@@ -59,6 +59,11 @@ const _renderIcon = (file: File) => {
   return <img src={url} className={detailListClass.fileIconImg} alt={`${iconName} file icon`} />;
 };
 
+const _renderNameColumn = (file: File) => {
+  const iconName = getFileIconName(file);
+  return <span aria-label={`${iconName} Name is ${file.name}`}>{file.name}</span>;
+};
+
 export const FileSelector: React.FC<FileSelectorProps> = props => {
   const { onFileChosen, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
   // for detail file list in open panel
@@ -89,9 +94,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: (item: File) => {
-        return <span aria-label={item.name}>{item.name}</span>;
-      },
+      onRender: _renderNameColumn,
       isPadded: true,
     },
     {
@@ -103,14 +106,17 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       isResizable: true,
       data: 'number',
       onRender: (item: File) => {
-        return <span>{calculateTimeDiff(item.lastModified)}</span>;
+        return (
+          <span aria-label={`Last modified time is ${calculateTimeDiff(item.lastModified)}`}>
+            {calculateTimeDiff(item.lastModified)}
+          </span>
+        );
       },
       isPadded: true,
     },
   ];
 
   const [currentSort, setSort] = useState<SortState>({ key: tableColumns[0].key, descending: true });
-  console.log(currentSort);
 
   const diskRootPattern = /[a-zA-Z]:\/$/;
   const storageFiles = useMemo(() => {
