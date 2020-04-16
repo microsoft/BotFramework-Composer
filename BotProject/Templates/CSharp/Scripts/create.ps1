@@ -91,7 +91,7 @@ Write-Host "> Creating resource group ..."
 
 # Deploy Azure services
 Write-Host "> Validating Azure deployment ..."
-$validation = az group deployment validate `
+$validation = az deployment group validate `
 	--resource-group $resourcegroup `
 	--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
 	--parameters appId=$appId appSecret="`"$($appPassword)`"" appServicePlanLocation=$location botId=$name shouldCreateAuthoringResource=$shouldCreateAuthoringResource luisAuthoringKey=$luisAuthoringKey `
@@ -103,7 +103,7 @@ if ($validation) {
 
 	if (-not $validation.error) {
 		Write-Host "> Deploying Azure services (this could take a while)..." -ForegroundColor Yellow
-		$deployment = az group deployment create `
+		$deployment = az deployment group create `
 			--name $timestamp `
 			--resource-group $resourceGroup `
 			--template-file "$(Join-Path $PSScriptRoot '..' 'DeploymentTemplates' 'template-with-preexisting-rg.json')" `
@@ -128,7 +128,7 @@ if ($validation) {
 
 
 # Get deployment outputs
-$outputs = (az group deployment show `
+$outputs = (az deployment group show `
 	--name $timestamp `
 	--resource-group $resourceGroup `
     --output json) 2>> $logFile
@@ -180,7 +180,7 @@ if ($outputs)
 else
 {
 	# Check for failed deployments
-	$operations = az group deployment operation list -g $resourceGroup -n $timestamp --output json 2>> $logFile | Out-Null 
+	$operations = az deployment group operation list -g $resourceGroup -n $timestamp --output json 2>> $logFile | Out-Null 
 	
 	if ($operations) {
 		$operations = $operations | ConvertFrom-Json
