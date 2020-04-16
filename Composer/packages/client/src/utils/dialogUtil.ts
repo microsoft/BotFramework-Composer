@@ -177,7 +177,13 @@ export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: nu
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
   }
   const triggers = get(dialogCopy, 'content.triggers');
-  triggers.splice(index, 1);
+  const deletedTrigger = triggers.splice(index, 1);
+  if (deletedTrigger && deletedTrigger[0].$kind === qnaMatchKey) {
+    const chooseIntentTriggerIndex = triggers.findIndex(t => t.$kind === chooseIntentKey);
+    if (chooseIntentTriggerIndex > -1) {
+      triggers.splice(chooseIntentTriggerIndex, 1);
+    }
+  }
   return dialogCopy.content;
 }
 
