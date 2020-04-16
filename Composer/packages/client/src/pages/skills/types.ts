@@ -3,10 +3,12 @@
 
 export interface ISkillFormData {
   manifestUrl: string;
+  name: string;
 }
 
 export interface ISkillFormDataErrors {
   manifestUrl?: string;
+  name?: string;
 }
 
 export const SkillUrlRegex = /^http[s]?:\/\/\w+/;

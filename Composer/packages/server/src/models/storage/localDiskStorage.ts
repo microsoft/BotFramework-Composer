@@ -5,6 +5,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 
 import glob from 'globby';
+import archiver from 'archiver';
 
 import { IFileStorage, Stat, MakeDirectoryOptions } from './interface';
 
@@ -73,5 +74,20 @@ export class LocalDiskStorage implements IFileStorage {
 
   async rename(oldPath: string, newPath: string): Promise<void> {
     return await rename(oldPath, newPath);
+  }
+
+  async zip(source: string, out: string): Promise<string> {
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    const stream = fs.createWriteStream(out);
+
+    return new Promise((resolve, reject) => {
+      archive
+        .directory(source, false)
+        .on('error', err => reject(err))
+        .pipe(stream);
+
+      stream.on('close', () => resolve(out));
+      archive.finalize();
+    });
   }
 }

@@ -52,6 +52,12 @@ export const EventColor = {
   collapsed: Colors.DarkGreen,
 };
 
+export const DefaultColors = {
+  theme: ObiColors.AzureGray3,
+  icon: ObiColors.AzureGray2,
+  color: ObiColors.Black,
+};
+
 export const NodeColors = {
   [DialogGroup.INPUT]: {
     themeColor: Colors.LightBlue,

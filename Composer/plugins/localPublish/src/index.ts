@@ -37,7 +37,7 @@ class LocalPublisher {
   private readonly baseDir = path.resolve(__dirname, '../');
   private templatePath;
 
-  constructor() { }
+  constructor() {}
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, user) => {
     const { settings, templatePath } = config;
@@ -67,8 +67,8 @@ class LocalPublisher {
       };
     }
   };
-  history = async config => { };
-  rollback = async (config, versionId) => { };
+  history = async config => {};
+  rollback = async (config, versionId) => {};
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
   private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);

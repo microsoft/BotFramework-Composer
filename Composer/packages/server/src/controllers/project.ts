@@ -282,6 +282,18 @@ async function updateSkill(req: Request, res: Response) {
   }
 }
 
+async function exportProject(req: Request, res: Response) {
+  const currentProject = await BotProjectService.getProjectById(req.params.projectId);
+  const file = await currentProject.exportToZip();
+  // @ts-ignore
+  res.download(Path.resolve(__dirname, `../../${file}`));
+  // todo: don't do this
+  setTimeout(() => {
+    // @ts-ignore
+    currentProject.removeZip(file);
+  }, 30000);
+}
+
 async function updateEnvSettings(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -375,6 +387,7 @@ export const ProjectController = {
   updateDefaultSlotEnvSettings,
   updateSkill,
   publishLuis,
+  exportProject,
   saveProjectAs,
   createProject,
   getAllProjects,

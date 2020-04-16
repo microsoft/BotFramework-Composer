@@ -64,6 +64,10 @@ export const FormFieldManifestUrl = css`
   width: 40rem;
 `;
 
+export const FormFieldEditName = css`
+  width: 20rem;
+`;
+
 export const FormFieldAlignHorizontal = css`
   display: flex;
   flex-wrap: wrap;

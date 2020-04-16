@@ -184,7 +184,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
             onDismiss={onDismissForm}
           ></SkillForm>
         ) : (
-          <Link onClick={() => setEditIndex(-1)}>Connect to a new skill</Link>
+          <Link onClick={() => setEditIndex(-1)}>{formatMessage('Connect to a new skill')}</Link>
         )}
       </div>
     );

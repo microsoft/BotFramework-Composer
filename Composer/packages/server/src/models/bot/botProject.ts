@@ -144,6 +144,24 @@ export class BotProject {
     return skills;
   };
 
+  public exportToZip = async () => {
+    try {
+      const zipFilePath = `${this.name}_export.zip`;
+      await this.fileStorage.zip(this.dataDir, zipFilePath);
+      return zipFilePath;
+    } catch (e) {
+      console.log('error zipping assets', e);
+    }
+  };
+
+  public removeZip = async (path: string) => {
+    try {
+      await this.fileStorage.removeFile(path);
+    } catch (e) {
+      console.log('error removing temp zip', e);
+    }
+  };
+
   public getSchemas = () => {
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
