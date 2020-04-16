@@ -6,6 +6,7 @@ import React, { useState, useRef } from 'react';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
 
@@ -30,6 +31,8 @@ const OpenObjectField: React.FC<FieldProps<{
   const [name, setName] = useState<string>('');
   const [newValue, setNewValue] = useState<string>('');
   const fieldRef = useRef<ITextField>(null);
+
+  const moreLabel = formatMessage('Edit Property');
 
   const handleKeyDown = event => {
     if (event.key.toLowerCase() === 'enter') {
@@ -119,18 +122,20 @@ const OpenObjectField: React.FC<FieldProps<{
               onKeyDown={handleKeyDown}
             />
           </div>
-          <IconButton
-            ariaLabel={formatMessage('Edit Property')}
-            disabled={true}
-            menuIconProps={{ iconName: 'MoreVertical' }}
-            styles={{
-              menuIcon: { fontSize: FontSizes.size16 },
-              root: { margin: '7px 0 7px 0' },
-              rootDisabled: {
-                backgroundColor: NeutralColors.white,
-              },
-            }}
-          />
+          <TooltipHost content={moreLabel}>
+            <IconButton
+              ariaLabel={moreLabel}
+              disabled={true}
+              menuIconProps={{ iconName: 'MoreVertical' }}
+              styles={{
+                menuIcon: { fontSize: FontSizes.size16 },
+                root: { margin: '7px 0 7px 0' },
+                rootDisabled: {
+                  backgroundColor: NeutralColors.white,
+                },
+              }}
+            />
+          </TooltipHost>
         </div>
       )}
     </div>
