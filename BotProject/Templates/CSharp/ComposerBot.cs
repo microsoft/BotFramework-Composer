@@ -21,8 +21,9 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private readonly ConversationState conversationState;
         private readonly IStatePropertyAccessor<DialogState> dialogState;
         private readonly string rootDialogFile;
+        private readonly string defaultLocale;
 
-        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, string rootDialog)
+        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, string rootDialog, string defaultLocale)
         {
             HostContext.Current.Set(skillClient);
             HostContext.Current.Set(conversationIdFactory);
@@ -31,6 +32,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialog;
+            this.defaultLocale = defaultLocale;
             LoadRootDialogAsync();
         }
         
@@ -44,10 +46,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private void LoadRootDialogAsync()
         {
             var rootFile = resourceExplorer.GetResource(rootDialogFile);
-            var rootDialog = resourceExplorer.LoadType<Dialog>(rootFile); 
+            var rootDialog = resourceExplorer.LoadType<Dialog>(rootFile);
             this.dialogManager = new DialogManager(rootDialog)
                                 .UseResourceExplorer(resourceExplorer)
-                                .UseLanguageGeneration();
-        }       
+                                .UseLanguageGeneration()
+                                .UseLanguagePolicy(new LanguagePolicy(defaultLocale)); 
+        }
     }
 }

@@ -75,6 +75,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
 
+            var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
+
             services.AddSingleton(userState);
             services.AddSingleton(conversationState);
             services.AddSingleton(resourceExplorer);
@@ -113,7 +115,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     s.GetService<ResourceExplorer>(),
                     s.GetService<BotFrameworkClient>(),
                     s.GetService<SkillConversationIdFactoryBase>(),
-                    rootDialog));
+                    rootDialog,
+                    defaultLocale));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

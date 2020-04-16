@@ -232,7 +232,7 @@ const DefaultUISchema: UISchema = {
     label: () => formatMessage('QnAMakerDialog'),
     helpLink: 'https://aka.ms/bfc-using-QnA',
   },
-  [SDKKinds.Recognizer]: {
+  [SDKKinds.IRecognizer]: {
     field: RecognizerField,
     helpLink: 'https://aka.ms/BFC-Using-LU',
   },
