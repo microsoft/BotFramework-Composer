@@ -23,6 +23,8 @@ describe('getReferredFiles', () => {
         intentTriggers: [
           { intent: 'dia1_trigger', dialogs: ['dia1'] },
           { intent: 'dia2_trigger', dialogs: ['dia2'] },
+          { intent: 'no_dialog', dialogs: [] },
+          { intent: '', dialogs: ['start_dialog_without_intent'] },
         ],
       },
       {
@@ -48,11 +50,25 @@ describe('getReferredFiles', () => {
         luFile: 'dia4',
         intentTriggers: [],
       },
+      {
+        id: 'start_dialog_without_intent',
+        luFile: 'start_dialog_without_intent',
+        intentTriggers: [],
+      },
     ];
-    const luFiles = [{ id: 'main.en-us' }, { id: 'dia1.en-us' }, { id: 'dia2.en-us' }, { id: 'dia3.en-us' }];
+    const luFiles = [
+      { id: 'main.en-us' },
+      { id: 'dia1.en-us' },
+      { id: 'dia2.en-us' },
+      { id: 'dia3.en-us' },
+      { id: 'start_dialog_without_intent.en-us' },
+    ];
     const config = createCrossTrainConfig(dialogs as DialogInfo[], luFiles as LuFile[]);
     expect(config.rootIds.length).toEqual(1);
     expect(config.rootIds[0]).toEqual('main.en-us.lu');
+    expect(config.triggerRules['main.en-us.lu']['dia1.en-us.lu']).toEqual('dia1_trigger');
+    expect(config.triggerRules['main.en-us.lu']['']).toEqual('no_dialog');
+    expect(config.triggerRules['main.en-us.lu']['start_dialog_without_intent.en-us.lu']).toEqual('');
     expect(config.triggerRules['main.en-us.lu']['dia1.en-us.lu']).toEqual('dia1_trigger');
     expect(config.triggerRules['dia1.en-us.lu']['dia3.en-us.lu']).toEqual('dia3_trigger');
     expect(config.triggerRules['dia1.en-us.lu']['dia4.en-us.lu']).toBeUndefined();
