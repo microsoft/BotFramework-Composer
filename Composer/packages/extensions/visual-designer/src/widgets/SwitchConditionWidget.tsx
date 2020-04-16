@@ -81,6 +81,9 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       <OffsetContainer offset={switchNode.offset}>
         <ElementWrapper id={switchNode.id} onEvent={onEvent}>
           <ElementMeasurer
@@ -114,9 +117,6 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
           />
         </OffsetContainer>
       ))}
-      <SVGContainer width={boundary.width} height={boundary.height}>
-        <FlowEdges edges={edges} />
-      </SVGContainer>
     </div>
   );
 };
