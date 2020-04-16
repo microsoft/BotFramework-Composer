@@ -40,7 +40,6 @@ import {
   chooseIntentKey,
 } from '../../utils/dialogUtil';
 import { addIntent as luAddIntent } from '../../utils/luUtil';
-import { addIntent as qnaAddIntent } from '../../utils/qnaUtil';
 import { StoreContext } from '../../store';
 
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
@@ -52,7 +51,7 @@ const validateForm = (
   isRegEx: boolean
 ): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $kind, specifiedType, intent, qnaAnswer, qnaQuestion } = data;
+  const { $kind, specifiedType, intent } = data;
 
   if ($kind === eventTypeKey && !specifiedType) {
     errors.specifiedType = formatMessage('Please select a event type');
@@ -74,14 +73,6 @@ const validateForm = (
     errors.intent = formatMessage(
       'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
     );
-  }
-
-  if ($kind === qnaMatchKey && !qnaAnswer) {
-    errors.qnaAnswer = formatMessage('Please input QnA answer');
-  }
-
-  if ($kind === qnaMatchKey && !qnaQuestion) {
-    errors.qnaQuestion = formatMessage('Please input QnA question');
   }
 
   if ($kind === intentTypeKey && isRegEx && regExIntents.find(ri => ri.intent === intent)) {
@@ -119,9 +110,8 @@ interface TriggerCreationModalProps {
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, qnaFiles, locale, projectId, schemas } = state;
+  const { dialogs, luFiles, locale, projectId, schemas } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const qnaFile = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const currentRecognizerType = get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us']`, '');
 
@@ -150,8 +140,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     intent: '',
     triggerPhrases: '',
     regexEx: '',
-    qnaQuestion: '',
-    qnaAnswer: '',
     sideEffectTriggerType: '',
   };
   const [formData, setFormData] = useState({ ...initialFormData, $kind: intentTypeKey });
@@ -177,12 +165,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     }
 
     const luContent = get(luFile, 'content', '');
-    const qnaContent = get(qnaFile, 'content', '');
     const luFileId = luFile?.id || `${dialogId}.${locale}`;
-    const qnaFileId = qnaFile?.id || `${dialogId}.${locale}`;
-    console.log(formData);
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
-    console.log(newDialog);
     if (formData.$kind === intentTypeKey) {
       const otherFilePayLoad: OtherFilePayLoad = {};
       if (formData.triggerPhrases) {
@@ -194,15 +178,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
         otherFilePayLoad.luFile = updateLuFile;
       }
       onSubmit(newDialog, otherFilePayLoad);
-    } else if (formData.$kind === qnaMatchKey) {
-      const otherFilePayLoad: OtherFilePayLoad = {};
-      const newContent = qnaAddIntent(qnaContent, { Name: formData.qnaQuestion, Body: formData.qnaAnswer });
-      const updateQnaFile = {
-        id: qnaFileId,
-        content: newContent,
-      };
-      otherFilePayLoad.qnaFile = updateQnaFile;
-      onSubmit(newDialog, otherFilePayLoad);
     } else {
       onSubmit(newDialog);
     }
@@ -210,7 +185,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
 
   const onSelectTriggerType = (e, option) => {
-    console.log(option.key === qnaMatchKey && isCrossTrain);
     const data = {
       ...initialFormData,
       $kind: option.key,
@@ -246,14 +220,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
-  const onChangeQnaQuestion = (e, question) => {
-    setFormData({ ...formData, qnaQuestion: question });
-  };
-
-  const onChangeQnaAnswer = (e, answer) => {
-    setFormData({ ...formData, qnaAnswer: answer });
-  };
-
   const eventTypes: IDropdownOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
@@ -267,7 +233,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const showEventDropDown = formData.$kind === eventTypeKey;
   const showActivityDropDown = formData.$kind === activityTypeKey;
   const showMessageDropDown = formData.$kind === messageTypeKey;
-  const showQnASection = formData.$kind === qnaMatchKey;
   return (
     <Dialog
       hidden={!isOpen}
@@ -382,26 +347,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
                 sectionId: formData.intent || 'newSection',
               }}
               height={150}
-            />
-          )}
-          {showQnASection && (
-            <TextField
-              label={formatMessage('Please input QnA question')}
-              onChange={onChangeQnaQuestion}
-              errorMessage={formData.errors.qnaQuestion}
-              data-testid={'qnaQuestion'}
-              value={formData.qnaQuestion}
-              multiline
-            />
-          )}
-          {showQnASection && (
-            <TextField
-              label={formatMessage('Please input QnA answer')}
-              onChange={onChangeQnaAnswer}
-              errorMessage={formData.errors.qnaAnswer}
-              data-testid={'qnaAnswer'}
-              value={formData.qnaAnswer}
-              multiline
             />
           )}
         </Stack>
