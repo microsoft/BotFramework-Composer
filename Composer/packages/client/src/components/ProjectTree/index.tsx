@@ -18,6 +18,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
+import { FocusZone, FocusZoneDirection, FocusZoneTabbableElements } from 'office-ui-fabric-react/lib/FocusZone';
 
 import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';
@@ -173,7 +174,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
       }}
       onResizeStop={handleResize}
     >
-      <div className="ProjectTree" css={root} data-testid="ProjectTree">
+      <FocusZone
+        className="ProjectTree"
+        css={root}
+        data-testid="ProjectTree"
+        handleTabKey={FocusZoneTabbableElements.all}
+        direction={FocusZoneDirection.bidirectional}
+        as={'div'}
+      >
         <SearchBox
           placeholder={formatMessage('Filter Dialogs')}
           styles={searchBox}
@@ -195,16 +203,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
           }
           styles={groupListStyle}
         />
-        <ActionButton
-          tabIndex={1}
-          iconProps={addIconProps}
-          css={addButton(0)}
-          onClick={onAdd}
-          data-testid="ProjectTreeNewDialog"
-        >
+        <ActionButton iconProps={addIconProps} css={addButton(0)} onClick={onAdd} data-testid="ProjectTreeNewDialog">
           {formatMessage('New Dialog ..')}
         </ActionButton>
-      </div>
+      </FocusZone>
     </Resizable>
   );
 };

@@ -48,7 +48,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
   return (
     <div
       role="presentation"
-      tabIndex={1}
+      data-is-focusable="true"
       css={navItem(isActive, !!isSubItemActive)}
       onClick={() => {
         onSelect(link.id);

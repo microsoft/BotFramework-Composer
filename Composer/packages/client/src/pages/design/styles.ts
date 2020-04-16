@@ -73,6 +73,9 @@ export const visualPanel = css`
   flex: 1;
   border-right: 1px solid #c4c4c4;
   position: relative;
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const visualEditor = (hidden: boolean) => css`
