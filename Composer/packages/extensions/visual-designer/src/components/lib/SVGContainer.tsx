@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 
-export const SVGContainer = ({ children, hidden = false }) => (
-  <svg width="100" height="100" overflow="visible" aria-hidden={hidden}>
+export const SVGContainer = ({ children, width = 100, height = 100, hidden = false }) => (
+  <svg css={{ overflow: 'visible', width, height, position: 'absolute', left: 0, top: 0 }} aria-hidden={hidden}>
     {children}
   </svg>
 );
