@@ -30,7 +30,7 @@ const QnaIntentEditor: React.FC<FieldProps<string>> = () => {
           },
         }}
       >
-        {formatMessage('qna content')}
+        {formatMessage('QnA content')}
       </Label>
       <TextField value={qnaContent} multiline rows={10} resizable={false} onChange={commitChanges} />
     </React.Fragment>

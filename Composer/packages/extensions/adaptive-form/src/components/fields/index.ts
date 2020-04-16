@@ -13,3 +13,4 @@ export * from './IntentField';
 export * from './SelectField';
 export * from './StringField';
 export * from './UnsupportedField';
+export * from './QnAActionsField';
