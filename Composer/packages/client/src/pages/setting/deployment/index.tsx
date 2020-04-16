@@ -47,14 +47,14 @@ export const Deployment: React.FC<RouteComponentProps> = () => {
       <div style={styles.page}>
         <h1 style={styles.header}>{instructions.title}</h1>
         <p>{instructions.description}</p>
-        <Stack horizontal gap="2rem" styles={{ root: { marginBottom: '1rem' } }}>
+        <Stack gap="2rem" horizontal styles={{ root: { marginBottom: '1rem' } }}>
           <DefaultButton onClick={openWizardCreate} text={instructions.button1} />
           <DefaultButton onClick={openWizardDeploy} text={instructions.button2} />
         </Stack>
         <Link href={instructions.helpLink} rel="noopener noreferrer" target="_blank">
           {formatMessage('Learn more')}
         </Link>
-        <DeployWizard isOpen={wizardOpen} initialStep={step} closeModal={closeWizard} />
+        <DeployWizard closeModal={closeWizard} initialStep={step} isOpen={wizardOpen} />
       </div>
     </Fragment>
   );

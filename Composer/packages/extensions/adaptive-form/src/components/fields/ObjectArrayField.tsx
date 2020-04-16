@@ -86,7 +86,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
 
   return (
     <div className={className}>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
       <div>
         {orderedProperties.length > 1 && !stackArrayItems && (
           <div css={objectArrayField.objectItemLabel}>
@@ -96,7 +96,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
 
                 if (propSchema && propSchema !== true) {
                   return (
-                    <div key={index} css={objectArrayField.objectItemValueLabel}>
+                    <div css={objectArrayField.objectItemValueLabel} key={index}>
                       <FieldLabel
                         description={propSchema.description}
                         id={`${id}.${key}`}
@@ -134,9 +134,19 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                   const lastField = index === allProperties.length - 1;
                   if (typeof property === 'string') {
                     return (
-                      <div key={index} css={objectArrayField.objectItemInputField}>
+                      <div css={objectArrayField.objectItemInputField} key={index}>
                         <TextField
+                          ariaLabel={
+                            lastField
+                              ? formatMessage(
+                                  'press Enter to add this item or Tab to move to the next interactive element'
+                                )
+                              : formatMessage(
+                                  'press Enter to add this name and advance to the next row, or press Tab to advance to the value field'
+                                )
+                          }
                           autoComplete="off"
+                          componentRef={index === 0 ? firstNewFieldRef : undefined}
                           iconProps={{
                             ...(lastField
                               ? {
@@ -148,21 +158,11 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                                 }
                               : {}),
                           }}
+                          onChange={handleNewObjectChange(property)}
+                          onKeyDown={handleKeyDown}
                           placeholder={getNewPlaceholder(props, property)}
                           styles={{ field: { padding: '0 24px 0 8px' } }}
                           value={newObject[property] || ''}
-                          onChange={handleNewObjectChange(property)}
-                          onKeyDown={handleKeyDown}
-                          ariaLabel={
-                            lastField
-                              ? formatMessage(
-                                  'press Enter to add this item or Tab to move to the next interactive element'
-                                )
-                              : formatMessage(
-                                  'press Enter to add this name and advance to the next row, or press Tab to advance to the value field'
-                                )
-                          }
-                          componentRef={index === 0 ? firstNewFieldRef : undefined}
                         />
                       </div>
                     );
@@ -170,8 +170,8 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                 })}
             </div>
             <IconButton
-              disabled
               ariaLabel="Item Actions"
+              disabled
               menuIconProps={{ iconName: 'MoreVertical' }}
               styles={{
                 menuIcon: {
@@ -186,7 +186,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
             />
           </React.Fragment>
         ) : (
-          <DefaultButton type="button" onClick={handleAdd}>
+          <DefaultButton onClick={handleAdd} type="button">
             {formatMessage('Add')}
           </DefaultButton>
         )}

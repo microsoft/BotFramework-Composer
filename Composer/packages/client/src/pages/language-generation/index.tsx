@@ -96,25 +96,25 @@ const LGPage: React.FC<LGPageProps> = (props) => {
         <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>
         <div css={flexContent}>
           <Toggle
+            checked={!!edit}
             className={'toggleEditMode'}
             css={actionButton}
-            onText={formatMessage('Edit mode')}
-            offText={formatMessage('Edit mode')}
             defaultChecked={false}
-            checked={!!edit}
+            offText={formatMessage('Edit mode')}
             onChange={onToggleEditMode}
+            onText={formatMessage('Edit mode')}
           />
         </div>
       </div>
       <div css={ContentStyle} data-testid="LGEditor">
         <div css={projectContainer}>
-          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={dialogId} />
+          <NavLinks fileId={dialogId} navLinks={navLinks} onSelect={onSelect} />
         </div>
         <div css={contentEditor}>
           <Suspense fallback={<LoadingSpinner />}>
-            <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit/*" dialogId={dialogId} />
-              <TableView path="/" dialogId={dialogId} />
+            <Router component={Fragment} primary={false}>
+              <CodeEditor dialogId={dialogId} path="/edit/*" />
+              <TableView dialogId={dialogId} path="/" />
             </Router>
           </Suspense>
         </div>

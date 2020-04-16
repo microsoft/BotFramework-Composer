@@ -20,17 +20,17 @@ export const ErrorPopup = (props) => {
 
   return (
     <Dialog
-      hidden={hidden}
-      onDismiss={_closeDialog}
       dialogContentProps={{
         type: DialogType.normal,
         title: props.title,
         styles: dialog,
       }}
+      hidden={hidden}
       modalProps={{
         isBlocking: false,
         styles: { main: { maxWidth: 450 } },
       }}
+      onDismiss={_closeDialog}
     >
       <div css={consoleStyle}>{props.error}</div>
       <DialogFooter>

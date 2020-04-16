@@ -46,17 +46,17 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
       <section css={section}>
         <h2>{formatMessage('General')}</h2>
         <Toggle
-          id={'onboardingToggle'}
-          data-testid="onboardingToggle"
           checked={!complete}
-          onChange={onOnboardingChange}
+          data-testid="onboardingToggle"
+          id={'onboardingToggle'}
           label={formatMessage('Onboarding')}
           offText={formatMessage('Disabled')}
+          onChange={onOnboardingChange}
           onText={formatMessage('Enabled')}
         />
         <p css={description}>
           {formatMessage('Enabling Onboarding will restart the product tour.')}
-          <Link href="https://aka.ms/bfc-onboarding" target="_blank" rel="noopener noreferrer" styles={link}>
+          <Link href="https://aka.ms/bfc-onboarding" rel="noopener noreferrer" styles={link} target="_blank">
             {formatMessage('Learn more')}
           </Link>
         </p>
@@ -67,7 +67,6 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
             directionalHint: DirectionalHint.rightCenter,
             isBeakVisible: false,
           }}
-          target={'#onboardingToggle'}
           styles={{
             bodyContent: {
               padding: '0px',
@@ -76,6 +75,7 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
               margin: '0px',
             },
           }}
+          target={'#onboardingToggle'}
         >
           <div
             css={css`
@@ -108,23 +108,23 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
         <h2>{formatMessage('Code Editor')}</h2>
         <Toggle
           checked={userSettings.codeEditor.lineNumbers}
-          onChange={(_e, checked) => onCodeEditorChange('lineNumbers', !!checked)}
           label={formatMessage('Line numbers')}
           offText={formatMessage('Off')}
+          onChange={(_e, checked) => onCodeEditorChange('lineNumbers', !!checked)}
           onText={formatMessage('On')}
         />
         <Toggle
           checked={userSettings.codeEditor.wordWrap}
-          onChange={(_e, checked) => onCodeEditorChange('wordWrap', !!checked)}
           label={formatMessage('Word wrap')}
           offText={formatMessage('Off')}
+          onChange={(_e, checked) => onCodeEditorChange('wordWrap', !!checked)}
           onText={formatMessage('On')}
         />
         <Toggle
           checked={userSettings.codeEditor.minimap}
-          onChange={(_e, checked) => onCodeEditorChange('minimap', !!checked)}
           label={formatMessage('Minimap')}
           offText={formatMessage('Off')}
+          onChange={(_e, checked) => onCodeEditorChange('minimap', !!checked)}
           onText={formatMessage('On')}
         />
       </section>

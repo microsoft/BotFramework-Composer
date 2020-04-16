@@ -99,8 +99,8 @@ export const drawSVGEdge = (
       <line
         key={`edge-${id}__line`}
         x1={startPoint.x}
-        y1={startPoint.y}
         x2={endPoint.x}
+        y1={startPoint.y}
         y2={endPoint.y}
         {...strokeProps}
       />
@@ -111,10 +111,10 @@ export const drawSVGEdge = (
   if (typeof label === 'string' || typeof label === 'number') {
     const text = (
       <text
+        fontSize={labelOptions?.fontSize}
         key={`edge-${id}__text`}
         x={startPoint.x + (labelOptions?.offset?.x || 0)}
         y={startPoint.y + (labelOptions?.offset?.y || 0)}
-        fontSize={labelOptions?.fontSize}
       >
         {label}
       </text>

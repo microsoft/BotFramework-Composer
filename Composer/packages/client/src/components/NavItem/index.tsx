@@ -42,11 +42,11 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
 
   const activeArea = (
     <div
-      css={link(active, disabled)}
-      aria-hidden="true"
-      tabIndex={-1}
       aria-disabled={disabled}
+      aria-hidden="true"
+      css={link(active, disabled)}
       data-testid={active ? 'ActiveLeftNavItem' : undefined}
+      tabIndex={-1}
     >
       <Icon iconName={iconName} styles={icon(active, disabled)} />
       {labelName}
@@ -60,11 +60,8 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
 
   return (
     <Link
-      data-testid={'LeftNav-CommandBarButton' + labelName}
-      to={to}
       aria-disabled={disabled}
       aria-label={labelName + (active ? '; selected' : '')}
-      ref={addRef}
       css={css`
         display: block;
 
@@ -75,6 +72,9 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
           text-decoration: none;
         }
       `}
+      data-testid={'LeftNav-CommandBarButton' + labelName}
+      ref={addRef}
+      to={to}
     >
       {activeArea}
     </Link>

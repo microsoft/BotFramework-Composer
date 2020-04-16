@@ -100,20 +100,20 @@ export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX
 
   return (
     <IconCard
-      themeColor={EventColor.expanded}
-      iconColor={EventColor.iconColor}
+      childDialog={dialog}
       corner={
         <div css={{ display: 'flex' }}>
           <NodeMenu id={id} onEvent={onEvent} />
         </div>
       }
-      label={label}
-      trigger={trigger}
-      summary={summary}
-      childDialog={dialog}
       icon={ElementIcon.Play}
-      onClick={onCardBodyClick}
+      iconColor={EventColor.iconColor}
+      label={label}
       onChildDialogClick={openChildDialog}
+      onClick={onCardBodyClick}
+      summary={summary}
+      themeColor={EventColor.expanded}
+      trigger={trigger}
     />
   );
 };

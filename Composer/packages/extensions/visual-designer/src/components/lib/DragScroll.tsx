@@ -62,9 +62,9 @@ export default function DragScroll(props) {
       className="dragscroll"
       css={{ width: '100%', height: '100%' }}
       onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     >
       {props.children}
     </div>

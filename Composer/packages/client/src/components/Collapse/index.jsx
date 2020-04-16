@@ -210,11 +210,11 @@ function CollapseContent({
 
   return (
     <div
-      ref={contentRef}
-      style={style}
       className={className}
       css={cssTransition}
       onTransitionEnd={onTransitionEnd}
+      ref={contentRef}
+      style={style}
       {...attrs}
     >
       {typeof render === 'function' ? render(collapseState) : children}

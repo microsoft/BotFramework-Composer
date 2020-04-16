@@ -41,21 +41,21 @@ const NumberField: React.FC<FieldProps> = (props) => {
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
       <SpinButton
-        id={id}
+        decrementButtonAriaLabel={formatMessage('decrement by { step }', { step })}
         disabled={Boolean(schema.const) || readonly || disabled}
+        id={id}
+        incrementButtonAriaLabel={formatMessage('increment by { step }', { step })}
+        label={label || formatMessage('numeric field')}
+        onDecrement={updateValue(-step)}
+        onIncrement={updateValue(step)}
+        onValidate={updateValue(0)}
         step={step}
         styles={{
           labelWrapper: { display: 'none' },
         }}
         value={displayValue}
-        onDecrement={updateValue(-step)}
-        onIncrement={updateValue(step)}
-        onValidate={updateValue(0)}
-        label={label || formatMessage('numeric field')}
-        incrementButtonAriaLabel={formatMessage('increment by { step }', { step })}
-        decrementButtonAriaLabel={formatMessage('decrement by { step }', { step })}
       />
     </>
   );

@@ -52,28 +52,28 @@ const OneOfField: React.FC<FieldProps> = (props) => {
         <FieldLabel {...props} />
         {options && options.length > 1 && (
           <Dropdown
+            ariaLabel={formatMessage('select property type')}
             id={`${props.id}-oneOf`}
+            onChange={handleTypeChange}
+            onRenderTitle={renderTypeTitle}
             options={options}
             responsiveMode={ResponsiveMode.large}
             selectedKey={selectedKey}
-            onChange={handleTypeChange}
-            onRenderTitle={renderTypeTitle}
             styles={{
               caretDownWrapper: { height: '24px', lineHeight: '24px' },
               root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
               title: { height: '24px', lineHeight: '20px' },
             }}
-            ariaLabel={formatMessage('select property type')}
           />
         )}
       </div>
       <Field
         {...props}
-        transparentBorder={false}
-        schema={selectedSchema || {}}
-        // allow object fields to render their labels
-        label={selectedSchema?.type === 'object' ? undefined : false}
         depth={props.depth - 1}
+        label={selectedSchema?.type === 'object' ? undefined : false}
+        // allow object fields to render their labels
+        schema={selectedSchema || {}}
+        transparentBorder={false}
       />
     </div>
   );

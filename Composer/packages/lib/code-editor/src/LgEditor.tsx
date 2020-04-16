@@ -103,14 +103,14 @@ export function LgEditor(props: LGLSPEditorProps) {
 
   return (
     <BaseEditor
-      placeholder={placeholder}
       helpURL={LG_HELP}
+      placeholder={placeholder}
       {...restProps}
-      onInit={onInit}
-      theme="lgtheme"
-      language="botbuilderlg"
-      options={options}
       editorDidMount={editorDidMount}
+      language="botbuilderlg"
+      onInit={onInit}
+      options={options}
+      theme="lgtheme"
     />
   );
 }

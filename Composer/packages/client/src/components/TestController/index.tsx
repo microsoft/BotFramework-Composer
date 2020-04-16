@@ -145,24 +145,24 @@ export const TestController: React.FC = () => {
         <EmulatorOpenButton botStatus={botStatus} hidden={showError} onClick={handleOpenEmulator} />
         <Loading botStatus={botStatus} />
         <div ref={addRef}>
-          <ErrorInfo hidden={!showError} onClick={handleErrorButtonClick} count={errorLength} />
+          <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
           <PrimaryButton
             css={botButton}
-            text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
-            onClick={handleStart}
-            id={'publishAndConnect'}
             disabled={showError || publishing || reloading}
+            id={'publishAndConnect'}
+            onClick={handleStart}
+            text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
           />
         </div>
       </div>
       <ErrorCallout
+        error={botLoadErrorMsg}
         onDismiss={dismissCallout}
         onTry={handleStart}
         target={botActionRef.current}
         visible={calloutVisible}
-        error={botLoadErrorMsg}
       />
-      <PublishLuisDialog isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} botName={botName} />
+      <PublishLuisDialog botName={botName} isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} />
     </Fragment>
   );
 };

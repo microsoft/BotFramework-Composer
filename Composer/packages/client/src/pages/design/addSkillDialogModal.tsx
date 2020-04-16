@@ -71,16 +71,16 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = (props) => {
   return (
     <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...addSkillDialog.SKILL_MANIFEST_FORM}>
       <form onSubmit={handleSubmit}>
-        <input type="submit" style={{ display: 'none' }} />
-        <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+        <input style={{ display: 'none' }} type="submit" />
+        <Stack styles={wizardStyles.stackinput} tokens={{ childrenGap: '2rem' }}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
-              required
               errorMessage={formDataErrors.manifestUrl}
               label={formatMessage('Skill manifest Url')}
+              onChange={updateForm('manifestUrl')}
+              required
               styles={manifestUrl}
               value={formData.manifestUrl}
-              onChange={updateForm('manifestUrl')}
             />
           </StackItem>
         </Stack>

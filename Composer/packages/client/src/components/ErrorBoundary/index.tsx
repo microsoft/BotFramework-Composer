@@ -14,7 +14,7 @@ const errorToShow = {
   message: formatMessage.rich('If this problem persists, please file an issue on <a>GitHub</a>.', {
     // eslint-disable-next-line react/display-name
     a: ({ children }) => (
-      <a key="a" href={githubIssueUrl} target="_blank" rel="noopener noreferrer" style={{ color: `greenyellow` }}>
+      <a href={githubIssueUrl} key="a" rel="noopener noreferrer" style={{ color: `greenyellow` }} target="_blank">
         {children}
       </a>
     ),
@@ -98,10 +98,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         {state.error ? (
           <ErrorPopup
             error={state.error.message}
-            title={state.error.summary}
             onDismiss={() => {
               this.closeErrorPopup();
             }}
+            title={state.error.summary}
           />
         ) : null}
         {this.props.children}

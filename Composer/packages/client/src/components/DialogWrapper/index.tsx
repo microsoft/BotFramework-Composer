@@ -21,18 +21,18 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
 
   return (
     <Dialog
-      hidden={false}
-      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
         subText: subText,
         styles: styles.dialog,
       }}
+      hidden={false}
       modalProps={{
         isBlocking: false,
         styles: styles.modal,
       }}
+      onDismiss={onDismiss}
     >
       {children}
     </Dialog>

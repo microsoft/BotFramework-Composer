@@ -13,11 +13,11 @@ describe('<ErrorCallout />', () => {
 
     render(
       <ErrorCallout
+        error={{ title: 'title test', message: 'message test' }}
         onDismiss={onDismiss}
         onTry={onTry}
         target={null}
-        visible={true}
-        error={{ title: 'title test', message: 'message test' }}
+        visible
       />
     );
 

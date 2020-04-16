@@ -125,24 +125,24 @@ export function CreationFlow(props) {
       ...DialogCreationCopy.CREATE_NEW_BOT,
       children: (
         <CreateOptions
-          templates={templateProjects}
           onDismiss={handleDismiss}
           onNext={handleCreateNext}
           saveTemplateId={saveTemplateId}
+          templates={templateProjects}
         />
       ),
     },
     [Steps.LOCATION]: {
       ...DialogCreationCopy.SELECT_LOCATION,
-      children: <OpenProject onOpen={openBot} onDismiss={handleDismiss} onCurrentPathUpdate={updateCurrentPath} />,
+      children: <OpenProject onCurrentPathUpdate={updateCurrentPath} onDismiss={handleDismiss} onOpen={openBot} />,
     },
     [Steps.DEFINE]: {
       ...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE,
       children: (
-        <DefineConversation onSubmit={handleSubmit} onDismiss={handleDismiss} onCurrentPathUpdate={updateCurrentPath} />
+        <DefineConversation onCurrentPathUpdate={updateCurrentPath} onDismiss={handleDismiss} onSubmit={handleSubmit} />
       ),
     },
   };
 
-  return <StepWizard steps={steps} step={step} onDismiss={handleDismiss} />;
+  return <StepWizard onDismiss={handleDismiss} step={step} steps={steps} />;
 }

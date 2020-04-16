@@ -67,7 +67,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
   const { foreachNode, loopActionsNode, loopBeginNode, loopEndNode } = nodeMap;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
@@ -84,9 +84,9 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
       </OffsetContainer>
       <OffsetContainer offset={loopActionsNode.offset}>
         <StepGroup
-          key={loopActionsNode.id}
-          id={loopActionsNode.id}
           data={loopActionsNode.data}
+          id={loopActionsNode.id}
+          key={loopActionsNode.id}
           onEvent={onEvent}
           onResize={(size) => {
             updateNodeBoundary(ForeachNodes.LoopActions, size);

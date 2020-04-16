@@ -47,7 +47,6 @@ export const RuleEditor = ({ id, data, onEvent, addCoachMarkRef }): JSX.Element 
   return (
     <div
       className="rule-editor"
-      data-testid="RuleEditor"
       css={{
         position: 'relative',
         display: 'flex',
@@ -55,18 +54,19 @@ export const RuleEditor = ({ id, data, onEvent, addCoachMarkRef }): JSX.Element 
         flexDirection: 'column',
         alignItems: 'center',
       }}
+      data-testid="RuleEditor"
       onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id: '' });
       }}
     >
       <StepEditor
-        key={stepGroup.id + '?version=' + outlineVersion.current}
-        id={stepGroup.id}
+        addCoachMarkRef={addCoachMarkRef}
         data={stepGroup.data}
+        id={stepGroup.id}
+        key={stepGroup.id + '?version=' + outlineVersion.current}
         onEvent={onEvent}
         trigger={<Trigger data={data} />}
-        addCoachMarkRef={addCoachMarkRef}
       />
     </div>
   );

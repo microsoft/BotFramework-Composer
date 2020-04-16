@@ -24,21 +24,21 @@ const PropertyEditor: React.FC = () => {
 
   return (
     <Resizable
-      size={{ width: currentWidth, height: 'auto' }}
-      minWidth={400}
-      maxWidth={800}
       enable={{
         left: true,
       }}
+      maxWidth={800}
+      minWidth={400}
       onResizeStop={handleResize}
+      size={{ width: currentWidth, height: 'auto' }}
     >
       <div
-        css={formEditor}
         aria-label={formatMessage('form editor')}
+        css={formEditor}
         data-testid="PropertyEditor"
         key={shellData.focusPath}
       >
-        <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
+        <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
           <AdaptiveForm formData={shellData.data} schema={shellData.schemas?.sdk?.content} />
         </Extension>
       </div>

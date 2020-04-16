@@ -76,28 +76,28 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   return (
     <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}>
       <form onSubmit={handleSubmit}>
-        <input type="submit" style={{ display: 'none' }} />
-        <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+        <input style={{ display: 'none' }} type="submit" />
+        <Stack styles={wizardStyles.stackinput} tokens={{ childrenGap: '2rem' }}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
-              label={formatMessage('Name')}
-              value={formData.name}
-              styles={name}
-              onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
-              data-testid="NewDialogName"
-              required
               autoFocus
+              data-testid="NewDialogName"
+              errorMessage={formDataErrors.name}
+              label={formatMessage('Name')}
+              onChange={updateForm('name')}
+              required
+              styles={name}
+              value={formData.name}
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
-              styles={description}
-              value={formData.description}
               label={formatMessage('Description')}
               multiline
-              resizable={false}
               onChange={updateForm('description')}
+              resizable={false}
+              styles={description}
+              value={formData.description}
             />
           </StackItem>
         </Stack>

@@ -148,18 +148,18 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
   return (
     <LgEditor
-      hidePlaceholder={inlineMode}
-      editorDidMount={editorDidMount}
-      value={content}
-      errorMessage={errorMsg}
       diagnostics={currentDiagnostics}
-      lgOption={lgOption}
+      editorDidMount={editorDidMount}
+      editorSettings={userSettings.codeEditor}
+      errorMessage={errorMsg}
+      hidePlaceholder={inlineMode}
       languageServer={{
         path: lspServerPath,
       }}
+      lgOption={lgOption}
       onChange={_onChange}
-      editorSettings={userSettings.codeEditor}
       onChangeSettings={handleSettingsChange}
+      value={content}
     />
   );
 };

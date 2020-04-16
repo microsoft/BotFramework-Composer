@@ -13,18 +13,18 @@ export function StepWizard(props) {
   const hidden = !currentStep;
   return (
     <Dialog
-      hidden={hidden}
-      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
         title: hidden ? '' : currentStep.title,
         subText: hidden ? '' : currentStep.subText,
         styles: styles.dialog,
       }}
+      hidden={hidden}
       modalProps={{
         isBlocking: false,
         styles: styles.modal,
       }}
+      onDismiss={onDismiss}
     >
       {!hidden && currentStep.children}
     </Dialog>

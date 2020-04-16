@@ -31,15 +31,15 @@ const Routes = (props) => {
           <DialogRouter path="/bot/:projectId/dialogs/:dialogId/*" {...props} />
           <Redirect
             from="/bot/:projectId/language-generation"
-            to="/bot/:projectId/language-generation/common"
             noThrow
+            to="/bot/:projectId/language-generation/common"
           />
           <Redirect
             from="/bot/:projectId/language-understanding"
-            to="/bot/:projectId/language-understanding/all"
             noThrow
+            to="/bot/:projectId/language-understanding/all"
           />
-          <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
+          <Redirect from="/" noThrow to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <SettingPage path="settings/*" />
             <LUPage path="language-understanding/:dialogId/*" />

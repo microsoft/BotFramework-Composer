@@ -42,8 +42,8 @@ export function SelectLocation(props) {
   function TemplateItem(props) {
     const { checked, text, key } = props;
     return (
-      <div key={key} css={itemRoot(checked)}>
-        {checked && <Icon iconName="CompletedSolid" css={itemIcon} />}
+      <div css={itemRoot(checked)} key={key}>
+        {checked && <Icon css={itemIcon} iconName="CompletedSolid" />}
         <span css={itemText}>{text}</span>
       </div>
     );
@@ -53,7 +53,12 @@ export function SelectLocation(props) {
     <Fragment>
       {errorMessage && <div css={error}>{errorMessage}</div>}
       <ChoiceGroup
+        data-testid="SelectLocation"
         defaultSelectedKey={defaultKey}
+        onChange={(e, option) => {
+          setErrorMessage('');
+          setSelected(option.path);
+        }}
         options={folders.map((folder) => {
           return {
             key: folder.name,
@@ -64,17 +69,12 @@ export function SelectLocation(props) {
             styles: option,
           };
         })}
-        onChange={(e, option) => {
-          setErrorMessage('');
-          setSelected(option.path);
-        }}
-        required={true}
+        required
         styles={choice}
-        data-testid="SelectLocation"
       />
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={handleOpen} text={formatMessage('Open')} data-testid="SelectLocationOpen" />
+        <PrimaryButton data-testid="SelectLocationOpen" onClick={handleOpen} text={formatMessage('Open')} />
       </DialogFooter>
     </Fragment>
   );

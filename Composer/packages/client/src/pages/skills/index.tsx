@@ -33,7 +33,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
 
-      <SkillList skills={skills} projectId={projectId}></SkillList>
+      <SkillList projectId={projectId} skills={skills}></SkillList>
     </div>
   );
 };

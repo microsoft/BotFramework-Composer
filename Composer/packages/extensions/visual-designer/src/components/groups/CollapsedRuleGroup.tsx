@@ -18,13 +18,13 @@ export const CollapsedRuleGroup = ({ count }): JSX.Element => {
   for (let i = 0; i < count; i++) {
     items.push(
       <div
-        key={i}
         css={{
           width: ElementWidth,
           height: ElementHeight,
           background: EventColor.collapsed,
           margin: `0 ${ElementMarginX}px ${ElementMarginY}px 0`,
         }}
+        key={i}
       />
     );
   }

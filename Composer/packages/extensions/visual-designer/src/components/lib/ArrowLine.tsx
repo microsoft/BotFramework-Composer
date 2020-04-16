@@ -20,8 +20,8 @@ export const ArrowLine: React.FC<ArrowLineProps> = ({ width, arrowsize, color })
   ];
   const pointsString = points.map((p) => `${p.x},${p.y}`).join(' ');
   return (
-    <svg css={{ display: 'block' }} width={width} height={1} overflow="visible">
-      <polyline points={pointsString} stroke={color} strokeWidth="1" fill="none" strokeDasharray="none" />
+    <svg css={{ display: 'block' }} height={1} overflow="visible" width={width}>
+      <polyline fill="none" points={pointsString} stroke={color} strokeDasharray="none" strokeWidth="1" />
     </svg>
   );
 };

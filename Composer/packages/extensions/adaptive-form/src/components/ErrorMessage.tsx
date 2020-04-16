@@ -15,11 +15,11 @@ const ErrorMessage: React.FC<ErrorMessageProps> = (props) => {
 
   return (
     <MessageBar
-      truncated
       dismissButtonAriaLabel={formatMessage('Close')}
       isMultiline={false}
       messageBarType={MessageBarType.error}
       overflowButtonAriaLabel={formatMessage('See more')}
+      truncated
     >
       {[label, error].filter(Boolean).join(' ')}
     </MessageBar>

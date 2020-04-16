@@ -89,10 +89,10 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
           css={arrayItem.schemaFieldOverride(!!stackArrayItems)}
           depth={depth + 1}
           label={!stackArrayItems ? false : undefined}
+          onBlur={handleBlur}
           transparentBorder={!stackArrayItems ? transparentBorder : undefined}
           uiOptions={uiOptions}
           value={value}
-          onBlur={handleBlur}
         />
       </div>
       <IconButton

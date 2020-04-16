@@ -49,11 +49,11 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCo
 
   const eventActions = activeEventData ? (
     <RuleEditor
-      key={focusedEvent}
-      id={focusedEvent}
-      data={activeEventData}
-      onEvent={onEvent}
       addCoachMarkRef={addCoachMarkRef}
+      data={activeEventData}
+      id={focusedEvent}
+      key={focusedEvent}
+      onEvent={onEvent}
     />
   ) : null;
 
@@ -75,7 +75,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCo
       }}
     >
       {ruleGroup && (
-        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
+        <EventsEditor data={ruleGroup.data} id={ruleGroup.id} key={ruleGroup.id} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
       <Collapse text="Actions">{eventActions}</Collapse>

@@ -29,17 +29,17 @@ const ConfirmDialog = (props) => {
 
   return (
     <Dialog
-      hidden={false}
-      onDismiss={onCancel}
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
         styles: dialog,
       }}
+      hidden={false}
       modalProps={{
         isBlocking: true,
         styles: dialogModal,
       }}
+      onDismiss={onCancel}
     >
       {onRenderContent(subTitle, BuiltInStyles[style])}
       <DialogFooter>
@@ -73,7 +73,7 @@ export const OpenConfirmModal = (title, subTitle, setting = {}) => {
       resolve(false);
     };
 
-    const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onConfirm={onConfirm} onCancel={onCancel} />;
+    const modal = <ConfirmDialog onCancel={onCancel} onConfirm={onConfirm} setting={{ title, subTitle, ...setting }} />;
     ReactDOM.render(modal, node);
   });
 };

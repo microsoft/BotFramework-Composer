@@ -87,13 +87,13 @@ const LUPage: React.FC<LUPageProps> = (props) => {
         <div css={flexContent}>
           {(!isRoot || edit) && (
             <Toggle
+              checked={!!edit}
               className={'toggleEditMode'}
               css={actionButton}
-              onText={formatMessage('Edit mode')}
-              offText={formatMessage('Edit mode')}
               defaultChecked={false}
-              checked={!!edit}
+              offText={formatMessage('Edit mode')}
               onChange={onToggleEditMode}
+              onText={formatMessage('Edit mode')}
             />
           )}
         </div>
@@ -101,22 +101,22 @@ const LUPage: React.FC<LUPageProps> = (props) => {
       <div css={ContentStyle} data-testid="LUEditor">
         <div css={projectContainer}>
           <DefaultButton
+            ariaHidden={false}
+            ariaLabel={formatMessage('all language understanding files')}
             key={'_all'}
             onClick={() => {
               onSelect('all');
             }}
             styles={isRoot ? dialogItemSelected : dialogItemNotSelected}
             text={formatMessage('All')}
-            ariaLabel={formatMessage('all language understanding files')}
-            ariaHidden={false}
           />
-          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={dialogId} />
+          <NavLinks fileId={dialogId} navLinks={navLinks} onSelect={onSelect} />
         </div>
         <div css={contentEditor}>
           <Suspense fallback={<LoadingSpinner />}>
-            <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit" dialogId={dialogId} />
-              <TableView path="/" dialogId={dialogId} />
+            <Router component={Fragment} primary={false}>
+              <CodeEditor dialogId={dialogId} path="/edit" />
+              <TableView dialogId={dialogId} path="/" />
             </Router>
           </Suspense>
         </div>

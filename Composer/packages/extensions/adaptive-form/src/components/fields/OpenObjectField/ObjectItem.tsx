@@ -59,39 +59,39 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
     <div css={container}>
       <div css={item}>
         <EditableField
-          transparentBorder
+          ariaLabel={formatMessage('key')}
           depth={0}
           error={errorMessage}
           id={`${name}.key`}
           name="key"
+          onBlur={handleBlur}
+          onChange={(newValue) => setName(newValue || '')}
           placeholder={initialName || formatMessage('Add a new key')}
           schema={{}}
           styles={{
             errorMessage: { display: 'block', paddingTop: 0 },
             root: { margin: '7px 0' },
           }}
+          transparentBorder
           uiOptions={{}}
           value={name}
-          onBlur={handleBlur}
-          onChange={(newValue) => setName(newValue || '')}
-          ariaLabel={formatMessage('key')}
         />
       </div>
       <div css={item}>
         <EditableField
-          transparentBorder
+          ariaLabel={formatMessage('value')}
           depth={0}
           id={`${name}.value`}
           name="value"
+          onChange={onValueChange}
           placeholder={initialValue || formatMessage('Add a new value')}
           schema={{}}
           styles={{
             root: { margin: '7px 0' },
           }}
+          transparentBorder
           uiOptions={{}}
           value={value}
-          onChange={onValueChange}
-          ariaLabel={formatMessage('value')}
         />
       </div>
       <IconButton

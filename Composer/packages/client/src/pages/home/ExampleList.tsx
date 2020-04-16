@@ -41,8 +41,8 @@ export const ExampleList: React.FC<ExampleListProps> = (props) => {
     }
 
     return (
-      <div css={exampleListCell} data-is-focusable={true} key={item.id} onClick={() => onClick(item.id)}>
-        <img role="presentation" src={resolveIcon(item.id)} css={exampleListCellIcon} />
+      <div css={exampleListCell} data-is-focusable key={item.id} onClick={() => onClick(item.id)}>
+        <img css={exampleListCellIcon} role="presentation" src={resolveIcon(item.id)} />
         <div css={exampleListCellContent}>
           <div css={exampleListCellName}>{item.name}</div>
           <div css={exampleListCellDescription}>{item.description}</div>
@@ -52,7 +52,7 @@ export const ExampleList: React.FC<ExampleListProps> = (props) => {
   }
 
   return (
-    <div data-is-scrollable="true" css={exampleListContainer}>
+    <div css={exampleListContainer} data-is-scrollable="true">
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <List items={examples} onRenderCell={_onRenderCell} />
       </ScrollablePane>

@@ -18,16 +18,16 @@ describe('<IconCard />', () => {
 
     renderResult = render(
       <IconCard
-        icon={icon}
-        label={label}
-        corner={corner}
-        summary={''}
-        trigger={''}
         childDialog={''}
-        themeColor={themeColor}
+        corner={corner}
+        icon={icon}
         iconColor={'red'}
-        onClick={onClick}
+        label={label}
         onChildDialogClick={() => {}}
+        onClick={onClick}
+        summary={''}
+        themeColor={themeColor}
+        trigger={''}
       />
     );
   });

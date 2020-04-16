@@ -177,13 +177,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item, index) => {
           return (
             <IconButton
+              ariaLabel={formatMessage('actions')}
               menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
                 items: getTemplatesMoreButtons(item, index),
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              ariaLabel={formatMessage('actions')}
             />
           );
         },
@@ -203,7 +203,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
-            <IconButton iconProps={{ iconName: 'Accept' }} ariaLabel={formatMessage('Used') + ';'} />
+            <IconButton ariaLabel={formatMessage('Used') + ';'} iconProps={{ iconName: 'Accept' }} />
           ) : (
             <div aria-label={formatMessage('Unused') + ';'} />
           );
@@ -218,7 +218,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
       <div data-testid="tableHeader">
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
             onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -247,9 +247,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
+          className="table-view-list"
+          columns={getTableColums()}
           componentRef={listRef}
-          items={templates}
+          getKey={getKeyCallback}
           initialFocusedIndex={focusedIndex}
+          items={templates}
+          // getKey={item => item.name}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderDetailsFooter={onRenderDetailsFooter}
+          onRenderDetailsHeader={onRenderDetailsHeader}
+          selectionMode={SelectionMode.none}
           styles={{
             root: {
               overflowX: 'hidden',
@@ -261,14 +269,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
               },
             },
           }}
-          className="table-view-list"
-          columns={getTableColums()}
-          // getKey={item => item.name}
-          getKey={getKeyCallback}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-          onRenderDetailsFooter={onRenderDetailsFooter}
-          selectionMode={SelectionMode.none}
         />
       </ScrollablePane>
     </div>

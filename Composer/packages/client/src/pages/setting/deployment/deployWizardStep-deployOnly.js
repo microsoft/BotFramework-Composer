@@ -123,36 +123,36 @@ export const DeployWizardStepDeploy = (props) => {
   return (
     <Fragment>
       <form onSubmit={submit}>
-        <Stack horizontal gap="2rem" styles={styles.stackinput}>
+        <Stack gap="2rem" horizontal styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
             <TextField
-              autoFocus={true}
-              label={formatMessage('Bot Display Name')}
-              styles={styles.input}
+              autoFocus
+              componentRef={nameRef}
+              data-testid="displayname"
               defaultValue={botName}
+              errorMessage={formData.errors.name}
+              label={formatMessage('Bot Display Name')}
               onBlur={useCallback(() => setNameErrors())}
               onChange={updateForm('name')}
-              errorMessage={formData.errors.name}
-              data-testid="displayname"
-              componentRef={nameRef}
               required
+              styles={styles.input}
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
             <p>{formatMessage('This is the name that your user will see.')}</p>
           </StackItem>
         </Stack>
-        <Stack horizontal gap="2rem" styles={styles.stackinput}>
+        <Stack gap="2rem" horizontal styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
             <TextField
+              componentRef={environmentRef}
+              data-testid="displayname"
+              errorMessage={formData.errors.environment}
               label={formatMessage('Environment Name')}
-              styles={styles.input}
               onBlur={useCallback(() => setEnvironmentErrors())}
               onChange={updateForm('environment')}
-              errorMessage={formData.errors.environment}
-              data-testid="displayname"
-              componentRef={environmentRef}
               required
+              styles={styles.input}
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -161,7 +161,7 @@ export const DeployWizardStepDeploy = (props) => {
         </Stack>
         <DialogFooter>
           <DefaultButton onClick={closeModal} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={submit} text={formatMessage('Next')} disabled={disable} />
+          <PrimaryButton disabled={disable} onClick={submit} text={formatMessage('Next')} />
         </DialogFooter>
       </form>
     </Fragment>

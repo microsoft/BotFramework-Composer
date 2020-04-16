@@ -25,23 +25,23 @@ export const DeployWizardStep3 = (props) => {
 
   return (
     <Fragment>
-      <Stack horizontal gap="2rem" styles={styles.stackinput}>
+      <Stack gap="2rem" horizontal styles={styles.stackinput}>
         <StackItem grow={1} styles={styles.halfstack}>
           <TextField
-            autoFocus={true}
+            autoFocus
             label={formatMessage('Publish Bot Script')}
+            multiline
+            readOnly
             styles={styles.textarea}
             value={scriptValue}
-            readOnly={true}
-            multiline={true}
           />
-          <PrimaryButton text={formatMessage('Copy to Clipboard')} onClick={copyToClipboard} />
+          <PrimaryButton onClick={copyToClipboard} text={formatMessage('Copy to Clipboard')} />
         </StackItem>
         <StackItem align="end" grow={1} styles={styles.halfstack}>
           {/* <p>{formatMessage('This is the name that your user will see.')}</p> */}
         </StackItem>
       </Stack>
-      <Stack horizontal gap="2rem" styles={styles.stackinput}>
+      <Stack gap="2rem" horizontal styles={styles.stackinput}>
         <StackItem grow={1}>
           <p>
             {formatMessage(
@@ -49,9 +49,9 @@ export const DeployWizardStep3 = (props) => {
             )}
           </p>
           <img
-            style={styles.gif}
-            src={processGif}
             alt={formatMessage('This image shows the command line tool output')}
+            src={processGif}
+            style={styles.gif}
           />
         </StackItem>
       </Stack>

@@ -59,9 +59,6 @@ const buildEdgeMenuItemsFromClipboardContext = (
       onRender: () => {
         return (
           <button
-            disabled={!enablePaste}
-            role="menuitem"
-            name="Paste"
             aria-posinset={1}
             aria-setsize={menuItemCount + 1}
             css={css`
@@ -78,14 +75,17 @@ const buildEdgeMenuItemsFromClipboardContext = (
                 background: rgb(237, 235, 233);
               }
             `}
+            disabled={!enablePaste}
+            name="Paste"
             onClick={() => onClick('PASTE')}
+            role="menuitem"
           >
             <div>
               <FontIcon
-                iconName="Paste"
                 css={css`
                   margin-right: 4px;
                 `}
+                iconName="Paste"
               />
               <span>Paste</span>
             </div>
@@ -119,6 +119,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
 
   return (
     <div
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       ref={addRef}
       style={{
         width: EdgeAddButtonSize.width,
@@ -130,11 +131,11 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
         background: 'white',
         outline: nodeSelected ? '1px solid #0078d4' : '',
       }}
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
     >
       <IconMenu
         iconName="Add"
+        iconSize={7}
         iconStyles={{
           background: 'white',
           color: '#005CE6',
@@ -149,14 +150,13 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
             },
           },
         }}
-        iconSize={7}
-        nodeSelected={nodeSelected}
+        label={formatMessage('Add')}
         menuItems={buildEdgeMenuItemsFromClipboardContext(
           nodeContext,
           onClick,
           selfHosted ? (x) => x !== SDKKinds.LogAction : undefined
         )}
-        label={formatMessage('Add')}
+        nodeSelected={nodeSelected}
         {...rest}
       />
     </div>

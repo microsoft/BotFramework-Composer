@@ -30,7 +30,7 @@ describe('<Home/>', () => {
       { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 },
     ];
     const onClickTemplate = jest.fn((item) => item);
-    const { container, getByText } = render(<ExampleList onClick={onClickTemplate} examples={templates} />);
+    const { container, getByText } = render(<ExampleList examples={templates} onClick={onClickTemplate} />);
     expect(container).toHaveTextContent('Echo Bot');
     const link = getByText('Echo Bot');
     fireEvent.click(link);

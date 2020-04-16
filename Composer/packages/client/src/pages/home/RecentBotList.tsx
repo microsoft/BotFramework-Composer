@@ -64,7 +64,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
           ...props,
           onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -83,19 +83,19 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
   });
 
   return (
-    <div data-is-scrollable="true" css={detailListContainer}>
+    <div css={detailListContainer} data-is-scrollable="true">
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
-          items={recentProjects}
-          compact={false}
+          checkboxVisibility={CheckboxVisibility.hidden}
           columns={tableColums}
+          compact={false}
           getKey={(item) => item.name}
+          isHeaderVisible
+          items={recentProjects}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
-          isHeaderVisible={true}
           selection={selection}
           selectionMode={SelectionMode.single}
-          checkboxVisibility={CheckboxVisibility.hidden}
         />
       </ScrollablePane>
     </div>

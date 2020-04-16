@@ -29,17 +29,17 @@ const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = (props) => {
   return (
     <Fragment>
       <SchemaField
-        id={`${id}.${choiceProperty}`}
-        name={choiceProperty}
         definitions={definitions}
         depth={depth}
-        schema={getSchema(choiceProperty)}
-        uiOptions={uiOptions.properties?.[choiceProperty] || {}}
-        value={value?.[choiceProperty]}
+        id={`${id}.${choiceProperty}`}
+        name={choiceProperty}
         onBlur={() => {}}
         onChange={onChange(choiceProperty)}
         onFocus={() => {}}
         rawErrors={getError(choiceProperty)}
+        schema={getSchema(choiceProperty)}
+        uiOptions={uiOptions.properties?.[choiceProperty] || {}}
+        value={value?.[choiceProperty]}
       />
       <SchemaField
         css={styles.choiceOptions}
@@ -47,26 +47,26 @@ const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = (props) => {
         depth={depth + 1}
         id={`${id}.choiceOptions`}
         name="choiceOptions"
-        schema={getSchema('choiceOptions')}
-        uiOptions={uiOptions.properties?.choiceOptions || {}}
-        value={value?.choiceOptions || {}}
         onBlur={() => {}}
         onChange={onChange('choiceOptions')}
         onFocus={() => {}}
         rawErrors={getError('choiceOptions')}
+        schema={getSchema('choiceOptions')}
+        uiOptions={uiOptions.properties?.choiceOptions || {}}
+        value={value?.choiceOptions || {}}
       />
       {getSchema('appendChoices') && (
         <SchemaField
-          id={`${id}.appendChoices`}
-          name="appendChoices"
           definitions={definitions}
           depth={depth}
+          id={`${id}.appendChoices`}
           label={formatMessage('Append choices')}
+          name="appendChoices"
+          onChange={onChange('appendChoices')}
+          rawErrors={getError('appendChoices')}
           schema={getSchema('appendChoices')}
           uiOptions={uiOptions.properties?.appendChoices || {}}
           value={((value as unknown) as ChoiceInput)?.appendChoices}
-          onChange={onChange('appendChoices')}
-          rawErrors={getError('appendChoices')}
         />
       )}
     </Fragment>

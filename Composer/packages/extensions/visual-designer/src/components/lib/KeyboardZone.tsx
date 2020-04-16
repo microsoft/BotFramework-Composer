@@ -47,7 +47,7 @@ export const KeyboardZone: FC<KeyboardZoneProps> = ({ onCommand, children }): JS
   };
 
   return (
-    <div onKeyDown={handleKeyDown} tabIndex={0} data-test-id="keyboard-zone">
+    <div data-test-id="keyboard-zone" onKeyDown={handleKeyDown} tabIndex={0}>
       {children}
     </div>
   );

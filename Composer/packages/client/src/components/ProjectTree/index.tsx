@@ -120,14 +120,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       onSelect(props.group!.key);
     };
     return (
-      <span role="grid" ref={props.group && props.group.data.isRoot && addMainDialogRef}>
+      <span ref={props.group && props.group.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
-          link={props.group!.data}
           depth={0}
           isActive={!props.group!.isCollapsed}
           isSubItemActive={!!selected}
-          onSelect={toggleCollapse}
+          link={props.group!.data}
           onDelete={onDeleteDialog}
+          onSelect={toggleCollapse}
         />
       </span>
     );
@@ -136,11 +136,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   function onRenderCell(nestingDepth?: number, item?: any): React.ReactNode {
     return (
       <TreeItem
-        link={item}
         depth={nestingDepth}
         isActive={createSelectedPath(item.index) === selected}
-        onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
+        link={item}
         onDelete={() => onDeleteTrigger(dialogId, item.index)}
+        onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
       />
     );
   }
@@ -165,25 +165,24 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
 
   return (
     <Resizable
-      size={{ width: currentWidth, height: 'auto' }}
-      minWidth={180}
-      maxWidth={500}
       enable={{
         right: true,
       }}
+      maxWidth={500}
+      minWidth={180}
       onResizeStop={handleResize}
+      size={{ width: currentWidth, height: 'auto' }}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         <SearchBox
           ariaLabel={formatMessage('Type dialog name')}
+          iconProps={{ iconName: 'Filter' }}
+          onChange={onFilter}
           placeholder={formatMessage('Filter Dialog')}
           styles={searchBox}
-          onChange={onFilter}
-          iconProps={{ iconName: 'Filter' }}
         />
         <GroupedList
           {...createGroup(sortedDialogs, dialogId, filter)}
-          onRenderCell={onRenderCell}
           componentRef={groupRef}
           groupProps={
             {
@@ -194,14 +193,15 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               isAllGroupsCollapsed: true,
             } as Partial<IGroupRenderProps>
           }
+          onRenderCell={onRenderCell}
           styles={groupListStyle}
         />
         <ActionButton
-          tabIndex={1}
-          iconProps={addIconProps}
           css={addButton(0)}
-          onClick={onAdd}
           data-testid="ProjectTreeNewDialog"
+          iconProps={addIconProps}
+          onClick={onAdd}
+          tabIndex={1}
         >
           {formatMessage('New Dialog ..')}
         </ActionButton>

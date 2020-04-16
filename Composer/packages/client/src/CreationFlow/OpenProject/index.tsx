@@ -22,12 +22,12 @@ export const OpenProject: React.FC<OpenProjectProps> = (props) => {
   return (
     <div data-testid="SelectLocation">
       <LocationSelectContent
+        onCurrentPathUpdate={onCurrentPathUpdate}
+        onOpen={onOpen}
         operationMode={{
           read: true,
           write: false,
         }}
-        onOpen={onOpen}
-        onCurrentPathUpdate={onCurrentPathUpdate}
       />
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />

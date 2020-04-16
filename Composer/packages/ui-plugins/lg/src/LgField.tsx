@@ -104,19 +104,19 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
       <LgEditor
-        height={125}
-        value={localValue}
-        onChange={onChange}
         diagnostics={diagnostics}
+        editorSettings={userSettings.codeEditor}
+        height={125}
         hidePlaceholder
         languageServer={{
           path: lspServerPath,
         }}
         lgOption={lgOption}
-        editorSettings={userSettings.codeEditor}
+        onChange={onChange}
         onChangeSettings={handleSettingsChange}
+        value={localValue}
       />
     </React.Fragment>
   );

@@ -73,10 +73,10 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
         title: formatMessage('Publishing'),
         subText: (
           <Spinner
-            size={SpinnerSize.small}
-            label={formatMessage('Updating your bot')}
             ariaLive="assertive"
+            label={formatMessage('Updating your bot')}
             labelPosition="left"
+            size={SpinnerSize.small}
           />
         ),
       });
@@ -92,7 +92,7 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
           ),
           type: DialogType.normal,
           children: (
-            <Stack horizontal horizontalAlign="end" gap="1rem">
+            <Stack gap="1rem" horizontal horizontalAlign="end">
               <PrimaryButton onClick={closeConfirm} text={formatMessage('OK')} />
             </Stack>
           ),
@@ -107,7 +107,7 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
           ),
           type: DialogType.normal,
           children: (
-            <Stack horizontal horizontalAlign="end" gap="1rem">
+            <Stack gap="1rem" horizontal horizontalAlign="end">
               <PrimaryButton onClick={closeConfirm} text={formatMessage('OK')} />
             </Stack>
           ),
@@ -124,7 +124,7 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
         }),
         type: DialogType.normal,
         children: (
-          <Stack horizontal horizontalAlign="end" gap="1rem">
+          <Stack gap="1rem" horizontal horizontalAlign="end">
             <PrimaryButton onClick={closeConfirm} text={formatMessage('OK')} />
           </Stack>
         ),
@@ -158,7 +158,7 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
       subText: formatMessage("Are you sure you want to rollback to your bot's last published state?"),
       type: DialogType.normal,
       children: (
-        <Stack horizontal horizontalAlign="end" gap="1rem">
+        <Stack gap="1rem" horizontal horizontalAlign="end">
           <DefaultButton onClick={closeConfirm} text={formatMessage('Cancel')} />
           <PrimaryButton onClick={rollback} text={formatMessage('Rollback')} />
         </Stack>
@@ -173,7 +173,7 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
       subText: formatMessage('Are you sure you want to publish your bot?'),
       type: DialogType.normal,
       children: (
-        <Stack horizontal horizontalAlign="end" gap="1rem">
+        <Stack gap="1rem" horizontal horizontalAlign="end">
           <DefaultButton onClick={closeConfirm} text={formatMessage('Cancel')} />
           <PrimaryButton onClick={publish} text={formatMessage('Publish')} />
         </Stack>
@@ -203,7 +203,7 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
       <h1 style={styles.header}>Publish your bot</h1>
       {publishVersions && publishVersions.integration && (
         <div style={styles.integration}>
-          <Stack horizontal gap="1rem" verticalAlign="start">
+          <Stack gap="1rem" horizontal verticalAlign="start">
             <StackItem grow={0}>
               <Icon iconName="sync" styles={styles.icon} />
             </StackItem>
@@ -212,32 +212,32 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
               Last tested <DateWidget date={publishVersions.integration.publishTimestamp} />
             </StackItem>
             <StackItem align="center" shrink={0} styles={styles.buttons}>
-              <PrimaryButton text="Publish" onClick={confirmPublish} styles={styles.button} />
+              <PrimaryButton onClick={confirmPublish} styles={styles.button} text="Publish" />
             </StackItem>
           </Stack>
         </div>
       )}
       {publishVersions && publishVersions.production && (
         <div style={styles.published}>
-          <Stack horizontal gap="1rem" verticalAlign="start">
+          <Stack gap="1rem" horizontal verticalAlign="start">
             <StackItem grow={0}>
-              <Icon styles={styles.icon} iconName="Globe" />
+              <Icon iconName="Globe" styles={styles.icon} />
             </StackItem>
             <StackItem grow={1}>
               <h1 style={styles.h1}>In Production</h1>
               Current version published <DateWidget date={publishVersions.production.publishTimestamp} />
             </StackItem>
             <StackItem align="center" shrink={0} styles={styles.buttons}>
-              <PrimaryButton text="Open in Emulator" onClick={openEmulator} styles={styles.button} />
+              <PrimaryButton onClick={openEmulator} styles={styles.button} text="Open in Emulator" />
             </StackItem>
           </Stack>
         </div>
       )}
       <div style={styles.rollback}>
         {publishVersions && publishVersions.previousProduction && (
-          <Stack horizontal gap="1rem" verticalAlign="start">
+          <Stack gap="1rem" horizontal verticalAlign="start">
             <StackItem grow={0}>
-              <Icon styles={styles.icon} iconName="history" />
+              <Icon iconName="history" styles={styles.icon} />
             </StackItem>
             <StackItem grow={1}>
               <a href="#" onClick={confirmRollback}>
@@ -248,9 +248,9 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
           </Stack>
         )}
         {publishVersions && !publishVersions.previousProduction && (
-          <Stack horizontal gap="1rem" verticalAlign="start">
+          <Stack gap="1rem" horizontal verticalAlign="start">
             <StackItem grow={0}>
-              <Icon styles={styles.disabledIcon} iconName="history" />
+              <Icon iconName="history" styles={styles.disabledIcon} />
             </StackItem>
             <StackItem grow={1} styles={styles.disabled}>
               Rollback will be available after your next publish.
@@ -260,7 +260,7 @@ export const RemotePublish: React.FC<RouteComponentProps> = () => {
       </div>
       {!publishVersions && <div>{formatMessage('Loading')}</div>}
 
-      <Dialog hidden={dialogHidden} onDismiss={closeConfirm} dialogContentProps={dialogProps}>
+      <Dialog dialogContentProps={dialogProps} hidden={dialogHidden} onDismiss={closeConfirm}>
         <DialogFooter>{dialogProps.children}</DialogFooter>
       </Dialog>
     </div>

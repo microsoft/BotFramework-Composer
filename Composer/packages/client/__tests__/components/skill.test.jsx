@@ -48,7 +48,7 @@ describe('<SkillForm />', () => {
     });
     const onDismiss = jest.fn(() => {});
     const { getByLabelText, getByText } = render(
-      <SkillForm skills={items} editIndex={0} onSubmit={onSubmit} onDismiss={onDismiss} />
+      <SkillForm editIndex={0} onDismiss={onDismiss} onSubmit={onSubmit} skills={items} />
     );
 
     const urlInput = getByLabelText('Manifest url');

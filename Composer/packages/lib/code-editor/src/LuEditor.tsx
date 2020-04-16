@@ -146,14 +146,14 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
 
   return (
     <BaseEditor
-      placeholder={placeholder}
       helpURL={LU_HELP}
+      placeholder={placeholder}
       {...restProps}
-      onInit={onInit}
-      theme="lu"
-      language="lu"
-      options={options}
       editorDidMount={editorDidMount}
+      language="lu"
+      onInit={onInit}
+      options={options}
+      theme="lu"
     />
   );
 };

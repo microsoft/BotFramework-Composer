@@ -24,7 +24,7 @@ export const LoopIndicator = ({ onClick }) => {
         onClick();
       }}
     >
-      <Icon iconName="Sync" css={{ color: 'white', fontSize: LoopIconSize.width / 2 }} />
+      <Icon css={{ color: 'white', fontSize: LoopIconSize.width / 2 }} iconName="Sync" />
     </div>
   );
 };

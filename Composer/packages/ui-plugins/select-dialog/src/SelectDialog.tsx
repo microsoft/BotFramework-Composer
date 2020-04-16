@@ -60,5 +60,5 @@ export const SelectDialog: React.FC<FieldProps> = (props) => {
     }
   };
 
-  return <ComboBoxField {...props} comboboxTitle={comboboxTitle} options={options} onChange={handleChange} />;
+  return <ComboBoxField {...props} comboboxTitle={comboboxTitle} onChange={handleChange} options={options} />;
 };

@@ -23,14 +23,14 @@ export const NavLinks: React.FC<NavLinksProps> = (props) => {
       {navLinks.map((dialog) => {
         return (
           <DefaultButton
+            ariaHidden={false}
+            ariaLabel={formatMessage('language understanding file')}
             key={dialog.id}
             onClick={() => {
               onSelect(dialog.id);
             }}
             styles={fileId === dialog.id ? dialogItemSelected : dialogItemNotSelected}
             text={dialog.name}
-            ariaLabel={formatMessage('language understanding file')}
-            ariaHidden={false}
           />
         );
       })}

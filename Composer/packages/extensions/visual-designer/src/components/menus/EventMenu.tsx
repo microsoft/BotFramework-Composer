@@ -25,8 +25,8 @@ export const EventMenu: React.FC<EventMenuProps> = ({ label, onClick, ...rest })
   return (
     <IconMenu
       iconName="CircleAddition"
-      label={label}
       iconStyles={{ color: '#0078D4' }}
+      label={label}
       menuItems={eventMenuItems}
       {...rest}
     />

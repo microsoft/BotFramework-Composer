@@ -44,17 +44,17 @@ export const DeployWizard = (props) => {
     {
       title: formatMessage('Set bot name and password'),
       subText: 'Make sure to sign in to the Azure Portal or create an account',
-      children: <DeployWizardStepCreate nextStep={completeStepCreate} closeModal={resetModal} />,
+      children: <DeployWizardStepCreate closeModal={resetModal} nextStep={completeStepCreate} />,
     },
     {
       title: formatMessage('Set bot name and password'),
       subText: 'Make sure to sign in to the Azure Portal or create an account',
-      children: <DeployWizardStepDeploy nextStep={completeStepDeploy} closeModal={resetModal} />,
+      children: <DeployWizardStepDeploy closeModal={resetModal} nextStep={completeStepDeploy} />,
     },
     {
       title: formatMessage('Create Azure Resources'),
       subText: 'The first step to deploying your bot is creating all the necessary Azure resources.',
-      children: <DeployWizardStep2 botValues={botValues} nextStep={completeStep2} closeModal={resetModal} />,
+      children: <DeployWizardStep2 botValues={botValues} closeModal={resetModal} nextStep={completeStep2} />,
     },
     {
       title: formatMessage('Publish your Bot'),
@@ -67,18 +67,18 @@ export const DeployWizard = (props) => {
   return (
     <Fragment>
       <Dialog
-        hidden={!isOpen}
-        onDismiss={closeModal}
         dialogContentProps={{
           type: DialogType.normal,
           title: steps[currentStep].title,
           subText: steps[currentStep].subText,
           styles: styles.dialog,
         }}
+        hidden={!isOpen}
         modalProps={{
           isBlocking: false,
           styles: styles.modal,
         }}
+        onDismiss={closeModal}
       >
         {steps[currentStep].children}
       </Dialog>

@@ -21,14 +21,14 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   const { onDismiss, onTry, target, visible, error } = props;
   return (
     <Callout
-      role="alertdialog"
-      ariaLabelledBy="callout-label-id"
       ariaDescribedBy="callout-description-id"
+      ariaLabelledBy="callout-label-id"
       gapSpace={0}
-      target={target}
-      onDismiss={onDismiss}
-      setInitialFocus={true}
       hidden={!visible}
+      onDismiss={onDismiss}
+      role="alertdialog"
+      setInitialFocus
+      target={target}
     >
       <div css={calloutContainer}>
         <p css={calloutLabel} id="callout-label-id">

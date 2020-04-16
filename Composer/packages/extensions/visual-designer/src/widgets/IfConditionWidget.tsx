@@ -70,7 +70,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={conditionNode.offset}>
@@ -97,9 +97,9 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
         return (
           <OffsetContainer key={`${node.id}/offset`} offset={node.offset}>
             <StepGroup
-              key={node.id}
-              id={node.id}
               data={node.data}
+              id={node.id}
+              key={node.id}
               onEvent={onEvent}
               onResize={(size) => {
                 updateNodeBoundary(nodeName, size);

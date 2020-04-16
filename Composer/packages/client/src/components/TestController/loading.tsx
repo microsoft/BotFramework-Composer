@@ -20,11 +20,11 @@ export const Loading: React.FC<ILoadingProps> = (props) => {
   if (!publishing && !reloading) return null;
   return (
     <Spinner
-      size={SpinnerSize.small}
-      label={publishing ? formatMessage('Publishing') : formatMessage('Reloading')}
       ariaLive="assertive"
+      label={publishing ? formatMessage('Publishing') : formatMessage('Reloading')}
       labelPosition="left"
       role="alert"
+      size={SpinnerSize.small}
     />
   );
 };

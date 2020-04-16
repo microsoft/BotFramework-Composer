@@ -28,14 +28,14 @@ describe('<ProjectTree/>', () => {
     const openNewTriggerModal = jest.fn(() => {});
     const { findByText } = renderWithStore(
       <ProjectTree
-        dialogs={dialogs}
         dialogId={dialogId}
-        selected={selected}
-        onSelect={handleSelect}
+        dialogs={dialogs}
         onAdd={handleAddDialog}
         onDeleteDialog={handleDeleteDialog}
         onDeleteTrigger={handleDeleteTrigger}
+        onSelect={handleSelect}
         openNewTriggerModal={openNewTriggerModal}
+        selected={selected}
       />
     );
     const node = await findByText('addtodo');

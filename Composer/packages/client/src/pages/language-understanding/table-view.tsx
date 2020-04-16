@@ -176,13 +176,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item, index) => {
           return (
             <IconButton
+              ariaLabel={formatMessage('actions')}
               menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
                 items: getTemplatesMoreButtons(item, index),
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              ariaLabel={formatMessage('actions')}
             />
           );
         },
@@ -213,7 +213,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   function onRenderDetailsHeader(props, defaultRender) {
     return (
       <div data-testid="tableHeader">
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
             onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -227,8 +227,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
+          className="table-view-list"
+          columns={getTableColums()}
           componentRef={listRef}
+          getKey={(item) => item.Name}
           items={intents}
+          layoutMode={DetailsListLayoutMode.justified}
+          onRenderDetailsHeader={onRenderDetailsHeader}
+          selectionMode={SelectionMode.none}
           styles={{
             root: {
               overflowX: 'hidden',
@@ -240,12 +246,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
               },
             },
           }}
-          className="table-view-list"
-          columns={getTableColums()}
-          getKey={(item) => item.Name}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-          selectionMode={SelectionMode.none}
         />
       </ScrollablePane>
     </div>

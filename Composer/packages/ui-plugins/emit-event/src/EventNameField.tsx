@@ -27,20 +27,20 @@ const EventNameField: React.FC<FieldProps<string>> = (props) => {
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
       <ComboBox
-        id={id}
-        text={value}
-        options={options}
-        placeholder={formatMessage('Select event type or type a custom one')}
         allowFreeform
         autoComplete="on"
-        onChange={handleChange}
         errorMessage={error as string}
-        useComboBoxAsMenuWidth
+        id={id}
+        onChange={handleChange}
+        options={options}
+        placeholder={formatMessage('Select event type or type a custom one')}
         styles={{
           errorMessage: { display: 'none' },
         }}
+        text={value}
+        useComboBoxAsMenuWidth
       />
     </>
   );

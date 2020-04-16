@@ -32,16 +32,16 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
     <EdgeMenu
-      onClick={($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
+      addCoachMarkRef={addCoachMarkRef}
       data-testid="StepGroupAdd"
       id={`${id}[0]`}
-      addCoachMarkRef={addCoachMarkRef}
+      onClick={($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
     />
   ) : (
     <StepGroup
-      id={id}
       addCoachMarkRef={addCoachMarkRef}
       data={data}
+      id={id}
       onEvent={onEvent}
       onResize={(boundary) => {
         if (boundary) {
@@ -62,11 +62,11 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
 
   return (
     <div
+      aria-label="step-editor"
       className="step-editor"
       css={{ position: 'relative', width: editorWidth, height: editorHeight }}
-      aria-label="step-editor"
     >
-      <SVGContainer width={editorWidth} height={editorHeight}>
+      <SVGContainer height={editorHeight} width={editorWidth}>
         {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
         {drawSVGEdge(
           'editor-edge__tail',
@@ -77,10 +77,10 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
           { directed: true }
         )}
         <circle
-          r={TerminatorSize.height / 2 - 1}
           cx={editorAxisX}
           cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
           fill="none"
+          r={TerminatorSize.height / 2 - 1}
           stroke={ObiColors.LightGray}
           strokeWidth="2"
         />

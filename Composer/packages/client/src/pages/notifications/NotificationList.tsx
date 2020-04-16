@@ -39,7 +39,7 @@ const columns: IColumn[] = [
     maxWidth: 30,
     onRender: (item: INotification) => {
       const icon = icons[item.severity];
-      return <FontIcon iconName={icon.iconName} css={typeIcon(icon)} />;
+      return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
     },
   },
   {
@@ -91,7 +91,7 @@ const columns: IColumn[] = [
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
-    <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+    <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
       {defaultRender({
         ...props,
         onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -115,20 +115,20 @@ export const NotificationList: React.FC<INotificationListProps> = (props) => {
       <div css={tableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            css={detailList}
-            items={showItems}
+            checkboxVisibility={CheckboxVisibility.hidden}
             columns={columns}
+            css={detailList}
+            isHeaderVisible
+            items={showItems}
+            layoutMode={DetailsListLayoutMode.justified}
             onItemInvoked={onItemClick}
+            onRenderDetailsHeader={onRenderDetailsHeader}
             selectionMode={SelectionMode.single}
             setKey="none"
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            checkboxVisibility={CheckboxVisibility.hidden}
-            onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </ScrollablePane>
       </div>
-      <Pagination pageCount={pageCount} onChange={setPageIndex} />
+      <Pagination onChange={setPageIndex} pageCount={pageCount} />
     </div>
   );
 };

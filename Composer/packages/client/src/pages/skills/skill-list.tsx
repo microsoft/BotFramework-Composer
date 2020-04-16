@@ -135,22 +135,22 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
       onRender: (_item, index) => {
         return (
           <div>
-            <Stack tokens={{ childrenGap: 8 }} horizontal>
+            <Stack horizontal tokens={{ childrenGap: 8 }}>
               <IconButton
+                ariaLabel="Edit"
                 iconProps={{
                   iconName: 'Edit',
                 }}
                 onClick={() => onItemEdit(index)}
                 title="Edit"
-                ariaLabel="Edit"
               />
               <IconButton
+                ariaLabel="Delete"
                 iconProps={{
                   iconName: 'Delete',
                 }}
                 onClick={() => onItemDelete(index)}
                 title="Delete"
-                ariaLabel="Delete"
               />
             </Stack>
           </div>
@@ -162,7 +162,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
       <div data-testid="tableHeader">
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
             onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -178,10 +178,10 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
       <div css={ActionButton} data-testid="add-skill">
         {typeof editIndex === 'number' ? (
           <SkillForm
-            skills={skills}
             editIndex={editIndex}
-            onSubmit={onSubmitForm}
             onDismiss={onDismissForm}
+            onSubmit={onSubmitForm}
+            skills={skills}
           ></SkillForm>
         ) : (
           <Link onClick={() => setEditIndex(-1)}>Connect to a new skill</Link>
@@ -195,15 +195,15 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
       <div css={TableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            items={skills}
-            styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}
-            columns={getColumns()}
-            selectionMode={SelectionMode.single}
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            onRenderDetailsFooter={onRenderDetailsFooter}
             checkboxVisibility={CheckboxVisibility.hidden}
+            columns={getColumns()}
+            isHeaderVisible
+            items={skills}
+            layoutMode={DetailsListLayoutMode.justified}
+            onRenderDetailsFooter={onRenderDetailsFooter}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+            selectionMode={SelectionMode.single}
+            styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}
           />
         </ScrollablePane>
       </div>

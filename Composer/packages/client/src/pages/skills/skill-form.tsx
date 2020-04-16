@@ -87,18 +87,18 @@ const SkillForm: React.FC<ISkillFormProps> = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="submit" style={{ display: 'none' }} />
+      <input style={{ display: 'none' }} type="submit" />
       <Stack tokens={{ childrenGap: '3rem' }}>
         <StackItem grow={0}>
           <TextField
-            css={FormFieldManifestUrl}
-            label={formatMessage('Manifest url')}
-            value={formData.manifestUrl}
-            onChange={updateForm('manifestUrl')}
-            errorMessage={formDataErrors.manifestUrl}
-            data-testid="NewSkillManifestUrl"
-            required
             autoFocus
+            css={FormFieldManifestUrl}
+            data-testid="NewSkillManifestUrl"
+            errorMessage={formDataErrors.manifestUrl}
+            label={formatMessage('Manifest url')}
+            onChange={updateForm('manifestUrl')}
+            required
+            value={formData.manifestUrl}
           />
         </StackItem>
 

@@ -18,6 +18,10 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
       disabled={disabled}
       errorMessage={error}
       id={id}
+      onChange={handleChange}
+      onRenderPrefix={() => {
+        return <Icon iconName="Variable" />;
+      }}
       placeholder={placeholder}
       readOnly={readonly}
       styles={{
@@ -25,10 +29,6 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
         errorMessage: { display: 'none' },
       }}
       value={value}
-      onChange={handleChange}
-      onRenderPrefix={() => {
-        return <Icon iconName="Variable" />;
-      }}
     />
   );
 };

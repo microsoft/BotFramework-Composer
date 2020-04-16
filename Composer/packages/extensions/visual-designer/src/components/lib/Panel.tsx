@@ -71,17 +71,16 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
           {title}
         </div>
         <IconButton
-          iconProps={{ iconName: 'PageRight' }}
           css={{
             transform: collapsed ? 'rotate(270deg)' : 'rotate(90deg)',
             marginRight: '-15px',
             transition: 'transform 0.2s linear',
           }}
+          iconProps={{ iconName: 'PageRight' }}
           onClick={collapseFuc}
         />
       </div>
       <div
-        onClick={onClickContent}
         css={{
           border: '1px solid #656565',
           boxSizing: 'border-box',
@@ -92,6 +91,7 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
           margin: '0 auto',
           position: 'relative',
         }}
+        onClick={onClickContent}
       >
         {collapsed ? <div>{collapsedItems}</div> : <div>{children}</div>}
         <div>{addMenu}</div>

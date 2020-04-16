@@ -75,7 +75,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
   };
 
-  const addButton = <Icon styles={home.button} iconName="Add" />;
+  const addButton = <Icon iconName="Add" styles={home.button} />;
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
@@ -139,33 +139,33 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.newBotContainer}>
             <div data-testid={'homePage-body-New'}>
               <ItemContainer
-                title={addButton}
                 content={formatMessage('New')}
-                styles={home.newBotItem}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
                 }}
+                styles={home.newBotItem}
+                title={addButton}
               />
             </div>
             {recentProjects.length > 0 ? (
               <ItemContainer
-                title={''}
                 content={recentProjects[0].name}
-                styles={home.lastestBotItem}
+                forwardedRef={addRef}
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
-                forwardedRef={addRef}
+                styles={home.lastestBotItem}
+                title={''}
               />
             ) : (
               <ItemContainer
-                title={''}
                 content={'ToDoBotWithLuis'}
-                styles={home.lastestBotItem}
+                forwardedRef={addRef}
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
-                forwardedRef={addRef}
+                styles={home.lastestBotItem}
+                title={''}
               />
             )}
           </div>
@@ -173,23 +173,23 @@ const Home: React.FC<RouteComponentProps> = () => {
             <div css={home.leftContainer}>
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
-                recentProjects={recentProjects}
                 onSelectionChanged={async (item) => {
                   await onSelectionChanged(item);
                 }}
+                recentProjects={recentProjects}
               />
             </div>
           )}
           <div css={home.leftContainer}>
             <h2 css={home.subtitle}>
               {formatMessage('Video tutorials:')}&nbsp;
-              <Link href={comingSoonLink.to} tabIndex={-1} key={comingSoonLink.text} target={'_blank'}>
+              <Link href={comingSoonLink.to} key={comingSoonLink.text} tabIndex={-1} target={'_blank'}>
                 <span css={comingSoonLink.css}>{comingSoonLink.text}</span>
               </Link>
             </h2>
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
-                <ItemContainer key={index} title={item.title} content={item.content} disabled />
+                <ItemContainer content={item.content} disabled key={index} title={item.title} />
               ))}
               <div css={home.linkContainer}>
                 <div>
@@ -201,10 +201,10 @@ const Home: React.FC<RouteComponentProps> = () => {
                   return (
                     <Link
                       href={link.to}
-                      tabIndex={-1}
                       key={'homePageLeftLinks-' + link.text}
-                      target="_blank"
                       rel="noopener noreferrer"
+                      tabIndex={-1}
+                      target="_blank"
                     >
                       <div css={link.css}>{link.text}</div>
                     </Link>

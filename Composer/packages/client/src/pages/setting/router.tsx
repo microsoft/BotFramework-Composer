@@ -15,7 +15,7 @@ const Routes = () => {
   return (
     <ErrorBoundary>
       <Router>
-        <DialogSettings path="dialog-settings" default />
+        <DialogSettings default path="dialog-settings" />
         <Deployment path="deployment" />
         <RemotePublish path="remote-publish" />
         <UserSettings path="preferences" />

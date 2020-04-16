@@ -71,6 +71,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
       >
         {icon && icon !== ElementIcon.None && (
           <div
+            aria-hidden
             css={{
               width: 16,
               height: 16,
@@ -79,18 +80,17 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
               justifyContent: 'center',
               marginRight: '5px',
             }}
-            aria-hidden={true}
           >
-            <Icon icon={icon} color={colors.icon} size={16} />
+            <Icon color={colors.icon} icon={icon} size={16} />
           </div>
         )}
         <div
+          aria-label={headerContent}
           css={css`
             ${headerText};
             line-height: 16px;
             transform: translateY(-1px);
           `}
-          aria-label={headerContent}
         >
           {headerContent}
         </div>

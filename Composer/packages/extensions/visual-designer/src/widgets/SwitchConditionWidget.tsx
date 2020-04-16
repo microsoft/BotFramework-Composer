@@ -81,7 +81,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={switchNode.offset}>
@@ -96,7 +96,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
           </ElementMeasurer>
         </ElementWrapper>
       </OffsetContainer>
-      <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
+      <OffsetContainer css={{ zIndex: 100 }} offset={choiceNode.offset}>
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
@@ -107,9 +107,9 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
       {(casesNodes as any).map((x, index) => (
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
           <StepGroup
-            key={x.id}
-            id={x.id}
             data={x.data}
+            id={x.id}
+            key={x.id}
             onEvent={onEvent}
             onResize={(size) => {
               updateNodeBoundary(getCaseKey(index), size);

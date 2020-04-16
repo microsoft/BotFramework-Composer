@@ -19,9 +19,9 @@ const JsonField: React.FC<FieldProps> = (props) => {
 
   return (
     <React.Fragment>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
       <div css={fieldStyle}>
-        <JsonEditor value={value} onChange={onChange} />
+        <JsonEditor onChange={onChange} value={value} />
       </div>
     </React.Fragment>
   );

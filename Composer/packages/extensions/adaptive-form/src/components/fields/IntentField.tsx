@@ -39,7 +39,7 @@ const IntentField: React.FC<FieldProps> = (props) => {
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
       {Editor ? <Editor {...props} onChange={handleChange} /> : `No Editor for ${type}`}
     </React.Fragment>
   );

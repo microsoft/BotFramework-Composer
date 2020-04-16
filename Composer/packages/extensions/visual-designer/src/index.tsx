@@ -102,23 +102,23 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
               schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema),
             }}
           >
-            <div data-testid="visualdesigner-container" css={styles}>
+            <div css={styles} data-testid="visualdesigner-container">
               <ObiEditor
-                key={dialogId}
-                path={dialogId}
+                addCoachMarkRef={addCoachMarkRef}
                 data={data}
-                focusedSteps={focusedActions}
-                onFocusSteps={onFocusSteps}
                 focusedEvent={focusedEvent}
-                onFocusEvent={onFocusEvent}
+                focusedSteps={focusedActions}
+                key={dialogId}
+                onChange={(x) => saveData(x)}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
+                onFocusEvent={onFocusEvent}
+                onFocusSteps={onFocusSteps}
                 onOpen={(x) => navTo(x)}
-                onChange={(x) => saveData(x)}
                 onSelect={onSelect}
-                undo={undo}
+                path={dialogId}
                 redo={redo}
-                addCoachMarkRef={addCoachMarkRef}
+                undo={undo}
               />
             </div>
           </FlowSchemaContext.Provider>

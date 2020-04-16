@@ -81,7 +81,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
           {hostControlLabels.learnMore}
         </Link>
       </p>
-      {absHosted ? <ChoiceGroup options={slots} onChange={changeSlot} css={slotChoice} selectedKey={slot} /> : null}
+      {absHosted ? <ChoiceGroup css={slotChoice} onChange={changeSlot} options={slots} selectedKey={slot} /> : null}
     </div>
   );
 

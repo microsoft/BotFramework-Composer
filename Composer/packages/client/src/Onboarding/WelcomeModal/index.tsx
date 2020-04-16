@@ -18,7 +18,7 @@ const WelcomeModal = () => {
 
   return !(complete || hideModal) ? (
     <Modal
-      isOpen={true}
+      isOpen
       onDismiss={exit}
       overlay={{ style: { background: 'transparent' } }}
       styles={minimized ? collapsedStyles : expandedStyles}

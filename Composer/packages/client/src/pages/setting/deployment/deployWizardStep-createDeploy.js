@@ -178,56 +178,56 @@ export const DeployWizardStepCreate = (props) => {
   return (
     <Fragment>
       <form onSubmit={submit}>
-        <Stack horizontal gap="2rem" styles={styles.stackinput}>
+        <Stack gap="2rem" horizontal styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
             <TextField
-              autoFocus={true}
-              label={formatMessage('Bot Display Name')}
-              styles={styles.input}
+              autoFocus
+              componentRef={nameRef}
+              data-testid="displayname"
               defaultValue={botName}
+              errorMessage={formData.errors.name}
+              label={formatMessage('Bot Display Name')}
               onBlur={useCallback(() => setNameErrors())}
               onChange={updateForm('name')}
-              errorMessage={formData.errors.name}
-              data-testid="displayname"
-              componentRef={nameRef}
               required
+              styles={styles.input}
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
             <p>{formatMessage('This is the name that your user will see.')}</p>
           </StackItem>
         </Stack>
-        <Stack horizontal gap="2rem" styles={styles.stackinput}>
+        <Stack gap="2rem" horizontal styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
             <TextField
+              componentRef={environmentRef}
+              data-testid="displayname"
+              errorMessage={formData.errors.environment}
               label={formatMessage('Environment Name')}
-              styles={styles.input}
               onBlur={useCallback(() => setEnvironmentErrors())}
               onChange={updateForm('environment')}
-              errorMessage={formData.errors.environment}
-              data-testid="displayname"
-              componentRef={environmentRef}
               required
+              styles={styles.input}
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
             <p>{formatMessage('A name for this instance of your bot on Azure. (Staging, Production, testing, etc)')}</p>
           </StackItem>
         </Stack>
-        <Stack horizontal gap="2rem" styles={styles.stackinput}>
+        <Stack gap="2rem" horizontal styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
             <TextField
+              autoComplete={'off'}
+              componentRef={appSecretRef}
+              data-testid="appsecret"
+              errorMessage={formData.errors.secret}
               label={formatMessage('App Secret')}
-              styles={styles.input}
               mask="****************"
+              maxLength={16}
               onBlur={useCallback(() => setAppSecretErrors())}
               onChange={updateForm('secret')}
-              errorMessage={formData.errors.secret}
-              data-testid="appsecret"
-              componentRef={appSecretRef}
               required
-              autoComplete={'off'}
-              maxLength={16}
+              styles={styles.input}
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -239,20 +239,20 @@ export const DeployWizardStepCreate = (props) => {
           </StackItem>
         </Stack>
 
-        <Stack horizontal gap="2rem" styles={styles.stackinput}>
+        <Stack gap="2rem" horizontal styles={styles.stackinput}>
           <StackItem grow={1} styles={styles.halfstack}>
             <ComboBox
-              label={formatMessage('Azure Region')}
-              styles={styles.input}
-              options={regionOptions}
+              autoComplete={'on'}
+              componentRef={regionRef}
+              data-testid="region"
               defaultSelectedKey={regionOptions[0].key}
+              errorMessage={formData.errors.region}
+              label={formatMessage('Azure Region')}
               onBlur={useCallback(() => setRegionErrors())}
               onChange={updateForm('region')}
-              errorMessage={formData.errors.region}
-              data-testid="region"
-              componentRef={regionRef}
+              options={regionOptions}
               required
-              autoComplete={'on'}
+              styles={styles.input}
             />
           </StackItem>
           <StackItem align="end" grow={1} styles={styles.halfstack}>
@@ -262,7 +262,7 @@ export const DeployWizardStepCreate = (props) => {
 
         <DialogFooter>
           <DefaultButton onClick={closeModal} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={submit} text={formatMessage('Next')} disabled={disable} />
+          <PrimaryButton disabled={disable} onClick={submit} text={formatMessage('Next')} />
         </DialogFooter>
       </form>
     </Fragment>

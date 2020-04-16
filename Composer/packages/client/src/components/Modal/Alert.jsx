@@ -18,20 +18,20 @@ const AlertDialog = (props) => {
 
   return (
     <Dialog
-      hidden={false}
-      minWidth={500}
-      onDismiss={onCancel}
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
         // subText: subTitle,
       }}
+      hidden={false}
+      minWidth={500}
       modalProps={{
         isBlocking: true,
         styles: {
           main: { maxWidth: 450 },
         },
       }}
+      onDismiss={onCancel}
     >
       {subTitle && <div style={BuiltInStyles[style]}>{subTitle}</div>}
 
@@ -65,7 +65,7 @@ export const OpenAlertModal = (title, subTitle, setting = {}) => {
       resolve(false);
     };
 
-    const modal = <AlertDialog setting={{ title, subTitle, ...setting }} onConfirm={onConfirm} onCancel={onCancel} />;
+    const modal = <AlertDialog onCancel={onCancel} onConfirm={onConfirm} setting={{ title, subTitle, ...setting }} />;
     ReactDOM.render(modal, node);
   });
 };

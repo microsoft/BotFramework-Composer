@@ -33,16 +33,16 @@ export class RuleGroup extends React.Component<NodeProps> {
     const elementId = `${id}[${index}]`;
     return (
       <div
-        key={elementId + 'block'}
         css={{
           width: RuleBlockWidth,
           height: RuleBlockHeight,
           boxSizing: 'border-box',
         }}
+        key={elementId + 'block'}
       >
         <EventRenderer
-          id={elementId}
           data={rule}
+          id={elementId}
           onEvent={onEvent}
           onResize={() => {
             this.propagateBoundary();

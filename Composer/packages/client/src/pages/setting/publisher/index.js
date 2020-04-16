@@ -116,10 +116,10 @@ export const Publisher = () => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
+          onSave={savePublishTarget}
           targetTypes={publishTypes.map((type) => {
             return { key: type, text: type };
           })}
-          onSave={savePublishTarget}
         />
       ),
     });
@@ -143,7 +143,7 @@ export const Publisher = () => {
   return (
     <div style={styles.page}>
       <h1 style={styles.header}>Publish your bot to a remote</h1>
-      <PrimaryButton text="Add Destination" onClick={addDestination} styles={styles.button} />
+      <PrimaryButton onClick={addDestination} styles={styles.button} text="Add Destination" />
       {publishTypes && publishTypes.length && <div>publish to types: {publishTypes.join(',')}</div>}
 
       {publishTargets.map((target, i) => {
@@ -152,7 +152,7 @@ export const Publisher = () => {
             <p>
               <label>Name:</label>
               {target.name}
-              <PrimaryButton text="Publish" onClick={publishToTarget(i)} />
+              <PrimaryButton onClick={publishToTarget(i)} text="Publish" />
             </p>
           </div>
         );
@@ -160,7 +160,7 @@ export const Publisher = () => {
 
       {!publishVersions && <div>{formatMessage('Loading')}</div>}
 
-      <Dialog hidden={dialogHidden} onDismiss={closeConfirm} dialogContentProps={dialogProps}>
+      <Dialog dialogContentProps={dialogProps} hidden={dialogHidden} onDismiss={closeConfirm}>
         {dialogProps.children}
         {dialogProps.footer && <DialogFooter>{dialogProps.footer}</DialogFooter>}
       </Dialog>
@@ -199,22 +199,22 @@ const CreatePublishTarget = (props) => {
       <form onSubmit={submit}>
         create a publish target.
         <TextField
-          placeholder="My Publish Target"
           label={formatMessage('Name')}
-          styles={styles.input}
           onChange={updateName}
+          placeholder="My Publish Target"
+          styles={styles.input}
         />
         <Dropdown
-          placeholder={formatMessage('Choose One')}
           label={formatMessage('Publish Destination Type')}
-          options={props.targetTypes}
           onChange={updateType}
+          options={props.targetTypes}
+          placeholder={formatMessage('Choose One')}
         />
         <TextField
           label={formatMessage('Paste Configuration')}
-          styles={styles.textarea}
+          multiline
           onChange={updateConfig}
-          multiline={true}
+          styles={styles.textarea}
         />
       </form>
       <DialogFooter>

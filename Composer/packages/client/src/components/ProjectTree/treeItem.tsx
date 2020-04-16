@@ -20,7 +20,7 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div role="cell" css={itemText(item.depth)}>
+    <div css={itemText(item.depth)} role="cell">
       {item.depth !== 0 && <Icon iconName="Flow" styles={{ root: { marginRight: '8px' } }} />}
       {item.displayName}
     </div>
@@ -32,12 +32,12 @@ const onRenderOverflowButton = (isRoot: boolean) => {
   return (overflowItems) => {
     return showIcon ? (
       <IconButton
-        role="cell"
         className="dialog-more-btn"
         data-testid="dialogMoreButton"
-        styles={moreButton}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
+        role="cell"
+        styles={moreButton}
       />
     ) : null;
   };
@@ -47,8 +47,6 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
   return (
     <div
-      role="presentation"
-      tabIndex={1}
       css={navItem(isActive, !!isSubItemActive)}
       onClick={() => {
         onSelect(link.id);
@@ -58,9 +56,12 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
           onSelect(link.id);
         }
       }}
+      role="presentation"
+      tabIndex={1}
     >
       <OverflowSet
-        role="row"
+        css={overflowSet}
+        data-testid={`DialogTreeItem${link.id}`}
         items={[
           {
             key: link.id,
@@ -68,6 +69,8 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             ...link,
           },
         ]}
+        onRenderItem={onRenderItem}
+        onRenderOverflowButton={onRenderOverflowButton(link.isRoot)}
         overflowItems={[
           {
             key: 'delete',
@@ -75,10 +78,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             onClick: () => onDelete(link.id),
           },
         ]}
-        css={overflowSet}
-        data-testid={`DialogTreeItem${link.id}`}
-        onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(link.isRoot)}
+        role="row"
       />
     </div>
   );

@@ -109,8 +109,8 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
         <FormTitle
           formData={localData}
           id={localData.$designer?.id || 'unknown'}
-          schema={$schema}
           onChange={($designer) => handleDataChange({ ...localData, $designer })}
+          schema={$schema}
           uiOptions={$uiSchema}
         />
         <SchemaField
@@ -118,11 +118,11 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
           depth={-1}
           id="root"
           name="root"
+          onChange={handleDataChange}
           rawErrors={errors}
           schema={$schema}
           uiOptions={$uiSchema}
           value={localData}
-          onChange={handleDataChange}
         />
       </PluginContext.Provider>
     </ErrorBoundary>

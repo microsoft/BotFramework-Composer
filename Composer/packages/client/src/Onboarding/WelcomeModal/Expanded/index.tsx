@@ -50,14 +50,14 @@ const WelcomeModal = () => {
             <IconButton iconProps={{ iconName: 'ChromeClose' }} onClick={exit} title="Close" />
           </div>
         </div>
-        <img src={welcomeImage} alt="Welcome" />
+        <img alt="Welcome" src={welcomeImage} />
         <div css={subtitleStyle}>{formatMessage('Your bot creation journey on Composer')}</div>
       </div>
       <div>
         {stepSets.map(({ steps: { length }, title }, index) => (
           <StepStatus
-            key={index}
             isComplete={index < currentSet || (index === currentSet && !~currentStep)}
+            key={index}
             steps={length}
             title={title}
           />
@@ -70,7 +70,7 @@ const WelcomeModal = () => {
               <PrimaryButton data-testid="onboardingNextSet" onClick={nextSet} text={stepSets[currentSet + 1].title} />
             )}
             {currentSet + 1 === stepSets.length && (
-              <PrimaryButton data-testid="onboardingDone" text={formatMessage('Done!')} onClick={onComplete} />
+              <PrimaryButton data-testid="onboardingDone" onClick={onComplete} text={formatMessage('Done!')} />
             )}
           </div>
         )}

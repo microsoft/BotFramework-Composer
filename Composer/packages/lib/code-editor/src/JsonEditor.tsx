@@ -78,14 +78,14 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
 
   return (
     <BaseEditor
-      id={id}
+      errorMessage={parseError}
       helpURL="https://www.json.org"
+      id={id}
       language="json"
+      onChange={handleChange}
+      onInit={onInit}
       options={options}
       value={JSON.stringify(initialValue, null, 2)}
-      onChange={handleChange}
-      errorMessage={parseError}
-      onInit={onInit}
       {...rest}
     />
   );

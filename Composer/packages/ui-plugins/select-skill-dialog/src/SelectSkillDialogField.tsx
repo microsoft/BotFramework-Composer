@@ -53,5 +53,5 @@ export const SelectSkillDialog: React.FC<FieldProps> = (props) => {
     }
   };
 
-  return <ComboBoxField {...props} comboboxTitle={comboboxTitle} options={options} onChange={handleChange} />;
+  return <ComboBoxField {...props} comboboxTitle={comboboxTitle} onChange={handleChange} options={options} />;
 };

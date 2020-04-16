@@ -28,9 +28,9 @@ export const About: React.FC<RouteComponentProps> = () => {
             latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code.`)}
               <Link
                 href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/toc.md'}
+                style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 tabIndex={-1}
                 target={'_blank'}
-                style={{ marginLeft: '5px', textDecoration: 'underline' }}
               >
                 {formatMessage(`Learn more`)}
               </Link>
@@ -42,9 +42,9 @@ export const About: React.FC<RouteComponentProps> = () => {
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
                   href={`https://github.com/microsoft/BotFramework-Composer/commit/${process.env.GIT_SHA}`}
+                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
                   tabIndex={-1}
                   target={'_blank'}
-                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
                   {process.env.GIT_SHA || 'Unknown'}
                 </Link>
@@ -55,9 +55,9 @@ export const About: React.FC<RouteComponentProps> = () => {
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
                   href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSION}`}
+                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
                   tabIndex={-1}
                   target={'_blank'}
-                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
                   {process.env.SDK_PACKAGE_VERSION || 'Unknown'}
                 </Link>
@@ -76,13 +76,13 @@ export const About: React.FC<RouteComponentProps> = () => {
         </div>
         <div css={about.linkContainer}>
           <div css={about.linkRow}>
-            <Icon styles={about.icon} iconName={'BlockedSite'} tabIndex={-1} />
+            <Icon iconName={'BlockedSite'} styles={about.icon} tabIndex={-1} />
             <Link href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'} target={'_blank'}>
               <div css={about.link}>{formatMessage(`Terms of Use`)} </div>
             </Link>
           </div>
           <div css={about.linkRow}>
-            <Icon styles={about.icon} ariaLabel={formatMessage('Privacy button')} iconName={'Lock'} />
+            <Icon ariaLabel={formatMessage('Privacy button')} iconName={'Lock'} styles={about.icon} />
             <Link href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'} target={'_blank'}>
               <div css={about.link}>{formatMessage(`Privacy`)}</div>
             </Link>

@@ -280,11 +280,11 @@ function DesignPage(props) {
         : [];
     return (
       <Breadcrumb
-        items={items}
         ariaLabel={formatMessage('Navigation Path')}
-        styles={breadcrumbClass}
         data-testid="Breadcrumb"
+        items={items}
         onRenderItem={onRenderBreadcrumbItem}
+        styles={breadcrumbClass}
       />
     );
   }, [dialogs, breadcrumb]);
@@ -361,14 +361,14 @@ function DesignPage(props) {
     <React.Fragment>
       <div css={pageRoot}>
         <ProjectTree
-          dialogs={dialogs}
           dialogId={dialogId}
-          selected={selected}
-          onSelect={handleSelect}
+          dialogs={dialogs}
           onAdd={() => actions.createDialogBegin({}, onCreateDialogComplete)}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
+          onSelect={handleSelect}
           openNewTriggerModal={openNewTriggerModal}
+          selected={selected}
         />
         <div css={contentWrapper}>
           {match && <ToolBar toolbarItems={toolbarItems} />}

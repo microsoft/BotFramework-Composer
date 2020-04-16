@@ -193,7 +193,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   const messageHelp = errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics;
 
   const syntaxLink = (
-    <Link key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
+    <Link href={helpURL} key="a" rel="noopener noreferrer" target="_blank">
       {formatMessage('Refer to the syntax documentation here.')}
     </Link>
   );
@@ -217,13 +217,13 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={editorOptions} />
+        <Editor {...rest} editorDidMount={onEditorMount} options={editorOptions} value={initialValue || ''} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
-          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
-          isMultiline={false}
           dismissButtonAriaLabel={formatMessage('Close')}
+          isMultiline={false}
+          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
           overflowButtonAriaLabel={formatMessage('See more')}
         >
           {messageHelp}
