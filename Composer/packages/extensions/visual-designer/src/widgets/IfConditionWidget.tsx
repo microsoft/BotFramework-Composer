@@ -70,6 +70,9 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       <OffsetContainer offset={conditionNode.offset}>
         <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
           <ElementMeasurer
@@ -105,9 +108,6 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           </OffsetContainer>
         );
       })}
-      <SVGContainer width={boundary.width} height={boundary.height}>
-        <FlowEdges edges={edges} />
-      </SVGContainer>
     </div>
   );
 };
