@@ -16,9 +16,9 @@ import { StepRenderer } from '../renderers/StepRenderer';
 import { GraphLayout } from '../../models/GraphLayout';
 import { EdgeMenu } from '../menus/EdgeMenu';
 import { SVGContainer } from '../lib/SVGContainer';
-import { renderEdge } from '../lib/EdgeUtil';
 import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
+import { FlowEdges } from '../lib/FlowEdges';
 
 const StepInterval = ElementInterval.y;
 
@@ -57,7 +57,9 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer hidden>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer width={boundary.width} height={boundary.height} hidden>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       {nodes
         ? nodes.map((node, index) => (
             <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={node.offset}>

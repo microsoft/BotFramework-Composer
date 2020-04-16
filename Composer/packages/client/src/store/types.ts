@@ -99,6 +99,7 @@ export interface State {
   publishTypes: string[];
   publishTargets: any[];
   userSettings: UserSettings;
+  announcement: string | undefined;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
