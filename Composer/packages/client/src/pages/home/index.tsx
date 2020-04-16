@@ -183,7 +183,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.leftContainer}>
             <h2 css={home.subtitle}>
               {formatMessage('Video tutorials:')}&nbsp;
-              <Link href={comingSoonLink.to} tabIndex={-1} key={comingSoonLink.text} target={'_blank'}>
+              <Link href={comingSoonLink.to} key={comingSoonLink.text} target={'_blank'}>
                 <span css={comingSoonLink.css}>{comingSoonLink.text}</span>
               </Link>
             </h2>
@@ -201,7 +201,6 @@ const Home: React.FC<RouteComponentProps> = () => {
                   return (
                     <Link
                       href={link.to}
-                      tabIndex={-1}
                       key={'homePageLeftLinks-' + link.text}
                       target="_blank"
                       rel="noopener noreferrer"
