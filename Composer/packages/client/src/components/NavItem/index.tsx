@@ -68,6 +68,19 @@ export const NavItem: React.FC<INavItemProps> = props => {
     </div>
   );
 
+  const activeAreaWithTooltip = (
+    <div css={link(active, disabled)} aria-hidden="true" tabIndex={-1} aria-disabled={disabled}>
+      <TooltipHost content={labelName} directionalHint={DirectionalHint.rightCenter}>
+        <Icon
+          data-testid={'LeftNav-CommandBarButton' + labelName}
+          iconName={iconName}
+          styles={icon(active, disabled)}
+        />
+      </TooltipHost>
+      {labelName}
+    </div>
+  );
+
   if (disabled) {
     // make it so we can't even click them by accident and lead to the error page
     return activeArea;
