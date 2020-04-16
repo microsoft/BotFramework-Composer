@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 
 import { container } from './styles';
 
-const Conversation = props => {
+const Conversation = (props) => {
   return (
     <div css={container} {...props}>
       {props.children}
