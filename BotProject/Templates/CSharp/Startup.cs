@@ -4,25 +4,19 @@
 using System;
 using System.IO;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
 using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
@@ -37,6 +31,83 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         public IWebHostEnvironment HostingEnvironment { get; }
 
         public IConfiguration Configuration { get; }
+
+        public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)
+        {
+            if (settings.Feature.UseTranscriptLoggerMiddleware)
+            {
+                if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
+                {
+                    adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
+                }
+            }
+        }
+
+        public void ConfigureTelemetryLoggerMiddleware(BotFrameworkAdapter adapter, BotSettings settings)
+        {
+            if (settings.Feature.UseTelementryLoggerMiddleware)
+            {
+                if (!string.IsNullOrEmpty(settings?.ApplicationInsights?.InstrumentationKey))
+                {
+                    var telemetryConfig = new TelemetryConfiguration(settings?.ApplicationInsights?.InstrumentationKey);
+                    var telemetryClient = new TelemetryClient(telemetryConfig);
+                    adapter.Use(new TelemetryLoggerMiddleware(new BotTelemetryClient(telemetryClient), true));
+                }
+            }
+        }
+
+        public void ConfigureShowTypingMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
+        {
+            if (settings.Feature.UseShowTypingMiddleware)
+            {
+                adapter.Use(new ShowTypingMiddleware());
+            }
+        }
+
+        public void ConfigureInspectionMiddleWare(BotFrameworkAdapter adapter, BotSettings settings, IStorage storage)
+        {
+            if (settings.Feature.UseInspectionMiddleware)
+            {
+                adapter.Use(new InspectionMiddleware(new InspectionState(storage)));
+            }
+        }
+
+        public IStorage ConfigureStorage(BotSettings settings)
+        {
+            IStorage storage;
+            if (settings.Feature.UseCosmosDb && !string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
+            {
+                storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
+            }
+            else
+            {
+                storage = new MemoryStorage();
+            }
+
+            return storage;
+        }
+
+        public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState)
+        {
+            var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
+            adapter
+              .UseStorage(storage)
+              .UseState(userState, conversationState);
+
+            // Configure Middlewares
+            ConfigureTranscriptLoggerMiddleware(adapter, settings);
+            ConfigureTelemetryLoggerMiddleware(adapter, settings);
+            ConfigureInspectionMiddleWare(adapter, settings, storage);
+            ConfigureShowTypingMiddleWare(adapter, settings);
+
+            adapter.OnTurnError = async (turnContext, exception) =>
+            {
+                await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
+                await conversationState.ClearStateAsync(turnContext).ConfigureAwait(false);
+                await conversationState.SaveChangesAsync(turnContext).ConfigureAwait(false);
+            };
+            return adapter;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -61,59 +132,21 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var settings = new BotSettings();
             Configuration.Bind(settings);
 
-            IStorage storage = null;
-
-            // Configure storage for deployment
-            if (!string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
-            {
-                storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
-            }
-            else
-            {
-                Console.WriteLine("The settings of CosmosDbStorage is incomplete, please check following settings: settings.CosmosDb");
-                storage = new MemoryStorage();
-            }
+            IStorage storage = ConfigureStorage(settings);
 
             services.AddSingleton(storage);
             var userState = new UserState(storage);
             var conversationState = new ConversationState(storage);
-
-            var botDir = Configuration.GetSection("bot").Get<string>();
-
-            // manage all bot resources
-            var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
-            var rootDialog = GetRootDialog(botDir);
-
             services.AddSingleton(userState);
             services.AddSingleton(conversationState);
+
+            // Configure bot loading path
+            var botDir = settings.Bot;
+            var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
+            var rootDialog = GetRootDialog(botDir);
             services.AddSingleton(resourceExplorer);
 
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) =>
-            {
-                HostContext.Current.Set<IConfiguration>(Configuration);
-
-                var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
-                adapter
-                  .UseStorage(storage)
-                  .UseState(userState, conversationState);               
-
-                if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
-                {
-                    adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
-                }
-                else
-                {
-                    Console.WriteLine("The settings of TranscriptLoggerMiddleware is incomplete, please check following settings: settings.BlobStorage.ConnectionString, settings.BlobStorage.Container");
-                }
-
-                adapter.OnTurnError = async (turnContext, exception) =>
-                {
-                    await turnContext.SendActivityAsync(exception.Message).ConfigureAwait(false);
-                    await conversationState.ClearStateAsync(turnContext).ConfigureAwait(false);
-                    await conversationState.SaveChangesAsync(turnContext).ConfigureAwait(false);
-                };
-                return adapter;
-            });
+            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState));
 
             services.AddSingleton<IBot>(s =>
                 new ComposerBot(
@@ -131,7 +164,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseWebSockets();
-            
+            app.UseNamedPipes(System.Environment.GetEnvironmentVariable("APPSETTING_WEBSITE_SITE_NAME") + ".directline");
+
             app.UseRouting()
                .UseEndpoints(endpoints =>
                {
