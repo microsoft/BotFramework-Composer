@@ -7,6 +7,7 @@ import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'rea
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
@@ -128,6 +129,8 @@ export const App: React.FC = () => {
   const { setCreationFlowStatus } = actions;
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
+  const globalNavButtonText = sideBarExpand ? formatMessage('Collapse Navigation') : formatMessage('Expand Navigation');
+
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
   return (
     <Fragment>
@@ -148,20 +151,23 @@ export const App: React.FC = () => {
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
           <div>
-            <IconButton
-              iconProps={{
-                iconName: 'GlobalNavButton',
-              }}
-              css={globalNav}
-              onClick={() => {
-                setSideBarExpand(!sideBarExpand);
-              }}
-              data-testid={'LeftNavButton'}
-              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
-            />
+            <TooltipHost content={globalNavButtonText} directionalHint={DirectionalHint.rightCenter}>
+              <IconButton
+                iconProps={{
+                  iconName: 'GlobalNavButton',
+                }}
+                css={globalNav}
+                onClick={() => {
+                  setSideBarExpand(!sideBarExpand);
+                }}
+                data-testid={'LeftNavButton'}
+                ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
+              />
+            </TooltipHost>
             <div css={dividerTop} />{' '}
             <FocusZone allowFocusRoot={true}>
               {topLinks(projectId, openedDialogId).map((link, index) => {
+                const showTooltip = !sideBarExpand && !link.disabled ? true : false;
                 return (
                   <NavItem
                     key={'NavLeftBar' + index}
@@ -170,6 +176,7 @@ export const App: React.FC = () => {
                     labelName={link.labelName}
                     exact={link.exact}
                     disabled={link.disabled}
+                    showTooltip={showTooltip}
                   />
                 );
               })}
@@ -178,6 +185,7 @@ export const App: React.FC = () => {
           <div css={leftNavBottom}>
             <div css={divider(sideBarExpand)} />{' '}
             {bottomLinks.map((link, index) => {
+              const showTooltip = !sideBarExpand && !link.disabled ? true : false;
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
@@ -186,6 +194,7 @@ export const App: React.FC = () => {
                   labelName={link.labelName}
                   exact={link.exact}
                   disabled={link.disabled}
+                  showTooltip={showTooltip}
                 />
               );
             })}
