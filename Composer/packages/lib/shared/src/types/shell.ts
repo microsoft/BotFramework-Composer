@@ -63,6 +63,8 @@ export interface ShellApi {
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;
+  getLuIntents: (id: string) => LuIntentSection[];
+  getLuIntent: (id: string, intentName: string) => LuIntentSection | undefined;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;
