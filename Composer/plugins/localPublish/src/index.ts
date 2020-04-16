@@ -45,7 +45,7 @@ class LocalPublisher {
 
     // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
     // and export the content into that folder as well.
-    if (project.settings.enableCustomRuntime !== true) {
+    if (project.settings.runtime && project.settings.runtime.customRuntime !== true) {
       await this.initBot(botId);
       await this.saveContent(botId, version, project.dataDir, user);
     }
@@ -150,7 +150,7 @@ class LocalPublisher {
     }
 
     // if not using custom runtime, update assets in tmp older
-    if (settings.enableCustomRuntime !== true) {
+    if (!settings.runtime || settings.runtime.customRuntime !== true) {
       await this.restoreBot(botId, version);
     }
 
@@ -164,9 +164,14 @@ class LocalPublisher {
   };
 
   private startBot = async (botId: string, port: number, settings: any): Promise<string> => {
-    const botDir = settings.enableCustomRuntime === true ? settings.customRuntimePath : this.getBotRuntimeDir(botId);
+    const botDir =
+      settings.runtime && settings.runtime.customRuntime === true
+        ? settings.runtime.path
+        : this.getBotRuntimeDir(botId);
     const commandAndArgs =
-      settings.enableCustomRuntime === true ? settings.customRuntimeCommand.split(/\s+/) : ['dotnet', 'run'];
+      settings.runtime && settings.runtime.customRuntime === true
+        ? settings.runtime.command.split(/\s+/)
+        : ['dotnet', 'run'];
     const startCommand = commandAndArgs.shift(); // take the 0th item off the array, leaving just the args
     return new Promise((resolve, reject) => {
       const process = spawn(

@@ -34,6 +34,11 @@ export class DefaultSettingManager extends FileSettingManager {
         endpointkey: '',
         hostname: '',
       },
+      runtime: {
+        customRuntime: false,
+        path: '',
+        command: '',
+      },
     };
   };
 

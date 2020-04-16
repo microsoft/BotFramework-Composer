@@ -25,20 +25,23 @@ import {
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
   const { botName, settings, projectId, location, runtimeSettings } = state;
-  const [formDataErrors, setFormDataErrors] = useState({ customRuntimeCommand: '', customRuntimePath: '' });
+  const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
   const changeEnabled = (_, on) => {
-    actions.setSettings(projectId, botName, { ...settings, enableCustomRuntime: on });
+    actions.setSettings(projectId, botName, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
   };
 
   const updateSetting = field => (e, newValue) => {
-    // TODO: validate these
-    const valid = true;
-    const error = 'There was an error';
+    let valid = true;
+    let error = 'There was an error';
+    if (newValue === '') {
+      valid = false;
+      error = 'This is a required field.';
+    }
 
     if (valid) {
-      actions.setSettings(projectId, botName, { ...settings, [field]: newValue });
+      actions.setSettings(projectId, botName, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
       setFormDataErrors({ ...formDataErrors, [field]: '' });
     } else {
       setFormDataErrors({ ...formDataErrors, [field]: error });
@@ -58,7 +61,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
         label={formatMessage('Use custom runtime')}
         inlineLabel
         onChange={changeEnabled}
-        checked={settings.enableCustomRuntime}
+        checked={settings.runtime && settings.runtime.customRuntime === true}
       />
     </div>
   );
@@ -77,11 +80,14 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
 
   useEffect(() => {
     if (runtimeSettings.path) {
-      changeEnabled(null, true);
       actions.setSettings(projectId, botName, {
         ...settings,
-        customRuntimePath: location + '/runtime',
-        customRuntimeCommand: runtimeSettings.startCommand,
+        runtime: {
+          ...settings.runtime,
+          customRuntime: true,
+          path: location + '/runtime',
+          command: runtimeSettings.startCommand,
+        },
       });
     }
   }, [runtimeSettings]);
@@ -93,26 +99,28 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       <div css={controlGroup}>
         <TextField
           label={formatMessage('Runtime code location')}
-          value={settings.customRuntimePath}
+          defaultValue={settings.runtime ? settings.runtime.path : ''}
           styles={name}
-          onChange={updateSetting('customRuntimePath')}
-          errorMessage={formDataErrors.customRuntimePath}
+          required
+          onChange={updateSetting('path')}
+          errorMessage={formDataErrors.path}
           data-testid="runtimeCodeLocation"
-          disabled={!settings.enableCustomRuntime}
+          disabled={!settings.runtime.customRuntime}
         />
         {formatMessage('Or: ')}
-        <Link onClick={showEjectModal} disabled={!settings.enableCustomRuntime} css={breathingSpace}>
+        <Link onClick={showEjectModal} disabled={!settings.runtime.customRuntime} css={breathingSpace}>
           {formatMessage('Get a new copy of the runtime code')}
         </Link>
 
         <TextField
           label={formatMessage('Start command')}
-          value={settings.customRuntimeCommand}
+          defaultValue={settings.runtime ? settings.runtime.command : ''}
           styles={name}
-          onChange={updateSetting('customRuntimeCommand')}
-          errorMessage={formDataErrors.customRuntimeCommand}
+          required
+          onChange={updateSetting('command')}
+          errorMessage={formDataErrors.command}
           data-testid="runtimeCommand"
-          disabled={!settings.enableCustomRuntime}
+          disabled={!settings.runtime.customRuntime}
         />
       </div>
       <EjectModal hidden={!ejectModalVisible} closeModal={closeEjectModal} ejectRuntime={ejectRuntime} />
