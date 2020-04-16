@@ -91,21 +91,25 @@ export const linkRow = css`
   padding-bottom: 6px;
 `;
 
-export const link = css`
-  font-size: ${FontSizes.mediumPlus};
-  font-weight: ${FontWeights.regular};
-  color: #0078d4;
-  margin-left: 10px;
-  text-decoration: underline;
-`;
+export const link = {
+  root: {
+    fontSize: FontSizes.mediumPlus,
+    fontWeight: FontWeights.regular,
+    color: '#0078d4',
+    marginLeft: '10px',
+    textDecoration: 'underline',
+  },
+};
 
-export const helpLink = css`
-  font-size: ${FontSizes.mediumPlus};
-  font-weight: ${FontWeights.regular};
-  color: #0078d4;
-  margin-left: 60px;
-  text-decoration: underline;
-`;
+export const helpLink = {
+  root: {
+    fontSize: FontSizes.mediumPlus,
+    fontWeight: FontWeights.regular,
+    color: '#0078d4',
+    marginLeft: '60px',
+    textDecoration: 'underline',
+  },
+};
 
 export const icon = {
   root: {

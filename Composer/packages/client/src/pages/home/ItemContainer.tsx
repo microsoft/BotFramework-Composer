@@ -39,6 +39,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         }
       }}
       ref={forwardedRef}
+      tabIndex={0}
       {...rest}
     >
       <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
