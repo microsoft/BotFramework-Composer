@@ -514,6 +514,11 @@ const setCodeEditorSettings: ReducerFunc = (state, settings) => {
   return state;
 };
 
+const setMessage: ReducerFunc = (state, message) => {
+  state.announcement = message;
+  return state;
+};
+
 const noOp: ReducerFunc = state => {
   return state;
 };
@@ -569,4 +574,5 @@ export const reducer = createReducer({
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
   [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
+  [ActionTypes.SET_MESSAGE]: setMessage,
 });

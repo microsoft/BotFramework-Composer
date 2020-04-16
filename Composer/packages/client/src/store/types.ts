@@ -118,6 +118,7 @@ export interface State {
     [key: string]: any[];
   };
   userSettings: UserSettings;
+  announcement: string | undefined;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

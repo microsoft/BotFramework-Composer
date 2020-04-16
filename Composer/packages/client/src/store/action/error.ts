@@ -11,3 +11,10 @@ export const setError: ActionCreator = ({ dispatch }, error) => {
     payload: error,
   });
 };
+
+export const setMessage: ActionCreator = ({ dispatch }, message) => {
+  dispatch({
+    type: ActionTypes.SET_MESSAGE,
+    payload: message,
+  });
+};
