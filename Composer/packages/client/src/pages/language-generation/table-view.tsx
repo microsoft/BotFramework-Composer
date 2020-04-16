@@ -45,6 +45,8 @@ const TableView: React.FC<TableViewProps> = props => {
 
   const _async = new Async();
 
+  const moreLabel = formatMessage('Actions');
+
   const announce = (message: string) => {
     setMessage(message);
     _async.setTimeout(() => {
@@ -176,15 +178,17 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: (item, index) => {
           return (
-            <IconButton
-              menuIconProps={{ iconName: 'MoreVertical' }}
-              menuProps={{
-                shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index),
-              }}
-              styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              ariaLabel={formatMessage('actions')}
-            />
+            <TooltipHost content={moreLabel} calloutProps={{ gapSpace: 10 }}>
+              <IconButton
+                menuIconProps={{ iconName: 'MoreVertical' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: getTemplatesMoreButtons(item, index),
+                }}
+                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+                ariaLabel={moreLabel}
+              />
+            </TooltipHost>
           );
         },
       },

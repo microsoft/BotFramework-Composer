@@ -5,7 +5,9 @@
 import { jsx } from '@emotion/core';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import formatMessage from 'format-message';
 
 import { moreButton, overflowSet, menuStyle, navItem, itemText } from './styles';
 
@@ -28,17 +30,21 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
 };
 
 const onRenderOverflowButton = (isRoot: boolean) => {
+  const moreLabel = formatMessage('Actions');
   const showIcon = !isRoot;
   return overflowItems => {
     return showIcon ? (
-      <IconButton
-        role="cell"
-        className="dialog-more-btn"
-        data-testid="dialogMoreButton"
-        styles={moreButton}
-        menuIconProps={{ iconName: 'MoreVertical' }}
-        menuProps={{ items: overflowItems, styles: menuStyle }}
-      />
+      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
+        <IconButton
+          ariaLabel={moreLabel}
+          role="cell"
+          className="dialog-more-btn"
+          data-testid="dialogMoreButton"
+          styles={moreButton}
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          menuProps={{ items: overflowItems, styles: menuStyle }}
+        />
+      </TooltipHost>
     ) : null;
   };
 };

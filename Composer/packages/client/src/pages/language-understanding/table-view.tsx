@@ -45,6 +45,8 @@ const TableView: React.FC<TableViewProps> = props => {
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
 
+  const moreLabel = formatMessage('Actions');
+
   function getIntentState(file: LuFile): string {
     if (!file.diagnostics) {
       return formatMessage('Error');
@@ -175,15 +177,17 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: (item, index) => {
           return (
-            <IconButton
-              menuIconProps={{ iconName: 'MoreVertical' }}
-              menuProps={{
-                shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index),
-              }}
-              styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              ariaLabel={formatMessage('actions')}
-            />
+            <TooltipHost content={moreLabel} calloutProps={{ gapSpace: 10 }}>
+              <IconButton
+                menuIconProps={{ iconName: 'MoreVertical' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: getTemplatesMoreButtons(item, index),
+                }}
+                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+                ariaLabel={moreLabel}
+              />
+            </TooltipHost>
           );
         },
       },
