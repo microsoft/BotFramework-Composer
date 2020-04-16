@@ -9,6 +9,7 @@ import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup, SDKKinds } from '@bfc/shared';
 import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -124,6 +125,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
   const handleMenuShow = menuSelected => {
     setMenuSelected(menuSelected);
   };
+  const moreLabel = formatMessage('Add');
   return (
     <div
       ref={addRef}
@@ -139,33 +141,35 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
       className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
     >
-      <IconMenu
-        iconName="Add"
-        iconStyles={{
-          background: 'white',
-          color: '#005CE6',
-          selectors: {
-            ':focus': {
-              outline: 'none',
-              selectors: {
-                '::after': {
-                  outline: 'none !important',
+      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
+        <IconMenu
+          iconName="Add"
+          iconStyles={{
+            background: 'white',
+            color: '#005CE6',
+            selectors: {
+              ':focus': {
+                outline: 'none',
+                selectors: {
+                  '::after': {
+                    outline: 'none !important',
+                  },
                 },
               },
             },
-          },
-        }}
-        iconSize={7}
-        nodeSelected={nodeSelected}
-        menuItems={buildEdgeMenuItemsFromClipboardContext(
-          nodeContext,
-          onClick,
-          selfHosted ? x => x !== SDKKinds.LogAction : undefined
-        )}
-        label={formatMessage('Add')}
-        handleMenuShow={handleMenuShow}
-        {...rest}
-      />
+          }}
+          iconSize={7}
+          nodeSelected={nodeSelected}
+          menuItems={buildEdgeMenuItemsFromClipboardContext(
+            nodeContext,
+            onClick,
+            selfHosted ? x => x !== SDKKinds.LogAction : undefined
+          )}
+          label={formatMessage('Add')}
+          handleMenuShow={handleMenuShow}
+          {...rest}
+        />
+      </TooltipHost>
     </div>
   );
 };
