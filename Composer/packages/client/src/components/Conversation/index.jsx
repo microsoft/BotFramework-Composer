@@ -4,8 +4,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 
+import { container } from './styles';
+
 const Conversation = props => {
-  return <div>{props.children}</div>;
+  return (
+    <div css={container} {...props}>
+      {props.children}
+    </div>
+  );
 };
 
 export { Conversation };
