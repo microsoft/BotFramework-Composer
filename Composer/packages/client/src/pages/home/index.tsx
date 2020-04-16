@@ -158,16 +158,16 @@ const Home: React.FC<RouteComponentProps> = () => {
                 forwardedRef={addRef}
               />
             ) : (
-              <ItemContainer
-                title={''}
-                content={'ToDoBotWithLuis'}
-                styles={home.lastestBotItem}
-                onClick={() => {
-                  onClickTemplate('ToDoBotWithLuisSample');
-                }}
-                forwardedRef={addRef}
-              />
-            )}
+                <ItemContainer
+                  title={''}
+                  content={'ToDoBotWithLuis'}
+                  styles={home.lastestBotItem}
+                  onClick={() => {
+                    onClickTemplate('ToDoBotWithLuisSample');
+                  }}
+                  forwardedRef={addRef}
+                />
+              )}
           </div>
           {recentProjects.length > 0 && (
             <div css={home.leftContainer}>
@@ -203,7 +203,6 @@ const Home: React.FC<RouteComponentProps> = () => {
                   return (
                     <Link
                       href={link.to}
-                      tabIndex={-1}
                       key={'homePageLeftLinks-' + link.text}
                       target="_blank"
                       rel="noopener noreferrer"
