@@ -114,7 +114,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const currentRecognizerType = get(dialogFile, `content.recognizer.recognizers[0].recognizers['en-us']`, '');
-
+  const isQnAMatchDefined = !!dialogFile?.triggers?.find(t => t.type === qnaMatchKey);
   const generateValidRecognizerTypes = () => {
     const res = [ValueRecognizerKey];
     if (currentRecognizerType === `${dialogId}.lu`) {
@@ -224,7 +224,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const activityTypes: IDropdownOption[] = getActivityTypes();
   const messageTypes: IDropdownOption[] = getMessageTypes();
   let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
-  if (!isCrossTrain && !isQnA) {
+  if ((!isCrossTrain && !isQnA) || isQnAMatchDefined) {
     triggerTypeOptions = triggerTypeOptions.filter(t => t.key !== qnaMatchKey);
   }
   const showIntentName = formData.$kind === intentTypeKey;
