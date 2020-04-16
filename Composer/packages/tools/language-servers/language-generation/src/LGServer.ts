@@ -356,10 +356,49 @@ export class LGServer {
         state.push(STRUCTURELG);
         cardName = line.trim().substring(1);
       } else if (state[state.length - 1] === STRUCTURELG && (line.trim() === '' || keyValueRegex.test(line))) {
-        return cardName;
+        state.push(STRUCTURELG);
       } else {
         state.push(ROOT);
       }
+    }
+
+    if (state[state.length - 1] === STRUCTURELG) {
+      return cardName;
+    }
+
+    return undefined;
+  }
+
+  private findLastStructureLGProps(
+    params: TextDocumentPositionParams,
+    templateId: string | undefined
+  ): string[] | undefined {
+    const state: LGCursorState[] = [];
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    const keyValueRegex = /.+=.+/;
+    let props: string[] = [];
+    for (const line of lines) {
+      if (line.trim().startsWith('#')) {
+        state.push(TEMPLATENAME);
+      } else if (line.trim().startsWith('-')) {
+        state.push(TEMPLATEBODY);
+      } else if ((state[state.length - 1] === TEMPLATENAME || templateId) && line.trim().startsWith('[')) {
+        state.push(STRUCTURELG);
+        props = [];
+      } else if (state[state.length - 1] === STRUCTURELG && (line.trim() === '' || keyValueRegex.test(line))) {
+        state.push(STRUCTURELG);
+        props.push(line.split('=')[0].trim());
+      } else {
+        state.push(ROOT);
+      }
+    }
+
+    if (state[state.length - 1] === STRUCTURELG) {
+      return props;
     }
 
     return undefined;
@@ -555,65 +594,52 @@ export class LGServer {
     }
 
     const cardType = this.matchCardTypeState(params, templateId);
-    console.log('cardType:' + cardType);
+    const propsList = this.findLastStructureLGProps(params, templateId);
     const cardNameRegex = /^\s*\[[\w]+/;
     const lastLine = lines[lines.length - 2];
-    console.log('last line:' + lastLine);
     const paddingIndent = cardNameRegex.test(lastLine) ? '\t' : '';
-    console.log('flag:' + cardNameRegex.test(lastLine));
-    console.log('paddingIndent' + paddingIndent.length);
+    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment'];
     if (cardType && cardTypes.includes(cardType)) {
       const items: CompletionItem[] = [];
-      if (cardType === 'CardAction') {
+      if (normalCardTypes.includes(cardType)) {
         cardPropDict[cardType].forEach(u => {
-          const item = {
-            label: `${u}: ${cardPropPossibleValueType[u]}`,
-            kind: CompletionItemKind.Keyword,
-            insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-            documentation: `Suggested propertiy ${u} in ${cardType}`,
-          };
-          items.push(item);
+          if (!propsList?.includes(u)) {
+            const item = {
+              label: `${u}: ${cardPropPossibleValueType[u]}`,
+              kind: CompletionItemKind.Keyword,
+              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`,
+            };
+            items.push(item);
+          }
+        });
+      } else if (cardType.endsWith('Card')) {
+        cardPropDict.Cards.forEach(u => {
+          if (!propsList?.includes(u)) {
+            const item = {
+              label: `${u}: ${cardPropPossibleValueType[u]}`,
+              kind: CompletionItemKind.Keyword,
+              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`,
+            };
+            items.push(item);
+          }
+        });
+      } else {
+        cardPropDict.Others.forEach(u => {
+          if (!propsList?.includes(u)) {
+            const item = {
+              label: `${u}: ${cardPropPossibleValueType[u]}`,
+              kind: CompletionItemKind.Keyword,
+              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`,
+            };
+            items.push(item);
+          }
         });
       }
-      //else if (cardType === 'Suggestions') {
-      //   let insertStr = '';
-      //   insertStr = cardPropDict[cardType].map(u => `\t${u} = `).join('\r\n');
-      //   const item = {
-      //     label: `Properties for ${cardType}`,
-      //     kind: CompletionItemKind.Keyword,
-      //     insertText: insertStr,
-      //     documentation: `Suggested properties for Card: ${cardType}`,
-      //   };
-      // } else if (cardType === 'Attachment') {
-      //   let insertStr = '';
-      //   insertStr = cardPropDict[cardType].map(u => `\t${u} = `).join('\r\n');
-      //   const item = {
-      //     label: `Properties for ${cardType}`,
-      //     kind: CompletionItemKind.Keyword,
-      //     insertText: insertStr,
-      //     documentation: `Suggested properties for Card: ${cardType}`,
-      //   };
-      // } else if (cardType.endsWith('Card')) {
-      //   let insertStr = '';
-      //   insertStr = cardPropDict.Cards.map(u => `\t${u} = `).join('\r\n');
-      //   const item = {
-      //     label: `Properties:${insertStr}`,
-      //     kind: CompletionItemKind.Keyword,
-      //     insertText: insertStr,
-      //     documentation: `Suggested properties for Card: ${cardType}`,
-      //   };
-      // } else {
-      //   let insertStr = '';
-      //   insertStr = cardPropDict.Others.map(u => `\t${u} = `).join('\r\n');
-      //   const item = {
-      //     label: `Properties for ${cardType}`,
-      //     kind: CompletionItemKind.Keyword,
-      //     insertText: insertStr,
-      //     documentation: `Suggested properties for Card: ${cardType}`,
-      //   };
-      // }
 
-      if (items) {
+      if (items.length > 0) {
         return Promise.resolve({
           isIncomplete: true,
           items: items,
@@ -651,16 +677,36 @@ export class LGServer {
     const range = Range.create(0, 0, position.line, position.character);
     const lines = document.getText(range).split('\n');
     const isInStructureLGMode = this.matchStructureLG(lines);
-    if (key === '\n' && isInStructureLGMode) {
-      const deleteRange = Range.create(position.line, 0, position.line, 4);
+    const lgDoc = this.getLGDocument(document);
+    const templateId = lgDoc?.templateId;
+    const cardType = this.matchCardTypeState(params, templateId);
+    const propsList = this.findLastStructureLGProps(params, templateId);
+    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment'];
+    let expectedPropsList: string[] = [];
+    let matchedAllProps = false;
+    if (cardType) {
+      if (normalCardTypes.includes(cardType)) {
+        expectedPropsList = cardPropDict[cardType];
+      } else if (cardType.endsWith('Card')) {
+        expectedPropsList = cardPropDict.Cards;
+      } else {
+        expectedPropsList = cardPropDict.Others;
+      }
+    }
+
+    if (expectedPropsList.length > 0 && propsList !== undefined && this.isSubList(expectedPropsList, propsList)) {
+      matchedAllProps = true;
+    }
+    if (key === '\n' && isInStructureLGMode && matchedAllProps) {
+      const length = templateId ? 4 : 2;
+      const deleteRange = Range.create(position.line, 0, position.line, length);
       const deleteItem: TextEdit = TextEdit.del(deleteRange);
       if (document.getText(deleteRange).trim() === '') {
         edits.push(deleteItem);
       }
     }
 
-    return Promise.resolve(null);
-    //return Promise.resolve(edits);
+    return Promise.resolve(edits);
   }
 
   private matchStructureLG(lines: string[]): boolean {
@@ -679,6 +725,16 @@ export class LGServer {
 
     if (state === ROOT) {
       return false;
+    }
+
+    return true;
+  }
+
+  private isSubList(list1: string[], list2: string[]): boolean {
+    for (const item of list1) {
+      if (!list2.includes(item)) {
+        return false;
+      }
     }
 
     return true;
