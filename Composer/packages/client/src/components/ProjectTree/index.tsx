@@ -175,8 +175,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         <SearchBox
-          ariaLabel={formatMessage('Filter Dialogs')}
-          placeholder={formatMessage('Type a dialog')}
+          ariaLabel={formatMessage('Type dialog name')}
+          placeholder={formatMessage('Filter Dialog')}
           styles={searchBox}
           onChange={onFilter}
           iconProps={{ iconName: 'Filter' }}
