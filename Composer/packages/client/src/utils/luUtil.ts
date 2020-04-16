@@ -49,7 +49,7 @@ function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
         const triggers = triggerRules[key];
         keys(triggers).forEach(id => {
           if (!result[name]) result[name] = {};
-          result[name][`${id}.${locale}.lu`] = triggers[id];
+          result[name][id ? `${id}.${locale}.lu` : id] = triggers[id];
         });
         return result;
       }, {}),
@@ -95,7 +95,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
 
   //map all referred lu files
   luFiles.forEach(file => {
-    countMap[getBaseName(file.id)] = 0;
+    countMap[getBaseName(file.id)] = 1;
   });
 
   let rootId = '';
@@ -104,25 +104,19 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
 
     const { intentTriggers } = dialog;
     const fileId = dialog.id;
-    if (intentTriggers.length) {
-      //find the trigger's dialog that use a recognizer
-      intentTriggers.forEach(item => {
-        const used = item.dialogs.filter(dialog => {
-          if (typeof countMap[dialog] === 'number') {
-            countMap[dialog]++;
-            return true;
-          }
-          return false;
-        });
-        if (used.length) {
-          const result = used.reduce((result, temp) => {
-            result[temp] = item.intent;
-            return result;
-          }, {});
-          triggerRules[fileId] = { ...triggerRules[fileId], ...result };
-        }
-      });
-    }
+    //find the trigger's dialog that use a recognizer
+    intentTriggers.forEach(item => {
+      //find all dialogs in trigger that has a luis recognizer
+      const used = item.dialogs.filter(dialog => !!countMap[dialog]);
+
+      const result = used.reduce((result, temp) => {
+        result[temp] = item.intent;
+        return result;
+      }, {});
+
+      if (!item.dialogs.length) result[''] = item.intent;
+      triggerRules[fileId] = { ...triggerRules[fileId], ...result };
+    });
   });
 
   const crossTrainConfig: ICrossTrainConfig = {

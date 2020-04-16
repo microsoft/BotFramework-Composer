@@ -2966,13 +2966,15 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@^4.9.0-preview.115707":
-  version "4.9.0-preview.115707"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.115707.tgz#6c5546217b8884c10f85c3e91248e0466ea57f2d"
-  integrity sha1-bFVGIXuIhMEPhcPpEkjgRm6lfy0=
+"@microsoft/bf-lu@4.9.0-preview.120468":
+  version "4.9.0-preview.120468"
+  uid a6ae457899ff9aedf9afe6ae5782403f9f654fce
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.120468#a6ae457899ff9aedf9afe6ae5782403f9f654fce"
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
+    "@oclif/command" "~1.5.19"
+    "@oclif/errors" "~1.2.2"
     "@types/node-fetch" "~2.5.5"
     antlr4 "^4.7.2"
     chalk "2.4.1"
