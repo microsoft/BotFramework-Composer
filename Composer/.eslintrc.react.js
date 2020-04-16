@@ -28,6 +28,10 @@ module.exports = {
     'react/no-danger': 'error',
     'react/no-deprecated': 'warn',
     'react/prop-types': 'warn',
+    'react/no-unknown-property': 'error',
+    'react/jsx-boolean-value': ['error', 'never'],
+    'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
+    'react/jsx-sort-props': 'error',
 
     // emotion
     'emotion/jsx-import': 'error',
