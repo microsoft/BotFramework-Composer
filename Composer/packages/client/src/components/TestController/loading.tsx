@@ -24,6 +24,7 @@ export const Loading: React.FC<ILoadingProps> = props => {
       label={publishing ? formatMessage('Publishing') : formatMessage('Reloading')}
       ariaLive="assertive"
       labelPosition="left"
+      role="alert"
     />
   );
 };
