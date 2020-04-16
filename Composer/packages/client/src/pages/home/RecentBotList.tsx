@@ -4,7 +4,6 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -22,11 +21,11 @@ import { calculateTimeDiff } from '../../utils';
 import { detailListContainer } from './styles';
 
 interface RecentBotListProps {
-  onSelectionChanged: (file: IObjectWithKey) => void;
+  onItemChosen: (file: IObjectWithKey) => void;
   recentProjects: any;
 }
 export function RecentBotList(props: RecentBotListProps): JSX.Element {
-  const { onSelectionChanged, recentProjects } = props;
+  const { onItemChosen, recentProjects } = props;
   // for detail file list in open panel
   const tableColums = [
     {
@@ -73,15 +72,6 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
     );
   }
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const file = selection.getSelection()[0];
-      // selected item will be cleaned when folder path changed file will be undefine
-      // when no item selected.
-      onSelectionChanged(file);
-    },
-  });
-
   return (
     <div data-is-scrollable="true" css={detailListContainer}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -93,7 +83,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
           isHeaderVisible={true}
-          selection={selection}
+          onItemInvoked={onItemChosen}
           selectionMode={SelectionMode.single}
           checkboxVisibility={CheckboxVisibility.hidden}
         />
