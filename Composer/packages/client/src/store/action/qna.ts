@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
-import * as qnaUtil from '@bfc/indexers/lib/utils/qnaUtil';
 
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
@@ -45,17 +44,6 @@ export const undoableUpdateQnaFile = undoable(
   async (store: Store, from, to) => updateQnaFile(store, ...to)
 );
 
-export const updateQnaIntent: ActionCreator = async (store, { projectId, file, intentName, intent }) => {
-  const newContent = qnaUtil.updateIntent(file.content, intentName, intent);
-  return await undoableUpdateQnaFile(store, { id: file.id, projectId, content: newContent });
-};
-
-export const createQnaIntent: ActionCreator = async (store, { projectId, file, intent }) => {
-  const newContent = qnaUtil.addIntent(file.content, intent);
-  return await undoableUpdateQnaFile(store, { id: file.id, projectId, content: newContent });
-};
-
-export const removeQnaIntent: ActionCreator = async (store, { projectId, file, intentName }) => {
-  const newContent = qnaUtil.removeIntent(file.content, intentName);
-  return await undoableUpdateQnaFile(store, { id: file.id, projectId, content: newContent });
+export const updateQnaContent: ActionCreator = async (store, { projectId, file, content }) => {
+  return await undoableUpdateQnaFile(store, { id: file.id, projectId, content });
 };

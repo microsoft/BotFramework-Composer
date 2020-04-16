@@ -61,15 +61,6 @@ const IntentField: React.FC<FieldProps> = props => {
           {editorRender(SDKKinds.LuisRecognizer)}
         </PivotItem>
         <PivotItem
-          headerText={formatMessage('QnA')}
-          itemKey={SDKKinds.QnaRecognizer}
-          headerButtonProps={{
-            disabled: !(type === SDKKinds.QnaRecognizer || type === SDKKinds.CrossTrainedRecognizerSet),
-          }}
-        >
-          {editorRender(SDKKinds.QnaRecognizer)}
-        </PivotItem>
-        <PivotItem
           headerText={formatMessage('Regex')}
           itemKey={SDKKinds.RegexRecognizer}
           headerButtonProps={{

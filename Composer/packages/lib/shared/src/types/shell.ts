@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, QnaFile, LuIntentSection, LgTemplate, QnaIntentSection } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnaFile, LuIntentSection, LgTemplate } from './indexers';
 import { UserSettings } from './settings';
 
 /** Recursively marks all properties as optional. */
@@ -62,10 +62,9 @@ export interface ShellApi {
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => void;
-  updateQnaIntent: (id: string, intentName: string, intent: QnaIntentSection | null) => void;
+  updateQnaContent: (id: string, content: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;
-  removeQnaIntent: (id: string, intentName: string) => void;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;

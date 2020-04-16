@@ -85,6 +85,8 @@ const RecognizerField: React.FC<FieldProps<IRecognizer>> = props => {
     }
   };
 
+  const QnAEditor =
+    recognizers.find(r => r.id === SDKKinds.QnaRecognizer)?.editor || `No Editor for ${SDKKinds.QnaRecognizer}`;
   return (
     <React.Fragment>
       <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
@@ -98,6 +100,9 @@ const RecognizerField: React.FC<FieldProps<IRecognizer>> = props => {
         />
       ) : (
         `Unable to determine recognizer type from data: ${value}`
+      )}
+      {(selectedType === SDKKinds.QnaRecognizer || selectedType === SDKKinds.CrossTrainedRecognizerSet) && (
+        <QnAEditor {...props} />
       )}
     </React.Fragment>
   );

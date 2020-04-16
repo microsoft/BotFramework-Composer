@@ -5,7 +5,6 @@ import { useEffect, useContext, useMemo } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
-import * as qnaUtil from '@bfc/indexers/lib/utils/qnaUtil';
 
 import * as lgUtil from './utils/lgUtil';
 import * as luUtil from './utils/luUtil';
@@ -139,25 +138,13 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     return await updateLuFile({ id, projectId, content });
   }
 
-  async function updateQnaIntentHandler(id, intentName, intent) {
+  async function updateQnaContentHandler(id, content) {
     const file = qnaFileResolver(id);
     if (!file) throw new Error(`qna file ${id} not found`);
-    if (!intentName) throw new Error(`intentName is missing or empty`);
-
-    const content = qnaUtil.updateIntent(file.content, intentName, intent);
 
     return await updateQnaFile({ id, projectId, content });
   }
 
-  async function removeQnaIntentHandler(id, intentName) {
-    const file = qnaFileResolver(id);
-    if (!file) throw new Error(`lu file ${id} not found`);
-    if (!intentName) throw new Error(`intentName is missing or empty`);
-
-    const content = qnaUtil.removeIntent(file.content, intentName);
-
-    return await updateQnaFile({ id, projectId, content });
-  }
   async function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find(dialog => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
@@ -241,8 +228,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     removeLgTemplate: removeLgTemplateHandler,
     removeLgTemplates: removeLgTemplatesHandler,
     updateLuIntent: updateLuIntentHandler,
-    updateQnaIntent: updateQnaIntentHandler,
-    removeQnaIntent: removeQnaIntentHandler,
+    updateQnaContent: updateQnaContentHandler,
     updateRegExIntent: updateRegExIntentHandler,
     removeLuIntent: removeLuIntentHandler,
     navTo,

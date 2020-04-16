@@ -188,6 +188,17 @@ const DefaultUISchema: UISchema = {
       },
     },
   },
+  [SDKKinds.OnQnAMatch]: {
+    label: () => formatMessage('Intent recognized'),
+    subtitle: () => formatMessage('Intent recognized'),
+    order: ['intent', 'condition', 'entities', '*'],
+    hidden: ['actions'],
+    properties: {
+      intent: {
+        field: IntentField,
+      },
+    },
+  },
   [SDKKinds.OnInvokeActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Conversation invoked'),
