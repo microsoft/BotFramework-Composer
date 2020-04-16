@@ -15,7 +15,7 @@ const dynamicStyle = props =>
     color: ${props.color || Colors.Black};
   `;
 
-export const LinkBtn = styled(Link)(props => ({
+export const LinkBtn = styled<any>(Link)(props => ({
   color: props.color || Colors.AzureBlue,
 }));
 
