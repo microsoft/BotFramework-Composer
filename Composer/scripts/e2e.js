@@ -11,6 +11,8 @@ const fs = require('fs');
 const { promisify } = require('util');
 const { spawn, execSync } = require('child_process');
 
+const chalk = require('chalk');
+
 const mkdir = promisify(fs.mkdir);
 
 const rootDir = path.resolve(__dirname, '..');
@@ -30,12 +32,30 @@ async function processArgs() {
   if (data > -1 && args[data + 1]) {
     process.env.COMPOSER_APP_DATA = args[data + 1];
   }
+
+  const msg = `
+${chalk.green('Starting Composer:')}
+  ${chalk.blue('COMPOSER_BOTS_FOLDER:')}\t${chalk.gray(process.env.COMPOSER_BOTS_FOLDER)}
+  ${chalk.blue('COMPOSER_APP_DATA:')}\t${chalk.gray(process.env.COMPOSER_APP_DATA)}
+
+
+Wait for the server to come up and then start cypress.
+  ${chalk.blue('yarn test:integration:open')} ${chalk.gray(
+    '- if you want to run a single test or run tests in watch mode'
+  )}
+  ${chalk.blue('yarn test:integration')} ${chalk.gray('- if you want to run the entire test suite')}
+  `;
+  console.log(msg);
+
+  // wait for a second so that users can see value of ENV variables.
+  await new Promise(resolve => {
+    setTimeout(resolve, 2000);
+  });
 }
 
 async function setup() {
   try {
     await mkdir(process.env.COMPOSER_BOTS_FOLDER);
-    console.log('using url', process.env.PORT);
   } catch (err) {
     process.stderr.write('There was a problem setting up.\n');
     process.stderr.write(`Error:\n${err.message}\n`);
@@ -47,7 +67,6 @@ async function run() {
     const server = spawn('yarn', ['start:dev'], { cwd: path.resolve(rootDir), stdio: 'inherit' });
 
     server.on('close', () => {
-      console.log('server close');
       resolve();
     });
 
@@ -62,6 +81,8 @@ async function run() {
 function cleanup() {
   execSync(`node ${path.resolve(__dirname, 'clean-e2e.js')}`);
 }
+
+console.clear();
 
 processArgs()
   .then(setup)
