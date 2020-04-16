@@ -6,6 +6,7 @@ import { jsx, css } from '@emotion/core';
 import { useCallback, useContext } from 'react';
 import { Link } from '@reach/router';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { StoreContext } from '../../store';
 import { useLocation } from '../../utils/hooks';
@@ -25,6 +26,7 @@ export interface INavItemProps {
   iconName: string;
   labelName: string;
   disabled: boolean;
+  showTooltip: boolean;
 }
 
 export const NavItem: React.FC<INavItemProps> = props => {
@@ -32,7 +34,7 @@ export const NavItem: React.FC<INavItemProps> = props => {
     actions: { onboardingAddCoachMarkRef },
   } = useContext(StoreContext);
 
-  const { to, iconName, labelName, disabled } = props;
+  const { to, iconName, labelName, disabled, showTooltip } = props;
   const {
     location: { pathname },
   } = useLocation();
@@ -49,6 +51,19 @@ export const NavItem: React.FC<INavItemProps> = props => {
       data-testid={active ? 'ActiveLeftNavItem' : undefined}
     >
       <Icon iconName={iconName} styles={icon(active, disabled)} />
+      {labelName}
+    </div>
+  );
+
+  const activeAreaWithTooltip = (
+    <div css={link(active, disabled)} aria-hidden="true" tabIndex={-1} aria-disabled={disabled}>
+      <TooltipHost content={labelName} directionalHint={DirectionalHint.rightCenter}>
+        <Icon
+          data-testid={'LeftNav-CommandBarButton' + labelName}
+          iconName={iconName}
+          styles={icon(active, disabled)}
+        />
+      </TooltipHost>
       {labelName}
     </div>
   );
@@ -76,7 +91,7 @@ export const NavItem: React.FC<INavItemProps> = props => {
         }
       `}
     >
-      {activeArea}
+      {showTooltip ? activeAreaWithTooltip : activeArea}
     </Link>
   );
 };
