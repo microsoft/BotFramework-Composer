@@ -5,6 +5,7 @@ import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors, NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -33,6 +34,8 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
   } = props;
   const [newValue, setNewValue] = useState<string>();
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
+
+  const moreLabel = formatMessage('Item Actions');
 
   const handleNewChange = (_e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) =>
     setNewValue(newValue || '');
@@ -88,21 +91,23 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
             ariaLabel={formatMessage('New value')}
             styles={{ root: { width: '100%' } }}
           />
-          <IconButton
-            disabled
-            menuIconProps={{ iconName: 'MoreVertical' }}
-            ariaLabel={formatMessage('Item Actions')}
-            styles={{
-              menuIcon: {
-                backgroundColor: NeutralColors.white,
-                color: NeutralColors.gray130,
-                fontSize: FontSizes.size16,
-              },
-              rootDisabled: {
-                backgroundColor: NeutralColors.white,
-              },
-            }}
-          />
+          <TooltipHost content={moreLabel}>
+            <IconButton
+              disabled
+              menuIconProps={{ iconName: 'MoreVertical' }}
+              ariaLabel={moreLabel}
+              styles={{
+                menuIcon: {
+                  backgroundColor: NeutralColors.white,
+                  color: NeutralColors.gray130,
+                  fontSize: FontSizes.size16,
+                },
+                rootDisabled: {
+                  backgroundColor: NeutralColors.white,
+                },
+              }}
+            />
+          </TooltipHost>
         </div>
       </div>
     </div>
