@@ -138,6 +138,7 @@ export interface AppUpdateState {
   downloadSizeInBytes?: number;
   error?: any;
   progressPercent?: number;
+  showing: boolean;
   status: AppUpdaterStatus;
   version?: string;
 }

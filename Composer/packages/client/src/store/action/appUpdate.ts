@@ -21,6 +21,13 @@ export const setAppUpdateProgress: ActionCreator = ({ dispatch }, { progressPerc
   });
 };
 
+export const setAppUpdateShowing: ActionCreator = ({ dispatch }, showing) => {
+  dispatch({
+    type: ActionTypes.SET_APP_UPDATE_SHOWING,
+    payload: showing,
+  });
+};
+
 export const setAppUpdateStatus: ActionCreator = ({ dispatch }, { status, version }) => {
   dispatch({
     type: ActionTypes.SET_APP_UPDATE_STATUS,

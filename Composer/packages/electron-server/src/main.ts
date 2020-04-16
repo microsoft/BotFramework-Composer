@@ -30,6 +30,7 @@ async function main() {
       preload: join(__dirname, 'preload.js'),
     },
     show: false,
+    title: `Bot Framework Composer (v${app.getVersion()})`,
   };
   if (process.platform === 'linux' && !isDevelopment) {
     // workaround for broken .AppImage icons since electron-builder@21.0.1 removed .AppImage desktop integration
@@ -37,6 +38,7 @@ async function main() {
     browserWindowOptions.icon = join(getUnpackedAsarPath(), 'resources/composerIcon_1024x1024.png');
   }
   mainWindow = new BrowserWindow(browserWindowOptions);
+  mainWindow.on('page-title-updated', ev => ev.preventDefault());
 
   // and load the index.html of the app.
   const CONTENT_URL = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
@@ -58,6 +60,8 @@ async function createAppDataDir() {
 function initializeAppUpdater() {
   const appUpdater = new AppUpdater();
   appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
+    // TODO: if auto/silent download is enabled in settings, don't send this event.
+    // instead, just download silently
     mainWindow.webContents.send('app-update', 'update-available', updateInfo);
   });
   appUpdater.on('progress', progress => {
@@ -72,9 +76,13 @@ function initializeAppUpdater() {
   appUpdater.on('error', err => {
     mainWindow.webContents.send('app-update', 'error', err);
   });
-  ipcMain.on('app-update', (name, payload) => {
-    console.log('got app update from client: ', name, payload);
-    appUpdater.downloadUpdate();
+  ipcMain.on('app-update', (_ev, name, payload) => {
+    if (name === 'start-download') {
+      appUpdater.downloadUpdate();
+    }
+    if (name === 'install-update') {
+      appUpdater.quitAndInstall();
+    }
   });
   appUpdater.checkForUpdates();
 }

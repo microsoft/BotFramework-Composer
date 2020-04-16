@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState, useCallback } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -22,68 +22,77 @@ function SelectOption(props) {
   const { checked, text, key } = props;
   return (
     <div key={key} css={optionRoot}>
-      <Icon iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} css={optionIcon(checked)} />
+      <Icon iconName={checked ? 'RadioBtnOn' : 'RadioBtnOff'} css={optionIcon(checked)} />
       <span>{text}</span>
     </div>
   );
 }
 
-function handleChange(ev, option) {
-  console.log(ev);
-  console.log(option);
-}
+const downloadOptions = {
+  downloadOnly: 'downloadOnly',
+  installAndUpdate: 'installAndUpdate',
+};
 
-export const AppUpdater: React.FC<{}> = props => {
+export const AppUpdater: React.FC<{}> = _props => {
   const {
-    actions: { setAppUpdateError, setAppUpdateProgress, setAppUpdateStatus },
+    actions: { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus },
     state: { appUpdate },
   } = useContext(StoreContext);
-  const { downloadSizeInBytes, error, status, progressPercent } = appUpdate;
+  const { downloadSizeInBytes, error, progressPercent, showing, status, version } = appUpdate;
+  const [downloadOption, setDownloadOption] = useState(downloadOptions.installAndUpdate);
 
-  const handleDismiss = useMemo(
-    () => () => setAppUpdateStatus({ status: AppUpdaterStatus.IDLE, version: undefined }),
-    []
-  );
+  const handleDismiss = useCallback(() => {
+    setAppUpdateShowing(false);
+    if (status === AppUpdaterStatus.UPDATE_UNAVAILABLE || status === AppUpdaterStatus.UPDATE_FAILED) {
+      setAppUpdateStatus({ status: AppUpdaterStatus.IDLE, version: undefined });
+    }
+  }, [showing, status]);
 
-  const handleOkay = useMemo(
-    () => () => {
-      // notify main to download the update
-      setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_IN_PROGRESS });
-      ipcRenderer.send(
-        'app-update',
-        'start-download',
-        false /* <-- flag to install and restart or just download manually*/
-      );
-    },
-    []
-  );
+  const handlePreDownloadOkay = useCallback(() => {
+    // notify main to download the update
+    setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_IN_PROGRESS });
+    ipcRenderer.send('app-update', 'start-download');
+  }, []);
 
-  // set up app update event listening
+  const handlePostDownloadOkay = useCallback(() => {
+    setAppUpdateShowing(false);
+    if (downloadOption === downloadOptions.installAndUpdate) {
+      ipcRenderer.send('app-update', 'install-update');
+    }
+  }, [downloadOption]);
+
+  const handleDownloadOptionChange = useCallback((_ev, option) => {
+    setDownloadOption(option);
+  }, []);
+
+  // listen for app updater events from main process
   useEffect(() => {
-    ipcRenderer.on('app-update', (event, name, payload) => {
-      console.log('got app update event from main: ', name);
+    ipcRenderer.on('app-update', (_event, name, payload) => {
       switch (name) {
         case 'update-available':
           setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_AVAILABLE, version: payload.version });
+          setAppUpdateShowing(true);
           break;
 
         case 'progress':
           const progress = (payload.percent as number).toFixed(2);
-          console.log('setting progress to: ', progress);
           setAppUpdateProgress({ progressPercent: progress, downloadSizeInBytes: payload.total });
           break;
 
         case 'update-not-available':
           setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
+          setAppUpdateShowing(true);
           break;
 
         case 'update-downloaded':
           setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_SUCCEEDED });
+          setAppUpdateShowing(true);
           break;
 
         case 'error':
           setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_FAILED });
           setAppUpdateError(payload);
+          setAppUpdateShowing(true);
 
         default:
           break;
@@ -94,19 +103,19 @@ export const AppUpdater: React.FC<{}> = props => {
   const title = useMemo(() => {
     switch (status) {
       case AppUpdaterStatus.UPDATE_AVAILABLE:
-        return 'New update available';
+        return formatMessage('New update available');
 
       case AppUpdaterStatus.UPDATE_FAILED:
-        return 'Update failed';
+        return formatMessage('Update failed');
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
-        return 'Update in progress';
+        return formatMessage('Update in progress');
 
       case AppUpdaterStatus.UPDATE_SUCCEEDED:
-        return 'Update complete';
+        return formatMessage('Update complete');
 
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
-        return 'No updates available';
+        return formatMessage('No updates available');
 
       case AppUpdaterStatus.IDLE:
       default:
@@ -119,43 +128,52 @@ export const AppUpdater: React.FC<{}> = props => {
       case AppUpdaterStatus.UPDATE_AVAILABLE:
         return (
           <ChoiceGroup
-            defaultSelectedKey="installAndUpdate"
+            defaultSelectedKey={downloadOptions.installAndUpdate}
             options={[
               {
-                key: 'installAndUpdate',
+                key: downloadOptions.installAndUpdate,
                 text: formatMessage('Install the update and restart Composer.'),
                 onRenderField: SelectOption,
               },
               {
-                key: 'download',
-                text: formatMessage('Download the new version manually'),
+                key: downloadOptions.downloadOnly,
+                text: formatMessage('Download the new version manually.'),
                 onRenderField: SelectOption,
               },
             ]}
-            onChange={handleChange}
+            onChange={handleDownloadOptionChange}
             required={true}
           />
         );
 
       case AppUpdaterStatus.UPDATE_FAILED:
-        return <p>Couldn't complete the update {error}.</p>;
+        return <p>{formatMessage(`Couldn't complete the update: ${error}`)}</p>;
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
-        const trimmedTotalInMB = ((downloadSizeInBytes || 0) / 1000000).toFixed(2);
+        let trimmedTotalInMB;
+        if (downloadSizeInBytes === undefined) {
+          trimmedTotalInMB = 'Calculating...';
+        } else {
+          trimmedTotalInMB = `${((downloadSizeInBytes || 0) / 1000000).toFixed(2)}MB`;
+        }
         const progressInHundredths = (progressPercent || 0) / 100;
         return (
           <ProgressIndicator
-            label={'Downloading...'}
-            description={`${progressPercent}% of ${trimmedTotalInMB}MB`}
+            label={formatMessage('Downloading...')}
+            description={formatMessage(`${progressPercent}% of ${trimmedTotalInMB}`)}
             percentComplete={progressInHundredths}
           />
         );
 
       case AppUpdaterStatus.UPDATE_SUCCEEDED:
-        return <p>Composer will restart.</p>;
+        const text =
+          downloadOption === downloadOptions.installAndUpdate
+            ? 'Composer will restart.'
+            : 'Composer will update the next time you start the app.';
+        return <p>{formatMessage(text)}</p>;
 
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
-        return <p>No updates available'</p>;
+        return <p>{formatMessage('No updates available.')}</p>;
 
       case AppUpdaterStatus.IDLE:
       default:
@@ -168,15 +186,17 @@ export const AppUpdater: React.FC<{}> = props => {
       case AppUpdaterStatus.UPDATE_AVAILABLE:
         return (
           <div>
-            <DefaultButton onClick={handleDismiss} text="Cancel" />
-            <PrimaryButton onClick={handleOkay} text="Okay" />
+            <DefaultButton onClick={handleDismiss} text={formatMessage('Cancel')} />
+            <PrimaryButton onClick={handlePreDownloadOkay} text={formatMessage('Okay')} />
           </div>
         );
 
-      case AppUpdaterStatus.UPDATE_FAILED:
       case AppUpdaterStatus.UPDATE_SUCCEEDED:
+        return <PrimaryButton onClick={handlePostDownloadOkay} text={formatMessage('Okay')} />;
+
+      case AppUpdaterStatus.UPDATE_FAILED:
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
-        return <PrimaryButton onClick={handleDismiss} text="Okay" />;
+        return <PrimaryButton onClick={handleDismiss} text={formatMessage('Okay')} />;
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
       case AppUpdaterStatus.IDLE:
@@ -185,26 +205,25 @@ export const AppUpdater: React.FC<{}> = props => {
     }
   }, [status]);
 
-  const showDialog = status !== AppUpdaterStatus.IDLE;
+  const subText =
+    status === AppUpdaterStatus.UPDATE_AVAILABLE ? formatMessage(`Bot Framework Composer v${version}`) : '';
 
-  return (
-    showDialog && (
-      <Dialog
-        hidden={false}
-        onDismiss={handleDismiss}
-        dialogContentProps={{
-          subText: `v${appUpdate.version}`,
-          type: DialogType.normal,
-          title,
-        }}
-        modalProps={{
-          isBlocking: false,
-          styles: modal,
-        }}
-      >
-        <DialogContent>{content}</DialogContent>
-        <DialogFooter>{footer}</DialogFooter>
-      </Dialog>
-    )
-  );
+  return showing ? (
+    <Dialog
+      hidden={false}
+      onDismiss={handleDismiss}
+      dialogContentProps={{
+        subText: subText,
+        type: DialogType.normal,
+        title,
+      }}
+      modalProps={{
+        isBlocking: false,
+        styles: modal,
+      }}
+    >
+      <DialogContent>{content}</DialogContent>
+      <DialogFooter>{footer}</DialogFooter>
+    </Dialog>
+  ) : null;
 };

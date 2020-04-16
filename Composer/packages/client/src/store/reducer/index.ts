@@ -494,6 +494,11 @@ const setAppUpdateProgress: ReducerFunc<{ progressPercent: number; downloadSizeI
   return state;
 };
 
+const setAppUpdateShowing: ReducerFunc<boolean> = (state, payload) => {
+  state.appUpdate.showing = payload;
+  return state;
+};
+
 const setAppUpdateStatus: ReducerFunc<{ status: AppUpdaterStatus; version?: string }> = (state, payload) => {
   const { status, version } = payload;
   if (state.appUpdate.status !== status) {
@@ -504,6 +509,7 @@ const setAppUpdateStatus: ReducerFunc<{ status: AppUpdaterStatus; version?: stri
     state.appUpdate.version = version;
   }
   if (status === AppUpdaterStatus.IDLE) {
+    state.appUpdate.progressPercent = 0;
     state.appUpdate.version = undefined;
   }
   return state;
@@ -565,5 +571,6 @@ export const reducer = createReducer({
   [ActionTypes.SET_MESSAGE]: setMessage,
   [ActionTypes.SET_APP_UPDATE_ERROR]: setAppUpdateError,
   [ActionTypes.SET_APP_UPDATE_PROGRESS]: setAppUpdateProgress,
+  [ActionTypes.SET_APP_UPDATE_SHOWING]: setAppUpdateShowing,
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
 });

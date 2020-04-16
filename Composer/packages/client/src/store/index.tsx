@@ -91,6 +91,7 @@ const initialState: State = {
   announcement: undefined,
   appUpdate: {
     progressPercent: 0,
+    showing: false,
     status: AppUpdaterStatus.IDLE,
   },
 };

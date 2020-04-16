@@ -9,6 +9,7 @@ const log = logger.extend('app-updater');
 
 export class AppUpdater extends EventEmitter {
   private checkingForUpdate: boolean = false;
+  private downloadingUpdate: boolean = false;
 
   constructor() {
     super();
@@ -34,41 +35,42 @@ export class AppUpdater extends EventEmitter {
   }
 
   public checkForUpdates() {
-    if (!this.checkingForUpdate) {
+    if (!(this.checkingForUpdate || this.downloadingUpdate)) {
       autoUpdater.checkForUpdates();
     }
   }
 
   public downloadUpdate() {
-    autoUpdater.downloadUpdate();
+    if (!this.downloadingUpdate) {
+      autoUpdater.downloadUpdate();
+    }
   }
 
   public quitAndInstall() {
+    logger('Quitting and installing...');
     autoUpdater.quitAndInstall();
   }
 
   private onError(err: Error) {
-    this.checkingForUpdate = false;
     logger('Got error while checking for updates: ', err);
+    this.resetToIdle();
     this.emit('error', err);
   }
 
   private onCheckingForUpdate() {
-    // flip some state to change UI in client
-    this.checkingForUpdate = true;
     log('Checking for updates...');
+    this.checkingForUpdate = true;
   }
 
   private onUpdateAvailable(updateInfo: UpdateInfo) {
-    this.checkingForUpdate = false;
-    console.log('update available');
     log('Update available: %O', updateInfo);
+    this.checkingForUpdate = false;
     this.emit('update-available', updateInfo);
   }
 
   private onUpdateNotAvailable(updateInfo: UpdateInfo) {
-    this.checkingForUpdate = false;
     log('Update not available: %O', updateInfo);
+    this.resetToIdle();
     this.emit('update-not-available');
   }
 
@@ -78,8 +80,14 @@ export class AppUpdater extends EventEmitter {
   }
 
   private onUpdateDownloaded(updateInfo: UpdateInfo) {
-    this.checkingForUpdate = false;
     log('Update downloaded: %O', updateInfo);
+    this.resetToIdle();
     this.emit('update-downloaded');
+  }
+
+  private resetToIdle() {
+    log('Resetting to idle...');
+    this.checkingForUpdate = false;
+    this.downloadingUpdate = false;
   }
 }
