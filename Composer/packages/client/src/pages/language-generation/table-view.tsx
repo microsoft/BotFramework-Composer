@@ -234,7 +234,14 @@ const TableView: React.FC<TableViewProps> = props => {
 
     return (
       <div data-testid="tableFooter">
-        <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'CirclePlus' }}
+          onClick={() => {
+            onCreateNewTemplate();
+            announce('item added');
+          }}
+        >
           {formatMessage('New template')}
         </ActionButton>
       </div>
