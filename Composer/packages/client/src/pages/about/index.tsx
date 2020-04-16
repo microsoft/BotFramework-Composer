@@ -65,7 +65,6 @@ export const About: React.FC<RouteComponentProps> = () => {
         <div css={about.linkRow}>
           <Link
             href={'https://github.com/microsoft/BotFramework-Composer/issues/new/choose'}
-            tabIndex={0}
             target={'_blank'}
             styles={about.helpLink}
           >
