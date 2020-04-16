@@ -23,6 +23,8 @@ export const projectContainer = css`
   flex-grow: 0;
   flex-shrink: 0;
   width: 255px;
+  height: 100%;
+  overflow: auto;
   border-right: 1px solid #c4c4c4;
 `;
 

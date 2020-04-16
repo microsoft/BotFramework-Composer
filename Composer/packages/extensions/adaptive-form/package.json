@@ -9,7 +9,9 @@
   ],
   "scripts": {
     "start": "tsc --watch --preserveWatchOutput",
-    "build": "tsc --build ./tsconfig.build.json",
+    "build": "yarn clean && yarn build:ts",
+    "build:ts": "tsc --build ./tsconfig.build.json",
+    "clean": "rimraf lib demo/dist",
     "lint": "eslint --quiet --ext .ts,.tsx src",
     "prepare": "yarn build"
   },

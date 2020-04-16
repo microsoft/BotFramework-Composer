@@ -120,7 +120,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
       onSelect(props.group!.key);
     };
     return (
-      <span ref={props.group && props.group.data.isRoot && addMainDialogRef}>
+      <span role="grid" ref={props.group && props.group.data.isRoot && addMainDialogRef}>
         <TreeItem
           link={props.group!.data}
           depth={0}
