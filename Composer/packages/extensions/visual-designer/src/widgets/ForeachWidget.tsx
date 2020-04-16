@@ -67,6 +67,9 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
   const { foreachNode, loopActionsNode, loopBeginNode, loopEndNode } = nodeMap;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
           <ElementMeasurer
@@ -97,9 +100,6 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
             <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />
           </OffsetContainer>
         ))}
-      <SVGContainer width={boundary.width} height={boundary.height}>
-        <FlowEdges edges={edges} />
-      </SVGContainer>
     </div>
   );
 };
