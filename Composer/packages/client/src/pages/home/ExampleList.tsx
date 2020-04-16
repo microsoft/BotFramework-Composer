@@ -32,7 +32,7 @@ const resolveIcon = (exampleId: string): string => {
   return exampleIcons.DefaultIcon;
 };
 
-export const ExampleList: React.FC<ExampleListProps> = props => {
+export const ExampleList: React.FC<ExampleListProps> = (props) => {
   const { onClick, examples } = props;
 
   function _onRenderCell(item?: ProjectTemplate): React.ReactNode {

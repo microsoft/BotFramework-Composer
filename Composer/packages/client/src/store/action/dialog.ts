@@ -37,7 +37,7 @@ export const updateDialog: ActionCreator = undoable(
   (state: State, args: any[], isEmpty) => {
     if (isEmpty) {
       const id = state.designPageLocation.dialogId;
-      const dialog = state.dialogs.find(dialog => dialog.id === id);
+      const dialog = state.dialogs.find((dialog) => dialog.id === id);
       return [{ id, content: dialog ? dialog.content : {} }];
     } else {
       return args;
@@ -57,7 +57,7 @@ export const createDialogBegin: ActionCreator = ({ dispatch }, { actions }, onCo
   });
 };
 
-export const createDialogCancel: ActionCreator = store => {
+export const createDialogCancel: ActionCreator = (store) => {
   const onCreateDialogComplete = store.getState().onCreateDialogComplete;
   if (typeof onCreateDialogComplete === 'function') {
     onCreateDialogComplete(null);

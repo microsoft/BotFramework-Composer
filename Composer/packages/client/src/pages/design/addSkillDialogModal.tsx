@@ -24,7 +24,7 @@ interface CreateDialogModalProps {
   onSubmit: (skillFormData: ISkillFormData) => void;
 }
 
-export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
+export const AddSkillDialog: React.FC<CreateDialogModalProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { skills } = state;
   const { isOpen, onDismiss, onSubmit } = props;
@@ -48,7 +48,7 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
       if (!SkillUrlRegex.test(manifestUrl)) {
         errors.manifestUrl = formatMessage('Url should start with http[s]://');
       }
-      if ((skills || []).some(skill => skill.manifestUrl === manifestUrl)) {
+      if ((skills || []).some((skill) => skill.manifestUrl === manifestUrl)) {
         errors.manifestUrl = formatMessage('Duplicate skill manifest Url');
       }
     } else {
@@ -57,7 +57,7 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
     setFormDataErrors(errors);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (Object.keys(formDataErrors).length > 0) {
       return;

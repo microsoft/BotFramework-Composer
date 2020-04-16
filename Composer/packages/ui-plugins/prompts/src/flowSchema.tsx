@@ -13,7 +13,7 @@ const BaseInputSchema: FlowWidget = {
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: data => `Bot Asks (${getInputType(data.$kind)})`,
+      title: (data) => `Bot Asks (${getInputType(data.$kind)})`,
       icon: 'MessageBot',
       colors: {
         theme: Colors.BlueMagenta20,
@@ -30,7 +30,7 @@ const BaseInputSchema: FlowWidget = {
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: data => `User Input (${getInputType(data.$kind)})`,
+      title: (data) => `User Input (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: 'User',
       menu: 'none',
@@ -39,11 +39,11 @@ const BaseInputSchema: FlowWidget = {
         icon: Colors.AzureBlue,
       },
     },
-    body: data =>
+    body: (data) =>
       data.$kind === SDKKinds.ChoiceInput && Array.isArray(data.choices) && data.choices.length ? (
         <ListOverview
           items={data.choices}
-          renderItem={item => {
+          renderItem={(item) => {
             const value = typeof item === 'object' ? item.value : item;
             return (
               <BorderedDiv height={20} title={value}>
@@ -55,7 +55,7 @@ const BaseInputSchema: FlowWidget = {
       ) : (
         <>{data.choices}</>
       ),
-    footer: data =>
+    footer: (data) =>
       data.property ? (
         <>
           {data.property} <FixedInfo>= Input({getInputType(data.$kind)})</FixedInfo>

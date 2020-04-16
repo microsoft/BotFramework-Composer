@@ -24,7 +24,7 @@ export function SelectLocation(props) {
   function handleOpen() {
     if (selected === null) {
       if (
-        folders.findIndex(item => {
+        folders.findIndex((item) => {
           return item.name === defaultKey;
         }) >= 0
       ) {
@@ -54,7 +54,7 @@ export function SelectLocation(props) {
       {errorMessage && <div css={error}>{errorMessage}</div>}
       <ChoiceGroup
         defaultSelectedKey={defaultKey}
-        options={folders.map(folder => {
+        options={folders.map((folder) => {
           return {
             key: folder.name,
             path: folder.path,

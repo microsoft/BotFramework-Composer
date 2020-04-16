@@ -29,7 +29,7 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
   onChange,
   onFocus,
 }) => {
-  const onRenderOption: IRenderFunction<ISelectableOption> = option =>
+  const onRenderOption: IRenderFunction<ISelectableOption> = (option) =>
     option ? (
       <div>
         <Icon

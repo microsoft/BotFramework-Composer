@@ -22,8 +22,8 @@ function transformDirectionToVectorAttrs(direction: Direction): Record<string, a
 
 function transformVectorToElement(vectors: ElementVector[], elements: SelectorElement[]): SelectorElement[] {
   const results: SelectorElement[] = [];
-  vectors.forEach(vector =>
-    results.push(elements.find(element => vector.selectedId === element.selectedId) as SelectorElement)
+  vectors.forEach((vector) =>
+    results.push(elements.find((element) => vector.selectedId === element.selectedId) as SelectorElement)
   );
   return results;
 }
@@ -36,7 +36,7 @@ function calculateElementVector(
 ): ElementVector[] {
   const currentElementBounds = currentElement.bounds;
   const elementVectors: ElementVector[] = [];
-  elements.forEach(element => {
+  elements.forEach((element) => {
     const bounds = element.bounds;
     let distance: number;
     let assistDistance: number;
@@ -94,7 +94,7 @@ export function filterElementsByVector(
 ): SelectorElement[] {
   const { assistAxle, boundRectKey } = transformDirectionToVectorAttrs(direction);
   const elementVectors = calculateElementVector(currentElement, elements, boundRectKey, assistAxle);
-  const candidates: ElementVector[] = elementVectors.filter(ele => ele.distance > 0);
+  const candidates: ElementVector[] = elementVectors.filter((ele) => ele.distance > 0);
 
   return transformVectorToElement(candidates, elements);
 }

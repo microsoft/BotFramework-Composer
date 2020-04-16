@@ -42,7 +42,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: item => {
+      onRender: (item) => {
         return <span aria-label={item.name}>{item.name}</span>;
       },
       isPadded: true,
@@ -55,7 +55,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       maxWidth: 70,
       isResizable: true,
       data: 'number',
-      onRender: item => {
+      onRender: (item) => {
         return <span>{calculateTimeDiff(item.dateModified)}</span>;
       },
       isPadded: true,
@@ -67,7 +67,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
         {defaultRender({
           ...props,
-          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
         })}
       </Sticky>
     );
@@ -89,7 +89,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           items={recentProjects}
           compact={false}
           columns={tableColums}
-          getKey={item => item.name}
+          getKey={(item) => item.name}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
           isHeaderVisible={true}

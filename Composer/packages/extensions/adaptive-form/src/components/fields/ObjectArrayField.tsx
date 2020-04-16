@@ -31,7 +31,7 @@ const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): stri
   return formatMessage('Add new {propertyName}', { propertyName });
 };
 
-const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
+const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
   const { value = [], schema, id, onChange, className, uiOptions, label, description } = props;
   const { items } = schema;
   const itemSchema = Array.isArray(items) ? items[0] : items;
@@ -129,7 +129,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           <React.Fragment>
             <div css={objectArrayField.arrayItemField}>
               {orderedProperties
-                .filter(p => !Array.isArray(p))
+                .filter((p) => !Array.isArray(p))
                 .map((property, index, allProperties) => {
                   const lastField = index === allProperties.length - 1;
                   if (typeof property === 'string') {

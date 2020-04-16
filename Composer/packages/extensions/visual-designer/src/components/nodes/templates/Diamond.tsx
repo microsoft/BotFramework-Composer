@@ -15,7 +15,7 @@ export const Diamond = ({ color = ObiColors.AzureGray2, onClick = () => {}, ...r
       height: DiamondSize.height,
       cursor: 'pointer',
     }}
-    onClick={e => {
+    onClick={(e) => {
       e.stopPropagation();
       onClick();
     }}

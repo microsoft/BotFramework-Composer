@@ -26,7 +26,7 @@ const isMac = () => {
 
 const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
   let prefix = isMac() ? 'Mac.' : 'Windows.';
-  ['ctrlKey', 'metaKey', 'altKey', 'shiftKey'].forEach(modifierAttr => {
+  ['ctrlKey', 'metaKey', 'altKey', 'shiftKey'].forEach((modifierAttr) => {
     if (e[modifierAttr]) {
       prefix += `${KeyNameByModifierAttr[modifierAttr]}.`;
     }
@@ -35,7 +35,7 @@ const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
 };
 
 export const KeyboardZone: FC<KeyboardZoneProps> = ({ onCommand, children }): JSX.Element => {
-  const handleKeyDown = e => {
+  const handleKeyDown = (e) => {
     if (overriddenKeyCodes.includes(e.key)) {
       e.preventDefault();
       e.stopPropagation();

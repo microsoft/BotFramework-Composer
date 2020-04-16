@@ -62,7 +62,7 @@ function sortDialog(dialogs: DialogInfo[]) {
 function createGroup(dialogs: DialogInfo[], dialogId: string, filter: string): { items: any[]; groups: IGroup[] } {
   let position = 0;
   const result = dialogs
-    .filter(dialog => {
+    .filter((dialog) => {
       return dialog.displayName.toLowerCase().includes(filter.toLowerCase());
     })
     .reduce(
@@ -95,7 +95,7 @@ const addIconProps: IIconProps = {
   styles: { root: { fontSize: '12px' } },
 };
 
-export const ProjectTree: React.FC<IProjectTreeProps> = props => {
+export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const {
     actions: { onboardingAddCoachMarkRef, updateUserSettings },
     state: {
@@ -106,8 +106,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const { dialogs, dialogId, selected, openNewTriggerModal, onSelect, onDeleteTrigger, onDeleteDialog, onAdd } = props;
   const [filter, setFilter] = useState('');
 
-  const addMainDialogRef = useCallback(mainDialog => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const addNewTriggerRef = useCallback(newTrigger => onboardingAddCoachMarkRef({ newTrigger }), []);
+  const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
+  const addNewTriggerRef = useCallback((newTrigger) => onboardingAddCoachMarkRef({ newTrigger }), []);
 
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);

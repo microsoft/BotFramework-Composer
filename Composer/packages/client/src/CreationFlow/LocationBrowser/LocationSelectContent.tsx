@@ -24,7 +24,7 @@ interface LocationSelectContentProps {
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
 }
 
-export const LocationSelectContent: React.FC<LocationSelectContentProps> = props => {
+export const LocationSelectContent: React.FC<LocationSelectContentProps> = (props) => {
   const { onOpen, onCurrentPathUpdate, operationMode } = props;
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus, focusedStorageFolder } = state;
@@ -41,7 +41,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
     }
   };
 
-  const checkShowItem = item => {
+  const checkShowItem = (item) => {
     if (item.type === 'bot' || item.type === 'folder') {
       return true;
     }

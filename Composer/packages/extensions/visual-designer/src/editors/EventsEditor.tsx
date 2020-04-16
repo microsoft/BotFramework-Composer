@@ -14,12 +14,12 @@ export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Elemen
   const ruleCount = data.children.length;
   const title = `Events (${ruleCount})`;
 
-  const onClick = $kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: ruleCount });
+  const onClick = ($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: ruleCount });
 
   return (
     <Panel
       title={title}
-      onClickContent={e => {
+      onClickContent={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.FocusEvent, '');
       }}

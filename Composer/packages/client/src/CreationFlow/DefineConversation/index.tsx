@@ -38,7 +38,7 @@ interface DefineConversationProps {
 
 const initialFormDataError: FormDataError = {};
 
-export const DefineConversation: React.FC<DefineConversationProps> = props => {
+export const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { onSubmit, onDismiss, onCurrentPathUpdate } = props;
   const { state } = useContext(StoreContext);
   const { templateId, focusedStorageFolder } = state;
@@ -52,7 +52,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
       defaultName = `${bot}-${i}`;
     } while (
       files &&
-      files.find(file => {
+      files.find((file) => {
         return file.name.toLowerCase() === defaultName.toLowerCase();
       }) &&
       i < MAXTRYTIMES
@@ -64,7 +64,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   const [formData, setFormData] = useState(initalFormData);
   const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
   const [disable, setDisable] = useState(false);
-  const updateForm = field => (e, newValue) => {
+  const updateForm = (field) => (e, newValue) => {
     setFormData({
       ...formData,
       [field]: newValue,
@@ -87,7 +87,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     if (
       name &&
       files &&
-      files.find(bot => {
+      files.find((bot) => {
         return bot.path.toLowerCase() === newBotPath.toLowerCase();
       })
     ) {
@@ -111,7 +111,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
     setFormDataErrors(errors);
   }, [focusedStorageFolder, formData.name]);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateForm(formData);
     if (Object.keys(errors).length) {

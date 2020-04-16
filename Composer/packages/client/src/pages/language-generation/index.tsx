@@ -31,7 +31,7 @@ interface LGPageProps extends RouteComponentProps<{}> {
   dialogId?: string;
 }
 
-const LGPage: React.FC<LGPageProps> = props => {
+const LGPage: React.FC<LGPageProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, projectId } = state;
 
@@ -39,10 +39,10 @@ const LGPage: React.FC<LGPageProps> = props => {
   const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const navLinks = useMemo(() => {
-    const newDialogLinks = dialogs.map(dialog => {
+    const newDialogLinks = dialogs.map((dialog) => {
       return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
     });
-    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
@@ -65,7 +65,7 @@ const LGPage: React.FC<LGPageProps> = props => {
   }, [dialogId, dialogs, projectId]);
 
   const onSelect = useCallback(
-    id => {
+    (id) => {
       const url = `/bot/${projectId}/language-generation/${id}`;
       navigateTo(url);
     },

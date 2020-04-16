@@ -10,7 +10,7 @@ interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | '
   schema?: any;
 }
 
-const JsonEditor: React.FC<JsonEditorProps> = props => {
+const JsonEditor: React.FC<JsonEditorProps> = (props) => {
   const { options: additionalOptions, value: initialValue, onChange, onInit: onInitProp, schema, id, ...rest } = props;
 
   const [parseError, setParseError] = useState<string>('');
@@ -21,8 +21,8 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     ...additionalOptions,
   };
 
-  const onInit: OnInit = monaco => {
-    const disposable = monaco.editor.onDidCreateModel(model => {
+  const onInit: OnInit = (monaco) => {
+    const disposable = monaco.editor.onDidCreateModel((model) => {
       const diagnosticOptions: any = {
         validate: true,
       };
@@ -30,7 +30,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
       if (schema) {
         const uri = btoa(JSON.stringify(schema));
         const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
-        const currentSchema = otherSchemas.find(s => s.uri === uri);
+        const currentSchema = otherSchemas.find((s) => s.uri === uri);
 
         /**
          * Because we mutate the global language settings, we need to
@@ -39,7 +39,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
          * by taking advantage of the `fileMatch` property + the model's uri.
          */
         diagnosticOptions.schemas = [
-          ...otherSchemas.filter(s => s.uri !== uri),
+          ...otherSchemas.filter((s) => s.uri !== uri),
           {
             uri,
             schema,
@@ -61,7 +61,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     }
   };
 
-  const handleChange = value => {
+  const handleChange = (value) => {
     if (value) {
       try {
         const data = JSON.parse(value);

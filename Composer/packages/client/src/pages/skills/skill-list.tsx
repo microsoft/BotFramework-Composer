@@ -80,7 +80,7 @@ const columns: IColumn[] = [
   },
 ];
 
-const SkillList: React.FC<ISkillListProps> = props => {
+const SkillList: React.FC<ISkillListProps> = (props) => {
   const { actions } = useContext(StoreContext);
 
   const { skills, projectId } = props;
@@ -103,12 +103,12 @@ const SkillList: React.FC<ISkillListProps> = props => {
     setEditIndex(undefined);
   }, []);
 
-  const onItemEdit = useCallback(index => {
+  const onItemEdit = useCallback((index) => {
     setEditIndex(index);
   }, []);
 
   const onItemDelete = useCallback(
-    index => {
+    (index) => {
       const payload = {
         projectId,
         targetId: index,
@@ -165,7 +165,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
         <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+            onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
           })}
         </Sticky>
       </div>

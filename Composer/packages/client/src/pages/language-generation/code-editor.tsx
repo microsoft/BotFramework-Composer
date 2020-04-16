@@ -23,7 +23,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = props => {
+const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const { actions, state, resolvers } = useContext(StoreContext);
   const { lgFiles, locale, projectId, userSettings } = state;
   const { lgImportresolver } = resolvers;
@@ -108,7 +108,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   );
 
   const _onChange = useCallback(
-    value => {
+    (value) => {
       setContent(value);
       if (!file) return;
       const { id } = file;

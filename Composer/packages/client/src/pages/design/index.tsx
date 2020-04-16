@@ -63,10 +63,10 @@ function onRenderBreadcrumbItem(item, render) {
 
 function getAllRef(targetId, dialogs) {
   let refs: string[] = [];
-  dialogs.forEach(dialog => {
+  dialogs.forEach((dialog) => {
     if (dialog.id === targetId) {
       refs = refs.concat(dialog.referredDialogs);
-    } else if (!dialog.referredDialogs.every(item => item !== targetId)) {
+    } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
       refs.push(dialog.displayName || dialog.id);
     }
   });
@@ -164,7 +164,7 @@ function DesignPage(props) {
     }
   }
 
-  const onCreateDialogComplete = newDialog => {
+  const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
       navTo(newDialog);
     }

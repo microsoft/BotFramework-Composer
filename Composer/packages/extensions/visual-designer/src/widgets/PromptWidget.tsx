@@ -68,7 +68,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(botAsksNode.data, boundary);
               updateNodeBoundary(PromptNodes.BotAsks, boundary);
             }}
@@ -80,7 +80,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
       <OffsetContainer offset={userAnswersNode.offset}>
         <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent} titleInHeader={true}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
               updateNodeBoundary(PromptNodes.UserAnswers, boundary);
             }}

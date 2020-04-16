@@ -33,7 +33,7 @@ export const Deployment: React.FC<RouteComponentProps> = () => {
     openWizard(1);
   };
 
-  const openWizard = initialStep => {
+  const openWizard = (initialStep) => {
     setStep(initialStep);
     setWizardOpen(true);
   };

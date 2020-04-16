@@ -13,7 +13,7 @@ import { UserIdentity } from './pluginLoader';
 
 const fileBlacklist = ['.DS_Store'];
 const isValidFile = (file: string) => {
-  return fileBlacklist.filter(badFile => badFile === file).length === 0;
+  return fileBlacklist.filter((badFile) => badFile === file).length === 0;
 };
 class StorageService {
   private STORE_KEY = 'storageConnections';
@@ -25,7 +25,7 @@ class StorageService {
   }
 
   public getStorageClient = (storageId: string, user?: UserIdentity): IFileStorage => {
-    const conn = this.storageConnections.find(s => {
+    const conn = this.storageConnections.find((s) => {
       return s.id === storageId;
     });
     if (conn === undefined) {
@@ -36,14 +36,14 @@ class StorageService {
 
   public createStorageConnection = (connection: StorageConnection) => {
     // if id is already in store, skip it
-    if (!this.storageConnections.find(item => item.id === connection.id)) {
+    if (!this.storageConnections.find((item) => item.id === connection.id)) {
       this.storageConnections.push(connection);
       Store.set(this.STORE_KEY, this.storageConnections);
     }
   };
 
   public getStorageConnections = (): StorageConnection[] => {
-    const connections = this.storageConnections.map(s => {
+    const connections = this.storageConnections.map((s) => {
       const temp = Object.assign({}, s);
       // if the last accessed path exist
       if (fs.existsSync(s.path)) {
@@ -75,7 +75,7 @@ class StorageService {
       return {
         name: '',
         parent: '/',
-        children: settings.diskNames.map(d => {
+        children: settings.diskNames.map((d) => {
           return {
             name: d,
             type: 'folder',
@@ -110,7 +110,7 @@ class StorageService {
   };
 
   public updateCurrentPath = (path: string, storageId: string) => {
-    const storage = this.storageConnections.find(s => s.id === storageId);
+    const storage = this.storageConnections.find((s) => s.id === storageId);
     if (storage) {
       storage.path = path;
       Store.set(this.STORE_KEY, this.storageConnections);
@@ -119,7 +119,7 @@ class StorageService {
   };
 
   private ensureDefaultBotFoldersExist = () => {
-    this.storageConnections.forEach(s => {
+    this.storageConnections.forEach((s) => {
       this.createFolderRecurively(s.defaultPath);
     });
   };
@@ -128,7 +128,7 @@ class StorageService {
     // locate new structure bot:
     const children = await storage.readDir(path);
     const dialogFile = /.+(.)dialog/;
-    const isNewBot = children.some(name => dialogFile.test(name));
+    const isNewBot = children.some((name) => dialogFile.test(name));
     // locate old structire bot: Main.dialog
     const mainPath = Path.join(path, 'Main', 'Main.dialog');
     const isOldBot = await storage.exists(mainPath);
@@ -137,7 +137,7 @@ class StorageService {
 
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
-    const children = (await storage.readDir(dirPath)).map(async childName => {
+    const children = (await storage.readDir(dirPath)).map(async (childName) => {
       try {
         if (childName === '') {
           return;
@@ -160,7 +160,7 @@ class StorageService {
     });
     // filter no access permission folder, witch value is null in children array
     const result = await Promise.all(children);
-    return result.filter(item => !!item);
+    return result.filter((item) => !!item);
   };
 
   private createFolderRecurively = (path: string) => {

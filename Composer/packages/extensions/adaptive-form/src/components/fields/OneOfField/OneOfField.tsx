@@ -15,7 +15,7 @@ import { oneOfField } from '../styles';
 
 import { getOptions, getSelectedOption } from './utils';
 
-const OneOfField: React.FC<FieldProps> = props => {
+const OneOfField: React.FC<FieldProps> = (props) => {
   const { schema, value, definitions } = props;
   const pluginConfig = usePluginConfig();
   const options = useMemo(() => getOptions(schema, definitions), [schema, definitions]);

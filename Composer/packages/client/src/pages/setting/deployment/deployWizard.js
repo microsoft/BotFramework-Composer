@@ -11,7 +11,7 @@ import { DeployWizardStep2 } from './deployWizardStep-getCreate';
 import { DeployWizardStep3 } from './deployWizardStep-getDeploy';
 import { styles } from './styles';
 
-export const DeployWizard = props => {
+export const DeployWizard = (props) => {
   const { isOpen, closeModal, initialStep } = props;
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [botValues, setBotValues] = useState();
@@ -21,12 +21,12 @@ export const DeployWizard = props => {
     setCurrentStep(initialStep);
   }, [initialStep]);
 
-  const completeStepCreate = form => {
+  const completeStepCreate = (form) => {
     setBotValues(form);
     setCurrentStep(2);
   };
 
-  const completeStepDeploy = form => {
+  const completeStepDeploy = (form) => {
     setBotValues(form);
     setCurrentStep(3);
   };

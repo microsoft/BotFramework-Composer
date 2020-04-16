@@ -56,9 +56,9 @@ function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
         case 'location':
           return true;
       }
-      targets.forEach(target => {
+      targets.forEach((target) => {
         templates.push(
-          ...extractLgTemplateRefs(target.value).map(x => {
+          ...extractLgTemplateRefs(target.value).map((x) => {
             return { name: x.name, path: target.path };
           })
         );
@@ -69,8 +69,8 @@ function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   JsonWalk(id, dialog, visitor);
   //uniquify lgTemplates based on name
   const res: LgTemplateJsonPath[] = [];
-  templates.forEach(t => {
-    if (!res.find(r => r.name === t.name)) {
+  templates.forEach((t) => {
+    if (!res.find((r) => r.name === t.name)) {
       res.push(t);
     }
   });
@@ -173,7 +173,7 @@ function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
         allChecks.splice(0, 0, ...checkerFunc);
       }
 
-      allChecks.forEach(func => {
+      allChecks.forEach((func) => {
         const result = func(path, value, value.$kind, schema.definitions[value.$kind]);
         if (result) {
           diagnostics.splice(0, 0, ...result);
@@ -183,7 +183,7 @@ function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
     return false;
   };
   JsonWalk(id, dialog, visitor);
-  return diagnostics.map(e => {
+  return diagnostics.map((e) => {
     e.source = id;
     return e;
   });

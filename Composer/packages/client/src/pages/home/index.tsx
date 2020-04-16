@@ -60,24 +60,24 @@ const Home: React.FC<RouteComponentProps> = () => {
     onboardingAddCoachMarkRef,
   } = actions;
 
-  const onClickRecentBotProject = async path => {
+  const onClickRecentBotProject = async (path) => {
     await openBotProject(path);
   };
 
-  const onSelectionChanged = async item => {
+  const onSelectionChanged = async (item) => {
     if (item && item.path) {
       await onClickRecentBotProject(item.path);
     }
   };
 
-  const onClickTemplate = id => {
+  const onClickTemplate = (id) => {
     saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
   };
 
   const addButton = <Icon styles={home.button} iconName="Add" />;
 
-  const addRef = useCallback(project => onboardingAddCoachMarkRef({ project }), []);
+  const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
   const toolbarItems = [
     {
@@ -174,7 +174,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
                 recentProjects={recentProjects}
-                onSelectionChanged={async item => {
+                onSelectionChanged={async (item) => {
                   await onSelectionChanged(item);
                 }}
               />
@@ -197,7 +197,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                     'Bot Framework provides the most comprehensive experience for building conversation applications.'
                   )}
                 </div>
-                {linksButtom.map(link => {
+                {linksButtom.map((link) => {
                   return (
                     <Link
                       href={link.to}

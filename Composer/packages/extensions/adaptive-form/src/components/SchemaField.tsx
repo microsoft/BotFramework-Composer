@@ -24,7 +24,7 @@ const schemaField = {
   `,
 };
 
-const SchemaField: React.FC<FieldProps> = props => {
+const SchemaField: React.FC<FieldProps> = (props) => {
   const {
     className,
     definitions,

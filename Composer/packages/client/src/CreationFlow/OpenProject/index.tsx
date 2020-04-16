@@ -16,7 +16,7 @@ interface OpenProjectProps {
   onDismiss: () => void;
 }
 
-export const OpenProject: React.FC<OpenProjectProps> = props => {
+export const OpenProject: React.FC<OpenProjectProps> = (props) => {
   const { onOpen, onDismiss, onCurrentPathUpdate } = props;
 
   return (

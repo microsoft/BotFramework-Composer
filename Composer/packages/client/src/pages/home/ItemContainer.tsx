@@ -32,7 +32,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   return (
     <div
       css={[itemContainerWrapper(disabled), styles.container]}
-      onClick={async e => {
+      onClick={async (e) => {
         e.preventDefault();
         if (onClick) {
           await onClick();

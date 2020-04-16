@@ -24,12 +24,12 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
       { condition: window.matchMedia('(max-width: 679px)'), length: PanelSize.minWidth },
     ];
 
-    PanelWidthList.forEach(panelWidth => {
+    PanelWidthList.forEach((panelWidth) => {
       const query = panelWidth.condition;
       if (query.matches) {
         setWidth(panelWidth.length);
       }
-      panelWidth.condition.addListener(e => {
+      panelWidth.condition.addListener((e) => {
         if (e.matches) {
           setWidth(panelWidth.length);
         }
@@ -37,8 +37,8 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
     });
 
     return () => {
-      PanelWidthList.forEach(panelWidth => {
-        panelWidth.condition.removeListener(e => {
+      PanelWidthList.forEach((panelWidth) => {
+        panelWidth.condition.removeListener((e) => {
           if (e.matches) {
             setWidth(panelWidth.length);
           }

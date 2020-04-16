@@ -62,7 +62,7 @@ export function LgEditor(props: LGLSPEditorProps) {
   const { lgOption, languageServer, onInit: onInitProp, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
-  const onInit: OnInit = monaco => {
+  const onInit: OnInit = (monaco) => {
     registerLGLanguage(monaco);
 
     if (typeof onInitProp === 'function') {

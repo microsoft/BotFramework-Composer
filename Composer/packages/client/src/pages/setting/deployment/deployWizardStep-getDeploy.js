@@ -11,7 +11,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { styles } from './styles';
 import processGif from './deploy-deploy-output.png';
 
-export const DeployWizardStep3 = props => {
+export const DeployWizardStep3 = (props) => {
   const { closeModal, botValues } = props;
 
   const scriptValue = [

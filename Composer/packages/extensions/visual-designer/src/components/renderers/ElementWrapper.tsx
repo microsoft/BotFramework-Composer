@@ -90,7 +90,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
         }
       `}
       {...declareElementAttributes(selectableId, id)}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}

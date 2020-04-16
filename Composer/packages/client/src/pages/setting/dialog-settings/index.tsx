@@ -46,7 +46,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     actions.setDialogSettingsSlot(projectId, option.key);
   };
 
-  const saveChangeResult = result => {
+  const saveChangeResult = (result) => {
     try {
       const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
       actions.setSettings(projectId, botName, mergedResult, absHosted ? slot : undefined);
@@ -89,7 +89,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor onChange={x => handleChange(x)} value={visibleSettings} />
+        <JsonEditor onChange={(x) => handleChange(x)} value={visibleSettings} />
       </div>
     </div>
   ) : (

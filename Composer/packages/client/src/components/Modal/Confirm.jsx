@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 
 import { DialogStyle, BuiltInStyles, dialog, dialogModal } from './styles';
 
-const ConfirmDialog = props => {
+const ConfirmDialog = (props) => {
   const { setting, onCancel, onConfirm } = props;
   const {
     title,
@@ -57,7 +57,7 @@ ConfirmDialog.propTypes = {
 };
 
 export const OpenConfirmModal = (title, subTitle, setting = {}) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const node = document.createElement('div');
     document.body.appendChild(node);
     const removeNode = () => {

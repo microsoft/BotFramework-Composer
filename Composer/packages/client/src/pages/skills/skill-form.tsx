@@ -24,7 +24,7 @@ const defaultFormData = {
   manifestUrl: '',
 };
 
-const SkillForm: React.FC<ISkillFormProps> = props => {
+const SkillForm: React.FC<ISkillFormProps> = (props) => {
   const { editIndex = -1, skills, onSubmit, onDismiss } = props;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
@@ -47,7 +47,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
         errors.manifestUrl = formatMessage('Url should start with http[s]://');
       }
 
-      const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
+      const duplicatedItemIndex = skills.findIndex((item) => item.manifestUrl === manifestUrl);
       if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
         errors.manifestUrl = formatMessage('Duplicate manifestUrl');
       }
@@ -72,7 +72,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
     setFormData(newData);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateForm(formData);
     setFormDataErrors(errors);

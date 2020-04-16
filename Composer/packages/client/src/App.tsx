@@ -97,7 +97,7 @@ const topLinks = (projectId: string, openedDialogId: string) => {
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
-    links = links.filter(link => link.to !== '/home');
+    links = links.filter((link) => link.to !== '/home');
   }
 
   return links;
@@ -126,7 +126,7 @@ export const App: React.FC = () => {
 
   const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation, announcement } = state;
   const { setCreationFlowStatus } = actions;
-  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
+  const mapNavItemTo = (x) => resolveToBasePath(BASEPATH, x);
 
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
   return (

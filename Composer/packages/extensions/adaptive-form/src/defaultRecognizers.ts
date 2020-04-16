@@ -11,17 +11,17 @@ const DefaultRecognizers: RecognizerSchema[] = [
   {
     id: 'none',
     displayName: () => formatMessage('None'),
-    isSelected: data => data === undefined,
-    handleRecognizerChange: props => props.onChange(undefined),
+    isSelected: (data) => data === undefined,
+    handleRecognizerChange: (props) => props.onChange(undefined),
   },
   {
     id: SDKKinds.RegexRecognizer,
     displayName: () => formatMessage('Regular Expression'),
     editor: RegexIntentField,
-    isSelected: data => {
+    isSelected: (data) => {
       return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
     },
-    handleRecognizerChange: props => {
+    handleRecognizerChange: (props) => {
       props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
     },
   },

@@ -14,7 +14,7 @@ const fieldStyle = css`
   label: JsonField;
 `;
 
-const JsonField: React.FC<FieldProps> = props => {
+const JsonField: React.FC<FieldProps> = (props) => {
   const { onChange, value, id, label, description, uiOptions } = props;
 
   return (

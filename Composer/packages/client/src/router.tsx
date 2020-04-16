@@ -22,7 +22,7 @@ const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
 const Skills = React.lazy(() => import('./pages/skills'));
 
-const Routes = props => {
+const Routes = (props) => {
   return (
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>
@@ -56,7 +56,7 @@ const Routes = props => {
   );
 };
 
-const DialogRouter = props => {
+const DialogRouter = (props) => {
   const match = { dialogId: props.dialogId, projectId: props.projectId };
   const { actions } = useContext(StoreContext);
 
@@ -71,7 +71,7 @@ const DialogRouter = props => {
   );
 };
 
-const ProjectRouter = props => {
+const ProjectRouter = (props) => {
   const { actions } = useContext(StoreContext);
 
   useEffect(() => {

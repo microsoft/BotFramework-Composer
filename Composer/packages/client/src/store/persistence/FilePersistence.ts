@@ -27,7 +27,7 @@ const fileChangeType = {
 class FilePersistence {
   private _files: { [fileName: string]: FileOperation };
   private _projectId = '';
-  private _handleError = name => error => {};
+  private _handleError = (name) => (error) => {};
 
   constructor() {
     this._files = {};
@@ -38,7 +38,7 @@ class FilePersistence {
       this.clear();
       const { files, id } = payload.response.data;
       this._projectId = id;
-      files.forEach(file => {
+      files.forEach((file) => {
         this.attach(file.name, file);
       });
     }
@@ -57,7 +57,7 @@ class FilePersistence {
   }
 
   public clear() {
-    keys(this._files).forEach(key => {
+    keys(this._files).forEach((key) => {
       this._files[key].flush();
     });
     this._files = {};
@@ -97,16 +97,16 @@ class FilePersistence {
     if (changeType === FileChangeType.DELETE) {
       await Promise.all(
         keys(this._files)
-          .filter(fileName => {
+          .filter((fileName) => {
             const fileId = getBaseName(fileName);
             return fileId === id || (getBaseName(fileId) === id && fileType === FileExtensions.Dialog);
           })
-          .map(async fileName => await this.doRemove(fileName))
+          .map(async (fileName) => await this.doRemove(fileName))
       );
     } else {
       const { dialogs, luFiles, lgFiles } = state;
       if (fileType === FileExtensions.Dialog) {
-        const dialog = dialogs.find(d => d.id === id);
+        const dialog = dialogs.find((d) => d.id === id);
         if (!dialog) return;
         await this.doUpdate(`${id}.dialog`, JSON.stringify(dialog.content, null, 2) + '\n');
         if (changeType === FileChangeType.CREATE) {
@@ -116,13 +116,13 @@ class FilePersistence {
       }
 
       if (fileType === FileExtensions.Lg) {
-        const lg = lgFiles.find(d => d.id === id);
+        const lg = lgFiles.find((d) => d.id === id);
         if (!lg) return;
         await this.doUpdate(`${id}.lg`, lg.content);
       }
 
       if (fileType === FileExtensions.Lu) {
-        const lu = luFiles.find(d => d.id === id);
+        const lu = luFiles.find((d) => d.id === id);
         if (!lu) return;
         await this.doUpdate(`${id}.lu`, lu.content);
       }
@@ -142,7 +142,7 @@ class FilePersistence {
 
   public registerHandleError(store: Store) {
     const curStore = store;
-    this._handleError = name => err => {
+    this._handleError = (name) => (err) => {
       //TODO: error handling now if sync file error, do a full refresh.
       const fileName = name;
       setError(curStore, {
@@ -157,8 +157,8 @@ class FilePersistence {
   private async _doCreateForOtherFile(files: ResourceInfo[], extension: string, targetId: string) {
     await Promise.all(
       files
-        .filter(file => getBaseName(file.id) === targetId)
-        .map(async file => await this.doUpdate(`${file.id}${extension}`, file.content))
+        .filter((file) => getBaseName(file.id) === targetId)
+        .map(async (file) => await this.doUpdate(`${file.id}${extension}`, file.content))
     );
   }
 }

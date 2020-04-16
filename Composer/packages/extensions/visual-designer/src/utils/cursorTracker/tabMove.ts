@@ -16,7 +16,7 @@ function isParentRect(parentRect, childRect) {
 
 function findSelectableChildren(element: SelectorElement, elementList: SelectorElement[]) {
   const rect = element.bounds;
-  return elementList.filter(el => {
+  return elementList.filter((el) => {
     const candidateRect = el.bounds;
     return isParentRect(rect, candidateRect);
   });
@@ -24,7 +24,7 @@ function findSelectableChildren(element: SelectorElement, elementList: SelectorE
 
 function findSelectableParent(element: SelectorElement, elementList: SelectorElement[]) {
   const rect = element.bounds;
-  return elementList.find(el => {
+  return elementList.find((el) => {
     const candidateRect = el.bounds;
     return isParentRect(candidateRect, rect);
   });

@@ -33,10 +33,10 @@ export function ToolBar(props) {
   let left = [];
   let right = [];
   if (toolbarItems && toolbarItems.length > 0) {
-    left = toolbarItems.filter(item => {
+    left = toolbarItems.filter((item) => {
       return item.align === 'left';
     });
-    right = toolbarItems.filter(item => {
+    right = toolbarItems.filter((item) => {
       return item.align === 'right';
     });
   }

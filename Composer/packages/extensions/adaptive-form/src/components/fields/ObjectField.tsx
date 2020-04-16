@@ -35,7 +35,7 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
 
   return (
     <React.Fragment>
-      {orderedProperties.map(row => (
+      {orderedProperties.map((row) => (
         <FormRow
           key={`${props.id}.${typeof row === 'string' ? row : row.join('_')}`}
           {...rest}

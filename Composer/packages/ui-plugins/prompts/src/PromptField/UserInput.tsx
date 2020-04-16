@@ -17,10 +17,10 @@ const getOptions = (enumSchema: JSONSchema7) => {
     return [];
   }
 
-  return enumSchema.enum.map(o => o as string);
+  return enumSchema.enum.map((o) => o as string);
 };
 
-const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
+const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
   const { onChange, getSchema, value, id, uiOptions, getError, definitions, depth, schema = {} } = props;
   const { currentDialog, designerId } = useShellApi();
   const { recognizers } = usePluginConfig();
@@ -30,7 +30,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
   const intentName = `${promptType}.response-${designerId}`;
 
   const type = recognizerType(currentDialog);
-  const Editor: any = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
+  const Editor: any = type === SDKKinds.LuisRecognizer && recognizers.find((r) => r.id === type)?.editor;
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
 
   return (

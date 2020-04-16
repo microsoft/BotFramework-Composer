@@ -17,7 +17,7 @@ import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ArrayField: React.FC<FieldProps<any[]>> = props => {
+const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
   const { value = [], onChange, schema, label, description, id, rawErrors = [], uiOptions, className, ...rest } = props;
   const [newValue, setNewValue] = useState<string>();
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
@@ -25,7 +25,7 @@ const ArrayField: React.FC<FieldProps<any[]>> = props => {
   const handleNewChange = (_e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) =>
     setNewValue(newValue || '');
 
-  const handleKeyDown = event => {
+  const handleKeyDown = (event) => {
     if (event.key.toLowerCase() === 'enter') {
       event.preventDefault();
 

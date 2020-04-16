@@ -61,7 +61,7 @@ export async function start(pluginDir?: string) {
       'upgrade-insecure-requests;',
     ];
 
-    app.all('*', function(req: Request, res: Response, next: NextFunction) {
+    app.all('*', function (req: Request, res: Response, next: NextFunction) {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -98,21 +98,21 @@ export async function start(pluginDir?: string) {
     // always authorize all api routes, it will be a no-op if no auth provider set
     app.use(`${BASEURL}/api`, authorize, apiRouter);
 
-    app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
+    app.use(function (err: Error, req: Request, res: Response, _next: NextFunction) {
       if (err) {
         log(err);
         res.status(500).json({ message: err.message });
       }
     });
 
-    app.get('*', function(req, res) {
+    app.get('*', function (req, res) {
       res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
     });
   });
 
   const port = process.env.PORT || 5000;
   let server;
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     server = app.listen(port, () => {
       if (process.env.NODE_ENV === 'production') {
         log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
@@ -144,7 +144,7 @@ export async function start(pluginDir?: string) {
     server.start();
   }
 
-  attachLSPServer(wss, server, '/lg-language-server', webSocket => {
+  attachLSPServer(wss, server, '/lg-language-server', (webSocket) => {
     // launch language server when the web socket is opened
     if (webSocket.readyState === webSocket.OPEN) {
       launchLanguageServer(webSocket);
@@ -155,7 +155,7 @@ export async function start(pluginDir?: string) {
     }
   });
 
-  attachLSPServer(wss, server, '/lu-language-server', webSocket => {
+  attachLSPServer(wss, server, '/lu-language-server', (webSocket) => {
     // launch language server when the web socket is opened
     if (webSocket.readyState === webSocket.OPEN) {
       launchLuLanguageServer(webSocket);

@@ -73,7 +73,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           uiOptions={{}}
           value={name}
           onBlur={handleBlur}
-          onChange={newValue => setName(newValue || '')}
+          onChange={(newValue) => setName(newValue || '')}
           ariaLabel={formatMessage('key')}
         />
       </div>

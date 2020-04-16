@@ -47,7 +47,7 @@ describe('test persistence layer', () => {
     expect(Object.keys(filePersistence.files).length).toBe(0);
     expect(filePersistence.projectId).toBe('');
     filePersistence.projectId = 'projectId';
-    files.forEach(file => filePersistence.attach(file.name, file));
+    files.forEach((file) => filePersistence.attach(file.name, file));
     expect(Object.keys(filePersistence.files).length).toBe(3);
   });
 
@@ -67,7 +67,7 @@ describe('test persistence layer', () => {
     await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
     await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LG, payload: { id: 'a.en-us' } });
     await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LU, payload: { id: 'a.en-us' } });
-    await new Promise(res =>
+    await new Promise((res) =>
       setTimeout(() => {
         const dialog = filePersistence.files['a.dialog'].file;
         const lg = filePersistence.files['a.en-us.lg'].file;

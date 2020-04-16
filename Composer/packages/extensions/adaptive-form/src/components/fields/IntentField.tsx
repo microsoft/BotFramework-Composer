@@ -24,7 +24,7 @@ export function recognizerType({ content }: DialogInfo): string | null {
   return null;
 }
 
-const IntentField: React.FC<FieldProps> = props => {
+const IntentField: React.FC<FieldProps> = (props) => {
   const { id, description, uiOptions, value, onChange } = props;
   const { currentDialog } = useShellApi();
   const { recognizers } = usePluginConfig();
@@ -34,7 +34,7 @@ const IntentField: React.FC<FieldProps> = props => {
     onChange(value);
   };
 
-  const Editor = recognizers.find(r => r.id === type)?.editor;
+  const Editor = recognizers.find((r) => r.id === type)?.editor;
   const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
 
   return (

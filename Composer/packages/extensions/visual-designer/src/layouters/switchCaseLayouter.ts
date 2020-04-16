@@ -29,7 +29,7 @@ export function switchCaseLayouter(
   const containerBoundary = calculateSwitchCaseBoundary(
     conditionNode.boundary,
     choiceNode.boundary,
-    branchNodes.map(x => x.boundary)
+    branchNodes.map((x) => x.boundary)
   );
 
   /** Calulate nodes position */
@@ -64,7 +64,7 @@ export function switchCaseLayouter(
   });
 
   const BaselinePositionY = choiceNode.offset.y + choiceNode.boundary.axisY;
-  branchNodes.forEach(x => {
+  branchNodes.forEach((x) => {
     edges.push(
       {
         id: `edge/${choiceNode.id}/case/baseline->${x.id}`,

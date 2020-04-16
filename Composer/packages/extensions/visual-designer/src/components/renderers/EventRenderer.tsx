@@ -48,7 +48,7 @@ export const EventRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): J
         data={data}
         focused={nodeFocused}
         onEvent={onEvent}
-        onResize={size => {
+        onResize={(size) => {
           onResize(size, 'node');
         }}
       />

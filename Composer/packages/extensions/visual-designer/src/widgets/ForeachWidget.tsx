@@ -73,7 +73,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(foreachNode.data, boundary);
               updateNodeBoundary(ForeachNodes.Foreach, boundary);
             }}
@@ -88,13 +88,13 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
           id={loopActionsNode.id}
           data={loopActionsNode.data}
           onEvent={onEvent}
-          onResize={size => {
+          onResize={(size) => {
             updateNodeBoundary(ForeachNodes.LoopActions, size);
           }}
         />
       </OffsetContainer>
       {[loopBeginNode, loopEndNode]
-        .filter(x => !!x)
+        .filter((x) => !!x)
         .map((x, index) => (
           <OffsetContainer key={`${id}/loopicon-${index}/offset`} offset={x.offset}>
             <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />

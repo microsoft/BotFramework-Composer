@@ -26,7 +26,7 @@ interface LUPageProps extends RouteComponentProps<{}> {
   path: string;
 }
 
-const LUPage: React.FC<LUPageProps> = props => {
+const LUPage: React.FC<LUPageProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, projectId } = state;
   const path = props.location?.pathname ?? '';
@@ -35,10 +35,10 @@ const LUPage: React.FC<LUPageProps> = props => {
   const isRoot = dialogId === 'all';
 
   const navLinks = useMemo(() => {
-    const newDialogLinks = dialogs.map(dialog => {
+    const newDialogLinks = dialogs.map((dialog) => {
       return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
     });
-    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
@@ -55,7 +55,7 @@ const LUPage: React.FC<LUPageProps> = props => {
   }, [dialogId, dialogs, projectId]);
 
   const onSelect = useCallback(
-    id => {
+    (id) => {
       const url = `/bot/${projectId}/language-understanding/${id}`;
       navigateTo(url);
     },

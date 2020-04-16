@@ -10,7 +10,7 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import { consoleStyle, dialog } from './styles';
 
-export const ErrorPopup = props => {
+export const ErrorPopup = (props) => {
   const [hidden, setHidden] = useState(props.error ? false : true);
 
   const _closeDialog = () => {

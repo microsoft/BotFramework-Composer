@@ -42,7 +42,7 @@ export const IconCard = ({
       className="card"
       data-testid="IconCard"
       css={containerStyle}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onClick();
       }}
@@ -155,7 +155,7 @@ export const IconCard = ({
                 style={{ lineHeight: '12px', fontSize: '12px', color: 'blue', paddingRight: '5px' }}
                 iconName="OpenSource"
                 data-testid="OpenIcon"
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
                   onChildDialogClick();
                 }}
@@ -165,7 +165,7 @@ export const IconCard = ({
                   cursor: 'pointer',
                   color: 'blue',
                 }}
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
                   onChildDialogClick();
                 }}

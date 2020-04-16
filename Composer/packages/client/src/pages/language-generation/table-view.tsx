@@ -27,7 +27,7 @@ interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
-const TableView: React.FC<TableViewProps> = props => {
+const TableView: React.FC<TableViewProps> = (props) => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, lgFiles, projectId, locale } = state;
   const { dialogId } = props;
@@ -80,7 +80,7 @@ const TableView: React.FC<TableViewProps> = props => {
   }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
-    index => {
+    (index) => {
       const payload = {
         file,
         projectId,
@@ -93,7 +93,7 @@ const TableView: React.FC<TableViewProps> = props => {
   );
 
   const onCopyTemplate = useCallback(
-    index => {
+    (index) => {
       const name = templates[index].name;
       const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
       const payload = {
@@ -151,7 +151,7 @@ const TableView: React.FC<TableViewProps> = props => {
         maxWidth: 150,
         isResizable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           return <div css={formCell}>#{item.name}</div>;
         },
       },
@@ -163,7 +163,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         data: 'string',
         isPadded: true,
-        onRender: item => {
+        onRender: (item) => {
           return <div css={formCell}>{item.body}</div>;
         },
       },
@@ -201,7 +201,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         isCollapsable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
             <IconButton iconProps={{ iconName: 'Accept' }} ariaLabel={formatMessage('Used') + ';'} />
           ) : (
@@ -221,7 +221,7 @@ const TableView: React.FC<TableViewProps> = props => {
         <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+            onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
           })}
         </Sticky>
       </div>
@@ -241,7 +241,7 @@ const TableView: React.FC<TableViewProps> = props => {
     );
   }, [activeDialog, templates]);
 
-  const getKeyCallback = useCallback(item => item.name, []);
+  const getKeyCallback = useCallback((item) => item.name, []);
 
   return (
     <div className={'table-view'} data-testid={'table-view'}>

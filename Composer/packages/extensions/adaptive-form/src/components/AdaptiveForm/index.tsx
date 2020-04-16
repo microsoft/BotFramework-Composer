@@ -110,7 +110,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
           formData={localData}
           id={localData.$designer?.id || 'unknown'}
           schema={$schema}
-          onChange={$designer => handleDataChange({ ...localData, $designer })}
+          onChange={($designer) => handleDataChange({ ...localData, $designer })}
           uiOptions={$uiSchema}
         />
         <SchemaField

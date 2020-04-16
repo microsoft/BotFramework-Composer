@@ -7,10 +7,10 @@ import { FieldLabel } from '@bfc/adaptive-form';
 import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import formatMessage from 'format-message';
 
-const EventNameField: React.FC<FieldProps<string>> = props => {
+const EventNameField: React.FC<FieldProps<string>> = (props) => {
   const { enumOptions, value, description, id, label, uiOptions, onChange, error } = props;
 
-  const options: IComboBoxOption[] = (enumOptions ?? []).map(o => ({
+  const options: IComboBoxOption[] = (enumOptions ?? []).map((o) => ({
     key: o?.toString(),
     text: o?.toString(),
   }));

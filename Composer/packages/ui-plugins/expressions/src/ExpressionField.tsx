@@ -26,7 +26,7 @@ const styles = {
   `,
 };
 
-const ExpressionField: React.FC<FieldProps> = props => {
+const ExpressionField: React.FC<FieldProps> = (props) => {
   const { id, value, label, description, schema, uiOptions, definitions } = props;
   const { $role, ...expressionSchema } = schema;
   const pluginConfig = usePluginConfig();

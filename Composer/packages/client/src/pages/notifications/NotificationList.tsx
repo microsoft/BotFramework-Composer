@@ -94,13 +94,13 @@ function onRenderDetailsHeader(props, defaultRender) {
     <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
       {defaultRender({
         ...props,
-        onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+        onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
       })}
     </Sticky>
   );
 }
 
-export const NotificationList: React.FC<INotificationListProps> = props => {
+export const NotificationList: React.FC<INotificationListProps> = (props) => {
   const { items, onItemClick } = props;
   const [pageIndex, setPageIndex] = useState<number>(1);
 

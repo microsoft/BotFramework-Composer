@@ -12,7 +12,7 @@ interface DialogWrapperProps extends Pick<IDialogProps, 'onDismiss'> {
   subText: string;
 }
 
-export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
+export const DialogWrapper: React.FC<DialogWrapperProps> = (props) => {
   const { isOpen, onDismiss, title, subText, children } = props;
 
   if (!isOpen) {

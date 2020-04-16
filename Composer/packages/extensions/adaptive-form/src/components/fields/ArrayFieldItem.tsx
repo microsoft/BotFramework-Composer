@@ -23,7 +23,7 @@ interface ArrayFieldItemProps extends FieldProps {
   onRemove: () => void;
 }
 
-const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
+const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
   const {
     canMoveUp,
     canMoveDown,
@@ -42,7 +42,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
   } = props;
 
   // This needs to return true to dismiss the menu after a click.
-  const fabricMenuItemClickHandler = fn => e => {
+  const fabricMenuItemClickHandler = (fn) => (e) => {
     fn(e);
     return true;
   };

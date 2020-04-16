@@ -16,7 +16,7 @@ export class AzureBlobStorage implements IFileStorage {
     }
   }
   async stat(path: string): Promise<Stat> {
-    const names = path.split('/').filter(i => i.length);
+    const names = path.split('/').filter((i) => i.length);
     let lastModified = '';
     let isFile = false;
     let size = '';
@@ -66,7 +66,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async readFile(path: string): Promise<string> {
-    const names = path.split('/').filter(i => i.length);
+    const names = path.split('/').filter((i) => i.length);
     const container = names[0];
     const blobPath = names.slice(1).join('/');
     return new Promise((resolve, reject) => {
@@ -81,7 +81,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async readDir(path: string): Promise<string[]> {
-    const names = path.split('/').filter(i => i.length);
+    const names = path.split('/').filter((i) => i.length);
     if (names.length === 0) {
       // show containers
       return await this.getContainersByPath(path);
@@ -100,9 +100,9 @@ export class AzureBlobStorage implements IFileStorage {
               reject(err);
             } else {
               const result: Set<string> = new Set();
-              data.entries.forEach(i => {
+              data.entries.forEach((i) => {
                 const temp = i.name.replace(blobPath, '');
-                result.add(temp.split('/').filter(i => i.length)[0]);
+                result.add(temp.split('/').filter((i) => i.length)[0]);
               });
               resolve(Array.from(result));
             }
@@ -122,14 +122,14 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async writeFile(path: string, content: any): Promise<void> {
-    const names = path.split('/').filter(i => i.length);
+    const names = path.split('/').filter((i) => i.length);
     if (names.length <= 1) {
       throw new Error('path must include container name and blob name');
     }
     const blobPath = names.slice(1).join('/');
 
     return new Promise((resolve, reject) => {
-      this.client.createBlockBlobFromText(names[0], blobPath, content, err => {
+      this.client.createBlockBlobFromText(names[0], blobPath, content, (err) => {
         if (err) {
           console.log(err);
           reject(err);
@@ -141,14 +141,14 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async removeFile(path: string): Promise<void> {
-    const names = path.split('/').filter(i => i.length);
+    const names = path.split('/').filter((i) => i.length);
     if (names.length <= 1) {
       throw new Error('path must include container name and blob name');
     }
     const blobPath = names.slice(1).join('/');
 
     return new Promise((resolve, reject) => {
-      this.client.deleteBlob(names[0], blobPath, err => {
+      this.client.deleteBlob(names[0], blobPath, (err) => {
         if (err) {
           console.log(err);
           reject(err);
@@ -160,13 +160,13 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async mkDir(path: string): Promise<void> {
-    const names = path.split('/').filter(i => i.length);
+    const names = path.split('/').filter((i) => i.length);
     if (names.length < 1) {
       throw new Error('path must include container name and blob name');
     }
     return new Promise((resolve, reject) => {
       // if container not exist, create container, then create blob file
-      this.client.createContainerIfNotExists(names[0], err => {
+      this.client.createContainerIfNotExists(names[0], (err) => {
         if (err) {
           console.log(err);
           reject(err);
@@ -179,7 +179,7 @@ export class AzureBlobStorage implements IFileStorage {
 
   async glob(pattern: string, path: string): Promise<string[]> {
     // all the path transform should be remove next time and ensure path was posix pattern
-    const names = path.split('/').filter(i => i.length);
+    const names = path.split('/').filter((i) => i.length);
     const prefix = names.slice(1).join('/');
     const containers = await this.getContainersByPath(path);
     // get all blob under path
@@ -213,7 +213,7 @@ export class AzureBlobStorage implements IFileStorage {
   }
 
   async getContainersByPath(path: string): Promise<string[]> {
-    const names = path.split('/').filter(i => i.length);
+    const names = path.split('/').filter((i) => i.length);
     const containers = [] as string[];
     // get all containers under path
     if (names.length < 1) {
@@ -223,7 +223,7 @@ export class AzureBlobStorage implements IFileStorage {
             console.log(err);
             reject(err);
           } else {
-            data.entries.forEach(item => {
+            data.entries.forEach((item) => {
               containers.push(item.name);
             });
             resolve(containers);

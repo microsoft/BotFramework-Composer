@@ -63,7 +63,7 @@ export class RuleGroup extends React.Component<NodeProps> {
           display: 'flex',
           flexWrap: 'wrap',
         }}
-        ref={el => {
+        ref={(el) => {
           this.containerElement = el;
           this.propagateBoundary();
         }}

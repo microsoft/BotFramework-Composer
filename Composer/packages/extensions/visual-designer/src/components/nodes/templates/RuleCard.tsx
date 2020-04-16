@@ -19,7 +19,7 @@ import { IconCard } from './IconCard';
 
 const StepsKey = ObiFieldNames.Actions;
 
-const getDirectJumpDialog = data => {
+const getDirectJumpDialog = (data) => {
   const steps = data[StepsKey];
   if (!Array.isArray(steps) || steps.length !== 1) {
     return null;

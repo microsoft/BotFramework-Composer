@@ -124,7 +124,7 @@ export const drawSVGEdge = (
   // Draw the edge arrow
   if (directed) {
     const [p1, p2] = calculateArrowPoints(endPoint, direction);
-    const points = [p1, endPoint, p2].map(p => `${p.x},${p.y}`).join(' ');
+    const points = [p1, endPoint, p2].map((p) => `${p.x},${p.y}`).join(' ');
     const arrow = (
       <polyline key={`edge-${id}__arrow`} points={points} {...strokeProps} fill="none" strokeDasharray="none" />
     );

@@ -18,7 +18,7 @@ import {
 export const Collapse = ({ text, children }) => {
   const [collapsed, setCollapsed] = useState(false);
 
-  const collapseFuc = e => {
+  const collapseFuc = (e) => {
     e.stopPropagation();
     setCollapsed(!collapsed);
   };

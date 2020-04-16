@@ -4,9 +4,9 @@
 import { start } from './server';
 
 start()
-  .then(_ => {
+  .then((_) => {
     console.log('Server started.');
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('Error occurred while starting server: ', err);
   });

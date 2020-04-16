@@ -26,7 +26,7 @@ interface FormTitleProps {
   uiOptions?: UIOptions;
 }
 
-const FormTitle: React.FC<FormTitleProps> = props => {
+const FormTitle: React.FC<FormTitleProps> = (props) => {
   const { name, description, schema, formData, uiOptions = {} } = props;
 
   const handleTitleChange = (newTitle?: string): void => {

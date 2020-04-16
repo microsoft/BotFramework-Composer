@@ -17,7 +17,7 @@ export interface IErrorCalloutProps {
   error: { title: string; message: string };
 }
 
-export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
+export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   const { onDismiss, onTry, target, visible, error } = props;
   return (
     <Callout

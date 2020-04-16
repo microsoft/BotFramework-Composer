@@ -62,13 +62,13 @@ export class LGServer {
     protected readonly memoryResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
-    this.documents.onDidChangeContent(change => this.validate(change.document));
-    this.documents.onDidClose(event => {
+    this.documents.onDidChangeContent((change) => this.validate(change.document));
+    this.documents.onDidClose((event) => {
       this.cleanPendingValidation(event.document);
       this.cleanDiagnostics(event.document);
     });
 
-    this.connection.onInitialize(params => {
+    this.connection.onInitialize((params) => {
       if (params.rootPath) {
         this.workspaceRoot = URI.file(params.rootPath);
       } else if (params.rootUri) {
@@ -91,9 +91,9 @@ export class LGServer {
         },
       };
     });
-    this.connection.onCompletion(params => this.completion(params));
-    this.connection.onHover(params => this.hover(params));
-    this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
+    this.connection.onCompletion((params) => this.completion(params));
+    this.connection.onHover((params) => this.hover(params));
+    this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
@@ -143,7 +143,7 @@ export class LGServer {
       return;
     }
 
-    memoryFileInfo.forEach(variable => {
+    memoryFileInfo.forEach((variable) => {
       const propertyList = variable.split('.');
       if (propertyList.length >= 1) {
         this.updateObject(propertyList);
@@ -172,7 +172,7 @@ export class LGServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map(errorMsg => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
     );
   }
 
@@ -260,7 +260,7 @@ export class LGServer {
     }
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
-    const matchItem = templates.find(u => u.name === word);
+    const matchItem = templates.find((u) => u.name === word);
     if (matchItem) {
       const hoveritem: Hover = { contents: [matchItem.body] };
       return Promise.resolve(hoveritem);
@@ -305,7 +305,7 @@ export class LGServer {
   }
 
   private removeParamFormat(params: string): string {
-    const resultArr = params.split(',').map(element => {
+    const resultArr = params.split(',').map((element) => {
       return element.trim().split(':')[0];
     });
     return resultArr.join(' ,');
@@ -444,7 +444,7 @@ export class LGServer {
         continue;
       }
 
-      Object.keys(tempVariable).forEach(e => {
+      Object.keys(tempVariable).forEach((e) => {
         if (e.toString() !== normalizedAnyPattern) {
           const item = {
             label: e.toString(),
@@ -471,7 +471,7 @@ export class LGServer {
     const endWithDot = wordAtCurRange.endsWith('.');
 
     this.updateMemoryVariables(params.textDocument.uri);
-    const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map(e => {
+    const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map((e) => {
       return {
         label: e.toString(),
         kind: CompletionItemKind.Property,
@@ -509,7 +509,7 @@ export class LGServer {
     }
 
     const { templates } = lgFile;
-    const completionTemplateList: CompletionItem[] = templates.map(template => {
+    const completionTemplateList: CompletionItem[] = templates.map((template) => {
       return {
         label: template.name,
         kind: CompletionItemKind.Reference,
@@ -521,7 +521,7 @@ export class LGServer {
       };
     });
 
-    const completionFunctionList: CompletionItem[] = Array.from(buildInfunctionsMap).map(item => {
+    const completionFunctionList: CompletionItem[] = Array.from(buildInfunctionsMap).map((item) => {
       const [key, value] = item;
       return {
         label: key,
@@ -536,7 +536,7 @@ export class LGServer {
     const curLineState = this.matchLineState(params, templateId);
 
     if (curLineState === STRUCTURELG) {
-      const cardTypesSuggestions: CompletionItem[] = cardTypes.map(type => {
+      const cardTypesSuggestions: CompletionItem[] = cardTypes.map((type) => {
         return {
           label: type,
           kind: CompletionItemKind.Keyword,
@@ -556,7 +556,7 @@ export class LGServer {
       let item: CompletionItem | undefined = undefined;
       if (cardType === 'CardAction') {
         let insertStr = '';
-        insertStr = cardPropDict[cardType].map(u => `\t${u} = `).join('\r\n');
+        insertStr = cardPropDict[cardType].map((u) => `\t${u} = `).join('\r\n');
         item = {
           label: `Properties for ${cardType}`,
           kind: CompletionItemKind.Keyword,
@@ -565,7 +565,7 @@ export class LGServer {
         };
       } else if (cardType === 'Suggestions') {
         let insertStr = '';
-        insertStr = cardPropDict[cardType].map(u => `\t${u} = `).join('\r\n');
+        insertStr = cardPropDict[cardType].map((u) => `\t${u} = `).join('\r\n');
         item = {
           label: `Properties for ${cardType}`,
           kind: CompletionItemKind.Keyword,
@@ -574,7 +574,7 @@ export class LGServer {
         };
       } else if (cardType === 'Attachment') {
         let insertStr = '';
-        insertStr = cardPropDict[cardType].map(u => `\t${u} = `).join('\r\n');
+        insertStr = cardPropDict[cardType].map((u) => `\t${u} = `).join('\r\n');
         item = {
           label: `Properties for ${cardType}`,
           kind: CompletionItemKind.Keyword,
@@ -583,7 +583,7 @@ export class LGServer {
         };
       } else if (cardType.endsWith('Card')) {
         let insertStr = '';
-        insertStr = cardPropDict.Cards.map(u => `\t${u} = `).join('\r\n');
+        insertStr = cardPropDict.Cards.map((u) => `\t${u} = `).join('\r\n');
         item = {
           label: `Properties for ${cardType}`,
           kind: CompletionItemKind.Keyword,
@@ -592,7 +592,7 @@ export class LGServer {
         };
       } else {
         let insertStr = '';
-        insertStr = cardPropDict.Others.map(u => `\t${u} = `).join('\r\n');
+        insertStr = cardPropDict.Others.map((u) => `\t${u} = `).join('\r\n');
         item = {
           label: `Properties for ${cardType}`,
           kind: CompletionItemKind.Keyword,

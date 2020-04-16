@@ -9,10 +9,10 @@ import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
 import { LuIntentSection, CodeEditorSettings } from '@bfc/shared';
 
-const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
+const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
   const { onChange, value, schema } = props;
   const { currentDialog, designerId, luFiles, shellApi, locale, projectId, userSettings } = useShellApi();
-  const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
+  const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 
   let intentName = value;
   if (typeof intentName === 'object') {
@@ -22,7 +22,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   }
 
   const [luIntent, setLuIntent] = useState<LuIntentSection>(
-    (luFile && luFile.intents.find(intent => intent.Name === intentName)) ||
+    (luFile && luFile.intents.find((intent) => intent.Name === intentName)) ||
       ({
         Name: intentName,
         Body: '',
@@ -33,7 +33,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
     return null;
   }
 
-  const commitChanges = newValue => {
+  const commitChanges = (newValue) => {
     if (!intentName) {
       return;
     }

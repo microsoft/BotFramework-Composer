@@ -7,7 +7,7 @@ import { render } from '@bfc/test-utils';
 import VisualDesigner from '../src';
 
 // READ: https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
-window.matchMedia = jest.fn().mockImplementation(query => {
+window.matchMedia = jest.fn().mockImplementation((query) => {
   return {
     matches: false,
     media: query,

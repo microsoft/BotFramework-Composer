@@ -19,8 +19,8 @@ const choiceSchema = {
       label: () => formatMessage('Synonyms (Optional)'),
       field: EditableField,
       serializer: {
-        get: value => (Array.isArray(value) ? value.join(', ') : value),
-        set: value => (typeof value === 'string' ? value.split(', ') : value),
+        get: (value) => (Array.isArray(value) ? value.join(', ') : value),
+        set: (value) => (typeof value === 'string' ? value.split(', ') : value),
       },
       placeholder: () => formatMessage('Add multiple comma-separated synonyms'),
     },

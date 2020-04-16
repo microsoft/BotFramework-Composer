@@ -14,7 +14,7 @@ interface IEmulatorOpenButtonProps {
   onClick: () => void;
 }
 
-export const EmulatorOpenButton: React.FC<IEmulatorOpenButtonProps> = props => {
+export const EmulatorOpenButton: React.FC<IEmulatorOpenButtonProps> = (props) => {
   const { onClick, botStatus, hidden } = props;
   const connected = botStatus === BotStatus.connected;
 

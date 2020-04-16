@@ -22,7 +22,7 @@ const loginOnce = once((login: BoundAction) => {
   }
 });
 
-export const RequireAuth: React.FC = props => {
+export const RequireAuth: React.FC = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { state, actions } = useContext(StoreContext);
   const { currentUser } = state;

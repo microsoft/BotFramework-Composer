@@ -154,7 +154,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
         menuItems={buildEdgeMenuItemsFromClipboardContext(
           nodeContext,
           onClick,
-          selfHosted ? x => x !== SDKKinds.LogAction : undefined
+          selfHosted ? (x) => x !== SDKKinds.LogAction : undefined
         )}
         label={formatMessage('Add')}
         {...rest}

@@ -17,7 +17,7 @@ const getFloat = (value: string, step: number) => {
   return parseFloat(fixed);
 };
 
-const NumberField: React.FC<FieldProps> = props => {
+const NumberField: React.FC<FieldProps> = (props) => {
   const { description, disabled, id, label, onChange, readonly, schema, value, uiOptions } = props;
 
   const { type } = schema;

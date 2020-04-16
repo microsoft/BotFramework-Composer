@@ -27,7 +27,7 @@ export interface INavItemProps {
   disabled: boolean;
 }
 
-export const NavItem: React.FC<INavItemProps> = props => {
+export const NavItem: React.FC<INavItemProps> = (props) => {
   const {
     actions: { onboardingAddCoachMarkRef },
   } = useContext(StoreContext);
@@ -38,7 +38,7 @@ export const NavItem: React.FC<INavItemProps> = props => {
   } = useLocation();
   const active = pathname.startsWith(to);
 
-  const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
+  const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
   const activeArea = (
     <div

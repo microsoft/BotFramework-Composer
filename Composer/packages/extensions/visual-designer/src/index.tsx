@@ -113,8 +113,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                 onFocusEvent={onFocusEvent}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
-                onOpen={x => navTo(x)}
-                onChange={x => saveData(x)}
+                onOpen={(x) => navTo(x)}
+                onChange={(x) => saveData(x)}
                 onSelect={onSelect}
                 undo={undo}
                 redo={redo}

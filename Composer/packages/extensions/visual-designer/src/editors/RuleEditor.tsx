@@ -55,7 +55,7 @@ export const RuleEditor = ({ id, data, onEvent, addCoachMarkRef }): JSX.Element 
         flexDirection: 'column',
         alignItems: 'center',
       }}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id: '' });
       }}

@@ -79,7 +79,7 @@ interface FieldLabelProps {
   inline?: boolean;
 }
 
-const FieldLabel: React.FC<FieldLabelProps> = props => {
+const FieldLabel: React.FC<FieldLabelProps> = (props) => {
   const { label, description, id, inline, helpLink } = props;
 
   if (!label) {

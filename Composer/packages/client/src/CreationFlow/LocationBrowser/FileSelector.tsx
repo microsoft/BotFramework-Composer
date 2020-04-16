@@ -64,7 +64,7 @@ const _renderNameColumn = (file: File) => {
   return <span aria-label={`${iconName} Name is ${file.name}`}>{file.name}</span>;
 };
 
-export const FileSelector: React.FC<FileSelectorProps> = props => {
+export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const { onFileChosen, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
   // for detail file list in open panel
   const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
@@ -153,7 +153,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
         {defaultRender({
           ...props,
-          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
         })}
       </Sticky>
     );
@@ -168,7 +168,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
   }
 
   const separator = path.sep;
-  const pathItems = currentPath.split(separator).filter(p => p !== '');
+  const pathItems = currentPath.split(separator).filter((p) => p !== '');
   const breadcrumbItems = pathItems.map((item, index) => {
     let itemPath = getNavItemPath(pathItems, separator, 0, index);
     // put a leading / back on the path if it started as a unix style path
@@ -217,12 +217,12 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
           <DetailsList
             items={storageFiles}
             compact={false}
-            columns={tableColumns.map(col => ({
+            columns={tableColumns.map((col) => ({
               ...col,
               isSorted: col.key === currentSort.key,
               isSortedDescending: currentSort.descending,
             }))}
-            getKey={item => item.name}
+            getKey={(item) => item.name}
             layoutMode={DetailsListLayoutMode.justified}
             onRenderDetailsHeader={onRenderDetailsHeader}
             isHeaderVisible={true}

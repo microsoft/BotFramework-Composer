@@ -7,7 +7,7 @@ import { SchemaField } from '@bfc/adaptive-form';
 
 import { PromptFieldProps } from './types';
 
-const BotAsks: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
+const BotAsks: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
   const { onChange, getSchema, uiOptions, value, getError, definitions, depth, id } = props;
 
   return (

@@ -7,7 +7,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 
-export const BeginSkillDialogField: React.FC<FieldProps> = props => {
+export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { depth, id, schema, uiOptions, value, onChange } = props;
   const { projectId, skills = [] } = useShellApi();
 
@@ -21,7 +21,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
     }
   };
 
-  const handleEndpointChange = skillEndpoint => {
+  const handleEndpointChange = (skillEndpoint) => {
     const { msAppId } =
       (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === skillEndpoint) || ({} as any);
     onChange({ ...value, skillEndpoint, ...(msAppId ? { skillAppId: msAppId } : {}) });
@@ -30,11 +30,11 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
   const skillEndpointSchema = { ...((schema?.properties?.skillEndpoint as JSONSchema7) || {}), enum: endpointOptions };
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
   skillEndpointUiSchema.serializer = {
-    get: value => {
+    get: (value) => {
       const endpoint = (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === value);
       return endpoint?.name;
     },
-    set: value => {
+    set: (value) => {
       const endpoint = (manifest?.endpoints || []).find(({ name }) => name === value);
       return endpoint?.endpointUrl;
     },

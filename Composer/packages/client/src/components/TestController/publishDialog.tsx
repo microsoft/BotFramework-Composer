@@ -15,7 +15,7 @@ interface IPublishLuisDialogProps {
   onPublish: () => void;
 }
 
-export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = props => {
+export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
   const { isOpen, onDismiss, onPublish, botName } = props;
 
   return (

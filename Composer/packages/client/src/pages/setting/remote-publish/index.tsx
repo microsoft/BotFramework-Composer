@@ -14,7 +14,7 @@ import { RouteComponentProps } from '@reach/router';
 import { StoreContext } from './../../../store';
 import { styles } from './styles';
 
-const DateWidget = props => {
+const DateWidget = (props) => {
   const { date } = props;
 
   const timestamp = new Date(date);

@@ -17,7 +17,7 @@ import { isAbsHosted } from '../../../utils/envUtil';
 import { StoreContext } from './../../../store';
 import { styles } from './styles';
 
-const DateWidget = props => {
+const DateWidget = (props) => {
   const { date } = props;
 
   const timestamp = new Date(date);
@@ -64,9 +64,9 @@ export const Publisher = () => {
     updatePublishTargets(settings.publishTargets || []);
   }, []);
 
-  const updatePublishTargets = async rawTargets => {
+  const updatePublishTargets = async (rawTargets) => {
     // make sure there is space for the status to be loaded
-    const targets = rawTargets.map(target => {
+    const targets = rawTargets.map((target) => {
       return {
         status: '',
         statusCode: 202,
@@ -83,7 +83,7 @@ export const Publisher = () => {
   useEffect(() => {
     console.log('publish targets changed');
     if (
-      publishTargets.filter(target => {
+      publishTargets.filter((target) => {
         return target.statusCode === 202;
       }).length
     ) {
@@ -116,7 +116,7 @@ export const Publisher = () => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          targetTypes={publishTypes.map(type => {
+          targetTypes={publishTypes.map((type) => {
             return { key: type, text: type };
           })}
           onSave={savePublishTarget}
@@ -130,7 +130,7 @@ export const Publisher = () => {
     setDialogHidden(true);
   };
 
-  const publishToTarget = index => {
+  const publishToTarget = (index) => {
     return async () => {
       if (publishTargets[index]) {
         const target = publishTargets[index];
@@ -168,7 +168,7 @@ export const Publisher = () => {
   );
 };
 
-const CreatePublishTarget = props => {
+const CreatePublishTarget = (props) => {
   let targetType = '';
   let config = '';
   let name = '';

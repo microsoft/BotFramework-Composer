@@ -82,7 +82,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     const lgTemplates = await getLgTemplates(inputLgRef.name);
     if (!Array.isArray(lgTemplates) || !lgTemplates.length) return lgText;
 
-    const targetTemplate = lgTemplates.find(x => x.name === inputLgRef.name);
+    const targetTemplate = lgTemplates.find((x) => x.name === inputLgRef.name);
     return targetTemplate ? targetTemplate.body : lgText;
   };
 
@@ -96,11 +96,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   const deleteLgTemplates = (lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
-      .map(x => {
+      .map((x) => {
         const lgTemplateRef = LgTemplateRef.parse(x);
         return lgTemplateRef ? lgTemplateRef.name : '';
       })
-      .filter(x => !!x);
+      .filter((x) => !!x);
     const lgFileId = path;
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
@@ -115,11 +115,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   const trackActionListChange = (actionPaths: string[]) => {
     if (!Array.isArray(actionPaths)) return;
-    actionPaths.forEach(x => trackActionChange(x));
+    actionPaths.forEach((x) => trackActionChange(x));
   };
 
   const deleteLuIntents = (luIntents: string[]) => {
-    return Promise.all(luIntents.map(intent => removeLuIntent(path, intent)));
+    return Promise.all(luIntents.map((intent) => removeLuIntent(path, intent)));
   };
 
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
@@ -143,21 +143,21 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         trackActionChange(eventData.id);
-        handler = e => {
-          onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates, deleteLuIntents)));
+        handler = (e) => {
+          onChange(deleteNode(data, e.id, (node) => deleteAction(node, deleteLgTemplates, deleteLuIntents)));
           onFocusSteps([]);
         };
         break;
       case NodeEventTypes.Insert:
         trackActionChange(eventData.id);
         if (eventData.$kind === 'PASTE') {
-          handler = e => {
-            pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then(dialog => {
+          handler = (e) => {
+            pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then((dialog) => {
               onChange(dialog);
             });
           };
         } else {
-          handler = e => {
+          handler = (e) => {
             const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
             onChange(dialog);
             onFocusSteps([`${e.id}[${e.position || 0}]`]);
@@ -165,21 +165,21 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         }
         break;
       case NodeEventTypes.InsertEvent:
-        handler = e => {
+        handler = (e) => {
           const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
           onChange(dialog);
           onFocusEvent(`${e.id}[${e.position || 0}]`);
         };
         break;
       case NodeEventTypes.CopySelection:
-        handler = e => {
-          copyNodes(data, e.actionIds, dereferenceLg).then(copiedNodes => onClipboardChange(copiedNodes));
+        handler = (e) => {
+          copyNodes(data, e.actionIds, dereferenceLg).then((copiedNodes) => onClipboardChange(copiedNodes));
         };
         break;
       case NodeEventTypes.CutSelection:
         trackActionListChange(eventData.actionIds);
-        handler = e => {
-          cutNodes(data, e.actionIds, dereferenceLg, nodes =>
+        handler = (e) => {
+          cutNodes(data, e.actionIds, dereferenceLg, (nodes) =>
             deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
           ).then(({ dialog, cutData }) => {
             onChange(dialog);
@@ -189,13 +189,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.MoveSelection:
-        handler = e => {
+        handler = (e) => {
           if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
 
           // Using copy-paste-delete pattern here is safer than using cut-paste
           // since create new dialog may be cancelled or failed
           copyNodes(data, e.actionIds, dereferenceLg)
-            .then(copiedActions => {
+            .then((copiedActions) => {
               const lgTemplatesToBeCreated: { name: string; body: string }[] = [];
               walkLgResourcesInActionList(copiedActions, (designerId, actionData, fieldName, lgStr) => {
                 if (!lgStr) return '';
@@ -207,7 +207,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
                 actionData[fieldName] = refString;
                 return refString;
               });
-              return onCreateDialog(copiedActions).then(dialogName => ({ dialogName, lgTemplatesToBeCreated }));
+              return onCreateDialog(copiedActions).then((dialogName) => ({ dialogName, lgTemplatesToBeCreated }));
             })
             .then(async ({ dialogName: newDialog, lgTemplatesToBeCreated }) => {
               // defense modal cancellation
@@ -221,8 +221,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               // delete old actions (they are already moved to new dialog)
 
               // HACK: https://github.com/microsoft/BotFramework-Composer/issues/2247
-              const postponedDeleteLgTemplates = templates => setTimeout(() => deleteLgTemplates(templates), 501);
-              const deleteResult = deleteNodes(data, e.actionIds, nodes =>
+              const postponedDeleteLgTemplates = (templates) => setTimeout(() => deleteLgTemplates(templates), 501);
+              const deleteResult = deleteNodes(data, e.actionIds, (nodes) =>
                 deleteActions(nodes, postponedDeleteLgTemplates, deleteLuIntents)
               );
 
@@ -241,8 +241,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.DeleteSelection:
         trackActionListChange(eventData.actionIds);
-        handler = e => {
-          const dialog = deleteNodes(data, e.actionIds, nodes =>
+        handler = (e) => {
+          const dialog = deleteNodes(data, e.actionIds, (nodes) =>
             deleteActions(nodes, deleteLgTemplates, deleteLuIntents)
           );
           onChange(dialog);
@@ -251,7 +251,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.AppendSelection:
         trackActionListChange(eventData.target);
-        handler = e => {
+        handler = (e) => {
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;
           const dialog = appendNodesAfter(data, e.target, e.actions);
@@ -306,7 +306,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const selection = new Selection({
     onSelectionChanged: (): void => {
       const selectedIndices = selection.getSelectedIndices();
-      const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
+      const selectedIds = selectedIndices.map((index) => nodeItems[index].key as string);
 
       if (selectedIds.length === 1) {
         // TODO: Change to focus all selected nodes after Form Editor support showing multiple nodes.
@@ -408,8 +408,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               boxSizing: 'border-box',
               '&:focus': { outline: 'none' },
             }}
-            ref={el => (divRef = el)}
-            onClick={e => {
+            ref={(el) => (divRef = el)}
+            onClick={(e) => {
               e.stopPropagation();
               dispatchEvent(NodeEventTypes.Focus, { id: '' });
             }}

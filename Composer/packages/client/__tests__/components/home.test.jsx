@@ -13,7 +13,7 @@ describe('<Home/>', () => {
       { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'a', path: 'path1', storageId: 'default' },
       { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'b', path: 'path2', storageId: 'default' },
     ];
-    const onSelectionChanged = jest.fn(item => item.path);
+    const onSelectionChanged = jest.fn((item) => item.path);
     const { container, queryByLabelText } = render(
       <RecentBotList onSelectionChanged={onSelectionChanged} recentProjects={recentProjects} />
     );
@@ -29,7 +29,7 @@ describe('<Home/>', () => {
       { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot', order: 1 },
       { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 },
     ];
-    const onClickTemplate = jest.fn(item => item);
+    const onClickTemplate = jest.fn((item) => item);
     const { container, getByText } = render(<ExampleList onClick={onClickTemplate} examples={templates} />);
     expect(container).toHaveTextContent('Echo Bot');
     const link = getByText('Echo Bot');
@@ -38,7 +38,7 @@ describe('<Home/>', () => {
   });
 
   it('should call onClick handler when clicked', () => {
-    const setCreationFlowStatus = jest.fn(item => item);
+    const setCreationFlowStatus = jest.fn((item) => item);
     const items = [
       {
         type: 'action',

@@ -39,7 +39,7 @@ const calculateNodes = (groupId: string, data): GraphNodeMap<StepNodeKey> => {
 const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
   const nodes = Object.keys(nodeMap)
     .sort((a, b) => parseStepIndex(a) - parseStepIndex(b))
-    .map(stepName => nodeMap[stepName]);
+    .map((stepName) => nodeMap[stepName]);
   return sequentialLayouter(nodes);
 };
 
@@ -68,7 +68,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
                 id={node.id}
                 data={node.data}
                 onEvent={onEvent}
-                onResize={size => {
+                onResize={(size) => {
                   designerCache.cacheBoundary(node.data, size);
                   updateNodeBoundary(getStepKey(index), size);
                 }}
@@ -81,7 +81,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
         css={{ zIndex: 100 }}
       >
         <EdgeMenu
-          onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
+          onClick={($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
           data-testid="StepGroupAdd"
           id={`${id}[0]`}
           addCoachMarkRef={addCoachMarkRef}
@@ -98,7 +98,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({
               css={{ zIndex: 100 }}
             >
               <EdgeMenu
-                onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: idx + 1 })}
+                onClick={($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: idx + 1 })}
                 data-testid="StepGroupAdd"
                 id={`${id}[${idx + 1}]`}
               />

@@ -5,26 +5,26 @@ import formatMessage from 'format-message';
 
 import { regionOptions } from './luisRegions.js';
 
-export const validateName = name => {
+export const validateName = (name) => {
   if (name.length === 0) {
     return formatMessage('Bot name is a required field');
   }
   return true;
 };
 
-export const validateEnvironment = name => {
+export const validateEnvironment = (name) => {
   if (name.length === 0) {
     return formatMessage('Environment name is a required field');
   }
   return true;
 };
 
-export const validateRegion = region => {
+export const validateRegion = (region) => {
   if (!region || !region.key) {
     return formatMessage('Azure region is a required field');
   }
   if (
-    regionOptions.filter(r => {
+    regionOptions.filter((r) => {
       return r.key === region.key;
     }).length === 0
   ) {
@@ -34,7 +34,7 @@ export const validateRegion = region => {
 };
 
 // 16 characters at least one special char
-export const validateSecret = val => {
+export const validateSecret = (val) => {
   if (val.length !== 16) {
     return formatMessage('App secret must be exactly 16 characters long');
   }

@@ -22,7 +22,7 @@ export default function DragScroll(props) {
   const isDragging = useRef(false);
   const dragStartPoint = useRef({ x: 0, y: 0 });
 
-  const handleMouseDown = e => {
+  const handleMouseDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
     isDragging.current = true;
@@ -30,7 +30,7 @@ export default function DragScroll(props) {
     dragStartPoint.current.y = e.pageY;
   };
 
-  const handleMouseUp = e => {
+  const handleMouseUp = (e) => {
     e.preventDefault();
     e.stopPropagation();
     isDragging.current = false;
@@ -40,7 +40,7 @@ export default function DragScroll(props) {
     isDragging.current = false;
   };
 
-  const handleMouseMove = e => {
+  const handleMouseMove = (e) => {
     if (isDragging.current) {
       const mouseMove = {
         x: e.pageX - dragStartPoint.current.x,

@@ -15,7 +15,7 @@ import TeachingBubbles from './TeachingBubbles';
 import WelcomeModal from './WelcomeModal';
 import { IStepSet, stepSets as defaultStepSets } from './onboarding';
 
-const getCurrentSet = stepSets => stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
+const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
 
 const Onboarding: React.FC = () => {
   const didMount = useRef(false);
@@ -71,7 +71,7 @@ const Onboarding: React.FC = () => {
 
   useEffect(() => {
     const sets = defaultStepSets(projectId, rootDialogId)
-      .map(stepSet => ({
+      .map((stepSet) => ({
         ...stepSet,
         steps: stepSet.steps.filter(({ targetId }) => {
           if (!dialogs.length) {
@@ -95,7 +95,7 @@ const Onboarding: React.FC = () => {
   }, [pathname, rootDialogId]);
 
   const nextSet = useCallback(() => {
-    setCurrentSet(current => {
+    setCurrentSet((current) => {
       let nextSet = -1;
 
       if (current + 1 < stepSets.length) {
@@ -108,11 +108,11 @@ const Onboarding: React.FC = () => {
 
   const nextStep = useCallback(() => {
     const { steps } = stepSets[currentSet] || { steps: [] };
-    setCurrentStep(current => (current + 1 < steps.length ? current + 1 : -1));
+    setCurrentStep((current) => (current + 1 < steps.length ? current + 1 : -1));
   }, [currentSet, setCurrentStep, stepSets]);
 
   const previousStep = useCallback(() => {
-    setCurrentStep(current => (current > 0 ? current - 1 : current));
+    setCurrentStep((current) => (current > 0 ? current - 1 : current));
   }, [setCurrentStep]);
 
   const onComplete = useCallback(() => {
@@ -133,7 +133,7 @@ const Onboarding: React.FC = () => {
     }
   }, [onComplete]);
 
-  const toggleMinimized = useCallback(() => setMinimized(minimized => !minimized), [setMinimized]);
+  const toggleMinimized = useCallback(() => setMinimized((minimized) => !minimized), [setMinimized]);
 
   const value = {
     actions: {

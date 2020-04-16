@@ -14,7 +14,7 @@ interface EditableFieldProps extends FieldProps {
   ariaLabel?: string;
 }
 
-const EditableField: React.FC<EditableFieldProps> = props => {
+const EditableField: React.FC<EditableFieldProps> = (props) => {
   const {
     depth,
     styles = {},

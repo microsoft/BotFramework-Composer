@@ -18,7 +18,7 @@ export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, di
   const calleeDialog = typeof dialog === 'object' ? get(dialog, '$ref') : dialog;
   const dialogRef = calleeDialog ? (
     <LinkBtn
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
       }}

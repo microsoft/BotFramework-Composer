@@ -9,7 +9,7 @@ export const fileList = css`
   width: 255px;
 `;
 
-export const linkItem = disabled => css`
+export const linkItem = (disabled) => css`
   display: block;
   text-decoration: none;
   color: ${disabled ? '#A6A6A6' : '#4f4f4f'};

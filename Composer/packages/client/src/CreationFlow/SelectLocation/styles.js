@@ -39,7 +39,7 @@ export const itemText = css`
   line-height: 32px;
 `;
 
-export const itemRoot = checked => css`
+export const itemRoot = (checked) => css`
   width: 100%;
   height: 100%;
   background: ${checked ? '#EDEBE9' : 'transparent'};

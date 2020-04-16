@@ -9,7 +9,7 @@ import composerIcon from '../../images/composerIcon.svg';
 
 import { headerContainer, title, botName } from './styles';
 
-export const Header = props => {
+export const Header = (props) => {
   return (
     <div css={headerContainer}>
       <img

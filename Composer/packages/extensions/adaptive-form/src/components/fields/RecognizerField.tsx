@@ -11,20 +11,20 @@ import formatMessage from 'format-message';
 import PluginContext from '../../PluginContext';
 import { FieldLabel } from '../FieldLabel';
 
-const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
+const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions } = props;
   const { shellApi, ...shellData } = useShellApi();
   const { recognizers } = useContext(PluginContext);
 
   const options = useMemo(() => {
-    return recognizers.map(r => ({
+    return recognizers.map((r) => ({
       key: r.id,
       text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName,
     }));
   }, [recognizers]);
 
   const selectedType = useMemo(() => {
-    const selected = recognizers.filter(r => r.isSelected(value)).map(r => r.id);
+    const selected = recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
 
     if (selected.length !== 1) {
       console.error(
@@ -40,7 +40,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
 
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
-      const handler = recognizers.find(r => r.id === option.key)?.handleRecognizerChange;
+      const handler = recognizers.find((r) => r.id === option.key)?.handleRecognizerChange;
 
       if (handler) {
         handler(props, shellData, shellApi);

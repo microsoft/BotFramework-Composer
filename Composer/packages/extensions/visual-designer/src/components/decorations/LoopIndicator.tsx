@@ -19,7 +19,7 @@ export const LoopIndicator = ({ onClick }) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onClick();
       }}

@@ -25,7 +25,7 @@ export const PublishController = {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     // find publish config by name.
-    const configs = currentProject.settings?.publishTargets?.filter(t => t.name === target) || [defaultPublishConfig];
+    const configs = currentProject.settings?.publishTargets?.filter((t) => t.name === target) || [defaultPublishConfig];
     const config = configs.length ? configs[0] : undefined;
     const method = config ? config.type : undefined;
 
@@ -67,7 +67,7 @@ export const PublishController = {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     // find publish config by name.
-    const configs = currentProject.settings?.publishTargets?.filter(t => t.name === target) || [defaultPublishConfig];
+    const configs = currentProject.settings?.publishTargets?.filter((t) => t.name === target) || [defaultPublishConfig];
     const config = configs.length ? configs[0] : undefined;
     const method = config ? config.type : undefined;
     if (pluginLoader.extensions.publish[method] && pluginLoader.extensions.publish[method].getStatus) {

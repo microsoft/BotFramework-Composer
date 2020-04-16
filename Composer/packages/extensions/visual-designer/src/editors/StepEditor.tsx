@@ -32,7 +32,7 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
     <EdgeMenu
-      onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
+      onClick={($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
       data-testid="StepGroupAdd"
       id={`${id}[0]`}
       addCoachMarkRef={addCoachMarkRef}
@@ -43,7 +43,7 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
       addCoachMarkRef={addCoachMarkRef}
       data={data}
       onEvent={onEvent}
-      onResize={boundary => {
+      onResize={(boundary) => {
         if (boundary) {
           setStepGroupBoundary(boundary);
         }

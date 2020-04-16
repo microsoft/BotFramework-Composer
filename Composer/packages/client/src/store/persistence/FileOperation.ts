@@ -9,7 +9,7 @@ import * as client from './http';
 export class FileOperation {
   public file: FileInfo | undefined;
   private projectId: string;
-  private errorHandler: FileErrorHandler = error => {};
+  private errorHandler: FileErrorHandler = (error) => {};
 
   private throttledUpdate = throttle(
     async (content: string) => {

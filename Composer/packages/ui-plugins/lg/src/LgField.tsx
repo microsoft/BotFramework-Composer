@@ -34,14 +34,14 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
   return lgText.startsWith('-') ? lgText : `- ${lgText}`;
 };
 
-const LgField: React.FC<FieldProps<string>> = props => {
+const LgField: React.FC<FieldProps<string>> = (props) => {
   const { label, id, description, value, name, uiOptions } = props;
   const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
 
   const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
   const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
   const lgFileId = `${currentDialog.lgFile}.${locale}`;
-  const lgFile = lgFiles && lgFiles.find(file => file.id === lgFileId);
+  const lgFile = lgFiles && lgFiles.find((file) => file.id === lgFileId);
 
   const updateLgTemplate = useCallback(
     (body: string) => {
@@ -52,7 +52,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
 
   const template = (lgFile &&
     lgFile.templates &&
-    lgFile.templates.find(template => {
+    lgFile.templates.find((template) => {
       return template.name === lgName;
     })) || {
     name: lgName,

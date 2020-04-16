@@ -67,7 +67,7 @@ const validateForm = (
     );
   }
 
-  if ($kind === intentTypeKey && isRegEx && regExIntents.find(ri => ri.intent === intent)) {
+  if ($kind === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
     errors.intent = `regEx ${intent} is already defined`;
   }
 
@@ -96,12 +96,12 @@ interface TriggerCreationModalProps {
   onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
 }
 
-export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
+export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, locale, projectId, schemas } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
+  const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$kind', '') === regexRecognizerKey;
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const isNone = !get(dialogFile, 'content.recognizer');
@@ -115,7 +115,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
   const [formData, setFormData] = useState(initialFormData);
 
-  const onClickSubmitButton = e => {
+  const onClickSubmitButton = (e) => {
     e.preventDefault();
     const errors = validateForm(formData, isRegEx, regexIntents);
 
@@ -172,7 +172,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const messageTypes: IDropdownOption[] = getMessageTypes();
   let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
   if (isNone) {
-    triggerTypeOptions = triggerTypeOptions.filter(t => t.key !== intentTypeKey);
+    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
   }
   const showIntentName = formData.$kind === intentTypeKey;
   const showRegExDropDown = formData.$kind === intentTypeKey && isRegEx;

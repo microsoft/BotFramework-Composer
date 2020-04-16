@@ -23,7 +23,7 @@ interface ChoiceInputSettingsProps extends PromptFieldProps<ChoiceInput | Confir
   choiceProperty: 'choices' | 'confirmChoices';
 }
 
-const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = props => {
+const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = (props) => {
   const { choiceProperty, getSchema, value, id, onChange, uiOptions, getError, definitions, depth } = props;
 
   return (

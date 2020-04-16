@@ -14,7 +14,7 @@ import { StoreContext } from '../../../store';
 import { styles } from './styles';
 import processGif from './deploy-create-output.png';
 
-export const DeployWizardStep2 = props => {
+export const DeployWizardStep2 = (props) => {
   const { state } = useContext(StoreContext);
   const { settings } = state;
   const { nextStep, closeModal, botValues } = props;

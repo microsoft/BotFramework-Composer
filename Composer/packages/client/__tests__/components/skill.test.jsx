@@ -43,7 +43,7 @@ describe('<SkillList />', () => {
 
 describe('<SkillForm />', () => {
   it('should render the skill form, and do update', () => {
-    const onSubmit = jest.fn(formData => {
+    const onSubmit = jest.fn((formData) => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
     const onDismiss = jest.fn(() => {});

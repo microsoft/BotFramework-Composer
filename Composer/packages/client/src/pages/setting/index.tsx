@@ -22,7 +22,7 @@ import { title, fileList, contentEditor } from './styles';
 
 const absHosted = isAbsHosted();
 
-const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
+const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = (props) => {
   const { state } = useContext(StoreContext);
   const { projectId } = state;
   const makeProjectLink = (id: string, path: string) => {

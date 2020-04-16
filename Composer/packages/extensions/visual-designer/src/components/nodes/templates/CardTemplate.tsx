@@ -98,7 +98,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   );
 
   // If body is null but footer not null, show footer as body.
-  const [displayedBody, displayedFooter] = [body, footer].filter(x => x !== undefined && x !== null);
+  const [displayedBody, displayedFooter] = [body, footer].filter((x) => x !== undefined && x !== null);
   const showFooter = displayedFooter !== undefined;
   return (
     <div
@@ -110,7 +110,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
       `}
       onClick={
         onClick
-          ? e => {
+          ? (e) => {
               e.stopPropagation();
               onClick(e);
             }

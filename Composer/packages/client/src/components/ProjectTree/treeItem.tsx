@@ -29,7 +29,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
 
 const onRenderOverflowButton = (isRoot: boolean) => {
   const showIcon = !isRoot;
-  return overflowItems => {
+  return (overflowItems) => {
     return showIcon ? (
       <IconButton
         role="cell"
@@ -43,7 +43,7 @@ const onRenderOverflowButton = (isRoot: boolean) => {
   };
 };
 
-export const TreeItem: React.FC<ITreeItemProps> = props => {
+export const TreeItem: React.FC<ITreeItemProps> = (props) => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
   return (
     <div
@@ -53,7 +53,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
       onClick={() => {
         onSelect(link.id);
       }}
-      onKeyDown={e => {
+      onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onSelect(link.id);
         }

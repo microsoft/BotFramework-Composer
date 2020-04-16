@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 
 import { DialogStyle, BuiltInStyles } from './styles';
 
-const AlertDialog = props => {
+const AlertDialog = (props) => {
   const { setting, onCancel, onConfirm } = props;
   const { title, subTitle = '', confirmBtnText = 'Ok', style = DialogStyle.normalStyle } = setting;
   if (!title) {
@@ -49,7 +49,7 @@ AlertDialog.propTypes = {
 };
 
 export const OpenAlertModal = (title, subTitle, setting = {}) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const node = document.createElement('div');
     document.body.appendChild(node);
     const removeNode = () => {

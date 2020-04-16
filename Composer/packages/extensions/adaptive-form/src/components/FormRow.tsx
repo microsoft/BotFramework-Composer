@@ -39,7 +39,7 @@ const formRow = {
   `,
 };
 
-const FormRow: React.FC<FormRowProps> = props => {
+const FormRow: React.FC<FormRowProps> = (props) => {
   const {
     id,
     depth,
@@ -60,7 +60,7 @@ const FormRow: React.FC<FormRowProps> = props => {
   if (Array.isArray(row)) {
     return (
       <div css={formRow.row}>
-        {row.map(property => (
+        {row.map((property) => (
           <SchemaField
             key={`${id}.${property}`}
             css={formRow.property}

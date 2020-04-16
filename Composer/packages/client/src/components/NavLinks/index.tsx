@@ -15,12 +15,12 @@ interface NavLinksProps {
   onSelect: (dialogId: string) => void;
 }
 
-export const NavLinks: React.FC<NavLinksProps> = props => {
+export const NavLinks: React.FC<NavLinksProps> = (props) => {
   const { navLinks, fileId, onSelect } = props;
 
   return (
     <Fragment>
-      {navLinks.map(dialog => {
+      {navLinks.map((dialog) => {
         return (
           <DefaultButton
             key={dialog.id}

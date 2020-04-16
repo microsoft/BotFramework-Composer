@@ -89,7 +89,7 @@ export function generageDiagnostic(message: string, severity: DiagnosticSeverity
 export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextDocument, offset = 0): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
   const defaultRange = Range.create(Position.create(0, 0), Position.create(0, 0));
-  lgDiags.forEach(diag => {
+  lgDiags.forEach((diag) => {
     // offset +1, lsp start from line:0, but monaco/composer start from line:1
     const range = diag.range ? offsetRange(diag.range, 1 + offset) : defaultRange;
     const diagnostic: Diagnostic = {
@@ -118,7 +118,7 @@ export function textFromTemplate(template: Template): string {
 
 export function checkTemplate(template: Template): LGDiagnostic[] {
   const text = textFromTemplate(template);
-  return Templates.parseText(text, '').diagnostics.filter(diagnostic => {
+  return Templates.parseText(text, '').diagnostics.filter((diagnostic) => {
     // ignore non-exist references in template body.
     return diagnostic.message.includes('does not have an evaluator') === false;
   });
@@ -126,7 +126,7 @@ export function checkTemplate(template: Template): LGDiagnostic[] {
 
 export function updateTemplate(content: string, name: string, body: string): string {
   const lgFile = Templates.parseText(content);
-  const template = lgFile.toArray().find(t => t.name === name);
+  const template = lgFile.toArray().find((t) => t.name === name);
   // add if not exist
   if (!template) {
     return lgFile.addTemplate(name, [], body).toString();

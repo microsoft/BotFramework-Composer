@@ -57,7 +57,7 @@ const calculateLayout = (nodeMap: GraphNodeMap<SwitchNodes | CaseNodeKey>) => {
   const { switchNode, choiceNode, ...cases } = nodeMap as GraphNodeMap<SwitchNodes>;
   const casesNodes = Object.keys(cases)
     .sort((a, b) => parseCaseIndex(a) - parseCaseIndex(b))
-    .map(caseName => nodeMap[caseName]);
+    .map((caseName) => nodeMap[caseName]);
   return switchCaseLayouter(switchNode, choiceNode, casesNodes);
 };
 
@@ -77,7 +77,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
 
   const { boundary, edges } = layout;
   const { switchNode, choiceNode, ...cases } = nodeMap as GraphNodeMap<SwitchNodes>;
-  const casesNodes = Object.keys(cases).map(x => nodeMap[x]);
+  const casesNodes = Object.keys(cases).map((x) => nodeMap[x]);
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
@@ -87,7 +87,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
       <OffsetContainer offset={switchNode.offset}>
         <ElementWrapper id={switchNode.id} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(switchNode.data, boundary);
               updateNodeBoundary(SwitchNodes.Switch, boundary);
             }}
@@ -111,7 +111,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
             id={x.id}
             data={x.data}
             onEvent={onEvent}
-            onResize={size => {
+            onResize={(size) => {
               updateNodeBoundary(getCaseKey(index), size);
             }}
           />

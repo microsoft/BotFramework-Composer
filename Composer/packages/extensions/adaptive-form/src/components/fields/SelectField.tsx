@@ -10,7 +10,7 @@ import { FieldLabel } from '../FieldLabel';
 export const SelectField: React.FC<FieldProps<string | number>> = function SelectField(props) {
   const { description, enumOptions, id, label, onBlur, onChange, onFocus, value = '', error, uiOptions } = props;
 
-  const options: IDropdownOption[] = (enumOptions ?? []).map(o => ({
+  const options: IDropdownOption[] = (enumOptions ?? []).map((o) => ({
     key: o?.toString(),
     text: o?.toString(),
   }));

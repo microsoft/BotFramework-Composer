@@ -32,18 +32,18 @@ interface Migration {
 const migrations: Migration[] = [
   {
     name: 'Add defaultPath',
-    condition: data => get(data, 'storageConnections.0.defaultPath') !== settings.botsFolder,
-    run: data => set(data, 'storageConnections[0].defaultPath', settings.botsFolder),
+    condition: (data) => get(data, 'storageConnections.0.defaultPath') !== settings.botsFolder,
+    run: (data) => set(data, 'storageConnections[0].defaultPath', settings.botsFolder),
   },
   {
     name: 'Re-init when version update',
-    condition: data => !data.version || data.version != initData.version,
-    run: data => initData,
+    condition: (data) => !data.version || data.version != initData.version,
+    run: (data) => initData,
   },
 ];
 
 export function runMigrations(initialData: any): any {
-  const migrationsToRun: Migration[] = migrations.filter(m => m.condition(initialData));
+  const migrationsToRun: Migration[] = migrations.filter((m) => m.condition(initialData));
   if (migrationsToRun.length > 0) {
     log('migration: running migrations...');
 

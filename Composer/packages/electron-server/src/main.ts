@@ -95,7 +95,7 @@ async function run() {
 }
 
 run()
-  .catch(e => {
+  .catch((e) => {
     error('Error occurred while starting Composer Electron: ', e);
     app.quit();
   })

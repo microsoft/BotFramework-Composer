@@ -28,7 +28,7 @@ export const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: { width: 180, marginLeft: 'auto' },
 };
 
-export const typeIcon = icon => css`
+export const typeIcon = (icon) => css`
   vertical-align: middle;
   font-size: 16px;
   width: 24px;

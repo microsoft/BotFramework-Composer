@@ -71,7 +71,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   }
 
   async function updateRegExIntentHandler(id, intentName, pattern) {
-    const dialog = dialogs.find(dialog => dialog.id === id);
+    const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
     return await updateDialog({ id, content: newDialog.content });
@@ -156,15 +156,15 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     onFocusSteps: focusSteps,
     onSelect: actions.setVisualEditorSelection,
     onCopy: actions.setVisualEditorClipboard,
-    createDialog: actionsSeed => {
-      return new Promise(resolve => {
+    createDialog: (actionsSeed) => {
+      return new Promise((resolve) => {
         actions.createDialogBegin(actionsSeed, (newDialog: string | null) => {
           resolve(newDialog);
         });
       });
     },
     addSkillDialog: () => {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         actions.addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
           resolve(newSkill);
         });
@@ -176,7 +176,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     updateUserSettings: actions.updateUserSettings,
   };
 
-  const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs, dialogId]);
+  const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
   const editorData = useMemo(() => {
     return source === 'PropertyEditor'
       ? getDialogData(dialogsMap, dialogId, focused || selected || '')

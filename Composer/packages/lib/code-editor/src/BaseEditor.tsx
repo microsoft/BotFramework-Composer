@@ -110,7 +110,7 @@ export interface BaseEditorProps extends EditorProps {
   onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
 }
 
-const BaseEditor: React.FC<BaseEditorProps> = props => {
+const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   const {
     onChange,
     editorDidMount,
@@ -143,7 +143,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   };
 
   useEffect(() => {
-    monaco.init().then(instance => {
+    monaco.init().then((instance) => {
       typeof onInit === 'function' && onInit(instance);
     });
   }, []);

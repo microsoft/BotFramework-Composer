@@ -16,7 +16,7 @@ import { ObjectItem } from './ObjectItem';
 
 const OpenObjectField: React.FC<FieldProps<{
   [key: string]: any;
-}>> = props => {
+}>> = (props) => {
   const {
     value = {},
     schema: { additionalProperties },
@@ -31,7 +31,7 @@ const OpenObjectField: React.FC<FieldProps<{
   const [newValue, setNewValue] = useState<string>('');
   const fieldRef = useRef<ITextField>(null);
 
-  const handleKeyDown = event => {
+  const handleKeyDown = (event) => {
     if (event.key.toLowerCase() === 'enter') {
       event.preventDefault();
 

@@ -15,7 +15,7 @@ interface SVGProps {
 
 const SIZE_RATIO = 30 / 18;
 
-const FriendSVG: React.FC<SVGProps> = props => {
+const FriendSVG: React.FC<SVGProps> = (props) => {
   return (
     <svg width={props.size} height={props.size} viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -26,7 +26,7 @@ const FriendSVG: React.FC<SVGProps> = props => {
   );
 };
 
-const UserSVG: React.FC<SVGProps> = props => {
+const UserSVG: React.FC<SVGProps> = (props) => {
   return (
     <svg width={props.size} height={props.size} viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -37,7 +37,7 @@ const UserSVG: React.FC<SVGProps> = props => {
   );
 };
 
-const MessageBotSVG: React.FC<SVGProps> = props => {
+const MessageBotSVG: React.FC<SVGProps> = (props) => {
   return (
     <svg width={props.size} height={props.size} viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -48,7 +48,7 @@ const MessageBotSVG: React.FC<SVGProps> = props => {
   );
 };
 
-const StopSVG: React.FC<SVGProps> = props => {
+const StopSVG: React.FC<SVGProps> = (props) => {
   return (
     <svg width={props.size} height={props.size} viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -59,7 +59,7 @@ const StopSVG: React.FC<SVGProps> = props => {
   );
 };
 
-const PlaySVG: React.FC<SVGProps> = props => {
+const PlaySVG: React.FC<SVGProps> = (props) => {
   return (
     <svg width={props.size} height={props.size} viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M1 1.16987L8.5 5.5L1 9.83013L1 1.16987Z" stroke="white" strokeWidth="0.5" />

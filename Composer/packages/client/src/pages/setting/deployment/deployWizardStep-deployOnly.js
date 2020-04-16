@@ -19,7 +19,7 @@ import { styles } from './styles';
 // https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.documents.locationnames?view=azure-dotnet
 import { regionOptions } from './luisRegions.js';
 
-export const DeployWizardStepDeploy = props => {
+export const DeployWizardStepDeploy = (props) => {
   const { nextStep, closeModal } = props;
   const { state } = useContext(StoreContext);
   const { botName, projectId } = state;
@@ -55,7 +55,7 @@ export const DeployWizardStepDeploy = props => {
     return true;
   };
 
-  const updateForm = field => (e, newValue) => {
+  const updateForm = (field) => (e, newValue) => {
     setFormData({
       ...formData,
       errors: {},
@@ -106,7 +106,7 @@ export const DeployWizardStepDeploy = props => {
     return nameErrors && environmentErrors;
   };
 
-  const submit = e => {
+  const submit = (e) => {
     e.preventDefault();
 
     if (validateForm()) {

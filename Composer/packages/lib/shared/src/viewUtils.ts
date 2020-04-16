@@ -197,7 +197,7 @@ export const createStepMenu = (
   filter?: (x: SDKKinds) => boolean
 ): IContextualMenuItem[] => {
   if (subMenu) {
-    const stepMenuItems = stepLabels.map(x => {
+    const stepMenuItems = stepLabels.map((x) => {
       const item = dialogGroups[x];
       if (item.types.length === 1) {
         const conceptLabel = ConceptLabels[item.types[0]];
@@ -209,7 +209,7 @@ export const createStepMenu = (
         };
       }
       const subMenu: IContextualMenuProps = {
-        items: item.types.filter(filter || (() => true)).map($kind => {
+        items: item.types.filter(filter || (() => true)).map(($kind) => {
           const conceptLabel = ConceptLabels[$kind];
 
           return {
@@ -232,7 +232,7 @@ export const createStepMenu = (
 
     return stepMenuItems;
   } else {
-    const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
+    const stepMenuItems = dialogGroups[stepLabels[0]].types.map((item) => {
       const conceptLabel = ConceptLabels[item];
       const name = conceptLabel && conceptLabel.title ? conceptLabel.title : item;
       const menuItem: IContextualMenuItem = {
@@ -264,7 +264,7 @@ export const createStepMenu = (
 export function getDialogGroupByType(type) {
   let dialogType = DialogGroup.OTHER;
 
-  Object.keys(dialogGroups).forEach(key => {
+  Object.keys(dialogGroups).forEach((key) => {
     if (dialogGroups[key].types.indexOf(type) > -1) {
       switch (key) {
         case DialogGroup.INPUT:
@@ -290,7 +290,7 @@ export function getDialogGroupByType(type) {
   return dialogType;
 }
 
-const truncateSDKType = $kind => (typeof $kind === 'string' ? $kind.split('Microsoft.')[1] : '');
+const truncateSDKType = ($kind) => (typeof $kind === 'string' ? $kind.split('Microsoft.')[1] : '');
 
 /**
  * Title priority: $designer.name > title from sdk schema > customize title > $kind suffix

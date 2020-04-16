@@ -16,7 +16,7 @@ describe('walkAdaptiveAction', () => {
       },
     ];
     const spy = jest.fn();
-    walkAdaptiveActionList(actions, x => spy(x));
+    walkAdaptiveActionList(actions, (x) => spy(x));
 
     expect(spy).toBeCalledTimes(2);
     expect(spy).toHaveBeenNthCalledWith(1, actions[0]);

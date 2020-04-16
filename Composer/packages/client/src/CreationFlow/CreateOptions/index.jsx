@@ -74,7 +74,7 @@ export function CreateOptions(props) {
       isResizable: !disabled,
       data: 'string',
       styles: rowTitle(disabled),
-      onRender: item => item.name,
+      onRender: (item) => item.name,
     },
     {
       key: 'description',
@@ -85,7 +85,7 @@ export function CreateOptions(props) {
       isResizable: !disabled,
       data: 'string',
       styles: rowTitle(disabled),
-      onRender: item => item.description,
+      onRender: (item) => item.description,
     },
   ];
 
@@ -98,7 +98,7 @@ export function CreateOptions(props) {
       </Sticky>
     );
   };
-  const onRenderRow = props => {
+  const onRenderRow = (props) => {
     if (props) {
       return (
         <DetailsRow {...props} styles={rowDetails(disabled)} data-testid={props.item.id} tabIndex={props.itemIndex} />
@@ -137,7 +137,7 @@ export function CreateOptions(props) {
             items={templates}
             compact={false}
             columns={tableColums}
-            getKey={item => item.name}
+            getKey={(item) => item.name}
             layoutMode={DetailsListLayoutMode.justified}
             isHeaderVisible={true}
             selectionMode={disabled ? SelectionMode.none : SelectionMode.single}

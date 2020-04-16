@@ -76,7 +76,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
       <OffsetContainer offset={conditionNode.offset}>
         <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(conditionNode.data, boundary);
               updateNodeBoundary(IfElseNodes.Condition, boundary);
             }}
@@ -92,7 +92,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           }}
         />
       </OffsetContainer>
-      {[IfElseNodes.IfBranch, IfElseNodes.ElseBranch].map(nodeName => {
+      {[IfElseNodes.IfBranch, IfElseNodes.ElseBranch].map((nodeName) => {
         const node = nodeMap[nodeName];
         return (
           <OffsetContainer key={`${node.id}/offset`} offset={node.offset}>
@@ -101,7 +101,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
               id={node.id}
               data={node.data}
               onEvent={onEvent}
-              onResize={size => {
+              onResize={(size) => {
                 updateNodeBoundary(nodeName, size);
               }}
             />

@@ -25,22 +25,22 @@ const OTHER_FIELDS: InputDialogKeys[] = [
   'alwaysPrompt',
 ];
 
-const PromptField: React.FC<FieldProps> = props => {
+const PromptField: React.FC<FieldProps> = (props) => {
   const { shellApi, focusedSteps, focusedTab } = useShellApi();
 
-  const getSchema: GetSchema = field => {
+  const getSchema: GetSchema = (field) => {
     const fieldSchema = get(props.schema, ['properties', field]);
 
     return fieldSchema;
   };
 
-  const getError = field => {
+  const getError = (field) => {
     if (typeof props.rawErrors === 'object') {
       return props.rawErrors[field];
     }
   };
 
-  const updateField: PromptFieldChangeHandler = field => data => {
+  const updateField: PromptFieldChangeHandler = (field) => (data) => {
     props.onChange({ ...props.value, [field]: data });
   };
 
@@ -60,7 +60,7 @@ const PromptField: React.FC<FieldProps> = props => {
           <UserInput {...props} getSchema={getSchema} onChange={updateField} getError={getError} />
         </PivotItem>
         <PivotItem headerText={formatMessage('Other')} itemKey={PromptTab.OTHER}>
-          {OTHER_FIELDS.filter(f => getSchema(f)).map(f => (
+          {OTHER_FIELDS.filter((f) => getSchema(f)).map((f) => (
             <SchemaField
               key={f}
               depth={props.depth}
