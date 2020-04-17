@@ -371,7 +371,7 @@ function DesignPage(props) {
           openNewTriggerModal={openNewTriggerModal}
         />
         <div css={contentWrapper}>
-          {match && <ToolBar toolbarItems={toolbarItems} />}
+          {match && <ToolBar toolbarItems={toolbarItems} actions={actions} projectId={projectId} />}
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
               <div css={visualPanel}>

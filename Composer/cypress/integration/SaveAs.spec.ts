@@ -13,7 +13,7 @@ context('Saving As', () => {
     cy.findByText('Save as').click();
     cy.findByTestId('NewDialogName').type('{selectall}__TestSaveAs{enter}');
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestSaveAs.Main').should('exist');
+      cy.findByText('__TestSaveAs').should('exist');
     });
   });
 });
