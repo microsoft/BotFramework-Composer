@@ -52,7 +52,7 @@ export class BotProjectDeploy {
     this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
     this.deploymentSettingsPath =
       config.deploymentSettingsPath ?? path.join(this.publishFolder, 'appsettings.deployment.json');
-    this.templatePath = config.templatePath ?? path.join('DeploymentTemplates', 'template-with-preexisting-rg.json');
+    this.templatePath = config.templatePath ?? path.join(this.projPath, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
     this.dotnetProjectPath = config.dotnetProjectPath ?? path.join(this.projPath, 'BotProject.csproj');
     this.remoteBotPath = config.remoteBotPath ?? path.join(this.publishFolder, 'ComposerDialogs');
     this.generatedFolder = config.generatedFolder ?? path.join(this.remoteBotPath, 'generated');
@@ -395,7 +395,9 @@ export class BotProjectDeploy {
       let settings: any = await fs.readJson(this.deploymentSettingsPath);
       settings['luis'] = luisConfig;
 
-      await fs.writeJson(this.deploymentSettingsPath, settings);
+      await fs.writeJson(this.deploymentSettingsPath, settings, {
+        spaces: 4
+      });
       const token = await this.creds.getToken();
 
       const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
@@ -515,7 +517,7 @@ export class BotProjectDeploy {
       baseUri: 'https://graph.windows.net',
     });
 
-    if (!fs.existsSync(this.deploymentSettingsPath)) {
+    if (!fs.existsSync(this.settingsPath)) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: `! Could not find an 'appsettings.deployment.json' file in the current directory.`,
@@ -523,7 +525,7 @@ export class BotProjectDeploy {
       return;
     }
 
-    const settings = await fs.readJson(this.deploymentSettingsPath);
+    const settings = await fs.readJson(this.settingsPath);
     let appId = settings.MicrosoftAppId;
 
     if (!appId) {
@@ -639,7 +641,7 @@ export class BotProjectDeploy {
     }
 
     const updateResult = await this.updateDeploymentJsonFile(
-      this.deploymentSettingsPath,
+      this.settingsPath,
       client,
       resourceGroupName,
       timeStamp,
