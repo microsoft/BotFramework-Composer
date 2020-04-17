@@ -88,8 +88,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
   const { skills, projectId } = props;
 
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [modalOpenIndex, setModalOpenIndex] = useState<number>(0);
+  const [selectedSkillIndex, setSelectedSkillIndex] = useState<number | null>(null);
 
   const onSubmitForm = useCallback(
     (submitFormData: ISkillFormData, editIndex: number) => {
@@ -130,13 +129,11 @@ const SkillList: React.FC<ISkillListProps> = props => {
   );
 
   const onViewManifest = index => {
-    setModalOpen(true);
-    setModalOpenIndex(index);
+    setSelectedSkillIndex(index);
   };
 
   const onHideManifest = () => {
-    setModalOpen(false);
-    setModalOpenIndex(0);
+    setSelectedSkillIndex(null);
   };
 
   const getColumns = useCallback(() => {
@@ -228,10 +225,15 @@ const SkillList: React.FC<ISkillListProps> = props => {
           />
         </ScrollablePane>
       </div>
-      <Modal titleAriaId={'skillManifestModal'} isOpen={isModalOpen} onDismiss={onHideManifest} isBlocking={false}>
+      <Modal
+        titleAriaId={'skillManifestModal'}
+        isOpen={selectedSkillIndex !== null}
+        onDismiss={onHideManifest}
+        isBlocking={false}
+      >
         <div>
           <span css={ManifestModalHeaderStyle} id={'skillManifestModalHeader'}>
-            {skills[modalOpenIndex] && skills[modalOpenIndex].name}
+            {selectedSkillIndex !== null && skills[selectedSkillIndex] && skills[selectedSkillIndex].name}
           </span>
           <IconButton
             style={{ float: 'right' }}
@@ -245,7 +247,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
             key={'testkey'}
             id={'modaljsonview'}
             onChange={() => {}}
-            value={isModalOpen && JSON.parse(skills[modalOpenIndex].body || '')}
+            value={selectedSkillIndex !== null && JSON.parse(skills[selectedSkillIndex].body || '')}
             height={800}
             width={800}
             options={{ readOnly: true }}

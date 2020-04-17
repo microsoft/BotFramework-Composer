@@ -4,6 +4,7 @@
 import * as fs from 'fs';
 
 import { Request, Response } from 'express';
+import { Archiver } from 'archiver';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -284,7 +285,15 @@ async function updateSkill(req: Request, res: Response) {
 
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
-  currentProject.exportToZip(res);
+  currentProject.exportToZip((archive: Archiver) => {
+    archive.on('error', err => {
+      res.status(500).send({ error: err.message });
+    });
+
+    res.attachment('tmp-archive.zip');
+
+    archive.pipe(res);
+  });
 }
 
 async function updateEnvSettings(req: Request, res: Response) {

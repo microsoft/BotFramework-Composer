@@ -255,5 +255,5 @@ export class AzureBlobStorage implements IFileStorage {
     });
   }
   //ToDo
-  async zip(source: string, out: string, res: any) {}
+  async zip(source: string, cb) {}
 }
