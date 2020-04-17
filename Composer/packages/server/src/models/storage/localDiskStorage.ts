@@ -92,17 +92,17 @@ export class LocalDiskStorage implements IFileStorage {
     // If a user has ejected the runtime into the path, we don't want to include
     // these files into the archive
     [
-      `${source}/dialogs/`,
-      `${source}/language-understanding/`,
-      `${source}/language-generation/`,
-      `${source}/settings/`,
+      p.format({ dir: `${source}/dialogs/` }),
+      p.format({ dir: `${source}/language-understanding/` }),
+      p.format({ dir: `${source}/language-generation/` }),
+      p.format({ dir: `${source}/settings/` }),
     ].forEach(directory => {
       archive.directory(directory, directory.split(source)[1]);
     });
 
     const files = await glob('*.dialog', { cwd: source, dot: true });
     files.forEach(file => {
-      archive.file(`${source}/${file}`, { name: p.basename(file) });
+      archive.file(p.format({ dir: `${source}/`, base: `${file}` }), { name: p.basename(file) });
     });
 
     archive.finalize();
