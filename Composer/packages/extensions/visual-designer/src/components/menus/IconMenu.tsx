@@ -83,6 +83,9 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     const onMenuClick = () => {
       handleMenuShow && handleMenuShow(true);
     };
+    const onAfterMenuDismiss = () => {
+      handleMenuShow && handleMenuShow(false);
+    };
     return (
       <IconButton
         // @ts-ignore
@@ -92,6 +95,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
         menuIconProps={{ iconName, style: { fontSize: iconSize, fontWeight: 'bold', color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
         onMenuClick={onMenuClick}
+        onAfterMenuDismiss={onAfterMenuDismiss}
         ariaLabel={label}
         {...rest}
       />
