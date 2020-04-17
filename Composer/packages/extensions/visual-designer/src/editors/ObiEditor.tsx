@@ -358,12 +358,16 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           case KeyboardCommandTypes.Node.Cut:
             dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
             break;
-          case KeyboardCommandTypes.Node.Paste:
-            dispatchEvent(NodeEventTypes.AppendSelection, {
-              target: focusedId,
-              actions: clipboardActions,
-            });
+          case KeyboardCommandTypes.Node.Paste: {
+            const currentSelectedId = selectionContext.selectedIds[0];
+            if (currentSelectedId.slice(-1) === '+') {
+              dispatchEvent(NodeEventTypes.AppendSelection, {
+                target: focusedId,
+                actions: clipboardActions,
+              });
+            }
             break;
+          }
         }
         break;
       case KeyboardPrimaryTypes.Cursor: {
