@@ -20,7 +20,7 @@ const declareElementAttributes = (id: string) => {
     [AttrNames.SelectedId]: `${id}${MenuTypes.NodeMenu}`,
   };
 };
-export const NodeMenu = ({ id, onEvent }) => {
+export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
   const menuItems = [
     {
       key: 'delete',
@@ -46,7 +46,7 @@ export const NodeMenu = ({ id, onEvent }) => {
         iconName="MoreVertical"
         iconSize={12}
         iconStyles={{
-          color: '#000000',
+          color: `${colors.color}`,
           selectors: {
             ':focus': {
               outline: 'none',

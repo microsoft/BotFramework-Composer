@@ -92,22 +92,6 @@ class LocalPublisher {
       };
     }
   };
-  // history = async (config: PublishConfig, project, user) => {
-  //   const botId = project.id;
-  //   const result = [];
-  //   const files = await readDir(this.getHistoryDir(botId));
-  //   console.log(files);
-  //   files.map(item => {
-  //     result.push({
-  //       time: 'now',
-  //       status: 200,
-  //       message: 'test',
-  //       comment: 'test',
-  //     });
-  //   });
-  //   return result;
-  // };
-  // rollback = async (config, project, versionId, user) => { };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
 

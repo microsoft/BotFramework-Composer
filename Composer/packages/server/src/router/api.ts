@@ -27,6 +27,7 @@ router.post('/projects/:projectId/settings/:slot', ProjectController.updateEnvSe
 router.post('/projects/:projectId/skills', ProjectController.updateSkill);
 router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
+router.get('/projects/:projectId/export', ProjectController.exportProject);
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
