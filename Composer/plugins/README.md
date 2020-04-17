@@ -20,7 +20,7 @@ Plugins currently have access to the following functional areas:
 * Web server - plugins can add additional web routes to Composer's web server instance.
 * Publishing - plugins can add publishing mechanisms
 
-Combining these three endpoints, it is possible to achieve scenarios such as:
+Combining these endpoints, it is possible to achieve scenarios such as:
 
 * Store content in a database
 * Require login via AAD or any other oauth provider

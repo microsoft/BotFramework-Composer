@@ -7,7 +7,7 @@ context('Visual Designer', () => {
     cy.createBot('TodoSample');
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+      cy.findByText('__TestTodoSample').click();
     });
   });
 

@@ -15,10 +15,12 @@ const passport = require('passport');
 export class ComposerPluginRegistration {
   public loader: PluginLoader;
   private _name: string;
+  private _description: string;
 
-  constructor(loader: PluginLoader, name: string) {
+  constructor(loader: PluginLoader, name: string, description: string) {
     this.loader = loader;
     this._name = name;
+    this._description = description;
   }
 
   public get passport() {
@@ -27,6 +29,14 @@ export class ComposerPluginRegistration {
 
   public get name(): string {
     return this._name;
+  }
+
+  public get description(): string {
+    return this._description;
+  }
+
+  public set description(val: string) {
+    this._description = val;
   }
 
   /**************************************************************************************
@@ -43,9 +53,12 @@ export class ComposerPluginRegistration {
   /**************************************************************************************
    * Publish related features
    *************************************************************************************/
-  public async addPublishMethod(plugin: Partial<PublishPlugin>) {
+  public async addPublishMethod(plugin: PublishPlugin) {
     console.log('registering publish method', this.name);
-    this.loader.extensions.publish[this.name] = plugin;
+    this.loader.extensions.publish[this.name] = {
+      plugin: this,
+      methods: plugin,
+    };
   }
 
   /**************************************************************************************
@@ -164,11 +177,26 @@ export class ComposerPluginRegistration {
   }
 }
 
+interface PublishResult {
+  message: string;
+  comment?: string;
+  log?: string;
+  id?: string;
+  time?: Date;
+  endpointURL?: string;
+  status?: number;
+}
+
+interface PublishResponse {
+  status: number;
+  result: PublishResult;
+}
+
 interface PublishPlugin {
-  publish: any;
-  getStatus?: any;
-  getHistory?: any;
-  rollback?: any;
+  publish: (config: any, project: any, metadata: any, user: any) => Promise<PublishResponse>;
+  getStatus?: (config: any, project: any, user: any) => Promise<PublishResponse>;
+  getHistory?: (config: any, project: any, user: any) => Promise<PublishResult[]>;
+  rollback?: (config: any, project: any, rollbackToVersion: string, user: any) => Promise<PublishResponse>;
   [key: string]: any;
 }
 
@@ -182,7 +210,10 @@ export class PluginLoader {
       [key: string]: any;
     };
     publish: {
-      [key: string]: Partial<PublishPlugin>;
+      [key: string]: {
+        plugin: ComposerPluginRegistration;
+        methods: PublishPlugin;
+      };
     };
     authentication: {
       middleware?: (req, res, next) => void;
@@ -238,8 +269,8 @@ export class PluginLoader {
     });
   }
 
-  public async loadPlugin(name: string, thisPlugin: any) {
-    const pluginRegistration = new ComposerPluginRegistration(this, name);
+  public async loadPlugin(name: string, description: string, thisPlugin: any) {
+    const pluginRegistration = new ComposerPluginRegistration(this, name, description);
     if (typeof thisPlugin.default === 'function') {
       // the module exported just an init function
       thisPlugin.default.call(null, pluginRegistration);
@@ -263,7 +294,7 @@ export class PluginLoader {
       try {
         // eslint-disable-next-line security/detect-non-literal-require, @typescript-eslint/no-var-requires
         const thisPlugin = require(modulePath);
-        this.loadPlugin(json.name, thisPlugin);
+        this.loadPlugin(json.name, json.description, thisPlugin);
       } catch (err) {
         console.error(err);
       }

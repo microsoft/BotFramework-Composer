@@ -64,10 +64,24 @@ export const FormFieldManifestUrl = css`
   width: 40rem;
 `;
 
+export const FormFieldEditName = css`
+  width: 20rem;
+`;
+
 export const FormFieldAlignHorizontal = css`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+`;
+
+export const FormFieldAlignHorizontalBotSettings = css`
+  max-width: 1500px;
+  margin-top: 20px;
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding-bottom: 15px;
 `;
 
 export const FormFieldName = css`
@@ -90,4 +104,15 @@ export const ActionButton = css`
 
 export const MarginLeftSmall = css`
   margin-left: ${FontSizes.small};
+`;
+
+export const ManifestModalHeaderStyle = css`
+  margin: 14px 0 0 16px;
+  fon-size: 20px;
+  font-weight: bolder;
+  align-items: left;
+`;
+
+export const ManifestModalBodyStyle = css`
+  margin: 15px 15px 15px 15px;
 `;
