@@ -14,6 +14,7 @@ import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
+import chalk from 'chalk';
 
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
@@ -115,7 +116,9 @@ export async function start(pluginDir?: string) {
   await new Promise(resolve => {
     server = app.listen(port, () => {
       if (process.env.NODE_ENV === 'production') {
-        log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
+        // We don't use the debug logger here because we always want it to be shown.
+        // eslint-disable-next-line no-console
+        console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
       }
       resolve();
     });
