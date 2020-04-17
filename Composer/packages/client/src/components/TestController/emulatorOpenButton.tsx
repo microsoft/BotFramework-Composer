@@ -4,10 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { BotStatus } from './../../constants';
+import { Fragment } from 'react';
 
 interface IEmulatorOpenButtonProps {
   botEndpoint: string;
@@ -23,7 +24,15 @@ export const EmulatorOpenButton: React.FC<IEmulatorOpenButtonProps> = props => {
   if (hidden || !connected) return null;
 
   return (
-    <TooltipHost content={botEndpoint}>
+    <TooltipHost
+      content={
+        <Fragment>
+          URL: {botEndpoint}{' '}
+          <IconButton iconProps={{ iconName: 'copy' }} onClick={() => navigator.clipboard.writeText(botEndpoint)} />
+        </Fragment>
+      }
+      closeDelay={50000}
+    >
       <ActionButton
         iconProps={{
           iconName: 'OpenInNewTab',
