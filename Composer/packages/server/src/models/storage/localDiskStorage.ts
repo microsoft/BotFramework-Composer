@@ -88,6 +88,9 @@ export class LocalDiskStorage implements IFileStorage {
 
     archive.pipe(res);
 
+    // We're selectively adding specific directories/files to the archive.
+    // If a user has ejected the runtime into the path, we don't want to include
+    // these files into the archive
     [
       `${source}/dialogs/`,
       `${source}/language-understanding/`,
@@ -98,9 +101,9 @@ export class LocalDiskStorage implements IFileStorage {
     });
 
     const files = await glob('*.dialog', { cwd: source, dot: true });
-    for (const i in files) {
-      archive.file(source + '/' + files[i], { name: p.basename(files[i]) });
-    }
+    files.forEach(file => {
+      archive.file(`${source}/${file}`, { name: p.basename(file) });
+    });
 
     archive.finalize();
   }
