@@ -3,6 +3,7 @@
 
 import fs from 'fs';
 import { promisify } from 'util';
+import p from 'path';
 
 import glob from 'globby';
 import archiver from 'archiver';
@@ -76,18 +77,31 @@ export class LocalDiskStorage implements IFileStorage {
     return await rename(oldPath, newPath);
   }
 
-  async zip(source: string, out: string): Promise<string> {
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    const stream = fs.createWriteStream(out);
+  async zip(source: string, out: string, res) {
+    const archive = archiver('zip');
 
-    return new Promise((resolve, reject) => {
-      archive
-        .directory(source, false)
-        .on('error', err => reject(err))
-        .pipe(stream);
-
-      stream.on('close', () => resolve(out));
-      archive.finalize();
+    archive.on('error', function(err) {
+      res.status(500).send({ error: err.message });
     });
+
+    res.attachment('tmp-archive.zip');
+
+    archive.pipe(res);
+
+    [
+      `${source}/dialogs/`,
+      `${source}/language-understanding/`,
+      `${source}/language-generation/`,
+      `${source}/settings/`,
+    ].forEach(directory => {
+      archive.directory(directory, directory.split(source)[1]);
+    });
+
+    const files = await glob('*.dialog', { cwd: source, dot: true });
+    for (const i in files) {
+      archive.file(source + '/' + files[i], { name: p.basename(files[i]) });
+    }
+
+    archive.finalize();
   }
 }

@@ -10,8 +10,10 @@ import formatMessage from 'format-message';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
 import { StoreContext } from '../../store';
+import { ContentStyle } from '../language-understanding/styles';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
+import SkillSettings from './skill-settings';
 import SkillList from './skill-list';
 
 const Skills: React.FC<RouteComponentProps> = () => {
@@ -32,8 +34,13 @@ const Skills: React.FC<RouteComponentProps> = () => {
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
-
-      <SkillList skills={skills} projectId={projectId}></SkillList>
+      <div css={ContentStyle}></div>
+      <SkillSettings
+        botId={state.settings.MicrosoftAppId}
+        skillHostEndpoint={state.settings.skillHostEndpoint}
+        onChange={() => {}}
+      />
+      <SkillList skills={skills} projectId={projectId} />
     </div>
   );
 };

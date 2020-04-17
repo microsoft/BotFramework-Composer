@@ -36,6 +36,7 @@ export const extractSkillManifestUrl = async (skills: any[]): Promise<Skill[]> =
         endpointUrl: get(resBody, 'endpoints[0].endpointUrl', ''), // needs more invesment on endpoint
         protocol: get(resBody, 'endpoints[0].protocol', ''),
         msAppId: get(resBody, 'endpoints[0].msAppId', ''),
+        body: res.bodyAsText,
       });
       continue;
     } catch (error) {

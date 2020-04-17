@@ -144,11 +144,10 @@ export class BotProject {
     return skills;
   };
 
-  public exportToZip = async () => {
+  public exportToZip = res => {
     try {
       const zipFilePath = `${this.name}_export.zip`;
-      await this.fileStorage.zip(this.dataDir, zipFilePath);
-      return zipFilePath;
+      this.fileStorage.zip(this.dataDir, zipFilePath, res);
     } catch (e) {
       console.log('error zipping assets', e);
     }

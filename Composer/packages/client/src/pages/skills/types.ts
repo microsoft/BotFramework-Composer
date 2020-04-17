@@ -3,7 +3,7 @@
 
 export interface ISkillFormData {
   manifestUrl: string;
-  name: string;
+  name?: string;
 }
 
 export interface ISkillFormDataErrors {

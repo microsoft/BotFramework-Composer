@@ -17,9 +17,11 @@ import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
+import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { Skill } from '@bfc/shared';
+import { JsonEditor } from '@bfc/code-editor';
 
 import { StoreContext } from '../../store';
 
@@ -84,7 +86,10 @@ const SkillList: React.FC<ISkillListProps> = props => {
   const { actions } = useContext(StoreContext);
 
   const { skills, projectId } = props;
+
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalOpenIndex, setModalOpenIndex] = useState<number>(0);
 
   const onSubmitForm = useCallback(
     (submitFormData: ISkillFormData, editIndex: number) => {
@@ -124,12 +129,22 @@ const SkillList: React.FC<ISkillListProps> = props => {
     [projectId, editIndex]
   );
 
+  const onViewManifest = index => {
+    setModalOpen(true);
+    setModalOpenIndex(index);
+  };
+
+  const onHideManifest = () => {
+    setModalOpen(false);
+    setModalOpenIndex(0);
+  };
+
   const getColumns = useCallback(() => {
     return columns.concat({
       key: 'buttons',
       name: '',
-      minWidth: 100,
-      maxWidth: 100,
+      minWidth: 120,
+      maxWidth: 120,
       fieldName: 'buttons',
       data: 'string',
       onRender: (_item, index) => {
@@ -151,6 +166,12 @@ const SkillList: React.FC<ISkillListProps> = props => {
                 onClick={() => onItemDelete(index)}
                 title="Delete"
                 ariaLabel="Delete"
+              />
+              <IconButton
+                iconProps={{ iconName: 'ContextMenu' }}
+                onClick={() => onViewManifest(index)}
+                title="View"
+                ariaLabel="View"
               />
             </Stack>
           </div>
@@ -191,7 +212,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
   }, [editIndex, skills]);
 
   return (
-    <div css={ContentStyle} data-testid="skill-list">
+    <div data-testid="skill-list">
       <div css={TableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
@@ -207,6 +228,33 @@ const SkillList: React.FC<ISkillListProps> = props => {
           />
         </ScrollablePane>
       </div>
+      <Modal titleAriaId={'skillManifestModal'} isOpen={isModalOpen} onDismiss={onHideManifest} isBlocking={false}>
+        <div>
+          <span
+            style={{ margin: '14px 0 0 16px', fontSize: '20px', fontWeight: 'bolder', alignItems: 'left' }}
+            id={'skillManifestModalHeader'}
+          >
+            {skills[modalOpenIndex] && skills[modalOpenIndex].name}
+          </span>
+          <IconButton
+            style={{ float: 'right' }}
+            iconProps={{ iconName: 'Cancel' }}
+            ariaLabel={formatMessage('Close popup modal')}
+            onClick={onHideManifest}
+          />
+        </div>
+        <div style={{ margin: '15px 15px 15px 15px' }}>
+          <JsonEditor
+            key={'testkey'}
+            id={'modaljsonview'}
+            onChange={() => {}}
+            value={isModalOpen && JSON.parse(skills[modalOpenIndex].body)}
+            height={800}
+            width={800}
+            options={{ readOnly: true }}
+          />
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -74,6 +74,16 @@ export const FormFieldAlignHorizontal = css`
   flex-direction: row;
 `;
 
+export const FormFieldAlignHorizontalBotSettings = css`
+  max-width: 1500px;
+  margin-top: 20px;
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding-bottom: 15px;
+`;
+
 export const FormFieldName = css`
   width: 10rem;
   margin-right: 1rem;

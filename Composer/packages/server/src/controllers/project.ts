@@ -284,14 +284,7 @@ async function updateSkill(req: Request, res: Response) {
 
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
-  const file = await currentProject.exportToZip();
-  // @ts-ignore
-  res.download(Path.resolve(__dirname, `../../${file}`));
-  // todo: don't do this
-  setTimeout(() => {
-    // @ts-ignore
-    currentProject.removeZip(file);
-  }, 30000);
+  currentProject.exportToZip(res);
 }
 
 async function updateEnvSettings(req: Request, res: Response) {

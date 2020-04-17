@@ -83,7 +83,8 @@ export const defaultFlowSchema: FlowSchema = {
   },
   [SDKKinds.SkillDialog]: {
     widget: 'ActionCard',
-    colors: { theme: '#004578', color: '#ffffff' },
+    colors: { theme: '#004578', color: '#ffffff', icon: '#ffffff' },
+    icon: 'Product',
     body: data => (
       <SingleLineDiv>
         <FixedInfo>Host </FixedInfo>
