@@ -30,6 +30,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         public class AdditionalTelemetryConfiguration
         {
             public bool LogPersonalInformation { get; set; }
+
+            public bool LogActivities { get; set; }
         }
     }
 }

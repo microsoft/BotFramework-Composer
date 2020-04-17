@@ -7,6 +7,7 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
@@ -65,11 +66,16 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             services.AddApplicationInsightsTelemetry();
             services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
-            services.AddSingleton<TelemetryInitializerMiddleware>();
             services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
             {
                 var telemetryClient = sp.GetService<IBotTelemetryClient>();
                 return new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings.Telemetry.LogPersonalInformation);
+            });
+            services.AddSingleton<TelemetryInitializerMiddleware>(sp =>
+            {
+                var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
+                var telemetryLoggerMiddleware = sp.GetService<TelemetryLoggerMiddleware>();
+                return new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings.Telemetry.LogActivities);
             });
 
             IStorage storage = null;
