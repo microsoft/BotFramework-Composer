@@ -39,8 +39,8 @@ class LocalPublisher {
 
   constructor() { }
   // config include botId and version, project is content(ComposerDialogs)
-  publish = async (config: PublishConfig, project, user) => {
-    const { settings, templatePath } = config;
+  publish = async (config: PublishConfig, project, metadata, user) => {
+    const { templatePath, settings } = config;
     this.templatePath = templatePath;
     const botId = project.id;
     const version = 'default';
@@ -50,25 +50,49 @@ class LocalPublisher {
     return {
       status: 200,
       result: {
-        jobId: new uuid(),
+        id: uuid(),
         version: version,
-        endpoint: url,
+        endpointURL: url,
       },
     };
   };
-  getStatus = async (botId: string) => {
+  getStatus = async (config: PublishConfig, project, user) => {
+    const botId = project.id;
     if (LocalPublisher.runningBots[botId]) {
+      const port = LocalPublisher.runningBots[botId].port;
+      const url = `http://localhost:${port}`;
       return {
-        botStatus: 'connected',
+        status: 200,
+        result: {
+          message: 'Running',
+          endpointURL: url,
+        },
       };
     } else {
       return {
-        botStatus: 'unConnected',
+        status: 200,
+        result: {
+          message: 'Ready',
+        },
       };
     }
   };
-  history = async config => { };
-  rollback = async (config, versionId) => { };
+  history = async (config: PublishConfig, project, user) => {
+    const botId = project.id;
+    const result = [];
+    const files = await readDir(this.getHistoryDir(botId));
+    console.log(files);
+    files.map(item => {
+      result.push({
+        time: 'now',
+        status: 200,
+        message: 'test',
+        comment: 'test',
+      });
+    });
+    return result;
+  };
+  rollback = async (config, project, versionId, user) => { };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
   private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);

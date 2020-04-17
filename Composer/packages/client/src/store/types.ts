@@ -46,6 +46,23 @@ export interface StorageFolder extends File {
   writable?: boolean;
 }
 
+export interface PublishType {
+  name: string;
+  description: string;
+  features: {
+    history: boolean;
+    publish: boolean;
+    rollback: boolean;
+    status: boolean;
+  };
+}
+
+export interface PublishTarget {
+  name: string;
+  type: PublishType;
+  configuration: any;
+}
+
 export interface State {
   dialogs: DialogInfo[];
   projectId: string;
@@ -96,8 +113,10 @@ export interface State {
     complete: boolean;
   };
   clipboardActions: any[];
-  publishTypes: string[];
-  publishTargets: any[];
+  publishTypes: PublishType[];
+  publishHistory: {
+    [key: string]: any[];
+  };
   userSettings: UserSettings;
   announcement: string | undefined;
 }
@@ -122,6 +141,7 @@ export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
+  publishTargets?: PublishTarget[];
   [key: string]: any;
 }
 
