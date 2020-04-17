@@ -14,7 +14,7 @@ export class AppUpdater extends EventEmitter {
   constructor() {
     super();
 
-    const settings = { autoDownload: false, useNightly: false }; // TODO: load settings from disk
+    const settings = { autoDownload: false, useNightly: false }; // TODO: implement and load these settings from disk / memory
     autoUpdater.allowDowngrade = false;
     autoUpdater.allowPrerelease = settings.useNightly;
     autoUpdater.autoDownload = settings.autoDownload;

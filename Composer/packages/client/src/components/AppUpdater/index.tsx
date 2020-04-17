@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useContext, useEffect, useMemo, useState, useCallback } from 'react';
-import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
@@ -13,7 +13,15 @@ import { StoreContext } from '../../store';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import formatMessage from 'format-message';
 
-import { modal, optionRoot, optionIcon } from './styles';
+import {
+  dialogContent,
+  dialogCopy,
+  dialogFooter,
+  modal,
+  optionRoot,
+  optionIcon,
+  updateAvailableDismissBtn,
+} from './styles';
 import { AppUpdaterStatus } from '../../constants';
 
 const { ipcRenderer } = window as any;
@@ -147,7 +155,7 @@ export const AppUpdater: React.FC<{}> = _props => {
         );
 
       case AppUpdaterStatus.UPDATE_FAILED:
-        return <p>{formatMessage(`Couldn't complete the update: ${error}`)}</p>;
+        return <p css={dialogCopy}>{formatMessage(`Couldn't complete the update: ${error}`)}</p>;
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
         let trimmedTotalInMB;
@@ -170,10 +178,10 @@ export const AppUpdater: React.FC<{}> = _props => {
           downloadOption === downloadOptions.installAndUpdate
             ? 'Composer will restart.'
             : 'Composer will update the next time you start the app.';
-        return <p>{formatMessage(text)}</p>;
+        return <p css={dialogCopy}>{formatMessage(text)}</p>;
 
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
-        return <p>{formatMessage('No updates available.')}</p>;
+        return <p css={dialogCopy}>{formatMessage('Composer is up to date.')}</p>;
 
       case AppUpdaterStatus.IDLE:
       default:
@@ -186,7 +194,7 @@ export const AppUpdater: React.FC<{}> = _props => {
       case AppUpdaterStatus.UPDATE_AVAILABLE:
         return (
           <div>
-            <DefaultButton onClick={handleDismiss} text={formatMessage('Cancel')} />
+            <DefaultButton onClick={handleDismiss} styles={updateAvailableDismissBtn} text={formatMessage('Cancel')} />
             <PrimaryButton onClick={handlePreDownloadOkay} text={formatMessage('Okay')} />
           </div>
         );
@@ -213,8 +221,9 @@ export const AppUpdater: React.FC<{}> = _props => {
       hidden={false}
       onDismiss={handleDismiss}
       dialogContentProps={{
+        styles: dialogContent,
         subText: subText,
-        type: DialogType.normal,
+        type: DialogType.close,
         title,
       }}
       modalProps={{
@@ -222,8 +231,8 @@ export const AppUpdater: React.FC<{}> = _props => {
         styles: modal,
       }}
     >
-      <DialogContent>{content}</DialogContent>
-      <DialogFooter>{footer}</DialogFooter>
+      {content}
+      <DialogFooter styles={dialogFooter}>{footer}</DialogFooter>
     </Dialog>
   ) : null;
 };
