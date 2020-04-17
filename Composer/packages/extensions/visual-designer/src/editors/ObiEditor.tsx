@@ -31,6 +31,7 @@ import {
   deleteNodes,
   getParentPaths,
   insertAction,
+  getCurrentNodePathDetail,
 } from '../utils/jsonTracker';
 import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
@@ -255,7 +256,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;
           const dialog = appendNodesAfter(data, e.target, e.actions);
+          const { parentPath, currentAction, currentKey } = getCurrentNodePathDetail(e.target) || { currentKey: 0 };
           onChange(dialog);
+          onFocusSteps([`${parentPath}.${currentAction}[${Number(currentKey) + 1}]`]);
         };
         break;
       case NodeEventTypes.Undo:

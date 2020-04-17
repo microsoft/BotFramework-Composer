@@ -36,7 +36,7 @@ function parseSelector(path: string): null | string[] {
   return normalizedSelectors;
 }
 
-function locateNode(dialog: { [key: string]: any }, path: string) {
+export function locateNode(dialog: { [key: string]: any }, path: string) {
   const selectors = parseSelector(path);
   if (!Array.isArray(selectors)) return null;
   if (selectors.length === 0) return dialog;
@@ -247,4 +247,17 @@ export const getParentPaths = (actionPath: string): string[] => {
     results.push(path);
   }
   return results;
+};
+
+export const getCurrentNodePathDetail = (actionPath: string) => {
+  if (typeof actionPath !== 'string') return null;
+  const pathSelectors = actionPath.split('.');
+  const currentAction = pathSelectors[pathSelectors.length - 1].split('[')[0];
+
+  pathSelectors.pop();
+  const parentPath = pathSelectors.join('.');
+  const keySelectors = parseSelector(actionPath);
+  const currentKey = keySelectors?.[keySelectors?.length - 1] || 0;
+
+  return { parentPath, currentAction, currentKey };
 };
