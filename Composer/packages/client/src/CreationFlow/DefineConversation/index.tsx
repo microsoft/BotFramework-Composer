@@ -137,6 +137,8 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
               onChange={updateForm('name')}
               errorMessage={formDataErrors.name}
               data-testid="NewDialogName"
+              required
+              autoFocus
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
