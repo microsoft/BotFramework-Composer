@@ -78,18 +78,20 @@ export const itemText = (depth: number) => css`
   cursor: pointer;
 `;
 
-export const moreButton: IButtonStyles = {
-  root: {
-    padding: '0 4px',
-    alignSelf: 'stretch',
-    height: 'auto',
-    visibility: 'hidden',
-    width: '16px',
-  },
-  menuIcon: {
-    fontSize: '14px',
-    color: '#000',
-  },
+export const moreButton = (isActive: boolean): IButtonStyles => {
+  return {
+    root: {
+      padding: '0 4px',
+      alignSelf: 'stretch',
+      visibility: isActive ? 'visible' : 'hidden',
+      height: 'auto',
+      width: '16px',
+    },
+    menuIcon: {
+      fontSize: '14px',
+      color: '#000',
+    },
+  };
 };
 
 export const moreMenu: Partial<ICalloutContentStyles> = {
