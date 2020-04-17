@@ -77,10 +77,11 @@ interface FieldLabelProps {
   description?: string;
   helpLink?: string;
   inline?: boolean;
+  required?: boolean;
 }
 
 const FieldLabel: React.FC<FieldLabelProps> = props => {
-  const { label, description, id, inline, helpLink } = props;
+  const { label, description, id, inline, helpLink, required } = props;
 
   if (!label) {
     return null;
@@ -95,11 +96,16 @@ const FieldLabel: React.FC<FieldLabelProps> = props => {
     >
       <Label
         htmlFor={id}
+        required={required}
         styles={{
           root: {
             fontWeight: '400',
             marginLeft: inline ? '4px' : '0',
-            marginRight: '4px',
+            selectors: {
+              '::after': {
+                paddingRight: 0,
+              },
+            },
           },
         }}
       >
