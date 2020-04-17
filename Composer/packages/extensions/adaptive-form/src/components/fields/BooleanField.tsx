@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { FieldLabel } from '../FieldLabel';
 
 const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
-  const { onChange, value, label, id, schema, uiOptions } = props;
+  const { onChange, value, label, id, schema, required, uiOptions } = props;
   const { description } = schema;
 
   const options: IDropdownOption[] = [
@@ -39,7 +39,14 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
 
   return (
     <React.Fragment>
-      <FieldLabel inline description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel
+        inline
+        description={description}
+        id={id}
+        label={label}
+        helpLink={uiOptions?.helpLink}
+        required={required}
+      />
       <Dropdown
         id={id}
         options={options}
