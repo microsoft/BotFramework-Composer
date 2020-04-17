@@ -38,7 +38,7 @@ router.get('/storages/:storageId/blobs', StorageController.getBlob);
 router.get('/publish/types', PublishController.getTypes);
 router.get('/publish/:projectId/status/:target', PublishController.status);
 router.post('/publish/:projectId/publish/:target', PublishController.publish);
-router.post('/publish/:projectId/history/:target', PublishController.history);
+router.get('/publish/:projectId/history/:target', PublishController.history);
 router.post('/publish/:projectId/rollback/:target', PublishController.rollback);
 
 router.get('/publish/:method', PublishController.publish);
