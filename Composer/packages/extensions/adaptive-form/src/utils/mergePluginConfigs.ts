@@ -12,7 +12,7 @@ import DefaultRoleSchema from '../defaultRoleSchema';
 import DefaultRecognizers from '../defaultRecognizers';
 
 const defaults: PluginConfig = {
-  uiSchema: DefaultUISchema,
+  formSchema: DefaultUISchema,
   roleSchema: DefaultRoleSchema,
   recognizers: DefaultRecognizers,
 };

@@ -16,6 +16,7 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
+import { Async } from 'office-ui-fabric-react/lib/Utilities';
 
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
@@ -34,12 +35,22 @@ const TableView: React.FC<TableViewProps> = props => {
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
+  const setMessage = useRef(debounce(actions.setMessage, 500)).current;
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [focusedIndex, setFocusedIndex] = useState(0);
+
+  const _async = new Async();
+
+  const announce = (message: string) => {
+    setMessage(message);
+    _async.setTimeout(() => {
+      setMessage(undefined);
+    }, 2000);
+  };
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
@@ -111,6 +122,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'delete',
           name: formatMessage('Delete'),
           onClick: () => {
+            announce('item deleted');
             onRemoveTemplate(index);
           },
         },
@@ -118,6 +130,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'copy',
           name: formatMessage('Make a copy'),
           onClick: () => {
+            announce('item copied');
             onCopyTemplate(index);
           },
         },
@@ -190,9 +203,9 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: item => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
-            <IconButton iconProps={{ iconName: 'Accept' }} ariaLabel={formatMessage('Used')} />
+            <IconButton iconProps={{ iconName: 'Accept' }} ariaLabel={formatMessage('Used') + ';'} />
           ) : (
-            <div aria-label={formatMessage('Unused')} />
+            <div aria-label={formatMessage('Unused') + ';'} />
           );
         },
       };
@@ -221,7 +234,14 @@ const TableView: React.FC<TableViewProps> = props => {
 
     return (
       <div data-testid="tableFooter">
-        <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'CirclePlus' }}
+          onClick={() => {
+            onCreateNewTemplate();
+            announce('item added');
+          }}
+        >
           {formatMessage('New template')}
         </ActionButton>
       </div>

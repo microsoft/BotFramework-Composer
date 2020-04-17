@@ -82,11 +82,14 @@ export enum ActionTypes {
   PUBLISH_SUCCESS = 'PUBLISH_SUCCESS',
   PUBLISH_FAILED = 'PUBLISH_FAILED',
   GET_PUBLISH_STATUS = 'GET_PUBLISH_STATUS',
+  GET_PUBLISH_STATUS_FAILED = 'GET_PUBLISH_STATUS_FAILED',
+  GET_PUBLISH_HISTORY = 'GET_PUBLISH_HISTORY',
   UPDATE_BOTSTATUS = 'UPDATE_BOTSTATUS',
-
   SET_USER_SETTINGS = 'SET_USER_SETTINGS',
   ADD_SKILL_DIALOG_BEGIN = 'ADD_SKILL_DIALOG_BEGIN',
   ADD_SKILL_DIALOG_END = 'ADD_SKILL_DIALOG_END',
+
+  SET_MESSAGE = 'SET_MESSAGE',
 }
 
 export const Tips = {
@@ -219,3 +222,8 @@ export const SupportedFileTypes = [
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
+
+export const DefaultPublishConfig = {
+  name: 'default',
+  type: 'localpublish',
+};
