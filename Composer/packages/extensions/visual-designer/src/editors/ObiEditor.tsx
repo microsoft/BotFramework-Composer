@@ -360,7 +360,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             break;
           case KeyboardCommandTypes.Node.Paste: {
             const currentSelectedId = selectionContext.selectedIds[0];
-            if (currentSelectedId.slice(-1) === '+') {
+            if (currentSelectedId.endsWith('+')) {
               dispatchEvent(NodeEventTypes.AppendSelection, {
                 target: focusedId,
                 actions: clipboardActions,
