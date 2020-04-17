@@ -796,7 +796,6 @@
             "title": "Begin a skill dialog",
             "description": "Begin a remote skill dialog.",
             "type": "object",
-            "required": ["resultProperty"],
             "properties": {
                 "$kind": {
                     "title": "$kind",
