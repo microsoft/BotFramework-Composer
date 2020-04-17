@@ -12,20 +12,17 @@ export interface IUtterance {
 }
 
 export class ComposerBootstrapSampler extends BootstrapSampler<number> {
-  private _times = 10;
+  private _maxImbalanceRatio = 10;
   private _utterances: IUtterance[] = [];
 
-  public constructor(utterances: IUtterance[]) {
+  public constructor(utterances: IUtterance[], maxImbalanceRatio) {
     super({}, true, SAMPLE_SIZE_CONFIGURATION);
     this._utterances = utterances;
+    this._maxImbalanceRatio = maxImbalanceRatio;
     utterances.forEach((e, index) => {
       const { intent } = e;
       this.addInstance(intent, index);
     });
-  }
-
-  public set times(v: number) {
-    this._times = v;
   }
 
   public computeSamplingNumberInstancesPerLabel(label = ''): number {
@@ -34,16 +31,20 @@ export class ComposerBootstrapSampler extends BootstrapSampler<number> {
       Number.MAX_SAFE_INTEGER
     );
 
-    return this._times * numberInstancesPerLabelReduce * SAMPLE_SIZE_CONFIGURATION;
+    return this._maxImbalanceRatio * numberInstancesPerLabelReduce * SAMPLE_SIZE_CONFIGURATION;
   }
 
   public getSampledUtterances() {
-    this.resetLabelsAndMap();
+    if (this._maxImbalanceRatio) {
+      this.resetLabelsAndMap();
 
-    const sampledIndexes = this.sampleInstances();
+      const sampledIndexes = this.sampleInstances();
 
-    const set = new Set([...sampledIndexes]);
+      const set = new Set([...sampledIndexes]);
 
-    return Array.from(set).map(index => this._utterances[index]);
+      return Array.from(set).map(index => this._utterances[index]);
+    } else {
+      return this._utterances;
+    }
   }
 }

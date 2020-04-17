@@ -4,28 +4,24 @@ import { ReservoirSampler } from '@microsoft/bf-dispatcher/lib/mathematics/sampl
 
 import { IUtterance } from './BootstrapSampler';
 
-const MIN_SAMPLE_SIZE = 15000;
-
 export class ComposerReservoirSampler extends ReservoirSampler<number> {
   private _utterances: IUtterance[] = [];
-  private _sampleSize = MIN_SAMPLE_SIZE;
+  private _maxUtteranceAllowed;
 
-  public constructor(utterances: IUtterance[]) {
+  public constructor(utterances: IUtterance[], maxUtteranceAllowed) {
     super({});
     this._utterances = utterances;
+    this._maxUtteranceAllowed = maxUtteranceAllowed;
     utterances.forEach((e, index) => {
       this.addInstance(e.intent, index);
     });
   }
 
-  public set sampleSize(v: number) {
-    this._sampleSize = v;
-  }
-
   public getSampledUtterances() {
-    this.resetLabelsAndMap();
-    if (this._utterances.length > this._sampleSize) {
-      const sampledIndexes = this.sampleInstances(this._sampleSize);
+    if (this._maxUtteranceAllowed && this._utterances.length > this._maxUtteranceAllowed) {
+      this.resetLabelsAndMap();
+
+      const sampledIndexes = this.sampleInstances(this._maxUtteranceAllowed);
 
       const set = new Set([...sampledIndexes]);
 

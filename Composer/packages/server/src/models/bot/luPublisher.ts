@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { FileInfo } from '@bfc/shared';
-import isEqual from 'lodash/isEqual';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -31,6 +30,11 @@ export interface ICrossTrainConfig {
   verbose: boolean;
 }
 
+export interface IDownSamplingConfig {
+  maxImbalanceRatio: number;
+  maxUtteranceAllowed: number;
+}
+
 export class LuPublisher {
   public botDir: string;
   public dialogsDir: string;
@@ -38,6 +42,8 @@ export class LuPublisher {
   public interuptionFolderPath: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
+  public downSamplingConfig: IDownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
+
   public crossTrainConfig: ICrossTrainConfig = {
     rootIds: [],
     triggerRules: {},
@@ -72,23 +78,15 @@ export class LuPublisher {
     }
   };
 
-  public getLuisConfig = () => this.config;
-
-  public setLuisConfig = (config: ILuisConfig) => {
-    if (!isEqual(config, this.config)) {
-      this.config = config;
-    }
-  };
-
-  public setAuthoringKey = (key: string) => {
-    if (this.config) {
-      this.config.authoringKey = key;
-    }
-  };
-
-  public setCrossTrainConfig = (crossTrainConfig: ICrossTrainConfig) => {
-    if (crossTrainConfig) this.crossTrainConfig = crossTrainConfig;
-  };
+  public setPublishConfig(
+    luisConfig: ILuisConfig,
+    crossTrainConfig: ICrossTrainConfig,
+    downSamplingConfig: IDownSamplingConfig
+  ) {
+    this.config = luisConfig;
+    this.crossTrainConfig = crossTrainConfig;
+    this.downSamplingConfig = downSamplingConfig;
+  }
 
   private async _createGeneratedDir() {
     // clear previous folder
@@ -113,10 +111,16 @@ export class LuPublisher {
 
   private _doDownSampling(luObject: any) {
     //do bootstramp sampling to make the utterances' number ratio to 1:10
-    const bootstrapSampler = new ComposerBootstrapSampler(luObject.utterances);
+    const bootstrapSampler = new ComposerBootstrapSampler(
+      luObject.utterances,
+      this.downSamplingConfig.maxImbalanceRatio
+    );
     luObject.utterances = bootstrapSampler.getSampledUtterances();
     //if detect the utterances>15000, use reservoir sampling to down size
-    const reservoirSampler = new ComposerReservoirSampler(luObject.utterances);
+    const reservoirSampler = new ComposerReservoirSampler(
+      luObject.utterances,
+      this.downSamplingConfig.maxUtteranceAllowed
+    );
     luObject.utterances = reservoirSampler.getSampledUtterances();
     return luObject;
   }

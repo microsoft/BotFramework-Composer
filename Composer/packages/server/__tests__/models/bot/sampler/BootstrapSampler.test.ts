@@ -20,9 +20,13 @@ describe('BootstrapSampler', () => {
       { intent: '1', text: '14', entities: [] },
       { intent: '1', text: '15', entities: [] },
     ];
-    const sampler = new ComposerBootstrapSampler(utterances);
+    const sampler = new ComposerBootstrapSampler(utterances, 10);
     const result = sampler.getSampledUtterances();
     const intent1 = result.filter(e => e.intent === '1').length;
     expect((result.length - intent1) / intent1).toBeCloseTo(0.1, 2);
+    const sampler1 = new ComposerBootstrapSampler(utterances, 5);
+    const result1 = sampler1.getSampledUtterances();
+    const intent11 = result1.filter(e => e.intent === '1').length;
+    expect((result1.length - intent11) / intent11).toBeCloseTo(0.2, 2);
   });
 });

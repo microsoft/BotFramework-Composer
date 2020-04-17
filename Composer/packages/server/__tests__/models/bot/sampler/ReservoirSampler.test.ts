@@ -22,14 +22,13 @@ describe('BootstrapSampler', () => {
       { intent: '1', text: '14', entities: [] },
       { intent: '1', text: '15', entities: [] },
     ];
-    const sampler = new ComposerReservoirSampler(utterances);
-    sampler.sampleSize = 10;
+    const sampler = new ComposerReservoirSampler(utterances, 10);
     expect(sampler.getSampledUtterances().length).toBe(10);
-    sampler.sampleSize = 11;
-    expect(sampler.getSampledUtterances().length).toBe(11);
-    sampler.sampleSize = 12;
-    expect(sampler.getSampledUtterances().length).toBe(12);
-    sampler.sampleSize = 16;
-    expect(sampler.getSampledUtterances().length).toBe(15);
+    const sampler1 = new ComposerReservoirSampler(utterances, 11);
+    expect(sampler1.getSampledUtterances().length).toBe(11);
+    const sampler2 = new ComposerReservoirSampler(utterances, 12);
+    expect(sampler2.getSampledUtterances().length).toBe(12);
+    const sampler3 = new ComposerReservoirSampler(utterances, 18);
+    expect(sampler3.getSampledUtterances().length).toBe(15);
   });
 });
