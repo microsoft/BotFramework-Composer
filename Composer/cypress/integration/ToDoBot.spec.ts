@@ -9,7 +9,7 @@ context('ToDo Bot', () => {
 
   it('can open the main dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+      cy.findByText('__TestTodoSample').click();
     });
     cy.withinEditor('PropertyEditor', () => {
       cy.findByDisplayValue('__TestTodoSample').should('exist');

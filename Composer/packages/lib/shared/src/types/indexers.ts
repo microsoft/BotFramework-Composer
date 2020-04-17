@@ -116,6 +116,7 @@ export interface Skill {
   endpoints: { [key: string]: any }[];
   endpointUrl: string;
   msAppId: string;
+  body: string | null | undefined;
 }
 
 export interface TextFile {
