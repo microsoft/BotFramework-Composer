@@ -56,10 +56,7 @@ export function ToolBar(props) {
                 {
                   key: 'zipexport',
                   text: formatMessage('Export assets to .zip'),
-                  onClick: () => {
-                    console.log('export');
-                    actions.exportToZip({ projectId });
-                  },
+                  onClick: () => actions.exportToZip({ projectId }),
                 },
               ],
             }}

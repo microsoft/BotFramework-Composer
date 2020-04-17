@@ -20,7 +20,7 @@ const declareElementAttributes = (id: string) => {
     [AttrNames.SelectedId]: `${id}${MenuTypes.NodeMenu}`,
   };
 };
-export const NodeMenu = ({ colors, id, onEvent }) => {
+export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
   const menuItems = [
     {
       key: 'delete',

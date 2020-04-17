@@ -153,14 +153,6 @@ export class BotProject {
     }
   };
 
-  public removeZip = async (path: string) => {
-    try {
-      await this.fileStorage.removeFile(path);
-    } catch (e) {
-      console.log('error removing temp zip', e);
-    }
-  };
-
   public getSchemas = () => {
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];

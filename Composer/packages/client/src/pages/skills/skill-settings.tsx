@@ -3,20 +3,21 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+
+import { DialogSetting, BoundAction } from '../../store/types';
 
 import { FormFieldAlignHorizontalBotSettings } from './styles';
 
 export interface ISkillFormProps {
   botId?: string;
   skillHostEndpoint?: string;
-  setSettings: any;
+  setSettings: BoundAction;
   projectId: string;
   botName: string;
-  settings: any;
-  onChange: (botId: string, skillHostEndpoint: string) => void;
+  settings: DialogSetting;
 }
 
 const SkillSettings: React.FC<ISkillFormProps> = props => {

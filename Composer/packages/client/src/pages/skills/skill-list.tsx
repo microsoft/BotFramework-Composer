@@ -26,7 +26,7 @@ import { JsonEditor } from '@bfc/code-editor';
 import { StoreContext } from '../../store';
 
 import SkillForm from './skill-form';
-import { TableView, ActionButton, TableCell } from './styles';
+import { TableView, ActionButton, TableCell, ManifestModalHeaderStyle, ManifestModalBodyStyle } from './styles';
 import { ISkillFormData } from './types';
 
 export interface ISkillListProps {
@@ -230,10 +230,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
       </div>
       <Modal titleAriaId={'skillManifestModal'} isOpen={isModalOpen} onDismiss={onHideManifest} isBlocking={false}>
         <div>
-          <span
-            style={{ margin: '14px 0 0 16px', fontSize: '20px', fontWeight: 'bolder', alignItems: 'left' }}
-            id={'skillManifestModalHeader'}
-          >
+          <span css={ManifestModalHeaderStyle} id={'skillManifestModalHeader'}>
             {skills[modalOpenIndex] && skills[modalOpenIndex].name}
           </span>
           <IconButton
@@ -243,12 +240,12 @@ const SkillList: React.FC<ISkillListProps> = props => {
             onClick={onHideManifest}
           />
         </div>
-        <div style={{ margin: '15px 15px 15px 15px' }}>
+        <div css={ManifestModalBodyStyle}>
           <JsonEditor
             key={'testkey'}
             id={'modaljsonview'}
             onChange={() => {}}
-            value={isModalOpen && JSON.parse(skills[modalOpenIndex].body)}
+            value={isModalOpen && JSON.parse(skills[modalOpenIndex].body || '')}
             height={800}
             width={800}
             options={{ readOnly: true }}

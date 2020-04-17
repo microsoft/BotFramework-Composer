@@ -42,7 +42,6 @@ const Skills: React.FC<RouteComponentProps> = () => {
         setSettings={actions.setSettings}
         botId={state.settings.MicrosoftAppId}
         skillHostEndpoint={state.settings.skillHostEndpoint}
-        onChange={() => {}}
       />
       <SkillList skills={skills} projectId={projectId} />
     </div>

@@ -8,6 +8,8 @@ import get from 'lodash/get';
 import { FlowSchema, FlowWidget } from '@bfc/extension';
 import { FixedInfo, SingleLineDiv, ListOverview } from '@bfc/ui-shared';
 
+import { ObiColors } from '../constants/ElementColors';
+
 const BaseInputSchema: FlowWidget = {
   widget: 'ActionCard',
   body: data => data.prompt,
@@ -83,8 +85,8 @@ export const defaultFlowSchema: FlowSchema = {
   },
   [SDKKinds.SkillDialog]: {
     widget: 'ActionCard',
-    colors: { theme: '#004578', color: '#ffffff', icon: '#ffffff' },
-    icon: 'Product',
+    colors: { theme: ObiColors.DarkBlue, color: ObiColors.White, icon: ObiColors.White },
+    icon: 'Library',
     body: data => (
       <SingleLineDiv>
         <FixedInfo>Host </FixedInfo>
