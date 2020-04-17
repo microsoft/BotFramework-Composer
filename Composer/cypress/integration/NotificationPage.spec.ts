@@ -31,7 +31,7 @@ context('Notification Page', () => {
     cy.visitPage('User Input');
 
     cy.findByTestId('LUEditor').within(() => {
-      cy.findByText('__TestToDoBotWithLuisSample.Main').click();
+      cy.findByText('__TestToDoBotWithLuisSample').click();
     });
 
     cy.get('.toggleEditMode button').click();
@@ -46,7 +46,7 @@ context('Notification Page', () => {
         .dblclick();
     });
 
-    cy.findAllByText('__TestToDoBotWithLuisSample.Main').should('exist');
+    cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
   });
 
   it('can show dialog expression error ', () => {
