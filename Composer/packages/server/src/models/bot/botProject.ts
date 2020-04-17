@@ -608,7 +608,7 @@ export class BotProject {
                 fileChanged = true;
 
                 // lg body line
-              } else if (templateBodyLinePattern.test(line) && line.includes('@{')) {
+              } else if (templateBodyLinePattern.test(line) && (line.includes('@{') || line.includes('${'))) {
                 let newContentLine = line;
                 replacers.map(replacer => {
                   newContentLine = replacer(newContentLine);
