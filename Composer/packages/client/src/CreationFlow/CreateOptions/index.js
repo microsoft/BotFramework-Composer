@@ -22,8 +22,13 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 
 import { detailListContainer, listHeader, rowDetails, rowTitle, optionRoot, optionIcon } from './styles';
 
+const optionKeys = {
+  createFromScratch: 'createFromScratch',
+  createFromTemplate: 'createFromTemplate',
+};
+
 export function CreateOptions(props) {
-  const [option, setOption] = useState('CreateFromScratch');
+  const [option, setOption] = useState(optionKeys.createFromScratch);
   const [disabled, setDisabled] = useState(true);
   const { templates, onDismiss, onNext } = props;
   const emptyBotKey = templates[1].id;
@@ -49,7 +54,7 @@ export function CreateOptions(props) {
 
   const handleChange = (event, option) => {
     setOption(option.key);
-    if (option.key === 'CreateFromTemplate') {
+    if (option.key === optionKeys.createFromTemplate) {
       setDisabled(false);
     } else {
       setDisabled(true);
@@ -57,7 +62,7 @@ export function CreateOptions(props) {
   };
 
   const handleJumpToNext = () => {
-    if (option === 'CreateFromTemplate') {
+    if (option === optionKeys.createFromTemplate) {
       onNext(template);
     } else {
       onNext(emptyBotKey);
@@ -110,25 +115,24 @@ export function CreateOptions(props) {
     <Fragment>
       <ChoiceGroup
         label={formatMessage('Choose how to create your bot')}
-        defaultSelectedKey="CreateFromScratch"
+        selectedKey={option}
         options={[
           {
-            ariaLabel: 'Create from scratch',
-            key: 'CreateFromScratch',
+            ariaLabel: 'Create from scratch' + (option === optionKeys.createFromScratch ? ' selected' : ''),
+            key: optionKeys.createFromScratch,
             'data-testid': 'Create from scratch',
             text: formatMessage('Create from scratch'),
             onRenderField: SelectOption,
           },
           {
-            ariaLabel: 'Create from template',
-            key: 'CreateFromTemplate',
+            ariaLabel: 'Create from template' + (option === optionKeys.createFromTemplate ? ' selected' : ''),
+            key: optionKeys.createFromTemplate,
             'data-testid': 'Create from template',
             text: formatMessage('Create from template'),
             onRenderField: SelectOption,
           },
         ]}
         onChange={handleChange}
-        required={true}
       />
       <h3 css={listHeader}>{formatMessage('Examples')}</h3>
       <div data-is-scrollable="true" css={detailListContainer}>
@@ -151,7 +155,7 @@ export function CreateOptions(props) {
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
         <PrimaryButton
-          disabled={option === 'CreateFromTemplate' && (templates.length <= 0 || template === null)}
+          disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || template === null)}
           onClick={handleJumpToNext}
           text={formatMessage('Next')}
           data-testid="NextStepButton"
