@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,6 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
@@ -45,6 +45,10 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
             services.AddSingleton<IConfiguration>(this.Configuration);
 
+            // Load settings
+            var settings = new BotSettings();
+            Configuration.Bind(settings);
+
             // Create the credential provider to be used with the Bot Framework Adapter.
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
             services.AddSingleton<BotAdapter>(sp => (BotFrameworkHttpAdapter)sp.GetService<IBotFrameworkHttpAdapter>());
@@ -57,9 +61,16 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             services.AddHttpClient<BotFrameworkClient, SkillHttpClient>();
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
 
-            // Load settings
-            var settings = new BotSettings();
-            Configuration.Bind(settings);
+            // Register telemetry client, initializers and middleware
+            services.AddApplicationInsightsTelemetry();
+            services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
+            services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
+            services.AddSingleton<TelemetryInitializerMiddleware>();
+            services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
+            {
+                var telemetryClient = sp.GetService<IBotTelemetryClient>();
+                return new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings.Telemetry.LogPersonalInformation);
+            });
 
             IStorage storage = null;
 
@@ -95,7 +106,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
                 adapter
                   .UseStorage(storage)
-                  .UseState(userState, conversationState);               
+                  .UseState(userState, conversationState)
+                  .Use(s.GetService<TelemetryInitializerMiddleware>());
 
                 if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
                 {

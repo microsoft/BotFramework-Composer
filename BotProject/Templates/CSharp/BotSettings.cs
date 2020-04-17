@@ -18,11 +18,18 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
         public TelemetryConfiguration AppInsights { get; set; }
 
+        public AdditionalTelemetryConfiguration Telemetry { get; set; }
+
         public class BlobStorageConfiguration
         {
             public string ConnectionString { get; set; }
 
             public string Container { get; set; }
+        }
+
+        public class AdditionalTelemetryConfiguration
+        {
+            public bool LogPersonalInformation { get; set; }
         }
     }
 }
