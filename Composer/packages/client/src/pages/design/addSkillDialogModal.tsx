@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { FormEvent, useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -28,7 +30,7 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
   const { state } = useContext(StoreContext);
   const { skills } = state;
   const { isOpen, onDismiss, onSubmit } = props;
-  const [formData, setFormData] = useState<ISkillFormData>({ manifestUrl: '' });
+  const [formData, setFormData] = useState<ISkillFormData>({ manifestUrl: '', name: '' });
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
 
   const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
@@ -77,10 +79,17 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
             <TextField
               required
               errorMessage={formDataErrors.manifestUrl}
-              label={formatMessage('Skill manifest Url')}
+              label={formatMessage('Manifest url')}
               styles={manifestUrl}
               value={formData.manifestUrl}
               onChange={updateForm('manifestUrl')}
+            />
+            <TextField
+              label={formatMessage('Custom name (optional)')}
+              value={formData.name}
+              onChange={updateForm('name')}
+              errorMessage={formDataErrors.name}
+              data-testid="NewSkillName"
             />
           </StackItem>
         </Stack>
