@@ -64,7 +64,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     await openBotProject(path);
   };
 
-  const onSelectionChanged = async item => {
+  const onItemChosen = async item => {
     if (item && item.path) {
       await onClickRecentBotProject(item.path);
     }
@@ -174,8 +174,8 @@ const Home: React.FC<RouteComponentProps> = () => {
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
                 recentProjects={recentProjects}
-                onSelectionChanged={async item => {
-                  await onSelectionChanged(item);
+                onItemChosen={async item => {
+                  await onItemChosen(item);
                 }}
               />
             </div>
@@ -183,8 +183,10 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.leftContainer}>
             <h2 css={home.subtitle}>
               {formatMessage('Video tutorials:')}&nbsp;
-              <Link href={comingSoonLink.to} tabIndex={-1} key={comingSoonLink.text} target={'_blank'}>
-                <span css={comingSoonLink.css}>{comingSoonLink.text}</span>
+              <Link href={comingSoonLink.to} key={comingSoonLink.text} target={'_blank'}>
+                <span css={comingSoonLink.css} aria-label={'Video tutorials coming soon'}>
+                  {comingSoonLink.text}
+                </span>
               </Link>
             </h2>
             <div css={home.newBotContainer}>
