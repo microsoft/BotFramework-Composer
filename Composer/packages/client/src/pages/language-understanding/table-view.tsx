@@ -115,7 +115,11 @@ const TableView: React.FC<TableViewProps> = props => {
             const [, childName] = item.name.split('/');
             displayName = `##${childName}`;
           }
-          return <div css={formCell}>{displayName}</div>;
+          return (
+            <div data-is-focusable={true} css={formCell}>
+              {displayName}
+            </div>
+          );
         },
       },
       {
@@ -127,7 +131,11 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         data: 'string',
         onRender: item => {
-          return <div css={luPhraseCell}>{item.phrases}</div>;
+          return (
+            <div data-is-focusable={true} css={luPhraseCell}>
+              {item.phrases}
+            </div>
+          );
         },
       },
       {
@@ -142,7 +150,7 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           const id = item.dialogId;
           return (
-            <div key={id} onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}>
+            <div data-is-focusable={true} key={id} onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}>
               <Link>{id}</Link>
             </div>
           );
