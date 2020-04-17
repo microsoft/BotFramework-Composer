@@ -21,7 +21,7 @@ Plugins currently have access to the following functional areas:
 * Publishing - plugins can add publishing mechanisms
 * Runtime Templates - plugins can provide a runtime template used when "ejecting" from Composer
 
-Combining these three endpoints, it is possible to achieve scenarios such as:
+Combining these endpoints, it is possible to achieve scenarios such as:
 
 * Store content in a database
 * Require login via AAD or any other oauth provider

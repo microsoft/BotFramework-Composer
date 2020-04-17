@@ -80,6 +80,7 @@ const initialState: State = {
   publishTypes: [],
   publishTargets: [],
   runtimeTemplates: [],
+  publishHistory: {},
   userSettings: storage.get('userSettings', {
     codeEditor: {
       lineNumbers: false,

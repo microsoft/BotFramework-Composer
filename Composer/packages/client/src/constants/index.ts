@@ -82,6 +82,8 @@ export enum ActionTypes {
   PUBLISH_SUCCESS = 'PUBLISH_SUCCESS',
   PUBLISH_FAILED = 'PUBLISH_FAILED',
   GET_PUBLISH_STATUS = 'GET_PUBLISH_STATUS',
+  GET_PUBLISH_STATUS_FAILED = 'GET_PUBLISH_STATUS_FAILED',
+  GET_PUBLISH_HISTORY = 'GET_PUBLISH_HISTORY',
   UPDATE_BOTSTATUS = 'UPDATE_BOTSTATUS',
   SET_RUNTIME_TEMPLATES = 'SET_RUNTIME_TEMPLATES',
   SET_USER_SETTINGS = 'SET_USER_SETTINGS',
@@ -221,3 +223,8 @@ export const SupportedFileTypes = [
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
+
+export const DefaultPublishConfig = {
+  name: 'default',
+  type: 'localpublish',
+};

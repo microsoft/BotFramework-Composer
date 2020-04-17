@@ -417,27 +417,68 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
   return state;
 };
 
-const setPublishTypes: ReducerFunc = (state, { response }) => {
-  state.publishTypes = response;
+const setPublishTypes: ReducerFunc = (state, { typelist }) => {
+  state.publishTypes = typelist;
   return state;
 };
 
 const publishSuccess: ReducerFunc = (state, payload) => {
-  state.botEndpoints[state.projectId] = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
-  state.botStatus = BotStatus.connected;
+  if (payload.target.name === 'default' && payload.endpointURL) {
+    state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
+    state.botStatus = BotStatus.connected;
+  }
+
+  // prepend the latest publish results to the history
+  if (!state.publishHistory[payload.target.name]) {
+    state.publishHistory[payload.target.name] = [];
+  }
+  state.publishHistory[payload.target.name].unshift(payload);
+
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, { error }) => {
-  state.botStatus = BotStatus.failed;
-  state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+const publishFailure: ReducerFunc = (state, { error, target }) => {
+  if (target.name === 'default') {
+    state.botStatus = BotStatus.failed;
+    state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+  }
+  // prepend the latest publish results to the history
+  if (!state.publishHistory[target.name]) {
+    state.publishHistory[target.name] = [];
+  }
+  state.publishHistory[target.name].unshift(error);
   return state;
 };
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
-  if (payload.results?.botStatus === 'connected') {
+  // the action below only applies to when a bot is being started using the "start bot" button
+  // a check should be added to this that ensures this ONLY applies to the "default" profile.
+  if (payload.target.name === 'default' && payload.endpointURL) {
     state.botStatus = BotStatus.connected;
+    state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
   }
+
+  // if no history exists, create one with the latest status
+  // otherwise, replace the latest publish history with this one
+  if (!state.publishHistory[payload.target.name] && payload.status !== 404) {
+    state.publishHistory[payload.target.name] = [payload];
+  } else if (payload.status !== 404) {
+    // make sure this status payload represents the same item as item 0 (most of the time)
+    // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
+    if (
+      state.publishHistory[payload.target.name].length &&
+      state.publishHistory[payload.target.name][0].id === payload.id
+    ) {
+      state.publishHistory[payload.target.name][0] = payload;
+    } else {
+      state.publishHistory[payload.target.name].unshift(payload);
+    }
+  }
+  return state;
+};
+
+const getPublishHistory: ReducerFunc = (state, payload) => {
+  state.publishHistory[payload.target.name] = payload.history;
   return state;
 };
 
@@ -534,6 +575,8 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
   [ActionTypes.PUBLISH_FAILED]: publishFailure,
   [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
+  [ActionTypes.GET_PUBLISH_STATUS_FAILED]: getPublishStatus,
+  [ActionTypes.GET_PUBLISH_HISTORY]: getPublishHistory,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,

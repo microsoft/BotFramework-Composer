@@ -37,8 +37,8 @@ class LocalPublisher {
 
   constructor() {}
   // config include botId and version, project is content(ComposerDialogs)
-  publish = async (config: PublishConfig, project, user) => {
-    const { settings, templatePath } = config;
+  publish = async (config: PublishConfig, project, metadata, user) => {
+    const { templatePath, settings } = config;
     this.templatePath = templatePath;
     const botId = project.id;
     const version = 'default';
@@ -50,30 +50,64 @@ class LocalPublisher {
       await this.saveContent(botId, version, project.dataDir, user);
     }
 
-    // start or restart the bot process
-    const url = await this.setBot(botId, version, settings, project.dataDir);
+    try {
+      // start or restart the bot process
+      const url = await this.setBot(botId, version, settings, project.dataDir);
 
-    return {
-      status: 200,
-      result: {
-        jobId: new uuid(),
-        version: version,
-        endpoint: url,
-      },
-    };
-  };
-
-  getStatus = async (botId: string) => {
-    if (LocalPublisher.runningBots[botId]) {
       return {
-        botStatus: 'connected',
+        status: 200,
+        result: {
+          id: uuid(),
+          version: version,
+          endpointURL: url,
+        },
       };
-    } else {
+    } catch (error) {
       return {
-        botStatus: 'unConnected',
+        status: 500,
+        result: {
+          message: error,
+        },
       };
     }
   };
+  getStatus = async (config: PublishConfig, project, user) => {
+    const botId = project.id;
+    if (LocalPublisher.runningBots[botId]) {
+      const port = LocalPublisher.runningBots[botId].port;
+      const url = `http://localhost:${port}`;
+      return {
+        status: 200,
+        result: {
+          message: 'Running',
+          endpointURL: url,
+        },
+      };
+    } else {
+      return {
+        status: 200,
+        result: {
+          message: 'Ready',
+        },
+      };
+    }
+  };
+  // history = async (config: PublishConfig, project, user) => {
+  //   const botId = project.id;
+  //   const result = [];
+  //   const files = await readDir(this.getHistoryDir(botId));
+  //   console.log(files);
+  //   files.map(item => {
+  //     result.push({
+  //       time: 'now',
+  //       status: 200,
+  //       message: 'test',
+  //       comment: 'test',
+  //     });
+  //   });
+  //   return result;
+  // };
+  // rollback = async (config, project, versionId, user) => { };
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
 
@@ -160,6 +194,7 @@ class LocalPublisher {
       return `http://localhost:${port}`;
     } catch (error) {
       this.stopBot(botId);
+      throw error;
     }
   };
 
@@ -172,18 +207,29 @@ class LocalPublisher {
       settings.runtime && settings.runtime.customRuntime === true
         ? settings.runtime.command.split(/\s+/)
         : ['dotnet', 'run'];
-    const startCommand = commandAndArgs.shift(); // take the 0th item off the array, leaving just the args
+
     return new Promise((resolve, reject) => {
-      const process = spawn(
-        startCommand,
-        // why would we need to point to the specific DLL?
-        // `bin/Debug/netcoreapp3.1/BotProject.dll`,
-        [...commandAndArgs, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
-        {
-          cwd: botDir,
-          stdio: ['ignore', 'pipe', 'pipe'],
-        }
-      );
+      // ensure the specified runtime path exists
+      if (!fs.existsSync(botDir)) {
+        reject(`Runtime path ${botDir} does not exist.`);
+      }
+
+      // take the 0th item off the array, leaving just the args
+      const startCommand = commandAndArgs.shift();
+
+      let process;
+      try {
+        process = spawn(
+          startCommand,
+          [...commandAndArgs, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
+          {
+            cwd: botDir,
+            stdio: ['ignore', 'pipe', 'pipe'],
+          }
+        );
+      } catch (err) {
+        reject(err);
+      }
       LocalPublisher.runningBots[botId] = { process: process, port: port };
       this.addListeners(process, resolve, reject);
     });
@@ -224,6 +270,10 @@ class LocalPublisher {
       if (code !== 0) {
         reject(erroutput);
       }
+    });
+
+    child.on('error', err => {
+      reject(`Could not launch bot runtime process: ${err.message}`);
     });
 
     child.on('message', msg => {
