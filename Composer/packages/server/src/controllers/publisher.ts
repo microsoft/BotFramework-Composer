@@ -52,7 +52,7 @@ export const PublishController = {
     // append config from client(like sensitive settings)
     const configuration = {
       name: profile.name,
-      ...JSON.parse(profile.configuration),
+      customizeConfiguration: JSON.parse(profile.configuration),
       settings: merge({}, currentProject.settings, sensitiveSettings),
       templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
     };
@@ -116,7 +116,7 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         const configuration = {
           name: profile.name,
-          ...JSON.parse(profile.configuration),
+          customizeConfiguration: JSON.parse(profile.configuration),
         };
 
         // call the method
@@ -162,7 +162,7 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         const configuration = {
           name: profile.name,
-          ...JSON.parse(profile.configuration),
+          customizeConfiguration: JSON.parse(profile.configuration),
         };
 
         // call the method
@@ -196,7 +196,7 @@ export const PublishController = {
     // append config from client(like sensitive settings)
     const configuration = {
       name: profile.name,
-      ...JSON.parse(profile.configuration),
+      customizeConfiguration: JSON.parse(profile.configuration),
       settings: merge({}, currentProject.settings, sensitiveSettings),
       templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
     };
