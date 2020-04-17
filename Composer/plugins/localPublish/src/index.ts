@@ -48,6 +48,13 @@ class LocalPublisher {
     if (project.settings.runtime && project.settings.runtime.customRuntime !== true) {
       await this.initBot(botId);
       await this.saveContent(botId, version, project.dataDir, user);
+    } else if (!project.settings.runtime.path || !project.settings.runtime.command) {
+      return {
+        status: 500,
+        result: {
+          message: 'Custom runtime settings are incomplete. Please specify path and command.',
+        },
+      };
     }
 
     try {

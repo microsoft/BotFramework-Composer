@@ -105,10 +105,14 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
           onChange={updateSetting('path')}
           errorMessage={formDataErrors.path}
           data-testid="runtimeCodeLocation"
-          disabled={!settings.runtime.customRuntime}
+          disabled={!settings.runtime || !settings.runtime.customRuntime}
         />
         {formatMessage('Or: ')}
-        <Link onClick={showEjectModal} disabled={!settings.runtime.customRuntime} css={breathingSpace}>
+        <Link
+          onClick={showEjectModal}
+          disabled={!settings.runtime || !settings.runtime.customRuntime}
+          css={breathingSpace}
+        >
           {formatMessage('Get a new copy of the runtime code')}
         </Link>
 
@@ -120,7 +124,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
           onChange={updateSetting('command')}
           errorMessage={formDataErrors.command}
           data-testid="runtimeCommand"
-          disabled={!settings.runtime.customRuntime}
+          disabled={!settings.runtime || !settings.runtime.customRuntime}
         />
       </div>
       <EjectModal hidden={!ejectModalVisible} closeModal={closeEjectModal} ejectRuntime={ejectRuntime} />
