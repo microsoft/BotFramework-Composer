@@ -25,7 +25,7 @@ export function recognizerType({ content }: DialogInfo): string | null {
 }
 
 const IntentField: React.FC<FieldProps> = props => {
-  const { id, description, uiOptions, value, onChange } = props;
+  const { id, description, uiOptions, value, required, onChange } = props;
   const { currentDialog } = useShellApi();
   const { recognizers } = usePluginConfig();
   const type = recognizerType(currentDialog);
@@ -39,7 +39,7 @@ const IntentField: React.FC<FieldProps> = props => {
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
+      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
       {Editor ? <Editor {...props} onChange={handleChange} /> : `No Editor for ${type}`}
     </React.Fragment>
   );
