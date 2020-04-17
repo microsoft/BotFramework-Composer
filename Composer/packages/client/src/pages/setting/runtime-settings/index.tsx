@@ -99,7 +99,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       <div css={controlGroup}>
         <TextField
           label={formatMessage('Runtime code location')}
-          defaultValue={settings.runtime ? settings.runtime.path : ''}
+          value={settings.runtime ? settings.runtime.path : ''}
           styles={name}
           required
           onChange={updateSetting('path')}
@@ -118,7 +118,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
 
         <TextField
           label={formatMessage('Start command')}
-          defaultValue={settings.runtime ? settings.runtime.command : ''}
+          value={settings.runtime ? settings.runtime.command : ''}
           styles={name}
           required
           onChange={updateSetting('command')}
