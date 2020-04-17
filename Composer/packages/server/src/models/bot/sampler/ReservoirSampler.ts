@@ -6,9 +6,9 @@ import { IUtterance } from './BootstrapSampler';
 
 export class ComposerReservoirSampler extends ReservoirSampler<number> {
   private _utterances: IUtterance[] = [];
-  private _maxUtteranceAllowed;
+  private _maxUtteranceAllowed: number;
 
-  public constructor(utterances: IUtterance[], maxUtteranceAllowed) {
+  public constructor(utterances: IUtterance[], maxUtteranceAllowed: number) {
     super({});
     this._utterances = utterances;
     this._maxUtteranceAllowed = maxUtteranceAllowed;

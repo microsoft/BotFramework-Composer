@@ -12,10 +12,10 @@ export interface IUtterance {
 }
 
 export class ComposerBootstrapSampler extends BootstrapSampler<number> {
-  private _maxImbalanceRatio = 10;
+  private _maxImbalanceRatio: number;
   private _utterances: IUtterance[] = [];
 
-  public constructor(utterances: IUtterance[], maxImbalanceRatio) {
+  public constructor(utterances: IUtterance[], maxImbalanceRatio: number) {
     super({}, true, SAMPLE_SIZE_CONFIGURATION);
     this._utterances = utterances;
     this._maxImbalanceRatio = maxImbalanceRatio;
