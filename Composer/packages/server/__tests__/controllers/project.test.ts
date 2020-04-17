@@ -264,6 +264,10 @@ describe('setting operation', () => {
       endpointkey: '',
       hostname: '',
     },
+    downsampling: {
+      maxImbalanceRatio: 10,
+      maxUtteranceAllowed: 15000,
+    },
   };
   let projectId = '';
   beforeEach(async () => {
