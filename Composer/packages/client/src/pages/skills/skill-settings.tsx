@@ -12,6 +12,10 @@ import { FormFieldAlignHorizontalBotSettings } from './styles';
 export interface ISkillFormProps {
   botId?: string;
   skillHostEndpoint?: string;
+  setSettings: any;
+  projectId: string;
+  botName: string;
+  settings: any;
   onChange: (botId: string, skillHostEndpoint: string) => void;
 }
 
@@ -28,10 +32,12 @@ const SkillSettings: React.FC<ISkillFormProps> = props => {
   }, [props.botId, props.skillHostEndpoint]);
 
   const handleFieldChange = event => {
-    setSkillSettings({
+    const localSettings = {
       ...skillSettings,
-      [event.target.id]: event.target.text,
-    });
+      [event.target.id]: event.target.value,
+    };
+    setSkillSettings({ ...localSettings });
+    props.setSettings(props.projectId, props.botName, { ...props.settings, ...localSettings }, undefined);
   };
 
   return (
@@ -39,8 +45,8 @@ const SkillSettings: React.FC<ISkillFormProps> = props => {
       <div style={{ marginLeft: '20px' }}>
         <TextField
           style={{ maxWidth: '300px' }}
-          aria-labelledby={'botId'}
-          id={'botId'}
+          aria-labelledby={'microsoftAppId'}
+          id={'MicrosoftAppId'}
           underlined
           label={formatMessage('Microsoft App Id')}
           description={formatMessage('The Microsoft App Id that will be calling the skill.')}

@@ -26,7 +26,7 @@ import { JsonEditor } from '@bfc/code-editor';
 import { StoreContext } from '../../store';
 
 import SkillForm from './skill-form';
-import { ContentStyle, TableView, ActionButton, TableCell } from './styles';
+import { TableView, ActionButton, TableCell } from './styles';
 import { ISkillFormData } from './types';
 
 export interface ISkillListProps {

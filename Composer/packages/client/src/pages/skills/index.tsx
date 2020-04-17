@@ -17,7 +17,7 @@ import SkillSettings from './skill-settings';
 import SkillList from './skill-list';
 
 const Skills: React.FC<RouteComponentProps> = () => {
-  const { state } = useContext(StoreContext);
+  const { state, actions } = useContext(StoreContext);
 
   const { skills, projectId } = state;
   const toolbarItems = [
@@ -36,6 +36,10 @@ const Skills: React.FC<RouteComponentProps> = () => {
       </div>
       <div css={ContentStyle}></div>
       <SkillSettings
+        projectId={state.projectId}
+        botName={state.botName}
+        settings={state.settings}
+        setSettings={actions.setSettings}
         botId={state.settings.MicrosoftAppId}
         skillHostEndpoint={state.settings.skillHostEndpoint}
         onChange={() => {}}
