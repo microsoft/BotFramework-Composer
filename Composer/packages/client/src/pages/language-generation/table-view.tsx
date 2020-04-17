@@ -152,7 +152,11 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         data: 'string',
         onRender: item => {
-          return <div css={formCell}>#{item.name}</div>;
+          return (
+            <div data-is-focusable={true} css={formCell}>
+              #{item.name}
+            </div>
+          );
         },
       },
       {
@@ -164,7 +168,11 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         isPadded: true,
         onRender: item => {
-          return <div css={formCell}>{item.body}</div>;
+          return (
+            <div data-is-focusable={true} css={formCell}>
+              {item.body}
+            </div>
+          );
         },
       },
       {
@@ -205,7 +213,7 @@ const TableView: React.FC<TableViewProps> = props => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
             <IconButton iconProps={{ iconName: 'Accept' }} ariaLabel={formatMessage('Used') + ';'} />
           ) : (
-            <div aria-label={formatMessage('Unused') + ';'} />
+            <div data-is-focusable={true} aria-label={formatMessage('Unused') + ';'} />
           );
         },
       };
