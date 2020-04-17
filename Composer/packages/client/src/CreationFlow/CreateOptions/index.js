@@ -20,7 +20,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 
-import { detailListContainer, listHeader, rowDetails, rowTitle, optionRoot, optionIcon } from './styles';
+import { detailListContainer, listHeader, rowDetails, rowTitle, optionRoot, optionIcon, tableCell } from './styles';
 
 const optionKeys = {
   createFromScratch: 'createFromScratch',
@@ -79,7 +79,11 @@ export function CreateOptions(props) {
       isResizable: !disabled,
       data: 'string',
       styles: rowTitle(disabled),
-      onRender: item => item.name,
+      onRender: item => (
+        <div css={tableCell} data-is-focusable={true}>
+          {item.name}
+        </div>
+      ),
     },
     {
       key: 'description',
@@ -90,7 +94,11 @@ export function CreateOptions(props) {
       isResizable: !disabled,
       data: 'string',
       styles: rowTitle(disabled),
-      onRender: item => item.description,
+      onRender: item => (
+        <div css={tableCell} data-is-focusable={true}>
+          {item.description}
+        </div>
+      ),
     },
   ];
 
@@ -111,6 +119,7 @@ export function CreateOptions(props) {
     }
     return null;
   };
+
   return (
     <Fragment>
       <ChoiceGroup
