@@ -606,7 +606,7 @@ export class LGServer {
           if (!propsList?.includes(u)) {
             const item = {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
-              kind: CompletionItemKind.Keyword,
+              kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
               documentation: `Suggested propertiy ${u} in ${cardType}`,
             };
@@ -618,7 +618,7 @@ export class LGServer {
           if (!propsList?.includes(u)) {
             const item = {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
-              kind: CompletionItemKind.Keyword,
+              kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
               documentation: `Suggested propertiy ${u} in ${cardType}`,
             };
@@ -630,7 +630,7 @@ export class LGServer {
           if (!propsList?.includes(u)) {
             const item = {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
-              kind: CompletionItemKind.Keyword,
+              kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
               documentation: `Suggested propertiy ${u} in ${cardType}`,
             };
