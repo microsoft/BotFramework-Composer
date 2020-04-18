@@ -5,6 +5,7 @@ import * as fs from 'fs';
 
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
+import { PluginLoader } from '@bfc/plugin-loader';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -12,7 +13,6 @@ import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
 import settings from '../settings';
-import { PluginLoader } from '../services/pluginLoader';
 
 import { Path } from './../utility/path';
 

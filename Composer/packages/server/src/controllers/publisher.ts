@@ -4,8 +4,8 @@
 import path from 'path';
 
 import merge from 'lodash/merge';
+import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
 
-import { pluginLoader, PluginLoader } from '../services/pluginLoader';
 import { BotProjectService } from '../services/project';
 import { runtimeFolder } from '../settings/env';
 

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { UserIdentity } from '../../services/pluginLoader';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import { FileSettingManager } from './fileSettingManager';
 
