@@ -37,7 +37,7 @@ class LocalPublisher {
   private readonly baseDir = path.resolve(__dirname, '../');
   private templatePath;
 
-  constructor() { }
+  constructor() {}
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, metadata, user) => {
     const { templatePath, settings } = config;
@@ -77,6 +77,7 @@ class LocalPublisher {
       };
     }
   };
+
   history = async (config: PublishConfig, project, user) => {
     const botId = project.id;
     const result = [];

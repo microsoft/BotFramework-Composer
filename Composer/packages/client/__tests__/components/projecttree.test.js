@@ -12,7 +12,7 @@ describe('<ProjectTree/>', () => {
   it('should render the projecttree', async () => {
     const { findByText } = renderWithStore(<ProjectTree dialogs={dialogs} />);
 
-    await findByText('ToDoBot.Main');
+    await findByText('ToDoBot');
   });
 
   it('should handle project tree item click', async () => {
