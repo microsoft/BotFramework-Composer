@@ -75,6 +75,9 @@ Object {
         "*",
       ],
     },
+    "Microsoft.BreakLoop": Object {
+      "label": [Function],
+    },
     "Microsoft.CancelAllDialogs": Object {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
       "label": [Function],
@@ -90,6 +93,9 @@ Object {
     },
     "Microsoft.ConfirmInput": Object {
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": [Function],
+    },
+    "Microsoft.ContinueLoop": Object {
       "label": [Function],
     },
     "Microsoft.DateTimeInput": Object {

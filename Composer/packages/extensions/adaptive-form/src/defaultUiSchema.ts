@@ -100,6 +100,12 @@ const DefaultUISchema: UISchema = {
     hidden: ['actions'],
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
   },
+  [SDKKinds.ContinueLoop]: {
+    label: () => formatMessage('Continue loop'),
+  },
+  [SDKKinds.BreakLoop]: {
+    label: () => formatMessage('Break out of loop'),
+  },
   [SDKKinds.HttpRequest]: {
     label: () => formatMessage('HTTP Request'),
     order: ['method', 'url', 'body', 'headers', '*'],

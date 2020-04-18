@@ -16,7 +16,7 @@ In this tutorial, you learn how to:
 
 ## Update recognizer
 
-1. Click on `WeatherBot.Main` in the left dialog navigation panel, go to the properties panel for this dialog and locate the **Recognizer Type** option and set it to `LUIS`
+1. Click on `WeatherBot` in the left dialog navigation panel, go to the properties panel for this dialog and locate the **Recognizer Type** option and set it to `LUIS`
 
    ![](../media/tutorial-weatherbot/07/luis-recognizer.png)
 
@@ -117,7 +117,7 @@ As an example, the user could say "How is the weather in 98052?" and instead of 
 
 Let's get this wired up.
 
-10. Step one is to add a regex entity extractor to the LUIS app. To do this, click on `WeatherBot.Main` and on the right side, add the following entity definition at the end of the LU content -
+10. Step one is to add a regex entity extractor to the LUIS app. To do this, click on `WeatherBot` and on the right side, add the following entity definition at the end of the LU content -
 
     ```
     > regex zipcode entity. Any time LUIS sees a five digit number, it will flag it as 'zipcode' entity.

@@ -144,6 +144,14 @@ export class BotProject {
     return skills;
   };
 
+  public exportToZip = cb => {
+    try {
+      this.fileStorage.zip(this.dataDir, cb);
+    } catch (e) {
+      console.log('error zipping assets', e);
+    }
+  };
+
   public getSchemas = () => {
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
