@@ -153,6 +153,20 @@ export const cardTypes = [
   'Activity',
 ];
 
+export const cardPropPossibleValueType = {
+  title: 'An Example Card',
+  type: 'Action Type',
+  value: 'Some Value',
+  SuggestionActions: 'Text | ${Some_CardAction}',
+  subtitle: 'An Example Subtitle',
+  text: 'Some text',
+  image: 'https://example.com/demo.jpg',
+  buttons: 'Text | ${Some_CardAction}',
+  contenttype: 'adaptivecard',
+  content: '${json(fromFile("../../card.json"))}',
+  name: 'An Example Name',
+};
+
 export const cardPropDict = {
   CardAction: ['title', 'type', 'value'],
   Suggestions: ['SuggestionActions'],
