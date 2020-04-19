@@ -161,7 +161,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         actions.getPublishHistory(projectId, _selected);
       }
     }
-  }, [settings.publishTargets, selectedTargetName]);
+  }, [selectedTargetName]);
 
   // once history is loaded, display it
   useEffect(() => {
@@ -265,7 +265,7 @@ const Publish: React.FC<PublishPageProps> = props => {
       children: (
         <CreatePublishTarget
           targetTypes={publishTypes.map(type => {
-            return { key: type.name, text: type.name };
+            return { key: type.name, text: type.name, configuration: type.configuration };
           })}
           targets={settings.publishTargets}
           updateSettings={savePublishTarget}
@@ -283,7 +283,7 @@ const Publish: React.FC<PublishPageProps> = props => {
       children: (
         <CreatePublishTarget
           targetTypes={publishTypes.map(type => {
-            return { key: type.name, text: type.name };
+            return { key: type.name, text: type.name, configuration: type.configuration };
           })}
           current={editTarget ? editTarget.item : null}
           targets={settings.publishTargets?.filter(item => editTarget && item.name != editTarget.item.name)}

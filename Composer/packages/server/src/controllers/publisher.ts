@@ -30,6 +30,7 @@ export const PublishController = {
               status: pluginLoader.extensions.publish[i].methods.getStatus ? true : false,
               rollback: pluginLoader.extensions.publish[i].methods.rollback ? true : false,
             },
+            configuration: pluginLoader.extensions.publish[i].methods.configuration || {},
           };
         })
     );

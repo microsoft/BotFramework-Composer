@@ -121,6 +121,10 @@ class LocalPublisher {
       };
     }
   };
+
+  configuration = {
+    clientId: '<please input client id>',
+  };
 }
 
 const publisher = new LocalPublisher();

@@ -55,6 +55,7 @@ export interface PublishType {
     rollback: boolean;
     status: boolean;
   };
+  configuration: any;
 }
 
 export interface PublishTarget {

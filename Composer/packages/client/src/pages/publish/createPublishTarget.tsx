@@ -21,6 +21,9 @@ export const CreatePublishTarget = props => {
 
   const updateType = (e, type) => {
     setTargetType(type.key);
+    // update configuration
+    const current = props.targetTypes.find(item => item.key);
+    current.configuration ? setConfig(current.configuration) : setConfig({});
   };
   const updateConfig = newConfig => {
     setConfig(newConfig);
@@ -77,7 +80,7 @@ export const CreatePublishTarget = props => {
           onChange={updateType}
         />
         <div css={label}>{formatMessage('Paste Configuration')}</div>
-        <JsonEditor onChange={updateConfig} height={200} value={config} />
+        <JsonEditor key={targetType} onChange={updateConfig} height={200} value={config} />
       </form>
       <DialogFooter>
         <DefaultButton onClick={props.closeDialog} text={formatMessage('Cancel')} />
