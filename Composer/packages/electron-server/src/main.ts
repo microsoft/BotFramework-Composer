@@ -8,7 +8,7 @@ import { app } from 'electron';
 import fixPath from 'fix-path';
 
 import { isDevelopment } from './utility/env';
-import { isWindows, isMac } from './utility/platform';
+import { isWindows } from './utility/platform';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 import ElectronWindow from './electronWindow';
 import log from './utility/logger';
