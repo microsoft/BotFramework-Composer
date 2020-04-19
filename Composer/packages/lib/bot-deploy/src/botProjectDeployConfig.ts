@@ -5,8 +5,11 @@ export interface BotProjectDeployConfig {
   // Subscription Id of Auzre Account
   subId: string;
 
-  // The credentials from user login
-  creds: any;
+  // The token for user login
+  accessToken: string;
+
+  // The token for aad-graph
+  graphToken: string;
 
   // The project path to deploy
   projPath: string;
@@ -40,4 +43,6 @@ export interface BotProjectDeployConfig {
 
   // Remote bot json dialog path, default is 'ComposerDialogs'
   remoteBotPath?: string;
+
+  [key: string]: any;
 }

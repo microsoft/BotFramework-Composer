@@ -6,22 +6,22 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 
 import archiver from 'archiver';
-import { BotProjectDeploy, BotProjectDeployConfig } from '@bfc/libs/bot-deploy';
+import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
 import { v4 as uuid } from 'uuid';
 import glob from 'globby';
 import { copy, emptyDir, readJson, pathExists, writeJson, stat } from 'fs-extra';
-import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
+import { interactiveLogin } from '@azure/ms-rest-nodeauth';
 
 interface CreateAndDeployResources {
   name: string;
   location: string;
   environment: string;
   subscriptionID: string;
-  // token: string;
   luisAuthoringKey?: string;
   luisAuthoringRegion?: string;
   appPassword: string;
-  username: string;
+  accessToken: string;
+  graphToken: string;
 }
 
 interface PublishConfig {
@@ -99,12 +99,12 @@ class AzurePublisher {
     }
     return;
   };
-  private getLoadingStatus = async (botId: string, profileName: string) => {
+  private getLoadingStatus = async (botId: string, profileName: string, jobId: string) => {
     if (this.publishingBots[botId] && this.publishingBots[botId][profileName]) {
       // get current status
-      console.log(this.publishingBots[botId][profileName]);
       if (this.publishingBots[botId][profileName].length > 0) {
-        return this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1];
+        return this.publishingBots[botId][profileName].find(item => item.result.jobId === jobId);
+        // return this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1];
       } else {
         return (
           (await this.getHistory(botId, profileName)[0]) || {
@@ -136,18 +136,12 @@ class AzurePublisher {
     luisAuthoringRegion?: string
   ) => {
     try {
-      await this.azDeployer.createAndDeploy(
-        name,
-        location,
-        environment,
-        appPassword,
-        luisAuthoringKey,
-        luisAuthoringRegion
-      );
+      await this.azDeployer.create(name, location, environment, appPassword, luisAuthoringKey);
+      await this.azDeployer.deploy(name, environment);
       // update status and history
       const status = this.removeLoadingStatus(botId, profileName, jobId);
+
       if (status) {
-        console.log(status);
         status.status = 200;
         status.result.message = 'Success';
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
@@ -159,55 +153,54 @@ class AzurePublisher {
       if (status) {
         status.status = 500;
         status.result.message = error ? error.message : 'publish error';
-        console.log(status);
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
       }
     }
   };
   publish = async (config: PublishConfig, project, metadata, user) => {
     const { settings, templatePath, name, customizeConfiguration } = config;
-    const { subscriptionID, environment, location, appPassword, username } = customizeConfiguration;
+    const {
+      subscriptionID,
+      environment,
+      location,
+      appPassword,
+      accessToken,
+      graphToken,
+      luisAuthoringKey,
+      luisAuthoringRegion,
+    } = customizeConfiguration;
     const srcBot = project.dataDir || '';
     this.templatePath = templatePath;
     const botId = project.id;
+    const publishName = customizeConfiguration.name;
     const jobId = uuid();
     try {
       // test creds, if not valid, return 500
-      if (!username) {
-        const res = {
-          status: 500,
-          id: jobId,
-          time: new Date(),
-          message: 'Publish Fail',
-          log: 'please input username to login azure cloud',
-          comment: metadata.comment,
-        };
-        // save in history
-        await this.updateHistory(botId, name, res);
+      if (!accessToken || !graphToken) {
+        throw new Error('please input token to login azure cloud');
       }
-      // create deploy instance
-      if (!this.azDeployer) {
-        const creds = new DeviceTokenCredentials('', '', username);
-        // console.log(creds);
-        this.azDeployer = new BotProjectDeploy({
-          subId: subscriptionID,
-          logger: (msg: any) => console.log(msg),
-          creds: creds,
-          projPath: this.projFolder,
-        });
-      }
+      // in order to update creds and subId
+      this.azDeployer = new BotProjectDeploy({
+        subId: subscriptionID,
+        logger: (msg: any) => {
+          console.log(msg);
+        },
+        accessToken: accessToken,
+        graphToken: graphToken,
+        projPath: this.projFolder,
+      });
       await this.init(srcBot, templatePath);
-      console.log('before create');
+
       this.createAndDeploy(
         botId,
         name,
         jobId,
-        customizeConfiguration.name,
+        publishName,
         location,
         environment,
         appPassword,
-        customizeConfiguration.luisAuthoringKey,
-        customizeConfiguration.luisAuthoringRegion
+        luisAuthoringKey,
+        luisAuthoringRegion
       );
 
       const response = {
@@ -224,7 +217,7 @@ class AzurePublisher {
       return response;
     } catch (err) {
       console.log(err);
-      return {
+      const res = {
         status: 500,
         result: {
           id: jobId,
@@ -234,6 +227,8 @@ class AzurePublisher {
           comment: metadata.comment,
         },
       };
+      this.updateHistory(botId, name, { status: res.status, ...res.result });
+      return res;
     }
   };
 
