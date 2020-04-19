@@ -57,6 +57,8 @@ const FormRow: React.FC<FormRowProps> = props => {
     onChange,
   } = props;
 
+  const { required = [] } = schema;
+
   if (Array.isArray(row)) {
     return (
       <div css={formRow.row}>
@@ -71,6 +73,7 @@ const FormRow: React.FC<FormRowProps> = props => {
             label={label === false ? false : undefined}
             name={property}
             rawErrors={rawErrors?.[property]}
+            required={required.includes(property)}
             schema={resolvePropSchema(schema, property, definitions) || {}}
             transparentBorder={transparentBorder}
             uiOptions={(uiOptions.properties?.[property] as UIOptions) ?? {}}
@@ -97,6 +100,7 @@ const FormRow: React.FC<FormRowProps> = props => {
         label={label === false ? false : undefined}
         name={row}
         rawErrors={rawErrors?.[row]}
+        required={required.includes(row)}
         schema={propSchema}
         transparentBorder={transparentBorder}
         uiOptions={(uiOptions.properties?.[row] as UIOptions) ?? {}}
