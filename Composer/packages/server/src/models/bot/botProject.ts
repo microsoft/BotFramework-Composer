@@ -80,8 +80,13 @@ export class BotProject {
   }
 
   public init = async () => {
+    // those 2 migrate methods shall be removed after a period of time
     await this._reformProjectStructure();
-    await this._replaceDashInTemplateName();
+    try {
+      await this._replaceDashInTemplateName();
+    } catch (_e) {
+      // when re-index opened bot, file write may error
+    }
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
     this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
