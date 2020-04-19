@@ -16,14 +16,14 @@
     "copy-plugins": "node scripts/copy-plugins.js",
     "copy-templates": "node scripts/copy-templates.js",
     "dist": "node scripts/electronBuilderDist.js",
-    "dist:full": "cross-env PLATFORM_OVERRIDE=win32 yarn clean && yarn build && yarn copy-templates && yarn run pack && yarn copy-plugins && yarn dist",
+    "dist:full": "yarn clean && yarn build && yarn copy-templates && yarn run pack && yarn copy-plugins && yarn dist",
     "pack": "node scripts/electronBuilderPack.js",
     "start": "cross-env NODE_ENV=development electron .",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
     "start:electron": "./node_modules/.bin/electron --inspect=7777 --remote-debugging-port=7778 .",
-    "start:electron:dev": "cross-env NODE_ENV=development ELECTRON_TARGET_URL=http://localhost:5000/ npm run start:electron"
+    "start:electron:dev": "cross-env NODE_ENV=development ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron"
   },
   "devDependencies": {
     "@types/archiver": "^3.0.0",
