@@ -29,6 +29,7 @@
   "devDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension": "*",
+    "@bfc/test-utils": "*",
     "@emotion/core": "^10.0.27",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
