@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { parseDeepLinkUrl } from './url';
+import { parseDeepLinkUrl } from '../../src/utility/url';
 
 describe('Parse URL', () => {
   it('should parse the url to navigate', () => {
