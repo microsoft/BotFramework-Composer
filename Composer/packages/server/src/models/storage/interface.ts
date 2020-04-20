@@ -31,4 +31,5 @@ export interface IFileStorage {
   glob(pattern: string | string[], path: string): Promise<string[]>;
   copyFile(src: string, dest: string): Promise<void>;
   rename(oldPath: string, newPath: string): Promise<void>;
+  zip(source: string, cb: any): unknown;
 }
