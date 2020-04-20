@@ -2,3 +2,4 @@
 // Licensed under the MIT License.
 export * from './useDebounce';
 export * from './useShellApi';
+export * from './getDialogApi';

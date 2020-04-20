@@ -7,14 +7,14 @@ export type ExternalResourceHandler<CopiedType> = (
   actionId: string,
   actionData: any,
   resourceFieldName: string,
-  resourceValue?: CopiedType
+  resourceValue: CopiedType
 ) => CopiedType;
 
 export type ExternalResourceHandlerAsync<CopiedType> = (
   actionId: string,
   actionData: any,
   resourceFieldName: string,
-  resourceValue?: CopiedType
+  resourceValue: CopiedType
 ) => Promise<CopiedType>;
 
 export interface ExternalApi {
