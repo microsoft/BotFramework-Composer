@@ -9,9 +9,8 @@ context('LU Page', () => {
 
   it('can open language understanding page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
-    cy.wait(1000);
     // left nav tree
-    cy.contains('__TestToDoBotWithLuisSample.Main');
+    cy.contains('__TestToDoBotWithLuisSample');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').should('not.exist');
@@ -23,7 +22,7 @@ context('LU Page', () => {
 
     // nav to ToDoBotWithLuisSample.main dialog
     cy.findByTestId('LUEditor').within(() => {
-      cy.findByText('__TestToDoBotWithLuisSample.Main').click();
+      cy.findByText('__TestToDoBotWithLuisSample').click();
     });
     cy.get('.toggleEditMode button').as('switchButton');
     // goto edit-mode

@@ -3,7 +3,7 @@
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
 import React from 'react';
 
-import { UIOptions } from './uiSchema';
+import { UIOptions } from './formSchema';
 
 declare module 'json-schema' {
   interface JSONSchema7 {
@@ -44,6 +44,7 @@ export interface FieldProps<T = any> {
   rawErrors?: FormErrors | string | string[] | FormErrors[];
   readonly?: boolean;
   schema: JSONSchema7;
+  required?: boolean;
   transparentBorder?: boolean;
   uiOptions: UIOptions;
   value?: T;

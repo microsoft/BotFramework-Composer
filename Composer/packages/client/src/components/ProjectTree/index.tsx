@@ -17,6 +17,7 @@ import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
+import { Resizable, ResizeCallback } from 're-resizable';
 
 import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';
@@ -96,7 +97,10 @@ const addIconProps: IIconProps = {
 
 export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const {
-    actions: { onboardingAddCoachMarkRef },
+    actions: { onboardingAddCoachMarkRef, updateUserSettings },
+    state: {
+      userSettings: { dialogNavWidth: currentWidth },
+    },
   } = useContext(StoreContext);
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, openNewTriggerModal, onSelect, onDeleteTrigger, onDeleteDialog, onAdd } = props;
@@ -116,7 +120,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
       onSelect(props.group!.key);
     };
     return (
-      <span ref={props.group && props.group.data.isRoot && addMainDialogRef}>
+      <span role="grid" ref={props.group && props.group.data.isRoot && addMainDialogRef}>
         <TreeItem
           link={props.group!.data}
           depth={0}
@@ -155,38 +159,47 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
     }
   };
 
+  const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
+    updateUserSettings({ dialogNavWidth: currentWidth + d.width });
+  };
+
   return (
-    <div className="ProjectTree" css={root} data-testid="ProjectTree">
-      <SearchBox
-        placeholder={formatMessage('Filter Dialogs')}
-        styles={searchBox}
-        onChange={onFilter}
-        iconProps={{ iconName: 'Filter' }}
-      />
-      <GroupedList
-        {...createGroup(sortedDialogs, dialogId, filter)}
-        onRenderCell={onRenderCell}
-        componentRef={groupRef}
-        groupProps={
-          {
-            onRenderHeader: onRenderHeader,
-            onRenderShowAll: onRenderShowAll,
-            showEmptyGroups: true,
-            showAllProps: false,
-            isAllGroupsCollapsed: true,
-          } as Partial<IGroupRenderProps>
-        }
-        styles={groupListStyle}
-      />
-      <ActionButton
-        tabIndex={1}
-        iconProps={addIconProps}
-        css={addButton(0)}
-        onClick={onAdd}
-        data-testid="ProjectTreeNewDialog"
-      >
-        {formatMessage('New Dialog ..')}
-      </ActionButton>
-    </div>
+    <Resizable
+      size={{ width: currentWidth, height: 'auto' }}
+      minWidth={180}
+      maxWidth={500}
+      enable={{
+        right: true,
+      }}
+      onResizeStop={handleResize}
+    >
+      <div className="ProjectTree" css={root} data-testid="ProjectTree">
+        <SearchBox
+          ariaLabel={formatMessage('Type dialog name')}
+          placeholder={formatMessage('Filter Dialog')}
+          styles={searchBox}
+          onChange={onFilter}
+          iconProps={{ iconName: 'Filter' }}
+        />
+        <GroupedList
+          {...createGroup(sortedDialogs, dialogId, filter)}
+          onRenderCell={onRenderCell}
+          componentRef={groupRef}
+          groupProps={
+            {
+              onRenderHeader: onRenderHeader,
+              onRenderShowAll: onRenderShowAll,
+              showEmptyGroups: true,
+              showAllProps: false,
+              isAllGroupsCollapsed: true,
+            } as Partial<IGroupRenderProps>
+          }
+          styles={groupListStyle}
+        />
+        <ActionButton iconProps={addIconProps} css={addButton(0)} onClick={onAdd} data-testid="ProjectTreeNewDialog">
+          {formatMessage('New Dialog ..')}
+        </ActionButton>
+      </div>
+    </Resizable>
   );
 };

@@ -21,6 +21,7 @@ interface IconMenuProps {
   label?: string;
   menuItems: any[];
   menuWidth?: number;
+  handleMenuShow?: (menuShowed: boolean) => void;
 }
 
 export const IconMenu: React.FC<IconMenuProps> = ({
@@ -31,6 +32,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
   label,
   menuItems,
   menuWidth,
+  handleMenuShow,
   ...rest
 }): JSX.Element => {
   const _onRenderItem = (item): React.ReactNode => {
@@ -78,6 +80,12 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       },
     };
 
+    const onMenuClick = () => {
+      handleMenuShow && handleMenuShow(true);
+    };
+    const onAfterMenuDismiss = () => {
+      handleMenuShow && handleMenuShow(false);
+    };
     return (
       <IconButton
         // @ts-ignore
@@ -86,6 +94,8 @@ export const IconMenu: React.FC<IconMenuProps> = ({
         styles={buttonStyles}
         menuIconProps={{ iconName, style: { fontSize: iconSize, fontWeight: 'bold', color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
+        onMenuClick={onMenuClick}
+        onAfterMenuDismiss={onAfterMenuDismiss}
         ariaLabel={label}
         {...rest}
       />
@@ -96,6 +106,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     <OverflowSet
       // @ts-ignore
       styles={{ position: 'absolute', top: 0 }}
+      aria-label="icon menu"
       vertical
       overflowItems={menuItems}
       onRenderOverflowButton={_onRenderOverflowButton}

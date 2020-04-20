@@ -5,11 +5,12 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { FieldProps } from '@bfc/extension';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
 const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
-  const { onChange, value, label, id, schema, uiOptions } = props;
+  const { onChange, value, label, id, schema, required, uiOptions } = props;
   const { description } = schema;
 
   const options: IDropdownOption[] = [
@@ -38,7 +39,14 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
 
   return (
     <React.Fragment>
-      <FieldLabel inline description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel
+        inline
+        description={description}
+        id={id}
+        label={label}
+        helpLink={uiOptions?.helpLink}
+        required={required}
+      />
       <Dropdown
         id={id}
         options={options}
@@ -47,9 +55,9 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
         onChange={handleChange}
         styles={{
           root: { width: '100%' },
-          label: { fontSize: '10px', fontWeight: '400' },
           errorMessage: { display: 'none' },
         }}
+        ariaLabel={label || formatMessage('boolean field')}
       />
     </React.Fragment>
   );

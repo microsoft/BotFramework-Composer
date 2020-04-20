@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useShellApi, PluginConfig, FormErrors, JSONSchema7 } from '@bfc/extension';
+import { useShellApi, FormErrors, JSONSchema7 } from '@bfc/extension';
 import ErrorBoundary from 'react-error-boundary';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
@@ -17,12 +17,11 @@ export interface AdaptiveFormProps {
   schema?: JSONSchema7;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData?: any;
-  plugins: PluginConfig[];
 }
 
 export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(props) {
-  const { shellApi, focusedSteps, currentDialog, focusPath } = useShellApi();
-  const { formData, schema, plugins } = props;
+  const { shellApi, focusedSteps, currentDialog, focusPath, plugins } = useShellApi();
+  const { formData, schema } = props;
   const [localData, setLocalData] = useState(formData);
 
   const syncData = useRef(
@@ -53,7 +52,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   }, []);
 
   const $uiSchema = useMemo(() => {
-    return getUISchema($schema, pluginConfig.uiSchema);
+    return getUISchema($schema, pluginConfig.formSchema);
   }, [$schema, pluginConfig]);
 
   const errors = useMemo(() => {
@@ -88,7 +87,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   }, [currentDialog, focusPath, localData]);
 
   if (!localData) {
-    return <>No Data</>;
+    return null;
   }
 
   if (!$schema) {
@@ -105,29 +104,27 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   };
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorInfo} key={focusPath}>
-      <div key={localData?.$designer?.id}>
-        <PluginContext.Provider value={pluginConfig}>
-          <FormTitle
-            formData={localData}
-            id={localData.$designer?.id || 'unknown'}
-            schema={$schema}
-            onChange={$designer => handleDataChange({ ...localData, $designer })}
-            uiOptions={$uiSchema}
-          />
-          <SchemaField
-            definitions={schema?.definitions}
-            depth={-1}
-            id="root"
-            name="root"
-            rawErrors={errors}
-            schema={$schema}
-            uiOptions={$uiSchema}
-            value={localData}
-            onChange={handleDataChange}
-          />
-        </PluginContext.Provider>
-      </div>
+    <ErrorBoundary FallbackComponent={ErrorInfo}>
+      <PluginContext.Provider value={pluginConfig}>
+        <FormTitle
+          formData={localData}
+          id={localData.$designer?.id || 'unknown'}
+          schema={$schema}
+          onChange={$designer => handleDataChange({ ...localData, $designer })}
+          uiOptions={$uiSchema}
+        />
+        <SchemaField
+          definitions={schema?.definitions}
+          depth={-1}
+          id="root"
+          name="root"
+          rawErrors={errors}
+          schema={$schema}
+          uiOptions={$uiSchema}
+          value={localData}
+          onChange={handleDataChange}
+        />
+      </PluginContext.Provider>
     </ErrorBoundary>
   );
 };

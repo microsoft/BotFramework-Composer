@@ -24,11 +24,13 @@ export enum SDKKinds {
   AgeEntityRecognizer = 'Microsoft.AgeEntityRecognizer',
   AttachmentInput = 'Microsoft.AttachmentInput',
   BeginDialog = 'Microsoft.BeginDialog',
+  BreakLoop = 'Microsoft.BreakLoop',
   CancelAllDialogs = 'Microsoft.CancelAllDialogs',
   ChoiceInput = 'Microsoft.ChoiceInput',
   ConditionalSelector = 'Microsoft.ConditionalSelector',
   ConfirmInput = 'Microsoft.ConfirmInput',
   ConfirmationEntityRecognizer = 'Microsoft.ConfirmationEntityRecognizer',
+  ContinueLoop = 'Microsoft.ContinueLoop',
   CurrencyEntityRecognizer = 'Microsoft.CurrencyEntityRecognizer',
   DateTimeEntityRecognizer = 'Microsoft.DateTimeEntityRecognizer',
   DateTimeInput = 'Microsoft.DateTimeInput',
@@ -105,7 +107,7 @@ export enum SDKKinds {
   /** Kinds */
 
   IActivityTemplate = 'Microsoft.IActivityTemplate',
-  Recognizer = 'Microsoft.Recognizer',
+  IRecognizer = 'Microsoft.IRecognizer',
   ILanguageGenerator = 'Microsoft.ILanguageGenerator',
   ITriggerSelector = 'Microsoft.ITriggerSelector',
   IDialog = 'Microsoft.IDialog',

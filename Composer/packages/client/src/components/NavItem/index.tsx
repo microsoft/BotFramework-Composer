@@ -2,15 +2,15 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { useCallback, useContext } from 'react';
 import { Link } from '@reach/router';
-import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { StoreContext } from '../../store';
 import { useLocation } from '../../utils/hooks';
 
-import { link, outer, commandBarButton } from './styles';
+import { link, icon } from './styles';
 
 /**
  * @param to The string URI to link to. Supports relative and absolute URIs.
@@ -40,26 +40,43 @@ export const NavItem: React.FC<INavItemProps> = props => {
 
   const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
+  const activeArea = (
+    <div
+      css={link(active, disabled)}
+      aria-hidden="true"
+      tabIndex={-1}
+      aria-disabled={disabled}
+      data-testid={active ? 'ActiveLeftNavItem' : undefined}
+    >
+      <Icon iconName={iconName} styles={icon(active, disabled)} />
+      {labelName}
+    </div>
+  );
+
+  if (disabled) {
+    // make it so we can't even click them by accident and lead to the error page
+    return activeArea;
+  }
+
   return (
     <Link
-      to={to}
-      css={link(active, disabled)}
       data-testid={'LeftNav-CommandBarButton' + labelName}
+      to={to}
       aria-disabled={disabled}
-      aria-label={labelName}
+      aria-label={labelName + (active ? '; selected' : '')}
       ref={addRef}
+      css={css`
+        display: block;
+
+        :link {
+          text-decoration: none;
+        }
+        :visited {
+          text-decoration: none;
+        }
+      `}
     >
-      <div css={outer} aria-hidden="true" tabIndex={-1}>
-        <CommandBarButton
-          iconProps={{
-            iconName,
-          }}
-          text={labelName}
-          styles={commandBarButton(active)}
-          disabled={disabled}
-          ariaHidden
-        />
-      </div>
+      {activeArea}
     </Link>
   );
 };

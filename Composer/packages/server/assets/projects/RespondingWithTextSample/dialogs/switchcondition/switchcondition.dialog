@@ -20,7 +20,7 @@
             "id": "958316",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-958316()}"
+          "activity": "${SendActivity_958316()}"
         }
       ]
     }

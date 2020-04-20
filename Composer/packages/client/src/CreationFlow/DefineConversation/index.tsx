@@ -14,7 +14,6 @@ import get from 'lodash/get';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { styles as wizardStyles } from '../StepWizard/styles';
 import { StoreContext } from '../../store';
-import { StorageFolder } from '../../store/types';
 
 import { name, description } from './styles';
 const MAXTRYTIMES = 10000;
@@ -35,15 +34,14 @@ interface DefineConversationProps {
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
-  focusedStorageFolder: StorageFolder;
 }
 
 const initialFormDataError: FormDataError = {};
 
 export const DefineConversation: React.FC<DefineConversationProps> = props => {
-  const { onSubmit, onDismiss, onCurrentPathUpdate, focusedStorageFolder } = props;
+  const { onSubmit, onDismiss, onCurrentPathUpdate } = props;
   const { state } = useContext(StoreContext);
-  const { templateId } = state;
+  const { templateId, focusedStorageFolder } = state;
   const files = get(focusedStorageFolder, 'children', []);
   const getDefaultName = () => {
     let i = -1;
@@ -99,7 +97,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
   };
 
   useEffect(() => {
-    const currentPath = Path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
+    const currentPath = Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || '');
     updateForm('location')(null, currentPath);
   }, [focusedStorageFolder]);
 
@@ -139,6 +137,8 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
               onChange={updateForm('name')}
               errorMessage={formDataErrors.name}
               data-testid="NewDialogName"
+              required
+              autoFocus
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
@@ -152,11 +152,7 @@ export const DefineConversation: React.FC<DefineConversationProps> = props => {
             />
           </StackItem>
         </Stack>
-        <LocationSelectContent
-          operationMode={{ read: true, write: true }}
-          onCurrentPathUpdate={onCurrentPathUpdate}
-          focusedStorageFolder={focusedStorageFolder}
-        />
+        <LocationSelectContent operationMode={{ read: true, write: true }} onCurrentPathUpdate={onCurrentPathUpdate} />
 
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />

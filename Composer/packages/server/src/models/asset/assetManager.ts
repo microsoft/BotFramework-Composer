@@ -35,12 +35,12 @@ const templates: TemplateData = {
   },
   TodoSample: {
     name: 'Simple Todo',
-    description: 'A sample bot that allows you add, list, remove to do items.',
+    description: 'A sample bot that allows you to add, list, and remove to do items.',
     order: 3,
   },
   ToDoBotWithLuisSample: {
     name: 'Todo with LUIS',
-    description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
+    description: 'A sample bot that allows you to add, list, and remove to do items using Language Understanding',
     order: 4,
   },
   RespondingWithCardsSample: {
@@ -49,11 +49,12 @@ const templates: TemplateData = {
   },
   AskingQuestionsSample: {
     name: 'Asking Questions',
-    description: 'A sample bot that shows how to ask question and capture user input.',
+    description: 'A sample bot that shows how to ask questions and capture user input.',
   },
   InterruptionSample: {
     name: 'Interruptions',
-    description: 'An advance sample bot that shows how to handle context switching and interruption in a conversation.',
+    description:
+      'An advanced sample bot that shows how to handle context switching and interruption in a conversation.',
   },
   RespondingWithTextSample: {
     name: 'Responding with Text',
@@ -65,7 +66,7 @@ const templates: TemplateData = {
   },
   ActionsSample: {
     name: 'Dialog Actions',
-    description: 'A sample bot that shows how to use Dialog actions.',
+    description: 'A sample bot that shows how to use Dialog Actions.',
   },
   QnAMakerLUISSample: {
     name: 'QnA Maker and LUIS',
@@ -117,7 +118,8 @@ export class AssetManager {
         const templateData = templates[name];
         if (!templateData) continue;
         const absPath = Path.join(path, name);
-        if ((await this.templateStorage.stat(absPath)).isDir) {
+        const folder = await this.templateStorage.stat(absPath);
+        if (folder.isDir) {
           const base = { id: name, ...templateData };
           this.projectTemplates.push({ ...base, path: absPath });
           output.push(base);

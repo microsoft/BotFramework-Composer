@@ -58,7 +58,7 @@ const getDefaultEdgeOptions = (direction: EdgeDirection): EdgeOptions => {
   };
 
   return {
-    color: ObiColors.LightGray,
+    color: ObiColors.AzureGray2,
     labelOptions: {
       offset: defaultTextOffsets[direction],
       fontSize: 14,
@@ -126,14 +126,7 @@ export const drawSVGEdge = (
     const [p1, p2] = calculateArrowPoints(endPoint, direction);
     const points = [p1, endPoint, p2].map(p => `${p.x},${p.y}`).join(' ');
     const arrow = (
-      <polyline
-        key={`edge-${id}__arrow`}
-        name={id}
-        points={points}
-        {...strokeProps}
-        fill="none"
-        strokeDasharray="none"
-      />
+      <polyline key={`edge-${id}__arrow`} points={points} {...strokeProps} fill="none" strokeDasharray="none" />
     );
     elements.push(arrow);
   }

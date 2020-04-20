@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from 'react-testing-library';
-import { DialogWrapper } from '@src/components/DialogWrapper';
+import { render } from '@bfc/test-utils';
+
+import { DialogWrapper } from '../../../src/components/DialogWrapper';
 
 describe('<DialogWrapper />', () => {
   const props = {

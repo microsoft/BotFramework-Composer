@@ -202,6 +202,7 @@ function parse(id: string, content: any, schema: any) {
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
 
   return {
+    id,
     content,
     diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
@@ -225,12 +226,8 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
           const id = getBaseName(file.name, '.dialog');
           const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
           const dialog = {
-            id,
             isRoot,
-            displayName: isRoot ? `${botName}.Main` : id,
-            content: dialogJson,
-            relativePath: file.relativePath,
-            lastModified: file.lastModified,
+            displayName: isRoot ? `${botName}` : id,
             ...parse(id, dialogJson, schema),
           };
           dialogs.push(dialog);

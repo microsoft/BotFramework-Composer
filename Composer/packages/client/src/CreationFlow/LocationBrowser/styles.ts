@@ -5,7 +5,6 @@ import { css } from '@emotion/core';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { FontWeights } from '@uifabric/styling';
 import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
-
 export const textFieldlabel = {
   root: [
     {
@@ -42,7 +41,6 @@ export const backIcon = css`
 
 export const detailListContainer = css`
   position: relative;
-  padding-top: 20px;
   overflow: hidden;
   flex-grow: 1;
 `;

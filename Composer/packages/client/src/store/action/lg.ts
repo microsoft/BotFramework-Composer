@@ -1,52 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
-import debounce from 'lodash/debounce';
 
 import { ActionTypes } from '../../constants';
-import httpClient from '../../utils/httpUtil';
 import * as lgUtil from '../../utils/lgUtil';
 import { undoable } from '../middlewares/undo';
-import { ActionCreator, State } from '../types';
+import { ActionCreator, State, Store } from '../types';
 
-import { setError } from './error';
+export const updateLgFile: ActionCreator = async (store, { id, content }) => {
+  store.dispatch({
+    type: ActionTypes.UPDATE_LG,
+    payload: { id, content },
+  });
+};
 
-//remove editor's debounce and add it to action
-export const debouncedUpdateLg = debounce(async (store, id, projectId, content, lastModified) => {
-  try {
-    const response = await httpClient.put(`/projects/${projectId}/lgFiles/${id}`, {
-      id,
-      projectId,
-      content,
-      lastModified,
-    });
-    store.dispatch({
-      type: ActionTypes.UPDATE_TIMESTAMP,
-      payload: {
-        id: id,
-        type: 'lg',
-        lastModified: response.data.lastModified,
-      },
-    });
-  } catch (err) {
-    setError(store, {
-      status: err.response.status,
-      message: err.response && err.response.data.message ? err.response.data.message : err,
-      summary: 'UPDATE LG ERROR',
-    });
-  }
-}, 500);
+export const createLgFile: ActionCreator = (store, { id, content }) => {
+  store.dispatch({
+    type: ActionTypes.CREATE_LG,
+    payload: { id, content },
+  });
+};
 
-export const updateLgFile: ActionCreator = async (store, { id, projectId, content }) => {
-  const state = store.getState();
-  const file = state.lgFiles.find(l => l.id === id);
-  if (file) {
-    store.dispatch({
-      type: ActionTypes.UPDATE_LG_SUCCESS,
-      payload: { id, projectId, content, lastModified: file.lastModified },
-    });
-    debouncedUpdateLg(store, id, projectId, content, file.lastModified);
-  }
+export const removeLgFile: ActionCreator = async (store, id) => {
+  store.dispatch({
+    type: ActionTypes.REMOVE_LG,
+    payload: { id },
+  });
 };
 
 export const undoableUpdateLgFile = undoable(
@@ -55,46 +34,14 @@ export const undoableUpdateLgFile = undoable(
     if (isEmpty) {
       const id = args[0].id;
       const content = clonedeep(state.lgFiles.find(lgFile => lgFile.id === id)?.content);
-      return [{ id, content, projectId: state.projectId }];
+      return [{ id, content }];
     } else {
       return args;
     }
   },
-  updateLgFile,
-  updateLgFile
+  async (store: Store, from, to) => updateLgFile(store, ...to),
+  async (store: Store, from, to) => updateLgFile(store, ...to)
 );
-
-export const createLgFile: ActionCreator = async ({ dispatch }, { id, projectId, content }) => {
-  try {
-    const response = await httpClient.post(`/projects/${projectId}/lgFiles`, { id, content });
-    dispatch({
-      type: ActionTypes.CREATE_LG_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.CREATE_LG_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-};
-
-export const removeLgFile: ActionCreator = async ({ dispatch }, { id, projectId }) => {
-  try {
-    const response = await httpClient.delete(`/projects/${projectId}/lgFiles/${id}`);
-    dispatch({
-      type: ActionTypes.REMOVE_LG_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.REMOVE_LG_FAILURE,
-      payload: null,
-      error: err,
-    });
-  }
-};
 
 export const updateLgTemplate: ActionCreator = async (store, { file, projectId, templateName, template }) => {
   const newContent = lgUtil.updateTemplate(file.content, templateName, template);

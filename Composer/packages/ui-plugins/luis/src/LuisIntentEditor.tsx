@@ -1,22 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
-import { LuIntentSection } from '@bfc/shared';
+import { LuIntentSection, CodeEditorSettings, LuMetaData } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const { onChange, value, schema } = props;
-  const { currentDialog, designerId, luFiles, shellApi, locale, projectId } = useShellApi();
+  const { currentDialog, designerId, luFiles, shellApi, locale, projectId, userSettings } = useShellApi();
   const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
 
   let intentName = value;
   if (typeof intentName === 'object') {
     const { $kind }: any = schema?.properties || {};
     const [, promptType] = $kind.const.split('.');
-    promptType && (intentName = `${promptType}.response-${designerId}`);
+    promptType && (intentName = new LuMetaData(`${promptType}_Response`, designerId).toString());
   }
 
   const [luIntent, setLuIntent] = useState<LuIntentSection>(
@@ -42,6 +44,10 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
     onChange(intentName);
   };
 
+  const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
+    shellApi.updateUserSettings({ codeEditor: settings });
+  };
+
   const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
 
   return (
@@ -51,17 +57,8 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
       value={luIntent.Body}
       onChange={commitChanges}
       diagnostics={diagnostics}
-      options={{
-        lineNumbers: 'off',
-        minimap: {
-          enabled: false,
-        },
-        lineDecorationsWidth: 10,
-        lineNumbersMinChars: 0,
-        glyphMargin: false,
-        folding: false,
-        renderLineHighlight: 'none',
-      }}
+      editorSettings={userSettings.codeEditor}
+      onChangeSettings={handleSettingsChange}
     />
   );
 };

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useContext } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { createStepMenu, DialogGroup, SDKKinds } from '@bfc/shared';
@@ -16,12 +16,14 @@ import { SelectionContext } from '../../store/SelectionContext';
 import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
+import { ObiColors } from '../../constants/ElementColors';
 
 import { IconMenu } from './IconMenu';
 
 interface EdgeMenuProps {
   id: string;
   onClick: (item: string | null) => void;
+  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
 
 const buildEdgeMenuItemsFromClipboardContext = (
@@ -35,6 +37,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
       DialogGroup.RESPONSE,
       DialogGroup.INPUT,
       DialogGroup.BRANCHING,
+      DialogGroup.LOOPING,
       DialogGroup.STEP,
       DialogGroup.MEMORY,
       DialogGroup.CODE,
@@ -100,7 +103,7 @@ const buildEdgeMenuItemsFromClipboardContext = (
   return menuItems;
 };
 
-export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
+export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick, ...rest }) => {
   const nodeContext = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
@@ -113,17 +116,25 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
     };
   };
 
+  const [menuSelected, setMenuSelected] = useState<boolean>(false);
+  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef && addCoachMarkRef({ action }), []);
+  let boxShaow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
+  boxShaow += menuSelected ? `,0 0 0 2px ${ObiColors.AzureBlue}` : nodeSelected ? `, 0 0 0 2px ${ObiColors.Black}` : '';
+
+  const handleMenuShow = menuSelected => {
+    setMenuSelected(menuSelected);
+  };
   return (
     <div
+      ref={addRef}
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,
         borderRadius: '8px',
         backdropFilter: 'white',
-        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+        boxShadow: boxShaow,
         overflow: 'hidden',
         background: 'white',
-        outline: nodeSelected ? '1px solid #0078d4' : '',
       }}
       className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
@@ -152,6 +163,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
           selfHosted ? x => x !== SDKKinds.LogAction : undefined
         )}
         label={formatMessage('Add')}
+        handleMenuShow={handleMenuShow}
         {...rest}
       />
     </div>

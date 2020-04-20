@@ -7,7 +7,7 @@ import { SDKKinds } from '@bfc/shared';
 import { EventNameField } from './EventNameField';
 
 const config: PluginConfig = {
-  uiSchema: {
+  formSchema: {
     [SDKKinds.EmitEvent]: {
       properties: {
         eventName: {

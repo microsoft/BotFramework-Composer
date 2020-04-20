@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import React from 'react';
 import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { NeutralColors } from '@uifabric/fluent-theme';
@@ -16,7 +16,7 @@ interface DescriptionCalloutProps {
 }
 
 const DescriptionCallout: React.FC<DescriptionCalloutProps> = function DescriptionCallout(props) {
-  const { description, title, id, helpLink } = props;
+  const { description, title, helpLink } = props;
 
   if (!description) {
     return null;
@@ -26,16 +26,22 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
     <TooltipHost
       delay={TooltipDelay.zero}
       directionalHint={DirectionalHint.bottomAutoEdge}
-      id={`${id}-description`}
       styles={{ root: { display: 'inline-block' } }}
       tooltipProps={{
         styles: { root: { width: '288px', padding: '17px 28px' } },
         onRenderContent: () => (
           <div>
-            <h3 style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }}>{title}</h3>
+            <h3 style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }} aria-label={title + '.'}>
+              {title}
+            </h3>
             <p>{description}</p>
             {helpLink && (
-              <Link href={helpLink} target="_blank" rel="noopener noreferrer">
+              <Link
+                href={helpLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={formatMessage('Learn more about {title}', { title: title.toLowerCase() })}
+              >
                 {formatMessage('Learn more')}
               </Link>
             )}
@@ -43,22 +49,24 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
         ),
       }}
     >
-      <IconButton
-        aria-labelledby={`${id}-description`}
-        iconProps={{
-          iconName: 'Unknown',
-        }}
-        styles={{
-          root: { width: '20px', minWidth: '20px', height: '20px' },
-          rootHovered: { backgroundColor: 'transparent' },
-          rootChecked: { backgroundColor: 'transparent' },
-          icon: {
-            color: NeutralColors.gray160,
-            fontSize: '12px',
-            marginBottom: '-2px',
-          },
-        }}
-      />
+      <div tabIndex={0}>
+        <Icon
+          aria-label={title + '; ' + description}
+          iconName={'Unknown'}
+          styles={{
+            root: {
+              width: '16px',
+              minWidth: '16px',
+              height: '16px',
+              color: NeutralColors.gray160,
+              fontSize: '12px',
+              marginBottom: '-2px',
+              paddingLeft: '4px',
+              paddingTop: '4px',
+            },
+          }}
+        />
+      </div>
     </TooltipHost>
   );
 };
@@ -69,30 +77,42 @@ interface FieldLabelProps {
   description?: string;
   helpLink?: string;
   inline?: boolean;
+  required?: boolean;
 }
 
 const FieldLabel: React.FC<FieldLabelProps> = props => {
-  const { label, description, id, inline, helpLink } = props;
+  const { label, description, id, inline, helpLink, required } = props;
 
   if (!label) {
     return null;
   }
 
   return (
-    <Label
-      htmlFor={id}
-      styles={{
-        root: {
-          fontWeight: '400',
-          display: 'flex',
-          alignItems: 'center',
-          marginLeft: inline ? '4px' : '0',
-        },
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
       }}
     >
-      {label}
+      <Label
+        htmlFor={id}
+        required={required}
+        styles={{
+          root: {
+            fontWeight: '400',
+            marginLeft: inline ? '4px' : '0',
+            selectors: {
+              '::after': {
+                paddingRight: 0,
+              },
+            },
+          },
+        }}
+      >
+        {label}
+      </Label>
       <DescriptionCallout description={description} id={id} title={label} helpLink={helpLink} />
-    </Label>
+    </div>
   );
 };
 

@@ -85,6 +85,12 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.ForeachPage]: {
     title: formatMessage('Loop: for each page (multiple items)'),
   },
+  [SDKKinds.ContinueLoop]: {
+    title: formatMessage('Continue loop'),
+  },
+  [SDKKinds.BreakLoop]: {
+    title: formatMessage('Break out of loop'),
+  },
   [SDKKinds.HttpRequest]: {
     title: formatMessage('Send an HTTP request'),
   },
@@ -99,7 +105,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKKinds.LuisRecognizer]: {
     description: formatMessage(
-      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+      "To understand what the user says, your dialog needs a 'IRecognizer', that includes example words and sentences that users may use."
     ),
     title: formatMessage('Language Understanding'),
   },
@@ -108,7 +114,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKKinds.MultiLanguageRecognizer]: {
     description: formatMessage(
-      "To understand what the user says, your dialog needs a 'Recognizer', that includes example words and sentences that users may use."
+      "To understand what the user says, your dialog needs a 'IRecognizer', that includes example words and sentences that users may use."
     ),
     title: formatMessage('Language Understanding'),
   },
