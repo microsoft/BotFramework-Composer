@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from 'react-testing-library';
+import { render } from '@bfc/test-utils';
 
 import { StoreContext } from '../../src/store';
 import { AppUpdater } from '../../src/components/AppUpdater';
