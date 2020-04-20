@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render } from 'react-testing-library';
+import { render } from '@bfc/test-utils';
 
 import { Header } from '../../src/components/Header';
 
