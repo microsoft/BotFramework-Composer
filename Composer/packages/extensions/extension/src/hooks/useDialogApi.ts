@@ -54,9 +54,9 @@ export function useDialogApi() {
   }
 
   async function cutSelectedActions(dialogId, dialogData, actionIds: string[]) {
-    const clipboardActions = await copySelectedActions(dialogId, dialogData, actionIds);
+    const cutActions = await copySelectedActions(dialogId, dialogData, actionIds);
     const newDialog = deleteSelectedActions(dialogId, dialogData, actionIds);
-    return { dialog: newDialog, cutData: clipboardActions };
+    return { dialog: newDialog, cutActions };
   }
 
   return {

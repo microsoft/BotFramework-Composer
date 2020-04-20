@@ -117,10 +117,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.CutSelection:
         trackActionListChange(eventData.actionIds);
         handler = e => {
-          cutSelectedActions(path, data, e.actionIds).then(({ dialog, cutData }) => {
+          cutSelectedActions(path, data, e.actionIds).then(({ dialog, cutActions }) => {
             onChange(dialog);
             onFocusSteps([]);
-            onClipboardChange(cutData);
+            onClipboardChange(cutActions);
           });
         };
         break;
