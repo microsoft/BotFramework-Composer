@@ -15,7 +15,7 @@ export interface DialogApiContext {
 const { queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
 export function useDialogApi() {
-  const { copyActions, deleteAction, deleteActions } = useActionApi();
+  const { constructActions, copyActions, deleteAction, deleteActions } = useActionApi();
 
   async function insertActions(
     dialogId: string,
@@ -24,9 +24,7 @@ export function useDialogApi() {
     targetArrayPosition: number,
     actionsToInsert: BaseSchema[]
   ) {
-    // Considering a scenario that copy one time but paste multiple times,
-    // it requires seeding all $designer.id again by invoking deepCopy.
-    const newNodes = await copyActions(dialogId, actionsToInsert);
+    const newNodes = await constructActions(dialogId, actionsToInsert);
     return insertNodes(dialogData, targetArrayPath, targetArrayPosition, newNodes);
   }
 
