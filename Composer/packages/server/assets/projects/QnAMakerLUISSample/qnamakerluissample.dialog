@@ -36,7 +36,7 @@
                     "id": "266608",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity-266608()}"
+                  "activity": "${SendActivity_266608()}"
                 }
               ]
             }
@@ -57,7 +57,7 @@
             "id": "771838",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-771838()}"
+          "activity": "${SendActivity_771838()}"
         }
       ],
       "intent": "Help"
@@ -98,7 +98,7 @@
             "id": "313066",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-313066()}"
+          "activity": "${SendActivity_313066()}"
         }
       ],
       "intent": "BuySurface"

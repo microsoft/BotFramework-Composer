@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import StorageService from '@src/services/storage';
-import { StorageController } from '@src/controllers/storage';
 
-jest.mock('@src/services/storage', () => ({
+import StorageService from '../../src/services/storage';
+import { StorageController } from '../../src/controllers/storage';
+
+jest.mock('../../src/services/storage', () => ({
   getBlob: jest.fn(),
 }));
 

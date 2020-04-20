@@ -26,15 +26,16 @@
     "react-dom": "16.13.0"
   },
   "devDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "@bfc/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "react": "16.13.0",
     "react-dom": "16.13.0"
   },
   "dependencies": {
-    "@bfc/adaptive-form": "*",
     "@bfc/code-editor": "*",
-    "@bfc/extension": "*",
     "@emotion/core": "^10.0.27"
   }
 }

@@ -78,7 +78,7 @@ const initialState: State = {
   },
   clipboardActions: [],
   publishTypes: [],
-  publishTargets: [],
+  publishHistory: {},
   userSettings: storage.get('userSettings', {
     codeEditor: {
       lineNumbers: false,
