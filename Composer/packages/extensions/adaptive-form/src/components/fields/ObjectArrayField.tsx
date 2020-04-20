@@ -59,7 +59,6 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
         }, {});
 
-        console.log(announce, 'announcing', ADD_NAME_MESSAGE);
         announce?.(ADD_NAME_MESSAGE);
 
         addItem(formattedData);
