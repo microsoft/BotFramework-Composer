@@ -9,6 +9,7 @@ import { Express } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
+import { JSONSchema7 } from 'json-schema';
 
 import { ComposerPluginRegistration } from './composerPluginRegistration';
 import { PublishPlugin, UserIdentity } from './types';
@@ -27,6 +28,8 @@ export class PluginLoader {
       [key: string]: {
         plugin: ComposerPluginRegistration;
         methods: PublishPlugin;
+        /** (Optional) Schema for publishing configuration. */
+        schema?: JSONSchema7;
       };
     };
     authentication: {

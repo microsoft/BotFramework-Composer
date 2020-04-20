@@ -3,6 +3,7 @@
 
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
+import { JSONSchema7 } from 'json-schema';
 
 import { PluginLoader } from './pluginLoader';
 import log from './logger';
@@ -56,11 +57,12 @@ export class ComposerPluginRegistration {
   /**************************************************************************************
    * Publish related features
    *************************************************************************************/
-  public async addPublishMethod(plugin: PublishPlugin) {
+  public async addPublishMethod(plugin: PublishPlugin, schema?: JSONSchema7) {
     log('registering publish method', this.name);
     this.loader.extensions.publish[this.name] = {
       plugin: this,
       methods: plugin,
+      schema: schema,
     };
   }
 
