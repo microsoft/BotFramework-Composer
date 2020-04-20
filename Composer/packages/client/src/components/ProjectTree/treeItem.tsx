@@ -20,14 +20,14 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div role="cell" css={itemText(item.depth)}>
+    <div role="cell" css={itemText(item.depth)} tabIndex={0}>
       {item.depth !== 0 && <Icon iconName="Flow" styles={{ root: { marginRight: '8px' } }} />}
       {item.displayName}
     </div>
   );
 };
 
-const onRenderOverflowButton = (isRoot: boolean) => {
+const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
   const showIcon = !isRoot;
   return overflowItems => {
     return showIcon ? (
@@ -35,7 +35,7 @@ const onRenderOverflowButton = (isRoot: boolean) => {
         role="cell"
         className="dialog-more-btn"
         data-testid="dialogMoreButton"
-        styles={moreButton}
+        styles={moreButton(isActive)}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
       />
@@ -48,7 +48,6 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
   return (
     <div
       role="presentation"
-      tabIndex={1}
       css={navItem(isActive, !!isSubItemActive)}
       onClick={() => {
         onSelect(link.id);
@@ -78,7 +77,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
         css={overflowSet}
         data-testid={`DialogTreeItem${link.id}`}
         onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(link.isRoot)}
+        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
       />
     </div>
   );

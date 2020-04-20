@@ -175,7 +175,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         <SearchBox
-          placeholder={formatMessage('Filter Dialogs')}
+          ariaLabel={formatMessage('Type dialog name')}
+          placeholder={formatMessage('Filter Dialog')}
           styles={searchBox}
           onChange={onFilter}
           iconProps={{ iconName: 'Filter' }}
@@ -195,13 +196,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
           }
           styles={groupListStyle}
         />
-        <ActionButton
-          tabIndex={1}
-          iconProps={addIconProps}
-          css={addButton(0)}
-          onClick={onAdd}
-          data-testid="ProjectTreeNewDialog"
-        >
+        <ActionButton iconProps={addIconProps} css={addButton(0)} onClick={onAdd} data-testid="ProjectTreeNewDialog">
           {formatMessage('New Dialog ..')}
         </ActionButton>
       </div>

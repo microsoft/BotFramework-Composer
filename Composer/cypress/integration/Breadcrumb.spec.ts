@@ -8,7 +8,7 @@ context('breadcrumb', () => {
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+      cy.findByText('__TestTodoSample').click();
     });
   });
 
@@ -25,7 +25,7 @@ context('breadcrumb', () => {
 
   it('can show dialog name in breadcrumb', () => {
     // Should path = main dialog at first render
-    hasBreadcrumbItems(cy, ['__TestTodoSample.Main']);
+    hasBreadcrumbItems(cy, ['__TestTodoSample']);
 
     // Click on AddToDo dialog
     cy.findByTestId('ProjectTree').within(() => {
@@ -35,10 +35,10 @@ context('breadcrumb', () => {
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+      cy.findByText('__TestTodoSample').click();
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample.Main']);
+    hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
   it('can show event name in breadcrumb', () => {
@@ -58,10 +58,10 @@ context('breadcrumb', () => {
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
       cy.findByTestId('RuleEditor').within(() => {
-        cy.findByText('Send a response').click({ force: true });
+        cy.findByText('Send a response').click();
       });
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample.Main', 'Greeting', 'Send a response']);
+    hasBreadcrumbItems(cy, ['__TestTodoSample', 'Greeting', 'Send a response']);
   });
 });

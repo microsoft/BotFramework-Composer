@@ -1,11 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogFactory } from '@bfc/shared';
-
-import { insert, deleteNode, queryNode, getParentPaths } from '../../src/utils/jsonTracker';
-
-const factory = new DialogFactory({});
+import { deleteNode, queryNode, getParentPaths } from '../../src/dialogUtils/jsonTracker';
 
 describe('queryNode', () => {
   describe('can query correct result', () => {
@@ -31,95 +27,6 @@ describe('queryNode', () => {
     dialog.foo.bar = 'newValue';
     expect(dialog.foo).toEqual({ bar: 'newValue' });
     expect(result).toEqual({ bar: 'newValue' });
-  });
-});
-
-describe('insert', () => {
-  const path = 'foo.bar';
-  let dialog;
-
-  beforeEach(() => {
-    dialog = { foo: {} };
-  });
-
-  describe('when data already exists', () => {
-    beforeEach(() => {
-      dialog.foo.bar = [{ $kind: 'firstOne' }, { $kind: 'secondOne' }];
-    });
-
-    it('inserts into the correct position', () => {
-      const updated = insert(dialog, path, 1, 'newOne', factory);
-      expect(updated.foo.bar).toEqual([
-        {
-          $kind: 'firstOne',
-        },
-        {
-          $kind: 'newOne',
-          $designer: { id: expect.any(String) },
-        },
-        {
-          $kind: 'secondOne',
-        },
-      ]);
-    });
-
-    it('inserts into front if position is less than 0', () => {
-      const updated = insert(dialog, path, -2, 'newOne', factory);
-      expect(updated.foo.bar).toEqual([
-        {
-          $kind: 'newOne',
-          $designer: { id: expect.any(String) },
-        },
-        {
-          $kind: 'firstOne',
-        },
-        {
-          $kind: 'secondOne',
-        },
-      ]);
-    });
-
-    it('inserts into end if position is greater than length', () => {
-      const updated = insert(dialog, path, 10, 'newOne', factory);
-      expect(updated.foo.bar).toEqual([
-        {
-          $kind: 'firstOne',
-        },
-        {
-          $kind: 'secondOne',
-        },
-        {
-          $kind: 'newOne',
-          $designer: { id: expect.any(String) },
-        },
-      ]);
-    });
-
-    it('inserts at end if position is undefined', () => {
-      const updated = insert(dialog, path, undefined, 'newOne', factory);
-      expect(updated.foo.bar).toEqual([
-        {
-          $kind: 'firstOne',
-        },
-        {
-          $kind: 'secondOne',
-        },
-        {
-          $kind: 'newOne',
-          $designer: { id: expect.any(String) },
-        },
-      ]);
-    });
-  });
-
-  describe('when data does not exist', () => {
-    it('inserts a new array with one element', () => {
-      const path = 'foo.bar';
-
-      const updated = insert(dialog, path, 0, 'newOne', factory);
-
-      expect(updated.foo.bar).toEqual([{ $kind: 'newOne', $designer: { id: expect.any(String) } }]);
-    });
   });
 });
 

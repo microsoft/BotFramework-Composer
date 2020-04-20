@@ -62,6 +62,9 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
 
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
           <ElementMeasurer
@@ -91,9 +94,6 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
           <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />
         </ElementWrapper>
       </OffsetContainer>
-      <SVGContainer width={boundary.width} height={boundary.height}>
-        <FlowEdges edges={edges} />
-      </SVGContainer>
     </div>
   );
 };
