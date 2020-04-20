@@ -44,7 +44,7 @@
           "$designer": {
             "id": "623448"
           },
-          "activity": "${bfdactivity-623448()}"
+          "activity": "${SendActivity_623448()}"
         },
         {
           "$kind": "Microsoft.ForeachPage",
@@ -64,7 +64,7 @@
                     "id": "636747",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity-636747()}"
+                  "activity": "${SendActivity_636747()}"
                 }
               ]
             }
