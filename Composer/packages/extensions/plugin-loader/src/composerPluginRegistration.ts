@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { RequestHandler } from 'express-serve-static-core';
-import { PluginLoader } from '@bfc/plugin-loader';
 
+import { PluginLoader } from './pluginLoader';
 import log from './logger';
 import { PublishPlugin } from './types';
 
