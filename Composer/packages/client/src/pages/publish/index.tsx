@@ -161,7 +161,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         actions.getPublishHistory(projectId, _selected);
       }
     }
-  }, [selectedTargetName]);
+  }, [projectId, selectedTargetName]);
 
   // once history is loaded, display it
   useEffect(() => {
