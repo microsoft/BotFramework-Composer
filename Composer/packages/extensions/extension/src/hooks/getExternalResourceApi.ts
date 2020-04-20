@@ -7,7 +7,7 @@ import { LgTemplateRef, LgMetaData, ShellApi } from '@bfc/shared';
  * External resources (LU, LG) CRUD lib with shell context bound
  */
 export const getExternalResourceApi = (shellApi: ShellApi) => {
-  const { removeLgTemplates, removeLuIntent, getLgTemplates, updateLgTemplate } = shellApi;
+  const { removeLgTemplates, removeLuIntent, getLgTemplates, getLuIntent, updateLgTemplate, updateLuIntent } = shellApi;
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
@@ -50,10 +50,14 @@ export const getExternalResourceApi = (shellApi: ShellApi) => {
   };
 
   return {
+    // LG
     createLgTemplate,
     readLgTemplate,
     deleteLgTemplate: (lgFileId: string, lgTemplate: string) => deleteLgTemplates(lgFileId, [lgTemplate]),
     deleteLgTemplates,
+    // LU
+    createLuIntent: updateLuIntent,
+    readLuIntent: getLuIntent,
     deleteLuIntent: (luFileId: string, luIntent: string) => deleteLuIntents(luFileId, [luIntent]),
     deleteLuIntents,
   };
