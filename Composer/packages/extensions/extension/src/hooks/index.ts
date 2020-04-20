@@ -6,3 +6,4 @@ export * from './useLgApi';
 export * from './useLuApi';
 export * from './useActionApi';
 export * from './useDialogApi';
+export * from './useDialogEditApi';

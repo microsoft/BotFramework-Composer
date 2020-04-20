@@ -5,10 +5,9 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { SDKKinds } from '@bfc/shared';
-import { useDialogApi, useActionApi } from '@bfc/extension';
+import { SDKKinds, DialogUtils } from '@bfc/shared';
+import { useDialogApi, useDialogEditApi } from '@bfc/extension';
 import get from 'lodash/get';
-import { DialogUtils } from '@bfc/shared';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
@@ -32,7 +31,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onClipboardChange,
   onOpen,
   onChange,
-  onCreateDialog,
   onSelect,
   undo,
   redo,
@@ -49,8 +47,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     cutSelectedActions,
     deleteSelectedAction,
     deleteSelectedActions,
-  } = useDialogApi();
-  const { constructActions } = useActionApi();
+  } = useDialogEditApi();
+  const { createDialog, readDialog, updateDialog } = useDialogApi();
 
   const trackActionChange = (actionPath: string) => {
     const affectedPaths = DialogUtils.getParentPaths(actionPath);
@@ -128,16 +126,16 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = async e => {
           if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
 
-          // Create target dialog
-          const newDialogId = await onCreateDialog([]);
-          if (!newDialogId) return;
-
           // Using copy-paste-delete pattern here is safer than using cut-paste since create new dialog may be cancelled or failed
           const actionsToBeMoved = await copySelectedActions(path, data, e.actionIds);
 
-          // Invoke action contructor asyncly
-          // TODO: be able to operate another dialog id
-          insertActions(newDialogId, {}, 'triggers[0]', 0, actionsToBeMoved);
+          // Create target dialog
+          const newDialogId = await createDialog();
+          if (!newDialogId) return;
+
+          // Insert to be moved actions asyncly
+          const newDialogData = readDialog(newDialogId);
+          updateDialog(newDialogId, insertActions(newDialogId, newDialogData, 'triggers[0]', 0, actionsToBeMoved));
 
           // Delete moved actions
           const deleteResult = deleteSelectedActions(path, data, e.actionIds);
