@@ -40,7 +40,7 @@ const collectLuIntents = (action: any, outputTemplates: string[]) => {
     case SDKKinds.NumberInput:
     case SDKKinds.TextInput: {
       const [, promptType] = action.$kind.split('.');
-      const intentName = `${promptType}.response-${action?.$designer?.id}`;
+      const intentName = `${promptType}_Response_${action?.$designer?.id}`;
       promptType && intentName && outputTemplates.push(intentName);
       break;
     }

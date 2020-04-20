@@ -20,7 +20,7 @@
             "id": "383595",
             "name": "Multiple choice"
           },
-          "prompt": "${bfdprompt-383595()}",
+          "prompt": "${TextInput_Prompt_383595()}",
           "maxTurnCount": 3,
           "property": "user.timeofday",
           "alwaysPrompt": false,
@@ -56,7 +56,7 @@
             "id": "749181",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-749181()}"
+          "activity": "${SendActivity_749181()}"
         }
       ]
     }
