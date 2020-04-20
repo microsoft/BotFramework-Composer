@@ -93,7 +93,6 @@ export interface QnaIntentSection {
 export interface QnaFile {
   id: string;
   content: string;
-  intents: QnaIntentSection[];
   [key: string]: any;
 }
 

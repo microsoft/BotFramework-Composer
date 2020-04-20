@@ -166,7 +166,7 @@ const createQnaFile: ReducerFunc = (state, { id, content }) => {
     return state;
   }
 
-  const qnaFile = { id, content, intents: qnaUtil.contentParse(content) };
+  const qnaFile = { id, content };
   state.qnaFiles.push(qnaFile);
   return state;
 };
@@ -179,8 +179,7 @@ const removeQnaFile: ReducerFunc = (state, { id }) => {
 const updateQnaTemplate: ReducerFunc = (state, { id, content }) => {
   state.qnaFiles = state.qnaFiles.map(qnaFile => {
     if (qnaFile.id === id) {
-      const intents = qnaUtil.contentParse(content);
-      return { ...qnaFile, intents, content };
+      return { ...qnaFile, content };
     }
     return qnaFile;
   });
