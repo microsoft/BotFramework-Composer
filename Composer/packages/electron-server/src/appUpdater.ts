@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { autoUpdater, UpdateInfo } from 'electron-updater';
 import { EventEmitter } from 'events';
+
+import { autoUpdater, UpdateInfo } from 'electron-updater';
 
 import logger from './utility/logger';
 const log = logger.extend('app-updater');
 
 export class AppUpdater extends EventEmitter {
-  private checkingForUpdate: boolean = false;
-  private downloadingUpdate: boolean = false;
+  private checkingForUpdate = false;
+  private downloadingUpdate = false;
 
   constructor() {
     super();

@@ -8,10 +8,11 @@ import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dia
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-
-import { StoreContext } from '../../store';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import formatMessage from 'format-message';
+
+import { StoreContext } from '../../store';
+import { AppUpdaterStatus } from '../../constants';
 
 import {
   dialogContent,
@@ -22,7 +23,6 @@ import {
   optionIcon,
   updateAvailableDismissBtn,
 } from './styles';
-import { AppUpdaterStatus } from '../../constants';
 
 const { ipcRenderer } = window as any;
 
@@ -82,10 +82,11 @@ export const AppUpdater: React.FC<{}> = _props => {
           setAppUpdateShowing(true);
           break;
 
-        case 'progress':
+        case 'progress': {
           const progress = (payload.percent as number).toFixed(2);
           setAppUpdateProgress({ progressPercent: progress, downloadSizeInBytes: payload.total });
           break;
+        }
 
         case 'update-not-available':
           // TODO: re-enable once we have implemented explicit "check for updates"
@@ -102,6 +103,7 @@ export const AppUpdater: React.FC<{}> = _props => {
           setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_FAILED });
           setAppUpdateError(payload);
           setAppUpdateShowing(true);
+          break;
 
         default:
           break;
@@ -127,6 +129,8 @@ export const AppUpdater: React.FC<{}> = _props => {
         return formatMessage('No updates available');
 
       case AppUpdaterStatus.IDLE:
+        return '';
+
       default:
         return '';
     }
@@ -156,9 +160,9 @@ export const AppUpdater: React.FC<{}> = _props => {
         );
 
       case AppUpdaterStatus.UPDATE_FAILED:
-        return <p css={dialogCopy}>{formatMessage(`Couldn't complete the update: ${error}`)}</p>;
+        return <p css={dialogCopy}>{`${formatMessage(`Couldn't complete the update:`)} ${error}`}</p>;
 
-      case AppUpdaterStatus.UPDATE_IN_PROGRESS:
+      case AppUpdaterStatus.UPDATE_IN_PROGRESS: {
         let trimmedTotalInMB;
         if (downloadSizeInBytes === undefined) {
           trimmedTotalInMB = 'Calculating...';
@@ -169,22 +173,26 @@ export const AppUpdater: React.FC<{}> = _props => {
         return (
           <ProgressIndicator
             label={formatMessage('Downloading...')}
-            description={formatMessage(`${progressPercent}% of ${trimmedTotalInMB}`)}
+            description={`${progressPercent}% ${formatMessage('of')} ${trimmedTotalInMB}`}
             percentComplete={progressInHundredths}
           />
         );
+      }
 
-      case AppUpdaterStatus.UPDATE_SUCCEEDED:
+      case AppUpdaterStatus.UPDATE_SUCCEEDED: {
         const text =
           downloadOption === downloadOptions.installAndUpdate
-            ? 'Composer will restart.'
-            : 'Composer will update the next time you start the app.';
-        return <p css={dialogCopy}>{formatMessage(text)}</p>;
+            ? formatMessage('Composer will restart.')
+            : formatMessage('Composer will update the next time you start the app.');
+        return <p css={dialogCopy}>{text}</p>;
+      }
 
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
         return <p css={dialogCopy}>{formatMessage('Composer is up to date.')}</p>;
 
       case AppUpdaterStatus.IDLE:
+        return undefined;
+
       default:
         return undefined;
     }
@@ -204,18 +212,24 @@ export const AppUpdater: React.FC<{}> = _props => {
         return <PrimaryButton onClick={handlePostDownloadOkay} text={formatMessage('Okay')} />;
 
       case AppUpdaterStatus.UPDATE_FAILED:
+        return <PrimaryButton onClick={handleDismiss} text={formatMessage('Okay')} />;
+
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
         return <PrimaryButton onClick={handleDismiss} text={formatMessage('Okay')} />;
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
+        return undefined;
+
       case AppUpdaterStatus.IDLE:
+        return undefined;
+
       default:
         return undefined;
     }
   }, [status]);
 
   const subText =
-    status === AppUpdaterStatus.UPDATE_AVAILABLE ? formatMessage(`Bot Framework Composer v${version}`) : '';
+    status === AppUpdaterStatus.UPDATE_AVAILABLE ? `${formatMessage('Bot Framework Composer')} v${version}` : '';
 
   return showing ? (
     <Dialog

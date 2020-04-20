@@ -6,13 +6,12 @@ import { join, resolve } from 'path';
 import { mkdirp } from 'fs-extra';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import fixPath from 'fix-path';
+import { UpdateInfo } from 'electron-updater';
 
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 import log from './utility/logger';
-const error = log.extend('error');
-
 import { AppUpdater } from './appUpdater';
-import { UpdateInfo } from 'electron-updater';
+const error = log.extend('error');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
