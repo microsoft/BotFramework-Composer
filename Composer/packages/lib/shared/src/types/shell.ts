@@ -60,7 +60,7 @@ export interface ShellApi {
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
-  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => void;
+  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => Promise<void>;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;
   createDialog: (actions: any) => Promise<string | null>;

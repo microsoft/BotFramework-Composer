@@ -3,16 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
 import { LuIntentSection, CodeEditorSettings } from '@bfc/shared';
+import debounce from 'lodash/debounce';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const { onChange, value, schema } = props;
   const { currentDialog, designerId, luFiles, shellApi, locale, projectId, userSettings } = useShellApi();
-  const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
+  const luFileId = `${currentDialog.id}.${locale}`;
+  const luFile = luFiles.find(f => f.id === luFileId);
 
   let intentName = value;
   if (typeof intentName === 'object') {
@@ -33,6 +35,17 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
     return null;
   }
 
+  const updateLuIntent = useCallback(
+    debounce((body: string) => {
+      if (!intentName) {
+        return;
+      }
+      const newIntent = { Name: intentName, Body: body };
+      shellApi.updateLuIntent(luFileId, intentName, newIntent).catch(() => {});
+    }, 750),
+    [intentName, luFileId]
+  );
+
   const commitChanges = newValue => {
     if (!intentName) {
       return;
@@ -40,7 +53,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
 
     const newIntent = { Name: intentName, Body: newValue };
     setLuIntent(newIntent);
-    shellApi.updateLuIntent(luFile.id, intentName, newIntent);
+    updateLuIntent(newValue);
     onChange(intentName);
   };
 

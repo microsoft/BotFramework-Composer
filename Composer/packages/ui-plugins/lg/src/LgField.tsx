@@ -44,9 +44,9 @@ const LgField: React.FC<FieldProps<string>> = props => {
   const lgFile = lgFiles && lgFiles.find(file => file.id === lgFileId);
 
   const updateLgTemplate = useCallback(
-    (body: string) => {
+    debounce((body: string) => {
       shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
-    },
+    }, 750),
     [lgName, lgFileId]
   );
 
