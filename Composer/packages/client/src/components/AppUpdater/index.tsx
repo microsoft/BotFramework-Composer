@@ -88,8 +88,9 @@ export const AppUpdater: React.FC<{}> = _props => {
           break;
 
         case 'update-not-available':
-          setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
-          setAppUpdateShowing(true);
+          // TODO: re-enable once we have implemented explicit "check for updates"
+          // setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
+          // setAppUpdateShowing(true);
           break;
 
         case 'update-downloaded':

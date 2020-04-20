@@ -20,9 +20,8 @@ export class AppUpdater extends EventEmitter {
     autoUpdater.autoDownload = settings.autoDownload;
     autoUpdater.setFeedURL({
       provider: 'github',
-      repo: 'One-Off-File-Distribution', // 'BotFramework-Composer',
-      owner: 'tonyanziano', //'microsoft',
-      private: true,
+      repo: 'BotFramework-Composer',
+      owner: 'microsoft',
     });
 
     autoUpdater.on('error', this.onError);
@@ -54,7 +53,9 @@ export class AppUpdater extends EventEmitter {
   private onError(err: Error) {
     logger('Got error while checking for updates: ', err);
     this.resetToIdle();
-    this.emit('error', err);
+    try {
+      this.emit('error', err);
+    } catch (e) {} // emitting 'error' will throw an error
   }
 
   private onCheckingForUpdate() {
@@ -70,8 +71,8 @@ export class AppUpdater extends EventEmitter {
 
   private onUpdateNotAvailable(updateInfo: UpdateInfo) {
     log('Update not available: %O', updateInfo);
-    this.resetToIdle();
-    this.emit('update-not-available');
+    this.checkingForUpdate = false;
+    this.emit('update-not-available', updateInfo);
   }
 
   private onDownloadProgress(progress: any) {
@@ -82,7 +83,7 @@ export class AppUpdater extends EventEmitter {
   private onUpdateDownloaded(updateInfo: UpdateInfo) {
     log('Update downloaded: %O', updateInfo);
     this.resetToIdle();
-    this.emit('update-downloaded');
+    this.emit('update-downloaded', updateInfo);
   }
 
   private resetToIdle() {
