@@ -20,9 +20,9 @@
     "pack": "node scripts/electronBuilderPack.js",
     "start": "cross-env NODE_ENV=development electron .",
     "start:electron": "./node_modules/.bin/electron --inspect=7777 --remote-debugging-port=7778 .",
-    "start:electron:dev": "cross-env ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron",
+    "start:electron:dev": "cross-env NODE_ENV=development ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron",
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "@types/archiver": "^3.0.0",
@@ -34,6 +34,7 @@
     "@types/form-data": "^2.2.1",
     "@types/globby": "^9.1.0",
     "@types/http-errors": "^1.6.1",
+    "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.3",
     "@types/lodash": "^4.14.146",
     "@types/lru-cache": "^5.1.0",
@@ -59,6 +60,7 @@
     "debug": "4.1.1",
     "electron-updater": "4.2.5",
     "fix-path": "^3.0.0",
+    "jest": "^25.3.0",
     "lodash": "^4.17.15"
   }
 }

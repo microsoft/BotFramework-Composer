@@ -9,7 +9,9 @@ const mockAutoUpdater = {
   setFeedURL: jest.fn(),
 };
 jest.mock('electron-updater', () => ({
-  autoUpdater: mockAutoUpdater,
+  get autoUpdater() {
+    return mockAutoUpdater;
+  },
 }));
 
 import { AppUpdater } from '../src/appUpdater';
