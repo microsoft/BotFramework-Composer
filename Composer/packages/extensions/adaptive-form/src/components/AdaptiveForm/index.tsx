@@ -17,11 +17,12 @@ export interface AdaptiveFormProps {
   schema?: JSONSchema7;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formData?: any;
+  announce?: (message: string) => void;
 }
 
 export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(props) {
   const { shellApi, focusedSteps, currentDialog, focusPath, plugins } = useShellApi();
-  const { formData, schema } = props;
+  const { formData, schema, announce } = props;
   const [localData, setLocalData] = useState(formData);
 
   const syncData = useRef(
@@ -123,6 +124,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
           uiOptions={$uiSchema}
           value={localData}
           onChange={handleDataChange}
+          announce={announce}
         />
       </PluginContext.Provider>
     </ErrorBoundary>

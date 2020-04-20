@@ -55,6 +55,7 @@ const FormRow: React.FC<FormRowProps> = props => {
     onBlur,
     onFocus,
     onChange,
+    announce,
   } = props;
 
   const { required = [] } = schema;
@@ -81,6 +82,7 @@ const FormRow: React.FC<FormRowProps> = props => {
             onBlur={onBlur}
             onChange={onChange(property)}
             onFocus={onFocus}
+            announce={announce}
           />
         ))}
       </div>
@@ -108,6 +110,7 @@ const FormRow: React.FC<FormRowProps> = props => {
         onBlur={onBlur}
         onChange={onChange(row)}
         onFocus={onFocus}
+        announce={announce}
       />
     );
   }

@@ -31,6 +31,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors,
     hideError,
     onChange,
+    announce,
     ...rest
   } = props;
   const pluginConfig = usePluginConfig();
@@ -78,6 +79,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     error: error || undefined,
     rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
     onChange: handleChange,
+    announce,
   };
 
   return (

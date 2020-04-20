@@ -52,6 +52,8 @@ export interface FieldProps<T = any> {
   onChange: ChangeHandler<T>;
   onFocus?: (id: string, value?: T) => void;
   onBlur?: (id: string, value?: T) => void;
+
+  announce?: (message: string) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

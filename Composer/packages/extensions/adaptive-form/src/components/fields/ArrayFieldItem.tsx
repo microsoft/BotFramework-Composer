@@ -38,6 +38,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
     uiOptions,
     value,
     className,
+    announce,
     ...rest
   } = props;
 
@@ -93,6 +94,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
           uiOptions={uiOptions}
           value={value}
           onBlur={handleBlur}
+          announce={announce}
         />
       </div>
       <IconButton

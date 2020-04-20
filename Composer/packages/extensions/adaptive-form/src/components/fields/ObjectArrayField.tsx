@@ -31,8 +31,13 @@ const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): stri
   return formatMessage('Add new {propertyName}', { propertyName });
 };
 
+const ADD_ITEM_MESSAGE = formatMessage('press Enter to add this item or Tab to move to the next interactive element');
+const ADD_NAME_MESSAGE = formatMessage(
+  'press Enter to add this name and advance to the next row, or press Tab to advance to the value field'
+);
+
 const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
-  const { value = [], schema, id, onChange, className, uiOptions, label, description, required } = props;
+  const { value = [], schema, id, onChange, className, uiOptions, label, description, required, announce } = props;
   const { items } = schema;
   const itemSchema = Array.isArray(items) ? items[0] : items;
   const properties = (itemSchema && itemSchema !== true && itemSchema.properties) || {};
@@ -53,6 +58,9 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           const serializeValue = uiOptions?.properties?.[key]?.serializer?.set;
           return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
         }, {});
+
+        console.log(announce, 'announcing', ADD_NAME_MESSAGE);
+        announce?.(ADD_NAME_MESSAGE);
 
         addItem(formattedData);
         setNewObject({});
@@ -153,15 +161,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                           value={newObject[property] || ''}
                           onChange={handleNewObjectChange(property)}
                           onKeyDown={handleKeyDown}
-                          ariaLabel={
-                            lastField
-                              ? formatMessage(
-                                  'press Enter to add this item or Tab to move to the next interactive element'
-                                )
-                              : formatMessage(
-                                  'press Enter to add this name and advance to the next row, or press Tab to advance to the value field'
-                                )
-                          }
+                          ariaLabel={lastField ? ADD_ITEM_MESSAGE : ADD_NAME_MESSAGE}
                           componentRef={index === 0 ? firstNewFieldRef : undefined}
                         />
                       </div>
