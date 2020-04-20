@@ -27,7 +27,7 @@ const styles = {
 };
 
 const ExpressionField: React.FC<FieldProps> = props => {
-  const { id, value, label, description, schema, uiOptions, definitions } = props;
+  const { id, value, label, description, schema, uiOptions, definitions, required } = props;
   const { $role, ...expressionSchema } = schema;
   const pluginConfig = usePluginConfig();
 
@@ -108,7 +108,13 @@ const ExpressionField: React.FC<FieldProps> = props => {
     <React.Fragment>
       {shouldRenderContainer && (
         <div css={styles.container}>
-          <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} />
+          <FieldLabel
+            id={id}
+            label={label}
+            description={description}
+            helpLink={uiOptions?.helpLink}
+            required={required}
+          />
           {options && options.length > 1 && (
             <Dropdown
               id={`${props.id}-type`}

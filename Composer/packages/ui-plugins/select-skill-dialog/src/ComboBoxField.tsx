@@ -15,6 +15,7 @@ interface ComboBoxFieldProps extends FieldProps {
   comboboxTitle: string | null;
   options: IComboBoxOption[];
   onChange: any;
+  required?: boolean;
 }
 
 export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
@@ -24,6 +25,7 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
   label,
   options,
   value = '',
+  required,
   uiOptions,
   onBlur,
   onChange,
@@ -43,7 +45,7 @@ export const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
 
   return (
     <React.Fragment>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <ComboBox
         autoComplete="off"
         id={id}

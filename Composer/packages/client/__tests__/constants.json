@@ -91,7 +91,7 @@
   {
       "id": "todobot",
       "isRoot": true,
-      "displayName": "ToDoBot.Main",
+      "displayName": "ToDoBot",
       "content": {
           "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {

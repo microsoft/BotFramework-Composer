@@ -87,7 +87,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   }, [currentDialog, focusPath, localData]);
 
   if (!localData) {
-    return <>No Data</>;
+    return null;
   }
 
   if (!$schema) {

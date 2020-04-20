@@ -21,3 +21,9 @@ export const MultilineCSS = css`
   overflow-wrap: break-word;
   word-break: break-all;
 `;
+
+export const ColorlessFontCSS = css`
+  font-size: 12px;
+  line-height: 14px;
+  font-family: Segoe UI;
+`;

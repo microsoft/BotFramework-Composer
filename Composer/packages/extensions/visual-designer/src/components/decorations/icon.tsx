@@ -91,6 +91,7 @@ export const Icon = ({ icon, color, size = 18, fill = 'white' }) => {
       iconName={icon}
       css={{
         fontSize: size,
+        color: color,
       }}
     />
   );

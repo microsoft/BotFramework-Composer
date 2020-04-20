@@ -8,9 +8,9 @@ In Composer, dialogs are functional components offered in a visual interface tha
 
 ## Types of dialogs
 
-You create a dialog in Composer to manage a conversation objective. There are two types of dialogs in Composer: _main dialog_ and _child dialog_. The main dialog is initialized by default when you create a new bot, and it has a **.Main** file extension. You can create one or more child dialogs to keep the dialog system organized. Each bot has one main dialog and can have zero or more child dialogs. Refer to the [Create a bot](./tutorial/tutorial-introduction.md) article on how to create a bot and its main dialog in Composer. Refer to the [Add a dialog](./tutorial/tutorial-add-dialog.md) article on how to create a child dialog and wire it up in the dialog system.
+You create a dialog in Composer to manage a conversation objective. There are two types of dialogs in Composer: _main dialog_ and _child dialog_. The main dialog is initialized by default when you create a new bot, and it has a \*\*\*\* file extension. You can create one or more child dialogs to keep the dialog system organized. Each bot has one main dialog and can have zero or more child dialogs. Refer to the [Create a bot](./tutorial/tutorial-introduction.md) article on how to create a bot and its main dialog in Composer. Refer to the [Add a dialog](./tutorial/tutorial-add-dialog.md) article on how to create a child dialog and wire it up in the dialog system.
 
-Below is a screenshot of a main dialog named `MyBot.Main` and two children dialogs called `Weather` and `Greeting`.
+Below is a screenshot of a main dialog named `MyBot` and two children dialogs called `Weather` and `Greeting`.
 
 ![Main and child dialog](./media/dialog/main-and-child-dialog.png)
 
@@ -21,7 +21,6 @@ At runtime, the main dialog is called into action and becomes the active dialog,
 The following diagram shows the anatomy of a dialog in Composer. Note that dialogs in Composer are based on [Adaptive dialogs](https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/adaptive-dialog#readme).
 
 ![The adaptive dialog anatomy](./media/dialog/adaptive-dialog-anatomy.png)
-
 
 ### Recognizer
 
@@ -46,7 +45,6 @@ Triggers contain a series of actions that the bot will undertake to fulfill a us
 ### Language Generator
 
 As the bot takes actions and sends messages, the **Language Generator** is used to create those messages from variables and templates. Language generators can create reusable components, variable messages, macros, and dynamic messages that are grammatically correct.
-
 
 ## Dialog actions
 
