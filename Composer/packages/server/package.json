@@ -67,6 +67,7 @@
     "axios": "^0.18.0",
     "azure-storage": "^2.10.3",
     "body-parser": "^1.18.3",
+    "chalk": "^4.0.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
     "debug": "^4.1.1",
