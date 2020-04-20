@@ -5,7 +5,6 @@ import { css } from '@emotion/core';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { FontWeights } from '@uifabric/styling';
 import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
-
 export const textFieldlabel = {
   root: [
     {

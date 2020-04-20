@@ -107,7 +107,7 @@ export enum SDKKinds {
   /** Kinds */
 
   IActivityTemplate = 'Microsoft.IActivityTemplate',
-  Recognizer = 'Microsoft.Recognizer',
+  IRecognizer = 'Microsoft.IRecognizer',
   ILanguageGenerator = 'Microsoft.ILanguageGenerator',
   ITriggerSelector = 'Microsoft.ITriggerSelector',
   IDialog = 'Microsoft.IDialog',

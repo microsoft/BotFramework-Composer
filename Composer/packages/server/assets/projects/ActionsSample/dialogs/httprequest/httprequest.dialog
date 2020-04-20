@@ -28,7 +28,7 @@
           "$designer": {
             "id": "229784"
           },
-          "activity": "${bfdactivity-229784()}"
+          "activity": "${SendActivity_229784()}"
         },
         {
           "$kind": "Microsoft.TextInput",
@@ -77,7 +77,7 @@
           "$designer": {
             "id": "200761"
           },
-          "activity": "${bfdactivity-200761()}"
+          "activity": "${SendActivity_200761()}"
         },
         {
           "$kind": "Microsoft.TextInput",
@@ -104,7 +104,7 @@
           "$designer": {
             "id": "212615"
           },
-          "activity": "${bfdactivity-212615()}"
+          "activity": "${SendActivity_212615()}"
         }
       ]
     }

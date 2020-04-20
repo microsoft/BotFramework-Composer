@@ -37,7 +37,7 @@
             "id": "461607",
             "name": "AskForListType"
           },
-          "prompt": "${bfdprompt-461607()}",
+          "prompt": "${TextInput_Prompt_461607()}",
           "maxTurnCount": "3",
           "property": "$listType",
           "value": "=@listType",
@@ -90,7 +90,7 @@
                 "id": "555579",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-555579()}"
+              "activity": "${SendActivity_555579()}"
             },
             {
               "$kind": "Microsoft.SendActivity",
@@ -98,7 +98,7 @@
                 "id": "121384",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-121384()}"
+              "activity": "${SendActivity_121384()}"
             }
           ],
           "elseActions": [
@@ -116,7 +116,7 @@
                     "id": "534454",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity-534454()}"
+                  "activity": "${SendActivity_534454()}"
                 }
               ]
             },
@@ -126,7 +126,7 @@
                 "id": "702637",
                 "name": "Multiple choice"
               },
-              "prompt": "${bfdprompt-702637()}",
+              "prompt": "${TextInput_Prompt_702637()}",
               "maxTurnCount": "3",
               "property": "$itemTitle",
               "value": "=coalesce(@itemTitle, $itemTitle, if(@number, user.lists[dialog.listType][int(@number) - 1], null))",
@@ -152,7 +152,7 @@
                 "id": "728630",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-728630()}"
+              "activity": "${SendActivity_728630()}"
             },
             {
               "$kind": "Microsoft.EditArray",
@@ -170,7 +170,7 @@
                 "id": "015149",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-015149()}"
+              "activity": "${SendActivity_015149()}"
             }
           ]
         }
