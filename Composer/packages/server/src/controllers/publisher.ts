@@ -18,17 +18,20 @@ const DEFAULT_RUNTIME = 'CSharp';
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
-      Object.keys(pluginLoader.extensions.publish)
-        .filter(i => pluginLoader.extensions.publish[i].plugin.name !== defaultPublishConfig.type)
-        .map(i => {
+      Object.values(pluginLoader.extensions.publish)
+        .filter(extension => extension.plugin.name !== defaultPublishConfig.type)
+        .map(extension => {
+          const { plugin, methods, schema } = extension;
+
           return {
-            name: pluginLoader.extensions.publish[i].plugin.name,
-            description: pluginLoader.extensions.publish[i].plugin.description,
+            name: plugin.name,
+            description: plugin.description,
+            schema,
             features: {
-              history: pluginLoader.extensions.publish[i].methods.history ? true : false,
-              publish: pluginLoader.extensions.publish[i].methods.publish ? true : false,
-              status: pluginLoader.extensions.publish[i].methods.getStatus ? true : false,
-              rollback: pluginLoader.extensions.publish[i].methods.rollback ? true : false,
+              history: methods.history ? true : false,
+              publish: methods.publish ? true : false,
+              status: methods.getStatus ? true : false,
+              rollback: methods.rollback ? true : false,
             },
           };
         })

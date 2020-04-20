@@ -212,7 +212,7 @@ const Publish: React.FC<PublishPageProps> = props => {
   }, [thisPublishHistory, selectedTargetName]);
 
   const savePublishTarget = useCallback(
-    async (name: string, type: PublishType, configuration: string) => {
+    async (name: string, type: string, configuration: string) => {
       const _target = (settings.publishTargets || []).concat([
         {
           name,
@@ -235,7 +235,7 @@ const Publish: React.FC<PublishPageProps> = props => {
   );
 
   const updatePublishTarget = useCallback(
-    async (name: string, type: PublishType, configuration: string) => {
+    async (name: string, type: string, configuration: string) => {
       if (!editTarget) {
         return;
       }
@@ -269,6 +269,7 @@ const Publish: React.FC<PublishPageProps> = props => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
+          types={publishTypes}
           targets={settings.publishTargets || []}
           updateSettings={savePublishTarget}
           current={null}
@@ -284,6 +285,7 @@ const Publish: React.FC<PublishPageProps> = props => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
+          types={publishTypes}
           current={editTarget ? editTarget.item : null}
           targets={(settings.publishTargets || []).filter(item => editTarget && item.name != editTarget.item.name)}
           updateSettings={updatePublishTarget}
@@ -309,7 +311,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
         // update the target with a lastPublished date
-        const updatedPublishTargets = settings.publishTargets.map(profile => {
+        const updatedPublishTargets = settings.publishgargets.map(profile => {
           if (profile.name === selectedTarget.name) {
             return {
               ...profile,
@@ -379,7 +381,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         onDismiss={() => setAddDialogHidden(true)}
         dialogContentProps={dialogProps}
         modalProps={{ isBlocking: true }}
-        minWidth={350}
+        minWidth={450}
       >
         {dialogProps.children}
       </Dialog>
@@ -388,7 +390,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         onDismiss={() => setEditDialogHidden(true)}
         dialogContentProps={editDialogProps}
         modalProps={{ isBlocking: true }}
-        minWidth={350}
+        minWidth={450}
       >
         {editDialogProps.children}
       </Dialog>

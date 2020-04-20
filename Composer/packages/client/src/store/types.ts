@@ -61,7 +61,7 @@ export interface PublishType {
 
 export interface PublishTarget {
   name: string;
-  type: PublishType;
+  type: string;
   configuration: string;
 }
 

@@ -16,29 +16,31 @@ import { PublishTarget, PublishType } from '../../store/types';
 import { label } from './styles';
 
 interface CreatePublishTargetProps {
+  closeDialog: () => void;
   current: PublishTarget | null;
   targets: PublishTarget[];
-  updateSettings: (name: string, type: PublishType, configuration: string) => Promise<void>;
-  closeDialog: () => void;
+  types: PublishType[];
+  updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
 }
 
 const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
-  const [targetType, setTargetType] = useState<PublishType | null>(props.current ? props.current.type : null);
+  const [targetType, setTargetType] = useState<string | undefined>(props.current?.type);
   const [name, setName] = useState(props.current ? props.current.name : '');
-  const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : {});
+  const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
 
   const targetTypes = useMemo(() => {
-    return props.targets.map(t => ({ key: t.name, text: t.name }));
+    return props.types.map(t => ({ key: t.name, text: t.name }));
   }, [props.targets]);
 
-  const updateType = (_e, type?: IDropdownOption) => {
-    const target = props.targets.find(t => t.name === type?.key);
+  const updateType = (_e, option?: IDropdownOption) => {
+    const type = props.types.find(t => t.name === option?.key);
 
-    if (target) {
-      setTargetType(target.type);
+    if (type) {
+      setTargetType(type.name);
     }
   };
+
   const updateConfig = newConfig => {
     setConfig(newConfig);
   };
@@ -54,6 +56,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
       }
     }
   };
+
+  const schema = useMemo(() => {
+    return targetType ? props.types.find(t => t.name === targetType)?.schema : undefined;
+  }, [props.targets, targetType]);
 
   const updateName = (e, newName) => {
     setErrorMsg('');
@@ -71,7 +77,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
 
   const submit = async () => {
     if (targetType) {
-      await props.updateSettings(name, targetType, JSON.stringify(config, null, 2) || '{}');
+      await props.updateSettings(name, targetType, JSON.stringify(config) || '{}');
       props.closeDialog();
     }
   };
@@ -90,11 +96,11 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
           placeholder={formatMessage('Choose One')}
           label={formatMessage('Publish Destination Type')}
           options={targetTypes}
-          defaultSelectedKey={props.current ? props.current.type.name : null}
+          defaultSelectedKey={props.current ? props.current.type : null}
           onChange={updateType}
         />
-        <div css={label}>{formatMessage('Paste Configuration')}</div>
-        <JsonEditor onChange={updateConfig} height={200} value={config} />
+        <div css={label}>{formatMessage('Publish Configuration')}</div>
+        <JsonEditor key={targetType} onChange={updateConfig} height={200} value={config} schema={schema} />
         <button type="submit" hidden disabled={isDisable()} />
       </form>
       <DialogFooter>

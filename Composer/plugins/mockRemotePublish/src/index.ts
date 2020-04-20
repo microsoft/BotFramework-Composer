@@ -10,6 +10,8 @@
 import { v4 as uuid } from 'uuid';
 import { ComposerPluginRegistration, PublishResponse, PublishPlugin } from '@bfc/plugin-loader';
 
+import schema from './schema';
+
 interface LocalPublishData {
   [profileName: string]: PublishResponse[];
 }
@@ -134,5 +136,5 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 export default async (composer: ComposerPluginRegistration): Promise<void> => {
   const publisher = new LocalPublisher(composer);
   // pass in the custom storage class that will override the default
-  await composer.addPublishMethod(publisher);
+  await composer.addPublishMethod(publisher, schema);
 };
