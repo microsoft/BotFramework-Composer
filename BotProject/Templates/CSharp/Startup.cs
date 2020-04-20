@@ -7,10 +7,13 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
+using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
 using Microsoft.Bot.Builder.Skills;
@@ -87,16 +90,25 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             return storage;
         }
 
-        public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState)
+        public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s)
         {
+            HostContext.Current.Set<IConfiguration>(Configuration);
+
             var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
+
+            adapter
+              .UseStorage(storage)
+              .UseState(userState, conversationState)
+              .Use(s.GetService<TelemetryInitializerMiddleware>());
+
             adapter
               .UseStorage(storage)
               .UseState(userState, conversationState);
 
             // Configure Middlewares
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
-            ConfigureTelemetryLoggerMiddleware(adapter, settings);
+
+            //ConfigureTelemetryLoggerMiddleware(adapter, settings);
             ConfigureInspectionMiddleWare(adapter, settings, storage);
             ConfigureShowTypingMiddleWare(adapter, settings);
 
@@ -116,6 +128,10 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
             services.AddSingleton<IConfiguration>(this.Configuration);
 
+            // Load settings
+            var settings = new BotSettings();
+            Configuration.Bind(settings);
+
             // Create the credential provider to be used with the Bot Framework Adapter.
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
             services.AddSingleton<BotAdapter>(sp => (BotFrameworkHttpAdapter)sp.GetService<IBotFrameworkHttpAdapter>());
@@ -128,9 +144,21 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             services.AddHttpClient<BotFrameworkClient, SkillHttpClient>();
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
 
-            // Load settings
-            var settings = new BotSettings();
-            Configuration.Bind(settings);
+            // Register telemetry client, initializers and middleware
+            services.AddApplicationInsightsTelemetry();
+            services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
+            services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
+            services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
+            {
+                var telemetryClient = sp.GetService<IBotTelemetryClient>();
+                return new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings.Telemetry.LogPersonalInformation);
+            });
+            services.AddSingleton<TelemetryInitializerMiddleware>(sp =>
+            {
+                var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
+                var telemetryLoggerMiddleware = sp.GetService<TelemetryLoggerMiddleware>();
+                return new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings.Telemetry.LogActivities);
+            });
 
             IStorage storage = ConfigureStorage(settings);
 
@@ -146,7 +174,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var rootDialog = GetRootDialog(botDir);
             services.AddSingleton(resourceExplorer);
 
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState));
+            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s));
 
             services.AddSingleton<IBot>(s =>
                 new ComposerBot(
@@ -155,6 +183,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     s.GetService<ResourceExplorer>(),
                     s.GetService<BotFrameworkClient>(),
                     s.GetService<SkillConversationIdFactoryBase>(),
+                    s.GetService<IBotTelemetryClient>(),
                     rootDialog));
         }
 
@@ -164,7 +193,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseWebSockets();
-            app.UseNamedPipes(System.Environment.GetEnvironmentVariable("APPSETTING_WEBSITE_SITE_NAME") + ".directline");
+
+            //app.UseNamedPipes(System.Environment.GetEnvironmentVariable("APPSETTING_WEBSITE_SITE_NAME") + ".directline");
 
             app.UseRouting()
                .UseEndpoints(endpoints =>

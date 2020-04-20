@@ -69,6 +69,10 @@ export const NodeColors = {
     themeColor: Colors.AzureGray3,
     iconColor: Colors.AzureGray2,
   },
+  [DialogGroup.LOOPING]: {
+    themeColor: Colors.AzureGray3,
+    iconColor: Colors.AzureGray2,
+  },
   [DialogGroup.LOG]: {
     themeColor: Colors.AzureGray3,
     iconColor: Colors.AzureGray2,

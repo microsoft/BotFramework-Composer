@@ -8,7 +8,6 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Debugging;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -87,6 +86,19 @@ namespace Tests
             .Send("Yes")
                 .AssertReply("Do you want to repeat this dialog, yes to repeat, no to end this dialog (1) Yes or (2) No")
             .Send("No")
+            .Send("08")
+                .AssertReply("In continue loop, which only outputs dual.")
+                .AssertReply("index: 1 value: 2")
+                .AssertReply("index: 3 value: 4")
+                .AssertReply("index: 5 value: 6")
+                .AssertReply("In break loop, which breaks when index > 2")
+                .AssertReply("index: 0 value: 1")
+                .AssertReply("index: 1 value: 2")
+                .AssertReply("index: 2 value: 3")
+                .AssertReply("done")
+            .Send("09")
+                .AssertReply("counter: 1")
+                .AssertReply("counter: 2")
             .StartTestAsync();
         }
 

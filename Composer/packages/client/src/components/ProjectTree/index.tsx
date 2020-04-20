@@ -120,7 +120,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
       onSelect(props.group!.key);
     };
     return (
-      <span ref={props.group && props.group.data.isRoot && addMainDialogRef}>
+      <span role="grid" ref={props.group && props.group.data.isRoot && addMainDialogRef}>
         <TreeItem
           link={props.group!.data}
           depth={0}
@@ -175,7 +175,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         <SearchBox
-          placeholder={formatMessage('Filter Dialogs')}
+          ariaLabel={formatMessage('Type dialog name')}
+          placeholder={formatMessage('Filter Dialog')}
           styles={searchBox}
           onChange={onFilter}
           iconProps={{ iconName: 'Filter' }}
