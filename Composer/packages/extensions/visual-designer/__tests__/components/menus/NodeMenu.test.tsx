@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, findAllByText } from 'react-testing-library';
+import { render, fireEvent, findAllByText } from '@bfc/test-utils';
 
 import { NodeMenu } from '../../../src/components/menus/NodeMenu';
 import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';
