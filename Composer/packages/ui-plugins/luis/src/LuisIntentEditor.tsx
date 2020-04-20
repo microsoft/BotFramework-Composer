@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
@@ -35,16 +35,12 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
     return null;
   }
 
-  const updateLuIntent = useCallback(
-    debounce((body: string) => {
-      if (!intentName) {
-        return;
-      }
+  const updateLuIntent = debounce((body: string) => {
+    if (luFileId && intentName) {
       const newIntent = { Name: intentName, Body: body };
       shellApi.updateLuIntent(luFileId, intentName, newIntent).catch(() => {});
-    }, 750),
-    [intentName, luFileId]
-  );
+    }
+  }, 750);
 
   const commitChanges = newValue => {
     if (!intentName) {
