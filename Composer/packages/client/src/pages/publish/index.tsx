@@ -161,7 +161,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         actions.getPublishHistory(projectId, _selected);
       }
     }
-  }, [settings.publishTargets, selectedTargetName]);
+  }, [projectId, selectedTargetName]);
 
   // once history is loaded, display it
   useEffect(() => {
@@ -196,7 +196,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         },
       ]);
     }
-  }, [publishHistory, selectedTargetName, settings.publishTargets]);
+  }, [publishHistory, selectedTargetName]);
 
   // check history to see if a 202 is found
   useEffect(() => {
