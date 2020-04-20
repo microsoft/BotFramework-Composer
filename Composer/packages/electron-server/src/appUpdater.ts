@@ -55,8 +55,8 @@ export class AppUpdater extends EventEmitter {
     logger('Got error while checking for updates: ', err);
     this.resetToIdle();
     try {
-      this.emit('error', err);
-    } catch (e) {} // emitting 'error' will throw an error
+      this.emit('error', err); // emitting 'error' will throw an error
+    } catch (e) {} // eslint-disable-line
   }
 
   private onCheckingForUpdate() {
