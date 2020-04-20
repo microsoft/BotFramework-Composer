@@ -8,20 +8,27 @@
  */
 
 import { v4 as uuid } from 'uuid';
+import { ComposerPluginRegistration, PublishResponse, PublishPlugin } from '@bfc/plugin-loader';
+
+interface LocalPublishData {
+  [profileName: string]: PublishResponse[];
+}
 
 interface PublishConfig {
   name: string;
   settings: any;
 }
 
-class LocalPublisher {
-  private data: any;
+class LocalPublisher implements PublishPlugin<PublishConfig> {
+  private data: { [botId: string]: LocalPublishData };
+  private composer: ComposerPluginRegistration;
 
-  constructor() {
+  constructor(composer: ComposerPluginRegistration) {
     this.data = {};
+    this.composer = composer;
   }
 
-  finishPublish = async (botId, profileName, jobId) => {
+  private finishPublish = async (botId: string, profileName: string, jobId: string) => {
     setTimeout(() => {
       this.data[botId][profileName].forEach(element => {
         if (element.result.id == jobId && element.status !== 500) {
@@ -34,7 +41,7 @@ class LocalPublisher {
   };
 
   // config include botId and version, project is content(ComposerDialogs)
-  publish = async (config: PublishConfig, project, metadata, user) => {
+  publish = async (config: PublishConfig, project, metadata) => {
     const profileName = config.name;
 
     if (!this.data[project.id]) {
@@ -66,7 +73,7 @@ class LocalPublisher {
 
     return response;
   };
-  getStatus = async (config: PublishConfig, project, user) => {
+  getStatus = async (config, project) => {
     const profileName = config.name;
     const botId = project.id;
 
@@ -98,13 +105,14 @@ class LocalPublisher {
     // return in reverse chrono
     return result.reverse();
   };
-  rollback = async (config: PublishConfig, project, rollbackToVersion, user) => {
-    console.log('ROLLBACK TO', project.id, rollbackToVersion);
+
+  rollback = async (config: PublishConfig, project, rollbackToVersion) => {
+    this.composer.log('ROLLBACK TO %s %s', project.id, rollbackToVersion);
     const profileName = config.name;
     const botId = project.id;
-    console.log('eval list', this.data[botId][profileName]);
+    this.composer.log('eval list %O', this.data[botId][profileName]);
     const matched = this.data[botId][profileName].filter(item => {
-      console.log('comparing ', item.result.id, rollbackToVersion);
+      this.composer.log('comparing %s %s', item.result.id, rollbackToVersion);
       return item.result.id === rollbackToVersion;
     });
     if (matched.length && matched[0].status === 200) {
@@ -123,8 +131,8 @@ class LocalPublisher {
   };
 }
 
-const publisher = new LocalPublisher();
-export default async (composer: any): Promise<void> => {
+export default async (composer: ComposerPluginRegistration): Promise<void> => {
+  const publisher = new LocalPublisher(composer);
   // pass in the custom storage class that will override the default
   await composer.addPublishMethod(publisher);
 };
