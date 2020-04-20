@@ -3,26 +3,17 @@
 
 using System;
 using System.IO;
-using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core.Skills;
 using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
@@ -84,6 +75,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
 
+            var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
+
             services.AddSingleton(userState);
             services.AddSingleton(conversationState);
             services.AddSingleton(resourceExplorer);
@@ -122,7 +115,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     s.GetService<ResourceExplorer>(),
                     s.GetService<BotFrameworkClient>(),
                     s.GetService<SkillConversationIdFactoryBase>(),
-                    rootDialog));
+                    rootDialog,
+                    defaultLocale));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

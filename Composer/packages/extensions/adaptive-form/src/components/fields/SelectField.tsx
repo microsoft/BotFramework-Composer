@@ -8,7 +8,19 @@ import formatMessage from 'format-message';
 import { FieldLabel } from '../FieldLabel';
 
 export const SelectField: React.FC<FieldProps<string | number>> = function SelectField(props) {
-  const { description, enumOptions, id, label, onBlur, onChange, onFocus, value = '', error, uiOptions } = props;
+  const {
+    description,
+    enumOptions,
+    id,
+    label,
+    onBlur,
+    onChange,
+    onFocus,
+    value = '',
+    error,
+    uiOptions,
+    required,
+  } = props;
 
   const options: IDropdownOption[] = (enumOptions ?? []).map(o => ({
     key: o?.toString(),
@@ -30,7 +42,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <Dropdown
         errorMessage={error as string}
         id={id}

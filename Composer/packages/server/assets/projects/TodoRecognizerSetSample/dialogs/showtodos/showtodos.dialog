@@ -25,7 +25,7 @@
                 "id": "339580",
                 "name": "Send an Activity"
               },
-              "activity": "${bfdactivity-339580()}"
+              "activity": "${SendActivity_339580()}"
             }
           ],
           "elseActions": [
@@ -35,7 +35,7 @@
                 "id": "662004",
                 "name": "Send an Activity"
               },
-              "activity": "${bfdactivity-662004()}"
+              "activity": "${SendActivity_662004()}"
             }
           ]
         }

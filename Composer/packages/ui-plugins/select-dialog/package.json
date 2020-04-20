@@ -33,6 +33,7 @@
   "devDependencies": {
     "@bfc/extension": "*",
     "@bfc/adaptive-form": "*",
+    "@bfc/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "format-message": "^6.2.3",
