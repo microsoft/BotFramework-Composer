@@ -2915,10 +2915,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@microsoft/bf-cli-command@4.8.0":
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.8.0.tgz#e2f6429b9ffba9c4a1841d0ac4c73f16d3494c97"
-  integrity sha512-pq7/Ok1ZSKNmSrHdJomt+z3a05Kzw1FodE+PdgUuGkZzrya7J2CgOpsOrdwzVuNad3gOfXWLCCInP9UMX/oOmw==
+"@microsoft/bf-cli-command@4.9.0-preview.121038":
+  version "4.9.0-preview.121038"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-4.9.0-preview.121038.tgz#88ccaab82381cab1e4e9d3daaa1daa70538ec16b"
+  integrity sha1-iMyquCOByrHk6dPaqh2qcFOOwWs=
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -2944,13 +2944,15 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-lu@4.8.0", "@microsoft/bf-lu@^4.8.0":
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.8.0.tgz#83a260f286836a4b06671a2572009c72bf1283ef"
-  integrity sha512-FEWt7TaAC6AcE3SasKVY9PeTlQijnMNfujLn8Rz5/9/ieibQwSgLDcgFzzUO1k4ON/V8sds0I72Y0ey950kziw==
+"@microsoft/bf-lu@4.9.0-preview.121038", "@microsoft/bf-lu@^4.9.0-preview.121038":
+  version "4.9.0-preview.121038"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.121038.tgz#9bdc967043c358f83c382cbb44cf509ea3884c92"
+  integrity sha1-m9yWcEPDWPg8OCy7RM9QnqOITJI=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
+    "@oclif/command" "~1.5.19"
+    "@oclif/errors" "~1.2.2"
     "@types/node-fetch" "~2.5.5"
     antlr4 "^4.7.2"
     chalk "2.4.1"
@@ -2966,38 +2968,16 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@^4.9.0-preview.115707":
-  version "4.9.0-preview.115707"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.115707.tgz#6c5546217b8884c10f85c3e91248e0466ea57f2d"
-  integrity sha1-bFVGIXuIhMEPhcPpEkjgRm6lfy0=
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.15"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
-    tslib "^1.10.0"
-
-"@microsoft/bf-luis-cli@^4.8.0":
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-luis-cli/-/bf-luis-cli-4.8.0.tgz#4256213a332520811bdab4a74289521ceb4fdfc8"
-  integrity sha512-lAvasa8l6H37nPgxDQdN+OeY/4DG0/Zbl01iSwmD5fSpNGOPxAcnFbA4W69gqNBW+MpD+2fP7PdUhIvIGJ7HQg==
+"@microsoft/bf-luis-cli@^4.9.0-preview.121038":
+  version "4.9.0-preview.121038"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-luis-cli/-/@microsoft/bf-luis-cli-4.9.0-preview.121038.tgz#52a8cde2fee47aa3248b7682cca6760ce1ca729a"
+  integrity sha1-UqjN4v7keqMki3aCzKZ2DOHKcpo=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/cognitiveservices-luis-runtime" "5.0.0"
     "@azure/ms-rest-azure-js" "2.0.1"
-    "@microsoft/bf-cli-command" "4.8.0"
-    "@microsoft/bf-lu" "4.8.0"
+    "@microsoft/bf-cli-command" "4.9.0-preview.121038"
+    "@microsoft/bf-lu" "4.9.0-preview.121038"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"
@@ -3626,8 +3606,8 @@
 
 "@types/nanoid@^2.1.0":
   version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@types/nanoid/-/nanoid-2.1.0.tgz#41edfda78986e9127d0dc14de982de766f994020"
-  integrity sha512-xdkn/oRTA0GSNPLIKZgHWqDTWZsVrieKomxJBOQUK9YDD+zfSgmwD5t4WJYra5S7XyhTw7tfvwznW+pFexaepQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/nanoid/-/@types/nanoid-2.1.0.tgz#41edfda78986e9127d0dc14de982de766f994020"
+  integrity sha1-Qe39p4mG6RJ9DcFN6YLedm+ZQCA=
   dependencies:
     "@types/node" "*"
 
@@ -4312,10 +4292,10 @@ adal-node@^0.1.28:
     xmldom ">= 0.1.x"
     xpath.js "~1.1.0"
 
-adaptive-expressions@4.9.0-preview-117748:
-  version "4.9.0-preview-117748"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.9.0-preview-117748.tgz#19373501962f88e23dbbaa5c8affa901a0a91b3a"
-  integrity sha1-GTc1AZYviOI9u6pciv+pAaCpGzo=
+adaptive-expressions@4.9.0-preview-119754:
+  version "4.9.0-preview-119754"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.9.0-preview-119754.tgz#d27e04ecc1b1a9a1ce751b11bfe6267592a66e79"
+  integrity sha1-0n4E7MGxqaHOdRsRv+YmdZKmbnk=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     "@types/lru-cache" "^5.1.0"
@@ -4329,9 +4309,9 @@ adaptive-expressions@4.9.0-preview-117748:
     moment-timezone "^0.5.25"
 
 adaptive-expressions@^4.8.0-preview-110700:
-  version "4.8.0-preview-110700"
-  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.8.0-preview-110700.tgz#eaf78b477ed8d24bd936a8cb0b71116d2b0aaef1"
-  integrity sha512-gsxatiSJONlNsveoqeqcalb75SB3VryhiJitCel5uCF2awi7qiW7jGzQ0OVRNUzNhggw8EpHrxvPbk+NrQy7Iw==
+  version "4.8.0-rc2-preview"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.8.0-rc2-preview.tgz#a533cdb1a5b2415f6b5b906f7eaa80133ca8981f"
+  integrity sha1-pTPNsaWyQV9rW5BvfqqAEzyomB8=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
     "@types/lru-cache" "^5.1.0"
@@ -5407,12 +5387,12 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@^4.9.0-preview-117748:
-  version "4.9.0-preview-117748"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.9.0-preview-117748.tgz#818ebe001584d09c9d1021b57c48348f2d4c41f8"
-  integrity sha1-gY6+ABWE0JydECG1fEg0jy1MQfg=
+botbuilder-lg@^4.9.0-preview-119754:
+  version "4.9.0-preview-119754"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.9.0-preview-119754.tgz#3eade42bb61beb766b1c5354428dd25be98bd455"
+  integrity sha1-Pq3kK7Yb63ZrHFNUQo3SW+mL1FU=
   dependencies:
-    adaptive-expressions "4.9.0-preview-117748"
+    adaptive-expressions "4.9.0-preview-119754"
     antlr4ts "0.5.0-alpha.1"
     lodash "^4.17.11"
     path "^0.12.7"
@@ -13623,10 +13603,15 @@ nan@^2.12.1:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
 
-nanoid@^2.1.6:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.1.6.tgz#0665418f692e54cf44f34d4010761f3240a03314"
-  integrity sha512-2NDzpiuEy3+H0AVtdt8LoFi7PnqkOnIzYmJQp7xsEU6VexLluHQwKREuiz57XaQC5006seIadPrIZJhyS2n7aw==
+nanoid-dictionary@^3.0.0:
+  version "3.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/nanoid-dictionary/-/nanoid-dictionary-3.0.0.tgz#e4ad77e528792095662a7be1855ce31448d0687c"
+  integrity sha1-5K135Sh5IJVmKnvhhVzjFEjQaHw=
+
+nanoid@^3.1.3:
+  version "3.1.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/nanoid/-/nanoid-3.1.3.tgz#b2bcfcfda4b4d6838bc22a0c8dd3c0a17a204c20"
+  integrity sha1-srz8/aS01oOLwioMjdPAoXogTCA=
 
 nanomatch@^1.2.9:
   version "1.2.13"
