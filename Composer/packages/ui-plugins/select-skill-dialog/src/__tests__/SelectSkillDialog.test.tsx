@@ -4,12 +4,10 @@
 // @ts-nocheck
 
 import React from 'react';
-import { cleanup, fireEvent, getAllByRole, render } from 'react-testing-library';
+import { fireEvent, getAllByRole, render, act } from '@bfc/test-utils';
 import { Extension } from '@bfc/extension';
 
 import { SelectSkillDialog } from '../SelectSkillDialogField';
-
-const flushPromises = () => Promise.resolve();
 
 const skills = [
   {
@@ -64,27 +62,24 @@ const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
 };
 
 describe('Select Skill Dialog', () => {
-  afterEach(cleanup);
-
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-
   it('should add a new skill', async () => {
-    const addSkillDialog = jest.fn().mockResolvedValue({ manifestUrl: 'https://' });
+    const addSkillDialog = jest.fn().mockImplementation(() => {
+      return {
+        then: cb => {
+          cb({ manifestUrl: 'https://' });
+        },
+      };
+    });
     const onChange = jest.fn();
 
     const { baseElement, findByRole } = renderSelectSkillDialog({ addSkillDialog, onChange });
     const combobox = await findByRole('combobox');
     fireEvent.click(combobox);
 
-    const dialogs = await getAllByRole(baseElement, 'option');
+    const dialogs = getAllByRole(baseElement, 'option');
     fireEvent.click(dialogs[dialogs.length - 1]);
 
-    await flushPromises();
-    jest.advanceTimersByTime(1000);
-
-    expect(addSkillDialog);
+    expect(addSkillDialog).toHaveBeenCalled();
     expect(onChange).toHaveBeenCalledWith({ key: 'https://' });
   });
 
@@ -95,7 +90,7 @@ describe('Select Skill Dialog', () => {
     const combobox = await findByRole('combobox');
     fireEvent.click(combobox);
 
-    const [skill] = await getAllByRole(baseElement, 'option');
+    const [skill] = getAllByRole(baseElement, 'option');
     fireEvent.click(skill);
 
     expect(onChange).toHaveBeenCalledWith({
@@ -107,7 +102,7 @@ describe('Select Skill Dialog', () => {
   });
 
   it('should display label', async () => {
-    const { findByText } = await renderSelectSkillDialog();
+    const { findByText } = renderSelectSkillDialog();
     await findByText('Skill Dialog Name');
   });
 });

@@ -33,7 +33,7 @@
   "devDependencies": {
     "@bfc/extension": "*",
     "@bfc/adaptive-form": "*",
-    "@bfc/shared": "*",
+    "@bfc/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",
     "format-message": "^6.2.3",
@@ -41,6 +41,7 @@
     "react-dom": "16.13.0"
   },
   "dependencies": {
+    "@bfc/shared": "*",
     "@emotion/core": "^10.0.27"
   }
 }
