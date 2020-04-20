@@ -7,7 +7,6 @@ import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
-import * as qnaUtil from '@bfc/indexers/lib/utils/qnaUtil';
 
 import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
