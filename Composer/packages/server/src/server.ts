@@ -99,7 +99,9 @@ export async function start(pluginDir?: string) {
     // always authorize all api routes, it will be a no-op if no auth provider set
     app.use(`${BASEURL}/api`, authorize, apiRouter);
 
-    app.use(function(err: Error, req: Request, res: Response) {
+    // next needs to be an arg in order for express to recognize this as the error handler
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
       if (err) {
         log(err);
         res.status(500).json({ message: err.message });
