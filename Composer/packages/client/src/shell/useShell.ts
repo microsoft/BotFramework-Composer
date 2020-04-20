@@ -105,6 +105,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   }, [schemas, projectId]);
 
   const api: ShellApi = {
+    getDialog: (dialogId: string) => dialogsMap[dialogId],
     saveDialog: (dialogId: string, newDialogData: any) => {
       dialogsMap[dialogId] = newDialogData;
       updateDialog({

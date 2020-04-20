@@ -50,6 +50,7 @@ export interface ShellData {
 }
 
 export interface ShellApi {
+  getDialog: (dialogId: string) => any;
   saveDialog: (dialogId: string, newDialogData: any) => any;
   saveData: <T = any>(newData: T, updatePath?: string) => void;
   navTo: (path: string, rest?: any) => void;
