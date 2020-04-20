@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, deleteAction, deleteActions, DialogUtils, deepCopyActions } from '@bfc/shared';
+import { BaseSchema, DialogUtils } from '@bfc/shared';
 
-import { useLgApi } from './useLgApi';
-import { useLuApi } from './useLuApi';
+import { useActionApi } from './useActionApi';
 
 export interface DialogApiContext {
   copyAction: (actionId: string) => BaseSchema;
@@ -16,8 +15,7 @@ export interface DialogApiContext {
 const { queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
 export function useDialogApi() {
-  const { createLgTemplate, readLgTemplate, deleteLgTemplates } = useLgApi();
-  const { deleteLuIntents } = useLuApi();
+  const { copyActions, deleteAction, deleteActions } = useActionApi();
 
   async function insertActions(
     dialogId: string,
@@ -28,9 +26,7 @@ export function useDialogApi() {
   ) {
     // Considering a scenario that copy one time but paste multiple times,
     // it requires seeding all $designer.id again by invoking deepCopy.
-    const newNodes = await deepCopyActions(actionsToInsert, (actionId, actionData, fieldName, fieldValue) =>
-      createLgTemplate(dialogId, actionId, fieldName, fieldValue)
-    );
+    const newNodes = await copyActions(dialogId, actionsToInsert);
     return insertNodes(dialogData, targetArrayPath, targetArrayPosition, newNodes);
   }
 
@@ -45,28 +41,18 @@ export function useDialogApi() {
   }
 
   function deleteSelectedAction(dialogId, dialogData, actionId: string) {
-    return deleteNode(dialogData, actionId, node =>
-      deleteAction(
-        node,
-        (templates: string[]) => deleteLgTemplates(dialogId, templates),
-        (luIntents: string[]) => deleteLuIntents(dialogId, luIntents)
-      )
-    );
+    return deleteNode(dialogData, actionId, node => deleteAction(dialogId, node));
   }
 
   function deleteSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
     return deleteNodes(dialogData, actionIds, nodes => {
-      deleteActions(
-        nodes,
-        (templates: string[]) => deleteLgTemplates(dialogId, templates),
-        (luIntents: string[]) => deleteLuIntents(dialogId, luIntents)
-      );
+      deleteActions(dialogId, nodes);
     });
   }
 
   async function copySelectedActions(dialogId, dialogData, actionIds: string[]) {
     const actions = queryNodes(dialogData, actionIds);
-    return deepCopyActions(actions, (actionId, actionData, fieldName, lgText) => readLgTemplate(dialogId, lgText));
+    return copyActions(dialogId, actions);
   }
 
   async function cutSelectedActions(dialogId, dialogData, actionIds: string[]) {
