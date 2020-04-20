@@ -1,5 +1,5 @@
 
-# TextInput.response-267073
+# TextInput_Response_267073
 - my name is {@userName = vishwac}
 - I'm {@userName = tom}
 - you can call me {@userName = chris}
@@ -18,7 +18,7 @@
 
 
 
-# NumberInput.response-826115
+# NumberInput_Response_826115
 - I'm {@userAge} years old
 - {@userAge = 36}
 

@@ -1,7 +1,7 @@
 [import](common.lg)
 
-# bfdprompt-383595
+# TextInput_Prompt_383595
 - what the time of day
 
-# bfdactivity-749181
+# SendActivity_749181
 - ${timeOfDayGreeting(user.timeofday)}

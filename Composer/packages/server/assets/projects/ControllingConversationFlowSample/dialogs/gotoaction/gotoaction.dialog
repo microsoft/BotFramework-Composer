@@ -43,7 +43,7 @@
           "$designer": {
             "id": "1QICaW"
           },
-          "activity": "${bfdactivity-1QICaW()}"
+          "activity": "${SendActivity_1QICaW()}"
         },
         {
           "$kind": "Microsoft.SetProperty",

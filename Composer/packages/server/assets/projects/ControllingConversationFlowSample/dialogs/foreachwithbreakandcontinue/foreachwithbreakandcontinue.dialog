@@ -81,7 +81,7 @@
           "$designer": {
             "id": "MLnfkV"
           },
-          "activity": "${bfdactivity-MLnfkV()}"
+          "activity": "${SendActivity_MLnfkV()}"
         },
         {
           "$kind": "Microsoft.Foreach",
@@ -110,7 +110,7 @@
               "$designer": {
                 "id": "_aqYPi"
               },
-              "activity": "${bfdactivity-_aqYPi()}"
+              "activity": "${SendActivity__aqYPi()}"
             }
           ]
         },
@@ -119,7 +119,7 @@
           "$designer": {
             "id": "49S9ax"
           },
-          "activity": "${bfdactivity-49S9ax()}"
+          "activity": "${SendActivity_49S9ax()}"
         },
         {
           "$kind": "Microsoft.Foreach",
@@ -145,7 +145,7 @@
               "$designer": {
                 "id": "Jz-Jjl"
               },
-              "activity": "${bfdactivity-Jz-Jjl()}"
+              "activity": "${SendActivity_Jz_Jjl()}"
             }
           ],
           "$designer": {
@@ -157,7 +157,7 @@
           "$designer": {
             "id": "8JDxhd"
           },
-          "activity": "${bfdactivity-8JDxhd()}"
+          "activity": "${SendActivity_8JDxhd()}"
         }
       ]
     }
