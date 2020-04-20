@@ -47,7 +47,7 @@ export const updateDialog: ActionCreator = undoable(
   (store: Store, from, to) => updateDialogBase(store, ...to)
 );
 
-export const createDialogBegin: ActionCreator = ({ dispatch }, { actions }, onComplete) => {
+export const createDialogBegin: ActionCreator = ({ dispatch }, actions, onComplete) => {
   dispatch({
     type: ActionTypes.CREATE_DIALOG_BEGIN,
     payload: {

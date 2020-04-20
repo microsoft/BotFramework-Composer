@@ -215,3 +215,14 @@ export const getParentPaths = (actionPath: string): string[] => {
   }
   return results;
 };
+
+export const parseNodePath = (path: string): { arrayPath: string; arrayIndex: number } | null => {
+  if (!path) return null;
+
+  const position = path.match(/^(.+)\[(\d+)\]$/);
+  if (position === null || position.length !== 3) return null;
+
+  const [, arrayPath, arrayIndexStr] = position;
+  const arrayIndex = parseInt(arrayIndexStr);
+  return { arrayPath, arrayIndex };
+};

@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { SDKKinds, LgTemplateRef, LgMetaData, walkLgResourcesInActionList } from '@bfc/shared';
-import { useDialogApi } from '@bfc/extension';
+import { SDKKinds } from '@bfc/shared';
+import { useDialogApi, useActionApi } from '@bfc/extension';
 import get from 'lodash/get';
 import { DialogUtils } from '@bfc/shared';
 
@@ -40,9 +40,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 }): JSX.Element | null => {
   let divRef;
 
-  const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, dialogFactory } = useContext(
-    NodeRendererContext
-  );
+  const { focusedId, focusedEvent, clipboardActions, dialogFactory } = useContext(NodeRendererContext);
   const {
     insertAction,
     insertActions,
@@ -52,6 +50,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     deleteSelectedAction,
     deleteSelectedActions,
   } = useDialogApi();
+  const { constructActions } = useActionApi();
 
   const trackActionChange = (actionPath: string) => {
     const affectedPaths = DialogUtils.getParentPaths(actionPath);
@@ -126,49 +125,36 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.MoveSelection:
-        handler = e => {
+        handler = async e => {
           if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
 
-          // Using copy-paste-delete pattern here is safer than using cut-paste
-          // since create new dialog may be cancelled or failed
-          copySelectedActions(path, data, e.actionIds)
-            .then(copiedActions => {
-              const lgTemplatesToBeCreated: { name: string; body: string }[] = [];
-              walkLgResourcesInActionList(copiedActions, (designerId, actionData, fieldName, lgStr) => {
-                if (!lgStr) return '';
+          // Create target dialog
+          const newDialogId = await onCreateDialog([]);
+          if (!newDialogId) return;
 
-                const lgName = new LgMetaData(fieldName, designerId).toString();
-                const refString = new LgTemplateRef(lgName).toString();
+          // Using copy-paste-delete pattern here is safer than using cut-paste since create new dialog may be cancelled or failed
+          const actionsToBeMoved = await copySelectedActions(path, data, e.actionIds);
 
-                lgTemplatesToBeCreated.push({ name: lgName, body: lgStr });
-                actionData[fieldName] = refString;
-                return refString;
-              });
-              // TODO: share the constructor logic
-              return onCreateDialog(copiedActions).then(dialogName => ({ dialogName, lgTemplatesToBeCreated }));
-            })
-            .then(async ({ dialogName: newDialog, lgTemplatesToBeCreated }) => {
-              // defense modal cancellation
-              if (!newDialog) return;
+          // Invoke action contructor asyncly
+          // TODO: be able to operate another dialog id
+          insertActions(newDialogId, {}, 'triggers[0]', 0, actionsToBeMoved);
 
-              // create lg templates for actions in new dialog
-              for (const { name, body } of lgTemplatesToBeCreated) {
-                await updateLgTemplate(newDialog, name, body);
-              }
+          // Delete moved actions
+          const deleteResult = deleteSelectedActions(path, data, e.actionIds);
 
-              // delete old actions (they are already moved to new dialog)
-              const deleteResult = deleteSelectedActions(path, data, e.actionIds);
+          // Insert a BeginDialog as placeholder
+          const placeholderPosition = DialogUtils.parseNodePath(e.actionIds[0]);
+          if (!placeholderPosition) return;
 
-              // insert a BeginDialog action points to newly created dialog
-              const indexes = e.actionIds[0].match(/^(.+)\[(\d+)\]$/);
-              if (indexes === null || indexes.length !== 3) return;
-
-              const [, arrayPath, actionIndexStr] = indexes;
-              const startIndex = parseInt(actionIndexStr);
-              const placeholderAction = dialogFactory.create(SDKKinds.BeginDialog, { dialog: newDialog });
-              const insertResult = insertAction(path, deleteResult, arrayPath, startIndex, placeholderAction);
-              onChange(insertResult);
-            });
+          const placeholderAction = dialogFactory.create(SDKKinds.BeginDialog, { dialog: newDialogId });
+          const insertResult = await insertAction(
+            path,
+            deleteResult,
+            placeholderPosition.arrayPath,
+            placeholderPosition.arrayIndex,
+            placeholderAction
+          );
+          onChange(insertResult);
           onFocusSteps([]);
         };
         break;
