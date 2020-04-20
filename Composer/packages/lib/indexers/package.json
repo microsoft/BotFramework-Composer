@@ -22,10 +22,9 @@
     "watch": "yarn build:ts --watch"
   },
   "devDependencies": {
+    "@bfc/test-utils": "*",
     "@types/lodash": "^4.14.146",
-    "jest": "24.0.0",
-    "rimraf": "^2.6.3",
-    "ts-jest": "^24.1.0"
+    "rimraf": "^2.6.3"
   },
   "dependencies": {
     "@bfc/shared": "*",

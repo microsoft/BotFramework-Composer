@@ -28,7 +28,7 @@ Tests can be run in two ways:
 
 > **IMPORTANT:** Any new code being checked in should also come with new tests!
 
-When writing tests for any React components, we will be using the `react-testing-library` ([documentation](https://testing-library.com/docs/react-testing-library/api)).
+When writing tests for any React components, we will be using the `@testing-library/react` ([documentation](https://testing-library.com/docs/@testing-library/react/api)).
 
 For some examples of how to write React component tests, look at the tests under the `<root>/Composer/packages/client/__tests__/` directory, or at the below examples.
 
@@ -73,7 +73,7 @@ export const Header = props => {
 ### Testing for text content:
 
 **client/\_\_tests__/header.test.js**
-   
+
   ```
   it('should render the header', async () => {
     const { getByText } = render(<Header />);
@@ -89,7 +89,7 @@ export const Header = props => {
   ```
   const { getByText } = render(<Header />);
   ```
-    
+
   This method allows us to search the rendered component for nodes containing text matching a string, regular expression, or matching function. The next 3 lines search for nodes containing "Composer," "New," and "Open:"
 
   ```
@@ -98,7 +98,7 @@ export const Header = props => {
   await waitForElement(() => getByText(/Open/));
   ```
 
-    
+
   > **NOTE:** The method `waitForElement` simply waits until the component is rendered, performs the inner function, and returns the result.
 
   > **NOTE:** Queries such as `getByText()` will throw an error if the DOM node is not found, so there is no need to assert anything.
@@ -117,17 +117,17 @@ export const Header = props => {
     expect(mockOpenStorageExplorer).toHaveBeenCalled();
   });
   ```
-    
+
   In this example, the first two lines create a mock Jest function to pass into the component as the prop `openStorageExplorer`, and then render the component:
 
   ```
   const mockOpenStorageExplorer = jest.fn(() => null);
   const { getByText } = render(<Header openStorageExplorer={mockOpenStorageExplorer} />);
   ```
-    
+
   The next line grabs a reference to the button labelled "Open" from the rendered component:
 
-  ```  
+  ```
   const openButton = await waitForElement(() => getByText(/Open/));
   ```
 
