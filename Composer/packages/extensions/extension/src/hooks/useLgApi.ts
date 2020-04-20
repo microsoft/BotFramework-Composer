@@ -6,11 +6,11 @@ import { LgTemplateRef, LgMetaData } from '@bfc/shared';
 import { useShellApi } from './useShellApi';
 
 /**
- * External resources (LU, LG) CRUD lib with shell context bound
+ * LG CRUD lib
  */
-export const useExternalResourceApi = () => {
+export const useLgApi = () => {
   const { shellApi } = useShellApi();
-  const { removeLgTemplates, removeLuIntent, getLgTemplates, getLuIntent, updateLgTemplate, updateLuIntent } = shellApi;
+  const { removeLgTemplates, getLgTemplates, updateLgTemplate } = shellApi;
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
@@ -20,10 +20,6 @@ export const useExternalResourceApi = () => {
       })
       .filter(x => !!x);
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
-  };
-
-  const deleteLuIntents = (luFileId: string, luIntents: string[]) => {
-    return Promise.all(luIntents.map(intent => removeLuIntent(luFileId, intent)));
   };
 
   const readLgTemplate = async (lgFileId: string, lgText: string): Promise<string> => {
@@ -53,15 +49,9 @@ export const useExternalResourceApi = () => {
   };
 
   return {
-    // LG
     createLgTemplate,
     readLgTemplate,
     deleteLgTemplate: (lgFileId: string, lgTemplate: string) => deleteLgTemplates(lgFileId, [lgTemplate]),
     deleteLgTemplates,
-    // LU
-    createLuIntent: updateLuIntent,
-    readLuIntent: getLuIntent,
-    deleteLuIntent: (luFileId: string, luIntent: string) => deleteLuIntents(luFileId, [luIntent]),
-    deleteLuIntents,
   };
 };

@@ -3,7 +3,8 @@
 
 import { BaseSchema, deleteAction, deleteActions, DialogUtils, deepCopyActions } from '@bfc/shared';
 
-import { useExternalResourceApi } from './useExternalResourceApi';
+import { useLgApi } from './useLgApi';
+import { useLuApi } from './useLuApi';
 
 export interface DialogApiContext {
   copyAction: (actionId: string) => BaseSchema;
@@ -15,7 +16,8 @@ export interface DialogApiContext {
 const { queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
 export function useDialogApi() {
-  const { createLgTemplate, readLgTemplate, deleteLgTemplates, deleteLuIntents } = useExternalResourceApi();
+  const { createLgTemplate, readLgTemplate, deleteLgTemplates } = useLgApi();
+  const { deleteLuIntents } = useLuApi();
 
   async function insertActions(
     dialogId: string,

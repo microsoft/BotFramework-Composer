@@ -3,4 +3,5 @@
 export * from './useDebounce';
 export * from './useShellApi';
 export * from './useDialogApi';
-export * from './useExternalResourceApi';
+export * from './useLgApi';
+export * from './useLuApi';
