@@ -12,7 +12,7 @@ export interface DialogApiContext {
   deleteActions: (actionIds: BaseSchema[]) => BaseSchema[];
 }
 
-const { queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
+const { appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
 export function useDialogApi() {
   const { constructActions, copyActions, deleteAction, deleteActions } = useActionApi();
@@ -36,6 +36,11 @@ export function useDialogApi() {
     actionToInsert: BaseSchema
   ) {
     return insertActions(dialogId, dialogData, targetArrayPath, targetArrayPosition, [actionToInsert]);
+  }
+
+  async function insertActionsAfter(dialogId: string, dialogData, targetId: string, actionsToInsert: BaseSchema[]) {
+    const newNodes = await constructActions(dialogId, actionsToInsert);
+    return appendNodesAfter(dialogData, targetId, newNodes);
   }
 
   function deleteSelectedAction(dialogId, dialogData, actionId: string) {
@@ -62,6 +67,7 @@ export function useDialogApi() {
   return {
     insertAction,
     insertActions,
+    insertActionsAfter,
     deleteSelectedAction,
     deleteSelectedActions,
     copySelectedActions,

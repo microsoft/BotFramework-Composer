@@ -46,6 +46,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const {
     insertAction,
     insertActions,
+    insertActionsAfter,
     copySelectedActions,
     cutSelectedActions,
     deleteSelectedAction,
@@ -178,15 +179,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           onFocusSteps([]);
         };
         break;
-      // case NodeEventTypes.AppendSelection:
-      //   trackActionListChange(eventData.target);
-      //   handler = e => {
-      //     // forbid paste to root level.
-      //     if (!e.target || e.target === focusedEvent) return;
-      //     const dialog = appendNodesAfter(data, e.target, e.actions);
-      //     onChange(dialog);
-      //   };
-      //   break;
+      case NodeEventTypes.AppendSelection:
+        trackActionListChange(eventData.target);
+        handler = e => {
+          // forbid paste to root level.
+          if (!e.target || e.target === focusedEvent) return;
+          onChange(insertActionsAfter(path, data, e.target, e.actions));
+        };
+        break;
       case NodeEventTypes.Undo:
         handler = undo;
         break;
