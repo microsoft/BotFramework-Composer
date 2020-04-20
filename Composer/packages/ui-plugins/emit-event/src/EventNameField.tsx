@@ -8,7 +8,7 @@ import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib
 import formatMessage from 'format-message';
 
 const EventNameField: React.FC<FieldProps<string>> = props => {
-  const { enumOptions, value, description, id, label, uiOptions, onChange, error } = props;
+  const { enumOptions, value, description, id, label, uiOptions, onChange, error, required } = props;
 
   const options: IComboBoxOption[] = (enumOptions ?? []).map(o => ({
     key: o?.toString(),
@@ -27,7 +27,7 @@ const EventNameField: React.FC<FieldProps<string>> = props => {
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <ComboBox
         id={id}
         text={value}

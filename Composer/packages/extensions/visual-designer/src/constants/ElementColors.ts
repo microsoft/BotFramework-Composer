@@ -11,6 +11,7 @@ const Colors = {
   AzureGray3: '#D7D7D7',
   Gray80: '#B3B0AD',
   Gray60: '#C8C6C4',
+  White: '#FFFFFF',
 
   // Composer Bright and Darks with white text
   RedOrange: '#DA3B01',
@@ -21,6 +22,7 @@ const Colors = {
   AzureBlue: '#0078D4',
   AzureBlue2: '#50E6FF',
   LightBlue: '#E5F0FF',
+  DarkBlue: '#004578',
   Green20: '#0B6A0B',
   Cyan40: '#005E50',
   Gray20: '#69797E',
@@ -50,6 +52,12 @@ export const EventColor = {
   expanded: Colors.AcidGreen,
   iconColor: Colors.DarkGreen,
   collapsed: Colors.DarkGreen,
+};
+
+export const DefaultColors = {
+  theme: ObiColors.AzureGray3,
+  icon: ObiColors.AzureGray2,
+  color: ObiColors.Black,
 };
 
 export const NodeColors = {

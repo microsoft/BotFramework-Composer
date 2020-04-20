@@ -32,7 +32,7 @@ const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): stri
 };
 
 const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
-  const { value = [], schema, id, onChange, className, uiOptions, label, description } = props;
+  const { value = [], schema, id, onChange, className, uiOptions, label, description, required } = props;
   const { items } = schema;
   const itemSchema = Array.isArray(items) ? items[0] : items;
   const properties = (itemSchema && itemSchema !== true && itemSchema.properties) || {};
@@ -86,7 +86,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
 
   return (
     <div className={className}>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <div>
         {orderedProperties.length > 1 && !stackArrayItems && (
           <div css={objectArrayField.objectItemLabel}>

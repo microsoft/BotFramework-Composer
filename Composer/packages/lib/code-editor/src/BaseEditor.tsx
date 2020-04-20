@@ -31,6 +31,7 @@ const defaultOptions = {
   folding: false,
   renderLineHighlight: 'none',
   formatOnType: true,
+  fixedOverflowWidgets: true,
 };
 
 const styles = {

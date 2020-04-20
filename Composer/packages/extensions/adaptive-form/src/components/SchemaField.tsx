@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FieldProps } from '@bfc/extension';
 
 import { getUISchema, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
@@ -17,10 +17,6 @@ const schemaField = {
     margin: 10px ${depth === 0 ? 18 : 0}px;
 
     label: SchemaFieldContainer;
-  `,
-  field: (hasError: boolean) => css`
-    width: 100%;
-    label: SchemaField;
   `,
 };
 
@@ -43,6 +39,16 @@ const SchemaField: React.FC<FieldProps> = props => {
     ...getUISchema(schema, pluginConfig.formSchema),
     ...baseUIOptions,
   };
+
+  useEffect(() => {
+    if (typeof value === 'undefined') {
+      if (schema?.const) {
+        onChange(schema.const);
+      } else if (schema?.default) {
+        onChange(schema.default);
+      }
+    }
+  }, []);
 
   const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
 
