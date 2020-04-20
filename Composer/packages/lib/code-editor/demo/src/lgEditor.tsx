@@ -45,31 +45,31 @@ const content = `# Hello
 -I can help you yes I can
 -Help, we don't need no stinkin' help!
 
-# bfdactivity-116673
+# SendActivity_116673
 -Successfully added a todo named @{dialog.todo}
 
-# bfdactivity-832307
+# SendActivity_832307
 -Successfully cleared items in the Todo List.
 
-# bfdactivity-983761
+# SendActivity_983761
 -You don't have any items in the Todo List.
 
-# bfdactivity-725469
+# SendActivity_725469
 -Successfully removed a todo named @{dialog.todo}
 
-# bfdactivity-549615
+# SendActivity_549615
 -@{dialog.todo} is not in the Todo List
 
-# bfdactivity-339580
+# SendActivity_339580
 -You have no todos.
 
-# bfdactivity-662084
+# SendActivity_662084
 -@{ShowTodo}
 
-# bfdactivity-696707
+# SendActivity_696707
 -@{help}
 
-# bfdactivity-157674
+# SendActivity_157674
 - Hi! I'm a ToDo bot. Say "add a todo named first" to get started.
 `;
 

@@ -5,13 +5,11 @@ import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogF
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { ExpressionEngine } from 'adaptive-expressions';
+import { Expression } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
-
-const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
   [dialogId: string]: any;
@@ -331,7 +329,7 @@ export function sanitizeDialogData(dialogData: any) {
 
 export function isExpression(str: string): boolean {
   try {
-    ExpressionParser.parse(str);
+    Expression.parse(str);
   } catch (error) {
     return false;
   }

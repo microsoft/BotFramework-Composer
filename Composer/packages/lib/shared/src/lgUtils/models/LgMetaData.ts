@@ -7,7 +7,7 @@ import buildLgTemplateName from '../stringBuilders/buildLgTemplateName';
 import { LgTemplateName } from './stringTypes';
 
 /**
- * LgMetaData can be converted from & to Lg name. Such as 'bfdactivity-1234'.
+ * LgMetaData can be converted from & to Lg name. Such as 'SendActivity_1234'.
  * It's created by Composer, contains designerId and filed type.
  */
 export default class LgMetaData {
