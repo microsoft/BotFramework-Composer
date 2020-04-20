@@ -2966,10 +2966,10 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@4.9.0-preview.120468":
-  version "4.9.0-preview.120468"
-  uid a6ae457899ff9aedf9afe6ae5782403f9f654fce
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.120468#a6ae457899ff9aedf9afe6ae5782403f9f654fce"
+"@microsoft/bf-lu@4.9.0-preview.121555":
+  version "4.9.0-preview.121555"
+  uid "3c9e4959c03117e1fea8360f78ae83022cb4751e"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.121555#3c9e4959c03117e1fea8360f78ae83022cb4751e"
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
