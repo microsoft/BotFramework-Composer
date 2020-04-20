@@ -28,7 +28,7 @@
           "$designer": {
             "id": "823322"
           },
-          "activity": "${bfdactivity-823322()}"
+          "activity": "${SendActivity_823322()}"
         }
       ]
     }

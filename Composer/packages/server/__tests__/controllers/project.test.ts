@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ProjectController } from '@src/controllers/project';
 import rimraf from 'rimraf';
-import { BotProjectService } from '@src/services/project';
 
+import { BotProjectService } from '../../src/services/project';
+import { ProjectController } from '../../src/controllers/project';
 import { Path } from '../../src/utility/path';
 
 let mockRes: Response;
@@ -150,28 +150,28 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'bot1', content: '' },
+      body: { name: 'bot1.dialog', content: '' },
     } as Request;
-    await ProjectController.updateDialog(mockReq, mockRes);
+    await ProjectController.updateFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
   it('should create dialog', async () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'test', content: '' },
+      body: { name: 'test.dialog', content: '' },
     } as Request;
-    await ProjectController.createDialog(mockReq, mockRes);
+    await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 
   it('should remove dialog', async () => {
     const mockReq = {
-      params: { dialogId: 'test', projectId },
+      params: { name: 'test.dialog', projectId },
       query: {},
       body: {},
     } as Request;
-    await ProjectController.removeDialog(mockReq, mockRes);
+    await ProjectController.removeFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
@@ -186,9 +186,9 @@ describe('lg operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'common.en-us', content: '' },
+      body: { name: 'common.en-us.lg', content: '' },
     } as Request;
-    await ProjectController.updateLgFile(mockReq, mockRes);
+    await ProjectController.updateFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 
@@ -196,19 +196,19 @@ describe('lg operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'test1', content: '' },
+      body: { name: 'test1.lg', content: '' },
     } as Request;
-    await ProjectController.createLgFile(mockReq, mockRes);
+    await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 
   it('should remove lg file', async () => {
     const mockReq = {
-      params: { lgFileId: 'test1', projectId },
+      params: { name: 'test1.lg', projectId },
       query: {},
       body: {},
     } as Request;
-    await ProjectController.removeLgFile(mockReq, mockRes);
+    await ProjectController.removeFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
@@ -223,9 +223,9 @@ describe('lu operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'b.en-us', content: '' },
+      body: { name: 'b.en-us.lu', content: '' },
     } as Request;
-    await ProjectController.updateLuFile(mockReq, mockRes);
+    await ProjectController.updateFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 
@@ -233,19 +233,19 @@ describe('lu operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { id: 'c', content: '' },
+      body: { name: 'c.lu', content: '' },
     } as Request;
-    await ProjectController.createLuFile(mockReq, mockRes);
+    await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 
   it('should remove lu file', async () => {
     const mockReq = {
-      params: { luFileId: 'c', projectId },
+      params: { name: 'c.lu', projectId },
       query: {},
       body: {},
     } as Request;
-    await ProjectController.removeLuFile(mockReq, mockRes);
+    await ProjectController.removeFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });

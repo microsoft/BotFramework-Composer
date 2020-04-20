@@ -42,6 +42,9 @@ export const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
       ':hover': {
         background: '#f4f4f4',
       },
+      ':focus': {
+        background: '#f4f4f4',
+      },
     },
   },
 };

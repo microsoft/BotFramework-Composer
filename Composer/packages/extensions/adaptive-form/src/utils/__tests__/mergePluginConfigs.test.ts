@@ -11,7 +11,7 @@ import DefaultRecognizers from '../../defaultRecognizers';
 describe('mergePluginConfigs', () => {
   it('returns default ui schema when no overrides', () => {
     expect(mergePluginConfigs()).toEqual({
-      uiSchema: DefaultUISchema,
+      formSchema: DefaultUISchema,
       roleSchema: DefaultRoleSchema,
       recognizers: DefaultRecognizers,
     });
@@ -19,7 +19,7 @@ describe('mergePluginConfigs', () => {
 
   it('merges overrides into the defaults', () => {
     const overrides = {
-      uiSchema: {
+      formSchema: {
         [SDKKinds.AdaptiveDialog]: {
           hidden: ['recognizer'],
           properties: {
@@ -38,27 +38,7 @@ describe('mergePluginConfigs', () => {
 
     expect(mergePluginConfigs(overrides)).toMatchInlineSnapshot(`
 Object {
-  "recognizers": Array [
-    Object {
-      "displayName": [Function],
-      "handleRecognizerChange": [Function],
-      "id": "none",
-      "isSelected": [Function],
-    },
-    Object {
-      "displayName": [Function],
-      "editor": [Function],
-      "handleRecognizerChange": [Function],
-      "id": "Microsoft.RegexRecognizer",
-      "isSelected": [Function],
-    },
-  ],
-  "roleSchema": Object {
-    "expression": Object {
-      "label": "expression label",
-    },
-  },
-  "uiSchema": Object {
+  "formSchema": Object {
     "Microsoft.AdaptiveDialog": Object {
       "description": [Function],
       "helpLink": "https://aka.ms/botframework",
@@ -95,6 +75,9 @@ Object {
         "*",
       ],
     },
+    "Microsoft.BreakLoop": Object {
+      "label": [Function],
+    },
     "Microsoft.CancelAllDialogs": Object {
       "helpLink": "https://aka.ms/bfc-understanding-dialogs",
       "label": [Function],
@@ -110,6 +93,9 @@ Object {
     },
     "Microsoft.ConfirmInput": Object {
       "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+      "label": [Function],
+    },
+    "Microsoft.ContinueLoop": Object {
       "label": [Function],
     },
     "Microsoft.DateTimeInput": Object {
@@ -179,6 +165,10 @@ Object {
         "headers",
         "*",
       ],
+    },
+    "Microsoft.IRecognizer": Object {
+      "field": [Function],
+      "helpLink": "https://aka.ms/BFC-Using-LU",
     },
     "Microsoft.IfCondition": Object {
       "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
@@ -435,10 +425,6 @@ Object {
       "helpLink": "https://aka.ms/bfc-using-QnA",
       "label": [Function],
     },
-    "Microsoft.Recognizer": Object {
-      "field": [Function],
-      "helpLink": "https://aka.ms/BFC-Using-LU",
-    },
     "Microsoft.RegexRecognizer": Object {
       "hidden": Array [
         "entities",
@@ -504,6 +490,26 @@ Object {
     "Microsoft.TraceActivity": Object {
       "helpLink": "https://aka.ms/bfc-debugging-bots",
       "label": [Function],
+    },
+  },
+  "recognizers": Array [
+    Object {
+      "displayName": [Function],
+      "handleRecognizerChange": [Function],
+      "id": "none",
+      "isSelected": [Function],
+    },
+    Object {
+      "displayName": [Function],
+      "editor": [Function],
+      "handleRecognizerChange": [Function],
+      "id": "Microsoft.RegexRecognizer",
+      "isSelected": [Function],
+    },
+  ],
+  "roleSchema": Object {
+    "expression": Object {
+      "label": "expression label",
     },
   },
 }

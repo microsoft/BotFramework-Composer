@@ -19,7 +19,7 @@
             "id": "298897"
           },
           "property": "dialog.todo",
-          "prompt": "OK, please enter the title of your todo.",
+          "prompt": "${TextInput_Prompt_298897()}",
           "maxTurnCount": 3,
           "value": "=@title",
           "alwaysPrompt": false,
@@ -39,7 +39,7 @@
           "$designer": {
             "id": "116673"
           },
-          "activity": "${bfdactivity-116673()}"
+          "activity": "${SendActivity_116673()}"
         }
       ]
     }

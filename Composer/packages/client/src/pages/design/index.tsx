@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -12,8 +12,8 @@ import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 
-import { VisualEditorAPI } from '../../messenger/FrameAPI';
-import { TestController } from '../../TestController';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { TestController } from '../../components/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
@@ -27,7 +27,9 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 
+import { VisualEditorAPI } from './FrameAPI';
 import { CreateDialogModal } from './createDialogModal';
+import { AddSkillDialog } from './addSkillDialogModal';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -287,7 +289,11 @@ function DesignPage(props) {
     );
   }, [dialogs, breadcrumb]);
 
-  async function onSubmit(data: { name: string; description: string }) {
+  async function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
+    await actions.updateSkill({ projectId, targetId: -1, skillData });
+  }
+
+  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
@@ -347,31 +353,33 @@ function DesignPage(props) {
     }
   }
 
+  if (!dialogId) {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <Fragment>
+    <React.Fragment>
       <div css={pageRoot}>
         <ProjectTree
           dialogs={dialogs}
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}
-          onAdd={() => actions.createDialogBegin(onCreateDialogComplete)}
+          onAdd={() => actions.createDialogBegin({}, onCreateDialogComplete)}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
           openNewTriggerModal={openNewTriggerModal}
         />
         <div css={contentWrapper}>
-          {match && <ToolBar toolbarItems={toolbarItems} />}
+          {match && <ToolBar toolbarItems={toolbarItems} actions={actions} projectId={projectId} />}
           <Conversation css={editorContainer}>
-            <Fragment>
-              <div css={editorWrapper}>
-                <div css={visualPanel}>
-                  {breadcrumbItems}
-                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                </div>
-                <PropertyEditor />
+            <div css={editorWrapper}>
+              <div css={visualPanel}>
+                {breadcrumbItems}
+                <VisualEditor openNewTriggerModal={openNewTriggerModal} />
               </div>
-            </Fragment>
+              <PropertyEditor />
+            </div>
           </Conversation>
         </div>
       </div>
@@ -379,7 +387,14 @@ function DesignPage(props) {
         <CreateDialogModal
           isOpen={state.showCreateDialogModal}
           onDismiss={() => actions.createDialogCancel()}
-          onSubmit={onSubmit}
+          onSubmit={handleCreateDialogSubmit}
+        />
+      )}
+      {state.showAddSkillDialogModal && (
+        <AddSkillDialog
+          isOpen={state.showAddSkillDialogModal}
+          onDismiss={() => actions.addSkillDialogCancel()}
+          onSubmit={handleAddSkillDialogSubmit}
         />
       )}
       {triggerModalVisible && (
@@ -390,7 +405,7 @@ function DesignPage(props) {
           onSubmit={onTriggerCreationSubmit}
         />
       )}
-    </Fragment>
+    </React.Fragment>
   );
 }
 

@@ -16,9 +16,9 @@ import { StepRenderer } from '../renderers/StepRenderer';
 import { GraphLayout } from '../../models/GraphLayout';
 import { EdgeMenu } from '../menus/EdgeMenu';
 import { SVGContainer } from '../lib/SVGContainer';
-import { renderEdge } from '../lib/EdgeUtil';
 import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
+import { FlowEdges } from '../lib/FlowEdges';
 
 const StepInterval = ElementInterval.y;
 
@@ -43,7 +43,13 @@ const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
+export const StepGroup: FunctionComponent<NodeProps> = ({
+  id,
+  addCoachMarkRef,
+  data,
+  onEvent,
+  onResize,
+}: NodeProps): JSX.Element => {
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(initialNodes, calculateLayout, onResize);
 
@@ -51,7 +57,9 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer hidden>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
+      <SVGContainer width={boundary.width} height={boundary.height} hidden>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       {nodes
         ? nodes.map((node, index) => (
             <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={node.offset}>
@@ -76,6 +84,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
           onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
           data-testid="StepGroupAdd"
           id={`${id}[0]`}
+          addCoachMarkRef={addCoachMarkRef}
         />
       </OffsetContainer>
       {nodes

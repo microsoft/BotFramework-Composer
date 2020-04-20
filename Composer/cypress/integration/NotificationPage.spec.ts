@@ -31,7 +31,7 @@ context('Notification Page', () => {
     cy.visitPage('User Input');
 
     cy.findByTestId('LUEditor').within(() => {
-      cy.findByText('__TestToDoBotWithLuisSample.Main').click();
+      cy.findByText('__TestToDoBotWithLuisSample').click();
     });
 
     cy.get('.toggleEditMode button').click();
@@ -43,10 +43,10 @@ context('Notification Page', () => {
       cy.findAllByText('__testtodobotwithluissample.en-us.lu')
         .should('exist')
         .first()
-        .click();
+        .dblclick();
     });
 
-    cy.findAllByText('__TestToDoBotWithLuisSample.Main').should('exist');
+    cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
   });
 
   it('can show dialog expression error ', () => {
@@ -60,7 +60,7 @@ context('Notification Page', () => {
       cy.findByText('WelcomeUser').should('exist');
     });
 
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByText('Condition').should('exist');
       cy.findByTestId('expression-type-dropdown-Condition')
         .focus()
@@ -77,7 +77,7 @@ context('Notification Page', () => {
       cy.findAllByText('__testtodobotwithluissample.dialog')
         .should('exist')
         .first()
-        .click();
+        .dblclick();
     });
 
     cy.findAllByText('WelcomeUser').should('exist');

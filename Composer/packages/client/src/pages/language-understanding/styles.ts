@@ -2,13 +2,17 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights, FontSizes, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
 export const actionButton = css`
   font-size: 16px;
   margin: 0;
   margin-left: 15px;
 `;
+
+export const iconClass = mergeStyles({
+  fontSize: FontSizes.medium,
+});
 
 export const flexContentSpaceBetween = css`
   display: flex;
@@ -39,6 +43,7 @@ export const ContentStyle = css`
   display: flex;
   border-top: 1px solid #dddddd;
   flex: 1;
+  height: calc(100% - 165px);
   position: relative;
   nav {
     ul {
@@ -53,28 +58,29 @@ export const contentEditor = css`
   height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
+
+  label: ContentEditor;
 `;
 
 export const codeEditorContainer = css`
   width: 100%;
 `;
 
-export const codeEditor = css`
-  border: 1px solid #dddddd;
-  padding-bottom: 10px;
-  height: calc(100% - 20px);
-`;
-
 export const formCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
   white-space: pre-wrap;
   font-size: 14px;
-  textarea,
-  input {
-    border: 1px solid #dddddd;
-  }
+  line-height: 28px;
 `;
 
 export const luPhraseCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
   white-space: pre-wrap;
   font-size: 14px;
 `;

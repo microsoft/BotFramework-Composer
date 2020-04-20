@@ -9,6 +9,7 @@ export const collapsedStyles: Partial<IModalStyles> = {
   main: {
     backgroundColor: palette.themePrimary,
     bottom: '30px',
+    minHeight: '55px',
     color: 'white',
     paddingLeft: '15px',
     position: 'absolute',

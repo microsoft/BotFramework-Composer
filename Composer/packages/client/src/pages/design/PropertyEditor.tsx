@@ -4,24 +4,45 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import AdaptiveForm from '@bfc/adaptive-form';
+import Extension from '@bfc/extension';
 import formatMessage from 'format-message';
+import { Resizable, ResizeCallback } from 're-resizable';
 
-import { BASEPATH } from '../../constants';
+import { useShell } from '../../shell';
+import plugins from '../../plugins';
 
 import { formEditor } from './styles';
 
-const rootPath = BASEPATH.replace(/\/+$/g, '');
-
 const PropertyEditor: React.FC = () => {
+  const { api: shellApi, data: shellData } = useShell('PropertyEditor');
+  const currentWidth = shellData?.userSettings?.propertyEditorWidth || 400;
+
+  const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
+    shellApi.updateUserSettings({ propertyEditorWidth: currentWidth + d.width });
+  };
+
   return (
-    <iframe
-      id="FormEditor"
-      key="FormEditor"
-      name="FormEditor"
-      css={formEditor}
-      src={`${rootPath}/extensionContainer.html`}
-      title={formatMessage('form editor')}
-    />
+    <Resizable
+      size={{ width: currentWidth, height: 'auto' }}
+      minWidth={400}
+      maxWidth={800}
+      enable={{
+        left: true,
+      }}
+      onResizeStop={handleResize}
+    >
+      <div
+        css={formEditor}
+        aria-label={formatMessage('form editor')}
+        data-testid="PropertyEditor"
+        key={shellData.focusPath}
+      >
+        <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
+          <AdaptiveForm formData={shellData.data} schema={shellData.schemas?.sdk?.content} />
+        </Extension>
+      </div>
+    </Resizable>
   );
 };
 

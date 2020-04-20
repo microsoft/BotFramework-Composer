@@ -5,6 +5,7 @@ import React from 'react';
 import { FieldProps } from '@bfc/extension';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
@@ -23,6 +24,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     onBlur,
     error,
     uiOptions,
+    required,
   } = props;
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -45,7 +47,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <TextField
         disabled={disabled}
         errorMessage={error}
@@ -73,6 +75,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         onBlur={handleBlur}
         onChange={handleChange}
         onFocus={handleFocus}
+        ariaLabel={label || formatMessage('string field')}
       />
     </>
   );
