@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import { KeyboardCommandTypes } from '../../constants/KeyboardCommandTypes';
 
 import { SelectorElement, Direction } from './type';
@@ -32,20 +33,38 @@ function findSelectableParent(element: SelectorElement, elementList: SelectorEle
 
 export function handleTabMove(currentElement: SelectorElement, selectableElements: SelectorElement[], command: string) {
   let nextElement: SelectorElement;
+  const selectableChildren = findSelectableChildren(currentElement, selectableElements);
+  const selectableParent = findSelectableParent(currentElement, selectableElements);
   if (command === KeyboardCommandTypes.Cursor.MoveNext) {
-    const selectableChildren = findSelectableChildren(currentElement, selectableElements);
     if (selectableChildren.length > 0) {
       // Tab to inner selectable element.
       nextElement = selectableChildren[0];
     } else {
-      // Perform like presssing down arrow key.
-      nextElement = locateNearestElement(currentElement, selectableElements, Direction.Down, ['isNode', 'isEdgeMenu']);
+      const hasInlineLinkElement =
+        currentElement.selectedId.endsWith('dot') &&
+        selectableElements.find(element => element.selectedId === selectableParent?.selectedId + 'link');
+      if (hasInlineLinkElement) {
+        nextElement =
+          selectableElements.find(element => element.selectedId === selectableParent?.selectedId + 'link') ||
+          currentElement;
+      } else {
+        // Perform like presssing down arrow key.
+        nextElement = locateNearestElement(currentElement, selectableElements, Direction.Down, [
+          'isNode',
+          'isEdgeMenu',
+        ]);
+      }
     }
   } else if (command === KeyboardCommandTypes.Cursor.MovePrevious) {
-    const selectableParent = findSelectableParent(currentElement, selectableElements);
     if (selectableParent) {
       // Tab to parent.
-      nextElement = selectableParent;
+      if (currentElement.isInlineLinkElement) {
+        nextElement =
+          selectableElements.find(element => element.selectedId === selectableParent.selectedId + 'dot') ||
+          selectableParent;
+      } else {
+        nextElement = selectableParent;
+      }
     } else {
       // Perform like pressing up arrow key.
       nextElement = locateNearestElement(currentElement, selectableElements, Direction.Up, ['isNode', 'isEdgeMenu']);
