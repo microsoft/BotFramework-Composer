@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { RequestHandler } from 'express-serve-static-core';
+import { Debugger } from 'debug';
 
 import { PluginLoader } from './pluginLoader';
 import log from './logger';
@@ -11,11 +12,13 @@ export class ComposerPluginRegistration {
   public loader: PluginLoader;
   private _name: string;
   private _description: string;
+  private _log: Debugger;
 
   constructor(loader: PluginLoader, name: string, description: string) {
     this.loader = loader;
     this._name = name;
     this._description = description;
+    this._log = log.extend(name);
   }
 
   public get passport() {
@@ -32,6 +35,11 @@ export class ComposerPluginRegistration {
 
   public set description(val: string) {
     this._description = val;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public log(message: string, ...args: any[]) {
+    this._log(message, ...args);
   }
 
   /**************************************************************************************

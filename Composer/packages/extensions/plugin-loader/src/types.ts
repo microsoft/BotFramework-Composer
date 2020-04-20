@@ -16,11 +16,12 @@ export interface PublishResponse {
   result: PublishResult;
 }
 
-export interface PublishPlugin {
-  publish: (config: any, project: any, metadata: any, user: any) => Promise<PublishResponse>;
-  getStatus?: (config: any, project: any, user: any) => Promise<PublishResponse>;
-  getHistory?: (config: any, project: any, user: any) => Promise<PublishResult[]>;
-  rollback?: (config: any, project: any, rollbackToVersion: string, user: any) => Promise<PublishResponse>;
+// TODO: Add types for project, metadata, user
+export interface PublishPlugin<Config = any> {
+  publish: (config: Config, project: any, metadata: any, user: any) => Promise<PublishResponse>;
+  getStatus?: (config: Config, project: any, user: any) => Promise<PublishResponse>;
+  getHistory?: (config: Config, project: any, user: any) => Promise<PublishResult[]>;
+  rollback?: (config: Config, project: any, rollbackToVersion: string, user: any) => Promise<PublishResponse>;
   [key: string]: any;
 }
 
