@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { SDKKinds, LgTemplateRef, LgMetaData, walkLgResourcesInActionList } from '@bfc/shared';
-import { getDialogApi, useShellApi } from '@bfc/extension';
+import { useDialogApi } from '@bfc/extension';
 import get from 'lodash/get';
 import { DialogUtils } from '@bfc/shared';
 
@@ -43,7 +43,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const { focusedId, focusedEvent, clipboardActions, updateLgTemplate, dialogFactory } = useContext(
     NodeRendererContext
   );
-  const { shellApi } = useShellApi();
   const {
     insertAction,
     insertActions,
@@ -51,7 +50,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     cutSelectedActions,
     deleteSelectedAction,
     deleteSelectedActions,
-  } = getDialogApi(shellApi);
+  } = useDialogApi();
 
   const trackActionChange = (actionPath: string) => {
     const affectedPaths = DialogUtils.getParentPaths(actionPath);

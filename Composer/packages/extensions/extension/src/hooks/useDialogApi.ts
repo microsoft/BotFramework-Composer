@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, deleteAction, deleteActions, DialogUtils, ShellApi, deepCopyActions } from '@bfc/shared';
+import { BaseSchema, deleteAction, deleteActions, DialogUtils, deepCopyActions } from '@bfc/shared';
 
-import { getExternalResourceApi } from './getExternalResourceApi';
+import { useExternalResourceApi } from './useExternalResourceApi';
 
 export interface DialogApiContext {
   copyAction: (actionId: string) => BaseSchema;
@@ -13,8 +13,9 @@ export interface DialogApiContext {
 }
 
 const { queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
-export function getDialogApi(shellApi: ShellApi) {
-  const { createLgTemplate, readLgTemplate, deleteLgTemplates, deleteLuIntents } = getExternalResourceApi(shellApi);
+
+export function useDialogApi() {
+  const { createLgTemplate, readLgTemplate, deleteLgTemplates, deleteLuIntents } = useExternalResourceApi();
 
   async function insertActions(
     dialogId: string,

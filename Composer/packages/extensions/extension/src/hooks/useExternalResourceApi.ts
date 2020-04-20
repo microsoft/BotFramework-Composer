@@ -1,12 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef, LgMetaData, ShellApi } from '@bfc/shared';
+import { LgTemplateRef, LgMetaData } from '@bfc/shared';
+
+import { useShellApi } from './useShellApi';
 
 /**
  * External resources (LU, LG) CRUD lib with shell context bound
  */
-export const getExternalResourceApi = (shellApi: ShellApi) => {
+export const useExternalResourceApi = () => {
+  const { shellApi } = useShellApi();
   const { removeLgTemplates, removeLuIntent, getLgTemplates, getLuIntent, updateLgTemplate, updateLuIntent } = shellApi;
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
