@@ -105,6 +105,14 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   }, [schemas, projectId]);
 
   const api: ShellApi = {
+    saveDialog: (dialogId: string, newDialogData: any) => {
+      dialogsMap[dialogId] = newDialogData;
+      updateDialog({
+        id: dialogId,
+        content: newDialogData,
+        projectId,
+      });
+    },
     saveData: (newData, updatePath) => {
       let dataPath = '';
       if (source === FORM_EDITOR) {
