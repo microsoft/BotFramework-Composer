@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogFactory } from '@bfc/shared';
-
-import { insert, deleteNode, queryNode, getParentPaths } from '../../src/utils/jsonTracker';
+import { DialogFactory } from '../../src/dialogFactory';
+import { insert, deleteNode, queryNode, getParentPaths } from '../../src/dialogUtils/jsonTracker';
 
 const factory = new DialogFactory({});
 

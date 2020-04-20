@@ -4,7 +4,9 @@
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { DialogFactory, deepCopyActions, ExternalResourceHandlerAsync } from '@bfc/shared';
+
+import { deepCopyActions, DialogFactory } from '../dialogFactory';
+import { ExternalResourceHandlerAsync } from '../copyUtils';
 
 function parseSelector(path: string): null | string[] {
   if (!path) return null;
