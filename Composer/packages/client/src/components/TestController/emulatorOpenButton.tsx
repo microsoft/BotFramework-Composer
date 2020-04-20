@@ -27,11 +27,10 @@ export const EmulatorOpenButton: React.FC<IEmulatorOpenButtonProps> = props => {
     <TooltipHost
       content={
         <Fragment>
-          URL: {botEndpoint}{' '}
+          {botEndpoint}
           <IconButton iconProps={{ iconName: 'copy' }} onClick={() => navigator.clipboard.writeText(botEndpoint)} />
         </Fragment>
       }
-      closeDelay={50000}
     >
       <ActionButton
         iconProps={{
