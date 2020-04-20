@@ -146,11 +146,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   }
 
   const onRenderShowAll = () => {
-    return (
-      <ActionButton css={addButton(1)} iconProps={addIconProps} onClick={openNewTriggerModal}>
-        <span ref={addNewTriggerRef}>{formatMessage('New Trigger ..')}</span>
-      </ActionButton>
-    );
+    return null;
   };
 
   const onFilter = (_e?: any, newValue?: string): void => {
@@ -196,9 +192,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
           }
           styles={groupListStyle}
         />
-        <ActionButton iconProps={addIconProps} css={addButton(0)} onClick={onAdd} data-testid="ProjectTreeNewDialog">
-          {formatMessage('New Dialog ..')}
-        </ActionButton>
       </div>
     </Resizable>
   );

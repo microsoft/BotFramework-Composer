@@ -121,7 +121,7 @@ export const middleTriggerContainer = css`
   align-items: center;
   background: #f6f6f6;
   width: 100%;
-  margin-top: 55px;
+  margin-top: 65px;
   height: calc(100% - 48px);
   min-height: 285px;
   position: absolute;
@@ -196,3 +196,14 @@ export const description = {
 export const manifestUrl = {
   subComponentStyles: textFieldlabel,
 };
+
+export const ManifestModalBodyStyle = css`
+  margin: 15px 15px 15px 15px;
+`;
+
+export const ManifestModalHeaderStyle = css`
+  margin: 14px 0 0 16px;
+  fon-size: 20px;
+  font-weight: bolder;
+  align-items: left;
+`;

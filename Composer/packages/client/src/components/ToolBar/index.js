@@ -31,7 +31,15 @@ function itemList(action, index) {
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
 export function ToolBar(props) {
-  const { toolbarItems, actions, projectId, ...rest } = props;
+  const {
+    toolbarItems,
+    actions,
+    projectId,
+    currentDialog,
+    openNewTriggerModal,
+    onCreateDialogComplete,
+    ...rest
+  } = props;
   let left = [];
   let right = [];
   if (toolbarItems && toolbarItems.length > 0) {
@@ -45,6 +53,27 @@ export function ToolBar(props) {
   return (
     <div css={headerSub} {...rest}>
       <div css={leftActions}>
+        <CommandButton
+          css={actionButton}
+          iconProps={{ iconName: 'Add' }}
+          text={formatMessage('Add')}
+          menuProps={{
+            items: [
+              {
+                key: 'adddialog',
+                text: formatMessage('Add new dialog'),
+                onClick: () => actions.createDialogBegin({}, onCreateDialogComplete),
+              },
+              {
+                key: 'addtrigger',
+                text: formatMessage(`Add new trigger on {displayName}`, {
+                  displayName: currentDialog ? currentDialog.displayName : '',
+                }),
+                onClick: () => openNewTriggerModal(),
+              },
+            ],
+          }}
+        />
         {left.map(itemList)}{' '}
         {window.location.href.indexOf('/dialogs/') !== -1 && (
           <CommandButton
