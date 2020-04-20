@@ -40,8 +40,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       error = 'This is a required field.';
     }
 
+    actions.setSettings(projectId, botName, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
+
     if (valid) {
-      actions.setSettings(projectId, botName, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
       setFormDataErrors({ ...formDataErrors, [field]: '' });
     } else {
       setFormDataErrors({ ...formDataErrors, [field]: error });
