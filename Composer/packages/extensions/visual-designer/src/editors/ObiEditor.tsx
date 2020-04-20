@@ -110,13 +110,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           };
         }
         break;
-      // case NodeEventTypes.InsertEvent:
-      //   handler = e => {
-      //     const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
-      //     onChange(dialog);
-      //     onFocusEvent(`${e.id}[${e.position || 0}]`);
-      //   };
-      //   break;
       case NodeEventTypes.CopySelection:
         handler = e => {
           copySelectedActions(path, data, e.actionIds).then(copiedNodes => onClipboardChange(copiedNodes));

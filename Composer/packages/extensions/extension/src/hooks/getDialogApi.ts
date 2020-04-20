@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, deleteAction, deleteActions, DialogUtils, ShellApi } from '@bfc/shared';
+import { BaseSchema, deleteAction, deleteActions, DialogUtils, ShellApi, deepCopyActions } from '@bfc/shared';
 
 import { getExternalResourceApi } from './getExternalResourceApi';
 
@@ -12,25 +12,9 @@ export interface DialogApiContext {
   deleteActions: (actionIds: BaseSchema[]) => BaseSchema[];
 }
 
-const { copyNodes, cutNodes, pasteNodes, deleteNode, deleteNodes } = DialogUtils;
+const { queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 export function getDialogApi(shellApi: ShellApi) {
   const { createLgTemplate, readLgTemplate, deleteLgTemplates, deleteLuIntents } = getExternalResourceApi(shellApi);
-
-  async function copySelectedActions(dialogId, dialogData, actionIds: string[]) {
-    return copyNodes(dialogData, actionIds, (actionId, actionData, fieldName, lgText) =>
-      readLgTemplate(dialogId, lgText)
-    );
-  }
-
-  async function cutSelectedActions(dialogId, dialogData, actionIds: string[]) {
-    return cutNodes(dialogData, actionIds, readLgTemplate, nodes => {
-      deleteActions(
-        nodes,
-        (templates: string[]) => deleteLgTemplates(dialogId, templates),
-        (luIntents: string[]) => deleteLuIntents(dialogId, luIntents)
-      );
-    });
-  }
 
   async function insertActions(
     dialogId: string,
@@ -39,13 +23,12 @@ export function getDialogApi(shellApi: ShellApi) {
     targetArrayPosition: number,
     actionsToInsert: BaseSchema[]
   ) {
-    return pasteNodes(
-      dialogData,
-      targetArrayPath,
-      targetArrayPosition,
-      actionsToInsert,
-      (actionId, actionData, fieldName, fieldValue) => createLgTemplate(dialogId, actionId, fieldName, fieldValue)
+    // Considering a scenario that copy one time but paste multiple times,
+    // it requires seeding all $designer.id again by invoking deepCopy.
+    const newNodes = await deepCopyActions(actionsToInsert, (actionId, actionData, fieldName, fieldValue) =>
+      createLgTemplate(dialogId, actionId, fieldName, fieldValue)
     );
+    return insertNodes(dialogData, targetArrayPath, targetArrayPosition, newNodes);
   }
 
   async function insertAction(
@@ -78,12 +61,23 @@ export function getDialogApi(shellApi: ShellApi) {
     });
   }
 
+  async function copySelectedActions(dialogId, dialogData, actionIds: string[]) {
+    const actions = queryNodes(dialogData, actionIds);
+    return deepCopyActions(actions, (actionId, actionData, fieldName, lgText) => readLgTemplate(dialogId, lgText));
+  }
+
+  async function cutSelectedActions(dialogId, dialogData, actionIds: string[]) {
+    const clipboardActions = await copySelectedActions(dialogId, dialogData, actionIds);
+    const newDialog = deleteSelectedActions(dialogId, dialogData, actionIds);
+    return { dialog: newDialog, cutData: clipboardActions };
+  }
+
   return {
-    copySelectedActions,
-    cutSelectedActions,
     insertAction,
     insertActions,
     deleteSelectedAction,
     deleteSelectedActions,
+    copySelectedActions,
+    cutSelectedActions,
   };
 }
