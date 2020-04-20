@@ -13,7 +13,7 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
-import { PublishTarget, PublishType } from '../../store/types';
+import { PublishTarget } from '../../store/types';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -311,7 +311,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
         // update the target with a lastPublished date
-        const updatedPublishTargets = settings.publishgargets.map(profile => {
+        const updatedPublishTargets = settings.publishTargets.map(profile => {
           if (profile.name === selectedTarget.name) {
             return {
               ...profile,

@@ -144,7 +144,7 @@ export interface DialogSetting {
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
   publishTargets?: PublishTarget[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface DesignPageLocation {
