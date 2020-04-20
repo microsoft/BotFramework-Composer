@@ -10,7 +10,7 @@ import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { MicrosoftIDialog } from './types';
 import { SDKKinds } from './types';
 import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi';
-import { generateUniqueId } from './generateUniqueId';
+import { generateDesignerId } from './generateUniqueId';
 
 interface DesignerAttributes {
   name: string;
@@ -30,7 +30,7 @@ export function getNewDesigner(name: string, description: string) {
     $designer: {
       name,
       description,
-      id: generateUniqueId(6),
+      id: generateDesignerId(),
     },
   };
 }
@@ -83,7 +83,7 @@ const initialDialogShape = () => ({
 export const getDesignerId = (data?: DesignerData) => {
   const newDesigner: DesignerData = {
     ...data,
-    id: generateUniqueId(6),
+    id: generateDesignerId(),
   };
 
   return newDesigner;
@@ -163,7 +163,7 @@ class DialogFactory {
     const defaultProperties = initialDialogShape()[$kind] || {};
 
     return merge(
-      { $kind, $designer: merge({ id: generateUniqueId(6) }, $designer) },
+      { $kind, $designer: merge({ id: generateDesignerId() }, $designer) },
       this.seedDefaults($kind),
       defaultProperties,
       propertyOverrides
