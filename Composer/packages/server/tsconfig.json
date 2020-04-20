@@ -3,11 +3,7 @@
   "compilerOptions": {
     "outDir": "./build/",
     "sourceMap": true,
-    "target": "es6",
-    "baseUrl": ".",
-    "paths": {
-      "@src/*": ["src/*"]
-    }
+    "target": "es6"
   },
-  "include": ["src/**/*.ts", "__tests__/**/*.test.ts"]
+  "include": ["src/**/*.ts", "__tests__/**/*"]
 }
