@@ -60,11 +60,11 @@ export interface ShellApi {
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
+  getLuIntent: (id: string, intentName: string) => LuIntentSection | undefined;
+  getLuIntents: (id: string) => LuIntentSection[];
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | null) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;
-  getLuIntents: (id: string) => LuIntentSection[];
-  getLuIntent: (id: string, intentName: string) => LuIntentSection | undefined;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;
