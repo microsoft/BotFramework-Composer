@@ -2,15 +2,10 @@
 // Licensed under the MIT License.
 
 import path from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
 
-import archiver from 'archiver';
 import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
-import { v4 as uuid } from 'uuid';
-import glob from 'globby';
+import { v4 as uuid, v5 as hash } from 'uuid';
 import { copy, emptyDir, readJson, pathExists, writeJson, stat } from 'fs-extra';
-import { interactiveLogin } from '@azure/ms-rest-nodeauth';
 
 interface CreateAndDeployResources {
   name: string;
@@ -38,11 +33,13 @@ class AzurePublisher {
   private botFolder: string;
   private templatePath: string;
   private azDeployer: BotProjectDeploy;
+  private resources: { [key: string]: boolean };
   constructor() {
     this.projFolder = path.resolve(__dirname, '../publishBots');
     this.botFolder = path.resolve(__dirname, '../publishBots/ComposerDialogs');
     this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
     this.publishingBots = {};
+    this.resources = {};
   }
 
   private init = async (srcBot: string, srcTemplate: string) => {
@@ -75,7 +72,7 @@ class AzurePublisher {
     if (!histories[botId][profileName]) {
       histories[botId][profileName] = [];
     }
-    histories[botId][profileName].push(newHistory);
+    histories[botId][profileName].unshift(newHistory);
     await writeJson(this.historyFilePath, histories);
   };
   private addLoadingStatus = (botId: string, profileName: string, newStatus) => {
@@ -99,32 +96,18 @@ class AzurePublisher {
     }
     return;
   };
-  private getLoadingStatus = async (botId: string, profileName: string, jobId: string) => {
-    if (this.publishingBots[botId] && this.publishingBots[botId][profileName]) {
+  private getLoadingStatus = (botId: string, profileName: string, jobId = '') => {
+    if (this.publishingBots[botId] && this.publishingBots[botId][profileName].length > 0) {
       // get current status
-      if (this.publishingBots[botId][profileName].length > 0) {
-        return this.publishingBots[botId][profileName].find(item => item.result.jobId === jobId);
-        // return this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1];
-      } else {
-        return (
-          (await this.getHistory(botId, profileName)[0]) || {
-            status: 404,
-            result: {
-              message: 'bot not published',
-            },
-          }
-        );
+      if (jobId) {
+        return this.publishingBots[botId][profileName].find(item => item.result.id === jobId);
       }
-    } else {
-      return {
-        status: 404,
-        result: {
-          message: 'bot not published',
-        },
-      };
+      return this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1];
     }
+    return undefined;
   };
   private createAndDeploy = async (
+    subscriptionID: string,
     botId: string,
     profileName: string,
     jobId: string,
@@ -136,24 +119,35 @@ class AzurePublisher {
     luisAuthoringRegion?: string
   ) => {
     try {
-      await this.azDeployer.create(name, location, environment, appPassword, luisAuthoringKey);
-      await this.azDeployer.deploy(name, environment);
+      // if create resource success, we do not create again. recreate resource with the same config may cause error.
+      const key = hash([name, location, environment, appPassword, luisAuthoringKey], subscriptionID);
+      if (!this.resources[key]) {
+        const createSuccess = await this.azDeployer.create(name, location, environment, appPassword, luisAuthoringKey);
+        if (!createSuccess) {
+          throw new Error('create resource fail');
+        }
+        this.resources[key] = true;
+      }
+      await this.azDeployer.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
+
       // update status and history
-      const status = this.removeLoadingStatus(botId, profileName, jobId);
+      const status = this.getLoadingStatus(botId, profileName, jobId);
 
       if (status) {
         status.status = 200;
         status.result.message = 'Success';
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
+        this.removeLoadingStatus(botId, profileName, jobId);
       }
     } catch (error) {
       console.log(error);
       // update status and history
-      const status = this.removeLoadingStatus(botId, profileName, jobId);
+      const status = this.getLoadingStatus(botId, profileName, jobId);
       if (status) {
         status.status = 500;
         status.result.message = error ? error.message : 'publish error';
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
+        this.removeLoadingStatus(botId, profileName, jobId);
       }
     }
   };
@@ -191,18 +185,6 @@ class AzurePublisher {
       });
       await this.init(srcBot, templatePath);
 
-      this.createAndDeploy(
-        botId,
-        name,
-        jobId,
-        publishName,
-        location,
-        environment,
-        appPassword,
-        luisAuthoringKey,
-        luisAuthoringRegion
-      );
-
       const response = {
         status: 202,
         result: {
@@ -214,6 +196,20 @@ class AzurePublisher {
         },
       };
       this.addLoadingStatus(botId, name, response);
+
+      this.createAndDeploy(
+        subscriptionID,
+        botId,
+        name,
+        jobId,
+        publishName,
+        location,
+        environment,
+        appPassword,
+        luisAuthoringKey,
+        luisAuthoringRegion
+      );
+
       return response;
     } catch (err) {
       console.log(err);
@@ -236,13 +232,40 @@ class AzurePublisher {
     const profileName = config.name;
     const botId = project.id;
     // return latest status
-    return await this.getLoadingStatus(botId, profileName);
+    const status = this.getLoadingStatus(botId, profileName);
+    if (status) {
+      return status;
+    } else {
+      const current = await this.getHistory(botId, profileName);
+      if (current.length > 0) {
+        return { status: current[0].status, result: { ...current[0] } };
+      }
+      return {
+        status: 404,
+        result: {
+          message: 'bot not published',
+        },
+      };
+    }
   };
 
   history = async (config: PublishConfig, project, user) => {
     const profileName = config.name;
     const botId = project.id;
     return await this.getHistory(botId, profileName);
+  };
+
+  // default value to show in Add profile dialog
+  configuration = {
+    subscriptionID: '<your subscription id>',
+    appPassword: '<16 characters including uppercase, lowercase, number and special character>',
+    name: '<unique name in your subscription>',
+    environment: 'composer',
+    location: 'westus',
+    luisAuthoringRegion: 'westus',
+    graphToken:
+      '<run az account get-access-token --resource-type aad-graph in command line and replace it with accessToken>',
+    accessToken: '<run az account get-access-token in command line and replace it with accessToken>',
   };
 }
 

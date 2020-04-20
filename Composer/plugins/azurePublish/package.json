@@ -9,14 +9,10 @@
   },
   "extendsComposer": true,
   "dependencies": {
-    "@azure/ms-rest-nodeauth": "^3.0.3",
-    "@microsoft/bf-lu": "^4.8.0",
-    "@microsoft/bf-luis-cli": "^4.8.0",
     "@types/archiver": "^3.1.0",
     "@types/fs-extra": "^8.1.0",
     "@types/request": "^2.48.4",
     "@types/request-promise": "^4.1.45",
-    "archiver": "^3.1.1",
-    "globby": "^11.0.0"
+    "uuid": "^7.0.3"
   }
 }
