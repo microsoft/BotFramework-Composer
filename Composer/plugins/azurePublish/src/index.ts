@@ -52,6 +52,8 @@ class AzurePublisher {
 
     // copy declarative assets into the tmp folder
     // TODO: this needs to be remote storage aware
+    // this should actually use the project's project.files list to write the files
+    // rather than expecting them to exist locally
     await copy(srcBot, this.botFolder, {
       recursive: true,
     });
