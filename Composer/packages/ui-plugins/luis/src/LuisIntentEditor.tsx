@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
-import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType, LgType } from '@bfc/shared';
+import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const { onChange, value, schema } = props;
