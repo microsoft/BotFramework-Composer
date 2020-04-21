@@ -93,7 +93,7 @@ class LocalPublisher {
     });
     return result;
   };
-  rollback = async (config, project, versionId, user) => { };
+  rollback = async (config, project, versionId, user) => {};
 
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
   private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);

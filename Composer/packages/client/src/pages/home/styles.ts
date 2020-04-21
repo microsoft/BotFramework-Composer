@@ -14,7 +14,8 @@ export const outline = css`
 
 export const page = css`
   display: flex;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 export const leftPage = css`
