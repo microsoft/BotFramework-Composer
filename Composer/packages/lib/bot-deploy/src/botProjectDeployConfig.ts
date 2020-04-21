@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export interface BotProjectDeployConfig {
-  // Subscription Id of Auzre Account
+  // Subscription Id of Azure Account
   subId: string;
 
   // The token for user login
@@ -26,7 +26,7 @@ export interface BotProjectDeployConfig {
   // Zip file path, default is 'code.zip'
   zipPath?: string;
 
-  // Pulblishing folder for 'dotnet publish' command, default is 'bin/Release/netcoreapp3.1'
+  // Publishing folder for 'dotnet publish' command, default is 'bin/Release/netcoreapp3.1'
   publishFolder?: string;
 
   // The deployment settings file path, default is 'appsettings.deployment.json'

@@ -35,23 +35,31 @@ class AzurePublisher {
   private azDeployer: BotProjectDeploy;
   private resources: { [key: string]: boolean };
   constructor() {
+    // establish path to working folder
     this.projFolder = path.resolve(__dirname, '../publishBots');
-    this.botFolder = path.resolve(__dirname, '../publishBots/ComposerDialogs');
+
+    // establish path to declarative assets
+    this.botFolder = path.resolve(this.projFolder, 'ComposerDialogs');
+
     this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
     this.publishingBots = {};
     this.resources = {};
   }
 
   private init = async (srcBot: string, srcTemplate: string) => {
-    // await emptyDir(this.botFolder);
-    // await emptyDir(path.resolve(this.projFolder, 'bin')); // empty the release bot
+    // clear out the temp folder
     await emptyDir(this.projFolder);
-    // copy bot and runtime into projFolder
+
+    // copy declarative assets into the tmp folder
+    // TODO: this needs to be remote storage aware
     await copy(srcBot, this.botFolder, {
       recursive: true,
     });
+
+    // copy the runtime template into the tmp folder
     await copy(srcTemplate, this.projFolder);
   };
+
   private getHistory = async (botId: string, profileName: string) => {
     if (await pathExists(this.historyFilePath)) {
       const histories = await readJson(this.historyFilePath);
@@ -106,6 +114,7 @@ class AzurePublisher {
     }
     return undefined;
   };
+
   private createAndDeploy = async (
     subscriptionID: string,
     botId: string,
@@ -119,6 +128,7 @@ class AzurePublisher {
     luisAuthoringRegion?: string
   ) => {
     try {
+      // TODO: This step should be handled outside of Composer
       // if create resource success, we do not create again. recreate resource with the same config may cause error.
       const key = hash([name, location, environment, appPassword, luisAuthoringKey], subscriptionID);
       if (!this.resources[key]) {
@@ -128,6 +138,8 @@ class AzurePublisher {
         }
         this.resources[key] = true;
       }
+
+      // Perform the deploy
       await this.azDeployer.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
 
       // update status and history
@@ -151,6 +163,10 @@ class AzurePublisher {
       }
     }
   };
+
+  /**************************************************************************************************
+   * plugin methods
+   *************************************************************************************************/
   publish = async (config: PublishConfig, project, metadata, user) => {
     const { settings, templatePath, name, customizeConfiguration } = config;
     const {
@@ -163,26 +179,29 @@ class AzurePublisher {
       luisAuthoringKey,
       luisAuthoringRegion,
     } = customizeConfiguration;
+
+    // point to the declarative assets (possibly in remote storage)
+    // TODO: this should definitely be using project.files instead of the path
     const srcBot = project.dataDir || '';
+
+    // point to the CSharp code
     this.templatePath = templatePath;
+
+    // get the bot id from the project
     const botId = project.id;
+
+    // get the name of the publish profile
     const publishName = customizeConfiguration.name;
+
+    // generate an id to track this deploy
     const jobId = uuid();
     try {
       // test creds, if not valid, return 500
       if (!accessToken || !graphToken) {
         throw new Error('please input token to login azure cloud');
       }
-      // in order to update creds and subId
-      this.azDeployer = new BotProjectDeploy({
-        subId: subscriptionID,
-        logger: (msg: any) => {
-          console.log(msg);
-        },
-        accessToken: accessToken,
-        graphToken: graphToken,
-        projPath: this.projFolder,
-      });
+
+      // copy files into temp folder
       await this.init(srcBot, templatePath);
 
       const response = {
@@ -197,6 +216,19 @@ class AzurePublisher {
       };
       this.addLoadingStatus(botId, name, response);
 
+      // Instantiate the Azure deploy class
+      this.azDeployer = new BotProjectDeploy({
+        subId: subscriptionID,
+        logger: (msg: any) => {
+          console.log(msg);
+        },
+        accessToken: accessToken,
+        graphToken: graphToken,
+        projPath: this.projFolder,
+      });
+
+      // Perform the deploy
+      // TODO: this should do deploy ONLY not create
       this.createAndDeploy(
         subscriptionID,
         botId,
