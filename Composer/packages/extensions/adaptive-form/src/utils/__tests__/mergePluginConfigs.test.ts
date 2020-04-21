@@ -166,6 +166,10 @@ Object {
         "*",
       ],
     },
+    "Microsoft.IRecognizer": Object {
+      "field": [Function],
+      "helpLink": "https://aka.ms/BFC-Using-LU",
+    },
     "Microsoft.IfCondition": Object {
       "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
       "hidden": Array [
@@ -420,10 +424,6 @@ Object {
     "Microsoft.QnAMakerDialog": Object {
       "helpLink": "https://aka.ms/bfc-using-QnA",
       "label": [Function],
-    },
-    "Microsoft.Recognizer": Object {
-      "field": [Function],
-      "helpLink": "https://aka.ms/BFC-Using-LU",
     },
     "Microsoft.RegexRecognizer": Object {
       "hidden": Array [

@@ -7,7 +7,7 @@ import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { LgMetaData, LgTemplateRef, CodeEditorSettings } from '@bfc/shared';
+import { LgMetaData, LgTemplateRef, CodeEditorSettings, SDKKinds } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
@@ -36,10 +36,22 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 
 const LgField: React.FC<FieldProps<string>> = props => {
   const { label, id, description, value, name, uiOptions, required } = props;
-  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
+  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings, data } = useShellApi();
+
+  let lgType = name;
+  const kind = data?.$kind;
+  if (kind) {
+    const [, schemaType] = kind.split('.');
+    if (schemaType === SDKKinds.SendActivity) {
+      lgType = schemaType;
+    } else {
+      const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
+      lgType = `${schemaType}_${nameCapitalized}`;
+    }
+  }
 
   const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
-  const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
+  const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(lgType, designerId || '').toString();
   const lgFileId = `${currentDialog.lgFile}.${locale}`;
   const lgFile = lgFiles && lgFiles.find(file => file.id === lgFileId);
 

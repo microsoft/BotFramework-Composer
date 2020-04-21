@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { copySwitchCondition } from '../../src/copyUtils/copySwitchCondition';
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('#copySwitchCondition', () => {
   it('can copy cases and default in input', async () => {
@@ -19,7 +19,7 @@ describe('#copySwitchCondition', () => {
           actions: [
             {
               $kind: 'Microsoft.SendActivity',
-              activity: '[bfdactivity-1234]',
+              activity: '[SendActivity_1234]',
             },
           ],
         },
@@ -73,7 +73,7 @@ describe('#copySwitchCondition', () => {
               $designer: {
                 id: '5678',
               },
-              activity: '[bfdactivity-1234]',
+              activity: '[SendActivity_1234]',
             },
           ],
         },

@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ProjectController } from '@src/controllers/project';
 import rimraf from 'rimraf';
-import { BotProjectService } from '@src/services/project';
 
+import { BotProjectService } from '../../src/services/project';
+import { ProjectController } from '../../src/controllers/project';
 import { Path } from '../../src/utility/path';
 
 let mockRes: Response;

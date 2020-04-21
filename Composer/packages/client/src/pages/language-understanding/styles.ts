@@ -3,7 +3,7 @@
 
 import { css } from '@emotion/core';
 import { FontWeights, FontSizes, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+
 export const actionButton = css`
   font-size: 16px;
   margin: 0;
@@ -67,9 +67,9 @@ export const codeEditorContainer = css`
 `;
 
 export const formCell = css`
-  border: 1px solid ${NeutralColors.white};
+  outline: none;
   :focus {
-    border: 1px solid ${NeutralColors.black};
+    outline: rgb(102, 102, 102) solid 1px;
   }
   white-space: pre-wrap;
   font-size: 14px;
@@ -77,9 +77,9 @@ export const formCell = css`
 `;
 
 export const luPhraseCell = css`
-  border: 1px solid ${NeutralColors.white};
+  outline: none;
   :focus {
-    border: 1px solid ${NeutralColors.black};
+    outline: rgb(102, 102, 102) solid 1px;
   }
   white-space: pre-wrap;
   font-size: 14px;
