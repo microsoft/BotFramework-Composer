@@ -11,9 +11,7 @@ import {
   IGroupRenderProps,
   IGroupedList,
 } from 'office-ui-fabric-react/lib/GroupedList';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
@@ -22,7 +20,7 @@ import { Resizable, ResizeCallback } from 're-resizable';
 import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';
 
-import { addButton, groupListStyle, root, searchBox } from './styles';
+import { groupListStyle, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';
 
 function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
@@ -83,17 +81,10 @@ interface IProjectTreeProps {
   dialogs: DialogInfo[];
   dialogId: string;
   selected: string;
-  openNewTriggerModal: () => void;
   onSelect: (id: string, selected?: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
-  onAdd: () => void;
 }
-
-const addIconProps: IIconProps = {
-  iconName: 'CircleAddition',
-  styles: { root: { fontSize: '12px' } },
-};
 
 export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const {
@@ -103,11 +94,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
     },
   } = useContext(StoreContext);
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
-  const { dialogs, dialogId, selected, openNewTriggerModal, onSelect, onDeleteTrigger, onDeleteDialog, onAdd } = props;
+  const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');
 
   const addMainDialogRef = useCallback(mainDialog => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const addNewTriggerRef = useCallback(newTrigger => onboardingAddCoachMarkRef({ newTrigger }), []);
 
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);

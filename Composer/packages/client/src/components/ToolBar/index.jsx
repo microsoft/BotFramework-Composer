@@ -54,17 +54,20 @@ export function ToolBar(props) {
     <div css={headerSub} {...rest}>
       <div css={leftActions}>
         <CommandButton
+          data-testid="AddFlyout"
           css={actionButton}
           iconProps={{ iconName: 'Add' }}
           text={formatMessage('Add')}
           menuProps={{
             items: [
               {
+                'data-testid': 'FlyoutNewDialog',
                 key: 'adddialog',
                 text: formatMessage('Add new dialog'),
                 onClick: () => actions.createDialogBegin({}, onCreateDialogComplete),
               },
               {
+                'data-testid': 'FlyoutNewTrigger',
                 key: 'addtrigger',
                 text: formatMessage(`Add new trigger on {displayName}`, {
                   displayName: currentDialog ? currentDialog.displayName : '',
