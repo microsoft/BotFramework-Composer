@@ -8,7 +8,7 @@ export const useDialogApi = () => {
     shellApi: { getDialog, saveDialog, createDialog },
   } = useShellApi();
 
-  async function createDialogCompleted(): Promise<string | undefined> {
+  async function createDialogCompleted(): Promise<string | null> {
     const newDialogId = await createDialog([]);
     // TODO: @lei9444 be able to new dialog data here.
     return newDialogId;

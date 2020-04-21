@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useEffect, useContext, useMemo } from 'react';
+import { useEffect, useContext, useMemo, useRef } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
@@ -22,6 +22,7 @@ type EventSource = 'VisualEditor' | 'PropertyEditor';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions } = useContext(StoreContext);
+  const dialogMapRef = useRef({});
   const {
     botName,
     breadcrumb,
@@ -104,12 +105,14 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     }
   }, [schemas, projectId]);
 
+  dialogMapRef.current = dialogsMap;
+
   const api: ShellApi = {
     getDialog: (dialogId: string) => {
-      return dialogsMap[dialogId];
+      return dialogMapRef.current[dialogId];
     },
     saveDialog: (dialogId: string, newDialogData: any) => {
-      dialogsMap[dialogId] = newDialogData;
+      dialogMapRef.current[dialogId] = newDialogData;
       updateDialog({
         id: dialogId,
         content: newDialogData,
@@ -122,17 +125,17 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         dataPath = updatePath || focused || '';
       }
 
-      const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
+      const updatedDialog = setDialogData(dialogMapRef.current, dialogId, dataPath, newData);
       const payload = {
         id: dialogId,
         content: updatedDialog,
         projectId,
       };
-      dialogsMap[dialogId] = updatedDialog;
+      dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
 
       //make sure focusPath always valid
-      const data = getDialogData(dialogsMap, dialogId, getFocusPath(selected, focused));
+      const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
       if (typeof data === 'undefined') {
         actions.navTo(dialogId);
       }
