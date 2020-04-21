@@ -31,7 +31,7 @@ function ExtractIntentTriggers(value: any): IIntentTrigger[] {
 
       if (trigger.$kind === SDKKinds.OnIntent && trigger.intent && trigger.actions?.length) {
         intentTriggers.push({ intent: trigger.intent, dialogs });
-      } else if (trigger.$kind === SDKKinds.OnBeginDialog && dialogs.length) {
+      } else if (trigger.$kind !== SDKKinds.OnIntent && dialogs.length) {
         const emptyIntent = intentTriggers.find(e => e.intent === '');
         if (emptyIntent) {
           //remove the duplication dialogs
