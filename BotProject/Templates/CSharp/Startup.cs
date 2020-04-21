@@ -46,19 +46,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             }
         }
 
-        public void ConfigureTelemetryLoggerMiddleware(BotFrameworkAdapter adapter, BotSettings settings)
-        {
-            if (settings.Feature.UseTelementryLoggerMiddleware)
-            {
-                if (!string.IsNullOrEmpty(settings?.ApplicationInsights?.InstrumentationKey))
-                {
-                    var telemetryConfig = new TelemetryConfiguration(settings?.ApplicationInsights?.InstrumentationKey);
-                    var telemetryClient = new TelemetryClient(telemetryConfig);
-                    adapter.Use(new TelemetryLoggerMiddleware(new BotTelemetryClient(telemetryClient), true));
-                }
-            }
-        }
-
         public void ConfigureShowTypingMiddleWare(BotFrameworkAdapter adapter, BotSettings settings)
         {
             if (settings.Feature.UseShowTypingMiddleware)
@@ -107,8 +94,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
             // Configure Middlewares
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
-
-            //ConfigureTelemetryLoggerMiddleware(adapter, settings);
             ConfigureInspectionMiddleWare(adapter, settings, storage);
             ConfigureShowTypingMiddleWare(adapter, settings);
 
@@ -144,21 +129,24 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             services.AddHttpClient<BotFrameworkClient, SkillHttpClient>();
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
 
-            // Register telemetry client, initializers and middleware
-            services.AddApplicationInsightsTelemetry();
-            services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
-            services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
-            services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
+            if (settings.Feature.UseTelementryLoggerMiddleware)
             {
-                var telemetryClient = sp.GetService<IBotTelemetryClient>();
-                return new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings.Telemetry.LogPersonalInformation);
-            });
-            services.AddSingleton<TelemetryInitializerMiddleware>(sp =>
-            {
-                var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
-                var telemetryLoggerMiddleware = sp.GetService<TelemetryLoggerMiddleware>();
-                return new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings.Telemetry.LogActivities);
-            });
+                // Register telemetry client, initializers and middleware
+                services.AddApplicationInsightsTelemetry();
+                services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
+                services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
+                services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
+                {
+                    var telemetryClient = sp.GetService<IBotTelemetryClient>();
+                    return new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings.Telemetry.LogPersonalInformation);
+                });
+                services.AddSingleton<TelemetryInitializerMiddleware>(sp =>
+                {
+                    var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
+                    var telemetryLoggerMiddleware = sp.GetService<TelemetryLoggerMiddleware>();
+                    return new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings.Telemetry.LogActivities);
+                });
+            }
 
             IStorage storage = ConfigureStorage(settings);
 
