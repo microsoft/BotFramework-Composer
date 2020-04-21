@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuIntentSection } from '@bfc/shared';
+import { LuIntentSection, BaseSchema, LuMetaData, LuType } from '@bfc/shared';
 
 import { useShellApi } from './useShellApi';
 
@@ -12,8 +12,15 @@ export const useLuApi = () => {
   const { shellApi } = useShellApi();
   const { removeLuIntent, getLuIntent, updateLuIntent } = shellApi;
 
-  const createLuIntent = async (luFildId: string, intentName: string, intent?: LuIntentSection) => {
-    await updateLuIntent(luFildId, intentName, intent);
+  const createLuIntent = async (
+    luFildId: string,
+    intent: LuIntentSection | undefined,
+    hostResourceId: string,
+    hostResourceData: BaseSchema
+  ) => {
+    const newLuIntentType = new LuType(hostResourceData.$kind).toString();
+    const newLuIntentName = new LuMetaData(newLuIntentType, hostResourceId).toString();
+    await updateLuIntent(luFildId, newLuIntentName, intent);
     return undefined;
   };
 

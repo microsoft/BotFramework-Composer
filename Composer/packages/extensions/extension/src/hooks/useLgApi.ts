@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef, LgMetaData } from '@bfc/shared';
+import { LgTemplateRef, LgMetaData, BaseSchema, LgType } from '@bfc/shared';
 
 import { useShellApi } from './useShellApi';
 
@@ -37,12 +37,14 @@ export const useLgApi = () => {
 
   const createLgTemplate = async (
     lgFileId: string,
-    nodeId: string,
-    lgType: string,
-    lgText: string
+    lgText: string,
+    hostActionId: string,
+    hostActionData: BaseSchema,
+    hostFieldName: string
   ): Promise<string> => {
     if (!lgText) return '';
-    const newLgTemplateName = new LgMetaData(lgType, nodeId).toString();
+    const newLgType = new LgType(hostActionData.$kind, hostFieldName).toString();
+    const newLgTemplateName = new LgMetaData(newLgType, hostActionId).toString();
     const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
     await updateLgTemplate(lgFileId, newLgTemplateName, lgText);
     return newLgTemplateRefStr;
