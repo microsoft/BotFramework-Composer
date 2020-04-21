@@ -17,7 +17,7 @@ export class AppUpdater extends EventEmitter {
 
     const settings = { autoDownload: false, useNightly: false }; // TODO: implement and load these settings from disk / memory
     autoUpdater.allowDowngrade = false;
-    autoUpdater.allowPrerelease = settings.useNightly;
+    autoUpdater.allowPrerelease = true;
     autoUpdater.autoDownload = settings.autoDownload;
     autoUpdater.setFeedURL({
       provider: 'github',
