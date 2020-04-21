@@ -54,11 +54,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             }
         }
 
-        public void ConfigureInspectionMiddleWare(BotFrameworkAdapter adapter, BotSettings settings, IStorage storage)
+        public void ConfigureInspectionMiddleWare(BotFrameworkAdapter adapter, BotSettings settings, IServiceProvider s)
         {
             if (settings.Feature.UseInspectionMiddleware)
             {
-                adapter.Use(new InspectionMiddleware(new InspectionState(storage)));
+                adapter.Use(s.GetService<TelemetryInitializerMiddleware>());
             }
         }
 
@@ -85,16 +85,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
             adapter
               .UseStorage(storage)
-              .UseState(userState, conversationState)
-              .Use(s.GetService<TelemetryInitializerMiddleware>());
-
-            adapter
-              .UseStorage(storage)
               .UseState(userState, conversationState);
 
             // Configure Middlewares
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
-            ConfigureInspectionMiddleWare(adapter, settings, storage);
+            ConfigureInspectionMiddleWare(adapter, settings, s);
             ConfigureShowTypingMiddleWare(adapter, settings);
 
             adapter.OnTurnError = async (turnContext, exception) =>
@@ -163,8 +158,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 
             var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
 
-            services.AddSingleton(userState);
-            services.AddSingleton(conversationState);
             services.AddSingleton(resourceExplorer);
 
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s));
