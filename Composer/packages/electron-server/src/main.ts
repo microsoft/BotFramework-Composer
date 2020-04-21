@@ -4,23 +4,27 @@
 import { join, resolve } from 'path';
 
 import { mkdirp } from 'fs-extra';
-import { app } from 'electron';
+import { app, ipcMain } from 'electron';
 import fixPath from 'fix-path';
+import { UpdateInfo } from 'electron-updater';
 
 import { isDevelopment } from './utility/env';
 import { isWindows } from './utility/platform';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 import ElectronWindow from './electronWindow';
 import log from './utility/logger';
+import { AppUpdater } from './appUpdater';
 import { parseDeepLinkUrl } from './utility/url';
+import { composerProtocol } from './constants';
 
 const error = log.extend('error');
 const baseUrl = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
 let deeplinkingUrl = '';
 
 function processArgsForWindows(args: string[]): string {
-  if (process.argv.length > 1) {
-    return parseDeepLinkUrl(args[args.length - 1]);
+  const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
+  if (deepLinkUrl) {
+    return parseDeepLinkUrl(deepLinkUrl);
   }
   return '';
 }
@@ -34,8 +38,45 @@ async function createAppDataDir() {
   await mkdirp(composerAppDataPath);
 }
 
+function initializeAppUpdater() {
+  log('Initializing app updater...');
+  const mainWindow = ElectronWindow.getInstance().browserWindow;
+  if (mainWindow) {
+    const appUpdater = new AppUpdater();
+    appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
+      // TODO: if auto/silent download is enabled in settings, don't send this event.
+      // instead, just download silently
+      mainWindow.webContents.send('app-update', 'update-available', updateInfo);
+    });
+    appUpdater.on('progress', progress => {
+      mainWindow.webContents.send('app-update', 'progress', progress);
+    });
+    appUpdater.on('update-not-available', () => {
+      mainWindow.webContents.send('app-update', 'update-not-available');
+    });
+    appUpdater.on('update-downloaded', () => {
+      mainWindow.webContents.send('app-update', 'update-downloaded');
+    });
+    appUpdater.on('error', err => {
+      mainWindow.webContents.send('app-update', 'error', err);
+    });
+    ipcMain.on('app-update', (_ev, name, payload) => {
+      if (name === 'start-download') {
+        appUpdater.downloadUpdate();
+      }
+      if (name === 'install-update') {
+        appUpdater.quitAndInstall();
+      }
+    });
+    appUpdater.checkForUpdates();
+  } else {
+    throw new Error('Main application window undefined during app updater initialization.');
+  }
+  log('App updater initialized.');
+}
+
 async function loadServer() {
-  let pluginsDir = '';
+  let pluginsDir = ''; // let this be assigned by start() if in development
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
@@ -66,7 +107,6 @@ async function main() {
     }
     await mainWindow.webContents.loadURL(baseUrl + deeplinkingUrl);
 
-    mainWindow.maximize();
     mainWindow.show();
 
     mainWindow.on('closed', function() {
@@ -108,6 +148,7 @@ async function run() {
     await loadServer();
     log('Server has been loaded');
     await main();
+    initializeAppUpdater();
   });
 
   // Quit when all windows are closed.
