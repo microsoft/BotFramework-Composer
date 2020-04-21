@@ -118,10 +118,6 @@ async function main() {
 async function run() {
   fixPath(); // required PATH fix for Mac (https://github.com/electron/electron/issues/5626)
 
-  if (isDevelopment && !app.isDefaultProtocolClient('bfcomposer')) {
-    app.setAsDefaultProtocolClient('bfcomposer');
-  }
-
   // Force Single Instance Application
   const gotTheLock = app.requestSingleInstanceLock();
   if (gotTheLock) {
