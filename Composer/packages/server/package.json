@@ -60,6 +60,7 @@
     "@bfc/indexers": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
+    "@bfc/plugin-loader": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-lu": "4.9.0-preview.121555",
     "archiver": "^3.0.0",
