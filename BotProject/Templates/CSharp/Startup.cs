@@ -160,6 +160,11 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             var botDir = settings.Bot;
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
+
+            var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
+
+            services.AddSingleton(userState);
+            services.AddSingleton(conversationState);
             services.AddSingleton(resourceExplorer);
 
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s));
@@ -172,7 +177,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     s.GetService<BotFrameworkClient>(),
                     s.GetService<SkillConversationIdFactoryBase>(),
                     s.GetService<IBotTelemetryClient>(),
-                    rootDialog));
+                    rootDialog,
+                    defaultLocale));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -181,9 +187,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseWebSockets();
-
-            //app.UseNamedPipes(System.Environment.GetEnvironmentVariable("APPSETTING_WEBSITE_SITE_NAME") + ".directline");
-
             app.UseRouting()
                .UseEndpoints(endpoints =>
                {
