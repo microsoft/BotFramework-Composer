@@ -62,8 +62,8 @@ export const rowTitle = disabled => {
 };
 
 export const tableCell = css`
-  border: 1px solid ${NeutralColors.white};
+  outline: none;
   :focus {
-    border: 1px solid ${NeutralColors.black};
+    outline: rgb(102, 102, 102) solid 1px;
   }
 `;
