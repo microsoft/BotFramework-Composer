@@ -41,8 +41,14 @@ export const NavItem: React.FC<INavItemProps> = props => {
   const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
   const activeArea = (
-    <div css={link(active, disabled)} aria-hidden="true" tabIndex={-1} aria-disabled={disabled}>
-      <Icon data-testid={'LeftNav-CommandBarButton' + labelName} iconName={iconName} styles={icon(active, disabled)} />
+    <div
+      css={link(active, disabled)}
+      aria-hidden="true"
+      tabIndex={-1}
+      aria-disabled={disabled}
+      data-testid={active ? 'ActiveLeftNavItem' : undefined}
+    >
+      <Icon iconName={iconName} styles={icon(active, disabled)} />
       {labelName}
     </div>
   );
@@ -54,11 +60,14 @@ export const NavItem: React.FC<INavItemProps> = props => {
 
   return (
     <Link
+      data-testid={'LeftNav-CommandBarButton' + labelName}
       to={to}
       aria-disabled={disabled}
       aria-label={labelName + (active ? '; selected' : '')}
       ref={addRef}
       css={css`
+        display: block;
+
         :link {
           text-decoration: none;
         }
