@@ -2,6 +2,7 @@
 // Licensed under the MIT License
 
 import { MicrosoftIDialog, SDKKinds } from '../types';
+import { LuMetaData, LuType } from '../luNameBuilder';
 
 import { walkAdaptiveAction } from './walkAdaptiveAction';
 import { walkAdaptiveActionList } from './walkAdaptiveActionList';
@@ -40,7 +41,7 @@ const collectLuIntents = (action: any, outputTemplates: string[]) => {
     case SDKKinds.NumberInput:
     case SDKKinds.TextInput: {
       const [, promptType] = action.$kind.split('.');
-      const intentName = `${promptType}_Response_${action?.$designer?.id}`;
+      const intentName = new LuMetaData(new LuType(action?.$kind).toString(), action?.$designer?.id).toString();
       promptType && intentName && outputTemplates.push(intentName);
       break;
     }
