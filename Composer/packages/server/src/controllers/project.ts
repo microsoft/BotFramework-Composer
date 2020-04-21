@@ -44,6 +44,7 @@ async function createProject(req: Request, res: Response) {
   log('Attempting to create project at %s', path);
 
   try {
+    await BotProjectService.cleanProject(locationRef);
     const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef, user);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);

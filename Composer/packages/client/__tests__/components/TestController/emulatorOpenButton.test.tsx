@@ -11,7 +11,12 @@ describe('<EmulatorOpenButton />', () => {
   it('should show the button to open emulator', () => {
     const onClick = jest.fn(() => {});
     const { container, getByText } = render(
-      <EmulatorOpenButton onClick={onClick} botStatus={BotStatus.connected} hidden={false} />
+      <EmulatorOpenButton
+        botEndpoint={'http://localhost:3979/api/messages'}
+        onClick={onClick}
+        botStatus={BotStatus.connected}
+        hidden={false}
+      />
     );
 
     expect(container).toHaveTextContent('Test in Emulator');
@@ -24,7 +29,12 @@ describe('<EmulatorOpenButton />', () => {
   it('should hidden the button if set hidden', () => {
     const onClick = jest.fn(() => {});
     const { container } = render(
-      <EmulatorOpenButton onClick={onClick} botStatus={BotStatus.connected} hidden={true} />
+      <EmulatorOpenButton
+        botEndpoint={'http://localhost:3979/api/messages'}
+        onClick={onClick}
+        botStatus={BotStatus.connected}
+        hidden={true}
+      />
     );
 
     expect(container).not.toHaveTextContent('Test in Emulator');
@@ -33,7 +43,12 @@ describe('<EmulatorOpenButton />', () => {
   it('should show the button if the bot status is not connected', () => {
     const onClick = jest.fn(() => {});
     const { container } = render(
-      <EmulatorOpenButton onClick={onClick} botStatus={BotStatus.publishing} hidden={false} />
+      <EmulatorOpenButton
+        botEndpoint={'http://localhost:3979/api/messages'}
+        onClick={onClick}
+        botStatus={BotStatus.publishing}
+        hidden={false}
+      />
     );
 
     expect(container).not.toHaveTextContent('Test in Emulator');

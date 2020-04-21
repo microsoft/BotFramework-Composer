@@ -42,6 +42,7 @@
     "start:server:dev": "yarn workspace @bfc/server start:dev",
     "runtime": "cd ../BotProject/CSharp/ && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
+    "test:watch": "yarn typecheck && jest --watch",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default",
     "test:integration": "cypress run --browser chrome",
     "test:integration:start-server": "node scripts/e2e.sh",
