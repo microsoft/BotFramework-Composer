@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useRef } from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, useShellApi } from '@bfc/extension';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -45,6 +45,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   const [newObject, setNewObject] = useState({});
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
   const firstNewFieldRef: React.RefObject<ITextField> = useRef(null);
+  const { announce } = useShellApi().shellApi;
 
   const handleNewObjectChange = (property: string) => (_e: React.FormEvent, newValue?: string) => {
     setNewObject({ ...newObject, [property]: newValue });
@@ -60,6 +61,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
         }, {});
 
+        announce(INSIDE_ROW_LABEL);
         addItem(formattedData);
         setNewObject({});
         firstNewFieldRef.current?.focus();
