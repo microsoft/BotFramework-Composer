@@ -135,7 +135,7 @@ export const App: React.FC = () => {
 
   const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation, announcement } = state;
   const { setCreationFlowStatus } = actions;
-  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
+  const mapNavItemTo = (relPath: string) => resolveToBasePath(BASEPATH, relPath);
 
   const globalNavButtonText = sideBarExpand ? formatMessage('Collapse Navigation') : formatMessage('Expand Navigation');
 
@@ -169,13 +169,13 @@ export const App: React.FC = () => {
                   setSideBarExpand(!sideBarExpand);
                 }}
                 data-testid={'LeftNavButton'}
-                ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
+                ariaLabel={globalNavButtonText}
               />
             </TooltipHost>
             <div css={dividerTop} />{' '}
             <FocusZone allowFocusRoot={true}>
               {topLinks(projectId, openedDialogId).map((link, index) => {
-                const showTooltip = !sideBarExpand && !link.disabled ? true : false;
+                const showTooltip = !(sideBarExpand || link.disabled);
                 return (
                   <NavItem
                     key={'NavLeftBar' + index}
@@ -193,7 +193,7 @@ export const App: React.FC = () => {
           <div css={leftNavBottom}>
             <div css={divider(sideBarExpand)} />{' '}
             {bottomLinks.map((link, index) => {
-              const showTooltip = !sideBarExpand && !link.disabled ? true : false;
+              const showTooltip = !(sideBarExpand || link.disabled);
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
