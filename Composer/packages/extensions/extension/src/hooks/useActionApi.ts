@@ -6,6 +6,7 @@ import {
   deepCopyActions,
   deleteAction as destructAction,
   deleteActions as destructActions,
+  LgType,
 } from '@bfc/shared';
 
 import { useLgApi } from './useLgApi';
@@ -18,7 +19,8 @@ export const useActionApi = () => {
   async function constructActions(dialogId: string, actions: BaseSchema[]) {
     return deepCopyActions(
       actions,
-      (actionId, actionData, fieldName, fieldValue) => createLgTemplate(dialogId, actionId, fieldName, fieldValue),
+      (actionId, actionData, fieldName, fieldValue) =>
+        createLgTemplate(dialogId, actionId, new LgType(actionData.$kind, fieldName).toString(), fieldValue),
       (actionId, actionData, fieldName, fieldValue) => createLuIntent(dialogId, 'TODO-luid', fieldValue)
     );
   }
