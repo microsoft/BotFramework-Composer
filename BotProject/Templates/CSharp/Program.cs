@@ -26,8 +26,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             {
                 var env = hostingContext.HostingEnvironment;
 
-                builder.AddJsonFile($"ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile("appsetting.json", optional: true, reloadOnChange: true)
+                builder.AddJsonFile("appsetting.json", optional: true, reloadOnChange: true)
                     .UseLuisConfigAdaptor()
                     .UseLuisSettings();
 
@@ -41,6 +40,9 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     //Azure Deploy
                     builder.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
                 }
+
+                // Composer settings have the highest prioirty, this will override the settings such as the 'feature' section in the appsettings.json
+                builder.AddJsonFile($"ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true);
 
                 if (!env.IsDevelopment())
                 {
