@@ -8,7 +8,7 @@ import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 describe('copySendActivity', () => {
   const externalApiWithLgCopy: ExternalApi = {
     ...externalApi,
-    copyLgField: (fromId, fromData, toId, toData, fieldName) => Promise.resolve(FormData[fieldName] + '(copy)'),
+    copyLgField: (fromId, fromData, toId, toData, fieldName) => Promise.resolve(fromData[fieldName] + '(copy)'),
   };
 
   it('can copy SendActivity', async () => {
