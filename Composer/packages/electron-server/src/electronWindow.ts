@@ -38,7 +38,7 @@ export default class ElectronWindow {
       browserWindowOptions.icon = join(getUnpackedAsarPath(), 'resources/composerIcon_1024x1024.png');
     }
     this._currentBrowserWindow = new BrowserWindow(browserWindowOptions);
-    this._currentBrowserWindow.on('page-title-updated', ev => ev.preventDefault());
+    this._currentBrowserWindow.on('page-title-updated', ev => ev.preventDefault()); // preserve explicit window title
   }
 
   public static destroy() {

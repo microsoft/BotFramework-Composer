@@ -210,7 +210,7 @@ export const App: React.FC = () => {
           </ErrorBoundary>
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
-        <AppUpdater />
+        {(window as any).__IS_ELECTRON__ && <AppUpdater />}
       </div>
     </Fragment>
   );

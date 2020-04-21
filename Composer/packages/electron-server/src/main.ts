@@ -15,14 +15,16 @@ import ElectronWindow from './electronWindow';
 import log from './utility/logger';
 import { AppUpdater } from './appUpdater';
 import { parseDeepLinkUrl } from './utility/url';
+import { composerProtocol } from './constants';
 
 const error = log.extend('error');
 const baseUrl = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
 let deeplinkingUrl = '';
 
 function processArgsForWindows(args: string[]): string {
-  if (process.argv.length > 1) {
-    return parseDeepLinkUrl(args[args.length - 1]);
+  const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
+  if (deepLinkUrl) {
+    return parseDeepLinkUrl(deepLinkUrl);
   }
   return '';
 }

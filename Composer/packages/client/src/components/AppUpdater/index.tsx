@@ -14,15 +14,7 @@ import formatMessage from 'format-message';
 import { StoreContext } from '../../store';
 import { AppUpdaterStatus } from '../../constants';
 
-import {
-  dialogContent,
-  dialogCopy,
-  dialogFooter,
-  modal,
-  optionRoot,
-  optionIcon,
-  updateAvailableDismissBtn,
-} from './styles';
+import { dialogContent, dialogCopy, dialogFooter, optionRoot, optionIcon, updateAvailableDismissBtn } from './styles';
 
 const { ipcRenderer } = window as any;
 
@@ -241,9 +233,10 @@ export const AppUpdater: React.FC<{}> = _props => {
         type: DialogType.close,
         title,
       }}
+      minWidth={427}
+      maxWidth={427}
       modalProps={{
         isBlocking: false,
-        styles: modal,
       }}
     >
       {content}
