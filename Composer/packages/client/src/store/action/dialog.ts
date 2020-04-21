@@ -22,7 +22,6 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
     type: ActionTypes.CREATE_DIALOG,
     payload: { id, content },
   });
-  return id;
 };
 
 export const updateDialogBase: ActionCreator = async (store, { id, content }) => {
