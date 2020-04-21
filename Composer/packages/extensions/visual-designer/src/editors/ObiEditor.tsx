@@ -135,10 +135,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
           // Insert to be moved actions asyncly
           const newDialogData = readDialog(newDialogId);
-          updateDialog(
+          const newDialogWithActions = await insertActions(
             newDialogId,
-            insertActions(newDialogId, newDialogData, `${'triggers'}[0].${'actions'}`, 0, actionsToBeMoved)
+            newDialogData,
+            `${'triggers'}[0].${'actions'}`,
+            0,
+            actionsToBeMoved
           );
+          updateDialog(newDialogId, newDialogWithActions);
 
           // Delete moved actions
           const deleteResult = deleteSelectedActions(path, data, e.actionIds);
