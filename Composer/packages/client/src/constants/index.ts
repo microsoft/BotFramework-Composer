@@ -88,8 +88,11 @@ export enum ActionTypes {
   SET_USER_SETTINGS = 'SET_USER_SETTINGS',
   ADD_SKILL_DIALOG_BEGIN = 'ADD_SKILL_DIALOG_BEGIN',
   ADD_SKILL_DIALOG_END = 'ADD_SKILL_DIALOG_END',
-
   SET_MESSAGE = 'SET_MESSAGE',
+  SET_APP_UPDATE_ERROR = 'SET_APP_UPDATE_ERROR',
+  SET_APP_UPDATE_PROGRESS = 'SET_APP_UPDATE_PROGRESS',
+  SET_APP_UPDATE_SHOWING = 'SET_APP_UPDATE_SHOWING',
+  SET_APP_UPDATE_STATUS = 'SET_APP_UPDATE_STATUS',
 }
 
 export const Tips = {
@@ -222,6 +225,15 @@ export const SupportedFileTypes = [
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
+
+export enum AppUpdaterStatus {
+  IDLE,
+  UPDATE_AVAILABLE,
+  UPDATE_UNAVAILABLE,
+  UPDATE_IN_PROGRESS,
+  UPDATE_FAILED,
+  UPDATE_SUCCEEDED,
+}
 
 export const DefaultPublishConfig = {
   name: 'default',
