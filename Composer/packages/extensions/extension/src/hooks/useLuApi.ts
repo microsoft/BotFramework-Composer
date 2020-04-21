@@ -21,11 +21,13 @@ export const useLuApi = () => {
     const newLuIntentType = new LuType(hostResourceData.$kind).toString();
     const newLuIntentName = new LuMetaData(newLuIntentType, hostResourceId).toString();
     await updateLuIntent(luFildId, newLuIntentName, intent);
-    return undefined;
+    return newLuIntentName;
   };
 
-  const readLuIntent = async (luFileId: string, intentName: string) => {
-    return await getLuIntent(luFileId, intentName);
+  const readLuIntent = (luFileId: string, hostResourceId: string, hostResourceData: BaseSchema) => {
+    const relatedLuIntentType = new LuType(hostResourceData.$kind).toString();
+    const relatedLuIntentName = new LuMetaData(relatedLuIntentType, hostResourceId).toString();
+    return getLuIntent(luFileId, relatedLuIntentName);
   };
 
   const deleteLuIntents = (luFileId: string, luIntents: string[]) => {

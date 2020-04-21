@@ -6,7 +6,6 @@ import {
   deepCopyActions,
   deleteAction as destructAction,
   deleteActions as destructActions,
-  LgType,
 } from '@bfc/shared';
 
 import { useLgApi } from './useLgApi';
@@ -20,16 +19,30 @@ export const useActionApi = () => {
     return deepCopyActions(
       actions,
       (actionId, actionData, fieldName, fieldValue) =>
-        createLgTemplate(dialogId, actionId, new LgType(actionData.$kind, fieldName).toString(), fieldValue),
-      (actionId, actionData, fieldName, fieldValue) => createLuIntent(dialogId, 'TODO-luid', fieldValue)
+        createLgTemplate(dialogId, fieldValue, actionId, actionData, fieldName),
+      async (actionId, actionData, luVirtualFieldName) => {
+        if (!actionData[luVirtualFieldName]) return undefined;
+        await createLuIntent(dialogId, actionData[luVirtualFieldName], actionId, actionData);
+
+        // during paste, remove the virtual LU field after intents persisted in file
+        delete actionData[luVirtualFieldName];
+        return undefined;
+      }
     );
   }
 
   async function copyActions(dialogId: string, actions: BaseSchema[]) {
     return deepCopyActions(
       actions,
-      (actionId, actionData, fieldName, lgText) => readLgTemplate(dialogId, lgText),
-      (actionId, actionData, fieldName, fieldValue) => readLuIntent(dialogId, 'TODO-luid')
+      async (actionId, actionData, fieldName, fieldValue) => readLgTemplate(dialogId, fieldValue),
+      async (actionId, actionData, luVirtualFieldName) => {
+        const luValue = readLuIntent(dialogId, actionId, actionData);
+        if (!luValue) return undefined;
+
+        // during copy, carry the LU data in virtual field
+        actionData[luVirtualFieldName] = luValue;
+        return luValue;
+      }
     );
   }
 

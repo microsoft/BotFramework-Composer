@@ -9,23 +9,26 @@ import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 export const copyInputDialog = async (input: InputDialog, externalApi: ExternalApi): Promise<InputDialog> => {
   const copy = shallowCopyAdaptiveAction(input, externalApi);
   const nodeId = copy.$designer ? copy.$designer.id : '';
-  const transform = (data, fieldName: string) => externalApi.transformLgField(nodeId, data, fieldName, data[fieldName]);
+  const transformLg = (data, fieldName: string) =>
+    externalApi.transformLgField(nodeId, data, fieldName, data[fieldName]);
 
   if (input.prompt !== undefined) {
-    copy.prompt = await transform(copy, 'prompt');
+    copy.prompt = await transformLg(copy, 'prompt');
   }
 
   if (input.unrecognizedPrompt !== undefined) {
-    copy.unrecognizedPrompt = await transform(copy, 'unrecognizedPrompt');
+    copy.unrecognizedPrompt = await transformLg(copy, 'unrecognizedPrompt');
   }
 
   if (input.invalidPrompt !== undefined) {
-    copy.invalidPrompt = await transform(copy, 'invalidPrompt');
+    copy.invalidPrompt = await transformLg(copy, 'invalidPrompt');
   }
 
   if (input.defaultValueResponse !== undefined) {
-    copy.defaultValueResponse = await transform(copy, 'defaultValueResponse');
+    copy.defaultValueResponse = await transformLg(copy, 'defaultValueResponse');
   }
+
+  await externalApi.transformLuField(nodeId, copy, '_lu', undefined);
 
   return copy;
 };

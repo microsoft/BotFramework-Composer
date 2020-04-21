@@ -22,13 +22,13 @@ export const useLgApi = () => {
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
 
-  const readLgTemplate = async (lgFileId: string, lgText: string): Promise<string> => {
+  const readLgTemplate = (lgFileId: string, lgText: string) => {
     if (!lgText) return '';
 
     const inputLgRef = LgTemplateRef.parse(lgText);
     if (!inputLgRef) return lgText;
 
-    const lgTemplates = await getLgTemplates(inputLgRef.name);
+    const lgTemplates = getLgTemplates(inputLgRef.name);
     if (!Array.isArray(lgTemplates) || !lgTemplates.length) return lgText;
 
     const targetTemplate = lgTemplates.find(x => x.name === inputLgRef.name);
