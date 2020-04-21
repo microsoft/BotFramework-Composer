@@ -18,6 +18,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
+import debounce from 'lodash/debounce';
 
 import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';
@@ -105,7 +106,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, openNewTriggerModal, onSelect, onDeleteTrigger, onDeleteDialog, onAdd } = props;
   const [filter, setFilter] = useState('');
-
+  const delayedSetFilter = debounce(newValue => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback(mainDialog => onboardingAddCoachMarkRef({ mainDialog }), []);
   const addNewTriggerRef = useCallback(newTrigger => onboardingAddCoachMarkRef({ newTrigger }), []);
 
@@ -155,13 +156,15 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
 
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
-      setFilter(newValue);
+      delayedSetFilter(newValue);
     }
   };
 
   const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
+
+  const res: { items: any[]; groups: IGroup[] } = createGroup(sortedDialogs, dialogId, filter);
 
   return (
     <Resizable
@@ -181,8 +184,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
           onChange={onFilter}
           iconProps={{ iconName: 'Filter' }}
         />
+        <div
+          aria-live={'polite'}
+          aria-label={`${res.groups.length} dialogs have been found
+          ${res.groups.length > 0 ? 'Press down arrow key to navigate the search results' : ''}`}
+        />
         <GroupedList
-          {...createGroup(sortedDialogs, dialogId, filter)}
+          {...res}
           onRenderCell={onRenderCell}
           componentRef={groupRef}
           groupProps={
