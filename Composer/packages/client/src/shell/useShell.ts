@@ -9,7 +9,7 @@ import get from 'lodash/get';
 import * as luUtil from '../utils/luUtil';
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { StoreContext } from '../store';
-import { getDialogData, setDialogData, sanitizeDialogData, announce } from '../utils';
+import { getDialogData, setDialogData, sanitizeDialogData } from '../utils';
 import { OpenAlertModal, DialogStyle } from '../components/Modal';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
@@ -20,7 +20,7 @@ const FORM_EDITOR = 'PropertyEditor';
 
 type EventSource = 'VisualEditor' | 'PropertyEditor';
 
-export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
+export function useShell(source?: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions, resolvers } = useContext(StoreContext);
   const { luFileResolver } = resolvers;
   const {
@@ -174,7 +174,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     redo: actions.redo,
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
     updateUserSettings: actions.updateUserSettings,
-    announce,
+    announce: actions.setMessage,
   };
 
   const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs, dialogId]);
