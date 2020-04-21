@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment } from 'react';
+import { useCallback, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 
@@ -38,6 +38,7 @@ export function ToolBar(props) {
     currentDialog,
     openNewTriggerModal,
     onCreateDialogComplete,
+    onboardingAddCoachMarkRef,
     ...rest
   } = props;
   let left = [];
@@ -50,34 +51,40 @@ export function ToolBar(props) {
       return item.align === 'right';
     });
   }
+  const addNewRef = useCallback(addNew => {
+    onboardingAddCoachMarkRef({ addNew });
+  }, []);
+
   return (
     <div css={headerSub} {...rest}>
       <div css={leftActions}>
         {window.location.href.indexOf('/dialogs/') !== -1 && (
-          <CommandButton
-            data-testid="AddFlyout"
-            css={actionButton}
-            iconProps={{ iconName: 'Add' }}
-            text={formatMessage('Add')}
-            menuProps={{
-              items: [
-                {
-                  'data-testid': 'FlyoutNewDialog',
-                  key: 'adddialog',
-                  text: formatMessage('Add new dialog'),
-                  onClick: () => actions.createDialogBegin({}, onCreateDialogComplete),
-                },
-                {
-                  'data-testid': 'FlyoutNewTrigger',
-                  key: 'addtrigger',
-                  text: formatMessage(`Add new trigger on {displayName}`, {
-                    displayName: currentDialog ? currentDialog.displayName : '',
-                  }),
-                  onClick: () => openNewTriggerModal(),
-                },
-              ],
-            }}
-          />
+          <div ref={addNewRef}>
+            <CommandButton
+              data-testid="AddFlyout"
+              css={actionButton}
+              iconProps={{ iconName: 'Add' }}
+              text={formatMessage('Add')}
+              menuProps={{
+                items: [
+                  {
+                    'data-testid': 'FlyoutNewDialog',
+                    key: 'adddialog',
+                    text: formatMessage('Add new dialog'),
+                    onClick: () => actions.createDialogBegin({}, onCreateDialogComplete),
+                  },
+                  {
+                    'data-testid': 'FlyoutNewTrigger',
+                    key: 'addtrigger',
+                    text: formatMessage(`Add new trigger on {displayName}`, {
+                      displayName: currentDialog ? currentDialog.displayName : '',
+                    }),
+                    onClick: () => openNewTriggerModal(),
+                  },
+                ],
+              }}
+            />
+          </div>
         )}
         {left.map(itemList)}{' '}
         {window.location.href.indexOf('/dialogs/') !== -1 && (

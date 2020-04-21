@@ -94,6 +94,7 @@ function DesignPage(props) {
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
+    onboardingAddCoachMarkRef,
   } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
@@ -395,6 +396,7 @@ function DesignPage(props) {
               currentDialog={currentDialog}
               openNewTriggerModal={openNewTriggerModal}
               onCreateDialogComplete={onCreateDialogComplete}
+              onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
             />
           )}
           <Conversation css={editorContainer}>
