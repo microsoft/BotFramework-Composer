@@ -165,7 +165,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
             onClick,
             selfHosted ? x => x !== SDKKinds.LogAction : undefined
           )}
-          label={formatMessage('Add')}
+          label={moreLabel}
           handleMenuShow={handleMenuShow}
           {...rest}
         />
