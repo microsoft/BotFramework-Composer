@@ -35,6 +35,7 @@ export const Header = props => {
         src={composerIcon}
       />
       <span css={title}>{formatMessage('Bot Framework Composer')}</span>
+      <span css={botName}>{props.botName}</span>
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}
