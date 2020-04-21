@@ -13,7 +13,7 @@ const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   if (!action || !action.$kind) return;
 
   const onFound = (fieldName: string) => {
-    action[fieldName] && handleLgField(get(action, '$deisigner.id', ''), fieldName, action[fieldName]);
+    action[fieldName] && handleLgField(get(action, '$designer.id', ''), fieldName, action[fieldName]);
   };
 
   switch (action.$kind) {
