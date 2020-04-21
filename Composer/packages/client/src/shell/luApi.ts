@@ -10,7 +10,7 @@ import * as luUtil from '../utils/luUtil';
 import { State, BoundActionHandlers } from '../store/types';
 import { StoreContext } from '../store';
 
-const createThrottledFunc = fn => throttle(fn, 1000, { leading: true, trailing: true });
+const createThrottledFunc = fn => throttle(fn, 0, { leading: true, trailing: true });
 
 function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver: (id: string) => LuFile | undefined) {
   const api = {
@@ -21,7 +21,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
 
       const content = luUtil.addIntent(file.content, intent);
       const projectId = state.projectId;
-      return await actions.updateLuFile({ id, projectId, content });
+      return await actions.updateLuFile({ id: file.id, projectId, content });
     },
     updateLuIntent: async (id: string, intentName: string, intent: LuIntentSection) => {
       const file = luFileResolver(id);
@@ -30,7 +30,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
 
       const content = luUtil.updateIntent(file.content, intentName, intent);
       const projectId = state.projectId;
-      return await actions.updateLuFile({ id, projectId, content });
+      return await actions.updateLuFile({ id: file.id, projectId, content });
     },
 
     removeLuIntent: async (id: string, intentName: string) => {
@@ -40,7 +40,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
 
       const content = luUtil.removeIntent(file.content, intentName);
       const projectId = state.projectId;
-      return await actions.updateLuFile({ id, projectId, content });
+      return await actions.updateLuFile({ id: file.id, projectId, content });
     },
 
     getLuIntents: (id: string): LuIntentSection[] => {
