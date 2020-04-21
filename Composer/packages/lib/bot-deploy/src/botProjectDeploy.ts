@@ -391,7 +391,8 @@ export class BotProjectDeploy {
         language = 'en-us';
       }
 
-      // Process LUIS
+      // Run through the lubuild process
+      // This happens in the build folder, NOT in the original source folder
       // TODO: this should be a method of its own
       if (luisAuthoringKey && luisAuthoringRegion) {
         // publishing luis
@@ -462,7 +463,7 @@ export class BotProjectDeploy {
           spaces: 4,
         });
 
-        // Assign a LUIS key to the endpoint
+        // Assign a LUIS key to the endpoint of each app
         const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
         const options = {
           headers: { Authorization: `Bearer ${this.creds.token}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
