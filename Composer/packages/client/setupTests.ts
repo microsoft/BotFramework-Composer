@@ -23,3 +23,6 @@ expect.extend({
     };
   },
 });
+
+// for tests using Electron IPC to talk to main process
+(window as any).ipcRenderer = { on: jest.fn() };
