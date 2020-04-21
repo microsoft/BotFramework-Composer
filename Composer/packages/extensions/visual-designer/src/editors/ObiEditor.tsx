@@ -102,6 +102,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             const newAction = dialogFactory.create(e.$kind);
             insertAction(path, data, e.id, e.position, newAction).then(dialog => {
               onChange(dialog);
+              onFocusSteps([`${e.id}[${e.position || 0}]`]);
             });
           };
         }
