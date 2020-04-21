@@ -159,6 +159,16 @@ export class BotProjectService {
     return projectId.toString();
   };
 
+  // clean project registry based on path to avoid reuseing the same id
+  public static cleanProject = async (location: LocationRef): Promise<void> => {
+    for (const key in BotProjectService.projectLocationMap) {
+      if (BotProjectService.projectLocationMap[key] === location.path) {
+        delete BotProjectService.projectLocationMap[key];
+      }
+    }
+    Store.set('projectLocationMap', BotProjectService.projectLocationMap);
+  };
+
   public static generateProjectId = async (path: string): Promise<string> => {
     const projectId = (Math.random() * 100000).toString();
     BotProjectService.projectLocationMap[projectId] = path;
