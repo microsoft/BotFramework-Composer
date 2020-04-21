@@ -64,6 +64,7 @@ export interface ShellApi {
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
   getLuIntent: (id: string, intentName: string) => LuIntentSection | undefined;
   getLuIntents: (id: string) => LuIntentSection[];
+  addLuIntent: (id: string, intentName: string, intent: LuIntentSection | undefined) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection | undefined) => Promise<void>;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;

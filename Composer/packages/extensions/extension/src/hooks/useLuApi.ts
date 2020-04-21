@@ -10,7 +10,7 @@ import { useShellApi } from './useShellApi';
  */
 export const useLuApi = () => {
   const { shellApi } = useShellApi();
-  const { removeLuIntent, getLuIntent, updateLuIntent } = shellApi;
+  const { addLuIntent, removeLuIntent, getLuIntent } = shellApi;
 
   const createLuIntent = async (
     luFildId: string,
@@ -18,9 +18,12 @@ export const useLuApi = () => {
     hostResourceId: string,
     hostResourceData: BaseSchema
   ) => {
+    if (!intent) return;
+
     const newLuIntentType = new LuType(hostResourceData.$kind).toString();
     const newLuIntentName = new LuMetaData(newLuIntentType, hostResourceId).toString();
-    await updateLuIntent(luFildId, newLuIntentName, intent);
+    const newLuIntent: LuIntentSection = { ...intent, Name: newLuIntentName };
+    await addLuIntent(luFildId, newLuIntentName, newLuIntent);
     return newLuIntentName;
   };
 

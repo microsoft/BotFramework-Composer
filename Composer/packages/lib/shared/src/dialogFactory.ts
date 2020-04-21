@@ -9,7 +9,7 @@ import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
 import { MicrosoftIDialog, LuIntentSection } from './types';
 import { SDKKinds } from './types';
-import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi';
+import { FieldProcessorAsync } from './copyUtils/ExternalApi';
 import { generateDesignerId } from './generateUniqueId';
 
 interface DesignerAttributes {
@@ -91,20 +91,20 @@ export const getDesignerId = (data?: DesignerData) => {
 
 export const deepCopyAction = async (
   data,
-  copyLgTemplate: ExternalResourceHandlerAsync<string>,
-  copyLuIntent: ExternalResourceHandlerAsync<LuIntentSection | undefined>
+  copyLgTemplate: FieldProcessorAsync<string>,
+  copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
 ) => {
   return await copyAdaptiveAction(data, {
     getDesignerId,
-    transformLgField: copyLgTemplate,
-    transformLuField: copyLuIntent,
+    copyLgField: copyLgTemplate,
+    copyLuField: copyLuIntent,
   });
 };
 
 export const deepCopyActions = async (
   actions: any[],
-  copyLgTemplate: ExternalResourceHandlerAsync<string>,
-  copyLuIntent: ExternalResourceHandlerAsync<LuIntentSection | undefined>
+  copyLgTemplate: FieldProcessorAsync<string>,
+  copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
 ) => {
   // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
   //        so we have to call them sequentially

@@ -6,6 +6,7 @@ import {
   deepCopyActions,
   deleteAction as destructAction,
   deleteActions as destructActions,
+  FieldProcessorAsync,
 } from '@bfc/shared';
 
 import { useLgApi } from './useLgApi';
@@ -16,34 +17,34 @@ export const useActionApi = () => {
   const { createLuIntent, readLuIntent, deleteLuIntents } = useLuApi();
 
   async function constructActions(dialogId: string, actions: BaseSchema[]) {
-    return deepCopyActions(
-      actions,
-      (actionId, actionData, fieldName, fieldValue) =>
-        createLgTemplate(dialogId, fieldValue, actionId, actionData, fieldName),
-      async (actionId, actionData, luVirtualFieldName) => {
-        if (!actionData[luVirtualFieldName]) return undefined;
-        await createLuIntent(dialogId, actionData[luVirtualFieldName], actionId, actionData);
+    // '- hi' -> 'SendActivity_1234'
+    const referenceLgText: FieldProcessorAsync<string> = (fromId, fromAction, toId, toAction, lgFieldName) =>
+      createLgTemplate(dialogId, fromAction[lgFieldName], toId, toAction, lgFieldName);
 
-        // during paste, remove the virtual LU field after intents persisted in file
-        delete actionData[luVirtualFieldName];
-        return undefined;
-      }
-    );
+    // LuIntentSection -> 'TextInput_Response_1234'
+    const referenceLuIntent: FieldProcessorAsync<any> = async (fromId, fromAction, toId, toAction, luFieldName) => {
+      fromAction[luFieldName] && (await createLuIntent(dialogId, fromAction[luFieldName], toId, toAction));
+      // during construction, remove the virtual LU field after intents persisted in file
+      delete toAction[luFieldName];
+    };
+
+    return deepCopyActions(actions, referenceLgText, referenceLuIntent);
   }
 
   async function copyActions(dialogId: string, actions: BaseSchema[]) {
-    return deepCopyActions(
-      actions,
-      async (actionId, actionData, fieldName, fieldValue) => readLgTemplate(dialogId, fieldValue),
-      async (actionId, actionData, luVirtualFieldName) => {
-        const luValue = readLuIntent(dialogId, actionId, actionData);
-        if (!luValue) return undefined;
+    // 'SendActivity_1234' -> '- hi'
+    const dereferenceLg: FieldProcessorAsync<string> = async (fromId, fromAction, toId, toAction, lgFieldName) =>
+      readLgTemplate(dialogId, fromAction[lgFieldName]);
 
-        // during copy, carry the LU data in virtual field
-        actionData[luVirtualFieldName] = luValue;
-        return luValue;
-      }
-    );
+    // 'TextInput_Response_1234' -> LuIntentSection | undefined
+    const dereferenceLu: FieldProcessorAsync<any> = async (fromId, fromAction, toId, toAction, luFieldName) => {
+      const luValue = readLuIntent(dialogId, fromId, fromAction);
+      // during copy, carry the LU data in virtual field
+      toAction[luFieldName] = luValue;
+      return luValue;
+    };
+
+    return deepCopyActions(actions, dereferenceLg, dereferenceLu);
   }
 
   async function constructAction(dialogId: string, action: BaseSchema) {
