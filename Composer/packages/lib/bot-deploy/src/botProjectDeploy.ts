@@ -53,16 +53,35 @@ export class BotProjectDeploy {
     this.creds = new TokenCredentials(config.accessToken);
     this.graphCreds = new TokenCredentials(config.graphToken);
     this.projPath = config.projPath;
+
+    // set path to .deployment file which points at the BotProject.csproj
     this.deployFilePath = config.deployFilePath ?? path.join(this.projPath, '.deployment');
+
+    // path to the zipped assets
     this.zipPath = config.zipPath ?? path.join(this.projPath, 'code.zip');
+
+    // path to the built, ready to deploy code assets
     this.publishFolder = config.publishFolder ?? path.join(this.projPath, 'bin\\Release\\netcoreapp3.1');
+
+    // path to the source appsettings.deployment.json file
     this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
+
+    // path to the deployed settings file that contains additional luis information
     this.deploymentSettingsPath =
       config.deploymentSettingsPath ?? path.join(this.publishFolder, 'appsettings.deployment.json');
+
+    // path to the ARM template
+    // this is currently expected to live in the code project
     this.templatePath =
       config.templatePath ?? path.join(this.projPath, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
+
+    // path to the dotnet project file
     this.dotnetProjectPath = config.dotnetProjectPath ?? path.join(this.projPath, 'BotProject.csproj');
+
+    // path to the built, ready to deploy declarative assets
     this.remoteBotPath = config.remoteBotPath ?? path.join(this.publishFolder, 'ComposerDialogs');
+
+    // path to the ready to deploy generated folder
     this.generatedFolder = config.generatedFolder ?? path.join(this.remoteBotPath, 'generated');
   }
 
@@ -220,14 +239,14 @@ export class BotProjectDeploy {
     return new Promise((resolve, reject) => {
       if (outputs?.properties?.outputs) {
         const outputResult = outputs.properties.outputs;
-        const applicatoinResult = {
+        const applicationResult = {
           MicrosoftAppId: appId,
           MicrosoftAppPassword: appPwd,
         };
         const outputObj = this.unpackObject(outputResult);
 
         const result = {};
-        Object.assign(result, outputObj, applicatoinResult);
+        Object.assign(result, outputObj, applicationResult);
 
         fs.writeFile(settingsPath, JSON.stringify(result, null, 4), err => {
           if (err) {
@@ -265,7 +284,12 @@ export class BotProjectDeploy {
   }
 
   private async dotnetPublish(publishFolder: string, projFolder: string, botPath?: string) {
+    // perform the dotnet publish command
+    // this builds the app and prepares it to be deployed
+    // results in a built copy in publishFolder/
     await exec(`dotnet publish ${this.dotnetProjectPath} -c release -o ${publishFolder} -v q`);
+
+    // Then, copy the declarative assets into the build folder.
     return new Promise((resolve, reject) => {
       const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
       const localBotPath = path.join(projFolder, 'ComposerDialogs');
