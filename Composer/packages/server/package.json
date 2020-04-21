@@ -61,7 +61,7 @@
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
     "@bfc/shared": "*",
-    "@microsoft/bf-lu": "^4.9.0-preview.121038",
+    "@microsoft/bf-lu": "4.9.0-preview.121555",
     "archiver": "^3.0.0",
     "axios": "^0.18.0",
     "azure-storage": "^2.10.3",
