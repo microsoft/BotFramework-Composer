@@ -70,12 +70,21 @@ export const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
 `;
 
 export const itemText = (depth: number) => css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+    z-index: 1;
+  }
   padding-left: ${depth * 16}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   text-align: left;
   cursor: pointer;
+`;
+
+export const content = css`
+  outline: none;
 `;
 
 export const moreButton = (isActive: boolean): IButtonStyles => {
