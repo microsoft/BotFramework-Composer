@@ -18,7 +18,7 @@ import {
   TextEdit,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
-import { updateIntent, isValid, checkSection } from '@bfc/indexers/lib/utils/luUtil';
+import { updateIntent, isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 
@@ -112,7 +112,7 @@ export class LUServer {
       const luFile = this.getLUDocument(document)?.index();
       if (!luFile) {
         diagnostics.push(`[Error luOption] File ${fileId}.lu do not exist`);
-      } else if (sectionId) {
+      } else if (sectionId && sectionId !== PlaceHolderSectionName) {
         const { sections } = luFile;
         const section = sections.find(({ Name }) => Name === sectionId);
         if (!section) diagnostics.push(`Section ${fileId}.lu#${sectionId} do not exist`);

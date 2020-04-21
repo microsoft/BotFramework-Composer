@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { ExpressionEngine, ReturnType } from 'adaptive-expressions';
+import { Expression, ReturnType } from 'adaptive-expressions';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 
@@ -10,8 +10,6 @@ export const ExpressionType = {
   boolean: 'boolean',
   string: 'string',
 };
-
-const ExpressionParser = new ExpressionEngine();
 
 const isExpression = (value: string | boolean | number, types: string[]): boolean => {
   //StringExpression always assumes string interpolation unless prefixed with =, producing a string
@@ -39,7 +37,7 @@ export const checkExpression = (exp: string | boolean | number, required: boolea
       } else if (typeof exp === 'number') {
         returnType = ReturnType.Number;
       } else {
-        returnType = ExpressionParser.parse(exp).returnType;
+        returnType = Expression.parse(exp).returnType;
       }
       message = checkReturnType(returnType, types);
     } catch (error) {

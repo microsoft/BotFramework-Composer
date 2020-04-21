@@ -28,7 +28,6 @@ export const About: React.FC<RouteComponentProps> = () => {
             latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code.`)}
               <Link
                 href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/toc.md'}
-                tabIndex={-1}
                 target={'_blank'}
                 style={{ marginLeft: '5px', textDecoration: 'underline' }}
               >
@@ -42,7 +41,6 @@ export const About: React.FC<RouteComponentProps> = () => {
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
                   href={`https://github.com/microsoft/BotFramework-Composer/commit/${process.env.GIT_SHA}`}
-                  tabIndex={-1}
                   target={'_blank'}
                   style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
@@ -55,7 +53,6 @@ export const About: React.FC<RouteComponentProps> = () => {
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
                   href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSION}`}
-                  tabIndex={-1}
                   target={'_blank'}
                   style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
@@ -68,23 +65,31 @@ export const About: React.FC<RouteComponentProps> = () => {
         <div css={about.linkRow}>
           <Link
             href={'https://github.com/microsoft/BotFramework-Composer/issues/new/choose'}
-            tabIndex={-1}
             target={'_blank'}
+            styles={about.helpLink}
           >
-            <div css={about.helpLink}>{formatMessage(`Getting Help`)} </div>
+            {formatMessage(`Getting Help`)}
           </Link>
         </div>
         <div css={about.linkContainer}>
           <div css={about.linkRow}>
             <Icon styles={about.icon} iconName={'BlockedSite'} tabIndex={-1} />
-            <Link href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'} target={'_blank'}>
-              <div css={about.link}>{formatMessage(`Terms of Use`)} </div>
+            <Link
+              href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'}
+              target={'_blank'}
+              styles={about.link}
+            >
+              {formatMessage(`Terms of Use`)}
             </Link>
           </div>
           <div css={about.linkRow}>
             <Icon styles={about.icon} ariaLabel={formatMessage('Privacy button')} iconName={'Lock'} />
-            <Link href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'} target={'_blank'}>
-              <div css={about.link}>{formatMessage(`Privacy`)}</div>
+            <Link
+              href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'}
+              target={'_blank'}
+              styles={about.link}
+            >
+              {formatMessage(`Privacy`)}
             </Link>
           </div>
         </div>
