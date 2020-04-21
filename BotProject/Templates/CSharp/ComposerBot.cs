@@ -27,7 +27,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private readonly IBotTelemetryClient telemetryClient;
         private readonly string defaultLocale;
 
-
         public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, IBotTelemetryClient telemetryClient, string rootDialog, string defaultLocale)
         {
             HostContext.Current.Set(skillClient);
