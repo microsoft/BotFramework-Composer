@@ -1,3 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-//# sourceMappingURL=interface.js.map
+
+import debug from 'debug';
+
+export default debug('composer:plugins');

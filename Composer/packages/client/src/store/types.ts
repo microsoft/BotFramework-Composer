@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile, Skill, UserSettings } from '@bfc/shared';
+import { JSONSchema7 } from '@bfc/extension';
 
 import { CreationFlowStatus, BotStatus } from '../constants';
 
@@ -49,6 +50,7 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
+  schema?: JSONSchema7;
   features: {
     history: boolean;
     publish: boolean;
@@ -59,8 +61,8 @@ export interface PublishType {
 
 export interface PublishTarget {
   name: string;
-  type: PublishType;
-  configuration: any;
+  type: string;
+  configuration: string;
 }
 
 export interface State {
@@ -142,7 +144,7 @@ export interface DialogSetting {
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
   publishTargets?: PublishTarget[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface DesignPageLocation {
