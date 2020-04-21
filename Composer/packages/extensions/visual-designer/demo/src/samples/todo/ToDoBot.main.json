@@ -66,7 +66,7 @@
               "updatedAt": "2019-08-02T22:36:20.947Z",
               "id": "157674"
             },
-            "activity": "[bfdactivity-157674]"
+            "activity": "[SendActivity_157674]"
           }
         ]
       },
@@ -135,7 +135,7 @@
               "updatedAt": "2019-08-01T23:44:57.629Z",
               "id": "696707"
             },
-            "activity": "[bfdactivity-696707]"
+            "activity": "[SendActivity_696707]"
           }
         ],
         "intent": "HelpIntent"

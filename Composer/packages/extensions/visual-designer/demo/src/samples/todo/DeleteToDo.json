@@ -68,7 +68,7 @@
                 "updatedAt": "2019-07-16T20:02:14.365Z",
                 "id": "725469"
               },
-              "activity": "[bfdactivity-725469]"
+              "activity": "[SendActivity_725469]"
             }
           ],
           "elseActions": [
@@ -79,7 +79,7 @@
                 "updatedAt": "2019-07-16T20:02:19.199Z",
                 "id": "549615"
               },
-              "activity": "[bfdactivity-549615]"
+              "activity": "[SendActivity_549615]"
             }
           ]
         }

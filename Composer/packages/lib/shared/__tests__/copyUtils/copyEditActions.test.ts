@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { copyEditActions } from '../../src/copyUtils/copyEditActions';
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('#copyEditActions', () => {
   it('can copy EditActions', async () => {

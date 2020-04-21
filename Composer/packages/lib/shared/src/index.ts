@@ -13,6 +13,7 @@ export * from './dialogFactory';
 export * from './generateUniqueId';
 export * from './labelMap';
 export * from './lgUtils';
+export * from './luNameBuilder';
 export * from './promptTabs';
 export * from './types';
 export * from './viewUtils';

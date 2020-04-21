@@ -13,6 +13,7 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
+import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import get from 'lodash/get';
 import { DialogInfo } from '@bfc/shared';
 import { LuEditor } from '@bfc/code-editor';
@@ -271,7 +272,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               luOption={{
                 projectId,
                 fileId: dialogId,
-                sectionId: formData.intent || 'newSection',
+                sectionId: formData.intent || PlaceHolderSectionName,
               }}
               height={150}
             />

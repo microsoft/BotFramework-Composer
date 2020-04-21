@@ -21,6 +21,7 @@ Cypress.Commands.add('withinEditor', (editorName, cb) => {
 
 Cypress.Commands.add('visitPage', page => {
   cy.findByTestId(`LeftNav-CommandBarButton${page}`).click();
+  cy.findByTestId('ActiveLeftNavItem').should('contain', page);
 });
 
 Cypress.on('uncaught:exception', err => {
