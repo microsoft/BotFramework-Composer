@@ -3,7 +3,6 @@
 
 import {
   BaseSchema,
-  deepCopyAction,
   deepCopyActions,
   deleteAction as destructAction,
   deleteActions as destructActions,
@@ -14,25 +13,30 @@ import { useLuApi } from './useLuApi';
 
 export const useActionApi = () => {
   const { createLgTemplate, readLgTemplate, deleteLgTemplates } = useLgApi();
-  const { deleteLuIntents } = useLuApi();
+  const { createLuIntent, readLuIntent, deleteLuIntents } = useLuApi();
 
-  async function constructAction(dialogId: string, action: BaseSchema[]) {
-    return deepCopyAction(action, (actionId, actionData, fieldName, fieldValue) =>
-      createLgTemplate(dialogId, actionId, fieldName, fieldValue)
+  async function constructActions(dialogId: string, actions: BaseSchema[]) {
+    return deepCopyActions(
+      actions,
+      (actionId, actionData, fieldName, fieldValue) => createLgTemplate(dialogId, actionId, fieldName, fieldValue),
+      (actionId, actionData, fieldName, fieldValue) => createLuIntent(dialogId, 'TODO-luid', fieldValue)
     );
   }
 
-  async function constructActions(dialogId: string, actions: BaseSchema[]) {
-    return deepCopyActions(actions, (actionId, actionData, fieldName, fieldValue) =>
-      createLgTemplate(dialogId, actionId, fieldName, fieldValue)
+  async function copyActions(dialogId: string, actions: BaseSchema[]) {
+    return deepCopyActions(
+      actions,
+      (actionId, actionData, fieldName, lgText) => readLgTemplate(dialogId, lgText),
+      (actionId, actionData, fieldName, fieldValue) => readLuIntent(dialogId, 'TODO-luid')
     );
+  }
+
+  async function constructAction(dialogId: string, action: BaseSchema) {
+    return await constructActions(dialogId, [action]);
   }
 
   async function copyAction(dialogId: string, action: BaseSchema) {
-    return deepCopyAction(action, (actionId, actionData, fieldName, lgText) => readLgTemplate(dialogId, lgText));
-  }
-  async function copyActions(dialogId: string, actions: BaseSchema[]) {
-    return deepCopyActions(actions, (actionId, actionData, fieldName, lgText) => readLgTemplate(dialogId, lgText));
+    return await copyActions(dialogId, [action]);
   }
 
   async function deleteAction(dialogId: string, action: BaseSchema) {

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DesignerData } from '../types';
+import { DesignerData, LuIntentSection } from '../types';
 
 export type ExternalResourceHandler<CopiedType> = (
   actionId: string,
@@ -20,4 +20,5 @@ export type ExternalResourceHandlerAsync<CopiedType> = (
 export interface ExternalApi {
   getDesignerId: (data?: DesignerData) => DesignerData;
   transformLgField: ExternalResourceHandlerAsync<string>;
+  transformLuField: ExternalResourceHandlerAsync<LuIntentSection | undefined>;
 }
