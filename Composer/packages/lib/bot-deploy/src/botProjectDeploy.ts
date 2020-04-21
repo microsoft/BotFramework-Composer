@@ -72,6 +72,20 @@ export class BotProjectDeploy {
     };
   }
 
+  private unpackObject(output: any) {
+    const unpacked: any = {};
+    for (const key in output) {
+      const objValue = output[key];
+      if (objValue.value) {
+        unpacked[key] = objValue.value;
+      }
+    }
+    return unpacked;
+  }
+
+  /**
+   * Format the parameters
+   */
   private getDeploymentTemplateParam(
     appId: string,
     appPwd: string,
@@ -99,6 +113,13 @@ export class BotProjectDeploy {
     });
   }
 
+  /***********************************************************************************************
+   * Azure API accessors
+   **********************************************************************************************/
+
+  /**
+   * Use the Azure API to create a new resource group
+   */
   private async createResourceGroup(
     client: ResourceManagementClient,
     location: string,
@@ -115,6 +136,9 @@ export class BotProjectDeploy {
     return await client.resourceGroups.createOrUpdate(resourceGroupName, param);
   }
 
+  /**
+   * Validate the deployment using the Azure API
+   */
   private async validateDeployment(
     client: ResourceManagementClient,
     templatePath: string,
@@ -138,6 +162,9 @@ export class BotProjectDeploy {
     return await client.deployments.validate(resourceGroupName, deployName, deployParam);
   }
 
+  /**
+   * Using an ARM template, provision a bunch of resources
+   */
   private async createDeployment(
     client: ResourceManagementClient,
     templatePath: string,
@@ -178,17 +205,9 @@ export class BotProjectDeploy {
     return createRes;
   }
 
-  private unpackObject(output: any) {
-    const unpakced: any = {};
-    for (const key in output) {
-      const objValue = output[key];
-      if (objValue.value) {
-        unpakced[key] = objValue.value;
-      }
-    }
-    return unpakced;
-  }
-
+  /**
+   * Write updated settings back to the settings file
+   */
   private async updateDeploymentJsonFile(
     settingsPath: string,
     client: ResourceManagementClient,
@@ -303,6 +322,9 @@ export class BotProjectDeploy {
     return fs.readFileSync(file).length > 0;
   }
 
+  /**
+   * Deploy a bot to a location
+   */
   public async deploy(
     name: string,
     environment: string,
@@ -313,6 +335,7 @@ export class BotProjectDeploy {
   ) {
     try {
       const webClient = new WebSiteManagementClient(this.creds, this.subId);
+
       // Check for existing deployment files
       if (!fs.pathExistsSync(this.deployFilePath)) {
         await this.botPrepareDeploy(this.deployFilePath);
@@ -324,6 +347,8 @@ export class BotProjectDeploy {
 
       // dotnet publish
       await this.dotnetPublish(this.publishFolder, this.projPath, botPath);
+
+      // LUIS build
       const settings = await fs.readJSON(this.settingsPath);
       const luisSettings = settings.luis;
 
@@ -342,6 +367,8 @@ export class BotProjectDeploy {
         language = 'en-us';
       }
 
+      // Process LUIS
+      // TODO: this should be a method of its own
       if (luisAuthoringKey && luisAuthoringRegion) {
         // publishing luis
         const botFiles = await this.getFiles(this.remoteBotPath);
@@ -403,6 +430,7 @@ export class BotProjectDeploy {
 
         Object.assign(luisConfig, luisAppIds);
 
+        // Update deploymentSettings with the luis config
         const settings: any = await fs.readJson(this.deploymentSettingsPath);
         settings.luis = luisConfig;
 
@@ -410,6 +438,7 @@ export class BotProjectDeploy {
           spaces: 4,
         });
 
+        // Assign a LUIS key to the endpoint
         const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
         const options = {
           headers: { Authorization: `Bearer ${this.creds.token}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
@@ -441,6 +470,8 @@ export class BotProjectDeploy {
           message: 'Luis Publish Success! ...',
         });
       }
+
+      // Build a zip file of the project
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Packing up the bot service ...',
@@ -451,6 +482,7 @@ export class BotProjectDeploy {
         message: 'Packing Service Success!',
       });
 
+      // Deploy the zip file to the web app
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Publishing to Azure ...',
@@ -473,12 +505,14 @@ export class BotProjectDeploy {
     }
   }
 
+  // Upload the zip file to Azure
   private async deployZip(webSiteClient: WebSiteManagementClient, zipPath: string, name: string, env: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Retrieve publishing details ...',
     });
     const userName = `${name}-${env}`;
+    // this seems unsafe!
     const userPwd = `${name}-${env}-${new Date().getTime().toString()}`;
 
     const updateRes = await webSiteClient.updatePublishingUser({
@@ -511,6 +545,9 @@ export class BotProjectDeploy {
     });
   }
 
+  /**
+   * Provision a set of Azure resources for use with a bot
+   */
   public async create(
     name: string,
     location: string,
@@ -518,38 +555,51 @@ export class BotProjectDeploy {
     appPassword: string,
     luisAuthoringKey?: string
   ) {
-    const graphClient = new GraphRbacManagementClient(this.graphCreds, this.tenantId, {
-      baseUri: 'https://graph.windows.net',
-    });
-
+    // Test for the existence of a deployment settings file.
+    // if one does not exists, emit an error message and stop.
     if (!fs.existsSync(this.settingsPath)) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: `! Could not find an 'appsettings.deployment.json' file in the current directory.`,
       });
+
+      // TODO: throw error
       return;
     }
 
     const settings = await fs.readJson(this.settingsPath);
+
+    // Validate settings
     let appId = settings.MicrosoftAppId;
 
+    // If the appId is not specified, create one
     if (!appId) {
+      // this requires an app password. if one not specified, fail.
       if (!appPassword) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
           message: `App password is required`,
         });
+        // TODO: throw error
         return;
       }
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: '> Creating App Registration ...',
       });
+
+      const graphClient = new GraphRbacManagementClient(this.graphCreds, this.tenantId, {
+        baseUri: 'https://graph.windows.net',
+      });
+
+      // create the app registration
       const appCreated = await this.createApp(graphClient, name, appPassword);
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: appCreated,
       });
+
+      // use the newly created app
       appId = appCreated.appId;
     }
 
@@ -569,12 +619,14 @@ export class BotProjectDeploy {
     const timeStamp = new Date().getTime().toString();
     const client = new ResourceManagementClient(this.creds, this.subId);
 
+    // Create a resource group to contain the new resources
     const rpres = await this.createResourceGroup(client, location, resourceGroupName);
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
       message: rpres,
     });
 
+    // Caste the parameters into the right format
     const deploymentTemplateParam = this.getDeploymentTemplateParam(
       appId,
       appPassword,
@@ -587,6 +639,7 @@ export class BotProjectDeploy {
       message: deploymentTemplateParam,
     });
 
+    // Validate the deployment using the Azure API
     const validation = await this.validateDeployment(
       client,
       this.templatePath,
@@ -600,6 +653,7 @@ export class BotProjectDeploy {
       message: validation,
     });
 
+    // Handle validation errors
     if (validation.error) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -613,9 +667,13 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
       });
+
+      // Todo: throw error
       return false;
     }
 
+    // Create the entire stack of resources inside the new resource group
+    // this is controlled by an ARM template identified in this.templatePath
     const deployment = await this.createDeployment(
       client,
       this.templatePath,
@@ -629,6 +687,7 @@ export class BotProjectDeploy {
       message: deployment,
     });
 
+    // Handle errors
     if (deployment._response.status != 200) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -642,9 +701,13 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
       });
+
+      // TODO: throw a real error
       return false;
     }
 
+    // Validate that everything was successfully created.
+    // Then, update the settings file with information about the new resources
     const updateResult = await this.updateDeploymentJsonFile(
       this.settingsPath,
       client,
@@ -658,6 +721,7 @@ export class BotProjectDeploy {
       message: updateResult,
     });
 
+    // Handle errors
     if (!updateResult) {
       const operations = await client.deploymentOperations.list(resourceGroupName, timeStamp);
       if (operations) {
@@ -702,6 +766,10 @@ export class BotProjectDeploy {
     return true;
   }
 
+  /**
+   * createAndDeploy
+   * provision the Azure resources AND deploy a bot to those resources
+   */
   public async createAndDeploy(
     name: string,
     location: string,
