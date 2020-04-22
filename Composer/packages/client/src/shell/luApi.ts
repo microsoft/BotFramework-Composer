@@ -21,7 +21,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
 
       const content = luUtil.updateIntent(file.content, intentName, intent);
       const projectId = state.projectId;
-      return await actions.updateLuFile({ id, projectId, content });
+      return await actions.updateLuFile({ id: file.id, projectId, content });
     },
 
     removeLuIntent: async (id: string, intentName: string) => {
@@ -31,7 +31,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
 
       const content = luUtil.removeIntent(file.content, intentName);
       const projectId = state.projectId;
-      return await actions.updateLuFile({ id, projectId, content });
+      return await actions.updateLuFile({ id: file.id, projectId, content });
     },
 
     getLuIntents: (id: string): LuIntentSection[] => {
