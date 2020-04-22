@@ -40,9 +40,13 @@ export function resolveFieldWidget(
       return DefaultFields.OneOfField;
     }
 
+    if (Array.isArray(schema.enum)) {
+      return DefaultFields.SelectField;
+    }
+
     switch (schema.type) {
       case 'string':
-        return schema.enum ? DefaultFields.SelectField : DefaultFields.StringField;
+        return DefaultFields.StringField;
       case 'integer':
       case 'number':
         return DefaultFields.NumberField;
