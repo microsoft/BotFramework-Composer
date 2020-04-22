@@ -253,3 +253,15 @@ export const exampleListCellDescription = css`
   font-size: ${fonts.small.fontSize};
   color: ${palette.neutralTertiary};
 `;
+
+export const tableCell = css`
+  outline: none;
+  width: auto;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
+`;

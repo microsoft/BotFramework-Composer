@@ -136,3 +136,14 @@ export const consoleStyle = css`
   padding: 15px;
   margin-bottom: 20px;
 `;
+
+export const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
+`;

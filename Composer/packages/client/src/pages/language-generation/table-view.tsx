@@ -22,7 +22,7 @@ import { Async } from 'office-ui-fabric-react/lib/Utilities';
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
-import { actionButton, formCell } from '../language-understanding/styles';
+import { actionButton, formCell, content } from '../language-understanding/styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -155,7 +155,9 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           return (
             <div data-is-focusable={true} css={formCell}>
-              #{item.name}
+              <div tabIndex={-1} css={content} aria-label={formatMessage(`Name is {name}`, { name: item.name })}>
+                #{item.name}
+              </div>
             </div>
           );
         },
@@ -171,7 +173,13 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           return (
             <div data-is-focusable={true} css={formCell}>
-              {item.body}
+              <div
+                tabIndex={-1}
+                css={content}
+                aria-label={formatMessage(`Response is {response}`, { response: item.body })}
+              >
+                {item.body}
+              </div>
             </div>
           );
         },
