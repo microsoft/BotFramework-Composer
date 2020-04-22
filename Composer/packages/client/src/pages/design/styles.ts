@@ -93,6 +93,7 @@ export const formEditor = css`
 
 export const breadcrumbClass = mergeStyleSets({
   root: {
+    width: '500px',
     margin: '0',
     padding: '10px',
   },

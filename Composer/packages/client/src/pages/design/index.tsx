@@ -288,7 +288,7 @@ function DesignPage(props) {
           }, [] as IBreadcrumbItem[])
         : [];
     return (
-      <Fragment>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Breadcrumb
           items={items}
           ariaLabel={formatMessage('Navigation Path')}
@@ -299,12 +299,12 @@ function DesignPage(props) {
         <Link
           style={{ position: 'absolute', right: 0, marginTop: '22px', marginRight: '10px' }}
           onClick={() => {
-            setDialogJsonVisibility(!dialogJsonVisible);
+            setDialogJsonVisibility(current => !current);
           }}
         >
           {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
         </Link>
-      </Fragment>
+      </div>
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
@@ -405,13 +405,13 @@ function DesignPage(props) {
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    key={'testkey'}
-                    id={'modaljsonview'}
+                    key={'dialogjson'}
+                    id={'dialogjson'}
                     onChange={data => {
                       actions.updateDialog({ id: currentDialog.id, projectId, content: data });
                     }}
-                    value={currentDialog.content || ''}
-                    schema={schemas.sdk}
+                    value={currentDialog.content || undefined}
+                    schema={schemas.sdk.content}
                   />
                 ) : (
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />
