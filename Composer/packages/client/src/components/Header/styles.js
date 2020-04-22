@@ -40,3 +40,23 @@ export const botName = css`
   font-size: 16px;
   color: #fff;
 `;
+
+export const updateAvailableIcon = {
+  icon: {
+    color: '#FFF',
+    fontSize: '20px',
+  },
+  root: {
+    position: 'absolute',
+    height: '20px',
+    width: '20px',
+    top: 'calc(50% - 10px)',
+    right: '20px',
+  },
+  rootHovered: {
+    backgroundColor: 'transparent',
+  },
+  rootPressed: {
+    backgroundColor: 'transparent',
+  },
+};
