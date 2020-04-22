@@ -5,10 +5,10 @@ import fs from 'fs';
 
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
-import { UserIdentity } from '../../services/pluginLoader';
 import StorageService from '../../services/storage';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
