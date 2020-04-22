@@ -220,7 +220,7 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           return (
             <div data-is-focusable={true} css={tableCell}>
-              <div tabIndex={-1} css={content}>
+              <div tabIndex={-1} css={content} aria-label={formatMessage(`State is {state}`, { state: item.state })}>
                 {item.state}
               </div>
             </div>
