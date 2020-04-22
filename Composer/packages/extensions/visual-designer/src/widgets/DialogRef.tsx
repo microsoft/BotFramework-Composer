@@ -31,7 +31,7 @@ export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, di
   };
   useEffect(() => {
     if (nodeSelected) {
-      linkBtnRef.current && linkBtnRef.current.focus();
+      linkBtnRef.current?.focus();
     }
   });
   const calleeDialog = typeof dialog === 'object' ? get(dialog, '$ref') : dialog;

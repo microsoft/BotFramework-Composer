@@ -35,18 +35,17 @@ export function handleTabMove(currentElement: SelectorElement, selectableElement
   let nextElement: SelectorElement;
   const selectableChildren = findSelectableChildren(currentElement, selectableElements);
   const selectableParent = findSelectableParent(currentElement, selectableElements);
+  const findElementWithSuffix = suffix => {
+    return selectableElements.find(element => element.selectedId === `${selectableParent?.selectedId}${suffix}`);
+  };
   if (command === KeyboardCommandTypes.Cursor.MoveNext) {
     if (selectableChildren.length > 0) {
       // Tab to inner selectable element.
       nextElement = selectableChildren[0];
     } else {
-      const hasInlineLinkElement =
-        currentElement.selectedId.endsWith('dot') &&
-        selectableElements.find(element => element.selectedId === selectableParent?.selectedId + 'link');
+      const hasInlineLinkElement = currentElement.selectedId.endsWith('dot') && findElementWithSuffix('link');
       if (hasInlineLinkElement) {
-        nextElement =
-          selectableElements.find(element => element.selectedId === selectableParent?.selectedId + 'link') ||
-          currentElement;
+        nextElement = findElementWithSuffix('link') || currentElement;
       } else {
         // Perform like presssing down arrow key.
         nextElement = locateNearestElement(currentElement, selectableElements, Direction.Down, [
@@ -59,9 +58,7 @@ export function handleTabMove(currentElement: SelectorElement, selectableElement
     if (selectableParent) {
       // Tab to parent.
       if (currentElement.isInlineLinkElement) {
-        nextElement =
-          selectableElements.find(element => element.selectedId === selectableParent.selectedId + 'dot') ||
-          selectableParent;
+        nextElement = findElementWithSuffix('dot') || selectableParent;
       } else {
         nextElement = selectableParent;
       }
