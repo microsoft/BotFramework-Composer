@@ -50,6 +50,9 @@ class AzurePublisher {
     // deploy resource exist
     if (exist) {
       await emptyDir(botFolder);
+      // TODO: this needs to be remote storage aware
+      // remember the project's project.files not include the settings.json file, need to change the indexer in client
+      // and save the project.files contents instead of copy
       await copy(srcBot, botFolder, {
         recursive: true,
       });
@@ -62,6 +65,7 @@ class AzurePublisher {
       await copy(srcTemplate, projFolder);
     }
   };
+
   private getHistory = async (botId: string, profileName: string) => {
     if (await pathExists(this.historyFilePath)) {
       const histories = await readJson(this.historyFilePath);
@@ -116,6 +120,7 @@ class AzurePublisher {
     }
     return undefined;
   };
+
   private createAndDeploy = async (
     resourcekey: string,
     botId: string,
@@ -133,7 +138,8 @@ class AzurePublisher {
       luisAuthoringRegion,
     } = customizeConfiguration;
     try {
-      // if create resource success, we do not create again. recreate resource with the same config may cause error.
+      // TODO: This step should be handled outside of Composer
+      // save the create result in file instead of memory.
       if (!create) {
         this.resources[resourcekey] = true;
       }
@@ -144,6 +150,8 @@ class AzurePublisher {
         }
         this.resources[resourcekey] = true;
       }
+
+      // Perform the deploy
       await this.azDeployer.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
 
       // update status and history
@@ -167,7 +175,12 @@ class AzurePublisher {
       }
     }
   };
+
+  /**************************************************************************************************
+   * plugin methods
+   *************************************************************************************************/
   publish = async (config: PublishConfig, project, metadata, user) => {
+    // templatePath point to the CSharp code
     const { settings, templatePath, name, customizeConfiguration } = config;
     const {
       subscriptionID,
@@ -177,9 +190,18 @@ class AzurePublisher {
       luisAuthoringKey,
       luisAuthoringRegion,
     } = customizeConfiguration;
+
+    // point to the declarative assets (possibly in remote storage)
+    // TODO: this should definitely be using project.files instead of the path
     const srcBot = project.dataDir || '';
+
+    // get the bot id from the project
     const botId = project.id;
+
+    // get the name of the publish profile
     const publishName = customizeConfiguration.name;
+
+    // generate an id to track this deploy
     const jobId = uuid();
 
     const resourcekey = hash(
@@ -229,6 +251,7 @@ class AzurePublisher {
       };
       this.addLoadingStatus(botId, name, response);
 
+      // TODO: move the provision out of plugin
       this.createAndDeploy(resourcekey, botId, name, jobId, customizeConfiguration);
 
       return response;
