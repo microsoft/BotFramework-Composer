@@ -11,7 +11,7 @@ import composerIcon from '../../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../../constants';
 import { StoreContext } from '../../store';
 
-import { updateAvailableIcon, headerContainer, title, botName } from './styles';
+import { updateAvailableIcon, headerContainer, title, botName, divider } from './styles';
 
 export const Header = props => {
   const {
@@ -34,8 +34,9 @@ export const Header = props => {
         aria-label={formatMessage('Composer Logo')}
         src={composerIcon}
       />
-      <span css={title}>{formatMessage('Bot Framework Composer')}</span>
-      <span css={botName}>{props.botName}</span>
+      <div css={title}>{formatMessage('Bot Framework Composer')}</div>
+      <div css={divider} />
+      <div css={botName}>{props.botName}</div>
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}
