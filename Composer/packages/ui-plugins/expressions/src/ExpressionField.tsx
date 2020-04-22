@@ -6,12 +6,12 @@ import { jsx, css } from '@emotion/core';
 import React, { useMemo, useState } from 'react';
 import { FieldProps } from '@bfc/extension';
 import { FieldLabel, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
-import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 
 import { ExpressionEditor } from './ExpressionEditor';
-import { getOptions, getSelectedOption } from './utils';
+import { getOptions, getSelectedOption, SchemaOption } from './utils';
 
 const styles = {
   container: css`
@@ -33,7 +33,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
 
   const options = useMemo(() => getOptions(expressionSchema, definitions), []);
   const initialSelectedOption = useMemo(
-    () => getSelectedOption(value, options) || ({ key: '', data: { schema: undefined } } as IDropdownOption),
+    () => getSelectedOption(value, options) || ({ key: '', data: { schema: {} } } as SchemaOption),
     []
   );
 
@@ -43,11 +43,11 @@ const ExpressionField: React.FC<FieldProps> = props => {
       data: { schema: selectedSchema },
     },
     setSelectedOption,
-  ] = useState<IDropdownOption>(initialSelectedOption);
+  ] = useState<SchemaOption>(initialSelectedOption);
 
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option && option.key !== selectedKey) {
-      setSelectedOption(option);
+      setSelectedOption(option as SchemaOption);
       props.onChange(undefined);
     }
   };
@@ -69,7 +69,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
     // return a json editor for open ended obejcts
     if (
       (selectedSchema.type === 'object' && !selectedSchema.properties) ||
-      (selectedSchema.type === 'array' && !selectedSchema.items)
+      (selectedSchema.type === 'array' && !selectedSchema.items && !selectedSchema.oneOf)
     ) {
       const defaultValue = selectedSchema.type === 'object' ? {} : [];
       return (
