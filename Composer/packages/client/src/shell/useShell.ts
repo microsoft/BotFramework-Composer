@@ -20,7 +20,7 @@ const FORM_EDITOR = 'PropertyEditor';
 
 type EventSource = 'VisualEditor' | 'PropertyEditor';
 
-export function useShell(source?: EventSource): { api: ShellApi; data: ShellData } {
+export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions, resolvers } = useContext(StoreContext);
   const { luFileResolver } = resolvers;
   const {

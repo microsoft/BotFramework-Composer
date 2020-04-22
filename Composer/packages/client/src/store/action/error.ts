@@ -14,7 +14,7 @@ export const setError: ActionCreator = ({ dispatch }, error) => {
   });
 };
 
-export const setMessage: ActionCreator = debounce(({ dispatch }, message) => {
+const _setMessage = debounce((dispatch, message: string) => {
   dispatch({
     type: ActionTypes.SET_MESSAGE,
     payload: message,
@@ -29,3 +29,7 @@ export const setMessage: ActionCreator = debounce(({ dispatch }, message) => {
     2000
   );
 }, 500);
+
+export const setMessage: ActionCreator = ({ dispatch }, message) => {
+  _setMessage(dispatch, message);
+};

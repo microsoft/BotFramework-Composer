@@ -20,12 +20,6 @@ import { objectArrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
 
-const END_OF_ROW_LABEL = formatMessage('press Enter to add this item or Tab to move to the next interactive element');
-
-const INSIDE_ROW_LABEL = formatMessage(
-  'press Enter to add this name and advance to the next row, or press Tab to advance to the value field'
-);
-
 const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): string | undefined => {
   const { uiOptions } = props;
   const placeholderOverride = uiOptions.properties?.[propertyName]?.placeholder;
@@ -46,6 +40,12 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
   const firstNewFieldRef: React.RefObject<ITextField> = useRef(null);
   const { announce } = useShellApi().shellApi;
+
+  const END_OF_ROW_LABEL = formatMessage('press Enter to add this item or Tab to move to the next interactive element');
+
+  const INSIDE_ROW_LABEL = formatMessage(
+    'press Enter to add this name and advance to the next row, or press Tab to advance to the value field'
+  );
 
   const handleNewObjectChange = (property: string) => (_e: React.FormEvent, newValue?: string) => {
     setNewObject({ ...newObject, [property]: newValue });

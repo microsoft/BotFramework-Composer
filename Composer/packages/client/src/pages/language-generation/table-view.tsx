@@ -22,7 +22,6 @@ import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
 import { actionButton, formCell } from '../language-understanding/styles';
-import { useShell } from '../../shell';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -30,8 +29,6 @@ interface TableViewProps extends RouteComponentProps<{}> {
 
 const TableView: React.FC<TableViewProps> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { api } = useShell();
-  const { announce } = api;
   const { dialogs, lgFiles, projectId, locale } = state;
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
@@ -115,7 +112,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'delete',
           name: formatMessage('Delete'),
           onClick: () => {
-            announce('item deleted');
+            actions.setMessage('item deleted');
             onRemoveTemplate(index);
           },
         },
@@ -123,7 +120,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'copy',
           name: formatMessage('Make a copy'),
           onClick: () => {
-            announce('item copied');
+            actions.setMessage('item copied');
             onCopyTemplate(index);
           },
         },
@@ -249,7 +246,7 @@ const TableView: React.FC<TableViewProps> = props => {
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => {
             onCreateNewTemplate();
-            announce('item added');
+            actions.setMessage('item added');
           }}
         >
           {formatMessage('New template')}
