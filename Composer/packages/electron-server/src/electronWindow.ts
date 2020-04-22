@@ -21,10 +21,12 @@ export default class ElectronWindow {
 
   private constructor() {
     // Create the browser window.
-    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+    const { height } = screen.getPrimaryDisplay().workAreaSize;
+    const adjustedHeight = height * 0.9; // take up 90% of screen height
+    const adjustedWidth = (4 / 3) * adjustedHeight; // snap to 4:3 aspect ratio (16:9 doesn't look as good when scaled down)
     const browserWindowOptions: Electron.BrowserWindowConstructorOptions = {
-      width: width * 0.75,
-      height: height * 0.9,
+      width: adjustedWidth,
+      height: adjustedHeight,
       webPreferences: {
         nodeIntegration: false,
         preload: join(__dirname, 'preload.js'),
