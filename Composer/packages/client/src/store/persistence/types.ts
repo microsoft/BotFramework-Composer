@@ -14,7 +14,7 @@ export enum FileExtensions {
 }
 
 export interface ResourceInfo {
-  id: string;
+  name: string;
   content: string;
 }
 

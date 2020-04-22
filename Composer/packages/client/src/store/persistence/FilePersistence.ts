@@ -11,6 +11,7 @@ import { getBaseName } from '../../utils';
 
 import { FileOperation } from './FileOperation';
 import { FileChangeType, FileExtensions, ResourceInfo } from './types';
+import Semaphore from './Semaphor';
 
 const fileChangeType = {
   [ActionTypes.CREATE_DIALOG]: { changeType: FileChangeType.CREATE, fileType: FileExtensions.Dialog },
@@ -28,6 +29,11 @@ class FilePersistence {
   private _files: { [fileName: string]: FileOperation };
   private _projectId = '';
   private _handleError = name => error => {};
+  private _operator = {
+    [FileChangeType.CREATE]: this.create.bind(this),
+    [FileChangeType.UPDATE]: this.update.bind(this),
+    [FileChangeType.DELETE]: this.remove.bind(this),
+  };
 
   constructor() {
     this._files = {};
@@ -71,61 +77,31 @@ class FilePersistence {
     if (this._files[fileName]) delete this._files[fileName];
   }
 
-  public async doRemove(fileName: string) {
-    try {
-      await this._files[fileName].removeFile();
-      this.detach(fileName);
-    } catch (error) {
-      this._handleError(fileName)(error);
-    }
+  public async remove(file: ResourceInfo) {
+    const { name } = file;
+    await this._files[name].removeFile();
+    this.detach(name);
   }
 
-  public async doUpdate(fileName: string, content: string) {
-    try {
-      if (!this._files[fileName]) {
-        this.attach(fileName);
-        await this._files[fileName].createFile(fileName, content);
-      } else {
-        await this._files[fileName].updateFile(content, this._handleError(fileName));
-      }
-    } catch (error) {
-      this._handleError(fileName)(error);
-    }
+  public async update(file: ResourceInfo) {
+    const { name, content } = file;
+    await this._files[name].updateFile(content, this._handleError(name));
   }
 
-  public async operate({ changeType, fileType }, id: string, state: State) {
-    if (changeType === FileChangeType.DELETE) {
-      await Promise.all(
-        keys(this._files)
-          .filter(fileName => {
-            const fileId = getBaseName(fileName);
-            return fileId === id || (getBaseName(fileId) === id && fileType === FileExtensions.Dialog);
-          })
-          .map(async fileName => await this.doRemove(fileName))
-      );
-    } else {
-      const { dialogs, luFiles, lgFiles } = state;
-      if (fileType === FileExtensions.Dialog) {
-        const dialog = dialogs.find(d => d.id === id);
-        if (!dialog) return;
-        await this.doUpdate(`${id}.dialog`, JSON.stringify(dialog.content, null, 2) + '\n');
-        if (changeType === FileChangeType.CREATE) {
-          await this._doCreateForOtherFile(luFiles, FileExtensions.Lu, id);
-          await this._doCreateForOtherFile(lgFiles, FileExtensions.Lg, id);
-        }
-      }
+  public async create(file: ResourceInfo) {
+    const { name, content } = file;
+    this.attach(name);
+    await this._files[name].createFile(name, content);
+  }
 
-      if (fileType === FileExtensions.Lg) {
-        const lg = lgFiles.find(d => d.id === id);
-        if (!lg) return;
-        await this.doUpdate(`${id}.lg`, lg.content);
-      }
-
-      if (fileType === FileExtensions.Lu) {
-        const lu = luFiles.find(d => d.id === id);
-        if (!lu) return;
-        await this.doUpdate(`${id}.lu`, lu.content);
-      }
+  public async operate(files: ResourceInfo[], changeType: FileChangeType) {
+    try {
+      const s = new Semaphore();
+      await s.start();
+      await Promise.all(files.map(async file => await this._operator[changeType](file)));
+      s.end();
+    } catch (error) {
+      this._handleError('')(error);
     }
   }
 
@@ -137,7 +113,8 @@ class FilePersistence {
     if (!this.projectId) return;
     const type = fileChangeType[action.type];
     if (!type) return;
-    await this.operate({ ...type }, action.payload?.id, currentState);
+    const files = this._getChangedFiles(type, action.payload?.id, currentState);
+    await this.operate(files, type.changeType);
   }
 
   public registerHandleError(store: Store) {
@@ -153,13 +130,58 @@ class FilePersistence {
     };
   }
 
-  // if create dialog, the lg and lu are created together
-  private async _doCreateForOtherFile(files: ResourceInfo[], extension: string, targetId: string) {
-    await Promise.all(
-      files
-        .filter(file => getBaseName(file.id) === targetId)
-        .map(async file => await this.doUpdate(`${file.id}${extension}`, file.content))
-    );
+  private _createResourceInfo(file: any, fileType: FileExtensions): ResourceInfo {
+    let content = file.content;
+    if (fileType === FileExtensions.Dialog) {
+      content = JSON.stringify(content, null, 2) + '\n';
+    }
+    return { name: `${file.id}${fileType}`, content };
+  }
+
+  private _getChangedFiles({ changeType, fileType }, id: string, state: State): ResourceInfo[] {
+    const { dialogs, luFiles, lgFiles } = state;
+    const files: ResourceInfo[] = [];
+
+    switch (fileType) {
+      case FileExtensions.Dialog: {
+        const dialog = dialogs.find(dialog => dialog.id === id);
+        if (changeType === FileChangeType.CREATE) {
+          luFiles
+            .filter(lu => getBaseName(lu.id) === id)
+            .forEach(lu => {
+              files.push(this._createResourceInfo(lu, FileExtensions.Lu));
+            });
+          lgFiles
+            .filter(lg => getBaseName(lg.id) === id)
+            .forEach(lg => {
+              files.push(this._createResourceInfo(lg, FileExtensions.Lg));
+            });
+          files.push(this._createResourceInfo(dialog, fileType));
+        } else if (changeType === FileChangeType.DELETE) {
+          keys(this._files)
+            .filter(fileName => {
+              const fileId = getBaseName(fileName);
+              return fileId === id || (getBaseName(fileId) === id && fileType === FileExtensions.Dialog);
+            })
+            .forEach(fileName => files.push({ name: fileName, content: '' }));
+        } else {
+          files.push(this._createResourceInfo(dialog, fileType));
+        }
+
+        break;
+      }
+      case FileExtensions.Lu: {
+        const lu = luFiles.find(lu => lu.id === id);
+        files.push(this._createResourceInfo(lu, fileType));
+        break;
+      }
+      case FileExtensions.Lg: {
+        const lg = lgFiles.find(lg => lg.id === id);
+        files.push(this._createResourceInfo(lg, fileType));
+        break;
+      }
+    }
+    return files;
   }
 }
 

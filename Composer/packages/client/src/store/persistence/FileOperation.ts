@@ -17,7 +17,7 @@ export class FileOperation {
         try {
           const response = await client.updateFile(this.projectId, this.file.name, content);
           this.file.content = content;
-          this.file.lastModified = response.data.lastModified;
+          this.file.lastModified = response.lastModified;
         } catch (error) {
           //the error can't be thrown out to upper layer
           this.errorHandler(error);
