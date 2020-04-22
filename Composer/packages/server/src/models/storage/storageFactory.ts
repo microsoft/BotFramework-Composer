@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { pluginLoader, UserIdentity } from '../../services/pluginLoader';
+import { pluginLoader, UserIdentity } from '@bfc/plugin-loader';
 
 import { LocalDiskStorage } from './localDiskStorage';
 import { StorageConnection, IFileStorage } from './interface';

@@ -12,7 +12,7 @@ import storage from '../utils/storage';
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
-import { CreationFlowStatus, BotStatus } from './../constants';
+import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from './../constants';
 import {
   State,
   ActionHandlers,
@@ -89,6 +89,11 @@ const initialState: State = {
     dialogNavWidth: 180,
   }),
   announcement: undefined,
+  appUpdate: {
+    progressPercent: 0,
+    showing: false,
+    status: AppUpdaterStatus.IDLE,
+  },
 };
 
 interface StoreContextValue {

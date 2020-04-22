@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
+import { PluginLoader } from '@bfc/plugin-loader';
 
 import StorageService from '../services/storage';
-import { PluginLoader } from '../services/pluginLoader';
 import { Path } from '../utility/path';
 
 function getStorageConnections(req: Request, res: Response) {
