@@ -8,5 +8,5 @@ const { writeToDist } = common;
 writeLatestYmlFile().catch(e => console.error(e));
 /** Generates latest-mac.yml */
 async function writeLatestYmlFile() {
-  glob('../**/*.exe', {}, (err, files) => writeToDist(err, files, 'latest-win.yml'));
+  glob('../**/*.exe', {}, (err, files) => writeToDist(err, files, 'latest.yml'));
 }
