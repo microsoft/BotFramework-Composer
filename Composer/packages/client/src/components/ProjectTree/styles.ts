@@ -126,12 +126,6 @@ export const overflowSet = css`
   justify-content: space-between;
 `;
 
-export const addButton = (depth: number) => css`
-  margin-left: ${depth * 16}px;
-  font-size: 12px;
-  color: #0078d4;
-`;
-
 export const styles = {
   dialog: {
     title: {
