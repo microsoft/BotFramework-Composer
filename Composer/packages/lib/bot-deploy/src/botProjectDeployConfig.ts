@@ -5,11 +5,8 @@ export interface BotProjectDeployConfig {
   // Subscription Id of Auzre Account
   subId: string;
 
-  // The token for user login
-  accessToken: string;
-
-  // The token for aad-graph
-  graphToken: string;
+  // credential
+  creds: any;
 
   // The project path to deploy
   projPath: string;

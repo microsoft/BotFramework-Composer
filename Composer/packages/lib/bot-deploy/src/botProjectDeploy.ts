@@ -14,8 +14,8 @@ import {
   ResourceGroupsCreateOrUpdateResponse,
 } from '@azure/arm-resources/esm/models';
 import { GraphRbacManagementClient } from '@azure/graph';
-// import * as msRestNodeAuth from '@azure/ms-rest-nodeauth';
-import { TokenCredentials } from '@azure/ms-rest-js';
+import * as msRestNodeAuth from '@azure/ms-rest-nodeauth';
+// import { TokenCredentials } from '@azure/ms-rest-js';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 
@@ -32,7 +32,6 @@ const readdir = promisify(fs.readdir);
 export class BotProjectDeploy {
   private subId: string;
   private creds: any;
-  private graphCreds: any;
   private projPath: string;
   private deploymentSettingsPath: string;
   private deployFilePath: string;
@@ -50,8 +49,7 @@ export class BotProjectDeploy {
   constructor(config: BotProjectDeployConfig) {
     this.subId = config.subId;
     this.logger = config.logger;
-    this.creds = new TokenCredentials(config.accessToken);
-    this.graphCreds = new TokenCredentials(config.graphToken);
+    this.creds = config.creds;
     this.projPath = config.projPath;
     this.deployFilePath = config.deployFilePath ?? path.join(this.projPath, '.deployment');
     this.zipPath = config.zipPath ?? path.join(this.projPath, 'code.zip');
@@ -247,41 +245,24 @@ export class BotProjectDeploy {
 
   private async dotnetPublish(publishFolder: string, projFolder: string, botPath?: string) {
     await exec(`dotnet publish ${this.dotnetProjectPath} -c release -o ${publishFolder} -v q`);
-    return new Promise((resolve, reject) => {
-      const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
-      const localBotPath = path.join(projFolder, 'ComposerDialogs');
+    const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
+    const localBotPath = path.join(projFolder, 'ComposerDialogs');
 
-      if (botPath) {
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Publishing dialogs from external bot project: ${botPath}`,
-        });
-        fs.copy(
-          botPath,
-          remoteBotPath,
-          {
-            overwrite: true,
-            recursive: true,
-          },
-          err => {
-            reject(err);
-          }
-        );
-      } else {
-        fs.copy(
-          localBotPath,
-          remoteBotPath,
-          {
-            overwrite: true,
-            recursive: true,
-          },
-          err => {
-            reject(err);
-          }
-        );
-      }
-      resolve();
-    });
+    if (botPath) {
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `Publishing dialogs from external bot project: ${botPath}`,
+      });
+      await fs.copy(botPath, remoteBotPath, {
+        overwrite: true,
+        recursive: true,
+      });
+    } else {
+      await fs.copy(localBotPath, remoteBotPath, {
+        overwrite: true,
+        recursive: true,
+      });
+    }
   }
 
   private async zipDirectory(source: string, out: string) {
@@ -410,9 +391,10 @@ export class BotProjectDeploy {
           spaces: 4,
         });
 
+        const token = await this.creds.getToken();
         const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
         const options = {
-          headers: { Authorization: `Bearer ${this.creds.token}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+          headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
         } as rp.RequestPromiseOptions;
         const response = await rp.get(getAccountUri, options);
         const jsonRes = JSON.parse(response);
@@ -424,11 +406,12 @@ export class BotProjectDeploy {
             status: BotProjectDeployLoggerType.DEPLOY_INFO,
             message: `Assigning to luis app id: ${luisAppIds}`,
           });
+          const token = await this.creds.getToken();
           const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
           const options = {
             body: account,
             json: true,
-            headers: { Authorization: `Bearer ${this.creds.token}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+            headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
           } as rp.RequestPromiseOptions;
           const response = await rp.post(luisAssignEndpoint, options);
           this.logger({
@@ -518,7 +501,15 @@ export class BotProjectDeploy {
     appPassword: string,
     luisAuthoringKey?: string
   ) {
-    const graphClient = new GraphRbacManagementClient(this.graphCreds, this.tenantId, {
+    const graphCreds = new msRestNodeAuth.DeviceTokenCredentials(
+      this.creds.clientId,
+      this.tenantId,
+      this.creds.username,
+      'graph',
+      this.creds.environment,
+      this.creds.tokenCache
+    );
+    const graphClient = new GraphRbacManagementClient(graphCreds, this.tenantId, {
       baseUri: 'https://graph.windows.net',
     });
 
