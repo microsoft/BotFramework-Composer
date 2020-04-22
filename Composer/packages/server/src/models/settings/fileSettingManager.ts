@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { UserIdentity } from '@bfc/plugin-loader';
+
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import StorageService from '../../services/storage';
-import { UserIdentity } from '../../services/pluginLoader';
 import log from '../../logger';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
