@@ -186,8 +186,20 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
         />
         <div
           aria-live={'polite'}
-          aria-label={`${res.groups.length} dialogs have been found
-          ${res.groups.length > 0 ? 'Press down arrow key to navigate the search results' : ''}`}
+          aria-label={formatMessage(
+            `{
+            dialogNum, plural,
+                =0 {No dialogs}
+                =1 {One dialog}
+              other {# dialogs}
+            } have been found.
+            {
+              dialogNum, select,
+                  0 {}
+                other {Press down arrow key to navigate the search results}
+            }`,
+            { dialogNum: res.groups.length }
+          )}
         />
         <GroupedList
           {...res}
