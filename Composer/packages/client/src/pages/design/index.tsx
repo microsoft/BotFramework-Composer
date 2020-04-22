@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useEffect, useMemo, useState, Fragment } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
