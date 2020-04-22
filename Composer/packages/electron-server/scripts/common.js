@@ -27,7 +27,8 @@ async function writeToDist(err, files, fileName) {
     sha512,
   };
   const ymlStr = yaml.safeDump(ymlInfo);
-  fsp.writeFileSync(path.normalize(`../dist/${fileName}`), ymlStr);
+  const ymlPath = path.join(__dirname, `../dist/${fileName}`);
+  fsp.writeFileSync(ymlPath, ymlStr);
 }
 
 // https://github.com/electron-userland/electron-builder/issues/3913 as hashFilAsync has been removed from latest electron-builder

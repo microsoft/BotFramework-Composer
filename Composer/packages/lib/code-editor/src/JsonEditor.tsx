@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useState } from 'react';
+import merge from 'lodash/merge';
+import schemaDefaults from 'json-schema-defaults';
 
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
@@ -76,13 +78,15 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     }
   };
 
+  const json = schema ? merge({}, schemaDefaults(schema), initialValue) : initialValue;
+
   return (
     <BaseEditor
       id={id}
       helpURL="https://www.json.org"
       language="json"
       options={options}
-      value={JSON.stringify(initialValue, null, 2)}
+      value={JSON.stringify(json, null, 2)}
       onChange={handleChange}
       errorMessage={parseError}
       onInit={onInit}

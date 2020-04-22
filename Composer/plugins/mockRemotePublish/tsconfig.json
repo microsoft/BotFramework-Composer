@@ -5,6 +5,7 @@
     "declaration": true,
     "sourceMap": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "outDir": "./lib",
     "rootDir": "./src",
     "types": [
