@@ -4,6 +4,23 @@
 import { JSONSchema7 } from '@bfc/extension';
 import { resolveRef, getValueType } from '@bfc/adaptive-form';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import merge from 'lodash/merge';
+import omit from 'lodash/omit';
+
+function getOptionLabel(schema: JSONSchema7): string {
+  const { title, enum: enumOptions } = schema;
+  const type = Array.isArray(schema.type) ? schema.type[0] : schema.type;
+
+  if (title) {
+    return title.toLowerCase();
+  }
+
+  if (Array.isArray(enumOptions) && enumOptions.length > 0) {
+    return 'dropdown';
+  }
+
+  return type || 'unknown';
+}
 
 export function getOptions(schema: JSONSchema7, definitions): IDropdownOption[] {
   const { type, oneOf, enum: enumOptions } = schema;
@@ -33,11 +50,13 @@ export function getOptions(schema: JSONSchema7, definitions): IDropdownOption[] 
       .map(s => {
         if (typeof s === 'object') {
           const resolved = resolveRef(s, definitions);
+          const merged = merge({}, omit(schema, 'oneOf'), resolved);
+          const label = getOptionLabel(resolved);
 
           return {
-            key: resolved.title?.toLowerCase() || resolved.type,
-            text: resolved.title?.toLowerCase() || resolved.type,
-            data: { schema: resolved },
+            key: label,
+            text: label,
+            data: { schema: merged },
           } as IDropdownOption;
         }
       })

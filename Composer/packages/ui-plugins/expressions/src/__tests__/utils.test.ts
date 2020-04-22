@@ -45,6 +45,13 @@ describe('getOptions', () => {
           type: 'number' as const,
         },
         {
+          title: 'an enum',
+          enum: ['one', 'two'],
+        },
+        {
+          enum: ['four', 'five'],
+        },
+        {
           $ref: '#/definitions/Microsoft.AnotherType',
         },
       ],
@@ -59,7 +66,7 @@ describe('getOptions', () => {
 
     it('returns one of options', () => {
       const options = getOptions(schema, definitions).map(o => o.key);
-      expect(options).toEqual(['my awesome string', 'boolean', 'number', 'another type']);
+      expect(options).toEqual(['my awesome string', 'boolean', 'number', 'an enum', 'dropdown', 'another type']);
     });
   });
 
