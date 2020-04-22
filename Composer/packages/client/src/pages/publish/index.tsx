@@ -380,7 +380,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         onDismiss={() => setAddDialogHidden(true)}
         dialogContentProps={dialogProps}
         modalProps={{ isBlocking: true }}
-        minWidth={350}
+        minWidth={500}
       >
         {dialogProps.children}
       </Dialog>
@@ -389,7 +389,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         onDismiss={() => setEditDialogHidden(true)}
         dialogContentProps={editDialogProps}
         modalProps={{ isBlocking: true }}
-        minWidth={350}
+        minWidth={500}
       >
         {editDialogProps.children}
       </Dialog>
