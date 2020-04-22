@@ -1,15 +1,10 @@
 {
     "$schema": "https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema",
-    "$id": "tests.schema",
+    "$id": "sdk.schema",
     "type": "object",
     "title": "Component kinds",
     "description": "These are all of the kinds that can be created by the loader.",
     "oneOf": [
-        {
-            "title": "CustomAction.dialog",
-            "description": "My Custom Action.",
-            "$ref": "#/definitions/CustomAction.dialog"
-        },
         {
             "title": "Microsoft.ActivityTemplate",
             "description": "",
@@ -491,56 +486,6 @@
             "$ref": "#/definitions/Microsoft.TemplateEngineLanguageGenerator"
         },
         {
-            "title": "Microsoft.Test.AssertCondition",
-            "description": "Assert condition is true.",
-            "$ref": "#/definitions/Microsoft.Test.AssertCondition"
-        },
-        {
-            "title": "Microsoft.Test.AssertReply",
-            "description": "Asserts that a reply text is valid.",
-            "$ref": "#/definitions/Microsoft.Test.AssertReply"
-        },
-        {
-            "title": "Microsoft.Test.AssertReplyActivity",
-            "description": "Asserts that a reply activity is valid.",
-            "$ref": "#/definitions/Microsoft.Test.AssertReplyActivity"
-        },
-        {
-            "title": "Microsoft.Test.AssertReplyOneOf",
-            "description": "Asserts that a reply text is one of multiple optional responses.",
-            "$ref": "#/definitions/Microsoft.Test.AssertReplyOneOf"
-        },
-        {
-            "title": "Microsoft.Test.Script",
-            "description": "Defines a sequence of test actions to perform to validate the behavior of dialogs.",
-            "$ref": "#/definitions/Microsoft.Test.Script"
-        },
-        {
-            "title": "Microsoft.Test.UserActivity",
-            "description": "Sends activity to the bot.",
-            "$ref": "#/definitions/Microsoft.Test.UserActivity"
-        },
-        {
-            "title": "Microsoft.Test.UserConversationUpdate",
-            "description": "Sends ConversationUpdate activity to the bot.",
-            "$ref": "#/definitions/Microsoft.Test.UserConversationUpdate"
-        },
-        {
-            "title": "Microsoft.Test.UserDelay",
-            "description": "Delays text script for time period.",
-            "$ref": "#/definitions/Microsoft.Test.UserDelay"
-        },
-        {
-            "title": "Microsoft.Test.UserSays",
-            "description": "Sends text to the bot from the user.",
-            "$ref": "#/definitions/Microsoft.Test.UserSays"
-        },
-        {
-            "title": "Microsoft.Test.UserTyping",
-            "description": "Sends typing activity to the bot.",
-            "$ref": "#/definitions/Microsoft.Test.UserTyping"
-        },
-        {
             "title": "Microsoft.TextInput",
             "description": "Collection information - Ask for a word or sentence.",
             "$ref": "#/definitions/Microsoft.TextInput"
@@ -574,117 +519,9 @@
             "title": "Microsoft.ValueRecognizer",
             "description": "Recogne activity.Value as intent and entities.",
             "$ref": "#/definitions/Microsoft.ValueRecognizer"
-        },
-        {
-            "title": "Testbot.JavascriptAction",
-            "description": "This gives you the ability to execute javascript to manipulate memory",
-            "$ref": "#/definitions/Testbot.JavascriptAction"
-        },
-        {
-            "title": "Testbot.Multiply",
-            "description": "This will return the result of arg1*arg2",
-            "$ref": "#/definitions/Testbot.Multiply"
-        },
-        {
-            "title": "root",
-            "description": "",
-            "$ref": "#/definitions/root"
-        },
-        {
-            "title": "test",
-            "description": "",
-            "$ref": "#/definitions/test"
         }
     ],
     "definitions": {
-        "CustomAction.dialog": {
-            "$role": "implements(Microsoft.IDialog)",
-            "title": "Custom Action",
-            "description": "My Custom Action.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "CustomAction.dialog"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "age": {
-                    "title": "Age",
-                    "description": "The age.",
-                    "examples": [
-                        20,
-                        "=$foo"
-                    ],
-                    "$role": "expression",
-                    "oneOf": [
-                        {
-                            "type": "number",
-                            "title": "number"
-                        },
-                        {
-                            "type": "string",
-                            "pattern": "^=.*\\S.*",
-                            "title": "string"
-                        }
-                    ],
-                    "default": 0
-                },
-                "name": {
-                    "title": "Name",
-                    "description": "The name.",
-                    "type": "string",
-                    "pattern": "^.*\\S.*"
-                },
-                "resultProperty": {
-                    "title": "Property",
-                    "description": "Property to store any value returned by the dialog that is called.",
-                    "examples": [
-                        "$name"
-                    ],
-                    "type": "string",
-                    "pattern": "^.*\\S.*"
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
         "Microsoft.ActivityTemplate": {
             "$role": "implements(Microsoft.IActivityTemplate)",
             "title": "Microsoft ActivityTemplate",
@@ -945,6 +782,7 @@
                     "examples": [
                         "user.age > 3"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -987,6 +825,7 @@
                     "examples": [
                         "add"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -1159,6 +998,7 @@
                         "dialog.${user.name}",
                         "=f(x)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -1450,6 +1290,7 @@
                     "examples": [
                         "dialog.userName"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -1610,6 +1451,7 @@
                 "eventName": {
                     "title": "Event name",
                     "description": "Name of the event to emit.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -1810,6 +1652,7 @@
                         "dialog.${user.name}",
                         "=f(x)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -1974,6 +1817,7 @@
                     "examples": [
                         "en-us"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -2332,6 +2176,7 @@
                         "dialog.${user.name}",
                         "=f(x)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -2414,6 +2259,7 @@
                     "examples": [
                         "en-us"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -2948,6 +2794,7 @@
                 "title": "Default locale",
                 "description": "Default locale.",
                 "default": "en-us",
+                "$role": "expression",
                 "type": "string",
                 "pattern": "^.*\\S.*"
             },
@@ -3093,6 +2940,7 @@
                         "dialog.${user.name}",
                         "=f(x)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -3145,6 +2993,7 @@
                     "examples": [
                         "=user.birthday"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -3155,6 +3004,7 @@
                     "examples": [
                         "=user.birthday"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -3164,6 +3014,7 @@
                     "examples": [
                         "=this.value[0].Value"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -3307,6 +3158,7 @@
                     "examples": [
                         "=$lastActivity"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -3415,6 +3267,7 @@
                     "items": {
                         "title": "Property",
                         "description": "Property to delete.",
+                        "$role": "expression",
                         "type": "string",
                         "pattern": "^.*\\S.*"
                     }
@@ -3500,6 +3353,7 @@
                 "property": {
                     "title": "Property",
                     "description": "Property to delete.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -3650,6 +3504,7 @@
                             "pattern": "^=.*\\S.*"
                         }
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -3739,6 +3594,7 @@
                         }
                     ],
                     "default": "push",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -3765,12 +3621,14 @@
                 "itemsProperty": {
                     "title": "Items property",
                     "description": "Property that holds the array to update.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
                 "resultProperty": {
                     "title": "Result Property",
                     "description": "Property to store the result of this action.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -3960,6 +3818,7 @@
                             "pattern": "^(?!(beginDialog$|resumeDialog$|repromptDialog$|cancelDialog$|endDialog$|activityReceived$|recognizedIntent$|unknownIntent$|actionsStarted$|actionsSaved$|actionsEnded$|actionsResumed))(\\S){1}.*"
                         }
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4328,6 +4187,7 @@
                     "examples": [
                         "user.todoList"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4335,6 +4195,7 @@
                     "title": "Index property",
                     "description": "Property that holds the index of the item.",
                     "default": "dialog.foreach.index",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4342,6 +4203,7 @@
                     "title": "Value property",
                     "description": "Property that holds the value of the item.",
                     "default": "dialog.foreach.value",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4439,6 +4301,7 @@
                     "examples": [
                         "user.todoList"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4455,6 +4318,7 @@
                     "title": "Index property",
                     "description": "Property that holds the index of the page.",
                     "default": "dialog.foreach.pageindex",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4462,6 +4326,7 @@
                     "title": "Page property",
                     "description": "Property that holds the value of the page.",
                     "default": "dialog.foreach.page",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4547,6 +4412,7 @@
                     "examples": [
                         "user.age"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4556,6 +4422,7 @@
                     "examples": [
                         "$lastActivity"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4642,6 +4509,7 @@
                     "examples": [
                         "user.age"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4745,6 +4613,7 @@
                 "actionId": {
                     "title": "Action Id",
                     "description": "Action Id to execute next",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -4952,6 +4821,7 @@
                     "examples": [
                         "https://contoso.com"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4989,6 +4859,7 @@
                     "examples": [
                         "dialog.contosodata"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -4999,6 +4870,7 @@
                         "application/json",
                         "text/plain"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -5007,6 +4879,7 @@
                     "title": "Headers",
                     "description": "One or more headers to include in the request (supports data binding).",
                     "additionalProperties": {
+                        "$role": "expression",
                         "type": "string",
                         "pattern": "^.*\\S.*"
                     }
@@ -5028,6 +4901,7 @@
                         }
                     ],
                     "default": "json",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -5081,11 +4955,6 @@
             "description": "Components which derive from Dialog",
             "$role": "interface",
             "oneOf": [
-                {
-                    "title": "CustomAction.dialog",
-                    "description": "My Custom Action.",
-                    "$ref": "#/definitions/CustomAction.dialog"
-                },
                 {
                     "title": "Microsoft.AdaptiveDialog",
                     "description": "Flexible, data driven dialog that can adapt to the conversation.",
@@ -5277,11 +5146,6 @@
                     "$ref": "#/definitions/Microsoft.SwitchCondition"
                 },
                 {
-                    "title": "Microsoft.Test.AssertCondition",
-                    "description": "Assert condition is true.",
-                    "$ref": "#/definitions/Microsoft.Test.AssertCondition"
-                },
-                {
                     "title": "Microsoft.TextInput",
                     "description": "Collection information - Ask for a word or sentence.",
                     "$ref": "#/definitions/Microsoft.TextInput"
@@ -5299,16 +5163,6 @@
                 {
                     "type": "string",
                     "title": "string"
-                },
-                {
-                    "title": "Testbot.JavascriptAction",
-                    "description": "This gives you the ability to execute javascript to manipulate memory",
-                    "$ref": "#/definitions/Testbot.JavascriptAction"
-                },
-                {
-                    "title": "Testbot.Multiply",
-                    "description": "This will return the result of arg1*arg2",
-                    "$ref": "#/definitions/Testbot.Multiply"
                 }
             ]
         },
@@ -5957,12 +5811,14 @@
                 "text": {
                     "title": "Text",
                     "description": "Information to log.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
                 "label": {
                     "title": "Label",
                     "description": "Label for the trace activity (used to identify it in a list of trace activities.)",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -6045,18 +5901,21 @@
                 "applicationId": {
                     "title": "LUIS Application ID",
                     "description": "Application ID for your model from the LUIS service.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
                 "endpoint": {
                     "title": "LUIS Endpoint",
                     "description": "Endpoint to use for LUIS service like https://westus.api.cognitive.microsoft.com.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
                 "endpointKey": {
                     "title": "LUIS prediction key",
                     "description": "LUIS prediction key used to call endpoint.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -6557,6 +6416,7 @@
                         "dialog.${user.name}",
                         "=f(x)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -6658,6 +6518,7 @@
                     "title": "Default locale",
                     "description": "Default locale to use if there is no locale available..",
                     "default": "en-us",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -6771,6 +6632,7 @@
                     "examples": [
                         "msgraphOAuthConnection"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -6802,6 +6664,7 @@
                         "Please sign in. ",
                         "=concat(x,y,z)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -6811,6 +6674,7 @@
                     "examples": [
                         "Login"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -6837,6 +6701,7 @@
                     "examples": [
                         "dialog.token"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10298,6 +10163,7 @@
                     "title": "KnowledgeBase Id",
                     "description": "KnowledgeBase Id of your QnA Maker KnowledgeBase.",
                     "default": "=settings.qna.knowledgebaseid",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10305,6 +10171,7 @@
                     "title": "Endpoint Key",
                     "description": "Endpoint key for the QnA Maker KB.",
                     "default": "=settings.qna.endpointkey",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10315,6 +10182,7 @@
                     "examples": [
                         "https://yourserver.azurewebsites.net/qnamaker"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10346,6 +10214,7 @@
                     "title": "Active learning card title",
                     "description": "Title for active learning suggestions card.",
                     "default": "Did you mean:",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10353,6 +10222,7 @@
                     "title": "Card no match text",
                     "description": "Text for no match option.",
                     "default": "None of the above.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10433,6 +10303,7 @@
                         }
                     ],
                     "default": "default",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -10499,6 +10370,7 @@
                     "title": "KnowledgeBase Id",
                     "description": "KnowledgeBase Id of your QnA Maker KnowledgeBase.",
                     "default": "settings.qna.knowledgebaseid",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10506,6 +10378,7 @@
                     "title": "Endpoint Key",
                     "description": "Endpoint key for the QnA Maker KB.",
                     "default": "settings.qna.endpointkey",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10516,6 +10389,7 @@
                     "examples": [
                         "https://yourserver.azurewebsites.net/qnamaker"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -10614,6 +10488,7 @@
                     ],
                     "description": "Type of Ranker.",
                     "default": "default",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -11344,6 +11219,7 @@
                     "examples": [
                         "user.age > 3"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -11444,6 +11320,7 @@
                                 "examples": [
                                     "user.age"
                                 ],
+                                "$role": "expression",
                                 "type": "string",
                                 "pattern": "^.*\\S.*"
                             },
@@ -11566,6 +11443,7 @@
                     "examples": [
                         "user.age"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -11666,12 +11544,14 @@
                     "examples": [
                         "=$lastActivity"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
                 "connectionName": {
                     "title": "Connection Name",
                     "description": "Connection name that was used with OAuthInput to log a user in.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -11801,6 +11681,7 @@
                     "examples": [
                         "dialog.userName"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -11808,6 +11689,7 @@
                     "title": "Skill host bot ID",
                     "description": "The Microsoft App ID that will be calling the skill.",
                     "default": "=settings.MicrosoftAppId",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -11818,12 +11700,14 @@
                     "examples": [
                         "https://mybot.contoso.com/api/skills/"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
                 "skillAppId": {
                     "title": "Skill App ID",
                     "description": "The Microsoft App ID for the skill.",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -11833,6 +11717,7 @@
                     "examples": [
                         "https://myskill.contoso.com/api/messages/"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -12661,6 +12546,7 @@
                     "examples": [
                         "user.favColor"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -12864,813 +12750,6 @@
                 }
             ]
         },
-        "Microsoft.Test.AssertCondition": {
-            "$role": "implements(Microsoft.IDialog)",
-            "title": "Assert Condition",
-            "description": "Assert condition is true.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.AssertCondition"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "condition": {
-                    "title": "Condition",
-                    "description": "Expression to evalute",
-                    "examples": [
-                        "user.age > 10"
-                    ],
-                    "$role": "expression",
-                    "oneOf": [
-                        {
-                            "type": "string",
-                            "pattern": "^.*\\S.*",
-                            "title": "string"
-                        },
-                        {
-                            "type": "boolean",
-                            "title": "boolean"
-                        }
-                    ],
-                    "default": "true"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "Description",
-                    "description": "Description of what the condition is testing"
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "condition",
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.AssertReply": {
-            "$role": "implements(Microsoft.Test.ITestAction)",
-            "title": "Assert Reply",
-            "description": "Asserts that a reply text is valid.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.AssertReply"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "text": {
-                    "type": "string",
-                    "title": "Reply Text",
-                    "description": "Expected reply text"
-                },
-                "exact": {
-                    "type": "boolean",
-                    "title": "Exact Match",
-                    "description": "If true then an exact match must happen, if false then the reply activity.text must contain the reply text. [Default:false]"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "Description",
-                    "description": "The description of what the assertion is testing"
-                },
-                "timeout": {
-                    "type": "number",
-                    "title": "Timeout",
-                    "description": "The amount of time in milliseconds to wait for a reply (default is 3000)"
-                },
-                "assertions": {
-                    "type": "array",
-                    "title": "Assertions to perform to validate Activity that is sent by the dialog",
-                    "description": "Sequence of expressions which must evaluate to true.",
-                    "items": {
-                        "title": "Assertion",
-                        "description": "Assertion as an expression, which must evaluate to true or it will fail the test script.",
-                        "examples": [
-                            "user.vip == true"
-                        ],
-                        "$role": "expression",
-                        "oneOf": [
-                            {
-                                "type": "string",
-                                "pattern": "^.*\\S.*",
-                                "title": "string"
-                            },
-                            {
-                                "type": "boolean",
-                                "title": "boolean"
-                            }
-                        ],
-                        "default": "true"
-                    }
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.AssertReplyActivity": {
-            "$role": "implements(Microsoft.Test.ITestAction)",
-            "title": "Assert Reply Activity",
-            "description": "Asserts that a reply activity is valid.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.AssertReplyActivity"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "description": {
-                    "type": "string",
-                    "title": "Description",
-                    "description": "The description of what the assertion is testing"
-                },
-                "timeout": {
-                    "type": "number",
-                    "title": "Timeout",
-                    "description": "The amount of time in milliseconds to wait for a reply (default is 3000)"
-                },
-                "assertions": {
-                    "type": "array",
-                    "title": "Assertions to perform to validate Activity that is sent by the dialog",
-                    "description": "Sequence of expressions which must evaluate to true.",
-                    "items": {
-                        "title": "Assertion",
-                        "description": "Assertion as an expression, which must evaluate to true or it will fail the test script.",
-                        "examples": [
-                            "user.vip == true"
-                        ],
-                        "$role": "expression",
-                        "oneOf": [
-                            {
-                                "type": "string",
-                                "pattern": "^.*\\S.*",
-                                "title": "string"
-                            },
-                            {
-                                "type": "boolean",
-                                "title": "boolean"
-                            }
-                        ],
-                        "default": "true"
-                    }
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "assertions",
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.AssertReplyOneOf": {
-            "$role": "implements(Microsoft.Test.ITestAction)",
-            "title": "Assert Reply OneOf",
-            "description": "Asserts that a reply text is one of multiple optional responses.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.AssertReplyOneOf"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "text": {
-                    "type": "array",
-                    "title": "Replies",
-                    "description": "Expected replies (one of which must match",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "exact": {
-                    "type": "boolean",
-                    "title": "Exact Match",
-                    "description": "If true then an exact match must happen, if false then the reply activity.text must contain the reply text. [Default:false]"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "Description",
-                    "description": "The description of what the assertion is testing"
-                },
-                "timeout": {
-                    "type": "number",
-                    "title": "Timeout",
-                    "description": "The amount of time in milliseconds to wait for a reply (default is 3000)"
-                },
-                "assertions": {
-                    "type": "array",
-                    "title": "Assertions to perform to validate Activity that is sent by the dialog",
-                    "description": "Sequence of expressions which must evaluate to true.",
-                    "items": {
-                        "title": "Assertion",
-                        "description": "Assertion as an expression, which must evaluate to true or it will fail the test script.",
-                        "examples": [
-                            "user.vip == true"
-                        ],
-                        "$role": "expression",
-                        "oneOf": [
-                            {
-                                "type": "string",
-                                "pattern": "^.*\\S.*",
-                                "title": "string"
-                            },
-                            {
-                                "type": "boolean",
-                                "title": "boolean"
-                            }
-                        ],
-                        "default": "true"
-                    }
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.ITestAction": {
-            "title": "Microsoft Test ITestAction",
-            "description": "Components which derive from TestAction class",
-            "$role": "interface",
-            "oneOf": [
-                {
-                    "title": "Microsoft.Test.AssertReply",
-                    "description": "Asserts that a reply text is valid.",
-                    "$ref": "#/definitions/Microsoft.Test.AssertReply"
-                },
-                {
-                    "title": "Microsoft.Test.AssertReplyActivity",
-                    "description": "Asserts that a reply activity is valid.",
-                    "$ref": "#/definitions/Microsoft.Test.AssertReplyActivity"
-                },
-                {
-                    "title": "Microsoft.Test.AssertReplyOneOf",
-                    "description": "Asserts that a reply text is one of multiple optional responses.",
-                    "$ref": "#/definitions/Microsoft.Test.AssertReplyOneOf"
-                },
-                {
-                    "title": "Microsoft.Test.UserActivity",
-                    "description": "Sends activity to the bot.",
-                    "$ref": "#/definitions/Microsoft.Test.UserActivity"
-                },
-                {
-                    "title": "Microsoft.Test.UserConversationUpdate",
-                    "description": "Sends ConversationUpdate activity to the bot.",
-                    "$ref": "#/definitions/Microsoft.Test.UserConversationUpdate"
-                },
-                {
-                    "title": "Microsoft.Test.UserDelay",
-                    "description": "Delays text script for time period.",
-                    "$ref": "#/definitions/Microsoft.Test.UserDelay"
-                },
-                {
-                    "title": "Microsoft.Test.UserSays",
-                    "description": "Sends text to the bot from the user.",
-                    "$ref": "#/definitions/Microsoft.Test.UserSays"
-                },
-                {
-                    "title": "Microsoft.Test.UserTyping",
-                    "description": "Sends typing activity to the bot.",
-                    "$ref": "#/definitions/Microsoft.Test.UserTyping"
-                },
-                {
-                    "type": "string",
-                    "title": "Reference to Microsoft.Test.ITestAction",
-                    "description": "Reference to Microsoft.Test.ITestAction .dialog file."
-                }
-            ]
-        },
-        "Microsoft.Test.Script": {
-            "title": "Test Script",
-            "description": "Defines a sequence of test actions to perform to validate the behavior of dialogs.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.Script"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "dialog": {
-                    "$kind": "Microsoft.IDialog",
-                    "title": "Dialog",
-                    "description": "The root dialog to execute the test script against.",
-                    "$ref": "#/definitions/Microsoft.IDialog"
-                },
-                "description": {
-                    "type": "string",
-                    "title": "Description",
-                    "description": "Description of the test script"
-                },
-                "script": {
-                    "type": "array",
-                    "description": "Sequence of test actions to execute.",
-                    "items": {
-                        "$kind": "Microsoft.Test.ITestAction",
-                        "$ref": "#/definitions/Microsoft.Test.ITestAction"
-                    }
-                },
-                "locale": {
-                    "type": "string",
-                    "title": "Locale",
-                    "description": "Set the locale for the user utterances in the script.",
-                    "default": "en-us"
-                },
-                "enableTrace": {
-                    "type": "boolean",
-                    "title": "Enable Trace Activity",
-                    "description": "Enable trace activities in the unit test (default is false)",
-                    "default": false
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "dialog",
-                        "script",
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.UserActivity": {
-            "$role": "implements(Microsoft.Test.ITestAction)",
-            "title": "Send Activity",
-            "description": "Sends activity to the bot.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.UserActivity"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "activity": {
-                    "type": "object",
-                    "additionalProperties": true
-                },
-                "user": {
-                    "type": "string",
-                    "title": "User Name",
-                    "description": "The activity.from.id and activity.from.name will be this if specified."
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "activity",
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.UserConversationUpdate": {
-            "$role": "implements(Microsoft.Test.ITestAction)",
-            "title": "Send ConversationUpdate",
-            "description": "Sends ConversationUpdate activity to the bot.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.UserConversationUpdate"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "membersAdded": {
-                    "type": "array",
-                    "title": "Members Added",
-                    "description": "Names of the members to add",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "membersRemoved": {
-                    "type": "array",
-                    "title": "Members Removed",
-                    "description": "Names of the members to remove",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.UserDelay": {
-            "$role": "implements(Microsoft.Test.ITestAction)",
-            "title": "Delay Execution",
-            "description": "Delays text script for time period.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.UserDelay"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "timespan": {
-                    "type": "number",
-                    "title": "Timespan",
-                    "description": "The amount of time in milliseconds to delay the execution of the test script"
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "timespan",
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.UserSays": {
-            "$role": "implements(Microsoft.Test.ITestAction)",
-            "title": "User Text",
-            "description": "Sends text to the bot from the user.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.UserSays"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "text": {
-                    "type": "string",
-                    "title": "Text",
-                    "description": "Text to send to the bot."
-                },
-                "user": {
-                    "type": "string",
-                    "title": "User Name",
-                    "description": "The activity.from.id and activity.from.name will be this if specified."
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "text",
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Microsoft.Test.UserTyping": {
-            "$role": "implements(Microsoft.Test.ITestAction)",
-            "title": "Send Typing",
-            "description": "Sends typing activity to the bot.",
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Microsoft.Test.UserTyping"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "user": {
-                    "type": "string",
-                    "title": "User Name",
-                    "description": "The activity.from.id and activity.from.name will be this if specified."
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
         "Microsoft.TextInput": {
             "$role": "implements(Microsoft.IDialog)",
             "type": "object",
@@ -13818,6 +12897,7 @@
                         "dialog.${user.name}",
                         "=f(x)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -13871,6 +12951,7 @@
                         "Hello ${user.name}",
                         "=concat(user.firstname, user.lastName)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -13882,6 +12963,7 @@
                         "Hello ${user.name}",
                         "=concat(user.firstname, user.lastName)"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -13892,6 +12974,7 @@
                         "=toUpper(this.value)",
                         "${toUpper(this.value)}"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 }
@@ -14034,18 +13117,21 @@
                 "name": {
                     "title": "Name",
                     "description": "Name of the trace activity",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
                 "label": {
                     "title": "Label",
                     "description": "Label for the trace activity (used to identify it in a list of trace activities.)",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
                 "valueType": {
                     "title": "Value type",
                     "description": "Type of value",
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -14212,6 +13298,7 @@
                     "examples": [
                         "=dialog.lastActivityId"
                     ],
+                    "$role": "expression",
                     "type": "string",
                     "pattern": "^.*\\S.*"
                 },
@@ -14329,308 +13416,6 @@
                     "type": "string",
                     "title": "Id",
                     "description": "Optional unique id using with RecognizerSet.  Other recognizers should return 'DeferToRecognizer_{Id}' intent when cross training data for this recognizer."
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Testbot.JavascriptAction": {
-            "$role": "implements(Microsoft.IDialog)",
-            "title": "Javascript Action",
-            "description": "This gives you the ability to execute javascript to manipulate memory",
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Testbot.JavascriptAction"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "id": {
-                    "type": "string",
-                    "title": "Id",
-                    "description": "Optional id for the dialog"
-                },
-                "disabled": {
-                    "title": "Disabled",
-                    "description": "Optional condition which if true will disable this action.",
-                    "examples": [
-                        true,
-                        "=f(x)"
-                    ],
-                    "$role": "expression",
-                    "oneOf": [
-                        {
-                            "type": "boolean",
-                            "title": "boolean"
-                        },
-                        {
-                            "type": "string",
-                            "pattern": "^=.*\\S.*",
-                            "title": "string"
-                        }
-                    ],
-                    "default": false
-                },
-                "script": {
-                    "type": "string",
-                    "title": "Script",
-                    "description": "name of the script file, or javascript function with function: doAction(memory, args) => result"
-                },
-                "options": {
-                    "title": "Options",
-                    "description": "One or more options that are passed to the function as args.",
-                    "$role": "expression",
-                    "oneOf": [
-                        {
-                            "type": "object",
-                            "title": "object"
-                        },
-                        {
-                            "type": "string",
-                            "pattern": "^=.*\\S.*",
-                            "title": "string"
-                        }
-                    ],
-                    "additionalProperties": {
-                        "type": "string",
-                        "title": "Options"
-                    }
-                },
-                "resultProperty": {
-                    "title": "Property",
-                    "description": "Property to store any value returned by the javascript function.",
-                    "examples": [
-                        "dialog.userName"
-                    ],
-                    "type": "string",
-                    "pattern": "^.*\\S.*"
-                }
-            },
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "Testbot.Multiply": {
-            "$role": "implements(Microsoft.IDialog)",
-            "title": "Multiply",
-            "description": "This will return the result of arg1*arg2",
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "Testbot.Multiply"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                },
-                "arg1": {
-                    "title": "Arg1",
-                    "description": "Value from callers memory to use as arg 1",
-                    "$role": "expression",
-                    "oneOf": [
-                        {
-                            "type": "number",
-                            "title": "number"
-                        },
-                        {
-                            "type": "string",
-                            "pattern": "^=.*\\S.*",
-                            "title": "string"
-                        }
-                    ],
-                    "default": 0
-                },
-                "arg2": {
-                    "title": "Arg2",
-                    "description": "Value from callers memory to use as arg 2",
-                    "$role": "expression",
-                    "oneOf": [
-                        {
-                            "type": "number",
-                            "title": "number"
-                        },
-                        {
-                            "type": "string",
-                            "pattern": "^=.*\\S.*",
-                            "title": "string"
-                        }
-                    ],
-                    "default": 0
-                },
-                "result": {
-                    "title": "Result",
-                    "description": "Property to store the result in",
-                    "type": "string",
-                    "pattern": "^.*\\S.*"
-                }
-            },
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "root": {
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "root"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
-                }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-                "^\\$": {
-                    "type": "string"
-                }
-            },
-            "anyOf": [
-                {
-                    "title": "Reference",
-                    "required": [
-                        "$copy"
-                    ]
-                },
-                {
-                    "title": "Type",
-                    "required": [
-                        "$kind"
-                    ]
-                }
-            ]
-        },
-        "test": {
-            "type": "object",
-            "properties": {
-                "$kind": {
-                    "title": "$kind",
-                    "description": "Defines the valid properties for the component you are configuring (from a dialog .schema file)",
-                    "type": "string",
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9.]*$",
-                    "const": "test"
-                },
-                "$copy": {
-                    "title": "$copy",
-                    "description": "Copy the definition by id from a .dialog file.",
-                    "type": "string",
-                    "pattern": "^(([a-zA-Z][a-zA-Z0-9.]*)?(#[a-zA-Z][a-zA-Z0-9.]*)?)$"
-                },
-                "$id": {
-                    "title": "$id",
-                    "description": "Inline id for reuse of an inline definition",
-                    "type": "string",
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9.]*)$"
-                },
-                "$designer": {
-                    "title": "$designer",
-                    "type": "object",
-                    "description": "Extra information for the Bot Framework Designer."
                 }
             },
             "additionalProperties": false,
