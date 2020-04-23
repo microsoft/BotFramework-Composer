@@ -2,7 +2,7 @@
 // Licensed under the MIT License
 
 import { copyForeach } from '../../src/copyUtils/copyForeach';
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('#copyForeach', () => {
   it('can copy Foreach action', async () => {

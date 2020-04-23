@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 import { SDKKinds } from '../../src';
 import CopyConstructorMap from '../../src/copyUtils/CopyConstructorMap';
 import { copyAdaptiveAction } from '../../src/copyUtils';

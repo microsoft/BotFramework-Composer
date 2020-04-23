@@ -14,6 +14,7 @@ import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
+import { pluginLoader } from '@bfc/plugin-loader';
 import chalk from 'chalk';
 
 import { BotProjectService } from './services/project';
@@ -22,7 +23,6 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
-import pluginLoader from './services/pluginLoader';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -99,6 +99,8 @@ export async function start(pluginDir?: string) {
     // always authorize all api routes, it will be a no-op if no auth provider set
     app.use(`${BASEURL}/api`, authorize, apiRouter);
 
+    // next needs to be an arg in order for express to recognize this as the error handler
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
       if (err) {
         log(err);
