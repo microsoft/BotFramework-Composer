@@ -5,9 +5,11 @@ import path from 'path';
 
 import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
 import { v4 as uuid, v5 as hash } from 'uuid';
-import { copy, emptyDir, readJson, pathExists, writeJson, mkdirSync } from 'fs-extra';
+import { copy, emptyDir, readJson, pathExists, writeJson, mkdirSync, pathExistsSync } from 'fs-extra';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import { MemoryCache } from 'adal-node';
+
+import schema from './schema';
 const _cache = new MemoryCache();
 
 interface CreateAndDeployResources {
@@ -18,7 +20,6 @@ interface CreateAndDeployResources {
   luisAuthoringKey?: string;
   luisAuthoringRegion?: string;
   appPassword: string;
-  create: boolean;
 }
 
 interface PublishConfig {
@@ -32,10 +33,12 @@ class AzurePublisher {
   private publishingBots: { [key: string]: any };
   private historyFilePath: string;
   private credsFile: string;
+  private provisionResource: string;
   private azDeployer: BotProjectDeploy;
   private resources: { [key: string]: boolean };
   constructor() {
     this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
+    this.provisionResource = path.resolve(__dirname, '../provisionResult.json');
     this.credsFile = path.resolve(__dirname, '../cred.txt');
     this.publishingBots = {};
     this.resources = {};
@@ -43,27 +46,27 @@ class AzurePublisher {
   private getProjectFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
   private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'ComposerDialogs');
 
-  private init = async (srcBot: string, srcTemplate: string, resourcekey: string) => {
+  private init = async (srcBot: string, srcTemplate: string, resourcekey: string, currentProvision: any) => {
     const exist = await pathExists(this.getProjectFolder(resourcekey));
     const botFolder = this.getBotFolder(resourcekey);
     const projFolder = this.getProjectFolder(resourcekey);
     // deploy resource exist
-    if (exist) {
-      await emptyDir(botFolder);
-      // TODO: this needs to be remote storage aware
-      // remember the project's project.files not include the settings.json file, need to change the indexer in client
-      // and save the project.files contents instead of copy
-      await copy(srcBot, botFolder, {
-        recursive: true,
-      });
-    } else {
+    if (!exist) {
       mkdirSync(projFolder, { recursive: true });
-      // copy bot and runtime into projFolder
-      await copy(srcBot, botFolder, {
-        recursive: true,
-      });
-      await copy(srcTemplate, projFolder);
     }
+    await emptyDir(projFolder);
+    // copy bot and runtime into projFolder
+    await copy(srcBot, botFolder, {
+      recursive: true,
+    });
+    await copy(srcTemplate, projFolder);
+    const resourcePath = path.resolve(projFolder, 'appsettings.deployment.json');
+    await writeJson(resourcePath, currentProvision, {
+      spaces: 4,
+    });
+    // TODO: this needs to be remote storage aware
+    // remember the project's project.files not include the settings.json file, need to change the indexer in client
+    // and save the project.files contents instead of copy
   };
 
   private getHistory = async (botId: string, profileName: string) => {
@@ -128,29 +131,8 @@ class AzurePublisher {
     jobId: string,
     customizeConfiguration: CreateAndDeployResources
   ) => {
-    const {
-      name,
-      location,
-      environment,
-      appPassword,
-      luisAuthoringKey,
-      create,
-      luisAuthoringRegion,
-    } = customizeConfiguration;
+    const { name, location, environment, appPassword, luisAuthoringKey, luisAuthoringRegion } = customizeConfiguration;
     try {
-      // TODO: This step should be handled outside of Composer
-      // save the create result in file instead of memory.
-      if (!create) {
-        this.resources[resourcekey] = true;
-      }
-      if (!this.resources[resourcekey]) {
-        const createSuccess = await this.azDeployer.create(name, location, environment, appPassword, luisAuthoringKey);
-        if (!createSuccess) {
-          throw new Error('create resource fail');
-        }
-        this.resources[resourcekey] = true;
-      }
-
       // Perform the deploy
       await this.azDeployer.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
 
@@ -204,6 +186,7 @@ class AzurePublisher {
     // generate an id to track this deploy
     const jobId = uuid();
 
+    // resource key to map to one provision resource
     const resourcekey = hash(
       [publishName, location, environment, appPassword, luisAuthoringKey, luisAuthoringRegion],
       subscriptionID
@@ -212,6 +195,16 @@ class AzurePublisher {
       // test creds, if not valid, return 500
       if (!(await pathExists(this.credsFile))) {
         throw new Error('please input token to login azure cloud');
+      }
+      if (!(await pathExists(this.provisionResource))) {
+        throw new Error('please do the provision first');
+      }
+      const provisions = await readJson(this.provisionResource);
+      const currentProvision = provisions[resourcekey];
+      if (!currentProvision) {
+        throw new Error(
+          'no successful created resource in Azure according to your config, please do the provision again'
+        );
       }
       const credsFromFile = await readJson(this.credsFile);
 
@@ -237,7 +230,7 @@ class AzurePublisher {
         creds: creds,
         projPath: this.getProjectFolder(resourcekey),
       });
-      await this.init(srcBot, templatePath, resourcekey);
+      await this.init(srcBot, templatePath, resourcekey, currentProvision);
 
       const response = {
         status: 202,
@@ -304,5 +297,5 @@ const azurePublish = new AzurePublisher();
 
 export default async (composer: any): Promise<void> => {
   // pass in the custom storage class that will override the default
-  await composer.addPublishMethod(azurePublish);
+  await composer.addPublishMethod(azurePublish, schema);
 };

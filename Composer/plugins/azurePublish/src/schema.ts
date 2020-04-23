@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-const schema = {
+import { JSONSchema7 } from '@bfc/plugin-loader';
+const schema: JSONSchema7 = {
   type: 'object',
   properties: {
     subscriptionID: {
@@ -33,15 +33,7 @@ const schema = {
       type: 'string',
       title: 'Authoring Key',
     },
-    // graphToken: {
-    //   type: 'string',
-    //   title: 'graph token',
-    // },
-    // accessToken: {
-    //   type: 'string',
-    //   title: 'access token',
-    // },
-    isCreate: {
+    create: {
       type: 'boolean',
       title: 'Azure Resource Create or not',
     },
@@ -50,13 +42,11 @@ const schema = {
     subscriptionID: '<your subscription id>',
     appPassword: '<16 characters including uppercase, lowercase, number and special character>',
     name: '<unique name in your subscription>',
-    environment: 'composer',
+    environment: 'dev',
     location: 'westus',
     luisAuthoringRegion: 'westus',
     luisAuthoringKey: '',
-    isCreate: false,
-    graphToken:
-      '<run az account get-access-token --resource-type aad-graph in command line and replace it with accessToken>',
-    accessToken: '<run az account get-access-token in command line and replace it with accessToken>',
+    create: false,
   },
 };
+export default schema;
