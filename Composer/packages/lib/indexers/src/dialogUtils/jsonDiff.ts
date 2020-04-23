@@ -5,15 +5,15 @@ import get from 'lodash/get';
 
 import { JsonWalk, VisitorFunc } from '../utils/jsonWalk';
 
-interface IJSONChangeAdd {
+export interface IJSONChangeAdd {
   path: string;
   value: any;
 }
-interface IJSONChangeDelete {
+export interface IJSONChangeDelete {
   path: string;
   value: any;
 }
-interface IJSONChangeUpdate {
+export interface IJSONChangeUpdate {
   path: string;
   value: any;
   preValue: any;
@@ -83,7 +83,12 @@ export const defaultJSONAddDiffer: IDiffer = (json1: any, json2: any, path: stri
 export const defaultJSONUpdateDiffer: IDiffer = (json1: any, json2: any, path: string) => {
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
-  return hasWithJsonPath(json1, path) === true && value1 !== value2 && defualtJSONStopComparison(value1, value2);
+  return (
+    hasWithJsonPath(json1, path) &&
+    hasWithJsonPath(json2, path) &&
+    value1 !== value2 &&
+    defualtJSONStopComparison(value1, value2)
+  );
 };
 
 export function JsonDiffAdds(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJSONChangeAdd[] {
@@ -133,10 +138,10 @@ export function JsonDiffUpdates(prevJson, currJson, differ?: IDiffer, stopper?: 
   return results;
 }
 
-export function JsonDiff(prevJson, currJson): IJsonChanges {
+export function JsonDiff(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJsonChanges {
   return {
-    adds: JsonDiffAdds(prevJson, currJson),
-    deletes: JsonDiffDeletes(prevJson, currJson),
-    updates: JsonDiffUpdates(prevJson, currJson),
+    adds: JsonDiffAdds(prevJson, currJson, differ, stopper),
+    deletes: JsonDiffDeletes(prevJson, currJson, differ, stopper),
+    updates: JsonDiffUpdates(prevJson, currJson, differ, stopper),
   };
 }
