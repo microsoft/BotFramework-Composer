@@ -62,6 +62,7 @@
     "@bfc/lu-languageserver": "*",
     "@bfc/plugin-loader": "*",
     "@bfc/shared": "*",
+    "@microsoft/bf-dispatcher": "4.9.0-preview.121555",
     "@microsoft/bf-lu": "4.9.0-preview.121555",
     "archiver": "^3.0.0",
     "axios": "^0.18.0",
@@ -88,6 +89,7 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
+    "ts-md5": "^1.2.7",
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^5.0.0"
