@@ -20,7 +20,16 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 
-import { detailListContainer, listHeader, rowDetails, rowTitle, optionRoot, optionIcon, tableCell } from './styles';
+import {
+  detailListContainer,
+  listHeader,
+  rowDetails,
+  rowTitle,
+  optionRoot,
+  optionIcon,
+  tableCell,
+  content,
+} from './styles';
 
 const optionKeys = {
   createFromScratch: 'createFromScratch',
@@ -81,7 +90,9 @@ export function CreateOptions(props) {
       styles: rowTitle(disabled),
       onRender: item => (
         <div css={tableCell} data-is-focusable={true}>
-          {item.name}
+          <div css={content} tabIndex={-1}>
+            {item.name}
+          </div>
         </div>
       ),
     },
@@ -96,7 +107,9 @@ export function CreateOptions(props) {
       styles: rowTitle(disabled),
       onRender: item => (
         <div css={tableCell} data-is-focusable={true}>
-          {item.description}
+          <div css={content} tabIndex={-1}>
+            {item.description}
+          </div>
         </div>
       ),
     },
