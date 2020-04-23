@@ -9,36 +9,30 @@ export const headerContainer = css`
   position: relative;
   background: ${NeutralColors.black};
   height: 50px;
-  line-height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const title = css`
-  position: relative;
   margin-left: 25px;
   font-weight: ${FontWeights.semibold};
   font-size: 16px;
   color: #fff;
-  bottom: 11px;
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0px;
-    right: -15px;
-    bottom: 11px;
-    width: 0px;
-    height: 24px;
-    border: none;
-    border-right: 1px solid #979797;
-    border-image: initial;
-    outline: none;
-  }
+  min-width: 200px;
 `;
 
 export const botName = css`
-  position: absolute;
-  margin-left: 30px;
+  margin-left: 15px;
   font-size: 16px;
+  word-break: break-all;
   color: #fff;
+`;
+
+export const divider = css`
+  height: 24px;
+  border-right: 1px solid #979797;
+  margin: 0px 0px 0px 4px;
 `;
 
 export const updateAvailableIcon = {
