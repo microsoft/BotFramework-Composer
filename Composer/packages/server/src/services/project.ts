@@ -4,6 +4,7 @@
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import { importResolverGenerator, ResolverResource } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -12,7 +13,6 @@ import log from '../logger';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
-import { UserIdentity } from './pluginLoader';
 
 const MAX_RECENT_BOTS = 7;
 
@@ -157,6 +157,16 @@ export class BotProjectService {
     BotProjectService.addRecentProject(locationRef.path);
     Store.set('projectLocationMap', BotProjectService.projectLocationMap);
     return projectId.toString();
+  };
+
+  // clean project registry based on path to avoid reuseing the same id
+  public static cleanProject = async (location: LocationRef): Promise<void> => {
+    for (const key in BotProjectService.projectLocationMap) {
+      if (BotProjectService.projectLocationMap[key] === location.path) {
+        delete BotProjectService.projectLocationMap[key];
+      }
+    }
+    Store.set('projectLocationMap', BotProjectService.projectLocationMap);
   };
 
   public static generateProjectId = async (path: string): Promise<string> => {

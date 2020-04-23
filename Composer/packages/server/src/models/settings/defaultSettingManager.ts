@@ -3,9 +3,9 @@
 
 import omit from 'lodash/omit';
 import { SensitiveProperties } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
-import { UserIdentity } from '../../services/pluginLoader';
 import log from '../../logger';
 
 import { FileSettingManager } from './fileSettingManager';

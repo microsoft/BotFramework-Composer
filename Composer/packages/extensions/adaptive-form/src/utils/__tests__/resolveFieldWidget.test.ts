@@ -46,13 +46,13 @@ describe('resolveFieldWidget', () => {
     it('uses global overrides', () => {
       const schema = {
         type: 'string' as const,
-        $kind: 'Microsoft.Recognizer',
+        $kind: 'Microsoft.IRecognizer',
       };
 
       const globalSchema = {
         roleSchema: {},
         formSchema: {
-          'Microsoft.Recognizer': {
+          'Microsoft.IRecognizer': {
             field: DefaultFields.RecognizerField,
           },
         },
