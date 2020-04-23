@@ -7,7 +7,7 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { moreButton, overflowSet, menuStyle, navItem, itemText } from './styles';
+import { moreButton, overflowSet, menuStyle, navItem, itemText, content } from './styles';
 
 interface ITreeItemProps {
   link: any;
@@ -21,8 +21,21 @@ interface ITreeItemProps {
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
     <div role="cell" css={itemText(item.depth)} tabIndex={0}>
-      {item.depth !== 0 && <Icon iconName="Flow" styles={{ root: { marginRight: '8px' } }} />}
-      {item.displayName}
+      <div css={content} tabIndex={-1}>
+        {item.depth !== 0 && (
+          <Icon
+            tabIndex={-1}
+            iconName="Flow"
+            styles={{
+              root: {
+                marginRight: '8px',
+                outline: 'none',
+              },
+            }}
+          />
+        )}
+        {item.displayName}
+      </div>
     </div>
   );
 };

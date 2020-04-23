@@ -3,7 +3,7 @@
 
 import { copyInputDialog } from '../../src/copyUtils/copyInputDialog';
 import { ExternalApi } from '../../src/copyUtils/ExternalApi';
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('shallowCopyAdaptiveAction', () => {
   const externalApiWithLgCopy: ExternalApi = {
@@ -22,10 +22,10 @@ describe('shallowCopyAdaptiveAction', () => {
       alwaysPrompt: false,
       allowInterruptions: 'true',
       outputFormat: 'none',
-      prompt: '[bfdprompt-1234]',
-      invalidPrompt: '[bfdinvalidPrompt-1234]',
-      unrecognizedPrompt: '[bfdunrecognizedPrompt-1234]',
-      defaultValueResponse: '[bfddefaultValueResponse-1234]',
+      prompt: '[TextInput_Prompt_1234]',
+      invalidPrompt: '[TextInput_InvalidPrompt_1234]',
+      unrecognizedPrompt: '[TextInput_UnrecognizedPrompt_1234]',
+      defaultValueResponse: '[TextInput_DefaultValueResponse_1234]',
     };
 
     expect(await copyInputDialog(promptText as any, externalApiWithLgCopy)).toEqual({
@@ -37,10 +37,10 @@ describe('shallowCopyAdaptiveAction', () => {
       alwaysPrompt: false,
       allowInterruptions: 'true',
       outputFormat: 'none',
-      prompt: '[bfdprompt-1234](copy)',
-      invalidPrompt: '[bfdinvalidPrompt-1234](copy)',
-      unrecognizedPrompt: '[bfdunrecognizedPrompt-1234](copy)',
-      defaultValueResponse: '[bfddefaultValueResponse-1234](copy)',
+      prompt: '[TextInput_Prompt_1234](copy)',
+      invalidPrompt: '[TextInput_InvalidPrompt_1234](copy)',
+      unrecognizedPrompt: '[TextInput_UnrecognizedPrompt_1234](copy)',
+      defaultValueResponse: '[TextInput_DefaultValueResponse_1234](copy)',
     });
   });
 });

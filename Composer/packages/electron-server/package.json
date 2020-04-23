@@ -2,26 +2,27 @@
   "name": "@bfc/electron-server",
   "license": "MIT",
   "author": "Microsoft Corporation",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Electron wrapper around Composer that launches Composer as a desktop application.",
   "main": "./build/main.js",
   "engines": {
     "node": ">=12"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && ncp src/preload.js build/preload.js",
     "clean": "rimraf build && rimraf dist",
     "copy-plugins": "node scripts/copy-plugins.js",
     "copy-templates": "node scripts/copy-templates.js",
     "dist": "node scripts/electronBuilderDist.js",
     "dist:full": "yarn clean && yarn build && yarn copy-templates && yarn run pack && yarn copy-plugins && yarn dist",
-    "pack": "node scripts/electronBuilderPack.js",
-    "start": "cross-env NODE_ENV=development electron .",
-    "typecheck": "tsc --noEmit",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
+    "pack": "node scripts/electronBuilderPack.js",
+    "start": "cross-env NODE_ENV=development electron .",
     "start:electron": "./node_modules/.bin/electron --inspect=7777 --remote-debugging-port=7778 .",
-    "start:electron:dev": "cross-env ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron"
+    "start:electron:dev": "cross-env NODE_ENV=development ELECTRON_TARGET_URL=http://localhost:3000/ npm run start:electron",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "@types/archiver": "^3.0.0",
@@ -33,7 +34,7 @@
     "@types/form-data": "^2.2.1",
     "@types/globby": "^9.1.0",
     "@types/http-errors": "^1.6.1",
-    "@types/jest": "^24.0.9",
+    "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.3",
     "@types/lodash": "^4.14.146",
     "@types/lru-cache": "^5.1.0",
@@ -46,6 +47,7 @@
     "fs-extra": "^9.0.0",
     "js-yaml": "^3.13.1",
     "mock-fs": "^4.10.1",
+    "ncp": "2.0.0",
     "nodemon": "^1.18.11",
     "path": "^0.12.7",
     "rimraf": "^2.6.3",
@@ -55,6 +57,7 @@
   "dependencies": {
     "@bfc/server": "*",
     "debug": "4.1.1",
+    "electron-updater": "4.2.5",
     "fix-path": "^3.0.0",
     "lodash": "^4.17.15"
   }
