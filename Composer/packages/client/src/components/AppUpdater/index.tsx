@@ -142,7 +142,7 @@ export const AppUpdater: React.FC<{}> = _props => {
               },
               {
                 key: downloadOptions.downloadOnly,
-                text: formatMessage('Download the new version manually.'),
+                text: formatMessage('Download now and install when you close Composer.'),
                 onRenderField: SelectOption,
               },
             ]}
@@ -175,7 +175,7 @@ export const AppUpdater: React.FC<{}> = _props => {
         const text =
           downloadOption === downloadOptions.installAndUpdate
             ? formatMessage('Composer will restart.')
-            : formatMessage('Composer will update the next time you start the app.');
+            : formatMessage('Composer will update the next time you close the app.');
         return <p css={dialogCopy}>{text}</p>;
       }
 
