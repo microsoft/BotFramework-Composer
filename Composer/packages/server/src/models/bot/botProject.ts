@@ -91,9 +91,6 @@ export class BotProject {
     this.settings = await this.getEnvSettings('', false);
     this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
     this.files = await this._getFiles();
-    if (this.settings) {
-      this.luPublisher.setLuisConfig(this.settings.luis);
-    }
   };
 
   public getProject = () => {
@@ -132,7 +129,6 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
-    this.luPublisher.setLuisConfig(config.luis);
   };
 
   // update skill in settings
@@ -255,15 +251,18 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
-  public publishLuis = async (authoringKey: string, fileIds: string[], crossTrainConfig: ICrossTrainConfig) => {
-    this.luPublisher.setAuthoringKey(authoringKey);
-    if (fileIds.length) {
+  public publishLuis = async (authoringKey: string, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
+    if (fileIds.length && this.settings) {
       const map = fileIds.reduce((result, id) => {
         result[id] = true;
         return result;
       }, {});
       const files = this.files.filter(file => map[Path.basename(file.name, '.lu')]);
-      this.luPublisher.setCrossTrainConfig(crossTrainConfig);
+      this.luPublisher.setPublishConfig(
+        { ...this.settings.luis, authoringKey },
+        crossTrainConfig,
+        this.settings.downsampling
+      );
       await this.luPublisher.publish(files);
     }
   };
