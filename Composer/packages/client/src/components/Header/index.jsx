@@ -34,8 +34,8 @@ export const Header = props => {
         aria-label={formatMessage('Composer Logo')}
         src={composerIcon}
       />
-      <span css={title}>{formatMessage('Bot Framework Composer')}</span>
-      <span css={botName}>{props.botName}</span>
+      <span css={title(props.botName)}>{formatMessage('Bot Framework Composer')}</span>
+      {props.botName && <span css={botName}>{`${props.botName}(${props.locale}}`}</span>}
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}

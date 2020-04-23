@@ -12,7 +12,7 @@ export const headerContainer = css`
   line-height: 50px;
 `;
 
-export const title = css`
+export const title = botName => css`
   position: relative;
   margin-left: 25px;
   font-weight: ${FontWeights.semibold};
@@ -28,7 +28,7 @@ export const title = css`
     width: 0px;
     height: 24px;
     border: none;
-    border-right: 1px solid #979797;
+    border-right: ${botName && '1px solid #979797;'}
     border-image: initial;
     outline: none;
   }
