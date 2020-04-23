@@ -19,3 +19,8 @@ export interface ResourceInfo {
 }
 
 export type FileErrorHandler = (error) => void;
+
+export interface IFileTask {
+  file: ResourceInfo;
+  changeType: FileChangeType;
+}

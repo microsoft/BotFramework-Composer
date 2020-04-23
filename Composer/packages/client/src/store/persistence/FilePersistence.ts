@@ -12,6 +12,7 @@ import { getBaseName } from '../../utils';
 import { FileOperation } from './FileOperation';
 import { FileChangeType, FileExtensions, ResourceInfo } from './types';
 import Semaphore from './Semaphor';
+import FileQueue from './FileQueue';
 
 const fileChangeType = {
   [ActionTypes.CREATE_DIALOG]: { changeType: FileChangeType.CREATE, fileType: FileExtensions.Dialog },
@@ -29,6 +30,9 @@ class FilePersistence {
   private _files: { [fileName: string]: FileOperation };
   private _projectId = '';
   private _handleError = name => error => {};
+  private _queue = new FileQueue();
+  private _lock = false;
+
   private _operator = {
     [FileChangeType.CREATE]: this.create.bind(this),
     [FileChangeType.UPDATE]: this.update.bind(this),
@@ -94,12 +98,15 @@ class FilePersistence {
     await this._files[name].createFile(name, content);
   }
 
-  public async operate(files: ResourceInfo[], changeType: FileChangeType) {
+  public async operate() {
     try {
-      const s = new Semaphore();
-      await s.start();
-      await Promise.all(files.map(async file => await this._operator[changeType](file)));
-      s.end();
+      if (this._lock) return;
+      this._lock = true;
+      while (this._queue.tasks.length) {
+        const tasks = this._queue.popList();
+        await Promise.all(tasks.map(async task => await this._operator[task.changeType](task.file)));
+      }
+      this._lock = false;
     } catch (error) {
       this._handleError('')(error);
     }
@@ -114,7 +121,8 @@ class FilePersistence {
     const type = fileChangeType[action.type];
     if (!type) return;
     const files = this._getChangedFiles(type, action.payload?.id, currentState);
-    await this.operate(files, type.changeType);
+    this._queue.push(files, type.changeType);
+    this.operate();
   }
 
   public registerHandleError(store: Store) {
