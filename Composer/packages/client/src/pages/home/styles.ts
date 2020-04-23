@@ -77,6 +77,7 @@ export const itemContainerWrapper = (disabled?: boolean) => css`
 `;
 
 export const itemContainer = css`
+  outline: none;
   height: 50%;
 `;
 
@@ -88,6 +89,7 @@ export const itemContainerTitle = css`
   font-weight: 600;
   padding: 0.5rem 1rem;
   box-sizing: border-box;
+  outline: none;
 `;
 
 export const itemContainerContent = css`
@@ -96,6 +98,7 @@ export const itemContainerContent = css`
   text-overflow: ellipsis;
   word-break: break-word;
   padding: 0.5rem 1rem;
+  outline: none;
 `;
 
 export const subtitle = css`
@@ -166,10 +169,10 @@ const baseBotItem = {
   container: css`
     box-shadow: ${Depths.depth4};
     transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
-
     &:hover,
     &:focus {
       box-shadow: ${Depths.depth16};
+      outline: rgb(102, 102, 102) solid 1px;
     }
 
     &:active {
@@ -225,7 +228,9 @@ export const exampleListCell = css`
   padding: 16px;
   box-sizing: border-box;
   display: flex;
-
+  &:focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
   &:hover {
     background: ${palette.neutralLight};
   }

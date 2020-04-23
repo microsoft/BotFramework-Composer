@@ -29,6 +29,15 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   forwardedRef,
   ...rest
 }) => {
+  const handleKeyDown = async event => {
+    if (event.key.toLowerCase() === 'enter') {
+      event.preventDefault();
+      if (onClick) {
+        await onClick();
+      }
+    }
+  };
+
   return (
     <div
       css={[itemContainerWrapper(disabled), styles.container]}
@@ -41,11 +50,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       ref={forwardedRef}
       tabIndex={0}
       {...rest}
+      onKeyDown={handleKeyDown}
     >
-      <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
+      <div tabIndex={-1} css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
         <div css={itemContainerTitle}>{title}</div>
       </div>
-      <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
+      <div tabIndex={-1} css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
         <div css={itemContainerContent}>{content}</div>
       </div>
     </div>
