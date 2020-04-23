@@ -64,6 +64,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
     // attempt to get a placeholder with the selected schema
     const placeholder =
       getUiPlaceholder({ ...props, schema: selectedSchema, placeholder: undefined }) || props.placeholder;
+    const enumOptions = selectedSchema?.enum as string[];
 
     if (selectedKey === 'expression') {
       return <ExpressionEditor {...props} placeholder={placeholder} />;
@@ -92,6 +93,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
       <Field
         key={selectedSchema.type}
         {...props}
+        enumOptions={enumOptions}
         placeholder={placeholder}
         schema={selectedSchema}
         // allow object fields to render their labels
