@@ -482,6 +482,11 @@ const getPublishHistory: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const setRuntimeTemplates: ReducerFunc = (state, payload) => {
+  state.runtimeTemplates = payload;
+  return state;
+};
+
 const setBotStatus: ReducerFunc = (state, payload) => {
   state.botStatus = payload.status;
   return state;
@@ -511,6 +516,11 @@ const setCodeEditorSettings: ReducerFunc = (state, settings) => {
   const newSettings = merge(state.userSettings, settings);
   storage.set('userSettings', newSettings);
   state.userSettings = newSettings;
+  return state;
+};
+
+const ejectSuccess: ReducerFunc = (state, payload) => {
+  state.runtimeSettings = payload.settings;
   return state;
 };
 
@@ -610,7 +620,9 @@ export const reducer = createReducer({
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
+  [ActionTypes.SET_RUNTIME_TEMPLATES]: setRuntimeTemplates,
   [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
+  [ActionTypes.EJECT_SUCCESS]: ejectSuccess,
   [ActionTypes.SET_MESSAGE]: setMessage,
   [ActionTypes.SET_APP_UPDATE_ERROR]: setAppUpdateError,
   [ActionTypes.SET_APP_UPDATE_PROGRESS]: setAppUpdateProgress,
