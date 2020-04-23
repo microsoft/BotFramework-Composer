@@ -8,7 +8,6 @@ import formatMessage from 'format-message';
 import { PromptField } from './PromptField';
 
 const choiceSchema = {
-  hidden: ['action'],
   properties: {
     value: {
       label: () => formatMessage('Choice Name'),
