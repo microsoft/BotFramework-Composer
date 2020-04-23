@@ -152,7 +152,7 @@ export const App: React.FC = () => {
       >
         {announcement}
       </div>
-      <Header botName={`${botName}(${locale})`} />
+      <Header botName={botName} locale={locale} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
           <div>
