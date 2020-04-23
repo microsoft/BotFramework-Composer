@@ -6,6 +6,5 @@ import selectDialog from '@bfc/ui-plugin-select-dialog';
 import selectSkillDialog from '@bfc/ui-plugin-select-skill-dialog';
 import lg from '@bfc/ui-plugin-lg';
 import lu from '@bfc/ui-plugin-luis';
-import emitEvent from '@bfc/ui-plugin-emit-event';
 
-export default [prompts, selectDialog, selectSkillDialog, lg, lu, expressions, emitEvent];
+export default [prompts, selectDialog, selectSkillDialog, lg, lu, expressions];
