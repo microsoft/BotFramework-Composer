@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 import get from 'lodash/get';
 
-import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
-import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
 import { SDKKinds } from '../types';
+
+import { walkAdaptiveAction } from './walkAdaptiveAction';
+import { walkAdaptiveActionList } from './walkAdaptiveActionList';
 
 type LgFieldHandler = (actionId: string, lgFieldName: string, lgFieldValue: string) => string;
 

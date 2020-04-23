@@ -3,9 +3,8 @@
 
 import { MicrosoftIDialog, SDKKinds } from '../types';
 import { LuMetaData, LuType } from '../luNameBuilder';
-
-import { walkAdaptiveAction } from './walkAdaptiveAction';
-import { walkAdaptiveActionList } from './walkAdaptiveActionList';
+import { walkAdaptiveAction } from '../walkerUtils/walkAdaptiveAction';
+import { walkAdaptiveActionList } from '../walkerUtils/walkAdaptiveActionList';
 
 // TODO: (ze) considering refactoring it with the `walkLgResources` util
 const collectLgTemplates = (action: any, outputTemplates: string[]) => {
