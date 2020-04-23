@@ -11,7 +11,6 @@ import { getBaseName } from '../../utils';
 
 import { FileOperation } from './FileOperation';
 import { FileChangeType, FileExtensions, ResourceInfo } from './types';
-import Semaphore from './Semaphor';
 import FileQueue from './FileQueue';
 
 const fileChangeType = {
@@ -122,7 +121,7 @@ class FilePersistence {
     if (!type) return;
     const files = this._getChangedFiles(type, action.payload?.id, currentState);
     this._queue.push(files, type.changeType);
-    this.operate();
+    await this.operate();
   }
 
   public registerHandleError(store: Store) {
