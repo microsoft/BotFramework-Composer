@@ -45,6 +45,7 @@ export function resolveFieldWidget(
     }
 
     switch (schema.type) {
+      case undefined:
       case 'string':
         return DefaultFields.StringField;
       case 'integer':
