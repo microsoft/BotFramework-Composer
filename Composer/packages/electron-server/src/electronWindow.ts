@@ -21,9 +21,11 @@ export default class ElectronWindow {
 
   private constructor() {
     // Create the browser window.
-    const { height } = screen.getPrimaryDisplay().workAreaSize;
-    const adjustedHeight = height * 0.9; // take up 90% of screen height
-    const adjustedWidth = (4 / 3) * adjustedHeight; // snap to 4:3 aspect ratio (16:9 doesn't look as good when scaled down)
+    const { height, width } = screen.getPrimaryDisplay().workAreaSize;
+    console.log(`Raw screen dimensions: ${height} x ${width}`);
+    const adjustedHeight = Math.floor(height * 0.9); // take up 90% of screen height
+    const adjustedWidth = Math.floor((4 / 3) * adjustedHeight); // snap to 4:3 aspect ratio (16:9 doesn't look as good when scaled down)
+    console.log(`Electron window dimensions: ${adjustedHeight} x ${adjustedWidth}`);
     const browserWindowOptions: Electron.BrowserWindowConstructorOptions = {
       width: adjustedWidth,
       height: adjustedHeight,
@@ -41,6 +43,7 @@ export default class ElectronWindow {
     }
     this._currentBrowserWindow = new BrowserWindow(browserWindowOptions);
     this._currentBrowserWindow.on('page-title-updated', ev => ev.preventDefault()); // preserve explicit window title
+    console.log('Rendered Electron window dimensions: ', this._currentBrowserWindow.getSize());
   }
 
   public static destroy() {
