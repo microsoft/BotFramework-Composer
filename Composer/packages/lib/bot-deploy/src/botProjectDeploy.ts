@@ -234,28 +234,20 @@ export class BotProjectDeploy {
     appPwd: string
   ): Promise<any> {
     const outputs = await client.deployments.get(resourceGroupName, deployName);
-    return new Promise((resolve, reject) => {
-      if (outputs?.properties?.outputs) {
-        const outputResult = outputs.properties.outputs;
-        const applicationResult = {
-          MicrosoftAppId: appId,
-          MicrosoftAppPassword: appPwd,
-        };
-        const outputObj = this.unpackObject(outputResult);
+    if (outputs?.properties?.outputs) {
+      const outputResult = outputs.properties.outputs;
+      const applicationResult = {
+        MicrosoftAppId: appId,
+        MicrosoftAppPassword: appPwd,
+      };
+      const outputObj = this.unpackObject(outputResult);
 
-        const result = {};
-        Object.assign(result, outputObj, applicationResult);
-
-        fs.writeFile(settingsPath, JSON.stringify(result, null, 4), err => {
-          if (err) {
-            reject(err);
-          }
-          resolve(result);
-        });
-      } else {
-        resolve({});
-      }
-    });
+      const result = {};
+      Object.assign(result, outputObj, applicationResult);
+      return result;
+    } else {
+      return null;
+    }
   }
 
   private async getFiles(dir: string): Promise<string[]> {
@@ -325,6 +317,120 @@ export class BotProjectDeploy {
     return fs.readFileSync(file).length > 0;
   }
 
+  // Run through the lubuild process
+  // This happens in the build folder, NOT in the original source folder
+  private async publishLuis(
+    name: string,
+    environment: string,
+    language: string,
+    luisEndpointKey: string,
+    luisAuthoringKey?: string,
+    luisAuthoringRegion?: string
+  ) {
+    if (luisAuthoringKey && luisAuthoringRegion) {
+      // publishing luis
+      const botFiles = await this.getFiles(this.remoteBotPath);
+      const modelFiles = botFiles.filter(name => {
+        return name.endsWith('.lu') && this.notEmptyLuisModel(name);
+      });
+
+      if (!(await fs.pathExists(this.generatedFolder))) {
+        await fs.mkdir(this.generatedFolder);
+      }
+      const builder = new luBuild.Builder(msg =>
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: msg,
+        })
+      );
+
+      const loadResult = await builder.loadContents(
+        modelFiles,
+        language || '',
+        environment || '',
+        luisAuthoringRegion || ''
+      );
+
+      const buildResult = await builder.build(
+        loadResult.luContents,
+        loadResult.recognizers,
+        luisAuthoringKey,
+        luisAuthoringRegion,
+        name,
+        environment,
+        language,
+        false,
+        loadResult.multiRecognizers,
+        loadResult.settings
+      );
+      await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
+
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `lubuild succeed`,
+      });
+
+      const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter(filename =>
+        filename.includes('luis.settings')
+      );
+      const luisAppIds: any = {};
+
+      for (const luisConfigFile of luisConfigFiles) {
+        const luisSettings = await fs.readJson(luisConfigFile);
+        Object.assign(luisAppIds, luisSettings.luis);
+      }
+
+      const luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
+      const luisConfig: any = {
+        endpoint: luisEndpoint,
+        endpointKey: luisEndpointKey,
+      };
+
+      Object.assign(luisConfig, luisAppIds);
+
+      // Update deploymentSettings with the luis config
+      const settings: any = await fs.readJson(this.deploymentSettingsPath);
+      settings.luis = luisConfig;
+
+      await fs.writeJson(this.deploymentSettingsPath, settings, {
+        spaces: 4,
+      });
+
+      const token = await this.creds.getToken();
+      // Assign a LUIS key to the endpoint of each app
+      const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
+      const options = {
+        headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+      } as rp.RequestPromiseOptions;
+      const response = await rp.get(getAccountUri, options);
+      const jsonRes = JSON.parse(response);
+      const account = this.getAccount(jsonRes, `${name}-${environment}-luis`);
+
+      for (const k in luisAppIds) {
+        const luisAppId = luisAppIds[k];
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: `Assigning to luis app id: ${luisAppIds}`,
+        });
+        const token = await this.creds.getToken();
+        const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
+        const options = {
+          body: account,
+          json: true,
+          headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+        } as rp.RequestPromiseOptions;
+        const response = await rp.post(luisAssignEndpoint, options);
+        this.logger({
+          status: BotProjectDeployLoggerType.DEPLOY_INFO,
+          message: response,
+        });
+      }
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: 'Luis Publish Success! ...',
+      });
+    }
+  }
   /**
    * Deploy a bot to a location
    */
@@ -370,112 +476,7 @@ export class BotProjectDeploy {
         language = 'en-us';
       }
 
-      // Run through the lubuild process
-      // This happens in the build folder, NOT in the original source folder
-      // TODO: this should be a method of its own
-      if (luisAuthoringKey && luisAuthoringRegion) {
-        // publishing luis
-        const botFiles = await this.getFiles(this.remoteBotPath);
-        const modelFiles = botFiles.filter(name => {
-          return name.endsWith('.lu') && this.notEmptyLuisModel(name);
-        });
-
-        if (!(await fs.pathExists(this.generatedFolder))) {
-          await fs.mkdir(this.generatedFolder);
-        }
-        const builder = new luBuild.Builder(msg =>
-          this.logger({
-            status: BotProjectDeployLoggerType.DEPLOY_INFO,
-            message: msg,
-          })
-        );
-
-        const loadResult = await builder.loadContents(
-          modelFiles,
-          language || '',
-          environment || '',
-          luisAuthoringRegion || ''
-        );
-
-        const buildResult = await builder.build(
-          loadResult.luContents,
-          loadResult.recognizers,
-          luisAuthoringKey,
-          luisAuthoringRegion,
-          name,
-          environment,
-          language,
-          false,
-          loadResult.multiRecognizers,
-          loadResult.settings
-        );
-        await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
-
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `lubuild succeed`,
-        });
-
-        const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter(filename =>
-          filename.includes('luis.settings')
-        );
-        const luisAppIds: any = {};
-
-        for (const luisConfigFile of luisConfigFiles) {
-          const luisSettings = await fs.readJson(luisConfigFile);
-          Object.assign(luisAppIds, luisSettings.luis);
-        }
-
-        const luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
-        const luisConfig: any = {
-          endpoint: luisEndpoint,
-          endpointKey: luisEndpointKey,
-        };
-
-        Object.assign(luisConfig, luisAppIds);
-
-        // Update deploymentSettings with the luis config
-        const settings: any = await fs.readJson(this.deploymentSettingsPath);
-        settings.luis = luisConfig;
-
-        await fs.writeJson(this.deploymentSettingsPath, settings, {
-          spaces: 4,
-        });
-
-        const token = await this.creds.getToken();
-        // Assign a LUIS key to the endpoint of each app
-        const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
-        const options = {
-          headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-        } as rp.RequestPromiseOptions;
-        const response = await rp.get(getAccountUri, options);
-        const jsonRes = JSON.parse(response);
-        const account = this.getAccount(jsonRes, `${name}-${environment}-luis`);
-
-        for (const k in luisAppIds) {
-          const luisAppId = luisAppIds[k];
-          this.logger({
-            status: BotProjectDeployLoggerType.DEPLOY_INFO,
-            message: `Assigning to luis app id: ${luisAppIds}`,
-          });
-          const token = await this.creds.getToken();
-          const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
-          const options = {
-            body: account,
-            json: true,
-            headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-          } as rp.RequestPromiseOptions;
-          const response = await rp.post(luisAssignEndpoint, options);
-          this.logger({
-            status: BotProjectDeployLoggerType.DEPLOY_INFO,
-            message: response,
-          });
-        }
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: 'Luis Publish Success! ...',
-        });
-      }
+      await this.publishLuis(name, environment, language, luisEndpointKey, luisAuthoringKey, luisAuthoringRegion);
 
       // Build a zip file of the project
       this.logger({
@@ -573,19 +574,10 @@ export class BotProjectDeploy {
       baseUri: 'https://graph.windows.net',
     });
 
-    // Test for the existence of a deployment settings file.
-    // if one does not exists, emit an error message and stop.
-    if (!fs.existsSync(this.settingsPath)) {
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: `! Could not find an 'appsettings.deployment.json' file in the current directory.`,
-      });
-
-      // TODO: throw error
-      return;
+    let settings: any = {};
+    if (fs.existsSync(this.settingsPath)) {
+      settings = await fs.readJson(this.settingsPath);
     }
-
-    const settings = await fs.readJson(this.settingsPath);
 
     // Validate settings
     let appId = settings.MicrosoftAppId;
@@ -598,8 +590,7 @@ export class BotProjectDeploy {
           status: BotProjectDeployLoggerType.PROVISION_INFO,
           message: `App password is required`,
         });
-        // TODO: throw error
-        return;
+        throw new Error(`App password is required`);
       }
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -682,8 +673,7 @@ export class BotProjectDeploy {
         message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
       });
 
-      // Todo: throw error
-      return false;
+      throw new Error(`! Error: ${validation.error.message}`);
     }
 
     // Create the entire stack of resources inside the new resource group
@@ -716,8 +706,7 @@ export class BotProjectDeploy {
         message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
       });
 
-      // TODO: throw a real error
-      return false;
+      throw new Error(`! Error: ${validation.error}`);
     }
 
     // Validate that everything was successfully created.
@@ -777,7 +766,7 @@ export class BotProjectDeploy {
       status: BotProjectDeployLoggerType.PROVISION_SUCCESS,
       message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
     });
-    return true;
+    return updateResult;
   }
 
   /**
