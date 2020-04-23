@@ -275,20 +275,20 @@ function DesignPage(props) {
     const items =
       dialogs.length > 0
         ? breadcrumb.reduce((result, item, index) => {
-          const { dialogId, selected, focused } = item;
-          const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
-          if (text) {
-            result.push({
-              // @ts-ignore
-              index,
-              isRoot: !selected && !focused,
-              text,
-              ...item,
-              onClick: handleBreadcrumbItemClick,
-            });
-          }
-          return result;
-        }, [] as IBreadcrumbItem[])
+            const { dialogId, selected, focused } = item;
+            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+            if (text) {
+              result.push({
+                // @ts-ignore
+                index,
+                isRoot: !selected && !focused,
+                text,
+                ...item,
+                onClick: handleBreadcrumbItemClick,
+              });
+            }
+            return result;
+          }, [] as IBreadcrumbItem[])
         : [];
     return (
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -417,8 +417,8 @@ function DesignPage(props) {
                     schema={schemas.sdk.content}
                   />
                 ) : (
-                    <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                  )}
+                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                )}
               </div>
               <PropertyEditor />
             </div>
