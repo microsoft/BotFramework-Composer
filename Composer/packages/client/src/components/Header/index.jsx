@@ -37,7 +37,7 @@ export const Header = props => {
       <div css={title}>{formatMessage('Bot Framework Composer')}</div>
       {props.botName && (
           <div css={divider} />
-          <span css={botName}>{`${props.botName}(${props.locale}}`}</span>
+          <span css={botName}>{`${props.botName} (${props.locale})`}</span>
         )
       }
       {showUpdateAvailableIcon && (
