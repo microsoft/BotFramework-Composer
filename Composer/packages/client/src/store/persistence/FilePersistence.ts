@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import keys from 'lodash/keys';
-import values from 'lodash/values';
 import { LgFile, LuFile, DialogInfo } from '@bfc/shared';
 
 import { Store, State } from '../types';
@@ -37,6 +36,14 @@ class FilePersistence {
     [ChangeType.UPDATE]: this._update,
     [ChangeType.DELETE]: this._delete,
   };
+
+  public get projectId(): string {
+    return this._projectId;
+  }
+
+  public get taskQueue() {
+    return this._taskQueue;
+  }
 
   public async notify(previousState: State, currentState: State, action: ActionType) {
     if (action.type === ActionTypes.GET_PROJECT_SUCCESS) {
@@ -171,7 +178,6 @@ class FilePersistence {
     const { dialogs, luFiles, lgFiles } = currentState;
     let files: IFileChange[] = [];
     const { changeType, fileType } = changeInfo;
-
     switch (fileType) {
       case FileExtensions.Dialog: {
         const dialog = dialogs.find(dialog => dialog.id === id);
