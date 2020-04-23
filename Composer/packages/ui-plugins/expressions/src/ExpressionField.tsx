@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React, { useMemo, useState } from 'react';
 import { FieldProps } from '@bfc/extension';
-import { FieldLabel, resolveFieldWidget, usePluginConfig } from '@bfc/adaptive-form';
+import { FieldLabel, resolveFieldWidget, usePluginConfig, getUiPlaceholder } from '@bfc/adaptive-form';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
@@ -27,7 +27,7 @@ const styles = {
 };
 
 const ExpressionField: React.FC<FieldProps> = props => {
-  const { id, value, label, description, schema, uiOptions, definitions, required } = props;
+  const { id, value, label, description, schema, uiOptions, definitions, required, className } = props;
   const { $role, ...expressionSchema } = schema;
   const pluginConfig = usePluginConfig();
 
@@ -61,9 +61,12 @@ const ExpressionField: React.FC<FieldProps> = props => {
     if (!selectedSchema || Array.isArray(selectedSchema.type) || !selectedSchema.type) {
       return null;
     }
+    // attempt to get a placeholder with the selected schema
+    const placeholder =
+      getUiPlaceholder({ ...props, schema: selectedSchema, placeholder: undefined }) || props.placeholder;
 
     if (selectedKey === 'expression') {
-      return <ExpressionEditor {...props} />;
+      return <ExpressionEditor {...props} placeholder={placeholder} />;
     }
 
     // return a json editor for open ended obejcts
@@ -89,6 +92,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
       <Field
         key={selectedSchema.type}
         {...props}
+        placeholder={placeholder}
         schema={selectedSchema}
         // allow object fields to render their labels
         label={selectedSchema.type !== 'object' ? false : undefined}
@@ -105,7 +109,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
   );
 
   return (
-    <React.Fragment>
+    <div className={className}>
       {shouldRenderContainer && (
         <div css={styles.container}>
           <FieldLabel
@@ -136,7 +140,7 @@ const ExpressionField: React.FC<FieldProps> = props => {
         </div>
       )}
       {renderField()}
-    </React.Fragment>
+    </div>
   );
 };
 
