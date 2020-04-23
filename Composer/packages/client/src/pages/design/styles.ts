@@ -93,6 +93,7 @@ export const formEditor = css`
 
 export const breadcrumbClass = mergeStyleSets({
   root: {
+    width: '500px',
     margin: '0',
     padding: '10px',
   },
@@ -121,7 +122,7 @@ export const middleTriggerContainer = css`
   align-items: center;
   background: #f6f6f6;
   width: 100%;
-  margin-top: 55px;
+  margin-top: 65px;
   height: calc(100% - 48px);
   min-height: 285px;
   position: absolute;

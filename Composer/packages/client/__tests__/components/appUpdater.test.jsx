@@ -55,7 +55,7 @@ describe('<AppUpdater />', () => {
     getByText('New update available');
     getByText('Bot Framework Composer v1.0.0');
     getByText('Install the update and restart Composer.');
-    getByText('Download the new version manually.');
+    getByText('Download now and install when you close Composer.');
   });
 
   it('should render the update unavailable dialog', () => {
