@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useContext, FC, useEffect, useState, useRef } from 'react';
 import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { SDKKinds, DialogUtils } from '@bfc/shared';
-import { useDialogApi, useDialogEditApi } from '@bfc/extension';
+import { useDialogApi, useDialogEditApi, useActionApi } from '@bfc/extension';
 import get from 'lodash/get';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
@@ -49,6 +49,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     deleteSelectedActions,
   } = useDialogEditApi();
   const { createDialog, readDialog, updateDialog } = useDialogApi();
+  const { actionsContainLuIntent } = useActionApi();
 
   const trackActionChange = (actionPath: string) => {
     const affectedPaths = DialogUtils.getParentPaths(actionPath);
@@ -126,15 +127,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = async e => {
           if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
 
-          // Using copy-paste-delete pattern here is safer than using cut-paste since create new dialog may be cancelled or failed
-          const actionsToBeMoved = await copySelectedActions(path, data, e.actionIds);
-
           // Create target dialog
           const newDialogId = await createDialog();
           if (!newDialogId) return;
-
-          // Insert to be moved actions asyncly
           const newDialogData = readDialog(newDialogId);
+
+          // Using copy->paste->delete pattern is safer than using cut->paste
+          const actionsToBeMoved = await copySelectedActions(path, data, e.actionIds);
           const newDialogWithActions = await insertActions(
             newDialogId,
             newDialogData,
@@ -142,6 +141,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             0,
             actionsToBeMoved
           );
+          if (actionsContainLuIntent(actionsToBeMoved)) {
+            // auto assign recognizer type to lu
+            newDialogWithActions.recognizer = `${newDialogId}.lu`;
+          }
           updateDialog(newDialogId, newDialogWithActions);
 
           // Delete moved actions

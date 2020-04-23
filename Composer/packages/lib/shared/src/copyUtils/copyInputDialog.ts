@@ -31,7 +31,7 @@ export const copyInputDialog = async (input: InputDialog, externalApi: ExternalA
     copy.defaultValueResponse = await copyLg(copy, 'defaultValueResponse');
   }
 
-  await externalApi.copyLuField(inputActionId, input, copiedActionId, copy, '_lg');
+  await externalApi.copyLuField(inputActionId, input, copiedActionId, copy, '');
 
   return copy;
 };
