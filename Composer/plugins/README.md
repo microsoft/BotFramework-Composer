@@ -43,7 +43,7 @@ Currently, plugins can be loaded into Composer using 1 of 2 methods:
 
 The simplest form of a plugin module is below:
 
-```js
+```ts
 export default async (composer: any): Promise<void> => {
 
   // call methods (see below) on the composer API
@@ -83,7 +83,7 @@ By default, the entire user profile is serialized to JSON and stored in the sess
 
 For example, the below code demonstrates storing only the user ID in the session during serialization, and the use of a database to load the full profile out of a database using that id during deserialization.
 
-```js
+```ts
 const serializeUser = function(user, done) {
   done(null, user.id);
 };
@@ -105,7 +105,7 @@ This is primarily for use with authentication-related URLs. While `/login` is al
 
 For example, when using oauth, there is a secondary URL for receiving the auth callback.  This has to be whitelisted, otherwise access will be denied to the callback URL and it will fail.
 
-```js
+```ts
 // define a callback url
 composer.addWebRoute('get','/oauth/callback', someFunction);
 
@@ -126,7 +126,7 @@ This is for use in the web route implementations to get user and provide it to o
 
 For example:
 
-```js
+```ts
 const RequestHandlerX = async (req, res) => {
 
   const user = await PluginLoader.getUserFromRequest(req);
@@ -161,7 +161,7 @@ If an authentication plugin is not configured, or the user is not logged in, the
 
 The class is expected to be in the form:
 
-```js
+```ts
 class CustomStorage implements IFileStorage {
   constructor(conn: StorageConnection, user?: UserIdentity) {
     ...
@@ -191,7 +191,7 @@ Signature for middleware is `(req, res, next) => {}`
 
 For example:
 
-```js
+```ts
 // simple route
 composer.addWebRoute('get', '/hello', (req, res) => {
   res.send('HELLO WORLD!');
@@ -249,7 +249,7 @@ When selected, the full content of the `path` will be copied into the project's 
 `Start Bot`, the `startCommand` will be executed.  The expected result is that a bot application launches and is made available
 to communicate with the Bot Framework Emulator.
 
-```js
+```ts
 await composer.addRuntimeTemplate({
   key: 'csharp',
   name: 'C#',

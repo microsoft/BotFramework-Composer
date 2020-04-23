@@ -12,6 +12,9 @@ import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
 
+import { copyDir } from './copyDir';
+import { IFileStorage } from './interface';
+
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
 const removeFile = promisify(fs.unlink);
@@ -50,7 +53,7 @@ class LocalPublisher {
       await this.saveContent(botId, version, project.dataDir, user);
     } else if (!project.settings.runtime.path || !project.settings.runtime.command) {
       return {
-        status: 500,
+        status: 400,
         result: {
           message: 'Custom runtime settings are incomplete. Please specify path and command.',
         },
@@ -219,7 +222,7 @@ class LocalPublisher {
           }
         );
       } catch (err) {
-        reject(err);
+        return reject(err);
       }
       LocalPublisher.runningBots[botId] = { process: process, port: port };
       this.addListeners(process, resolve, reject);
@@ -352,8 +355,18 @@ export default async (composer: any): Promise<void> => {
   await composer.addRuntimeTemplate({
     key: 'csharp',
     name: 'C#',
-    path: __dirname + '/../../../../BotProject/Templates/CSharp',
     startCommand: 'dotnet run',
+    eject: async (project: any, localDisk: IFileStorage) => {
+      const sourcePath = path.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
+      const destPath = path.join(project.dir, 'runtime');
+      if (!(await project.fileStorage.exists(destPath))) {
+        // used to read bot project template from source (bundled in plugin)
+        await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
+        return destPath;
+      } else {
+        throw new Error(`Runtime already exists at ${destPath}`);
+      }
+    },
   });
 };
 

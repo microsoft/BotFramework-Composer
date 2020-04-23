@@ -65,6 +65,17 @@ export interface PublishTarget {
   configuration: string;
 }
 
+export interface RuntimeTemplate {
+  /** internal use key */
+  key: string;
+  /** name of runtime template to display in interface */
+  name: string;
+  /** path to runtime template */
+  path: string;
+  /** command used to start runtime */
+  startCommand: string;
+}
+
 export interface State {
   dialogs: DialogInfo[];
   projectId: string;
@@ -116,7 +127,7 @@ export interface State {
   };
   clipboardActions: any[];
   publishTargets: any[];
-  runtimeTemplates: any[];
+  runtimeTemplates: RuntimeTemplate[];
   publishTypes: PublishType[];
   publishHistory: {
     [key: string]: any[];

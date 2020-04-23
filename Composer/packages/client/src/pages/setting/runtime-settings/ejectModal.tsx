@@ -7,21 +7,20 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
-import { IDropdown, IDropdownOption } from 'office-ui-fabric-react';
+import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 
 import { StoreContext } from '../../../store';
 
 import { modalControlGroup } from './style';
 
 export interface EjectModalProps {
-  ejectRuntime: (template: any) => void;
+  ejectRuntime: (templateKey: string) => void;
   hidden: boolean;
   closeModal: () => void;
 }
 
 export const EjectModal: React.FC<EjectModalProps> = props => {
-  const [selectedTemplate, setSelectedTemplate] = useState<any | undefined>();
+  const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>();
   const { state, actions } = useContext(StoreContext);
   const { runtimeTemplates } = state;
 
@@ -32,16 +31,15 @@ export const EjectModal: React.FC<EjectModalProps> = props => {
   const availableRuntimeTemplates = useMemo(() => {
     return runtimeTemplates.map(t => {
       return {
-        data: { ...t },
         text: t.name,
         key: t.key,
       };
     });
   }, [runtimeTemplates]);
 
-  const selectTemplate = (ev, item?: IDropdownOption) => {
+  const selectTemplate = (ev, item?: IChoiceGroupOption) => {
     if (item) {
-      setSelectedTemplate(item.data);
+      setSelectedTemplate(item.key);
     }
   };
 

@@ -2,16 +2,15 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import path from 'path';
-
 import { jsx } from '@emotion/core';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { StoreContext } from '../../../store';
 
 import { EjectModal } from './ejectModal';
@@ -26,7 +25,7 @@ import {
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, settings, projectId, location, runtimeSettings } = state;
+  const { botName, settings, projectId } = state;
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
@@ -76,8 +75,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
     setEjectModalVisible(false);
   };
 
-  const ejectRuntime = async template => {
-    await actions.ejectRuntime(projectId, template.key);
+  const ejectRuntime = async (templateKey: string) => {
+    await actions.ejectRuntime(projectId, templateKey);
     closeEjectModal();
   };
 
@@ -119,6 +118,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       <EjectModal hidden={!ejectModalVisible} closeModal={closeEjectModal} ejectRuntime={ejectRuntime} />
     </div>
   ) : (
-    <div>{formatMessage('Data loading...')}</div>
+    <LoadingSpinner />
   );
 };
