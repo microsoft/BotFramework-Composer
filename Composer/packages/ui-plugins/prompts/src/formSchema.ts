@@ -1,22 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UISchema } from '@bfc/extension';
+import { UISchema, UIOptions } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
-import { EditableField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
+import { StringField } from '@bfc/adaptive-form';
 
 import { PromptField } from './PromptField';
 
-const choiceSchema = {
+const choiceSchema: UIOptions = {
+  order: ['value', 'synonyms', 'actions', '*'],
   properties: {
     value: {
       label: () => formatMessage('Choice Name'),
-      field: EditableField,
-      placeholder: () => formatMessage('Add new option here'),
     },
     synonyms: {
       label: () => formatMessage('Synonyms (Optional)'),
-      field: EditableField,
+      field: StringField,
       serializer: {
         get: value => (Array.isArray(value) ? value.join(', ') : value),
         set: value => (typeof value === 'string' ? value.split(', ') : value),
