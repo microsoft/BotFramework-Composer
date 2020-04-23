@@ -4,8 +4,6 @@
 import { JSONSchema7, JSONSchema7Definition, SchemaDefinitions } from '@bfc/extension';
 import { resolveRef, getValueType } from '@bfc/adaptive-form';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import merge from 'lodash/merge';
-import omit from 'lodash/omit';
 
 export interface SchemaOption extends IDropdownOption {
   data: {
@@ -57,13 +55,12 @@ export function getOneOfOptions(
         return all.concat(getOneOfOptions(item.oneOf, item, definitions));
       }
 
-      const merged = merge({}, omit(parentSchema, 'oneOf'), resolved);
       const label = getOptionLabel(resolved, parentSchema);
 
       all.push({
         key: label,
         text: label,
-        data: { schema: merged },
+        data: { schema: resolved },
       } as SchemaOption);
     }
 
