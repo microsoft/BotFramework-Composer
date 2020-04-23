@@ -12,10 +12,11 @@ import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
 
+import { copyDir } from './copyDir';
+import { IFileStorage } from './interface';
+
 const stat = promisify(fs.stat);
-const readFile = promisify(fs.readFile);
 const readDir = promisify(fs.readdir);
-const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
 const rmDir = promisify(rimraf);
@@ -44,17 +45,41 @@ class LocalPublisher {
     this.templatePath = templatePath;
     const botId = project.id;
     const version = 'default';
-    await this.initBot(botId);
-    await this.saveContent(botId, version, project.dataDir, user);
-    const url = await this.setBot(botId, version, settings, project.dataDir);
-    return {
-      status: 200,
-      result: {
-        id: uuid(),
-        version: version,
-        endpointURL: url,
-      },
-    };
+
+    // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
+    // and export the content into that folder as well.
+    if (project.settings.runtime && project.settings.runtime.customRuntime !== true) {
+      await this.initBot(botId);
+      await this.saveContent(botId, version, project.dataDir, user);
+    } else if (!project.settings.runtime.path || !project.settings.runtime.command) {
+      return {
+        status: 400,
+        result: {
+          message: 'Custom runtime settings are incomplete. Please specify path and command.',
+        },
+      };
+    }
+
+    try {
+      // start or restart the bot process
+      const url = await this.setBot(botId, version, settings, project.dataDir);
+
+      return {
+        status: 200,
+        result: {
+          id: uuid(),
+          version: version,
+          endpointURL: url,
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        result: {
+          message: error,
+        },
+      };
+    }
   };
   getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
@@ -78,29 +103,19 @@ class LocalPublisher {
     }
   };
 
-  history = async (config: PublishConfig, project, user) => {
-    const botId = project.id;
-    const result = [];
-    const files = await readDir(this.getHistoryDir(botId));
-    console.log(files);
-    files.map(item => {
-      result.push({
-        time: 'now',
-        status: 200,
-        message: 'test',
-        comment: 'test',
-      });
-    });
-    return result;
-  };
-  rollback = async (config, project, versionId, user) => {};
-
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
+
   private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);
-  private getBotAssetsDir = (botId: string) => path.resolve(this.getBotDir(botId), 'ComposerDialogs');
+
+  private getBotRuntimeDir = (botId: string) => path.resolve(this.getBotDir(botId), 'runtime');
+
+  private getBotAssetsDir = (botId: string) => path.resolve(this.getBotDir(botId));
+
   private getHistoryDir = (botId: string) => path.resolve(this.getBotDir(botId), 'history');
+
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);
+
   private botExist = async (botId: string) => {
     try {
       const status = await stat(this.getBotDir(botId));
@@ -109,6 +124,7 @@ class LocalPublisher {
       return false;
     }
   };
+
   private dirExist = async (dirPath: string) => {
     try {
       const status = await stat(dirPath);
@@ -122,20 +138,21 @@ class LocalPublisher {
     const isExist = await this.botExist(botId);
     if (!isExist) {
       const botDir = this.getBotDir(botId);
+      const runtimeDir = this.getBotRuntimeDir(botId);
       // create bot dir
       await mkDir(botDir, { recursive: true });
-      // copy runtime template in folder
-      await this.copyDir(this.templatePath, botDir);
-      // unzip runtime template to bot folder
-      // const zip = new AdmZip(this.templatePath);
-      // zip.extractAllTo(botDir, true);
+      await mkDir(runtimeDir, { recursive: true });
 
-      // create ComposerDialogs and histroy folder
+      // create ComposerDialogs and history folder
       mkDir(this.getBotAssetsDir(botId), { recursive: true });
       mkDir(this.getHistoryDir(botId), { recursive: true });
+
+      // copy runtime template in folder
+      await this.copyDir(this.templatePath, runtimeDir);
+
       try {
-        execSync('dotnet user-secrets init', { cwd: botDir });
-        execSync('dotnet build', { cwd: botDir });
+        execSync('dotnet user-secrets init', { cwd: runtimeDir });
+        execSync('dotnet build', { cwd: runtimeDir });
       } catch (error) {
         // delete the folder to make sure build again.
         rmDir(botDir);
@@ -146,7 +163,7 @@ class LocalPublisher {
 
   private saveContent = async (botId: string, version: string, srcDir: string, user: any) => {
     const dstPath = this.getDownloadPath(botId, version);
-    const zipFilePath = await this.zipBot(dstPath, srcDir);
+    await this.zipBot(dstPath, srcDir);
   };
 
   // start bot in current version
@@ -159,30 +176,59 @@ class LocalPublisher {
     } else {
       port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
     }
-    await this.restoreBot(botId, version);
+
+    // if not using custom runtime, update assets in tmp older
+    if (!settings.runtime || settings.runtime.customRuntime !== true) {
+      await this.restoreBot(botId, version);
+    }
+
+    // start the bot process
     try {
       await this.startBot(botId, port, settings);
       return `http://localhost:${port}`;
     } catch (error) {
       this.stopBot(botId);
+      throw error;
     }
   };
 
   private startBot = async (botId: string, port: number, settings: any): Promise<string> => {
-    const botDir = this.getBotDir(botId);
+    const botDir =
+      settings.runtime && settings.runtime.customRuntime === true
+        ? settings.runtime.path
+        : this.getBotRuntimeDir(botId);
+    const commandAndArgs =
+      settings.runtime && settings.runtime.customRuntime === true
+        ? settings.runtime.command.split(/\s+/)
+        : ['dotnet', 'run'];
+
     return new Promise((resolve, reject) => {
-      const process = spawn(
-        'dotnet',
-        ['bin/Debug/netcoreapp3.1/BotProject.dll', `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
-        {
-          cwd: botDir,
-          stdio: ['ignore', 'pipe', 'pipe'],
-        }
-      );
+      // ensure the specified runtime path exists
+      if (!fs.existsSync(botDir)) {
+        reject(`Runtime path ${botDir} does not exist.`);
+      }
+
+      // take the 0th item off the array, leaving just the args
+      const startCommand = commandAndArgs.shift();
+
+      let process;
+      try {
+        process = spawn(
+          startCommand,
+          [...commandAndArgs, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
+          {
+            cwd: botDir,
+            stdio: ['ignore', 'pipe', 'pipe'],
+          }
+        );
+      } catch (err) {
+        return reject(err);
+      }
       LocalPublisher.runningBots[botId] = { process: process, port: port };
       this.addListeners(process, resolve, reject);
     });
   };
+
   private getConfig = (config: any) => {
     const configList: string[] = [];
     if (config.MicrosoftAppPassword) {
@@ -201,6 +247,7 @@ class LocalPublisher {
     }
     return configList;
   };
+
   private addListeners = (child: ChildProcess, resolve: Function, reject: Function) => {
     let erroutput = '';
     child.stdout &&
@@ -219,6 +266,10 @@ class LocalPublisher {
       }
     });
 
+    child.on('error', err => {
+      reject(`Could not launch bot runtime process: ${err.message}`);
+    });
+
     child.on('message', msg => {
       console.log(msg);
     });
@@ -229,6 +280,7 @@ class LocalPublisher {
     const dstPath = this.getBotAssetsDir(botId);
     await this.unZipBot(srcPath, dstPath);
   };
+
   private zipBot = async (dstPath: string, srcDir: string) => {
     // delete previous and create new
     if (fs.existsSync(dstPath)) {
@@ -263,6 +315,7 @@ class LocalPublisher {
     LocalPublisher.runningBots[botId]?.process.kill('SIGKILL');
     delete LocalPublisher.runningBots[botId];
   };
+
   private copyDir = async (srcDir: string, dstDir: string) => {
     if (!(await this.dirExist(srcDir))) {
       throw new Error(`no such dir ${srcDir}`);
@@ -283,6 +336,7 @@ class LocalPublisher {
       }
     }
   };
+
   static stopAll = () => {
     for (const botId in LocalPublisher.runningBots) {
       const bot = LocalPublisher.runningBots[botId];
@@ -294,8 +348,26 @@ class LocalPublisher {
 
 const publisher = new LocalPublisher();
 export default async (composer: any): Promise<void> => {
-  // pass in the custom storage class that will override the default
+  // register this publishing method with Composer
   await composer.addPublishMethod(publisher);
+
+  // register the bundled c# runtime used by the local publisher with the eject feature
+  await composer.addRuntimeTemplate({
+    key: 'csharp',
+    name: 'C#',
+    startCommand: 'dotnet run',
+    eject: async (project: any, localDisk: IFileStorage) => {
+      const sourcePath = path.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
+      const destPath = path.join(project.dir, 'runtime');
+      if (!(await project.fileStorage.exists(destPath))) {
+        // used to read bot project template from source (bundled in plugin)
+        await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
+        return destPath;
+      } else {
+        throw new Error(`Runtime already exists at ${destPath}`);
+      }
+    },
+  });
 };
 
 // stop all the runningBot when process exit
@@ -303,6 +375,7 @@ const cleanup = (signal: NodeJS.Signals) => {
   LocalPublisher.stopAll();
   process.exit(0);
 };
+
 (['SIGINT', 'SIGTERM', 'SIGQUIT'] as NodeJS.Signals[]).forEach((signal: NodeJS.Signals) => {
   process.on(signal, cleanup.bind(null, signal));
 });

@@ -35,6 +35,11 @@ export class DefaultSettingManager extends FileSettingManager {
         endpointkey: '',
         hostname: '',
       },
+      runtime: {
+        customRuntime: false,
+        path: '',
+        command: '',
+      },
       downsampling: {
         maxImbalanceRatio: 10,
         maxUtteranceAllowed: 15000,
