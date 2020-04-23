@@ -5,8 +5,9 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FieldProps } from '@bfc/extension';
-import { FieldLabel } from '@bfc/adaptive-form';
 import { JsonEditor } from '@bfc/code-editor';
+
+import { FieldLabel } from '../FieldLabel';
 
 const fieldStyle = css`
   height: 300px;

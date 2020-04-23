@@ -25,7 +25,6 @@
     "@bfc/shared": "*",
     "@bfc/ui-plugin-emit-event": "*",
     "@bfc/ui-plugin-expressions": "*",
-    "@bfc/ui-plugin-json": "*",
     "@bfc/ui-plugin-lg": "*",
     "@bfc/ui-plugin-luis": "*",
     "@bfc/ui-plugin-prompts": "*",
