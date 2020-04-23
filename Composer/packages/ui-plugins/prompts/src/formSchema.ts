@@ -3,7 +3,7 @@
 import { UISchema, UIOptions } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
-import { StringField } from '@bfc/adaptive-form';
+import { StringField, JsonField } from '@bfc/adaptive-form';
 
 import { PromptField } from './PromptField';
 
@@ -21,6 +21,9 @@ const choiceSchema: UIOptions = {
         set: value => (typeof value === 'string' ? value.split(', ') : value),
       },
       placeholder: () => formatMessage('Add multiple comma-separated synonyms'),
+    },
+    action: {
+      field: JsonField,
     },
   },
 };
