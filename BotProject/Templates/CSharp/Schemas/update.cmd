@@ -1,2 +1,2 @@
 cd ..
-bf dialog:merge *.csproj -o schema/sdk.schema -v -b "R9"
+bf dialog:merge *.csproj -o schema/sdk.schema -v -b ""
