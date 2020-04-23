@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState, useRef } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -85,6 +85,7 @@ const getTabFromFragment = () => {
 
 function DesignPage(props) {
   const { state, actions } = useContext(StoreContext);
+  const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas } = state;
   const {
     removeDialog,
@@ -100,7 +101,6 @@ function DesignPage(props) {
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
 
   useEffect(() => {
@@ -170,6 +170,9 @@ function DesignPage(props) {
       selectTo(selected);
     } else {
       navTo(id);
+    }
+    if (visualPanelRef.current) {
+      visualPanelRef.current.focus();
     }
   }
 
@@ -401,7 +404,7 @@ function DesignPage(props) {
           )}
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
-              <div css={visualPanel}>
+              <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor

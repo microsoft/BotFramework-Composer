@@ -30,7 +30,7 @@ context('Notification Page', () => {
   it('can show lu syntax error ', () => {
     cy.visitPage('User Input');
 
-    cy.findByTestId('LUEditor').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestToDoBotWithLuisSample').click();
     });
 
