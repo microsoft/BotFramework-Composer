@@ -14,6 +14,18 @@ export const iconClass = mergeStyles({
   fontSize: FontSizes.medium,
 });
 
+export const pageRoot = css`
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: row;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
 export const flexContentSpaceBetween = css`
   display: flex;
   justify-content: space-between;
@@ -42,8 +54,6 @@ export const ContentStyle = css`
   margin-left: 2px;
   display: flex;
   border-top: 1px solid #dddddd;
-  flex: 1;
-  height: calc(100% - 165px);
   position: relative;
   nav {
     ul {

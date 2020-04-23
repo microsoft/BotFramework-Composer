@@ -1,18 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import isEqual from 'lodash/isEqual';
 import { FileInfo } from '@bfc/shared';
 
-import { Path } from './../../utility/path';
-import { IFileStorage } from './../storage/interface';
+import { Path } from '../../utility/path';
+import { IFileStorage } from '../storage/interface';
+import log from '../../logger';
+
+import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
+import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 import { ILuisConfig } from './interface';
-import log from './../../logger';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
@@ -24,6 +30,11 @@ export interface ICrossTrainConfig {
   verbose: boolean;
 }
 
+export interface IDownSamplingConfig {
+  maxImbalanceRatio: number;
+  maxUtteranceAllowed: number;
+}
+
 export class LuPublisher {
   public botDir: string;
   public dialogsDir: string;
@@ -31,6 +42,8 @@ export class LuPublisher {
   public interuptionFolderPath: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
+  public downSamplingConfig: IDownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
+
   public crossTrainConfig: ICrossTrainConfig = {
     rootIds: [],
     triggerRules: {},
@@ -65,23 +78,15 @@ export class LuPublisher {
     }
   };
 
-  public getLuisConfig = () => this.config;
-
-  public setLuisConfig = (config: ILuisConfig) => {
-    if (!isEqual(config, this.config)) {
-      this.config = config;
-    }
-  };
-
-  public setAuthoringKey = (key: string) => {
-    if (this.config) {
-      this.config.authoringKey = key;
-    }
-  };
-
-  public setCrossTrainConfig = (crossTrainConfig: ICrossTrainConfig) => {
-    if (crossTrainConfig) this.crossTrainConfig = crossTrainConfig;
-  };
+  public setPublishConfig(
+    luisConfig: ILuisConfig,
+    crossTrainConfig: ICrossTrainConfig,
+    downSamplingConfig: IDownSamplingConfig
+  ) {
+    this.config = luisConfig;
+    this.crossTrainConfig = crossTrainConfig;
+    this.downSamplingConfig = downSamplingConfig;
+  }
 
   private async _createGeneratedDir() {
     // clear previous folder
@@ -104,6 +109,33 @@ export class LuPublisher {
     await this._writeFiles(result.luResult);
   }
 
+  private _doDownSampling(luObject: any) {
+    //do bootstramp sampling to make the utterances' number ratio to 1:10
+    const bootstrapSampler = new ComposerBootstrapSampler(
+      luObject.utterances,
+      this.downSamplingConfig.maxImbalanceRatio
+    );
+    luObject.utterances = bootstrapSampler.getSampledUtterances();
+    //if detect the utterances>15000, use reservoir sampling to down size
+    const reservoirSampler = new ComposerReservoirSampler(
+      luObject.utterances,
+      this.downSamplingConfig.maxUtteranceAllowed
+    );
+    luObject.utterances = reservoirSampler.getSampledUtterances();
+    return luObject;
+  }
+
+  private async _downSizeUtterances(luContents: any) {
+    return await Promise.all(
+      luContents.map(async luContent => {
+        const result = await LuisBuilder.fromLUAsync(luContent.content);
+        const sampledResult = this._doDownSampling(result);
+        const content = luisToLuContent(sampledResult);
+        return { ...luContent, content };
+      })
+    );
+  }
+
   private async _writeFiles(crossTrainResult) {
     if (!(await this.storage.exists(this.interuptionFolderPath))) {
       await this.storage.mkDir(this.interuptionFolderPath);
@@ -121,6 +153,7 @@ export class LuPublisher {
       throw new Error('No luis file exist');
     }
     const loadResult = await this._loadLuConatents(config.models);
+    loadResult.luContents = await this._downSizeUtterances(loadResult.luContents);
     const buildResult = await this.builder.build(
       loadResult.luContents,
       loadResult.recognizers,
