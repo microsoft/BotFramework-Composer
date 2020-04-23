@@ -606,10 +606,6 @@ export class BotProjectDeploy {
         message: '> Creating App Registration ...',
       });
 
-      const graphClient = new GraphRbacManagementClient(this.graphCreds, this.tenantId, {
-        baseUri: 'https://graph.windows.net',
-      });
-
       // create the app registration
       const appCreated = await this.createApp(graphClient, name, appPassword);
       this.logger({
