@@ -11,9 +11,7 @@ import {
   IGroupRenderProps,
   IGroupedList,
 } from 'office-ui-fabric-react/lib/GroupedList';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
@@ -23,7 +21,7 @@ import debounce from 'lodash/debounce';
 import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';
 
-import { addButton, groupListStyle, root, searchBox } from './styles';
+import { groupListStyle, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';
 
 function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
@@ -84,17 +82,10 @@ interface IProjectTreeProps {
   dialogs: DialogInfo[];
   dialogId: string;
   selected: string;
-  openNewTriggerModal: () => void;
   onSelect: (id: string, selected?: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
-  onAdd: () => void;
 }
-
-const addIconProps: IIconProps = {
-  iconName: 'CircleAddition',
-  styles: { root: { fontSize: '12px' } },
-};
 
 export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const {
@@ -104,11 +95,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
     },
   } = useContext(StoreContext);
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
-  const { dialogs, dialogId, selected, openNewTriggerModal, onSelect, onDeleteTrigger, onDeleteDialog, onAdd } = props;
+  const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce(newValue => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback(mainDialog => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const addNewTriggerRef = useCallback(newTrigger => onboardingAddCoachMarkRef({ newTrigger }), []);
 
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);
@@ -147,11 +137,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   }
 
   const onRenderShowAll = () => {
-    return (
-      <ActionButton css={addButton(1)} iconProps={addIconProps} onClick={openNewTriggerModal}>
-        <span ref={addNewTriggerRef}>{formatMessage('New Trigger ..')}</span>
-      </ActionButton>
-    );
+    return null;
   };
 
   const onFilter = (_e?: any, newValue?: string): void => {
@@ -216,9 +202,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
           }
           styles={groupListStyle}
         />
-        <ActionButton iconProps={addIconProps} css={addButton(0)} onClick={onAdd} data-testid="ProjectTreeNewDialog">
-          {formatMessage('New Dialog ..')}
-        </ActionButton>
       </div>
     </Resizable>
   );
