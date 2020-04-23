@@ -11,6 +11,8 @@ import { globalHistory } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { JsonEditor } from '@bfc/code-editor';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController';
@@ -92,13 +94,20 @@ function DesignPage(props) {
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
+    onboardingAddCoachMarkRef,
   } = actions;
   const { location, match } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
+  const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
+
+  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    if (currentDialog) {
+      setCurrentDialog(currentDialog);
+    }
     const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
     if (!currentDialog && rootDialog) {
       const { search } = location;
@@ -279,15 +288,25 @@ function DesignPage(props) {
           }, [] as IBreadcrumbItem[])
         : [];
     return (
-      <Breadcrumb
-        items={items}
-        ariaLabel={formatMessage('Navigation Path')}
-        styles={breadcrumbClass}
-        data-testid="Breadcrumb"
-        onRenderItem={onRenderBreadcrumbItem}
-      />
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Breadcrumb
+          items={items}
+          ariaLabel={formatMessage('Navigation Path')}
+          styles={breadcrumbClass}
+          data-testid="Breadcrumb"
+          onRenderItem={onRenderBreadcrumbItem}
+        />
+        <Link
+          style={{ position: 'absolute', right: 0, marginTop: '22px', marginRight: '10px' }}
+          onClick={() => {
+            setDialogJsonVisibility(current => !current);
+          }}
+        >
+          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+        </Link>
+      </div>
     );
-  }, [dialogs, breadcrumb]);
+  }, [dialogs, breadcrumb, dialogJsonVisible]);
 
   async function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
     await actions.updateSkill({ projectId, targetId: -1, skillData });
@@ -365,18 +384,38 @@ function DesignPage(props) {
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}
-          onAdd={() => actions.createDialogBegin({}, onCreateDialogComplete)}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
-          openNewTriggerModal={openNewTriggerModal}
         />
         <div css={contentWrapper}>
-          {match && <ToolBar toolbarItems={toolbarItems} />}
+          {match && (
+            <ToolBar
+              toolbarItems={toolbarItems}
+              actions={actions}
+              projectId={projectId}
+              currentDialog={currentDialog}
+              openNewTriggerModal={openNewTriggerModal}
+              onCreateDialogComplete={onCreateDialogComplete}
+              onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+            />
+          )}
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
               <div css={visualPanel}>
                 {breadcrumbItems}
-                <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                {dialogJsonVisible ? (
+                  <JsonEditor
+                    key={'dialogjson'}
+                    id={'dialogjson'}
+                    onChange={data => {
+                      actions.updateDialog({ id: currentDialog.id, projectId, content: data });
+                    }}
+                    value={currentDialog.content || undefined}
+                    schema={schemas.sdk.content}
+                  />
+                ) : (
+                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                )}
               </div>
               <PropertyEditor />
             </div>

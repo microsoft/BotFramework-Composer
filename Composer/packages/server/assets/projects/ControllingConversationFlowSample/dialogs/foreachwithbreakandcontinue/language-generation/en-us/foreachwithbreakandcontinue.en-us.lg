@@ -1,16 +1,16 @@
 [import](common.lg)
 
 
-# bfdactivity-MLnfkV()
+# SendActivity_MLnfkV()
 - In continue loop, which only outputs dual.
-# bfdactivity-8JDxhd()
+# SendActivity_8JDxhd()
 - done
 
-# bfdactivity-49S9ax()
+# SendActivity_49S9ax()
 - In break loop, which breaks when index > 2
 
 
-# bfdactivity-_aqYPi()
+# SendActivity__aqYPi()
 - index: ${dialog.foreach.index} value: ${dialog.foreach.value}
-# bfdactivity-Jz-Jjl()
+# SendActivity_Jz_Jjl()
 - index: ${dialog.foreach.index} value: ${dialog.foreach.value}

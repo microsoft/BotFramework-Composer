@@ -5,10 +5,10 @@ import fs from 'fs';
 
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
-import { UserIdentity } from '../../services/pluginLoader';
 import StorageService from '../../services/storage';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
@@ -80,8 +80,13 @@ export class BotProject {
   }
 
   public init = async () => {
+    // those 2 migrate methods shall be removed after a period of time
     await this._reformProjectStructure();
-
+    try {
+      await this._replaceDashInTemplateName();
+    } catch (_e) {
+      // when re-index opened bot, file write may error
+    }
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
     this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
@@ -142,6 +147,14 @@ export class BotProject {
 
     this.skills = skills;
     return skills;
+  };
+
+  public exportToZip = cb => {
+    try {
+      this.fileStorage.zip(this.dataDir, cb);
+    } catch (e) {
+      console.log('error zipping assets', e);
+    }
   };
 
   public getSchemas = () => {
@@ -558,6 +571,133 @@ export class BotProject {
 
       await this.ensureDirExists(Path.dirname(absolutePath));
       await this.fileStorage.writeFile(absolutePath, content);
+    }
+  };
+
+  private _replaceDashInTemplateName = async () => {
+    const files: { [key: string]: string }[] = [];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.json'];
+    const replacers = [
+      (line: string) => {
+        return line.replace('bfdactivity-', 'SendActivity_');
+      },
+      (line: string) => {
+        return line.replace('bfdprompt-', 'TextInput_Prompt_');
+      },
+      (line: string) => {
+        return line.replace('bfdinvalidPrompt-', 'TextInput_InvalidPrompt_');
+      },
+      (line: string) => {
+        return line.replace('bfdunrecognizedPrompt-', 'TextInput_UnrecognizedPrompt_');
+      },
+      (line: string) => {
+        return line.replace('bfddefaultValueResponse-', 'TextInput_DefaultValueResponse_');
+      },
+    ];
+
+    for (const pattern of patterns) {
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
+      for (const filePath of paths.sort()) {
+        let fileChanged = false;
+        const realFilePath: string = Path.join(root, filePath);
+        if ((await this.fileStorage.stat(realFilePath)).isFile) {
+          let content: string = await this.fileStorage.readFile(realFilePath);
+          const fileType = Path.extname(filePath);
+          const newContentLines: string[] = [];
+          if (fileType === '.lg') {
+            const templateNamePattern = /^\s*#\s*.*/;
+            const templateBodyLinePattern = /^\s*-.*/;
+            const lines = content.split('\n');
+            for (const line of lines) {
+              // lg name line
+              if (templateNamePattern.test(line) && line.includes('-')) {
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newLine = newLine.replace('-', '_');
+                newContentLines.push(newLine);
+                fileChanged = true;
+
+                // lg body line
+              } else if (templateBodyLinePattern.test(line) && (line.includes('@{') || line.includes('${'))) {
+                let newContentLine = line;
+                replacers.map(replacer => {
+                  newContentLine = replacer(newContentLine);
+                });
+                newContentLines.push(newContentLine);
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          if (fileType === '.dialog') {
+            const lines = content.split('\n');
+            const callingTempaltePattern = /^\s*"[\w]+":\s*"\$\{.*\}"/;
+            for (const line of lines) {
+              if (callingTempaltePattern.test(line) && line.includes('-')) {
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newLine = newLine.replace('-', '_');
+                newContentLines.push(newLine);
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          // card
+          if (fileType === '.json' && Path.basename(filePath) !== 'appsettings.json') {
+            const lines = content.split('\n');
+            const activityInJson = /^\s*"activity":\s*"\[.*\]"/;
+            for (const line of lines) {
+              if (activityInJson.test(line) && line.includes('-')) {
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newLine = newLine.replace('-', '_');
+
+                newContentLines.push(newLine);
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          if (fileChanged) {
+            files.push({ realFilePath, content });
+          }
+        }
+      }
+    }
+
+    for (const file of files) {
+      const { realFilePath, content } = file;
+      await this.fileStorage.removeFile(realFilePath);
+
+      try {
+        const dirPath = Path.dirname(realFilePath);
+        await this.fileStorage.rmDir(dirPath);
+      } catch (_error) {
+        // pass , dir may not empty
+      }
+
+      await this.ensureDirExists(Path.dirname(realFilePath));
+      await this.fileStorage.writeFile(realFilePath, content);
     }
   };
 

@@ -14,6 +14,8 @@ import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
+import { pluginLoader } from '@bfc/plugin-loader';
+import chalk from 'chalk';
 
 import { BotProjectService } from './services/project';
 import { getAuthProvider } from './router/auth';
@@ -21,7 +23,6 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
-import pluginLoader from './services/pluginLoader';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -98,6 +99,8 @@ export async function start(pluginDir?: string) {
     // always authorize all api routes, it will be a no-op if no auth provider set
     app.use(`${BASEURL}/api`, authorize, apiRouter);
 
+    // next needs to be an arg in order for express to recognize this as the error handler
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
       if (err) {
         log(err);
@@ -115,7 +118,9 @@ export async function start(pluginDir?: string) {
   await new Promise(resolve => {
     server = app.listen(port, () => {
       if (process.env.NODE_ENV === 'production') {
-        log(`\n\nComposer now running at:\n\nhttp://localhost:${port}\n`);
+        // We don't use the debug logger here because we always want it to be shown.
+        // eslint-disable-next-line no-console
+        console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
       }
       resolve();
     });

@@ -4,6 +4,8 @@
 import * as fs from 'fs';
 
 import { Request, Response } from 'express';
+import { Archiver } from 'archiver';
+import { PluginLoader } from '@bfc/plugin-loader';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -11,7 +13,6 @@ import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
 import settings from '../settings';
-import { PluginLoader } from '../services/pluginLoader';
 
 import { Path } from './../utility/path';
 
@@ -43,6 +44,7 @@ async function createProject(req: Request, res: Response) {
   log('Attempting to create project at %s', path);
 
   try {
+    await BotProjectService.cleanProject(locationRef);
     const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef, user);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
@@ -282,6 +284,19 @@ async function updateSkill(req: Request, res: Response) {
   }
 }
 
+async function exportProject(req: Request, res: Response) {
+  const currentProject = await BotProjectService.getProjectById(req.params.projectId);
+  currentProject.exportToZip((archive: Archiver) => {
+    archive.on('error', err => {
+      res.status(500).send({ error: err.message });
+    });
+
+    res.attachment('tmp-archive.zip');
+
+    archive.pipe(res);
+  });
+}
+
 async function updateEnvSettings(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -375,6 +390,7 @@ export const ProjectController = {
   updateDefaultSlotEnvSettings,
   updateSkill,
   publishLuis,
+  exportProject,
   saveProjectAs,
   createProject,
   getAllProjects,

@@ -16,7 +16,7 @@ import { oneOfField } from '../styles';
 import { getOptions, getSelectedOption } from './utils';
 
 const OneOfField: React.FC<FieldProps> = props => {
-  const { schema, value, definitions } = props;
+  const { definitions, description, id, label, schema, required, uiOptions, value } = props;
   const pluginConfig = usePluginConfig();
   const options = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
   const initialSelectedOption = useMemo(
@@ -49,7 +49,13 @@ const OneOfField: React.FC<FieldProps> = props => {
   return (
     <div css={oneOfField.container}>
       <div css={oneOfField.label}>
-        <FieldLabel {...props} />
+        <FieldLabel
+          id={id}
+          label={label}
+          description={description}
+          helpLink={uiOptions?.helpLink}
+          required={required}
+        />
         {options && options.length > 1 && (
           <Dropdown
             id={`${props.id}-oneOf`}

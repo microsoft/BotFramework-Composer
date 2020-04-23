@@ -13,6 +13,7 @@ import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
+import { PublishTarget } from '../../store/types';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
@@ -52,7 +53,7 @@ const Publish: React.FC<PublishPageProps> = props => {
     type: DialogType.normal,
     children: {},
   });
-  const [editTarget, setEditTarget] = useState();
+  const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
 
   const isRollbackSupported = useMemo(
     () => (target, version): boolean => {
@@ -210,8 +211,8 @@ const Publish: React.FC<PublishPageProps> = props => {
     }
   }, [thisPublishHistory, selectedTargetName]);
 
-  const savePublishTarget = useMemo(
-    () => async (name, type, configuration) => {
+  const savePublishTarget = useCallback(
+    async (name: string, type: string, configuration: string) => {
       const _target = (settings.publishTargets || []).concat([
         {
           name,
@@ -233,8 +234,12 @@ const Publish: React.FC<PublishPageProps> = props => {
     [settings.publishTargets, projectId, botName]
   );
 
-  const updatePublishTarget = useMemo(
-    () => async (name, type, configuration) => {
+  const updatePublishTarget = useCallback(
+    async (name: string, type: string, configuration: string) => {
+      if (!editTarget) {
+        return;
+      }
+
       const _targets = settings.publishTargets ? [...settings.publishTargets] : [];
 
       _targets[editTarget.index] = {
@@ -264,10 +269,8 @@ const Publish: React.FC<PublishPageProps> = props => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          targetTypes={publishTypes.map(type => {
-            return { key: type.name, text: type.name };
-          })}
-          targets={settings.publishTargets}
+          types={publishTypes}
+          targets={settings.publishTargets || []}
           updateSettings={savePublishTarget}
           current={null}
           closeDialog={() => setAddDialogHidden(true)}
@@ -282,11 +285,9 @@ const Publish: React.FC<PublishPageProps> = props => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          targetTypes={publishTypes.map(type => {
-            return { key: type.name, text: type.name };
-          })}
+          types={publishTypes}
           current={editTarget ? editTarget.item : null}
-          targets={settings.publishTargets?.filter(item => editTarget && item.name != editTarget.item.name)}
+          targets={(settings.publishTargets || []).filter(item => editTarget && item.name != editTarget.item.name)}
           updateSettings={updatePublishTarget}
           closeDialog={() => setEditDialogHidden(true)}
         />
@@ -335,7 +336,7 @@ const Publish: React.FC<PublishPageProps> = props => {
     [projectId, selectedTarget, settings.publishTargets]
   );
 
-  const onEdit = async (index: number, item: any) => {
+  const onEdit = async (index: number, item: PublishTarget) => {
     const newItem = { item: item, index: index };
     setEditTarget(newItem);
     setEditDialogHidden(false);
@@ -380,7 +381,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         onDismiss={() => setAddDialogHidden(true)}
         dialogContentProps={dialogProps}
         modalProps={{ isBlocking: true }}
-        minWidth={350}
+        minWidth={450}
       >
         {dialogProps.children}
       </Dialog>
@@ -389,7 +390,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         onDismiss={() => setEditDialogHidden(true)}
         dialogContentProps={editDialogProps}
         modalProps={{ isBlocking: true }}
-        minWidth={350}
+        minWidth={450}
       >
         {editDialogProps.children}
       </Dialog>
