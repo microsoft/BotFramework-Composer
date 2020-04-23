@@ -5,6 +5,7 @@ import { ActionCreator } from '../types';
 
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
+import { setSettings } from './setting';
 
 export const getRuntimeTemplates: ActionCreator = async ({ dispatch }) => {
   try {
@@ -21,13 +22,26 @@ export const getRuntimeTemplates: ActionCreator = async ({ dispatch }) => {
   }
 };
 
-export const ejectRuntime: ActionCreator = async ({ dispatch }, projectId, name) => {
+export const ejectRuntime: ActionCreator = async (store, projectId, name) => {
+  const { dispatch, getState } = store;
   try {
     const response = await httpClient.post(`/runtime/eject/${projectId}/${name}`);
     dispatch({
       type: ActionTypes.EJECT_SUCCESS,
       payload: response.data,
     });
+    if (response.data.settings && response.data.settings.path) {
+      const { settings: oldsettings, botName } = getState();
+      setSettings(store, projectId, botName, {
+        ...oldsettings,
+        runtime: {
+          ...oldsettings.runtime,
+          customRuntime: true,
+          path: response.data.settings.path,
+          command: response.data.settings.startCommand,
+        },
+      });
+    }
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,

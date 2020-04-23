@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import path from 'path';
+
 import { jsx } from '@emotion/core';
 import { useState, useContext, useEffect } from 'react';
 import formatMessage from 'format-message';
@@ -78,20 +80,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
     await actions.ejectRuntime(projectId, template.key);
     closeEjectModal();
   };
-
-  useEffect(() => {
-    if (runtimeSettings.path) {
-      actions.setSettings(projectId, botName, {
-        ...settings,
-        runtime: {
-          ...settings.runtime,
-          customRuntime: true,
-          path: location + '/runtime',
-          command: runtimeSettings.startCommand,
-        },
-      });
-    }
-  }, [runtimeSettings]);
 
   return botName ? (
     <div css={runtimeSettingsStyle}>

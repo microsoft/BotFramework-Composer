@@ -2,20 +2,26 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useMemo, useState, useContext } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { IDropdown, IDropdownOption } from 'office-ui-fabric-react';
 
 import { StoreContext } from '../../../store';
 
 import { modalControlGroup } from './style';
 
-export const EjectModal = props => {
-  const [availableRuntimeTemplates, setRuntimeTemplates] = useState();
-  const [selectedTemplate, setSelectedTemplate] = useState();
+export interface EjectModalProps {
+  ejectRuntime: (template: any) => void;
+  hidden: boolean;
+  closeModal: () => void;
+}
+
+export const EjectModal: React.FC<EjectModalProps> = props => {
+  const [selectedTemplate, setSelectedTemplate] = useState<any | undefined>();
   const { state, actions } = useContext(StoreContext);
   const { runtimeTemplates } = state;
 
@@ -23,22 +29,20 @@ export const EjectModal = props => {
     actions.getRuntimeTemplates();
   }, []);
 
-  useEffect(() => {
-    // format for use in a choicegroup
-    const formatted = runtimeTemplates.map(t => {
+  const availableRuntimeTemplates = useMemo(() => {
+    return runtimeTemplates.map(t => {
       return {
-        ...t,
+        data: { ...t },
         text: t.name,
         key: t.key,
       };
     });
-
-    // set to choicegroup variable
-    setRuntimeTemplates(formatted);
   }, [runtimeTemplates]);
 
-  const selectTemplate = (ev, template) => {
-    setSelectedTemplate(template);
+  const selectTemplate = (ev, item?: IDropdownOption) => {
+    if (item) {
+      setSelectedTemplate(item.data);
+    }
   };
 
   const doEject = () => {

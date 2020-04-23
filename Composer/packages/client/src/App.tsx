@@ -20,6 +20,7 @@ import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { CreationFlowStatus } from './constants';
+import { AppUpdater } from './components/AppUpdater';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -209,6 +210,7 @@ export const App: React.FC = () => {
           </ErrorBoundary>
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
+        {(window as any).__IS_ELECTRON__ && <AppUpdater />}
       </div>
     </Fragment>
   );

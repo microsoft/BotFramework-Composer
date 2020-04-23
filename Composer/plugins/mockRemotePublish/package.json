@@ -18,5 +18,9 @@
     "portfinder": "^1.0.25",
     "rimraf": "^3.0.2",
     "uuid": "^7.0.1"
+  },
+  "devDependencies": {
+    "@bfc/plugin-loader": "file:../../packages/extensions/plugin-loader",
+    "@types/uuid": "^7.0.2"
   }
 }

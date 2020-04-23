@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+export * from './appUpdate';
 export * from './dialog';
 export * from './editors';
 export * from './error';

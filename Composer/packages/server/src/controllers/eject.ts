@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 import path from 'path';
 
-import { pluginLoader, PluginLoader } from '../services/pluginLoader';
+import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
+
 import { BotProjectService } from '../services/project';
 import { copyDir } from '../utility/storage';
 import { LocalDiskStorage } from '../models/storage/localDiskStorage';
@@ -21,6 +22,7 @@ export const EjectController = {
       const template = source[0];
       const runtimePath = path.join(currentProject.dir, 'runtime');
       if (!(await currentProject.fileStorage.exists(runtimePath))) {
+        // used to read bot project template from source (bundled in plugin)
         const fileStorage = new LocalDiskStorage();
         await copyDir(template.path, fileStorage, runtimePath, currentProject.fileStorage);
         res.json({
