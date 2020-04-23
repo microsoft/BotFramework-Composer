@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export enum FileChangeType {
+export enum ChangeType {
   DELETE = 1,
   UPDATE,
   CREATE,
@@ -20,7 +20,8 @@ export interface ResourceInfo {
 
 export type FileErrorHandler = (error) => void;
 
-export interface IFileTask {
-  file: ResourceInfo;
-  changeType: FileChangeType;
+export interface IFileChange {
+  id: string;
+  change: string;
+  type: ChangeType;
 }
