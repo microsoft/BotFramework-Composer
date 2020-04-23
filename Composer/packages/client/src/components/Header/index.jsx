@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { useContext, useCallback } from 'react';
+import { useContext, useCallback, Fragment } from 'react';
 
 import composerIcon from '../../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../../constants';
@@ -35,8 +35,12 @@ export const Header = props => {
         src={composerIcon}
       />
       <div css={title}>{formatMessage('Bot Framework Composer')}</div>
-      <div css={divider} />
-      <div css={botName}>{props.botName}</div>
+      {props.botName && (
+        <Fragment>
+          <div css={divider} />
+          <span css={botName}>{`${props.botName} (${props.locale})`}</span>
+        </Fragment>
+      )}
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}
