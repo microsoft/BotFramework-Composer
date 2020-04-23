@@ -3,6 +3,7 @@
 import has from 'lodash/has';
 import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
+import { SDKKinds } from '@bfc/shared';
 
 import {
   JsonDiffAdds,
@@ -36,26 +37,37 @@ import {
  * update { activity }, pass this to json diff, get property changes.
  */
 
-export function isDialogObject(value: any): boolean {
+function isDialogObject(value: any): boolean {
   return typeof value === 'object' && has(value, '$kind');
 }
 
-export function isDialogObject2(value: any): boolean {
-  return typeof value === 'object' && has(value, '$kind') && has(value, '$designer.id');
-}
-
-export function isSameDialogObject(value1: any, value2: any): boolean {
+export function isSameDesignerId(value1: any, value2: any): boolean {
   return (
     typeof value1 === 'object' &&
     typeof value2 === 'object' &&
-    get(value1, '$kind') === get(value2, '$kind') &&
     get(value1, '$designer.id') === get(value2, '$designer.id')
   );
 }
 
+export function isSameKind(value1: any, value2: any): boolean {
+  return typeof value1 === 'object' && typeof value2 === 'object' && get(value1, '$kind') === get(value2, '$kind');
+}
+
+function isSkipDialogObject(value1: any, value2: any): boolean {
+  const skipKinds = [SDKKinds.AdaptiveDialog, SDKKinds.OnUnknownIntent];
+  const kind1 = get(value1, '$kind');
+  const kind2 = get(value2, '$kind');
+  return skipKinds.includes(kind1) || skipKinds.includes(kind2);
+}
+
+function isSameType(value1, value2) {
+  if (typeof value1 !== 'object' || typeof value2 !== 'object') return false;
+  return Array.isArray(value1) === Array.isArray(value2);
+}
+
 // define dialog walk stop point
 export const defualtDialogStopComparison: IStopper = (value1: any, value2: any) => {
-  return !Array.isArray(value2) && !isDialogObject(value2) && defualtJSONStopComparison(value1, value2);
+  return !isSameType(value1, value2) || defualtJSONStopComparison(value1, value2);
 };
 
 // define json2 compare to json1 at path is an add.
@@ -66,11 +78,14 @@ export const defaultDialogAddDiffer: IDiffer = (json1: any, json2: any, path: st
 export const defaultDialogUpdateDiffer: IDiffer = (json1: any, json2: any, path: string) => {
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
+
   return (
     hasWithJsonPath(json1, path) &&
     hasWithJsonPath(json2, path) &&
-    isSameDialogObject(value2, value2) &&
-    !isEqual(value1, value2)
+    isDialogObject(value1) &&
+    isDialogObject(value2) &&
+    !isSkipDialogObject(value1, value2) &&
+    (!isSameKind(value1, value2) || !isEqual(value1, value2))
   );
 };
 
@@ -87,7 +102,7 @@ export function DialogDiffDelete(prevJson, currJson, differ?: IDiffer, stopper?:
 export function DialogDiffUpdate(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJSONChangeUpdate[] {
   const usedDiffer = differ || defaultDialogUpdateDiffer;
   const usedStopper = stopper || defualtDialogStopComparison;
-  return JsonDiffUpdates(currJson, prevJson, usedDiffer, usedStopper);
+  return JsonDiffUpdates(prevJson, currJson, usedDiffer, usedStopper);
 }
 
 export function DialogDiff(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJsonChanges {
