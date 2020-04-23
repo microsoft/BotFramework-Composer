@@ -43,7 +43,7 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'trigger',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'newTrigger',
+        targetId: 'addNew',
       },
       {
         id: 'userInput',
@@ -70,7 +70,7 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'welcomeMessage',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'newTrigger',
+        targetId: 'addNew',
       },
     ],
     title: formatMessage('Add welcome message'),
@@ -81,7 +81,7 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'intentTrigger',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'newTrigger',
+        targetId: 'addNew',
       },
     ],
     title: formatMessage('Add an intent trigger'),

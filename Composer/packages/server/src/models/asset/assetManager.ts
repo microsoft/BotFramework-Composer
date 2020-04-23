@@ -3,6 +3,7 @@
 
 import find from 'lodash/find';
 import { ProjectTemplate } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -10,7 +11,6 @@ import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { UserIdentity } from '../../services/pluginLoader';
 import { IFileStorage } from '../storage/interface';
 
 interface TemplateData {
