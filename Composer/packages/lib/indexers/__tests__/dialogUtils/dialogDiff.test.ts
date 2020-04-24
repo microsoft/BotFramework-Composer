@@ -3,12 +3,8 @@
 
 import fs from 'fs';
 
-import set from 'lodash/set';
-import get from 'lodash/get';
-import cloneDeep from 'lodash/cloneDeep';
-
 import { DialogDiffAdd, DialogDiffUpdate } from '../../src/dialogUtils/dialogDiff';
-import { JsonPathStart } from '../../src/dialogUtils/jsonDiff';
+import { JsonPathStart, JsonInsert, JsonSet } from '../../src/dialogUtils/jsonDiff';
 
 const baseDialog = JSON.parse(fs.readFileSync(`${__dirname}/data/base.dialog`, 'utf-8'));
 
@@ -60,45 +56,23 @@ const inserts = [
   },
 ];
 
-const baseDialogAdded = adds.reduce((dialog, currentItem) => {
-  const { path, value } = currentItem;
-  return set(dialog, path, value);
-}, cloneDeep(baseDialog));
-
-const baseDialogUpdated = updates.reduce((dialog, currentItem) => {
-  const { path, value } = currentItem;
-  return set(dialog, path, value);
-}, cloneDeep(baseDialog));
-
-const baseDialogInserted = inserts.reduce((dialog, currentItem) => {
-  const { path, value } = currentItem;
-  const matched = path.match(/(.*)\[(\d+)\]$/);
-  if (!matched) throw new Error('insert path must in an array, e.g [1]');
-  const [, insertListPath, insertIndex] = matched;
-  const insertListValue = get(dialog, insertListPath);
-  if (!Array.isArray(insertListValue)) throw new Error('insert target path value is not an array');
-
-  insertListValue.splice(Number(insertIndex), 0, value);
-  return set(dialog, insertListPath, insertListValue);
-}, cloneDeep(baseDialog));
-
 describe('dialog diff', () => {
   it('inserts', () => {
-    const changes = DialogDiffAdd(baseDialog, baseDialogInserted);
+    const changes = DialogDiffAdd(baseDialog, JsonInsert(baseDialog, inserts));
     expect(changes.length).toEqual(1);
     // expect(changes[0].path).toEqual([JsonPathStart, adds[0].path].join('.'));
     // expect(changes[0].value).toEqual(changes[0].value);
   });
 
   it('adds', () => {
-    const changes = DialogDiffAdd(baseDialog, baseDialogAdded);
+    const changes = DialogDiffAdd(baseDialog, JsonSet(baseDialog, adds));
     expect(changes.length).toEqual(1);
     expect(changes[0].path).toEqual([JsonPathStart, adds[0].path].join('.'));
     expect(changes[0].value).toEqual(changes[0].value);
   });
 
   it('updates', () => {
-    const changes = DialogDiffUpdate(baseDialog, baseDialogUpdated);
+    const changes = DialogDiffUpdate(baseDialog, JsonSet(baseDialog, updates));
     expect(changes.length).toEqual(1);
     expect(changes[0].path).toEqual([JsonPathStart, updates[0].path].join('.'));
     expect(changes[0].value).toEqual(changes[0].value);

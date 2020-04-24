@@ -2,6 +2,9 @@
 // Licensed under the MIT License.
 import has from 'lodash/has';
 import get from 'lodash/get';
+import set from 'lodash/set';
+import isEqual from 'lodash/isEqual';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { JsonWalk, VisitorFunc } from '../utils/jsonWalk';
 
@@ -60,6 +63,8 @@ export function hasWithJsonPath(value, path) {
  * case 1: they both are object walk-able value, same type, e.g. {}, {a:1} -> false,
  * case 2: they are not same type, e.g. {}, [] -> true
  * case 3: one of them is non-walk-able type, e.g. 1, {} -> true
+ * TODO:
+ * case 4: both are array, [], [] -> listDiff
  */
 export const defualtJSONStopComparison: IStopper = (json1: any, json2: any, path: string) => {
   const value1 = getWithJsonPath(json1, path);
@@ -80,8 +85,12 @@ export const defaultJSONAddDiffer: IDiffer = (json1: any, json2: any, path: stri
 export const defaultJSONUpdateDiffer: IDiffer = (json1: any, json2: any, path: string, stopper: IStopper) => {
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
+
+  // TODO handle array diff
+
   const isStop = stopper(json1, json2, path);
-  const isChange = isStop && hasWithJsonPath(json1, path) && hasWithJsonPath(json2, path) && value1 !== value2;
+  // _isEqual comparison use http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero
+  const isChange = isStop && hasWithJsonPath(json1, path) && hasWithJsonPath(json2, path) && isEqual(value1, value2);
   return { isChange, isStop };
 };
 
@@ -131,10 +140,52 @@ export function JsonDiffUpdates(prevJson, currJson, differ?: IDiffer, stopper?: 
   return results;
 }
 
+/**
+ * Why both need JsonDiff & ListDiff ?
+ *
+ * 1. Diff an object with key (path), compararion happens inside this key field.
+ * if key `add` or `delete`, absolutely a change happen on this key (path).
+ * if key is same, compare this key's right value would know it's an `update` or not.
+ *
+ * 2. Diff a list with key like [0],[1], comparation may happen cross it's siblings
+ * if key '[4]' is added, and list.length + 1, it's a simple `add` change.
+ * if key '[4]' is deleted, and list.length - 1, it's a delete happens somewhere, to figure out where, we need compararion cross all list item.
+ * if all key is same, which means list.length is same, the fact probably be `update on [1] & add on [5] & delete on [0]` .
+ *
+ * @param prevJson {[key:string]: any}
+ * @param currJson
+ * @param differ
+ * @param stopper
+ */
 export function JsonDiff(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJsonChanges {
   return {
     adds: JsonDiffAdds(prevJson, currJson, differ, stopper),
     deletes: JsonDiffDeletes(prevJson, currJson, differ, stopper),
     updates: JsonDiffUpdates(prevJson, currJson, differ, stopper),
   };
+}
+
+/**
+ * Utils
+ */
+
+export function JsonSet(base: any, updates: { path: string; value: any }[]) {
+  return updates.reduce((dialog, currentItem) => {
+    const { path, value } = currentItem;
+    return set(dialog, path, value);
+  }, cloneDeep(base));
+}
+
+export function JsonInsert(base: any, updates: { path: string; value: any }[]) {
+  return updates.reduce((dialog, currentItem) => {
+    const { path, value } = currentItem;
+    const matched = path.match(/(.*)\[(\d+)\]$/);
+    if (!matched) throw new Error('insert path must in an array, e.g [1]');
+    const [, insertListPath, insertIndex] = matched;
+    const insertListValue = insertListPath ? get(dialog, insertListPath) : base;
+    if (!Array.isArray(insertListValue)) throw new Error('insert target path value is not an array');
+
+    insertListValue.splice(Number(insertIndex), 0, value);
+    return insertListPath ? set(dialog, insertListPath, insertListValue) : insertListValue;
+  }, cloneDeep(base));
 }

@@ -34,57 +34,85 @@ import {
   hasWithJsonPath,
 } from './jsonDiff';
 
+interface DialogObject {
+  $kind: SDKKinds;
+  $designer?: {
+    id: string | number;
+  };
+}
+
 function isDialogObject(value: any): boolean {
   return typeof value === 'object' && has(value, '$kind');
 }
 
-export function isSameDesignerIdDialogObject(value1: any, value2: any): boolean {
-  return (
-    typeof value1 === 'object' &&
-    typeof value2 === 'object' &&
-    get(value1, '$designer.id') === get(value2, '$designer.id')
-  );
+/**
+ *
+ * @param value1
+ * @param value2
+ * if both have $designer.id, they must be same.
+ */
+export function isSameDesignerId(value1: DialogObject, value2: DialogObject): boolean {
+  if (has(value1, '$designer.id') === false && has(value2, '$designer.id') === false) return true;
+  return get(value1, '$designer.id') === get(value2, '$designer.id');
 }
 
-export function isSameKind(value1: any, value2: any): boolean {
-  return typeof value1 === 'object' && typeof value2 === 'object' && get(value1, '$kind') === get(value2, '$kind');
+/**
+ *
+ * @param value1
+ * @param value2
+ *  if both have $kind, they must be same.
+ */
+export function isSameKind(value1: DialogObject, value2: DialogObject): boolean {
+  if (has(value1, '$kind') === false && has(value2, '$kind') === false) return true;
+  return get(value1, '$kind') === get(value2, '$kind');
 }
 
-function isSkipDialogObject(value1: any, value2: any): boolean {
+function isSkipDialogObject(value1: DialogObject, value2: DialogObject): boolean {
   const skipKinds = [SDKKinds.AdaptiveDialog, SDKKinds.OnUnknownIntent];
   const kind1 = get(value1, '$kind');
   const kind2 = get(value2, '$kind');
   return skipKinds.includes(kind1) || skipKinds.includes(kind2);
 }
 
-function isSameType(value1, value2) {
+export function isSameType(value1, value2) {
   if (typeof value1 !== 'object' || typeof value2 !== 'object') return false;
   return Array.isArray(value1) === Array.isArray(value2);
 }
 
-// define json walk stop point.
+/**
+ *
+ * @param json1
+ * @param json2
+ * @param path
+ * compare json2 to json1 json at path should stop walk
+ * case 1: extend default json stop comparision.
+ * case 2: not same $kind type
+ * case 3: not same $designer.id, if exist
+ */
 export const defualtDialogStopComparison: IStopper = (json1: any, json2: any, path: string) => {
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
-  return !isSameType(value1, value2) || defualtJSONStopComparison(json1, json2, path);
+  return (
+    !isSameKind(value1, value2) || !isSameDesignerId(value1, value2) || defualtJSONStopComparison(json1, json2, path)
+  );
 };
 
-// define json2 compare to json1 at path is an add.
+// compare json2 to json1 at path is an add.
 export const defaultDialogAddDiffer: IDiffer = (json1: any, json2: any, path: string, stopper: IStopper) => {
+  // TODO: ['a','b','c'] -> ['x','a','b','c']  is an add at $0, not add at $3
   return defaultJSONAddDiffer(json1, json2, path, stopper);
 };
 
-// define json2 compare to json1 at path is an update.
+// compare json2 to json1 at path is an update.
 export const defaultDialogUpdateDiffer: IDiffer = (json1: any, json2: any, path: string, stopper: IStopper) => {
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
+
+  const isSameStructure =
+    hasWithJsonPath(json1, path) && hasWithJsonPath(json2, path) && isDialogObject(value1) && isDialogObject(value2);
+
   const isChange =
-    hasWithJsonPath(json1, path) &&
-    hasWithJsonPath(json2, path) &&
-    isDialogObject(value1) &&
-    isDialogObject(value2) &&
-    !isSkipDialogObject(value1, value2) &&
-    (!isSameKind(value1, value2) || !isEqual(value1, value2));
+    isSameStructure && !isSkipDialogObject(value1, value2) && (!isSameKind(value1, value2) || !isEqual(value1, value2));
   const isStop = isChange || stopper(json1, json2, path);
   return { isChange, isStop };
 };
