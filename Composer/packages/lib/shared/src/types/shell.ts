@@ -70,4 +70,5 @@ export interface ShellApi {
   redo: () => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
+  announce: (message: string) => void;
 }

@@ -78,6 +78,8 @@ const initialState: State = {
   },
   clipboardActions: [],
   publishTypes: [],
+  publishTargets: [],
+  runtimeTemplates: [],
   publishHistory: {},
   userSettings: storage.get('userSettings', {
     codeEditor: {
@@ -88,6 +90,10 @@ const initialState: State = {
     propertyEditorWidth: 400,
     dialogNavWidth: 180,
   }),
+  runtimeSettings: {
+    path: '',
+    startCommand: '',
+  },
   announcement: undefined,
   appUpdate: {
     progressPercent: 0,
