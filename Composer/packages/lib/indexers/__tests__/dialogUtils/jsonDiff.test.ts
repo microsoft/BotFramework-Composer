@@ -28,7 +28,7 @@ const rhs = {
 };
 
 describe('json diff', () => {
-  it('get json changes path & value', () => {
+  it('get all changes', () => {
     const changes = JsonDiff(lhs, rhs);
     expect(changes.adds.length).toEqual(2);
     expect(changes.adds[0].path).toEqual('$.foo.bar.c[2]');

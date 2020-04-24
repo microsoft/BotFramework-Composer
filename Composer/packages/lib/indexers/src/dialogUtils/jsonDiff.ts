@@ -25,19 +25,15 @@ export interface IJsonChanges {
   updates: IJSONChangeUpdate[];
 }
 
-export type IDiffer = (json1, json2, path: string) => boolean;
-export type IStopper = (value1, value2) => boolean;
+export type IDiffer = (
+  json1: any,
+  json2: any,
+  path: string,
+  stopper: IStopper
+) => { isChange: boolean; isStop: boolean };
+export type IStopper = (json1: any, json2: any, path: string) => boolean;
 
 export const JsonPathStart = '$';
-
-// TODO:
-/**
- * TODO:
- * 1. array.insert()
- *   [1,2,3] -> [0,1,2,3]
- *   is an add at [0];
- *
- */
 
 export function jsonPathToObjectPath(path: string) {
   // eslint-disable-next-line security/detect-non-literal-regexp
@@ -57,38 +53,36 @@ export function hasWithJsonPath(value, path) {
 
 /**
  *
- * @param value1
- * @param value2
- *
- * {}, {a:1} false
- * {}, []    true
- * 1, {}     true
- * 'a', 'a'  true
+ * @param json1
+ * @param json2
+ * @param path
+ * compare json2 to json1 json at path should stop walk
+ * case 1: they both are object walk-able value, same type, e.g. {}, {a:1} -> false,
+ * case 2: they are not same type, e.g. {}, [] -> true
+ * case 3: one of them is non-walk-able type, e.g. 1, {} -> true
  */
-
-// define json walk stop point
-export const defualtJSONStopComparison: IStopper = (value1: any, value2: any) => {
-  if (typeof value1 !== 'object' || typeof value2 !== 'object') return true;
-  if (Array.isArray(value1) && !Array.isArray(value2)) return true;
-  if (Array.isArray(value2) && !Array.isArray(value1)) return true;
+export const defualtJSONStopComparison: IStopper = (json1: any, json2: any, path: string) => {
+  const value1 = getWithJsonPath(json1, path);
+  const value2 = getWithJsonPath(json2, path);
+  if (typeof value1 !== 'object' || typeof value2 !== 'object') return true; // case 3
+  if (Array.isArray(value1) !== Array.isArray(value2)) return true; // case 2
   return false;
 };
 
-// define json2 compare to json1 at path is an add.
-export const defaultJSONAddDiffer: IDiffer = (json1: any, json2: any, path: string) => {
-  return hasWithJsonPath(json1, path) === false && hasWithJsonPath(json2, path) === true;
+// compare json2 to json1 at path is an add.
+export const defaultJSONAddDiffer: IDiffer = (json1: any, json2: any, path: string, stopper: IStopper) => {
+  const isChange = hasWithJsonPath(json1, path) === false && hasWithJsonPath(json2, path) === true;
+  const isStop = isChange || stopper(json1, json2, path);
+  return { isChange, isStop };
 };
 
-// define json2 compare to json1 at path is an update.
-export const defaultJSONUpdateDiffer: IDiffer = (json1: any, json2: any, path: string) => {
+// compare json2 to json1 at path is an update.
+export const defaultJSONUpdateDiffer: IDiffer = (json1: any, json2: any, path: string, stopper: IStopper) => {
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
-  return (
-    hasWithJsonPath(json1, path) &&
-    hasWithJsonPath(json2, path) &&
-    value1 !== value2 &&
-    defualtJSONStopComparison(value1, value2)
-  );
+  const isStop = stopper(json1, json2, path);
+  const isChange = isStop && hasWithJsonPath(json1, path) && hasWithJsonPath(json2, path) && value1 !== value2;
+  return { isChange, isStop };
 };
 
 export function JsonDiffAdds(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJSONChangeAdd[] {
@@ -97,12 +91,11 @@ export function JsonDiffAdds(prevJson, currJson, differ?: IDiffer, stopper?: ISt
   const usedDiffer = differ || defaultJSONAddDiffer;
   const usedStopper = stopper || defualtJSONStopComparison;
   const visitor: VisitorFunc = (path, value) => {
-    const preValue = getWithJsonPath(prevJson, path);
-    if (usedDiffer(prevJson, currJson, path)) {
+    const { isChange, isStop } = usedDiffer(prevJson, currJson, path, usedStopper);
+    if (isChange) {
       results.push({ path, value });
-      return true;
     }
-    if (usedStopper(preValue, value)) {
+    if (isStop) {
       return true;
     }
 
@@ -123,12 +116,12 @@ export function JsonDiffUpdates(prevJson, currJson, differ?: IDiffer, stopper?: 
   const usedStopper = stopper || defualtJSONStopComparison;
 
   const visitor: VisitorFunc = (path, value) => {
-    const preValue = getWithJsonPath(prevJson, path);
-    if (usedDiffer(prevJson, currJson, path)) {
+    const { isChange, isStop } = usedDiffer(prevJson, currJson, path, usedStopper);
+    if (isChange) {
+      const preValue = getWithJsonPath(prevJson, path);
       results.push({ path, preValue, value });
-      return true;
     }
-    if (usedStopper(preValue, value)) {
+    if (isStop) {
       return true;
     }
     return false;
