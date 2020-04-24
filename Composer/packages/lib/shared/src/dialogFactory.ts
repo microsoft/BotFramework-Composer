@@ -7,9 +7,9 @@ import merge from 'lodash/merge';
 import { DesignerData } from './types/sdk';
 import { copyAdaptiveAction } from './copyUtils';
 import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
-import { MicrosoftIDialog } from './types';
+import { MicrosoftIDialog, LuIntentSection } from './types';
 import { SDKKinds } from './types';
-import { ExternalResourceHandlerAsync } from './copyUtils/ExternalApi';
+import { FieldProcessorAsync } from './copyUtils/ExternalApi';
 import { generateDesignerId } from './generateUniqueId';
 
 interface DesignerAttributes {
@@ -89,21 +89,30 @@ export const getDesignerId = (data?: DesignerData) => {
   return newDesigner;
 };
 
-export const deepCopyAction = async (data, copyLgTemplate: ExternalResourceHandlerAsync<string>) => {
+export const deepCopyAction = async (
+  data,
+  copyLgTemplate: FieldProcessorAsync<string>,
+  copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
+) => {
   return await copyAdaptiveAction(data, {
     getDesignerId,
-    transformLgField: copyLgTemplate,
+    copyLgField: copyLgTemplate,
+    copyLuField: copyLuIntent,
   });
 };
 
-export const deepCopyActions = async (actions: any[], copyLgTemplate: ExternalResourceHandlerAsync<string>) => {
+export const deepCopyActions = async (
+  actions: any[],
+  copyLgTemplate: FieldProcessorAsync<string>,
+  copyLuIntent: FieldProcessorAsync<LuIntentSection | string | undefined>
+) => {
   // NOTES: underlying lg api for writing new lg template to file is not concurrency-safe,
   //        so we have to call them sequentially
   // TODO: copy them parralleled via Promise.all() after optimizing lg api.
   const copiedActions: any[] = [];
   for (const action of actions) {
     // Deep copy nodes with external resources
-    const copy = await deepCopyAction(action, copyLgTemplate);
+    const copy = await deepCopyAction(action, copyLgTemplate, copyLuIntent);
     copiedActions.push(copy);
   }
   return copiedActions;
