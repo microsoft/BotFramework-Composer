@@ -19,6 +19,7 @@ Plugins currently have access to the following functional areas:
 * Storage - plugins can override the built in filesystem storage with a new way to read, write and access bot projects.
 * Web server - plugins can add additional web routes to Composer's web server instance.
 * Publishing - plugins can add publishing mechanisms
+* Runtime Templates - plugins can provide a runtime template used when "ejecting" from Composer
 
 Combining these endpoints, it is possible to achieve scenarios such as:
 
@@ -42,7 +43,7 @@ Currently, plugins can be loaded into Composer using 1 of 2 methods:
 
 The simplest form of a plugin module is below:
 
-```
+```ts
 export default async (composer: any): Promise<void> => {
 
   // call methods (see below) on the composer API
@@ -82,7 +83,7 @@ By default, the entire user profile is serialized to JSON and stored in the sess
 
 For example, the below code demonstrates storing only the user ID in the session during serialization, and the use of a database to load the full profile out of a database using that id during deserialization.
 
-```
+```ts
 const serializeUser = function(user, done) {
   done(null, user.id);
 };
@@ -104,7 +105,7 @@ This is primarily for use with authentication-related URLs. While `/login` is al
 
 For example, when using oauth, there is a secondary URL for receiving the auth callback.  This has to be whitelisted, otherwise access will be denied to the callback URL and it will fail.
 
-```
+```ts
 // define a callback url
 composer.addWebRoute('get','/oauth/callback', someFunction);
 
@@ -125,7 +126,7 @@ This is for use in the web route implementations to get user and provide it to o
 
 For example:
 
-```
+```ts
 const RequestHandlerX = async (req, res) => {
 
   const user = await PluginLoader.getUserFromRequest(req);
@@ -160,7 +161,7 @@ If an authentication plugin is not configured, or the user is not logged in, the
 
 The class is expected to be in the form:
 
-```
+```ts
 class CustomStorage implements IFileStorage {
   constructor(conn: StorageConnection, user?: UserIdentity) {
     ...
@@ -190,7 +191,7 @@ Signature for middleware is `(req, res, next) => {}`
 
 For example:
 
-```
+```ts
 // simple route
 composer.addWebRoute('get', '/hello', (req, res) => {
   res.send('HELLO WORLD!');
@@ -231,14 +232,31 @@ Publishing plugins support the following features:
 * getHistory - get a list of historical publish actions. Optional.
 * rollback - roll back to a previous publish (as provided by getHistory). Optional.
 
-##### publish(config, project, user)
+##### publish(config, project, metadata, user)
 
-##### getStatus(config, user)
+##### getStatus(config, project, user)
 
-##### getHistory(config, user)
+##### getHistory(config, project, user)
 
-##### rollback(config, versionIdentifier, user)
+##### rollback(config, project, rollbackToVersion, user)
 
+### Runtime Templates
+
+#### `composer.addRuntimeTemplate(templateInfo)`
+
+Expose a runtime template to the Composer UI. Registered templates will become available in the "Runtime settings" tab.
+When selected, the full content of the `path` will be copied into the project's `runtime` folder. Then, when a user clicks
+`Start Bot`, the `startCommand` will be executed.  The expected result is that a bot application launches and is made available
+to communicate with the Bot Framework Emulator.
+
+```ts
+await composer.addRuntimeTemplate({
+  key: 'csharp',
+  name: 'C#',
+  path: __dirname + '/../../../../BotProject/Templates/CSharp',
+  startCommand: 'dotnet run',
+});
+```
 
 ### Accessors
 

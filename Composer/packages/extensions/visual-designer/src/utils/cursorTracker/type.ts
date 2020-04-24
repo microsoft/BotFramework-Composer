@@ -7,6 +7,7 @@ export class SelectorElement {
   isSelectable: string | null;
   isNode: string | null;
   isEdgeMenu: string | null;
+  isInlineLinkElement: string | null;
   focusedId: string | null;
   selectedId: string;
   tab: string | null;
@@ -15,6 +16,7 @@ export class SelectorElement {
     this.isSelectable = element.getAttribute(AttrNames.SelectableElement);
     this.isNode = element.getAttribute(AttrNames.NodeElement);
     this.isEdgeMenu = element.getAttribute(AttrNames.EdgeMenuElement);
+    this.isInlineLinkElement = element.getAttribute(AttrNames.InlineLinkElement);
     this.focusedId = element.getAttribute(AttrNames.FocusedId);
     this.selectedId = element.getAttribute(AttrNames.SelectedId) as string;
     this.tab = element.getAttribute(AttrNames.Tab);
