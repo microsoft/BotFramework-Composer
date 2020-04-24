@@ -64,6 +64,11 @@ export function useDialogEditApi() {
     return { dialog: newDialog, cutActions };
   }
 
+  function updateRecognizer(dialogId, dialogData, recognizer) {
+    dialogData.recognizer = recognizer;
+    return dialogData;
+  }
+
   return {
     insertAction,
     insertActions,
@@ -72,5 +77,6 @@ export function useDialogEditApi() {
     deleteSelectedActions,
     copySelectedActions,
     cutSelectedActions,
+    updateRecognizer,
   };
 }

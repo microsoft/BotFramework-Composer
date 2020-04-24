@@ -47,6 +47,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     cutSelectedActions,
     deleteSelectedAction,
     deleteSelectedActions,
+    updateRecognizer,
   } = useDialogEditApi();
   const { createDialog, readDialog, updateDialog } = useDialogApi();
   const { actionsContainLuIntent } = useActionApi();
@@ -130,11 +131,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           // Create target dialog
           const newDialogId = await createDialog();
           if (!newDialogId) return;
-          const newDialogData = readDialog(newDialogId);
+          let newDialogData = readDialog(newDialogId);
 
           // Using copy->paste->delete pattern is safer than using cut->paste
           const actionsToBeMoved = await copySelectedActions(path, data, e.actionIds);
-          const newDialogWithActions = await insertActions(
+          newDialogData = await insertActions(
             newDialogId,
             newDialogData,
             `${'triggers'}[0].${'actions'}`,
@@ -143,9 +144,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           );
           if (actionsContainLuIntent(actionsToBeMoved)) {
             // auto assign recognizer type to lu
-            newDialogWithActions.recognizer = `${newDialogId}.lu`;
+            newDialogData = updateRecognizer(path, newDialogData, `${newDialogId}.lu`);
           }
-          updateDialog(newDialogId, newDialogWithActions);
+          updateDialog(newDialogId, newDialogData);
 
           // Delete moved actions
           const deleteResult = deleteSelectedActions(path, data, e.actionIds);
