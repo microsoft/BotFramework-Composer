@@ -13,15 +13,10 @@ export enum FileExtensions {
   Lg = '.lg',
 }
 
-export interface ResourceInfo {
-  name: string;
-  content: string;
-}
-
 export type FileErrorHandler = (error) => void;
 
 export interface IFileChange {
-  id: string;
+  id: string; //now use file name
   change: string;
   type: ChangeType;
 }
