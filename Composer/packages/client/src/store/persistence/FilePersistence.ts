@@ -191,10 +191,11 @@ class FilePersistence {
 
   private _getFileChanges(previousState: State, currentState: State, action: ActionType): IFileChange[] {
     let fileChanges: IFileChange[] = [];
-    const { changeType, fileExtension } = actionType2ChangeType[action.type];
+    const fileChangeType = actionType2ChangeType[action.type];
 
-    if (!changeType) return fileChanges;
+    if (!fileChangeType) return fileChanges;
 
+    const { changeType, fileExtension } = fileChangeType;
     const targetId = action.payload.id;
 
     switch (fileExtension) {
