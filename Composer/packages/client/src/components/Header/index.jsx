@@ -27,7 +27,7 @@ export const Header = props => {
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
   return (
-    <div css={headerContainer}>
+    <div role="banner" css={headerContainer}>
       <img
         style={{ marginLeft: '9px', marginTop: '6px' }}
         alt={formatMessage('Composer Logo')}

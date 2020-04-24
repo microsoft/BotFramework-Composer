@@ -390,7 +390,7 @@ function DesignPage(props) {
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
         />
-        <div css={contentWrapper}>
+        <div role="main" css={contentWrapper}>
           {match && (
             <ToolBar
               toolbarItems={toolbarItems}

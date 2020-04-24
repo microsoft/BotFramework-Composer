@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { walkAdaptiveAction } from '../../src/deleteUtils/walkAdaptiveAction';
+import { walkAdaptiveAction } from '../../src/walkerUtils';
 
 describe('walkAdaptiveAction', () => {
   it('can walk single action', () => {

@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { LuEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
-import { LuIntentSection, CodeEditorSettings, LuMetaData } from '@bfc/shared';
+import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   const { onChange, value, schema } = props;
@@ -17,8 +17,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
   let intentName = value;
   if (typeof intentName === 'object') {
     const { $kind }: any = schema?.properties || {};
-    const [, promptType] = $kind.const.split('.');
-    promptType && (intentName = new LuMetaData(`${promptType}_Response`, designerId).toString());
+    $kind.const && (intentName = new LuMetaData(new LuType($kind.const).toString(), designerId).toString());
   }
 
   const [luIntent, setLuIntent] = useState<LuIntentSection>(

@@ -35,14 +35,16 @@ const Skills: React.FC<RouteComponentProps> = () => {
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
       <div css={ContentStyle}></div>
-      <SkillSettings
-        projectId={state.projectId}
-        botName={state.botName}
-        settings={state.settings}
-        setSettings={actions.setSettings}
-        botId={state.settings.MicrosoftAppId}
-        skillHostEndpoint={state.settings.skillHostEndpoint as string | undefined}
-      />
+      <div role="main">
+        <SkillSettings
+          projectId={state.projectId}
+          botName={state.botName}
+          settings={state.settings}
+          setSettings={actions.setSettings}
+          botId={state.settings.MicrosoftAppId}
+          skillHostEndpoint={state.settings.skillHostEndpoint as string | undefined}
+        />
+      </div>
       <SkillList skills={skills} projectId={projectId} />
     </div>
   );
