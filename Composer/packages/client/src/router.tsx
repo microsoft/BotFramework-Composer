@@ -14,7 +14,6 @@ import { BASEPATH } from './constants';
 import { StoreContext } from './store';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
-const Home = React.lazy(() => import('./pages/home'));
 const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
