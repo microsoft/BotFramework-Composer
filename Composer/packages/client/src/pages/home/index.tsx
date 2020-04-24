@@ -54,7 +54,6 @@ const Home: React.FC<RouteComponentProps> = () => {
   const {
     openBotProject,
     setCreationFlowStatus,
-    fetchTemplates,
     saveTemplateId,
     fetchRecentProjects,
     onboardingAddCoachMarkRef,
@@ -70,23 +69,10 @@ const Home: React.FC<RouteComponentProps> = () => {
     }
   };
 
-  const onClickTemplate = (id: string, urlParams?: URLSearchParams) => {
-    const createParams: any = {};
-    if (urlParams) {
-      if (urlParams.get('schemaUrl')) {
-        createParams.schemaUrl = urlParams.get('schemaUrl');
-      }
-      if (urlParams.get('name')) {
-        createParams.name = urlParams.get('name');
-      }
-
-      if (urlParams.get('description')) {
-        createParams.description = urlParams.get('description');
-      }
-    }
-    saveTemplateId(id);
-    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE, createParams);
-    navigate(`home/create/template/${id}`);
+  const onClickTemplate = async (id: string) => {
+    await saveTemplateId(id);
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+    navigate(`projects/create/${id}`);
   };
 
   const addButton = <Icon styles={home.button} iconName="Add" />;
@@ -103,7 +89,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.NEW);
-          navigate(`home/createProject`);
+          navigate(`projects/create`);
         },
       },
       align: 'left',
@@ -119,7 +105,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.OPEN);
-          navigate(`home/openProject`);
+          navigate(`projects/open`);
         },
       },
       align: 'left',
@@ -135,7 +121,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`./home/saveProject/${state.projectId}`);
+          navigate(`projects/${state.projectId}/save`);
         },
       },
       align: 'left',
@@ -145,7 +131,6 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   useEffect(() => {
     fetchRecentProjects();
-    fetchTemplates();
   }, []);
 
   return (
@@ -167,7 +152,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.newBotItem}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
-                  navigate('./home/createProject');
+                  navigate('projects/create');
                 }}
               />
             </div>

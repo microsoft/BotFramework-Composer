@@ -6,19 +6,19 @@ context('Navigate Url', () => {
     cy.visit(Cypress.env('COMPOSER_URL'));
   });
 
-  it.only('should open Create From Scratch/Template window from a url', () => {
-    cy.visit(`${Cypress.env('COMPOSER_URL')}/home/createProject`);
+  it('should open Create From Scratch/Template window from a url', () => {
+    cy.visit(`${Cypress.env('COMPOSER_URL')}/projects/create`);
     cy.get('[data-testid="Create from scratch"]').should('be.visible');
     cy.get('[data-testid="Create from template"]').should('be.visible');
   });
 
-  it.only('should open Define Conversations window from a url', () => {
-    cy.visit(`${Cypress.env('COMPOSER_URL')}/home/create/template/TodoSample`);
+  it('should open Define Conversations window from a url', () => {
+    cy.visit(`${Cypress.env('COMPOSER_URL')}/projects/create/TodoSample`);
     cy.get('[data-testid="NewDialogName"]').should('be.visible');
   });
 
-  it.only('should create the Open a Bot window from a location through the specified url', () => {
-    cy.visit(`${Cypress.env('COMPOSER_URL')}/home/openProject`);
+  it('should create the Open a Bot window from a location through the specified url', () => {
+    cy.visit(`${Cypress.env('COMPOSER_URL')}/projects/open`);
     cy.get('[data-testid="SelectLocation"]').should('be.visible');
   });
 });

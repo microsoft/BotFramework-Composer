@@ -48,10 +48,10 @@ const initialFormDataError: FormDataError = {};
 
 const DefineConversation: React.FC<DefineConversationProps> = props => {
   const { onSubmit, onDismiss, onCurrentPathUpdate } = props;
-  const { state, actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const { templateId, focusedStorageFolder } = state;
   const files = get(focusedStorageFolder, 'children', []);
-  const { saveTemplateId } = actions;
+
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -69,10 +69,11 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
     return defaultName;
   };
 
-  const initalFormData: FormData = { name: getDefaultName(), description: '', location: '', schemaUrl: '' };
+  const initalFormData: FormData = { name: '', description: '', location: '', schemaUrl: '' };
   const [formData, setFormData] = useState(initalFormData);
   const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
   const [disable, setDisable] = useState(false);
+
   const updateForm = field => (e, newValue) => {
     setFormData({
       ...formData,
@@ -111,24 +112,24 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
   }, [focusedStorageFolder]);
 
   useEffect(() => {
-    const errors = validateForm(formData);
-    if (Object.keys(errors).length || !focusedStorageFolder.writable) {
-      setDisable(true);
-    } else {
-      setDisable(false);
+    if (formData.name) {
+      const errors = validateForm(formData);
+      if (Object.keys(errors).length || !focusedStorageFolder.writable) {
+        setDisable(true);
+      } else {
+        setDisable(false);
+      }
+      setFormDataErrors(errors);
     }
-    setFormDataErrors(errors);
   }, [focusedStorageFolder, formData.name]);
 
   useEffect(() => {
-    saveTemplateId(props.templateId);
-  }, []);
-
-  useEffect(() => {
-    const updatedFormData = {
-      ...formData,
-    };
-    if (props.location?.search) {
+    const formData: FormData = { name: getDefaultName(), description: '', location: '', schemaUrl: '' };
+    setFormData(formData);
+    if (props.location && props.location.search) {
+      const updatedFormData = {
+        ...formData,
+      };
       const urlSearchParams = new URLSearchParams(decodeURIComponent(props.location.search));
       const description = urlSearchParams.get('description');
       if (description) {
@@ -146,8 +147,8 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
       } else {
         updatedFormData.name = getDefaultName();
       }
+      setFormData(updatedFormData);
     }
-    setFormData(updatedFormData);
   }, [templateId]);
 
   const handleSubmit = e => {
@@ -204,7 +205,12 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
 
           <DialogFooter>
             <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-            <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} disabled={disable} />
+            <PrimaryButton
+              onClick={handleSubmit}
+              text={formatMessage('Next')}
+              disabled={disable}
+              data-testid="SubmitNewBotBtn"
+            />
           </DialogFooter>
         </form>
       </DialogWrapper>

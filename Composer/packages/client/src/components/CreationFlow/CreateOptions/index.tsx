@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState, Fragment, useEffect, useMemo } from 'react';
+import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -22,7 +23,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ProjectTemplate } from '@bfc/shared';
 
 import { styles as wizardStyles } from '../StepWizard/styles';
-import { DialogCreationCopy } from '../../../constants';
+import { DialogCreationCopy, EmptyBotTemplateId } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
 
 import {
@@ -143,9 +144,11 @@ export function CreateOptions(props) {
 
   useEffect(() => {
     if (templates.length > 1) {
-      const emptyBotKey = templates[1] && templates[1].id;
-      setTemplate(emptyBotKey);
-      setEmptyBotKey(emptyBotKey);
+      const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
+      if (emptyBotTemplate) {
+        setTemplate(emptyBotTemplate.id);
+        setEmptyBotKey(emptyBotTemplate.id);
+      }
     }
   }, [templates]);
 

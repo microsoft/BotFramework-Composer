@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { promisify } from 'util';
 import fs from 'fs';
 
 import axios from 'axios';
@@ -23,6 +24,7 @@ import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
+const mkDirAsync = promisify(fs.mkdir);
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -186,7 +188,7 @@ export class BotProject {
         responseType: 'stream',
       });
       const pathToSchema = `${pathToSave}/Schemas`;
-      fs.mkdirSync(pathToSchema);
+      await mkDirAsync(pathToSchema);
       response.data.pipe(fs.createWriteStream(`${pathToSchema}/sdk.schema`));
     } catch (ex) {
       throw new Error('Schema file could not be downloaded. Please check the url to the schema.');

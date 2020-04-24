@@ -3,10 +3,9 @@
 
 import Path from 'path';
 
-import React, { useEffect, useContext, useRef, Fragment, Suspense } from 'react';
+import React, { useEffect, useContext, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { CreationFlowStatus } from '../../constants';
 import { StoreContext } from '../../store';
 import Home from '../../pages/home';
@@ -34,6 +33,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
+
   useEffect(() => {
     if (storages && storages.length) {
       const storageId = storage.id;
@@ -43,15 +43,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
   }, [storages]);
 
-  const init = async () => {
-    (async function() {
-      await fetchStorages();
-      await fetchTemplates();
-    })();
-  };
-
   useEffect(() => {
-    init();
+    fetchStorages();
+    fetchTemplates();
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
@@ -98,42 +92,37 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     handleDismiss();
   };
 
-  const handleCreateNext = data => {
-    navigate(`./create/template/${data}`);
+  const handleCreateNext = async data => {
+    await saveTemplateId(data);
+    await setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+    navigate(`./create/${data}`);
   };
 
   return (
     <Fragment>
       <Home />
-      <Suspense fallback={<LoadingSpinner />}>
-        <Router>
-          <CreateOptions
-            templates={templateProjects}
-            onDismiss={handleDismiss}
-            onNext={handleCreateNext}
-            saveTemplateId={saveTemplateId}
-            path="/createProject"
-          />
-          <DefineConversation
-            onSubmit={handleSubmit}
-            onDismiss={handleDismiss}
-            onCurrentPathUpdate={updateCurrentPath}
-            path="create/template/:templateId"
-          />
-          <DefineConversation
-            onSubmit={handleSubmit}
-            onDismiss={handleDismiss}
-            onCurrentPathUpdate={updateCurrentPath}
-            path="/saveProject/:projectId"
-          />
-          <OpenProject
-            onOpen={openBot}
-            onDismiss={handleDismiss}
-            onCurrentPathUpdate={updateCurrentPath}
-            path="/openProject"
-          />
-        </Router>
-      </Suspense>
+      <Router>
+        <DefineConversation
+          onSubmit={handleSubmit}
+          onDismiss={handleDismiss}
+          onCurrentPathUpdate={updateCurrentPath}
+          path="create/:templateId"
+        />
+        <CreateOptions
+          templates={templateProjects}
+          onDismiss={handleDismiss}
+          onNext={handleCreateNext}
+          saveTemplateId={saveTemplateId}
+          path="create"
+        />
+        <DefineConversation
+          onSubmit={handleSubmit}
+          onDismiss={handleDismiss}
+          onCurrentPathUpdate={updateCurrentPath}
+          path=":projectId/save"
+        />
+        <OpenProject onOpen={openBot} onDismiss={handleDismiss} onCurrentPathUpdate={updateCurrentPath} path="open" />
+      </Router>
     </Fragment>
   );
 };

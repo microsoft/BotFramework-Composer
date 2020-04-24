@@ -11,9 +11,10 @@ context('Saving As', () => {
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.url().should('contain', 'home');
     cy.findByText('Save as').click();
-    cy.url().should('contain', 'home/saveProject');
-
-    cy.findByTestId('NewDialogName').type('{selectall}__TestSaveAs{enter}');
+    cy.findByTestId('NewDialogName')
+      .clear()
+      .type('__TestSaveAs');
+    cy.findByTestId('SubmitNewBotBtn').click();
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestSaveAs').should('exist');
     });
