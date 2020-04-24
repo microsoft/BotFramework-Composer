@@ -54,8 +54,6 @@ class FilePersistence {
 
     const fileChanges: IFileChange[] = this._getFileChanges(previousState, currentState, action);
 
-    if (!fileChanges.length) return;
-
     for (const change of fileChanges) {
       if (!this._taskQueue[change.id]) {
         this._taskQueue[change.id] = [];
