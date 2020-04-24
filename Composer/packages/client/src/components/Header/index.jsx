@@ -5,13 +5,13 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { useContext, useCallback } from 'react';
+import { useContext, useCallback, Fragment } from 'react';
 
 import composerIcon from '../../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../../constants';
 import { StoreContext } from '../../store';
 
-import { updateAvailableIcon, headerContainer, title, botName } from './styles';
+import { updateAvailableIcon, headerContainer, title, botName, divider } from './styles';
 
 export const Header = props => {
   const {
@@ -34,8 +34,13 @@ export const Header = props => {
         aria-label={formatMessage('Composer Logo')}
         src={composerIcon}
       />
-      <span css={title}>{formatMessage('Bot Framework Composer')}</span>
-      <span css={botName}>{props.botName}</span>
+      <div css={title}>{formatMessage('Bot Framework Composer')}</div>
+      {props.botName && (
+        <Fragment>
+          <div css={divider} />
+          <span css={botName}>{`${props.botName} (${props.locale})`}</span>
+        </Fragment>
+      )}
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}
