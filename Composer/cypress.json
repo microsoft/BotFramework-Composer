@@ -11,6 +11,6 @@
   "viewportHeight": 1200,
   "defaultCommandTimeout": 8000,
   "env": {
-    "COMPOSER_URL": "http://localhost:3000"
+    "COMPOSER_URL": "http://localhost:3000/home"
   }
 }
