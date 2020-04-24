@@ -7,6 +7,7 @@ import { mkdirp } from 'fs-extra';
 import { app, ipcMain } from 'electron';
 import fixPath from 'fix-path';
 import { UpdateInfo } from 'electron-updater';
+import { getPortPromise } from 'portfinder';
 
 import { isDevelopment } from './utility/env';
 import { isWindows } from './utility/platform';
@@ -18,8 +19,9 @@ import { parseDeepLinkUrl } from './utility/url';
 import { composerProtocol } from './constants';
 
 const error = log.extend('error');
-const baseUrl = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
 let deeplinkingUrl = '';
+// webpack dev server runs on :3000
+const getBaseUrl = () => (isDevelopment ? 'http://localhost:3000/' : `http://localhost:${process.env.FALLBACK_PORT}`);
 
 function processArgsForWindows(args: string[]): string {
   const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
@@ -90,6 +92,9 @@ async function loadServer() {
   log('Created app data directory.');
 
   log('Starting server...');
+  const availablePort = await getPortPromise();
+  log('Found available port: ', availablePort);
+  process.env.FALLBACK_PORT = availablePort.toString();
   const { start } = await import('@bfc/server');
   await start(pluginsDir);
   log('Server started. Rendering application...');
@@ -105,7 +110,7 @@ async function main() {
     if (isWindows()) {
       deeplinkingUrl = processArgsForWindows(process.argv);
     }
-    await mainWindow.webContents.loadURL(baseUrl + deeplinkingUrl);
+    await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkingUrl);
 
     mainWindow.show();
 
@@ -128,7 +133,7 @@ async function run() {
 
       const mainWindow = ElectronWindow.getInstance().browserWindow;
       if (mainWindow) {
-        await mainWindow.webContents.loadURL(baseUrl + deeplinkingUrl);
+        await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkingUrl);
         if (mainWindow.isMinimized()) {
           mainWindow.restore();
         }
@@ -171,7 +176,7 @@ async function run() {
       deeplinkingUrl = parseDeepLinkUrl(url);
       if (ElectronWindow.isBrowserWindowCreated) {
         const mainWindow = ElectronWindow.getInstance().browserWindow;
-        mainWindow?.loadURL(baseUrl + deeplinkingUrl);
+        mainWindow?.loadURL(getBaseUrl() + deeplinkingUrl);
       }
     });
   });

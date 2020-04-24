@@ -113,7 +113,7 @@ export async function start(pluginDir?: string) {
     });
   });
 
-  const port = process.env.PORT || 5000;
+  const port = process.env.PORT || process.env.FALLBACK_PORT;
   let server;
   await new Promise(resolve => {
     server = app.listen(port, () => {
@@ -122,6 +122,7 @@ export async function start(pluginDir?: string) {
         // eslint-disable-next-line no-console
         console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
       }
+      console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
       resolve();
     });
   });
