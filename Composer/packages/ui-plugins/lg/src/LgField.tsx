@@ -7,7 +7,7 @@ import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { LgMetaData, LgTemplateRef, CodeEditorSettings, SDKKinds } from '@bfc/shared';
+import { LgMetaData, LgTemplateRef, LgType, CodeEditorSettings } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
@@ -39,19 +39,13 @@ const LgField: React.FC<FieldProps<string>> = props => {
   const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings, data } = useShellApi();
 
   let lgType = name;
-  const kind = data?.$kind;
-  if (kind) {
-    const [, schemaType] = kind.split('.');
-    if (schemaType === SDKKinds.SendActivity) {
-      lgType = schemaType;
-    } else {
-      const nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
-      lgType = `${schemaType}_${nameCapitalized}`;
-    }
+  const $kind = data?.$kind;
+  if ($kind) {
+    lgType = new LgType($kind, name).toString();
   }
 
-  const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
-  const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(lgType, designerId || '').toString();
+  const lgTemplateRef = LgTemplateRef.parse(value);
+  const lgName = lgTemplateRef ? lgTemplateRef.name : new LgMetaData(lgType, designerId || '').toString();
   const lgFileId = `${currentDialog.lgFile}.${locale}`;
   const lgFile = lgFiles && lgFiles.find(file => file.id === lgFileId);
 
