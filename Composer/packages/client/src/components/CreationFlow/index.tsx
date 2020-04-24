@@ -44,8 +44,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   }, [storages]);
 
   const init = async () => {
-    fetchTemplates();
-    fetchStorages();
+    (async function() {
+      await fetchStorages();
+      await fetchTemplates();
+    })();
   };
 
   useEffect(() => {
