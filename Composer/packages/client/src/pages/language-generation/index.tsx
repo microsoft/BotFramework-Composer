@@ -119,7 +119,7 @@ const LGPage: React.FC<LGPageProps> = props => {
               />
             </div>
           </div>
-          <div css={ContentStyle} data-testid="LGEditor">
+          <div role="main" css={ContentStyle} data-testid="LGEditor">
             <div css={contentEditor}>
               <Suspense fallback={<LoadingSpinner />}>
                 <Router primary={false} component={Fragment}>
