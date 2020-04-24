@@ -122,7 +122,6 @@ export async function start(pluginDir?: string) {
         // eslint-disable-next-line no-console
         console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
       }
-      console.log(`\n\n${chalk.green('Composer now running at:')}\n\n${chalk.blue(`http://localhost:${port}`)}\n`);
       resolve();
     });
   });
