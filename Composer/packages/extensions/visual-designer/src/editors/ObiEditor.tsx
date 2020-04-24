@@ -97,6 +97,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           handler = e => {
             insertActions(path, data, e.id, e.position, clipboardActions).then(dialog => {
               onChange(dialog);
+              onFocusSteps([`${e.id}[${e.position || 0}]`]);
             });
           };
         } else {

@@ -137,6 +137,12 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       //make sure focusPath always valid
       const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
       if (typeof data === 'undefined') {
+        /**
+         * It's improper to fallback to `dialogId` directly:
+         *   - If 'action' not exists at `focused` path, fallback to trigger path;
+         *   - If 'trigger' not exisits at `selected` path, fallback to dialog Id;
+         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
+         */
         actions.navTo(dialogId);
       }
     },
