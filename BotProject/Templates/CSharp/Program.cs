@@ -26,7 +26,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             {
                 var env = hostingContext.HostingEnvironment;
 
-                builder.AddJsonFile($"ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
+                var configFile = Path.GetFullPath(Path.Combine(@"../settings/appsettings.json"));
+                builder.AddJsonFile(configFile, optional: true, reloadOnChange: true)
                     .AddJsonFile("appsetting.json", optional: true, reloadOnChange: true)
                     .UseLuisConfigAdaptor()
                     .UseLuisSettings();
