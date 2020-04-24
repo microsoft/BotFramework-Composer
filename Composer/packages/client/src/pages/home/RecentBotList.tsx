@@ -18,7 +18,7 @@ import formatMessage from 'format-message';
 
 import { calculateTimeDiff } from '../../utils';
 
-import { detailListContainer } from './styles';
+import { detailListContainer, tableCell, content } from './styles';
 
 interface RecentBotListProps {
   onItemChosen: (file: IObjectWithKey) => void;
@@ -42,7 +42,17 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
       onRender: item => {
-        return <span aria-label={item.name}>{item.name}</span>;
+        return (
+          <div css={tableCell} data-is-focusable={true}>
+            <div
+              tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`Bot name is {botName}`, { botName: item.name })}
+            >
+              {item.name}
+            </div>
+          </div>
+        );
       },
       isPadded: true,
     },
@@ -55,7 +65,17 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       isResizable: true,
       data: 'number',
       onRender: item => {
-        return <span>{calculateTimeDiff(item.dateModified)}</span>;
+        return (
+          <div css={tableCell} data-is-focusable={true}>
+            <div
+              tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
+            >
+              {calculateTimeDiff(item.dateModified)}
+            </div>
+          </div>
+        );
       },
       isPadded: true,
     },
