@@ -17,6 +17,7 @@ import {
 import get from 'lodash/get';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
 import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
@@ -53,6 +54,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onSelect,
   undo,
   redo,
+  announce,
   addCoachMarkRef,
 }): JSX.Element | null => {
   let divRef;
@@ -133,19 +135,27 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             selectedIds: [...newFocusedIds],
           });
           onFocusSteps([...newFocusedIds], e.tab);
+          announce(ScreenReaderMessage.NodeFocused);
         };
         break;
       case NodeEventTypes.FocusEvent:
-        handler = onFocusEvent;
+        handler = eventData => {
+          onFocusEvent(eventData);
+          announce(ScreenReaderMessage.EventFocused);
+        };
         break;
       case NodeEventTypes.OpenDialog:
-        handler = ({ caller, callee }) => onOpen(callee, caller);
+        handler = ({ caller, callee }) => {
+          onOpen(callee, caller);
+          announce(ScreenReaderMessage.DialogOpened);
+        };
         break;
       case NodeEventTypes.Delete:
         trackActionChange(eventData.id);
         handler = e => {
           onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates, deleteLuIntents)));
           onFocusSteps([]);
+          announce(ScreenReaderMessage.NodeDeleted);
         };
         break;
       case NodeEventTypes.Insert:
@@ -155,12 +165,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then(dialog => {
               onChange(dialog);
             });
+            announce(ScreenReaderMessage.NodeCreated);
           };
         } else {
           handler = e => {
             const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
             onChange(dialog);
             onFocusSteps([`${e.id}[${e.position || 0}]`]);
+            announce(ScreenReaderMessage.NodeCreated);
           };
         }
         break;
@@ -169,11 +181,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
           onChange(dialog);
           onFocusEvent(`${e.id}[${e.position || 0}]`);
+          announce(ScreenReaderMessage.EventCreated);
         };
         break;
       case NodeEventTypes.CopySelection:
         handler = e => {
           copyNodes(data, e.actionIds, dereferenceLg).then(copiedNodes => onClipboardChange(copiedNodes));
+          announce(ScreenReaderMessage.NodesCopied);
         };
         break;
       case NodeEventTypes.CutSelection:
@@ -186,6 +200,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             onFocusSteps([]);
             onClipboardChange(cutData);
           });
+          announce(ScreenReaderMessage.NodesCut);
         };
         break;
       case NodeEventTypes.MoveSelection:
@@ -237,6 +252,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               onChange(insertResult);
             });
           onFocusSteps([]);
+          announce(ScreenReaderMessage.NodesMoved);
         };
         break;
       case NodeEventTypes.DeleteSelection:
@@ -247,6 +263,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           );
           onChange(dialog);
           onFocusSteps([]);
+          announce(ScreenReaderMessage.NodesDeleted);
         };
         break;
       case NodeEventTypes.AppendSelection:
@@ -256,13 +273,20 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           if (!e.target || e.target === focusedEvent) return;
           const dialog = appendNodesAfter(data, e.target, e.actions);
           onChange(dialog);
+          announce(ScreenReaderMessage.NodesCreated);
         };
         break;
       case NodeEventTypes.Undo:
-        handler = undo;
+        handler = () => {
+          undo && undo();
+          announce(ScreenReaderMessage.ActionUndo);
+        };
         break;
       case NodeEventTypes.Redo:
-        handler = redo;
+        handler = () => {
+          redo && redo();
+          announce(ScreenReaderMessage.ActionUndo);
+        };
         break;
       default:
         handler = onFocusSteps;
@@ -375,6 +399,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         });
         focused && onFocusSteps([focused], tab);
         scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
+        announce(ScreenReaderMessage.NodeFocused);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
@@ -443,6 +468,7 @@ ObiEditor.defaultProps = {
   onSelect: () => {},
   undo: () => {},
   redo: () => {},
+  announce: (message: string) => {},
   addCoachMarkRef: () => {},
 };
 
@@ -461,5 +487,6 @@ interface ObiEditorProps {
   onSelect: (ids: string[]) => any;
   undo?: () => any;
   redo?: () => any;
+  announce: (message: string) => any;
   addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
