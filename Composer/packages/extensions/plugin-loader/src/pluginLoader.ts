@@ -6,13 +6,11 @@ import fs from 'fs';
 
 import passport from 'passport';
 import { Express } from 'express';
-import { RequestHandler } from 'express-serve-static-core';
 import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
-import { JSONSchema7 } from 'json-schema';
 
 import { ComposerPluginRegistration } from './composerPluginRegistration';
-import { PublishPlugin, UserIdentity } from './types';
+import { UserIdentity, ExtensionCollection } from './types';
 import log from './logger';
 
 export class PluginLoader {
@@ -20,26 +18,7 @@ export class PluginLoader {
   private _webserver: Express | undefined;
   public loginUri: string;
 
-  public extensions: {
-    storage: {
-      [key: string]: any;
-    };
-    publish: {
-      [key: string]: {
-        plugin: ComposerPluginRegistration;
-        methods: PublishPlugin;
-        /** (Optional) Schema for publishing configuration. */
-        schema?: JSONSchema7;
-      };
-    };
-    authentication: {
-      middleware?: RequestHandler;
-      serializeUser?: (user: any, next: any) => void;
-      deserializeUser?: (user: any, next: any) => void;
-      allowedUrls: string[];
-      [key: string]: any;
-    };
-  };
+  public extensions: ExtensionCollection;
 
   constructor() {
     // load any plugins present in the default folder
@@ -52,6 +31,7 @@ export class PluginLoader {
       authentication: {
         allowedUrls: [this.loginUri],
       },
+      runtimeTemplates: [],
     };
     this._passport = passport;
   }
