@@ -29,7 +29,7 @@ context('LG Page', () => {
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.findByTestId('LGEditor').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestTodoSample').click();
     });
   });
