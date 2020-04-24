@@ -12,14 +12,20 @@ import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUti
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
 const LU_HELP = 'https://aka.ms/lu-file-format';
-const placeholder = `> To learn more about the LU file format, read the documentation at
-> ${LU_HELP}
-> add some example phrases to trigger this intent:
+
+const placeholderHelp = `> To learn more about the LU file format, read the documentation at
+> ${LU_HELP}`;
+
+const placeholderContentSample = `> add some example phrases to trigger this intent:
 > - please tell me the weather
 > - what is the weather like in {city=Seattle}
 > entity definitions: 
-> @ ml city
-`;
+> @ ml city`;
+
+const placeholderExample = {
+  placeholderHelp: placeholderHelp,
+  placeholderContentSample: placeholderContentSample,
+};
 
 export interface LUOption {
   projectId?: string;
@@ -91,7 +97,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     ...props.options,
   };
 
-  const { luOption, languageServer, onInit: onInitProp, ...restProps } = props;
+  const { luOption, languageServer, onInit: onInitProp, placeholder, ...restProps } = props;
   const luServer = languageServer || defaultLUServer;
 
   const onInit: OnInit = monaco => {
@@ -152,7 +158,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
 
   return (
     <BaseEditor
-      placeholder={placeholder}
+      placeholder={placeholder ? placeholderExample[placeholder] : ''}
       helpURL={LU_HELP}
       {...restProps}
       onInit={onInit}

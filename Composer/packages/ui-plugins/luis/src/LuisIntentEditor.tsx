@@ -58,6 +58,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
       onChangeSettings={handleSettingsChange}
+      placeholder={'placeholderContentSample'}
     />
   );
 };

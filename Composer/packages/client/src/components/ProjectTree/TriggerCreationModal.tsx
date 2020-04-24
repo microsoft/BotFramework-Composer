@@ -274,6 +274,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
                 sectionId: formData.intent || PlaceHolderSectionName,
               }}
               height={150}
+              placeholder={'placeholderContentSample'}
             />
           )}
         </Stack>
