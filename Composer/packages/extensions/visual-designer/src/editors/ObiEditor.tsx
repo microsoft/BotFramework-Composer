@@ -135,7 +135,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             selectedIds: [...newFocusedIds],
           });
           onFocusSteps([...newFocusedIds], e.tab);
-          announce(ScreenReaderMessage.NodeFocused);
+          announce(ScreenReaderMessage.ActionFocused);
         };
         break;
       case NodeEventTypes.FocusEvent:
@@ -155,7 +155,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = e => {
           onChange(deleteNode(data, e.id, node => deleteAction(node, deleteLgTemplates, deleteLuIntents)));
           onFocusSteps([]);
-          announce(ScreenReaderMessage.NodeDeleted);
+          announce(ScreenReaderMessage.ActionDeleted);
         };
         break;
       case NodeEventTypes.Insert:
@@ -165,14 +165,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             pasteNodes(data, e.id, e.position, clipboardActions, buildLgReference).then(dialog => {
               onChange(dialog);
             });
-            announce(ScreenReaderMessage.NodeCreated);
+            announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
           handler = e => {
             const dialog = insert(data, e.id, e.position, e.$kind, dialogFactory);
             onChange(dialog);
             onFocusSteps([`${e.id}[${e.position || 0}]`]);
-            announce(ScreenReaderMessage.NodeCreated);
+            announce(ScreenReaderMessage.ActionCreated);
           };
         }
         break;
@@ -187,7 +187,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.CopySelection:
         handler = e => {
           copyNodes(data, e.actionIds, dereferenceLg).then(copiedNodes => onClipboardChange(copiedNodes));
-          announce(ScreenReaderMessage.NodesCopied);
+          announce(ScreenReaderMessage.ActionsCopied);
         };
         break;
       case NodeEventTypes.CutSelection:
@@ -200,7 +200,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             onFocusSteps([]);
             onClipboardChange(cutData);
           });
-          announce(ScreenReaderMessage.NodesCut);
+          announce(ScreenReaderMessage.ActionsCut);
         };
         break;
       case NodeEventTypes.MoveSelection:
@@ -252,7 +252,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               onChange(insertResult);
             });
           onFocusSteps([]);
-          announce(ScreenReaderMessage.NodesMoved);
+          announce(ScreenReaderMessage.ActionsMoved);
         };
         break;
       case NodeEventTypes.DeleteSelection:
@@ -263,7 +263,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           );
           onChange(dialog);
           onFocusSteps([]);
-          announce(ScreenReaderMessage.NodesDeleted);
+          announce(ScreenReaderMessage.ActionsDeleted);
         };
         break;
       case NodeEventTypes.AppendSelection:
@@ -273,7 +273,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           if (!e.target || e.target === focusedEvent) return;
           const dialog = appendNodesAfter(data, e.target, e.actions);
           onChange(dialog);
-          announce(ScreenReaderMessage.NodesCreated);
+          announce(ScreenReaderMessage.ActionsCreated);
         };
         break;
       case NodeEventTypes.Undo:
@@ -399,7 +399,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         });
         focused && onFocusSteps([focused], tab);
         scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
-        announce(ScreenReaderMessage.NodeFocused);
+        announce(ScreenReaderMessage.ActionFocused);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
