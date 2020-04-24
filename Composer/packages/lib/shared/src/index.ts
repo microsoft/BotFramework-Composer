@@ -3,6 +3,8 @@
 
 import formatMessage from 'format-message';
 
+import * as dialogUtils from './dialogUtils';
+
 formatMessage.setup({ missingTranslation: 'ignore' });
 
 export * from './constant';
@@ -18,3 +20,4 @@ export * from './viewUtils';
 export * from './walkerUtils';
 export * from './resolverFactory';
 export * from './functionUtils';
+export const DialogUtils = dialogUtils;
