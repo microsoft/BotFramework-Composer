@@ -31,6 +31,7 @@ describe('LgTemplateRef#', () => {
 
   describe('parse()', () => {
     it('should return null when inputs are invalid', () => {
+      expect(LgTemplateRef.parse()).toEqual(null);
       expect(LgTemplateRef.parse('')).toEqual(null);
       expect(LgTemplateRef.parse('xxx')).toEqual(null);
       expect(LgTemplateRef.parse('${0}')).toEqual(null);

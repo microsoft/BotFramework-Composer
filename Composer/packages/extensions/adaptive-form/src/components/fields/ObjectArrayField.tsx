@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useMemo, useRef } from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, useShellApi } from '@bfc/extension';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -39,6 +39,13 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
   const [newObject, setNewObject] = useState({});
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
   const firstNewFieldRef: React.RefObject<ITextField> = useRef(null);
+  const { announce } = useShellApi().shellApi;
+
+  const END_OF_ROW_LABEL = formatMessage('press Enter to add this item or Tab to move to the next interactive element');
+
+  const INSIDE_ROW_LABEL = formatMessage(
+    'press Enter to add this name and advance to the next row, or press Tab to advance to the value field'
+  );
 
   const handleNewObjectChange = (property: string) => (_e: React.FormEvent, newValue?: string) => {
     setNewObject({ ...newObject, [property]: newValue });
@@ -54,6 +61,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           return { ...obj, [key]: typeof serializeValue === 'function' ? serializeValue(value) : value };
         }, {});
 
+        announce(INSIDE_ROW_LABEL);
         addItem(formattedData);
         setNewObject({});
         firstNewFieldRef.current?.focus();
@@ -153,15 +161,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                           value={newObject[property] || ''}
                           onChange={handleNewObjectChange(property)}
                           onKeyDown={handleKeyDown}
-                          ariaLabel={
-                            lastField
-                              ? formatMessage(
-                                  'press Enter to add this item or Tab to move to the next interactive element'
-                                )
-                              : formatMessage(
-                                  'press Enter to add this name and advance to the next row, or press Tab to advance to the value field'
-                                )
-                          }
+                          ariaLabel={lastField ? END_OF_ROW_LABEL : INSIDE_ROW_LABEL}
                           componentRef={index === 0 ? firstNewFieldRef : undefined}
                         />
                       </div>

@@ -142,7 +142,7 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
   const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
-    <div css={listRoot} data-testid="notifications-table-view">
+    <div role="main" css={listRoot} data-testid="notifications-table-view">
       <div css={tableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
