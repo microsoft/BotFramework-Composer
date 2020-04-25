@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/* eslint-disable react/prop-types */
 /** @jsx jsx */
 
 import { jsx } from '@emotion/core';

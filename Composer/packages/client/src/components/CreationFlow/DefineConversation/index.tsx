@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+//TODO: Remove Path module
 import Path from 'path';
 
 import get from 'lodash/get';

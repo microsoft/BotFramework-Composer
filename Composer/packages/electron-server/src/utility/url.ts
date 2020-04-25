@@ -4,7 +4,7 @@
 import lowerCase from 'lodash/lowerCase';
 
 import log from './logger';
-const error = log.extend('error');
+const error = log.extend('electron-deeplink-url');
 
 export const parseDeepLinkUrl = deeplinkUrl => {
   try {

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// TODO: Remove path module
 import Path from 'path';
 
 import React, { useEffect, useContext, useRef, Fragment } from 'react';
@@ -10,7 +11,7 @@ import { CreationFlowStatus } from '../../constants';
 import { StoreContext } from '../../store';
 import Home from '../../pages/home';
 
-import { CreateOptions } from './CreateOptions/index';
+import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
 
