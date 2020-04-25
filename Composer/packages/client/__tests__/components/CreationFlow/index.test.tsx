@@ -90,7 +90,7 @@ describe('<CreationFlow/>', () => {
     );
 
     const component = renderComponent();
-    await navigate('/create/template/Echobot');
+    await navigate('create/Emptybot');
     const node = await component.findByText('Next');
     fireEvent.click(node);
   });
