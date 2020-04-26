@@ -127,7 +127,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
   }, [focusedStorageFolder, formData.name]);
 
   useEffect(() => {
-    if (saveTemplateId) {
+    if (saveTemplateId && templateId) {
       saveTemplateId(templateId);
     }
   });
