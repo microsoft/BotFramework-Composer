@@ -3,8 +3,10 @@
 
 import isEqual from 'lodash/isEqual';
 import intersectionBy from 'lodash/intersectionBy';
-import xorWith from 'lodash/xorWith';
+import differenceWith from 'lodash/differenceWith';
+// import xorWith from 'lodash/xorWith';
 import indexOf from 'lodash/indexOf';
+// import pullAllWith from 'lodash/pullAllWith';
 
 import { IJsonChanges, IJSONChangeAdd, IJSONChangeDelete, IJSONChangeUpdate, IDiffer, IStopper } from './jsonDiff';
 
@@ -35,60 +37,48 @@ import { IJsonChanges, IJSONChangeAdd, IJSONChangeDelete, IJSONChangeUpdate, IDi
  * @param stopper
  */
 export function ListDiff(list1: any[], list2: any[], differ?: IDiffer, stopper?: IStopper): IJsonChanges {
-  const allChanges = xorWith(list1, list2, isEqual);
+  const usedDiffer = differ || isEqual;
+  const list1Changes = differenceWith(list1, list2, usedDiffer).map(item => {
+    return {
+      index: indexOf(list1, item),
+      value: item,
+    };
+  }); // list1[index] item are not found in list2
+  const list2Changes = differenceWith(list2, list1, usedDiffer).map(item => {
+    return {
+      index: indexOf(list2, item),
+      value: item,
+    };
+  }); // list2[index] item are not found in list1
 
-  const deleteChanges: any[] = [];
-  const addChanges: any[] = [];
-  // split changes to adds & deletes
-  allChanges.forEach(item => {
-    const list1Index = indexOf(list1, item);
-    const list2Index = indexOf(list2, item);
-    if (list1Index !== -1) {
-      deleteChanges.push({
-        index: list1Index,
-        value: item,
-      });
-    } else if (list2Index !== -1) {
-      addChanges.push({
-        index: list2Index,
-        value: item,
-      });
-    }
+  // same index's change are should be an `update`.
+  const updateChanges = intersectionBy(list2Changes, list1Changes, 'index');
+  const updateChangesIndex = updateChanges.map(({ index }) => index);
+  // pull out changes already included by `updates`
+  const deleteChanges = list1Changes.filter(({ index }) => !updateChangesIndex.includes(index));
+  const addChanges = list2Changes.filter(({ index }) => !updateChangesIndex.includes(index));
+
+  // format outputs
+  const adds = addChanges.map(({ index, value }) => {
+    return {
+      path: `[${index}]`,
+      value,
+    };
   });
-
-  const intersectionChanges = intersectionBy(addChanges, addChanges, 'index');
-  // same path add & delete is update
-  const updates: IJSONChangeUpdate[] = intersectionChanges
-    .map(({ index, value }) => {
-      const preValue = list1[index];
-      return {
-        path: `[${index}]`,
-        preValue,
-        value,
-      };
-    })
-    .filter(({ preValue }) => !!preValue);
-
-  const updateChangesIndex = updates.map(({ path }) => path);
-
-  // pull out updates from adds/deletes
-  const adds: IJSONChangeAdd[] = addChanges
-    .filter(({ index }) => !updateChangesIndex.includes(`[${index}]`))
-    .map(({ index, value }) => {
-      return {
-        path: `[${index}]`,
-        value,
-      };
-    });
-  const deletes: IJSONChangeDelete[] = deleteChanges
-    .filter(({ index }) => !updateChangesIndex.includes(`[${index}]`))
-    .map(({ index, value }) => {
-      return {
-        path: `[${index}]`,
-        value,
-      };
-    });
-
+  const deletes = deleteChanges.map(({ index, value }) => {
+    return {
+      path: `[${index}]`,
+      value,
+    };
+  });
+  const updates = updateChanges.map(({ index, value }) => {
+    const preValue = list1[index];
+    return {
+      path: `[${index}]`,
+      value,
+      preValue,
+    };
+  });
   return {
     adds,
     deletes,

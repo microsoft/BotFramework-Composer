@@ -87,6 +87,9 @@ export const defaultJSONUpdateDiffer: IDiffer = (json1: any, json2: any, path: s
   const value2 = getWithJsonPath(json2, path);
 
   // TODO handle array diff
+  // if( Array.isArray(value1) && Array.isArray(value2) ) {
+
+  // }
 
   const isStop = stopper(json1, json2, path);
   // _isEqual comparison use http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero
@@ -169,23 +172,23 @@ export function JsonDiff(prevJson, currJson, differ?: IDiffer, stopper?: IStoppe
  * Utils
  */
 
-export function JsonSet(base: any, updates: { path: string; value: any }[]) {
-  return updates.reduce((dialog, currentItem) => {
+export function JsonSet(origin: any, updates: { path: string; value: any }[]) {
+  return updates.reduce((origin, currentItem) => {
     const { path, value } = currentItem;
-    return set(dialog, path, value);
-  }, cloneDeep(base));
+    return set(origin, path, value);
+  }, cloneDeep(origin));
 }
 
-export function JsonInsert(base: any, updates: { path: string; value: any }[]) {
-  return updates.reduce((dialog, currentItem) => {
+export function JsonInsert(origin: any, updates: { path: string; value: any }[]) {
+  return updates.reduce((origin, currentItem) => {
     const { path, value } = currentItem;
     const matched = path.match(/(.*)\[(\d+)\]$/);
     if (!matched) throw new Error('insert path must in an array, e.g [1]');
     const [, insertListPath, insertIndex] = matched;
-    const insertListValue = insertListPath ? get(dialog, insertListPath) : base;
+    const insertListValue = insertListPath ? get(origin, insertListPath) : origin;
     if (!Array.isArray(insertListValue)) throw new Error('insert target path value is not an array');
 
     insertListValue.splice(Number(insertIndex), 0, value);
-    return insertListPath ? set(dialog, insertListPath, insertListValue) : insertListValue;
-  }, cloneDeep(base));
+    return insertListPath ? set(origin, insertListPath, insertListValue) : insertListValue;
+  }, cloneDeep(origin));
 }
