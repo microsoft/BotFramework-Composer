@@ -15,7 +15,6 @@ import {
 } from '@azure/arm-resources/esm/models';
 import { GraphRbacManagementClient } from '@azure/graph';
 import * as msRestNodeAuth from '@azure/ms-rest-nodeauth';
-// import { TokenCredentials } from '@azure/ms-rest-js';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 
@@ -501,6 +500,7 @@ export class BotProjectDeploy {
       });
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 

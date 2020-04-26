@@ -44,8 +44,8 @@ class AzurePublisher {
     this.resources = {};
   }
   private getProjectFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
-  private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'ComposerDialogs');
-
+  private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key));
+  private getRuntimeFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'runtime');
   private init = async (srcBot: string, srcTemplate: string, resourcekey: string, currentProvision: any) => {
     const exist = await pathExists(this.getProjectFolder(resourcekey));
     const botFolder = this.getBotFolder(resourcekey);
@@ -244,7 +244,6 @@ class AzurePublisher {
       };
       this.addLoadingStatus(botId, name, response);
 
-      // TODO: move the provision out of plugin
       this.createAndDeploy(resourcekey, botId, name, jobId, customizeConfiguration);
 
       return response;

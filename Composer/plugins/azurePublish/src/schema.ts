@@ -33,10 +33,6 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Authoring Key',
     },
-    create: {
-      type: 'boolean',
-      title: 'Azure Resource Create or not',
-    },
   },
   default: {
     subscriptionID: '<your subscription id>',
@@ -46,7 +42,6 @@ const schema: JSONSchema7 = {
     location: 'westus',
     luisAuthoringRegion: 'westus',
     luisAuthoringKey: '',
-    create: false,
   },
 };
 export default schema;
