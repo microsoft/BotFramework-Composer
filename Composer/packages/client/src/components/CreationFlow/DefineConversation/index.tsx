@@ -12,6 +12,7 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import React, { useState, Fragment, useEffect, useContext } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
+import querystring from 'query-string';
 
 import { DialogCreationCopy } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
@@ -131,20 +132,19 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
       const updatedFormData = {
         ...formData,
       };
-      const urlSearchParams = new URLSearchParams(decodeURIComponent(props.location.search));
-      const description = urlSearchParams.get('description');
+
+      const decoded = decodeURIComponent(props.location.search);
+      const { name, description, schemaUrl } = querystring.parse(decoded);
       if (description) {
-        updatedFormData.description = description;
+        updatedFormData.description = description as string;
       }
 
-      const schemaUrl = urlSearchParams.get('schemaUrl');
       if (schemaUrl) {
-        updatedFormData.schemaUrl = schemaUrl;
+        updatedFormData.schemaUrl = schemaUrl as string;
       }
 
-      const name: string | null = urlSearchParams.get('name');
       if (name) {
-        updatedFormData.name = name;
+        updatedFormData.name = name as string;
       } else {
         updatedFormData.name = getDefaultName();
       }

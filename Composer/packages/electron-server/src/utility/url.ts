@@ -17,7 +17,7 @@ export const parseDeepLinkUrl = deeplinkUrl => {
       }
 
       case 'create': {
-        return `home/${convertedUrl.hostname}${convertedUrl.pathname}${convertedUrl.search}`;
+        return `projects/${convertedUrl.hostname}${convertedUrl.pathname}${convertedUrl.search}`;
       }
 
       default:

@@ -103,7 +103,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     <Fragment>
       <Home />
       <Router>
-        Dashboard path="/" default />
         <DefineConversation
           onSubmit={handleSubmit}
           onDismiss={handleDismiss}
