@@ -22,7 +22,7 @@ import { LuFile } from '@bfc/shared';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
 
-import { formCell, luPhraseCell } from './styles';
+import { formCell, luPhraseCell, tableCell, content } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
@@ -117,7 +117,9 @@ const TableView: React.FC<TableViewProps> = props => {
           }
           return (
             <div data-is-focusable={true} css={formCell}>
-              {displayName}
+              <div tabIndex={-1} css={content} aria-label={formatMessage(`Name is {name}`, { name: displayName })}>
+                {displayName}
+              </div>
             </div>
           );
         },
@@ -133,7 +135,13 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           return (
             <div data-is-focusable={true} css={luPhraseCell}>
-              {item.phrases}
+              <div
+                tabIndex={-1}
+                css={content}
+                aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: item.phrases })}
+              >
+                {item.phrases}
+              </div>
             </div>
           );
         },
@@ -150,7 +158,12 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           const id = item.dialogId;
           return (
-            <div data-is-focusable={true} key={id} onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}>
+            <div
+              data-is-focusable={true}
+              key={id}
+              onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
+              aria-label={formatMessage(`link to where this luis intent defined`)}
+            >
               <Link>{id}</Link>
             </div>
           );
@@ -190,7 +203,7 @@ const TableView: React.FC<TableViewProps> = props => {
                 items: getTemplatesMoreButtons(item, index),
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              ariaLabel={formatMessage('actions')}
+              ariaLabel={formatMessage('Open inline editor')}
             />
           );
         },
@@ -205,7 +218,13 @@ const TableView: React.FC<TableViewProps> = props => {
         isCollapsable: true,
         data: 'string',
         onRender: item => {
-          return item.state;
+          return (
+            <div data-is-focusable={true} css={tableCell}>
+              <div tabIndex={-1} css={content} aria-label={formatMessage(`State is {state}`, { state: item.state })}>
+                {item.state}
+              </div>
+            </div>
+          );
         },
       },
     ];
