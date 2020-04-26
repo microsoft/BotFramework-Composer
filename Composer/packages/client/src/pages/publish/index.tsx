@@ -402,7 +402,7 @@ const Publish: React.FC<PublishPageProps> = props => {
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
-      <div css={ContentStyle} data-testid="Publish">
+      <div role="main" css={ContentStyle} data-testid="Publish">
         <div css={projectContainer}>
           <div
             key={'_all'}
