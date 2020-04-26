@@ -44,14 +44,15 @@ interface DefineConversationProps
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
+  saveTemplateId?: (templateId: string) => void;
 }
 
 const initialFormDataError: FormDataError = {};
 
 const DefineConversation: React.FC<DefineConversationProps> = props => {
-  const { onSubmit, onDismiss, onCurrentPathUpdate } = props;
+  const { onSubmit, onDismiss, onCurrentPathUpdate, saveTemplateId, templateId } = props;
   const { state } = useContext(StoreContext);
-  const { templateId, focusedStorageFolder } = state;
+  const { focusedStorageFolder } = state;
   const files = get(focusedStorageFolder, 'children', []);
 
   const getDefaultName = () => {
@@ -124,6 +125,12 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
       setFormDataErrors(errors);
     }
   }, [focusedStorageFolder, formData.name]);
+
+  useEffect(() => {
+    if (saveTemplateId) {
+      saveTemplateId(templateId);
+    }
+  });
 
   useEffect(() => {
     const formData: FormData = { name: getDefaultName(), description: '', location: '', schemaUrl: '' };

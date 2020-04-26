@@ -94,7 +94,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNext = async data => {
-    await saveTemplateId(data);
     await setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`./create/${data}`);
   };
@@ -108,14 +107,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onDismiss={handleDismiss}
           onCurrentPathUpdate={updateCurrentPath}
           path="create/:templateId"
-        />
-        <CreateOptions
-          templates={templateProjects}
-          onDismiss={handleDismiss}
-          onNext={handleCreateNext}
           saveTemplateId={saveTemplateId}
-          path="create"
         />
+        <CreateOptions templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} path="create" />
         <DefineConversation
           onSubmit={handleSubmit}
           onDismiss={handleDismiss}
