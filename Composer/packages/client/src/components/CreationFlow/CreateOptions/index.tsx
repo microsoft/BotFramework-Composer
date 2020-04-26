@@ -22,9 +22,9 @@ import {
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ProjectTemplate } from '@bfc/shared';
 
-import { styles as wizardStyles } from '../StepWizard/styles';
 import { DialogCreationCopy, EmptyBotTemplateId } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
+import { DialogTypes } from '../../DialogWrapper/styles';
 
 import {
   detailListContainer,
@@ -46,7 +46,7 @@ export function CreateOptions(props) {
   const [option, setOption] = useState(optionKeys.createFromScratch);
   const [disabled, setDisabled] = useState(true);
   const { templates, onDismiss, onNext } = props;
-  const [template, setTemplate] = useState('');
+  const [currentTemplate, setCurrentTemplate] = useState('');
   const [emptyBotKey, setEmptyBotKey] = useState('');
 
   const selection = useMemo(() => {
@@ -54,11 +54,11 @@ export function CreateOptions(props) {
       onSelectionChanged: () => {
         const t = selection.getSelection()[0] as ProjectTemplate;
         if (t) {
-          setTemplate(t.id);
+          setCurrentTemplate(t.id);
         }
       },
     });
-  }, [templates]);
+  }, []);
 
   function SelectOption(props) {
     const { checked, text, key } = props;
@@ -81,7 +81,7 @@ export function CreateOptions(props) {
 
   const handleJumpToNext = () => {
     if (option === optionKeys.createFromTemplate) {
-      onNext(template);
+      onNext(currentTemplate);
     } else {
       onNext(emptyBotKey);
     }
@@ -146,7 +146,7 @@ export function CreateOptions(props) {
     if (templates.length > 1) {
       const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
       if (emptyBotTemplate) {
-        setTemplate(emptyBotTemplate.id);
+        setCurrentTemplate(emptyBotTemplate.id);
         setEmptyBotKey(emptyBotTemplate.id);
       }
     }
@@ -175,7 +175,7 @@ export function CreateOptions(props) {
         isOpen={true}
         {...DialogCreationCopy.CREATE_NEW_BOT}
         onDismiss={onDismiss}
-        overrideStyles={wizardStyles}
+        dialogType={DialogTypes.CreateFlow}
       >
         <ChoiceGroup
           label={formatMessage('Choose how to create your bot')}
@@ -204,7 +204,7 @@ export function CreateOptions(props) {
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
           <PrimaryButton
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || template === null)}
+            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
             onClick={handleJumpToNext}
             text={formatMessage('Next')}
             data-testid="NextStepButton"

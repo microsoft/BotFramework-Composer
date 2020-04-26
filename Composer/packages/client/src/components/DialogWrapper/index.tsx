@@ -2,33 +2,26 @@
 // Licensed under the MIT License.
 
 import React, { useEffect, useState } from 'react';
-import { Dialog, DialogType, IDialogProps, IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
-import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
+import { Dialog, DialogType, IDialogProps } from 'office-ui-fabric-react/lib/Dialog';
 
-import { styles } from './styles';
+import { styles, DialogTypes } from './styles';
 
 interface DialogWrapperProps extends Pick<IDialogProps, 'onDismiss'> {
   isOpen: boolean;
   title: string;
   subText: string;
-  overrideStyles?: { modal: Partial<IModalStyles>; dialog: Partial<IDialogContentStyles> };
+  dialogType: DialogTypes;
 }
 
 export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
-  const { isOpen, onDismiss, title, subText, children, overrideStyles } = props;
-  const [wrapperStyle, updateWrapperStyle] = useState({
-    modal: styles.modal,
-    dialog: styles.dialog,
-  });
+  const { isOpen, onDismiss, title, subText, children, dialogType } = props;
+  const [currentStyle, setStyle] = useState(styles[dialogType]);
 
   useEffect(() => {
-    if (overrideStyles) {
-      updateWrapperStyle({
-        modal: overrideStyles.modal,
-        dialog: overrideStyles.dialog,
-      });
+    if (dialogType) {
+      setStyle(styles[dialogType]);
     }
-  }, [overrideStyles]);
+  }, [dialogType]);
 
   if (!isOpen) {
     return null;
@@ -42,11 +35,11 @@ export const DialogWrapper: React.FC<DialogWrapperProps> = props => {
         type: DialogType.normal,
         title: title,
         subText: subText,
-        styles: wrapperStyle.dialog,
+        styles: currentStyle.dialog,
       }}
       modalProps={{
         isBlocking: false,
-        styles: wrapperStyle.modal,
+        styles: currentStyle.modal,
       }}
     >
       {children}

@@ -11,8 +11,8 @@ import { RouteComponentProps } from '@reach/router';
 
 import { DialogCreationCopy } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
+import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
-import { styles as wizardStyles } from '../StepWizard/styles';
 
 interface OpenProjectProps extends RouteComponentProps<{}> {
   onOpen: (path: string, storage: string) => void;
@@ -28,7 +28,7 @@ export const OpenProject: React.FC<OpenProjectProps> = props => {
       {...DialogCreationCopy.SELECT_LOCATION}
       onDismiss={onDismiss}
       isOpen={true}
-      overrideStyles={wizardStyles}
+      dialogType={DialogTypes.CreateFlow}
     >
       <div data-testid="SelectLocation">
         <LocationSelectContent

@@ -23,11 +23,10 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import moment from 'moment';
 
 import { FileTypes } from '../../../constants/index';
-import { styles as wizardStyles } from '../StepWizard/styles';
 import { StorageFolder, File } from '../../../store/types';
 import { getFileIconName, calculateTimeDiff } from '../../../utils';
 
-import { dropdown, detailListContainer, detailListClass, tableCell, content } from './styles';
+import { dropdown, detailListContainer, detailListClass, tableCell, content, halfstack, stackinput } from './styles';
 
 interface FileSelectorProps {
   operationMode: {
@@ -208,8 +207,8 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
 
   return (
     <Fragment>
-      <Stack horizontal tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
-        <StackItem grow={0} styles={wizardStyles.halfstack}>
+      <Stack horizontal tokens={{ childrenGap: '2rem' }} styles={stackinput}>
+        <StackItem grow={0} styles={halfstack}>
           <Dropdown
             label={formatMessage('Location')}
             styles={dropdown}

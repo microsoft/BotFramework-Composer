@@ -15,11 +15,11 @@ import { RouteComponentProps } from '@reach/router';
 
 import { DialogCreationCopy } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
+import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
-import { styles as wizardStyles } from '../StepWizard/styles';
 import { StoreContext } from '../../../store';
 
-import { name, description } from './styles';
+import { name, description, halfstack, stackinput } from './styles';
 const MAXTRYTIMES = 10000;
 
 interface FormData {
@@ -171,12 +171,12 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
         isOpen={true}
         {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}
         onDismiss={onDismiss}
-        overrideStyles={wizardStyles}
+        dialogType={DialogTypes.CreateFlow}
       >
         <form onSubmit={handleSubmit}>
           <input type="submit" style={{ display: 'none' }} />
-          <Stack horizontal={true} tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
-            <StackItem grow={0} styles={wizardStyles.halfstack}>
+          <Stack horizontal={true} tokens={{ childrenGap: '2rem' }} styles={stackinput}>
+            <StackItem grow={0} styles={halfstack}>
               <TextField
                 label={formatMessage('Name')}
                 value={formData.name}
@@ -188,7 +188,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
                 autoFocus
               />
             </StackItem>
-            <StackItem grow={0} styles={wizardStyles.halfstack}>
+            <StackItem grow={0} styles={halfstack}>
               <TextField
                 styles={description}
                 value={formData.description}
