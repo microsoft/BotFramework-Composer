@@ -25,7 +25,7 @@ describe('Parse URL', () => {
       'bfcomposer://create/template/EchoBot?schemaUrl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2Fbotframework-sdk%2Fmaster%2Fschemas%2Fcomponent%2Fcomponent.schema%26description%3DHello%20desc';
     const urlToNavigate = parseDeepLinkUrl(testString);
     expect(urlToNavigate).toBe(
-      'home/create/template/EchoBot?schemaUrl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2Fbotframework-sdk%2Fmaster%2Fschemas%2Fcomponent%2Fcomponent.schema%26description%3DHello%20desc'
+      'projects/create/template/EchoBot?schemaUrl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2Fbotframework-sdk%2Fmaster%2Fschemas%2Fcomponent%2Fcomponent.schema%26description%3DHello%20desc'
     );
   });
 });
