@@ -202,13 +202,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Undo:
         handler = () => {
-          undo && undo();
+          undo?.();
           announce(ScreenReaderMessage.ActionUndo);
         };
         break;
       case NodeEventTypes.Redo:
         handler = () => {
-          redo && redo();
+          redo?.();
           announce(ScreenReaderMessage.ActionUndo);
         };
         break;

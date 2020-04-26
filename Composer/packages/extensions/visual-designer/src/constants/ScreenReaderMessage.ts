@@ -13,6 +13,6 @@ export enum ScreenReaderMessage {
   ActionsCopied = 'Actions copied',
   ActionsCut = 'Actions cut',
   ActionsMoved = 'Actions moved',
-  ActionUndo = 'Action undo',
-  ActionRedo = 'Action redo',
+  ActionUndo = 'Undo',
+  ActionRedo = 'Redo',
 }
