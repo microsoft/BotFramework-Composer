@@ -13,7 +13,6 @@ context('Creating a new bot', () => {
   it('can create a new bot', () => {
     cy.findByTestId('Create from scratch').click();
     cy.findByTestId('NextStepButton').click();
-    cy.createBot('ToDoBotWithLuisSample');
     cy.enterTextAndSubmit('NewDialogName', '__TestNewProject', 'SubmitNewBotBtn');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestNewProject').should('exist');
