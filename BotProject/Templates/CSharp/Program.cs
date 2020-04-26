@@ -26,14 +26,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             {
                 var env = hostingContext.HostingEnvironment;
 
-                var configuration = builder.Build();
-                var botRoot = configuration.GetValue<string>("bot") ?? ".";
-
-                var configFile = Path.GetFullPath(Path.Combine(botRoot, @"settings/appsettings.json"));
-                builder.AddJsonFile(configFile, optional: true, reloadOnChange: true)
-                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .UseLuisConfigAdaptor()
-                    .UseLuisSettings();
+                builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
                 if (env.IsDevelopment())
                 {
@@ -46,10 +39,13 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
                     builder.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
                 }
 
-                if (!env.IsDevelopment())
-                {
-                    builder.AddUserSecrets<Startup>();
-                }
+                var configuration = builder.Build();
+                var botRoot = configuration.GetValue<string>("bot") ?? ".";
+                var configFile = Path.GetFullPath(Path.Combine(botRoot, @"settings/appsettings.json"));
+
+                builder.AddJsonFile(configFile, optional: true, reloadOnChange: true)
+                    .UseLuisConfigAdaptor()
+                    .UseLuisSettings();
 
                 builder.AddEnvironmentVariables()
                        .AddCommandLine(args);
