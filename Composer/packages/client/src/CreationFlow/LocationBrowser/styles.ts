@@ -84,3 +84,14 @@ export const detailListClass = mergeStyleSets({
     maxWidth: '16px',
   },
 });
+
+export const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
+`;

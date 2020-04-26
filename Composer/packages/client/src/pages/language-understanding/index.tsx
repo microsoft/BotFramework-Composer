@@ -120,7 +120,7 @@ const LUPage: React.FC<LUPageProps> = props => {
             )}
           </div>
         </div>
-        <div css={ContentStyle} data-testid="LUEditor">
+        <div role="main" css={ContentStyle} data-testid="LUEditor">
           <div css={contentEditor}>
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>
