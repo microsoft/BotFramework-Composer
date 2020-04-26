@@ -9,4 +9,4 @@ export const LgNamePattern = `([A-Z]\\w+)_(\\w{6})`;
  * ${help-me()}
  * ${formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm')}
  */
-export const LgTemplateRefPattern = `\\$\\{([A-Za-z_][\\w]+)(\\(.*\\))?\\}`;
+export const LgTemplateRefPattern = `\\$\\{([A-Za-z_][\\w]+)(\\([^\\)]*\\))?\\}`;
