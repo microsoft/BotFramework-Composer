@@ -27,7 +27,7 @@ import { styles as wizardStyles } from '../StepWizard/styles';
 import { StorageFolder, File } from '../../store/types';
 import { getFileIconName, calculateTimeDiff } from '../../utils';
 
-import { dropdown, detailListContainer, detailListClass } from './styles';
+import { dropdown, detailListContainer, detailListClass, tableCell, content } from './styles';
 
 interface FileSelectorProps {
   operationMode: {
@@ -61,7 +61,13 @@ const _renderIcon = (file: File) => {
 
 const _renderNameColumn = (file: File) => {
   const iconName = getFileIconName(file);
-  return <span aria-label={`${iconName} Name is ${file.name}`}>{file.name}</span>;
+  return (
+    <div data-is-focusable={true} css={tableCell}>
+      <div tabIndex={-1} css={content} aria-label={`${iconName} Name is ${file.name}`}>
+        {file.name}
+      </div>
+    </div>
+  );
 };
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
@@ -107,9 +113,15 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       data: 'number',
       onRender: (item: File) => {
         return (
-          <span aria-label={`Last modified time is ${calculateTimeDiff(item.lastModified)}`}>
-            {calculateTimeDiff(item.lastModified)}
-          </span>
+          <div css={tableCell} data-is-focusable={true}>
+            <div
+              tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.lastModified) })}
+            >
+              {calculateTimeDiff(item.lastModified)}
+            </div>
+          </div>
         );
       },
       isPadded: true,

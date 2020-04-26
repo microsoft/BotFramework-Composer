@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useEffect, useContext, useMemo } from 'react';
+import { useEffect, useContext, useMemo, useRef } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import get from 'lodash/get';
 
-import * as luUtil from '../utils/luUtil';
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { StoreContext } from '../store';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils';
@@ -15,14 +14,15 @@ import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 
 import { useLgApi } from './lgApi';
+import { useLuApi } from './luApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
 type EventSource = 'VisualEditor' | 'PropertyEditor';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
-  const { state, actions, resolvers } = useContext(StoreContext);
-  const { luFileResolver } = resolvers;
+  const { state, actions } = useContext(StoreContext);
+  const dialogMapRef = useRef({});
   const {
     botName,
     breadcrumb,
@@ -38,8 +38,8 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     skills,
   } = state;
   const lgApi = useLgApi();
+  const luApi = useLuApi();
   const updateDialog = actions.updateDialog;
-  const updateLuFile = actions.updateLuFile; //if debounced, error can't pass to form
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
@@ -49,26 +49,6 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       return result;
     }, {});
   }, [dialogs]);
-
-  async function updateLuIntentHandler(id, intentName, intent) {
-    const file = luFileResolver(id);
-    if (!file) throw new Error(`lu file ${id} not found`);
-    if (!intentName) throw new Error(`intentName is missing or empty`);
-
-    const content = luUtil.updateIntent(file.content, intentName, intent);
-
-    return await updateLuFile({ id, projectId, content });
-  }
-
-  async function removeLuIntentHandler(id, intentName) {
-    const file = luFileResolver(id);
-    if (!file) throw new Error(`lu file ${id} not found`);
-    if (!intentName) throw new Error(`intentName is missing or empty`);
-
-    const content = luUtil.removeIntent(file.content, intentName);
-
-    return await updateLuFile({ id, projectId, content });
-  }
 
   async function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find(dialog => dialog.id === id);
@@ -125,32 +105,50 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     }
   }, [schemas, projectId]);
 
+  dialogMapRef.current = dialogsMap;
+
   const api: ShellApi = {
+    getDialog: (dialogId: string) => {
+      return dialogMapRef.current[dialogId];
+    },
+    saveDialog: (dialogId: string, newDialogData: any) => {
+      dialogMapRef.current[dialogId] = newDialogData;
+      updateDialog({
+        id: dialogId,
+        content: newDialogData,
+        projectId,
+      });
+    },
     saveData: (newData, updatePath) => {
       let dataPath = '';
       if (source === FORM_EDITOR) {
         dataPath = updatePath || focused || '';
       }
 
-      const updatedDialog = setDialogData(dialogsMap, dialogId, dataPath, newData);
+      const updatedDialog = setDialogData(dialogMapRef.current, dialogId, dataPath, newData);
       const payload = {
         id: dialogId,
         content: updatedDialog,
         projectId,
       };
-      dialogsMap[dialogId] = updatedDialog;
+      dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
 
       //make sure focusPath always valid
-      const data = getDialogData(dialogsMap, dialogId, getFocusPath(selected, focused));
+      const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
       if (typeof data === 'undefined') {
+        /**
+         * It's improper to fallback to `dialogId` directly:
+         *   - If 'action' not exists at `focused` path, fallback to trigger path;
+         *   - If 'trigger' not exisits at `selected` path, fallback to dialog Id;
+         *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
+         */
         actions.navTo(dialogId);
       }
     },
     ...lgApi,
-    updateLuIntent: updateLuIntentHandler,
+    ...luApi,
     updateRegExIntent: updateRegExIntentHandler,
-    removeLuIntent: removeLuIntentHandler,
     navTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
