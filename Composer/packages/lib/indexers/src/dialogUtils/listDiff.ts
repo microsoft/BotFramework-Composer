@@ -37,7 +37,7 @@ import { IJsonChanges, IJSONChangeAdd, IJSONChangeDelete, IJSONChangeUpdate, IDi
  * @param stopper
  */
 export function ListDiff(list1: any[], list2: any[], differ?: IDiffer, stopper?: IStopper): IJsonChanges {
-  const usedDiffer = differ || isEqual;
+  const usedDiffer = isEqual;
   const list1Changes = differenceWith(list1, list2, usedDiffer).map(item => {
     return {
       index: indexOf(list1, item),

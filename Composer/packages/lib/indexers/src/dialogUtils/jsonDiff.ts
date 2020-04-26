@@ -8,6 +8,8 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { JsonWalk, VisitorFunc } from '../utils/jsonWalk';
 
+import { ListDiff } from './listDiff';
+
 export interface IJSONChangeAdd {
   path: string;
   value: any;
@@ -86,14 +88,9 @@ export const defaultJSONUpdateDiffer: IDiffer = (json1: any, json2: any, path: s
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
 
-  // TODO handle array diff
-  // if( Array.isArray(value1) && Array.isArray(value2) ) {
-
-  // }
-
   const isStop = stopper(json1, json2, path);
   // _isEqual comparison use http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero
-  const isChange = isStop && hasWithJsonPath(json1, path) && hasWithJsonPath(json2, path) && isEqual(value1, value2);
+  const isChange = isStop && hasWithJsonPath(json1, path) && hasWithJsonPath(json2, path) && !isEqual(value1, value2);
   return { isChange, isStop };
 };
 
@@ -103,12 +100,24 @@ export function JsonDiffAdds(prevJson, currJson, differ?: IDiffer, stopper?: ISt
   const usedDiffer = differ || defaultJSONAddDiffer;
   const usedStopper = stopper || defualtJSONStopComparison;
   const visitor: VisitorFunc = (path, value) => {
-    const { isChange, isStop } = usedDiffer(prevJson, currJson, path, usedStopper);
-    if (isChange) {
-      results.push({ path, value });
-    }
-    if (isStop) {
+    // if both value are array, pass to ListDiffer
+    const value1 = getWithJsonPath(prevJson, path);
+    const value2 = getWithJsonPath(currJson, path);
+    if (Array.isArray(value1) && Array.isArray(value2)) {
+      const listChanges = ListDiff(value1, value2, usedDiffer, usedStopper).adds.map(item => {
+        item.path = `${path}${item.path}`;
+        return item;
+      });
+      results.push(...listChanges);
       return true;
+    } else {
+      const { isChange, isStop } = usedDiffer(prevJson, currJson, path, usedStopper);
+      if (isChange) {
+        results.push({ path, value });
+      }
+      if (isStop) {
+        return true;
+      }
     }
 
     return false;
@@ -128,14 +137,27 @@ export function JsonDiffUpdates(prevJson, currJson, differ?: IDiffer, stopper?: 
   const usedStopper = stopper || defualtJSONStopComparison;
 
   const visitor: VisitorFunc = (path, value) => {
-    const { isChange, isStop } = usedDiffer(prevJson, currJson, path, usedStopper);
-    if (isChange) {
-      const preValue = getWithJsonPath(prevJson, path);
-      results.push({ path, preValue, value });
-    }
-    if (isStop) {
+    // if both value are array, pass to ListDiffer
+    const value1 = getWithJsonPath(prevJson, path);
+    const value2 = getWithJsonPath(currJson, path);
+    if (Array.isArray(value1) && Array.isArray(value2)) {
+      const listChanges = ListDiff(value1, value2, usedDiffer, usedStopper).updates.map(item => {
+        item.path = `${path}${item.path}`;
+        return item;
+      });
+      results.push(...listChanges);
       return true;
+    } else {
+      const { isChange, isStop } = usedDiffer(prevJson, currJson, path, usedStopper);
+      if (isChange) {
+        const preValue = getWithJsonPath(prevJson, path);
+        results.push({ path, preValue, value });
+      }
+      if (isStop) {
+        return true;
+      }
     }
+
     return false;
   };
 
