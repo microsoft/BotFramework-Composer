@@ -23,10 +23,10 @@ interface CreateAndDeployResources {
 }
 
 interface PublishConfig {
-  customizeConfiguration: CreateAndDeployResources;
   settings: any;
   templatePath: string;
   name: string; //profile name
+  [key: string]: any;
 }
 
 class AzurePublisher {
@@ -163,25 +163,34 @@ class AzurePublisher {
    *************************************************************************************************/
   publish = async (config: PublishConfig, project, metadata, user) => {
     // templatePath point to the CSharp code
-    const { settings, templatePath, name, customizeConfiguration } = config;
     const {
+      settings,
+      templatePath,
+      name,
       subscriptionID,
+      publishName,
       environment,
       location,
       appPassword,
       luisAuthoringKey,
       luisAuthoringRegion,
-    } = customizeConfiguration;
+    } = config;
 
+    const customizeConfiguration = {
+      subscriptionID,
+      publishName,
+      environment,
+      location,
+      appPassword,
+      luisAuthoringKey,
+      luisAuthoringRegion,
+    };
     // point to the declarative assets (possibly in remote storage)
     // TODO: this should definitely be using project.files instead of the path
     const srcBot = project.dataDir || '';
 
     // get the bot id from the project
     const botId = project.id;
-
-    // get the name of the publish profile
-    const publishName = customizeConfiguration.name;
 
     // generate an id to track this deploy
     const jobId = uuid();

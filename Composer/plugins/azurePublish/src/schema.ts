@@ -13,9 +13,9 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'App Password',
     },
-    name: {
+    publishName: {
       type: 'string',
-      title: 'Name',
+      title: 'publishName',
     },
     environment: {
       type: 'string',
@@ -37,7 +37,7 @@ const schema: JSONSchema7 = {
   default: {
     subscriptionID: '<your subscription id>',
     appPassword: '<16 characters including uppercase, lowercase, number and special character>',
-    name: '<unique name in your subscription>',
+    publishName: '<unique name in your subscription>',
     environment: 'dev',
     location: 'westus',
     luisAuthoringRegion: 'westus',
