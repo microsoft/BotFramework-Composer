@@ -13,10 +13,8 @@ context('Creating a new bot', () => {
   it('can create a new bot', () => {
     cy.findByTestId('Create from scratch').click();
     cy.findByTestId('NextStepButton').click();
-    cy.findByTestId('NewDialogName')
-      .clear()
-      .type('__TestNewProject');
-    cy.findByTestId('SubmitNewBotBtn').click();
+    cy.createBot('ToDoBotWithLuisSample');
+    cy.enterTextAndSubmit('NewDialogName', '__TestNewProject', 'SubmitNewBotBtn');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestNewProject').should('exist');
     });
@@ -26,10 +24,7 @@ context('Creating a new bot', () => {
     cy.findByTestId('Create from template').click();
     cy.findByTestId('TodoSample').click({ force: true });
     cy.findByTestId('NextStepButton').click();
-    cy.findByTestId('NewDialogName')
-      .clear()
-      .type('__TestNewProject2');
-    cy.findByTestId('SubmitNewBotBtn').click();
+    cy.enterTextAndSubmit('NewDialogName', '__TestNewProject2', 'SubmitNewBotBtn');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestNewProject2').should('exist');
       cy.findByText('addtodo').should('exist');
