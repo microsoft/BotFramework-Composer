@@ -4,7 +4,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import { DialogFactory, deepCopyActions, ExternalResourceHandlerAsync } from '@bfc/shared';
 
 function parseSelector(path: string): null | string[] {
   if (!path) return null;
@@ -86,11 +85,16 @@ function prepareTargetArray(dialog: { [key: string]: any }, arrayPath: string) {
   return { parentData, currentData, currentKey };
 }
 
-export function queryNode(inputDialog, path) {
+export function queryNode(inputDialog, path?: string) {
+  if (!path) return null;
   const target = locateNode(inputDialog, path);
   if (!target) return null;
 
   return target.currentData;
+}
+
+export function queryNodes(inputDialog, nodeIds: string[]) {
+  return nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
 }
 
 export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedData: any) => any) {
@@ -151,11 +155,6 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNod
   return dialog;
 }
 
-export function insert(inputDialog, path, position, $kind, factory: DialogFactory) {
-  const newStep = factory.create($kind);
-  return insertAction(inputDialog, path, position, newStep);
-}
-
 export function insertAction(inputDialog, arrayPath: string, position: number, newAction) {
   const dialog = cloneDeep(inputDialog);
   const current = get(dialog, arrayPath, []);
@@ -167,25 +166,6 @@ export function insertAction(inputDialog, arrayPath: string, position: number, n
   set(dialog, arrayPath, current);
 
   return dialog;
-}
-
-type DereferenceLgHandler = ExternalResourceHandlerAsync<string>;
-
-export async function copyNodes(inputDialog, nodeIds: string[], dereferenceLg: DereferenceLgHandler): Promise<any[]> {
-  const nodes = nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
-  return deepCopyActions(nodes, dereferenceLg);
-}
-
-export async function cutNodes(
-  inputDialog,
-  nodeIds: string[],
-  dereferenceLg: DereferenceLgHandler,
-  callbackOnCutNodes?: (nodes: any[]) => any
-) {
-  const nodesData = await copyNodes(inputDialog, nodeIds, dereferenceLg);
-  const newDialog = deleteNodes(inputDialog, nodeIds, callbackOnCutNodes);
-
-  return { dialog: newDialog, cutData: nodesData };
 }
 
 export function appendNodesAfter(inputDialog, targetId, newNodes) {
@@ -204,7 +184,7 @@ export function appendNodesAfter(inputDialog, targetId, newNodes) {
   return dialog;
 }
 
-function insertNodes(inputDialog, arrayPath: string, arrayIndex: number, newNodes: any[]) {
+export function insertNodes(inputDialog, arrayPath: string, arrayIndex: number, newNodes: any[]) {
   if (!Array.isArray(newNodes) || newNodes.length === 0) {
     return inputDialog;
   }
@@ -218,19 +198,6 @@ function insertNodes(inputDialog, arrayPath: string, arrayIndex: number, newNode
 
   targetArray.currentData.splice(arrayIndex, 0, ...newNodes);
   return dialog;
-}
-
-export async function pasteNodes(
-  inputDialog,
-  arrayPath: string,
-  arrayIndex: number,
-  clipboardNodes: any[],
-  handleLgField: ExternalResourceHandlerAsync<string>
-) {
-  // Considering a scenario that copy one time but paste multiple times,
-  // it requires seeding all $designer.id again by invoking deepCopy.
-  const newNodes = await deepCopyActions(clipboardNodes, handleLgField);
-  return insertNodes(inputDialog, arrayPath, arrayIndex, newNodes);
 }
 
 export const getParentPaths = (actionPath: string): string[] => {
@@ -247,4 +214,15 @@ export const getParentPaths = (actionPath: string): string[] => {
     results.push(path);
   }
   return results;
+};
+
+export const parseNodePath = (path: string): { arrayPath: string; arrayIndex: number } | null => {
+  if (!path) return null;
+
+  const position = path.match(/^(.+)\[(\d+)\]$/);
+  if (position === null || position.length !== 3) return null;
+
+  const [, arrayPath, arrayIndexStr] = position;
+  const arrayIndex = parseInt(arrayIndexStr);
+  return { arrayPath, arrayIndex };
 };
