@@ -16,6 +16,7 @@ export const page = css`
   display: flex;
   overflow-x: hidden;
   overflow-y: auto;
+  flex-wrap: wrap;
 `;
 
 export const leftPage = css`
@@ -58,7 +59,6 @@ export const newBotContainer = css`
 `;
 
 export const leftContainer = css`
-  min-width: 535px;
   margin-top: 10px;
   margin-bottom: 10px;
   flex: auto;
@@ -252,4 +252,16 @@ export const exampleListCellName = css`
 export const exampleListCellDescription = css`
   font-size: ${fonts.small.fontSize};
   color: ${palette.neutralTertiary};
+`;
+
+export const tableCell = css`
+  outline: none;
+  width: auto;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
 `;

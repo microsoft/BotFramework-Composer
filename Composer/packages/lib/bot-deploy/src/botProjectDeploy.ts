@@ -15,7 +15,6 @@ import {
 } from '@azure/arm-resources/esm/models';
 import { GraphRbacManagementClient } from '@azure/graph';
 import * as msRestNodeAuth from '@azure/ms-rest-nodeauth';
-// import { TokenCredentials } from '@azure/ms-rest-js';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 
@@ -226,7 +225,6 @@ export class BotProjectDeploy {
    * Write updated settings back to the settings file
    */
   private async updateDeploymentJsonFile(
-    settingsPath: string,
     client: ResourceManagementClient,
     resourceGroupName: string,
     deployName: string,
@@ -501,6 +499,7 @@ export class BotProjectDeploy {
       });
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 
@@ -711,14 +710,7 @@ export class BotProjectDeploy {
 
     // Validate that everything was successfully created.
     // Then, update the settings file with information about the new resources
-    const updateResult = await this.updateDeploymentJsonFile(
-      this.settingsPath,
-      client,
-      resourceGroupName,
-      timeStamp,
-      appId,
-      appPassword
-    );
+    const updateResult = await this.updateDeploymentJsonFile(client, resourceGroupName, timeStamp, appId, appPassword);
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
       message: updateResult,

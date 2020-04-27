@@ -21,7 +21,7 @@ context('LU Page', () => {
       .should('exist');
 
     // nav to ToDoBotWithLuisSample.main dialog
-    cy.findByTestId('LUEditor').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestToDoBotWithLuisSample').click();
     });
     cy.get('.toggleEditMode button').as('switchButton');
@@ -32,7 +32,7 @@ context('LU Page', () => {
       .should('exist');
 
     // back to all table view
-    cy.findByTestId('LUEditor').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('All').click();
     });
     cy.findByTestId('LUEditor')

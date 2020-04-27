@@ -98,7 +98,7 @@ async function loadServer() {
 async function main() {
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
-    if (isDevelopment) {
+    if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow.webContents.openDevTools();
     }
 

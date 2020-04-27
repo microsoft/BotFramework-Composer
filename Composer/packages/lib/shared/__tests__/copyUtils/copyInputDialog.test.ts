@@ -8,7 +8,7 @@ import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 describe('shallowCopyAdaptiveAction', () => {
   const externalApiWithLgCopy: ExternalApi = {
     ...externalApi,
-    transformLgField: (id, data, field, value) => Promise.resolve(value + '(copy)'),
+    copyLgField: (fromId, fromData, toId, toData, fieldName) => Promise.resolve(fromData[fieldName] + '(copy)'),
   };
 
   it('can copy TextInput', async () => {

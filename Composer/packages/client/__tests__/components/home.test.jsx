@@ -19,7 +19,7 @@ describe('<Home/>', () => {
     );
     expect(container).toHaveTextContent('a');
     expect(container).toHaveTextContent('b');
-    const link = queryByLabelText('a');
+    const link = queryByLabelText('Bot name is a');
     fireEvent.dblClick(link);
     expect(onItemChosen.mock.results[0].value).toBe('path1');
   });
