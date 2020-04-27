@@ -225,7 +225,6 @@ export class BotProjectDeploy {
    * Write updated settings back to the settings file
    */
   private async updateDeploymentJsonFile(
-    settingsPath: string,
     client: ResourceManagementClient,
     resourceGroupName: string,
     deployName: string,
@@ -711,14 +710,7 @@ export class BotProjectDeploy {
 
     // Validate that everything was successfully created.
     // Then, update the settings file with information about the new resources
-    const updateResult = await this.updateDeploymentJsonFile(
-      this.settingsPath,
-      client,
-      resourceGroupName,
-      timeStamp,
-      appId,
-      appPassword
-    );
+    const updateResult = await this.updateDeploymentJsonFile(client, resourceGroupName, timeStamp, appId, appPassword);
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
       message: updateResult,

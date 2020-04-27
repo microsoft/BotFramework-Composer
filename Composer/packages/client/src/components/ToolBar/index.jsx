@@ -71,7 +71,7 @@ export function ToolBar(props) {
                     'data-testid': 'FlyoutNewDialog',
                     key: 'adddialog',
                     text: formatMessage('Add new dialog'),
-                    onClick: () => actions.createDialogBegin({}, onCreateDialogComplete),
+                    onClick: () => actions.createDialogBegin([], onCreateDialogComplete),
                   },
                   {
                     'data-testid': 'FlyoutNewTrigger',

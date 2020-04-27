@@ -5,15 +5,14 @@ import path from 'path';
 
 import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
 import { v4 as uuid, v5 as hash } from 'uuid';
-import { copy, emptyDir, readJson, pathExists, writeJson, mkdirSync, pathExistsSync } from 'fs-extra';
+import { copy, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import { MemoryCache } from 'adal-node';
 
 import schema from './schema';
 const _cache = new MemoryCache();
-
 interface CreateAndDeployResources {
-  name: string;
+  publishName: string;
   location: string;
   environment: string;
   subscriptionID: string;
@@ -44,29 +43,38 @@ class AzurePublisher {
     this.resources = {};
   }
   private getProjectFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
-  private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key));
-  private getRuntimeFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'runtime');
-  private init = async (srcBot: string, srcTemplate: string, resourcekey: string, currentProvision: any) => {
-    const exist = await pathExists(this.getProjectFolder(resourcekey));
+  private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'ComposerDialogs');
+  private getSettingsPath = (key: string) => path.resolve(this.getBotFolder(key), 'settings/appsettings.json');
+  private init = async (botFiles: any, settings: any, srcTemplate: string, resourcekey: string) => {
+    const projExist = await pathExists(this.getProjectFolder(resourcekey));
+    const botExist = await pathExists(this.getBotFolder(resourcekey));
     const botFolder = this.getBotFolder(resourcekey);
     const projFolder = this.getProjectFolder(resourcekey);
+    const settingsPath = this.getSettingsPath(resourcekey);
     // deploy resource exist
-    if (!exist) {
+    await emptyDir(projFolder);
+    if (!projExist) {
       mkdirSync(projFolder, { recursive: true });
     }
-    await emptyDir(projFolder);
+    if (!botExist) {
+      mkdirSync(botFolder, { recursive: true });
+    }
+    // save bot files
+    for (const file of botFiles) {
+      const filePath = path.resolve(botFolder, file.relativePath);
+      if (!(await pathExists(path.dirname(filePath)))) {
+        mkdirSync(path.dirname(filePath), { recursive: true });
+      }
+      writeFileSync(filePath, file.content);
+    }
+
+    // save the settings file
+    if (!(await pathExists(path.dirname(settingsPath)))) {
+      mkdirSync(path.dirname(settingsPath), { recursive: true });
+    }
+    await writeJson(settingsPath, settings, { spaces: 4 });
     // copy bot and runtime into projFolder
-    await copy(srcBot, botFolder, {
-      recursive: true,
-    });
     await copy(srcTemplate, projFolder);
-    const resourcePath = path.resolve(projFolder, 'appsettings.deployment.json');
-    await writeJson(resourcePath, currentProvision, {
-      spaces: 4,
-    });
-    // TODO: this needs to be remote storage aware
-    // remember the project's project.files not include the settings.json file, need to change the indexer in client
-    // and save the project.files contents instead of copy
   };
 
   private getHistory = async (botId: string, profileName: string) => {
@@ -131,10 +139,17 @@ class AzurePublisher {
     jobId: string,
     customizeConfiguration: CreateAndDeployResources
   ) => {
-    const { name, location, environment, appPassword, luisAuthoringKey, luisAuthoringRegion } = customizeConfiguration;
+    const {
+      publishName,
+      location,
+      environment,
+      appPassword,
+      luisAuthoringKey,
+      luisAuthoringRegion,
+    } = customizeConfiguration;
     try {
       // Perform the deploy
-      await this.azDeployer.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
+      await this.azDeployer.deploy(publishName, environment, luisAuthoringKey, luisAuthoringRegion);
 
       // update status and history
       const status = this.getLoadingStatus(botId, profileName, jobId);
@@ -176,7 +191,7 @@ class AzurePublisher {
       luisAuthoringRegion,
     } = config;
 
-    const customizeConfiguration = {
+    const customizeConfiguration: CreateAndDeployResources = {
       subscriptionID,
       publishName,
       environment,
@@ -186,8 +201,7 @@ class AzurePublisher {
       luisAuthoringRegion,
     };
     // point to the declarative assets (possibly in remote storage)
-    // TODO: this should definitely be using project.files instead of the path
-    const srcBot = project.dataDir || '';
+    const botFiles = project.files;
 
     // get the bot id from the project
     const botId = project.id;
@@ -197,38 +211,51 @@ class AzurePublisher {
 
     // resource key to map to one provision resource
     const resourcekey = hash(
-      [publishName, location, environment, appPassword, luisAuthoringKey, luisAuthoringRegion],
+      [subscriptionID, publishName, location, environment, appPassword, luisAuthoringKey, luisAuthoringRegion],
       subscriptionID
     );
+
+    await this.init(botFiles, settings, templatePath, resourcekey);
+
     try {
+      const profile = settings.publishTargets?.find(item => item.name === name);
       // test creds, if not valid, return 500
-      if (!(await pathExists(this.credsFile))) {
-        throw new Error('please input token to login azure cloud');
+      if (!profile || !profile.credential) {
+        throw new Error('please run Login script to login azure cloud');
       }
-      if (!(await pathExists(this.provisionResource))) {
-        throw new Error('please do the provision first');
+      if (!profile || !profile.provision) {
+        throw new Error('please run provision script to do the provision');
       }
-      const provisions = await readJson(this.provisionResource);
-      const currentProvision = provisions[resourcekey];
+      const currentProvision = profile.provision;
       if (!currentProvision) {
         throw new Error(
           'no successful created resource in Azure according to your config, please do the provision again'
         );
       }
-      const credsFromFile = await readJson(this.credsFile);
+      // append provision resource into file
+      const resourcePath = path.resolve(this.getProjectFolder(resourcekey), 'appsettings.deployment.json');
+      const appSettings = await readJson(resourcePath);
+      await writeJson(
+        resourcePath,
+        { ...appSettings, ...currentProvision },
+        {
+          spaces: 4,
+        }
+      );
+      const credential = profile.credential;
 
-      if (credsFromFile.tokenCache && credsFromFile.tokenCache._entries) {
-        _cache.add(credsFromFile.tokenCache._entries, (err, result) => {
+      if (credential.tokenCache && credential.tokenCache._entries) {
+        _cache.add(credential.tokenCache._entries, (err, result) => {
           console.log(err);
           console.log(result);
         });
       }
       const creds = new DeviceTokenCredentials(
-        credsFromFile.clientId,
-        credsFromFile.domain,
-        credsFromFile.username,
-        credsFromFile.tokenAudience,
-        credsFromFile.environment,
+        credential.clientId,
+        credential.domain,
+        credential.username,
+        credential.tokenAudience,
+        credential.environment,
         _cache
       );
       this.azDeployer = new BotProjectDeploy({
@@ -239,7 +266,6 @@ class AzurePublisher {
         creds: creds,
         projPath: this.getProjectFolder(resourcekey),
       });
-      await this.init(srcBot, templatePath, resourcekey, currentProvision);
 
       const response = {
         status: 202,
