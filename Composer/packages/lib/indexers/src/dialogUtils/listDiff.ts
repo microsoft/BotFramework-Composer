@@ -8,7 +8,7 @@ import differenceWith from 'lodash/differenceWith';
 import indexOf from 'lodash/indexOf';
 // import pullAllWith from 'lodash/pullAllWith';
 
-import { IJsonChanges, IJSONChangeAdd, IJSONChangeDelete, IJSONChangeUpdate, IDiffer, IStopper } from './jsonDiff';
+import { IJsonChanges, IComparator } from './jsonDiff';
 
 /**
  * diff with listItem's change
@@ -33,18 +33,17 @@ import { IJsonChanges, IJSONChangeAdd, IJSONChangeDelete, IJSONChangeUpdate, IDi
  * Assume list1, list2 both are uniqed list.
  * @param list1 {[key:string]: any}
  * @param list2
- * @param differ
- * @param stopper
+ * @param comparator
  */
-export function ListDiff(list1: any[], list2: any[], differ?: IDiffer, stopper?: IStopper): IJsonChanges {
-  const usedDiffer = isEqual;
-  const list1Changes = differenceWith(list1, list2, usedDiffer).map(item => {
+export function ListDiff(list1: any[], list2: any[], comparator?: IComparator): IJsonChanges {
+  const usedComparator = isEqual;
+  const list1Changes = differenceWith(list1, list2, usedComparator).map(item => {
     return {
       index: indexOf(list1, item),
       value: item,
     };
   }); // list1[index] item are not found in list2
-  const list2Changes = differenceWith(list2, list1, usedDiffer).map(item => {
+  const list2Changes = differenceWith(list2, list1, usedComparator).map(item => {
     return {
       index: indexOf(list2, item),
       value: item,

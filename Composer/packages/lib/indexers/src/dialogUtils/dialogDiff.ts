@@ -26,9 +26,9 @@ import {
   IJSONChangeAdd,
   IJSONChangeDelete,
   IJSONChangeUpdate,
-  IDiffer,
+  IComparator,
   IStopper,
-  defaultJSONAddDiffer,
+  defaultJSONAddComparator,
   defualtJSONStopComparison,
   getWithJsonPath,
   hasWithJsonPath,
@@ -84,6 +84,7 @@ export function isSameType(value1, value2) {
  * @param json1
  * @param json2
  * @param path
+ * stop function tell JsonWalk what is the leaf, most small comparision unit. for AdaptiveDialog is { $kind, ...no-child }
  * compare json2 to json1 json at path should stop walk
  * case 1: extend default json stop comparision.
  * case 2: not same $kind type
@@ -98,13 +99,13 @@ export const defualtDialogStopComparison: IStopper = (json1: any, json2: any, pa
 };
 
 // compare json2 to json1 at path is an add.
-export const defaultDialogAddDiffer: IDiffer = (json1: any, json2: any, path: string, stopper: IStopper) => {
+export const defaultDialogAddComparator: IComparator = (json1: any, json2: any, path: string) => {
   // TODO: ['a','b','c'] -> ['x','a','b','c']  is an add at $0, not add at $3
-  return defaultJSONAddDiffer(json1, json2, path, stopper);
+  return defaultJSONAddComparator(json1, json2, path);
 };
 
 // compare json2 to json1 at path is an update.
-export const defaultDialogUpdateDiffer: IDiffer = (json1: any, json2: any, path: string, stopper: IStopper) => {
+export const defaultDialogUpdateComparator: IComparator = (json1: any, json2: any, path: string) => {
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
 
@@ -113,7 +114,7 @@ export const defaultDialogUpdateDiffer: IDiffer = (json1: any, json2: any, path:
 
   const isChange =
     isSameStructure && !isSkipDialogObject(value1, value2) && (!isSameKind(value1, value2) || !isEqual(value1, value2));
-  const isStop = isChange || stopper(json1, json2, path);
+  const isStop = isChange || defualtDialogStopComparison(json1, json2, path);
   return { isChange, isStop };
 };
 
@@ -121,30 +122,28 @@ export const defaultDialogUpdateDiffer: IDiffer = (json1: any, json2: any, path:
  *
  * @param prevJson , previous json value
  * @param currJson , current json value
- * @param differ , the diff function used to compare tow value, decide it's a 'add' or not, hasNot in prevJson && has in currJson is the most common comparision function.
- * @param stopper , stop function tell JsonWalk what is the leaf, most small comparision unit. for AdaptiveDialog is { $kind, ...no-child }
+ * @param comparator , the compare function used to compare tow value, decide it's a 'add' or not, hasNot in prevJson && has in currJson is the most common comparision function.
  */
 
-export function DialogDiffAdd(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJSONChangeAdd[] {
-  const usedDiffer = differ || defaultDialogAddDiffer;
-  const usedStopper = stopper || defualtDialogStopComparison;
-  return JsonDiffAdds(prevJson, currJson, usedDiffer, usedStopper);
+export function DialogDiffAdd(prevJson, currJson, comparator?: IComparator): IJSONChangeAdd[] {
+  const usedComparator = comparator || defaultDialogAddComparator;
+
+  return JsonDiffAdds(prevJson, currJson, usedComparator);
 }
 
-export function DialogDiffDelete(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJSONChangeDelete[] {
-  return DialogDiffAdd(currJson, prevJson, differ, stopper);
+export function DialogDiffDelete(prevJson, currJson, comparator?: IComparator): IJSONChangeDelete[] {
+  return DialogDiffAdd(currJson, prevJson, comparator);
 }
 
-export function DialogDiffUpdate(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJSONChangeUpdate[] {
-  const usedDiffer = differ || defaultDialogUpdateDiffer;
-  const usedStopper = stopper || defualtDialogStopComparison;
-  return JsonDiffUpdates(prevJson, currJson, usedDiffer, usedStopper);
+export function DialogDiffUpdate(prevJson, currJson, comparator?: IComparator): IJSONChangeUpdate[] {
+  const usedComparator = comparator || defaultDialogUpdateComparator;
+  return JsonDiffUpdates(prevJson, currJson, usedComparator);
 }
 
-export function DialogDiff(prevJson, currJson, differ?: IDiffer, stopper?: IStopper): IJsonChanges {
+export function DialogDiff(prevJson, currJson, comparator?: IComparator): IJsonChanges {
   return {
-    adds: DialogDiffAdd(prevJson, currJson, differ, stopper),
-    deletes: DialogDiffDelete(prevJson, currJson, differ, stopper),
-    updates: DialogDiffUpdate(prevJson, currJson, differ, stopper),
+    adds: DialogDiffAdd(prevJson, currJson, comparator),
+    deletes: DialogDiffDelete(prevJson, currJson, comparator),
+    updates: DialogDiffUpdate(prevJson, currJson, comparator),
   };
 }
