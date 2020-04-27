@@ -35,6 +35,9 @@ export class DefaultSettingManager extends FileSettingManager {
         endpointkey: '',
         hostname: '',
       },
+      telemetry: {
+        logPersonalInformation: false,
+      },
       runtime: {
         customRuntime: false,
         path: '',
