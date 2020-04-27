@@ -20,6 +20,7 @@ import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
 import { designerCache } from '../store/DesignerCache';
+import { MenuTypes } from '../constants/MenuTypes';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -228,6 +229,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     setSelectableElements(querySelectableElements());
   }, [data, focusedEvent]);
 
+  useEffect((): void => {
+    if (!focusedId) {
+      resetSelectionData();
+    }
+  }, [focusedId]);
+
   const selection = new Selection({
     onSelectionChanged: (): void => {
       const selectedIndices = selection.getSelectedIndices();
@@ -293,7 +300,13 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case KeyboardPrimaryTypes.Cursor: {
         const currentSelectedId = selectionContext.selectedIds[0] || focusedId || '';
-        const { selected, focused, tab } = moveCursor(selectableElements, currentSelectedId, command);
+        const { selected, focused, tab } = currentSelectedId
+          ? moveCursor(selectableElements, currentSelectedId, command)
+          : {
+              selected: `${focusedEvent}.actions[0]${MenuTypes.EdgeMenu}`,
+              focused: undefined,
+              tab: '',
+            };
         setSelectionContext({
           getNodeIndex: selectionContext.getNodeIndex,
           selectedIds: [selected as string],
