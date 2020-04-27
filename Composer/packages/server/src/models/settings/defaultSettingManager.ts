@@ -37,7 +37,7 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       telemetry: {
         logPersonalInformation: false,
-      }
+      },
       runtime: {
         customRuntime: false,
         path: '',
