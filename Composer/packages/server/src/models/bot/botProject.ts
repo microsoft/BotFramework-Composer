@@ -160,6 +160,7 @@ export class BotProject {
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
 
     if (userSDKSchemaFile !== undefined) {
+      debug('Customized SDK schema found');
       try {
         sdkSchema = JSON.parse(userSDKSchemaFile.content);
       } catch (error) {
