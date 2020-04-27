@@ -226,6 +226,24 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	}
 }
 
+# Enable all features to true by default
+$featureConfig = @{ }
+$featureConfig["UseTelementryLoggerMiddleware"] = $true
+$featureConfig["UseTranscriptLoggerMiddleware"] = $true
+$featureConfig["UseShowTypingMiddleware"] = $true
+$featureConfig["UseInspectionMiddleware"] = $true
+$featureConfig["UseCosmosDb"] = $true
+
+if (Test-Path $(Join-Path $publishFolder appsettings.deployment.json)) {
+	$settings = Get-Content $(Join-Path $publishFolder appsettings.deployment.json) | ConvertFrom-Json
+}
+else {
+	$settings = New-Object PSObject
+}
+
+$settings | Add-Member -Type NoteProperty -Force -Name 'feature' -Value $featureConfig
+$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.deployment.json)
+
 $resourceGroup = "$name-$environment"
 
 if ($?) {     

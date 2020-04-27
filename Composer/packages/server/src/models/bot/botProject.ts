@@ -644,7 +644,6 @@ export class BotProject {
                 replacers.map(replacer => {
                   newLine = replacer(newLine);
                 });
-                newLine = newLine.replace('-', '_');
                 newContentLines.push(newLine);
                 fileChanged = true;
               } else {
