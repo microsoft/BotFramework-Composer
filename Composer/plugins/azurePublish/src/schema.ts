@@ -33,6 +33,10 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Authoring Key',
     },
+    provision: {
+      type: 'object',
+      title: 'Provision resource',
+    },
   },
   default: {
     subscriptionID: '<your subscription id>',
@@ -42,6 +46,7 @@ const schema: JSONSchema7 = {
     location: 'westus',
     luisAuthoringRegion: 'westus',
     luisAuthoringKey: '',
+    provision: '<provision result after run provision script>',
   },
 };
 export default schema;
