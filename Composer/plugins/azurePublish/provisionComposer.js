@@ -12,8 +12,6 @@ const hash = require('uuid').v5;
 msRestNodeAuth
   .interactiveLogin()
   .then(async creds => {
-    const result = JSON.stringify(creds);
-    fs.writeFileSync('cred.txt', result);
     const subId = argv.subscriptionId;
     const name = argv.name;
     const environment = argv.environment || 'dev';
@@ -23,7 +21,6 @@ msRestNodeAuth
     const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus';
     const key = hash([name, location, environment, appPassword, luisAuthoringKey, luisAuthoringRegion], subId);
     const projFolder = argv.projFolder || path.resolve(__dirname, `publishBots/${key}`);
-    const settingsPath = path.resolve(__dirname, 'provisionResult.json'); // path to save the provision result.
     const config = {
       subId: subId,
       creds: creds,
@@ -38,21 +35,16 @@ msRestNodeAuth
         `Your Azure hosting environment has been created! Copy paste the following configuration into a new profile in Composer's Publishing tab.`
       );
       console.log(`{
-        "name": "${name}",
+        "publishName": "${name}",
         "location": "${location}",
         "subscriptionID": "${subId}",
-        "appPassword":"${appPassword}"
-        "luisAuthoringRegion":"${luisAuthoringRegion}",
-        "environment":"${environment}",
-        "luisAuthoringKey":${luisAuthoringKey ? '"' + luisAuthoringKey + '"' : null}
+        "appPassword": "${appPassword}"
+        ${luisAuthoringKey ? '"luisAuthoringKey": "' + luisAuthoringKey + '",' : ''}
+        "luisAuthoringRegion": "${luisAuthoringRegion}",
+        "environment": "${environment}",
+        "provision": ${createResult},
+        "credential": ${creds}
       }`);
-      // write the provision result into file
-      let result = {};
-      if (await fs.pathExists(settingsPath)) {
-        result = (await fs.readJson(settingsPath)) || {};
-      }
-      result.key = createResult;
-      await fs.writeJson(settingsPath, result);
     }
   })
   .catch(err => {
