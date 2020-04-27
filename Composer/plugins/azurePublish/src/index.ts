@@ -75,17 +75,6 @@ class AzurePublisher {
     await writeJson(settingsPath, settings, { spaces: 4 });
     // copy bot and runtime into projFolder
     await copy(srcTemplate, projFolder);
-<<<<<<< HEAD
-    const resourcePath = path.resolve(projFolder, 'appsettings.deployment.json');
-    await writeJson(resourcePath, currentProvision, {
-      spaces: 4,
-    });
-    // TODO: this needs to be remote storage aware
-    // remember the project's project.files not include the settings.json file, need to change the indexer in client
-    // and save the project.files contents instead of copy
-    // BEN SAYS: content of settings.json is available in project.settings?
-=======
->>>>>>> ab25d8741f595a9d2ae0644b770c8a2dcb2a51dc
   };
 
   private getHistory = async (botId: string, profileName: string) => {
