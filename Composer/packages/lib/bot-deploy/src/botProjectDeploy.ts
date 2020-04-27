@@ -4,7 +4,7 @@
 import * as path from 'path';
 import * as util from 'util';
 
-import { WebSiteManagementClient } from '@azure/arm-appservice-profile-2019-03-01-hybrid';
+// import { WebSiteManagementClient } from '@azure/arm-appservice-profile-2019-03-01-hybrid';
 import { ResourceManagementClient } from '@azure/arm-resources';
 import {
   Deployment,
@@ -58,7 +58,7 @@ export class BotProjectDeploy {
     this.zipPath = config.zipPath ?? path.join(this.projPath, 'code.zip');
 
     // path to the built, ready to deploy code assets
-    this.publishFolder = config.publishFolder ?? path.join(this.projPath, 'bin\\Release\\netcoreapp3.1');
+    this.publishFolder = config.publishFolder ?? path.join(this.projPath, 'bin', 'Release', 'netcoreapp3.1');
 
     // path to the source appsettings.deployment.json file
     this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
@@ -441,7 +441,7 @@ export class BotProjectDeploy {
     language?: string
   ) {
     try {
-      const webClient = new WebSiteManagementClient(this.creds, this.subId);
+      // const webClient = new WebSiteManagementClient(this.creds, this.subId);
 
       // Check for existing deployment files
       if (!fs.pathExistsSync(this.deployFilePath)) {
@@ -492,7 +492,13 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Publishing to Azure ...',
       });
-      await this.deployZip(webClient, this.zipPath, name, environment);
+
+      const token = await this.creds.getToken();
+
+      console.log('`````````````````````````````````````````````````````````````````');
+      console.log(JSON.stringify(token));
+      console.log('`````````````````````````````````````````````````````````````````');
+      await this.deployZip(token.accessToken, this.zipPath, name, environment);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Publish To Azure Success!',
@@ -512,35 +518,35 @@ export class BotProjectDeploy {
   }
 
   // Upload the zip file to Azure
-  private async deployZip(webSiteClient: WebSiteManagementClient, zipPath: string, name: string, env: string) {
+  private async deployZip(token: string, zipPath: string, name: string, env: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Retrieve publishing details ...',
     });
-    const userName = `${name}-${env}`;
-    // this seems unsafe!
-    // I don't think we should be changing azure user information here
-    const userPwd = `${name}-${env}-${new Date().getTime().toString()}`;
+    // const userName = `${name}-${env}`;
+    // // this seems unsafe!
+    // // I don't think we should be changing azure user information here
+    // const userPwd = `${name}-${env}-${new Date().getTime().toString()}`;
 
-    const updateRes = await webSiteClient.updatePublishingUser({
-      publishingUserName: userName,
-      publishingPassword: userPwd,
-    });
-    this.logger({
-      status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: updateRes,
-    });
+    // const updateRes = await webSiteClient.updatePublishingUser({
+    //   publishingUserName: userName,
+    //   publishingPassword: userPwd,
+    // });
+    // this.logger({
+    //   status: BotProjectDeployLoggerType.DEPLOY_INFO,
+    //   message: updateRes,
+    // });
 
     const publishEndpoint = `https://${name}-${env}.scm.azurewebsites.net/zipdeploy`;
 
-    const publishCreds = Buffer.from(`${userName}:${userPwd}`).toString('base64');
+    // const publishCreds = Buffer.from(`${userName}:${userPwd}`).toString('base64');
 
     const fileContent = await fs.readFile(zipPath);
     const options = {
       body: fileContent,
       encoding: null,
       headers: {
-        Authorization: `Basic ${publishCreds}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/zip',
         'Content-Length': fileContent.length,
       },
