@@ -34,6 +34,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
     publish: formatMessage('Publish'),
     settings: formatMessage('Settings'),
     preferences: formatMessage('User Preferences'),
+    runtime: formatMessage('Runtime Config'),
   };
 
   const links: INavLink[] = [
@@ -44,6 +45,8 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
       url: '',
     },
     { key: 'preferences', name: settingLabels.preferences, url: '' },
+    { key: 'runtime', name: settingLabels.runtime, url: '' },
+
     // { key: '/settings/publish', name: settingLabels.publish, url: '' },
 
     // { key: 'services', name: formatMessage('Services') },
