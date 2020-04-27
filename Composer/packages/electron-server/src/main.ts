@@ -7,7 +7,6 @@ import { mkdirp } from 'fs-extra';
 import { app, ipcMain } from 'electron';
 import fixPath from 'fix-path';
 import { UpdateInfo } from 'electron-updater';
-import { getPortPromise } from 'portfinder';
 
 import { isDevelopment } from './utility/env';
 import { isWindows } from './utility/platform';
@@ -20,8 +19,17 @@ import { composerProtocol } from './constants';
 
 const error = log.extend('error');
 let deeplinkingUrl = '';
+let serverPort;
 // webpack dev server runs on :3000
-const getBaseUrl = () => (isDevelopment ? 'http://localhost:3000/' : `http://localhost:${process.env.FALLBACK_PORT}`);
+const getBaseUrl = () => {
+  if (isDevelopment) {
+    return 'http://localhost:3000/';
+  }
+  if (!serverPort) {
+    throw new Error('getBaseUrl() called before serverPort is defined.');
+  }
+  return `http://localhost:${serverPort}`;
+};
 
 function processArgsForWindows(args: string[]): string {
   const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
@@ -92,15 +100,13 @@ async function loadServer() {
   log('Created app data directory.');
 
   log('Starting server...');
-  const availablePort = await getPortPromise();
-  log('Found available port: ', availablePort);
-  process.env.FALLBACK_PORT = availablePort.toString();
   const { start } = await import('@bfc/server');
-  await start(pluginsDir);
-  log('Server started. Rendering application...');
+  serverPort = await start(pluginsDir);
+  log(`Server started at port: ${serverPort}`);
 }
 
 async function main() {
+  log('Rendering application...');
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
     if (process.env.COMPOSER_DEV_TOOLS) {
@@ -117,6 +123,7 @@ async function main() {
     mainWindow.on('closed', function() {
       ElectronWindow.destroy();
     });
+    log('Rendered application.');
   }
 }
 
@@ -147,7 +154,6 @@ async function run() {
   app.on('ready', async () => {
     log('App ready');
     await loadServer();
-    log('Server has been loaded');
     await main();
     initializeAppUpdater();
   });
