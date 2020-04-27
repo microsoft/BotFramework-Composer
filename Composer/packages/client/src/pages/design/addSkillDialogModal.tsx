@@ -11,7 +11,8 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { addSkillDialog } from '../../constants';
-import { DialogWrapper } from '../../components/DialogWrapper/index';
+import { DialogWrapper } from '../../components/DialogWrapper';
+import { DialogTypes } from '../../components/DialogWrapper/styles';
 import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex } from '../skills/types';
 import { StorageFolder } from '../../store/types';
 import { StoreContext } from '../../store';
@@ -71,7 +72,12 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
   };
 
   return (
-    <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...addSkillDialog.SKILL_MANIFEST_FORM}>
+    <DialogWrapper
+      isOpen={isOpen}
+      onDismiss={onDismiss}
+      {...addSkillDialog.SKILL_MANIFEST_FORM}
+      dialogType={DialogTypes.DesignFlow}
+    >
       <form onSubmit={handleSubmit}>
         <input type="submit" style={{ display: 'none' }} />
         <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>

@@ -9,7 +9,7 @@ import fixPath from 'fix-path';
 import { UpdateInfo } from 'electron-updater';
 
 import { isDevelopment } from './utility/env';
-import { isWindows } from './utility/platform';
+import { isWindows, isMac } from './utility/platform';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 import ElectronWindow from './electronWindow';
 import log from './utility/logger';
@@ -19,7 +19,7 @@ import { composerProtocol } from './constants';
 
 const error = log.extend('error');
 const baseUrl = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
-let deeplinkingUrl = '';
+let deeplinkUrl = '';
 
 function processArgsForWindows(args: string[]): string {
   const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
@@ -103,9 +103,9 @@ async function main() {
     }
 
     if (isWindows()) {
-      deeplinkingUrl = processArgsForWindows(process.argv);
+      deeplinkUrl = processArgsForWindows(process.argv);
     }
-    await mainWindow.webContents.loadURL(baseUrl + deeplinkingUrl);
+    await mainWindow.webContents.loadURL(baseUrl + deeplinkUrl);
 
     mainWindow.show();
 
@@ -123,12 +123,12 @@ async function run() {
   if (gotTheLock) {
     app.on('second-instance', async (e, argv) => {
       if (isWindows()) {
-        deeplinkingUrl = processArgsForWindows(argv);
+        deeplinkUrl = processArgsForWindows(argv);
       }
 
       const mainWindow = ElectronWindow.getInstance().browserWindow;
       if (mainWindow) {
-        await mainWindow.webContents.loadURL(baseUrl + deeplinkingUrl);
+        await mainWindow.webContents.loadURL(baseUrl + deeplinkUrl);
         if (mainWindow.isMinimized()) {
           mainWindow.restore();
         }
@@ -151,7 +151,7 @@ async function run() {
   app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
+    if (!isMac()) {
       app.quit();
     }
   });
@@ -168,10 +168,10 @@ async function run() {
     // Protocol handler for osx
     app.on('open-url', (event, url) => {
       event.preventDefault();
-      deeplinkingUrl = parseDeepLinkUrl(url);
+      deeplinkUrl = parseDeepLinkUrl(url);
       if (ElectronWindow.isBrowserWindowCreated) {
         const mainWindow = ElectronWindow.getInstance().browserWindow;
-        mainWindow?.loadURL(baseUrl + deeplinkingUrl);
+        mainWindow?.loadURL(baseUrl + deeplinkUrl);
       }
     });
   });
