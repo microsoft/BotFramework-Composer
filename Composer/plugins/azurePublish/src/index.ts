@@ -67,6 +67,7 @@ class AzurePublisher {
     // TODO: this needs to be remote storage aware
     // remember the project's project.files not include the settings.json file, need to change the indexer in client
     // and save the project.files contents instead of copy
+    // BEN SAYS: content of settings.json is available in project.settings?
   };
 
   private getHistory = async (botId: string, profileName: string) => {
