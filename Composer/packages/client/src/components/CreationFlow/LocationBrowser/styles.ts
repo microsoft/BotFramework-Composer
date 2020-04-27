@@ -95,3 +95,19 @@ export const tableCell = css`
 export const content = css`
   outline: none;
 `;
+
+export const halfstack = {
+  root: [
+    {
+      flexBasis: '50%',
+    },
+  ],
+};
+
+export const stackinput = {
+  root: [
+    {
+      marginBottom: '1rem',
+    },
+  ],
+};
