@@ -519,6 +519,7 @@ export class BotProjectDeploy {
     });
     const userName = `${name}-${env}`;
     // this seems unsafe!
+    // I don't think we should be changing azure user information here
     const userPwd = `${name}-${env}-${new Date().getTime().toString()}`;
 
     const updateRes = await webSiteClient.updatePublishingUser({
