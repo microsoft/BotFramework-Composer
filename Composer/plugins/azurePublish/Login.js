@@ -10,7 +10,7 @@ msRestNodeAuth
     // const result = JSON.stringify(creds);
     // fs.writeFileSync('cred.txt', result);
     console.log(`parse this into profile`);
-    console.log(creds);
+    console.log(JSON.stringify(creds, null, 2));
   })
   .catch(err => {
     console.error(err);

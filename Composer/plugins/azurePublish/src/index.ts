@@ -212,16 +212,17 @@ class AzurePublisher {
 
     await this.init(botFiles, settings, templatePath, resourcekey);
 
+    // profile should contain all the same things as as `config` -- why pull it back out?
     try {
-      const profile = settings.publishTargets?.find(item => item.name === name);
+      // const profile = settings.publishTargets?.find(item => item.name === name);
       // test creds, if not valid, return 500
-      if (!profile || !profile.credential) {
+      if (!config || !config.credential) {
         throw new Error('please run Login script to login azure cloud');
       }
-      if (!profile || !profile.provision) {
+      if (!config || !config.provision) {
         throw new Error('please run provision script to do the provision');
       }
-      const currentProvision = profile.provision;
+      const currentProvision = config.provision;
       if (!currentProvision) {
         throw new Error(
           'no successful created resource in Azure according to your config, please do the provision again'
@@ -237,7 +238,7 @@ class AzurePublisher {
           spaces: 4,
         }
       );
-      const credential = profile.credential;
+      const credential = config.credential;
 
       if (credential.tokenCache && credential.tokenCache._entries) {
         _cache.add(credential.tokenCache._entries, (err, result) => {
