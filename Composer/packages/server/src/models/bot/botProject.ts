@@ -434,7 +434,7 @@ export class BotProject {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
-      const paths = await this.fileStorage.glob([pattern, '!(generated/**)'], root);
+      const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
