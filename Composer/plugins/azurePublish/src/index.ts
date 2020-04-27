@@ -31,20 +31,15 @@ interface PublishConfig {
 class AzurePublisher {
   private publishingBots: { [key: string]: any };
   private historyFilePath: string;
-  private credsFile: string;
-  private provisionResource: string;
   private azDeployer: BotProjectDeploy;
-  private resources: { [key: string]: boolean };
   constructor() {
     this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
-    this.provisionResource = path.resolve(__dirname, '../provisionResult.json');
-    this.credsFile = path.resolve(__dirname, '../cred.txt');
     this.publishingBots = {};
-    this.resources = {};
   }
   private getProjectFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
   private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'ComposerDialogs');
   private getSettingsPath = (key: string) => path.resolve(this.getBotFolder(key), 'settings/appsettings.json');
+
   private init = async (botFiles: any, settings: any, srcTemplate: string, resourcekey: string) => {
     const projExist = await pathExists(this.getProjectFolder(resourcekey));
     const botExist = await pathExists(this.getBotFolder(resourcekey));

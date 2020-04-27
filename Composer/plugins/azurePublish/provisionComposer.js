@@ -34,17 +34,22 @@ msRestNodeAuth
       console.log(
         `Your Azure hosting environment has been created! Copy paste the following configuration into a new profile in Composer's Publishing tab.`
       );
-      console.log(`{
-        "publishName": "${name}",
-        "location": "${location}",
-        "subscriptionID": "${subId}",
-        "appPassword": "${appPassword}"
-        ${luisAuthoringKey ? '"luisAuthoringKey": "' + luisAuthoringKey + '",' : ''}
-        "luisAuthoringRegion": "${luisAuthoringRegion}",
-        "environment": "${environment}",
-        "provision": ${createResult},
-        "credential": ${creds}
-      }`);
+
+      const profile = {
+        publishName: name,
+        location: location,
+        subscriptionID: subId,
+        appPassword: appPassword,
+        luisAuthoringKey: luisAuthoringKey,
+        luisAuthoringRegion: luisAuthoringRegion,
+        environment: environment,
+        provision: createResult,
+        accessToken: await creds.getToken().accessToken,
+        // TODO: remove this when we figure out how to use accessToken only
+        credential: creds,
+      };
+
+      console.log(JSON.stringify(profile, null, 2));
     }
   })
   .catch(err => {
