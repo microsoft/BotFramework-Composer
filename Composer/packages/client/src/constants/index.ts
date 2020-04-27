@@ -241,3 +241,5 @@ export const DefaultPublishConfig = {
   name: 'default',
   type: 'localpublish',
 };
+
+export const EmptyBotTemplateId = 'EmptyBot';
