@@ -183,6 +183,10 @@ export class BotProjectService {
   public static getProjectById = async (projectId: string, user?: UserIdentity) => {
     BotProjectService.initialize();
 
+    // use indexed project
+    const indexedCurrentProject = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
+    if (indexedCurrentProject) return indexedCurrentProject;
+
     if (!BotProjectService.projectLocationMap?.[projectId]) {
       throw new Error('project not found in cache');
     } else {
