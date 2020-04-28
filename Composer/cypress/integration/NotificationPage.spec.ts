@@ -64,7 +64,6 @@ context('Notification Page', () => {
       cy.findByText('Condition').should('exist');
       cy.findByTestId('expression-type-dropdown-Condition')
         .focus()
-        .type('{downarrow}')
         .should('contain.text', 'expression');
       cy.get('#root\\.condition')
         .click()
