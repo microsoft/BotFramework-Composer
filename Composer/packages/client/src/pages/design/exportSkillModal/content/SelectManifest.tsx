@@ -25,7 +25,7 @@ import { ContentProps } from '../constants';
 const VERSION_REGEX = /\d\.\d\.(\d+|preview-\d+)/i;
 
 const SCHEMA_URIS = [
-  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.1.preview-0.json',
+  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.1.preview-1.json',
   'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
 ];
 
