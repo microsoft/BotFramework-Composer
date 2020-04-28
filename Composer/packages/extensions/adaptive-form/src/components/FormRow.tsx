@@ -59,6 +59,9 @@ const FormRow: React.FC<FormRowProps> = props => {
 
   const { required = [] } = schema;
 
+  const HELP_URL =
+    'https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language';
+
   if (Array.isArray(row)) {
     return (
       <div css={formRow.row}>
@@ -108,6 +111,7 @@ const FormRow: React.FC<FormRowProps> = props => {
         onBlur={onBlur}
         onChange={onChange(row)}
         onFocus={onFocus}
+        helpURL={HELP_URL}
       />
     );
   }

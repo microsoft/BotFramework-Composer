@@ -31,6 +31,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors,
     hideError,
     onChange,
+    helpURL,
     ...rest
   } = props;
   const pluginConfig = usePluginConfig();
@@ -50,7 +51,9 @@ const SchemaField: React.FC<FieldProps> = props => {
     }
   }, []);
 
-  const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
+  const error = typeof rawErrors === 'string' && (
+    <ErrorMessage error={rawErrors} label={getUiLabel(props)} helpURL={helpURL} />
+  );
 
   if (!schema || name.startsWith('$')) {
     return null;
