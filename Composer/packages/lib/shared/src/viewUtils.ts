@@ -186,6 +186,26 @@ const menuItemHandler = (
   }
 };
 
+export const createStepSubmenu = (
+  label: string,
+  items: IContextualMenuItem[],
+  handleType,
+  factory
+): IContextualMenuItem => {
+  const subMenu: IContextualMenuProps = {
+    items,
+    onItemClick: menuItemHandler(factory, handleType),
+  };
+
+  const menuItem: IContextualMenuItem = {
+    key: label,
+    text: label,
+    name: label,
+    subMenuProps: subMenu,
+  };
+  return menuItem;
+};
+
 export const createStepMenu = (
   stepLabels: DialogGroup[],
   subMenu = true,
