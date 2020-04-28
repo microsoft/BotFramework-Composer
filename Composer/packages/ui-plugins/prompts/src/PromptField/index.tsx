@@ -23,6 +23,7 @@ const OTHER_FIELDS: InputDialogKeys[] = [
   'defaultValue',
   'allowInterruptions',
   'alwaysPrompt',
+  'recognizerOptions',
 ];
 
 const PromptField: React.FC<FieldProps> = props => {
