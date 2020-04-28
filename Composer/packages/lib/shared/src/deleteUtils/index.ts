@@ -2,9 +2,9 @@
 // Licensed under the MIT License
 
 import { MicrosoftIDialog, SDKKinds } from '../types';
-
-import { walkAdaptiveAction } from './walkAdaptiveAction';
-import { walkAdaptiveActionList } from './walkAdaptiveActionList';
+import { LuMetaData, LuType } from '../luNameBuilder';
+import { walkAdaptiveAction } from '../walkerUtils/walkAdaptiveAction';
+import { walkAdaptiveActionList } from '../walkerUtils/walkAdaptiveActionList';
 
 // TODO: (ze) considering refactoring it with the `walkLgResources` util
 const collectLgTemplates = (action: any, outputTemplates: string[]) => {
@@ -40,7 +40,7 @@ const collectLuIntents = (action: any, outputTemplates: string[]) => {
     case SDKKinds.NumberInput:
     case SDKKinds.TextInput: {
       const [, promptType] = action.$kind.split('.');
-      const intentName = `${promptType}_Response_${action?.$designer?.id}`;
+      const intentName = new LuMetaData(new LuType(action?.$kind).toString(), action?.$designer?.id).toString();
       promptType && intentName && outputTemplates.push(intentName);
       break;
     }
@@ -71,7 +71,7 @@ export const deleteAdaptiveActionList = (
   const luIntents: string[] = [];
 
   walkAdaptiveActionList(data, action => collectLgTemplates(action, lgTemplates));
-  walkAdaptiveAction(data, action => collectLuIntents(action, luIntents));
+  walkAdaptiveActionList(data, action => collectLuIntents(action, luIntents));
 
   deleteLgTemplates(lgTemplates.filter(activity => !!activity));
   deleteLuIntents(luIntents);

@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { promisify } from 'util';
 import fs from 'fs';
 
+import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
 import { UserIdentity } from '@bfc/plugin-loader';
@@ -22,6 +24,7 @@ import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
+const mkDirAsync = promisify(fs.mkdir);
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -160,6 +163,7 @@ export class BotProject {
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
 
     if (userSDKSchemaFile !== undefined) {
+      debug('Customized SDK schema found');
       try {
         sdkSchema = JSON.parse(userSDKSchemaFile.content);
       } catch (error) {
@@ -176,6 +180,21 @@ export class BotProject {
       diagnostics,
     };
   };
+
+  public async saveSchemaToProject(schemaUrl, pathToSave) {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: schemaUrl,
+        responseType: 'stream',
+      });
+      const pathToSchema = `${pathToSave}/Schemas`;
+      await mkDirAsync(pathToSchema);
+      response.data.pipe(fs.createWriteStream(`${pathToSchema}/sdk.schema`));
+    } catch (ex) {
+      throw new Error('Schema file could not be downloaded. Please check the url to the schema.');
+    }
+  }
 
   public updateBotInfo = async (name: string, description: string) => {
     const mainDialogFile = this.files.find(file => !file.relativePath.includes('/') && file.name.endsWith('.dialog'));
@@ -434,7 +453,7 @@ export class BotProject {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
-      const paths = await this.fileStorage.glob([pattern, '!(generated/**)'], root);
+      const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
@@ -644,7 +663,6 @@ export class BotProject {
                 replacers.map(replacer => {
                   newLine = replacer(newLine);
                 });
-                newLine = newLine.replace('-', '_');
                 newContentLines.push(newLine);
                 fileChanged = true;
               } else {
@@ -705,13 +723,14 @@ export class BotProject {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
-    const schemasDir = Path.join(this.dir, 'Schemas');
+    const schemasDir = Path.join(this.dir, 'schemas');
 
     if (!(await this.fileStorage.exists(schemasDir))) {
       debug('No schemas directory found.');
       return [];
     }
 
+    debug('Schemas directory found.');
     const schemas: FileInfo[] = [];
     const paths = await this.fileStorage.glob('*.schema', schemasDir);
 

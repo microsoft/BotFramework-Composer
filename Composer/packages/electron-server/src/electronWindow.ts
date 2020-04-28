@@ -6,6 +6,7 @@ import { join } from 'path';
 
 import { app, BrowserWindow, screen } from 'electron';
 
+import { isLinux } from './utility/platform';
 import { isDevelopment } from './utility/env';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 import logger from './utility/logger';
@@ -38,7 +39,7 @@ export default class ElectronWindow {
       show: false,
       title: `Bot Framework Composer (v${app.getVersion()})`,
     };
-    if (process.platform === 'linux' && !isDevelopment) {
+    if (isLinux() && !isDevelopment) {
       // workaround for broken .AppImage icons since electron-builder@21.0.1 removed .AppImage desktop integration
       // (https://github.com/electron-userland/electron-builder/releases/tag/v21.0.1)
       browserWindowOptions.icon = join(getUnpackedAsarPath(), 'resources/composerIcon_1024x1024.png');

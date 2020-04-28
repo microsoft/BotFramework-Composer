@@ -15,11 +15,12 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { useMemo, useState } from 'react';
+import formatMessage from 'format-message';
 
 import { Pagination } from '../../components/Pagination';
 
 import { INotification } from './types';
-import { notification, typeIcon, listRoot, icons, tableView, detailList } from './styles';
+import { notification, typeIcon, listRoot, icons, tableView, detailList, tableCell, content } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
@@ -53,7 +54,17 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.severity}</span>;
+      return (
+        <div data-is-focusable={true} css={tableCell}>
+          <div
+            aria-label={formatMessage(`This is a {severity} notification`, { severity: item.severity })}
+            tabIndex={-1}
+            css={content}
+          >
+            {item.severity}
+          </div>
+        </div>
+      );
     },
     isPadded: true,
   },
@@ -67,7 +78,17 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.location}</span>;
+      return (
+        <div data-is-focusable={true} css={tableCell}>
+          <div
+            aria-label={formatMessage(`Location is {location}`, { location: item.location })}
+            tabIndex={-1}
+            css={content}
+          >
+            {item.location}
+          </div>
+        </div>
+      );
     },
     isPadded: true,
   },
@@ -83,7 +104,17 @@ const columns: IColumn[] = [
     isMultiline: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.message}</span>;
+      return (
+        <div data-is-focusable={true} css={tableCell}>
+          <div
+            aria-label={formatMessage(`Notification Message {msg}`, { msg: item.message })}
+            tabIndex={-1}
+            css={content}
+          >
+            {item.message}
+          </div>
+        </div>
+      );
     },
     isPadded: true,
   },
@@ -111,7 +142,7 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
   const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
-    <div css={listRoot} data-testid="notifications-table-view">
+    <div role="main" css={listRoot} data-testid="notifications-table-view">
       <div css={tableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList

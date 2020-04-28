@@ -52,6 +52,7 @@ export const HeaderText = css`
 
 export const ContentStyle = css`
   margin-left: 2px;
+  height: calc(100vh - 180px);
   display: flex;
   border-top: 1px solid #dddddd;
   position: relative;
@@ -65,7 +66,6 @@ export const ContentStyle = css`
 export const contentEditor = css`
   flex: 4;
   margin: 20px;
-  height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
 
@@ -145,4 +145,15 @@ export const consoleStyle = css`
   color: #fff;
   padding: 15px;
   margin-bottom: 20px;
+`;
+
+export const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
 `;

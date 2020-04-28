@@ -13,8 +13,8 @@ export default class LuMetaData {
   type: string;
   designerId: string;
 
-  constructor(lgType: string, designerId: string) {
-    this.type = lgType;
+  constructor(luType: string, designerId: string) {
+    this.type = luType;
     this.designerId = designerId;
   }
 

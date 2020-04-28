@@ -23,15 +23,9 @@ context('Luis Deploy', () => {
     cy.findByText('Start Bot').click();
 
     // clear its settings before
-    cy.findByTestId('ProjectNameInput')
-      .clear()
-      .type('MyProject');
-    cy.findByTestId('EnvironmentInput')
-      .clear()
-      .type('composer');
-    cy.findByTestId('AuthoringKeyInput')
-      .clear()
-      .type('0d4991873f334685a9686d1b48e0ff48');
+    cy.enterTextAndSubmit('ProjectNameInput', 'MyProject');
+    cy.enterTextAndSubmit('EnvironmentInput', 'composer');
+    cy.enterTextAndSubmit('AuthoringKeyInput', '0d4991873f334685a9686d1b48e0ff48');
     // wait for the debounce interval of sync settings
     cy.findByText('OK').click();
     cy.findByText('Restart Bot').should('exist');
