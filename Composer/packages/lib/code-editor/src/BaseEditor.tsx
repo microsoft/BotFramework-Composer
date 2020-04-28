@@ -223,7 +223,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
       {(hasError || hasWarning) && (
         <MessageBar
           messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
-          isMultiline={false}
+          isMultiline={true}
           dismissButtonAriaLabel={formatMessage('Close')}
           overflowButtonAriaLabel={formatMessage('See more')}
         >
