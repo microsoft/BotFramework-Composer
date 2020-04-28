@@ -180,11 +180,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         handler = e => {
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;
-          const { parentPath, currentAction, currentKey } = DialogUtils.getCurrentNodePathDetail(e.target) || {
-            currentKey: 0,
-          };
           onChange(insertActionsAfter(path, data, e.target, e.actions));
-          onFocusSteps([`${parentPath}.${currentAction}[${Number(currentKey) + 1}]`]);
         };
         break;
       case NodeEventTypes.Undo:
@@ -290,9 +286,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           case KeyboardCommandTypes.Node.Paste: {
             const currentSelectedId = selectionContext.selectedIds[0];
             if (currentSelectedId.endsWith('+')) {
-              dispatchEvent(NodeEventTypes.AppendSelection, {
-                target: focusedId,
-                actions: clipboardActions,
+              const { arrayPath, arrayIndex } = DialogUtils.parseNodePath(currentSelectedId.slice(0, -1)) || {};
+              dispatchEvent(NodeEventTypes.Insert, {
+                id: arrayPath,
+                position: arrayIndex,
+                $kind: 'PASTE',
               });
             }
             break;

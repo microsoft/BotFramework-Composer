@@ -216,18 +216,6 @@ export const getParentPaths = (actionPath: string): string[] => {
   return results;
 };
 
-export const getCurrentNodePathDetail = (actionPath: string) => {
-  if (typeof actionPath !== 'string') return null;
-  const pathSelectors = actionPath.split('.');
-  const currentAction = pathSelectors[pathSelectors.length - 1].split('[')[0];
-
-  pathSelectors.pop();
-  const parentPath = pathSelectors.join('.');
-  const keySelectors = parseSelector(actionPath);
-  const currentKey = keySelectors?.[keySelectors?.length - 1] || 0;
-
-  return { parentPath, currentAction, currentKey };
-};
 export const parseNodePath = (path: string): { arrayPath: string; arrayIndex: number } | null => {
   if (!path) return null;
 
