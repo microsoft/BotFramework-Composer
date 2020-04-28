@@ -395,6 +395,8 @@ msRestNodeAuth
         `Your Azure hosting environment has been created! Copy paste the following configuration into a new profile in Composer's Publishing tab.`
       );
 
+      const token = await creds.getToken();
+
       const profile = {
         publishName: name,
         location: location,
@@ -404,7 +406,7 @@ msRestNodeAuth
         luisAuthoringRegion: luisAuthoringRegion,
         environment: environment,
         provision: createResult,
-        accessToken: await creds.getToken().accessToken,
+        accessToken: token.accessToken,
       };
 
       console.log(JSON.stringify(profile, null, 2));
