@@ -14,7 +14,8 @@ import {
   ResourceGroupsCreateOrUpdateResponse,
 } from '@azure/arm-resources/esm/models';
 import { GraphRbacManagementClient } from '@azure/graph';
-import * as msRestNodeAuth from '@azure/ms-rest-nodeauth';
+// import { TokenCredentials } from '@azure/ms-rest-js';
+import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 
@@ -30,7 +31,9 @@ const readdir = promisify(fs.readdir);
 
 export class BotProjectDeploy {
   private subId: string;
-  private creds: any;
+  private accessToken: string;
+  // private accessCredential: any; // credential from accessToken
+  private creds: any; // credential from interactive login
   private projPath: string;
   private deploymentSettingsPath: string;
   private deployFilePath: string;
@@ -48,6 +51,8 @@ export class BotProjectDeploy {
   constructor(config: BotProjectDeployConfig) {
     this.subId = config.subId;
     this.logger = config.logger;
+    this.accessToken = config.accessToken;
+    // this.accessCredential = new TokenCredentials(config.accessToken);
     this.creds = config.creds;
     this.projPath = config.projPath;
 
@@ -394,11 +399,10 @@ export class BotProjectDeploy {
         spaces: 4,
       });
 
-      const token = await this.creds.getToken();
       // Assign a LUIS key to the endpoint of each app
       const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
       const options = {
-        headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+        headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
       } as rp.RequestPromiseOptions;
       const response = await rp.get(getAccountUri, options);
       const jsonRes = JSON.parse(response);
@@ -410,12 +414,12 @@ export class BotProjectDeploy {
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
           message: `Assigning to luis app id: ${luisAppIds}`,
         });
-        const token = await this.creds.getToken();
+
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
         const options = {
           body: account,
           json: true,
-          headers: { Authorization: `Bearer ${token.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
         } as rp.RequestPromiseOptions;
         const response = await rp.post(luisAssignEndpoint, options);
         this.logger({
@@ -441,7 +445,7 @@ export class BotProjectDeploy {
     language?: string
   ) {
     try {
-      // const webClient = new WebSiteManagementClient(this.creds, this.subId);
+      // const webClient = new WebSiteManagementClient(this.accessCredential, this.subId);
 
       // Check for existing deployment files
       if (!fs.pathExistsSync(this.deployFilePath)) {
@@ -493,12 +497,7 @@ export class BotProjectDeploy {
         message: 'Publishing to Azure ...',
       });
 
-      const token = await this.creds.getToken();
-
-      console.log('`````````````````````````````````````````````````````````````````');
-      console.log(JSON.stringify(token));
-      console.log('`````````````````````````````````````````````````````````````````');
-      await this.deployZip(token.accessToken, this.zipPath, name, environment);
+      await this.deployZip(this.accessToken, this.zipPath, name, environment);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Publish To Azure Success!',
@@ -568,7 +567,7 @@ export class BotProjectDeploy {
     appPassword: string,
     luisAuthoringKey?: string
   ) {
-    const graphCreds = new msRestNodeAuth.DeviceTokenCredentials(
+    const graphCreds = new DeviceTokenCredentials(
       this.creds.clientId,
       this.tenantId,
       this.creds.username,
