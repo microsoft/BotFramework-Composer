@@ -28,7 +28,7 @@ import log from './logger';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
-export async function start(pluginDir?: string): Promise<number> {
+export async function start(pluginDir?: string): Promise<number | string> {
   const clientDirectory = path.resolve(require.resolve('@bfc/client'), '..');
   const app: Express = express();
   app.set('view engine', 'ejs');
@@ -115,7 +115,13 @@ export async function start(pluginDir?: string): Promise<number> {
   });
 
   const preferredPort = process.env.PORT || 5000;
-  const port = await getPortPromise({ port: preferredPort as number });
+  let port = preferredPort;
+  if (process.env.NODE_ENV === 'production') {
+    // Dynamically search for an open PORT starting with PORT or 5000, so that
+    // the app doesn't crash if the port is already being used.
+    // (disabled in dev in order to avoid breaking the webpack dev server proxy)
+    await getPortPromise({ port: preferredPort as number });
+  }
   let server;
   await new Promise(resolve => {
     server = app.listen(port, () => {
