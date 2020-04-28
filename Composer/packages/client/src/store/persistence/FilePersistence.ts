@@ -22,6 +22,9 @@ const fileChangeType = {
   [ActionTypes.UPDATE_LU]: { changeType: FileChangeType.UPDATE, fileType: FileExtensions.Lu },
   [ActionTypes.CREATE_LU]: { changeType: FileChangeType.CREATE, fileType: FileExtensions.Lu },
   [ActionTypes.REMOVE_LU]: { changeType: FileChangeType.DELETE, fileType: FileExtensions.Lu },
+  [ActionTypes.CREATE_SKILL_MANIFEST]: { changeType: FileChangeType.CREATE, fileType: FileExtensions.Manifest },
+  [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: FileChangeType.DELETE, fileType: FileExtensions.Manifest },
+  [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: FileChangeType.UPDATE, fileType: FileExtensions.Manifest },
 };
 
 class FilePersistence {
@@ -104,7 +107,7 @@ class FilePersistence {
           .map(async fileName => await this.doRemove(fileName))
       );
     } else {
-      const { dialogs, luFiles, lgFiles } = state;
+      const { dialogs, luFiles, lgFiles, skillManifests } = state;
       if (fileType === FileExtensions.Dialog) {
         const dialog = dialogs.find(d => d.id === id);
         if (!dialog) return;
@@ -113,6 +116,12 @@ class FilePersistence {
           await this._doCreateForOtherFile(luFiles, FileExtensions.Lu, id);
           await this._doCreateForOtherFile(lgFiles, FileExtensions.Lg, id);
         }
+      }
+
+      if (fileType === FileExtensions.Manifest) {
+        const manifest = skillManifests.find(manifest => manifest.id === id);
+        if (!manifest) return;
+        await this.doUpdate(`${id}.manifest`, JSON.stringify(manifest.content, null, 2) + '\n');
       }
 
       if (fileType === FileExtensions.Lg) {

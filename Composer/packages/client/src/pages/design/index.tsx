@@ -30,8 +30,9 @@ import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 
 import { VisualEditorAPI } from './FrameAPI';
-import { CreateDialogModal } from './createDialogModal';
 import { AddSkillDialog } from './addSkillDialogModal';
+import { CreateDialogModal } from './createDialogModal';
+import { ExportSkillModal } from './exportSkillModal';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -102,6 +103,7 @@ function DesignPage(props) {
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
+  const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -400,6 +402,7 @@ function DesignPage(props) {
               openNewTriggerModal={openNewTriggerModal}
               onCreateDialogComplete={onCreateDialogComplete}
               onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+              showSkillManifestModal={() => setExportSkillModalVisible(true)}
             />
           )}
           <Conversation css={editorContainer}>
@@ -445,6 +448,13 @@ function DesignPage(props) {
           isOpen={triggerModalVisible}
           onDismiss={onTriggerCreationDismiss}
           onSubmit={onTriggerCreationSubmit}
+        />
+      )}
+      {exportSkillModalVisible && (
+        <ExportSkillModal
+          isOpen={exportSkillModalVisible}
+          onDismiss={() => setExportSkillModalVisible(false)}
+          onSubmit={() => setExportSkillModalVisible(false)}
         />
       )}
     </React.Fragment>
