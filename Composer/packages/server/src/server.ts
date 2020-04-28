@@ -120,7 +120,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
     // Dynamically search for an open PORT starting with PORT or 5000, so that
     // the app doesn't crash if the port is already being used.
     // (disabled in dev in order to avoid breaking the webpack dev server proxy)
-    await getPortPromise({ port: preferredPort as number });
+    port = await getPortPromise({ port: preferredPort as number });
   }
   let server;
   await new Promise(resolve => {
