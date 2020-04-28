@@ -58,17 +58,6 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           rawErrors={getError('outputFormat')}
         />
       )}
-      <SchemaField
-        name="value"
-        definitions={definitions}
-        depth={depth}
-        id={`${id}.value`}
-        schema={getSchema('value')}
-        uiOptions={uiOptions.properties?.value || {}}
-        value={value?.value}
-        onChange={onChange('value')}
-        rawErrors={getError('value')}
-      />
       {Editor && $kind !== SDKKinds.AttachmentInput && (
         <React.Fragment>
           <FieldLabel id={`${id}.intent`} label={intentLabel} />

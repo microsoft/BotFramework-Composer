@@ -27,6 +27,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     const disposable = monaco.editor.onDidCreateModel(model => {
       const diagnosticOptions: any = {
         validate: true,
+        enableSchemaRequest: true,
       };
 
       if (schema) {

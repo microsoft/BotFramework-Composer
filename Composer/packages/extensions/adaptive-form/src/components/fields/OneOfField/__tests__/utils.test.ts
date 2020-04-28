@@ -42,6 +42,13 @@ describe('getOptions', () => {
           type: 'number' as const,
         },
         {
+          title: 'an enum',
+          enum: ['one', 'two'],
+        },
+        {
+          enum: ['four', 'five'],
+        },
+        {
           $ref: '#/definitions/Microsoft.AnotherType',
         },
       ],
@@ -55,46 +62,8 @@ describe('getOptions', () => {
     };
 
     it('returns one of options', () => {
-      expect(getOptions(schema, definitions)).toEqual([
-        {
-          key: 'my awesome string',
-          text: 'my awesome string',
-          data: {
-            schema: {
-              title: 'My Awesome String',
-              type: 'string',
-            },
-          },
-        },
-        {
-          key: 'boolean',
-          text: 'boolean',
-          data: {
-            schema: {
-              type: 'boolean',
-            },
-          },
-        },
-        {
-          key: 'number',
-          text: 'number',
-          data: {
-            schema: {
-              type: 'number',
-            },
-          },
-        },
-        {
-          key: 'another type',
-          text: 'another type',
-          data: {
-            schema: {
-              title: 'Another Type',
-              type: 'object',
-            },
-          },
-        },
-      ]);
+      const options = getOptions(schema, definitions).map(o => o.key);
+      expect(options).toEqual(['my awesome string', 'boolean', 'number', 'an enum', 'dropdown', 'another type']);
     });
   });
 });

@@ -79,14 +79,24 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
     value
   );
 
-  const stackArrayItems = useMemo(
-    () =>
-      orderedProperties.length > 2 ||
+  const stackArrayItems = useMemo(() => {
+    const allOrderProps = orderedProperties.reduce((all, prop) => {
+      if (Array.isArray(prop)) {
+        all.push(...prop);
+      } else {
+        all.push(prop);
+      }
+
+      return all;
+    }, [] as string[]);
+
+    return (
+      allOrderProps.length > 2 ||
       !!Object.entries(properties).filter(
-        ([key, { $role }]: any) => orderedProperties.includes(key) && $role === 'expression'
-      ).length,
-    [itemSchema, orderedProperties]
-  );
+        ([key, { $role }]: any) => allOrderProps.includes(key) && $role === 'expression'
+      ).length
+    );
+  }, [itemSchema, orderedProperties]);
 
   if (!itemSchema || itemSchema === true) {
     return <UnsupportedField {...props} />;

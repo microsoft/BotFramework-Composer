@@ -18,6 +18,10 @@ declare module 'json-schema' {
   }
 }
 
+export interface SchemaDefinitions {
+  [key: string]: JSONSchema7Definition;
+}
+
 // Re-export monkey patched json schema interfaces
 export { JSONSchema7, JSONSchema7Definition };
 

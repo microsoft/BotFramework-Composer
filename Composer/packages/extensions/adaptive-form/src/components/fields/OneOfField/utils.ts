@@ -1,10 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7, JSONSchema7Definition } from '@bfc/extension';
+import { JSONSchema7, JSONSchema7Definition, FieldProps } from '@bfc/extension';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import merge from 'lodash/merge';
+import omit from 'lodash/omit';
 
-import { resolveRef, getValueType } from '../../../utils';
+import { resolveRef, getValueType, getUiPlaceholder, getUiDescription } from '../../../utils';
+
+function getOptionLabel(schema: JSONSchema7): string {
+  const { title, enum: enumOptions } = schema;
+  const type = Array.isArray(schema.type) ? schema.type[0] : schema.type;
+
+  if (title) {
+    return title.toLowerCase();
+  }
+
+  if (Array.isArray(enumOptions) && enumOptions.length > 0) {
+    return 'dropdown';
+  }
+
+  return type || 'unknown';
+}
 
 export function getOptions(
   schema: JSONSchema7,
@@ -29,11 +46,13 @@ export function getOptions(
       .map(s => {
         if (typeof s === 'object') {
           const resolved = resolveRef(s, definitions);
+          const merged = merge({}, omit(schema, 'oneOf'), resolved);
+          const label = getOptionLabel(resolved);
 
           return {
-            key: resolved.title?.toLowerCase() || resolved.type,
-            text: resolved.title?.toLowerCase() || resolved.type,
-            data: { schema: resolved },
+            key: label,
+            text: label,
+            data: { schema: merged },
           } as IDropdownOption;
         }
       })
@@ -79,4 +98,20 @@ export function getSelectedOption(value: any | undefined, options: IDropdownOpti
 
   // lastly, attempt to find the option based on value type
   return options.find(({ data }) => data.schema.type === valueType) || options[0];
+}
+
+export function getFieldProps(props: FieldProps, schema?: JSONSchema7): FieldProps {
+  const enumOptions = schema?.enum as string[];
+
+  return {
+    ...props,
+    enumOptions,
+    schema: schema || {},
+    transparentBorder: false,
+    // allows object fields to render their labels
+    label: schema?.type === 'object' ? undefined : false,
+    depth: props.depth - 1,
+    placeholder: getUiPlaceholder({ ...props, placeholder: undefined }),
+    description: getUiDescription({ ...props, description: undefined }),
+  };
 }
