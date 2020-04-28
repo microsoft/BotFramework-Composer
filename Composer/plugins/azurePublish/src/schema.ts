@@ -112,7 +112,7 @@ const schema: JSONSchema7 = {
     location: 'westus',
     luisAuthoringRegion: 'westus',
     luisAuthoringKey: '',
-    provision: '<provision result after run provision script>',
+    provision: {},
   },
 };
 export default schema;
