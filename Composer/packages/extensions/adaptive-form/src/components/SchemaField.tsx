@@ -31,6 +31,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors,
     hideError,
     onChange,
+    helpURL,
     ...rest
   } = props;
   const pluginConfig = usePluginConfig();
