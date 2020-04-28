@@ -30,7 +30,7 @@ interface Button {
   disabled?: ((_: any) => boolean) | boolean;
   primary?: boolean;
   text: string;
-  onClick: ({}: any) => () => void;
+  onClick: (_: any) => () => void;
 }
 
 interface EditorStep {

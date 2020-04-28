@@ -7,10 +7,10 @@ import ErrorBoundary from 'react-error-boundary';
 
 import PluginContext from '../../PluginContext';
 import { SchemaField } from '../SchemaField';
+import { mergePluginConfigs } from '../../utils/mergePluginConfigs';
 
 import FormTitle from './FormTitle';
 import ErrorInfo from './ErrorInfo';
-import { mergePluginConfigs } from '../../utils/mergePluginConfigs';
 
 export interface AdaptiveFormProps {
   errors?: string | FormErrors | string[] | FormErrors[];

@@ -20,7 +20,6 @@ import formatMessage from 'format-message';
 
 import { calculateTimeDiff } from '../../../../utils';
 import { StoreContext } from '../../../../store';
-
 import { ContentProps } from '../constants';
 
 const VERSION_REGEX = /\d\.\d\.(\d+|preview-\d+)/i;
@@ -132,11 +131,12 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       <div>
         <Label
           required
-          children={formatMessage('Manifest Version')}
           styles={{
             root: { fontWeight: '400' },
           }}
-        />
+        >
+          {formatMessage('Manifest Version')}
+        </Label>
         <div css={styles.create}>
           <Dropdown
             errorMessage={errors?.version}
@@ -150,14 +150,15 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
             onChange={handleChange}
           />
           <PrimaryButton
-            children={formatMessage('Create')}
             styles={{
               root: {
                 marginLeft: 8,
               },
             }}
             onClick={handleCreate}
-          />
+          >
+            {formatMessage('Create')}
+          </PrimaryButton>
         </div>
       </div>
       <div css={styles.detailListContainer}>

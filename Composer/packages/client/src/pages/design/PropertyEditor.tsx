@@ -10,12 +10,12 @@ import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 import { Resizable, ResizeCallback } from 're-resizable';
+import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
 import { useShell } from '../../shell';
 import plugins from '../../plugins';
 
 import { formEditor } from './styles';
-import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
 const PropertyEditor: React.FC = () => {
   const { api: shellApi, data: shellData } = useShell('PropertyEditor');

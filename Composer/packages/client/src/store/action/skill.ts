@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import { ActionCreator } from '../types';
-
 import { ActionTypes } from '../../constants';
-import { setError } from './error';
 import httpClient from '../../utils/httpUtil';
+
+import { setError } from './error';
 
 export const createSkillManifest: ActionCreator = ({ dispatch }, { content, id }) => {
   dispatch({
