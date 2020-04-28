@@ -26,6 +26,7 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
       onDismiss={onDismiss}
       setInitialFocus={true}
       hidden={!visible}
+      data-testid={'errorCallout'}
       ariaLabel={formatMessage(`{title}. {msg}`, { title: error.title, msg: error.message })}
     >
       <div css={calloutContainer}>
