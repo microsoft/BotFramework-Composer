@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { promisify } from 'util';
 import fs from 'fs';
 
+import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
 import { UserIdentity } from '@bfc/plugin-loader';
@@ -22,6 +24,7 @@ import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
+const mkDirAsync = promisify(fs.mkdir);
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -91,9 +94,6 @@ export class BotProject {
     this.settings = await this.getEnvSettings('', false);
     this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
     this.files = await this._getFiles();
-    if (this.settings) {
-      this.luPublisher.setLuisConfig(this.settings.luis);
-    }
   };
 
   public getProject = () => {
@@ -132,7 +132,6 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
-    this.luPublisher.setLuisConfig(config.luis);
   };
 
   // update skill in settings
@@ -180,6 +179,21 @@ export class BotProject {
       diagnostics,
     };
   };
+
+  public async saveSchemaToProject(schemaUrl, pathToSave) {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: schemaUrl,
+        responseType: 'stream',
+      });
+      const pathToSchema = `${pathToSave}/Schemas`;
+      await mkDirAsync(pathToSchema);
+      response.data.pipe(fs.createWriteStream(`${pathToSchema}/sdk.schema`));
+    } catch (ex) {
+      throw new Error('Schema file could not be downloaded. Please check the url to the schema.');
+    }
+  }
 
   public updateBotInfo = async (name: string, description: string) => {
     const mainDialogFile = this.files.find(file => !file.relativePath.includes('/') && file.name.endsWith('.dialog'));
@@ -255,15 +269,18 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
-  public publishLuis = async (authoringKey: string, fileIds: string[], crossTrainConfig: ICrossTrainConfig) => {
-    this.luPublisher.setAuthoringKey(authoringKey);
-    if (fileIds.length) {
+  public publishLuis = async (authoringKey: string, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
+    if (fileIds.length && this.settings) {
       const map = fileIds.reduce((result, id) => {
         result[id] = true;
         return result;
       }, {});
       const files = this.files.filter(file => map[Path.basename(file.name, '.lu')]);
-      this.luPublisher.setCrossTrainConfig(crossTrainConfig);
+      this.luPublisher.setPublishConfig(
+        { ...this.settings.luis, authoringKey },
+        crossTrainConfig,
+        this.settings.downsampling
+      );
       await this.luPublisher.publish(files);
     }
   };
@@ -645,7 +662,6 @@ export class BotProject {
                 replacers.map(replacer => {
                   newLine = replacer(newLine);
                 });
-                newLine = newLine.replace('-', '_');
                 newContentLines.push(newLine);
                 fileChanged = true;
               } else {

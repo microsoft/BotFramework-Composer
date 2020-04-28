@@ -26,5 +26,13 @@ declare namespace Cypress {
      * });
      */
     withinEditor(editor: string, cb: (currentSubject: JQuery<HTMLElement>) => void): void;
+
+    /**
+     * Clears a text box, adds text to it and submit.
+     * @example cy.withinEditor('VisualEditor', () => {
+     *    cy.enterTextAndSubmit;('NewDialogName', 'SubmitNewBotBtn', 'New Project');
+     * });
+     */
+    enterTextAndSubmit(textElement: string, text: string, submitBtn?: string): void;
   }
 }

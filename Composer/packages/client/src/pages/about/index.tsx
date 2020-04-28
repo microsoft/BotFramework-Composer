@@ -12,7 +12,7 @@ import * as about from './styles';
 
 export const About: React.FC<RouteComponentProps> = () => {
   return (
-    <div css={about.outline}>
+    <div role="main" css={about.outline}>
       <div css={about.content}>
         <h1 css={about.title}> {formatMessage(`About`)} </h1>
         <div css={about.body}>
