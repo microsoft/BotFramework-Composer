@@ -5,13 +5,18 @@
 import { jsx, css } from '@emotion/core';
 import { useCallback, useContext, useState } from 'react';
 import classnames from 'classnames';
-import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup, SDKKinds } from '@bfc/shared';
-import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import formatMessage, { custom } from 'format-message';
+import { createStepMenu, createStepSubmenu, DialogGroup, SDKKinds } from '@bfc/shared';
+import {
+  IContextualMenu,
+  IContextualMenuItem,
+  ContextualMenuItemType,
+} from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import get from 'lodash/get';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
-import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { NodeRendererContext, NodeRendererContextValue } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
 import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
@@ -26,12 +31,44 @@ interface EdgeMenuProps {
   addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
 
+const buildCustomActionsSubmenu = (
+  label: string,
+  customizedActionGroups: any[][],
+  handleType,
+  factory
+): IContextualMenuItem => {
+  const itemGroups: IContextualMenuItem[][] = customizedActionGroups
+    .filter(actionGroup => Array.isArray(actionGroup) && actionGroup.length)
+    .map(actionGroup => {
+      return actionGroup.map(({ title: $kind }) => ({
+        key: $kind,
+        name: $kind,
+        $kind,
+      }));
+    });
+
+  const flatCustomItems: IContextualMenuItem[] = itemGroups.reduce((resultItems, currentGroup, currentIndex) => {
+    if (currentIndex !== 0) {
+      // push a sep line ahead.
+      resultItems.push({
+        key: 'divider',
+        itemType: ContextualMenuItemType.Divider,
+      });
+    }
+    resultItems.push(...currentGroup);
+    return resultItems;
+  }, []);
+
+  return createStepSubmenu(label, flatCustomItems, handleType, factory);
+};
+
 const buildEdgeMenuItemsFromClipboardContext = (
-  context,
+  context: NodeRendererContextValue,
   onClick,
   filter?: (t: SDKKinds) => boolean
 ): IContextualMenu[] => {
-  const { clipboardActions } = context;
+  const { clipboardActions, dialogFactory } = context;
+  const onMenuItemClick = (e, item) => onClick(item ? item.data.$kind : null);
   const menuItems = createStepMenu(
     [
       DialogGroup.RESPONSE,
@@ -44,10 +81,14 @@ const buildEdgeMenuItemsFromClipboardContext = (
       DialogGroup.LOG,
     ],
     true,
-    (e, item) => onClick(item ? item.data.$kind : null),
+    onMenuItemClick,
     context.dialogFactory,
     filter
   );
+
+  // Append a 'Customized' section
+  // TODO: calculate actions[] from injected schema files.
+  menuItems.push(buildCustomActionsSubmenu(formatMessage('Custom Actions'), [], onMenuItemClick, dialogFactory));
 
   const enablePaste = Array.isArray(clipboardActions) && clipboardActions.length > 0;
   const menuItemCount = menuItems.length;
