@@ -17,6 +17,7 @@
   },
   "license": "MIT",
   "peerDependencies": {
+    "@bfc/ui-plugin-expressions": "*",
     "@bfc/code-editor": "*",
     "@bfc/extension": "*",
     "@uifabric/fluent-theme": "^7.1.4",
@@ -42,4 +43,5 @@
     "lodash": "^4.17.15",
     "react-error-boundary": "^1.2.5"
   }
+}
 }
