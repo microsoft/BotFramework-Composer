@@ -60,9 +60,6 @@ const FormRow: React.FC<FormRowProps> = props => {
 
   const { required = [] } = schema;
 
-  const HELP_URL =
-    'https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language';
-
   if (Array.isArray(row)) {
     return (
       <div css={formRow.row}>

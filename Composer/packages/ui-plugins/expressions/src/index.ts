@@ -15,4 +15,7 @@ const config: PluginConfig = {
   },
 };
 
+export const HELP_URL =
+  'https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language';
+
 export default config;
