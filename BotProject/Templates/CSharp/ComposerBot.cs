@@ -23,9 +23,10 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         private readonly ConversationState conversationState;
         private readonly IStatePropertyAccessor<DialogState> dialogState;
         private readonly string rootDialogFile;
+        private readonly IBotTelemetryClient telemetryClient;
         private readonly string defaultLocale;
 
-        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, string rootDialog, string defaultLocale)
+        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, IBotTelemetryClient telemetryClient, string rootDialog, string defaultLocale)
         {
             HostContext.Current.Set(skillClient);
             HostContext.Current.Set(conversationIdFactory);
@@ -35,6 +36,8 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             this.resourceExplorer = resourceExplorer;
             this.rootDialogFile = rootDialog;
             this.defaultLocale = defaultLocale;
+            this.telemetryClient = telemetryClient;
+
             LoadRootDialogAsync();
         }
         
@@ -62,6 +65,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             this.dialogManager = new DialogManager(rootDialog)
                                 .UseResourceExplorer(resourceExplorer)
                                 .UseLanguageGeneration()
+                                .UseTelemetry(this.telemetryClient)
                                 .UseLanguagePolicy(new LanguagePolicy(defaultLocale)); 
         }
     }

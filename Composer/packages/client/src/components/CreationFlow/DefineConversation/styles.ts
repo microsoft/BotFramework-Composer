@@ -31,3 +31,19 @@ export const locationBrowse = {
 export const locationOnly = {
   subComponentStyles: textFieldlabel,
 };
+
+export const halfstack = {
+  root: [
+    {
+      flexBasis: '50%',
+    },
+  ],
+};
+
+export const stackinput = {
+  root: [
+    {
+      marginBottom: '1rem',
+    },
+  ],
+};
