@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useShellApi, FormErrors, JSONSchema7 } from '@bfc/extension';
 import ErrorBoundary from 'react-error-boundary';
 import isEqual from 'lodash/isEqual';
@@ -84,7 +84,24 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
     }
 
     return {};
-  }, [currentDialog, focusPath, localData]);
+  }, [currentDialog?.diagnostics, focusPath, localData?.$kind]);
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      if (!isEqual(formData, localData)) {
+        shellApi.saveData(localData, focusedSteps[0]);
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(id);
+    };
+  }, [localData]);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDataChange = useCallback((newData?: any) => {
+    setLocalData(newData);
+  }, []);
 
   if (!localData) {
     return null;
@@ -93,15 +110,6 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   if (!$schema) {
     return null;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDataChange = (newData?: any) => {
-    setLocalData(newData);
-
-    if (!isEqual(formData, newData)) {
-      shellApi.saveData(newData, focusedSteps[0]);
-    }
-  };
 
   return (
     <ErrorBoundary FallbackComponent={ErrorInfo}>

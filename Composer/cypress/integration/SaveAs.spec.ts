@@ -11,7 +11,7 @@ context('Saving As', () => {
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.url().should('contain', 'home');
     cy.findByText('Save as').click();
-    cy.findByTestId('NewDialogName').type('{selectall}__TestSaveAs{enter}');
+    cy.enterTextAndSubmit('NewDialogName', '__TestSaveAs', 'SubmitNewBotBtn');
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestSaveAs').should('exist');
     });
