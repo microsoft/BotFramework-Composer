@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 context('Notification Page', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('ToDoBotWithLuisSample');
     cy.visitPage('Notifications');
