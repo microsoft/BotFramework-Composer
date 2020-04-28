@@ -36,8 +36,74 @@ const schema: JSONSchema7 = {
     provision: {
       type: 'object',
       title: 'Provision resource',
+      properties: {
+        applicationInsights: {
+          type: 'object',
+          properties: {
+            InstrumentationKey: {
+              type: 'string',
+            },
+          },
+        },
+        cosmosDb: {
+          type: 'object',
+          properties: {
+            cosmosDBEndpoint: {
+              type: 'string',
+            },
+            authKey: {
+              type: 'string',
+            },
+            databaseId: {
+              type: 'string',
+            },
+            collectionId: {
+              type: 'string',
+            },
+            containerId: {
+              type: 'string',
+            },
+          },
+          required: ['cosmosDBEndpoint', 'authKey', 'databaseId', 'collectionId', 'containerId'],
+        },
+        blobStorage: {
+          type: 'object',
+          properties: {
+            connectionString: {
+              type: 'string',
+            },
+            container: {
+              type: 'string',
+            },
+          },
+          required: ['connectionString', 'container'],
+        },
+        luis: {
+          type: 'object',
+          properties: {
+            endpointKey: {
+              type: 'string',
+            },
+            authoringKey: {
+              type: 'string',
+            },
+            region: {
+              type: 'string',
+            },
+          },
+          required: ['endpointKey', 'authoringKey', 'region'],
+        },
+        MicrosoftAppId: {
+          type: 'string',
+        },
+        MicrosoftAppPassword: {
+          type: 'string',
+        },
+      },
+      required: ['applicationInsights', 'cosmosDb', 'blobStorage', 'luis', 'MicrosoftAppId', 'MicrosoftAppPassword'],
     },
   },
+  required: ['subscriptionID', 'appPassword', 'publishName', 'provision'],
   default: {
     subscriptionID: '<your subscription id>',
     appPassword: '<16 characters including uppercase, lowercase, number and special character>',
