@@ -3,7 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect, useMemo } from 'react';
+import find from 'lodash/find';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -19,6 +20,11 @@ import {
   DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { ProjectTemplate } from '@bfc/shared';
+
+import { DialogCreationCopy, EmptyBotTemplateId } from '../../../constants';
+import { DialogWrapper } from '../../DialogWrapper';
+import { DialogTypes } from '../../DialogWrapper/styles';
 
 import {
   detailListContainer,
@@ -40,16 +46,19 @@ export function CreateOptions(props) {
   const [option, setOption] = useState(optionKeys.createFromScratch);
   const [disabled, setDisabled] = useState(true);
   const { templates, onDismiss, onNext } = props;
-  const emptyBotKey = templates[1].id;
-  const [template, setTemplate] = useState(emptyBotKey);
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const t = selection.getSelection()[0];
-      if (t) {
-        setTemplate(t.id);
-      }
-    },
-  });
+  const [currentTemplate, setCurrentTemplate] = useState('');
+  const [emptyBotKey, setEmptyBotKey] = useState('');
+
+  const selection = useMemo(() => {
+    return new Selection({
+      onSelectionChanged: () => {
+        const t = selection.getSelection()[0] as ProjectTemplate;
+        if (t) {
+          setCurrentTemplate(t.id);
+        }
+      },
+    });
+  }, []);
 
   function SelectOption(props) {
     const { checked, text, key } = props;
@@ -72,7 +81,7 @@ export function CreateOptions(props) {
 
   const handleJumpToNext = () => {
     if (option === optionKeys.createFromTemplate) {
-      onNext(template);
+      onNext(currentTemplate);
     } else {
       onNext(emptyBotKey);
     }
@@ -133,56 +142,75 @@ export function CreateOptions(props) {
     return null;
   };
 
+  useEffect(() => {
+    if (templates.length > 1) {
+      const emptyBotTemplate = find(templates, ['id', EmptyBotTemplateId]);
+      if (emptyBotTemplate) {
+        setCurrentTemplate(emptyBotTemplate.id);
+        setEmptyBotKey(emptyBotTemplate.id);
+      }
+    }
+  }, [templates]);
+
+  const choiceOptions = [
+    {
+      ariaLabel: 'Create from scratch' + (option === optionKeys.createFromScratch ? ' selected' : ''),
+      key: optionKeys.createFromScratch,
+      'data-testid': 'Create from scratch',
+      text: formatMessage('Create from scratch'),
+      onRenderField: SelectOption,
+    },
+    {
+      ariaLabel: 'Create from template' + (option === optionKeys.createFromTemplate ? ' selected' : ''),
+      key: optionKeys.createFromTemplate,
+      'data-testid': 'Create from template',
+      text: formatMessage('Create from template'),
+      onRenderField: SelectOption,
+    },
+  ];
+
   return (
     <Fragment>
-      <ChoiceGroup
-        label={formatMessage('Choose how to create your bot')}
-        selectedKey={option}
-        options={[
-          {
-            ariaLabel: 'Create from scratch' + (option === optionKeys.createFromScratch ? ' selected' : ''),
-            key: optionKeys.createFromScratch,
-            'data-testid': 'Create from scratch',
-            text: formatMessage('Create from scratch'),
-            onRenderField: SelectOption,
-          },
-          {
-            ariaLabel: 'Create from template' + (option === optionKeys.createFromTemplate ? ' selected' : ''),
-            key: optionKeys.createFromTemplate,
-            'data-testid': 'Create from template',
-            text: formatMessage('Create from template'),
-            onRenderField: SelectOption,
-          },
-        ]}
-        onChange={handleChange}
-      />
-      <h3 css={listHeader}>{formatMessage('Examples')}</h3>
-      <div data-is-scrollable="true" css={detailListContainer}>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <DetailsList
-            items={templates}
-            compact={false}
-            columns={tableColums}
-            getKey={item => item.name}
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
-            checkboxVisibility={CheckboxVisibility.hidden}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            onRenderRow={onRenderRow}
-            selection={selection}
-          />
-        </ScrollablePane>
-      </div>
-      <DialogFooter>
-        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton
-          disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || template === null)}
-          onClick={handleJumpToNext}
-          text={formatMessage('Next')}
-          data-testid="NextStepButton"
+      <DialogWrapper
+        isOpen={true}
+        {...DialogCreationCopy.CREATE_NEW_BOT}
+        onDismiss={onDismiss}
+        dialogType={DialogTypes.CreateFlow}
+      >
+        <ChoiceGroup
+          label={formatMessage('Choose how to create your bot')}
+          selectedKey={option}
+          options={choiceOptions}
+          onChange={handleChange}
         />
-      </DialogFooter>
+        <h3 css={listHeader}>{formatMessage('Examples')}</h3>
+        <div data-is-scrollable="true" css={detailListContainer}>
+          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+            <DetailsList
+              items={templates}
+              compact={false}
+              columns={tableColums}
+              getKey={item => item.name}
+              layoutMode={DetailsListLayoutMode.justified}
+              isHeaderVisible={true}
+              selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
+              checkboxVisibility={CheckboxVisibility.hidden}
+              onRenderDetailsHeader={onRenderDetailsHeader}
+              onRenderRow={onRenderRow}
+              selection={selection}
+            />
+          </ScrollablePane>
+        </div>
+        <DialogFooter>
+          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+          <PrimaryButton
+            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
+            onClick={handleJumpToNext}
+            text={formatMessage('Next')}
+            data-testid="NextStepButton"
+          />
+        </DialogFooter>
+      </DialogWrapper>
     </Fragment>
   );
 }

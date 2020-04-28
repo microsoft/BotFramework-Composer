@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { promisify } from 'util';
 import fs from 'fs';
 
+import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
 import { UserIdentity } from '@bfc/plugin-loader';
@@ -22,6 +24,7 @@ import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
+const mkDirAsync = promisify(fs.mkdir);
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -176,6 +179,21 @@ export class BotProject {
       diagnostics,
     };
   };
+
+  public async saveSchemaToProject(schemaUrl, pathToSave) {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: schemaUrl,
+        responseType: 'stream',
+      });
+      const pathToSchema = `${pathToSave}/Schemas`;
+      await mkDirAsync(pathToSchema);
+      response.data.pipe(fs.createWriteStream(`${pathToSchema}/sdk.schema`));
+    } catch (ex) {
+      throw new Error('Schema file could not be downloaded. Please check the url to the schema.');
+    }
+  }
 
   public updateBotInfo = async (name: string, description: string) => {
     const mainDialogFile = this.files.find(file => !file.relativePath.includes('/') && file.name.endsWith('.dialog'));

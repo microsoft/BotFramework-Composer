@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
+import { navigate } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
@@ -17,7 +18,6 @@ import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
-
 const linksButtom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
@@ -54,7 +54,6 @@ const Home: React.FC<RouteComponentProps> = () => {
   const {
     openBotProject,
     setCreationFlowStatus,
-    fetchTemplates,
     saveTemplateId,
     fetchRecentProjects,
     onboardingAddCoachMarkRef,
@@ -70,9 +69,10 @@ const Home: React.FC<RouteComponentProps> = () => {
     }
   };
 
-  const onClickTemplate = id => {
-    saveTemplateId(id);
+  const onClickTemplate = async (id: string) => {
+    await saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+    navigate(`projects/create/${id}`);
   };
 
   const addButton = <Icon styles={home.button} iconName="Add" />;
@@ -87,7 +87,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'CirclePlus',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.NEW);
+          navigate(`projects/create`);
+        },
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-New',
@@ -100,7 +103,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'OpenFolderHorizontal',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.OPEN);
+          navigate(`projects/open`);
+        },
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-Open',
@@ -113,7 +119,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'Save',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.SAVEAS);
+          navigate(`projects/${state.projectId}/save`);
+        },
       },
       align: 'left',
       disabled: botName ? false : true,
@@ -122,7 +131,6 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   useEffect(() => {
     fetchRecentProjects();
-    fetchTemplates();
   }, []);
 
   return (
@@ -144,6 +152,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.newBotItem}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
+                  navigate('projects/create');
                 }}
               />
             </div>

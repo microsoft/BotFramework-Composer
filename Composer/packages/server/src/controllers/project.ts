@@ -18,7 +18,7 @@ import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location } = req.body;
+  const { name, description, storageId, location, schemaUrl } = req.body;
   const user = await PluginLoader.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -50,7 +50,11 @@ async function createProject(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
+      if (schemaUrl) {
+        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+      }
       await currentProject.init();
+
       const project = currentProject.getProject();
       log('Project created successfully.');
       res.status(200).json({
