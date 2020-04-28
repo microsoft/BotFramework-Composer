@@ -1,7 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getOptions, getSelectedOption } from '../utils';
+import { getOptions, getSelectedOption, getOneOfOptions } from '../utils';
+
+describe('getOneOfOptions', () => {
+  const schema = {
+    title: 'test schema',
+    oneOf: [
+      {
+        type: 'array' as const,
+        oneOf: [
+          {
+            items: {
+              type: 'string' as const,
+            },
+          },
+          {
+            items: {
+              type: 'object' as const,
+            },
+          },
+        ],
+      },
+      {
+        type: 'string' as const,
+      },
+    ],
+  };
+
+  it('returns options of each one of entry', () => {
+    const options = getOneOfOptions(schema.oneOf, schema, {}).map(o => o.key);
+    expect(options).toEqual(['array (string)', 'array (object)', 'string']);
+  });
+});
 
 describe('getOptions', () => {
   describe('when there is an array of types', () => {
@@ -45,6 +76,13 @@ describe('getOptions', () => {
           type: 'number' as const,
         },
         {
+          title: 'an enum',
+          enum: ['one', 'two'],
+        },
+        {
+          enum: ['four', 'five'],
+        },
+        {
           $ref: '#/definitions/Microsoft.AnotherType',
         },
       ],
@@ -59,7 +97,7 @@ describe('getOptions', () => {
 
     it('returns one of options', () => {
       const options = getOptions(schema, definitions).map(o => o.key);
-      expect(options).toEqual(['my awesome string', 'boolean', 'number', 'another type']);
+      expect(options).toEqual(['my awesome string', 'boolean', 'number', 'an enum', 'dropdown', 'another type']);
     });
   });
 
@@ -89,7 +127,7 @@ describe('getSelectedOption', () => {
       text: 'string',
       data: {
         schema: {
-          type: 'string',
+          type: 'string' as const,
         },
       },
     },
@@ -98,7 +136,7 @@ describe('getSelectedOption', () => {
       text: 'integer',
       data: {
         schema: {
-          type: 'integer',
+          type: 'integer' as const,
         },
       },
     },
@@ -107,7 +145,7 @@ describe('getSelectedOption', () => {
       text: 'object',
       data: {
         schema: {
-          type: 'object',
+          type: 'object' as const,
         },
       },
     },
@@ -116,7 +154,7 @@ describe('getSelectedOption', () => {
       text: 'array1',
       data: {
         schema: {
-          type: 'array',
+          type: 'array' as const,
         },
       },
     },
@@ -125,9 +163,9 @@ describe('getSelectedOption', () => {
       text: 'array2',
       data: {
         schema: {
-          type: 'array',
+          type: 'array' as const,
           items: {
-            type: 'integer',
+            type: 'integer' as const,
           },
         },
       },
@@ -136,7 +174,7 @@ describe('getSelectedOption', () => {
       key: 'expression',
       text: 'expression',
       data: {
-        schema: { type: 'string' },
+        schema: { type: 'string' as const },
       },
     },
   ];

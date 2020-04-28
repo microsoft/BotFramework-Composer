@@ -16,10 +16,8 @@ import Routes from './router';
 import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
-import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
-import { CreationFlowStatus } from './constants';
 import { AppUpdater } from './components/AppUpdater';
 
 initializeIcons(undefined, { disableWarnings: true });
@@ -129,11 +127,11 @@ const bottomLinks = [
 ];
 
 export const App: React.FC = () => {
-  const { state, actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
-  const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation, announcement } = state;
-  const { setCreationFlowStatus } = actions;
+  const { botName, projectId, dialogs, locale, designPageLocation, announcement } = state;
+
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
@@ -202,9 +200,6 @@ export const App: React.FC = () => {
         <div css={rightPanel}>
           <ErrorBoundary>
             <RequireAuth>
-              {creationFlowStatus !== CreationFlowStatus.CLOSE && (
-                <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
-              )}
               <Routes component={Content} />
             </RequireAuth>
           </ErrorBoundary>

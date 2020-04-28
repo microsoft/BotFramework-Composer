@@ -25,27 +25,32 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
             .ConfigureAppConfiguration((hostingContext, builder) =>
             {
                 var env = hostingContext.HostingEnvironment;
-
-                builder.AddJsonFile($"ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile("appsetting.json", optional: true, reloadOnChange: true)
-                    .UseLuisConfigAdaptor()
-                    .UseLuisSettings();
+                
+                builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
                 if (env.IsDevelopment())
                 {
                     // Local Debug
                     builder.AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true);
                 }
-                else
+
+                var configuration = builder.Build();
+
+                // Hard code the settings path to 'ComposerDialogs' while deployment
+                var botRoot = configuration.GetValue<string>("bot") ?? "ComposerDialogs";
+                var configFile = Path.GetFullPath(Path.Combine(botRoot, @"settings/appsettings.json"));
+
+                builder.AddJsonFile(configFile, optional: true, reloadOnChange: true);
+
+                // Need to put this part here to override the any customized settings
+                if (!env.IsDevelopment())
                 {
                     //Azure Deploy
                     builder.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
                 }
 
-                if (!env.IsDevelopment())
-                {
-                    builder.AddUserSecrets<Startup>();
-                }
+                builder.UseLuisConfigAdaptor()
+                    .UseLuisSettings();
 
                 builder.AddEnvironmentVariables()
                        .AddCommandLine(args);

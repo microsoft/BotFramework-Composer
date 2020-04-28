@@ -1,21 +1,84 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7 } from '@bfc/extension';
+import { JSONSchema7, JSONSchema7Definition, SchemaDefinitions } from '@bfc/extension';
 import { resolveRef, getValueType } from '@bfc/adaptive-form';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
-export function getOptions(schema: JSONSchema7, definitions): IDropdownOption[] {
+export interface SchemaOption extends IDropdownOption {
+  data: {
+    schema: JSONSchema7;
+  };
+}
+
+function getOptionLabel(schema: JSONSchema7, parent: JSONSchema7): string {
+  const { title, enum: enumOptions, items } = schema;
+  if (title) {
+    return title.toLowerCase();
+  }
+
+  if (Array.isArray(enumOptions) && enumOptions.length > 0) {
+    return 'dropdown';
+  }
+
+  let childType = Array.isArray(schema.type) ? schema.type[0] : schema.type;
+
+  // check array items
+  if (!childType && typeof items === 'object') {
+    const item = Array.isArray(items) ? items[0] : items;
+
+    if (typeof item === 'object') {
+      childType = Array.isArray(item.type) ? item.type[0] : item.type;
+    }
+  }
+
+  const childLabel = childType || 'unknown';
+
+  if (parent.type && !Array.isArray(parent.type)) {
+    return `${parent.type} (${childLabel})`;
+  }
+
+  return childLabel;
+}
+
+export function getOneOfOptions(
+  oneOf: JSONSchema7Definition[],
+  parentSchema: JSONSchema7,
+  definitions?: SchemaDefinitions
+): SchemaOption[] {
+  return oneOf.reduce((all, item) => {
+    if (typeof item === 'object') {
+      const resolved = resolveRef(item, definitions);
+
+      // if item has a one of, recurse on it
+      if (item.oneOf) {
+        return all.concat(getOneOfOptions(item.oneOf, item, definitions));
+      }
+
+      const label = getOptionLabel(resolved, parentSchema);
+
+      all.push({
+        key: label,
+        text: label,
+        data: { schema: resolved },
+      } as SchemaOption);
+    }
+
+    return all;
+  }, [] as SchemaOption[]);
+}
+
+export function getOptions(schema: JSONSchema7, definitions): SchemaOption[] {
   const { type, oneOf, enum: enumOptions } = schema;
 
   const expressionOption = {
     key: 'expression',
     text: 'expression',
-    data: { schema: { ...schema, type: 'string' } },
+    data: { schema: { ...schema, type: 'string' as const } },
   };
 
   if (type && Array.isArray(type)) {
-    const options: IDropdownOption[] = type.map(t => ({
+    const options: SchemaOption[] = type.map(t => ({
       key: t,
       text: t,
       data: { schema: { ...schema, type: t } },
@@ -29,19 +92,7 @@ export function getOptions(schema: JSONSchema7, definitions): IDropdownOption[] 
   }
 
   if (oneOf && Array.isArray(oneOf)) {
-    return oneOf
-      .map(s => {
-        if (typeof s === 'object') {
-          const resolved = resolveRef(s, definitions);
-
-          return {
-            key: resolved.title?.toLowerCase() || resolved.type,
-            text: resolved.title?.toLowerCase() || resolved.type,
-            data: { schema: resolved },
-          } as IDropdownOption;
-        }
-      })
-      .filter(Boolean) as IDropdownOption[];
+    return getOneOfOptions(oneOf, schema, definitions);
   }
 
   // this could either be an expression or an enum value
@@ -59,7 +110,7 @@ export function getOptions(schema: JSONSchema7, definitions): IDropdownOption[] 
   return [expressionOption];
 }
 
-export function getSelectedOption(value: any | undefined, options: IDropdownOption[]): IDropdownOption | undefined {
+export function getSelectedOption(value: any | undefined, options: SchemaOption[]): SchemaOption | undefined {
   const expressionOption = options.find(({ key }) => key === 'expression');
   const valueType = getValueType(value);
 
@@ -81,7 +132,7 @@ export function getSelectedOption(value: any | undefined, options: IDropdownOpti
         } = o;
 
         const itemSchema = Array.isArray(schema.items) ? schema.items[0] : schema.items;
-        return itemSchema && getValueType(item) === itemSchema.type;
+        return typeof itemSchema === 'object' && getValueType(item) === itemSchema.type;
       }) || firstArrayOption
     );
   }

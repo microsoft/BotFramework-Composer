@@ -8,7 +8,8 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { DialogCreationCopy } from '../../constants';
-import { DialogWrapper } from '../../components/DialogWrapper/index';
+import { DialogWrapper } from '../../components/DialogWrapper';
+import { DialogTypes } from '../../components/DialogWrapper/styles';
 import { StorageFolder } from '../../store/types';
 import { StoreContext } from '../../store';
 
@@ -74,7 +75,12 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   };
 
   return (
-    <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}>
+    <DialogWrapper
+      isOpen={isOpen}
+      onDismiss={onDismiss}
+      {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}
+      dialogType={DialogTypes.DesignFlow}
+    >
       <form onSubmit={handleSubmit}>
         <input type="submit" style={{ display: 'none' }} />
         <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>

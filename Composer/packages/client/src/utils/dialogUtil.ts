@@ -270,8 +270,7 @@ export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
 }
 
 export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
-  const dialogsMapClone = cloneDeep(dialogsMap);
-  const dialog = dialogsMapClone[dialogId];
+  const dialog = cloneDeep(dialogsMap[dialogId]);
 
   if (!dataPath) {
     return data;

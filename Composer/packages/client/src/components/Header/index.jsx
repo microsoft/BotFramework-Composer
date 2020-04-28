@@ -11,7 +11,7 @@ import composerIcon from '../../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../../constants';
 import { StoreContext } from '../../store';
 
-import { updateAvailableIcon, headerContainer, title, botName, divider } from './styles';
+import { updateAvailableIcon, headerContainer, title, botName, divider, headerTextContainer } from './styles';
 
 export const Header = props => {
   const {
@@ -27,20 +27,22 @@ export const Header = props => {
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
   return (
-    <div css={headerContainer}>
+    <div role="banner" css={headerContainer}>
       <img
         style={{ marginLeft: '9px', marginTop: '6px' }}
         alt={formatMessage('Composer Logo')}
         aria-label={formatMessage('Composer Logo')}
         src={composerIcon}
       />
-      <div css={title}>{formatMessage('Bot Framework Composer')}</div>
-      {props.botName && (
-        <Fragment>
-          <div css={divider} />
-          <span css={botName}>{`${props.botName} (${props.locale})`}</span>
-        </Fragment>
-      )}
+      <div css={headerTextContainer}>
+        <div css={title}>{formatMessage('Bot Framework Composer')}</div>
+        {props.botName && (
+          <Fragment>
+            <div css={divider} />
+            <span css={botName}>{`${props.botName} (${props.locale})`}</span>
+          </Fragment>
+        )}
+      </div>
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}

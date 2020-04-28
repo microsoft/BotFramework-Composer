@@ -15,24 +15,22 @@ export const headerContainer = css`
 `;
 
 export const title = css`
-  margin-left: 25px;
+  margin-left: 20px;
   font-weight: ${FontWeights.semibold};
   font-size: 16px;
   color: #fff;
-  min-width: 200px;
 `;
 
 export const botName = css`
-  margin-left: 15px;
+  margin-left: 20px;
   font-size: 16px;
-  word-break: break-all;
   color: #fff;
 `;
 
 export const divider = css`
   height: 24px;
   border-right: 1px solid #979797;
-  margin: 0px 0px 0px 4px;
+  margin: 0px 0px 0px 20px;
 `;
 
 export const updateAvailableIcon = {
@@ -54,3 +52,9 @@ export const updateAvailableIcon = {
     backgroundColor: 'transparent',
   },
 };
+
+export const headerTextContainer = css`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;

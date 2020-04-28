@@ -16,7 +16,8 @@ export default class LgTemplateRef {
     this.parameters = parameters;
   }
 
-  static parse(input: LgTemplateRefString): LgTemplateRef | null {
+  static parse(input?: LgTemplateRefString): LgTemplateRef | null {
+    if (!input) return null;
     return parseLgTemplateRef(input);
   }
 
