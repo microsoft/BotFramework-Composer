@@ -7,6 +7,8 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 
+import { SkillEndpointField } from './SkillEndpointField';
+
 export const BeginSkillDialogField: React.FC<FieldProps> = props => {
   const { depth, id, schema, uiOptions, value, onChange } = props;
   const { projectId, skills = [] } = useShellApi();
@@ -27,7 +29,6 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
     onChange({ ...value, skillEndpoint, ...(msAppId ? { skillAppId: msAppId } : {}) });
   };
 
-  const skillEndpointSchema = { ...((schema?.properties?.skillEndpoint as JSONSchema7) || {}), enum: endpointOptions };
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
   skillEndpointUiSchema.serializer = {
     get: value => {
@@ -52,11 +53,12 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
         value={value?.id}
         onChange={handleIdChange}
       />
-      <SchemaField
+      <SkillEndpointField
         depth={depth + 1}
         id={`${id}.skillEndpoint`}
         name="skillEndpoint"
-        schema={skillEndpointSchema}
+        schema={(schema?.properties?.skillEndpoint as JSONSchema7) || {}}
+        enumOptions={endpointOptions}
         rawErrors={{}}
         uiOptions={skillEndpointUiSchema}
         value={value?.skillEndpoint}
