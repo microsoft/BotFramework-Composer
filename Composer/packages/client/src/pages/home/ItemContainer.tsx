@@ -4,8 +4,16 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
+import { Button } from 'office-ui-fabric-react/lib/Button';
 
-import { itemContainerWrapper, itemContainer, itemContainerContent, itemContainerTitle, disabledItem } from './styles';
+import {
+  itemContainerWrapper,
+  itemContainer,
+  itemContainerContent,
+  itemContainerTitle,
+  disabledItem,
+  childrenContainer,
+} from './styles';
 
 interface ItemContainerProps {
   onClick?: () => void | Promise<void>;
@@ -29,17 +37,21 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   forwardedRef,
   ...rest
 }) => {
-  const handleKeyDown = async event => {
-    if (event.key.toLowerCase() === 'enter') {
-      event.preventDefault();
-      if (onClick) {
-        await onClick();
-      }
-    }
+  const onRenderChildren = () => {
+    return (
+      <div css={childrenContainer}>
+        <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
+          <div css={itemContainerTitle}>{title}</div>
+        </div>
+        <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
+          <div css={itemContainerContent}>{content}</div>
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div
+    <Button
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async e => {
         e.preventDefault();
@@ -48,16 +60,9 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         }
       }}
       ref={forwardedRef}
-      tabIndex={0}
       {...rest}
-      onKeyDown={handleKeyDown}
-    >
-      <div tabIndex={-1} css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
-        <div css={itemContainerTitle}>{title}</div>
-      </div>
-      <div tabIndex={-1} css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
-        <div css={itemContainerContent}>{content}</div>
-      </div>
-    </div>
+      onRenderChildren={onRenderChildren}
+      disabled={disabled}
+    />
   );
 };
