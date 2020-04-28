@@ -35,7 +35,7 @@ function parseSelector(path: string): null | string[] {
   return normalizedSelectors;
 }
 
-export function locateNode(dialog: { [key: string]: any }, path: string) {
+function locateNode(dialog: { [key: string]: any }, path: string) {
   const selectors = parseSelector(path);
   if (!Array.isArray(selectors)) return null;
   if (selectors.length === 0) return dialog;
