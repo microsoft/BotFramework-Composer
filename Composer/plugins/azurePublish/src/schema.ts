@@ -102,8 +102,11 @@ const schema: JSONSchema7 = {
       },
       required: ['applicationInsights', 'cosmosDb', 'blobStorage', 'luis', 'MicrosoftAppId', 'MicrosoftAppPassword'],
     },
+    accessToken: {
+      type: 'string',
+    },
   },
-  required: ['subscriptionID', 'appPassword', 'publishName', 'provision'],
+  required: ['subscriptionID', 'appPassword', 'publishName', 'provision', 'accessToken'],
   default: {
     subscriptionID: '<your subscription id>',
     appPassword: '<16 characters including uppercase, lowercase, number and special character>',

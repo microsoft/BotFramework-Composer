@@ -6,7 +6,10 @@ export interface BotProjectDeployConfig {
   subId: string;
 
   // credential
-  creds: any;
+  creds?: any;
+
+  // access token to access azure
+  accessToken: string;
 
   // The project path to deploy
   projPath: string;
