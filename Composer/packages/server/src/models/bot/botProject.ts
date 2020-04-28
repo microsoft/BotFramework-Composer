@@ -706,13 +706,14 @@ export class BotProject {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
-    const schemasDir = Path.join(this.dir, 'Schemas');
+    const schemasDir = Path.join(this.dir, 'schemas');
 
     if (!(await this.fileStorage.exists(schemasDir))) {
       debug('No schemas directory found.');
       return [];
     }
 
+    debug('Schemas directory found.');
     const schemas: FileInfo[] = [];
     const paths = await this.fileStorage.glob('*.schema', schemasDir);
 
