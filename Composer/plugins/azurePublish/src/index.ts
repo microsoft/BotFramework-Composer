@@ -128,7 +128,6 @@ class AzurePublisher {
   };
 
   private createAndDeploy = async (
-    resourcekey: string,
     botId: string,
     profileName: string,
     jobId: string,
@@ -184,6 +183,8 @@ class AzurePublisher {
       appPassword,
       luisAuthoringKey,
       luisAuthoringRegion,
+      provision,
+      accessToken,
     } = config;
 
     const customizeConfiguration: CreateAndDeployResources = {
@@ -212,54 +213,34 @@ class AzurePublisher {
 
     await this.init(botFiles, settings, templatePath, resourcekey);
 
-    // profile should contain all the same things as as `config` -- why pull it back out?
     try {
-      // const profile = settings.publishTargets?.find(item => item.name === name);
       // test creds, if not valid, return 500
-      if (!config || !config.credential) {
+      if (!accessToken) {
         throw new Error('please run Login script to login azure cloud');
       }
-      if (!config || !config.provision) {
-        throw new Error('please run provision script to do the provision');
-      }
-      const currentProvision = config.provision;
-      if (!currentProvision) {
+      if (!provision) {
         throw new Error(
-          'no successful created resource in Azure according to your config, please do the provision again'
+          'no successful created resource in Azure according to your config, please run provision script to do the provision'
         );
       }
+
       // append provision resource into file
       const resourcePath = path.resolve(this.getProjectFolder(resourcekey), 'appsettings.deployment.json');
       const appSettings = await readJson(resourcePath);
       await writeJson(
         resourcePath,
-        { ...appSettings, ...currentProvision },
+        { ...appSettings, ...provision },
         {
           spaces: 4,
         }
       );
-      const credential = config.credential;
 
-      if (credential.tokenCache && credential.tokenCache._entries) {
-        _cache.add(credential.tokenCache._entries, (err, result) => {
-          console.log(err);
-          console.log(result);
-        });
-      }
-      const creds = new DeviceTokenCredentials(
-        credential.clientId,
-        credential.domain,
-        credential.username,
-        credential.tokenAudience,
-        credential.environment,
-        _cache
-      );
       this.azDeployer = new BotProjectDeploy({
         subId: subscriptionID,
         logger: (msg: any) => {
           console.log(msg);
         },
-        creds: creds,
+        accessToken: accessToken,
         projPath: this.getProjectFolder(resourcekey),
       });
 
@@ -275,7 +256,7 @@ class AzurePublisher {
       };
       this.addLoadingStatus(botId, name, response);
 
-      this.createAndDeploy(resourcekey, botId, name, jobId, customizeConfiguration);
+      this.createAndDeploy(botId, name, jobId, customizeConfiguration);
 
       return response;
     } catch (err) {
