@@ -29,7 +29,7 @@ function ExtractIntentTriggers(value: any): IIntentTrigger[] {
     for (const trigger of triggers) {
       const dialogs = ExtractAllBeginDialogs(trigger);
 
-      if (trigger.$kind === SDKKinds.OnIntent && trigger.intent && trigger.actions?.length) {
+      if (trigger.$kind === SDKKinds.OnIntent && trigger.intent) {
         intentTriggers.push({ intent: trigger.intent, dialogs });
       } else if (trigger.$kind !== SDKKinds.OnIntent && dialogs.length) {
         const emptyIntent = intentTriggers.find(e => e.intent === '');
