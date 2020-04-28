@@ -5,6 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { FieldProps, UIOptions } from '@bfc/extension';
+import { HELP_URL } from '@bfc/ui-plugin-expressions';
 
 import { resolvePropSchema } from '../utils';
 
@@ -58,9 +59,6 @@ const FormRow: React.FC<FormRowProps> = props => {
   } = props;
 
   const { required = [] } = schema;
-
-  const HELP_URL =
-    'https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language';
 
   if (Array.isArray(row)) {
     return (
