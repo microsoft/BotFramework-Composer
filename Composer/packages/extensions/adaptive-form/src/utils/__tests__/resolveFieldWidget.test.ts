@@ -91,6 +91,16 @@ describe('resolveFieldWidget', () => {
     });
   });
 
+  describe('type: enum', () => {
+    it('returns SelectField with an enum', () => {
+      const schema = {
+        enum: ['one', 'two', 'three'],
+      };
+
+      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.SelectField);
+    });
+  });
+
   describe('type: string', () => {
     it('returns StringField', () => {
       const schema = {
@@ -98,15 +108,6 @@ describe('resolveFieldWidget', () => {
       };
 
       expect(resolveFieldWidget(schema)).toEqual(DefaultFields.StringField);
-    });
-
-    it('returns SelectField with an enum', () => {
-      const schema = {
-        type: 'string' as const,
-        enum: ['one', 'two', 'three'],
-      };
-
-      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.SelectField);
     });
   });
 
