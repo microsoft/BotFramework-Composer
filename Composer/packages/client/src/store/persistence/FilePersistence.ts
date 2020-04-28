@@ -79,8 +79,10 @@ class FilePersistence {
 
   private init(payload) {
     if (payload) {
-      this._taskQueue = {};
-      this._projectId = payload.response.data.id;
+      if (this._projectId !== payload.response.data.id) {
+        this._taskQueue = {};
+        this._projectId = payload.response.data.id;
+      }
     }
   }
 

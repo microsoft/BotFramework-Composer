@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 context('Notification Page', () => {
-  beforeEach(() => {
+  before(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('ToDoBotWithLuisSample');
     cy.visitPage('Notifications');
@@ -67,7 +67,8 @@ context('Notification Page', () => {
         .should('contain.text', 'expression');
       cy.get('#root\\.condition')
         .click()
-        .type('()');
+        .type('()')
+        .wait(1000);
     });
 
     cy.get('[data-testid="notifications-info-button"]').click();
