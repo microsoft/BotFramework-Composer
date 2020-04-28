@@ -16,6 +16,7 @@ import log from './utility/logger';
 import { AppUpdater } from './appUpdater';
 import { parseDeepLinkUrl } from './utility/url';
 import { composerProtocol } from './constants';
+import { initAppMenu } from './appMenu';
 
 const error = log.extend('error');
 const baseUrl = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
@@ -96,6 +97,7 @@ async function loadServer() {
 }
 
 async function main() {
+  initAppMenu();
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
     if (process.env.COMPOSER_DEV_TOOLS) {
