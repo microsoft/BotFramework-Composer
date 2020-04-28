@@ -135,7 +135,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar toolbarItems={toolbarItems} />
+      <ToolBar toolbarItems={toolbarItems} onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} />
       <div css={home.page}>
         <div role="main" css={home.leftPage}>
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
