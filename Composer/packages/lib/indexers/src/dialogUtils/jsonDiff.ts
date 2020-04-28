@@ -82,10 +82,9 @@ export const defaultJSONAddComparator: IComparator = (json1: any, json2: any, pa
 export const defaultJSONUpdateComparator: IComparator = (json1: any, json2: any, path: string) => {
   const value1 = getWithJsonPath(json1, path);
   const value2 = getWithJsonPath(json2, path);
-
-  const isStop = defualtJSONStopComparison(json1, json2, path);
   // _isEqual comparison use http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero
-  const isChange = isStop && hasWithJsonPath(json1, path) && hasWithJsonPath(json2, path) && !isEqual(value1, value2);
+  const isChange = hasWithJsonPath(json1, path) && hasWithJsonPath(json2, path) && !isEqual(value1, value2);
+  const isStop = defualtJSONStopComparison(json1, json2, path);
   return { isChange, isStop };
 };
 
@@ -98,7 +97,7 @@ export function JsonDiffAdds(prevJson, currJson, comparator?: IComparator): IJSO
     const value1 = getWithJsonPath(prevJson, path);
     const value2 = getWithJsonPath(currJson, path);
     if (Array.isArray(value1) && Array.isArray(value2)) {
-      const listChanges = ListDiff(value1, value2, usedComparator).adds.map(item => {
+      const listChanges = ListDiff(value1, value2).adds.map(item => {
         item.path = `${path}${item.path}`;
         return item;
       });
@@ -142,7 +141,8 @@ export function JsonDiffUpdates(prevJson, currJson, comparator?: IComparator): I
       return true;
     } else {
       const { isChange, isStop } = usedComparator(prevJson, currJson, path);
-      if (isChange) {
+      // only catch stop leaf's change
+      if (isChange && isStop) {
         const preValue = getWithJsonPath(prevJson, path);
         results.push({ path, preValue, value });
       }

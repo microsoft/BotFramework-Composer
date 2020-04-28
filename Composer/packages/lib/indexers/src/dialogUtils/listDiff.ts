@@ -10,6 +10,8 @@ import indexOf from 'lodash/indexOf';
 
 import { IJsonChanges, IComparator } from './jsonDiff';
 
+export type IValueComparator = (item1: any, item2: any) => boolean;
+
 /**
  * diff with listItem's change
  * @param list1 any[]
@@ -33,10 +35,18 @@ import { IJsonChanges, IComparator } from './jsonDiff';
  * Assume list1, list2 both are uniqed list.
  * @param list1 {[key:string]: any}
  * @param list2
- * @param comparator
+ * @param comparator // value comparator
  */
 export function ListDiff(list1: any[], list2: any[], comparator?: IComparator): IJsonChanges {
-  const usedComparator = isEqual;
+  const usedComparator = (item1, item2): boolean => {
+    if (comparator) {
+      return !comparator(item1, item2, '$').isChange;
+    } else {
+      return isEqual(item1, item2);
+    }
+  };
+
+  // difference comparator is an updated comparator
   const list1Changes = differenceWith(list1, list2, usedComparator).map(item => {
     return {
       index: indexOf(list1, item),
