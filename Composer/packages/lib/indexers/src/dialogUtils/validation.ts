@@ -27,24 +27,26 @@ const checkReturnType = (returnType: ReturnType, types: string[]): string => {
 
 export const checkExpression = (exp: string | boolean | number, required: boolean, types: string[]): string => {
   let message = '';
-  if (!exp && required) {
-    message = formatMessage(`is missing or empty`);
-  } else {
-    try {
-      let returnType: ReturnType;
-      if (typeof exp === 'boolean') {
-        returnType = ReturnType.Boolean;
-      } else if (typeof exp === 'number') {
-        returnType = ReturnType.Number;
-      } else {
+  let returnType: ReturnType = ReturnType.Object;
+  switch (typeof exp) {
+    case 'boolean': {
+      returnType = ReturnType.Boolean;
+      break;
+    }
+    case 'number': {
+      returnType = ReturnType.Number;
+      break;
+    }
+    default: {
+      if (!exp && required) message = formatMessage(`is missing or empty`);
+      try {
         returnType = Expression.parse(exp).returnType;
+      } catch (error) {
+        message = `${formatMessage('must be an expression:')} ${error})`;
       }
-      message = checkReturnType(returnType, types);
-    } catch (error) {
-      message = `${formatMessage('must be an expression:')} ${error})`;
     }
   }
-
+  if (!message) message = checkReturnType(returnType, types);
   return message;
 };
 
