@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { SharedColors } from '@uifabric/fluent-theme';
 import { css } from '@emotion/core';
 
 export const headerContainer = css`
   position: relative;
-  background: ${NeutralColors.black};
+  background: ${SharedColors.cyanBlue10};
   height: 50px;
   display: flex;
   flex-direction: row;
