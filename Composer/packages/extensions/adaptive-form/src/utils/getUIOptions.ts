@@ -11,5 +11,5 @@ export function getUIOptions(schema?: JSONSchema7, uiSchema?: UISchema, pluginOp
 
   const formOptions = uiSchema && kind && uiSchema[kind] ? uiSchema[kind] : {};
 
-  return { ...pluginOptions, ...formOptions };
+  return { ...formOptions, ...pluginOptions };
 }
