@@ -121,7 +121,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`projects/${state.projectId}/save`);
+          navigate(`projects/${state.projectId}/${state.templateId}/save`);
         },
       },
       align: 'left',

@@ -64,8 +64,9 @@ describe('<CreationFlow/>', () => {
   it('should render the component', async () => {
     const expectedTemplateId = 'EchoBot';
     storeContext.state.templateId = 'EchoBot';
-    storeContext.actions.createProject = async templateId => {
+    storeContext.actions.createProject = async (templateId, name, description, location) => {
       expect(templateId).toBe(expectedTemplateId);
+      expect(location).toBe('\\test-folder\\Desktop');
     };
     storeContext.state.focusedStorageFolder = {
       name: 'Desktop',
@@ -77,7 +78,7 @@ describe('<CreationFlow/>', () => {
           type: 'bot',
           path: 'Desktop/EchoBot-11299',
           lastModified: 'Wed Apr 22 2020 17:51:07 GMT-0700 (Pacific Daylight Time)',
-          size: '',
+          size: 1,
         },
       ],
     };
