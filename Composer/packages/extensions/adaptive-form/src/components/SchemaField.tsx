@@ -88,5 +88,5 @@ const SchemaField: React.FC<FieldProps> = props => {
   );
 };
 
-export { SchemaField };
+export { SchemaField, schemaField };
 export default SchemaField;
