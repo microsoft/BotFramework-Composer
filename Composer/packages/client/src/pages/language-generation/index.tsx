@@ -100,8 +100,6 @@ const LGPage: React.FC<LGPageProps> = props => {
   return (
     <Fragment>
       <div css={pageRoot} data-testid="LGPage">
-        <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
-
         <div css={contentWrapper}>
           <ToolBar toolbarItems={toolbarItems} />
 
@@ -119,8 +117,9 @@ const LGPage: React.FC<LGPageProps> = props => {
               />
             </div>
           </div>
-          <div role="main" css={ContentStyle} data-testid="LGEditor">
-            <div css={contentEditor}>
+          <div role="main" css={ContentStyle}>
+            <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+            <div css={contentEditor} data-testid="LGEditor">
               <Suspense fallback={<LoadingSpinner />}>
                 <Router primary={false} component={Fragment}>
                   <CodeEditor path="/edit/*" dialogId={dialogId} />
