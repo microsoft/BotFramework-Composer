@@ -402,12 +402,12 @@ export class BotProject {
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
-    this.files[index].content = content;
 
     const absolutePath = `${this.dir}/${relativePath}`;
 
     // only write if the file has actually changed
     if (this.files[index].content !== content) {
+      this.files[index].content = content;
       await this.fileStorage.writeFile(absolutePath, content);
     }
 
