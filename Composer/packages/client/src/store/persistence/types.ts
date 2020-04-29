@@ -9,6 +9,7 @@ export enum FileChangeType {
 
 export enum FileExtensions {
   Dialog = '.dialog',
+  Manifest = '.manifest',
   Lu = '.lu',
   Lg = '.lg',
 }

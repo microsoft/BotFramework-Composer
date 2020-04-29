@@ -67,7 +67,7 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
-  const { dialogs, luFiles, lgFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
+  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
   state.botEnvironment = botEnvironment || state.botEnvironment;
@@ -80,6 +80,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = settings;
   state.locale = locale;
+  state.skillManifests = skillManifestFiles;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
   return state;
@@ -373,6 +374,21 @@ const addSkillDialogCancel: ReducerFunc = state => {
   return state;
 };
 
+const createSkillManifest: ReducerFunc = (state, { content = {}, id }) => {
+  state.skillManifests = [...state.skillManifests, { content, id }];
+  return state;
+};
+
+const updateSkillManifest: ReducerFunc = (state, payload) => {
+  state.skillManifests = state.skillManifests.map(manifest => (manifest.id === payload.id ? payload : manifest));
+  return state;
+};
+
+const removeSkillManifest: ReducerFunc = (state, { id }) => {
+  state.skillManifests = state.skillManifests.filter(manifest => manifest.name === id);
+  return state;
+};
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
@@ -603,6 +619,9 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_SKILL_SUCCESS]: updateSkill,
   [ActionTypes.ADD_SKILL_DIALOG_BEGIN]: addSkillDialogBegin,
   [ActionTypes.ADD_SKILL_DIALOG_END]: addSkillDialogCancel,
+  [ActionTypes.CREATE_SKILL_MANIFEST]: createSkillManifest,
+  [ActionTypes.REMOVE_SKILL_MANIFEST]: removeSkillManifest,
+  [ActionTypes.UPDATE_SKILL_MANIFEST]: updateSkillManifest,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
