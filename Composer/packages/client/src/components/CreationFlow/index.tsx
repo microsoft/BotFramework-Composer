@@ -66,7 +66,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async botFolder => {
     await openBotProject(botFolder);
-    handleDismiss();
+    setCreationFlowStatus(CreationFlowStatus.CLOSE);
   };
 
   const handleCreateNew = async formData => {
