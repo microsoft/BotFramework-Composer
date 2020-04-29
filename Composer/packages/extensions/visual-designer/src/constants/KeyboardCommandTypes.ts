@@ -89,11 +89,15 @@ const KeyboardNodeEditingShortcuts = {
   'Windows.Control.c': KeyboardCommandTypes.Node.Copy,
   'Windows.Control.X': KeyboardCommandTypes.Node.Cut,
   'Windows.Control.x': KeyboardCommandTypes.Node.Cut,
+  'Windows.Control.V': KeyboardCommandTypes.Node.Paste,
+  'Windows.Control.v': KeyboardCommandTypes.Node.Paste,
 
   'Mac.Meta.C': KeyboardCommandTypes.Node.Copy,
   'Mac.Meta.c': KeyboardCommandTypes.Node.Copy,
   'Mac.Meta.X': KeyboardCommandTypes.Node.Cut,
   'Mac.Meta.x': KeyboardCommandTypes.Node.Cut,
+  'Mac.Meta.V': KeyboardCommandTypes.Node.Paste,
+  'Mac.Meta.v': KeyboardCommandTypes.Node.Paste,
 };
 
 const KeyboardOperationEditingShortcuts = {
