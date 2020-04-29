@@ -359,9 +359,12 @@ export default async (composer: any): Promise<void> => {
     eject: async (project: any, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
       const destPath = path.join(project.dir, 'runtime');
+      const schemaSrcPath = path.join(sourcePath, 'Schemas');
+      const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
+        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         return destPath;
       } else {
         throw new Error(`Runtime already exists at ${destPath}`);

@@ -19,6 +19,13 @@ const appPassword = argv.appPassword;
 const appId = argv.appId; // MicrosoftAppId
 const luisAuthoringKey = argv.luisAuthoringKey;
 const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus';
+
+const createLuisResource = argv.createLuisResource == 'true' ? true : false;
+const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'true' ? true : false;
+const createCosmosDb = argv.createCosmosDb == 'true' ? true : false;
+const createStorage = argv.createStorage == 'true' ? true : false;
+const createAppInsignts = argv.createAppInsignts == 'true' ? true : false;
+
 const templatePath = path.join(__dirname, '../DeploymentTemplates', 'template-with-preexisting-rg.json');
 
 const BotProjectDeployLoggerType = {
@@ -27,7 +34,7 @@ const BotProjectDeployLoggerType = {
   PROVISION_ERROR: 'PROVISION_ERROR',
   PROVISION_WARNING: 'PROVISION_WARNING',
   PROVISION_SUCCESS: 'PROVISION_SUCCESS',
-
+  PROVISION_ERROR_DETAILS: 'PROVISION_ERROR_DETAILS',
   // Logger Type for Deploy
   DEPLOY_INFO: 'DEPLOY_INFO',
   DEPLOY_ERROR: 'DEPLOY_ERROR',
@@ -76,7 +83,11 @@ const getDeploymentTemplateParam = (
   appPwd,
   location,
   name,
-  shouldCreateAuthoringResource
+  shouldCreateAuthoringResource,
+  shouldCreateLuisResource,
+  useAppInsights,
+  useCosmosDb,
+  useStorage
 ) => {
   return {
     appId: pack(appId),
@@ -84,6 +95,10 @@ const getDeploymentTemplateParam = (
     appServicePlanLocation: pack(location),
     botId: pack(name),
     shouldCreateAuthoringResource: pack(shouldCreateAuthoringResource),
+    shouldCreateLuisResource: pack(shouldCreateLuisResource),
+    useAppInsights: pack(useAppInsights),
+    useCosmosDb: pack(useCosmosDb),
+    useStorage: pack(useStorage),
   };
 }
 
@@ -186,7 +201,11 @@ const create = async (
   environment,
   appId,
   appPassword,
-  luisAuthoringKey
+  createLuisResource = false,
+  createLuisAuthoringResource = false,
+  createCosmosDb = false,
+  createStorage = false,
+  createAppInsignts = false
 ) => {
   const graphCreds = new msRestNodeAuth.DeviceTokenCredentials(
     creds.clientId,
@@ -231,11 +250,6 @@ const create = async (
     message: `> Create App Id Success! ID: ${appId}`,
   });
 
-  let shouldCreateAuthoringResource = true;
-  if (luisAuthoringKey) {
-    shouldCreateAuthoringResource = false;
-  }
-
   const resourceGroupName = `${name}-${environment}`;
 
   // timestamp will be used as deployment name
@@ -255,7 +269,11 @@ const create = async (
     appPassword,
     location,
     name,
-    shouldCreateAuthoringResource
+    createLuisAuthoringResource,
+    createLuisResource,
+    createAppInsignts,
+    createCosmosDb,
+    createStorage
   );
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -288,12 +306,15 @@ const create = async (
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
       message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
     });
-
-    throw new Error(`! Error: ${validation.error.message}`);
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
+      message: validation.error.details,
+    });
+    throw new Error('Maybe you have the same resource group in current subscription. please make sure your name is unique in subscription and remove your resource group and try again.');
   }
 
   // Create the entire stack of resources inside the new resource group
-  // this is controlled by an ARM template identified in this.templatePath
+  // this is controlled by an ARM template identified in templatePath
   const deployment = await createDeployment(
     client,
     resourceGroupName,
@@ -388,7 +409,12 @@ msRestNodeAuth
       environment,
       appId,
       appPassword,
-      luisAuthoringKey);
+      createLuisResource,
+      createLuisAuthoringResource,
+      createCosmosDb,
+      createStorage,
+      createAppInsignts
+    );
 
     if (createResult) {
       console.log(
@@ -396,7 +422,6 @@ msRestNodeAuth
       );
 
       const token = await creds.getToken();
-
       const profile = {
         publishName: name,
         location: location,
