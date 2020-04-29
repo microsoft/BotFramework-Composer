@@ -5,6 +5,7 @@ import 'dotenv/config';
 import path from 'path';
 import crypto from 'crypto';
 
+import { getPortPromise } from 'portfinder';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
@@ -27,7 +28,7 @@ import log from './logger';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
-export async function start(pluginDir?: string) {
+export async function start(pluginDir?: string): Promise<number | string> {
   const clientDirectory = path.resolve(require.resolve('@bfc/client'), '..');
   const app: Express = express();
   app.set('view engine', 'ejs');
@@ -45,75 +46,82 @@ export async function start(pluginDir?: string) {
 
   // load all the plugins that exist in the folder
   pluginDir = pluginDir || path.resolve(__dirname, '../../../plugins');
-  pluginLoader.loadPluginsFromFolder(pluginDir).then(() => {
-    const { login, authorize } = getAuthProvider();
+  await pluginLoader.loadPluginsFromFolder(pluginDir);
 
-    const CS_POLICIES = [
-      "default-src 'none';",
-      "font-src 'self' https:;",
-      "img-src 'self' data:;",
-      "base-uri 'none';",
-      "connect-src 'self';",
-      "frame-src 'self' bfemulator: https://login.microsoftonline.com https://*.botframework.com;",
-      "worker-src 'self';",
-      "form-action 'none';",
-      "frame-ancestors 'self';",
-      "manifest-src 'self';",
-      'upgrade-insecure-requests;',
-    ];
+  const { login, authorize } = getAuthProvider();
 
-    app.all('*', function(req: Request, res: Response, next: NextFunction) {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  const CS_POLICIES = [
+    "default-src 'none';",
+    "font-src 'self' https:;",
+    "img-src 'self' data:;",
+    "base-uri 'none';",
+    "connect-src 'self';",
+    "frame-src 'self' bfemulator: https://login.microsoftonline.com https://*.botframework.com;",
+    "worker-src 'self';",
+    "form-action 'none';",
+    "frame-ancestors 'self';",
+    "manifest-src 'self';",
+    'upgrade-insecure-requests;',
+  ];
 
-      if (process.env.ENABLE_CSP === 'true') {
-        req.__nonce__ = crypto.randomBytes(16).toString('base64');
-        res.header(
-          'Content-Security-Policy',
-          CS_POLICIES.concat([
-            `script-src 'self' 'nonce-${req.__nonce__}';`,
-            // TODO: use nonce strategy after addressing issues with monaco-editor pacakge
-            "style-src 'self' 'unsafe-inline'",
-            // `style-src 'self' 'nonce-${req.__nonce__}';`,
-          ]).join(' ')
-        );
-      }
+  app.all('*', function(req: Request, res: Response, next: NextFunction) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
 
-      next();
-    });
-
-    app.use(`${BASEURL}/`, express.static(clientDirectory, { immutable: true, maxAge: 31536000 }));
-    app.use(morgan('dev'));
-
-    // only register the login route if the auth provider defines one
-    if (login) {
-      app.get(`${BASEURL}/api/login`, login);
-    } else {
-      // register the route so that client that requires_auth knows not try repeatedly
-      app.get(`${BASEURL}/api/login`, (req, res) => {
-        res.redirect(`${BASEURL}#error=${encodeURIComponent('NoSupport')}`);
-      });
+    if (process.env.ENABLE_CSP === 'true') {
+      req.__nonce__ = crypto.randomBytes(16).toString('base64');
+      res.header(
+        'Content-Security-Policy',
+        CS_POLICIES.concat([
+          `script-src 'self' 'nonce-${req.__nonce__}';`,
+          // TODO: use nonce strategy after addressing issues with monaco-editor pacakge
+          "style-src 'self' 'unsafe-inline'",
+          // `style-src 'self' 'nonce-${req.__nonce__}';`,
+        ]).join(' ')
+      );
     }
 
-    // always authorize all api routes, it will be a no-op if no auth provider set
-    app.use(`${BASEURL}/api`, authorize, apiRouter);
-
-    // next needs to be an arg in order for express to recognize this as the error handler
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
-      if (err) {
-        log(err);
-        res.status(500).json({ message: err.message });
-      }
-    });
-
-    app.get('*', function(req, res) {
-      res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
-    });
+    next();
   });
 
-  const port = process.env.PORT || 5000;
+  app.use(`${BASEURL}/`, express.static(clientDirectory, { immutable: true, maxAge: 31536000 }));
+  app.use(morgan('dev'));
+
+  // only register the login route if the auth provider defines one
+  if (login) {
+    app.get(`${BASEURL}/api/login`, login);
+  } else {
+    // register the route so that client that requires_auth knows not try repeatedly
+    app.get(`${BASEURL}/api/login`, (req, res) => {
+      res.redirect(`${BASEURL}#error=${encodeURIComponent('NoSupport')}`);
+    });
+  }
+
+  // always authorize all api routes, it will be a no-op if no auth provider set
+  app.use(`${BASEURL}/api`, authorize, apiRouter);
+
+  // next needs to be an arg in order for express to recognize this as the error handler
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  app.use(function(err: Error, req: Request, res: Response, _next: NextFunction) {
+    if (err) {
+      log(err);
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+  app.get('*', function(req, res) {
+    res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
+  });
+
+  const preferredPort = process.env.PORT || 5000;
+  let port = preferredPort;
+  if (process.env.NODE_ENV === 'production') {
+    // Dynamically search for an open PORT starting with PORT or 5000, so that
+    // the app doesn't crash if the port is already being used.
+    // (disabled in dev in order to avoid breaking the webpack dev server proxy)
+    port = await getPortPromise({ port: preferredPort as number });
+  }
   let server;
   await new Promise(resolve => {
     server = app.listen(port, () => {
@@ -170,4 +178,6 @@ export async function start(pluginDir?: string) {
       });
     }
   });
+
+  return port;
 }
