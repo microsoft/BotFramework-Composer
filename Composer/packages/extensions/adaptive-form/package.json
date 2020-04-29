@@ -17,7 +17,6 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@bfc/ui-plugin-expressions": "*",
     "@bfc/code-editor": "*",
     "@bfc/extension": "*",
     "@uifabric/fluent-theme": "^7.1.4",
