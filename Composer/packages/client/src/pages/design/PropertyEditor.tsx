@@ -19,7 +19,7 @@ import { formEditor } from './styles';
 
 const PropertyEditor: React.FC = () => {
   const { api: shellApi, data: shellData } = useShell('PropertyEditor');
-  const { currentDialog, data: formData, focusPath, focusedSteps, schemas } = shellData;
+  const { currentDialog, data: formData = {}, focusPath, focusedSteps, schemas } = shellData;
 
   const currentWidth = shellData?.userSettings?.propertyEditorWidth || 400;
 
@@ -50,7 +50,7 @@ const PropertyEditor: React.FC = () => {
     if (schemas?.sdk?.content && localData) {
       return resolveBaseSchema(schemas.sdk.content, localData);
     }
-  }, [schemas?.sdk?.content, localData]);
+  }, [schemas?.sdk?.content, localData.$kind]);
 
   const pluginConfig = useMemo(() => {
     return mergePluginConfigs(...plugins);

@@ -8,6 +8,7 @@ import AdaptiveForm, { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
+import { ContentProps } from '../constants';
 import { StoreContext } from '../../../../store';
 
 const styles = {
@@ -47,7 +48,7 @@ const InlineLabelField: React.FC<FieldProps> = props => {
   );
 };
 
-export const Description = ({ errors, value, schema, onChange }) => {
+export const Description: React.FC<ContentProps> = ({ errors, value, schema, onChange }) => {
   const { state } = useContext(StoreContext);
   const { botName } = state;
 

@@ -21,7 +21,7 @@ interface ExportSkillModalProps {
   onSubmit: () => void;
 }
 
-export const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss }) => {
+const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss }) => {
   const { actions, state } = useContext(StoreContext);
   const { skillManifests } = state;
   const { updateSkillManifest } = actions;
@@ -51,11 +51,12 @@ export const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, on
   const handleNext = () => {
     const validated = typeof validate === 'function' ? validate(content, schema) : errors;
 
-    if (!Object.keys(validated).length && currentStep + 1 < order.length) {
-      setCurrentStep(currentStep + 1);
+    if (!Object.keys(validated).length) {
+      setCurrentStep(current => (current + 1 < order.length ? current + 1 : current));
+      setErrors({});
+    } else {
+      setErrors(validated);
     }
-
-    setErrors(validated);
   };
 
   const handleSave = (manifest?: SkillManifest) => {
@@ -72,7 +73,7 @@ export const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, on
       onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.close,
-        title: title,
+        title: title(),
         styles: styles.dialog,
       }}
       modalProps={{
@@ -82,7 +83,7 @@ export const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, on
     >
       <div css={styles.container}>
         <p>
-          {subText}
+          {typeof subText === 'function' && subText()}
           {helpLink && (
             <React.Fragment>
               {!!subText && <React.Fragment>&nbsp;</React.Fragment>}
@@ -110,6 +111,7 @@ export const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, on
             <div>
               {buttons.map(({ disabled, primary, text, onClick }, index) => {
                 const Button = primary ? PrimaryButton : DefaultButton;
+                const buttonText = text();
                 const isDisabled = typeof disabled === 'function' ? disabled({ manifest: skillManifest }) : !!disabled;
 
                 return (
@@ -117,7 +119,7 @@ export const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, on
                     key={index}
                     disabled={isDisabled}
                     styles={{ root: { marginLeft: '8px' } }}
-                    text={text}
+                    text={buttonText}
                     onClick={onClick({
                       setCurrentStep,
                       onDismiss,
@@ -136,3 +138,5 @@ export const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, on
     </Dialog>
   );
 };
+
+export default ExportSkillModal;

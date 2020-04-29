@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -20,14 +20,7 @@ import formatMessage from 'format-message';
 
 import { calculateTimeDiff } from '../../../../utils';
 import { StoreContext } from '../../../../store';
-import { ContentProps } from '../constants';
-
-const VERSION_REGEX = /\d\.\d\.(\d+|preview-\d+)/i;
-
-const SCHEMA_URIS = [
-  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.1.preview-1.json',
-  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
-];
+import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
 
 const styles = {
   detailListContainer: css`
@@ -51,15 +44,19 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
   const [version] = VERSION_REGEX.exec(manifestVersion) || [''];
   const fileName = `skill-manifest-${version.replace(/\./g, '-')}`;
 
-  const options: IDropdownOption[] = SCHEMA_URIS.map((key, index) => {
-    const [version] = VERSION_REGEX.exec(key) || [];
+  const options: IDropdownOption[] = useMemo(
+    () =>
+      SCHEMA_URIS.map((key, index) => {
+        const [version] = VERSION_REGEX.exec(key) || [];
 
-    return {
-      text: formatMessage('Version {version}', { version }),
-      key,
-      selected: !index,
-    };
-  });
+        return {
+          text: formatMessage('Version {version}', { version }),
+          key,
+          selected: !index,
+        };
+      }),
+    []
+  );
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {

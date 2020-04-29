@@ -27,7 +27,7 @@ interface CreateDialogModalProps {
   onSubmit: (skillFormData: ISkillFormData) => void;
 }
 
-export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
+const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
   const { state } = useContext(StoreContext);
   const { skills } = state;
   const { isOpen, onDismiss, onSubmit } = props;
@@ -107,3 +107,5 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
     </DialogWrapper>
   );
 };
+
+export default AddSkillDialog;

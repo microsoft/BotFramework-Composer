@@ -7,6 +7,13 @@ import startCase from 'lodash/startCase';
 
 import { Description, FetchManifestSchema, ReviewManifest, SelectManifest } from './content';
 
+export const VERSION_REGEX = /\d\.\d\.(\d+|preview-\d+)/i;
+
+export const SCHEMA_URIS = [
+  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.1.preview-1.json',
+  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
+];
+
 export interface SkillManifest {
   content: any;
   id: string;
@@ -29,7 +36,7 @@ export interface ContentProps {
 interface Button {
   disabled?: ((_: any) => boolean) | boolean;
   primary?: boolean;
-  text: string;
+  text: () => string;
   onClick: (_: any) => () => void;
 }
 
@@ -37,8 +44,8 @@ interface EditorStep {
   buttons?: Button[];
   editJson?: boolean;
   helpLink?: string;
-  title: string;
-  subText?: any;
+  title: () => string;
+  subText?: () => any;
   content: React.FC<ContentProps>;
   validate?: (value: any, schema: any) => { [key: string]: any };
 }
@@ -58,13 +65,13 @@ export const order: ManifestEditorSteps[] = [
 ];
 
 const cancelButton: Button = {
-  text: formatMessage('Cancel'),
+  text: () => formatMessage('Cancel'),
   onClick: ({ onDismiss }) => onDismiss,
 };
 
 const nextButton: Button = {
   primary: true,
-  text: formatMessage('Next'),
+  text: () => formatMessage('Next'),
   onClick: ({ onNext }) => onNext,
 };
 
@@ -75,26 +82,26 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         disabled: ({ manifest }) => !manifest,
         primary: true,
-        text: formatMessage('Edit'),
+        text: () => formatMessage('Edit'),
         onClick: ({ onNext }) => onNext,
       },
     ],
     content: SelectManifest,
     editJson: false,
-    subText: formatMessage('Create a new skill manifest or select which one you want to edit'),
-    title: formatMessage('Create or edit skill manifest'),
+    subText: () => formatMessage('Create a new skill manifest or select which one you want to edit'),
+    title: () => formatMessage('Create or edit skill manifest'),
   },
   [ManifestEditorSteps.FETCH_MANIFEST_SCHEMA]: {
     content: FetchManifestSchema,
     editJson: false,
-    title: formatMessage('Select manifest version'),
+    title: () => formatMessage('Select manifest version'),
   },
   [ManifestEditorSteps.MANIFEST_DESCRIPTION]: {
     buttons: [cancelButton, nextButton],
     content: Description,
     editJson: true,
-    title: formatMessage('Describe your skill'),
-    subText: formatMessage('To make your bot available for others as a skill, we need to generate a manifest.'),
+    title: () => formatMessage('Describe your skill'),
+    subText: () => formatMessage('To make your bot available for others as a skill, we need to generate a manifest.'),
     validate: (value, schema) => {
       const required = schema?.required || [];
 
@@ -116,12 +123,12 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       cancelButton,
       {
         primary: true,
-        text: formatMessage('Done'),
+        text: () => formatMessage('Done'),
         onClick: ({ onDismiss }) => onDismiss,
       },
     ],
     content: ReviewManifest,
-    subText: formatMessage('The manifest can be edited and refined manually if and where needed.'),
-    title: formatMessage('Review and generate'),
+    subText: () => formatMessage('The manifest can be edited and refined manually if and where needed.'),
+    title: () => formatMessage('Review and generate'),
   },
 };

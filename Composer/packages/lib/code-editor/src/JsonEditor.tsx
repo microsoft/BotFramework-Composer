@@ -10,7 +10,7 @@ interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | '
   onChange: (jsonData: any) => void;
   value?: object;
   schema?: any;
-  setError?: (error: string) => void;
+  onError?: (error: string) => void;
 }
 
 const JsonEditor: React.FC<JsonEditorProps> = props => {
@@ -19,7 +19,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     value: initialValue,
     onChange,
     onInit: onInitProp,
-    setError,
+    onError,
     schema,
     id,
     ...rest
@@ -34,9 +34,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
   };
 
   useEffect(() => {
-    if (setError) {
-      setError(parseError);
-    }
+    onError && onError(parseError);
   }, [parseError]);
 
   const onInit: OnInit = monaco => {
