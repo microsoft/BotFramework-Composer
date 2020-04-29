@@ -89,6 +89,7 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
     "path-to-regexp": "^6.1.0",
+    "portfinder": "1.0.25",
     "ts-md5": "^1.2.7",
     "vscode-languageserver": "^5.3.0-next",
     "vscode-ws-jsonrpc": "^0.1.1",
