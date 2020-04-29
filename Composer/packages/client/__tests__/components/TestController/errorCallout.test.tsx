@@ -21,7 +21,7 @@ describe('<ErrorCallout />', () => {
       />
     );
 
-    const container = document.querySelector('[role="alertdialog"]');
+    const container = document.querySelector('[ data-testid="errorCallout"]');
     expect(container).toHaveTextContent('title test');
 
     const tryButton = getByText(container as HTMLElement, 'Try again');
