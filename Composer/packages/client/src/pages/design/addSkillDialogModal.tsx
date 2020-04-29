@@ -107,3 +107,5 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
     </DialogWrapper>
   );
 };
+
+export default AddSkillDialog;
