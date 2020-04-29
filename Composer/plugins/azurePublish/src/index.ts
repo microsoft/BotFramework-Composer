@@ -5,7 +5,7 @@ import path from 'path';
 
 import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
 import { v4 as uuid, v5 as hash } from 'uuid';
-import { copy, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
+import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 
 import schema from './schema';
 
@@ -82,6 +82,12 @@ class AzurePublisher {
     await copy(srcTemplate, projFolder);
   };
 
+  private async cleanup(resourcekey: string) {
+    const projFolder = this.getProjectFolder(resourcekey);
+    await emptyDir(projFolder);
+    await rmdir(projFolder);
+  }
+
   private async loadHistoryFromFile() {
     if (await pathExists(this.historyFilePath)) {
       this.histories = await readJson(this.historyFilePath);
@@ -144,6 +150,7 @@ class AzurePublisher {
     botId: string,
     profileName: string,
     jobId: string,
+    resourcekey: string,
     customizeConfiguration: CreateAndDeployResources
   ) => {
     const {
@@ -167,6 +174,7 @@ class AzurePublisher {
         status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
+        await this.cleanup(resourcekey);
       }
     } catch (error) {
       console.log(error);
@@ -178,6 +186,7 @@ class AzurePublisher {
         status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
+        await this.cleanup(resourcekey);
       }
     }
   };
@@ -293,13 +302,13 @@ class AzurePublisher {
       };
       this.addLoadingStatus(botId, name, response);
 
-      this.createAndDeploy(botId, name, jobId, customizeConfiguration);
+      this.createAndDeploy(botId, name, jobId, resourcekey, customizeConfiguration);
 
       return response;
     } catch (err) {
       console.log(err);
       this.logMessages.push(err.message);
-      const res = {
+      const response = {
         status: 500,
         result: {
           id: jobId,
@@ -309,8 +318,9 @@ class AzurePublisher {
           comment: metadata.comment,
         },
       };
-      this.updateHistory(botId, name, { status: res.status, ...res.result });
-      return res;
+      this.updateHistory(botId, name, { status: response.status, ...response.result });
+      this.cleanup(resourcekey);
+      return response;
     }
   };
 
