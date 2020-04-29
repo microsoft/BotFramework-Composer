@@ -19,8 +19,18 @@ import { composerProtocol } from './constants';
 import { initAppMenu } from './appMenu';
 
 const error = log.extend('error');
-const baseUrl = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
 let deeplinkUrl = '';
+let serverPort;
+// webpack dev server runs on :3000
+const getBaseUrl = () => {
+  if (isDevelopment) {
+    return 'http://localhost:3000/';
+  }
+  if (!serverPort) {
+    throw new Error('getBaseUrl() called before serverPort is defined.');
+  }
+  return `http://localhost:${serverPort}`;
+};
 
 function processArgsForWindows(args: string[]): string {
   const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
@@ -92,11 +102,12 @@ async function loadServer() {
 
   log('Starting server...');
   const { start } = await import('@bfc/server');
-  await start(pluginsDir);
-  log('Server started. Rendering application...');
+  serverPort = await start(pluginsDir);
+  log(`Server started at port: ${serverPort}`);
 }
 
 async function main() {
+  log('Rendering application...');
   initAppMenu();
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
@@ -107,13 +118,14 @@ async function main() {
     if (isWindows()) {
       deeplinkUrl = processArgsForWindows(process.argv);
     }
-    await mainWindow.webContents.loadURL(baseUrl + deeplinkUrl);
+    await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkUrl);
 
     mainWindow.show();
 
     mainWindow.on('closed', function() {
       ElectronWindow.destroy();
     });
+    log('Rendered application.');
   }
 }
 
@@ -130,7 +142,7 @@ async function run() {
 
       const mainWindow = ElectronWindow.getInstance().browserWindow;
       if (mainWindow) {
-        await mainWindow.webContents.loadURL(baseUrl + deeplinkUrl);
+        await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkUrl);
         if (mainWindow.isMinimized()) {
           mainWindow.restore();
         }
@@ -144,7 +156,6 @@ async function run() {
   app.on('ready', async () => {
     log('App ready');
     await loadServer();
-    log('Server has been loaded');
     await main();
     initializeAppUpdater();
   });
@@ -173,7 +184,7 @@ async function run() {
       deeplinkUrl = parseDeepLinkUrl(url);
       if (ElectronWindow.isBrowserWindowCreated) {
         const mainWindow = ElectronWindow.getInstance().browserWindow;
-        mainWindow?.loadURL(baseUrl + deeplinkUrl);
+        mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
       }
     });
   });

@@ -9,7 +9,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import React, { useState, Fragment, useEffect, useContext } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
@@ -18,7 +18,7 @@ import { DialogCreationCopy } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
-import { StoreContext } from '../../../store';
+import { StorageFolder } from '../../../store/types';
 
 import { name, description, halfstack, stackinput } from './styles';
 const MAXTRYTIMES = 10000;
@@ -26,13 +26,11 @@ const MAXTRYTIMES = 10000;
 interface FormData {
   name: string;
   description: string;
-  location: string;
   schemaUrl: string;
 }
 
 interface FormDataError {
   name?: string;
-  location?: string;
 }
 
 interface DefineConversationProps
@@ -45,16 +43,14 @@ interface DefineConversationProps
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
   saveTemplateId?: (templateId: string) => void;
+  focusedStorageFolder: StorageFolder;
 }
 
 const initialFormDataError: FormDataError = {};
 
 const DefineConversation: React.FC<DefineConversationProps> = props => {
-  const { onSubmit, onDismiss, onCurrentPathUpdate, saveTemplateId, templateId } = props;
-  const { state } = useContext(StoreContext);
-  const { focusedStorageFolder } = state;
+  const { onSubmit, onDismiss, onCurrentPathUpdate, saveTemplateId, templateId, focusedStorageFolder } = props;
   const files = get(focusedStorageFolder, 'children', []);
-
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -72,7 +68,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
     return defaultName;
   };
 
-  const initalFormData: FormData = { name: '', description: '', location: '', schemaUrl: '' };
+  const initalFormData: FormData = { name: '', description: '', schemaUrl: '' };
   const [formData, setFormData] = useState(initalFormData);
   const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
   const [disable, setDisable] = useState(false);
@@ -110,11 +106,6 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
   };
 
   useEffect(() => {
-    const currentPath = Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || '');
-    updateForm('location')(null, currentPath);
-  }, [focusedStorageFolder]);
-
-  useEffect(() => {
     if (formData.name) {
       const errors = validateForm(formData);
       if (Object.keys(errors).length || !focusedStorageFolder.writable) {
@@ -133,7 +124,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
   });
 
   useEffect(() => {
-    const formData: FormData = { name: getDefaultName(), description: '', location: '', schemaUrl: '' };
+    const formData: FormData = { name: getDefaultName(), description: '', schemaUrl: '' };
     setFormData(formData);
     if (props.location && props.location.search) {
       const updatedFormData = {
@@ -171,7 +162,6 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
       ...formData,
     });
   };
-
   return (
     <Fragment>
       <DialogWrapper
@@ -209,6 +199,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
           <LocationSelectContent
             operationMode={{ read: true, write: true }}
             onCurrentPathUpdate={onCurrentPathUpdate}
+            focusedStorageFolder={focusedStorageFolder}
           />
 
           <DialogFooter>

@@ -121,7 +121,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`projects/${state.projectId}/save`);
+          navigate(`projects/${state.projectId}/${state.templateId}/save`);
         },
       },
       align: 'left',
@@ -135,7 +135,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar toolbarItems={toolbarItems} />
+      <ToolBar toolbarItems={toolbarItems} onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} />
       <div css={home.page}>
         <div role="main" css={home.leftPage}>
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
@@ -211,8 +211,9 @@ const Home: React.FC<RouteComponentProps> = () => {
                 {linksButtom.map(link => {
                   return (
                     <Link
+                      style={{ width: '150px' }}
                       href={link.to}
-                      tabIndex={-1}
+                      tabIndex={0}
                       key={'homePageLeftLinks-' + link.text}
                       target="_blank"
                       rel="noopener noreferrer"
