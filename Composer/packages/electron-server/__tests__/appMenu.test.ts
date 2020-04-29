@@ -11,9 +11,7 @@ jest.mock('../src/utility/platform', () => ({
 const mockBuildFromTemplate = jest.fn();
 const mockSetApplicationMenu = jest.fn();
 jest.mock('electron', () => ({
-  app: {
-    name: 'Bot Framework Composer',
-  },
+  app: {},
   dialog: {},
   Menu: {
     buildFromTemplate: template => mockBuildFromTemplate(template),
@@ -54,7 +52,7 @@ describe('App menu', () => {
 
     // Help
     expect(menuTemplate[4].label).toBe('Help');
-    expect(menuTemplate[4].submenu.length).toBe(8);
+    expect(menuTemplate[4].submenu.length).toBe(9);
 
     expect(mockSetApplicationMenu).toHaveBeenCalledTimes(1);
   });
@@ -69,7 +67,7 @@ describe('App menu', () => {
 
     // App
     expect(menuTemplate[0].label).toBe('Bot Framework Composer');
-    expect(menuTemplate[0].submenu.length).toBe(9);
+    expect(menuTemplate[0].submenu.length).toBe(7);
 
     // File
     expect(menuTemplate[1].label).toBe('File');
@@ -89,7 +87,7 @@ describe('App menu', () => {
 
     // Help
     expect(menuTemplate[5].label).toBe('Help');
-    expect(menuTemplate[5].submenu.length).toBe(8);
+    expect(menuTemplate[5].submenu.length).toBe(9);
 
     expect(mockSetApplicationMenu).toHaveBeenCalledTimes(1);
   });

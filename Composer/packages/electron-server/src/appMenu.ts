@@ -9,17 +9,15 @@ function getAppMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
     return [
       {
-        label: app.name,
+        label: 'Bot Framework Composer',
         submenu: [
-          { role: 'about' },
-          { type: 'separator' },
           { role: 'services' },
           { type: 'separator' },
-          { role: 'hide' },
+          { label: 'Hide Bot Framework Composer', role: 'hide' },
           { role: 'hideOthers' },
           { role: 'unhide' },
           { type: 'separator' },
-          { role: 'quit' },
+          { label: 'Quit Bot Framework Composer', role: 'quit' },
         ],
       },
     ];
@@ -92,7 +90,13 @@ export function initAppMenu() {
       label: 'Help',
       submenu: [
         {
-          label: 'Learn More',
+          label: 'Documentation',
+          click: async () => {
+            await shell.openExternal('https://docs.microsoft.com/en-us/composer/');
+          },
+        },
+        {
+          label: 'Composer on GitHub',
           click: async () => {
             await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/tree/master');
           },
