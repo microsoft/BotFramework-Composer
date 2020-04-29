@@ -341,7 +341,7 @@
     "ApplicationInsights": {
       "type": "object",
       "value": {
-        "InstrumentationKey": "[if(parameters('shouldCreateLuisResource'), (reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).InstrumentationKey, '')]"
+        "InstrumentationKey": "[if(parameters('useAppInsights'), reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName'))).InstrumentationKey, '')]"
       }
     },
     "cosmosDb": {
