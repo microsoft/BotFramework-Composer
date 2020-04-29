@@ -13,6 +13,7 @@ import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { JsonEditor } from '@bfc/code-editor';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController';
@@ -41,7 +42,6 @@ import {
 } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 const AddSkillDialog = React.lazy(() => import('./addSkillDialogModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
