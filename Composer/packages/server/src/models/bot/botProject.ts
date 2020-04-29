@@ -163,6 +163,7 @@ export class BotProject {
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
 
     if (userSDKSchemaFile !== undefined) {
+      debug('Customized SDK schema found');
       try {
         sdkSchema = JSON.parse(userSDKSchemaFile.content);
       } catch (error) {
@@ -452,7 +453,7 @@ export class BotProject {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
-      const paths = await this.fileStorage.glob([pattern, '!(generated/**)'], root);
+      const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
@@ -722,13 +723,14 @@ export class BotProject {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
-    const schemasDir = Path.join(this.dir, 'Schemas');
+    const schemasDir = Path.join(this.dir, 'schemas');
 
     if (!(await this.fileStorage.exists(schemasDir))) {
       debug('No schemas directory found.');
       return [];
     }
 
+    debug('Schemas directory found.');
     const schemas: FileInfo[] = [];
     const paths = await this.fileStorage.glob('*.schema', schemasDir);
 
