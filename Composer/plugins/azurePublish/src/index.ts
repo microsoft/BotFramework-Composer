@@ -212,12 +212,23 @@ class AzurePublisher {
       subscriptionID
     );
 
-    await this.init(botFiles, settings, templatePath, resourcekey);
+    // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
+    let runtimeCodePath = templatePath;
+    if (
+      project.settings &&
+      project.settings.runtime &&
+      project.settings.runtime.customRuntime === true &&
+      project.settings.runtime.path
+    ) {
+      runtimeCodePath = project.settings.runtime.path;
+    }
+
+    await this.init(botFiles, settings, runtimeCodePath, resourcekey);
 
     try {
       // test creds, if not valid, return 500
       if (!accessToken) {
-        throw new Error('please run Login script to login azure cloud');
+        throw new Error('Required field `accessToken` is missing from publishing profile.');
       }
       if (!provision) {
         throw new Error(
