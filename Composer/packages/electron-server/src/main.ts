@@ -16,6 +16,7 @@ import log from './utility/logger';
 import { AppUpdater } from './appUpdater';
 import { parseDeepLinkUrl } from './utility/url';
 import { composerProtocol } from './constants';
+import { initAppMenu } from './appMenu';
 
 const error = log.extend('error');
 let deeplinkUrl = '';
@@ -107,6 +108,7 @@ async function loadServer() {
 
 async function main() {
   log('Rendering application...');
+  initAppMenu();
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
     if (process.env.COMPOSER_DEV_TOOLS) {
