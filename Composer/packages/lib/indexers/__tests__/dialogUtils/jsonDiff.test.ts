@@ -1,19 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 
 import {
   JsonDiff,
-  JsonDiffUpdates,
   IComparator,
   getWithJsonPath,
   hasWithJsonPath,
   JsonSet,
   JsonInsert,
   defaultJSONUpdateComparator,
-  // defaultJSONAddComparator,
   defualtJSONStopComparison,
-  JsonDiffAdds,
 } from '../../src/dialogUtils/jsonDiff';
 
 describe('json diff check comparators', () => {
@@ -166,13 +164,63 @@ describe('json diff with default comparator', () => {
     expect(changes.deletes[0].path).toEqual('$.foo.bar.d[1]');
 
     expect(changes.updates.length).toEqual(1);
-    expect(changes.updates[0].path).toEqual('$.foo.bar.f[1]');
-    expect(changes.updates[0].value).toEqual(rhs2.foo.bar.f[1]);
-    expect(changes.updates[0].preValue).toEqual(lhs2.foo.bar.f[1]);
+    expect(changes.updates[0].path).toEqual('$.foo.bar.f[1].name');
+    expect(changes.updates[0].value).toEqual(rhs2.foo.bar.f[1].name);
+    expect(changes.updates[0].preValue).toEqual(lhs2.foo.bar.f[1].name);
+  });
+
+  it('get all changes in deep object', () => {
+    const basic = {
+      foo: {
+        bar: [
+          {
+            id: 1,
+            name: 'a',
+            items: [
+              {
+                id: 11,
+                name: 'a1',
+              },
+              {
+                id: 12,
+                name: 'a2',
+              },
+            ],
+          },
+        ],
+      },
+      buzz: 'world',
+    };
+
+    const insert1 = [
+      {
+        path: 'foo.bar[0].items[0]',
+        value: {
+          id: 10,
+          name: 'a0',
+        },
+      },
+    ];
+    const object1 = JsonInsert(basic, insert1);
+
+    const changes1 = JsonDiff(basic, object1);
+    expect(changes1.adds.length).toEqual(1);
+    expect(changes1.deletes.length).toEqual(0);
+    expect(changes1.updates.length).toEqual(0);
+    expect(changes1.adds[0].path).toEqual(`$.${insert1[0].path}`);
+    expect(changes1.adds[0].value).toEqual(insert1[0].value);
+
+    const object2 = JsonSet(basic, insert1);
+    const changes2 = JsonDiff(basic, object2);
+    expect(changes2.adds.length).toEqual(0);
+    expect(changes2.deletes.length).toEqual(0);
+    expect(changes2.updates.length).toEqual(2);
+    expect(changes2.updates[0].path).toEqual(`$.${insert1[0].path}.id`);
+    expect(changes2.updates[1].path).toEqual(`$.${insert1[0].path}.name`);
   });
 });
 
-describe('json diff with custom comparator', () => {
+describe('json diff with customize comparator', () => {
   const basic = {
     foo: {
       bar: {
@@ -209,7 +257,7 @@ describe('json diff with custom comparator', () => {
       }
     };
 
-    const list1 = JsonInsert(basic, [
+    const insert1 = [
       {
         path: 'foo.bar.c[0]',
         value: { id: 11, name: 'x' },
@@ -218,21 +266,34 @@ describe('json diff with custom comparator', () => {
         path: 'foo.bar.d[1]',
         value: { id: 11, name: 'x' },
       },
-    ]);
-    const changes1 = JsonDiffAdds(basic, list1);
-    expect(changes1.length).toEqual(2);
+    ];
+    const list1 = JsonInsert(basic, insert1);
+    const changes1 = JsonDiff(basic, list1);
+    expect(changes1.adds.length).toEqual(2);
+    expect(changes1.deletes.length).toEqual(0);
+    expect(changes1.updates.length).toEqual(0);
+    expect(changes1.adds[0].path).toEqual(`$.${insert1[0].path}`);
+    expect(changes1.adds[0].value).toEqual(insert1[0].value);
+    expect(changes1.adds[1].path).toEqual(`$.${insert1[1].path}`);
+    expect(changes1.adds[1].value).toEqual(insert1[1].value);
 
-    const list2 = JsonSet(basic, [
+    const insert2 = [
       {
         path: 'foo.bar.c[1]',
-        value: { id: 22, name: 'xbb' }, // id change, count as a change
+        value: { id: 22, name: 'xbb' }, // id updated, count as a change
       },
       {
         path: 'foo.bar.c[0]',
-        value: { id: 1, name: 'x' }, // id not change, not count as a change
+        value: { id: 1, name: 'x' }, // id not updated, not count as a change
       },
-    ]);
-    const changes2 = JsonDiffUpdates(basic, list2, myComparator);
-    expect(changes2.length).toEqual(1);
+    ];
+    const list2 = JsonSet(basic, insert2);
+    const changes2 = JsonDiff(basic, list2, myComparator);
+    expect(changes2.adds.length).toEqual(0);
+    expect(changes2.deletes.length).toEqual(0);
+    expect(changes2.updates.length).toEqual(1);
+    expect(changes2.updates[0].path).toEqual(`$.${insert2[0].path}`);
+    expect(changes2.updates[0].preValue).toEqual(get(basic, insert2[0].path));
+    expect(changes2.updates[0].value).toEqual(insert2[0].value);
   });
 });

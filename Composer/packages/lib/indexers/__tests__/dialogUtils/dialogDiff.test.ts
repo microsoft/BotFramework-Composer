@@ -3,78 +3,110 @@
 
 import fs from 'fs';
 
-import { DialogDiffAdd, DialogDiffUpdate } from '../../src/dialogUtils/dialogDiff';
-import { JsonPathStart, JsonInsert, JsonSet } from '../../src/dialogUtils/jsonDiff';
+import get from 'lodash/get';
+
+import { DialogDiff } from '../../src/dialogUtils/dialogDiff';
+import { JsonInsert, JsonSet } from '../../src/dialogUtils/jsonDiff';
 
 const baseDialog = JSON.parse(fs.readFileSync(`${__dirname}/data/base.dialog`, 'utf-8'));
 
-const adds = [
-  // add at list end
-  {
-    path: 'triggers[7].actions[1]',
-    value: {
-      $kind: 'Microsoft.SendActivity',
-      $designer: {
-        id: '677448',
-      },
-      activity: 'Hi! Agian!',
-    },
-  },
-];
-
-const updates = [
-  // update at list middle
-  {
-    path: 'triggers[1]',
-    value: {
-      $kind: 'Microsoft.OnIntent',
-      $designer: {
-        id: '064506',
-      },
-      actions: [
-        {
-          $kind: 'Microsoft.BeginDialog',
-          dialog: 'addtodo',
-        },
-      ],
-      intent: 'AddIntent',
-    },
-  },
-];
-
-const inserts = [
-  // insert at list start
-  {
-    path: 'triggers[7].actions[0]',
-    value: {
-      $kind: 'Microsoft.SendActivity',
-      $designer: {
-        id: '677449',
-      },
-      activity: 'Hi! Agian!',
-    },
-  },
-];
-
 describe('dialog diff', () => {
   it('inserts', () => {
-    const changes = DialogDiffAdd(baseDialog, JsonInsert(baseDialog, inserts));
-    expect(changes.length).toEqual(1);
-    // expect(changes[0].path).toEqual([JsonPathStart, adds[0].path].join('.'));
-    // expect(changes[0].value).toEqual(changes[0].value);
-  });
+    const inserts1 = [
+      // insert at list start
+      {
+        path: 'triggers[0].actions[0]',
+        value: {
+          $kind: 'Microsoft.SendActivity',
+          $designer: {
+            id: '677449',
+          },
+          activity: 'Hi! Agian!',
+        },
+      },
+    ];
 
-  it('adds', () => {
-    const changes = DialogDiffAdd(baseDialog, JsonSet(baseDialog, adds));
-    expect(changes.length).toEqual(1);
-    expect(changes[0].path).toEqual([JsonPathStart, adds[0].path].join('.'));
-    expect(changes[0].value).toEqual(changes[0].value);
+    const dialog1 = JsonInsert(baseDialog, inserts1);
+    const changes1 = DialogDiff(baseDialog, dialog1);
+    expect(changes1.adds.length).toEqual(1);
+    expect(changes1.deletes.length).toEqual(0);
+    expect(changes1.updates.length).toEqual(0);
+    expect(changes1.adds[0].path).toEqual(`$.${inserts1[0].path}`);
+    expect(changes1.adds[0].value).toEqual(inserts1[0].value);
+
+    const inserts2 = [
+      // insert at list end
+      {
+        path: 'triggers[7].actions[1]',
+        value: {
+          $kind: 'Microsoft.SendActivity',
+          $designer: {
+            id: '677448',
+          },
+          activity: 'Hi! Agian!',
+        },
+      },
+    ];
+
+    const dialog2 = JsonInsert(baseDialog, inserts2);
+    const changes2 = DialogDiff(baseDialog, dialog2);
+    expect(changes2.adds.length).toEqual(1);
+    expect(changes2.deletes.length).toEqual(0);
+    expect(changes2.updates.length).toEqual(0);
+    expect(changes2.adds[0].path).toEqual(`$.${inserts2[0].path}`);
+    expect(changes2.adds[0].value).toEqual(inserts2[0].value);
+
+    const inserts3 = [
+      // insert at list middle
+      {
+        path: 'triggers[5].actions[1]',
+        value: {
+          $kind: 'Microsoft.SendActivity',
+          $designer: {
+            id: '677445',
+          },
+          activity: 'Hi 5',
+        },
+      },
+      // insert at list start
+      {
+        path: 'triggers[7].actions[0]',
+        value: {
+          $kind: 'Microsoft.SendActivity',
+          $designer: {
+            id: '677440',
+          },
+          activity: 'Hi! Agian!',
+        },
+      },
+    ];
+
+    const dialog3 = JsonInsert(baseDialog, inserts3);
+    const changes3 = DialogDiff(baseDialog, dialog3);
+    expect(changes3.adds.length).toEqual(2);
+    expect(changes3.deletes.length).toEqual(0);
+    expect(changes3.updates.length).toEqual(0);
+    expect(changes3.adds[0].path).toEqual(`$.${inserts3[0].path}`);
+    expect(changes3.adds[0].value).toEqual(inserts3[0].value);
+    expect(changes3.adds[1].path).toEqual(`$.${inserts3[1].path}`);
+    expect(changes3.adds[1].value).toEqual(inserts3[1].value);
   });
 
   it('updates', () => {
-    const changes = DialogDiffUpdate(baseDialog, JsonSet(baseDialog, updates));
-    expect(changes.length).toEqual(1);
-    expect(changes[0].path).toEqual([JsonPathStart, updates[0].path].join('.'));
-    expect(changes[0].value).toEqual(changes[0].value);
+    const inserts1 = [
+      {
+        path: 'triggers[7].actions[0].activity',
+        value: 'Hi!',
+      },
+    ];
+
+    const dialog1 = JsonSet(baseDialog, inserts1);
+    const changes1 = DialogDiff(baseDialog, dialog1);
+    expect(changes1.adds.length).toEqual(0);
+    expect(changes1.deletes.length).toEqual(0);
+    expect(changes1.updates.length).toEqual(1);
+    expect(changes1.updates[0].path).toEqual(`$.${inserts1[0].path}`);
+    expect(changes1.updates[0].value).toEqual(inserts1[0].value);
+    expect(changes1.updates[0].preValue).toEqual(get(baseDialog, inserts1[0].path));
   });
 });

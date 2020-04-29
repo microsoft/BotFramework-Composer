@@ -88,10 +88,10 @@ export const defaultJSONUpdateComparator: IComparator = (json1: any, json2: any,
   return { isChange, isStop };
 };
 
-export function JsonDiffAdds(prevJson, currJson, comparator?: IComparator): IJSONChangeAdd[] {
+export function JsonDiffAdds(prevJson, currJson): IJSONChangeAdd[] {
   const results: IJSONChangeAdd[] = [];
 
-  const usedComparator = comparator || defaultJSONAddComparator;
+  const usedComparator = defaultJSONAddComparator;
   const visitor: VisitorFunc = (path, value) => {
     // if both value are array, pass to ListDiffer
     const value1 = getWithJsonPath(prevJson, path);
@@ -120,8 +120,8 @@ export function JsonDiffAdds(prevJson, currJson, comparator?: IComparator): IJSO
   return results;
 }
 
-export function JsonDiffDeletes(prevJson, currJson, comparator?: IComparator): IJSONChangeDelete[] {
-  return JsonDiffAdds(currJson, prevJson, comparator);
+export function JsonDiffDeletes(prevJson, currJson): IJSONChangeDelete[] {
+  return JsonDiffAdds(currJson, prevJson);
 }
 
 export function JsonDiffUpdates(prevJson, currJson, comparator?: IComparator): IJSONChangeUpdate[] {
@@ -176,8 +176,8 @@ export function JsonDiffUpdates(prevJson, currJson, comparator?: IComparator): I
  */
 export function JsonDiff(prevJson, currJson, comparator?: IComparator): IJsonChanges {
   return {
-    adds: JsonDiffAdds(prevJson, currJson, comparator),
-    deletes: JsonDiffDeletes(prevJson, currJson, comparator),
+    adds: JsonDiffAdds(prevJson, currJson),
+    deletes: JsonDiffDeletes(prevJson, currJson),
     updates: JsonDiffUpdates(prevJson, currJson, comparator),
   };
 }
