@@ -135,6 +135,12 @@ export const TestController: React.FC = () => {
           hidden={showError}
           onClick={handleOpenEmulator}
         />
+        <div
+          aria-live={'assertive'}
+          aria-label={formatMessage(`{ botStatus}`, {
+            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
+          })}
+        />
         <Loading botStatus={botStatus} />
         <div ref={addRef}>
           <ErrorInfo hidden={!showError} onClick={handleErrorButtonClick} count={errorLength} />
