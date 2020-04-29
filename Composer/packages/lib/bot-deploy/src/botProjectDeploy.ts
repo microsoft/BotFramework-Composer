@@ -582,11 +582,11 @@ export class BotProjectDeploy {
     location: string,
     environment: string,
     appPassword: string,
-    createLuisResource: boolean = true,
-    createLuisAuthoringResource: boolean = true,
-    createCosmosDb: boolean = true,
-    createStorage: boolean = true,
-    createAppInsignts: boolean = true
+    createLuisResource = true,
+    createLuisAuthoringResource = true,
+    createCosmosDb = true,
+    createStorage = true,
+    createAppInsignts = true
   ) {
     const graphCreds = new DeviceTokenCredentials(
       this.creds.clientId,
@@ -700,10 +700,6 @@ export class BotProjectDeploy {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
         message: validation.error.details,
-      });
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
-        message: validation.error.additionalInfo,
       });
 
       throw new Error(`! Error: ${validation.error.message}`);
