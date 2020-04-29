@@ -101,6 +101,12 @@ export function initAppMenu() {
             await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/tree/master');
           },
         },
+        {
+          label: 'Learn More About Bot Framework',
+          click: async () => {
+            await shell.openExternal('https://dev.botframework.com/');
+          },
+        },
         { type: 'separator' },
         {
           label: 'Report an Issue',
