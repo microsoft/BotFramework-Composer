@@ -2,10 +2,11 @@
 // Licensed under the MIT License.
 
 import React, { useContext } from 'react';
-import { createStepMenu, DialogGroup } from '@bfc/shared';
+import { DialogGroup } from '@bfc/shared';
 
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 
+import { createStepMenu } from './createSchemaMenu';
 import { IconMenu } from './IconMenu';
 
 interface EventMenuProps {
