@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { SkillEndpointField } from './SkillEndpointField';
 
 export const BeginSkillDialogField: React.FC<FieldProps> = props => {
-  const { depth, id, schema, uiOptions, value, onChange } = props;
+  const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
   const { projectId, skills = [] } = useShellApi();
 
   const manifest = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [skills, value.id]);
@@ -52,6 +52,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
         uiOptions={uiOptions.properties?.id || {}}
         value={value?.id}
         onChange={handleIdChange}
+        definitions={definitions}
       />
       <SkillEndpointField
         depth={depth + 1}
@@ -63,6 +64,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
         uiOptions={skillEndpointUiSchema}
         value={value?.skillEndpoint}
         onChange={handleEndpointChange}
+        definitions={definitions}
       />
       <Link href={`/bot/${projectId}/skills`} styles={{ root: { fontSize: '12px', padding: '0 16px' } }}>
         {formatMessage('Open Skills page for configuration details')}

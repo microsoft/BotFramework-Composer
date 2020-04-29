@@ -65,19 +65,20 @@ const SchemaField: React.FC<FieldProps> = props => {
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
   const FieldWidget = resolveFieldWidget(schema, uiOptions, pluginConfig);
-  const fieldProps = {
+  const fieldProps: FieldProps = {
     ...rest,
-    name,
-    uiOptions,
-    enumOptions: schema.enum as string[],
-    label: getUiLabel({ ...props, uiOptions }),
-    placeholder: getUiPlaceholder({ ...props, uiOptions }),
+    definitions,
     description: getUiDescription({ ...props, uiOptions }),
-    schema,
-    value: deserializedValue,
+    enumOptions: schema.enum as string[],
     error: error || undefined,
-    rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
+    label: getUiLabel({ ...props, uiOptions }),
+    name,
     onChange: handleChange,
+    placeholder: getUiPlaceholder({ ...props, uiOptions }),
+    rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
+    schema,
+    uiOptions,
+    value: deserializedValue,
   };
 
   return (
