@@ -50,6 +50,7 @@ async function createProject(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
+      await currentProject.init();
       if (schemaUrl) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
       }
@@ -111,6 +112,7 @@ async function openProject(req: Request, res: Response) {
     const id = await BotProjectService.openProject(location, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
+      await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
         id: currentProject.id,
@@ -152,6 +154,7 @@ async function saveProjectAs(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
+      await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
         id,
