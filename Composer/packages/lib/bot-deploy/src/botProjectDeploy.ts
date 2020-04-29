@@ -419,9 +419,13 @@ export class BotProjectDeploy {
       } catch (err) {
         // handle the token invalid
         const error = JSON.parse(err.error);
-        throw new Error(
-          `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
-        );
+        if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+          throw new Error(
+            `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+          );
+        } else {
+          throw err;
+        }
       }
       const account = this.getAccount(jsonRes, `${name}-${environment}-luis`);
 
@@ -803,12 +807,7 @@ export class BotProjectDeploy {
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string
   ) {
-    try {
-      await this.create(name, location, environment, appPassword);
-      await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
-    } catch (er) {
-      console.log(er);
-      throw er;
-    }
+    await this.create(name, location, environment, appPassword);
+    await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
   }
 }
