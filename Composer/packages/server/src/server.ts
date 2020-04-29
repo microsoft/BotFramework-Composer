@@ -4,8 +4,8 @@
 import 'dotenv/config';
 import path from 'path';
 import crypto from 'crypto';
-import { getPortPromise } from 'portfinder';
 
+import { getPortPromise } from 'portfinder';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
