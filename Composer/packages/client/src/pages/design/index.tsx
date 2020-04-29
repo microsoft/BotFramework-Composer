@@ -41,6 +41,7 @@ import {
 } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 const AddSkillDialog = React.lazy(() => import('./addSkillDialogModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
@@ -430,7 +431,7 @@ function DesignPage(props) {
           </Conversation>
         </div>
       </div>
-      <Suspense fallback={<div />}>
+      <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
         {state.showCreateDialogModal && (
           <CreateDialogModal
             isOpen={state.showCreateDialogModal}
@@ -438,8 +439,6 @@ function DesignPage(props) {
             onSubmit={handleCreateDialogSubmit}
           />
         )}
-      </Suspense>
-      <Suspense fallback={<div />}>
         {state.showAddSkillDialogModal && (
           <AddSkillDialog
             isOpen={state.showAddSkillDialogModal}
@@ -447,8 +446,6 @@ function DesignPage(props) {
             onSubmit={handleAddSkillDialogSubmit}
           />
         )}
-      </Suspense>
-      <Suspense fallback={<div />}>
         {exportSkillModalVisible && (
           <ExportSkillModal
             isOpen={exportSkillModalVisible}
@@ -456,8 +453,6 @@ function DesignPage(props) {
             onSubmit={() => setExportSkillModalVisible(false)}
           />
         )}
-      </Suspense>
-      <Suspense fallback={<div />}>
         {triggerModalVisible && (
           <TriggerCreationModal
             dialogId={dialogId}
