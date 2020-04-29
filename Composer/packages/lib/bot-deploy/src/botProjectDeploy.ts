@@ -112,7 +112,11 @@ export class BotProjectDeploy {
     appPwd: string,
     location: string,
     name: string,
-    shouldCreateAuthoringResource: boolean
+    shouldCreateAuthoringResource: boolean,
+    shouldCreateLuisResource: boolean,
+    useAppInsights: boolean,
+    useCosmosDb: boolean,
+    useStorage: boolean
   ) {
     return {
       appId: this.pack(appId),
@@ -120,6 +124,10 @@ export class BotProjectDeploy {
       appServicePlanLocation: this.pack(location),
       botId: this.pack(name),
       shouldCreateAuthoringResource: this.pack(shouldCreateAuthoringResource),
+      shouldCreateLuisResource: this.pack(shouldCreateLuisResource),
+      useAppInsights: this.pack(useAppInsights),
+      useCosmosDb: this.pack(useCosmosDb),
+      useStorage: this.pack(useStorage),
     };
   }
 
@@ -565,7 +573,11 @@ export class BotProjectDeploy {
     location: string,
     environment: string,
     appPassword: string,
-    luisAuthoringKey?: string
+    createLuisResource: boolean = true,
+    createLuisAuthoringResource: boolean = true,
+    createCosmosDb: boolean = true,
+    createStorage: boolean = true,
+    createAppInsignts: boolean = true
   ) {
     const graphCreds = new DeviceTokenCredentials(
       this.creds.clientId,
@@ -618,11 +630,6 @@ export class BotProjectDeploy {
       message: `> Create App Id Success! ID: ${appId}`,
     });
 
-    let shouldCreateAuthoringResource = true;
-    if (luisAuthoringKey) {
-      shouldCreateAuthoringResource = false;
-    }
-
     const resourceGroupName = `${name}-${environment}`;
 
     // timestamp will be used as deployment name
@@ -642,7 +649,11 @@ export class BotProjectDeploy {
       appPassword,
       location,
       name,
-      shouldCreateAuthoringResource
+      createLuisAuthoringResource,
+      createLuisResource,
+      createAppInsignts,
+      createCosmosDb,
+      createStorage
     );
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -676,6 +687,14 @@ export class BotProjectDeploy {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
         message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
+        message: validation.error.details,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
+        message: validation.error.additionalInfo,
       });
 
       throw new Error(`! Error: ${validation.error.message}`);
@@ -780,7 +799,7 @@ export class BotProjectDeploy {
     luisAuthoringRegion?: string
   ) {
     try {
-      await this.create(name, location, environment, appPassword, luisAuthoringKey);
+      await this.create(name, location, environment, appPassword);
       await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
     } catch (er) {
       console.log(er);
