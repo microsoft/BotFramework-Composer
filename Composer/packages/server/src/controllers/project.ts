@@ -50,10 +50,10 @@ async function createProject(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
-      await currentProject.init();
       if (schemaUrl) {
         await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
       }
+      await currentProject.init();
 
       const project = currentProject.getProject();
       log('Project created successfully.');
