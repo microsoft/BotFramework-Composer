@@ -224,7 +224,8 @@
           "id": "botstate-db"
         },
         "options": {}
-      }
+      },
+      "condition": "[parameters('useCosmosDb')]"
     },
     {
       "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
@@ -263,7 +264,8 @@
           }
         },
         "options": {}
-      }
+      },
+      "condition": "[parameters('useCosmosDb')]"
     },
     {
       "apiVersion": "2017-12-01",
