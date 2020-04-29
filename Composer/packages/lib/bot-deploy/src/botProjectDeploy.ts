@@ -399,13 +399,22 @@ export class BotProjectDeploy {
         spaces: 4,
       });
 
-      // Assign a LUIS key to the endpoint of each app
-      const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
-      const options = {
-        headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-      } as rp.RequestPromiseOptions;
-      const response = await rp.get(getAccountUri, options);
-      const jsonRes = JSON.parse(response);
+      let jsonRes;
+      try {
+        // Assign a LUIS key to the endpoint of each app
+        const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
+        const options = {
+          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+        } as rp.RequestPromiseOptions;
+        const response = await rp.get(getAccountUri, options);
+        jsonRes = JSON.parse(response);
+      } catch (err) {
+        // handle the token invalid
+        const error = JSON.parse(err.error);
+        throw new Error(
+          `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+        );
+      }
       const account = this.getAccount(jsonRes, `${name}-${environment}-luis`);
 
       for (const k in luisAppIds) {
