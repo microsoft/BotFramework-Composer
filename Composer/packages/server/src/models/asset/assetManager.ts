@@ -160,6 +160,15 @@ export class AssetManager {
     return output;
   }
 
+  // Copy material from the boilerplate into the project
+  // This is used to copy shared content into every new project
+  public async copyBoilerplate(dstDir: string, dstStorage: IFileStorage) {
+    const boilerplatePath = Path.join(this.assetsLibraryPath, 'shared');
+    if (await this.templateStorage.exists(boilerplatePath)) {
+      await copyDir(boilerplatePath, this.templateStorage, dstDir, dstStorage);
+    }
+  }
+
   public async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage) {
     const template = find(this.projectTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
