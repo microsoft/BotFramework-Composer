@@ -5,15 +5,14 @@
 import { jsx, css } from '@emotion/core';
 import { useCallback, useContext, useState } from 'react';
 import classnames from 'classnames';
-import formatMessage, { custom } from 'format-message';
-import { createStepMenu, createStepSubmenu, DialogGroup, SDKKinds } from '@bfc/shared';
+import formatMessage from 'format-message';
+import { DialogGroup, SDKKinds } from '@bfc/shared';
 import {
   IContextualMenu,
   IContextualMenuItem,
   ContextualMenuItemType,
 } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
-import get from 'lodash/get';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext, NodeRendererContextValue } from '../../store/NodeRendererContext';
@@ -24,6 +23,7 @@ import { MenuTypes } from '../../constants/MenuTypes';
 import { ObiColors } from '../../constants/ElementColors';
 
 import { IconMenu } from './IconMenu';
+import { createStepMenu, createStepSubmenu } from './createSchemaMenu';
 
 interface EdgeMenuProps {
   id: string;
