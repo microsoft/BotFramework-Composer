@@ -59,6 +59,7 @@ export interface ShellApi {
   onSelect: (ids: string[]) => void;
   getLgTemplates: (id: string) => LgTemplate[];
   copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<void>;
+  addLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
   removeLgTemplate: (id: string, templateName: string) => Promise<void>;
   removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;

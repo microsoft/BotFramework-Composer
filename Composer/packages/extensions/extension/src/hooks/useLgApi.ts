@@ -10,7 +10,7 @@ import { useShellApi } from './useShellApi';
  */
 export const useLgApi = () => {
   const { shellApi } = useShellApi();
-  const { removeLgTemplates, getLgTemplates, updateLgTemplate } = shellApi;
+  const { removeLgTemplates, getLgTemplates, addLgTemplate } = shellApi;
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
@@ -46,7 +46,7 @@ export const useLgApi = () => {
     const newLgType = new LgType(hostActionData.$kind, hostFieldName).toString();
     const newLgTemplateName = new LgMetaData(newLgType, hostActionId).toString();
     const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
-    await updateLgTemplate(lgFileId, newLgTemplateName, lgText);
+    await addLgTemplate(lgFileId, newLgTemplateName, lgText);
     return newLgTemplateRefStr;
   };
 
