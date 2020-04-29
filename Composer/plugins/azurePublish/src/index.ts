@@ -8,6 +8,12 @@ import { v4 as uuid, v5 as hash } from 'uuid';
 import { copy, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 
 import schema from './schema';
+
+// This option controls whether the history is serialized to a file between sessions with Composer
+// set to TRUE for history to be saved to disk
+// set to FALSE for history to be cached in memory only
+const PERSIST_HISTORY = false;
+
 interface CreateAndDeployResources {
   publishName: string;
   location: string;
@@ -28,10 +34,15 @@ interface PublishConfig {
 class AzurePublisher {
   private publishingBots: { [key: string]: any };
   private historyFilePath: string;
+  private histories: any;
   private azDeployer: BotProjectDeploy;
   private logMessages: any[];
   constructor() {
+    this.histories = {};
     this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
+    if (PERSIST_HISTORY) {
+      this.loadHistoryFromFile();
+    }
     this.publishingBots = {};
     this.logMessages = [];
   }
@@ -71,29 +82,32 @@ class AzurePublisher {
     await copy(srcTemplate, projFolder);
   };
 
-  private getHistory = async (botId: string, profileName: string) => {
+  private async loadHistoryFromFile() {
     if (await pathExists(this.historyFilePath)) {
-      const histories = await readJson(this.historyFilePath);
-      if (histories && histories[botId] && histories[botId][profileName]) {
-        return histories[botId][profileName];
-      }
+      this.histories = await readJson(this.historyFilePath);
+    }
+  }
+
+  private getHistory = async (botId: string, profileName: string) => {
+    if (this.histories && this.histories[botId] && this.histories[botId][profileName]) {
+      return this.histories[botId][profileName];
     }
     return [];
   };
+
   private updateHistory = async (botId: string, profileName: string, newHistory: any) => {
-    let histories = {};
-    if (await pathExists(this.historyFilePath)) {
-      histories = (await readJson(this.historyFilePath)) || {};
+    if (!this.histories[botId]) {
+      this.histories[botId] = {};
     }
-    if (!histories[botId]) {
-      histories[botId] = {};
+    if (!this.histories[botId][profileName]) {
+      this.histories[botId][profileName] = [];
     }
-    if (!histories[botId][profileName]) {
-      histories[botId][profileName] = [];
+    this.histories[botId][profileName].unshift(newHistory);
+    if (PERSIST_HISTORY) {
+      await writeJson(this.historyFilePath, this.histories);
     }
-    histories[botId][profileName].unshift(newHistory);
-    await writeJson(this.historyFilePath, histories);
   };
+
   private addLoadingStatus = (botId: string, profileName: string, newStatus) => {
     // save in publishingBots
     if (!this.publishingBots[botId]) {
