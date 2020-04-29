@@ -7,7 +7,7 @@ import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 
 import PluginContext from '../../PluginContext';
-import { resolveBaseSchema, getUISchema, mergePluginConfigs } from '../../utils';
+import { resolveBaseSchema, getUIOptions, mergePluginConfigs } from '../../utils';
 import { SchemaField } from '../SchemaField';
 
 import FormTitle from './FormTitle';
@@ -52,7 +52,7 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
   }, []);
 
   const $uiSchema = useMemo(() => {
-    return getUISchema($schema, pluginConfig.formSchema);
+    return getUIOptions($schema, pluginConfig.formSchema);
   }, [$schema, pluginConfig]);
 
   const errors = useMemo(() => {
