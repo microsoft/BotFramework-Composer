@@ -67,6 +67,7 @@ const TableView: React.FC<TableViewProps> = props => {
       },
     };
     createLgTemplate(payload);
+    setFocusedIndex(templates.length);
   }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
