@@ -42,7 +42,17 @@
                 "id": "641773",
                 "name": "Branch: if/else"
               },
-              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)"
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "859266",
+                    "name": "Send a response"
+                  },
+                  "activity": "${help()}"
+                }
+              ]
             }
           ]
         }
