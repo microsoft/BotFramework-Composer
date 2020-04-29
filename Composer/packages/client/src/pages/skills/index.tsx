@@ -10,7 +10,6 @@ import formatMessage from 'format-message';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
 import { StoreContext } from '../../store';
-import { ContentStyle } from '../language-understanding/styles';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';
