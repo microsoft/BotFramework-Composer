@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React, { Fragment, useContext, useEffect, Suspense } from 'react';
-import { Router, Redirect } from '@reach/router';
+import { jsx, css } from '@emotion/core';
+import React, { useContext, useEffect, Suspense } from 'react';
+import { Router, Redirect, RouteComponentProps } from '@reach/router';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { About } from './pages/about';
@@ -28,8 +28,6 @@ const Routes = props => {
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>
         <Router basepath={BASEPATH} {...props}>
-          {/* <!-- this is out here, instead of inside ProjectRouter, to allow for a specific place in the DOM. --> */}
-          <DialogRouter path="/bot/:projectId/dialogs/:dialogId/*" {...props} />
           <Redirect
             from="/bot/:projectId/language-generation"
             to="/bot/:projectId/language-generation/common"
@@ -44,6 +42,7 @@ const Routes = props => {
           <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
           {/* <Redirect from="/bot/:projectId" to="/bot/:projectId/dialogs/Main" noThrow /> */}
           <ProjectRouter path="/bot/:projectId">
+            <DesignPage path="dialogs/:dialogId/*" />
             <SettingPage path="settings/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
@@ -61,29 +60,26 @@ const Routes = props => {
   );
 };
 
-const DialogRouter = props => {
-  const match = { dialogId: props.dialogId, projectId: props.projectId };
-  const { actions } = useContext(StoreContext);
+const projectStyle = css`
+  height: 100%;
+
+  & > div {
+    height: 100%;
+  }
+
+  label: ProjectRouter;
+`;
+
+const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = props => {
+  const { actions, state } = useContext(StoreContext);
 
   useEffect(() => {
-    actions.fetchProjectById(props.projectId);
+    if (state.projectId !== props.projectId) {
+      actions.fetchProjectById(props.projectId);
+    }
   }, []);
 
-  return (
-    <Fragment>
-      <DesignPage match={match} {...props} />
-    </Fragment>
-  );
-};
-
-const ProjectRouter = props => {
-  const { actions } = useContext(StoreContext);
-
-  useEffect(() => {
-    actions.fetchProjectById(props.projectId);
-  }, []);
-
-  return <Fragment>{props.children}</Fragment>;
+  return <div css={projectStyle}>{props.children}</div>;
 };
 
 export default Routes;
