@@ -6,11 +6,8 @@ import path from 'path';
 import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
 import { v4 as uuid, v5 as hash } from 'uuid';
 import { copy, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
-import { MemoryCache } from 'adal-node';
 
 import schema from './schema';
-const _cache = new MemoryCache();
 interface CreateAndDeployResources {
   publishName: string;
   location: string;
@@ -32,9 +29,11 @@ class AzurePublisher {
   private publishingBots: { [key: string]: any };
   private historyFilePath: string;
   private azDeployer: BotProjectDeploy;
+  private logMessages: any[];
   constructor() {
     this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
     this.publishingBots = {};
+    this.logMessages = [];
   }
   private getProjectFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
   private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'ComposerDialogs');
@@ -151,6 +150,7 @@ class AzurePublisher {
       if (status) {
         status.status = 200;
         status.result.message = 'Success';
+        status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
       }
@@ -161,6 +161,7 @@ class AzurePublisher {
       if (status) {
         status.status = 500;
         status.result.message = error ? error.message : 'publish error';
+        status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
       }
@@ -239,18 +240,20 @@ class AzurePublisher {
         subId: subscriptionID,
         logger: (msg: any) => {
           console.log(msg);
+          this.logMessages.push(JSON.stringify(msg, null, 2));
         },
         accessToken: accessToken,
         projPath: this.getProjectFolder(resourcekey),
       });
 
+      this.logMessages = ['Publish starting...'];
       const response = {
         status: 202,
         result: {
           id: jobId,
           time: new Date(),
           message: 'Accepted for publishing.',
-          log: 'Publish starting...',
+          log: this.logMessages.join('\n'),
           comment: metadata.comment,
         },
       };
@@ -261,13 +264,14 @@ class AzurePublisher {
       return response;
     } catch (err) {
       console.log(err);
+      this.logMessages.push(err.message);
       const res = {
         status: 500,
         result: {
           id: jobId,
           time: new Date(),
           message: 'Publish Fail',
-          log: err.message,
+          log: this.logMessages.join('\n'),
           comment: metadata.comment,
         },
       };

@@ -100,7 +100,7 @@ const schema: JSONSchema7 = {
           type: 'string',
         },
       },
-      required: ['applicationInsights', 'cosmosDb', 'blobStorage', 'luis', 'MicrosoftAppId', 'MicrosoftAppPassword'],
+      required: ['MicrosoftAppId', 'MicrosoftAppPassword'],
     },
     accessToken: {
       type: 'string',
