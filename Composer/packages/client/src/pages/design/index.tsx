@@ -13,7 +13,6 @@ import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { JsonEditor } from '@bfc/code-editor';
-import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController';
@@ -431,7 +430,7 @@ function DesignPage(props) {
           </Conversation>
         </div>
       </div>
-      <Suspense fallback={<Spinner label={formatMessage('Loading')} />}>
+      <Suspense fallback={<LoadingSpinner />}>
         {state.showCreateDialogModal && (
           <CreateDialogModal
             isOpen={state.showCreateDialogModal}
