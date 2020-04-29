@@ -7,7 +7,7 @@ import React from 'react';
 import { FieldProps } from '@bfc/extension';
 import {
   getUiLabel,
-  getUISchema,
+  getUIOptions,
   getUiPlaceholder,
   getUiDescription,
   schemaField,
@@ -20,7 +20,7 @@ export const SkillEndpointField: React.FC<FieldProps> = props => {
   const pluginConfig = usePluginConfig();
 
   const uiOptions = {
-    ...getUISchema(schema, pluginConfig.formSchema),
+    ...getUIOptions(schema, pluginConfig.formSchema),
     ...baseUIOptions,
   };
 
