@@ -28,7 +28,7 @@ interface CreateDialogModalProps {
   isOpen: boolean;
 }
 
-const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
+export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;

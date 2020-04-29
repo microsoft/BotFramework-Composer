@@ -97,7 +97,7 @@ interface TriggerCreationModalProps {
   onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
 }
 
-const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
+export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, locale, projectId, schemas } = state;
