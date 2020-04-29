@@ -19,7 +19,8 @@ const appPassword = argv.appPassword;
 const appId = argv.appId; // MicrosoftAppId
 const luisAuthoringKey = argv.luisAuthoringKey;
 const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus';
-const createLuisResource = argv.createLuisAuthoringResource == 'true' ? true : false;
+
+const createLuisResource = argv.createLuisResource == 'true' ? true : false;
 const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'true' ? true : false;
 const createCosmosDb = argv.createCosmosDb == 'true' ? true : false;
 const createStorage = argv.createStorage == 'true' ? true : false;
@@ -420,6 +421,7 @@ msRestNodeAuth
         `Your Azure hosting environment has been created! Copy paste the following configuration into a new profile in Composer's Publishing tab.`
       );
 
+      const token = await creds.getToken();
       const profile = {
         publishName: name,
         location: location,
@@ -429,7 +431,7 @@ msRestNodeAuth
         luisAuthoringRegion: luisAuthoringRegion,
         environment: environment,
         provision: createResult,
-        accessToken: await creds.getToken().accessToken,
+        accessToken: token.accessToken,
       };
 
       console.log(JSON.stringify(profile, null, 2));
