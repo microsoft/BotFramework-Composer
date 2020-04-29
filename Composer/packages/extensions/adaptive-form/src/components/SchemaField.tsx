@@ -52,7 +52,7 @@ const SchemaField: React.FC<FieldProps> = props => {
   }, []);
 
   const error = typeof rawErrors === 'string' && (
-    <ErrorMessage error={rawErrors} label={getUiLabel(props)} helpURL={uiOptions.helpLink} />
+    <ErrorMessage error={rawErrors} label={getUiLabel(props)} helpLink={uiOptions.helpLink} />
   );
 
   if (!schema || name.startsWith('$')) {

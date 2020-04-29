@@ -9,11 +9,11 @@ import formatMessage from 'format-message';
 interface ErrorMessageProps {
   label?: string | false;
   error?: string;
-  helpURL?: string;
+  helpLink?: string;
 }
 
 const ErrorMessage: React.FC<ErrorMessageProps> = props => {
-  const { error, label, helpURL } = props;
+  const { error, label, helpLink } = props;
 
   return (
     <MessageBar
@@ -22,8 +22,8 @@ const ErrorMessage: React.FC<ErrorMessageProps> = props => {
       messageBarType={MessageBarType.error}
     >
       {[label, error].filter(Boolean).join(' ')}
-      {helpURL && (
-        <Link key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
+      {helpLink && (
+        <Link key="a" href={helpLink} target="_blank" rel="noopener noreferrer">
           {formatMessage('Refer to the syntax documentation here.')}
         </Link>
       )}
