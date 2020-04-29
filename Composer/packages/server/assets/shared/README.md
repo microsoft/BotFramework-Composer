@@ -67,3 +67,11 @@ When you are ready to publish your bot to Azure, select the newly created profil
 
 ## Refresh your Azure Token
 
+When publishing, you may encounter an error about your access token being expired. This happens when the access token used to provision your bot expires.
+
+To get a new token:
+
+* Open a terminal window
+* Run `az account get-access-token`
+* This will result in a JSON object printed to the console, containing a new `accessToken` field.
+* Copy the value of the accessToken from the terminal and into the publish profile in Composer.
