@@ -30,7 +30,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchFolderItemsByPath,
     setCreationFlowStatus,
   } = actions;
-  const { templateId, templateProjects, storages } = state;
+  const { templateId, templateProjects, storages, focusedStorageFolder } = state;
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
@@ -70,11 +70,22 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async formData => {
-    await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
+    await createProject(
+      templateId || '',
+      formData.name,
+      formData.description,
+      Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || ''),
+      formData.schemaUrl
+    );
   };
 
   const handleSaveAs = async formData => {
-    await saveProjectAs(state.projectId, formData.name, formData.description, formData.location);
+    await saveProjectAs(
+      state.projectId,
+      formData.name,
+      formData.description,
+      Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || '')
+    );
   };
 
   const handleSubmit = formData => {
@@ -106,6 +117,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onSubmit={handleSubmit}
           onDismiss={handleDismiss}
           onCurrentPathUpdate={updateCurrentPath}
+          focusedStorageFolder={focusedStorageFolder}
           path="create/:templateId"
           saveTemplateId={saveTemplateId}
         />
@@ -114,9 +126,16 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onSubmit={handleSubmit}
           onDismiss={handleDismiss}
           onCurrentPathUpdate={updateCurrentPath}
-          path=":projectId/save"
+          focusedStorageFolder={focusedStorageFolder}
+          path=":projectId/:templateId/save"
         />
-        <OpenProject onOpen={openBot} onDismiss={handleDismiss} onCurrentPathUpdate={updateCurrentPath} path="open" />
+        <OpenProject
+          onOpen={openBot}
+          onDismiss={handleDismiss}
+          onCurrentPathUpdate={updateCurrentPath}
+          focusedStorageFolder={focusedStorageFolder}
+          path="open"
+        />
       </Router>
     </Fragment>
   );
