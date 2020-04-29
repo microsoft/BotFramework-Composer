@@ -65,7 +65,7 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         public IStorage ConfigureStorage(BotSettings settings)
         {
             IStorage storage;
-            if (settings.Feature.UseCosmosDb && !string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
+            if (settings.Feature.UseCosmosDbPersistentStorage && !string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
             {
                 storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
             }

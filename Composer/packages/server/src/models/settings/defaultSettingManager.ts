@@ -23,7 +23,7 @@ export class DefaultSettingManager extends FileSettingManager {
         UseTranscriptLoggerMiddleware: false,
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
-        UseCosmosDb: false,
+        UseCosmosDbPersistentStorage: false,
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
@@ -43,7 +43,7 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       telemetry: {
         logPersonalInformation: false,
-        logActivities: false,
+        logActivities: true,
       },
       runtime: {
         customRuntime: false,
