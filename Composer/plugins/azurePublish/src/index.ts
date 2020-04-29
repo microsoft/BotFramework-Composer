@@ -222,7 +222,16 @@ class AzurePublisher {
 
     // resource key to map to one provision resource
     const resourcekey = hash(
-      [subscriptionID, publishName, location, environment, appPassword, luisAuthoringKey, luisAuthoringRegion],
+      [
+        project.name,
+        subscriptionID,
+        publishName,
+        location,
+        environment,
+        appPassword,
+        luisAuthoringKey,
+        luisAuthoringRegion,
+      ],
       subscriptionID
     );
 
