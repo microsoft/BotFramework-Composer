@@ -5,6 +5,7 @@
 import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { FieldProps, UIOptions } from '@bfc/extension';
+import expressionConfig from '@bfc/ui-plugin-expressions';
 
 import { resolvePropSchema } from '../utils';
 
@@ -108,6 +109,7 @@ const FormRow: React.FC<FormRowProps> = props => {
         onBlur={onBlur}
         onChange={onChange(row)}
         onFocus={onFocus}
+        helpURL={expressionConfig.roleSchema?.expression?.helpLink}
       />
     );
   }
