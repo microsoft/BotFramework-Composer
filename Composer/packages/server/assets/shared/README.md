@@ -74,4 +74,4 @@ To get a new token:
 * Open a terminal window
 * Run `az account get-access-token`
 * This will result in a JSON object printed to the console, containing a new `accessToken` field.
-* Copy the value of the accessToken from the terminal and into the publish profile in Composer.
+* Copy the value of the accessToken from the terminal and into the publish `accessToken` field in the profile in Composer.
