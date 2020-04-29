@@ -52,6 +52,7 @@ export const HeaderText = css`
 
 export const ContentStyle = css`
   margin-left: 2px;
+  height: calc(100vh - 180px);
   display: flex;
   border-top: 1px solid #dddddd;
   position: relative;
@@ -65,7 +66,6 @@ export const ContentStyle = css`
 export const contentEditor = css`
   flex: 4;
   margin: 20px;
-  height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
 

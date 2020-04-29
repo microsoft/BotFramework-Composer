@@ -100,8 +100,6 @@ const LUPage: React.FC<LUPageProps> = props => {
 
   return (
     <div css={pageRoot} data-testid="LUPage">
-      <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
-
       <div css={contentWrapper}>
         <ToolBar toolbarItems={toolbarItems} />
         <div css={ContentHeaderStyle}>
@@ -120,8 +118,9 @@ const LUPage: React.FC<LUPageProps> = props => {
             )}
           </div>
         </div>
-        <div role="main" css={ContentStyle} data-testid="LUEditor">
-          <div css={contentEditor}>
+        <div role="main" css={ContentStyle}>
+          <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+          <div css={contentEditor} data-testid="LUEditor">
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>
                 <CodeEditor path="/edit" dialogId={dialogId} />

@@ -121,9 +121,10 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
         result[item.intent] = deduped[0];
       } else if (deduped.length) {
         result[item.intent] = deduped;
+      } else {
+        result[item.intent] = '';
       }
 
-      if (!item.dialogs.length) result[item.intent] = '';
       triggerRules[fileId] = { ...triggerRules[fileId], ...result };
     });
   });
