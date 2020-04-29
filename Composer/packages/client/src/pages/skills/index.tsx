@@ -34,7 +34,6 @@ const Skills: React.FC<RouteComponentProps> = () => {
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
-      <div css={ContentStyle}></div>
       <div role="main">
         <SkillSettings
           projectId={state.projectId}
