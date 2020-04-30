@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef, LgMetaData, BaseSchema, LgType } from '@bfc/shared';
-
-import { useShellApi } from './useShellApi';
+import { LgTemplateRef, LgMetaData, BaseSchema, LgType, ShellApi } from '@bfc/shared';
 
 /**
  * LG CRUD lib
  */
-export const useLgApi = () => {
-  const { shellApi } = useShellApi();
+export const useLgApi = (shellApi: ShellApi) => {
   const { removeLgTemplates, getLgTemplates, updateLgTemplate } = shellApi;
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
