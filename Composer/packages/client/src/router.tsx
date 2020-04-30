@@ -77,7 +77,11 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = prop
     if (state.projectId !== props.projectId) {
       actions.fetchProjectById(props.projectId);
     }
-  }, []);
+  }, [props.projectId, state.projectId]);
+
+  if (props.projectId !== state.projectId) {
+    return <LoadingSpinner />;
+  }
 
   return <div css={projectStyle}>{props.children}</div>;
 };
