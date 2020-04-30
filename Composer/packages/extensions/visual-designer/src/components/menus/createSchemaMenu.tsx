@@ -59,6 +59,10 @@ const createDivider = () => ({
   itemType: ContextualMenuItemType.Divider,
 });
 
+const get$kindFrom$ref = ($ref: string): SDKKinds => {
+  return $ref.replace('#/definitions/', '') as SDKKinds;
+};
+
 const createCustomActionSubMenu = (
   customizedActionGroups: DefinitionSummary[][],
   onClick: ActionMenuItemClickHandler
@@ -71,10 +75,10 @@ const createCustomActionSubMenu = (
     .filter(actionGroup => Array.isArray(actionGroup) && actionGroup.length)
     .map(actionGroup => {
       return actionGroup.map(
-        ({ title: $kind }) =>
+        ({ title, $ref }) =>
           ({
-            key: $kind,
-            name: $kind,
+            key: get$kindFrom$ref($ref),
+            name: title,
             onClick: (e, itemData) => onClick(itemData),
           } as IContextualMenuItem)
       );

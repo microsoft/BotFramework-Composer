@@ -77,7 +77,6 @@ export class BotProject {
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
-
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
@@ -161,7 +160,19 @@ export class BotProject {
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
 
-    const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
+    const isSDKSchemaFile = f => f.name === 'sdk.schema';
+    const schemaFiles = this.files.filter(f => f.name.endsWith('.schema'));
+    const userSDKSchemaFile = schemaFiles.find(f => isSDKSchemaFile(f));
+    const customSchemaFiles = schemaFiles
+      .filter(f => !isSDKSchemaFile(f))
+      .map(file => {
+        try {
+          return JSON.parse(file.content);
+        } catch (e) {
+          console.error(`Attempt to parse ${file.name} as JSON failed`);
+        }
+      })
+      .filter(schema => schema);
 
     if (userSDKSchemaFile !== undefined) {
       debug('Customized SDK schema found');
@@ -178,6 +189,7 @@ export class BotProject {
       sdk: {
         content: sdkSchema,
       },
+      customSchemas: customSchemaFiles,
       diagnostics,
     };
   };
