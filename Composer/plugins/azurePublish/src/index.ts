@@ -171,7 +171,7 @@ class AzurePublisher {
    * plugin methods
    *************************************************************************************************/
   publish = async (config: PublishConfig, project, metadata, user) => {
-    // templatePath point to the CSharp code
+    // templatePath point to the dotnet code
     const {
       settings,
       templatePath,

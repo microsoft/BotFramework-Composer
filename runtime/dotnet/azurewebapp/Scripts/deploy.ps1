@@ -47,7 +47,7 @@ else {
 # Check for existing deployment files
 if (-not (Test-Path (Join-Path $projFolder '.deployment'))) {
 	# Add needed deployment files for az
-	az bot prepare-deploy --lang Csharp --code-dir $projFolder --proj-file-path BotProject.csproj --output json | Out-Null
+	az bot prepare-deploy --lang Csharp --code-dir $projFolder --proj-file-path Microsoft.BotFramework.Composer.WebApp.csproj --output json | Out-Null
 }
 
 # Delete src zip, if it exists

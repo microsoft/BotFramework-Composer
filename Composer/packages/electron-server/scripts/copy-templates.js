@@ -4,7 +4,7 @@
 const fs = require('fs-extra');
 const { resolve } = require('path');
 
-const source = resolve(__dirname, '../../../../BotProject/Templates');
+const source = resolve(__dirname, '../../../../runtime');
 const destination = resolve(__dirname, '../build/templates');
 console.log(`[copy-templates.js] Copying templates from ${source} to ${destination}`);
 
