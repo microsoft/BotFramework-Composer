@@ -19,6 +19,7 @@ export const inlineModePlaceholder = formatMessage(`> add some example phrases t
 
 export const LU_HELP = 'https://aka.ms/lu-file-format';
 export const defaultPlaceholder = formatMessage(
-  `> To learn more about the LU file format, read the documentation at > {LU_HELP}`,
+  `> To learn more about the LU file format, read the documentation at
+> {LU_HELP}`,
   { LU_HELP: LU_HELP }
 );
