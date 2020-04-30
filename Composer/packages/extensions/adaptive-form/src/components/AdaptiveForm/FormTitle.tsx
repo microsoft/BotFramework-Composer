@@ -72,7 +72,7 @@ const FormTitle: React.FC<FormTitleProps> = props => {
     return description || schema.description || '';
   };
 
-  return (
+  return uiLabel !== false ? (
     <div css={styles.container} id={props.id}>
       <div>
         <EditableField
@@ -109,10 +109,9 @@ const FormTitle: React.FC<FormTitleProps> = props => {
           )}
         </p>
       </div>
-
       {props.children}
     </div>
-  );
+  ) : null;
 };
 
 export default FormTitle;

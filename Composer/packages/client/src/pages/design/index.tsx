@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useEffect, useMemo, useState, useRef } from 'react';
+import React, { Suspense, useContext, useEffect, useMemo, useState, useRef } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
@@ -18,7 +18,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
-import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
+import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { DialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
@@ -30,8 +30,6 @@ import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 
 import { VisualEditorAPI } from './FrameAPI';
-import { CreateDialogModal } from './createDialogModal';
-import { AddSkillDialog } from './addSkillDialogModal';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -43,6 +41,11 @@ import {
 } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
+
+const AddSkillDialog = React.lazy(() => import('./addSkillDialogModal'));
+const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
+const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
+const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
 
 function onRenderContent(subTitle, style) {
   return (
@@ -102,6 +105,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
+  const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -399,6 +403,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             openNewTriggerModal={openNewTriggerModal}
             onCreateDialogComplete={onCreateDialogComplete}
             onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+            showSkillManifestModal={() => setExportSkillModalVisible(true)}
           />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
@@ -423,28 +428,37 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           </Conversation>
         </div>
       </div>
-      {state.showCreateDialogModal && (
-        <CreateDialogModal
-          isOpen={state.showCreateDialogModal}
-          onDismiss={() => actions.createDialogCancel()}
-          onSubmit={handleCreateDialogSubmit}
-        />
-      )}
-      {state.showAddSkillDialogModal && (
-        <AddSkillDialog
-          isOpen={state.showAddSkillDialogModal}
-          onDismiss={() => actions.addSkillDialogCancel()}
-          onSubmit={handleAddSkillDialogSubmit}
-        />
-      )}
-      {triggerModalVisible && (
-        <TriggerCreationModal
-          dialogId={dialogId}
-          isOpen={triggerModalVisible}
-          onDismiss={onTriggerCreationDismiss}
-          onSubmit={onTriggerCreationSubmit}
-        />
-      )}
+      <Suspense fallback={<LoadingSpinner />}>
+        {state.showCreateDialogModal && (
+          <CreateDialogModal
+            isOpen={state.showCreateDialogModal}
+            onDismiss={() => actions.createDialogCancel()}
+            onSubmit={handleCreateDialogSubmit}
+          />
+        )}
+        {state.showAddSkillDialogModal && (
+          <AddSkillDialog
+            isOpen={state.showAddSkillDialogModal}
+            onDismiss={() => actions.addSkillDialogCancel()}
+            onSubmit={handleAddSkillDialogSubmit}
+          />
+        )}
+        {exportSkillModalVisible && (
+          <ExportSkillModal
+            isOpen={exportSkillModalVisible}
+            onDismiss={() => setExportSkillModalVisible(false)}
+            onSubmit={() => setExportSkillModalVisible(false)}
+          />
+        )}
+        {triggerModalVisible && (
+          <TriggerCreationModal
+            dialogId={dialogId}
+            isOpen={triggerModalVisible}
+            onDismiss={onTriggerCreationDismiss}
+            onSubmit={onTriggerCreationSubmit}
+          />
+        )}
+      </Suspense>
     </React.Fragment>
   );
 };
