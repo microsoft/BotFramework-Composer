@@ -11,3 +11,4 @@ export * from './BaseEditor';
 export * from './JsonEditor';
 export * from './LgEditor';
 export * from './LuEditor';
+export * from './constants';
