@@ -3,25 +3,30 @@
 
 import React from 'react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 
 interface ErrorMessageProps {
   label?: string | false;
   error?: string;
+  helpLink?: string;
 }
 
 const ErrorMessage: React.FC<ErrorMessageProps> = props => {
-  const { error, label } = props;
+  const { error, label, helpLink } = props;
 
   return (
     <MessageBar
-      truncated
       dismissButtonAriaLabel={formatMessage('Close')}
-      isMultiline={false}
+      isMultiline={true}
       messageBarType={MessageBarType.error}
-      overflowButtonAriaLabel={formatMessage('See more')}
     >
       {[label, error].filter(Boolean).join(' ')}
+      {helpLink && (
+        <Link key="a" href={helpLink} target="_blank" rel="noopener noreferrer">
+          {formatMessage('Refer to the syntax documentation here.')}
+        </Link>
+      )}
     </MessageBar>
   );
 };
