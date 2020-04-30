@@ -44,7 +44,7 @@
     "test": "yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default",
-    "test:integration": "cypress run --browser chrome",
+    "test:integration": "cypress run --browser edge",
     "test:integration:start-server": "node scripts/e2e.js",
     "test:integration:open": "cypress open",
     "test:integration:clean": "node scripts/clean-e2e.js",
