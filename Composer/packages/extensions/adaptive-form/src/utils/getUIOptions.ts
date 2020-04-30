@@ -1,15 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UISchema, UIOptions, JSONSchema7 } from '@bfc/extension';
+import { UISchema, UIOptions, JSONSchema7, RoleSchema } from '@bfc/extension';
 /**
  * Merges overrides and plugins into default ui schema and returns the UIOptions
  */
-export function getUIOptions(schema?: JSONSchema7, uiSchema?: UISchema, pluginOptions?: UIOptions): UIOptions {
+export function getUIOptions(schema?: JSONSchema7, uiSchema?: UISchema, roleSchema?: RoleSchema): UIOptions {
   const { $kind } = schema?.properties || {};
 
   const kind = $kind && typeof $kind === 'object' && ($kind.const as string);
 
   const formOptions = uiSchema && kind && uiSchema[kind] ? uiSchema[kind] : {};
+  const pluginOptions = roleSchema && kind && roleSchema[kind] ? roleSchema[kind] : {};
 
-  return { ...formOptions, ...pluginOptions };
+  return { ...pluginOptions, ...formOptions };
 }
