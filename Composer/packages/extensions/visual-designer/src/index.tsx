@@ -72,6 +72,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLuIntent,
     undo,
     redo,
+    announce,
   } = shellApi;
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
@@ -120,6 +121,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                 onSelect={onSelect}
                 undo={undo}
                 redo={redo}
+                announce={announce}
                 addCoachMarkRef={addCoachMarkRef}
               />
             </div>

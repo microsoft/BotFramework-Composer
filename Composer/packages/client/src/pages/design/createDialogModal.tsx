@@ -116,3 +116,5 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
     </DialogWrapper>
   );
 };
+
+export default CreateDialogModal;

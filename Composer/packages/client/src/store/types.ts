@@ -100,6 +100,7 @@ export interface State {
   lgFiles: LgFile[];
   luFiles: LuFile[];
   skills: Skill[];
+  skillManifests: any[];
   designPageLocation: DesignPageLocation;
   error: StateError | null;
   breadcrumb: BreadcrumbItem[];

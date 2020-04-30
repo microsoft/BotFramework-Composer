@@ -10,7 +10,6 @@ import formatMessage from 'format-message';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
 import { StoreContext } from '../../store';
-import { ContentStyle } from '../language-understanding/styles';
 
 import { ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';
@@ -34,7 +33,6 @@ const Skills: React.FC<RouteComponentProps> = () => {
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
-      <div css={ContentStyle}></div>
       <div role="main">
         <SkillSettings
           projectId={state.projectId}
