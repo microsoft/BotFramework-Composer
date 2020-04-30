@@ -19,7 +19,7 @@ export interface EditorSchema {
 }
 
 export interface BotSchemas {
-  default: OBISchema;
+  default?: OBISchema;
   sdk?: any;
   diagnostics?: any[];
 }
