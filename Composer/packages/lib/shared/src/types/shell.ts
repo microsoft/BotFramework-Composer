@@ -4,6 +4,7 @@
 
 import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
 import { UserSettings } from './settings';
+import { OBISchema } from './schema';
 
 /** Recursively marks all properties as optional. */
 type AllPartial<T> = {
@@ -18,6 +19,7 @@ export interface EditorSchema {
 }
 
 export interface BotSchemas {
+  default?: OBISchema;
   sdk?: any;
   diagnostics?: any[];
 }
