@@ -1,128 +1,187 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 import {
   IContextualMenuItem,
-  IContextualMenuProps,
+  ContextualMenuItemType,
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
-import { DialogFactory, ConceptLabels, DialogGroup, dialogGroups, SDKKinds } from '@bfc/shared';
+import { ConceptLabels, DialogGroup, dialogGroups, SDKKinds } from '@bfc/shared';
+import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import formatMessage from 'format-message';
 
-const menuItemHandler = (
-  factory: DialogFactory,
-  handleType: (
-    e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
-    item: IContextualMenuItem
-  ) => void
-) => (
-  e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
-  item: IContextualMenuItem | undefined
-) => {
-  if (item) {
-    const name =
-      ConceptLabels[item.$kind] && ConceptLabels[item.$kind].title ? ConceptLabels[item.$kind].title : item.$kind;
-    item = {
-      ...item,
-      data: {
-        ...factory.create(item.$kind, {
-          $designer: { name },
-        }),
-      },
-    };
-    return handleType(e, item);
-  }
+const resolveMenuTitle = ($kind: SDKKinds): string => {
+  const conceptLabel = ConceptLabels[$kind];
+  return conceptLabel?.title || $kind;
 };
 
-export const createStepSubmenu = (
-  label: string,
-  items: IContextualMenuItem[],
-  handleType,
-  factory
-): IContextualMenuItem => {
-  const subMenu: IContextualMenuProps = {
-    items,
-    onItemClick: menuItemHandler(factory, handleType),
-  };
+type ActionMenuItemClickHandler = (item?: IContextualMenuItem) => any;
+type ActionKindFilter = ($kind: SDKKinds) => boolean;
 
-  const menuItem: IContextualMenuItem = {
+const createBaseActionMenu = (
+  onClick: ActionMenuItemClickHandler,
+  filter?: ActionKindFilter
+): IContextualMenuItem[] => {
+  const pickedGroups: DialogGroup[] = [
+    DialogGroup.RESPONSE,
+    DialogGroup.INPUT,
+    DialogGroup.BRANCHING,
+    DialogGroup.LOOPING,
+    DialogGroup.STEP,
+    DialogGroup.MEMORY,
+    DialogGroup.CODE,
+    DialogGroup.LOG,
+  ];
+  const stepMenuItems = pickedGroups
+    .map(key => dialogGroups[key])
+    .filter(groupItem => groupItem && Array.isArray(groupItem.types) && groupItem.types.length)
+    .map(({ label, types: actionKinds }) => {
+      const subMenuItems: IContextualMenuItem[] = actionKinds
+        .filter($kind => (filter ? filter($kind) : true))
+        .map($kind => ({
+          key: $kind,
+          name: resolveMenuTitle($kind),
+          onClick: (e, itemData) => onClick(itemData),
+        }));
+
+      if (subMenuItems.length === 1) {
+        // hoists the only item to upper level
+        return subMenuItems[0];
+      }
+      return createSubMenu(label, onClick, subMenuItems);
+    });
+  return stepMenuItems;
+};
+
+const createDivider = () => ({
+  key: 'divider',
+  itemType: ContextualMenuItemType.Divider,
+});
+
+const createCustomActionSubMenu = (
+  customizedActionGroups: any[][],
+  onClick: ActionMenuItemClickHandler
+): IContextualMenuItem[] => {
+  if (!Array.isArray(customizedActionGroups) || customizedActionGroups.length === 0) {
+    return [];
+  }
+
+  const itemGroups: IContextualMenuItem[][] = customizedActionGroups
+    .filter(actionGroup => Array.isArray(actionGroup) && actionGroup.length)
+    .map(actionGroup => {
+      return actionGroup.map(
+        ({ title: $kind }) =>
+          ({
+            key: $kind,
+            name: $kind,
+            onClick: (e, itemData) => onClick(itemData),
+          } as IContextualMenuItem)
+      );
+    });
+
+  const flatMenuItems: IContextualMenuItem[] = itemGroups.reduce((resultItems, currentGroup, currentIndex) => {
+    if (currentIndex !== 0) {
+      // push a sep line ahead.
+      resultItems.push(createDivider());
+    }
+    resultItems.push(...currentGroup);
+    return resultItems;
+  }, []);
+
+  return flatMenuItems;
+};
+
+const createPasteButtonItem = (
+  menuItemCount: number,
+  disabled: boolean,
+  onClick: ActionMenuItemClickHandler
+): IContextualMenuItem => {
+  return {
+    key: 'Paste',
+    name: 'Paste',
+    ariaLabel: 'Paste',
+    disabled: disabled,
+    onRender: () => {
+      return (
+        <button
+          disabled={disabled}
+          role="menuitem"
+          name="Paste"
+          aria-posinset={1}
+          aria-setsize={menuItemCount + 1}
+          css={css`
+            color: ${disabled ? '#BDBDBD' : '#0078D4'};
+            background: #fff;
+            width: 100%;
+            height: 36px;
+            line-height: 36px;
+            border-style: none;
+            text-align: left;
+            padding: 0 8px;
+            outline: none;
+            &:hover {
+              background: rgb(237, 235, 233);
+            }
+          `}
+          onClick={() => onClick({ key: 'Paste' })}
+        >
+          <div>
+            <FontIcon
+              iconName="Paste"
+              css={css`
+                margin-right: 4px;
+              `}
+            />
+            <span>Paste</span>
+          </div>
+        </button>
+      );
+    },
+  };
+};
+
+interface ActionMenuOptions {
+  isSelfHosted: boolean;
+  enablePaste: boolean;
+}
+
+const createSubMenu = (
+  label: string,
+  onClick: ActionMenuItemClickHandler,
+  subItems: IContextualMenuItem[]
+): IContextualMenuItem => {
+  return {
     key: label,
     text: label,
-    name: label,
-    subMenuProps: subMenu,
+    subMenuProps: {
+      items: subItems,
+      onItemClick: (e, itemData) => onClick(itemData),
+    },
   };
-  return menuItem;
 };
 
-export const createStepMenu = (
-  stepLabels: DialogGroup[],
-  subMenu = true,
-  handleType: (
-    e: React.MouseEvent<HTMLElement, MouseEvent> | React.KeyboardEvent<HTMLElement> | undefined,
-    item: IContextualMenuItem
-  ) => void,
-  factory: DialogFactory,
-  filter?: (x: SDKKinds) => boolean
-): IContextualMenuItem[] => {
-  if (subMenu) {
-    const stepMenuItems = stepLabels.map(x => {
-      const item = dialogGroups[x];
-      if (item.types.length === 1) {
-        const conceptLabel = ConceptLabels[item.types[0]];
-        return {
-          key: item.types[0],
-          name: conceptLabel && conceptLabel.title ? conceptLabel.title : item.types[0],
-          $kind: item.types[0],
-          onClick: menuItemHandler(factory, handleType),
-        };
-      }
-      const subMenu: IContextualMenuProps = {
-        items: item.types.filter(filter || (() => true)).map($kind => {
-          const conceptLabel = ConceptLabels[$kind];
+export const createActionMenu = (onClick: ActionMenuItemClickHandler, options: ActionMenuOptions) => {
+  const resultItems: IContextualMenuItem[] = [];
 
-          return {
-            key: $kind,
-            name: conceptLabel && conceptLabel.title ? conceptLabel.title : $kind,
-            $kind: $kind,
-          };
-        }),
-        onItemClick: menuItemHandler(factory, handleType),
-      };
+  // base SDK menu
+  const baseMenuItems = createBaseActionMenu(
+    onClick,
+    options.isSelfHosted ? ($kind: SDKKinds) => $kind !== SDKKinds.LogAction : undefined
+  );
+  resultItems.push(...baseMenuItems);
 
-      const menuItem: IContextualMenuItem = {
-        key: item.label,
-        text: item.label,
-        name: item.label,
-        subMenuProps: subMenu,
-      };
-      return menuItem;
-    });
-
-    return stepMenuItems;
-  } else {
-    const stepMenuItems = dialogGroups[stepLabels[0]].types.map(item => {
-      const conceptLabel = ConceptLabels[item];
-      const name = conceptLabel && conceptLabel.title ? conceptLabel.title : item;
-      const menuItem: IContextualMenuItem = {
-        key: item,
-        text: name,
-        name: name,
-        $kind: item,
-        ...factory.create(item, {
-          $designer: { name },
-        }),
-        data: {
-          $kind: item,
-          ...factory.create(item, {
-            $designer: { name },
-          }),
-        },
-        onClick: (e, item: IContextualMenuItem | undefined) => {
-          if (item) {
-            return handleType(e, item);
-          }
-        },
-      };
-      return menuItem;
-    });
-    return stepMenuItems;
+  // Append a 'Custom Actions' item conditionally.
+  const customActionItems = createCustomActionSubMenu([], onClick);
+  const customActionTitle = formatMessage('Custom Actions');
+  if (customActionItems.length) {
+    resultItems.push(createSubMenu(customActionTitle, onClick, customActionItems));
   }
+
+  // paste button
+  const pasteButtonDisabled = !options.enablePaste;
+  const pasteButton = createPasteButtonItem(resultItems.length, pasteButtonDisabled, onClick);
+  resultItems.unshift(pasteButton, createDivider());
+
+  return resultItems;
 };
