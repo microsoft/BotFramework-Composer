@@ -344,6 +344,5 @@ class AzurePublisher {
 const azurePublish = new AzurePublisher();
 
 export default async (composer: any): Promise<void> => {
-  // pass in the custom storage class that will override the default
   await composer.addPublishMethod(azurePublish, schema);
 };
