@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export enum FileChangeType {
+export enum ChangeType {
   DELETE = 1,
   UPDATE,
   CREATE,
@@ -9,13 +9,15 @@ export enum FileChangeType {
 
 export enum FileExtensions {
   Dialog = '.dialog',
+  Manifest = '.manifest',
   Lu = '.lu',
   Lg = '.lg',
 }
 
-export interface ResourceInfo {
-  id: string;
-  content: string;
-}
-
 export type FileErrorHandler = (error) => void;
+
+export interface IFileChange {
+  id: string; //now use file name
+  change: string;
+  type: ChangeType;
+}
