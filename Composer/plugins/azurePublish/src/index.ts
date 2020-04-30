@@ -16,12 +16,10 @@ const PERSIST_HISTORY = false;
 
 interface CreateAndDeployResources {
   publishName: string;
-  location: string;
   environment: string;
   subscriptionID: string;
   luisAuthoringKey?: string;
   luisAuthoringRegion?: string;
-  appPassword: string;
 }
 
 interface PublishConfig {
@@ -153,14 +151,7 @@ class AzurePublisher {
     resourcekey: string,
     customizeConfiguration: CreateAndDeployResources
   ) => {
-    const {
-      publishName,
-      location,
-      environment,
-      appPassword,
-      luisAuthoringKey,
-      luisAuthoringRegion,
-    } = customizeConfiguration;
+    const { publishName, environment, luisAuthoringKey, luisAuthoringRegion } = customizeConfiguration;
     try {
       // Perform the deploy
       await this.azDeployer.deploy(publishName, environment, luisAuthoringKey, luisAuthoringRegion);
@@ -204,22 +195,12 @@ class AzurePublisher {
       publishName,
       environment,
       location,
-      appPassword,
       luisAuthoringKey,
       luisAuthoringRegion,
       provision,
       accessToken,
     } = config;
 
-    const customizeConfiguration: CreateAndDeployResources = {
-      subscriptionID,
-      publishName,
-      environment,
-      location,
-      appPassword,
-      luisAuthoringKey,
-      luisAuthoringRegion,
-    };
     // point to the declarative assets (possibly in remote storage)
     const botFiles = project.files;
 
@@ -237,7 +218,7 @@ class AzurePublisher {
         publishName,
         location,
         environment,
-        appPassword,
+        provision?.MicrosoftAppPassword,
         luisAuthoringKey,
         luisAuthoringRegion,
       ],
@@ -267,6 +248,14 @@ class AzurePublisher {
           'no successful created resource in Azure according to your config, please run provision script to do the provision'
         );
       }
+
+      const customizeConfiguration: CreateAndDeployResources = {
+        subscriptionID,
+        publishName,
+        environment,
+        luisAuthoringKey,
+        luisAuthoringRegion,
+      };
 
       // append provision resource into file
       const resourcePath = path.resolve(this.getProjectFolder(resourcekey), 'appsettings.deployment.json');

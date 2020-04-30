@@ -9,10 +9,6 @@ const schema: JSONSchema7 = {
       title: 'Subscription ID',
       examples: ['<your subscription id>'],
     },
-    appPassword: {
-      type: 'string',
-      title: 'App Password',
-    },
     publishName: {
       type: 'string',
       title: 'publishName',
@@ -106,10 +102,9 @@ const schema: JSONSchema7 = {
       type: 'string',
     },
   },
-  required: ['subscriptionID', 'appPassword', 'publishName', 'provision', 'accessToken'],
+  required: ['subscriptionID', 'publishName', 'provision', 'accessToken'],
   default: {
     subscriptionID: '<your subscription id>',
-    appPassword: '<16 characters including uppercase, lowercase, number and special character>',
     publishName: '<unique name in your subscription>',
     environment: 'dev',
     location: 'westus',

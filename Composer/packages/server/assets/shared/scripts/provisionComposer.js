@@ -20,11 +20,11 @@ const appId = argv.appId; // MicrosoftAppId
 const luisAuthoringKey = argv.luisAuthoringKey;
 const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus';
 
-const createLuisResource = argv.createLuisResource == 'true' ? true : false;
-const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'true' ? true : false;
-const createCosmosDb = argv.createCosmosDb == 'true' ? true : false;
-const createStorage = argv.createStorage == 'true' ? true : false;
-const createAppInsignts = argv.createAppInsignts == 'true' ? true : false;
+const createLuisResource = argv.createLuisResource == 'false' ? false : true;
+const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'false' ? false : true;
+const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
+const createStorage = argv.createStorage == 'false' ? false : true;
+const createAppInsignts = argv.createAppInsignts == 'false' ? false : true;
 
 const templatePath = path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
 
@@ -162,6 +162,18 @@ const updateDeploymentJsonFile = async (client, resourceGroupName, deployName, a
     };
     const outputObj = unpackObject(outputResult);
 
+    if (!createAppInsignts) {
+      delete outputObj.applicationInsights;
+    }
+    if (!createCosmosDb) {
+      delete outputObj.cosmosDb;
+    }
+    if (!createLuisAuthoringResource && !createLuisResource) {
+      delete outputObj.luis;
+    }
+    if (!createStorage) {
+      delete outputObj.blobStorage;
+    }
     const result = {};
     Object.assign(result, outputObj, applicationResult);
     return result;
@@ -181,11 +193,11 @@ const create = async (
   environment,
   appId,
   appPassword,
-  createLuisResource = false,
-  createLuisAuthoringResource = false,
-  createCosmosDb = false,
-  createStorage = false,
-  createAppInsignts = false
+  createLuisResource = true,
+  createLuisAuthoringResource = true,
+  createCosmosDb = true,
+  createStorage = true,
+  createAppInsignts = true
 ) => {
   const graphCreds = new msRestNodeAuth.DeviceTokenCredentials(
     creds.clientId,
@@ -404,7 +416,6 @@ msRestNodeAuth
         publishName: name,
         location: location,
         subscriptionID: subId,
-        appPassword: appPassword,
         luisAuthoringKey: luisAuthoringKey,
         luisAuthoringRegion: luisAuthoringRegion,
         environment: environment,
