@@ -8,7 +8,7 @@ export function resolveRef(
 ): JSONSchema7 {
   if (typeof schema?.$ref === 'string') {
     const defName = schema.$ref.replace('#/definitions/', '');
-    const defSchema = (typeof definitions[defName] === 'object' ? definitions[defName] : {}) as object;
+    const defSchema = typeof definitions[defName] === 'object' ? (definitions[defName] as JSONSchema7) : {};
 
     const resolvedSchema = {
       ...defSchema,
