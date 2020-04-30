@@ -29,7 +29,6 @@ export const link = (active: boolean, disabled: boolean) => css`
     : `&:hover {
       background-color: ${NeutralColors.gray50};
     }
-
     &:focus {
       outline: none;
       .ms-Fabric--isFocusVisible &::after {

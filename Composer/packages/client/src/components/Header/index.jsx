@@ -29,7 +29,7 @@ export const Header = props => {
   return (
     <div role="banner" css={headerContainer}>
       <img
-        style={{ marginLeft: '9px', marginTop: '6px' }}
+        style={{ marginLeft: '9px' }}
         alt={formatMessage('Composer Logo')}
         aria-label={formatMessage('Composer Logo')}
         src={composerIcon}
