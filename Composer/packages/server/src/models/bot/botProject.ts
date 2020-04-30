@@ -160,11 +160,12 @@ export class BotProject {
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
 
-    const isSDKSchemaFile = f => f.name === 'sdk.schema';
     const schemaFiles = this.files.filter(f => f.name.endsWith('.schema'));
-    const userSDKSchemaFile = schemaFiles.find(f => isSDKSchemaFile(f));
+
+    const isAppSchemaFile = f => f.name === 'sdk.schema';
+    const userSDKSchemaFile = schemaFiles.find(f => isAppSchemaFile(f));
     const customSchemas = schemaFiles
-      .filter(f => !isSDKSchemaFile(f))
+      .filter(f => !isAppSchemaFile(f))
       .map(file => {
         try {
           return JSON.parse(file.content);
