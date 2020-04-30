@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
@@ -16,6 +16,7 @@ import { SelfHostContext } from './store/SelfHostContext';
 import { FlowSchemaContext } from './store/FlowSchemaContext';
 import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './utils/mergePluginConfig';
+import { getCustomSchema } from './utils/getCustomSchema';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -86,6 +87,12 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
+  // Compute schema diff
+  const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
+    schemas?.sdk?.content,
+    schemas?.default,
+  ]);
+
   const nodeContext: NodeRendererContextValue = {
     focusedId,
     focusedEvent,
@@ -98,8 +105,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLgTemplates,
     removeLuIntent,
     dialogFactory: new DialogFactory(schema),
-    // schema files other than sdk.schema
-    customSchemas: schemas?.customSchemas || [],
+    customSchemas: customSchema ? [customSchema] : [],
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);
