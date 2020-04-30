@@ -359,12 +359,13 @@ export default async (composer: any): Promise<void> => {
     startCommand: 'dotnet run --project azurewebapp',
     eject: async (project: any, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
-      console.log("eject sourcepath" + sourcePath);
       const destPath = path.join(project.dir, 'runtime');
-      console.log("eject destpath" + destPath);
+      const schemaSrcPath = path.join(sourcePath, 'Schemas');
+      const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
+        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         return destPath;
       } else {
         throw new Error(`Runtime already exists at ${destPath}`);

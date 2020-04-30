@@ -5,20 +5,21 @@ import path from 'path';
 
 import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
 import { v4 as uuid, v5 as hash } from 'uuid';
-import { copy, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
-import { MemoryCache } from 'adal-node';
+import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 
 import schema from './schema';
-const _cache = new MemoryCache();
+
+// This option controls whether the history is serialized to a file between sessions with Composer
+// set to TRUE for history to be saved to disk
+// set to FALSE for history to be cached in memory only
+const PERSIST_HISTORY = false;
+
 interface CreateAndDeployResources {
   publishName: string;
-  location: string;
   environment: string;
   subscriptionID: string;
   luisAuthoringKey?: string;
   luisAuthoringRegion?: string;
-  appPassword: string;
 }
 
 interface PublishConfig {
@@ -31,10 +32,17 @@ interface PublishConfig {
 class AzurePublisher {
   private publishingBots: { [key: string]: any };
   private historyFilePath: string;
+  private histories: any;
   private azDeployer: BotProjectDeploy;
+  private logMessages: any[];
   constructor() {
+    this.histories = {};
     this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
+    if (PERSIST_HISTORY) {
+      this.loadHistoryFromFile();
+    }
     this.publishingBots = {};
+    this.logMessages = [];
   }
   private getProjectFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
   private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'ComposerDialogs');
@@ -72,29 +80,38 @@ class AzurePublisher {
     await copy(srcTemplate, projFolder);
   };
 
-  private getHistory = async (botId: string, profileName: string) => {
+  private async cleanup(resourcekey: string) {
+    const projFolder = this.getProjectFolder(resourcekey);
+    await emptyDir(projFolder);
+    await rmdir(projFolder);
+  }
+
+  private async loadHistoryFromFile() {
     if (await pathExists(this.historyFilePath)) {
-      const histories = await readJson(this.historyFilePath);
-      if (histories && histories[botId] && histories[botId][profileName]) {
-        return histories[botId][profileName];
-      }
+      this.histories = await readJson(this.historyFilePath);
+    }
+  }
+
+  private getHistory = async (botId: string, profileName: string) => {
+    if (this.histories && this.histories[botId] && this.histories[botId][profileName]) {
+      return this.histories[botId][profileName];
     }
     return [];
   };
+
   private updateHistory = async (botId: string, profileName: string, newHistory: any) => {
-    let histories = {};
-    if (await pathExists(this.historyFilePath)) {
-      histories = (await readJson(this.historyFilePath)) || {};
+    if (!this.histories[botId]) {
+      this.histories[botId] = {};
     }
-    if (!histories[botId]) {
-      histories[botId] = {};
+    if (!this.histories[botId][profileName]) {
+      this.histories[botId][profileName] = [];
     }
-    if (!histories[botId][profileName]) {
-      histories[botId][profileName] = [];
+    this.histories[botId][profileName].unshift(newHistory);
+    if (PERSIST_HISTORY) {
+      await writeJson(this.historyFilePath, this.histories);
     }
-    histories[botId][profileName].unshift(newHistory);
-    await writeJson(this.historyFilePath, histories);
   };
+
   private addLoadingStatus = (botId: string, profileName: string, newStatus) => {
     // save in publishingBots
     if (!this.publishingBots[botId]) {
@@ -131,16 +148,10 @@ class AzurePublisher {
     botId: string,
     profileName: string,
     jobId: string,
+    resourcekey: string,
     customizeConfiguration: CreateAndDeployResources
   ) => {
-    const {
-      publishName,
-      location,
-      environment,
-      appPassword,
-      luisAuthoringKey,
-      luisAuthoringRegion,
-    } = customizeConfiguration;
+    const { publishName, environment, luisAuthoringKey, luisAuthoringRegion } = customizeConfiguration;
     try {
       // Perform the deploy
       await this.azDeployer.deploy(publishName, environment, luisAuthoringKey, luisAuthoringRegion);
@@ -151,8 +162,10 @@ class AzurePublisher {
       if (status) {
         status.status = 200;
         status.result.message = 'Success';
+        status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
+        await this.cleanup(resourcekey);
       }
     } catch (error) {
       console.log(error);
@@ -161,8 +174,10 @@ class AzurePublisher {
       if (status) {
         status.status = 500;
         status.result.message = error ? error.message : 'publish error';
+        status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
+        await this.cleanup(resourcekey);
       }
     }
   };
@@ -180,22 +195,12 @@ class AzurePublisher {
       publishName,
       environment,
       location,
-      appPassword,
       luisAuthoringKey,
       luisAuthoringRegion,
       provision,
       accessToken,
     } = config;
 
-    const customizeConfiguration: CreateAndDeployResources = {
-      subscriptionID,
-      publishName,
-      environment,
-      location,
-      appPassword,
-      luisAuthoringKey,
-      luisAuthoringRegion,
-    };
     // point to the declarative assets (possibly in remote storage)
     const botFiles = project.files;
 
@@ -207,22 +212,50 @@ class AzurePublisher {
 
     // resource key to map to one provision resource
     const resourcekey = hash(
-      [subscriptionID, publishName, location, environment, appPassword, luisAuthoringKey, luisAuthoringRegion],
+      [
+        project.name,
+        subscriptionID,
+        publishName,
+        location,
+        environment,
+        provision?.MicrosoftAppPassword,
+        luisAuthoringKey,
+        luisAuthoringRegion,
+      ],
       subscriptionID
     );
 
-    await this.init(botFiles, settings, templatePath, resourcekey);
+    // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
+    let runtimeCodePath = templatePath;
+    if (
+      project.settings &&
+      project.settings.runtime &&
+      project.settings.runtime.customRuntime === true &&
+      project.settings.runtime.path
+    ) {
+      runtimeCodePath = project.settings.runtime.path;
+    }
+
+    await this.init(botFiles, settings, runtimeCodePath, resourcekey);
 
     try {
       // test creds, if not valid, return 500
       if (!accessToken) {
-        throw new Error('please run Login script to login azure cloud');
+        throw new Error('Required field `accessToken` is missing from publishing profile.');
       }
       if (!provision) {
         throw new Error(
           'no successful created resource in Azure according to your config, please run provision script to do the provision'
         );
       }
+
+      const customizeConfiguration: CreateAndDeployResources = {
+        subscriptionID,
+        publishName,
+        environment,
+        luisAuthoringKey,
+        luisAuthoringRegion,
+      };
 
       // append provision resource into file
       const resourcePath = path.resolve(this.getProjectFolder(resourcekey), 'appsettings.deployment.json');
@@ -239,40 +272,44 @@ class AzurePublisher {
         subId: subscriptionID,
         logger: (msg: any) => {
           console.log(msg);
+          this.logMessages.push(JSON.stringify(msg, null, 2));
         },
         accessToken: accessToken,
         projPath: this.getProjectFolder(resourcekey),
       });
 
+      this.logMessages = ['Publish starting...'];
       const response = {
         status: 202,
         result: {
           id: jobId,
           time: new Date(),
           message: 'Accepted for publishing.',
-          log: 'Publish starting...',
+          log: this.logMessages.join('\n'),
           comment: metadata.comment,
         },
       };
       this.addLoadingStatus(botId, name, response);
 
-      this.createAndDeploy(botId, name, jobId, customizeConfiguration);
+      this.createAndDeploy(botId, name, jobId, resourcekey, customizeConfiguration);
 
       return response;
     } catch (err) {
       console.log(err);
-      const res = {
+      this.logMessages.push(err.message);
+      const response = {
         status: 500,
         result: {
           id: jobId,
           time: new Date(),
           message: 'Publish Fail',
-          log: err.message,
+          log: this.logMessages.join('\n'),
           comment: metadata.comment,
         },
       };
-      this.updateHistory(botId, name, { status: res.status, ...res.result });
-      return res;
+      this.updateHistory(botId, name, { status: response.status, ...response.result });
+      this.cleanup(resourcekey);
+      return response;
     }
   };
 
@@ -307,6 +344,5 @@ class AzurePublisher {
 const azurePublish = new AzurePublisher();
 
 export default async (composer: any): Promise<void> => {
-  // pass in the custom storage class that will override the default
   await composer.addPublishMethod(azurePublish, schema);
 };

@@ -19,7 +19,14 @@ const appPassword = argv.appPassword;
 const appId = argv.appId; // MicrosoftAppId
 const luisAuthoringKey = argv.luisAuthoringKey;
 const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus';
-const templatePath = path.join(__dirname, '../DeploymentTemplates', 'template-with-preexisting-rg.json');
+
+const createLuisResource = argv.createLuisResource == 'false' ? false : true;
+const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'false' ? false : true;
+const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
+const createStorage = argv.createStorage == 'false' ? false : true;
+const createAppInsignts = argv.createAppInsignts == 'false' ? false : true;
+
+const templatePath = path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
 
 const BotProjectDeployLoggerType = {
   // Logger Type for Provision
@@ -27,13 +34,13 @@ const BotProjectDeployLoggerType = {
   PROVISION_ERROR: 'PROVISION_ERROR',
   PROVISION_WARNING: 'PROVISION_WARNING',
   PROVISION_SUCCESS: 'PROVISION_SUCCESS',
-
+  PROVISION_ERROR_DETAILS: 'PROVISION_ERROR_DETAILS',
   // Logger Type for Deploy
   DEPLOY_INFO: 'DEPLOY_INFO',
   DEPLOY_ERROR: 'DEPLOY_ERROR',
   DEPLOY_WARNING: 'DEPLOY_WARNING',
   DEPLOY_SUCCESS: 'DEPLOY_SUCCESS',
-}
+};
 const createApp = async (graphClient, displayName, appPassword) => {
   const createRes = await graphClient.applications.create({
     displayName: displayName,
@@ -48,13 +55,9 @@ const createApp = async (graphClient, displayName, appPassword) => {
     replyUrls: ['https://token.botframework.com/.auth/web/redirect'],
   });
   return createRes;
-}
+};
 
-const createResourceGroup = async (
-  client,
-  location,
-  resourceGroupName
-) => {
+const createResourceGroup = async (client, location, resourceGroupName) => {
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
     message: `> Creating resource group ...`,
@@ -64,19 +67,23 @@ const createResourceGroup = async (
   };
 
   return await client.resourceGroups.createOrUpdate(resourceGroupName, param);
-}
-const pack = (scope) => {
+};
+const pack = scope => {
   return {
     value: scope,
   };
-}
+};
 
 const getDeploymentTemplateParam = (
   appId,
   appPwd,
   location,
   name,
-  shouldCreateAuthoringResource
+  shouldCreateAuthoringResource,
+  shouldCreateLuisResource,
+  useAppInsights,
+  useCosmosDb,
+  useStorage
 ) => {
   return {
     appId: pack(appId),
@@ -84,18 +91,17 @@ const getDeploymentTemplateParam = (
     appServicePlanLocation: pack(location),
     botId: pack(name),
     shouldCreateAuthoringResource: pack(shouldCreateAuthoringResource),
+    shouldCreateLuisResource: pack(shouldCreateLuisResource),
+    useAppInsights: pack(useAppInsights),
+    useCosmosDb: pack(useCosmosDb),
+    useStorage: pack(useStorage),
   };
-}
+};
 
 /**
  * Validate the deployment using the Azure API
  */
-const validateDeployment = async (
-  client,
-  resourceGroupName,
-  deployName,
-  templateParam
-) => {
+const validateDeployment = async (client, resourceGroupName, deployName, templateParam) => {
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
     message: '> Validating Azure deployment ...',
@@ -110,17 +116,12 @@ const validateDeployment = async (
     },
   };
   return await client.deployments.validate(resourceGroupName, deployName, deployParam);
-}
+};
 
 /**
  * Using an ARM template, provision a bunch of resources
  */
-const createDeployment = async (
-  client,
-  resourceGroupName,
-  deployName,
-  templateParam
-) => {
+const createDeployment = async (client, resourceGroupName, deployName, templateParam) => {
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
     message: `> Deploying Azure services (this could take a while)...`,
@@ -135,7 +136,7 @@ const createDeployment = async (
   };
 
   return await client.deployments.createOrUpdate(resourceGroupName, deployName, deployParam);
-}
+};
 
 const unpackObject = output => {
   const unpacked = {};
@@ -146,18 +147,12 @@ const unpackObject = output => {
     }
   }
   return unpacked;
-}
+};
 
 /**
  * Write updated settings back to the settings file
  */
-const updateDeploymentJsonFile = async (
-  client,
-  resourceGroupName,
-  deployName,
-  appId,
-  appPwd
-) => {
+const updateDeploymentJsonFile = async (client, resourceGroupName, deployName, appId, appPwd) => {
   const outputs = await client.deployments.get(resourceGroupName, deployName);
   if (outputs && outputs.properties && outputs.properties.outputs) {
     const outputResult = outputs.properties.outputs;
@@ -167,13 +162,25 @@ const updateDeploymentJsonFile = async (
     };
     const outputObj = unpackObject(outputResult);
 
+    if (!createAppInsignts) {
+      delete outputObj.applicationInsights;
+    }
+    if (!createCosmosDb) {
+      delete outputObj.cosmosDb;
+    }
+    if (!createLuisAuthoringResource && !createLuisResource) {
+      delete outputObj.luis;
+    }
+    if (!createStorage) {
+      delete outputObj.blobStorage;
+    }
     const result = {};
     Object.assign(result, outputObj, applicationResult);
     return result;
   } else {
     return null;
   }
-}
+};
 
 /**
  * Provision a set of Azure resources for use with a bot
@@ -186,7 +193,11 @@ const create = async (
   environment,
   appId,
   appPassword,
-  luisAuthoringKey
+  createLuisResource = true,
+  createLuisAuthoringResource = true,
+  createCosmosDb = true,
+  createStorage = true,
+  createAppInsignts = true
 ) => {
   const graphCreds = new msRestNodeAuth.DeviceTokenCredentials(
     creds.clientId,
@@ -231,11 +242,6 @@ const create = async (
     message: `> Create App Id Success! ID: ${appId}`,
   });
 
-  let shouldCreateAuthoringResource = true;
-  if (luisAuthoringKey) {
-    shouldCreateAuthoringResource = false;
-  }
-
   const resourceGroupName = `${name}-${environment}`;
 
   // timestamp will be used as deployment name
@@ -255,7 +261,11 @@ const create = async (
     appPassword,
     location,
     name,
-    shouldCreateAuthoringResource
+    createLuisAuthoringResource,
+    createLuisResource,
+    createAppInsignts,
+    createCosmosDb,
+    createStorage
   );
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -263,12 +273,7 @@ const create = async (
   });
 
   // Validate the deployment using the Azure API
-  const validation = await validateDeployment(
-    client,
-    resourceGroupName,
-    timeStamp,
-    deploymentTemplateParam
-  );
+  const validation = await validateDeployment(client, resourceGroupName, timeStamp, deploymentTemplateParam);
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
     message: validation,
@@ -288,18 +293,18 @@ const create = async (
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
       message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
     });
-
-    throw new Error(`! Error: ${validation.error.message}`);
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
+      message: validation.error.details,
+    });
+    throw new Error(
+      'Maybe you have the same resource group in current subscription. please make sure your name is unique in subscription and remove your resource group and try again.'
+    );
   }
 
   // Create the entire stack of resources inside the new resource group
-  // this is controlled by an ARM template identified in this.templatePath
-  const deployment = await createDeployment(
-    client,
-    resourceGroupName,
-    timeStamp,
-    deploymentTemplateParam
-  );
+  // this is controlled by an ARM template identified in templatePath
+  const deployment = await createDeployment(client, resourceGroupName, timeStamp, deploymentTemplateParam);
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
     message: deployment,
@@ -335,10 +340,17 @@ const create = async (
   if (!updateResult) {
     const operations = await client.deploymentOperations.list(resourceGroupName, timeStamp);
     if (operations) {
-      const failedOperations = operations.filter(value => value && value.properties && value.properties.statusMessage.error !== null);
+      const failedOperations = operations.filter(
+        value => value && value.properties && value.properties.statusMessage.error !== null
+      );
       if (failedOperations) {
         failedOperations.forEach(operation => {
-          switch (operation && operation.properties && operation.properties.statusMessage.error.code && operation.properties.targetResource) {
+          switch (
+            operation &&
+            operation.properties &&
+            operation.properties.statusMessage.error.code &&
+            operation.properties.targetResource
+          ) {
             case 'MissingRegistrationForLocation':
               logger({
                 status: BotProjectDeployLoggerType.PROVISION_ERROR,
@@ -374,8 +386,7 @@ const create = async (
     message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
   });
   return updateResult;
-}
-
+};
 
 msRestNodeAuth
   .interactiveLogin()
@@ -388,23 +399,28 @@ msRestNodeAuth
       environment,
       appId,
       appPassword,
-      luisAuthoringKey);
+      createLuisResource,
+      createLuisAuthoringResource,
+      createCosmosDb,
+      createStorage,
+      createAppInsignts
+    );
 
     if (createResult) {
       console.log(
         `Your Azure hosting environment has been created! Copy paste the following configuration into a new profile in Composer's Publishing tab.`
       );
 
+      const token = await creds.getToken();
       const profile = {
         publishName: name,
         location: location,
         subscriptionID: subId,
-        appPassword: appPassword,
         luisAuthoringKey: luisAuthoringKey,
         luisAuthoringRegion: luisAuthoringRegion,
         environment: environment,
         provision: createResult,
-        accessToken: await creds.getToken().accessToken,
+        accessToken: token.accessToken,
       };
 
       console.log(JSON.stringify(profile, null, 2));
