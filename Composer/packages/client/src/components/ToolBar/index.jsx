@@ -39,6 +39,7 @@ export function ToolBar(props) {
     openNewTriggerModal,
     onCreateDialogComplete,
     onboardingAddCoachMarkRef,
+    showSkillManifestModal,
     ...rest
   } = props;
   let left = [];
@@ -98,6 +99,11 @@ export function ToolBar(props) {
                   key: 'zipexport',
                   text: formatMessage('Export assets to .zip'),
                   onClick: () => actions.exportToZip({ projectId }),
+                },
+                {
+                  key: 'exportAsSkill',
+                  text: formatMessage('Export as skill'),
+                  onClick: showSkillManifestModal,
                 },
               ],
             }}
