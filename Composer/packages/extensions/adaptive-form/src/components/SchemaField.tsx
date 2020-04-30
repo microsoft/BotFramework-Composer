@@ -37,7 +37,7 @@ const SchemaField: React.FC<FieldProps> = props => {
 
   const schema = resolveRef(baseSchema, definitions);
   const uiOptions = {
-    ...getUIOptions(schema, pluginConfig.formSchema, pluginConfig.roleSchema[schema.$role || '']),
+    ...getUIOptions(schema, pluginConfig.formSchema, pluginConfig.roleSchema),
     ...baseUIOptions,
   };
 
