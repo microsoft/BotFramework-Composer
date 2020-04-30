@@ -80,7 +80,6 @@ async function getProjectById(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     if (currentProject !== undefined && (await currentProject.exists())) {
-      await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
         id: projectId,
