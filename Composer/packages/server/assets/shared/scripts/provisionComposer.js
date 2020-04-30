@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+const chalk = require('chalk');
 const fs = require('fs-extra');
 const msRestNodeAuth = require('@azure/ms-rest-nodeauth');
 const argv = require('minimist')(process.argv.slice(2));
@@ -8,18 +9,79 @@ const { promisify } = require('util');
 const { GraphRbacManagementClient } = require('@azure/graph');
 const { ResourceManagementClient } = require('@azure/arm-resources');
 const readFile = promisify(fs.readFile);
+const ora = require('ora');
 
-const logger = msg => console.log(msg);
+const logger = msg => {
+  if (msg.status === BotProjectDeployLoggerType.PROVISION_ERROR) {
+    console.log(chalk.red(msg.message));
+  } else {
+    console.log(chalk.green(msg.message));
+  }
+};
 const tenantId = '72f988bf-86f1-41af-91ab-2d7cd011db47';
+
+const usage = () => {
+  const options = [
+    ['subscriptionId', 'Azure Subscription Id'],
+    ['name', 'Project Name'],
+    ['appPassword', '16 character password'],
+    ['environment', 'Environment name (Defaults to dev)'],
+    ['location', 'Azure Region (Defaults to westus)'],
+    ['appId', 'Microsoft App ID (Will create if absent)'],
+    ['luisAuthoringKey', 'LUIS Authoring Key to use when publishing to LUIS'],
+    ['luisAuthoringRegion', 'Azure Region used with LUIS (defaults to westus)'],
+    ['createLuisResource', 'Create a LUIS resource? Default true'],
+    ['createLuisAuthoringResource', 'Create a LUIS authoring resource? Default true'],
+    ['createCosmosDb', 'Create a CosmosDB? Default true'],
+    ['createStorage', 'Create a storage account? Default true'],
+    ['createAppInsights', 'Create an AppInsights resource? Default true'],
+  ];
+
+  const instructions = [
+    ``,
+    chalk.bold('Provision Azure resources for use with Bot Framework Composer bots'),
+    `* This script will create a new resource group and the necessary Azure resources needed to operate a Bot Framework bot in the cloud.`,
+    `* Use this to create a publishing profile used in Composer's "Publish" toolbar.`,
+    ``,
+    chalk.bold(`Basic Usage:`),
+    chalk.greenBright(`node provisionComposer --subscriptionId=`) +
+      chalk.yellow('<Azure Subscription Id>') +
+      chalk.greenBright(' --name=') +
+      chalk.yellow('<Name for your environment>') +
+      chalk.greenBright(' --appPassword=') +
+      chalk.yellow('<16 character password>'),
+    ``,
+    chalk.bold(`All options:`),
+    ...options.map(option => {
+      return chalk.greenBright('--' + option[0]) + '\t' + chalk.yellow(option[1]);
+    }),
+  ];
+
+  console.log(instructions.join('\n'));
+};
+
+// check for required parameters
+if (Object.keys(argv).length === 0) {
+  return usage();
+}
+
+if (!argv.name || !argv.subscriptionId || !argv.appPassword) {
+  return usage();
+}
+
+// Get required fields from the arguments
 const subId = argv.subscriptionId;
-const name = argv.name;
+const name = argv.name.toString();
+const appPassword = argv.appPassword;
+
+// Get optional fields from the arguments
 const environment = argv.environment || 'dev';
 const location = argv.location || 'westus';
-const appPassword = argv.appPassword;
-const appId = argv.appId; // MicrosoftAppId
+const appId = argv.appId; // MicrosoftAppId - generated if left blank
 const luisAuthoringKey = argv.luisAuthoringKey;
 const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus';
 
+// Get option flags
 const createLuisResource = argv.createLuisResource == 'false' ? false : true;
 const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'false' ? false : true;
 const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
@@ -35,28 +97,44 @@ const BotProjectDeployLoggerType = {
   PROVISION_WARNING: 'PROVISION_WARNING',
   PROVISION_SUCCESS: 'PROVISION_SUCCESS',
   PROVISION_ERROR_DETAILS: 'PROVISION_ERROR_DETAILS',
-  // Logger Type for Deploy
-  DEPLOY_INFO: 'DEPLOY_INFO',
-  DEPLOY_ERROR: 'DEPLOY_ERROR',
-  DEPLOY_WARNING: 'DEPLOY_WARNING',
-  DEPLOY_SUCCESS: 'DEPLOY_SUCCESS',
-};
-const createApp = async (graphClient, displayName, appPassword) => {
-  const createRes = await graphClient.applications.create({
-    displayName: displayName,
-    passwordCredentials: [
-      {
-        value: appPassword,
-        startDate: new Date(),
-        endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 2)),
-      },
-    ],
-    availableToOtherTenants: true,
-    replyUrls: ['https://token.botframework.com/.auth/web/redirect'],
-  });
-  return createRes;
 };
 
+/**
+ * Create a Bot Framework registration
+ * @param {} graphClient
+ * @param {*} displayName
+ * @param {*} appPassword
+ */
+const createApp = async (graphClient, displayName, appPassword) => {
+  try {
+    const createRes = await graphClient.applications.create({
+      displayName: displayName,
+      passwordCredentials: [
+        {
+          value: appPassword,
+          startDate: new Date(),
+          endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 2)),
+        },
+      ],
+      availableToOtherTenants: true,
+      replyUrls: ['https://token.botframework.com/.auth/web/redirect'],
+    });
+    return createRes;
+  } catch (err) {
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_ERROR,
+      message: err.body.message,
+    });
+    return false;
+  }
+};
+
+/**
+ * Create an Azure resources group
+ * @param {} client
+ * @param {*} location
+ * @param {*} resourceGroupName
+ */
 const createResourceGroup = async (client, location, resourceGroupName) => {
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
@@ -68,10 +146,26 @@ const createResourceGroup = async (client, location, resourceGroupName) => {
 
   return await client.resourceGroups.createOrUpdate(resourceGroupName, param);
 };
+
+/**
+ * Format parameters
+ * @param {} scope
+ */
 const pack = scope => {
   return {
     value: scope,
   };
+};
+
+const unpackObject = output => {
+  const unpacked = {};
+  for (const key in output) {
+    const objValue = output[key];
+    if (objValue.value) {
+      unpacked[key] = objValue.value;
+    }
+  }
+  return unpacked;
 };
 
 const getDeploymentTemplateParam = (
@@ -122,10 +216,6 @@ const validateDeployment = async (client, resourceGroupName, deployName, templat
  * Using an ARM template, provision a bunch of resources
  */
 const createDeployment = async (client, resourceGroupName, deployName, templateParam) => {
-  logger({
-    status: BotProjectDeployLoggerType.PROVISION_INFO,
-    message: `> Deploying Azure services (this could take a while)...`,
-  });
   const templateFile = await readFile(templatePath, { encoding: 'utf-8' });
   const deployParam = {
     properties: {
@@ -138,19 +228,8 @@ const createDeployment = async (client, resourceGroupName, deployName, templateP
   return await client.deployments.createOrUpdate(resourceGroupName, deployName, deployParam);
 };
 
-const unpackObject = output => {
-  const unpacked = {};
-  for (const key in output) {
-    const objValue = output[key];
-    if (objValue.value) {
-      unpacked[key] = objValue.value;
-    }
-  }
-  return unpacked;
-};
-
 /**
- * Write updated settings back to the settings file
+ * Format the results into the expected shape
  */
 const updateDeploymentJsonFile = async (client, resourceGroupName, deployName, appId, appPwd) => {
   const outputs = await client.deployments.get(resourceGroupName, deployName);
@@ -180,6 +259,13 @@ const updateDeploymentJsonFile = async (client, resourceGroupName, deployName, a
   } else {
     return null;
   }
+};
+
+const provisionFailed = msg => {
+  logger({
+    status: BotProjectDeployLoggerType.PROVISION_ERROR,
+    message: chalk.bold('** Provision failed **'),
+  });
 };
 
 /**
@@ -213,14 +299,6 @@ const create = async (
 
   // If the appId is not specified, create one
   if (!appId) {
-    // this requires an app password. if one not specified, fail.
-    if (!appPassword) {
-      logger({
-        status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: `App password is required`,
-      });
-      throw new Error(`App password is required`);
-    }
     logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
       message: '> Creating App Registration ...',
@@ -228,10 +306,9 @@ const create = async (
 
     // create the app registration
     const appCreated = await createApp(graphClient, name, appPassword);
-    logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: appCreated,
-    });
+    if (appCreated === false) {
+      return provisionFailed();
+    }
 
     // use the newly created app
     appId = appCreated.appId;
@@ -249,11 +326,15 @@ const create = async (
   const client = new ResourceManagementClient(creds, subId);
 
   // Create a resource group to contain the new resources
-  const rpres = await createResourceGroup(client, location, resourceGroupName);
-  logger({
-    status: BotProjectDeployLoggerType.PROVISION_INFO,
-    message: rpres,
-  });
+  try {
+    const rpres = await createResourceGroup(client, location, resourceGroupName);
+  } catch (err) {
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_ERROR,
+      message: err.body.message,
+    });
+    return provisionFailed();
+  }
 
   // Caste the parameters into the right format
   const deploymentTemplateParam = getDeploymentTemplateParam(
@@ -267,74 +348,67 @@ const create = async (
     createCosmosDb,
     createStorage
   );
-  logger({
-    status: BotProjectDeployLoggerType.PROVISION_INFO,
-    message: deploymentTemplateParam,
-  });
 
   // Validate the deployment using the Azure API
   const validation = await validateDeployment(client, resourceGroupName, timeStamp, deploymentTemplateParam);
-  logger({
-    status: BotProjectDeployLoggerType.PROVISION_INFO,
-    message: validation,
-  });
 
   // Handle validation errors
   if (validation.error) {
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: `! Template is not valid with provided parameters. Review the log for more information.`,
+      message: `! Error: ${validation.error.message}`,
     });
     logger({
-      status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: `! Error: ${validation.error.message}`,
+      status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
+      message: JSON.stringify(validation.error.details, null, 2),
     });
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
       message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
     });
-    logger({
-      status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
-      message: validation.error.details,
-    });
-    throw new Error(
-      'Maybe you have the same resource group in current subscription. please make sure your name is unique in subscription and remove your resource group and try again.'
-    );
+    return provisionFailed();
   }
 
   // Create the entire stack of resources inside the new resource group
   // this is controlled by an ARM template identified in templatePath
-  const deployment = await createDeployment(client, resourceGroupName, timeStamp, deploymentTemplateParam);
   logger({
     status: BotProjectDeployLoggerType.PROVISION_INFO,
-    message: deployment,
+    message: `> Deploying Azure services (this could take a while)...`,
   });
-
-  // Handle errors
-  if (deployment._response.status != 200) {
+  const spinner = ora().start();
+  try {
+    const deployment = await createDeployment(client, resourceGroupName, timeStamp, deploymentTemplateParam);
+    // Handle errors
+    if (deployment._response.status != 200) {
+      spinner.fail();
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `! Template is not valid with provided parameters. Review the log for more information.`,
+      });
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `! Error: ${validation.error}`,
+      });
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+      });
+      return provisionFailed();
+    }
+  } catch (err) {
+    spinner.fail();
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: `! Template is not valid with provided parameters. Review the log for more information.`,
+      message: err.body.message,
     });
-    logger({
-      status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: `! Error: ${validation.error}`,
-    });
-    logger({
-      status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
-    });
-
-    throw new Error(`! Error: ${validation.error}`);
+    return provisionFailed();
   }
+
+  spinner.succeed('Success!');
 
   // Validate that everything was successfully created.
   // Then, update the settings file with information about the new resources
   const updateResult = await updateDeploymentJsonFile(client, resourceGroupName, timeStamp, appId, appPassword);
-  logger({
-    status: BotProjectDeployLoggerType.PROVISION_INFO,
-    message: updateResult,
-  });
 
   // Handle errors
   if (!updateResult) {
@@ -381,13 +455,10 @@ const create = async (
       });
     }
   }
-  logger({
-    status: BotProjectDeployLoggerType.PROVISION_SUCCESS,
-    message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
-  });
   return updateResult;
 };
 
+console.log(chalk.bold('Login to Azure:'));
 msRestNodeAuth
   .interactiveLogin()
   .then(async creds => {
@@ -407,9 +478,13 @@ msRestNodeAuth
     );
 
     if (createResult) {
+      console.log('');
       console.log(
-        `Your Azure hosting environment has been created! Copy paste the following configuration into a new profile in Composer's Publishing tab.`
+        chalk.bold(
+          `Your Azure hosting environment has been created! Copy paste the following configuration into a new profile in Composer's Publishing tab.`
+        )
       );
+      console.log('');
 
       const token = await creds.getToken();
       const profile = {
@@ -423,7 +498,9 @@ msRestNodeAuth
         accessToken: token.accessToken,
       };
 
-      console.log(JSON.stringify(profile, null, 2));
+      console.log(chalk.white(JSON.stringify(profile, null, 2)));
+
+      console.log('');
     }
   })
   .catch(err => {
