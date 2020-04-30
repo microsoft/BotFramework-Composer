@@ -88,6 +88,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLgTemplates,
     removeLuIntent,
     dialogFactory: new DialogFactory(schema),
+    // schema files other than sdk.schema
+    customSchemas: [],
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);

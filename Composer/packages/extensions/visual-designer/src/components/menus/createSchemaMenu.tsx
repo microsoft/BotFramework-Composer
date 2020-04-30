@@ -161,7 +161,11 @@ const createSubMenu = (
   };
 };
 
-export const createActionMenu = (onClick: ActionMenuItemClickHandler, options: ActionMenuOptions) => {
+export const createActionMenu = (
+  onClick: ActionMenuItemClickHandler,
+  options: ActionMenuOptions,
+  customActionGroups?: DefinitionSummary[][]
+) => {
   const resultItems: IContextualMenuItem[] = [];
 
   // base SDK menu
@@ -172,10 +176,12 @@ export const createActionMenu = (onClick: ActionMenuItemClickHandler, options: A
   resultItems.push(...baseMenuItems);
 
   // Append a 'Custom Actions' item conditionally.
-  const customActionItems = createCustomActionSubMenu([], onClick);
-  const customActionTitle = formatMessage('Custom Actions');
-  if (customActionItems.length) {
-    resultItems.push(createSubMenu(customActionTitle, onClick, customActionItems));
+  if (customActionGroups) {
+    const customActionItems = createCustomActionSubMenu(customActionGroups, onClick);
+    if (customActionItems.length) {
+      const customActionTitle = formatMessage('Custom Actions');
+      resultItems.push(createSubMenu(customActionTitle, onClick, customActionItems));
+    }
   }
 
   // paste button
