@@ -14,6 +14,8 @@ const ora = require('ora');
 const logger = msg => {
   if (msg.status === BotProjectDeployLoggerType.PROVISION_ERROR) {
     console.log(chalk.red(msg.message));
+  } else if (msg.status === BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS) {
+    console.log(chalk.white(msg.message));
   } else {
     console.log(chalk.green(msg.message));
   }
@@ -358,10 +360,12 @@ const create = async (
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
       message: `! Error: ${validation.error.message}`,
     });
-    logger({
-      status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
-      message: JSON.stringify(validation.error.details, null, 2),
-    });
+    if (validation.error.details) {
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
+        message: JSON.stringify(validation.error.details, null, 2),
+      });
+    }
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
       message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
