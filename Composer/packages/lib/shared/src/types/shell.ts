@@ -19,9 +19,9 @@ export interface EditorSchema {
 }
 
 export interface BotSchemas {
+  default: OBISchema;
   sdk?: any;
   diagnostics?: any[];
-  customSchemas?: OBISchema[];
 }
 
 export interface ShellData {
