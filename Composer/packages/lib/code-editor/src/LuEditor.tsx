@@ -10,10 +10,7 @@ import { EditorDidMount, Monaco } from '@monaco-editor/react';
 import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
-
-const LU_HELP = 'https://aka.ms/lu-file-format';
-const placeholder = `> To learn more about the LU file format, read the documentation at
-> ${LU_HELP}`;
+import { defaultPlaceholder, LU_HELP } from './constants';
 
 export interface LUOption {
   projectId?: string;
@@ -85,7 +82,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     ...props.options,
   };
 
-  const { luOption, languageServer, onInit: onInitProp, ...restProps } = props;
+  const { luOption, languageServer, onInit: onInitProp, placeholder = defaultPlaceholder, ...restProps } = props;
   const luServer = languageServer || defaultLUServer;
 
   const onInit: OnInit = monaco => {
