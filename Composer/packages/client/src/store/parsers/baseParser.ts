@@ -13,9 +13,9 @@ export class BaseParser {
     this.worker.onmessage = this.handleMsg;
   }
 
-  sendMsg = <T>(payload: T) => {
+  sendMsg = <T>(type: string, payload: T) => {
     const msgId = this.globalMsgId++;
-    const msg = { id: msgId, payload };
+    const msg = { id: msgId, type, payload };
     return new Promise((resolve, reject) => {
       // save callbacks for later
       this.resolves[msgId] = resolve;

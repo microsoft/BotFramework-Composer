@@ -6,9 +6,9 @@ import { LuFile, LuIntentSection } from '@bfc/shared';
 import throttle from 'lodash/throttle';
 import mapValues from 'lodash/mapValues';
 
-import * as luUtil from '../utils/luUtil';
 import { State, BoundActionHandlers } from '../store/types';
 import { StoreContext } from '../store';
+import luParser from '../store/parsers/luParser';
 
 const createThrottledFunc = fn => throttle(fn, 0, { leading: true, trailing: true });
 
@@ -19,7 +19,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
       if (!file) throw new Error(`lu file ${id} not found`);
       if (!intentName) throw new Error(`intentName is missing or empty`);
 
-      const content = luUtil.addIntent(file.content, intent);
+      const content = await luParser.addIntent(file.content, intent);
       const projectId = state.projectId;
       return await actions.updateLuFile({ id: file.id, projectId, content });
     },
@@ -28,7 +28,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
       if (!file) throw new Error(`lu file ${id} not found`);
       if (!intentName) throw new Error(`intentName is missing or empty`);
 
-      const content = luUtil.updateIntent(file.content, intentName, intent);
+      const content = await luParser.updateIntent(file.content, intentName, intent);
       const projectId = state.projectId;
       return await actions.updateLuFile({ id: file.id, projectId, content });
     },
@@ -38,7 +38,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
       if (!file) throw new Error(`lu file ${id} not found`);
       if (!intentName) throw new Error(`intentName is missing or empty`);
 
-      const content = luUtil.removeIntent(file.content, intentName);
+      const content = await luParser.removeIntent(file.content, intentName);
       const projectId = state.projectId;
       return await actions.updateLuFile({ id: file.id, projectId, content });
     },

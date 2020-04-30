@@ -15,7 +15,7 @@ export type IndexPayload = {
 // Wrapper class
 class Indexer extends BaseParser {
   index(files: FileInfo, botName: string, schemas: any, locale: string) {
-    return this.sendMsg<IndexPayload>({ files, botName, schemas, locale });
+    return this.sendMsg<IndexPayload>('', { files, botName, schemas, locale });
   }
 }
 

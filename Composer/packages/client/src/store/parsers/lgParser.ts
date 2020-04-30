@@ -14,7 +14,7 @@ export type LgPayload = {
 // Wrapper class
 class LgParser extends BaseParser {
   parse(targetId: string, content: string, lgFiles: LgFile[]) {
-    return this.sendMsg<LgPayload>({ targetId, content, lgFiles: lgFiles });
+    return this.sendMsg<LgPayload>('', { targetId, content, lgFiles: lgFiles });
   }
 }
 
