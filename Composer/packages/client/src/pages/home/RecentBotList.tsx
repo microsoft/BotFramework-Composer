@@ -5,6 +5,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { IObjectWithKey } from 'office-ui-fabric-react/lib/MarqueeSelection';
@@ -44,13 +45,12 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       onRender: item => {
         return (
           <div css={tableCell} data-is-focusable={true}>
-            <div
-              tabIndex={-1}
-              css={content}
+            <Link
               aria-label={formatMessage(`Bot name is {botName}`, { botName: item.name })}
+              onClick={() => onItemChosen(item)}
             >
               {item.name}
-            </div>
+            </Link>
           </div>
         );
       },
