@@ -7,6 +7,12 @@ import { JSONSchema7 } from '@bfc/extension';
 
 type SchemaDefinitionSet = { [$kind: string]: JSONSchema7 };
 
+/**
+ * Merge sdk.schema and other *.schema files as one schema object.
+ * @param builtinSdkSchema schema object from 'sdk.schema'
+ * @param customSchemas schema objects under 'schemas' folder other than 'sdk.schema'
+ * @returns The merged schema object.
+ */
 export const mergeSchemas = (builtinSdkSchema?: OBISchema, customSchemas?: OBISchema[]): OBISchema => {
   if (!builtinSdkSchema) return {};
   if (!Array.isArray(customSchemas) || customSchemas.length === 0) return builtinSdkSchema;
