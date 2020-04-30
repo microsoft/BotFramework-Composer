@@ -1,0 +1,1 @@
+# Javascript bot launcher for Azure WebApp
