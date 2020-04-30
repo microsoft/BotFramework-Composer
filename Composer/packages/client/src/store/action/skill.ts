@@ -2,10 +2,39 @@
 // Licensed under the MIT License.
 
 import { ActionCreator } from '../types';
+import { ActionTypes } from '../../constants';
+import httpClient from '../../utils/httpUtil';
 
-import { ActionTypes } from './../../constants/index';
-import httpClient from './../../utils/httpUtil';
 import { setError } from './error';
+
+export const createSkillManifest: ActionCreator = ({ dispatch }, { content, id }) => {
+  dispatch({
+    type: ActionTypes.CREATE_SKILL_MANIFEST,
+    payload: {
+      content,
+      id,
+    },
+  });
+};
+
+export const removeSkillManifest: ActionCreator = ({ dispatch }, id) => {
+  dispatch({
+    type: ActionTypes.REMOVE_SKILL_MANIFEST,
+    payload: {
+      id,
+    },
+  });
+};
+
+export const updateSkillManifest: ActionCreator = ({ dispatch }, { content, id }) => {
+  dispatch({
+    type: ActionTypes.UPDATE_SKILL_MANIFEST,
+    payload: {
+      content,
+      id,
+    },
+  });
+};
 
 export const updateSkill: ActionCreator = async (store, { projectId, targetId, skillData }) => {
   const state = store.getState();
