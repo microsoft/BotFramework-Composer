@@ -51,6 +51,7 @@ const initialState: State = {
   schemas: {},
   luFiles: [],
   skills: [],
+  skillManifests: [],
   actionsSeed: [],
   designPageLocation: {
     projectId: '',
