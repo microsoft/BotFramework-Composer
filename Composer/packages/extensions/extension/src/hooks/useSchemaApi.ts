@@ -3,7 +3,7 @@
 
 import { useMemo } from 'react';
 import get from 'lodash/get';
-import { OBISchema, DefinitionSummary, SDKKinds } from '@bfc/shared';
+import { OBISchema, DefinitionSummary } from '@bfc/shared';
 
 import { JSONSchema7 } from '../types';
 
