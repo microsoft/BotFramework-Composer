@@ -18,7 +18,7 @@ import { useLuApi } from './luApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
-type EventSource = 'VisualEditor' | 'PropertyEditor';
+type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions } = useContext(StoreContext);
