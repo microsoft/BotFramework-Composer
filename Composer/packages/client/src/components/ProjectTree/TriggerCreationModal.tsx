@@ -286,3 +286,5 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     </Dialog>
   );
 };
+
+export default TriggerCreationModal;
