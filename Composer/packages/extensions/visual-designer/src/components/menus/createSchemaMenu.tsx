@@ -7,7 +7,7 @@ import {
   IContextualMenuItem,
   ContextualMenuItemType,
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
-import { ConceptLabels, DialogGroup, dialogGroups, SDKKinds } from '@bfc/shared';
+import { ConceptLabels, DialogGroup, dialogGroups, SDKKinds, DefinitionSummary } from '@bfc/shared';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
@@ -60,7 +60,7 @@ const createDivider = () => ({
 });
 
 const createCustomActionSubMenu = (
-  customizedActionGroups: any[][],
+  customizedActionGroups: DefinitionSummary[][],
   onClick: ActionMenuItemClickHandler
 ): IContextualMenuItem[] => {
   if (!Array.isArray(customizedActionGroups) || customizedActionGroups.length === 0) {
