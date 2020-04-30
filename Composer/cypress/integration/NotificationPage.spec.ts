@@ -67,7 +67,8 @@ context('Notification Page', () => {
         .should('contain.text', 'expression');
       cy.get('#root\\.condition')
         .click()
-        .type('()');
+        .type('()')
+        .wait(1000);
     });
 
     cy.get('[data-testid="notifications-info-button"]').click();
