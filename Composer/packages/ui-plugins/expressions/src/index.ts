@@ -10,6 +10,7 @@ const config: PluginConfig = {
   roleSchema: {
     [SDKRoles.expression]: {
       field: ExpressionField,
+      helpLink: 'https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language',
     },
   },
 };

@@ -2,13 +2,11 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { useCallback, useContext, useState } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { createStepMenu, DialogGroup, SDKKinds } from '@bfc/shared';
-import { IContextualMenu, ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
+import { DefinitionSummary } from '@bfc/shared';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -19,6 +17,7 @@ import { MenuTypes } from '../../constants/MenuTypes';
 import { ObiColors } from '../../constants/ElementColors';
 
 import { IconMenu } from './IconMenu';
+import { createActionMenu } from './createSchemaMenu';
 
 interface EdgeMenuProps {
   id: string;
@@ -26,85 +25,8 @@ interface EdgeMenuProps {
   addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
 
-const buildEdgeMenuItemsFromClipboardContext = (
-  context,
-  onClick,
-  filter?: (t: SDKKinds) => boolean
-): IContextualMenu[] => {
-  const { clipboardActions } = context;
-  const menuItems = createStepMenu(
-    [
-      DialogGroup.RESPONSE,
-      DialogGroup.INPUT,
-      DialogGroup.BRANCHING,
-      DialogGroup.LOOPING,
-      DialogGroup.STEP,
-      DialogGroup.MEMORY,
-      DialogGroup.CODE,
-      DialogGroup.LOG,
-    ],
-    true,
-    (e, item) => onClick(item ? item.data.$kind : null),
-    context.dialogFactory,
-    filter
-  );
-
-  const enablePaste = Array.isArray(clipboardActions) && clipboardActions.length > 0;
-  const menuItemCount = menuItems.length;
-  menuItems.unshift(
-    {
-      key: 'Paste',
-      name: 'Paste',
-      ariaLabel: 'Paste',
-      disabled: !enablePaste,
-      onRender: () => {
-        return (
-          <button
-            disabled={!enablePaste}
-            role="menuitem"
-            name="Paste"
-            aria-posinset={1}
-            aria-setsize={menuItemCount + 1}
-            css={css`
-              color: ${enablePaste ? '#0078D4' : '#BDBDBD'};
-              background: #fff;
-              width: 100%;
-              height: 36px;
-              line-height: 36px;
-              border-style: none;
-              text-align: left;
-              padding: 0 8px;
-              outline: none;
-              &:hover {
-                background: rgb(237, 235, 233);
-              }
-            `}
-            onClick={() => onClick('PASTE')}
-          >
-            <div>
-              <FontIcon
-                iconName="Paste"
-                css={css`
-                  margin-right: 4px;
-                `}
-              />
-              <span>Paste</span>
-            </div>
-          </button>
-        );
-      },
-    },
-    {
-      key: 'divider',
-      itemType: ContextualMenuItemType.Divider,
-    }
-  );
-
-  return menuItems;
-};
-
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick, ...rest }) => {
-  const nodeContext = useContext(NodeRendererContext);
+  const { clipboardActions, customSchemas } = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
@@ -124,6 +46,19 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
   const handleMenuShow = menuSelected => {
     setMenuSelected(menuSelected);
   };
+
+  const menuItems = createActionMenu(
+    item => {
+      if (!item) return;
+      onClick(item.key);
+    },
+    {
+      isSelfHosted: selfHosted,
+      enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
+    },
+    // Custom Action 'oneOf' arrays from schema file
+    customSchemas.map(x => x.oneOf).filter(oneOf => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
+  );
   return (
     <div
       ref={addRef}
@@ -157,11 +92,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
         }}
         iconSize={7}
         nodeSelected={nodeSelected}
-        menuItems={buildEdgeMenuItemsFromClipboardContext(
-          nodeContext,
-          onClick,
-          selfHosted ? x => x !== SDKKinds.LogAction : undefined
-        )}
+        menuItems={menuItems}
         label={formatMessage('Add')}
         handleMenuShow={handleMenuShow}
         {...rest}
