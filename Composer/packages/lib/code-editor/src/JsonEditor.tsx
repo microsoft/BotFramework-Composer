@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import merge from 'lodash/merge';
 import schemaDefaults from 'json-schema-defaults';
 
@@ -10,10 +10,20 @@ interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | '
   onChange: (jsonData: any) => void;
   value?: object;
   schema?: any;
+  onError?: (error: string) => void;
 }
 
 const JsonEditor: React.FC<JsonEditorProps> = props => {
-  const { options: additionalOptions, value: initialValue, onChange, onInit: onInitProp, schema, id, ...rest } = props;
+  const {
+    options: additionalOptions,
+    value: initialValue,
+    onChange,
+    onInit: onInitProp,
+    onError,
+    schema,
+    id,
+    ...rest
+  } = props;
 
   const [parseError, setParseError] = useState<string>('');
   const options = {
@@ -22,6 +32,10 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     readOnly: false,
     ...additionalOptions,
   };
+
+  useEffect(() => {
+    onError && onError(parseError);
+  }, [parseError]);
 
   const onInit: OnInit = monaco => {
     const disposable = monaco.editor.onDidCreateModel(model => {

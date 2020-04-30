@@ -10,9 +10,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
 {
     public class BotFeatureSettings
     {
-        // Use TelementryLoggerMiddleware
-        public bool UseTelementryLoggerMiddleware { get; set; }
-
         // Use TranscriptLoggerMiddleware 
         public bool UseTranscriptLoggerMiddleware { get; set; }
 
@@ -23,6 +20,6 @@ namespace Microsoft.Bot.Builder.ComposerBot.Json
         public bool UseInspectionMiddleware { get; set; }
 
         // Use CosmosDb for storage
-        public bool UseCosmosDb { get; set; }
+        public bool UseCosmosDbPersistentStorage { get; set; }
     }
 }

@@ -9,8 +9,7 @@ import { ActionType } from '../action/types';
 import { getBaseName } from '../../utils';
 
 import * as client from './http';
-import { IFileChange } from './types';
-import { ChangeType, FileExtensions } from './types';
+import { IFileChange, ChangeType, FileExtensions } from './types';
 
 const actionType2ChangeType = {
   [ActionTypes.CREATE_DIALOG]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Dialog },
@@ -22,6 +21,9 @@ const actionType2ChangeType = {
   [ActionTypes.UPDATE_LU]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Lu },
   [ActionTypes.CREATE_LU]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Lu },
   [ActionTypes.REMOVE_LU]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Lu },
+  [ActionTypes.CREATE_SKILL_MANIFEST]: { changeType: ChangeType.CREATE, fileType: FileExtensions.Manifest },
+  [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileType: FileExtensions.Manifest },
+  [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileType: FileExtensions.Manifest },
 };
 
 class FilePersistence {
@@ -136,7 +138,7 @@ class FilePersistence {
 
   private _createChange(file: any, fileExtension: FileExtensions, changeType: ChangeType): IFileChange {
     let content = file.content;
-    if (fileExtension === FileExtensions.Dialog) {
+    if (fileExtension === FileExtensions.Dialog || fileExtension === FileExtensions.Manifest) {
       content = JSON.stringify(content, null, 2) + '\n';
     }
     return { id: `${file.id}${fileExtension}`, change: content, type: changeType };
@@ -189,6 +191,18 @@ class FilePersistence {
     return fileChanges;
   }
 
+  private _getSkillManifestsChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+    const fileChanges: IFileChange[] = [];
+    let { skillManifests } = currentState;
+
+    if (changeType === ChangeType.DELETE) {
+      skillManifests = previousState.skillManifests;
+    }
+    const skillManifest = skillManifests.find(skill => skill.id === id);
+    fileChanges.push(this._createChange(skillManifest, FileExtensions.Manifest, changeType));
+    return fileChanges;
+  }
+
   private _getFileChanges(previousState: State, currentState: State, action: ActionType): IFileChange[] {
     let fileChanges: IFileChange[] = [];
     const fileChangeType = actionType2ChangeType[action.type];
@@ -209,6 +223,10 @@ class FilePersistence {
       }
       case FileExtensions.Lg: {
         fileChanges = this._getLgFileChanges(targetId, previousState, currentState, changeType);
+        break;
+      }
+      case FileExtensions.Manifest: {
+        fileChanges = this._getSkillManifestsChanges(targetId, previousState, currentState, changeType);
         break;
       }
     }
