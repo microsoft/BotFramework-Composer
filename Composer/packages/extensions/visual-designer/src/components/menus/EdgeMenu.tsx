@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { useCallback, useContext, useState } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
+import { DefinitionSummary } from '@bfc/shared';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -25,7 +26,7 @@ interface EdgeMenuProps {
 }
 
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick, ...rest }) => {
-  const { clipboardActions } = useContext(NodeRendererContext);
+  const { clipboardActions, customSchemas } = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
@@ -54,7 +55,9 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
     {
       isSelfHosted: selfHosted,
       enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
-    }
+    },
+    // Custom Action 'oneOf' arrays from schema file
+    customSchemas.map(x => x.oneOf).filter(oneOf => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
   );
   return (
     <div
