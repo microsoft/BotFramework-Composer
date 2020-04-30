@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
-import { LuEditor } from '@bfc/code-editor';
+import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
 import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/shared';
@@ -51,14 +51,14 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
 
   return (
     <LuEditor
-      height={150}
+      height={225}
       luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
       value={luIntent.Body}
       onChange={commitChanges}
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
       onChangeSettings={handleSettingsChange}
-      placeholder={placeholder}
+      placeholder={placeholder || inlineModePlaceholder}
     />
   );
 };

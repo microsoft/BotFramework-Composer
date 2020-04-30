@@ -6,11 +6,11 @@ import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { EditorDidMount, Monaco } from '@monaco-editor/react';
-import { LU_HELP, defaultPlaceholder } from '@bfc/shared';
 
 import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
+import { defaultPlaceholder, LU_HELP } from './constants';
 
 export interface LUOption {
   projectId?: string;

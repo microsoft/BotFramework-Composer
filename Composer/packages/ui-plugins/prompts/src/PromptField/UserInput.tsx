@@ -4,15 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
-import {
-  SDKKinds,
-  MicrosoftInputDialog,
-  ChoiceInput,
-  ConfirmInput,
-  LuMetaData,
-  LuType,
-  inlineModePlaceholder,
-} from '@bfc/shared';
+import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData, LuType } from '@bfc/shared';
 import { FieldLabel, recognizerType, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
 import { JSONSchema7, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -28,16 +20,26 @@ const getOptions = (enumSchema: JSONSchema7) => {
   return enumSchema.enum.map(o => o as string);
 };
 
+const expectedResponsesPlaceholder = () =>
+  formatMessage(`> add some expected user responses:
+> - Please remind me to '{itemTitle=buy milk}'
+> - remind me to '{itemTitle}'
+> - add '{itemTitle}' to my todo list
+>
+> entity definitions:
+> @ ml itemTitle
+`);
+
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
   const { onChange, getSchema, value, id, uiOptions, getError, definitions, depth, schema = {} } = props;
   const { currentDialog, designerId } = useShellApi();
   const { recognizers } = usePluginConfig();
 
-  const { const: $kind } = (schema?.properties?.['$kind'] as any) || {};
+  const { const: $kind } = (schema?.properties?.$kind as { const: string }) || {};
   const intentName = new LuMetaData(new LuType($kind).toString(), designerId).toString();
 
   const type = recognizerType(currentDialog);
-  const Editor: any = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
+  const Editor = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
 
   return (
@@ -80,7 +82,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
       {Editor && $kind !== SDKKinds.AttachmentInput && (
         <React.Fragment>
           <FieldLabel id={`${id}.intent`} label={intentLabel} />
-          <Editor {...props} placeholder={inlineModePlaceholder} onChange={() => {}} />
+          <Editor {...props} onChange={() => {}} placeholder={expectedResponsesPlaceholder()} />
         </React.Fragment>
       )}
       {getSchema('defaultLocale') && (
