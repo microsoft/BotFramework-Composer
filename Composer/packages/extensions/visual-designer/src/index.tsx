@@ -41,7 +41,16 @@ export interface VisualDesignerProps {
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
   const { shellApi, plugins, ...shellData } = useShellApi();
-  const { dialogId, focusedEvent, focusedActions, focusedTab, clipboardActions, data: inputData, hosted } = shellData;
+  const {
+    dialogId,
+    focusedEvent,
+    focusedActions,
+    focusedTab,
+    clipboardActions,
+    data: inputData,
+    hosted,
+    schemas,
+  } = shellData;
 
   const dataCache = useRef({});
 
@@ -90,7 +99,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLuIntent,
     dialogFactory: new DialogFactory(schema),
     // schema files other than sdk.schema
-    customSchemas: [],
+    customSchemas: schemas?.customSchemas || [],
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);
