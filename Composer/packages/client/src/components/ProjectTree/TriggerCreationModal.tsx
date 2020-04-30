@@ -15,7 +15,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import get from 'lodash/get';
-import { DialogInfo } from '@bfc/shared';
+import { DialogInfo, inlineModePlaceholder } from '@bfc/shared';
 import { LuEditor } from '@bfc/code-editor';
 
 import {
@@ -274,7 +274,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
                 sectionId: formData.intent || PlaceHolderSectionName,
               }}
               height={150}
-              placeholder={'placeholderContentSample'}
+              placeholder={inlineModePlaceholder}
             />
           )}
         </Stack>

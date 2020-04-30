@@ -169,7 +169,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
       onChange={_onChange}
       editorSettings={userSettings.codeEditor}
       onChangeSettings={handleSettingsChange}
-      placeholder={'placeholderHelp'}
     />
   );
 };

@@ -4,7 +4,15 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
-import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData, LuType } from '@bfc/shared';
+import {
+  SDKKinds,
+  MicrosoftInputDialog,
+  ChoiceInput,
+  ConfirmInput,
+  LuMetaData,
+  LuType,
+  inlineModePlaceholder,
+} from '@bfc/shared';
 import { FieldLabel, recognizerType, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
 import { JSONSchema7, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -72,7 +80,7 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
       {Editor && $kind !== SDKKinds.AttachmentInput && (
         <React.Fragment>
           <FieldLabel id={`${id}.intent`} label={intentLabel} />
-          <Editor {...props} onChange={() => {}} />
+          <Editor {...props} placeholder={inlineModePlaceholder} onChange={() => {}} />
         </React.Fragment>
       )}
       {getSchema('defaultLocale') && (

@@ -10,7 +10,7 @@ import { filterSectionDiagnostics } from '@bfc/indexers';
 import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
-  const { onChange, value, schema } = props;
+  const { onChange, value, schema, placeholder } = props;
   const { currentDialog, designerId, luFiles, shellApi, locale, projectId, userSettings } = useShellApi();
   const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
 
@@ -58,7 +58,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
       onChangeSettings={handleSettingsChange}
-      placeholder={'placeholderContentSample'}
+      placeholder={placeholder}
     />
   );
 };

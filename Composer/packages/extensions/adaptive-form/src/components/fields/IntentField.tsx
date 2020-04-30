@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
-import { DialogInfo, SDKKinds } from '@bfc/shared';
+import { DialogInfo, SDKKinds, inlineModePlaceholder } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { usePluginConfig } from '../../hooks';
@@ -40,7 +40,11 @@ const IntentField: React.FC<FieldProps> = props => {
   return (
     <React.Fragment>
       <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
-      {Editor ? <Editor {...props} onChange={handleChange} /> : `No Editor for ${type}`}
+      {Editor ? (
+        <Editor {...props} onChange={handleChange} placeholder={inlineModePlaceholder} />
+      ) : (
+        `No Editor for ${type}`
+      )}
     </React.Fragment>
   );
 };
