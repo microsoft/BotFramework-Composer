@@ -163,7 +163,7 @@ export class BotProject {
     const isSDKSchemaFile = f => f.name === 'sdk.schema';
     const schemaFiles = this.files.filter(f => f.name.endsWith('.schema'));
     const userSDKSchemaFile = schemaFiles.find(f => isSDKSchemaFile(f));
-    const customSchemaFiles = schemaFiles
+    const customSchemas = schemaFiles
       .filter(f => !isSDKSchemaFile(f))
       .map(file => {
         try {
@@ -189,7 +189,7 @@ export class BotProject {
       sdk: {
         content: sdkSchema,
       },
-      customSchemas: customSchemaFiles,
+      customSchemas,
       diagnostics,
     };
   };
