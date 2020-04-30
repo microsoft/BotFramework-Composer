@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UISchema, JSONSchema7, UIOptions } from '@bfc/extension';
+import { UISchema, JSONSchema7, RoleSchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
 import { getUIOptions } from '../getUIOptions';
@@ -50,6 +50,7 @@ Object {
 
   it('merges overrides and a plugin into default schema', () => {
     const schema: JSONSchema7 = {
+      $role: 'expression',
       properties: {
         $kind: {
           const: SDKKinds.AdaptiveDialog,
@@ -64,8 +65,10 @@ Object {
       },
     };
 
-    const plugin: UIOptions = {
-      helpLink: 'https://example.com/plugin',
+    const plugin: RoleSchema = {
+      expression: {
+        helpLink: 'https://example.com/plugin',
+      },
     };
 
     expect(getUIOptions(schema, uiSchema, plugin)).toMatchInlineSnapshot(`

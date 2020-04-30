@@ -57,7 +57,7 @@ const PropertyEditor: React.FC = () => {
   }, []);
 
   const $uiSchema = useMemo(() => {
-    return getUIOptions($schema, pluginConfig.formSchema);
+    return getUIOptions($schema, pluginConfig.formSchema, pluginConfig.roleSchema);
   }, [$schema, pluginConfig]);
 
   const errors = useMemo(() => {
