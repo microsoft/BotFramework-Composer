@@ -44,20 +44,23 @@ class AzurePublisher {
     this.publishingBots = {};
     this.logMessages = [];
   }
-  private getProjectFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
-  private getBotFolder = (key: string) => path.resolve(this.getProjectFolder(key), 'ComposerDialogs');
+
+  private getRuntimeFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
+  private getProjectFolder = (key: string, template: string) => path.resolve(__dirname, `../publishBots/${key}/${template}`);
+  private getBotFolder = (key: string) => path.resolve(this.getRuntimeFolder(key), 'ComposerDialogs');
   private getSettingsPath = (key: string) => path.resolve(this.getBotFolder(key), 'settings/appsettings.json');
 
   private init = async (botFiles: any, settings: any, srcTemplate: string, resourcekey: string) => {
-    const projExist = await pathExists(this.getProjectFolder(resourcekey));
+    const runtimeExist = await pathExists(this.getRuntimeFolder(resourcekey));
     const botExist = await pathExists(this.getBotFolder(resourcekey));
     const botFolder = this.getBotFolder(resourcekey);
-    const projFolder = this.getProjectFolder(resourcekey);
+    const runtimeFolder = this.getRuntimeFolder(resourcekey);
     const settingsPath = this.getSettingsPath(resourcekey);
+
     // deploy resource exist
-    await emptyDir(projFolder);
-    if (!projExist) {
-      mkdirSync(projFolder, { recursive: true });
+    await emptyDir(runtimeFolder);
+    if (!runtimeExist) {
+      mkdirSync(runtimeFolder, { recursive: true });
     }
     if (!botExist) {
       mkdirSync(botFolder, { recursive: true });
@@ -77,11 +80,11 @@ class AzurePublisher {
     }
     await writeJson(settingsPath, settings, { spaces: 4 });
     // copy bot and runtime into projFolder
-    await copy(srcTemplate, projFolder);
+    await copy(srcTemplate, runtimeFolder);
   };
 
   private async cleanup(resourcekey: string) {
-    const projFolder = this.getProjectFolder(resourcekey);
+    const projFolder = this.getRuntimeFolder(resourcekey);
     await emptyDir(projFolder);
     await rmdir(projFolder);
   }
@@ -258,7 +261,9 @@ class AzurePublisher {
       };
 
       // append provision resource into file
-      const resourcePath = path.resolve(this.getProjectFolder(resourcekey), 'appsettings.deployment.json');
+      // TODO: here is where we configure the template for the runtime, and should be parameterized when we 
+      // implement interchangeable runtimes
+      const resourcePath = path.resolve(this.getProjectFolder(resourcekey, 'azurewebapp'), 'appsettings.deployment.json');
       const appSettings = await readJson(resourcePath);
       await writeJson(
         resourcePath,
@@ -275,7 +280,7 @@ class AzurePublisher {
           this.logMessages.push(JSON.stringify(msg, null, 2));
         },
         accessToken: accessToken,
-        projPath: this.getProjectFolder(resourcekey),
+        projPath: this.getProjectFolder(resourcekey, 'azurewebapp'),
       });
 
       this.logMessages = ['Publish starting...'];
