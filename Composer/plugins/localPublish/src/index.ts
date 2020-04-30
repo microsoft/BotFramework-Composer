@@ -201,7 +201,7 @@ class LocalPublisher {
     const commandAndArgs =
       settings.runtime && settings.runtime.customRuntime === true
         ? settings.runtime.command.split(/\s+/)
-        : ['dotnet', 'run --project azurewebapp']; //TODO: ccastro should pick up the bot start command here. After, remove azurewebapp arg
+        : ['dotnet', 'run', '--project', 'azurewebapp']; //TODO: ccastro should pick up the bot start command here. After, remove azurewebapp arg
 
     return new Promise((resolve, reject) => {
       // ensure the specified runtime path exists
@@ -211,7 +211,7 @@ class LocalPublisher {
 
       // take the 0th item off the array, leaving just the args
       const startCommand = commandAndArgs.shift();
-
+      
       let process;
       try {
         process = spawn(

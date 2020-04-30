@@ -37,4 +37,14 @@
   <ItemGroup>
     <ProjectReference Include="..\core\Microsoft.BotFramework.Composer.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="Scripts\package.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Scripts\provisionComposer.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
