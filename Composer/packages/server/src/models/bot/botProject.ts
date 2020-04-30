@@ -178,6 +178,7 @@ export class BotProject {
       sdk: {
         content: sdkSchema,
       },
+      default: this.defaultSDKSchema,
       diagnostics,
     };
   };
