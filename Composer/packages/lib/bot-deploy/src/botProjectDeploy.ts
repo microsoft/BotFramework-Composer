@@ -486,12 +486,12 @@ export class BotProjectDeploy {
 
       let luisEndpointKey = '';
 
-      if (!luisAuthoringKey) {
+      if (luisSettings && !luisAuthoringKey) {
         luisAuthoringKey = luisSettings.authoringKey;
         luisEndpointKey = luisSettings.endpointKey;
       }
 
-      if (!luisAuthoringRegion) {
+      if (luisSettings && !luisAuthoringRegion) {
         luisAuthoringRegion = luisSettings.region;
       }
 
@@ -543,24 +543,8 @@ export class BotProjectDeploy {
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Retrieve publishing details ...',
     });
-    // const userName = `${name}-${env}`;
-    // // this seems unsafe!
-    // // I don't think we should be changing azure user information here
-    // const userPwd = `${name}-${env}-${new Date().getTime().toString()}`;
-
-    // const updateRes = await webSiteClient.updatePublishingUser({
-    //   publishingUserName: userName,
-    //   publishingPassword: userPwd,
-    // });
-    // this.logger({
-    //   status: BotProjectDeployLoggerType.DEPLOY_INFO,
-    //   message: updateRes,
-    // });
 
     const publishEndpoint = `https://${name}-${env}.scm.azurewebsites.net/zipdeploy`;
-
-    // const publishCreds = Buffer.from(`${userName}:${userPwd}`).toString('base64');
-
     const fileContent = await fs.readFile(zipPath);
     const options = {
       body: fileContent,
@@ -571,11 +555,23 @@ export class BotProjectDeploy {
         'Content-Length': fileContent.length,
       },
     } as rp.RequestPromiseOptions;
-    const response = await rp.post(publishEndpoint, options);
-    this.logger({
-      status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: response,
-    });
+    try {
+      const response = await rp.post(publishEndpoint, options);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: response,
+      });
+    } catch (err) {
+      const error = JSON.parse(err.error);
+      console.log(err);
+      if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+        throw new Error(
+          `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+        );
+      } else {
+        throw err;
+      }
+    }
   }
 
   /**
