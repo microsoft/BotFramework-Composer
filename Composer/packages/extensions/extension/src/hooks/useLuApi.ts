@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuIntentSection, BaseSchema, LuMetaData, LuType } from '@bfc/shared';
-
-import { useShellApi } from './useShellApi';
+import { LuIntentSection, BaseSchema, LuMetaData, LuType, ShellApi } from '@bfc/shared';
 
 /**
  * LU CRUD API
  */
-export const useLuApi = () => {
-  const { shellApi } = useShellApi();
+export const useLuApi = (shellApi: ShellApi) => {
   const { addLuIntent, removeLuIntent, getLuIntent } = shellApi;
 
   const createLuIntent = async (
