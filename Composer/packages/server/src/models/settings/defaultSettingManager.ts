@@ -19,6 +19,12 @@ export class DefaultSettingManager extends FileSettingManager {
 
   protected createDefaultSettings = (): any => {
     return {
+      feature: {
+        UseTranscriptLoggerMiddleware: false,
+        UseShowTypingMiddleware: false,
+        UseInspectionMiddleware: false,
+        UseCosmosDbPersistentStorage: false,
+      },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
       luis: {
@@ -37,6 +43,7 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       telemetry: {
         logPersonalInformation: false,
+        logActivities: true,
       },
       runtime: {
         customRuntime: false,

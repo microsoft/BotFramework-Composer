@@ -13,15 +13,16 @@ import { DialogCreationCopy } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
-
+import { StorageFolder } from '../../../store/types';
 interface OpenProjectProps extends RouteComponentProps<{}> {
+  focusedStorageFolder: StorageFolder;
   onOpen: (path: string, storage: string) => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onDismiss: () => void;
 }
 
 export const OpenProject: React.FC<OpenProjectProps> = props => {
-  const { onOpen, onDismiss, onCurrentPathUpdate } = props;
+  const { onOpen, onDismiss, onCurrentPathUpdate, focusedStorageFolder } = props;
 
   return (
     <DialogWrapper
@@ -38,6 +39,7 @@ export const OpenProject: React.FC<OpenProjectProps> = props => {
           }}
           onOpen={onOpen}
           onCurrentPathUpdate={onCurrentPathUpdate}
+          focusedStorageFolder={focusedStorageFolder}
         />
         <DialogFooter>
           <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
