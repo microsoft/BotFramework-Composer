@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AdaptiveForm, { resolveBaseSchema, getUISchema, mergePluginConfigs } from '@bfc/adaptive-form';
-import Extension, { FormErrors, JSONSchema7 } from '@bfc/extension';
+import Extension, { FormErrors } from '@bfc/extension';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
@@ -14,7 +14,6 @@ import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
 import { useShell } from '../../shell';
 import plugins from '../../plugins';
-import { mergeSchemas } from '../../utils/mergeSchemas';
 
 import { formEditor } from './styles';
 
@@ -49,8 +48,7 @@ const PropertyEditor: React.FC = () => {
 
   const $schema = useMemo(() => {
     if (schemas?.sdk?.content && localData) {
-      const mergedSchema = mergeSchemas(schemas?.sdk?.content, schemas?.customSchemas);
-      return resolveBaseSchema(mergedSchema as JSONSchema7, localData);
+      return resolveBaseSchema(schemas.sdk.content, localData);
     }
   }, [schemas?.sdk?.content, localData.$kind]);
 
