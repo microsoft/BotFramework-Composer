@@ -1,11 +1,3 @@
-!macro customInit
-    ; Attempt to uninstall older, squirrel-based app.
-    ;DetailPrint "Uninstall Squirrel-based version of application"
-    ;IfFileExists "$INSTDIR\..\..\botframework\Update.exe" 0 noSquirrel
-    ;nsExec::Exec '"$INSTDIR\..\..\botframework\Update.exe" --uninstall -s'
-    ;noSquirrel:
-!macroend
-
 !macro customInstall
     DetailPrint "Register bfcomposer URI Handler"
     DeleteRegKey HKCU "SOFTWARE\Classes\bfcomposer"
@@ -22,6 +14,4 @@
     DeleteRegKey HKCU "SOFTWARE\Classes\bfcomposer"
     ;DetailPrint "Unregister bfcomposer URI Handler"
     ;DeleteRegKey HKCU "SOFTWARE\Classes\bfcomposer"
-    DetailPrint "Unregister botemulator URI Handler"
-    DeleteRegKey HKCU "SOFTWARE\Classes\botemulator"
 !macroend
