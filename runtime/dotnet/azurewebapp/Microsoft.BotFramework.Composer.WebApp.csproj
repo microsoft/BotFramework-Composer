@@ -32,4 +32,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\core\Microsoft.BotFramework.Composer.Core.csproj" />
+  </ItemGroup>
 </Project>
