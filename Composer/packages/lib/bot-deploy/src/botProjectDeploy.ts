@@ -274,7 +274,7 @@ export class BotProjectDeploy {
 
   private async botPrepareDeploy(pathToDeploymentFile: string) {
     return new Promise((resolve, reject) => {
-      const data = `[config]\nproject = BotProject.csproj`;
+      const data = `[config]\nproject = Microsoft.BotFramework.Composer.WebApp.csproj`;
       fs.writeFile(pathToDeploymentFile, data, err => {
         if (err) {
           reject(err);
