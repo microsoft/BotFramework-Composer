@@ -57,6 +57,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
     }
   };
 
+  const instructions = useMemo(() => {
+    return targetType ? props.types.find(t => t.name === targetType)?.instructions : '';
+  }, [props.targets, targetType]);
+
   const schema = useMemo(() => {
     return targetType ? props.types.find(t => t.name === targetType)?.schema : undefined;
   }, [props.targets, targetType]);
@@ -99,6 +103,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
           defaultSelectedKey={props.current ? props.current.type : null}
           onChange={updateType}
         />
+        {instructions && <p>{formatMessage(instructions)}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
         <JsonEditor key={targetType} onChange={updateConfig} height={200} value={config} schema={schema} />
         <button type="submit" hidden disabled={isDisable()} />

@@ -15,6 +15,8 @@ import schema from './schema';
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
 
+const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
+
 interface CreateAndDeployResources {
   publishName: string;
   environment: string;
@@ -341,5 +343,5 @@ class AzurePublisher {
 const azurePublish = new AzurePublisher();
 
 export default async (composer: any): Promise<void> => {
-  await composer.addPublishMethod(azurePublish, schema);
+  await composer.addPublishMethod(azurePublish, schema, instructions);
 };
