@@ -143,7 +143,9 @@ export function deleteTrigger(
   }
   const triggers = get(dialogCopy, 'content.triggers');
   const removedTriggers = triggers.splice(index, 1);
-  callbackOnDeletedTrigger && callbackOnDeletedTrigger(removedTriggers[0]);
+  if (callbackOnDeletedTrigger && removedTriggers[0]) {
+    callbackOnDeletedTrigger(removedTriggers[0]);
+  }
   return dialogCopy.content;
 }
 
