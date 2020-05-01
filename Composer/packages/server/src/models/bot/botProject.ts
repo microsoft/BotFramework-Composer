@@ -178,7 +178,6 @@ export class BotProject {
       sdk: {
         content: sdkSchema,
       },
-      default: this.defaultSDKSchema,
       diagnostics,
     };
   };
@@ -251,7 +250,7 @@ export class BotProject {
   };
 
   public deleteFile = async (name: string) => {
-    if (Path.basename(name, '.dialog') === this.name) {
+    if (Path.resolve(name) === 'Main') {
       throw new Error(`Main dialog can't be removed`);
     }
 
@@ -334,7 +333,7 @@ export class BotProject {
       try {
         await this.fileStorage.rmDir(folderPath);
       } catch (e) {
-        // pass
+        console.log(e);
       }
     }
   };
@@ -411,18 +410,18 @@ export class BotProject {
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
-
     const absolutePath = `${this.dir}/${relativePath}`;
 
     // only write if the file has actually changed
     if (this.files[index].content !== content) {
-      this.files[index].content = content;
       await this.fileStorage.writeFile(absolutePath, content);
     }
 
     // TODO: we should get the lastModified from the writeFile operation
     // instead of calling stat again which could be expensive
     const stats = await this.fileStorage.stat(absolutePath);
+
+    this.files[index].content = content;
 
     return stats.lastModified;
   };
@@ -434,10 +433,10 @@ export class BotProject {
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
-    this.files.splice(index, 1);
 
     const absolutePath = `${this.dir}/${relativePath}`;
     await this.fileStorage.removeFile(absolutePath);
+    this.files.splice(index, 1);
   };
 
   // ensure dir exist, dir is a absolute dir path

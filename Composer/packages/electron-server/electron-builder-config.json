@@ -32,7 +32,6 @@
       {
         "target": "nsis",
         "arch": [
-          "ia32",
           "x64"
         ]
       }
@@ -41,18 +40,15 @@
     "artifactName": "BotFramework-Composer-${version}-windows-setup.${ext}"
   },
   "nsis": {
-    "include": "resources/installer.nsh",
     "perMachine": false,
     "allowElevation": true,
     "allowToChangeInstallationDirectory": true,
     "packElevateHelper": true,
     "unicode": true,
     "runAfterFinish": true,
-    "installerIcon": "resources/composerIcon.ico",
-    "uninstallerIcon": "resources/composerIcon.ico",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "Bot Framework Composer",
+    "shortcutName": "Bot Framework Composer (preview)",
     "oneClick": false
   },
   "linux": {

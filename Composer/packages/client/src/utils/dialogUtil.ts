@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogFactory, ITrigger } from '@bfc/shared';
+import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogFactory } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
@@ -128,12 +128,7 @@ export function createSelectedPath(selected: number) {
   return `triggers[${selected}]`;
 }
 
-export function deleteTrigger(
-  dialogs: DialogInfo[],
-  dialogId: string,
-  index: number,
-  callbackOnDeletedTrigger?: (trigger: ITrigger) => any
-) {
+export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
   const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === regexRecognizerKey;
@@ -142,8 +137,7 @@ export function deleteTrigger(
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
   }
   const triggers = get(dialogCopy, 'content.triggers');
-  const removedTriggers = triggers.splice(index, 1);
-  callbackOnDeletedTrigger && callbackOnDeletedTrigger(removedTriggers[0]);
+  triggers.splice(index, 1);
   return dialogCopy.content;
 }
 

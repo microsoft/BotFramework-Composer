@@ -158,6 +158,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LuEditor
+      hidePlaceholder={inlineMode}
       editorDidMount={editorDidMount}
       value={content}
       errorMessage={httpErrorMsg}

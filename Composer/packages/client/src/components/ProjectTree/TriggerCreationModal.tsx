@@ -16,7 +16,7 @@ import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import get from 'lodash/get';
 import { DialogInfo } from '@bfc/shared';
-import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
+import { LuEditor } from '@bfc/code-editor';
 
 import {
   generateNewDialog,
@@ -262,22 +262,20 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid={'RegExDropDown'}
             />
           )}
+          {showTriggerPhrase && <Label>{formatMessage('Trigger phrases')}</Label>}
           {showTriggerPhrase && (
-            <React.Fragment>
-              <Label>{formatMessage('Trigger phrases')}</Label>
-              <LuEditor
-                onChange={onTriggerPhrasesChange}
-                value={formData.triggerPhrases}
-                errorMessage={formData.errors.triggerPhrases}
-                luOption={{
-                  projectId,
-                  fileId: dialogId,
-                  sectionId: formData.intent || PlaceHolderSectionName,
-                }}
-                height={225}
-                placeholder={inlineModePlaceholder}
-              />
-            </React.Fragment>
+            <LuEditor
+              onChange={onTriggerPhrasesChange}
+              value={formData.triggerPhrases}
+              errorMessage={formData.errors.triggerPhrases}
+              hidePlaceholder={true}
+              luOption={{
+                projectId,
+                fileId: dialogId,
+                sectionId: formData.intent || PlaceHolderSectionName,
+              }}
+              height={150}
+            />
           )}
         </Stack>
       </div>

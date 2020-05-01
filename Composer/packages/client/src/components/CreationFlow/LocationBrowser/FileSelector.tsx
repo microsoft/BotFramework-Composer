@@ -7,7 +7,6 @@ import path from 'path';
 import { jsx } from '@emotion/core';
 import { useMemo, useState } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -59,23 +58,13 @@ const _renderIcon = (file: File) => {
   return <img src={url} className={detailListClass.fileIconImg} alt={`${iconName} file icon`} />;
 };
 
-const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) => {
+const _renderNameColumn = (file: File) => {
   const iconName = getFileIconName(file);
   return (
     <div data-is-focusable={true} css={tableCell}>
-      <Link
-        aria-label={
-          file.name === '..'
-            ? formatMessage('previous folder')
-            : formatMessage('{icon} name is {file}', {
-                icon: iconName,
-                file: file.name,
-              })
-        }
-        onClick={() => onFileChosen(file)}
-      >
+      <div tabIndex={-1} css={content} aria-label={`${iconName} Name is ${file.name}`}>
         {file.name}
-      </Link>
+      </div>
     </div>
   );
 };
@@ -110,7 +99,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: _renderNameColumn(onFileChosen),
+      onRender: _renderNameColumn,
       isPadded: true,
     },
     {

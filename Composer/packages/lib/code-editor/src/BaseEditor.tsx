@@ -225,6 +225,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
           messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
           isMultiline={true}
           dismissButtonAriaLabel={formatMessage('Close')}
+          overflowButtonAriaLabel={formatMessage('See more')}
         >
           {messageHelp}
           {syntaxLink}

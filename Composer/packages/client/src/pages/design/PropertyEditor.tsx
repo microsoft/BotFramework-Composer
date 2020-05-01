@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import AdaptiveForm, { resolveBaseSchema, getUIOptions, mergePluginConfigs } from '@bfc/adaptive-form';
+import AdaptiveForm, { resolveBaseSchema, getUISchema, mergePluginConfigs } from '@bfc/adaptive-form';
 import Extension, { FormErrors } from '@bfc/extension';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
@@ -57,7 +57,7 @@ const PropertyEditor: React.FC = () => {
   }, []);
 
   const $uiSchema = useMemo(() => {
-    return getUIOptions($schema, pluginConfig.formSchema, pluginConfig.roleSchema);
+    return getUISchema($schema, pluginConfig.formSchema);
   }, [$schema, pluginConfig]);
 
   const errors = useMemo(() => {

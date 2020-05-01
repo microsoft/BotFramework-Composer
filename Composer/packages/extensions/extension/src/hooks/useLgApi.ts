@@ -1,13 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LgTemplateRef, LgMetaData, BaseSchema, LgType, ShellApi } from '@bfc/shared';
+import { LgTemplateRef, LgMetaData, BaseSchema, LgType } from '@bfc/shared';
+
+import { useShellApi } from './useShellApi';
 
 /**
  * LG CRUD lib
  */
-export const useLgApi = (shellApi: ShellApi) => {
-  const { removeLgTemplates, getLgTemplates, addLgTemplate } = shellApi;
+export const useLgApi = () => {
+  const { shellApi } = useShellApi();
+  const { removeLgTemplates, getLgTemplates, updateLgTemplate } = shellApi;
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
@@ -43,7 +46,7 @@ export const useLgApi = (shellApi: ShellApi) => {
     const newLgType = new LgType(hostActionData.$kind, hostFieldName).toString();
     const newLgTemplateName = new LgMetaData(newLgType, hostActionId).toString();
     const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
-    await addLgTemplate(lgFileId, newLgTemplateName, lgText);
+    await updateLgTemplate(lgFileId, newLgTemplateName, lgText);
     return newLgTemplateRefStr;
   };
 

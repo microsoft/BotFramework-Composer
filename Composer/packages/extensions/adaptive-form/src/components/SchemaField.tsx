@@ -3,9 +3,9 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useEffect } from 'react';
-import { FieldProps, UIOptions } from '@bfc/extension';
+import { FieldProps } from '@bfc/extension';
 
-import { getUIOptions, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
+import { getUISchema, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
 import { usePluginConfig } from '../hooks';
 
 import { ErrorMessage } from './ErrorMessage';
@@ -34,10 +34,9 @@ const SchemaField: React.FC<FieldProps> = props => {
     ...rest
   } = props;
   const pluginConfig = usePluginConfig();
-
   const schema = resolveRef(baseSchema, definitions);
-  const uiOptions: UIOptions = {
-    ...getUIOptions(schema, pluginConfig.formSchema, pluginConfig.roleSchema),
+  const uiOptions = {
+    ...getUISchema(schema, pluginConfig.formSchema),
     ...baseUIOptions,
   };
 
@@ -51,9 +50,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     }
   }, []);
 
-  const error = typeof rawErrors === 'string' && (
-    <ErrorMessage error={rawErrors} label={getUiLabel(props)} helpLink={uiOptions.helpLink} />
-  );
+  const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
 
   if (!schema || name.startsWith('$')) {
     return null;

@@ -29,7 +29,7 @@ const getBaseUrl = () => {
   if (!serverPort) {
     throw new Error('getBaseUrl() called before serverPort is defined.');
   }
-  return `http://localhost:${serverPort}/`;
+  return `http://localhost:${serverPort}`;
 };
 
 function processArgsForWindows(args: string[]): string {

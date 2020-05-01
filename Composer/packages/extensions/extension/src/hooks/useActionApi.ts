@@ -8,15 +8,14 @@ import {
   deleteActions as destructActions,
   FieldProcessorAsync,
   walkAdaptiveActionList,
-  ShellApi,
 } from '@bfc/shared';
 
 import { useLgApi } from './useLgApi';
 import { useLuApi } from './useLuApi';
 
-export const useActionApi = (shellApi: ShellApi) => {
-  const { createLgTemplate, readLgTemplate, deleteLgTemplates } = useLgApi(shellApi);
-  const { createLuIntent, readLuIntent, deleteLuIntents } = useLuApi(shellApi);
+export const useActionApi = () => {
+  const { createLgTemplate, readLgTemplate, deleteLgTemplates } = useLgApi();
+  const { createLuIntent, readLuIntent, deleteLuIntents } = useLuApi();
 
   const luFieldName = '_lu';
 

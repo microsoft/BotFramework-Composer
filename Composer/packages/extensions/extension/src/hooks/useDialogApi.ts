@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ShellApi } from '@bfc/shared';
+import { useShellApi } from './useShellApi';
 
-export const useDialogApi = (shellApi: ShellApi) => {
-  const { getDialog, saveDialog, createDialog } = shellApi;
+export const useDialogApi = () => {
+  const {
+    shellApi: { getDialog, saveDialog, createDialog },
+  } = useShellApi();
 
   return {
     createDialog: () => createDialog([]),
