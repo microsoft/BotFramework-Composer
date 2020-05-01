@@ -78,9 +78,9 @@ export class ComposerPluginRegistration {
    * to communicate with the Bot Framework Emulator.
    * ```ts
    * await composer.addRuntimeTemplate({
-   *   key: 'csharp',
+   *   key: 'azurewebapp',
    *   name: 'C#',
-   *   path: __dirname + '/../../../../BotProject/Templates/CSharp',
+   *   path: __dirname + '/../../../../runtime/dotnet/azurewebapp',
    *   startCommand: 'dotnet run',
    * });
    * ```
