@@ -14,7 +14,7 @@ const defaultPublishConfig = {
   type: 'localpublish',
   configuration: JSON.stringify({}),
 };
-const DEFAULT_RUNTIME = 'CSharp';
+const DEFAULT_RUNTIME = 'dotnet';
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
