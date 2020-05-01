@@ -3,4 +3,4 @@
 
 import debug from 'debug';
 
-export default debug('composer');
+export default debug('composer:electron');
