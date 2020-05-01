@@ -4,7 +4,6 @@
 import * as path from 'path';
 import * as util from 'util';
 
-import { WebSiteManagementClient } from '@azure/arm-appservice-profile-2019-03-01-hybrid';
 import { ResourceManagementClient } from '@azure/arm-resources';
 import {
   Deployment,
@@ -17,7 +16,6 @@ import { GraphRbacManagementClient } from '@azure/graph';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
-import { TokenCredentials } from '@azure/ms-rest-js';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
@@ -33,7 +31,6 @@ export class BotProjectDeploy {
   private subId: string;
   private accessToken: string;
   private creds: any; // credential from interactive login
-  private accessCredential: any; // credential from accessToken
   private projPath: string;
   private deploymentSettingsPath: string;
   private deployFilePath: string;
@@ -52,7 +49,6 @@ export class BotProjectDeploy {
     this.subId = config.subId;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
-    this.accessCredential = new TokenCredentials(config.accessToken);
     this.creds = config.creds;
     this.projPath = config.projPath;
 
@@ -466,8 +462,6 @@ export class BotProjectDeploy {
     language?: string
   ) {
     try {
-      const webClient = new WebSiteManagementClient(this.accessCredential, this.subId);
-
       // Check for existing deployment files
       if (!fs.pathExistsSync(this.deployFilePath)) {
         await this.botPrepareDeploy(this.deployFilePath);
@@ -518,13 +512,13 @@ export class BotProjectDeploy {
         message: 'Publishing to Azure ...',
       });
 
-      await this.deployZip(webClient, this.zipPath, name, environment);
+      await this.deployZip(this.accessToken, this.zipPath, name, environment);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Publish To Azure Success!',
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
       throw error;
     }
   }
@@ -538,48 +532,37 @@ export class BotProjectDeploy {
   }
 
   // Upload the zip file to Azure
-  private async deployZip(webClient: WebSiteManagementClient, zipPath: string, name: string, env: string) {
+  private async deployZip(token: string, zipPath: string, name: string, env: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Retrieve publishing details ...',
     });
+
+    const publishEndpoint = `https://${name}-${env}.scm.azurewebsites.net/zipdeploy`;
+    const fileContent = await fs.readFile(zipPath);
+    const options = {
+      body: fileContent,
+      encoding: null,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/zip',
+        'Content-Length': fileContent.length,
+      },
+    } as rp.RequestPromiseOptions;
     try {
-      const userName = `${name}-${env}`;
-      const userPwd = `${name}-${env}-${new Date().getTime().toString()}`;
-      const updateRes = await webClient.updatePublishingUser({
-        publishingUserName: userName,
-        publishingPassword: userPwd,
-      });
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: updateRes,
-      });
-      const publishCreds = Buffer.from(`${userName}:${userPwd}`).toString('base64');
-
-      const publishEndpoint = `https://${name}-${env}.scm.azurewebsites.net/api/zipdeploy`;
-      const fileContent = await fs.readFile(zipPath);
-      const options = {
-        body: fileContent,
-        encoding: null,
-        headers: {
-          Authorization: `Basic ${publishCreds}`,
-          'Content-Type': 'application/zip',
-          'Content-Length': fileContent.length,
-        },
-      } as rp.RequestPromiseOptions;
-
       const response = await rp.post(publishEndpoint, options);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: response.toString(),
+        message: response,
       });
     } catch (err) {
-      if (err.code === 'InvalidAuthenticationToken') {
+      if (err.statusCode === 403) {
         throw new Error(
-          `Type:${err.code}, Message: ${err.body?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+          `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
         );
+      } else {
+        throw err;
       }
-      throw err;
     }
   }
 
