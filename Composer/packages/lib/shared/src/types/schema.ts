@@ -121,6 +121,12 @@ export enum SDKRoles {
   // union_*_ = 'union(*)',
 }
 
+export interface DefinitionSummary {
+  title: string;
+  description: string;
+  $ref: string;
+}
+
 export interface OBISchema extends JSONSchema6 {
   $schema?: string;
   $role?: string;
@@ -132,6 +138,7 @@ export interface OBISchema extends JSONSchema6 {
     [key: string]: any;
   };
   description?: string;
+  oneOf?: DefinitionSummary[];
   definitions?: any;
   title?: string;
   __additional_property?: boolean;

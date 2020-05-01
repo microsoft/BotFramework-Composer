@@ -159,7 +159,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'test.dialog', content: '' },
+      body: { name: 'test2.dialog', content: '' },
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -167,7 +167,7 @@ describe('dialog operation', () => {
 
   it('should remove dialog', async () => {
     const mockReq = {
-      params: { name: 'test.dialog', projectId },
+      params: { name: 'test2.dialog', projectId },
       query: {},
       body: {},
     } as Request;
