@@ -38,9 +38,8 @@ export class ComposerPluginRegistration {
     this._description = val;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public log(message: string, ...args: any[]) {
-    this._log(message, ...args);
+  public get log() {
+    return this._log;
   }
 
   /**************************************************************************************
