@@ -1,7 +1,7 @@
 [import](common.lg)
 
 # SendActivity_068558
--${help()}
+-${WelcomeUser()}
 
 # SendActivity_581197
--${help()}
+-${WelcomeUser()}
