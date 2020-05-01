@@ -78,7 +78,8 @@ export class BotProjectDeploy {
       config.templatePath ?? path.join(this.projPath, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
 
     // path to the dotnet project file
-    this.dotnetProjectPath = config.dotnetProjectPath ?? path.join(this.projPath, 'BotProject.csproj');
+    this.dotnetProjectPath =
+      config.dotnetProjectPath ?? path.join(this.projPath, 'Microsoft.BotFramework.Composer.WebApp.csproj');
 
     // path to the built, ready to deploy declarative assets
     this.remoteBotPath = config.remoteBotPath ?? path.join(this.publishFolder, 'ComposerDialogs');

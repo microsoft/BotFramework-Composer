@@ -13,6 +13,7 @@ import schema from './schema';
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
+const DEFAULT_RUNTIME = 'azurewebapp';
 
 interface CreateAndDeployResources {
   publishName: string;
@@ -47,15 +48,15 @@ class AzurePublisher {
 
   private getRuntimeFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
   private getProjectFolder = (key: string, template: string) => path.resolve(__dirname, `../publishBots/${key}/${template}`);
-  private getBotFolder = (key: string) => path.resolve(this.getRuntimeFolder(key), 'ComposerDialogs');
-  private getSettingsPath = (key: string) => path.resolve(this.getBotFolder(key), 'settings/appsettings.json');
+  private getBotFolder = (key: string, template: string) => path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
+  private getSettingsPath = (key: string, template: string) => path.resolve(this.getBotFolder(key, template), 'settings/appsettings.json');
 
   private init = async (botFiles: any, settings: any, srcTemplate: string, resourcekey: string) => {
     const runtimeExist = await pathExists(this.getRuntimeFolder(resourcekey));
-    const botExist = await pathExists(this.getBotFolder(resourcekey));
-    const botFolder = this.getBotFolder(resourcekey);
+    const botExist = await pathExists(this.getBotFolder(resourcekey, DEFAULT_RUNTIME));
+    const botFolder = this.getBotFolder(resourcekey, DEFAULT_RUNTIME);
     const runtimeFolder = this.getRuntimeFolder(resourcekey);
-    const settingsPath = this.getSettingsPath(resourcekey);
+    const settingsPath = this.getSettingsPath(resourcekey, DEFAULT_RUNTIME);
 
     // deploy resource exist
     await emptyDir(runtimeFolder);
@@ -263,7 +264,7 @@ class AzurePublisher {
       // append provision resource into file
       // TODO: here is where we configure the template for the runtime, and should be parameterized when we 
       // implement interchangeable runtimes
-      const resourcePath = path.resolve(this.getProjectFolder(resourcekey, 'azurewebapp'), 'appsettings.deployment.json');
+      const resourcePath = path.resolve(this.getProjectFolder(resourcekey, DEFAULT_RUNTIME), 'appsettings.deployment.json');
       const appSettings = await readJson(resourcePath);
       await writeJson(
         resourcePath,
