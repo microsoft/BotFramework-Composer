@@ -53,6 +53,8 @@ export const content = css`
   flex: 1;
   display: flex;
   flex-direction: column;
+
+  label: Content;
 `;
 
 export const showDesign = show => css`
