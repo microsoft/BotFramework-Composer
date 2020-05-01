@@ -151,7 +151,8 @@ class LocalPublisher {
       await this.copyDir(this.templatePath, runtimeDir);
 
       try {
-        execSync('dotnet user-secrets init', { cwd: runtimeDir });
+        // TODO ccastro: discuss with benbrown. Consider init command as template metadata. Remove azurewebapp from here.
+        execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir });
         execSync('dotnet build', { cwd: runtimeDir });
       } catch (error) {
         // delete the folder to make sure build again.
@@ -200,7 +201,7 @@ class LocalPublisher {
     const commandAndArgs =
       settings.runtime && settings.runtime.customRuntime === true
         ? settings.runtime.command.split(/\s+/)
-        : ['dotnet', 'run'];
+        : ['dotnet', 'run', '--project', 'azurewebapp']; //TODO: ccastro should pick up the bot start command here. After, remove azurewebapp arg
 
     return new Promise((resolve, reject) => {
       // ensure the specified runtime path exists
@@ -210,7 +211,6 @@ class LocalPublisher {
 
       // take the 0th item off the array, leaving just the args
       const startCommand = commandAndArgs.shift();
-
       let process;
       try {
         process = spawn(
@@ -353,11 +353,11 @@ export default async (composer: any): Promise<void> => {
 
   // register the bundled c# runtime used by the local publisher with the eject feature
   await composer.addRuntimeTemplate({
-    key: 'csharp',
+    key: 'azurewebapp',
     name: 'C#',
-    startCommand: 'dotnet run',
+    startCommand: 'dotnet run --project azurewebapp',
     eject: async (project: any, localDisk: IFileStorage) => {
-      const sourcePath = path.resolve(__dirname, '../../../../BotProject/Templates/CSharp');
+      const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
       const schemaSrcPath = path.join(sourcePath, 'Schemas');
       const schemaDstPath = path.join(project.dir, 'schemas');

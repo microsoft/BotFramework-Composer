@@ -40,7 +40,7 @@
     "start:client": "yarn workspace @bfc/client start",
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
-    "runtime": "cd ../BotProject/CSharp/ && dotnet build && dotnet run",
+    "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default",

@@ -6,7 +6,7 @@ import { JSONSchema6 } from 'json-schema';
 // All of the known SDK types. Update this list when we take a schema update.
 // To get this list copy the output of the following commands in a node repl from the project root:
 
-// const schema = JSON.parse(fs.readFileSync('./BotProject/CSharp/Schemas/sdk.schema', 'utf-8'));
+// const schema = JSON.parse(fs.readFileSync('./runtime/dotnet/azurewebapp/Schemas/sdk.schema', 'utf-8'));
 // const types = schema.oneOf.map(t => t.title);
 // let uType = 'export enum SDKKinds {\n';
 // uType += types.map(t => `  ${t.replace('Microsoft.', '')} = '${t}',`).join('\n');
