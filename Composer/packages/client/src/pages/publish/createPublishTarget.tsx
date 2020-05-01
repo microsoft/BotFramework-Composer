@@ -30,7 +30,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
   const [errorMessage, setErrorMsg] = useState('');
 
   const targetTypes = useMemo(() => {
-    return props.types.map(t => ({ key: t.name, text: t.name }));
+    return props.types.map(t => ({ key: t.name, text: t.description }));
   }, [props.targets]);
 
   const updateType = (_e, option?: IDropdownOption) => {
