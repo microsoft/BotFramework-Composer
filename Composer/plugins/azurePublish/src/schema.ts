@@ -4,10 +4,8 @@ import { JSONSchema7 } from '@bfc/plugin-loader';
 const schema: JSONSchema7 = {
   type: 'object',
   properties: {
-    subscriptionID: {
+    accessToken: {
       type: 'string',
-      title: 'Subscription ID',
-      examples: ['<your subscription id>'],
     },
     publishName: {
       type: 'string',
@@ -17,17 +15,13 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Environment',
     },
-    location: {
-      type: 'string',
-      title: 'Location',
-    },
     luisAuthoringRegion: {
       type: 'string',
-      title: 'region',
+      title: 'LUIS authoring region',
     },
     luisAuthoringKey: {
       type: 'string',
-      title: 'Authoring Key',
+      title: 'LUIS authoring Key',
     },
     provision: {
       type: 'object',
@@ -98,19 +92,37 @@ const schema: JSONSchema7 = {
       },
       required: ['MicrosoftAppId', 'MicrosoftAppPassword'],
     },
-    accessToken: {
-      type: 'string',
-    },
   },
   required: ['subscriptionID', 'publishName', 'provision', 'accessToken'],
   default: {
-    subscriptionID: '<your subscription id>',
+    accessToken: '<Access token from az account get-access-token>',
     publishName: '<unique name in your subscription>',
     environment: 'dev',
-    location: 'westus',
     luisAuthoringRegion: 'westus',
     luisAuthoringKey: '',
-    provision: {},
+    provision: {
+      applicationInsights: {
+        InstrumentationKey: '<Instrumentation Key>',
+      },
+      cosmosDb: {
+        cosmosDBEndpoint: '<endpoint url>',
+        authKey: '<auth key>',
+        databaseId: 'botstate-db',
+        collectionId: 'botstate-collection',
+        containerId: 'botstate-container',
+      },
+      blobStorage: {
+        connectionString: '<connection string>',
+        container: '<container>',
+      },
+      luis: {
+        endpointKey: '<endpoint key>',
+        authoringKey: '<authoring key>',
+        region: 'westus',
+      },
+      MicrosoftAppId: '<app id from Bot Framework registration>',
+      MicrosoftAppPassword: '<app password from Bot Framework registration>',
+    },
   },
 };
 export default schema;

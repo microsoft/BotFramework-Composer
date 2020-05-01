@@ -4,7 +4,8 @@
 import path from 'path';
 
 import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
-import { v4 as uuid, v5 as hash } from 'uuid';
+import { v4 as uuid } from 'uuid';
+import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 
 import schema from './schema';
@@ -194,7 +195,6 @@ class AzurePublisher {
       subscriptionID,
       publishName,
       environment,
-      location,
       luisAuthoringKey,
       luisAuthoringRegion,
       provision,
@@ -211,18 +211,15 @@ class AzurePublisher {
     const jobId = uuid();
 
     // resource key to map to one provision resource
-    const resourcekey = hash(
+    const resourcekey = md5(
       [
         project.name,
-        subscriptionID,
         publishName,
-        location,
         environment,
         provision?.MicrosoftAppPassword,
         luisAuthoringKey,
         luisAuthoringRegion,
-      ],
-      subscriptionID
+      ].join()
     );
 
     // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
