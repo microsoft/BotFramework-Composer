@@ -7,7 +7,7 @@ import React, { Suspense, useContext, useEffect, useMemo, useState, useRef } fro
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { globalHistory } from '@reach/router';
+import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
@@ -88,7 +88,7 @@ const getTabFromFragment = () => {
   }
 };
 
-function DesignPage(props) {
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas } = state;
@@ -102,7 +102,7 @@ function DesignPage(props) {
     clearUndoHistory,
     onboardingAddCoachMarkRef,
   } = actions;
-  const { location, match } = props;
+  const { location } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
@@ -118,15 +118,15 @@ function DesignPage(props) {
     }
     const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
     if (!currentDialog && rootDialog) {
-      const { search } = location;
+      const { search } = location || {};
       navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
       return;
     }
   }, [dialogId, dialogs, location]);
 
   useEffect(() => {
-    if (match) {
-      const { dialogId, projectId } = match;
+    if (location && props.dialogId && props.projectId) {
+      const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
@@ -400,18 +400,16 @@ function DesignPage(props) {
           onDeleteTrigger={handleDeleteTrigger}
         />
         <div role="main" css={contentWrapper}>
-          {match && (
-            <ToolBar
-              toolbarItems={toolbarItems}
-              actions={actions}
-              projectId={projectId}
-              currentDialog={currentDialog}
-              openNewTriggerModal={openNewTriggerModal}
-              onCreateDialogComplete={onCreateDialogComplete}
-              onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
-              showSkillManifestModal={() => setExportSkillModalVisible(true)}
-            />
-          )}
+          <ToolBar
+            toolbarItems={toolbarItems}
+            actions={actions}
+            projectId={projectId}
+            currentDialog={currentDialog}
+            openNewTriggerModal={openNewTriggerModal}
+            onCreateDialogComplete={onCreateDialogComplete}
+            onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+            showSkillManifestModal={() => setExportSkillModalVisible(true)}
+          />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
               <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
@@ -468,6 +466,6 @@ function DesignPage(props) {
       </Suspense>
     </React.Fragment>
   );
-}
+};
 
 export default DesignPage;
