@@ -211,7 +211,6 @@ class LocalPublisher {
 
       // take the 0th item off the array, leaving just the args
       const startCommand = commandAndArgs.shift();
-      
       let process;
       try {
         process = spawn(
