@@ -133,6 +133,7 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
+    this.settings = config;
   };
 
   // update skill in settings
