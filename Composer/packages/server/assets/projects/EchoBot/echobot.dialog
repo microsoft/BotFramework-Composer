@@ -50,7 +50,7 @@
                     "id": "859266",
                     "name": "Send a response"
                   },
-                  "activity": "${help()}"
+                  "activity": "${SendActivity_Welcome()}"
                 }
               ]
             }
