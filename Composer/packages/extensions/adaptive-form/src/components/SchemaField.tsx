@@ -3,9 +3,9 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useEffect } from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, UIOptions } from '@bfc/extension';
 
-import { getUISchema, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
+import { getUIOptions, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
 import { usePluginConfig } from '../hooks';
 
 import { ErrorMessage } from './ErrorMessage';
@@ -34,9 +34,10 @@ const SchemaField: React.FC<FieldProps> = props => {
     ...rest
   } = props;
   const pluginConfig = usePluginConfig();
+
   const schema = resolveRef(baseSchema, definitions);
-  const uiOptions = {
-    ...getUISchema(schema, pluginConfig.formSchema),
+  const uiOptions: UIOptions = {
+    ...getUIOptions(schema, pluginConfig.formSchema, pluginConfig.roleSchema),
     ...baseUIOptions,
   };
 
@@ -50,7 +51,9 @@ const SchemaField: React.FC<FieldProps> = props => {
     }
   }, []);
 
-  const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
+  const error = typeof rawErrors === 'string' && (
+    <ErrorMessage error={rawErrors} label={getUiLabel(props)} helpLink={uiOptions.helpLink} />
+  );
 
   if (!schema || name.startsWith('$')) {
     return null;
@@ -65,19 +68,20 @@ const SchemaField: React.FC<FieldProps> = props => {
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
   const FieldWidget = resolveFieldWidget(schema, uiOptions, pluginConfig);
-  const fieldProps = {
+  const fieldProps: FieldProps = {
     ...rest,
-    name,
-    uiOptions,
-    enumOptions: schema.enum as string[],
-    label: getUiLabel({ ...props, uiOptions }),
-    placeholder: getUiPlaceholder({ ...props, uiOptions }),
+    definitions,
     description: getUiDescription({ ...props, uiOptions }),
-    schema,
-    value: deserializedValue,
+    enumOptions: schema.enum as string[],
     error: error || undefined,
-    rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
+    label: getUiLabel({ ...props, uiOptions }),
+    name,
     onChange: handleChange,
+    placeholder: getUiPlaceholder({ ...props, uiOptions }),
+    rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
+    schema,
+    uiOptions,
+    value: deserializedValue,
   };
 
   return (
