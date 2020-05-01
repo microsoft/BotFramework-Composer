@@ -11,7 +11,6 @@ import { RouteComponentProps } from '@reach/router';
 import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar';
 import { navigateTo } from '../../utils';
-import { isAbsHosted } from '../../utils/envUtil';
 import { Tree } from '../../components/Tree/index';
 import { Conversation } from '../../components/Conversation/index';
 import { MainContent } from '../../components/MainContent/index';
@@ -19,8 +18,6 @@ import { TestController } from '../../components/TestController';
 
 import Routes from './router';
 import { title, fileList, contentEditor } from './styles';
-
-const absHosted = isAbsHosted();
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
   const { state } = useContext(StoreContext);
@@ -31,7 +28,6 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
 
   const settingLabels = {
     title: formatMessage('Configuration'),
-    publish: formatMessage('Publish'),
     settings: formatMessage('Settings'),
     preferences: formatMessage('User Preferences'),
     runtime: formatMessage('Runtime Config'),
@@ -39,11 +35,6 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
 
   const links: INavLink[] = [
     { key: 'dialog-settings', name: settingLabels.settings, url: '' },
-    {
-      key: `${absHosted ? 'remote-publish' : 'deployment'}`,
-      name: settingLabels.publish,
-      url: '',
-    },
     { key: 'preferences', name: settingLabels.preferences, url: '' },
     { key: 'runtime', name: settingLabels.runtime, url: '' },
 
