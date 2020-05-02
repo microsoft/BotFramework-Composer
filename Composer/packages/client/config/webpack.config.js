@@ -273,6 +273,11 @@ module.exports = function(webpackEnv) {
           include: paths.appSrc,
         },
         {
+          test: /\.worker\.ts$/,
+          loader: 'worker-loader',
+          options: { inline: true, fallback: false },
+        },
+        {
           // "oneOf" will traverse all following loaders until one will
           // match the requirements. When no loader matches it will fall
           // back to the "file" loader at the end of the loader list.
@@ -287,10 +292,6 @@ module.exports = function(webpackEnv) {
                 limit: 10000,
                 name: 'static/media/[name].[hash:8].[ext]',
               },
-            },
-            {
-              test: /\.worker\.ts$/,
-              use: { loader: 'worker-loader' },
             },
             {
               test: /\.tsx?$/,

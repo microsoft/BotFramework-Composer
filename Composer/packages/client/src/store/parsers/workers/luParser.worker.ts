@@ -2,9 +2,25 @@
 // Licensed under the MIT License.
 import { luIndexer } from '@bfc/indexers';
 import * as luUtil from '@bfc/indexers/lib/utils/luUtil';
+import { LuIntentSection } from '@bfc/shared';
 
-import { LuActionType } from './../luParser';
-import { LuPayload } from './../luParser';
+export type LuPayload = {
+  targetId: string;
+  content: string;
+};
+
+export type IntentPayload = {
+  content: string;
+  intentName?: string;
+  intent?: LuIntentSection | null;
+};
+
+export enum LuActionType {
+  Parse = 'parse',
+  AddIntent = 'add-intent',
+  UpdateIntent = 'update-intent',
+  RemoveIntent = 'remove-intent',
+}
 
 const ctx: Worker = self as any;
 
