@@ -289,6 +289,10 @@ module.exports = function(webpackEnv) {
               },
             },
             {
+              test: /\.worker\.ts$/,
+              use: { loader: 'worker-loader' },
+            },
+            {
               test: /\.tsx?$/,
               include: paths.appSrc,
               loader: require.resolve('ts-loader'),

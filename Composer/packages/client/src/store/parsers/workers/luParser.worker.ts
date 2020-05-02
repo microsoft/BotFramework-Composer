@@ -39,9 +39,5 @@ ctx.onmessage = function(msg) {
     }
   }
 
-  const msg1 = {
-    id,
-    payload: result,
-  };
   ctx.postMessage({ id, payload: result });
 };
