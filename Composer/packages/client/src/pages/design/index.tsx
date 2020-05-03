@@ -5,7 +5,6 @@
 import { jsx } from '@emotion/core';
 import React, { Suspense, useContext, useEffect, useMemo, useState, useRef } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
