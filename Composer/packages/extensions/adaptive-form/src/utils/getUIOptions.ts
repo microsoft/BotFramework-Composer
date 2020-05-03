@@ -13,5 +13,7 @@ export function getUIOptions(schema?: JSONSchema7, uiSchema?: UISchema, roleSche
   const formOptions = uiSchema && kind && uiSchema[kind] ? uiSchema[kind] : {};
   const roleOptions = roleSchema && $role && roleSchema[$role] ? roleSchema[$role] : {};
 
-  return { ...roleOptions, ...formOptions };
+  // remove the field from the role schema
+  const combined = { ...roleOptions, field: undefined, ...formOptions };
+  return combined;
 }
