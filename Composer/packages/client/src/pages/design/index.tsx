@@ -60,12 +60,7 @@ function onRenderContent(subTitle, style) {
 }
 
 function onRenderBreadcrumbItem(item, render) {
-  return (
-    <span>
-      {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
-      {render(item)}
-    </span>
-  );
+  return <span>{render(item)}</span>;
 }
 
 function getAllRef(targetId, dialogs) {
@@ -304,6 +299,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           items={items}
           ariaLabel={formatMessage('Navigation Path')}
           styles={breadcrumbClass}
+          maxDisplayedItems={3}
+          onReduceData={() => undefined}
           data-testid="Breadcrumb"
           onRenderItem={onRenderBreadcrumbItem}
         />
