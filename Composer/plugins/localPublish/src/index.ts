@@ -61,6 +61,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       this.composer.log('Using managed runtime');
       await this.initBot(botId);
       await this.saveContent(botId, version, project.dataDir, user);
+      await this.saveSkillManifests(botId, project.dataDir);
     } else if (!project.settings.runtime.path || !project.settings.runtime.command) {
       return {
         status: 400,
@@ -123,6 +124,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private getHistoryDir = (botId: string) => path.resolve(this.getBotDir(botId), 'history');
 
+  private getManifestSrcDir = (srcDir: string) =>  path.resolve(srcDir, 'skill-manifests');
+
+  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'wwwroot', 'skill-manifests');
+
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);
 
@@ -177,6 +182,19 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const dstPath = this.getDownloadPath(botId, version);
     await this.zipBot(dstPath, srcDir);
   };
+
+  private saveSkillManifests = async (botId: string, srcDir: string) => {
+    const manifestSrcDir = this.getManifestSrcDir(srcDir);
+    const manifestDstDir = this.getManifestDstDir(botId);
+
+    if (await this.dirExist(manifestDstDir)) {
+      await rmDir(manifestDstDir);
+    }
+
+    if (await this.dirExist(manifestSrcDir)) {
+      this.copyDir(manifestSrcDir, manifestDstDir);
+    }
+  }
 
   // start bot in current version
   private setBot = async (botId: string, version: string, settings: any, project: any = undefined) => {
