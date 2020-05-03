@@ -10,7 +10,7 @@ export const main = css`
 `;
 
 export const sideBar = isExpand => css`
-  width: ${isExpand ? '220' : '48'}px;
+  width: ${isExpand ? '175' : '48'}px;
   background-color: ${NeutralColors.gray20};
   height: 100%;
   border-right: 1px solid ${NeutralColors.gray50};

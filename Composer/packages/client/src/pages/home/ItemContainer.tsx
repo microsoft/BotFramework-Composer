@@ -5,6 +5,7 @@
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
 import { Button } from 'office-ui-fabric-react/lib/Button';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import {
   itemContainerWrapper,
@@ -44,7 +45,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           <div css={itemContainerTitle}>{title}</div>
         </div>
         <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
-          <div css={itemContainerContent}>{content}</div>
+          <div css={itemContainerContent}>
+            <Text variant="large" nowrap>
+              {content}
+            </Text>
+          </div>
         </div>
       </div>
     );
