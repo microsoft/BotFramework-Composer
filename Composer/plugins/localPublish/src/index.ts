@@ -34,6 +34,8 @@ interface PublishConfig {
   templatePath: string;
 }
 
+const isWin = process.platform === "win32";
+
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');
@@ -232,7 +234,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
           {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],
-            detached: true,
+            detached: !isWin, // detach in non-windows
           }
         );
         this.composer.log('Started process %d', process.pid);
@@ -280,7 +282,6 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     child.stderr &&
       child.stderr.on('data', (err: any) => {
-        logger('error: %s', err);
         erroutput += err.toString();
       });
 
@@ -342,7 +343,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     if (proc) {
       this.composer.log('Killing process %d', -proc.pid);
       // Kill the bot process AND all child processes
-      process.kill(-proc.pid);
+      process.kill(isWin? proc.pid : -proc.pid);
     }
     delete LocalPublisher.runningBots[botId];
   };
@@ -372,7 +373,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     for (const botId in LocalPublisher.runningBots) {
       const bot = LocalPublisher.runningBots[botId];
       // Kill the bot process AND all child processes
-      process.kill(-bot.process.pid);
+      process.kill(isWin? bot.process.pid : -bot.process.pid);
       delete LocalPublisher.runningBots[botId];
     }
   };
