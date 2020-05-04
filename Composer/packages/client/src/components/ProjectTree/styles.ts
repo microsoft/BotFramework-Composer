@@ -8,6 +8,7 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
+import { ISearchBoxStyles } from 'office-ui-fabric-react';
 
 export const groupListStyle: Partial<IGroupedListStyles> = {
   root: {
@@ -16,12 +17,11 @@ export const groupListStyle: Partial<IGroupedListStyles> = {
   },
 };
 
-export const searchBox = {
+export const searchBox: ISearchBoxStyles = {
   root: {
-    outline: 'none',
-    border: 'none',
     borderBottom: '1px solid #edebe9',
     height: '45px',
+    borderRadius: '0px',
   },
 };
 export const root = css`
