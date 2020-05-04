@@ -122,12 +122,7 @@ const PropertyEditor: React.FC = () => {
       }}
       onResizeStop={handleResize}
     >
-      <div
-        css={formEditor}
-        aria-label={formatMessage('form editor')}
-        data-testid="PropertyEditor"
-        key={shellData.focusPath}
-      >
+      <div css={formEditor} aria-label={formatMessage('form editor')} data-testid="PropertyEditor">
         <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
           <AdaptiveForm
             errors={errors}
