@@ -256,7 +256,7 @@ const DefaultUISchema: UISchema = {
     order: ['dialog', 'options', 'includeActivity', '*'],
   },
   [SDKKinds.SendActivity]: {
-    label: () => formatMessage('Send an Activity'),
+    label: () => formatMessage('Send a response'),
     helpLink: 'https://aka.ms/bfc-send-activity',
     order: ['activity', '*'],
   },
