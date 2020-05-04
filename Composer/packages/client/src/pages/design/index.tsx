@@ -10,7 +10,7 @@ import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
 
@@ -303,14 +303,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           data-testid="Breadcrumb"
           onRenderItem={onRenderBreadcrumbItem}
         />
-        <Link
-          style={{ position: 'absolute', right: 0, marginTop: '22px', marginRight: '10px' }}
-          onClick={() => {
-            setDialogJsonVisibility(current => !current);
-          }}
-        >
-          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-        </Link>
+        <div style={{ padding: '10px' }}>
+          <ActionButton
+            onClick={() => {
+              setDialogJsonVisibility(current => !current);
+            }}
+          >
+            {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+          </ActionButton>
+        </div>
       </div>
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
