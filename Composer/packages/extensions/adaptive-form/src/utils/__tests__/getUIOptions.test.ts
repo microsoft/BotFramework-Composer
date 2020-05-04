@@ -19,7 +19,11 @@ describe('getUIOptions', () => {
         },
       },
     };
-    expect(getUIOptions(schema)).toMatchInlineSnapshot(`Object {}`);
+    expect(getUIOptions(schema)).toMatchInlineSnapshot(`
+Object {
+  "field": undefined,
+}
+`);
   });
 
   it('merges overrides into default schema', () => {
@@ -39,6 +43,7 @@ describe('getUIOptions', () => {
     };
     expect(getUIOptions(schema, uiSchema)).toMatchInlineSnapshot(`
 Object {
+  "field": undefined,
   "label": "First Label",
   "order": Array [
     "*",
@@ -73,6 +78,7 @@ Object {
 
     expect(getUIOptions(schema, uiSchema, plugin)).toMatchInlineSnapshot(`
 Object {
+  "field": undefined,
   "helpLink": "https://example.com/plugin",
   "label": "First Label",
   "order": Array [
