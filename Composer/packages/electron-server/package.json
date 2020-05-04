@@ -14,7 +14,7 @@
     "copy-plugins": "node scripts/copy-plugins.js",
     "copy-templates": "node scripts/copy-templates.js",
     "dist": "node scripts/electronBuilderDist.js",
-    "dist:full": "yarn clean && yarn build && yarn copy-templates && yarn run pack && yarn copy-plugins && yarn dist",
+    "dist:full": "yarn clean && yarn build && yarn run pack && yarn copy-templates && yarn copy-plugins && yarn dist",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "yarn lint --fix",
     "pack": "node scripts/electronBuilderPack.js",
