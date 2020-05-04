@@ -37,12 +37,13 @@ const styles = {
 };
 
 export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillManifests, setSkillManifest }) => {
-  const { actions } = useContext(StoreContext);
+  const { actions, state } = useContext(StoreContext);
+  const { botName } = state;
   const [manifestVersion, setManifestVersion] = useState<string>(SCHEMA_URIS[0]);
   const [errors, setErrors] = useState<{ version?: string }>({});
 
   const [version] = VERSION_REGEX.exec(manifestVersion) || [''];
-  const fileName = `skill-manifest-${version.replace(/\./g, '-')}`;
+  const fileName = `${botName}-${version.replace(/\./g, '-')}-manifest`;
 
   const options: IDropdownOption[] = useMemo(
     () =>
