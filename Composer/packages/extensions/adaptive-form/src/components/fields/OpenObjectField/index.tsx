@@ -96,7 +96,7 @@ const OpenObjectField: React.FC<FieldProps<{
         <div css={styles.container}>
           <div css={styles.item}>
             <TextField
-              ariaLabel={formatMessage(keyLabel)}
+              ariaLabel={keyLabel}
               autoComplete="off"
               placeholder={formatMessage('Add a new key')}
               styles={{
@@ -110,7 +110,7 @@ const OpenObjectField: React.FC<FieldProps<{
           </div>
           <div css={styles.item}>
             <TextField
-              ariaLabel={formatMessage(valueLabel)}
+              ariaLabel={valueLabel}
               autoComplete="off"
               iconProps={{
                 iconName: 'ReturnKey',
