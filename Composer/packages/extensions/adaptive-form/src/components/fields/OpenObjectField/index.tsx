@@ -64,15 +64,18 @@ const OpenObjectField: React.FC<FieldProps<{
     onChange(newFormData);
   };
 
+  const keyLabel = formatMessage('Key');
+  const valueLabel = formatMessage('Value');
+
   return (
     <div className="OpenObjectField">
       <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <div css={styles.labelContainer}>
         <div css={styles.label}>
-          <FieldLabel required id={`${id}.key`} label={'Key'} />
+          <FieldLabel required id={`${id}.key`} label={keyLabel} />
         </div>
         <div css={styles.label}>
-          <FieldLabel id={`${id}.value`} label={'Value'} />
+          <FieldLabel id={`${id}.value`} label={valueLabel} />
         </div>
         <div css={styles.filler} />
       </div>
@@ -93,6 +96,7 @@ const OpenObjectField: React.FC<FieldProps<{
         <div css={styles.container}>
           <div css={styles.item}>
             <TextField
+              ariaLabel={formatMessage(keyLabel)}
               autoComplete="off"
               placeholder={formatMessage('Add a new key')}
               styles={{
@@ -106,6 +110,7 @@ const OpenObjectField: React.FC<FieldProps<{
           </div>
           <div css={styles.item}>
             <TextField
+              ariaLabel={formatMessage(valueLabel)}
               autoComplete="off"
               iconProps={{
                 iconName: 'ReturnKey',
