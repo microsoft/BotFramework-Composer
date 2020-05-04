@@ -16,14 +16,9 @@
         - ${list(user.lists.shopping, 'shopping')}
     - DEFAULT : 
         - ```
-## Todo list
-${list(user.lists.todo, 'todo')}
-
-## Grocery list
-${list(user.lists.grocery, 'grocery')}
-
-## Shopping list
-${list(user.lists.shopping, 'shopping')}
+        ${list(user.lists.todo, 'todo')}
+        ${list(user.lists.grocery, 'grocery')}
+        ${list(user.lists.shopping, 'shopping')}
         ```
 
 # list(collection, name)
