@@ -1,7 +1,7 @@
 {
   "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "name": "ToDoBotWithLuisSample-17",
+    "name": "ToDoBotWithLuisSample",
     "id": "232009"
   },
   "autoEndDialog": true,
