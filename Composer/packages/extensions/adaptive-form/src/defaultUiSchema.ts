@@ -39,7 +39,6 @@ const DefaultUISchema: UISchema = {
   },
   [SDKKinds.OnCancelDialog]: {
     label: () => formatMessage('Dialog cancelled'),
-    subtitle: () => formatMessage('Cancel dialog event'),
   },
   [SDKKinds.CancelAllDialogs]: {
     label: () => formatMessage('Cancel All Dialogs'),
@@ -132,23 +131,19 @@ const DefaultUISchema: UISchema = {
   [SDKKinds.OnActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Activities'),
-    subtitle: () => formatMessage('Activity recieved'),
   },
   [SDKKinds.OnBeginDialog]: {
     ...triggerUiSchema,
     label: () => formatMessage('Dialog started'),
-    subtitle: () => formatMessage('Begin dialog event'),
   },
   [SDKKinds.OnCancelDialog]: { ...triggerUiSchema },
   [SDKKinds.OnCondition]: {
     ...triggerUiSchema,
     label: () => formatMessage('Handle a condition'),
-    subtitle: () => formatMessage('Condition'),
   },
   [SDKKinds.OnConversationUpdateActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Greeting'),
-    subtitle: () => formatMessage('ConversationUpdate activity'),
     description: () => formatMessage('Handle the events fired when a user begins a new conversation with the bot.'),
     helpLink:
       'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime',
@@ -156,36 +151,29 @@ const DefaultUISchema: UISchema = {
   [SDKKinds.OnCustomEvent]: {
     ...triggerUiSchema,
     label: () => formatMessage('Handle an Event'),
-    subtitle: () => formatMessage('Custom event'),
   },
   [SDKKinds.OnDialogEvent]: {
     ...triggerUiSchema,
     label: () => formatMessage('Dialog events'),
-    subtitle: () => formatMessage('Dialog event'),
   },
   [SDKKinds.OnEndOfConversationActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Conversation ended'),
-    subtitle: () => formatMessage('EndOfConversation activity'),
   },
   [SDKKinds.OnError]: {
     ...triggerUiSchema,
     label: () => formatMessage('Error occurred'),
-    subtitle: () => formatMessage('Error event'),
   },
   [SDKKinds.OnEventActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Event received'),
-    subtitle: () => formatMessage('Event activity'),
   },
   [SDKKinds.OnHandoffActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Handover to human'),
-    subtitle: () => formatMessage('Handoff activity'),
   },
   [SDKKinds.OnIntent]: {
     label: () => formatMessage('Intent recognized'),
-    subtitle: () => formatMessage('Intent recognized'),
     order: ['intent', 'condition', 'entities', '*'],
     hidden: ['actions'],
     properties: {
@@ -197,42 +185,34 @@ const DefaultUISchema: UISchema = {
   [SDKKinds.OnInvokeActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Conversation invoked'),
-    subtitle: () => formatMessage('Invoke activity'),
   },
   [SDKKinds.OnMessageActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Message recieved'),
-    subtitle: () => formatMessage('Message recieved activity'),
   },
   [SDKKinds.OnMessageDeleteActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Message deleted'),
-    subtitle: () => formatMessage('Message deleted activity'),
   },
   [SDKKinds.OnMessageReactionActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Message reaction'),
-    subtitle: () => formatMessage('Message reaction activity'),
   },
   [SDKKinds.OnMessageUpdateActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Message updated'),
-    subtitle: () => formatMessage('Message updated activity'),
   },
   [SDKKinds.OnRepromptDialog]: {
     ...triggerUiSchema,
     label: () => formatMessage('Re-prompt for input'),
-    subtitle: () => formatMessage('Reprompt dialog event'),
   },
   [SDKKinds.OnTypingActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('User is typing'),
-    subtitle: () => formatMessage('Typing activity'),
   },
   [SDKKinds.OnUnknownIntent]: {
     ...triggerUiSchema,
     label: () => formatMessage('Unknown intent'),
-    subtitle: () => formatMessage('Unknown intent recognized'),
   },
   [SDKKinds.QnAMakerDialog]: {
     label: () => formatMessage('QnAMakerDialog'),
