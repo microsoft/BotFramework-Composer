@@ -4,6 +4,8 @@
 import * as fs from 'fs';
 
 import { Request, Response } from 'express';
+import { Archiver } from 'archiver';
+import { PluginLoader } from '@bfc/plugin-loader';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -16,7 +18,8 @@ import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location } = req.body;
+  const { name, description, storageId, location, schemaUrl } = req.body;
+  const user = await PluginLoader.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
   }
@@ -41,15 +44,25 @@ async function createProject(req: Request, res: Response) {
   log('Attempting to create project at %s', path);
 
   try {
-    const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef);
-    await BotProjectService.openProject(newProjRef);
-    const currentProject = BotProjectService.getCurrentBotProject();
+    await BotProjectService.cleanProject(locationRef);
+    const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef, user);
+    const id = await BotProjectService.openProject(newProjRef, user);
+    const currentProject = await BotProjectService.getProjectById(id, user);
+
+    // inject shared content into every new project.  this comes from assets/shared
+    await AssectService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
-      await currentProject.index();
-      const project = currentProject.getIndexes();
+      if (schemaUrl) {
+        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+      }
+      await currentProject.init();
+
+      const project = currentProject.getProject();
       log('Project created successfully.');
       res.status(200).json({
+        id,
         ...project,
       });
     }
@@ -60,17 +73,26 @@ async function createProject(req: Request, res: Response) {
   }
 }
 
-async function getProject(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
-  if (currentProject !== undefined && (await currentProject.exists())) {
-    await currentProject.index();
-    const project = currentProject.getIndexes();
-    res.status(200).json({
-      ...project,
-    });
-  } else {
+async function getProjectById(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+    if (currentProject !== undefined && (await currentProject.exists())) {
+      const project = currentProject.getProject();
+      res.status(200).json({
+        id: projectId,
+        ...project,
+      });
+    } else {
+      res.status(404).json({
+        message: 'No such bot project opened',
+      });
+    }
+  } catch (error) {
     res.status(404).json({
-      message: 'No such bot project opened',
+      message: error.message,
     });
   }
 }
@@ -83,22 +105,26 @@ async function openProject(req: Request, res: Response) {
     return;
   }
 
+  const user = await PluginLoader.getUserFromRequest(req);
+
   const location: LocationRef = {
     storageId: req.body.storageId,
     path: req.body.path,
   };
 
   try {
-    await BotProjectService.openProject(location);
-    const currentProject = BotProjectService.getCurrentBotProject();
+    const id = await BotProjectService.openProject(location, user);
+    const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
-      const project = currentProject.getIndexes();
+      await currentProject.init();
+      const project = currentProject.getProject();
       res.status(200).json({
+        id: currentProject.id,
         ...project,
       });
     } else {
       res.status(404).json({
-        message: 'No such bot project opened',
+        message: 'Cannot open bot project',
       });
     }
   } catch (e) {
@@ -116,6 +142,10 @@ async function saveProjectAs(req: Request, res: Response) {
     return;
   }
 
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+  const originalProject = await BotProjectService.getProjectById(projectId, user);
+
   const { name, description, location, storageId } = req.body;
 
   const locationRef: LocationRef = {
@@ -124,13 +154,14 @@ async function saveProjectAs(req: Request, res: Response) {
   };
 
   try {
-    await BotProjectService.saveProjectAs(locationRef);
-    const currentProject = BotProjectService.getCurrentBotProject();
+    const id = await BotProjectService.saveProjectAs(originalProject, locationRef, user);
+    const currentProject = await BotProjectService.getProjectById(id, user);
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
-      await currentProject.index();
-      const project = currentProject.getIndexes();
+      await currentProject.init();
+      const project = currentProject.getProject();
       res.status(200).json({
+        id,
         ...project,
       });
     } else {
@@ -146,15 +177,19 @@ async function saveProjectAs(req: Request, res: Response) {
 }
 
 async function getRecentProjects(req: Request, res: Response) {
-  const projects = await BotProjectService.getRecentBotProjects();
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const projects = await BotProjectService.getRecentBotProjects(user);
   return res.status(200).json(projects);
 }
 
-async function updateDialog(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
+async function updateFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    await currentProject.updateDialog(req.body.id, req.body.content);
-    res.send(204);
+    const lastModified = await currentProject.updateFile(req.body.name, req.body.content);
+    res.status(200).json({ lastModified: lastModified });
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
@@ -162,15 +197,17 @@ async function updateDialog(req: Request, res: Response) {
   }
 }
 
-async function createDialog(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
+async function createFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const content = JSON.stringify(req.body.content, null, 2) + '\n';
-    const id = req.body.id;
+    const { name, content } = req.body;
 
     //dir = id
-    const dialogResources = await currentProject.createDialog(id, content);
-    res.status(200).json(dialogResources);
+    const file = await currentProject.createFile(name, content);
+    res.status(200).json(file);
   } else {
     res.status(404).json({
       message: 'No such bot project opened',
@@ -178,82 +215,24 @@ async function createDialog(req: Request, res: Response) {
   }
 }
 
-async function removeDialog(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
+async function removeFile(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const dialogResources = await currentProject.removeDialog(req.params.dialogId);
+    const dialogResources = await currentProject.deleteFile(req.params.name);
     res.status(200).json(dialogResources);
   } else {
     res.status(404).json({ error: 'No bot project opened' });
   }
 }
 
-async function updateLgFile(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
-  if (currentProject !== undefined) {
-    const lgFiles = await currentProject.updateLgFile(req.body.id, req.body.content);
-    res.status(200).json({ lgFiles });
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
-async function createLgFile(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
-  if (currentProject !== undefined) {
-    const lgFiles = await currentProject.createLgFile(req.body.id, req.body.content);
-    res.status(200).json({ lgFiles });
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
-async function removeLgFile(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
-  if (currentProject !== undefined) {
-    const lgFiles = await currentProject.removeLgFile(req.params.lgFileId);
-    res.status(200).json({ lgFiles });
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
-async function updateLuFile(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
-  if (currentProject !== undefined) {
-    try {
-      const luFiles = await currentProject.updateLuFile(req.body.id, req.body.content);
-      res.status(200).json({ luFiles });
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
-async function createLuFile(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
-  if (currentProject !== undefined) {
-    const luFiles = await currentProject.createLuFile(req.body.id, req.body.content);
-    res.status(200).json({ luFiles });
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
 async function getDefaultSlotEnvSettings(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
       const settings = await currentProject.getDefaultSlotEnvSettings(req.query.obfuscate);
@@ -271,7 +250,10 @@ async function getDefaultSlotEnvSettings(req: Request, res: Response) {
 }
 
 async function getEnvSettings(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
       const settings = await currentProject.getEnvSettings(req.params.slot, req.query.obfuscate);
@@ -288,8 +270,45 @@ async function getEnvSettings(req: Request, res: Response) {
   }
 }
 
+async function updateSkill(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    try {
+      const skills = await currentProject.updateSkill(req.body.skills);
+      res.status(200).json(skills);
+    } catch (err) {
+      res.status(404).json({
+        message: err.message,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
+async function exportProject(req: Request, res: Response) {
+  const currentProject = await BotProjectService.getProjectById(req.params.projectId);
+  currentProject.exportToZip((archive: Archiver) => {
+    archive.on('error', err => {
+      res.status(500).send({ error: err.message });
+    });
+
+    res.attachment('tmp-archive.zip');
+
+    archive.pipe(res);
+  });
+}
+
 async function updateEnvSettings(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
       await currentProject.updateEnvSettings(req.params.slot, req.body.settings);
@@ -307,7 +326,10 @@ async function updateEnvSettings(req: Request, res: Response) {
 }
 
 async function updateDefaultSlotEnvSettings(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
       await currentProject.updateDefaultSlotEnvSettings(req.body.settings);
@@ -324,23 +346,18 @@ async function updateDefaultSlotEnvSettings(req: Request, res: Response) {
   }
 }
 
-async function removeLuFile(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
-  if (currentProject !== undefined) {
-    const luFiles = await currentProject.removeLuFile(req.params.luFileId);
-    res.status(200).json({ luFiles });
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
 async function publishLuis(req: Request, res: Response) {
-  const currentProject = BotProjectService.getCurrentBotProject();
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const luFiles = await currentProject.publishLuis(req.body.authoringKey);
+      const luFiles = await currentProject.publishLuis(
+        req.body.authoringKey,
+        req.body.luFiles,
+        req.body.crossTrainConfig
+      );
       res.status(200).json({ luFiles });
     } catch (error) {
       res.status(400).json({
@@ -357,8 +374,10 @@ async function publishLuis(req: Request, res: Response) {
 async function getAllProjects(req: Request, res: Response) {
   const storageId = 'default';
   const folderPath = Path.resolve(settings.botsFolder);
+  const user = await PluginLoader.getUserFromRequest(req);
+
   try {
-    res.status(200).json(await StorageService.getBlob(storageId, folderPath));
+    res.status(200).json(await StorageService.getBlob(storageId, folderPath, user));
   } catch (e) {
     res.status(400).json({
       message: e.message,
@@ -367,22 +386,18 @@ async function getAllProjects(req: Request, res: Response) {
 }
 
 export const ProjectController = {
-  getProject,
+  getProjectById,
   openProject,
-  updateDialog,
-  createDialog,
-  removeDialog,
-  updateLgFile,
-  createLgFile,
-  removeLgFile,
+  updateFile,
+  createFile,
+  removeFile,
   getEnvSettings,
   getDefaultSlotEnvSettings,
   updateEnvSettings,
   updateDefaultSlotEnvSettings,
-  updateLuFile,
-  createLuFile,
-  removeLuFile,
+  updateSkill,
   publishLuis,
+  exportProject,
   saveProjectAs,
   createProject,
   getAllProjects,

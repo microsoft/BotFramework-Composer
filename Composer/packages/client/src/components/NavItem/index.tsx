@@ -2,15 +2,15 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useCallback, useContext, useState } from 'react';
-import { Link, LinkGetProps } from '@reach/router';
-import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
+import { jsx, css } from '@emotion/core';
+import { useCallback, useContext } from 'react';
+import { Link } from '@reach/router';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { StoreContext } from '../../store';
+import { useLocation } from '../../utils/hooks';
 
-import { link, outer, commandBarButton } from './styles';
+import { link, icon } from './styles';
 
 /**
  * @param to The string URI to link to. Supports relative and absolute URIs.
@@ -32,38 +32,51 @@ export const NavItem: React.FC<INavItemProps> = props => {
     actions: { onboardingAddCoachMarkRef },
   } = useContext(StoreContext);
 
-  const { to, exact, iconName, labelName, disabled } = props;
-  const [active, setActive] = useState(false);
+  const { to, iconName, labelName, disabled } = props;
+  const {
+    location: { pathname },
+  } = useLocation();
+  const active = pathname.startsWith(to);
 
   const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
+  const activeArea = (
+    <div
+      css={link(active, disabled)}
+      aria-hidden="true"
+      tabIndex={-1}
+      aria-disabled={disabled}
+      data-testid={active ? 'ActiveLeftNavItem' : undefined}
+    >
+      <Icon iconName={iconName} styles={icon(active, disabled)} />
+      {labelName}
+    </div>
+  );
+
+  if (disabled) {
+    // make it so we can't even click them by accident and lead to the error page
+    return activeArea;
+  }
+
   return (
-    <FocusZone allowFocusRoot={true} disabled={disabled}>
-      <Link
-        to={to}
-        css={link(active, disabled)}
-        getProps={(props: LinkGetProps) => {
-          const isActive = exact ? props.isCurrent : props.isPartiallyCurrent;
-          setActive(isActive);
-          return {};
-        }}
-        data-testid={'LeftNav-CommandBarButton' + labelName}
-        aria-disabled={disabled}
-        aria-label={labelName}
-        ref={addRef}
-      >
-        <div css={outer} aria-hidden="true">
-          <CommandBarButton
-            iconProps={{
-              iconName,
-            }}
-            text={labelName}
-            styles={commandBarButton(active)}
-            disabled={disabled}
-            ariaHidden
-          />
-        </div>
-      </Link>
-    </FocusZone>
+    <Link
+      data-testid={'LeftNav-CommandBarButton' + labelName}
+      to={to}
+      aria-disabled={disabled}
+      aria-label={labelName + (active ? '; selected' : '')}
+      ref={addRef}
+      css={css`
+        display: block;
+
+        :link {
+          text-decoration: none;
+        }
+        :visited {
+          text-decoration: none;
+        }
+      `}
+    >
+      {activeArea}
+    </Link>
   );
 };

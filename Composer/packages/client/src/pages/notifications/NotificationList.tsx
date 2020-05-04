@@ -12,15 +12,15 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { useMemo, useState } from 'react';
+import formatMessage from 'format-message';
 
 import { Pagination } from '../../components/Pagination';
 
 import { INotification } from './types';
-import { notification, typeIcon, listRoot, icons, tableView, detailList } from './styles';
+import { notification, typeIcon, listRoot, icons, tableView, detailList, tableCell, content } from './styles';
 
 export interface INotificationListProps {
   items: INotification[];
@@ -44,7 +44,7 @@ const columns: IColumn[] = [
     },
   },
   {
-    key: 'Notification Type',
+    key: 'NotificationType',
     name: 'Type',
     className: notification.columnCell,
     fieldName: 'type',
@@ -54,12 +54,22 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.severity}</span>;
+      return (
+        <div data-is-focusable={true} css={tableCell}>
+          <div
+            aria-label={formatMessage(`This is a {severity} notification`, { severity: item.severity })}
+            tabIndex={-1}
+            css={content}
+          >
+            {item.severity}
+          </div>
+        </div>
+      );
     },
     isPadded: true,
   },
   {
-    key: 'Notification Location',
+    key: 'NotificationLocation',
     name: 'Location',
     className: notification.columnCell,
     fieldName: 'location',
@@ -68,12 +78,22 @@ const columns: IColumn[] = [
     isResizable: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.location}</span>;
+      return (
+        <div data-is-focusable={true} css={tableCell}>
+          <div
+            aria-label={formatMessage(`Location is {location}`, { location: item.location })}
+            tabIndex={-1}
+            css={content}
+          >
+            {item.location}
+          </div>
+        </div>
+      );
     },
     isPadded: true,
   },
   {
-    key: 'Notification Detail',
+    key: 'NotificationDetail',
     name: 'Message',
     className: notification.columnCell,
     fieldName: 'message',
@@ -84,7 +104,17 @@ const columns: IColumn[] = [
     isMultiline: true,
     data: 'string',
     onRender: (item: INotification) => {
-      return <span>{item.message}</span>;
+      return (
+        <div data-is-focusable={true} css={tableCell}>
+          <div
+            aria-label={formatMessage(`Notification Message {msg}`, { msg: item.message })}
+            tabIndex={-1}
+            css={content}
+          >
+            {item.message}
+          </div>
+        </div>
+      );
     },
     isPadded: true,
   },
@@ -109,26 +139,17 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
     return Math.ceil(items.length / itemCount) || 1;
   }, [items]);
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const items = selection.getSelection();
-      if (items.length) {
-        onItemClick(items[0] as INotification);
-      }
-    },
-  });
-
   const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
-    <div css={listRoot} data-testid="notifications-table-view">
+    <div role="main" css={listRoot} data-testid="notifications-table-view">
       <div css={tableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             css={detailList}
             items={showItems}
             columns={columns}
-            selection={selection}
+            onItemInvoked={onItemClick}
             selectionMode={SelectionMode.single}
             setKey="none"
             layoutMode={DetailsListLayoutMode.justified}

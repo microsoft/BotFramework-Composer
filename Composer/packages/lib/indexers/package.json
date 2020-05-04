@@ -22,16 +22,15 @@
     "watch": "yarn build:ts --watch"
   },
   "devDependencies": {
+    "@bfc/test-utils": "*",
     "@types/lodash": "^4.14.146",
-    "jest": "24.0.0",
-    "rimraf": "^2.6.3",
-    "ts-jest": "^24.1.0"
+    "rimraf": "^2.6.3"
   },
   "dependencies": {
     "@bfc/shared": "*",
-    "@microsoft/bf-lu": "4.8.0-preview.111952",
-    "botbuilder-lg": "^4.8.0-preview.106823",
-    "botframework-expressions": "^4.8.0-preview.106476",
+    "@microsoft/bf-lu": "4.9.0-preview.121555",
+    "adaptive-expressions": "^4.8.0-preview-110700",
+    "botbuilder-lg": "^4.9.0-preview-119754",
     "lodash": "^4.17.15"
   }
 }

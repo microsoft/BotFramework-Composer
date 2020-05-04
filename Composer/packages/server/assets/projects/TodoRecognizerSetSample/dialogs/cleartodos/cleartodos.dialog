@@ -1,0 +1,54 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "316336"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "id": "480162"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.EditArray",
+          "$designer": {
+            "id": "832300"
+          },
+          "changeType": "Clear",
+          "itemsProperty": "user.todos",
+          "resultProperty": "dialog.cleared"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "983700"
+          },
+          "condition": "dialog.cleared",
+          "actions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "832307"
+              },
+              "activity": "${SendActivity_832307()}"
+            }
+          ],
+          "elseActions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "983761"
+              },
+              "activity": "${SendActivity_983761()}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "generator": "cleartodos.lg",
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema"
+}

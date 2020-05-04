@@ -20,24 +20,27 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   const notifications = useNotifications(filter);
   const navigations = {
     [NotificationType.LG]: (item: INotification) => {
-      let url = `/language-generation/${item.id}/edit#L=${item.diagnostic.range?.start.line || 0}`;
+      const { projectId, resourceId, diagnostic, dialogPath } = item;
+      let uri = `/bot/${projectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
       //the format of item.id is lgFile#inlineTemplateId
-      if (item.dialogPath) {
-        url = toUrlUtil(item.dialogPath);
+      if (dialogPath) {
+        uri = toUrlUtil(projectId, dialogPath);
       }
-      navigateTo(url);
+      navigateTo(uri);
     },
     [NotificationType.LU]: (item: INotification) => {
-      let uri = `/language-understanding/${item.id}`;
-      if (item.dialogPath) {
-        uri = convertPathToUrl(item.id, item.dialogPath);
+      const { projectId, resourceId, diagnostic, dialogPath } = item;
+      let uri = `/bot/${projectId}/language-understanding/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+      if (dialogPath) {
+        uri = convertPathToUrl(projectId, resourceId, dialogPath);
       }
       navigateTo(uri);
     },
     [NotificationType.DIALOG]: (item: INotification) => {
       //path is like main.trigers[0].actions[0]
       //uri = id?selected=triggers[0]&focused=triggers[0].actions[0]
-      const uri = convertPathToUrl(item.id, item.dialogPath);
+      const { projectId, id, dialogPath } = item;
+      const uri = convertPathToUrl(projectId, id, dialogPath);
       navigateTo(uri);
     },
   };

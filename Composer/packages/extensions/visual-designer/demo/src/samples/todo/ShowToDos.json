@@ -1,5 +1,5 @@
 {
-    "$type": "Microsoft.AdaptiveDialog",
+    "$kind": "Microsoft.AdaptiveDialog",
     "$designer": {
       "createdAt": "2019-07-03T06:51:43.763Z",
       "updatedAt": "2019-07-16T20:00:49.889Z",
@@ -9,7 +9,7 @@
     "$schema": "../../app.schema",
     "triggers": [
       {
-        "$type": "Microsoft.OnBeginDialog",
+        "$kind": "Microsoft.OnBeginDialog",
         "$designer": {
           "id": "783343",
           "updatedAt": "2019-07-22T08:11:00.380Z"
@@ -17,7 +17,7 @@
          
         "actions": [
           {
-            "$type": "Microsoft.IfCondition",
+            "$kind": "Microsoft.IfCondition",
             "$designer": {
               "createdAt": "2019-07-01T22:05:03.290Z",
               "updatedAt": "2019-07-16T20:02:34.141Z",
@@ -26,26 +26,26 @@
             "condition": "user.todos == null",
             "actions": [
               {
-                "$type": "Microsoft.SendActivity",
+                "$kind": "Microsoft.SendActivity",
                 "$designer": {
                   "createdAt": "2019-07-01T22:04:54.741Z",
                   "updatedAt": "2019-07-16T20:02:29.357Z",
                   "id": "339580",
                   "name": "Send an Activity"
                 },
-                "activity": "[bfdactivity-339580]"
+                "activity": "[SendActivity_339580]"
               }
             ],
             "elseActions": [
               {
-                "$type": "Microsoft.SendActivity",
+                "$kind": "Microsoft.SendActivity",
                 "$designer": {
                   "createdAt": "2019-07-01T22:05:03.290Z",
                   "updatedAt": "2019-07-16T20:02:34.141Z",
                   "id": "662084",
                   "name": "Send an Activity"
                 },
-                "activity": "[bfdactivity-662084]"
+                "activity": "[SendActivity_662084]"
               }
             ]
           }

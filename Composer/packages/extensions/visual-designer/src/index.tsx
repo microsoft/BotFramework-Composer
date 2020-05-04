@@ -2,19 +2,21 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, CacheProvider } from '@emotion/core';
+import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
-import { ShellData, ShellApi } from '@bfc/shared';
+import { DialogFactory } from '@bfc/shared';
+import { useShellApi, JSONSchema7 } from '@bfc/extension';
 
 import { ObiEditor } from './editors/ObiEditor';
-import { NodeRendererContext } from './store/NodeRendererContext';
+import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
-import { UISchemaContext } from './store/UISchemaContext';
-import { UISchemaProvider } from './schema/uischemaProvider';
-import { uiSchema } from './schema/uischema';
+import { FlowSchemaContext } from './store/FlowSchemaContext';
+import { FlowSchemaProvider } from './schema/flowSchemaProvider';
+import { mergePluginConfig } from './utils/mergePluginConfig';
+import { getCustomSchema } from './utils/getCustomSchema';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -25,18 +27,32 @@ const emotionCache = createCache({
   nonce: window.__nonce__,
 });
 
-const visualEditorSchemaProvider = new UISchemaProvider(uiSchema);
+const styles = css`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-const VisualDesigner: React.FC<VisualDesignerProps> = ({
-  dialogId,
-  focusedEvent,
-  focusedActions,
-  focusedTab,
-  clipboardActions,
-  data: inputData,
-  shellApi,
-  hosted,
-}): JSX.Element => {
+  overflow: scroll;
+`;
+
+export interface VisualDesignerProps {
+  schema?: JSONSchema7;
+}
+const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
+  const { shellApi, plugins, ...shellData } = useShellApi();
+  const {
+    dialogId,
+    focusedEvent,
+    focusedActions,
+    focusedTab,
+    clipboardActions,
+    data: inputData,
+    hosted,
+    schemas,
+  } = shellData;
+
   const dataCache = useRef({});
 
   /**
@@ -66,29 +82,45 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
     removeLuIntent,
     undo,
     redo,
+    announce,
   } = shellApi;
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
-  const nodeContext = {
+  // Compute schema diff
+  const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
+    schemas?.sdk?.content,
+    schemas?.default,
+  ]);
+
+  const nodeContext: NodeRendererContextValue = {
     focusedId,
     focusedEvent,
     focusedTab,
     clipboardActions: clipboardActions || [],
     updateLgTemplate,
     getLgTemplates,
-    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => ''),
+    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => undefined),
     removeLgTemplate,
     removeLgTemplates,
     removeLuIntent,
+    dialogFactory: new DialogFactory(schema),
+    customSchemas: customSchema ? [customSchema] : [],
   };
+
+  const visualEditorConfig = mergePluginConfig(...plugins);
 
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
-          <UISchemaContext.Provider value={visualEditorSchemaProvider}>
-            <div data-testid="visualdesigner-container" css={{ width: '100%', height: '100%', overflow: 'scroll' }}>
+          <FlowSchemaContext.Provider
+            value={{
+              widgets: visualEditorConfig.widgets,
+              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema),
+            }}
+          >
+            <div data-testid="visualdesigner-container" css={styles}>
               <ObiEditor
                 key={dialogId}
                 path={dialogId}
@@ -104,34 +136,15 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({
                 onSelect={onSelect}
                 undo={undo}
                 redo={redo}
+                announce={announce}
                 addCoachMarkRef={addCoachMarkRef}
               />
             </div>
-          </UISchemaContext.Provider>
+          </FlowSchemaContext.Provider>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>
     </CacheProvider>
   );
-};
-
-interface VisualDesignerProps extends ShellData {
-  onChange: (newData: object, updatePath?: string) => void;
-  shellApi: ShellApi;
-}
-
-VisualDesigner.defaultProps = {
-  dialogId: '',
-  focusedEvent: '',
-  focusedSteps: [],
-  data: { $type: '' },
-  shellApi: ({
-    navTo: () => {},
-    onFocusEvent: () => {},
-    onFocusSteps: () => {},
-    onSelect: () => {},
-    saveData: () => {},
-    addCoachMarkRef: () => {},
-  } as unknown) as ShellApi,
 };
 
 export default VisualDesigner;

@@ -6,7 +6,7 @@
  * Licensed under the MIT License.
  */
 
-import { ReturnType } from 'botframework-expressions';
+import { ReturnType } from 'adaptive-expressions';
 export class FunctionEntity {
   public constructor(params: string[], returntype: ReturnType, introduction: string) {
     this.Params = params;
@@ -758,6 +758,31 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
       'test a given string ia match a common regex pattern.'
     ),
   ],
+
+  //type checing functions
+  [
+    'isInteger',
+    new FunctionEntity(['input: any'], ReturnType.Boolean, 'determine whether a given input is an integer number.'),
+  ],
+  [
+    'isFloat',
+    new FunctionEntity(['input: any'], ReturnType.Boolean, 'determine whether a given input is a float point number.'),
+  ],
+  [
+    'isBoolean',
+    new FunctionEntity(['input: any'], ReturnType.Boolean, 'determine whether a given input is a boolean.'),
+  ],
+  ['isArray', new FunctionEntity(['input: any'], ReturnType.Boolean, 'determine whether a given input is an array.')],
+  ['isObject', new FunctionEntity(['input: any'], ReturnType.Boolean, 'determine whether a given input is an object.')],
+  [
+    'isDateTime',
+    new FunctionEntity(
+      ['input: any'],
+      ReturnType.Boolean,
+      'determine whether a given input is a UTC ISO format timestamp.'
+    ),
+  ],
+  ['isString', new FunctionEntity(['input: any'], ReturnType.Boolean, 'determine whether a given input is a string.')],
 
   // Functions injected from LG library
   // https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/Functions-injected-from-LG.md

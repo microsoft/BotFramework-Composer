@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from 'react-testing-library';
-import { DialogWrapper } from '@src/components/DialogWrapper';
+import { render } from '@bfc/test-utils';
+
+import { DialogWrapper } from '../../../src/components/DialogWrapper';
+import { DialogTypes } from '../../../src/components/DialogWrapper/styles';
 
 describe('<DialogWrapper />', () => {
   const props = {
@@ -11,6 +13,7 @@ describe('<DialogWrapper />', () => {
     title: 'My Dialog',
     subText: 'Create new dialog',
     onDismiss: jest.fn(),
+    dialogType: DialogTypes.CreateFlow,
   };
 
   it('renders null when not open', () => {

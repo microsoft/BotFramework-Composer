@@ -5,13 +5,11 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Bot.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -42,11 +40,23 @@ namespace Tests
 
         public TestContext TestContext { get; set; }
 
+        // Override for locale test
+        public static IActivity CreateConversationUpdateActivity()
+        {
+            return new Activity(ActivityTypes.ConversationUpdate)
+            {
+                MembersAdded = new List<ChannelAccount>() { new ChannelAccount(id: "test") },
+                MembersRemoved = new List<ChannelAccount>(),
+                Locale = "en-us"
+            };
+        }
+
+
         [TestMethod]
         public async Task ToDoBotTest()
         {
             await BuildTestFlow()
-            .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply("Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started.")
             .Send("add a todo named first")
                 .AssertReply("Successfully added a todo named first")
@@ -76,7 +86,7 @@ namespace Tests
                 .UseState(userState, convoState)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
-            var resource = resourceExplorer.GetResource("Main.dialog");
+            var resource = resourceExplorer.GetResource("todosample.dialog");
             var dialog = resourceExplorer.LoadType<Dialog>(resource);
             DialogManager dm = new DialogManager(dialog)
                                 .UseResourceExplorer(resourceExplorer)

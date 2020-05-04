@@ -1,5 +1,5 @@
 {
-    "$type": "Microsoft.AdaptiveDialog",
+    "$kind": "Microsoft.AdaptiveDialog",
     "$designer": {
       "createdAt": "2019-07-04T08:14:01.139Z",
       "updatedAt": "2019-08-01T23:45:38.308Z",
@@ -8,41 +8,41 @@
     },
     "autoEndDialog": false,
     "recognizer": {
-      "$type": "Microsoft.RegexRecognizer",
+      "$kind": "Microsoft.RegexRecognizer",
       "intents": [
         {
   
-            "$type": "Microsoft.IntentPattern",
+            "$kind": "Microsoft.IntentPattern",
             "intent": "AddIntent",
             "pattern": "(?i)(?:add|create) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?" 
         },
         {
   
-            "$type": "Microsoft.IntentPattern",
+            "$kind": "Microsoft.IntentPattern",
             "intent": "ClearIntent",
             "pattern": "(?i)(?:delete|remove|clear) (?:all|every) (?:to-dos|todos|tasks)" 
         },
         {
   
-            "$type": "Microsoft.IntentPattern",
+            "$kind": "Microsoft.IntentPattern",
             "intent": "DeleteIntent",
             "pattern": "(?i)(?:delete|remove|clear) .*(?:to-do|todo|task)(?: )?(?:named (?<title>.*))?" 
         },
         {
   
-            "$type": "Microsoft.IntentPattern",
+            "$kind": "Microsoft.IntentPattern",
             "intent": "ShowIntent",
             "pattern": "(?i)(?:show|see|view) .*(?:to-do|todo|task)" 
         },
         {
   
-            "$type": "Microsoft.IntentPattern",
+            "$kind": "Microsoft.IntentPattern",
             "intent": "HelpIntent",
             "pattern": "(?i)help" 
         },
         {
   
-            "$type": "Microsoft.IntentPattern",
+            "$kind": "Microsoft.IntentPattern",
             "intent": "CancelIntent",
             "pattern": "(?i)cancel|never mind"
         }
@@ -51,7 +51,7 @@
     "generator": "common.lg",
     "triggers": [
       {
-        "$type": "Microsoft.OnConversationUpdateActivity",
+        "$kind": "Microsoft.OnConversationUpdateActivity",
         "$designer": {
           "createdAt": "2019-07-01T22:02:14.960Z",
           "updatedAt": "2019-07-16T20:00:24.788Z",
@@ -60,18 +60,18 @@
         "constraint": "toLower(turn.Activity.membersAdded[0].name) != 'bot'",
         "actions": [
           {
-            "$type": "Microsoft.SendActivity",
+            "$kind": "Microsoft.SendActivity",
             "$designer": {
               "createdAt": "2019-08-02T22:18:56.943Z",
               "updatedAt": "2019-08-02T22:36:20.947Z",
               "id": "157674"
             },
-            "activity": "[bfdactivity-157674]"
+            "activity": "[SendActivity_157674]"
           }
         ]
       },
       {
-        "$type": "Microsoft.OnIntent",
+        "$kind": "Microsoft.OnIntent",
         "$designer": {
           "createdAt": "2019-07-16T19:59:32.772Z",
           "updatedAt": "2019-07-16T19:59:36.277Z",
@@ -79,14 +79,14 @@
         },
         "actions": [
           {
-            "$type": "Microsoft.BeginDialog",
+            "$kind": "Microsoft.BeginDialog",
             "dialog": "AddToDo"
           }
         ],
         "intent": "AddIntent"
       },
       {
-        "$type": "Microsoft.OnIntent",
+        "$kind": "Microsoft.OnIntent",
         "$designer": {
           "createdAt": "2019-07-16T19:59:37.184Z",
           "updatedAt": "2019-08-01T23:46:50.759Z",
@@ -94,7 +94,7 @@
         },
         "actions": [
           {
-            "$type": "Microsoft.BeginDialog",
+            "$kind": "Microsoft.BeginDialog",
             "dialog": "DeleteToDo",
             "$designer": {
               "createdAt": "2019-08-01T23:47:15.255Z",
@@ -106,7 +106,7 @@
         "intent": "DeleteIntent"
       },
       {
-        "$type": "Microsoft.OnIntent",
+        "$kind": "Microsoft.OnIntent",
         "$designer": {
           "createdAt": "2019-07-16T19:59:41.352Z",
           "updatedAt": "2019-07-16T19:59:44.427Z",
@@ -114,14 +114,14 @@
         },
         "actions": [
           {
-            "$type": "Microsoft.BeginDialog",
+            "$kind": "Microsoft.BeginDialog",
             "dialog": "ClearToDos"
           }
         ],
         "intent": "ClearIntent"
       },
       {
-        "$type": "Microsoft.OnIntent",
+        "$kind": "Microsoft.OnIntent",
         "$designer": {
           "createdAt": "2019-07-16T19:59:50.315Z",
           "updatedAt": "2019-07-16T19:59:54.774Z",
@@ -129,19 +129,19 @@
         },
         "actions": [
           {
-            "$type": "Microsoft.SendActivity",
+            "$kind": "Microsoft.SendActivity",
             "$designer": {
               "createdAt": "2019-08-01T23:44:56.704Z",
               "updatedAt": "2019-08-01T23:44:57.629Z",
               "id": "696707"
             },
-            "activity": "[bfdactivity-696707]"
+            "activity": "[SendActivity_696707]"
           }
         ],
         "intent": "HelpIntent"
       },
       {
-        "$type": "Microsoft.OnIntent",
+        "$kind": "Microsoft.OnIntent",
         "$designer": {
           "createdAt": "2019-07-16T20:00:00.082Z",
           "updatedAt": "2019-07-16T20:00:03.344Z",
@@ -149,14 +149,14 @@
         },
         "actions": [
           {
-            "$type": "Microsoft.BeginDialog",
+            "$kind": "Microsoft.BeginDialog",
             "dialog": "ShowToDos"
           }
         ],
         "intent": "ShowIntent"
       },
       {
-        "$type": "Microsoft.OnIntent",
+        "$kind": "Microsoft.OnIntent",
         "$designer": {
           "createdAt": "2019-07-16T20:00:08.499Z",
           "updatedAt": "2019-07-16T20:00:12.504Z",
@@ -164,17 +164,17 @@
         },
         "actions": [
           {
-            "$type": "Microsoft.SendActivity",
+            "$kind": "Microsoft.SendActivity",
             "activity": "ok."
           },
           {
-            "$type": "Microsoft.EndDialog"
+            "$kind": "Microsoft.EndDialog"
           }
         ],
         "intent": "CancelIntent"
       },
       {
-        "$type": "Microsoft.OnUnknownIntent",
+        "$kind": "Microsoft.OnUnknownIntent",
         "$designer": {
           "createdAt": "2019-07-16T20:00:13.577Z",
           "updatedAt": "2019-07-16T20:00:19.435Z",
@@ -182,7 +182,7 @@
         },
         "actions": [
           {
-            "$type": "Microsoft.SendActivity",
+            "$kind": "Microsoft.SendActivity",
             "activity": "Hi! I'm a ToDo bot. Say \"add a todo named first\" to get started."
           }
         ]

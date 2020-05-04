@@ -5,14 +5,8 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Bot.Builder.LanguageGeneration;
-using Microsoft.Bot.Builder.ComposerBot.Json;
 using Microsoft.Bot.Schema;
-using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -46,11 +40,23 @@ namespace Tests
 
         public TestContext TestContext { get; set; }
 
+        // Override for locale test
+        public static IActivity CreateConversationUpdateActivity()
+        {
+            return new Activity(ActivityTypes.ConversationUpdate)
+            {
+                MembersAdded = new List<ChannelAccount>() { new ChannelAccount(id: "test") },
+                MembersRemoved = new List<ChannelAccount>(),
+                Locale = "en-us"
+            };
+        }
+
+
         [TestMethod]
         public async Task MessageTest()
         {
             await BuildTestFlow()
-            .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply("What type of message would you like to send?\n\n   1. Simple Text\n   2. Text With Memory\n   3. LGWithParam\n   4. LGComposition\n   5. Structured LG\n   6. MultiLineText\n   7. IfElseCondition\n   8. SwitchCondition")
             .Send("1")
                 .AssertReplyOneOf(new string[] { "Hi, this is simple text", "Hey, this is simple text", "Hello, this is simple text" })
@@ -80,7 +86,7 @@ namespace Tests
                 .UseState(userState, convoState)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
-            var resource = resourceExplorer.GetResource("Main.dialog");
+            var resource = resourceExplorer.GetResource("respondingwithtextsample.dialog");
             var dialog = resourceExplorer.LoadType<Dialog>(resource);
             DialogManager dm = new DialogManager(dialog)
                                 .UseResourceExplorer(resourceExplorer)

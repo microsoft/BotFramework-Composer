@@ -5,31 +5,29 @@ import express, { Router, Request, Response, NextFunction, RequestHandler } from
 
 import { ProjectController } from '../controllers/project';
 import { StorageController } from '../controllers/storage';
-import { BotConnectorController } from '../controllers/connector';
+import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
+import { EjectController } from '../controllers/eject';
 
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
 router.get('/projects', ProjectController.getAllProjects);
-router.get('/projects/opened', ProjectController.getProject);
-router.put('/projects/opened', ProjectController.openProject);
-router.put('/projects/opened/dialogs/:dialogId', ProjectController.updateDialog);
-router.delete('/projects/opened/dialogs/:dialogId', ProjectController.removeDialog);
-router.post('/projects/opened/dialogs', ProjectController.createDialog);
-router.put('/projects/opened/lgFiles/:lgFileId', ProjectController.updateLgFile);
-router.delete('/projects/opened/lgFiles/:lgFileId', ProjectController.removeLgFile);
-router.post('/projects/opened/lgFiles', ProjectController.createLgFile);
-router.put('/projects/opened/luFiles/:luFileId', ProjectController.updateLuFile);
-router.delete('/projects/opened/luFiles/:luFileId', ProjectController.removeLuFile);
-router.get('/projects/opened/settings', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
-router.post('/projects/opened/settings', ProjectController.updateDefaultSlotEnvSettings);
-router.get('/projects/opened/settings/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
-router.post('/projects/opened/settings/:slot', ProjectController.updateEnvSettings);
-router.post('/projects/opened/luFiles', ProjectController.createLuFile);
-router.post('/projects/opened/luFiles/publish', ProjectController.publishLuis);
-router.post('/projects/opened/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/recent', ProjectController.getRecentProjects);
+
+router.get('/projects/:projectId', ProjectController.getProjectById);
+router.put('/projects/open', ProjectController.openProject);
+router.put('/projects/:projectId/files/:name', ProjectController.updateFile);
+router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
+router.post('/projects/:projectId/files', ProjectController.createFile);
+router.get('/projects/:projectId/settings', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
+router.post('/projects/:projectId/settings', ProjectController.updateDefaultSlotEnvSettings);
+router.get('/projects/:projectId/settings/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>
+router.post('/projects/:projectId/settings/:slot', ProjectController.updateEnvSettings);
+router.post('/projects/:projectId/skills', ProjectController.updateSkill);
+router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
+router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
+router.get('/projects/:projectId/export', ProjectController.exportProject);
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
@@ -37,13 +35,18 @@ router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs', StorageController.getBlob);
 
-// connector
-router.get('/launcher/connect', BotConnectorController.connect);
-router.post('/launcher/sync', BotConnectorController.sync);
-router.get('/launcher/status', BotConnectorController.status);
-router.get('/launcher/publishHistory', BotConnectorController.getPublishHistory);
-router.post('/launcher/publish', BotConnectorController.publish);
-router.post('/launcher/publish/:label', BotConnectorController.publish);
+// publishing
+router.get('/publish/types', PublishController.getTypes);
+router.get('/publish/:projectId/status/:target', PublishController.status);
+router.post('/publish/:projectId/publish/:target', PublishController.publish);
+router.get('/publish/:projectId/history/:target', PublishController.history);
+router.post('/publish/:projectId/rollback/:target', PublishController.rollback);
+
+router.get('/publish/:method', PublishController.publish);
+
+// runtime ejection
+router.get('/runtime/templates', EjectController.getTemplates);
+router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);

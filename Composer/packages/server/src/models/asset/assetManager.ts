@@ -3,6 +3,7 @@
 
 import find from 'lodash/find';
 import { ProjectTemplate } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -34,12 +35,12 @@ const templates: TemplateData = {
   },
   TodoSample: {
     name: 'Simple Todo',
-    description: 'A sample bot that allows you add, list, remove to do items.',
+    description: 'A sample bot that allows you to add, list, and remove to do items.',
     order: 3,
   },
   ToDoBotWithLuisSample: {
     name: 'Todo with LUIS',
-    description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
+    description: 'A sample bot that allows you to add, list, and remove to do items using Language Understanding',
     order: 4,
   },
   RespondingWithCardsSample: {
@@ -48,11 +49,12 @@ const templates: TemplateData = {
   },
   AskingQuestionsSample: {
     name: 'Asking Questions',
-    description: 'A sample bot that shows how to ask question and capture user input.',
+    description: 'A sample bot that shows how to ask questions and capture user input.',
   },
   InterruptionSample: {
     name: 'Interruptions',
-    description: 'An advance sample bot that shows how to handle context switching and interruption in a conversation.',
+    description:
+      'An advanced sample bot that shows how to handle context switching and interruption in a conversation.',
   },
   RespondingWithTextSample: {
     name: 'Responding with Text',
@@ -64,7 +66,7 @@ const templates: TemplateData = {
   },
   ActionsSample: {
     name: 'Dialog Actions',
-    description: 'A sample bot that shows how to use Dialog actions.',
+    description: 'A sample bot that shows how to use Dialog Actions.',
   },
   QnAMakerLUISSample: {
     name: 'QnA Maker and LUIS',
@@ -116,7 +118,8 @@ export class AssetManager {
         const templateData = templates[name];
         if (!templateData) continue;
         const absPath = Path.join(path, name);
-        if ((await this.templateStorage.stat(absPath)).isDir) {
+        const folder = await this.templateStorage.stat(absPath);
+        if (folder.isDir) {
           const base = { id: name, ...templateData };
           this.projectTemplates.push({ ...base, path: absPath });
           output.push(base);
@@ -157,6 +160,15 @@ export class AssetManager {
     return output;
   }
 
+  // Copy material from the boilerplate into the project
+  // This is used to copy shared content into every new project
+  public async copyBoilerplate(dstDir: string, dstStorage: IFileStorage) {
+    const boilerplatePath = Path.join(this.assetsLibraryPath, 'shared');
+    if (await this.templateStorage.exists(boilerplatePath)) {
+      await copyDir(boilerplatePath, this.templateStorage, dstDir, dstStorage);
+    }
+  }
+
   public async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage) {
     const template = find(this.projectTemplates, { id: templateId });
     if (template === undefined || template.path === undefined) {
@@ -175,16 +187,16 @@ export class AssetManager {
     await copyDir(runtime.path, this.templateStorage, dstDir, dstStorage);
   }
 
-  public async copyProjectTemplateTo(templateId: string, ref: LocationRef): Promise<LocationRef> {
+  public async copyProjectTemplateTo(templateId: string, ref: LocationRef, user?: UserIdentity): Promise<LocationRef> {
     // user storage maybe diff from template storage
-    const dstStorage = StorageService.getStorageClient(ref.storageId);
+    const dstStorage = StorageService.getStorageClient(ref.storageId, user);
     const dstDir = Path.resolve(ref.path);
     if (await dstStorage.exists(dstDir)) {
       log('Failed copying template to %s', dstDir);
       throw new Error('already have this folder, please give another name');
     }
     await this.copyDataFilesTo(templateId, dstDir, dstStorage);
-    await this.copyRuntimeTo(dstDir, dstStorage);
+    // await this.copyRuntimeTo(dstDir, dstStorage);
     return ref;
   }
 }

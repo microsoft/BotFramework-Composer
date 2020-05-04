@@ -1,8 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { UserIdentity } from '@bfc/plugin-loader';
+
 import { Path } from '../../utility/path';
-import { LocalDiskStorage } from '../storage/localDiskStorage';
+import { IFileStorage } from '../storage/interface';
+import StorageService from '../../services/storage';
 import log from '../../logger';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
@@ -10,25 +13,26 @@ import { ISettingManager, OBFUSCATED_VALUE } from '.';
 const debug = log.extend('file-settings-manager');
 
 // TODO: this causes tests to fail
-const subPath = 'ComposerDialogs/settings/appsettings.json';
+const subPath = 'settings/appsettings.json';
 
 export class FileSettingManager implements ISettingManager {
   private basePath: string;
-  protected storage: LocalDiskStorage;
+  protected storage: IFileStorage;
 
-  constructor(basePath: string) {
+  constructor(basePath: string, user?: UserIdentity) {
     this.basePath = basePath;
-    this.storage = new LocalDiskStorage();
+    // todo: do we need to pass in a storage client id? there can only be one at a time.
+    this.storage = StorageService.getStorageClient('default', user);
   }
 
-  public get = async (slot = '', obfuscate = false): Promise<any> => {
+  public async get(slot = '', obfuscate = false): Promise<any> {
     this.validateSlot(slot);
 
     const path = this.getPath(slot);
     const settings = await this._getFromStorage(path, slot);
 
     return obfuscate ? this.obfuscateValues(settings) : settings;
-  };
+  }
 
   private _getFromStorage = async (path: string, slot: string) => {
     if (await this.storage.exists(path)) {

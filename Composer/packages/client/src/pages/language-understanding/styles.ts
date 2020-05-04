@@ -2,12 +2,28 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { FontWeights, FontSizes, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+
 export const actionButton = css`
   font-size: 16px;
   margin: 0;
   margin-left: 15px;
+`;
+
+export const iconClass = mergeStyles({
+  fontSize: FontSizes.medium,
+});
+
+export const pageRoot = css`
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: row;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 `;
 
 export const flexContentSpaceBetween = css`
@@ -36,9 +52,9 @@ export const HeaderText = css`
 
 export const ContentStyle = css`
   margin-left: 2px;
+  height: calc(100vh - 180px);
   display: flex;
   border-top: 1px solid #dddddd;
-  flex: 1;
   position: relative;
   nav {
     ul {
@@ -50,31 +66,31 @@ export const ContentStyle = css`
 export const contentEditor = css`
   flex: 4;
   margin: 20px;
-  height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
+
+  label: ContentEditor;
 `;
 
 export const codeEditorContainer = css`
   width: 100%;
 `;
 
-export const codeEditor = css`
-  border: 1px solid #dddddd;
-  padding-bottom: 10px;
-  height: calc(100% - 20px);
-`;
-
 export const formCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
   white-space: pre-wrap;
   font-size: 14px;
-  textarea,
-  input {
-    border: 1px solid #dddddd;
-  }
+  line-height: 28px;
 `;
 
 export const luPhraseCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
   white-space: pre-wrap;
   font-size: 14px;
 `;
@@ -131,14 +147,13 @@ export const consoleStyle = css`
   margin-bottom: 20px;
 `;
 
-export const dialogItem = selected => css`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: ${selected ? NeutralColors.gray20 : NeutralColors.white};
-  font-weight: ${selected ? FontWeights.semibold : FontWeights.semilight};
-  height: 32px;
-  font-size: ${FontSizes.small};
-  padding-left: 18px;
-  cursor: pointer;
+export const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
 `;

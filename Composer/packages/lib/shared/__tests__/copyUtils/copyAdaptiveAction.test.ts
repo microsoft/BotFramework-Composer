@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
-import { SDKTypes } from '../../src';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
+import { SDKKinds } from '../../src';
 import CopyConstructorMap from '../../src/copyUtils/CopyConstructorMap';
 import { copyAdaptiveAction } from '../../src/copyUtils';
 
-// NOTES: Cannot use SDKTypes here. `jest.mock` has to have zero dependency.
+// NOTES: Cannot use SDKKinds here. `jest.mock` has to have zero dependency.
 jest.mock('../../src/copyUtils/CopyConstructorMap', () => ({
   'Microsoft.SendActivity': jest.fn(),
   'Microsoft.IfCondition': jest.fn(),
@@ -27,25 +27,25 @@ describe('copyAdaptiveAction', () => {
   });
 
   const registeredTypes = [
-    SDKTypes.SendActivity,
-    SDKTypes.IfCondition,
-    SDKTypes.SwitchCondition,
-    SDKTypes.EditActions,
-    SDKTypes.ChoiceInput,
-    SDKTypes.Foreach,
+    SDKKinds.SendActivity,
+    SDKKinds.IfCondition,
+    SDKKinds.SwitchCondition,
+    SDKKinds.EditActions,
+    SDKKinds.ChoiceInput,
+    SDKKinds.Foreach,
   ];
-  for (const $type of registeredTypes) {
-    it(`should invoke registered handler for ${$type}`, async () => {
-      await copyAdaptiveAction({ $type }, externalApi);
-      expect(CopyConstructorMap[$type]).toHaveReturnedTimes(1);
+  for (const $kind of registeredTypes) {
+    it(`should invoke registered handler for ${$kind}`, async () => {
+      await copyAdaptiveAction({ $kind }, externalApi);
+      expect(CopyConstructorMap[$kind]).toHaveReturnedTimes(1);
     });
   }
 
   it('should invoke default handler for other types', async () => {
-    await copyAdaptiveAction({ $type: SDKTypes.BeginDialog }, externalApi);
+    await copyAdaptiveAction({ $kind: SDKKinds.BeginDialog }, externalApi);
     expect(CopyConstructorMap.default).toHaveReturnedTimes(1);
 
-    await copyAdaptiveAction({ $type: SDKTypes.HttpRequest }, externalApi);
+    await copyAdaptiveAction({ $kind: SDKKinds.HttpRequest }, externalApi);
     expect(CopyConstructorMap.default).toHaveReturnedTimes(2);
   });
 });

@@ -56,7 +56,7 @@ export const notificationHeaderText = css`
 
 export const root = css`
   display: flex;
-  height: 100%;
+  height: calc(100vh - 50px);
   flex-direction: column;
 `;
 
@@ -75,4 +75,15 @@ export const tableView = css`
 
 export const detailList = css`
   overflow-x: hidden;
+`;
+
+export const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
 `;

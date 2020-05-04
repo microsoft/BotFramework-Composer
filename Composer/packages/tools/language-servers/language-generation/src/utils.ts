@@ -2,16 +2,9 @@
 // Licensed under the MIT License.
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
-import {
-  DiagnosticSeverity as LGDiagnosticSeverity,
-  ImportResolver,
-  Diagnostic as LGDiagnostic,
-  StaticChecker,
-  LGParser,
-} from 'botbuilder-lg';
-import { LgTemplate, Diagnostic as BFDiagnostic, offsetRange, LgFile, LgParsed } from '@bfc/indexers';
-
-const staticChecker = new StaticChecker();
+import { DiagnosticSeverity as LGDiagnosticSeverity, Diagnostic as LGDiagnostic, Templates } from 'botbuilder-lg';
+import { LgTemplate, Diagnostic as BFDiagnostic, LgFile, LgParsed } from '@bfc/shared';
+import { offsetRange } from '@bfc/indexers';
 
 // state should map to tokenizer state
 export enum LGCursorState {
@@ -27,6 +20,7 @@ export enum LGCursorState {
 }
 
 export interface LGOption {
+  projectId: string;
   fileId: string;
   templateId: string;
 }
@@ -39,6 +33,7 @@ export interface Template {
 
 export interface LGDocument {
   uri: string;
+  projectId?: string;
   fileId?: string;
   templateId?: string;
   index: () => LgParsed;
@@ -123,19 +118,59 @@ export function textFromTemplate(template: Template): string {
 
 export function checkTemplate(template: Template): LGDiagnostic[] {
   const text = textFromTemplate(template);
-  return staticChecker.checkText(text, '', ImportResolver.fileResolver).filter(diagnostic => {
+  return Templates.parseText(text, '').diagnostics.filter(diagnostic => {
     // ignore non-exist references in template body.
     return diagnostic.message.includes('does not have an evaluator') === false;
   });
 }
 
 export function updateTemplate(content: string, name: string, body: string): string {
-  const resource = LGParser.parse(content);
-  const template = resource.templates.find(t => t.name === name);
+  const lgFile = Templates.parseText(content);
+  const template = lgFile.toArray().find(t => t.name === name);
   // add if not exist
   if (!template) {
-    return resource.addTemplate(name, [], body).toString();
+    return lgFile.addTemplate(name, [], body).toString();
   } else {
-    return resource.updateTemplate(name, name, template.parameters, body).toString();
+    return lgFile.updateTemplate(name, name, template.parameters, body).toString();
   }
 }
+
+export const cardTypes = [
+  'Typing',
+  'Suggestions',
+  'HeroCard',
+  'SigninCard',
+  'ThumbnailCard',
+  'AudioCard',
+  'VideoCard',
+  'AnimationCard',
+  'MediaCard',
+  'OAuthCard',
+  'Attachment',
+  'AttachmentLayout',
+  'CardAction',
+  'AdaptiveCard',
+  'Activity',
+];
+
+export const cardPropPossibleValueType = {
+  title: 'An Example Card',
+  type: 'Action Type',
+  value: 'Some Value',
+  SuggestionActions: 'Text | ${Some_CardAction}',
+  subtitle: 'An Example Subtitle',
+  text: 'Some text',
+  image: 'https://example.com/demo.jpg',
+  buttons: 'Text | ${Some_CardAction}',
+  contenttype: 'adaptivecard',
+  content: '${json(fromFile("../../card.json"))}',
+  name: 'An Example Name',
+};
+
+export const cardPropDict = {
+  CardAction: ['title', 'type', 'value'],
+  Suggestions: ['SuggestionActions'],
+  Cards: ['title', 'subtitle', 'text', 'image', 'buttons'],
+  Attachment: ['contenttype', 'content'],
+  Others: ['type', 'name', 'value'],
+};

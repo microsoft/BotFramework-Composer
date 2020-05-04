@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { UserIdentity } from '@bfc/plugin-loader';
+
 import { FileSettingManager } from './fileSettingManager';
 
 export class HostedSettingManager extends FileSettingManager {
-  constructor(basePath: string) {
-    super(basePath);
+  constructor(basePath: string, user?: UserIdentity) {
+    super(basePath, user);
   }
 
   protected createDefaultSettings = (): any => {

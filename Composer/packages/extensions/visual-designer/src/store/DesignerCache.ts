@@ -16,8 +16,8 @@ export class DesignerCache {
     const designerId = get(actionData, '$designer.id', '');
     if (!designerId) return null;
 
-    const $type = get(actionData, '$type');
-    return `${$type}-${designerId}`;
+    const $kind = get(actionData, '$kind');
+    return `${$kind}-${designerId}`;
   }
 
   cacheBoundary(actionData: BaseSchema, boundary: Boundary): boolean {
@@ -34,6 +34,13 @@ export class DesignerCache {
     this.boundaryCache[key] = boundary;
     this.cacheSize += 1;
     return true;
+  }
+
+  uncacheBoundary(actionData: BaseSchema): boolean {
+    const key = this.getActionDataHash(actionData);
+    if (!key) return false;
+
+    return delete this.boundaryCache[key];
   }
 
   loadBounary(actionData: BaseSchema): Boundary | undefined {

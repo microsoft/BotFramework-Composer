@@ -1,5 +1,5 @@
 {
-  "$type": "Microsoft.AdaptiveDialog",
+  "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
     "createdAt": "2019-07-03T06:51:41.186Z",
     "updatedAt": "2019-07-16T20:00:46.804Z",
@@ -9,7 +9,7 @@
   "$schema": "../../app.schema",
   "triggers": [
     {
-      "$type": "Microsoft.OnBeginDialog",
+      "$kind": "Microsoft.OnBeginDialog",
       "$designer": {
         "id": "768658",
         "updatedAt": "2019-07-22T08:10:54.685Z"
@@ -17,7 +17,7 @@
        
       "actions": [
         {
-          "$type": "Microsoft.SetProperty",
+          "$kind": "Microsoft.SetProperty",
           "$designer": {
             "createdAt": "2019-07-01T22:04:05.322Z",
             "updatedAt": "2019-07-16T20:02:14.365Z",
@@ -27,7 +27,7 @@
           "value": "@title"
         },
         {
-          "$type": "Microsoft.TextInput",
+          "$kind": "Microsoft.TextInput",
           "$designer": {
             "createdAt": "2019-07-16T20:01:55.761Z",
             "updatedAt": "2019-07-16T20:01:59.761Z",
@@ -41,7 +41,7 @@
           "outputFormat": "none"
         },
         {
-          "$type": "Microsoft.EditArray",
+          "$kind": "Microsoft.EditArray",
           "$designer": {
             "createdAt": "2019-07-16T20:02:01.004Z",
             "updatedAt": "2019-07-16T20:02:06.091Z",
@@ -53,7 +53,7 @@
           "value": "dialog.todo"
         },
         {
-          "$type": "Microsoft.IfCondition",
+          "$kind": "Microsoft.IfCondition",
           "$designer": {
             "createdAt": "2019-07-01T22:04:45.788Z",
             "updatedAt": "2019-07-16T20:02:19.199Z",
@@ -62,24 +62,24 @@
           "condition": "dialog.removed",
           "actions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "createdAt": "2019-07-01T22:04:05.322Z",
                 "updatedAt": "2019-07-16T20:02:14.365Z",
                 "id": "725469"
               },
-              "activity": "[bfdactivity-725469]"
+              "activity": "[SendActivity_725469]"
             }
           ],
           "elseActions": [
             {
-              "$type": "Microsoft.SendActivity",
+              "$kind": "Microsoft.SendActivity",
               "$designer": {
                 "createdAt": "2019-07-01T22:04:45.788Z",
                 "updatedAt": "2019-07-16T20:02:19.199Z",
                 "id": "549615"
               },
-              "activity": "[bfdactivity-549615]"
+              "activity": "[SendActivity_549615]"
             }
           ]
         }

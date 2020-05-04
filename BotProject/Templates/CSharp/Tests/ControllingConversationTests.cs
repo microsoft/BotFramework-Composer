@@ -5,13 +5,11 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
-using Microsoft.Bot.Builder.Dialogs.Debugging;
-using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
-using Microsoft.Bot.Builder.Dialogs.Declarative.Types;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Bot.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -42,11 +40,22 @@ namespace Tests
 
         public TestContext TestContext { get; set; }
 
+        // Override for locale test
+        public static IActivity CreateConversationUpdateActivity()
+        {
+            return new Activity(ActivityTypes.ConversationUpdate)
+            {
+                MembersAdded = new List<ChannelAccount>() { new ChannelAccount(id: "test") },
+                MembersRemoved = new List<ChannelAccount>(),
+                Locale = "en-us"
+            };
+        }
+
         [TestMethod]
         public async Task ControllingConversationBotTest()
         {
             await BuildTestFlow()
-            .SendConversationUpdate()
+            .Send(CreateConversationUpdateActivity())
                 .AssertReply(String.Format("Welcome to the Controlling Conversation sample. Choose from the list below to try.{0}You can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.", Environment.NewLine))
             .Send("01")
                 .AssertReply("Hello, What's your age?")
@@ -74,6 +83,19 @@ namespace Tests
             .Send("Yes")
                 .AssertReply("Do you want to repeat this dialog, yes to repeat, no to end this dialog (1) Yes or (2) No")
             .Send("No")
+            .Send("08")
+                .AssertReply("In continue loop, which only outputs dual.")
+                .AssertReply("index: 1 value: 2")
+                .AssertReply("index: 3 value: 4")
+                .AssertReply("index: 5 value: 6")
+                .AssertReply("In break loop, which breaks when index > 2")
+                .AssertReply("index: 0 value: 1")
+                .AssertReply("index: 1 value: 2")
+                .AssertReply("index: 2 value: 3")
+                .AssertReply("done")
+            .Send("09")
+                .AssertReply("counter: 1")
+                .AssertReply("counter: 2")
             .StartTestAsync();
         }
 
@@ -89,7 +111,7 @@ namespace Tests
                 .UseState(userState, convoState)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
-            var resource = resourceExplorer.GetResource("Main.dialog");
+            var resource = resourceExplorer.GetResource("controllingconversationflowsample.dialog");
             var dialog = resourceExplorer.LoadType<Dialog>(resource);
             DialogManager dm = new DialogManager(dialog)
                                .UseResourceExplorer(resourceExplorer)

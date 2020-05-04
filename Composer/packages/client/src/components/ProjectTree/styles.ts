@@ -5,6 +5,7 @@ import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 
@@ -24,7 +25,8 @@ export const searchBox = {
   },
 };
 export const root = css`
-  width: 180px;
+  width: 100%;
+  height: 100%;
   border-right: 1px solid #c4c4c4;
   box-sizing: border-box;
   overflow-y: auto;
@@ -42,9 +44,13 @@ export const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
   color: #545454;
   background: ${isActive && !isSubItemActive ? '#f2f2f2' : 'transparent'};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
-  &: hover {
+  &:hover {
     color: #545454;
     background: #f2f2f2;
+
+    .dialog-more-btn {
+      visibility: visible;
+    }
   }
   &:focus {
     outline: none;
@@ -64,8 +70,12 @@ export const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
 `;
 
 export const itemText = (depth: number) => css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+    z-index: 1;
+  }
   padding-left: ${depth * 16}px;
-  width: ${depth === 0 ? 130 : 120}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -73,24 +83,37 @@ export const itemText = (depth: number) => css`
   cursor: pointer;
 `;
 
-export const moreButton: IButtonStyles = {
-  root: {
-    padding: '0 4px',
-    alignSelf: 'stretch',
-    height: 'auto',
-    visibility: 'hidden',
-    width: '16px',
-  },
-  menuIcon: {
-    fontSize: '14px',
-    color: '#000',
-  },
+export const content = css`
+  outline: none;
+`;
+
+export const moreButton = (isActive: boolean): IButtonStyles => {
+  return {
+    root: {
+      padding: '0 4px',
+      alignSelf: 'stretch',
+      visibility: isActive ? 'visible' : 'hidden',
+      height: 'auto',
+      width: '16px',
+    },
+    menuIcon: {
+      fontSize: '14px',
+      color: '#000',
+    },
+  };
 };
 
 export const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
     marginTop: '-7px',
     width: '100px',
+  },
+};
+
+export const menuStyle: Partial<IContextualMenuStyles> = {
+  subComponentStyles: {
+    menuItem: {},
+    callout: moreMenu,
   },
 };
 
@@ -101,17 +124,6 @@ export const overflowSet = css`
   box-sizing: border-box;
   line-height: 36px;
   justify-content: space-between;
-  & : hover {
-    .dialog-more-btn {
-      visibility: visible;
-    }
-  }
-`;
-
-export const addButton = (depth: number) => css`
-  margin-left: ${depth * 16}px;
-  font-size: 12px;
-  color: #0078d4;
 `;
 
 export const styles = {

@@ -3,10 +3,13 @@
 
 import * as fs from 'fs';
 
+import { UserIdentity } from '@bfc/plugin-loader';
+
 import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
+import settings from '../settings';
 
 const fileBlacklist = ['.DS_Store'];
 const isValidFile = (file: string) => {
@@ -21,14 +24,14 @@ class StorageService {
     this.ensureDefaultBotFoldersExist();
   }
 
-  public getStorageClient = (storageId: string): IFileStorage => {
+  public getStorageClient = (storageId: string, user?: UserIdentity): IFileStorage => {
     const conn = this.storageConnections.find(s => {
       return s.id === storageId;
     });
     if (conn === undefined) {
       throw new Error(`no storage connection with id ${storageId}`);
     }
-    return StorageFactory.createStorageClient(conn);
+    return StorageFactory.createStorageClient(conn, user);
   };
 
   public createStorageConnection = (connection: StorageConnection) => {
@@ -54,21 +57,35 @@ class StorageService {
     return connections;
   };
 
-  public checkBlob = async (storageId: string, filePath: string): Promise<boolean> => {
-    const storageClient = this.getStorageClient(storageId);
+  public checkBlob = async (storageId: string, filePath: string, user?: UserIdentity): Promise<boolean> => {
+    const storageClient = this.getStorageClient(storageId, user);
     return await storageClient.exists(filePath);
   };
 
-  public getBlobDateModified = async (storageId: string, filePath: string) => {
-    const storageClient = this.getStorageClient(storageId);
+  public getBlobDateModified = async (storageId: string, filePath: string, user?: UserIdentity) => {
+    const storageClient = this.getStorageClient(storageId, user);
     const stat = await storageClient.stat(filePath);
     return stat.lastModified;
   };
 
   // return connent for file
   // return children for dir
-  public getBlob = async (storageId: string, filePath: string) => {
-    const storageClient = this.getStorageClient(storageId);
+  public getBlob = async (storageId: string, filePath: string, user?: UserIdentity) => {
+    if (filePath === '/' && settings.platform === 'win32') {
+      return {
+        name: '',
+        parent: '/',
+        children: settings.diskNames.map(d => {
+          return {
+            name: d,
+            type: 'folder',
+            path: d,
+            writable: false,
+          };
+        }),
+      };
+    }
+    const storageClient = this.getStorageClient(storageId, user);
     const stat = await storageClient.stat(filePath);
     if (stat.isFile) {
       // NOTE: this behavior is not correct, we should NOT parse this file as json
@@ -77,10 +94,17 @@ class StorageService {
       // TODO: fix this behavior and the upper layer interface accordingly
       return JSON.parse(await storageClient.readFile(filePath));
     } else {
+      let writable = true;
+      try {
+        fs.accessSync(filePath, fs.constants.W_OK);
+      } catch (err) {
+        writable = false;
+      }
       return {
         name: Path.basename(filePath),
         parent: Path.dirname(filePath),
         children: await this.getChildren(storageClient, filePath),
+        writable: writable,
       };
     }
   };
@@ -100,11 +124,15 @@ class StorageService {
     });
   };
 
-  private isBotFolder = (path: string) => {
-    // locate Main.dialog
-    const mainPath = Path.join(path, 'ComposerDialogs/Main', 'Main.dialog');
-    const isbot = fs.existsSync(mainPath);
-    return isbot;
+  private isBotFolder = async (storage: IFileStorage, path: string) => {
+    // locate new structure bot:
+    const children = await storage.readDir(path);
+    const dialogFile = /.+(.)dialog/;
+    const isNewBot = children.some(name => dialogFile.test(name));
+    // locate old structire bot: Main.dialog
+    const mainPath = Path.join(path, 'Main', 'Main.dialog');
+    const isOldBot = await storage.exists(mainPath);
+    return isNewBot || isOldBot;
   };
 
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
@@ -121,7 +149,7 @@ class StorageService {
         }
         return {
           name: childName,
-          type: childStat.isDir ? (this.isBotFolder(childAbsPath) ? 'bot' : 'folder') : 'file',
+          type: childStat.isDir ? ((await this.isBotFolder(storage, childAbsPath)) ? 'bot' : 'folder') : 'file',
           path: childAbsPath,
           lastModified: childStat.lastModified, // just keep the previous interface
           size: childStat.size, // just keep the previous interface

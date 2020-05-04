@@ -8,7 +8,7 @@ context('breadcrumb', () => {
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+      cy.findByText('__TestTodoSample').click();
     });
   });
 
@@ -25,29 +25,29 @@ context('breadcrumb', () => {
 
   it('can show dialog name in breadcrumb', () => {
     // Should path = main dialog at first render
-    hasBreadcrumbItems(cy, ['__TestTodoSample.Main']);
+    hasBreadcrumbItems(cy, ['__TestTodoSample']);
 
     // Click on AddToDo dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('AddToDo').click();
+      cy.findByText('addtodo').click();
     });
-    hasBreadcrumbItems(cy, ['AddToDo']);
+    hasBreadcrumbItems(cy, ['Addtodo']);
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+      cy.findByText('__TestTodoSample').click();
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample.Main']);
+    hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
   it('can show event name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('AddToDo').click();
+      cy.findByText('addtodo').click();
       cy.findByText('Dialog started').click();
     });
 
-    hasBreadcrumbItems(cy, ['AddToDo', 'Dialog started']);
+    hasBreadcrumbItems(cy, ['Addtodo', 'Dialog started']);
   });
 
   it('can show action name in breadcrumb', () => {
@@ -62,6 +62,6 @@ context('breadcrumb', () => {
       });
     });
 
-    hasBreadcrumbItems(cy, ['__TestTodoSample.Main', 'Greeting', 'Send a response']);
+    hasBreadcrumbItems(cy, ['__TestTodoSample', 'Greeting', 'Send a response']);
   });
 });

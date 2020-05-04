@@ -5,9 +5,8 @@ import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
 
-import { ActionTypes, BASEPATH } from './../../constants/index';
+import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
-import { startBot } from './bot';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 import httpClient from './../../utils/httpUtil';
@@ -30,9 +29,16 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
   });
 };
 
-export const fetchProject: ActionCreator = async store => {
+export const setBotStatus: ActionCreator = ({ dispatch }, status: BotStatus) => {
+  dispatch({
+    type: ActionTypes.UPDATE_BOTSTATUS,
+    payload: { status },
+  });
+};
+
+export const fetchProjectById: ActionCreator = async (store, projectId) => {
   try {
-    const response = await httpClient.get(`/projects/opened`);
+    const response = await httpClient.get(`/projects/${projectId}`);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
@@ -40,10 +46,16 @@ export const fetchProject: ActionCreator = async store => {
       },
     });
     return response.data;
-  } catch (err) {
+  } catch (error) {
     navigateTo('/home');
-    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
+    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: { error } });
   }
+};
+
+export const fetchProject: ActionCreator = async store => {
+  const state = store.getState();
+  const projectId = state.projectId;
+  return fetchProjectById(store, projectId);
 };
 
 export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
@@ -55,8 +67,13 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
         response,
       },
     });
-  } catch (err) {
-    dispatch({ type: ActionTypes.GET_RECENT_PROJECTS_FAILURE, payload: null, error: err });
+  } catch (error) {
+    dispatch({
+      type: ActionTypes.GET_RECENT_PROJECTS_FAILURE,
+      payload: {
+        error,
+      },
+    });
   }
 };
 
@@ -68,19 +85,22 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       storageId,
       path: absolutePath,
     };
-    const response = await httpClient.put(`/projects/opened`, data);
-    const dialogs = response.data.dialogs;
+    const response = await httpClient.put(`/projects/open`, data);
+    const files = response.data.files;
+    const projectId = response.data.id;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
         response,
       },
     });
-    if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
-      startBot(store, true);
+    if (files && files.length > 0) {
+      // navTo(store, 'Main');
+      const mainUrl = `/bot/${projectId}/dialogs/Main`;
+      navigateTo(mainUrl);
+    } else {
+      navigate(BASEPATH);
     }
-    navigate(BASEPATH);
   } catch (err) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
@@ -98,7 +118,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
   }
 };
 
-export const saveProjectAs: ActionCreator = async (store, name, description, location) => {
+export const saveProjectAs: ActionCreator = async (store, projectId, name, description, location) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
   try {
@@ -108,20 +128,24 @@ export const saveProjectAs: ActionCreator = async (store, name, description, loc
       description,
       location,
     };
-    const response = await httpClient.post(`/projects/opened/project/saveAs`, data);
-    const dialogs = response.data.dialogs;
+    const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
+    const files = response.data.files;
+    const newProjectId = response.data.id;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
+      payload: { response },
+    });
+    if (files && files.length > 0) {
+      const mainUrl = `/bot/${newProjectId}/dialogs/Main`;
+      navigateTo(mainUrl);
+    }
+  } catch (error) {
+    store.dispatch({
+      type: ActionTypes.GET_PROJECT_FAILURE,
       payload: {
-        response,
+        error,
       },
     });
-    if (dialogs && dialogs.length > 0) {
-      navTo(store, 'Main');
-    }
-    return response.data;
-  } catch (err) {
-    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
   }
 };
 
@@ -130,7 +154,8 @@ export const createProject: ActionCreator = async (
   templateId: string,
   name: string,
   description: string,
-  location: string
+  location: string,
+  schemaUrl?: string
 ) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
@@ -141,9 +166,11 @@ export const createProject: ActionCreator = async (
       name,
       description,
       location,
+      schemaUrl,
     };
+
     const response = await httpClient.post(`/projects`, data);
-    const dialogs = response.data.dialogs;
+    const files = response.data.files;
     settingStorage.remove(name);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
@@ -151,12 +178,17 @@ export const createProject: ActionCreator = async (
         response,
       },
     });
-    if (dialogs && dialogs.length > 0) {
+    if (files && files.length > 0) {
       navTo(store, 'Main');
     }
     return response.data;
-  } catch (err) {
-    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: null, error: err });
+  } catch (error) {
+    store.dispatch({
+      type: ActionTypes.GET_PROJECT_FAILURE,
+      payload: {
+        error,
+      },
+    });
   }
 };
 

@@ -4,34 +4,28 @@
 context('Luis Deploy', () => {
   beforeEach(() => {
     cy.server();
-    cy.route('GET', '/api/launcher/connect?botEnvironment=production', 'OK');
-    cy.route('POST', '/api/launcher/sync', 'OK');
-    cy.route('POST', 'api/projects/opened/settings', 'OK');
+    cy.route('POST', '/api/publish/*/publish/default', { endpointURL: 'anything' });
+    cy.route('POST', '/api/projects/*/settings', 'OK');
+    cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything' });
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('ToDoBotWithLuisSample');
   });
 
   it('can deploy luis success', () => {
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();
-
+    cy.url().should('contain', 'language-understanding/all');
     cy.route({
       method: 'POST',
-      url: '/api/projects/opened/luFiles/publish',
+      url: 'api/projects/*/luFiles/publish',
       status: 200,
       response: 'fixture:luPublish/success',
     });
     cy.findByText('Start Bot').click();
 
     // clear its settings before
-    cy.findByTestId('ProjectNameInput')
-      .clear()
-      .type('MyProject');
-    cy.findByTestId('EnvironmentInput')
-      .clear()
-      .type('composer');
-    cy.findByTestId('AuthoringKeyInput')
-      .clear()
-      .type('0d4991873f334685a9686d1b48e0ff48');
+    cy.enterTextAndSubmit('ProjectNameInput', 'MyProject');
+    cy.enterTextAndSubmit('EnvironmentInput', 'composer');
+    cy.enterTextAndSubmit('AuthoringKeyInput', '0d4991873f334685a9686d1b48e0ff48');
     // wait for the debounce interval of sync settings
     cy.findByText('OK').click();
     cy.findByText('Restart Bot').should('exist');
@@ -39,7 +33,7 @@ context('Luis Deploy', () => {
 
     cy.route({
       method: 'POST',
-      url: '/api/projects/opened/luFiles/publish',
+      url: 'api/projects/*/luFiles/publish',
       status: 400,
       response: 'fixture:luPublish/error',
     });

@@ -8,7 +8,7 @@ import { JSONSchema6 } from 'json-schema';
 
 // const schema = JSON.parse(fs.readFileSync('./BotProject/CSharp/Schemas/sdk.schema', 'utf-8'));
 // const types = schema.oneOf.map(t => t.title);
-// let uType = 'export enum SDKTypes {\n';
+// let uType = 'export enum SDKKinds {\n';
 // uType += types.map(t => `  ${t.replace('Microsoft.', '')} = '${t}',`).join('\n');
 // uType += '\n}';
 // console.log(uType);
@@ -18,17 +18,19 @@ import { JSONSchema6 } from 'json-schema';
  * All references of the type should be accessed through this enum.
  * */
 
-export enum SDKTypes {
+export enum SDKKinds {
   ActivityTemplate = 'Microsoft.ActivityTemplate',
   AdaptiveDialog = 'Microsoft.AdaptiveDialog',
   AgeEntityRecognizer = 'Microsoft.AgeEntityRecognizer',
   AttachmentInput = 'Microsoft.AttachmentInput',
   BeginDialog = 'Microsoft.BeginDialog',
+  BreakLoop = 'Microsoft.BreakLoop',
   CancelAllDialogs = 'Microsoft.CancelAllDialogs',
   ChoiceInput = 'Microsoft.ChoiceInput',
   ConditionalSelector = 'Microsoft.ConditionalSelector',
   ConfirmInput = 'Microsoft.ConfirmInput',
   ConfirmationEntityRecognizer = 'Microsoft.ConfirmationEntityRecognizer',
+  ContinueLoop = 'Microsoft.ContinueLoop',
   CurrencyEntityRecognizer = 'Microsoft.CurrencyEntityRecognizer',
   DateTimeEntityRecognizer = 'Microsoft.DateTimeEntityRecognizer',
   DateTimeInput = 'Microsoft.DateTimeInput',
@@ -50,7 +52,6 @@ export enum SDKTypes {
   HttpRequest = 'Microsoft.HttpRequest',
   IfCondition = 'Microsoft.IfCondition',
   IpEntityRecognizer = 'Microsoft.IpEntityRecognizer',
-  LanguagePolicy = 'Microsoft.LanguagePolicy',
   LogAction = 'Microsoft.LogAction',
   LuisRecognizer = 'Microsoft.LuisRecognizer',
   MentionEntityRecognizer = 'Microsoft.MentionEntityRecognizer',
@@ -102,12 +103,34 @@ export enum SDKTypes {
   TraceActivity = 'Microsoft.TraceActivity',
   TrueSelector = 'Microsoft.TrueSelector',
   UrlEntityRecognizer = 'Microsoft.UrlEntityRecognizer',
+
+  /** Kinds */
+
+  IActivityTemplate = 'Microsoft.IActivityTemplate',
+  IRecognizer = 'Microsoft.IRecognizer',
+  ILanguageGenerator = 'Microsoft.ILanguageGenerator',
+  ITriggerSelector = 'Microsoft.ITriggerSelector',
+  IDialog = 'Microsoft.IDialog',
+  LanguagePolicy = 'Microsoft.LanguagePolicy',
+}
+
+export enum SDKRoles {
+  expression = 'expression',
+  // TODO
+  // union = 'union',
+  // union_*_ = 'union(*)',
+}
+
+export interface DefinitionSummary {
+  title: string;
+  description: string;
+  $ref: string;
 }
 
 export interface OBISchema extends JSONSchema6 {
   $schema?: string;
   $role?: string;
-  $type?: SDKTypes;
+  $kind?: SDKKinds;
   $copy?: string;
   $id?: string;
   $designer?: {
@@ -115,6 +138,7 @@ export interface OBISchema extends JSONSchema6 {
     [key: string]: any;
   };
   description?: string;
+  oneOf?: DefinitionSummary[];
   definitions?: any;
   title?: string;
   __additional_property?: boolean;

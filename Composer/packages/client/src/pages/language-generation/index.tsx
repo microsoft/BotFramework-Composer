@@ -16,31 +16,38 @@ import {
   flexContent,
   actionButton,
   contentEditor,
+  contentWrapper,
   HeaderText,
+  pageRoot,
 } from '../language-understanding/styles';
-import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
-import { NavLinks } from '../../components/NavLinks';
+import { TestController } from '../../components/TestController';
+import { DialogTree } from '../../components/DialogTree';
 
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
-import { TestController } from './../../TestController';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LGPageProps extends RouteComponentProps<{}> {
-  fileId?: string;
+  dialogId?: string;
 }
 
 const LGPage: React.FC<LGPageProps> = props => {
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, projectId } = state;
 
   const path = props.location?.pathname ?? '';
-  const { fileId = '' } = props;
+  const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const navLinks = useMemo(() => {
     const newDialogLinks = dialogs.map(dialog => {
-      return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
+      return {
+        id: dialog.id,
+        url: dialog.id,
+        key: dialog.id,
+        name: dialog.displayName,
+        ariaLabel: formatMessage('language generation file'),
+      };
     });
     const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
 
@@ -52,33 +59,34 @@ const LGPage: React.FC<LGPageProps> = props => {
       id: 'common',
       key: 'common',
       name: 'All',
+      ariaLabel: formatMessage('all language generation files'),
       url: '',
     });
     return newDialogLinks;
   }, [dialogs]);
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === fileId);
-    if (!activeDialog && dialogs.length && fileId !== 'common') {
-      navigateTo('/language-generation/common');
+    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    if (!activeDialog && dialogs.length && dialogId !== 'common') {
+      navigateTo(`/bot/${projectId}/language-generation/common`);
     }
-  }, [fileId, dialogs]);
+  }, [dialogId, dialogs, projectId]);
 
   const onSelect = useCallback(
     id => {
-      const url = `/language-generation/${id}`;
+      const url = `/bot/${projectId}/language-generation/${id}`;
       navigateTo(url);
     },
-    [edit]
+    [edit, projectId]
   );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/language-generation/${fileId}`;
+      let url = `/bot/${projectId}/language-generation/${dialogId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [fileId]
+    [dialogId, projectId]
   );
 
   const toolbarItems = [
@@ -91,32 +99,35 @@ const LGPage: React.FC<LGPageProps> = props => {
 
   return (
     <Fragment>
-      <ToolBar toolbarItems={toolbarItems} />
-      <div css={ContentHeaderStyle}>
-        <div css={HeaderText}>{formatMessage('Bot Responses')}</div>
-        <div css={flexContent}>
-          <Toggle
-            className={'toggleEditMode'}
-            css={actionButton}
-            onText={formatMessage('Edit mode')}
-            offText={formatMessage('Edit mode')}
-            defaultChecked={false}
-            checked={!!edit}
-            onChange={onToggleEditMode}
-          />
-        </div>
-      </div>
-      <div css={ContentStyle} data-testid="LGEditor">
-        <div css={projectContainer}>
-          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
-        </div>
-        <div css={contentEditor}>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit" fileId={fileId} />
-              <TableView path="/" fileId={fileId} />
-            </Router>
-          </Suspense>
+      <div css={pageRoot} data-testid="LGPage">
+        <div css={contentWrapper}>
+          <ToolBar toolbarItems={toolbarItems} />
+
+          <div css={ContentHeaderStyle}>
+            <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>
+            <div css={flexContent}>
+              <Toggle
+                className={'toggleEditMode'}
+                css={actionButton}
+                onText={formatMessage('Edit mode')}
+                offText={formatMessage('Edit mode')}
+                defaultChecked={false}
+                checked={!!edit}
+                onChange={onToggleEditMode}
+              />
+            </div>
+          </div>
+          <div role="main" css={ContentStyle}>
+            <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+            <div css={contentEditor} data-testid="LGEditor">
+              <Suspense fallback={<LoadingSpinner />}>
+                <Router primary={false} component={Fragment}>
+                  <CodeEditor path="/edit/*" dialogId={dialogId} />
+                  <TableView path="/" dialogId={dialogId} />
+                </Router>
+              </Suspense>
+            </div>
+          </div>
         </div>
       </div>
     </Fragment>

@@ -17,7 +17,6 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const MonacoWebpackPlugin = require('@bfcomposer/monaco-editor-webpack-plugin');
 
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
@@ -121,7 +120,6 @@ module.exports = function(webpackEnv) {
         // initialization, it doesn't blow up the WebpackDevServer client, and
         // changing JS code would still trigger a refresh.
       ].filter(Boolean),
-      extension: paths.extensionIndexJs,
     },
     output: {
       // The build folder.
@@ -404,10 +402,6 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
-      new MonacoWebpackPlugin({
-        // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-        languages: ['markdown', 'json'],
-      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -418,26 +412,6 @@ module.exports = function(webpackEnv) {
             filename: isEnvProduction ? 'index.ejs' : 'index.html',
             template: paths.appHtml,
             chunks: ['main'],
-          },
-          isEnvProduction
-            ? {
-                minify: {
-                  removeComments: true,
-                },
-              }
-            : undefined
-        )
-      ),
-      // Generates an `extension.html` file with the <script> injected.
-      new HtmlWebpackPlugin(
-        Object.assign(
-          {},
-          {
-            inject: true,
-            // only emit ejs in production because the dev server cannot render ejs templates
-            filename: isEnvProduction ? 'extensionContainer.ejs' : 'extensionContainer.html',
-            template: paths.extensionContainerHtml,
-            chunks: ['extension'],
           },
           isEnvProduction
             ? {

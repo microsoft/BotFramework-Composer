@@ -3,6 +3,7 @@ Param(
 	[string] $environment,
 	[string] $luisAuthoringKey,
 	[string] $luisAuthoringRegion,
+	[string] $language,
 	[string] $projFolder = $(Get-Location),
 	[string] $botPath,
 	[string] $logFile = $(Join-Path $PSScriptRoot .. "deploy_log.txt")
@@ -31,6 +32,9 @@ if (-not $environment) {
 	$environment = $environment.ToLower().Split(" ") | Select-Object -First 1
 }
 
+if (-not $language) {
+	$language = "en-us"
+}
 
 # Reset log file
 if (Test-Path $logFile) {
@@ -62,16 +66,17 @@ dotnet publish -c release -o $publishFolder -v q > $logFile
 
 # Copy bot files to running folder
 $remoteBotPath = $(Join-Path $publishFolder "ComposerDialogs")
-$localBotPath = $(Join-Path $projFolder "ComposerDialogs")
 Remove-Item $remoteBotPath -Recurse -ErrorAction Ignore
 
-if ($botPath) {
-	Write-Host "Publishing dialogs from external bot project: $($botPath)"
-	Copy-Item -Path $botPath -Recurse -Destination $remoteBotPath -Container -Force
+
+if (-not $botPath) {
+	# If don't provide bot path, then try to copy all dialogs except the runtime folder in parent folder to the publishing folder (bin\Realse\ Folder)
+	$botPath = '..'
 }
-else {
-	Copy-Item -Path $localBotPath -Recurse -Destination $publishFolder -Container -Force
-}
+
+$botPath = $(Join-Path $botPath '*')
+Write-Host "Publishing dialogs from external bot project: $($botPath)"
+Copy-Item -Path (Get-Item -Path $botPath -Exclude ('runtime', 'generated')).FullName -Destination $remoteBotPath -Recurse -Force -Container
 
 # Try to get luis config from appsettings
 $settings = Get-Content $(Join-Path $projFolder appsettings.deployment.json) | ConvertFrom-Json
@@ -107,10 +112,13 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 	# Generate Luconfig.json file
 	$luconfigjson = @{
 		"name"            = $name;
-		"defaultLanguage" = "en-us";
+		"defaultLanguage" = $language;
 		"models"          = $noneEmptyModels
 	}
 	
+	$luString = $noneEmptyModels | Out-String
+	Write-Host $luString
+
 	$luconfigjson | ConvertTo-Json -Depth 100 | Out-File $(Join-Path $remoteBotPath luconfig.json)
 
 	# Execute bf luis:build command
@@ -123,12 +131,12 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 			New-Item -ItemType Directory -Force -Path generated
 		}
 		
-		bf luis:build --in .\ --botName $name --authoringKey $luisAuthoringKey --dialog --out .\generated --suffix $customizedEnv -f --region $luisAuthoringRegion
+		bf luis:build --luConfig $(Join-Path $remoteBotPath luconfig.json) --botName $name --authoringKey $luisAuthoringKey --dialog --out .\generated --suffix $customizedEnv -f --region $luisAuthoringRegion
 	}
 	else {
 		Write-Host "bf luis:build does not exist, use the following command to install:"
 		Write-Host "1. npm config set registry https://botbuilder.myget.org/F/botframework-cli/npm/"
-		Write-Host "2. npm install -g @microsoft/botframework-cli"
+		Write-Host "2. npm install -g @microsoft/botframework-cli/4.9.0-preview.121555"
 		Write-Host "3. npm config set registry http://registry.npmjs.org"
 		Break
 	}
@@ -217,6 +225,24 @@ if ($luisAuthoringKey -and $luisAuthoringRegion) {
 		}
 	}
 }
+
+# Enable all features to true by default
+$featureConfig = @{ }
+$featureConfig["UseTelementryLoggerMiddleware"] = $true
+$featureConfig["UseTranscriptLoggerMiddleware"] = $true
+$featureConfig["UseShowTypingMiddleware"] = $true
+$featureConfig["UseInspectionMiddleware"] = $true
+$featureConfig["UseCosmosDb"] = $true
+
+if (Test-Path $(Join-Path $publishFolder appsettings.deployment.json)) {
+	$settings = Get-Content $(Join-Path $publishFolder appsettings.deployment.json) | ConvertFrom-Json
+}
+else {
+	$settings = New-Object PSObject
+}
+
+$settings | Add-Member -Type NoteProperty -Force -Name 'feature' -Value $featureConfig
+$settings | ConvertTo-Json -depth 100 | Out-File $(Join-Path $publishFolder appsettings.deployment.json)
 
 $resourceGroup = "$name-$environment"
 

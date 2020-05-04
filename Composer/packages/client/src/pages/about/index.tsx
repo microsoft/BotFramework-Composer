@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
@@ -12,9 +12,9 @@ import * as about from './styles';
 
 export const About: React.FC<RouteComponentProps> = () => {
   return (
-    <div css={about.outline}>
+    <div role="main" css={about.outline}>
       <div css={about.content}>
-        <div css={about.title}> {formatMessage(`About`)} </div>
+        <h1 css={about.title}> {formatMessage(`About`)} </h1>
         <div css={about.body}>
           <div css={about.version}>{formatMessage(`Release: `) + (process.env.COMPOSER_VERSION || 'Unknown')}</div>
           <div css={about.description}>
@@ -28,7 +28,6 @@ export const About: React.FC<RouteComponentProps> = () => {
             latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code.`)}
               <Link
                 href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/toc.md'}
-                tabIndex={-1}
                 target={'_blank'}
                 style={{ marginLeft: '5px', textDecoration: 'underline' }}
               >
@@ -42,7 +41,6 @@ export const About: React.FC<RouteComponentProps> = () => {
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
                   href={`https://github.com/microsoft/BotFramework-Composer/commit/${process.env.GIT_SHA}`}
-                  tabIndex={-1}
                   target={'_blank'}
                   style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
@@ -55,7 +53,6 @@ export const About: React.FC<RouteComponentProps> = () => {
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
                   href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSION}`}
-                  tabIndex={-1}
                   target={'_blank'}
                   style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
@@ -68,31 +65,31 @@ export const About: React.FC<RouteComponentProps> = () => {
         <div css={about.linkRow}>
           <Link
             href={'https://github.com/microsoft/BotFramework-Composer/issues/new/choose'}
-            tabIndex={-1}
             target={'_blank'}
+            styles={about.helpLink}
           >
-            <div css={about.helpLink}>{formatMessage(`Getting Help`)} </div>
+            {formatMessage(`Getting Help`)}
           </Link>
         </div>
         <div css={about.linkContainer}>
           <div css={about.linkRow}>
-            <IconButton styles={about.icon} iconProps={{ iconName: 'BlockedSite' }} />
+            <Icon styles={about.icon} iconName={'BlockedSite'} tabIndex={-1} />
             <Link
               href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'}
-              tabIndex={-1}
               target={'_blank'}
+              styles={about.link}
             >
-              <div css={about.link}>{formatMessage(`Terms of Use`)} </div>
+              {formatMessage(`Terms of Use`)}
             </Link>
           </div>
           <div css={about.linkRow}>
-            <IconButton styles={about.icon} iconProps={{ iconName: 'Lock' }} />
+            <Icon styles={about.icon} ariaLabel={formatMessage('Privacy button')} iconName={'Lock'} />
             <Link
               href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'}
-              tabIndex={-1}
               target={'_blank'}
+              styles={about.link}
             >
-              <div css={about.link}>{formatMessage(`Privacy`)}</div>
+              {formatMessage(`Privacy`)}
             </Link>
           </div>
         </div>

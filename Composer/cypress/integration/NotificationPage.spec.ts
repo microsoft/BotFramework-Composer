@@ -13,12 +13,12 @@ context('Notification Page', () => {
 
     cy.get('.toggleEditMode button').as('switchButton');
     cy.get('@switchButton').click();
-    cy.get('textarea').type('test lg syntax error#');
+    cy.get('textarea').type('#');
 
-    cy.visitPage('Notifications');
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('common.lg')
+    cy.findByTestId('notifications-table-view').within(() => {
+      cy.findAllByText('common.en-us.lg')
         .should('exist')
         .first()
         .click();
@@ -30,23 +30,23 @@ context('Notification Page', () => {
   it('can show lu syntax error ', () => {
     cy.visitPage('User Input');
 
-    cy.findByTestId('LUEditor').within(() => {
-      cy.findByText('__TestToDoBotWithLuisSample.Main').click();
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('__TestToDoBotWithLuisSample').click();
     });
 
     cy.get('.toggleEditMode button').click();
-    cy.get('textarea').type('test lu syntax error');
+    cy.get('textarea').type('t');
 
-    cy.visitPage('Notifications');
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('Main.lu')
+    cy.findByTestId('notifications-table-view').within(() => {
+      cy.findAllByText('__testtodobotwithluissample.en-us.lu')
         .should('exist')
         .first()
-        .click();
+        .dblclick();
     });
 
-    cy.findAllByText('__TestToDoBotWithLuisSample.Main').should('exist');
+    cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
   });
 
   it('can show dialog expression error ', () => {
@@ -60,18 +60,24 @@ context('Notification Page', () => {
       cy.findByText('WelcomeUser').should('exist');
     });
 
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByText('Condition').should('exist');
-      cy.get('.ObjectItem input').type('()');
+      cy.findByTestId('expression-type-dropdown-Condition')
+        .focus()
+        .should('contain.text', 'expression');
+      cy.get('#root\\.condition')
+        .click()
+        .type('()')
+        .wait(1000);
     });
 
-    cy.visitPage('Notifications');
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
-      cy.findAllByText('Main.dialog')
+    cy.findByTestId('notifications-table-view').within(() => {
+      cy.findAllByText('__testtodobotwithluissample.dialog')
         .should('exist')
         .first()
-        .click();
+        .dblclick();
     });
 
     cy.findAllByText('WelcomeUser').should('exist');

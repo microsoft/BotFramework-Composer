@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { walkAdaptiveAction } from '../../src/deleteUtils/walkAdaptiveAction';
+import { walkAdaptiveAction } from '../../src/walkerUtils';
 
 describe('walkAdaptiveAction', () => {
   it('can walk single action', () => {
     const action = {
-      $type: 'Microsoft.SendActivity',
+      $kind: 'Microsoft.SendActivity',
       activity: 'hello',
     };
     const spy = jest.fn();

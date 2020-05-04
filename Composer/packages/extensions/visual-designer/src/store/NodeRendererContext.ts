@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { ShellApi } from '@bfc/shared';
+import { ShellApi, DialogFactory, OBISchema } from '@bfc/shared';
 
 type ShellApiFuncs =
   | 'getLgTemplates'
@@ -12,11 +12,13 @@ type ShellApiFuncs =
   | 'updateLgTemplate'
   | 'removeLuIntent';
 
-interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> {
+export interface NodeRendererContextValue extends Pick<ShellApi, ShellApiFuncs> {
   focusedId?: string;
   focusedEvent?: string;
   focusedTab?: string;
   clipboardActions: any[];
+  dialogFactory: DialogFactory;
+  customSchemas: OBISchema[];
 }
 
 export const NodeRendererContext = React.createContext<NodeRendererContextValue>({
@@ -24,10 +26,12 @@ export const NodeRendererContext = React.createContext<NodeRendererContextValue>
   focusedEvent: '',
   focusedTab: '',
   clipboardActions: [],
-  getLgTemplates: () => Promise.resolve([]),
-  copyLgTemplate: () => Promise.resolve(''),
+  getLgTemplates: () => [],
+  copyLgTemplate: () => Promise.resolve(),
   removeLgTemplate: () => Promise.resolve(),
   removeLgTemplates: () => Promise.resolve(),
   updateLgTemplate: () => Promise.resolve(),
   removeLuIntent: () => Promise.resolve(),
+  dialogFactory: new DialogFactory(),
+  customSchemas: [],
 });

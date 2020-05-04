@@ -5,21 +5,21 @@
 import { jsx } from '@emotion/core';
 import { FC, useMemo } from 'react';
 import { PromptTab } from '@bfc/shared';
+import { WidgetContainerProps } from '@bfc/extension';
 
 import { baseInputLayouter } from '../layouters/baseInputLayouter';
 import { transformBaseInput } from '../transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
-import { WidgetContainerProps } from '../schema/uischema.types';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { IconBrick } from '../components/decorations/IconBrick';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum PromptNodes {
   BotAsks = 'botAsksNode',
@@ -62,6 +62,9 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
 
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
           <ElementMeasurer
@@ -75,7 +78,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
+        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent} titleInHeader={true}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
@@ -91,7 +94,6 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
           <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />
         </ElementWrapper>
       </OffsetContainer>
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
     </div>
   );
 };

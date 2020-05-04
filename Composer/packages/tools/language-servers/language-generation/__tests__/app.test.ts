@@ -112,7 +112,7 @@ describe('lg lsp server', () => {
       [
         response => {
           expect(response.id).toEqual(2);
-          expect(response.result.contents[0]).toEqual('-Good evening');
+          expect(response.result.contents[0]).toContain('-Good evening');
         },
       ]
     );
@@ -125,7 +125,7 @@ describe('lg lsp server', () => {
     await send(payload, [
       response => {
         expect(response.method).toEqual('textDocument/publishDiagnostics');
-        expect(response.params.diagnostics.length).toEqual(0);
+        expect(response.params.diagnostics.length).toEqual(1);
       },
     ]);
   });
