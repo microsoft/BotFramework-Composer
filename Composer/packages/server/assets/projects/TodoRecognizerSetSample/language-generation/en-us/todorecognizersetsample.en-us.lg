@@ -1,9 +1,9 @@
 [import](common.lg)
 
-# bfdactivity-696707
--${help()}
+# SendActivity_696707
+-${WelcomeUser()}
 
-# bfdactivity-157674()
+# SendActivity_157674()
 - Hi! I'm a ToDo bot. Say "add a todo named first" to get started.
 
 # foo

@@ -6,8 +6,8 @@ import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 import { resolveRef } from './resolveRef';
 
 export function resolveBaseSchema(schema: JSONSchema7, data: MicrosoftAdaptiveDialog): JSONSchema7 | undefined {
-  const kindDef = schema.definitions?.[data.$kind];
-  if (typeof kindDef === 'object') {
-    return resolveRef(kindDef, schema.definitions);
+  const defSchema = schema.definitions?.[data.$kind];
+  if (defSchema && typeof defSchema === 'object') {
+    return resolveRef(defSchema, schema.definitions);
   }
 }

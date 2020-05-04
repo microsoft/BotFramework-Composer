@@ -3,13 +3,13 @@
 
 import * as fs from 'fs';
 
+import { UserIdentity } from '@bfc/plugin-loader';
+
 import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
 import settings from '../settings';
-
-import { UserIdentity } from './pluginLoader';
 
 const fileBlacklist = ['.DS_Store'];
 const isValidFile = (file: string) => {

@@ -8,6 +8,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
+import { navigate } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
@@ -17,7 +18,6 @@ import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
-
 const linksButtom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
@@ -54,7 +54,6 @@ const Home: React.FC<RouteComponentProps> = () => {
   const {
     openBotProject,
     setCreationFlowStatus,
-    fetchTemplates,
     saveTemplateId,
     fetchRecentProjects,
     onboardingAddCoachMarkRef,
@@ -64,18 +63,19 @@ const Home: React.FC<RouteComponentProps> = () => {
     await openBotProject(path);
   };
 
-  const onSelectionChanged = async (item) => {
+  const onItemChosen = async (item) => {
     if (item && item.path) {
       await onClickRecentBotProject(item.path);
     }
   };
 
-  const onClickTemplate = (id) => {
-    saveTemplateId(id);
+  const onClickTemplate = async (id: string) => {
+    await saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+    navigate(`projects/create/${id}`);
   };
 
-  const addButton = <Icon iconName="Add" styles={home.button} />;
+  const addButton = <Icon styles={home.button} iconName="Add" />;
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
@@ -87,7 +87,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'CirclePlus',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.NEW),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.NEW);
+          navigate(`projects/create`);
+        },
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-New',
@@ -100,7 +103,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'OpenFolderHorizontal',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.OPEN),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.OPEN);
+          navigate(`projects/open`);
+        },
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-Open',
@@ -113,7 +119,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         iconProps: {
           iconName: 'Save',
         },
-        onClick: () => setCreationFlowStatus(CreationFlowStatus.SAVEAS),
+        onClick: () => {
+          setCreationFlowStatus(CreationFlowStatus.SAVEAS);
+          navigate(`projects/${state.projectId}/${state.templateId}/save`);
+        },
       },
       align: 'left',
       disabled: botName ? false : true,
@@ -122,14 +131,13 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   useEffect(() => {
     fetchRecentProjects();
-    fetchTemplates();
   }, []);
 
   return (
     <div css={home.outline}>
-      <ToolBar toolbarItems={toolbarItems} />
+      <ToolBar toolbarItems={toolbarItems} onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} />
       <div css={home.page}>
-        <div css={home.leftPage}>
+        <div role="main" css={home.leftPage}>
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div css={home.introduction}>
             {formatMessage(
@@ -139,33 +147,34 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.newBotContainer}>
             <div data-testid={'homePage-body-New'}>
               <ItemContainer
+                title={addButton}
                 content={formatMessage('New')}
+                styles={home.newBotItem}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
+                  navigate('projects/create');
                 }}
-                styles={home.newBotItem}
-                title={addButton}
               />
             </div>
             {recentProjects.length > 0 ? (
               <ItemContainer
+                title={''}
                 content={recentProjects[0].name}
-                forwardedRef={addRef}
+                styles={home.lastestBotItem}
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
-                styles={home.lastestBotItem}
-                title={''}
+                forwardedRef={addRef}
               />
             ) : (
               <ItemContainer
+                title={''}
                 content={'ToDoBotWithLuis'}
-                forwardedRef={addRef}
+                styles={home.lastestBotItem}
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
-                styles={home.lastestBotItem}
-                title={''}
+                forwardedRef={addRef}
               />
             )}
           </div>
@@ -173,23 +182,25 @@ const Home: React.FC<RouteComponentProps> = () => {
             <div css={home.leftContainer}>
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
-                onSelectionChanged={async (item) => {
-                  await onSelectionChanged(item);
-                }}
                 recentProjects={recentProjects}
+                onItemChosen={async (item) => {
+                  await onItemChosen(item);
+                }}
               />
             </div>
           )}
           <div css={home.leftContainer}>
             <h2 css={home.subtitle}>
               {formatMessage('Video tutorials:')}&nbsp;
-              <Link href={comingSoonLink.to} key={comingSoonLink.text} tabIndex={-1} target={'_blank'}>
-                <span css={comingSoonLink.css}>{comingSoonLink.text}</span>
+              <Link href={comingSoonLink.to} key={comingSoonLink.text} target={'_blank'}>
+                <span css={comingSoonLink.css} aria-label={'Video tutorials coming soon'}>
+                  {comingSoonLink.text}
+                </span>
               </Link>
             </h2>
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
-                <ItemContainer content={item.content} disabled key={index} title={item.title} />
+                <ItemContainer key={index} title={item.title} content={item.content} disabled />
               ))}
               <div css={home.linkContainer}>
                 <div>
@@ -200,11 +211,12 @@ const Home: React.FC<RouteComponentProps> = () => {
                 {linksButtom.map((link) => {
                   return (
                     <Link
+                      style={{ width: '150px' }}
                       href={link.to}
+                      tabIndex={0}
                       key={'homePageLeftLinks-' + link.text}
-                      rel="noopener noreferrer"
-                      tabIndex={-1}
                       target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <div css={link.css}>{link.text}</div>
                     </Link>

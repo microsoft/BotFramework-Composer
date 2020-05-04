@@ -41,6 +41,7 @@
     "react-dom": "16.13.0"
   },
   "dependencies": {
+    "@bfc/shared": "*",
     "@emotion/core": "^10.0.27"
   }
 }

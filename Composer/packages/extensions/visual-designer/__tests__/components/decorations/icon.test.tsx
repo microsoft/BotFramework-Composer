@@ -16,13 +16,13 @@ describe('<Icon />', () => {
 
   it('renders icon component with invalid icon', () => {
     icon = 'invalidIcon';
-    const { findByRole } = render(<Icon color={iconColor} icon={icon} />);
+    const { findByRole } = render(<Icon icon={icon} color={iconColor} />);
     expect(findByRole('icon')).resolves.toBeTruthy();
   });
 
   it('renders icon component with valid icon', () => {
     icon = iconList[0];
-    const { findByRole } = render(<Icon color={iconColor} icon={icon} />);
+    const { findByRole } = render(<Icon icon={icon} color={iconColor} />);
     expect(findByRole('icon')).resolves.toBeTruthy();
   });
 });

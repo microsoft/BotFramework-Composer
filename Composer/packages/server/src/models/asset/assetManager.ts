@@ -3,6 +3,7 @@
 
 import find from 'lodash/find';
 import { ProjectTemplate } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -10,7 +11,6 @@ import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { UserIdentity } from '../../services/pluginLoader';
 import { IFileStorage } from '../storage/interface';
 
 interface TemplateData {
@@ -35,12 +35,12 @@ const templates: TemplateData = {
   },
   TodoSample: {
     name: 'Simple Todo',
-    description: 'A sample bot that allows you add, list, remove to do items.',
+    description: 'A sample bot that allows you to add, list, and remove to do items.',
     order: 3,
   },
   ToDoBotWithLuisSample: {
     name: 'Todo with LUIS',
-    description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
+    description: 'A sample bot that allows you to add, list, and remove to do items using Language Understanding',
     order: 4,
   },
   RespondingWithCardsSample: {
@@ -49,11 +49,12 @@ const templates: TemplateData = {
   },
   AskingQuestionsSample: {
     name: 'Asking Questions',
-    description: 'A sample bot that shows how to ask question and capture user input.',
+    description: 'A sample bot that shows how to ask questions and capture user input.',
   },
   InterruptionSample: {
     name: 'Interruptions',
-    description: 'An advance sample bot that shows how to handle context switching and interruption in a conversation.',
+    description:
+      'An advanced sample bot that shows how to handle context switching and interruption in a conversation.',
   },
   RespondingWithTextSample: {
     name: 'Responding with Text',
@@ -65,7 +66,7 @@ const templates: TemplateData = {
   },
   ActionsSample: {
     name: 'Dialog Actions',
-    description: 'A sample bot that shows how to use Dialog actions.',
+    description: 'A sample bot that shows how to use Dialog Actions.',
   },
   QnAMakerLUISSample: {
     name: 'QnA Maker and LUIS',
@@ -157,6 +158,15 @@ export class AssetManager {
     }
 
     return output;
+  }
+
+  // Copy material from the boilerplate into the project
+  // This is used to copy shared content into every new project
+  public async copyBoilerplate(dstDir: string, dstStorage: IFileStorage) {
+    const boilerplatePath = Path.join(this.assetsLibraryPath, 'shared');
+    if (await this.templateStorage.exists(boilerplatePath)) {
+      await copyDir(boilerplatePath, this.templateStorage, dstDir, dstStorage);
+    }
   }
 
   public async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage) {

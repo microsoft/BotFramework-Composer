@@ -116,6 +116,7 @@ export interface Skill {
   endpoints: { [key: string]: any }[];
   endpointUrl: string;
   msAppId: string;
+  body: string | null | undefined;
 }
 
 export interface TextFile {
@@ -125,3 +126,9 @@ export interface TextFile {
 export type FileResolver = (id: string) => FileInfo | undefined;
 
 export type MemoryResolver = (id: string) => string[] | undefined;
+
+export interface SkillManifestInfo {
+  content: { [key: string]: any };
+  lastModified: string;
+  id: string;
+}

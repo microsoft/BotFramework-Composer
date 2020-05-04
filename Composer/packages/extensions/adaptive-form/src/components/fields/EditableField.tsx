@@ -7,7 +7,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
 import { FieldProps } from '@bfc/extension';
 
-interface EditableFieldProps extends FieldProps {
+interface EditableFieldProps extends Omit<FieldProps, 'definitions'> {
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;

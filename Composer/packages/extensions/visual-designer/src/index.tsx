@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
@@ -16,6 +16,7 @@ import { SelfHostContext } from './store/SelfHostContext';
 import { FlowSchemaContext } from './store/FlowSchemaContext';
 import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './utils/mergePluginConfig';
+import { getCustomSchema } from './utils/getCustomSchema';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -41,7 +42,16 @@ export interface VisualDesignerProps {
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
   const { shellApi, plugins, ...shellData } = useShellApi();
-  const { dialogId, focusedEvent, focusedActions, focusedTab, clipboardActions, data: inputData, hosted } = shellData;
+  const {
+    dialogId,
+    focusedEvent,
+    focusedActions,
+    focusedTab,
+    clipboardActions,
+    data: inputData,
+    hosted,
+    schemas,
+  } = shellData;
 
   const dataCache = useRef({});
 
@@ -72,9 +82,16 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLuIntent,
     undo,
     redo,
+    announce,
   } = shellApi;
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
+
+  // Compute schema diff
+  const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
+    schemas?.sdk?.content,
+    schemas?.default,
+  ]);
 
   const nodeContext: NodeRendererContextValue = {
     focusedId,
@@ -88,6 +105,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLgTemplates,
     removeLuIntent,
     dialogFactory: new DialogFactory(schema),
+    customSchemas: customSchema ? [customSchema] : [],
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);
@@ -102,23 +120,24 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
               schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema),
             }}
           >
-            <div css={styles} data-testid="visualdesigner-container">
+            <div data-testid="visualdesigner-container" css={styles}>
               <ObiEditor
-                addCoachMarkRef={addCoachMarkRef}
-                data={data}
-                focusedEvent={focusedEvent}
-                focusedSteps={focusedActions}
                 key={dialogId}
-                onChange={(x) => saveData(x)}
+                path={dialogId}
+                data={data}
+                focusedSteps={focusedActions}
+                onFocusSteps={onFocusSteps}
+                focusedEvent={focusedEvent}
+                onFocusEvent={onFocusEvent}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
-                onFocusEvent={onFocusEvent}
-                onFocusSteps={onFocusSteps}
                 onOpen={(x) => navTo(x)}
+                onChange={(x) => saveData(x)}
                 onSelect={onSelect}
-                path={dialogId}
-                redo={redo}
                 undo={undo}
+                redo={redo}
+                announce={announce}
+                addCoachMarkRef={addCoachMarkRef}
               />
             </div>
           </FlowSchemaContext.Provider>

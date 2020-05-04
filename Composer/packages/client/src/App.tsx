@@ -16,10 +16,9 @@ import Routes from './router';
 import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
-import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
-import { CreationFlowStatus } from './constants';
+import { AppUpdater } from './components/AppUpdater';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -81,6 +80,13 @@ const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
+      to: `/bot/${projectId}/publish`,
+      iconName: 'CloudUpload',
+      labelName: formatMessage('Publish'),
+      exact: true,
+      disabled: !botLoaded,
+    },
+    {
       to: `/bot/${projectId}/skills`,
       iconName: 'PlugDisconnected',
       labelName: formatMessage('Skills'),
@@ -121,19 +127,19 @@ const bottomLinks = [
 ];
 
 export const App: React.FC = () => {
-  const { state, actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
-  const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation, announcement } = state;
-  const { setCreationFlowStatus } = actions;
+  const { botName, projectId, dialogs, locale, designPageLocation, announcement } = state;
+
   const mapNavItemTo = (x) => resolveToBasePath(BASEPATH, x);
 
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
   return (
     <Fragment>
       <div
-        aria-live="assertive"
         role="alert"
+        aria-live="assertive"
         style={{
           display: 'block',
           position: 'absolute',
@@ -144,32 +150,32 @@ export const App: React.FC = () => {
       >
         {announcement}
       </div>
-      <Header botName={`${botName}(${locale})`} />
+      <Header botName={botName} locale={locale} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
           <div>
             <IconButton
-              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
-              css={globalNav}
-              data-testid={'LeftNavButton'}
               iconProps={{
                 iconName: 'GlobalNavButton',
               }}
+              css={globalNav}
               onClick={() => {
                 setSideBarExpand(!sideBarExpand);
               }}
+              data-testid={'LeftNavButton'}
+              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />
             <div css={dividerTop} />{' '}
-            <FocusZone allowFocusRoot>
+            <FocusZone allowFocusRoot={true}>
               {topLinks(projectId, openedDialogId).map((link, index) => {
                 return (
                   <NavItem
-                    disabled={link.disabled}
-                    exact={link.exact}
-                    iconName={link.iconName}
                     key={'NavLeftBar' + index}
-                    labelName={link.labelName}
                     to={mapNavItemTo(link.to)}
+                    iconName={link.iconName}
+                    labelName={link.labelName}
+                    exact={link.exact}
+                    disabled={link.disabled}
                   />
                 );
               })}
@@ -180,12 +186,12 @@ export const App: React.FC = () => {
             {bottomLinks.map((link, index) => {
               return (
                 <NavItem
-                  disabled={link.disabled}
-                  exact={link.exact}
-                  iconName={link.iconName}
                   key={'NavLeftBar' + index}
-                  labelName={link.labelName}
                   to={mapNavItemTo(link.to)}
+                  iconName={link.iconName}
+                  labelName={link.labelName}
+                  exact={link.exact}
+                  disabled={link.disabled}
                 />
               );
             })}
@@ -194,14 +200,12 @@ export const App: React.FC = () => {
         <div css={rightPanel}>
           <ErrorBoundary>
             <RequireAuth>
-              {creationFlowStatus !== CreationFlowStatus.CLOSE && (
-                <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
-              )}
               <Routes component={Content} />
             </RequireAuth>
           </ErrorBoundary>
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
+        {(window as any).__IS_ELECTRON__ && <AppUpdater />}
       </div>
     </Fragment>
   );

@@ -11,18 +11,17 @@ import {
   IGroupRenderProps,
   IGroupedList,
 } from 'office-ui-fabric-react/lib/GroupedList';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { IIconProps } from 'office-ui-fabric-react/lib/Icon';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
+import debounce from 'lodash/debounce';
 
 import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';
 
-import { addButton, groupListStyle, root, searchBox } from './styles';
+import { groupListStyle, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';
 
 function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
@@ -83,17 +82,10 @@ interface IProjectTreeProps {
   dialogs: DialogInfo[];
   dialogId: string;
   selected: string;
-  openNewTriggerModal: () => void;
   onSelect: (id: string, selected?: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
-  onAdd: () => void;
 }
-
-const addIconProps: IIconProps = {
-  iconName: 'CircleAddition',
-  styles: { root: { fontSize: '12px' } },
-};
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const {
@@ -103,11 +95,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     },
   } = useContext(StoreContext);
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
-  const { dialogs, dialogId, selected, openNewTriggerModal, onSelect, onDeleteTrigger, onDeleteDialog, onAdd } = props;
+  const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');
-
+  const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
-  const addNewTriggerRef = useCallback((newTrigger) => onboardingAddCoachMarkRef({ newTrigger }), []);
 
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);
@@ -120,14 +111,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       onSelect(props.group!.key);
     };
     return (
-      <span ref={props.group && props.group.data.isRoot && addMainDialogRef} role="grid">
+      <span role="grid" ref={props.group && props.group.data.isRoot && addMainDialogRef}>
         <TreeItem
+          link={props.group!.data}
           depth={0}
           isActive={!props.group!.isCollapsed}
           isSubItemActive={!!selected}
-          link={props.group!.data}
-          onDelete={onDeleteDialog}
           onSelect={toggleCollapse}
+          onDelete={onDeleteDialog}
         />
       </span>
     );
@@ -136,26 +127,22 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   function onRenderCell(nestingDepth?: number, item?: any): React.ReactNode {
     return (
       <TreeItem
+        link={item}
         depth={nestingDepth}
         isActive={createSelectedPath(item.index) === selected}
-        link={item}
-        onDelete={() => onDeleteTrigger(dialogId, item.index)}
         onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
+        onDelete={() => onDeleteTrigger(dialogId, item.index)}
       />
     );
   }
 
   const onRenderShowAll = () => {
-    return (
-      <ActionButton css={addButton(1)} iconProps={addIconProps} onClick={openNewTriggerModal}>
-        <span ref={addNewTriggerRef}>{formatMessage('New Trigger ..')}</span>
-      </ActionButton>
-    );
+    return null;
   };
 
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
-      setFilter(newValue);
+      delayedSetFilter(newValue);
     }
   };
 
@@ -163,26 +150,46 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
 
+  const res: { items: any[]; groups: IGroup[] } = createGroup(sortedDialogs, dialogId, filter);
+
   return (
     <Resizable
+      size={{ width: currentWidth, height: 'auto' }}
+      minWidth={180}
+      maxWidth={500}
       enable={{
         right: true,
       }}
-      maxWidth={500}
-      minWidth={180}
       onResizeStop={handleResize}
-      size={{ width: currentWidth, height: 'auto' }}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         <SearchBox
           ariaLabel={formatMessage('Type dialog name')}
-          iconProps={{ iconName: 'Filter' }}
-          onChange={onFilter}
           placeholder={formatMessage('Filter Dialog')}
           styles={searchBox}
+          onChange={onFilter}
+          iconProps={{ iconName: 'Filter' }}
+        />
+        <div
+          aria-live={'polite'}
+          aria-label={formatMessage(
+            `{
+            dialogNum, plural,
+                =0 {No dialogs}
+                =1 {One dialog}
+              other {# dialogs}
+            } have been found.
+            {
+              dialogNum, select,
+                  0 {}
+                other {Press down arrow key to navigate the search results}
+            }`,
+            { dialogNum: res.groups.length }
+          )}
         />
         <GroupedList
-          {...createGroup(sortedDialogs, dialogId, filter)}
+          {...res}
+          onRenderCell={onRenderCell}
           componentRef={groupRef}
           groupProps={
             {
@@ -193,18 +200,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               isAllGroupsCollapsed: true,
             } as Partial<IGroupRenderProps>
           }
-          onRenderCell={onRenderCell}
           styles={groupListStyle}
         />
-        <ActionButton
-          css={addButton(0)}
-          data-testid="ProjectTreeNewDialog"
-          iconProps={addIconProps}
-          onClick={onAdd}
-          tabIndex={1}
-        >
-          {formatMessage('New Dialog ..')}
-        </ActionButton>
       </div>
     </Resizable>
   );

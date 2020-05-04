@@ -4,21 +4,20 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
-import { LuEditor } from '@bfc/code-editor';
+import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { filterSectionDiagnostics } from '@bfc/indexers';
-import { LuIntentSection, CodeEditorSettings } from '@bfc/shared';
+import { LuIntentSection, CodeEditorSettings, LuMetaData, LuType } from '@bfc/shared';
 
 const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
-  const { onChange, value, schema } = props;
+  const { onChange, value, schema, placeholder } = props;
   const { currentDialog, designerId, luFiles, shellApi, locale, projectId, userSettings } = useShellApi();
   const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 
   let intentName = value;
   if (typeof intentName === 'object') {
     const { $kind }: any = schema?.properties || {};
-    const [, promptType] = $kind.const.split('.');
-    promptType && (intentName = `${promptType}.response-${designerId}`);
+    $kind.const && (intentName = new LuMetaData(new LuType($kind.const).toString(), designerId).toString());
   }
 
   const [luIntent, setLuIntent] = useState<LuIntentSection>(
@@ -52,13 +51,14 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
 
   return (
     <LuEditor
+      height={225}
+      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
+      value={luIntent.Body}
+      onChange={commitChanges}
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
-      height={150}
-      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
-      onChange={commitChanges}
       onChangeSettings={handleSettingsChange}
-      value={luIntent.Body}
+      placeholder={placeholder || inlineModePlaceholder}
     />
   );
 };

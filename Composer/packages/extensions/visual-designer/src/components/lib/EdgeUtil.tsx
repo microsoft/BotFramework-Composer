@@ -58,7 +58,7 @@ const getDefaultEdgeOptions = (direction: EdgeDirection): EdgeOptions => {
   };
 
   return {
-    color: ObiColors.LightGray,
+    color: ObiColors.AzureGray2,
     labelOptions: {
       offset: defaultTextOffsets[direction],
       fontSize: 14,

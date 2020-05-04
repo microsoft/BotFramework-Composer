@@ -65,7 +65,7 @@
               "actions": [
                 {
                   "$kind": "Microsoft.SendActivity",
-                  "activity": "${help()}"
+                  "activity": "${WelcomeUser()}"
                 }
               ]
             }
@@ -175,7 +175,7 @@
           "$designer": {
             "id": "068558"
           },
-          "activity": "${bfdactivity-068558()}"
+          "activity": "${SendActivity_068558()}"
         }
       ],
       "intent": "CancelIntent"
@@ -191,7 +191,7 @@
           "$designer": {
             "id": "581197"
           },
-          "activity": "${bfdactivity-581197()}"
+          "activity": "${SendActivity_581197()}"
         }
       ]
     }

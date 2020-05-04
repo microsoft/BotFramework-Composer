@@ -19,11 +19,13 @@ const rootDir = path.resolve(__dirname, '..');
 
 process.env.COMPOSER_BOTS_FOLDER = path.resolve(rootDir, 'cypress/__test_bots__');
 process.env.COMPOSER_APP_DATA = path.resolve(rootDir, 'cypress/__e2e_data.json');
+let isDev = false;
 
 async function processArgs() {
   const args = process.argv.slice(2);
   const folder = args.indexOf('--bots');
   const data = args.indexOf('--data');
+  const dev = args.indexOf('--dev');
 
   if (folder > -1 && args[folder + 1]) {
     process.env.COMPOSER_BOTS_FOLDER = args[folder + 1];
@@ -31,6 +33,10 @@ async function processArgs() {
 
   if (data > -1 && args[data + 1]) {
     process.env.COMPOSER_APP_DATA = args[data + 1];
+  }
+
+  if (dev > -1) {
+    isDev = true;
   }
 
   const msg = `
@@ -64,7 +70,8 @@ async function setup() {
 
 async function run() {
   return new Promise(resolve => {
-    const server = spawn('yarn', ['start:dev'], { cwd: path.resolve(rootDir), stdio: 'inherit' });
+    const startCommand = isDev ? 'start:dev' : 'start';
+    const server = spawn('yarn', [startCommand], { cwd: path.resolve(rootDir), stdio: 'inherit' });
 
     server.on('close', () => {
       resolve();

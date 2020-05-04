@@ -22,7 +22,6 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
     type: ActionTypes.CREATE_DIALOG,
     payload: { id, content },
   });
-  return id;
 };
 
 export const updateDialogBase: ActionCreator = async (store, { id, content }) => {
@@ -47,7 +46,7 @@ export const updateDialog: ActionCreator = undoable(
   (store: Store, from, to) => updateDialogBase(store, ...to)
 );
 
-export const createDialogBegin: ActionCreator = ({ dispatch }, { actions }, onComplete) => {
+export const createDialogBegin: ActionCreator = ({ dispatch }, actions, onComplete) => {
   dispatch({
     type: ActionTypes.CREATE_DIALOG_BEGIN,
     payload: {

@@ -14,6 +14,18 @@ export const iconClass = mergeStyles({
   fontSize: FontSizes.medium,
 });
 
+export const pageRoot = css`
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: row;
+`;
+
+export const contentWrapper = css`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+`;
+
 export const flexContentSpaceBetween = css`
   display: flex;
   justify-content: space-between;
@@ -40,10 +52,9 @@ export const HeaderText = css`
 
 export const ContentStyle = css`
   margin-left: 2px;
+  height: calc(100vh - 180px);
   display: flex;
   border-top: 1px solid #dddddd;
-  flex: 1;
-  height: calc(100% - 165px);
   position: relative;
   nav {
     ul {
@@ -55,7 +66,6 @@ export const ContentStyle = css`
 export const contentEditor = css`
   flex: 4;
   margin: 20px;
-  height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
 
@@ -67,12 +77,20 @@ export const codeEditorContainer = css`
 `;
 
 export const formCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
   white-space: pre-wrap;
   font-size: 14px;
   line-height: 28px;
 `;
 
 export const luPhraseCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
   white-space: pre-wrap;
   font-size: 14px;
 `;
@@ -127,4 +145,15 @@ export const consoleStyle = css`
   color: #fff;
   padding: 15px;
   margin-bottom: 20px;
+`;
+
+export const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
 `;

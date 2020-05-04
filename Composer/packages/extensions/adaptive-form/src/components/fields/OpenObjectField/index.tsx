@@ -25,6 +25,7 @@ const OpenObjectField: React.FC<FieldProps<{
     label,
     description,
     uiOptions,
+    required,
   } = props;
 
   const [name, setName] = useState<string>('');
@@ -65,10 +66,10 @@ const OpenObjectField: React.FC<FieldProps<{
 
   return (
     <div className="OpenObjectField">
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <div css={styles.labelContainer}>
         <div css={styles.label}>
-          <FieldLabel id={`${id}.key`} label={'Key'} />
+          <FieldLabel required id={`${id}.key`} label={'Key'} />
         </div>
         <div css={styles.label}>
           <FieldLabel id={`${id}.value`} label={'Value'} />
@@ -78,12 +79,12 @@ const OpenObjectField: React.FC<FieldProps<{
       {Object.entries(value).map(([name, value], index) => {
         return (
           <ObjectItem
-            formData={value}
             key={index}
-            name={name}
+            formData={value}
             onDelete={handleDropPropertyClick(name)}
             onNameChange={handleNameChange(name)}
             onValueChange={handleValueChange(name)}
+            name={name}
             value={value}
           />
         );
@@ -93,14 +94,14 @@ const OpenObjectField: React.FC<FieldProps<{
           <div css={styles.item}>
             <TextField
               autoComplete="off"
-              componentRef={fieldRef}
-              onChange={(_, newValue) => setName(newValue || '')}
-              onKeyDown={handleKeyDown}
               placeholder={formatMessage('Add a new key')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
               value={name}
+              onChange={(_, newValue) => setName(newValue || '')}
+              onKeyDown={handleKeyDown}
+              componentRef={fieldRef}
             />
           </div>
           <div css={styles.item}>
@@ -110,18 +111,18 @@ const OpenObjectField: React.FC<FieldProps<{
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
               }}
-              onChange={(_, newValue) => setNewValue(newValue || '')}
-              onKeyDown={handleKeyDown}
               placeholder={formatMessage('Add a new value')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
               value={newValue}
+              onChange={(_, newValue) => setNewValue(newValue || '')}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <IconButton
             ariaLabel={formatMessage('Edit Property')}
-            disabled
+            disabled={true}
             menuIconProps={{ iconName: 'MoreVertical' }}
             styles={{
               menuIcon: { fontSize: FontSizes.size16 },

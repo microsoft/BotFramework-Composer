@@ -13,10 +13,10 @@ import { resolveFieldWidget } from '../../../utils';
 import { usePluginConfig } from '../../../hooks';
 import { oneOfField } from '../styles';
 
-import { getOptions, getSelectedOption } from './utils';
+import { getOptions, getSelectedOption, getFieldProps } from './utils';
 
 const OneOfField: React.FC<FieldProps> = (props) => {
-  const { schema, value, definitions } = props;
+  const { definitions, description, id, label, schema, required, uiOptions, value } = props;
   const pluginConfig = usePluginConfig();
   const options = useMemo(() => getOptions(schema, definitions), [schema, definitions]);
   const initialSelectedOption = useMemo(
@@ -49,32 +49,31 @@ const OneOfField: React.FC<FieldProps> = (props) => {
   return (
     <div css={oneOfField.container}>
       <div css={oneOfField.label}>
-        <FieldLabel {...props} />
+        <FieldLabel
+          id={id}
+          label={label}
+          description={description}
+          helpLink={uiOptions?.helpLink}
+          required={required}
+        />
         {options && options.length > 1 && (
           <Dropdown
-            ariaLabel={formatMessage('select property type')}
             id={`${props.id}-oneOf`}
-            onChange={handleTypeChange}
-            onRenderTitle={renderTypeTitle}
             options={options}
             responsiveMode={ResponsiveMode.large}
             selectedKey={selectedKey}
+            onChange={handleTypeChange}
+            onRenderTitle={renderTypeTitle}
             styles={{
               caretDownWrapper: { height: '24px', lineHeight: '24px' },
               root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
               title: { height: '24px', lineHeight: '20px' },
             }}
+            ariaLabel={formatMessage('select property type')}
           />
         )}
       </div>
-      <Field
-        {...props}
-        depth={props.depth - 1}
-        label={selectedSchema?.type === 'object' ? undefined : false}
-        // allow object fields to render their labels
-        schema={selectedSchema || {}}
-        transparentBorder={false}
-      />
+      <Field {...getFieldProps(props, selectedSchema)} />
     </div>
   );
 };

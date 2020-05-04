@@ -31,16 +31,16 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
         styles: { root: { width: '288px', padding: '17px 28px' } },
         onRenderContent: () => (
           <div>
-            <h3 aria-label={title + '.'} style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }}>
+            <h3 style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }} aria-label={title + '.'}>
               {title}
             </h3>
             <p>{description}</p>
             {helpLink && (
               <Link
-                aria-label={formatMessage('Learn more about {title}', { title: title.toLowerCase() })}
                 href={helpLink}
-                rel="noopener noreferrer"
                 target="_blank"
+                rel="noopener noreferrer"
+                aria-label={formatMessage('Learn more about {title}', { title: title.toLowerCase() })}
               >
                 {formatMessage('Learn more')}
               </Link>
@@ -77,10 +77,11 @@ interface FieldLabelProps {
   description?: string;
   helpLink?: string;
   inline?: boolean;
+  required?: boolean;
 }
 
 const FieldLabel: React.FC<FieldLabelProps> = (props) => {
-  const { label, description, id, inline, helpLink } = props;
+  const { label, description, id, inline, helpLink, required } = props;
 
   if (!label) {
     return null;
@@ -95,17 +96,22 @@ const FieldLabel: React.FC<FieldLabelProps> = (props) => {
     >
       <Label
         htmlFor={id}
+        required={required}
         styles={{
           root: {
             fontWeight: '400',
             marginLeft: inline ? '4px' : '0',
-            marginRight: '4px',
+            selectors: {
+              '::after': {
+                paddingRight: 0,
+              },
+            },
           },
         }}
       >
         {label}
       </Label>
-      <DescriptionCallout description={description} helpLink={helpLink} id={id} title={label} />
+      <DescriptionCallout description={description} id={id} title={label} helpLink={helpLink} />
     </div>
   );
 };

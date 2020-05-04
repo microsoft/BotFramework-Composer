@@ -11,7 +11,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
 
 import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex } from './types';
-import { FormFieldManifestUrl, MarginLeftSmall } from './styles';
+import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall } from './styles';
 
 export interface ISkillFormProps {
   editIndex?: number;
@@ -28,7 +28,7 @@ const SkillForm: React.FC<ISkillFormProps> = (props) => {
   const { editIndex = -1, skills, onSubmit, onDismiss } = props;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
-    ? assignDefined(defaultFormData, { manifestUrl: originFormData.manifestUrl })
+    ? assignDefined(defaultFormData, { manifestUrl: originFormData.manifestUrl, name: originFormData.name })
     : { ...defaultFormData };
   const [formData, setFormData] = useState<ISkillFormData>(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
@@ -99,6 +99,14 @@ const SkillForm: React.FC<ISkillFormProps> = (props) => {
             onChange={updateForm('manifestUrl')}
             required
             value={formData.manifestUrl}
+          />
+          <TextField
+            css={FormFieldEditName}
+            label={formatMessage('Custom name (optional)')}
+            value={formData.name}
+            onChange={updateForm('name')}
+            errorMessage={formDataErrors.name}
+            data-testid="NewSkillName"
           />
         </StackItem>
 

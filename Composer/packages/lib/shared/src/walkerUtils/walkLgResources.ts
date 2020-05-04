@@ -2,19 +2,19 @@
 // Licensed under the MIT License.
 import get from 'lodash/get';
 
-import { ExternalResourceHandler } from '../copyUtils/ExternalApi';
-import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
-import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
 import { SDKKinds } from '../types';
 
-type LgFieldHandler = ExternalResourceHandler<string>;
+import { walkAdaptiveAction } from './walkAdaptiveAction';
+import { walkAdaptiveActionList } from './walkAdaptiveActionList';
+
+type LgFieldHandler = (actionId: string, lgFieldName: string, lgFieldValue: string) => string;
 
 const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   if (typeof action === 'string') return;
   if (!action || !action.$kind) return;
 
   const onFound = (fieldName: string) => {
-    action[fieldName] && handleLgField(get(action, '$designer.id'), action, fieldName, action[fieldName]);
+    action[fieldName] && handleLgField(get(action, '$designer.id', ''), fieldName, action[fieldName]);
   };
 
   switch (action.$kind) {

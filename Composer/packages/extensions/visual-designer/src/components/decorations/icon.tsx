@@ -90,6 +90,7 @@ export const Icon = ({ icon, color, size = 18, fill = 'white' }) => {
     <FabricIcon
       css={{
         fontSize: size,
+        color: color,
       }}
       iconName={icon}
     />

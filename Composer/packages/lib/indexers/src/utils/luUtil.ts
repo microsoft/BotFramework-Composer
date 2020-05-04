@@ -21,6 +21,9 @@ const { luParser, sectionOperator } = sectionHandler;
 
 const NEWLINE = '\r\n';
 
+// when new add a section in inline editor, the section haven't exist on file context, to make suggestion/validation possiable here mock one.
+export const PlaceHolderSectionName = `_NewSectionPlaceHolderSectionName`;
+
 export function isValid(diagnostics: any[]) {
   return diagnostics.every((item) => {
     item.Severity !== 'ERROR';
@@ -162,13 +165,14 @@ export function updateIntent(content: string, intentName: string, intent: LuInte
  * @param content origin lu file content
  * @param {Name, Body} intent the adds. Name support subSection naming 'CheckEmail/CheckUnreadEmail', if #CheckEmail not exist will do recursive add.
  */
-export function addIntent(content: string, { Name, Body }: LuIntentSection): string {
+export function addIntent(content: string, { Name, Body, Entities }: LuIntentSection): string {
   const intentName = Name;
   if (Name.includes('/')) {
     const [, childName] = Name.split('/');
     Name = childName;
   }
-  return updateIntent(content, intentName, { Name, Body });
+  // If the invoker doesn't want to carry Entities, don't pass Entities in.
+  return updateIntent(content, intentName, { Name, Body, Entities });
 }
 
 /**

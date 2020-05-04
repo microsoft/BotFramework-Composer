@@ -3,20 +3,22 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useMemo, useState, useRef } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { globalHistory } from '@reach/router';
+import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { JsonEditor } from '@bfc/code-editor';
+import { useTriggerApi } from '@bfc/extension';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
-import { TriggerCreationModal, LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
+import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { DialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
@@ -26,10 +28,9 @@ import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
+import { useShell } from '../../shell';
 
 import { VisualEditorAPI } from './FrameAPI';
-import { CreateDialogModal } from './createDialogModal';
-import { AddSkillDialog } from './addSkillDialogModal';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -42,6 +43,11 @@ import {
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 
+const AddSkillDialog = React.lazy(() => import('./addSkillDialogModal'));
+const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
+const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
+const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
+
 function onRenderContent(subTitle, style) {
   return (
     <div css={deleteDialogContent}>
@@ -53,12 +59,7 @@ function onRenderContent(subTitle, style) {
 }
 
 function onRenderBreadcrumbItem(item, render) {
-  return (
-    <span>
-      {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
-      {render(item)}
-    </span>
-  );
+  return <span>{render(item)}</span>;
 }
 
 function getAllRef(targetId, dialogs) {
@@ -81,8 +82,9 @@ const getTabFromFragment = () => {
   }
 };
 
-function DesignPage(props) {
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const { state, actions } = useContext(StoreContext);
+  const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas } = state;
   const {
     removeDialog,
@@ -92,24 +94,33 @@ function DesignPage(props) {
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
+    onboardingAddCoachMarkRef,
   } = actions;
-  const { location, match } = props;
+  const { location } = props;
   const { dialogId, selected } = designPageLocation;
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
+  const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
+  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
+  const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
+  const shell = useShell('ProjectTree');
+  const triggerApi = useTriggerApi(shell.api);
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    if (currentDialog) {
+      setCurrentDialog(currentDialog);
+    }
     const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
     if (!currentDialog && rootDialog) {
-      const { search } = location;
+      const { search } = location || {};
       navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
       return;
     }
   }, [dialogId, dialogs, location]);
 
   useEffect(() => {
-    if (match) {
-      const { dialogId, projectId } = match;
+    if (location && props.dialogId && props.projectId) {
+      const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);
       setDesignPageLocation({
         dialogId: dialogId,
@@ -161,6 +172,9 @@ function DesignPage(props) {
       selectTo(selected);
     } else {
       navTo(id);
+    }
+    if (visualPanelRef.current) {
+      visualPanelRef.current.focus();
     }
   }
 
@@ -279,15 +293,27 @@ function DesignPage(props) {
           }, [] as IBreadcrumbItem[])
         : [];
     return (
-      <Breadcrumb
-        ariaLabel={formatMessage('Navigation Path')}
-        data-testid="Breadcrumb"
-        items={items}
-        onRenderItem={onRenderBreadcrumbItem}
-        styles={breadcrumbClass}
-      />
+      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
+        <Breadcrumb
+          items={items}
+          ariaLabel={formatMessage('Navigation Path')}
+          styles={breadcrumbClass}
+          maxDisplayedItems={3}
+          onReduceData={() => undefined}
+          data-testid="Breadcrumb"
+          onRenderItem={onRenderBreadcrumbItem}
+        />
+        <Link
+          style={{ position: 'absolute', right: 0, marginTop: '22px', marginRight: '10px' }}
+          onClick={() => {
+            setDialogJsonVisibility((current) => !current);
+          }}
+        >
+          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+        </Link>
+      </div>
     );
-  }, [dialogs, breadcrumb]);
+  }, [dialogs, breadcrumb, dialogJsonVisible]);
 
   async function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
     await actions.updateSkill({ projectId, targetId: -1, skillData });
@@ -331,7 +357,8 @@ function DesignPage(props) {
   }
 
   async function handleDeleteTrigger(id, index) {
-    const content = deleteTrigger(dialogs, id, index);
+    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
+
     if (content) {
       await updateDialog({ id, projectId, content });
       const match = /\[(\d+)\]/g.exec(selected);
@@ -361,52 +388,80 @@ function DesignPage(props) {
     <React.Fragment>
       <div css={pageRoot}>
         <ProjectTree
-          dialogId={dialogId}
           dialogs={dialogs}
-          onAdd={() => actions.createDialogBegin({}, onCreateDialogComplete)}
+          dialogId={dialogId}
+          selected={selected}
+          onSelect={handleSelect}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
-          onSelect={handleSelect}
-          openNewTriggerModal={openNewTriggerModal}
-          selected={selected}
         />
-        <div css={contentWrapper}>
-          {match && <ToolBar toolbarItems={toolbarItems} />}
+        <div role="main" css={contentWrapper}>
+          <ToolBar
+            toolbarItems={toolbarItems}
+            actions={actions}
+            projectId={projectId}
+            currentDialog={currentDialog}
+            openNewTriggerModal={openNewTriggerModal}
+            onCreateDialogComplete={onCreateDialogComplete}
+            onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+            showSkillManifestModal={() => setExportSkillModalVisible(true)}
+          />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
-              <div css={visualPanel}>
+              <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
                 {breadcrumbItems}
-                <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                {dialogJsonVisible ? (
+                  <JsonEditor
+                    key={'dialogjson'}
+                    id={'dialogjson'}
+                    onChange={(data) => {
+                      actions.updateDialog({ id: currentDialog.id, projectId, content: data });
+                    }}
+                    value={currentDialog.content || undefined}
+                    schema={schemas.sdk.content}
+                  />
+                ) : (
+                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                )}
               </div>
               <PropertyEditor />
             </div>
           </Conversation>
         </div>
       </div>
-      {state.showCreateDialogModal && (
-        <CreateDialogModal
-          isOpen={state.showCreateDialogModal}
-          onDismiss={() => actions.createDialogCancel()}
-          onSubmit={handleCreateDialogSubmit}
-        />
-      )}
-      {state.showAddSkillDialogModal && (
-        <AddSkillDialog
-          isOpen={state.showAddSkillDialogModal}
-          onDismiss={() => actions.addSkillDialogCancel()}
-          onSubmit={handleAddSkillDialogSubmit}
-        />
-      )}
-      {triggerModalVisible && (
-        <TriggerCreationModal
-          dialogId={dialogId}
-          isOpen={triggerModalVisible}
-          onDismiss={onTriggerCreationDismiss}
-          onSubmit={onTriggerCreationSubmit}
-        />
-      )}
+      <Suspense fallback={<LoadingSpinner />}>
+        {state.showCreateDialogModal && (
+          <CreateDialogModal
+            isOpen={state.showCreateDialogModal}
+            onDismiss={() => actions.createDialogCancel()}
+            onSubmit={handleCreateDialogSubmit}
+          />
+        )}
+        {state.showAddSkillDialogModal && (
+          <AddSkillDialog
+            isOpen={state.showAddSkillDialogModal}
+            onDismiss={() => actions.addSkillDialogCancel()}
+            onSubmit={handleAddSkillDialogSubmit}
+          />
+        )}
+        {exportSkillModalVisible && (
+          <ExportSkillModal
+            isOpen={exportSkillModalVisible}
+            onDismiss={() => setExportSkillModalVisible(false)}
+            onSubmit={() => setExportSkillModalVisible(false)}
+          />
+        )}
+        {triggerModalVisible && (
+          <TriggerCreationModal
+            dialogId={dialogId}
+            isOpen={triggerModalVisible}
+            onDismiss={onTriggerCreationDismiss}
+            onSubmit={onTriggerCreationSubmit}
+          />
+        )}
+      </Suspense>
     </React.Fragment>
   );
-}
+};
 
 export default DesignPage;

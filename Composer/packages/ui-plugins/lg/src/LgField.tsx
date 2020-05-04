@@ -7,7 +7,7 @@ import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { FieldLabel } from '@bfc/adaptive-form';
-import { LgMetaData, LgTemplateRef, CodeEditorSettings } from '@bfc/shared';
+import { LgMetaData, LgTemplateRef, LgType, CodeEditorSettings } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
@@ -35,11 +35,17 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
 };
 
 const LgField: React.FC<FieldProps<string>> = (props) => {
-  const { label, id, description, value, name, uiOptions } = props;
-  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings } = useShellApi();
+  const { label, id, description, value, name, uiOptions, required } = props;
+  const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings, data } = useShellApi();
 
-  const singleLgRefMatched = value && value.match(/\$\{([\w-]+)(\(.*\))\}/);
-  const lgName = singleLgRefMatched ? singleLgRefMatched[1] : new LgMetaData(name, designerId || '').toString();
+  let lgType = name;
+  const $kind = data?.$kind;
+  if ($kind) {
+    lgType = new LgType($kind, name).toString();
+  }
+
+  const lgTemplateRef = LgTemplateRef.parse(value);
+  const lgName = lgTemplateRef ? lgTemplateRef.name : new LgMetaData(lgType, designerId || '').toString();
   const lgFileId = `${currentDialog.lgFile}.${locale}`;
   const lgFile = lgFiles && lgFiles.find((file) => file.id === lgFileId);
 
@@ -104,19 +110,19 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   return (
     <React.Fragment>
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
+      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
       <LgEditor
+        height={225}
+        value={localValue}
+        onChange={onChange}
         diagnostics={diagnostics}
-        editorSettings={userSettings.codeEditor}
-        height={125}
         hidePlaceholder
         languageServer={{
           path: lspServerPath,
         }}
         lgOption={lgOption}
-        onChange={onChange}
+        editorSettings={userSettings.codeEditor}
         onChangeSettings={handleSettingsChange}
-        value={localValue}
       />
     </React.Fragment>
   );

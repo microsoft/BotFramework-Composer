@@ -12,7 +12,7 @@ import PluginContext from '../../PluginContext';
 import { FieldLabel } from '../FieldLabel';
 
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
-  const { value, id, label, description, uiOptions } = props;
+  const { value, id, label, description, uiOptions, required } = props;
   const { shellApi, ...shellData } = useShellApi();
   const { recognizers } = useContext(PluginContext);
 
@@ -50,14 +50,14 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
 
   return (
     <React.Fragment>
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
+      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
       {selectedType ? (
         <Dropdown
           label={formatMessage('Recognizer Type')}
-          onChange={handleChangeRecognizerType}
           options={options}
           responsiveMode={ResponsiveMode.large}
           selectedKey={selectedType}
+          onChange={handleChangeRecognizerType}
         />
       ) : (
         `Unable to determine recognizer type from data: ${value}`

@@ -23,7 +23,7 @@ const DefaultUISchema: UISchema = {
         label: () => formatMessage('Language Understanding'),
         description: () =>
           formatMessage(
-            'To understand what the user says, your dialog needs a "Recognizer"; that includes example words and sentences that users may use.'
+            'To understand what the user says, your dialog needs a "IRecognizer"; that includes example words and sentences that users may use.'
           ),
       },
     },
@@ -99,6 +99,12 @@ const DefaultUISchema: UISchema = {
     order: ['itemsProperty', 'pageSize', '*'],
     hidden: ['actions'],
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
+  },
+  [SDKKinds.ContinueLoop]: {
+    label: () => formatMessage('Continue loop'),
+  },
+  [SDKKinds.BreakLoop]: {
+    label: () => formatMessage('Break out of loop'),
   },
   [SDKKinds.HttpRequest]: {
     label: () => formatMessage('HTTP Request'),
@@ -232,7 +238,7 @@ const DefaultUISchema: UISchema = {
     label: () => formatMessage('QnAMakerDialog'),
     helpLink: 'https://aka.ms/bfc-using-QnA',
   },
-  [SDKKinds.Recognizer]: {
+  [SDKKinds.IRecognizer]: {
     field: RecognizerField,
     helpLink: 'https://aka.ms/BFC-Using-LU',
   },

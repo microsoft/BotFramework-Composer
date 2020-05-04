@@ -18,7 +18,7 @@ const client = new msRest.ServiceClient(creds, clientOptions);
 export const extractSkillManifestUrl = async (skills: any[]): Promise<Skill[]> => {
   const skillsParsed: Skill[] = [];
   for (const skill of skills) {
-    const { manifestUrl } = skill;
+    const { manifestUrl, name } = skill;
     try {
       const req: msRest.RequestPrepareOptions = {
         url: manifestUrl,
@@ -30,12 +30,13 @@ export const extractSkillManifestUrl = async (skills: any[]): Promise<Skill[]> =
       const resBody = typeof res.bodyAsText === 'string' && JSON.parse(res.bodyAsText);
       skillsParsed.push({
         manifestUrl,
-        name: resBody?.name || '',
+        name: name || resBody?.name || '',
         description: resBody?.description || '',
         endpoints: get(resBody, 'endpoints', []),
         endpointUrl: get(resBody, 'endpoints[0].endpointUrl', ''), // needs more invesment on endpoint
         protocol: get(resBody, 'endpoints[0].protocol', ''),
         msAppId: get(resBody, 'endpoints[0].msAppId', ''),
+        body: res.bodyAsText,
       });
       continue;
     } catch (error) {

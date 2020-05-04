@@ -13,9 +13,10 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
+import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import get from 'lodash/get';
 import { DialogInfo } from '@bfc/shared';
-import { LuEditor } from '@bfc/code-editor';
+import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 
 import {
   generateNewDialog,
@@ -183,105 +184,109 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   return (
     <Dialog
+      hidden={!isOpen}
+      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Create a trigger'),
         styles: styles.dialog,
       }}
-      hidden={!isOpen}
       modalProps={{
         isBlocking: false,
         styles: styles.modal,
       }}
-      onDismiss={onDismiss}
     >
       <div css={dialogWindow}>
         <Stack>
           <Dropdown
-            data-testid={'triggerTypeDropDown'}
-            defaultSelectedKey={formData.$kind}
-            errorMessage={formData.errors.$kind}
             label={formatMessage('What is the type of this trigger?')}
-            onChange={onSelectTriggerType}
             options={triggerTypeOptions}
             styles={dropdownStyles}
+            onChange={onSelectTriggerType}
+            errorMessage={formData.errors.$kind}
+            data-testid={'triggerTypeDropDown'}
+            defaultSelectedKey={formData.$kind}
           />
           {showEventDropDown && (
             <Dropdown
-              data-testid={'eventTypeDropDown'}
-              errorMessage={formData.errors.specifiedType}
-              label={formatMessage('Which event?')}
-              onChange={onSelectSpecifiedTypeType}
-              options={eventTypes}
               placeholder={formatMessage('Select a event type')}
+              label={formatMessage('Which event?')}
+              options={eventTypes}
               styles={dropdownStyles}
+              onChange={onSelectSpecifiedTypeType}
+              errorMessage={formData.errors.specifiedType}
+              data-testid={'eventTypeDropDown'}
             />
           )}
           {showActivityDropDown && (
             <Dropdown
-              data-testid={'activityTypeDropDown'}
-              errorMessage={formData.errors.specifiedType}
-              label={formatMessage('Which activity type')}
-              onChange={onSelectSpecifiedTypeType}
-              options={activityTypes}
               placeholder={formatMessage('Select an activity type')}
+              label={formatMessage('Which activity type')}
+              options={activityTypes}
               styles={dropdownStyles}
+              onChange={onSelectSpecifiedTypeType}
+              errorMessage={formData.errors.specifiedType}
+              data-testid={'activityTypeDropDown'}
             />
           )}
           {showMessageDropDown && (
             <Dropdown
-              data-testid={'messageTypeDropDown'}
-              errorMessage={formData.errors.specifiedType}
-              label={formatMessage('Which message type?')}
-              onChange={onSelectSpecifiedTypeType}
-              options={messageTypes}
               placeholder={formatMessage('Select a message type')}
+              label={formatMessage('Which message type?')}
+              options={messageTypes}
               styles={dropdownStyles}
+              onChange={onSelectSpecifiedTypeType}
+              errorMessage={formData.errors.specifiedType}
+              data-testid={'messageTypeDropDown'}
             />
           )}
           {showIntentName && (
             <TextField
-              data-testid="TriggerName"
-              errorMessage={formData.errors.intent}
               label={
                 isRegEx
                   ? formatMessage('What is the name of this trigger (RegEx)')
                   : formatMessage('What is the name of this trigger (Luis)')
               }
-              onChange={onNameChange}
               styles={intent}
+              onChange={onNameChange}
+              errorMessage={formData.errors.intent}
+              data-testid="TriggerName"
             />
           )}
 
           {showRegExDropDown && (
             <TextField
-              data-testid={'RegExDropDown'}
-              errorMessage={formData.errors.regexEx}
               label={formatMessage('Please input regex pattern')}
               onChange={onChangeRegEx}
+              errorMessage={formData.errors.regexEx}
+              data-testid={'RegExDropDown'}
             />
           )}
-          {showTriggerPhrase && <Label>{formatMessage('Trigger phrases')}</Label>}
           {showTriggerPhrase && (
-            <LuEditor
-              errorMessage={formData.errors.triggerPhrases}
-              height={150}
-              hidePlaceholder
-              luOption={{
-                projectId,
-                fileId: dialogId,
-                sectionId: formData.intent || 'newSection',
-              }}
-              onChange={onTriggerPhrasesChange}
-              value={formData.triggerPhrases}
-            />
+            <React.Fragment>
+              <Label>{formatMessage('Trigger phrases')}</Label>
+              <LuEditor
+                onChange={onTriggerPhrasesChange}
+                value={formData.triggerPhrases}
+                errorMessage={formData.errors.triggerPhrases}
+                luOption={{
+                  projectId,
+                  fileId: dialogId,
+                  sectionId: formData.intent || PlaceHolderSectionName,
+                }}
+                height={225}
+                placeholder={inlineModePlaceholder}
+              />
+            </React.Fragment>
           )}
         </Stack>
       </div>
       <DialogFooter>
         <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton data-testid={'triggerFormSubmit'} onClick={onClickSubmitButton} text={formatMessage('Submit')} />
+        <PrimaryButton onClick={onClickSubmitButton} text={formatMessage('Submit')} data-testid={'triggerFormSubmit'} />
       </DialogFooter>
     </Dialog>
   );
 };
+
+export default TriggerCreationModal;

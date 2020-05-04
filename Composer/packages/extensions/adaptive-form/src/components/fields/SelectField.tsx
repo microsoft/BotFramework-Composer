@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -8,17 +8,33 @@ import formatMessage from 'format-message';
 import { FieldLabel } from '../FieldLabel';
 
 export const SelectField: React.FC<FieldProps<string | number>> = function SelectField(props) {
-  const { description, enumOptions, id, label, onBlur, onChange, onFocus, value = '', error, uiOptions } = props;
+  const {
+    description,
+    enumOptions,
+    id,
+    label,
+    onBlur,
+    onChange,
+    onFocus,
+    value = '',
+    error,
+    uiOptions,
+    required,
+  } = props;
 
-  const options: IDropdownOption[] = (enumOptions ?? []).map((o) => ({
-    key: o?.toString(),
-    text: o?.toString(),
-  }));
+  const options: IDropdownOption[] = useMemo(() => {
+    const opts = (enumOptions ?? []).map((o) => ({
+      key: o?.toString(),
+      text: o?.toString(),
+    }));
 
-  options.unshift({
-    key: '',
-    text: '',
-  });
+    opts.unshift({
+      key: '',
+      text: '',
+    });
+
+    return opts;
+  }, [enumOptions]);
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
@@ -30,20 +46,20 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
 
   return (
     <>
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <Dropdown
-        ariaLabel={label || formatMessage('selection field')}
         errorMessage={error as string}
         id={id}
-        onBlur={() => onBlur && onBlur(id, value)}
-        onChange={handleChange}
-        onFocus={() => onFocus && onFocus(id, value)}
         options={options}
         responsiveMode={ResponsiveMode.large}
         selectedKey={value}
         styles={{
           errorMessage: { display: 'none' },
         }}
+        onBlur={() => onBlur && onBlur(id, value)}
+        onChange={handleChange}
+        onFocus={() => onFocus && onFocus(id, value)}
+        ariaLabel={label || formatMessage('selection field')}
       />
     </>
   );

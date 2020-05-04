@@ -7,7 +7,7 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { moreButton, overflowSet, menuStyle, navItem, itemText } from './styles';
+import { moreButton, overflowSet, menuStyle, navItem, itemText, content } from './styles';
 
 interface ITreeItemProps {
   link: any;
@@ -20,24 +20,37 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div css={itemText(item.depth)} role="cell">
-      {item.depth !== 0 && <Icon iconName="Flow" styles={{ root: { marginRight: '8px' } }} />}
-      {item.displayName}
+    <div role="cell" css={itemText(item.depth)} tabIndex={0}>
+      <div css={content} tabIndex={-1}>
+        {item.depth !== 0 && (
+          <Icon
+            tabIndex={-1}
+            iconName="Flow"
+            styles={{
+              root: {
+                marginRight: '8px',
+                outline: 'none',
+              },
+            }}
+          />
+        )}
+        {item.displayName}
+      </div>
     </div>
   );
 };
 
-const onRenderOverflowButton = (isRoot: boolean) => {
+const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
   const showIcon = !isRoot;
   return (overflowItems) => {
     return showIcon ? (
       <IconButton
+        role="cell"
         className="dialog-more-btn"
         data-testid="dialogMoreButton"
+        styles={moreButton(isActive)}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
-        role="cell"
-        styles={moreButton}
       />
     ) : null;
   };
@@ -47,6 +60,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
   return (
     <div
+      role="presentation"
       css={navItem(isActive, !!isSubItemActive)}
       onClick={() => {
         onSelect(link.id);
@@ -56,12 +70,9 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
           onSelect(link.id);
         }
       }}
-      role="presentation"
-      tabIndex={1}
     >
       <OverflowSet
-        css={overflowSet}
-        data-testid={`DialogTreeItem${link.id}`}
+        role="row"
         items={[
           {
             key: link.id,
@@ -69,8 +80,6 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             ...link,
           },
         ]}
-        onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(link.isRoot)}
         overflowItems={[
           {
             key: 'delete',
@@ -78,7 +87,10 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             onClick: () => onDelete(link.id),
           },
         ]}
-        role="row"
+        css={overflowSet}
+        data-testid={`DialogTreeItem${link.id}`}
+        onRenderItem={onRenderItem}
+        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
       />
     </div>
   );

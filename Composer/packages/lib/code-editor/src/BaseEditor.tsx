@@ -31,6 +31,7 @@ const defaultOptions = {
   folding: false,
   renderLineHighlight: 'none',
   formatOnType: true,
+  fixedOverflowWidgets: true,
 };
 
 const styles = {
@@ -193,7 +194,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   const messageHelp = errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics;
 
   const syntaxLink = (
-    <Link href={helpURL} key="a" rel="noopener noreferrer" target="_blank">
+    <Link key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
       {formatMessage('Refer to the syntax documentation here.')}
     </Link>
   );
@@ -217,14 +218,13 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} editorDidMount={onEditorMount} options={editorOptions} value={initialValue || ''} />
+        <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={editorOptions} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
-          dismissButtonAriaLabel={formatMessage('Close')}
-          isMultiline={false}
           messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
-          overflowButtonAriaLabel={formatMessage('See more')}
+          isMultiline={true}
+          dismissButtonAriaLabel={formatMessage('Close')}
         >
           {messageHelp}
           {syntaxLink}

@@ -128,3 +128,15 @@ export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationS
   const mapNavPath = resolveToBasePath(BASEPATH, to);
   navigate(mapNavPath, navigateOpts);
 }
+
+export const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
+  // this creates a temporary hidden iframe to fire off the bfemulator protocol
+  // and start up the emulator
+  const i = document.createElement('iframe');
+  i.style.display = 'none';
+  i.onload = () => i.parentNode && i.parentNode.removeChild(i);
+  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&msaAppId=${
+    authSettings.MicrosoftAppId
+  }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
+  document.body.appendChild(i);
+};

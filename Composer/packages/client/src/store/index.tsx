@@ -12,7 +12,7 @@ import storage from '../utils/storage';
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
-import { CreationFlowStatus, BotStatus } from './../constants';
+import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from './../constants';
 import {
   State,
   ActionHandlers,
@@ -51,6 +51,7 @@ const initialState: State = {
   schemas: {},
   luFiles: [],
   skills: [],
+  skillManifests: [],
   actionsSeed: [],
   designPageLocation: {
     projectId: '',
@@ -79,6 +80,8 @@ const initialState: State = {
   clipboardActions: [],
   publishTypes: [],
   publishTargets: [],
+  runtimeTemplates: [],
+  publishHistory: {},
   userSettings: storage.get('userSettings', {
     codeEditor: {
       lineNumbers: false,
@@ -88,7 +91,16 @@ const initialState: State = {
     propertyEditorWidth: 400,
     dialogNavWidth: 180,
   }),
+  runtimeSettings: {
+    path: '',
+    startCommand: '',
+  },
   announcement: undefined,
+  appUpdate: {
+    progressPercent: 0,
+    showing: false,
+    status: AppUpdaterStatus.IDLE,
+  },
 };
 
 interface StoreContextValue {

@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React from 'react';
-import { FieldProps } from '@bfc/extension';
+import React, { useEffect } from 'react';
+import { FieldProps, UIOptions } from '@bfc/extension';
 
-import { getUISchema, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
+import { getUIOptions, resolveFieldWidget, resolveRef, getUiLabel, getUiPlaceholder, getUiDescription } from '../utils';
 import { usePluginConfig } from '../hooks';
 
 import { ErrorMessage } from './ErrorMessage';
@@ -17,10 +17,6 @@ const schemaField = {
     margin: 10px ${depth === 0 ? 18 : 0}px;
 
     label: SchemaFieldContainer;
-  `,
-  field: (hasError: boolean) => css`
-    width: 100%;
-    label: SchemaField;
   `,
 };
 
@@ -38,13 +34,26 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     ...rest
   } = props;
   const pluginConfig = usePluginConfig();
+
   const schema = resolveRef(baseSchema, definitions);
-  const uiOptions = {
-    ...getUISchema(schema, pluginConfig.formSchema),
+  const uiOptions: UIOptions = {
+    ...getUIOptions(schema, pluginConfig.formSchema, pluginConfig.roleSchema),
     ...baseUIOptions,
   };
 
-  const error = typeof rawErrors === 'string' && <ErrorMessage error={rawErrors} label={getUiLabel(props)} />;
+  useEffect(() => {
+    if (typeof value === 'undefined') {
+      if (schema?.const) {
+        onChange(schema.const);
+      } else if (schema?.default) {
+        onChange(schema.default);
+      }
+    }
+  }, []);
+
+  const error = typeof rawErrors === 'string' && (
+    <ErrorMessage error={rawErrors} label={getUiLabel(props)} helpLink={uiOptions.helpLink} />
+  );
 
   if (!schema || name.startsWith('$')) {
     return null;
@@ -59,28 +68,29 @@ const SchemaField: React.FC<FieldProps> = (props) => {
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
   const FieldWidget = resolveFieldWidget(schema, uiOptions, pluginConfig);
-  const fieldProps = {
+  const fieldProps: FieldProps = {
     ...rest,
-    name,
-    uiOptions,
-    enumOptions: schema.enum as string[],
-    label: getUiLabel({ ...props, uiOptions }),
-    placeholder: getUiPlaceholder({ ...props, uiOptions }),
+    definitions,
     description: getUiDescription({ ...props, uiOptions }),
-    schema,
-    value: deserializedValue,
+    enumOptions: schema.enum as string[],
     error: error || undefined,
-    rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
+    label: getUiLabel({ ...props, uiOptions }),
+    name,
     onChange: handleChange,
+    placeholder: getUiPlaceholder({ ...props, uiOptions }),
+    rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
+    schema,
+    uiOptions,
+    value: deserializedValue,
   };
 
   return (
     <div className={className} css={schemaField.container(props.depth)}>
       <FieldWidget {...fieldProps} />
-      {!hideError && error}
+      {!hideError && !uiOptions.hideError && error}
     </div>
   );
 };
 
-export { SchemaField };
+export { SchemaField, schemaField };
 export default SchemaField;

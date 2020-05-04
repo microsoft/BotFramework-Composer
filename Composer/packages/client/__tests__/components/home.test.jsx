@@ -13,15 +13,15 @@ describe('<Home/>', () => {
       { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'a', path: 'path1', storageId: 'default' },
       { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'b', path: 'path2', storageId: 'default' },
     ];
-    const onSelectionChanged = jest.fn((item) => item.path);
+    const onItemChosen = jest.fn((item) => item.path);
     const { container, queryByLabelText } = render(
-      <RecentBotList onSelectionChanged={onSelectionChanged} recentProjects={recentProjects} />
+      <RecentBotList onItemChosen={onItemChosen} recentProjects={recentProjects} />
     );
     expect(container).toHaveTextContent('a');
     expect(container).toHaveTextContent('b');
-    const link = queryByLabelText('a');
-    fireEvent.click(link);
-    expect(onSelectionChanged.mock.results[0].value).toBe('path1');
+    const link = queryByLabelText('Bot name is a');
+    fireEvent.dblClick(link);
+    expect(onItemChosen.mock.results[0].value).toBe('path1');
   });
 
   it('should dispatch onClick event when clicked on an ExampleList', () => {
@@ -30,7 +30,7 @@ describe('<Home/>', () => {
       { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 },
     ];
     const onClickTemplate = jest.fn((item) => item);
-    const { container, getByText } = render(<ExampleList examples={templates} onClick={onClickTemplate} />);
+    const { container, getByText } = render(<ExampleList onClick={onClickTemplate} examples={templates} />);
     expect(container).toHaveTextContent('Echo Bot');
     const link = getByText('Echo Bot');
     fireEvent.click(link);
