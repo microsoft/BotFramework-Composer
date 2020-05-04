@@ -97,7 +97,7 @@ async function loadServer() {
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
-    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'build', 'templates');
+    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'BotProject', 'Templates');
     pluginsDir = join(unpackedDir, 'build', 'plugins');
   }
 
