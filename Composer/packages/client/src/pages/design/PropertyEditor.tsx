@@ -106,10 +106,6 @@ const PropertyEditor: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDataChange = (newData?: any) => {
     setLocalData(newData);
-
-    if (!isEqual(formData, newData)) {
-      shellApi.saveData(newData, focusedSteps[0]);
-    }
   };
 
   return (
