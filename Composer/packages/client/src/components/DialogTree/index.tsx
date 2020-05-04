@@ -32,26 +32,26 @@ export const DialogTree: React.FC<IDialogTreeProps> = (props) => {
 
   return (
     <Resizable
-      size={{ width: currentWidth, height: 'auto' }}
-      minWidth={180}
-      maxWidth={500}
       enable={{
         right: true,
       }}
+      maxWidth={500}
+      minWidth={180}
       onResizeStop={handleResize}
+      size={{ width: currentWidth, height: 'auto' }}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         {navLinks.map((item) => {
           return (
             <DefaultButton
+              ariaHidden={false}
+              ariaLabel={item.ariaLabel}
               key={item.id}
               onClick={() => {
                 onSelect(item.id);
               }}
               styles={dialogId === item.id ? dialogItemSelected : dialogItemNotSelected}
               text={item.name}
-              ariaLabel={item.ariaLabel}
-              ariaHidden={false}
             />
           );
         })}

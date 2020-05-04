@@ -109,9 +109,6 @@ const createPasteButtonItem = (
     onRender: () => {
       return (
         <button
-          disabled={disabled}
-          role="menuitem"
-          name="Paste"
           aria-posinset={1}
           aria-setsize={menuItemCount + 1}
           css={css`
@@ -128,14 +125,17 @@ const createPasteButtonItem = (
               background: rgb(237, 235, 233);
             }
           `}
+          disabled={disabled}
+          name="Paste"
           onClick={() => onClick({ key: 'Paste' })}
+          role="menuitem"
         >
           <div>
             <FontIcon
-              iconName="Paste"
               css={css`
                 margin-right: 4px;
               `}
+              iconName="Paste"
             />
             <span>Paste</span>
           </div>

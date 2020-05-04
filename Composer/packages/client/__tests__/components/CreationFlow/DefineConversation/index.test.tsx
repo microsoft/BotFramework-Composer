@@ -33,11 +33,11 @@ describe('<DefineConversation/>', () => {
     return render(
       <StoreContext.Provider value={storeContext}>
         <DefineConversation
-          onSubmit={onSubmitMock}
-          onDismiss={onDismissMock}
-          onCurrentPathUpdate={onCurrentPathUpdateMock}
-          location={locationMock}
           focusedStorageFolder={focusedStorageFolder}
+          location={locationMock}
+          onCurrentPathUpdate={onCurrentPathUpdateMock}
+          onDismiss={onDismissMock}
+          onSubmit={onSubmitMock}
         />
       </StoreContext.Provider>
     );

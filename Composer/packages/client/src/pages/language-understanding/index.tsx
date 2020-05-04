@@ -107,24 +107,24 @@ const LUPage: React.FC<LUPageProps> = (props) => {
           <div css={flexContent}>
             {(!isRoot || edit) && (
               <Toggle
+                checked={!!edit}
                 className={'toggleEditMode'}
                 css={actionButton}
-                onText={formatMessage('Edit mode')}
-                offText={formatMessage('Edit mode')}
                 defaultChecked={false}
-                checked={!!edit}
+                offText={formatMessage('Edit mode')}
                 onChange={onToggleEditMode}
+                onText={formatMessage('Edit mode')}
               />
             )}
           </div>
         </div>
-        <div role="main" css={ContentStyle}>
-          <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+        <div css={ContentStyle} role="main">
+          <DialogTree dialogId={dialogId} navLinks={navLinks} onSelect={onSelect} />
           <div css={contentEditor} data-testid="LUEditor">
             <Suspense fallback={<LoadingSpinner />}>
-              <Router primary={false} component={Fragment}>
-                <CodeEditor path="/edit" dialogId={dialogId} />
-                <TableView path="/" dialogId={dialogId} />
+              <Router component={Fragment} primary={false}>
+                <CodeEditor dialogId={dialogId} path="/edit" />
+                <TableView dialogId={dialogId} path="/" />
               </Router>
             </Suspense>
           </div>

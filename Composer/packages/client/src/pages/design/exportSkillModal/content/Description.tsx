@@ -39,9 +39,9 @@ const InlineLabelField: React.FC<FieldProps> = (props) => {
         <TextField
           errorMessage={rawErrors as string}
           id={id}
+          onChange={handleChange}
           placeholder={placeholder}
           value={value}
-          onChange={handleChange}
         />
       </div>
     </div>
@@ -92,5 +92,5 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
     properties,
   };
 
-  return <AdaptiveForm formData={value} errors={errors} schema={schema} onChange={onChange} uiOptions={uiOptions} />;
+  return <AdaptiveForm errors={errors} formData={value} onChange={onChange} schema={schema} uiOptions={uiOptions} />;
 };

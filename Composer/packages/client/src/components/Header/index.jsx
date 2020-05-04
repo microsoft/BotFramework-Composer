@@ -27,12 +27,12 @@ export const Header = (props) => {
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
   return (
-    <div role="banner" css={headerContainer}>
+    <div css={headerContainer} role="banner">
       <img
-        style={{ marginLeft: '9px' }}
         alt={formatMessage('Composer Logo')}
         aria-label={formatMessage('Composer Logo')}
         src={composerIcon}
+        style={{ marginLeft: '9px' }}
       />
       <div css={headerTextContainer}>
         <div css={title}>{formatMessage('Bot Framework Composer')}</div>

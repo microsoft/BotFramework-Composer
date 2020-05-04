@@ -13,10 +13,10 @@ export const TargetList = (props) => {
   const onRenderOverflowButton = (overflowItems: any[] | undefined) => {
     return (
       <IconButton
-        role="menuitem"
-        title="More options"
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems! }}
+        role="menuitem"
+        title="More options"
       />
     );
   };
@@ -29,7 +29,7 @@ export const TargetList = (props) => {
     <Fragment>
       {props.list.map((target, index) => {
         return (
-          <div key={index} style={{ cursor: 'pointer' }} onClick={() => props.onSelect(target)}>
+          <div key={index} onClick={() => props.onSelect(target)} style={{ cursor: 'pointer' }}>
             <OverflowSet
               css={props.selectedTarget === target.name ? targetSelected : overflowSet}
               items={[
@@ -38,6 +38,8 @@ export const TargetList = (props) => {
                   key: target.name,
                 },
               ]}
+              onRenderItem={onRenderItem}
+              onRenderOverflowButton={onRenderOverflowButton}
               overflowItems={[
                 {
                   key: 'delete',
@@ -50,8 +52,6 @@ export const TargetList = (props) => {
                   onClick: () => props.onEdit(index, target),
                 },
               ]}
-              onRenderItem={onRenderItem}
-              onRenderOverflowButton={onRenderOverflowButton}
             />
           </div>
         );

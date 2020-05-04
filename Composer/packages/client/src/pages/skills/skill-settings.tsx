@@ -45,28 +45,28 @@ const SkillSettings: React.FC<ISkillFormProps> = (props) => {
     <div css={FormFieldAlignHorizontalBotSettings}>
       <div style={{ marginLeft: '20px' }}>
         <TextField
-          style={{ maxWidth: '300px' }}
           aria-labelledby={'microsoftAppId'}
-          id={'MicrosoftAppId'}
-          underlined
-          label={formatMessage('Microsoft App Id')}
-          description={formatMessage('The Microsoft App Id that will be calling the skill.')}
-          value={skillSettings.botId}
-          onChange={handleFieldChange}
           data-testid="SkillBotId"
+          description={formatMessage('The Microsoft App Id that will be calling the skill.')}
+          id={'MicrosoftAppId'}
+          label={formatMessage('Microsoft App Id')}
+          onChange={handleFieldChange}
+          style={{ maxWidth: '300px' }}
+          underlined
+          value={skillSettings.botId}
         />
       </div>
       <div style={{ marginLeft: '50px' }}>
         <TextField
-          style={{ width: '400px' }}
           aria-labelledby={'skillHostEndpoint'}
-          underlined
-          id={'skillHostEndpoint'}
-          description={formatMessage('The callback url for the skill host.')}
-          label={formatMessage('Skill Host Endpoint')}
-          value={skillSettings.skillHostEndpoint}
-          onChange={handleFieldChange}
           data-testid="SkillHostEndpoint"
+          description={formatMessage('The callback url for the skill host.')}
+          id={'skillHostEndpoint'}
+          label={formatMessage('Skill Host Endpoint')}
+          onChange={handleFieldChange}
+          style={{ width: '400px' }}
+          underlined
+          value={skillSettings.skillHostEndpoint}
         />
       </div>
     </div>

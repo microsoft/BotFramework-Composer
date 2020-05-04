@@ -158,17 +158,17 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
   return (
     <LuEditor
-      editorDidMount={editorDidMount}
-      value={content}
-      errorMessage={httpErrorMsg}
       diagnostics={currentDiagnostics}
-      luOption={luOption}
+      editorDidMount={editorDidMount}
+      editorSettings={userSettings.codeEditor}
+      errorMessage={httpErrorMsg}
       languageServer={{
         path: lspServerPath,
       }}
+      luOption={luOption}
       onChange={_onChange}
-      editorSettings={userSettings.codeEditor}
       onChangeSettings={handleSettingsChange}
+      value={content}
     />
   );
 };

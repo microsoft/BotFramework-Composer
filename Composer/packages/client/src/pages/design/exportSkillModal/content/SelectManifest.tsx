@@ -114,7 +114,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
           ...props,
           onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -137,6 +137,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
         <div css={styles.create}>
           <Dropdown
             errorMessage={errors?.version}
+            onChange={handleChange}
             options={options}
             responsiveMode={ResponsiveMode.large}
             styles={{
@@ -144,15 +145,14 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
                 width: '250px',
               },
             }}
-            onChange={handleChange}
           />
           <PrimaryButton
+            onClick={handleCreate}
             styles={{
               root: {
                 marginLeft: 8,
               },
             }}
-            onClick={handleCreate}
           >
             {formatMessage('Create')}
           </PrimaryButton>
@@ -161,16 +161,16 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       <div css={styles.detailListContainer}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            items={skillManifests}
-            compact={false}
-            columns={tableColumns}
-            getKey={(item) => item.name}
-            layoutMode={DetailsListLayoutMode.justified}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            isHeaderVisible={true}
-            onActiveItemChanged={({ id }) => setSkillManifest(id)}
-            selectionMode={SelectionMode.single}
             checkboxVisibility={CheckboxVisibility.hidden}
+            columns={tableColumns}
+            compact={false}
+            getKey={(item) => item.name}
+            isHeaderVisible
+            items={skillManifests}
+            layoutMode={DetailsListLayoutMode.justified}
+            onActiveItemChanged={({ id }) => setSkillManifest(id)}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+            selectionMode={SelectionMode.single}
           />
         </ScrollablePane>
       </div>

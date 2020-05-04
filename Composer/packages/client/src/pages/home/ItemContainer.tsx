@@ -46,7 +46,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         </div>
         <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
           <div css={itemContainerContent}>
-            <Text variant="large" nowrap>
+            <Text nowrap variant="large">
               {content}
             </Text>
           </div>
@@ -66,8 +66,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       }}
       ref={forwardedRef}
       {...rest}
-      onRenderChildren={onRenderChildren}
       disabled={disabled}
+      onRenderChildren={onRenderChildren}
     />
   );
 };

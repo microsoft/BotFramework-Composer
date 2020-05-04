@@ -165,10 +165,10 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
                 title="Delete"
               />
               <IconButton
+                ariaLabel="View"
                 iconProps={{ iconName: 'ContextMenu' }}
                 onClick={() => onViewManifest(index)}
                 title="View"
-                ariaLabel="View"
               />
             </Stack>
           </div>
@@ -226,31 +226,31 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
         </ScrollablePane>
       </div>
       <Modal
-        titleAriaId={'skillManifestModal'}
+        isBlocking={false}
         isOpen={selectedSkillIndex !== null}
         onDismiss={onHideManifest}
-        isBlocking={false}
+        titleAriaId={'skillManifestModal'}
       >
         <div>
           <span css={ManifestModalHeaderStyle} id={'skillManifestModalHeader'}>
             {selectedSkillIndex !== null && skills[selectedSkillIndex] && skills[selectedSkillIndex].name}
           </span>
           <IconButton
-            style={{ float: 'right' }}
-            iconProps={{ iconName: 'Cancel' }}
             ariaLabel={formatMessage('Close popup modal')}
+            iconProps={{ iconName: 'Cancel' }}
             onClick={onHideManifest}
+            style={{ float: 'right' }}
           />
         </div>
         <div css={ManifestModalBodyStyle}>
           <JsonEditor
-            key={'testkey'}
-            id={'modaljsonview'}
-            onChange={() => {}}
-            value={selectedSkillIndex !== null && JSON.parse(skills[selectedSkillIndex].body || '')}
             height={800}
-            width={800}
+            id={'modaljsonview'}
+            key={'testkey'}
+            onChange={() => {}}
             options={{ readOnly: true }}
+            value={selectedSkillIndex !== null && JSON.parse(skills[selectedSkillIndex].body || '')}
+            width={800}
           />
         </div>
       </Modal>

@@ -295,19 +295,19 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return (
       <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
         <Breadcrumb
-          items={items}
           ariaLabel={formatMessage('Navigation Path')}
-          styles={breadcrumbClass}
+          data-testid="Breadcrumb"
+          items={items}
           maxDisplayedItems={3}
           onReduceData={() => undefined}
-          data-testid="Breadcrumb"
           onRenderItem={onRenderBreadcrumbItem}
+          styles={breadcrumbClass}
         />
         <Link
-          style={{ position: 'absolute', right: 0, marginTop: '22px', marginRight: '10px' }}
           onClick={() => {
             setDialogJsonVisibility((current) => !current);
           }}
+          style={{ position: 'absolute', right: 0, marginTop: '22px', marginRight: '10px' }}
         >
           {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
         </Link>
@@ -388,23 +388,23 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     <React.Fragment>
       <div css={pageRoot}>
         <ProjectTree
-          dialogs={dialogs}
           dialogId={dialogId}
-          selected={selected}
-          onSelect={handleSelect}
+          dialogs={dialogs}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
+          onSelect={handleSelect}
+          selected={selected}
         />
-        <div role="main" css={contentWrapper}>
+        <div css={contentWrapper} role="main">
           <ToolBar
-            toolbarItems={toolbarItems}
             actions={actions}
-            projectId={projectId}
             currentDialog={currentDialog}
-            openNewTriggerModal={openNewTriggerModal}
-            onCreateDialogComplete={onCreateDialogComplete}
             onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+            onCreateDialogComplete={onCreateDialogComplete}
+            openNewTriggerModal={openNewTriggerModal}
+            projectId={projectId}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
+            toolbarItems={toolbarItems}
           />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
@@ -412,13 +412,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    key={'dialogjson'}
                     id={'dialogjson'}
+                    key={'dialogjson'}
                     onChange={(data) => {
                       actions.updateDialog({ id: currentDialog.id, projectId, content: data });
                     }}
-                    value={currentDialog.content || undefined}
                     schema={schemas.sdk.content}
+                    value={currentDialog.content || undefined}
                   />
                 ) : (
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />

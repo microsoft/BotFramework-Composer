@@ -46,20 +46,20 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <Dropdown
+        ariaLabel={label || formatMessage('selection field')}
         errorMessage={error as string}
         id={id}
+        onBlur={() => onBlur && onBlur(id, value)}
+        onChange={handleChange}
+        onFocus={() => onFocus && onFocus(id, value)}
         options={options}
         responsiveMode={ResponsiveMode.large}
         selectedKey={value}
         styles={{
           errorMessage: { display: 'none' },
         }}
-        onBlur={() => onBlur && onBlur(id, value)}
-        onChange={handleChange}
-        onFocus={() => onFocus && onFocus(id, value)}
-        ariaLabel={label || formatMessage('selection field')}
       />
     </>
   );

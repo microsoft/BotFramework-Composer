@@ -15,8 +15,8 @@ function itemList(action, index) {
   } else {
     return (
       <ActionButton
-        key={index}
         css={actionButton}
+        key={index}
         {...action.buttonProps}
         data-testid={action.dataTestid}
         disabled={action.disabled}
@@ -62,10 +62,9 @@ export function ToolBar(props) {
         {window.location.href.indexOf('/dialogs/') !== -1 && (
           <div ref={addNewRef}>
             <CommandButton
-              data-testid="AddFlyout"
               css={actionButton}
+              data-testid="AddFlyout"
               iconProps={{ iconName: 'Add' }}
-              text={formatMessage('Add')}
               menuProps={{
                 items: [
                   {
@@ -84,6 +83,7 @@ export function ToolBar(props) {
                   },
                 ],
               }}
+              text={formatMessage('Add')}
             />
           </div>
         )}
@@ -92,7 +92,6 @@ export function ToolBar(props) {
           <CommandButton
             css={actionButton}
             iconProps={{ iconName: 'OpenInNewWindow' }}
-            text={formatMessage('Export')}
             menuProps={{
               items: [
                 {
@@ -107,6 +106,7 @@ export function ToolBar(props) {
                 },
               ],
             }}
+            text={formatMessage('Export')}
           />
         )}
       </div>

@@ -51,23 +51,23 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
 
   return (
     <Dialog
-      hidden={props.hidden}
-      onDismiss={props.closeModal}
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Add custom runtime'),
         subText: formatMessage('Select runtime version to add'),
       }}
+      hidden={props.hidden}
       modalProps={{
         isBlocking: false,
       }}
+      onDismiss={props.closeModal}
     >
       <div css={modalControlGroup}>
-        <ChoiceGroup options={availableRuntimeTemplates} onChange={selectTemplate} required={true} />
+        <ChoiceGroup onChange={selectTemplate} options={availableRuntimeTemplates} required />
       </div>
       <DialogFooter>
         <DefaultButton onClick={props.closeModal}>Cancel</DefaultButton>
-        <PrimaryButton onClick={doEject} disabled={!selectedTemplate}>
+        <PrimaryButton disabled={!selectedTemplate} onClick={doEject}>
           {formatMessage('Okay')}
         </PrimaryButton>
       </DialogFooter>

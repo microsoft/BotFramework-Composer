@@ -44,27 +44,27 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   return (
     <React.Fragment>
       <SchemaField
+        definitions={definitions}
         depth={depth + 1}
         id={`${id}.id`}
         name="id"
-        schema={(schema?.properties?.id as JSONSchema7) || {}}
+        onChange={handleIdChange}
         rawErrors={{}}
+        schema={(schema?.properties?.id as JSONSchema7) || {}}
         uiOptions={uiOptions.properties?.id || {}}
         value={value?.id}
-        onChange={handleIdChange}
-        definitions={definitions}
       />
       <SkillEndpointField
+        definitions={definitions}
         depth={depth + 1}
+        enumOptions={endpointOptions}
         id={`${id}.skillEndpoint`}
         name="skillEndpoint"
-        schema={(schema?.properties?.skillEndpoint as JSONSchema7) || {}}
-        enumOptions={endpointOptions}
+        onChange={handleEndpointChange}
         rawErrors={{}}
+        schema={(schema?.properties?.skillEndpoint as JSONSchema7) || {}}
         uiOptions={skillEndpointUiSchema}
         value={value?.skillEndpoint}
-        onChange={handleEndpointChange}
-        definitions={definitions}
       />
       <Link href={`/bot/${projectId}/skills`} styles={{ root: { fontSize: '12px', padding: '0 16px' } }}>
         {formatMessage('Open Skills page for configuration details')}

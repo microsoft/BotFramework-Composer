@@ -24,20 +24,20 @@ export const PublishDialog = (props) => {
   };
   return props.target ? (
     <Dialog
-      hidden={false}
-      onDismiss={props.onDismiss}
       dialogContentProps={publishDialogProps}
+      hidden={false}
       modalProps={{ isBlocking: true }}
+      onDismiss={props.onDismiss}
     >
       <Fragment>
         <div css={publishDialogText}>{props.target.name}</div>
         <form onSubmit={submit}>
           <TextField
-            placeholder="Provide a brief description of this publish. It will appear on the publish history list"
             label={formatMessage('Comment')}
+            multiline
             // styles={styles.textarea}
             onChange={(e, newvalue) => setComment(newvalue || '')}
-            multiline={true}
+            placeholder="Provide a brief description of this publish. It will appear on the publish history list"
           />
         </form>
         <DialogFooter>

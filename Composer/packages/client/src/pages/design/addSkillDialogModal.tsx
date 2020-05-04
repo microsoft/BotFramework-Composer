@@ -79,23 +79,23 @@ export const AddSkillDialog: React.FC<CreateDialogModalProps> = (props) => {
       dialogType={DialogTypes.DesignFlow}
     >
       <form onSubmit={handleSubmit}>
-        <input type="submit" style={{ display: 'none' }} />
-        <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+        <input style={{ display: 'none' }} type="submit" />
+        <Stack styles={wizardStyles.stackinput} tokens={{ childrenGap: '2rem' }}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
-              required
               errorMessage={formDataErrors.manifestUrl}
               label={formatMessage('Manifest url')}
+              onChange={updateForm('manifestUrl')}
+              required
               styles={manifestUrl}
               value={formData.manifestUrl}
-              onChange={updateForm('manifestUrl')}
             />
             <TextField
-              label={formatMessage('Custom name (optional)')}
-              value={formData.name}
-              onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
               data-testid="NewSkillName"
+              errorMessage={formDataErrors.name}
+              label={formatMessage('Custom name (optional)')}
+              onChange={updateForm('name')}
+              value={formData.name}
             />
           </StackItem>
         </Stack>

@@ -64,17 +64,17 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = (props) => {
           <div css={fileList}>
             <Tree variant="large">
               <Nav
-                initialSelectedKey={props['*'] || 'dialog-settings'}
-                onRenderGroupHeader={_onRenderGroupHeader}
                 groups={[
                   {
                     name: settingLabels.title,
                     links,
                   },
                 ]}
+                initialSelectedKey={props['*'] || 'dialog-settings'}
                 onLinkClick={(e, item) => {
                   navigateTo(makeProjectLink(projectId, item?.key as string));
                 }}
+                onRenderGroupHeader={_onRenderGroupHeader}
               />
             </Tree>
           </div>

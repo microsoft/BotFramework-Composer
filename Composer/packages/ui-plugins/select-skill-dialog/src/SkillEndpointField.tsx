@@ -40,11 +40,11 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
     <div css={schemaField.container(depth)}>
       <SelectField
         {...props}
-        value={deserializedValue}
         description={description}
         label={label}
-        placeholder={placeholder}
         onChange={handleChange}
+        placeholder={placeholder}
+        value={deserializedValue}
       />
     </div>
   );

@@ -56,19 +56,19 @@ const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
 
   return (
     <div className={className}>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <div>
         {arrayItems.map((element, idx) => (
           <ArrayFieldItem
             {...rest}
+            error={rawErrors[idx]}
             id={id}
-            uiOptions={uiOptions}
             key={element.id}
-            transparentBorder
             label={false}
             rawErrors={rawErrors[idx]}
-            error={rawErrors[idx]}
             schema={itemSchema}
+            transparentBorder
+            uiOptions={uiOptions}
             value={element.value}
             {...getArrayItemProps(arrayItems, idx, handleChange)}
           />
@@ -77,21 +77,21 @@ const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
       <div css={arrayField.inputFieldContainer}>
         <div css={arrayField.field}>
           <TextField
+            ariaLabel={formatMessage('New value')}
             data-testid="string-array-text-input"
             iconProps={{
               iconName: 'ReturnKey',
               style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
             }}
-            value={newValue}
             onChange={handleNewChange}
             onKeyDown={handleKeyDown}
-            ariaLabel={formatMessage('New value')}
             styles={{ root: { width: '100%' } }}
+            value={newValue}
           />
           <IconButton
+            ariaLabel={formatMessage('Item Actions')}
             disabled
             menuIconProps={{ iconName: 'MoreVertical' }}
-            ariaLabel={formatMessage('Item Actions')}
             styles={{
               menuIcon: {
                 backgroundColor: NeutralColors.white,

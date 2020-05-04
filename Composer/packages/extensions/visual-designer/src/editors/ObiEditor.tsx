@@ -352,11 +352,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   return (
     <SelectionContext.Provider value={selectionContext}>
       <KeyboardZone onCommand={handleKeyboardCommand}>
-        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+        <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
           <div
-            tabIndex={0}
             className="obi-editor-container"
-            data-testid="obi-editor-container"
             css={{
               width: '100%',
               height: '100%',
@@ -364,20 +362,22 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               boxSizing: 'border-box',
               '&:focus': { outline: 'none' },
             }}
-            ref={(el) => (divRef = el)}
+            data-testid="obi-editor-container"
             onClick={(e) => {
               e.stopPropagation();
               dispatchEvent(NodeEventTypes.Focus, { id: '' });
             }}
+            ref={(el) => (divRef = el)}
+            tabIndex={0}
           >
             <AdaptiveDialogEditor
-              id={path}
+              addCoachMarkRef={addCoachMarkRef}
               data={data}
+              id={path}
               onEvent={(eventName, eventData) => {
                 divRef.focus({ preventScroll: true });
                 dispatchEvent(eventName, eventData);
               }}
-              addCoachMarkRef={addCoachMarkRef}
             />
           </div>
         </MarqueeSelection>

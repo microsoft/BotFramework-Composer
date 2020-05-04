@@ -165,50 +165,50 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   return (
     <Fragment>
       <DialogWrapper
-        isOpen={true}
+        isOpen
         {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}
-        onDismiss={onDismiss}
         dialogType={DialogTypes.CreateFlow}
+        onDismiss={onDismiss}
       >
         <form onSubmit={handleSubmit}>
-          <input type="submit" style={{ display: 'none' }} />
-          <Stack horizontal={true} tokens={{ childrenGap: '2rem' }} styles={stackinput}>
+          <input style={{ display: 'none' }} type="submit" />
+          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
             <StackItem grow={0} styles={halfstack}>
               <TextField
-                label={formatMessage('Name')}
-                value={formData.name}
-                styles={name}
-                onChange={updateForm('name')}
-                errorMessage={formDataErrors.name}
-                data-testid="NewDialogName"
-                required
                 autoFocus
+                data-testid="NewDialogName"
+                errorMessage={formDataErrors.name}
+                label={formatMessage('Name')}
+                onChange={updateForm('name')}
+                required
+                styles={name}
+                value={formData.name}
               />
             </StackItem>
             <StackItem grow={0} styles={halfstack}>
               <TextField
-                styles={description}
-                value={formData.description}
                 label={formatMessage('Description')}
                 multiline
-                resizable={false}
                 onChange={updateForm('description')}
+                resizable={false}
+                styles={description}
+                value={formData.description}
               />
             </StackItem>
           </Stack>
           <LocationSelectContent
-            operationMode={{ read: true, write: true }}
-            onCurrentPathUpdate={onCurrentPathUpdate}
             focusedStorageFolder={focusedStorageFolder}
+            onCurrentPathUpdate={onCurrentPathUpdate}
+            operationMode={{ read: true, write: true }}
           />
 
           <DialogFooter>
             <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
             <PrimaryButton
+              data-testid="SubmitNewBotBtn"
+              disabled={disable}
               onClick={handleSubmit}
               text={formatMessage('Next')}
-              disabled={disable}
-              data-testid="SubmitNewBotBtn"
             />
           </DialogFooter>
         </form>

@@ -55,11 +55,11 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div data-is-focusable={true} css={tableCell}>
+        <div css={tableCell} data-is-focusable>
           <div
             aria-label={formatMessage(`This is a {severity} notification`, { severity: item.severity })}
-            tabIndex={-1}
             css={content}
+            tabIndex={-1}
           >
             {item.severity}
           </div>
@@ -79,11 +79,11 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div data-is-focusable={true} css={tableCell}>
+        <div css={tableCell} data-is-focusable>
           <div
             aria-label={formatMessage(`Location is {location}`, { location: item.location })}
-            tabIndex={-1}
             css={content}
+            tabIndex={-1}
           >
             {item.location}
           </div>
@@ -105,11 +105,11 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div data-is-focusable={true} css={tableCell}>
+        <div css={tableCell} data-is-focusable>
           <div
             aria-label={formatMessage(`Notification Message {msg}`, { msg: item.message })}
-            tabIndex={-1}
             css={content}
+            tabIndex={-1}
           >
             {item.message}
           </div>
@@ -142,7 +142,7 @@ export const NotificationList: React.FC<INotificationListProps> = (props) => {
   const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
-    <div role="main" css={listRoot} data-testid="notifications-table-view">
+    <div css={listRoot} data-testid="notifications-table-view" role="main">
       <div css={tableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList

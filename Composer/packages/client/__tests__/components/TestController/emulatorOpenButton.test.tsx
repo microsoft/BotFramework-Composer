@@ -13,9 +13,9 @@ describe('<EmulatorOpenButton />', () => {
     const { container, getByText } = render(
       <EmulatorOpenButton
         botEndpoint={'http://localhost:3979/api/messages'}
-        onClick={onClick}
         botStatus={BotStatus.connected}
         hidden={false}
+        onClick={onClick}
       />
     );
 
@@ -31,9 +31,9 @@ describe('<EmulatorOpenButton />', () => {
     const { container } = render(
       <EmulatorOpenButton
         botEndpoint={'http://localhost:3979/api/messages'}
-        onClick={onClick}
         botStatus={BotStatus.connected}
-        hidden={true}
+        hidden
+        onClick={onClick}
       />
     );
 
@@ -45,9 +45,9 @@ describe('<EmulatorOpenButton />', () => {
     const { container } = render(
       <EmulatorOpenButton
         botEndpoint={'http://localhost:3979/api/messages'}
-        onClick={onClick}
         botStatus={BotStatus.publishing}
         hidden={false}
+        onClick={onClick}
       />
     );
 

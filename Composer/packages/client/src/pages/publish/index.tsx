@@ -269,11 +269,11 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          types={publishTypes}
-          targets={settings.publishTargets || []}
-          updateSettings={savePublishTarget}
-          current={null}
           closeDialog={() => setAddDialogHidden(true)}
+          current={null}
+          targets={settings.publishTargets || []}
+          types={publishTypes}
+          updateSettings={savePublishTarget}
         />
       ),
     });
@@ -285,11 +285,11 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          types={publishTypes}
+          closeDialog={() => setEditDialogHidden(true)}
           current={editTarget ? editTarget.item : null}
           targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
+          types={publishTypes}
           updateSettings={updatePublishTarget}
-          closeDialog={() => setEditDialogHidden(true)}
         />
       ),
     });
@@ -377,40 +377,40 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   return (
     <Fragment>
       <Dialog
-        hidden={addDialogHidden}
-        onDismiss={() => setAddDialogHidden(true)}
         dialogContentProps={dialogProps}
-        modalProps={{ isBlocking: true }}
+        hidden={addDialogHidden}
         minWidth={450}
+        modalProps={{ isBlocking: true }}
+        onDismiss={() => setAddDialogHidden(true)}
       >
         {dialogProps.children}
       </Dialog>
       <Dialog
-        hidden={editDialogHidden}
-        onDismiss={() => setEditDialogHidden(true)}
         dialogContentProps={editDialogProps}
-        modalProps={{ isBlocking: true }}
+        hidden={editDialogHidden}
         minWidth={450}
+        modalProps={{ isBlocking: true }}
+        onDismiss={() => setEditDialogHidden(true)}
       >
         {editDialogProps.children}
       </Dialog>
       {!publishDialogHidden && (
         <PublishDialog onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} target={selectedTarget} />
       )}
-      {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
+      {showLog && <LogDialog onDismiss={() => setShowLog(false)} version={selectedVersion} />}
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
-      <div role="main" css={ContentStyle} data-testid="Publish">
+      <div css={ContentStyle} data-testid="Publish" role="main">
         <div css={projectContainer}>
           <div
+            css={selectedTargetName === 'all' ? targetSelected : overflowSet}
             key={'_all'}
             onClick={() => {
               setSelectedTarget(undefined);
               onSelectTarget('all');
             }}
-            css={selectedTargetName === 'all' ? targetSelected : overflowSet}
             style={{
               height: '36px',
               cursor: 'pointer',
@@ -421,12 +421,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           {settings && settings.publishTargets && (
             <TargetList
               list={settings.publishTargets}
+              onDelete={async (index) => await onDelete(index)}
+              onEdit={async (item, target) => await onEdit(item, target)}
               onSelect={(item) => {
                 setSelectedTarget(item);
                 onSelectTarget(item.name);
               }}
-              onEdit={async (item, target) => await onEdit(item, target)}
-              onDelete={async (index) => await onDelete(index)}
               selectedTarget={selectedTargetName}
             />
           )}
@@ -434,8 +434,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <div css={contentEditor}>
           <Fragment>
             <PublishStatusList
-              items={thisPublishHistory}
               groups={groups}
+              items={thisPublishHistory}
               onItemClick={setSelectedVersion}
               updateItems={setThisPublishHistory}
             />
@@ -456,17 +456,17 @@ const LogDialog = (props) => {
   };
   return (
     <Dialog
-      hidden={false}
-      onDismiss={props.onDismiss}
       dialogContentProps={logDialogProps}
-      modalProps={{ isBlocking: true }}
+      hidden={false}
       minWidth={450}
+      modalProps={{ isBlocking: true }}
+      onDismiss={props.onDismiss}
     >
       <TextField
-        value={props && props.version ? props.version.log : ''}
+        multiline
         placeholder="Log Output"
-        multiline={true}
         style={{ minHeight: 300 }}
+        value={props && props.version ? props.version.log : ''}
       />
     </Dialog>
   );

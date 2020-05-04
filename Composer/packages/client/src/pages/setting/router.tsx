@@ -14,7 +14,7 @@ const Routes = () => {
   return (
     <ErrorBoundary>
       <Router>
-        <DialogSettings path="dialog-settings" default />
+        <DialogSettings default path="dialog-settings" />
         <UserSettings path="preferences" />
         <RuntimeSettings path="runtime" />
       </Router>

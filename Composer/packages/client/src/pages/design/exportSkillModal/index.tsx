@@ -69,17 +69,17 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
   return (
     <Dialog
-      hidden={false}
-      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.close,
         title: title(),
         styles: styles.dialog,
       }}
+      hidden={false}
       modalProps={{
         isBlocking: false,
         styles: styles.modal,
       }}
+      onDismiss={onDismiss}
     >
       <div css={styles.container}>
         <p>
@@ -87,7 +87,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
           {helpLink && (
             <React.Fragment>
               {!!subText && <React.Fragment>&nbsp;</React.Fragment>}
-              <Link href={helpLink} target="_blank" rel="noopener noreferrer">
+              <Link href={helpLink} rel="noopener noreferrer" target="_blank">
                 {formatMessage('Learn More')}
               </Link>
             </React.Fragment>
@@ -97,13 +97,13 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
           <Content
             completeStep={handleNext}
             errors={errors}
+            onChange={(manifestContent) => updateSkillManifest({ ...skillManifest, content: manifestContent })}
             schema={schema}
             setErrors={setErrors}
-            setSkillManifest={handleSelectManifest}
             setSchema={setSchema}
+            setSkillManifest={handleSelectManifest}
             skillManifests={skillManifests as SkillManifest[]}
             value={content}
-            onChange={(manifestContent) => updateSkillManifest({ ...skillManifest, content: manifestContent })}
           />
         </div>
         <DialogFooter>
@@ -116,10 +116,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
                 return (
                   <Button
-                    key={index}
                     disabled={isDisabled}
-                    styles={{ root: { marginLeft: '8px' } }}
-                    text={buttonText}
+                    key={index}
                     onClick={onClick({
                       setCurrentStep,
                       onDismiss,
@@ -127,6 +125,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                       onSave: handleSave,
                       onSubmit,
                     })}
+                    styles={{ root: { marginLeft: '8px' } }}
+                    text={buttonText}
                   />
                 );
               })}

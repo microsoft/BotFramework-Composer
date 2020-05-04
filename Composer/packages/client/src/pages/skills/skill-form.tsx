@@ -102,11 +102,11 @@ const SkillForm: React.FC<ISkillFormProps> = (props) => {
           />
           <TextField
             css={FormFieldEditName}
-            label={formatMessage('Custom name (optional)')}
-            value={formData.name}
-            onChange={updateForm('name')}
-            errorMessage={formDataErrors.name}
             data-testid="NewSkillName"
+            errorMessage={formDataErrors.name}
+            label={formatMessage('Custom name (optional)')}
+            onChange={updateForm('name')}
+            value={formData.name}
           />
         </StackItem>
 

@@ -37,7 +37,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 }): JSX.Element => {
   const _onRenderItem = (item): React.ReactNode => {
     return (
-      <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
+      <Link onClick={item.onClick} styles={{ root: { marginRight: 10 } }}>
         {item.name}
       </Link>
     );
@@ -89,14 +89,14 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     return (
       <IconButton
         // @ts-ignore
+        ariaLabel={label}
         componentRef={buttonRef}
         data-testid="iconMenu"
-        styles={buttonStyles}
         menuIconProps={{ iconName, style: { fontSize: iconSize, fontWeight: 'bold', color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
-        onMenuClick={onMenuClick}
         onAfterMenuDismiss={onAfterMenuDismiss}
-        ariaLabel={label}
+        onMenuClick={onMenuClick}
+        styles={buttonStyles}
         {...rest}
       />
     );
@@ -105,12 +105,12 @@ export const IconMenu: React.FC<IconMenuProps> = ({
   return (
     <OverflowSet
       // @ts-ignore
-      styles={{ position: 'absolute', top: 0 }}
       aria-label="icon menu"
-      vertical
-      overflowItems={menuItems}
-      onRenderOverflowButton={_onRenderOverflowButton}
       onRenderItem={_onRenderItem}
+      onRenderOverflowButton={_onRenderOverflowButton}
+      overflowItems={menuItems}
+      styles={{ position: 'absolute', top: 0 }}
+      vertical
     />
   );
 };

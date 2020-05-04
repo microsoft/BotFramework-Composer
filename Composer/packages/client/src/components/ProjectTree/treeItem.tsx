@@ -20,11 +20,10 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div role="cell" css={itemText(item.depth)} tabIndex={0}>
+    <div css={itemText(item.depth)} role="cell" tabIndex={0}>
       <div css={content} tabIndex={-1}>
         {item.depth !== 0 && (
           <Icon
-            tabIndex={-1}
             iconName="Flow"
             styles={{
               root: {
@@ -32,6 +31,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
                 outline: 'none',
               },
             }}
+            tabIndex={-1}
           />
         )}
         {item.displayName}
@@ -45,12 +45,12 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
   return (overflowItems) => {
     return showIcon ? (
       <IconButton
-        role="cell"
         className="dialog-more-btn"
         data-testid="dialogMoreButton"
-        styles={moreButton(isActive)}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
+        role="cell"
+        styles={moreButton(isActive)}
       />
     ) : null;
   };
@@ -60,7 +60,6 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
   return (
     <div
-      role="presentation"
       css={navItem(isActive, !!isSubItemActive)}
       onClick={() => {
         onSelect(link.id);
@@ -70,9 +69,11 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
           onSelect(link.id);
         }
       }}
+      role="presentation"
     >
       <OverflowSet
-        role="row"
+        css={overflowSet}
+        data-testid={`DialogTreeItem${link.id}`}
         items={[
           {
             key: link.id,
@@ -80,6 +81,8 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             ...link,
           },
         ]}
+        onRenderItem={onRenderItem}
+        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
         overflowItems={[
           {
             key: 'delete',
@@ -87,10 +90,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             onClick: () => onDelete(link.id),
           },
         ]}
-        css={overflowSet}
-        data-testid={`DialogTreeItem${link.id}`}
-        onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
+        role="row"
       />
     </div>
   );

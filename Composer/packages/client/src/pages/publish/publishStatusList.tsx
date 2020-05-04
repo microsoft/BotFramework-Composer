@@ -38,7 +38,7 @@ export interface IStatus {
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
-    <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+    <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
       {defaultRender({
         ...props,
         onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -178,18 +178,21 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     <div css={listRoot}>
       <div css={tableView}>
         <DetailsList
-          css={detailList}
-          items={items}
+          checkboxVisibility={CheckboxVisibility.hidden}
           columns={columns.map((col) => ({
             ...col,
             isSorted: col.key === currentSort.key,
             isSortedDescending: currentSort.descending,
           }))}
-          groups={groups}
-          selection={selection}
-          selectionMode={SelectionMode.single}
+          css={detailList}
           getKey={(item) => item.id}
-          setKey="none"
+          groupProps={{
+            showEmptyGroups: true,
+          }}
+          groups={groups}
+          isHeaderVisible
+          items={items}
+          layoutMode={DetailsListLayoutMode.justified}
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
             if (clickedCol.key === currentSort.key) {
@@ -199,13 +202,10 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
               clickedCol.isSorted = false;
             }
           }}
-          layoutMode={DetailsListLayoutMode.justified}
-          isHeaderVisible={true}
-          checkboxVisibility={CheckboxVisibility.hidden}
           onRenderDetailsHeader={onRenderDetailsHeader}
-          groupProps={{
-            showEmptyGroups: true,
-          }}
+          selection={selection}
+          selectionMode={SelectionMode.single}
+          setKey="none"
         />
       </div>
     </div>

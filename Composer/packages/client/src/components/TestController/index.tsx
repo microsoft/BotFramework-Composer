@@ -136,10 +136,10 @@ export const TestController: React.FC = () => {
           onClick={handleOpenEmulator}
         />
         <div
-          aria-live={'assertive'}
           aria-label={formatMessage(`{ botStatus}`, {
             botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
           })}
+          aria-live={'assertive'}
         />
         <Loading botStatus={botStatus} />
         <div ref={addRef}>

@@ -136,8 +136,8 @@ export const defaultFlowSchema: FlowSchema = {
     widget: 'ActionCard',
     body: (data) => (
       <ListOverview
-        items={data.assignments}
         itemPadding={8}
+        items={data.assignments}
         renderItem={({ property, value }) => {
           const v = typeof value === 'object' ? JSON.stringify(value) : value;
           const content = `${property} : ${v}`;
@@ -158,8 +158,8 @@ export const defaultFlowSchema: FlowSchema = {
     widget: 'ActionCard',
     body: (data) => (
       <ListOverview
-        items={data.properties}
         itemPadding={8}
+        items={data.properties}
         renderItem={(item) => (
           <SingleLineDiv height={16} title={item}>
             {item}

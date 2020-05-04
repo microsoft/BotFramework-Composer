@@ -51,14 +51,14 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
 
   return (
     <LuEditor
-      height={225}
-      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
-      value={luIntent.Body}
-      onChange={commitChanges}
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
+      height={225}
+      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
+      onChange={commitChanges}
       onChangeSettings={handleSettingsChange}
       placeholder={placeholder || inlineModePlaceholder}
+      value={luIntent.Body}
     />
   );
 };

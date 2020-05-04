@@ -21,8 +21,8 @@ const { ipcRenderer } = window as any;
 function SelectOption(props) {
   const { checked, text, key } = props;
   return (
-    <div key={key} css={optionRoot}>
-      <Icon iconName={checked ? 'RadioBtnOn' : 'RadioBtnOff'} css={optionIcon(checked)} />
+    <div css={optionRoot} key={key}>
+      <Icon css={optionIcon(checked)} iconName={checked ? 'RadioBtnOn' : 'RadioBtnOff'} />
       <span>{text}</span>
     </div>
   );
@@ -134,6 +134,7 @@ export const AppUpdater: React.FC<{}> = (_props) => {
         return (
           <ChoiceGroup
             defaultSelectedKey={downloadOptions.installAndUpdate}
+            onChange={handleDownloadOptionChange}
             options={[
               {
                 key: downloadOptions.installAndUpdate,
@@ -146,8 +147,7 @@ export const AppUpdater: React.FC<{}> = (_props) => {
                 onRenderField: SelectOption,
               },
             ]}
-            onChange={handleDownloadOptionChange}
-            required={true}
+            required
           />
         );
 
@@ -164,8 +164,8 @@ export const AppUpdater: React.FC<{}> = (_props) => {
         const progressInHundredths = (progressPercent || 0) / 100;
         return (
           <ProgressIndicator
-            label={formatMessage('Downloading...')}
             description={`${progressPercent}% ${formatMessage('of')} ${trimmedTotalInMB}`}
+            label={formatMessage('Downloading...')}
             percentComplete={progressInHundredths}
           />
         );
@@ -225,19 +225,19 @@ export const AppUpdater: React.FC<{}> = (_props) => {
 
   return showing ? (
     <Dialog
-      hidden={false}
-      onDismiss={handleDismiss}
       dialogContentProps={{
         styles: dialogContent,
         subText: subText,
         type: DialogType.close,
         title,
       }}
-      minWidth={427}
+      hidden={false}
       maxWidth={427}
+      minWidth={427}
       modalProps={{
         isBlocking: false,
       }}
+      onDismiss={handleDismiss}
     >
       {content}
       <DialogFooter styles={dialogFooter}>{footer}</DialogFooter>
