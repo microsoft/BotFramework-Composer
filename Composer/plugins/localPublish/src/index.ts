@@ -124,9 +124,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private getHistoryDir = (botId: string) => path.resolve(this.getBotDir(botId), 'history');
 
-  private getManifestSrcDir = (srcDir: string) =>  path.resolve(srcDir, 'skill-manifests');
+  private getManifestSrcDir = (srcDir: string) =>  path.resolve(srcDir, 'manifests');
 
-  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'wwwroot', 'skill-manifests');
+  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'wwwroot', 'manifests');
 
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);
