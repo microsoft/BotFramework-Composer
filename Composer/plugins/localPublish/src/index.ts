@@ -34,7 +34,7 @@ interface PublishConfig {
   templatePath: string;
 }
 
-const isWin = process.platform === "win32";
+const isWin = process.platform === 'win32';
 
 class LocalPublisher implements PublishPlugin<PublishConfig> {
   static runningBots: { [key: string]: RunningBot } = {};
@@ -84,6 +84,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         },
       };
     } catch (error) {
+      console.error('Error in local publish', error);
       return {
         status: 500,
         result: {
@@ -124,9 +125,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private getHistoryDir = (botId: string) => path.resolve(this.getBotDir(botId), 'history');
 
-  private getManifestSrcDir = (srcDir: string) =>  path.resolve(srcDir, 'skill-manifests');
+  private getManifestSrcDir = (srcDir: string) => path.resolve(srcDir, 'skill-manifests');
 
-  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'wwwroot', 'skill-manifests');
+  private getManifestDstDir = (botId: string) =>
+    path.resolve(this.getBotRuntimeDir(botId), 'wwwroot', 'skill-manifests');
 
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);
@@ -195,7 +197,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     if (await this.dirExist(manifestSrcDir)) {
       this.copyDir(manifestSrcDir, manifestDstDir);
     }
-  }
+  };
 
   // start bot in current version
   private setBot = async (botId: string, version: string, settings: any, project: any = undefined) => {
@@ -361,7 +363,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     if (proc) {
       this.composer.log('Killing process %d', -proc.pid);
       // Kill the bot process AND all child processes
-      process.kill(isWin? proc.pid : -proc.pid);
+      try {
+        process.kill(isWin ? proc.pid : -proc.pid);
+      } catch (err) {
+        // ESRCH means pid not found
+        // this throws an error but doesn't indicate failure for us
+        if (err.code !== 'ESRCH') {
+          throw err;
+        }
+      }
     }
     delete LocalPublisher.runningBots[botId];
   };
@@ -391,7 +401,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     for (const botId in LocalPublisher.runningBots) {
       const bot = LocalPublisher.runningBots[botId];
       // Kill the bot process AND all child processes
-      process.kill(isWin? bot.process.pid : -bot.process.pid);
+      try {
+        process.kill(isWin ? bot.process.pid : -bot.process.pid);
+      } catch (err) {
+        // swallow this error which happens if the child process is already gone
+      }
       delete LocalPublisher.runningBots[botId];
     }
   };
