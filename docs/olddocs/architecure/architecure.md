@@ -36,11 +36,17 @@ The bot's assets are the source of truth for the bot at any given time. The Appl
 
 Here is a overview of a potential folder structure
 
-    BotLauncher
-    |____CSharp
-    |  |____runtime.cs
-    |____Node
-    |  |____runtime.js
+    runtime
+    |____dotnet
+    |  |____core
+    |  |____azurefunctions
+    |  |____azurewebapp
+    |  |____<othertechnology>
+    |____js
+    |  |____core
+    |  |____azurefunctions
+    |  |____azurewebapp
+    |  |____<yetanothetechnology>
 
     Composer
     |____pacakges
@@ -112,8 +118,8 @@ server is api server of Composer web app, which is also the component that work 
     // each type of connector knows how to invoke and talk to certain type of bot launcher
     // it's not the concern of the composer
     "launcherConnector": {
-        "type": "CSharp", 
-        "path": "../BotLauncher/CSharp"
+        "type": "azurewebapp", 
+        "path": "../runtime/dotnet/azurewebapp"
     }
 }
 ```
