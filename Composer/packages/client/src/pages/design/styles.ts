@@ -80,7 +80,6 @@ export const visualPanel = css`
   flex-direction: column;
   flex: 1;
   border-right: 1px solid #c4c4c4;
-  border-left: 1px solid #c4c4c4;
   position: relative;
 
   &:focus {
