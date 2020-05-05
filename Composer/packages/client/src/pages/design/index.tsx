@@ -5,7 +5,6 @@
 import { jsx } from '@emotion/core';
 import React, { Suspense, useContext, useEffect, useMemo, useState, useRef } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
@@ -60,12 +59,7 @@ function onRenderContent(subTitle, style) {
 }
 
 function onRenderBreadcrumbItem(item, render) {
-  return (
-    <span>
-      {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
-      {render(item)}
-    </span>
-  );
+  return <span>{render(item)}</span>;
 }
 
 function getAllRef(targetId, dialogs) {
@@ -299,11 +293,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           }, [] as IBreadcrumbItem[])
         : [];
     return (
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
         <Breadcrumb
           items={items}
           ariaLabel={formatMessage('Navigation Path')}
           styles={breadcrumbClass}
+          maxDisplayedItems={3}
+          onReduceData={() => undefined}
           data-testid="Breadcrumb"
           onRenderItem={onRenderBreadcrumbItem}
         />

@@ -32,6 +32,12 @@ const getBaseUrl = () => {
   return `http://localhost:${serverPort}/`;
 };
 
+// set production flag
+if (app.isPackaged) {
+  process.env.NODE_ENV = 'production';
+}
+log(`${process.env.NODE_ENV} environment detected.`);
+
 function processArgsForWindows(args: string[]): string {
   const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
   if (deepLinkUrl) {
@@ -91,7 +97,7 @@ async function loadServer() {
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
-    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'build', 'templates');
+    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'BotProject', 'Templates');
     pluginsDir = join(unpackedDir, 'build', 'plugins');
   }
 
