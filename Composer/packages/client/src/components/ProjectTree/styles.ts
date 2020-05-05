@@ -8,7 +8,7 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
-import { ISearchBoxStyles } from 'office-ui-fabric-react';
+import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 export const groupListStyle: Partial<IGroupedListStyles> = {
   root: {
