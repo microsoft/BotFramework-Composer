@@ -2,10 +2,28 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { FC } from 'react';
 
 import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
+
+const styles = css`
+  position: relative;
+
+  &:focus {
+    outline: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border: 1px solid black;
+    }
+  }
+`;
 
 const KeyNameByModifierAttr = {
   ctrlKey: 'Control',
@@ -47,7 +65,7 @@ export const KeyboardZone: FC<KeyboardZoneProps> = ({ onCommand, children }): JS
   };
 
   return (
-    <div onKeyDown={handleKeyDown} tabIndex={0} data-test-id="keyboard-zone">
+    <div onKeyDown={handleKeyDown} tabIndex={0} data-test-id="keyboard-zone" css={styles}>
       {children}
     </div>
   );
