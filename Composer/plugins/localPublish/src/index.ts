@@ -423,7 +423,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     eject: async (project: any, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
-      const schemaSrcPath = path.join(sourcePath, 'Schemas');
+      const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
       const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
