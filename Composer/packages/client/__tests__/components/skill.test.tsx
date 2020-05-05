@@ -2,18 +2,24 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { render, fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils';
+import { Skill } from '@bfc/shared';
 
+import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
 import SkillForm from '../../src/pages/skills/skill-form';
+import { renderWithStore } from '../testUtils';
 
-const items = [
+const items: Skill[] = [
   {
     manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
     name: 'Email Skill',
     description: 'The Email skill provides email related capabilities and supports Office and Google calendars.',
     endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
     msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
+    protocol: '',
+    endpoints: [],
+    body: '',
   },
   {
     manifestUrl: 'https://hualxielearn2-snskill.azurewebsites.net/manifest/manifest-1.0.json',
@@ -21,23 +27,43 @@ const items = [
     description: 'The Point of Interest skill provides PoI search capabilities leveraging Azure Maps and Foursquare.',
     endpointUrl: 'https://hualxielearn2-snskill.azurewebsites.net/api/messages',
     msAppId: 'e2852590-ea71-4a69-9e44-e74b5b6cbe89',
+    protocol: '',
+    endpoints: [],
+    body: '',
   },
 ];
 
+describe('Skill page', () => {
+  it('can add a new skill', () => {
+    const { getByText } = renderWithStore(<Skills />);
+
+    const button = getByText('Connect to a new skill');
+    fireEvent.click(button);
+
+    const manifestUrl = getByLabelText(document.body, 'Manifest url');
+    expect(manifestUrl).toBeTruthy();
+
+    const cancel = getByTestId(document.body, 'SkillFormCancel');
+    fireEvent.click(cancel);
+  });
+});
+
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
-    const { container } = render(<SkillList skills={items} />);
+    const { container } = render(<SkillList skills={items} projectId="test-project" onEdit={jest.fn()} />);
     expect(container).toHaveTextContent('Email Skill');
     expect(container).toHaveTextContent('Point Of Interest Skill');
   });
 
-  it('should open/close skill form', () => {
-    const renderResult = render(<SkillList skills={items} />);
-    const createButton = renderResult.getByText('Connect to a new skill');
-    fireEvent.click(createButton);
+  it('can edit the skill', () => {
+    const onEdit = jest.fn();
+    const { getAllByTestId } = render(<SkillList skills={items} projectId="test-project" onEdit={onEdit} />);
 
-    const cancelButton = renderResult.getByText('Cancel');
-    fireEvent.click(cancelButton);
+    const editBtns = getAllByTestId('EditSkill');
+    editBtns.forEach((btn, i) => {
+      fireEvent.click(btn);
+      expect(onEdit).toHaveBeenCalledWith(i);
+    });
   });
 });
 
@@ -48,11 +74,11 @@ describe('<SkillForm />', () => {
     });
     const onDismiss = jest.fn(() => {});
     const { getByLabelText, getByText } = render(
-      <SkillForm skills={items} editIndex={0} onSubmit={onSubmit} onDismiss={onDismiss} />
+      <SkillForm skills={items} editIndex={0} onSubmit={onSubmit} onDismiss={onDismiss} isOpen />
     );
 
     const urlInput = getByLabelText('Manifest url');
-    expect(urlInput.value).toBe(items[0].manifestUrl);
+    expect(urlInput.getAttribute('value')).toBe(items[0].manifestUrl);
     fireEvent.change(urlInput, { target: { value: 'http://AwesomeSkill' } });
 
     const submitButton = getByText('Confirm');

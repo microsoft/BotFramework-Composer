@@ -4,6 +4,12 @@
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { css } from '@emotion/core';
 
+export const ContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
   height: 60px;
@@ -34,7 +40,6 @@ export const ContentStyle = css`
 export const TableView = css`
   flex: 4;
   margin: 20px;
-  height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
   fontsize: 16px;
@@ -58,6 +63,14 @@ export const ChoiceGroupAlignHorizontal = css`
   .ms-ChoiceField-wrapper {
     margin-right: 2rem;
   }
+`;
+
+export const FormModalTitle = css`
+  padding: 0 24px;
+`;
+
+export const FormModalBody = css`
+  padding: 24px;
 `;
 
 export const FormFieldManifestUrl = css`
@@ -108,7 +121,7 @@ export const MarginLeftSmall = css`
 
 export const ManifestModalHeaderStyle = css`
   margin: 14px 0 0 16px;
-  fon-size: 20px;
+  font-size: 20px;
   font-weight: bolder;
   align-items: left;
 `;

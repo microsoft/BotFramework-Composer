@@ -6,11 +6,11 @@ import { jsx } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { UIOptions, JSONSchema7 } from '@bfc/extension';
 
 import { EditableField } from '../fields/EditableField';
+import { Link } from '../Link';
 
 import { title as styles } from './styles';
 

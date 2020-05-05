@@ -3,6 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import React from 'react';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -20,7 +21,7 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div role="cell" css={itemText(item.depth)} tabIndex={0}>
+    <div role="cell" css={itemText(item.depth)} tabIndex={0} onFocus={item.onFocus} onBlur={item.onBlur}>
       <div css={content} tabIndex={-1}>
         {item.depth !== 0 && (
           <Icon
@@ -58,6 +59,7 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
 
 export const TreeItem: React.FC<ITreeItemProps> = props => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
+
   return (
     <div
       role="presentation"
@@ -88,6 +90,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
           },
         ]}
         css={overflowSet}
+        styles={{ item: { flex: 1 } }}
         data-testid={`DialogTreeItem${link.id}`}
         onRenderItem={onRenderItem}
         onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
