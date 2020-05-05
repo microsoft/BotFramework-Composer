@@ -85,7 +85,7 @@ const getTabFromFragment = () => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -425,7 +425,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />
                 )}
               </div>
-              <PropertyEditor />
+              <PropertyEditor key={focusPath} />
             </div>
           </Conversation>
         </div>
