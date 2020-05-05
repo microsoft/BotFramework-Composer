@@ -203,6 +203,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnBeginDialog": Object {
             "hidden": Array [
@@ -213,6 +214,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnCancelDialog": Object {
             "hidden": Array [
@@ -232,6 +234,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnConversationUpdateActivity": Object {
             "description": [Function],
@@ -244,6 +247,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnCustomEvent": Object {
             "hidden": Array [
@@ -254,6 +258,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnDialogEvent": Object {
             "hidden": Array [
@@ -264,6 +269,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnEndOfConversationActivity": Object {
             "hidden": Array [
@@ -274,6 +280,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnError": Object {
             "hidden": Array [
@@ -284,6 +291,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnEventActivity": Object {
             "hidden": Array [
@@ -294,6 +302,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnHandoffActivity": Object {
             "hidden": Array [
@@ -304,6 +313,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnIntent": Object {
             "hidden": Array [
@@ -321,6 +331,7 @@ describe('mergePluginConfigs', () => {
                 "field": [Function],
               },
             },
+            "subtitle": [Function],
           },
           "Microsoft.OnInvokeActivity": Object {
             "hidden": Array [
@@ -331,6 +342,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnMessageActivity": Object {
             "hidden": Array [
@@ -341,6 +353,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnMessageDeleteActivity": Object {
             "hidden": Array [
@@ -351,6 +364,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnMessageReactionActivity": Object {
             "hidden": Array [
@@ -361,6 +375,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnMessageUpdateActivity": Object {
             "hidden": Array [
@@ -371,6 +386,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnRepromptDialog": Object {
             "hidden": Array [
@@ -381,6 +397,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnTypingActivity": Object {
             "hidden": Array [
@@ -391,6 +408,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.OnUnknownIntent": Object {
             "hidden": Array [
@@ -401,6 +419,7 @@ describe('mergePluginConfigs', () => {
               "condition",
               "*",
             ],
+            "subtitle": [Function],
           },
           "Microsoft.QnAMakerDialog": Object {
             "helpLink": "https://aka.ms/bfc-using-QnA",
