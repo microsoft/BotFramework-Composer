@@ -5,8 +5,7 @@ export interface ProjectTemplate {
   id: string;
   name: string;
   description: string;
-  /** Absolute path of the template */
-  path?: string;
-  /** Optional order property */
-  order?: number;
+  path: string; // absolute path
+  tags?: string[]; // tags for further grouping and search secenario
+  support?: string[]; // list of supported runtime versions
 }

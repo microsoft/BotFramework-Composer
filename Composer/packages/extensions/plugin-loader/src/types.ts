@@ -23,6 +23,15 @@ export interface PublishResponse {
   result: PublishResult;
 }
 
+export interface BotTemplate {
+  id: string;
+  name: string;
+  description: string;
+  path: string; // absolute path
+  tags?: string[]; // tags for further grouping and search secenario
+  support?: string[]; // list of supported runtime versions
+}
+
 // TODO: Add types for project, metadata
 export interface PublishPlugin<Config = any> {
   publish: (config: Config, project: any, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
@@ -71,4 +80,6 @@ export interface ExtensionCollection {
     [key: string]: any;
   };
   runtimeTemplates: RuntimeTemplate[];
+  botTemplates: BotTemplate[];
+  baseTemplates: BotTemplate[];
 }

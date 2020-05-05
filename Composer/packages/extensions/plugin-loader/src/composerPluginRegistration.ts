@@ -7,7 +7,7 @@ import { JSONSchema7 } from 'json-schema';
 
 import { PluginLoader } from './pluginLoader';
 import log from './logger';
-import { PublishPlugin, RuntimeTemplate } from './types';
+import { PublishPlugin, RuntimeTemplate, BotTemplate } from './types';
 
 export class ComposerPluginRegistration {
   public loader: PluginLoader;
@@ -86,6 +86,20 @@ export class ComposerPluginRegistration {
    */
   public addRuntimeTemplate(plugin: RuntimeTemplate) {
     this.loader.extensions.runtimeTemplates.push(plugin);
+  }
+
+  /**************************************************************************************
+   * Add Bot Template (aka, SampleBot)
+   *************************************************************************************/
+  public addBotTemplate(template: BotTemplate) {
+    this.loader.extensions.botTemplates.push(template);
+  }
+
+  /**************************************************************************************
+   * Add Base Template (aka, BoilerPlate)
+   *************************************************************************************/
+  public addBaseTemplate(template: BotTemplate) {
+    this.loader.extensions.baseTemplates.push(template);
   }
 
   /**************************************************************************************
