@@ -98,8 +98,6 @@ const schema: JSONSchema7 = {
     accessToken: '<Access token from az account get-access-token>',
     publishName: '<unique name in your subscription>',
     environment: 'dev',
-    luisAuthoringRegion: 'westus',
-    luisAuthoringKey: '',
     provision: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
