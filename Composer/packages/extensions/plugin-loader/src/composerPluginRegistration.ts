@@ -56,10 +56,11 @@ export class ComposerPluginRegistration {
   /**************************************************************************************
    * Publish related features
    *************************************************************************************/
-  public async addPublishMethod(plugin: PublishPlugin, schema?: JSONSchema7) {
+  public async addPublishMethod(plugin: PublishPlugin, schema?: JSONSchema7, instructions?: string) {
     log('registering publish method', this.name);
     this.loader.extensions.publish[this.name] = {
       plugin: this,
+      instructions: instructions,
       methods: plugin,
       schema: schema,
     };
@@ -77,9 +78,9 @@ export class ComposerPluginRegistration {
    * to communicate with the Bot Framework Emulator.
    * ```ts
    * await composer.addRuntimeTemplate({
-   *   key: 'csharp',
+   *   key: 'azurewebapp',
    *   name: 'C#',
-   *   path: __dirname + '/../../../../BotProject/Templates/CSharp',
+   *   path: __dirname + '/../../../../runtime/dotnet/azurewebapp',
    *   startCommand: 'dotnet run',
    * });
    * ```
