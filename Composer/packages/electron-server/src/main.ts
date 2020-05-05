@@ -47,6 +47,7 @@ function processArgsForWindows(args: string[]): string {
 }
 
 async function createAppDataDir() {
+  // TODO: Move all ENV variable setting to an env file and update build process to leverage those variables too
   const appDataBasePath: string = process.env.APPDATA || process.env.HOME || '';
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
