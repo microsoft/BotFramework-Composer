@@ -29,7 +29,7 @@ import { TableView, TableCell, ManifestModalHeaderStyle, ManifestModalBodyStyle 
 export interface ISkillListProps {
   skills: Skill[];
   projectId: string;
-  onEdit: (index: number) => void;
+  onEdit: (index?: number) => void;
 }
 
 const columns: IColumn[] = [
@@ -129,6 +129,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
                 onClick={() => onEdit(index)}
                 title="Edit"
                 ariaLabel="Edit"
+                data-testid="EditSkill"
               />
               <IconButton
                 iconProps={{
@@ -137,12 +138,14 @@ const SkillList: React.FC<ISkillListProps> = props => {
                 onClick={() => onItemDelete(index)}
                 title="Delete"
                 ariaLabel="Delete"
+                data-testid="DeleteSkill"
               />
               <IconButton
                 iconProps={{ iconName: 'ContextMenu' }}
                 onClick={() => onViewManifest(index)}
                 title="View"
                 ariaLabel="View"
+                data-testid="ViewManifest"
               />
             </Stack>
           </div>

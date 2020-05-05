@@ -21,7 +21,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
   const [editIndex, setEditIndex] = useState<number | undefined>();
 
-  const { skills, projectId } = state;
+  const { skills, projectId, settings, botName } = state;
   const toolbarItems = [
     {
       type: 'action',
@@ -68,12 +68,12 @@ const Skills: React.FC<RouteComponentProps> = () => {
       </div>
       <div role="main">
         <SkillSettings
-          projectId={state.projectId}
-          botName={state.botName}
-          settings={state.settings}
+          projectId={projectId}
+          botName={botName}
+          settings={settings}
           setSettings={actions.setSettings}
-          botId={state.settings.MicrosoftAppId}
-          skillHostEndpoint={state.settings.skillHostEndpoint as string | undefined}
+          botId={settings.MicrosoftAppId}
+          skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
       <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} />

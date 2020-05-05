@@ -118,7 +118,12 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
 
           <StackItem>
             <PrimaryButton onClick={handleSubmit} text={formatMessage('Confirm')} />
-            <DefaultButton css={MarginLeftSmall} onClick={onDismiss} text={formatMessage('Cancel')} />
+            <DefaultButton
+              css={MarginLeftSmall}
+              onClick={onDismiss}
+              text={formatMessage('Cancel')}
+              data-testid="SkillFormCancel"
+            />
           </StackItem>
         </Stack>
       </form>
