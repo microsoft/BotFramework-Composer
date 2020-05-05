@@ -14,18 +14,19 @@ const defaultPublishConfig = {
   type: 'localpublish',
   configuration: JSON.stringify({}),
 };
-const DEFAULT_RUNTIME = 'CSharp';
+const DEFAULT_RUNTIME = 'dotnet';
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
       Object.values(pluginLoader.extensions.publish)
         .filter(extension => extension.plugin.name !== defaultPublishConfig.type)
         .map(extension => {
-          const { plugin, methods, schema } = extension;
+          const { plugin, methods, schema, instructions } = extension;
 
           return {
             name: plugin.name,
             description: plugin.description,
+            instructions: instructions,
             schema,
             features: {
               history: methods.history ? true : false,
@@ -55,9 +56,9 @@ export const PublishController = {
     // append config from client(like sensitive settings)
     const configuration = {
       name: profile.name,
-      ...JSON.parse(profile.configuration),
       settings: merge({}, currentProject.settings, sensitiveSettings),
       templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
+      ...JSON.parse(profile.configuration),
     };
 
     if (
