@@ -81,9 +81,13 @@ export const AppUpdater: React.FC<{}> = _props => {
         }
 
         case 'update-not-available':
-          // TODO: re-enable once we have implemented explicit "check for updates"
-          // setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
-          // setAppUpdateShowing(true);
+          const explicit = payload;
+          if (explicit) {
+            // the user has explicitly checked for an update via the Help menu;
+            // we should display some UI feedback if there are no updates available
+            setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
+            setAppUpdateShowing(true);
+          }
           break;
 
         case 'update-downloaded':
@@ -188,7 +192,7 @@ export const AppUpdater: React.FC<{}> = _props => {
       default:
         return undefined;
     }
-  }, [status, progressPercent]);
+  }, [status, progressPercent, error]);
 
   const footer = useMemo(() => {
     switch (status) {

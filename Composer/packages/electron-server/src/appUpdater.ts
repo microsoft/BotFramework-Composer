@@ -4,28 +4,32 @@
 import { EventEmitter } from 'events';
 
 import { autoUpdater, UpdateInfo } from 'electron-updater';
+import { app } from 'electron';
+import { prerelease as isNightly } from 'semver';
 
 import logger from './utility/logger';
 const log = logger.extend('app-updater');
 
+interface AppUpdaterSettings {
+  autoDownload: boolean;
+  useNightly: boolean;
+}
+
+let appUpdater: AppUpdater | undefined;
 export class AppUpdater extends EventEmitter {
   private checkingForUpdate = false;
   private downloadingUpdate = false;
+  private explicitCheck = false;
 
   constructor() {
     super();
 
-    const settings = { autoDownload: false, useNightly: false }; // TODO: implement and load these settings from disk / memory
+    const settings = this.getSettings();
     autoUpdater.allowDowngrade = false;
     autoUpdater.allowPrerelease = true;
     autoUpdater.autoDownload = settings.autoDownload;
-    autoUpdater.setFeedURL({
-      provider: 'github',
-      repo: 'BotFramework-Composer',
-      owner: 'microsoft',
-    });
 
-    autoUpdater.on('error', this.onError);
+    autoUpdater.on('error', this.onError.bind(this));
     autoUpdater.on('checking-for-update', this.onCheckingForUpdate.bind(this));
     autoUpdater.on('update-available', this.onUpdateAvailable.bind(this));
     autoUpdater.on('update-not-available', this.onUpdateNotAvailable.bind(this));
@@ -34,8 +38,23 @@ export class AppUpdater extends EventEmitter {
     logger('Initialized');
   }
 
-  public checkForUpdates() {
+  public static getInstance(): AppUpdater {
+    if (!appUpdater) {
+      appUpdater = new AppUpdater();
+    }
+    return appUpdater;
+  }
+
+  /**
+   * Checks GitHub for Composer updates
+   * @param explicit If true, the user explicitly checked for an update via the Help menu,
+   * and we will show UI if there are no available updates.
+   */
+  public checkForUpdates(explicit: boolean = false) {
     if (!(this.checkingForUpdate || this.downloadingUpdate)) {
+      this.explicitCheck = explicit;
+      this.setFeedURL();
+      this.determineUpdatePath();
       autoUpdater.checkForUpdates();
     }
   }
@@ -72,8 +91,8 @@ export class AppUpdater extends EventEmitter {
 
   private onUpdateNotAvailable(updateInfo: UpdateInfo) {
     log('Update not available: %O', updateInfo);
-    this.checkingForUpdate = false;
-    this.emit('update-not-available', updateInfo);
+    this.emit('update-not-available', this.explicitCheck);
+    this.resetToIdle();
   }
 
   private onDownloadProgress(progress: any) {
@@ -91,5 +110,59 @@ export class AppUpdater extends EventEmitter {
     log('Resetting to idle...');
     this.checkingForUpdate = false;
     this.downloadingUpdate = false;
+    this.explicitCheck = false;
+  }
+
+  private setFeedURL() {
+    const settings = this.getSettings();
+    if (settings.useNightly) {
+      log('Updates set to be retrieved from nightly repo.');
+      autoUpdater.setFeedURL({
+        provider: 'github',
+        repo: 'BotFramework-Composer-Nightlies',
+        owner: 'microsoft',
+        vPrefixedTagName: true, // whether our release tags are prefixed with v or not
+      });
+    } else {
+      log('Updates set to be retrieved from stable repo.');
+      autoUpdater.setFeedURL({
+        provider: 'github',
+        repo: 'BotFramework-Composer',
+        owner: 'microsoft',
+        vPrefixedTagName: true,
+      });
+    }
+  }
+
+  private determineUpdatePath() {
+    const currentVersion = app.getVersion();
+
+    // The following paths don't need to allow downgrade:
+    //    nightly -> stable     (1.0.1-nightly.x.x -> 1.0.2)
+    //    nightly -> nightly    (1.0.1-nightly.x.x -> 1.0.1-nightly.y.x)
+    if (isNightly(currentVersion)) {
+      log(`Updating from nightly to (stable | nightly). Not allowing downgrade.`);
+      autoUpdater.allowDowngrade = false;
+      return;
+    }
+
+    // https://github.com/npm/node-semver/blob/v7.3.2/classes/semver.js#L127
+    // The following path needs to allow downgrade to work:
+    //    stable -> nightly     (1.0.1 -> 1.0.1-nightly.x.x)
+    const settings = this.getSettings();
+    if (!isNightly(currentVersion) && settings.useNightly) {
+      log(`Updating from stable to nightly. Allowing downgrade.`);
+      autoUpdater.allowDowngrade = true;
+      return;
+    }
+
+    // stable -> stable
+    log('Updating from stable to stable. Not allowing downgrade.');
+    autoUpdater.allowDowngrade = false;
+  }
+
+  private getSettings(): AppUpdaterSettings {
+    // TODO: replace with actual implementation that fetches settings from disk
+    return { autoDownload: false, useNightly: true };
   }
 }
