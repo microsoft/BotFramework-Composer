@@ -81,10 +81,17 @@ export const itemText = (depth: number) => css`
   overflow: hidden;
   text-align: left;
   cursor: pointer;
+  width: 100%;
+
+  label: ProjectTreeItemContainer;
 `;
 
 export const content = css`
   outline: none;
+  display: flex;
+  align-items: center;
+
+  label: ProjectTreeItem;
 `;
 
 export const moreButton = (isActive: boolean): IButtonStyles => {
@@ -121,8 +128,11 @@ export const overflowSet = css`
   width: 100%;
   height: 100%;
   padding-left: 12px;
+  padding-right: 12px;
   box-sizing: border-box;
   line-height: 36px;
+  justify-content: space-between;
+  display: flex;
   justify-content: space-between;
 `;
 
