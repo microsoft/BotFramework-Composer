@@ -169,6 +169,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
           styles={searchBox}
           onChange={onFilter}
           iconProps={{ iconName: 'Filter' }}
+          underlined
         />
         <div
           aria-live={'polite'}
