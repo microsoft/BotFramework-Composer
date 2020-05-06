@@ -4,7 +4,7 @@ import { UISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { RecognizerField, IntentField } from './components/fields';
+import { IntentField } from './components/fields';
 
 const triggerUiSchema = {
   order: ['condition', '*'],
@@ -153,11 +153,6 @@ const DefaultUISchema: UISchema = {
     helpLink:
       'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime',
   },
-  [SDKKinds.OnCustomEvent]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Handle an Event'),
-    subtitle: () => formatMessage('Custom event'),
-  },
   [SDKKinds.OnDialogEvent]: {
     ...triggerUiSchema,
     label: () => formatMessage('Dialog events'),
@@ -237,10 +232,6 @@ const DefaultUISchema: UISchema = {
   [SDKKinds.QnAMakerDialog]: {
     label: () => formatMessage('QnAMakerDialog'),
     helpLink: 'https://aka.ms/bfc-using-QnA',
-  },
-  [SDKKinds.IRecognizer]: {
-    field: RecognizerField,
-    helpLink: 'https://aka.ms/BFC-Using-LU',
   },
   [SDKKinds.RegexRecognizer]: {
     hidden: ['entities'],

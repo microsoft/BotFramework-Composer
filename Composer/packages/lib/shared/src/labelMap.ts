@@ -97,9 +97,6 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.IfCondition]: {
     title: formatMessage('Branch: if/else'),
   },
-  [SDKKinds.LanguagePolicy]: {
-    title: formatMessage('LanguagePolicy'),
-  },
   [SDKKinds.LogAction]: {
     title: formatMessage('Log to console'),
   },
@@ -145,10 +142,6 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     description:
       'Handle the events fired when a user begins a new conversation with the bot. <a href="https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime" target="_blank">Learn more</a>',
   },
-  [SDKKinds.OnCustomEvent]: {
-    title: formatMessage('Custom event'),
-    subtitle: formatMessage('Custom event'),
-  },
   [SDKKinds.OnDialogEvent]: {
     title: formatMessage('Dialog events'),
     subtitle: formatMessage('Dialog events'),
@@ -176,10 +169,6 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.OnInvokeActivity]: {
     title: formatMessage('Conversation invoked'),
     subtitle: formatMessage('Invoke activity'),
-  },
-  [SDKKinds.OnMessageEventActivity]: {
-    title: formatMessage('Message events'),
-    subtitle: formatMessage('Message activity'),
   },
   [SDKKinds.OnMessageActivity]: {
     title: formatMessage('Message received'),
