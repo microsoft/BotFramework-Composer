@@ -9,12 +9,16 @@ export const pageRoot = css`
   height: 100%;
   display: flex;
   flex-direction: row;
+
+  label: DesignPageContainer;
 `;
 
 export const contentWrapper = css`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+
+  label: DesignPageContent;
 `;
 
 export const projectContainer = css`
@@ -25,10 +29,9 @@ export const projectContainer = css`
   width: 255px;
   overflow: auto;
   border-right: 1px solid #c4c4c4;
-`;
 
-//remove TODO
-export const projectWrapper = css``;
+  label: DesignPageProjectContent;
+`;
 
 export const projectHeader = css`
   font-weight: bold;
@@ -39,16 +42,22 @@ export const projectHeader = css`
   justify-content: space-between;
   align-items: center;
   background-color: ${NeutralColors.gray20};
+
+  label: DesignPageProjectHeader;
 `;
 
 export const projectTree = css`
   flex-grow: 3;
   flex-shrink: 3;
+
+  label: DesignPageProjectTree;
 `;
 
 export const assetTree = css`
   flex-grow: 2;
   flex-shrink: 2;
+
+  label: DesignPageAssetTree;
 `;
 /*******/
 
@@ -71,8 +80,24 @@ export const visualPanel = css`
   flex-direction: column;
   flex: 1;
   border-right: 1px solid #c4c4c4;
-  border-left: 1px solid #c4c4c4;
   position: relative;
+
+  &:focus {
+    border-right: none;
+    outline: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border: black solid 1px;
+    }
+  }
+
+  label: DesignPageVisualPanel;
 `;
 
 export const visualEditor = (hidden: boolean) => css`
