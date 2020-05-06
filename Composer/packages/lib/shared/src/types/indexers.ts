@@ -35,7 +35,6 @@ export interface DialogInfo {
   luFile: string;
   referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
-  userDefinedVariables: string[];
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
 }
