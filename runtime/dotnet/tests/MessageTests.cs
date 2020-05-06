@@ -20,11 +20,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-<<<<<<< HEAD:BotProject/Templates/CSharp/Tests/MessageTests.cs
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\..\Composer\plugins\samples\assets\projects");
-=======
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\packages\server\assets\projects");
->>>>>>> master:runtime/dotnet/tests/MessageTests.cs
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\plugins\samples\assets\projects");
 
         private static ResourceExplorer resourceExplorer = new ResourceExplorer();
 
