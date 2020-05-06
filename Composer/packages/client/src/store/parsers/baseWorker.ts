@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 // Wrapper class
-export class BaseParser {
+export class BaseWorker {
   private worker: Worker;
   private resolves = {};
   private rejects = {};

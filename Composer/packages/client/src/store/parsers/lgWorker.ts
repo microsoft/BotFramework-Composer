@@ -3,7 +3,7 @@
 import { LgFile } from '@bfc/shared';
 import Worker from 'worker-loader!./workers/lgParser.worker.ts';
 
-import { BaseParser } from './baseParser';
+import { BaseWorker } from './baseWorker';
 
 export type LgPayload = {
   targetId: string;
@@ -12,10 +12,10 @@ export type LgPayload = {
 };
 
 // Wrapper class
-class LgParser extends BaseParser {
+class LgWorker extends BaseWorker {
   parse(targetId: string, content: string, lgFiles: LgFile[]) {
     return this.sendMsg<LgPayload>('', { targetId, content, lgFiles: lgFiles });
   }
 }
 
-export default new LgParser(new Worker());
+export default new LgWorker(new Worker());

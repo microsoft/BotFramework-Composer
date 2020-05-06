@@ -8,7 +8,7 @@ import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { Text } from '../../constants';
-import LuParser from '../parsers/luParser';
+import LuParser from '../parsers/luWorker';
 
 import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';

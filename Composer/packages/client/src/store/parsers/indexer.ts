@@ -3,7 +3,7 @@
 import { FileInfo } from '@bfc/shared';
 import Worker from 'worker-loader!./workers/indexer.worker.ts';
 
-import { BaseParser } from './baseParser';
+import { BaseWorker } from './baseWorker';
 
 export type IndexPayload = {
   files: FileInfo;
@@ -13,7 +13,7 @@ export type IndexPayload = {
 };
 
 // Wrapper class
-class Indexer extends BaseParser {
+class Indexer extends BaseWorker {
   index(files: FileInfo, botName: string, schemas: any, locale: string) {
     return this.sendMsg<IndexPayload>('', { files, botName, schemas, locale });
   }

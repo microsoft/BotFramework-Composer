@@ -7,10 +7,10 @@ import { ActionTypes } from '../../constants';
 import * as lgUtil from '../../utils/lgUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
-import LgParser from '../parsers/lgParser';
+import LgWorker from '../parsers/lgWorker';
 
 export const updateLgFile: ActionCreator = async (store, { id, content }) => {
-  const result = (await LgParser.parse(id, content, store.getState().lgFiles)) as LgFile;
+  const result = (await LgWorker.parse(id, content, store.getState().lgFiles)) as LgFile;
   store.dispatch({
     type: ActionTypes.UPDATE_LG,
     payload: { ...result },

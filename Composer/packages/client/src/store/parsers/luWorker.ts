@@ -3,7 +3,7 @@
 import Worker from 'worker-loader!./workers/luParser.worker.ts';
 import { LuIntentSection } from '@bfc/shared';
 
-import { BaseParser } from './baseParser';
+import { BaseWorker } from './baseWorker';
 
 export type LuPayload = {
   targetId: string;
@@ -24,7 +24,7 @@ export enum LuActionType {
 }
 
 // Wrapper class
-class LuParser extends BaseParser {
+class LuWorker extends BaseWorker {
   parse(targetId: string, content: string) {
     return this.sendMsg<LuPayload>(LuActionType.Parse, { targetId, content });
   }
@@ -42,4 +42,4 @@ class LuParser extends BaseParser {
   }
 }
 
-export default new LuParser(new Worker());
+export default new LuWorker(new Worker());
