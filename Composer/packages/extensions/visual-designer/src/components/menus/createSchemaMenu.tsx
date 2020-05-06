@@ -11,6 +11,8 @@ import { ConceptLabels, DialogGroup, dialogGroups, SDKKinds, DefinitionSummary }
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
+import { MenuEventTypes } from '../../constants/MenuTypes';
+
 const resolveMenuTitle = ($kind: SDKKinds): string => {
   const conceptLabel = ConceptLabels[$kind];
   return conceptLabel?.title || $kind;
@@ -128,7 +130,7 @@ const createPasteButtonItem = (
               background: rgb(237, 235, 233);
             }
           `}
-          onClick={() => onClick({ key: 'PASTE' })}
+          onClick={() => onClick({ key: MenuEventTypes.Paste })}
         >
           <div>
             <FontIcon
