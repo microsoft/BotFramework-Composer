@@ -10,7 +10,6 @@ import { ProjectController } from '../../src/controllers/project';
 import { Path } from '../../src/utility/path';
 
 jest.mock('@bfc/plugin-loader', () => {
-  //const p = require('path');
   return {
     pluginLoader: {
       extensions: {
