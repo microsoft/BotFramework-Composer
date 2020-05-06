@@ -77,7 +77,7 @@ describe('calculateSwitchCaseBoundary', () => {
   });
   it('should return a box whose property be calcalated by conditionBoundary, choiceBoundary, branchBoundaries', () => {
     const returnBoundary = {
-      width: 580 + BranchIntervalX * 2,
+      width: 580 + BranchIntervalX,
       height: 180 + BranchIntervalY * 3,
       axisX: 140,
       axisY: 0,
