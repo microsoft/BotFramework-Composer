@@ -21,7 +21,14 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div role="cell" css={itemText(item.depth)} tabIndex={0} onFocus={item.onFocus} onBlur={item.onBlur}>
+    <div
+      role="cell"
+      css={itemText(item.depth)}
+      tabIndex={0}
+      onFocus={item.onFocus}
+      onBlur={item.onBlur}
+      data-is-focusable={true}
+    >
       <div css={content} tabIndex={-1}>
         {item.depth !== 0 && (
           <Icon
@@ -47,11 +54,17 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
     return showIcon ? (
       <IconButton
         role="cell"
+        data-is-focusable={isActive}
         className="dialog-more-btn"
         data-testid="dialogMoreButton"
         styles={moreButton(isActive)}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            e.stopPropagation();
+          }
+        }}
       />
     ) : null;
   };
@@ -94,6 +107,7 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
         data-testid={`DialogTreeItem${link.id}`}
         onRenderItem={onRenderItem}
         onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
+        doNotContainWithinFocusZone={true}
       />
     </div>
   );
