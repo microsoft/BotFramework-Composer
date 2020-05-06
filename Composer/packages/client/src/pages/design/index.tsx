@@ -293,7 +293,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           }, [] as IBreadcrumbItem[])
         : [];
     return (
-      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
+      <div
+        role="region"
+        aria-label={formatMessage('Breadcrumb')}
+        style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}
+      >
         <Breadcrumb
           items={items}
           ariaLabel={formatMessage('Navigation Path')}
@@ -388,14 +392,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <ProjectTree
-          dialogs={dialogs}
-          dialogId={dialogId}
-          selected={selected}
-          onSelect={handleSelect}
-          onDeleteDialog={handleDeleteDialog}
-          onDeleteTrigger={handleDeleteTrigger}
-        />
+        <div role="region" aria-label={formatMessage('Navigation pane')}>
+          <ProjectTree
+            dialogs={dialogs}
+            dialogId={dialogId}
+            selected={selected}
+            onSelect={handleSelect}
+            onDeleteDialog={handleDeleteDialog}
+            onDeleteTrigger={handleDeleteTrigger}
+          />
+        </div>
         <div role="main" css={contentWrapper}>
           <div role="region" aria-label={formatMessage('toolbar')}>
             <ToolBar
@@ -424,10 +430,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     schema={schemas.sdk.content}
                   />
                 ) : (
-                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                  <div role="region" aria-Label={formatMessage('Authoring canvas')}>
+                    <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                  </div>
                 )}
               </div>
-              <PropertyEditor key={focusPath} />
+              <div role="region" aria-Label={formatMessage('Properties panel')}>
+                <PropertyEditor key={focusPath} />
+              </div>
             </div>
           </Conversation>
         </div>
