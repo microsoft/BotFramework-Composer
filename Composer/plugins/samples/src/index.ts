@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 
 const samplesDir = path.resolve(__dirname, '../assets/projects');
-const biolerplateDir = path.resolve(__dirname, '../assets/shared');
+const boilerplateDir = path.resolve(__dirname, '../assets/shared');
 
 const samplesRegitry = {
   '*': {  // base registry item, can be override by later specific entry
@@ -92,21 +92,21 @@ function getSamples(): any[] {
   return samples;
 }
 
-function getBiolerPlates() {
+function getBoilerplates() {
   return [
     {
-      id: "biolerplate",
-      name: "biolerplate",
+      id: "boilerplate",
+      name: "boilerplate",
       description: "base template for every bot template",
-      path: biolerplateDir,
-      tags: ["biolerplate"],
+      path: boilerplateDir,
+      tags: ["boilerplate"],
       support: ["*"],
     }
   ]
 }
 
 const samples = getSamples();
-const biolerplates = getBiolerPlates();
+const boilerplates = getBoilerplates();
 
 export default async (composer: any): Promise<void> => {
   // register this publishing method with Composer
@@ -114,7 +114,7 @@ export default async (composer: any): Promise<void> => {
     await composer.addBotTemplate(temlate);
   }
 
-  for (const temlate of biolerplates) {
+  for (const temlate of boilerplates) {
     await composer.addBaseTemplate(temlate);
   }
 };
