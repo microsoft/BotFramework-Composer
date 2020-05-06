@@ -80,7 +80,7 @@ export const AppUpdater: React.FC<{}> = _props => {
           break;
         }
 
-        case 'update-not-available':
+        case 'update-not-available': {
           const explicit = payload;
           if (explicit) {
             // the user has explicitly checked for an update via the Help menu;
@@ -89,6 +89,7 @@ export const AppUpdater: React.FC<{}> = _props => {
             setAppUpdateShowing(true);
           }
           break;
+        }
 
         case 'update-downloaded':
           setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_SUCCEEDED });

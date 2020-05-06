@@ -50,7 +50,7 @@ export class AppUpdater extends EventEmitter {
    * @param explicit If true, the user explicitly checked for an update via the Help menu,
    * and we will show UI if there are no available updates.
    */
-  public checkForUpdates(explicit: boolean = false) {
+  public checkForUpdates(explicit = false) {
     if (!(this.checkingForUpdate || this.downloadingUpdate)) {
       this.explicitCheck = explicit;
       this.setFeedURL();
