@@ -18,8 +18,8 @@ export const TruncatedCSS = css`
 
 export const MultilineCSS = css`
   white-space: initial;
-  overflow-wrap: break-word;
-  word-break: break-all;
+  overflow-wrap: anywhere;
+  word-break: normal;
 `;
 
 export const ColorlessFontCSS = css`

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 const mockAutoUpdater = {
+  allowDowngrade: false,
   checkForUpdates: jest.fn(),
   downloadUpdate: jest.fn(),
   on: jest.fn(),
@@ -14,24 +15,59 @@ jest.mock('electron-updater', () => ({
   },
 }));
 
+const mockGetVersion = jest.fn(() => '0.0.1');
+jest.mock('electron', () => ({
+  app: {
+    getVersion: () => mockGetVersion(),
+  },
+}));
+
 import { AppUpdater } from '../src/appUpdater';
 
 describe('App updater', () => {
   let appUpdater: AppUpdater;
   beforeEach(() => {
-    appUpdater = new AppUpdater();
+    mockAutoUpdater.allowDowngrade = false;
+    appUpdater = AppUpdater.getInstance();
+    (appUpdater as any).checkingForUpdate = false;
+    (appUpdater as any).downloadingUpdate = false;
     mockAutoUpdater.checkForUpdates.mockClear();
     mockAutoUpdater.checkForUpdates.mockClear();
     mockAutoUpdater.downloadUpdate.mockClear();
     mockAutoUpdater.on.mockClear();
     mockAutoUpdater.quitAndInstall.mockClear();
     mockAutoUpdater.setFeedURL.mockClear();
+    mockGetVersion.mockClear();
   });
 
-  it('should check for updates', () => {
-    appUpdater.checkForUpdates();
+  it('should check for updates from the nightly repo', () => {
+    const getSettingsSpy = jest.spyOn(appUpdater as any, 'getSettings').mockReturnValue({ useNightly: true });
+    appUpdater.checkForUpdates(true);
 
     expect(mockAutoUpdater.checkForUpdates).toHaveBeenCalled();
+    expect((appUpdater as any).explicitCheck).toBe(true);
+    expect(mockAutoUpdater.setFeedURL).toHaveBeenCalledWith({
+      provider: 'github',
+      repo: 'BotFramework-Composer-Nightlies',
+      owner: 'microsoft',
+      vPrefixedTagName: true,
+    });
+    getSettingsSpy.mockRestore();
+  });
+
+  it('should check for updates from the stable repo', () => {
+    const getSettingsSpy = jest.spyOn(appUpdater as any, 'getSettings').mockReturnValue({ useNightly: false });
+    appUpdater.checkForUpdates(true);
+
+    expect(mockAutoUpdater.checkForUpdates).toHaveBeenCalled();
+    expect((appUpdater as any).explicitCheck).toBe(true);
+    expect(mockAutoUpdater.setFeedURL).toHaveBeenCalledWith({
+      provider: 'github',
+      repo: 'BotFramework-Composer',
+      owner: 'microsoft',
+      vPrefixedTagName: true,
+    });
+    getSettingsSpy.mockRestore();
   });
 
   it('should not check for updates if it is already checking for an update', () => {
@@ -46,6 +82,34 @@ describe('App updater', () => {
     appUpdater.checkForUpdates();
 
     expect(mockAutoUpdater.checkForUpdates).not.toHaveBeenCalled();
+  });
+
+  it('should not allow a downgrade when checking for updates from nightly to (stable or nightly)', () => {
+    mockGetVersion.mockReturnValueOnce('0.0.1-nightly.12345.abcdef');
+    mockAutoUpdater.allowDowngrade = true;
+    appUpdater.checkForUpdates();
+
+    expect(mockAutoUpdater.allowDowngrade).toBe(false);
+  });
+
+  it('should not allow a downgrade when checking for updates from stable to stable', () => {
+    mockGetVersion.mockReturnValueOnce('0.0.1');
+    const getSettingsSpy = jest.spyOn(appUpdater as any, 'getSettings').mockReturnValue({ useNightly: false });
+    mockAutoUpdater.allowDowngrade = true;
+    appUpdater.checkForUpdates();
+
+    expect(mockAutoUpdater.allowDowngrade).toBe(false);
+    getSettingsSpy.mockRestore();
+  });
+
+  it('should allow a downgrade when checking for updates from stable to nightly', () => {
+    mockGetVersion.mockReturnValueOnce('0.0.1');
+    const getSettingsSpy = jest.spyOn(appUpdater as any, 'getSettings').mockReturnValue({ useNightly: true });
+    mockAutoUpdater.allowDowngrade = false;
+    appUpdater.checkForUpdates();
+
+    expect(mockAutoUpdater.allowDowngrade).toBe(true);
+    getSettingsSpy.mockRestore();
   });
 
   it('should download an update', () => {
@@ -86,11 +150,14 @@ describe('App updater', () => {
 
   it('should handle no available update', () => {
     const emitSpy = jest.spyOn(appUpdater, 'emit');
+    const explicit = true;
     (appUpdater as any).checkingForUpdate = true;
+    (appUpdater as any).explicitCheck = explicit;
     (appUpdater as any).onUpdateNotAvailable('update info');
 
     expect((appUpdater as any).checkingForUpdate).toBe(false);
-    expect(emitSpy).toHaveBeenCalledWith('update-not-available', 'update info');
+    expect((appUpdater as any).explicitCheck).toBe(false);
+    expect(emitSpy).toHaveBeenCalledWith('update-not-available', explicit);
   });
 
   it('should handle download progress', () => {

@@ -63,7 +63,7 @@ function initializeAppUpdater() {
   log('Initializing app updater...');
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
-    const appUpdater = new AppUpdater();
+    const appUpdater = AppUpdater.getInstance();
     appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
       // TODO: if auto/silent download is enabled in settings, don't send this event.
       // instead, just download silently
@@ -72,8 +72,8 @@ function initializeAppUpdater() {
     appUpdater.on('progress', progress => {
       mainWindow.webContents.send('app-update', 'progress', progress);
     });
-    appUpdater.on('update-not-available', () => {
-      mainWindow.webContents.send('app-update', 'update-not-available');
+    appUpdater.on('update-not-available', (explicitCheck: boolean) => {
+      mainWindow.webContents.send('app-update', 'update-not-available', explicitCheck);
     });
     appUpdater.on('update-downloaded', () => {
       mainWindow.webContents.send('app-update', 'update-downloaded');
