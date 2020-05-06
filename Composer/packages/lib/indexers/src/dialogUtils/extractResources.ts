@@ -16,7 +16,7 @@ interface DialogResources {
 }
 
 // find out all lg templates given dialog
-export function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
+export function ExtractLgTemplates(id: string, dialog: { [key: string]: any }): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
   /**
    *
@@ -73,7 +73,7 @@ export function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
 }
 
 // find out all lu intents given dialog
-export function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
+export function ExtractLuIntents(id: string, dialog: { [key: string]: any }): ReferredLuIntents[] {
   const intents: ReferredLuIntents[] = [];
   /**    *
    * @param path , jsonPath string
@@ -96,7 +96,7 @@ export function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
 }
 
 // find out all triggers given dialog
-export function ExtractTriggers(dialog): ITrigger[] {
+export function ExtractTriggers(dialog: { [key: string]: any }): ITrigger[] {
   const triggers: ITrigger[] = [];
   /**    *
    * @param path , jsonPath string
@@ -132,7 +132,7 @@ export function ExtractTriggers(dialog): ITrigger[] {
 }
 
 // find out all referred dialog
-export function ExtractReferredDialogs(dialog): string[] {
+export function ExtractReferredDialogs(dialog: { [key: string]: any }): string[] {
   const dialogs: string[] = [];
   /**    *
    * @param path , jsonPath string
@@ -152,51 +152,21 @@ export function ExtractReferredDialogs(dialog): string[] {
 }
 
 // find out all referred dialog
-export function ExtractLGFile(dialog): string {
+export function ExtractLGFile(dialog: { [key: string]: any }): string {
   const lgFile = typeof dialog.generator === 'string' ? dialog.generator : '';
   return getBaseName(lgFile, '.lg');
 }
 
 // find out all referred dialog
-export function ExtractLUFile(dialog): string {
+export function ExtractLUFile(dialog: { [key: string]: any }): string {
   const luFile = typeof dialog.recognizer === 'string' ? dialog.recognizer : '';
   return getBaseName(luFile, '.lu');
 }
 
 // find out all lg/lu resource from given dialog (json value)
-export function ExtractExternalResources(value: any): DialogResources {
-  const dialogResources: DialogResources = {
-    lgTemplates: [],
-    luIntents: [],
+export function ExtractResources(content: { [key: string]: any }): DialogResources {
+  return {
+    lgTemplates: ExtractLgTemplates('$', content),
+    luIntents: ExtractLuIntents('$', content),
   };
-
-  const visitor: VisitorFunc = (path: string, value: any): boolean => {
-    if (value?.$kind === SDKKinds.OnIntent) {
-      if (value.intent) {
-        const dialogs: string[] = [];
-
-        const visitor: VisitorFunc = (path: string, value: any): boolean => {
-          if (value?.$kind === SDKKinds.BeginDialog) {
-            if (value.dialog) {
-              dialogs.push(value.dialog);
-            }
-            return true;
-          }
-          return false;
-        };
-        JsonWalk('$', value, visitor);
-        if (dialogs.length) {
-          triggers.push({
-            intent: value.intent,
-            dialogs,
-          });
-        }
-      }
-      return true;
-    }
-    return false;
-  };
-  JsonWalk('$', value, visitor);
-
-  return dialogResources;
 }
