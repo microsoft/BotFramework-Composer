@@ -164,7 +164,7 @@
           "$designer": {
             "id": "953339"
           },
-          "activity": "${help()}"
+          "activity": "${WelcomeUser()}"
         }
       ]
     },
@@ -197,7 +197,7 @@
                     "id": "859266",
                     "name": "Send a response"
                   },
-                  "activity": "${help()}"
+                  "activity": "${WelcomeUser()}"
                 }
               ]
             }

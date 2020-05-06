@@ -21,9 +21,9 @@ const actionType2ChangeType = {
   [ActionTypes.UPDATE_LU]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Lu },
   [ActionTypes.CREATE_LU]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Lu },
   [ActionTypes.REMOVE_LU]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Lu },
-  [ActionTypes.CREATE_SKILL_MANIFEST]: { changeType: ChangeType.CREATE, fileType: FileExtensions.Manifest },
-  [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileType: FileExtensions.Manifest },
-  [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileType: FileExtensions.Manifest },
+  [ActionTypes.CREATE_SKILL_MANIFEST]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Manifest },
+  [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Manifest },
+  [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
 };
 
 class FilePersistence {
