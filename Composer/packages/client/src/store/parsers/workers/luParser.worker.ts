@@ -36,24 +36,28 @@ const parse = (payload: LuPayload) => {
 ctx.onmessage = function(msg) {
   const { id, type, payload } = msg.data;
   let result: any = null;
-  switch (type) {
-    case LuActionType.Parse: {
-      result = parse(payload);
-      break;
+  try {
+    switch (type) {
+      case LuActionType.Parse: {
+        result = parse(payload);
+        break;
+      }
+      case LuActionType.AddIntent: {
+        result = luUtil.addIntent(payload.content, payload.intent);
+        break;
+      }
+      case LuActionType.UpdateIntent: {
+        result = luUtil.updateIntent(payload.content, payload.intentName, payload.intent);
+        break;
+      }
+      case LuActionType.RemoveIntent: {
+        result = luUtil.removeIntent(payload.content, payload.intentName);
+        break;
+      }
     }
-    case LuActionType.AddIntent: {
-      result = luUtil.addIntent(payload.content, payload.intent);
-      break;
-    }
-    case LuActionType.UpdateIntent: {
-      result = luUtil.updateIntent(payload.content, payload.intentName, payload.intent);
-      break;
-    }
-    case LuActionType.RemoveIntent: {
-      result = luUtil.removeIntent(payload.content, payload.intentName);
-      break;
-    }
-  }
 
-  ctx.postMessage({ id, payload: result });
+    ctx.postMessage({ id, payload: result });
+  } catch (error) {
+    ctx.postMessage({ id, error });
+  }
 };

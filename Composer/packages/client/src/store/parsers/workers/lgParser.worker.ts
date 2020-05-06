@@ -9,14 +9,13 @@ ctx.onmessage = function(msg) {
   const { id, payload } = msg.data;
   const { targetId, content, lgFiles } = payload;
   const { parse } = lgIndexer;
+  try {
+    const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
 
-  const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
+    const { templates, diagnostics } = parse(content, targetId, lgImportresolver);
 
-  const { templates, diagnostics } = parse(content, targetId, lgImportresolver);
-
-  const msg1 = {
-    id,
-    payload: { id: targetId, content, templates, diagnostics },
-  };
-  ctx.postMessage(msg1);
+    ctx.postMessage({ id, payload: { id: targetId, content, templates, diagnostics } });
+  } catch (error) {
+    ctx.postMessage({ id, error });
+  }
 };

@@ -26,7 +26,7 @@ export class BaseWorker {
 
   // Handle incoming calculation result
   handleMsg = msg => {
-    const { id, err, payload } = msg.data;
+    const { id, error, payload } = msg.data;
     if (payload) {
       const resolve = this.resolves[id];
       if (resolve) resolve(payload);
@@ -34,8 +34,8 @@ export class BaseWorker {
       // error condition
       const reject = this.rejects[id];
       if (reject) {
-        if (err) {
-          reject(err);
+        if (error) {
+          reject(error);
         } else {
           reject('Got nothing');
         }

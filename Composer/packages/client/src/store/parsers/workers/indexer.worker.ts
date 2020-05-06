@@ -9,11 +9,10 @@ ctx.onmessage = function(msg) {
   const { files, botName, schemas, locale } = payload;
   const { index } = indexer;
 
-  const { dialogs, luFiles, lgFiles } = index(files, botName, schemas, locale);
-
-  const msg1 = {
-    id,
-    payload: { dialogs, luFiles, lgFiles },
-  };
-  ctx.postMessage(msg1);
+  try {
+    const { dialogs, luFiles, lgFiles } = index(files, botName, schemas, locale);
+    ctx.postMessage({ id, payload: { dialogs, luFiles, lgFiles } });
+  } catch (error) {
+    ctx.postMessage({ id, error });
+  }
 };
