@@ -10,7 +10,6 @@ export interface NodeProps {
   focused?: boolean;
   onEvent: (action, id, ...rest) => object | void;
   onResize: (boundary: Boundary, id?) => object | void;
-  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 
   isRoot?: boolean;
 }
