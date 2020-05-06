@@ -35,7 +35,7 @@
      // The ARM template file path, default is 'DeploymentTemplates/template-with-preexisting-rg.json'
      templatePath?: string
 
-     // Dotnet project path, default is 'BotProject.csproj'
+     // Dotnet project path, default is 'Microsoft.BotFramework.Composer.WebApp.csproj'
      dotnetProjectPath?: string
 
      // Lubuild generated folder path, default is 'generated'

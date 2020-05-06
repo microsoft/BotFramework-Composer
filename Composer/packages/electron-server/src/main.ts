@@ -47,12 +47,16 @@ function processArgsForWindows(args: string[]): string {
 }
 
 async function createAppDataDir() {
+  // TODO: Move all ENV variable setting to an env file and update build process to leverage those variables too
   const appDataBasePath: string = process.env.APPDATA || process.env.HOME || '';
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
+  const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   log('creating composer app data path at: ', composerAppDataPath);
-  await mkdirp(composerAppDataPath);
+  process.env.LOCAL_PUBLISH_PATH = localPublishPath;
+  log('creating local bot runtime publish path: ', localPublishPath);
+  await mkdirp(localPublishPath);
 }
 
 function initializeAppUpdater() {

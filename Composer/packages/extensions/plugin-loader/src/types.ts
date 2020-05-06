@@ -68,6 +68,8 @@ export interface ExtensionCollection {
     [key: string]: {
       plugin: ComposerPluginRegistration;
       methods: PublishPlugin;
+      /** (Optional instructions displayed in the UI) */
+      instructions?: string;
       /** (Optional) Schema for publishing configuration. */
       schema?: JSONSchema7;
     };

@@ -30,7 +30,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
   const [errorMessage, setErrorMsg] = useState('');
 
   const targetTypes = useMemo(() => {
-    return props.types.map(t => ({ key: t.name, text: t.name }));
+    return props.types.map(t => ({ key: t.name, text: t.description }));
   }, [props.targets]);
 
   const updateType = (_e, option?: IDropdownOption) => {
@@ -56,6 +56,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
       }
     }
   };
+
+  const instructions: string | undefined = useMemo((): string | undefined => {
+    return targetType ? props.types.find(t => t.name === targetType)?.instructions : '';
+  }, [props.targets, targetType]);
 
   const schema = useMemo(() => {
     return targetType ? props.types.find(t => t.name === targetType)?.schema : undefined;
@@ -99,6 +103,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
           defaultSelectedKey={props.current ? props.current.type : null}
           onChange={updateType}
         />
+        {instructions && <p>{instructions}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
         <JsonEditor key={targetType} onChange={updateConfig} height={200} value={config} schema={schema} />
         <button type="submit" hidden disabled={isDisable()} />
