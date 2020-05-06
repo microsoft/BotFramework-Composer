@@ -74,6 +74,21 @@ export const NavItem: React.FC<INavItemProps> = props => {
         :visited {
           text-decoration: none;
         }
+
+        :focus {
+          outline: none;
+          position: relative;
+
+          &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border: 1px solid black;
+          }
+        }
       `}
     >
       {activeArea}
