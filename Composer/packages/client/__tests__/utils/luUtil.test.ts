@@ -23,6 +23,10 @@ describe('getReferredFiles', () => {
         intentTriggers: [
           { intent: 'dia1_trigger', dialogs: ['dia1'] },
           { intent: 'dia2_trigger', dialogs: ['dia2'] },
+          { intent: 'dias_trigger', dialogs: ['dia5', 'dia6'] },
+          { intent: 'no_dialog', dialogs: [] },
+          { intent: 'dialog_without_lu', dialogs: ['dialog_without_lu'] },
+          { intent: '', dialogs: ['start_dialog_without_intent'] },
         ],
       },
       {
@@ -48,14 +52,46 @@ describe('getReferredFiles', () => {
         luFile: 'dia4',
         intentTriggers: [],
       },
+      {
+        id: 'dia5',
+        luFile: 'dia5',
+        intentTriggers: [],
+      },
+      {
+        id: 'dia6',
+        luFile: 'dia6',
+        intentTriggers: [],
+      },
+      {
+        id: 'start_dialog_without_intent',
+        luFile: 'start_dialog_without_intent',
+        intentTriggers: [],
+      },
+      {
+        id: 'dialog_without_lu',
+        intentTriggers: [],
+      },
     ];
-    const luFiles = [{ id: 'main.en-us' }, { id: 'dia1.en-us' }, { id: 'dia2.en-us' }, { id: 'dia3.en-us' }];
+    const luFiles = [
+      { id: 'main.en-us' },
+      { id: 'dia1.en-us' },
+      { id: 'dia2.en-us' },
+      { id: 'dia3.en-us' },
+      { id: 'dia5.en-us' },
+      { id: 'dia6.en-us' },
+      { id: 'start_dialog_without_intent.en-us' },
+    ];
     const config = createCrossTrainConfig(dialogs as DialogInfo[], luFiles as LuFile[]);
     expect(config.rootIds.length).toEqual(1);
     expect(config.rootIds[0]).toEqual('main.en-us.lu');
-    expect(config.triggerRules['main.en-us.lu']['dia1.en-us.lu']).toEqual('dia1_trigger');
-    expect(config.triggerRules['dia1.en-us.lu']['dia3.en-us.lu']).toEqual('dia3_trigger');
+    expect(config.triggerRules['main.en-us.lu'].dia1_trigger).toEqual('dia1.en-us.lu');
+    expect(config.triggerRules['main.en-us.lu'].no_dialog).toEqual('');
+    expect(config.triggerRules['main.en-us.lu']['']).toEqual('start_dialog_without_intent.en-us.lu');
+    expect(config.triggerRules['main.en-us.lu'].dia1_trigger).toEqual('dia1.en-us.lu');
+    expect(config.triggerRules['main.en-us.lu'].dias_trigger.length).toBe(2);
+    expect(config.triggerRules['dia1.en-us.lu'].dia3_trigger).toEqual('dia3.en-us.lu');
     expect(config.triggerRules['dia1.en-us.lu']['dia4.en-us.lu']).toBeUndefined();
+    expect(config.triggerRules['main.en-us.lu'].dialog_without_lu).toEqual('');
   });
 
   it('check the lu files before publish', () => {

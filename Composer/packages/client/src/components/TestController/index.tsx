@@ -7,13 +7,15 @@ import React, { useState, useRef, Fragment, useContext, useEffect, useCallback }
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
+import { DefaultPublishConfig } from '../../constants';
+
 import settingsStorage from './../../utils/dialogSettingStorage';
 import { StoreContext } from './../../store';
 import { BotStatus, LuisConfig } from './../../constants';
 import { isAbsHosted } from './../../utils/envUtil';
 import { getReferredFiles } from './../../utils/luUtil';
 import useNotifications from './../../pages/notifications/useNotifications';
-import { navigateTo } from './../../utils';
+import { navigateTo, openInEmulator } from './../../utils';
 import { PublishLuisDialog } from './publishDialog';
 import { bot, botButton } from './styles';
 import { ErrorCallout } from './errorCallout';
@@ -21,21 +23,6 @@ import { EmulatorOpenButton } from './emulatorOpenButton';
 import { Loading } from './loading';
 import { ErrorInfo } from './errorInfo';
 
-const openInEmulator = (url, authSettings: { MicrosoftAppId: string; MicrosoftAppPassword: string }) => {
-  // this creates a temporary hidden iframe to fire off the bfemulator protocol
-  // and start up the emulator
-  const i = document.createElement('iframe');
-  i.style.display = 'none';
-  i.onload = () => i.parentNode && i.parentNode.removeChild(i);
-  i.src = `bfemulator://livechat.open?botUrl=${encodeURIComponent(url)}&msaAppId=${
-    authSettings.MicrosoftAppId
-  }&msaAppPassword=${encodeURIComponent(authSettings.MicrosoftAppPassword)}`;
-  document.body.appendChild(i);
-};
-
-const defaultPublishConfig = {
-  name: 'default',
-};
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
@@ -53,7 +40,7 @@ export const TestController: React.FC = () => {
 
   useEffect(() => {
     if (projectId) {
-      getPublishStatus(projectId, defaultPublishConfig);
+      getPublishStatus(projectId, DefaultPublishConfig);
     }
   }, [projectId]);
 
@@ -95,7 +82,7 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
     const sensitiveSettings = settingsStorage.get(botName);
-    await publishToTarget(state.projectId, { ...defaultPublishConfig, sensitiveSettings });
+    await publishToTarget(state.projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   function isLuisConfigComplete(config) {
@@ -142,7 +129,18 @@ export const TestController: React.FC = () => {
   return (
     <Fragment>
       <div css={bot} ref={botActionRef}>
-        <EmulatorOpenButton botStatus={botStatus} hidden={showError} onClick={handleOpenEmulator} />
+        <EmulatorOpenButton
+          botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
+          botStatus={botStatus}
+          hidden={showError}
+          onClick={handleOpenEmulator}
+        />
+        <div
+          aria-live={'assertive'}
+          aria-label={formatMessage(`{ botStatus}`, {
+            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
+          })}
+        />
         <Loading botStatus={botStatus} />
         <div ref={addRef}>
           <ErrorInfo hidden={!showError} onClick={handleErrorButtonClick} count={errorLength} />

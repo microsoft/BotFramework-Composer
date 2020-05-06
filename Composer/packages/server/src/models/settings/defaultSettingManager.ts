@@ -3,9 +3,9 @@
 
 import omit from 'lodash/omit';
 import { SensitiveProperties } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
-import { UserIdentity } from '../../services/pluginLoader';
 import log from '../../logger';
 
 import { FileSettingManager } from './fileSettingManager';
@@ -19,6 +19,12 @@ export class DefaultSettingManager extends FileSettingManager {
 
   protected createDefaultSettings = (): any => {
     return {
+      feature: {
+        UseTranscriptLoggerMiddleware: false,
+        UseShowTypingMiddleware: false,
+        UseInspectionMiddleware: false,
+        UseCosmosDbPersistentStorage: false,
+      },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
       luis: {
@@ -29,13 +35,36 @@ export class DefaultSettingManager extends FileSettingManager {
         defaultLanguage: 'en-us',
         environment: 'composer',
       },
+      publishTargets: [],
       qna: {
         knowledgebaseid: '',
         endpointkey: '',
         hostname: '',
       },
+      telemetry: {
+        logPersonalInformation: false,
+        logActivities: true,
+      },
+      runtime: {
+        customRuntime: false,
+        path: '',
+        command: '',
+      },
+      downsampling: {
+        maxImbalanceRatio: 10,
+        maxUtteranceAllowed: 15000,
+      },
     };
   };
+
+  public async get(slot = '', obfuscate = false): Promise<any> {
+    const result = await super.get(slot, obfuscate);
+    //add downsampling property for old bot
+    if (!result.downsampling) {
+      result.downsampling = this.createDefaultSettings().downsampling;
+    }
+    return result;
+  }
 
   private filterOutSensitiveValue = (obj: any) => {
     if (obj && typeof obj === 'object') {

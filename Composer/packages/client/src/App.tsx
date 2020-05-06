@@ -16,10 +16,9 @@ import Routes from './router';
 import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
-import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
-import { CreationFlowStatus } from './constants';
+import { AppUpdater } from './components/AppUpdater';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -81,6 +80,13 @@ const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
+      to: `/bot/${projectId}/publish`,
+      iconName: 'CloudUpload',
+      labelName: formatMessage('Publish'),
+      exact: true,
+      disabled: !botLoaded,
+    },
+    {
       to: `/bot/${projectId}/skills`,
       iconName: 'PlugDisconnected',
       labelName: formatMessage('Skills'),
@@ -121,16 +127,30 @@ const bottomLinks = [
 ];
 
 export const App: React.FC = () => {
-  const { state, actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
-  const { botName, projectId, dialogs, creationFlowStatus, locale, designPageLocation } = state;
-  const { setCreationFlowStatus } = actions;
+
+  const { botName, projectId, dialogs, locale, designPageLocation, announcement } = state;
+
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
   return (
     <Fragment>
-      <Header botName={`${botName}(${locale})`} />
+      <div
+        role="alert"
+        aria-live="assertive"
+        style={{
+          display: 'block',
+          position: 'absolute',
+          top: '-9999px',
+          height: '1px',
+          width: '1px',
+        }}
+      >
+        {announcement}
+      </div>
+      <Header botName={botName} locale={locale} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
           <div>
@@ -180,14 +200,12 @@ export const App: React.FC = () => {
         <div css={rightPanel}>
           <ErrorBoundary>
             <RequireAuth>
-              {creationFlowStatus !== CreationFlowStatus.CLOSE && (
-                <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
-              )}
               <Routes component={Content} />
             </RequireAuth>
           </ErrorBoundary>
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
+        {(window as any).__IS_ELECTRON__ && <AppUpdater />}
       </div>
     </Fragment>
   );

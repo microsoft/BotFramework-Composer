@@ -1,6 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-export const LgNamePattern = `bfd(\\w+)-(\\w+)`;
+export const LgNamePattern = `([A-Z]\\w+)_(\\w{6})`;
 
-export const LgTemplateRefPattern = `\\$\\{([A-Za-z_][-\\w]+)(\\([^\\)]*\\))?\\}`;
+/**
+ * should matches
+ * ${help()} ${help(name)} ${help(name, location)}
+ * ${help-me()}
+ * ${formatDateTime(utcNow(), 'yyyy-MM-ddTHH:mm')}
+ */
+export const LgTemplateRefPattern = `\\$\\{([A-Za-z_][\\w]+)(\\([^\\)]*\\))?\\}`;

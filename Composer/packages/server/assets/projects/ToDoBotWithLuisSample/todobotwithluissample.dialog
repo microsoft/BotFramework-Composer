@@ -1,12 +1,10 @@
 {
   "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "$designer": {
-      "name": "ToDoBotWithLuisSample-17",
-      "id": "232009"
-    }
+    "name": "ToDoBotWithLuisSample",
+    "id": "232009"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "recognizer": "todobotwithluissample.lu",
   "triggers": [
@@ -39,7 +37,7 @@
                     "id": "202664",
                     "name": "Send a response"
                   },
-                  "activity": "${bfdactivity-202664()}"
+                  "activity": "${SendActivity_202664()}"
                 }
               ]
             }
@@ -181,7 +179,7 @@
             "id": "107784",
             "name": "Confirmation"
           },
-          "prompt": "${bfdprompt-107784()}",
+          "prompt": "${TextInput_Prompt_107784()}",
           "maxTurnCount": "3",
           "property": "turn.cancelOutcome",
           "value": "=@confirmation",
@@ -209,7 +207,7 @@
                 "id": "140076",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-140076()}"
+              "activity": "${SendActivity_140076()}"
             },
             {
               "$kind": "Microsoft.CancelAllDialogs",
@@ -226,7 +224,7 @@
                 "id": "272233",
                 "name": "Send a response"
               },
-              "activity": "${bfdactivity-272233()}"
+              "activity": "${SendActivity_272233()}"
             }
           ]
         }
@@ -244,7 +242,7 @@
             "id": "037398",
             "name": "Send a response"
           },
-          "activity": "${bfdactivity-037398()}"
+          "activity": "${SendActivity_037398()}"
         }
       ]
     }

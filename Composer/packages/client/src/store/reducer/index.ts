@@ -8,7 +8,7 @@ import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } fr
 import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { ActionTypes, FileTypes, BotStatus, Text } from '../../constants';
+import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils';
@@ -67,7 +67,7 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
-  const { dialogs, luFiles, lgFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
+  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
   state.botEnvironment = botEnvironment || state.botEnvironment;
@@ -80,6 +80,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = settings;
   state.locale = locale;
+  state.skillManifests = skillManifestFiles;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
   return state;
@@ -373,6 +374,21 @@ const addSkillDialogCancel: ReducerFunc = state => {
   return state;
 };
 
+const createSkillManifest: ReducerFunc = (state, { content = {}, id }) => {
+  state.skillManifests = [...state.skillManifests, { content, id }];
+  return state;
+};
+
+const updateSkillManifest: ReducerFunc = (state, payload) => {
+  state.skillManifests = state.skillManifests.map(manifest => (manifest.id === payload.id ? payload : manifest));
+  return state;
+};
+
+const removeSkillManifest: ReducerFunc = (state, { id }) => {
+  state.skillManifests = state.skillManifests.filter(manifest => manifest.name === id);
+  return state;
+};
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
@@ -417,27 +433,73 @@ const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
   return state;
 };
 
-const setPublishTypes: ReducerFunc = (state, { response }) => {
-  state.publishTypes = response;
+const setPublishTypes: ReducerFunc = (state, { typelist }) => {
+  state.publishTypes = typelist;
   return state;
 };
 
 const publishSuccess: ReducerFunc = (state, payload) => {
-  state.botEndpoints[state.projectId] = `${payload.results?.result?.endpoint || 'http://localhost:3979'}/api/messages`;
-  state.botStatus = BotStatus.connected;
+  if (payload.target.name === 'default' && payload.endpointURL) {
+    state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
+    state.botStatus = BotStatus.connected;
+  }
+
+  // prepend the latest publish results to the history
+  if (!state.publishHistory[payload.target.name]) {
+    state.publishHistory[payload.target.name] = [];
+  }
+  state.publishHistory[payload.target.name].unshift(payload);
+
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, { error }) => {
-  state.botStatus = BotStatus.failed;
-  state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+const publishFailure: ReducerFunc = (state, { error, target }) => {
+  if (target.name === 'default') {
+    state.botStatus = BotStatus.failed;
+    state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+  }
+  // prepend the latest publish results to the history
+  if (!state.publishHistory[target.name]) {
+    state.publishHistory[target.name] = [];
+  }
+  state.publishHistory[target.name].unshift(error);
   return state;
 };
 
 const getPublishStatus: ReducerFunc = (state, payload) => {
-  if (payload.results?.botStatus === 'connected') {
+  // the action below only applies to when a bot is being started using the "start bot" button
+  // a check should be added to this that ensures this ONLY applies to the "default" profile.
+  if (payload.target.name === 'default' && payload.endpointURL) {
     state.botStatus = BotStatus.connected;
+    state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
   }
+
+  // if no history exists, create one with the latest status
+  // otherwise, replace the latest publish history with this one
+  if (!state.publishHistory[payload.target.name] && payload.status !== 404) {
+    state.publishHistory[payload.target.name] = [payload];
+  } else if (payload.status !== 404) {
+    // make sure this status payload represents the same item as item 0 (most of the time)
+    // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
+    if (
+      state.publishHistory[payload.target.name].length &&
+      state.publishHistory[payload.target.name][0].id === payload.id
+    ) {
+      state.publishHistory[payload.target.name][0] = payload;
+    } else {
+      state.publishHistory[payload.target.name].unshift(payload);
+    }
+  }
+  return state;
+};
+
+const getPublishHistory: ReducerFunc = (state, payload) => {
+  state.publishHistory[payload.target.name] = payload.history;
+  return state;
+};
+
+const setRuntimeTemplates: ReducerFunc = (state, payload) => {
+  state.runtimeTemplates = payload;
   return state;
 };
 
@@ -470,6 +532,53 @@ const setCodeEditorSettings: ReducerFunc = (state, settings) => {
   const newSettings = merge(state.userSettings, settings);
   storage.set('userSettings', newSettings);
   state.userSettings = newSettings;
+  return state;
+};
+
+const ejectSuccess: ReducerFunc = (state, payload) => {
+  state.runtimeSettings = payload.settings;
+  return state;
+};
+
+const setMessage: ReducerFunc = (state, message) => {
+  state.announcement = message;
+  return state;
+};
+
+const setAppUpdateError: ReducerFunc<any> = (state, error) => {
+  state.appUpdate.error = error;
+  return state;
+};
+
+const setAppUpdateProgress: ReducerFunc<{ progressPercent: number; downloadSizeInBytes: number }> = (
+  state,
+  { downloadSizeInBytes, progressPercent }
+) => {
+  if (downloadSizeInBytes !== state.appUpdate.downloadSizeInBytes) {
+    state.appUpdate.downloadSizeInBytes = downloadSizeInBytes;
+  }
+  state.appUpdate.progressPercent = progressPercent;
+  return state;
+};
+
+const setAppUpdateShowing: ReducerFunc<boolean> = (state, payload) => {
+  state.appUpdate.showing = payload;
+  return state;
+};
+
+const setAppUpdateStatus: ReducerFunc<{ status: AppUpdaterStatus; version?: string }> = (state, payload) => {
+  const { status, version } = payload;
+  if (state.appUpdate.status !== status) {
+    state.appUpdate.status;
+  }
+  state.appUpdate.status = status;
+  if (status === AppUpdaterStatus.UPDATE_AVAILABLE) {
+    state.appUpdate.version = version;
+  }
+  if (status === AppUpdaterStatus.IDLE) {
+    state.appUpdate.progressPercent = 0;
+    state.appUpdate.version = undefined;
+  }
   return state;
 };
 
@@ -510,6 +619,9 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_SKILL_SUCCESS]: updateSkill,
   [ActionTypes.ADD_SKILL_DIALOG_BEGIN]: addSkillDialogBegin,
   [ActionTypes.ADD_SKILL_DIALOG_END]: addSkillDialogCancel,
+  [ActionTypes.CREATE_SKILL_MANIFEST]: createSkillManifest,
+  [ActionTypes.REMOVE_SKILL_MANIFEST]: removeSkillManifest,
+  [ActionTypes.UPDATE_SKILL_MANIFEST]: updateSkillManifest,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
   [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
@@ -519,11 +631,20 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
   [ActionTypes.PUBLISH_FAILED]: publishFailure,
   [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
+  [ActionTypes.GET_PUBLISH_STATUS_FAILED]: getPublishStatus,
+  [ActionTypes.GET_PUBLISH_HISTORY]: getPublishHistory,
   [ActionTypes.REMOVE_RECENT_PROJECT]: removeRecentProject,
   [ActionTypes.EDITOR_SELECTION_VISUAL]: setVisualEditorSelection,
   [ActionTypes.ONBOARDING_ADD_COACH_MARK_REF]: onboardingAddCoachMarkRef,
   [ActionTypes.ONBOARDING_SET_COMPLETE]: onboardingSetComplete,
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
+  [ActionTypes.SET_RUNTIME_TEMPLATES]: setRuntimeTemplates,
   [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
+  [ActionTypes.EJECT_SUCCESS]: ejectSuccess,
+  [ActionTypes.SET_MESSAGE]: setMessage,
+  [ActionTypes.SET_APP_UPDATE_ERROR]: setAppUpdateError,
+  [ActionTypes.SET_APP_UPDATE_PROGRESS]: setAppUpdateProgress,
+  [ActionTypes.SET_APP_UPDATE_SHOWING]: setAppUpdateShowing,
+  [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
 });

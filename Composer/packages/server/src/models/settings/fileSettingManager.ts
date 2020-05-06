@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { UserIdentity } from '@bfc/plugin-loader';
+
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import StorageService from '../../services/storage';
-import { UserIdentity } from '../../services/pluginLoader';
 import log from '../../logger';
 
 import { ISettingManager, OBFUSCATED_VALUE } from '.';
@@ -24,14 +25,14 @@ export class FileSettingManager implements ISettingManager {
     this.storage = StorageService.getStorageClient('default', user);
   }
 
-  public get = async (slot = '', obfuscate = false): Promise<any> => {
+  public async get(slot = '', obfuscate = false): Promise<any> {
     this.validateSlot(slot);
 
     const path = this.getPath(slot);
     const settings = await this._getFromStorage(path, slot);
 
     return obfuscate ? this.obfuscateValues(settings) : settings;
-  };
+  }
 
   private _getFromStorage = async (path: string, slot: string) => {
     if (await this.storage.exists(path)) {

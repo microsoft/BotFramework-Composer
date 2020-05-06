@@ -3,6 +3,7 @@
 
 import find from 'lodash/find';
 import { ProjectTemplate } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import log from '../../logger';
 import { LocalDiskStorage } from '../storage/localDiskStorage';
@@ -10,7 +11,6 @@ import { LocationRef } from '../bot/interface';
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
-import { UserIdentity } from '../../services/pluginLoader';
 import { IFileStorage } from '../storage/interface';
 
 interface TemplateData {
@@ -19,6 +19,14 @@ interface TemplateData {
     description: string;
     order?: number;
     icon?: string;
+  };
+}
+
+interface ProjectTemplateCollection {
+  [key: string]: {
+    name: string;
+    description: string;
+    path: string;
   };
 }
 
@@ -35,12 +43,12 @@ const templates: TemplateData = {
   },
   TodoSample: {
     name: 'Simple Todo',
-    description: 'A sample bot that allows you add, list, remove to do items.',
+    description: 'A sample bot that allows you to add, list, and remove to do items.',
     order: 3,
   },
   ToDoBotWithLuisSample: {
     name: 'Todo with LUIS',
-    description: 'A sample bot that allows you add, list, remove to do items and uses language Understanding',
+    description: 'A sample bot that allows you to add, list, and remove to do items using Language Understanding',
     order: 4,
   },
   RespondingWithCardsSample: {
@@ -49,11 +57,12 @@ const templates: TemplateData = {
   },
   AskingQuestionsSample: {
     name: 'Asking Questions',
-    description: 'A sample bot that shows how to ask question and capture user input.',
+    description: 'A sample bot that shows how to ask questions and capture user input.',
   },
   InterruptionSample: {
     name: 'Interruptions',
-    description: 'An advance sample bot that shows how to handle context switching and interruption in a conversation.',
+    description:
+      'An advanced sample bot that shows how to handle context switching and interruption in a conversation.',
   },
   RespondingWithTextSample: {
     name: 'Responding with Text',
@@ -65,7 +74,7 @@ const templates: TemplateData = {
   },
   ActionsSample: {
     name: 'Dialog Actions',
-    description: 'A sample bot that shows how to use Dialog actions.',
+    description: 'A sample bot that shows how to use Dialog Actions.',
   },
   QnAMakerLUISSample: {
     name: 'QnA Maker and LUIS',
@@ -77,16 +86,17 @@ const templates: TemplateData = {
   },
 };
 
-const runtimes: TemplateData = {
-  CSharp: {
-    name: 'CSharp Runtime',
-    description: 'A Bot Framework runtime using the CSharp/dotnet version of the SDK',
+const runtimes: ProjectTemplateCollection = {
+  dotnet: {
+    name: 'dotnet webapp runtime',
+    description: 'A Bot Framework runtime using the dotnet version of the SDK, hosted in azure web app',
+    path: 'dotnet',
   },
 };
 
 // set a default runtime template.
 // when we have multiple runtimes this will be a parameter.
-const DEFAULT_RUNTIME = 'CSharp';
+const DEFAULT_RUNTIME = 'dotnet';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -100,7 +110,7 @@ export class AssetManager {
     this.runtimesPath = runtimesPath;
     this.templateStorage = new LocalDiskStorage();
 
-    // initialize the list of project tempaltes
+    // initialize the list of project templates
     this.getProjectTemplates();
 
     // initialize the list of runtimes.
@@ -144,12 +154,15 @@ export class AssetManager {
     const output: ProjectTemplate[] = [];
 
     if (await this.templateStorage.exists(path)) {
-      const folders = await this.templateStorage.readDir(path);
       this.runtimeTemplates = [];
-      for (const name of folders) {
-        const absPath = Path.join(path, name);
+      for (const runtimeKey in runtimes) {
+        const absPath = Path.join(path, runtimes[runtimeKey].path);
         if ((await this.templateStorage.stat(absPath)).isDir) {
-          const base = { id: name, name: runtimes[name].name, description: runtimes[name].description };
+          const base = {
+            id: runtimeKey,
+            name: runtimes[runtimeKey].name,
+            description: runtimes[runtimeKey].description,
+          };
           this.runtimeTemplates.push({ ...base, path: absPath });
           output.push(base);
         }
@@ -157,6 +170,15 @@ export class AssetManager {
     }
 
     return output;
+  }
+
+  // Copy material from the boilerplate into the project
+  // This is used to copy shared content into every new project
+  public async copyBoilerplate(dstDir: string, dstStorage: IFileStorage) {
+    const boilerplatePath = Path.join(this.assetsLibraryPath, 'shared');
+    if (await this.templateStorage.exists(boilerplatePath)) {
+      await copyDir(boilerplatePath, this.templateStorage, dstDir, dstStorage);
+    }
   }
 
   public async copyDataFilesTo(templateId: string, dstDir: string, dstStorage: IFileStorage) {

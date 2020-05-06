@@ -4,6 +4,8 @@
 import * as fs from 'fs';
 
 import { Request, Response } from 'express';
+import { Archiver } from 'archiver';
+import { PluginLoader } from '@bfc/plugin-loader';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
@@ -11,13 +13,12 @@ import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import StorageService from '../services/storage';
 import settings from '../settings';
-import { PluginLoader } from '../services/pluginLoader';
 
 import { Path } from './../utility/path';
 
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
-  const { name, description, storageId, location } = req.body;
+  const { name, description, storageId, location, schemaUrl } = req.body;
   const user = await PluginLoader.getUserFromRequest(req);
   if (templateId === '') {
     templateId = 'EmptyBot';
@@ -43,12 +44,21 @@ async function createProject(req: Request, res: Response) {
   log('Attempting to create project at %s', path);
 
   try {
+    await BotProjectService.cleanProject(locationRef);
     const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef, user);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
+
+    // inject shared content into every new project.  this comes from assets/shared
+    await AssectService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
+      if (schemaUrl) {
+        await currentProject.saveSchemaToProject(schemaUrl, locationRef.path);
+      }
       await currentProject.init();
+
       const project = currentProject.getProject();
       log('Project created successfully.');
       res.status(200).json({
@@ -70,7 +80,6 @@ async function getProjectById(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     if (currentProject !== undefined && (await currentProject.exists())) {
-      await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
         id: projectId,
@@ -282,6 +291,19 @@ async function updateSkill(req: Request, res: Response) {
   }
 }
 
+async function exportProject(req: Request, res: Response) {
+  const currentProject = await BotProjectService.getProjectById(req.params.projectId);
+  currentProject.exportToZip((archive: Archiver) => {
+    archive.on('error', err => {
+      res.status(500).send({ error: err.message });
+    });
+
+    res.attachment('tmp-archive.zip');
+
+    archive.pipe(res);
+  });
+}
+
 async function updateEnvSettings(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -375,6 +397,7 @@ export const ProjectController = {
   updateDefaultSlotEnvSettings,
   updateSkill,
   publishLuis,
+  exportProject,
   saveProjectAs,
   createProject,
   getAllProjects,

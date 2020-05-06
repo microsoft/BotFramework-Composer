@@ -15,10 +15,10 @@ import { LoopIndicator } from '../components/decorations/LoopIndicator';
 import { StepGroup } from '../components/groups';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum ForeachNodes {
   Foreach = 'foreachNode',
@@ -67,6 +67,9 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
   const { foreachNode, loopActionsNode, loopBeginNode, loopEndNode } = nodeMap;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <SVGContainer width={boundary.width} height={boundary.height}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
           <ElementMeasurer
@@ -97,7 +100,6 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
             <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />
           </OffsetContainer>
         ))}
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
     </div>
   );
 };

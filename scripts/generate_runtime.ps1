@@ -2,7 +2,7 @@ Param(
     [string] $destinationFolder,
     [string] $luisAuthroingKey,
     [SecureString] $appPassword,
-    [string] $projFolder = $(Join-Path $(Get-Location) BotProject CSharp)
+    [string] $projFolder = $(Join-Path $(Get-Location) "runtime/dotnet")
 )
 
 $destinationFolder = $(Join-Path $destinationFolder BotRuntime)

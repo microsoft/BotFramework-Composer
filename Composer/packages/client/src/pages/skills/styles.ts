@@ -4,6 +4,12 @@
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { css } from '@emotion/core';
 
+export const ContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
   height: 60px;
@@ -34,7 +40,6 @@ export const ContentStyle = css`
 export const TableView = css`
   flex: 4;
   margin: 20px;
-  height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
   fontsize: 16px;
@@ -60,14 +65,36 @@ export const ChoiceGroupAlignHorizontal = css`
   }
 `;
 
+export const FormModalTitle = css`
+  padding: 0 24px;
+`;
+
+export const FormModalBody = css`
+  padding: 24px;
+`;
+
 export const FormFieldManifestUrl = css`
   width: 40rem;
+`;
+
+export const FormFieldEditName = css`
+  width: 20rem;
 `;
 
 export const FormFieldAlignHorizontal = css`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+`;
+
+export const FormFieldAlignHorizontalBotSettings = css`
+  max-width: 1500px;
+  margin-top: 20px;
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding-bottom: 15px;
 `;
 
 export const FormFieldName = css`
@@ -90,4 +117,15 @@ export const ActionButton = css`
 
 export const MarginLeftSmall = css`
   margin-left: ${FontSizes.small};
+`;
+
+export const ManifestModalHeaderStyle = css`
+  margin: 14px 0 0 16px;
+  font-size: 20px;
+  font-weight: bolder;
+  align-items: left;
+`;
+
+export const ManifestModalBodyStyle = css`
+  margin: 15px 15px 15px 15px;
 `;

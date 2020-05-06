@@ -4,6 +4,8 @@
 import merge from 'lodash/merge';
 import find from 'lodash/find';
 import { importResolverGenerator, ResolverResource } from '@bfc/shared';
+import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import { BotProject } from '../models/bot/botProject';
 import { LocationRef } from '../models/bot/interface';
@@ -12,7 +14,6 @@ import log from '../logger';
 
 import StorageService from './storage';
 import { Path } from './../utility/path';
-import { UserIdentity } from './pluginLoader';
 
 const MAX_RECENT_BOTS = 7;
 
@@ -35,7 +36,7 @@ export class BotProjectService {
 
   public static lgImportResolver(source: string, id: string, projectId: string): ResolverResource {
     BotProjectService.initialize();
-    const project = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
+    const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');
     const resource = project.files.reduce((result: ResolverResource[], file) => {
       const { name, content } = file;
@@ -50,7 +51,7 @@ export class BotProjectService {
 
   public static luImportResolver(source: string, id: string, projectId: string): ResolverResource {
     BotProjectService.initialize();
-    const project = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
+    const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');
     const resource = project.files.reduce((result: ResolverResource[], file) => {
       const { name, content } = file;
@@ -88,9 +89,13 @@ export class BotProjectService {
       'turn.repeatedIds',
       'turn.activityProcessed',
     ];
+    const projectVariables = BotProjectService.getIndexedProjectById(projectId)
+      ?.files.filter(file => file.name.endsWith('.dialog'))
+      .map(({ content }) => extractMemoryPaths(content));
+
     const userDefined: string[] =
-      BotProjectService.currentBotProjects[projectId]?.dialogs.reduce((result: string[], dialog) => {
-        result = [...dialog.userDefinedVariables, ...result];
+      projectVariables?.reduce((result: string[], variables) => {
+        result = [...variables, ...result];
         return result;
       }, []) || [];
     return [...defaultProperties, ...userDefined];
@@ -159,6 +164,16 @@ export class BotProjectService {
     return projectId.toString();
   };
 
+  // clean project registry based on path to avoid reuseing the same id
+  public static cleanProject = async (location: LocationRef): Promise<void> => {
+    for (const key in BotProjectService.projectLocationMap) {
+      if (BotProjectService.projectLocationMap[key] === location.path) {
+        delete BotProjectService.projectLocationMap[key];
+      }
+    }
+    Store.set('projectLocationMap', BotProjectService.projectLocationMap);
+  };
+
   public static generateProjectId = async (path: string): Promise<string> => {
     const projectId = (Math.random() * 100000).toString();
     BotProjectService.projectLocationMap[projectId] = path;
@@ -170,8 +185,17 @@ export class BotProjectService {
     Store.set('projectLocationMap', BotProjectService.projectLocationMap);
   };
 
-  public static getProjectById = async (projectId: string, user?: UserIdentity) => {
+  public static getIndexedProjectById(projectId): BotProject | undefined {
+    // use indexed project
+    const indexedCurrentProject = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
+    if (indexedCurrentProject) return indexedCurrentProject;
+  }
+
+  public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
+
+    const cachedProject = BotProjectService.getIndexedProjectById(projectId);
+    if (cachedProject) return cachedProject;
 
     if (!BotProjectService.projectLocationMap?.[projectId]) {
       throw new Error('project not found in cache');

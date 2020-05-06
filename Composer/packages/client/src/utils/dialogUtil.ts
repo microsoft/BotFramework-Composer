@@ -1,17 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogFactory } from '@bfc/shared';
+import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogFactory, ITrigger } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { ExpressionEngine } from 'adaptive-expressions';
+import { Expression } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
-
-const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
   [dialogId: string]: any;
@@ -130,7 +128,12 @@ export function createSelectedPath(selected: number) {
   return `triggers[${selected}]`;
 }
 
-export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
+export function deleteTrigger(
+  dialogs: DialogInfo[],
+  dialogId: string,
+  index: number,
+  callbackOnDeletedTrigger?: (trigger: ITrigger) => any
+) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
   const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === regexRecognizerKey;
@@ -139,7 +142,8 @@ export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: nu
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
   }
   const triggers = get(dialogCopy, 'content.triggers');
-  triggers.splice(index, 1);
+  const removedTriggers = triggers.splice(index, 1);
+  callbackOnDeletedTrigger && callbackOnDeletedTrigger(removedTriggers[0]);
   return dialogCopy.content;
 }
 
@@ -272,8 +276,7 @@ export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
 }
 
 export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
-  const dialogsMapClone = cloneDeep(dialogsMap);
-  const dialog = dialogsMapClone[dialogId];
+  const dialog = cloneDeep(dialogsMap[dialogId]);
 
   if (!dataPath) {
     return data;
@@ -331,7 +334,7 @@ export function sanitizeDialogData(dialogData: any) {
 
 export function isExpression(str: string): boolean {
   try {
-    ExpressionParser.parse(str);
+    Expression.parse(str);
   } catch (error) {
     return false;
   }

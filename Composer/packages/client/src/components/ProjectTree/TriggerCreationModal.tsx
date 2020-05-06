@@ -13,9 +13,10 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
+import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import get from 'lodash/get';
 import { DialogInfo } from '@bfc/shared';
-import { LuEditor } from '@bfc/code-editor';
+import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 
 import {
   generateNewDialog,
@@ -261,20 +262,22 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               data-testid={'RegExDropDown'}
             />
           )}
-          {showTriggerPhrase && <Label>{formatMessage('Trigger phrases')}</Label>}
           {showTriggerPhrase && (
-            <LuEditor
-              onChange={onTriggerPhrasesChange}
-              value={formData.triggerPhrases}
-              errorMessage={formData.errors.triggerPhrases}
-              hidePlaceholder={true}
-              luOption={{
-                projectId,
-                fileId: dialogId,
-                sectionId: formData.intent || 'newSection',
-              }}
-              height={150}
-            />
+            <React.Fragment>
+              <Label>{formatMessage('Trigger phrases')}</Label>
+              <LuEditor
+                onChange={onTriggerPhrasesChange}
+                value={formData.triggerPhrases}
+                errorMessage={formData.errors.triggerPhrases}
+                luOption={{
+                  projectId,
+                  fileId: dialogId,
+                  sectionId: formData.intent || PlaceHolderSectionName,
+                }}
+                height={225}
+                placeholder={inlineModePlaceholder}
+              />
+            </React.Fragment>
           )}
         </Stack>
       </div>
@@ -285,3 +288,5 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     </Dialog>
   );
 };
+
+export default TriggerCreationModal;

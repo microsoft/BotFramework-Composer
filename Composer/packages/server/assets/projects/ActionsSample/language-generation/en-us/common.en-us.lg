@@ -1,4 +1,4 @@
-# help
+# WelcomeUser
 -```I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.
 01 - Actions
 02 - EndTurn
@@ -14,5 +14,5 @@
 12 - EmitEvent
 13 - QnAMaker```
 
-# bfdactivity-839941
+# SendActivity_839941
 -Hello ${user.name}, nice to meet you!

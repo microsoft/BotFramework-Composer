@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { ExpressionEngine, ReturnType } from 'adaptive-expressions';
+import { Expression, ReturnType } from 'adaptive-expressions';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
 
@@ -10,8 +10,6 @@ export const ExpressionType = {
   boolean: 'boolean',
   string: 'string',
 };
-
-const ExpressionParser = new ExpressionEngine();
 
 const isExpression = (value: string | boolean | number, types: string[]): boolean => {
   //StringExpression always assumes string interpolation unless prefixed with =, producing a string
@@ -29,24 +27,26 @@ const checkReturnType = (returnType: ReturnType, types: string[]): string => {
 
 export const checkExpression = (exp: string | boolean | number, required: boolean, types: string[]): string => {
   let message = '';
-  if (!exp && required) {
-    message = formatMessage(`is missing or empty`);
-  } else {
-    try {
-      let returnType: ReturnType;
-      if (typeof exp === 'boolean') {
-        returnType = ReturnType.Boolean;
-      } else if (typeof exp === 'number') {
-        returnType = ReturnType.Number;
-      } else {
-        returnType = ExpressionParser.parse(exp).returnType;
+  let returnType: ReturnType = ReturnType.Object;
+  switch (typeof exp) {
+    case 'boolean': {
+      returnType = ReturnType.Boolean;
+      break;
+    }
+    case 'number': {
+      returnType = ReturnType.Number;
+      break;
+    }
+    default: {
+      if (!exp && required) message = formatMessage(`is missing or empty`);
+      try {
+        returnType = Expression.parse(exp).returnType;
+      } catch (error) {
+        message = `${formatMessage('must be an expression:')} ${error})`;
       }
-      message = checkReturnType(returnType, types);
-    } catch (error) {
-      message = `${formatMessage('must be an expression:')} ${error})`;
     }
   }
-
+  if (!message) message = checkReturnType(returnType, types);
   return message;
 };
 

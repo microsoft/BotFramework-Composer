@@ -3,24 +3,24 @@
 
 import { copySendActivity } from '../../src/copyUtils/copySendActivity';
 import { ExternalApi } from '../../src/copyUtils/ExternalApi';
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('copySendActivity', () => {
   const externalApiWithLgCopy: ExternalApi = {
     ...externalApi,
-    transformLgField: (id, data, fieldName, fieldValue) => Promise.resolve(fieldValue + '(copy)'),
+    copyLgField: (fromId, fromData, toId, toData, fieldName) => Promise.resolve(fromData[fieldName] + '(copy)'),
   };
 
   it('can copy SendActivity', async () => {
     const sendActivity = {
       $kind: 'Microsoft.SendActivity',
-      activity: '[bfdactivity-1234]',
+      activity: '[SendActivity_1234]',
     };
 
     expect(await copySendActivity(sendActivity, externalApiWithLgCopy)).toEqual({
       $kind: 'Microsoft.SendActivity',
       $designer: { id: '5678' },
-      activity: '[bfdactivity-1234](copy)',
+      activity: '[SendActivity_1234](copy)',
     });
   });
 });

@@ -1,7 +1,7 @@
 [import](common.lg)
 
-# bfdactivity-640616
--${help()}
+# SendActivity_640616
+-${WelcomeUser()}
 
-# bfdactivity-640617
--${help()}
+# SendActivity_640617
+-${WelcomeUser()}

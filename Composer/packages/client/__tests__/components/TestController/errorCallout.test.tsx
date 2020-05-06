@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, getByText } from 'react-testing-library';
+import { render, fireEvent, getByText } from '@bfc/test-utils';
 
 import { ErrorCallout } from '../../../src/components/TestController/errorCallout';
 
@@ -21,7 +21,7 @@ describe('<ErrorCallout />', () => {
       />
     );
 
-    const container = document.querySelector('[role="alertdialog"]');
+    const container = document.querySelector('[ data-testid="errorCallout"]');
     expect(container).toHaveTextContent('title test');
 
     const tryButton = getByText(container as HTMLElement, 'Try again');

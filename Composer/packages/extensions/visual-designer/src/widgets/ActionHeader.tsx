@@ -5,10 +5,10 @@
 import { jsx, css } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
 import { WidgetComponent, WidgetContainerProps } from '@bfc/extension';
-import { StandardFontCSS, TruncatedCSS } from '@bfc/ui-shared';
+import { TruncatedCSS, ColorlessFontCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
-import { ObiColors } from '../constants/ElementColors';
+import { DefaultColors } from '../constants/ElementColors';
 import { NodeMenu } from '../components/menus/NodeMenu';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { Icon } from '../components/decorations/icon';
@@ -21,24 +21,15 @@ export interface ActionHeaderProps extends WidgetContainerProps {
   colors?: {
     theme: string;
     icon: string;
+    color: string;
   };
 }
-
-const DefaultColors = {
-  theme: ObiColors.AzureGray3,
-  icon: ObiColors.AzureGray2,
-};
 
 const container = css`
   cursor: pointer;
   position: relative;
   display: flex;
   align-items: center;
-`;
-
-const headerText = css`
-  ${StandardFontCSS};
-  ${TruncatedCSS};
 `;
 
 export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
@@ -52,6 +43,11 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   colors = DefaultColors,
 }) => {
   const headerContent = disableSDKTitle ? title : generateSDKTitle(data, title);
+
+  const headerText = css`
+    ${ColorlessFontCSS};
+    ${TruncatedCSS};
+  `;
 
   return (
     <div
@@ -89,13 +85,14 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
             ${headerText};
             line-height: 16px;
             transform: translateY(-1px);
+            color: ${colors.color || 'black'};
           `}
           aria-label={headerContent}
         >
           {headerContent}
         </div>
       </div>
-      <div>{menu === 'none' ? null : menu || <NodeMenu id={id} onEvent={onEvent} />}</div>
+      <div>{menu === 'none' ? null : menu || <NodeMenu colors={colors} id={id} onEvent={onEvent} />}</div>
     </div>
   );
 };

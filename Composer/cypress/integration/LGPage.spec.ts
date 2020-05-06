@@ -10,7 +10,7 @@ context('LG Page', () => {
   it('can open language generation page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonBot Responses').click();
     // left nav tree
-    cy.contains('TodoSample.Main');
+    cy.contains('TodoSample');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').as('switchButton');
@@ -29,8 +29,8 @@ context('LG Page', () => {
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.findByTestId('LGEditor').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('__TestTodoSample').click();
     });
   });
 });

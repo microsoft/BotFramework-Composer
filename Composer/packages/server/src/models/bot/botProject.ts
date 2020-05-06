@@ -1,14 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { promisify } from 'util';
 import fs from 'fs';
 
+import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
+import { UserIdentity } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
-import { UserIdentity } from '../../services/pluginLoader';
 import StorageService from '../../services/storage';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
@@ -22,6 +24,7 @@ import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
+const mkDirAsync = promisify(fs.mkdir);
 
 const oauthInput = () => ({
   MicrosoftAppId: process.env.MicrosoftAppId || '',
@@ -43,6 +46,7 @@ const BotStructureTemplate = {
     lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
   },
+  skillManifests: 'manifests/${MANIFESTNAME}.json',
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -80,15 +84,17 @@ export class BotProject {
   }
 
   public init = async () => {
+    // those 2 migrate methods shall be removed after a period of time
     await this._reformProjectStructure();
-
+    try {
+      await this._replaceDashInTemplateName();
+    } catch (_e) {
+      // when re-index opened bot, file write may error
+    }
     this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
     this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
     this.files = await this._getFiles();
-    if (this.settings) {
-      this.luPublisher.setLuisConfig(this.settings.luis);
-    }
   };
 
   public getProject = () => {
@@ -127,7 +133,7 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
-    this.luPublisher.setLuisConfig(config.luis);
+    this.settings = config;
   };
 
   // update skill in settings
@@ -144,6 +150,14 @@ export class BotProject {
     return skills;
   };
 
+  public exportToZip = cb => {
+    try {
+      this.fileStorage.zip(this.dataDir, cb);
+    } catch (e) {
+      console.log('error zipping assets', e);
+    }
+  };
+
   public getSchemas = () => {
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
@@ -151,6 +165,7 @@ export class BotProject {
     const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
 
     if (userSDKSchemaFile !== undefined) {
+      debug('Customized SDK schema found');
       try {
         sdkSchema = JSON.parse(userSDKSchemaFile.content);
       } catch (error) {
@@ -164,9 +179,25 @@ export class BotProject {
       sdk: {
         content: sdkSchema,
       },
+      default: this.defaultSDKSchema,
       diagnostics,
     };
   };
+
+  public async saveSchemaToProject(schemaUrl, pathToSave) {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: schemaUrl,
+        responseType: 'stream',
+      });
+      const pathToSchema = `${pathToSave}/Schemas`;
+      await mkDirAsync(pathToSchema);
+      response.data.pipe(fs.createWriteStream(`${pathToSchema}/sdk.schema`));
+    } catch (ex) {
+      throw new Error('Schema file could not be downloaded. Please check the url to the schema.');
+    }
+  }
 
   public updateBotInfo = async (name: string, description: string) => {
     const mainDialogFile = this.files.find(file => !file.relativePath.includes('/') && file.name.endsWith('.dialog'));
@@ -221,7 +252,7 @@ export class BotProject {
   };
 
   public deleteFile = async (name: string) => {
-    if (Path.resolve(name) === 'Main') {
+    if (Path.basename(name, '.dialog') === this.name) {
       throw new Error(`Main dialog can't be removed`);
     }
 
@@ -242,15 +273,18 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
-  public publishLuis = async (authoringKey: string, fileIds: string[], crossTrainConfig: ICrossTrainConfig) => {
-    this.luPublisher.setAuthoringKey(authoringKey);
-    if (fileIds.length) {
+  public publishLuis = async (authoringKey: string, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
+    if (fileIds.length && this.settings) {
       const map = fileIds.reduce((result, id) => {
         result[id] = true;
         return result;
       }, {});
       const files = this.files.filter(file => map[Path.basename(file.name, '.lu')]);
-      this.luPublisher.setCrossTrainConfig(crossTrainConfig);
+      this.luPublisher.setPublishConfig(
+        { ...this.settings.luis, authoringKey },
+        crossTrainConfig,
+        this.settings.downsampling
+      );
       await this.luPublisher.publish(files);
     }
   };
@@ -301,7 +335,7 @@ export class BotProject {
       try {
         await this.fileStorage.rmDir(folderPath);
       } catch (e) {
-        console.log(e);
+        // pass
       }
     }
   };
@@ -335,6 +369,13 @@ export class BotProject {
         DIALOGNAME,
         LOCALE,
       });
+    } else if (fileType === '.json') {
+      dir = templateInterpolate(
+        Path.dirname(Path.join(BotStructureTemplate.folder, BotStructureTemplate.skillManifests)),
+        {
+          MANIFESTNAME: id,
+        }
+      );
     }
     return dir;
   };
@@ -371,18 +412,18 @@ export class BotProject {
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
+
     const absolutePath = `${this.dir}/${relativePath}`;
 
     // only write if the file has actually changed
     if (this.files[index].content !== content) {
+      this.files[index].content = content;
       await this.fileStorage.writeFile(absolutePath, content);
     }
 
     // TODO: we should get the lastModified from the writeFile operation
     // instead of calling stat again which could be expensive
     const stats = await this.fileStorage.stat(absolutePath);
-
-    this.files[index].content = content;
 
     return stats.lastModified;
   };
@@ -394,10 +435,10 @@ export class BotProject {
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
+    this.files.splice(index, 1);
 
     const absolutePath = `${this.dir}/${relativePath}`;
     await this.fileStorage.removeFile(absolutePath);
-    this.files.splice(index, 1);
   };
 
   // ensure dir exist, dir is a absolute dir path
@@ -417,12 +458,12 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
       const root = this.dataDir;
-      const paths = await this.fileStorage.glob([pattern, '!(generated/**)'], root);
+      const paths = await this.fileStorage.glob([pattern, '!(generated/**)', '!(runtime/**)'], root);
 
       for (const filePath of paths.sort()) {
         const realFilePath: string = Path.join(root, filePath);
@@ -561,18 +602,145 @@ export class BotProject {
     }
   };
 
+  private _replaceDashInTemplateName = async () => {
+    const files: { [key: string]: string }[] = [];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.json'];
+    const replacers = [
+      (line: string) => {
+        return line.replace('bfdactivity-', 'SendActivity_');
+      },
+      (line: string) => {
+        return line.replace('bfdprompt-', 'TextInput_Prompt_');
+      },
+      (line: string) => {
+        return line.replace('bfdinvalidPrompt-', 'TextInput_InvalidPrompt_');
+      },
+      (line: string) => {
+        return line.replace('bfdunrecognizedPrompt-', 'TextInput_UnrecognizedPrompt_');
+      },
+      (line: string) => {
+        return line.replace('bfddefaultValueResponse-', 'TextInput_DefaultValueResponse_');
+      },
+    ];
+
+    for (const pattern of patterns) {
+      const root = this.dataDir;
+      const paths = await this.fileStorage.glob(pattern, root);
+      for (const filePath of paths.sort()) {
+        let fileChanged = false;
+        const realFilePath: string = Path.join(root, filePath);
+        if ((await this.fileStorage.stat(realFilePath)).isFile) {
+          let content: string = await this.fileStorage.readFile(realFilePath);
+          const fileType = Path.extname(filePath);
+          const newContentLines: string[] = [];
+          if (fileType === '.lg') {
+            const templateNamePattern = /^\s*#\s*.*/;
+            const templateBodyLinePattern = /^\s*-.*/;
+            const lines = content.split('\n');
+            for (const line of lines) {
+              // lg name line
+              if (templateNamePattern.test(line) && line.includes('-')) {
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newLine = newLine.replace('-', '_');
+                newContentLines.push(newLine);
+                fileChanged = true;
+
+                // lg body line
+              } else if (templateBodyLinePattern.test(line) && (line.includes('@{') || line.includes('${'))) {
+                let newContentLine = line;
+                replacers.map(replacer => {
+                  newContentLine = replacer(newContentLine);
+                });
+                newContentLines.push(newContentLine);
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          if (fileType === '.dialog') {
+            const lines = content.split('\n');
+            const callingTempaltePattern = /^\s*"[\w]+":\s*"\$\{.*\}"/;
+            for (const line of lines) {
+              if (callingTempaltePattern.test(line) && line.includes('-')) {
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newContentLines.push(newLine);
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          // card
+          if (fileType === '.json' && Path.basename(filePath) !== 'appsettings.json') {
+            const lines = content.split('\n');
+            const activityInJson = /^\s*"activity":\s*"\[.*\]"/;
+            for (const line of lines) {
+              if (activityInJson.test(line) && line.includes('-')) {
+                let newLine = line;
+                replacers.map(replacer => {
+                  newLine = replacer(newLine);
+                });
+                newLine = newLine.replace('-', '_');
+
+                newContentLines.push(newLine);
+                fileChanged = true;
+              } else {
+                newContentLines.push(line);
+              }
+            }
+
+            content = newContentLines.join('\n');
+          }
+
+          if (fileChanged) {
+            files.push({ realFilePath, content });
+          }
+        }
+      }
+    }
+
+    for (const file of files) {
+      const { realFilePath, content } = file;
+      await this.fileStorage.removeFile(realFilePath);
+
+      try {
+        const dirPath = Path.dirname(realFilePath);
+        await this.fileStorage.rmDir(dirPath);
+      } catch (_error) {
+        // pass , dir may not empty
+      }
+
+      await this.ensureDirExists(Path.dirname(realFilePath));
+      await this.fileStorage.writeFile(realFilePath, content);
+    }
+  };
+
   private _getSchemas = async (): Promise<FileInfo[]> => {
     if (!(await this.exists())) {
       throw new Error(`${this.dir} is not a valid path`);
     }
 
-    const schemasDir = Path.join(this.dir, 'Schemas');
+    const schemasDir = Path.join(this.dir, 'schemas');
 
     if (!(await this.fileStorage.exists(schemasDir))) {
       debug('No schemas directory found.');
       return [];
     }
 
+    debug('Schemas directory found.');
     const schemas: FileInfo[] = [];
     const paths = await this.fileStorage.glob('*.schema', schemasDir);
 

@@ -2,10 +2,10 @@
 // Licensed under the MIT License.
 
 import { Request, Response } from 'express';
-import { ProjectController } from '@src/controllers/project';
 import rimraf from 'rimraf';
-import { BotProjectService } from '@src/services/project';
 
+import { BotProjectService } from '../../src/services/project';
+import { ProjectController } from '../../src/controllers/project';
 import { Path } from '../../src/utility/path';
 
 let mockRes: Response;
@@ -159,7 +159,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'test.dialog', content: '' },
+      body: { name: 'test2.dialog', content: '' },
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -167,7 +167,7 @@ describe('dialog operation', () => {
 
   it('should remove dialog', async () => {
     const mockReq = {
-      params: { name: 'test.dialog', projectId },
+      params: { name: 'test2.dialog', projectId },
       query: {},
       body: {},
     } as Request;
@@ -263,6 +263,10 @@ describe('setting operation', () => {
       knowledgebaseid: '',
       endpointkey: '',
       hostname: '',
+    },
+    downsampling: {
+      maxImbalanceRatio: 10,
+      maxUtteranceAllowed: 15000,
     },
   };
   let projectId = '';

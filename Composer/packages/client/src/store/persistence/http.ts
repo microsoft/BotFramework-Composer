@@ -20,5 +20,5 @@ export const updateFile = async (projectId: string, name: string, content: strin
     name,
     content,
   });
-  return response;
+  return response.data;
 };

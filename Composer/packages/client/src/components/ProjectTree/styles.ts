@@ -8,6 +8,7 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
+import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 export const groupListStyle: Partial<IGroupedListStyles> = {
   root: {
@@ -16,12 +17,11 @@ export const groupListStyle: Partial<IGroupedListStyles> = {
   },
 };
 
-export const searchBox = {
+export const searchBox: ISearchBoxStyles = {
   root: {
-    outline: 'none',
-    border: 'none',
     borderBottom: '1px solid #edebe9',
     height: '45px',
+    borderRadius: '0px',
   },
 };
 export const root = css`
@@ -70,26 +70,44 @@ export const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
 `;
 
 export const itemText = (depth: number) => css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+    z-index: 1;
+  }
   padding-left: ${depth * 16}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   text-align: left;
   cursor: pointer;
+  width: 100%;
+
+  label: ProjectTreeItemContainer;
 `;
 
-export const moreButton: IButtonStyles = {
-  root: {
-    padding: '0 4px',
-    alignSelf: 'stretch',
-    height: 'auto',
-    visibility: 'hidden',
-    width: '16px',
-  },
-  menuIcon: {
-    fontSize: '14px',
-    color: '#000',
-  },
+export const content = css`
+  outline: none;
+  display: flex;
+  align-items: center;
+
+  label: ProjectTreeItem;
+`;
+
+export const moreButton = (isActive: boolean): IButtonStyles => {
+  return {
+    root: {
+      padding: '0 4px',
+      alignSelf: 'stretch',
+      visibility: isActive ? 'visible' : 'hidden',
+      height: 'auto',
+      width: '16px',
+    },
+    menuIcon: {
+      fontSize: '14px',
+      color: '#000',
+    },
+  };
 };
 
 export const moreMenu: Partial<ICalloutContentStyles> = {
@@ -110,15 +128,12 @@ export const overflowSet = css`
   width: 100%;
   height: 100%;
   padding-left: 12px;
+  padding-right: 12px;
   box-sizing: border-box;
   line-height: 36px;
   justify-content: space-between;
-`;
-
-export const addButton = (depth: number) => css`
-  margin-left: ${depth * 16}px;
-  font-size: 12px;
-  color: #0078d4;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const styles = {

@@ -9,10 +9,10 @@ import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
@@ -21,7 +21,7 @@ import { LgTemplate } from '@bfc/shared';
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
-import { actionButton, formCell, iconClass } from '../language-understanding/styles';
+import { actionButton, formCell, content } from '../language-understanding/styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -67,6 +67,7 @@ const TableView: React.FC<TableViewProps> = props => {
       },
     };
     createLgTemplate(payload);
+    setFocusedIndex(templates.length);
   }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
@@ -112,6 +113,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'delete',
           name: formatMessage('Delete'),
           onClick: () => {
+            actions.setMessage('item deleted');
             onRemoveTemplate(index);
           },
         },
@@ -119,6 +121,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'copy',
           name: formatMessage('Make a copy'),
           onClick: () => {
+            actions.setMessage('item copied');
             onCopyTemplate(index);
           },
         },
@@ -140,7 +143,13 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         data: 'string',
         onRender: item => {
-          return <div css={formCell}>#{item.name}</div>;
+          return (
+            <div data-is-focusable={true} css={formCell}>
+              <div tabIndex={-1} css={content} aria-label={formatMessage(`Name is {name}`, { name: item.name })}>
+                #{item.name}
+              </div>
+            </div>
+          );
         },
       },
       {
@@ -152,7 +161,17 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         isPadded: true,
         onRender: item => {
-          return <div css={formCell}>{item.body}</div>;
+          return (
+            <div data-is-focusable={true} css={formCell}>
+              <div
+                tabIndex={-1}
+                css={content}
+                aria-label={formatMessage(`Response is {response}`, { response: item.body })}
+              >
+                {item.body}
+              </div>
+            </div>
+          );
         },
       },
       {
@@ -191,11 +210,18 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: item => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
-            <div css={formCell}>
-              <FontIcon iconName="Accept" aria-label={formatMessage('Used')} className={iconClass} />
-            </div>
+            <Icon
+              iconName={'Accept'}
+              ariaLabel={formatMessage('Used') + ';'}
+              styles={{
+                root: {
+                  fontSize: '16px',
+                  paddingTop: '8px',
+                },
+              }}
+            />
           ) : (
-            <div aria-label={formatMessage('Unused')} />
+            <div data-is-focusable={true} aria-label={formatMessage('Unused') + ';'} />
           );
         },
       };
@@ -224,7 +250,14 @@ const TableView: React.FC<TableViewProps> = props => {
 
     return (
       <div data-testid="tableFooter">
-        <ActionButton css={actionButton} iconProps={{ iconName: 'CirclePlus' }} onClick={() => onCreateNewTemplate()}>
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'CirclePlus' }}
+          onClick={() => {
+            onCreateNewTemplate();
+            actions.setMessage('item added');
+          }}
+        >
           {formatMessage('New template')}
         </ActionButton>
       </div>

@@ -58,7 +58,7 @@ function findAllTypes(schema: any): string[] {
     types = schema.oneOf?.filter(item => !!ExpressionType[item.type]).map(item => item.type);
   }
 
-  return types;
+  return Array.from(new Set<string>(types));
 }
 
 export const IsExpression: CheckerFunc = (path, value, type, schema) => {
