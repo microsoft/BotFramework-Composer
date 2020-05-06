@@ -37,20 +37,14 @@ namespace Microsoft.BotFramework.Composer.Functions
 
             config
                 .SetBasePath(rootDirectory)
-                .AddJsonFile("ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .UseLuisConfigAdapter()
                 .UseLuisSettings();
 
             config.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
-            if (Debugger.IsAttached)
+
+            if (!Debugger.IsAttached)
             {
-                // Local Debug
-                //config.AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true);
-            }
-            else
-            {
-                //Azure Deploy
-                //config.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
                 config.AddUserSecrets<Startup>();
             }
 
@@ -70,6 +64,8 @@ namespace Microsoft.BotFramework.Composer.Functions
             rootConfiguration.Bind(settings);
 
             var services = builder.Services;
+
+            services.AddSingleton<IConfiguration>(rootConfiguration);
 
             services.AddLogging();
 
@@ -119,14 +115,13 @@ namespace Microsoft.BotFramework.Composer.Functions
             services.AddSingleton(conversationState);
 
             // Resource explorer to track declarative assets
-            var resourceExplorer = new ResourceExplorer().AddFolder(Path.Combine(rootDirectory, "ComposerDialogs"));
+            var resourceExplorer = new ResourceExplorer().AddFolder(Path.Combine(rootDirectory, settings.Bot ?? "."));
             services.AddSingleton(resourceExplorer);
 
             // Adapter
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>(s =>
             {
                 // Retrieve required dependencies
-                //IConfiguration configuration = s.GetService<IConfiguration>();
                 IStorage storage = s.GetService<IStorage>();
                 UserState userState = s.GetService<UserState>();
                 ConversationState conversationState = s.GetService<ConversationState>();

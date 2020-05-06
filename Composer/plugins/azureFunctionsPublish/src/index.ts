@@ -14,7 +14,7 @@ import schema from './schema';
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
-const DEFAULT_RUNTIME = 'azurewebapp';
+const DEFAULT_RUNTIME = 'azurefunctions';
 
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
@@ -280,7 +280,8 @@ class AzurePublisher {
           this.logMessages.push(JSON.stringify(msg, null, 2));
         },
         accessToken: accessToken,
-        projPath: this.getProjectFolder(resourcekey, 'azurewebapp'),
+        projPath: this.getProjectFolder(resourcekey, DEFAULT_RUNTIME),
+        dotnetProjectPath: path.join(this.getProjectFolder(resourcekey, DEFAULT_RUNTIME), 'Microsoft.BotFramework.Composer.Functions.csproj')
       });
 
       this.logMessages = ['Publish starting...'];
