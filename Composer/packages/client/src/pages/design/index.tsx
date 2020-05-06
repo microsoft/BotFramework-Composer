@@ -10,7 +10,7 @@ import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
 
@@ -85,7 +85,7 @@ const getTabFromFragment = () => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -303,14 +303,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           data-testid="Breadcrumb"
           onRenderItem={onRenderBreadcrumbItem}
         />
-        <Link
-          style={{ position: 'absolute', right: 0, marginTop: '22px', marginRight: '10px' }}
-          onClick={() => {
-            setDialogJsonVisibility(current => !current);
-          }}
-        >
-          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-        </Link>
+        <div style={{ padding: '10px' }}>
+          <ActionButton
+            onClick={() => {
+              setDialogJsonVisibility(current => !current);
+            }}
+          >
+            {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+          </ActionButton>
+        </div>
       </div>
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
@@ -424,7 +425,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />
                 )}
               </div>
-              <PropertyEditor />
+              <PropertyEditor key={focusPath} />
             </div>
           </Conversation>
         </div>

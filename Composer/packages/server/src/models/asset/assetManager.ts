@@ -22,6 +22,14 @@ interface TemplateData {
   };
 }
 
+interface ProjectTemplateCollection {
+  [key: string]: {
+    name: string;
+    description: string;
+    path: string;
+  };
+}
+
 const templates: TemplateData = {
   EchoBot: {
     name: 'Echo Bot',
@@ -78,16 +86,17 @@ const templates: TemplateData = {
   },
 };
 
-const runtimes: TemplateData = {
-  CSharp: {
-    name: 'CSharp Runtime',
-    description: 'A Bot Framework runtime using the CSharp/dotnet version of the SDK',
+const runtimes: ProjectTemplateCollection = {
+  dotnet: {
+    name: 'dotnet webapp runtime',
+    description: 'A Bot Framework runtime using the dotnet version of the SDK, hosted in azure web app',
+    path: 'dotnet',
   },
 };
 
 // set a default runtime template.
 // when we have multiple runtimes this will be a parameter.
-const DEFAULT_RUNTIME = 'CSharp';
+const DEFAULT_RUNTIME = 'dotnet';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -101,7 +110,7 @@ export class AssetManager {
     this.runtimesPath = runtimesPath;
     this.templateStorage = new LocalDiskStorage();
 
-    // initialize the list of project tempaltes
+    // initialize the list of project templates
     this.getProjectTemplates();
 
     // initialize the list of runtimes.
@@ -145,12 +154,15 @@ export class AssetManager {
     const output: ProjectTemplate[] = [];
 
     if (await this.templateStorage.exists(path)) {
-      const folders = await this.templateStorage.readDir(path);
       this.runtimeTemplates = [];
-      for (const name of folders) {
-        const absPath = Path.join(path, name);
+      for (const runtimeKey in runtimes) {
+        const absPath = Path.join(path, runtimes[runtimeKey].path);
         if ((await this.templateStorage.stat(absPath)).isDir) {
-          const base = { id: name, name: runtimes[name].name, description: runtimes[name].description };
+          const base = {
+            id: runtimeKey,
+            name: runtimes[runtimeKey].name,
+            description: runtimes[runtimeKey].description,
+          };
           this.runtimeTemplates.push({ ...base, path: absPath });
           output.push(base);
         }

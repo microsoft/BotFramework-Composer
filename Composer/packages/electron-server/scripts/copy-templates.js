@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const { resolve } = require('path');
 const electronBuildConfig = require('../electron-builder-config.json');
 
-const source = resolve(__dirname, '../../../../BotProject');
+const source = resolve(__dirname, '../../../../runtime');
 
 let destination;
 switch (process.platform) {

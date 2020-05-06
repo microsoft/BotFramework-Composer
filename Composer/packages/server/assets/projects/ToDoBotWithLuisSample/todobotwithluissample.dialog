@@ -1,12 +1,10 @@
 {
   "$kind": "Microsoft.AdaptiveDialog",
   "$designer": {
-    "$designer": {
-      "name": "ToDoBotWithLuisSample-17",
-      "id": "232009"
-    }
+    "name": "ToDoBotWithLuisSample",
+    "id": "232009"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "recognizer": "todobotwithluissample.lu",
   "triggers": [

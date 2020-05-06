@@ -45,7 +45,7 @@ export interface UIOptions {
     get: (value: any) => any;
     set: (value: any) => any;
   };
-  /** subtitle rendered in form title */
+  /** subtitle rendered in form title, defaults to schema.$kind */
   subtitle?: UIOptionValue<string>;
 }
 
