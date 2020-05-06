@@ -1,7 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogFactory, ITrigger } from '@bfc/shared';
+import {
+  ConceptLabels,
+  DialogGroup,
+  SDKKinds,
+  dialogGroups,
+  DialogInfo,
+  DialogFactory,
+  ITriggerCondition,
+} from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
@@ -132,7 +140,7 @@ export function deleteTrigger(
   dialogs: DialogInfo[],
   dialogId: string,
   index: number,
-  callbackOnDeletedTrigger?: (trigger: ITrigger) => any
+  callbackOnDeletedTrigger?: (trigger: ITriggerCondition) => any
 ) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
