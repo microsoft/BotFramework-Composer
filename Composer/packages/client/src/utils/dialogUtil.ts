@@ -42,7 +42,7 @@ export const intentTypeKey: string = SDKKinds.OnIntent;
 export const activityTypeKey: string = SDKKinds.OnActivity;
 export const messageTypeKey: string = SDKKinds.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
-export const customerTypeKey: string = SDKKinds.OnCustomEvent;
+export const customEventTypeKey: string = SDKKinds.OnCustomEvent;
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
   const insertAt = typeof position === 'undefined' ? current.length : position;

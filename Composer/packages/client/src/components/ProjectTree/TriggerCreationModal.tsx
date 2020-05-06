@@ -27,7 +27,7 @@ import {
   intentTypeKey,
   activityTypeKey,
   messageTypeKey,
-  customerTypeKey,
+  customEventTypeKey,
   getEventTypes,
   getActivityTypes,
   getMessageTypes,
@@ -146,7 +146,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   };
 
   const onSelectTriggerType = (e, option) => {
-    if (option.key === customerTypeKey) {
+    if (option.key === customEventTypeKey) {
       setFormData({ ...initialFormData, $kind: option.key, specifiedType: eventTypeKey });
     } else {
       setFormData({ ...initialFormData, $kind: option.key });
