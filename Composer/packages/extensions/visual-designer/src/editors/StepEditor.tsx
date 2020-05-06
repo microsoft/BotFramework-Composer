@@ -3,7 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useShellApi } from '@bfc/extension';
 
 import { StepGroup } from '../components/groups';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
@@ -20,21 +21,24 @@ import { ObiColors } from '../constants/ElementColors';
 const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);
 
-export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX.Element => {
+export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
+  const { shellApi } = useShellApi();
+  const { addCoachMarkRef } = shellApi;
+
+  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef({ action }), []);
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
     <EdgeMenu
+      forwardedRef={addRef}
       onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
       data-testid="StepGroupAdd"
       id={`${id}[0]`}
-      addCoachMarkRef={addCoachMarkRef}
     />
   ) : (
     <StepGroup
       id={id}
-      addCoachMarkRef={addCoachMarkRef}
       data={data}
       onEvent={onEvent}
       onResize={boundary => {

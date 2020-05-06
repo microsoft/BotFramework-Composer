@@ -3,7 +3,8 @@
   "license": "MIT",
   "private": true,
   "resolutions": {
-    "@types/react": "16.9.23"
+    "@types/react": "16.9.23",
+    "mkdirp": "^0.5.2"
   },
   "engines": {
     "node": ">=12"
@@ -33,7 +34,10 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
-    "build:plugins": "concurrently \"cd plugins/localPublish && yarn install && yarn build\" \"cd plugins/azurePublish && yarn install && yarn build\" ",
+    "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish",
+    "build:plugins:localpublish": "cd plugins/localPublish && yarn install && yarn build",
+    "build:plugins:samples": "cd plugins/samples && yarn install && yarn build",
+    "build:plugins:azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "node scripts/update.js && yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
@@ -100,9 +104,6 @@
     "get-port": "^5.1.1",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.0",
-    "mocha": "5.2.0",
-    "mocha-junit-reporter": "^1.22.0",
-    "mocha-multi-reporters": "^1.1.7",
     "prettier": "^1.19.1",
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
