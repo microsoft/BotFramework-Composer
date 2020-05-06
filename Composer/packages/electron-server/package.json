@@ -48,7 +48,7 @@
     "js-yaml": "^3.13.1",
     "mock-fs": "^4.10.1",
     "ncp": "2.0.0",
-    "nodemon": "^1.18.11",
+    "nodemon": "^2.0.3",
     "path": "^0.12.7",
     "rimraf": "^2.6.3",
     "source-map-explorer": "^2.1.0",
