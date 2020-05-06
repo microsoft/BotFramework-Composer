@@ -17,6 +17,7 @@ import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import get from 'lodash/get';
 import { DialogInfo } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
+import { ComboBox, IComboBoxOption, IComboBox } from 'office-ui-fabric-react/lib/ComboBox';
 
 import {
   generateNewDialog,
@@ -26,11 +27,8 @@ import {
   eventTypeKey,
   intentTypeKey,
   activityTypeKey,
-  messageTypeKey,
-  customEventTypeKey,
   getEventTypes,
   getActivityTypes,
-  getMessageTypes,
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
@@ -45,18 +43,14 @@ const validateForm = (
   regExIntents: [{ intent: string; pattern: string }]
 ): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $kind, specifiedType, intent, triggerPhrases, regexEx } = data;
+  const { $kind, event: eventName, intent, triggerPhrases, regexEx } = data;
 
-  if ($kind === eventTypeKey && !specifiedType) {
-    errors.specifiedType = formatMessage('Please select a event type');
+  if ($kind === eventTypeKey && !eventName) {
+    errors.event = formatMessage('Please select a event type');
   }
 
-  if ($kind === activityTypeKey && !specifiedType) {
-    errors.specifiedType = formatMessage('Please select an activity type');
-  }
-
-  if ($kind === messageTypeKey && !specifiedType) {
-    errors.specifiedType = formatMessage('Please select a message type');
+  if ($kind === activityTypeKey && !eventName) {
+    errors.event = formatMessage('Please select an activity type');
   }
 
   if (!$kind) {
@@ -109,13 +103,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const isNone = !get(dialogFile, 'content.recognizer');
   const initialFormData: TriggerFormData = {
     errors: {},
-    $kind: isNone ? '' : intentTypeKey,
-    specifiedType: '',
+    $kind: '',
+    event: '',
     intent: '',
     triggerPhrases: '',
     regexEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
+  const [selectedType, setSelectedType] = useState(isNone ? '' : intentTypeKey);
 
   const onClickSubmitButton = e => {
     e.preventDefault();
@@ -145,16 +140,37 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     onDismiss();
   };
 
+  const eventTypes: IComboBoxOption[] = getEventTypes();
+  const activityTypes: IDropdownOption[] = getActivityTypes();
+  let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
+
   const onSelectTriggerType = (e, option) => {
-    if (option.key === customEventTypeKey) {
-      setFormData({ ...initialFormData, $kind: option.key, specifiedType: eventTypeKey });
-    } else {
-      setFormData({ ...initialFormData, $kind: option.key });
+    setSelectedType(option.key || '');
+    setFormData({ ...initialFormData, $kind: option.key });
+  };
+
+  const handleEventChange = (
+    event: React.FormEvent<IComboBox>,
+    option?: IComboBoxOption,
+    index?: number,
+    value?: string
+  ) => {
+    if (value) {
+      // if the custom event is an actual type, use that instead
+      if (eventTypes.find(o => o.key === value)) {
+        setFormData({ ...formData, $kind: value, event: '' });
+      } else {
+        setFormData({ ...formData, $kind: eventTypeKey, event: value });
+      }
+    } else if (option) {
+      setFormData({ ...formData, $kind: option.key as string, event: '' });
     }
   };
 
-  const onSelectSpecifiedTypeType = (e, option) => {
-    setFormData({ ...formData, specifiedType: option.key });
+  const onSelectSpecifiedType = (_e: any, option?: IDropdownOption) => {
+    if (option) {
+      setFormData({ ...formData, $kind: option.key as string });
+    }
   };
 
   const onNameChange = (e, name) => {
@@ -173,19 +189,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
-  const eventTypes: IDropdownOption[] = getEventTypes();
-  const activityTypes: IDropdownOption[] = getActivityTypes();
-  const messageTypes: IDropdownOption[] = getMessageTypes();
-  let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
   if (isNone) {
     triggerTypeOptions = triggerTypeOptions.filter(t => t.key !== intentTypeKey);
   }
-  const showIntentName = formData.$kind === intentTypeKey;
-  const showRegExDropDown = formData.$kind === intentTypeKey && isRegEx;
-  const showTriggerPhrase = formData.$kind === intentTypeKey && !isRegEx;
-  const showEventDropDown = formData.$kind === eventTypeKey;
-  const showActivityDropDown = formData.$kind === activityTypeKey;
-  const showMessageDropDown = formData.$kind === messageTypeKey;
+  const showIntentName = selectedType === intentTypeKey;
+  const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
+  const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
+  const showEventDropDown = selectedType === eventTypeKey;
+  const showActivityDropDown = selectedType === activityTypeKey;
 
   return (
     <Dialog
@@ -210,17 +221,21 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
             onChange={onSelectTriggerType}
             errorMessage={formData.errors.$kind}
             data-testid={'triggerTypeDropDown'}
-            defaultSelectedKey={formData.$kind}
+            defaultSelectedKey={selectedType}
           />
           {showEventDropDown && (
-            <Dropdown
-              placeholder={formatMessage('Select a event type')}
+            <ComboBox
+              placeholder={formatMessage('Select an event type or enter a custom event name')}
               label={formatMessage('Which event?')}
               options={eventTypes}
               styles={dropdownStyles}
-              onChange={onSelectSpecifiedTypeType}
-              errorMessage={formData.errors.specifiedType}
+              onChange={handleEventChange}
+              errorMessage={formData.errors.event}
               data-testid={'eventTypeDropDown'}
+              allowFreeform
+              useComboBoxAsMenuWidth
+              autoComplete="off"
+              text={formData.event || eventTypes.find(e => e.key === formData.$kind)?.text}
             />
           )}
           {showActivityDropDown && (
@@ -229,20 +244,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               label={formatMessage('Which activity type')}
               options={activityTypes}
               styles={dropdownStyles}
-              onChange={onSelectSpecifiedTypeType}
-              errorMessage={formData.errors.specifiedType}
+              onChange={onSelectSpecifiedType}
+              errorMessage={formData.errors.event}
               data-testid={'activityTypeDropDown'}
-            />
-          )}
-          {showMessageDropDown && (
-            <Dropdown
-              placeholder={formatMessage('Select a message type')}
-              label={formatMessage('Which message type?')}
-              options={messageTypes}
-              styles={dropdownStyles}
-              onChange={onSelectSpecifiedTypeType}
-              errorMessage={formData.errors.specifiedType}
-              data-testid={'messageTypeDropDown'}
             />
           )}
           {showIntentName && (

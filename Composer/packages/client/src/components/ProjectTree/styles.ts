@@ -163,7 +163,7 @@ export const dropdownStyles = {
     width: '400px',
   },
   root: {
-    paddingBottom: '20px',
+    marginBottom: '20px',
   },
 };
 
