@@ -3,6 +3,7 @@
 
 import merge from 'lodash/merge';
 import find from 'lodash/find';
+import flatten from 'lodash/flatten';
 import { importResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/plugin-loader';
@@ -89,15 +90,15 @@ export class BotProjectService {
       'turn.repeatedIds',
       'turn.activityProcessed',
     ];
-    const projectVariables = BotProjectService.getIndexedProjectById(projectId)
-      ?.files.filter(file => file.name.endsWith('.dialog'))
-      .map(({ content }) => extractMemoryPaths(content));
+    const projectVariables =
+      BotProjectService.getIndexedProjectById(projectId)
+        ?.files.filter(file => file.name.endsWith('.dialog'))
+        .map(({ content }) => {
+          const dialogJson = JSON.parse(content);
+          return extractMemoryPaths(dialogJson);
+        }) || [];
 
-    const userDefined: string[] =
-      projectVariables?.reduce((result: string[], variables) => {
-        result = [...variables, ...result];
-        return result;
-      }, []) || [];
+    const userDefined: string[] = flatten(projectVariables);
     return [...defaultProperties, ...userDefined];
   }
 
