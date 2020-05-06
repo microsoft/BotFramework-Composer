@@ -21,6 +21,7 @@ import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
 import { designerCache } from '../store/DesignerCache';
+import { MenuEventTypes } from '../constants/MenuTypes';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -104,7 +105,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Insert:
         trackActionChange(eventData.id);
-        if (eventData.$kind === 'PASTE') {
+        if (eventData.$kind === MenuEventTypes.Paste) {
           handler = e => {
             insertActions(path, data, e.id, e.position, clipboardActions).then(dialog => {
               onChange(dialog);
@@ -314,7 +315,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               dispatchEvent(NodeEventTypes.Insert, {
                 id: arrayPath,
                 position: arrayIndex,
-                $kind: 'PASTE',
+                $kind: MenuEventTypes.Paste,
               });
             }
             break;
