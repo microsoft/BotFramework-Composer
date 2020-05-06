@@ -118,8 +118,10 @@ const LGPage: React.FC<LGPageProps> = props => {
             </div>
           </div>
           <div role="main" css={ContentStyle}>
-            <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
-            <div css={contentEditor} data-testid="LGEditor">
+            <div role="region" aria-label={formatMessage('LG navigation pane')}>
+              <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+            </div>
+            <div css={contentEditor} data-testid="LGEditor" role="region" aria-label={formatMessage('LG editor')}>
               <Suspense fallback={<LoadingSpinner />}>
                 <Router primary={false} component={Fragment}>
                   <CodeEditor path="/edit/*" dialogId={dialogId} />
