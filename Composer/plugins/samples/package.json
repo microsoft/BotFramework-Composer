@@ -12,13 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@bfc/plugin-loader": "file:../../packages/extensions/plugin-loader",
     "path": "^0.12.7",
     "portfinder": "^1.0.25",
     "rimraf": "^3.0.2",
     "uuid": "^7.0.1"
-  },
-  "devDependencies": {
-    "@bfc/plugin-loader": "file:../../packages/extensions/plugin-loader",
-    "@types/node": "^13.13.2"
   }
 }
