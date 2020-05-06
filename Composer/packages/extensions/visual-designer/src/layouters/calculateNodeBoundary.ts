@@ -4,15 +4,14 @@
 import { Boundary } from '../models/Boundary';
 import {
   ElementInterval,
+  BranchIntervalX,
+  BranchIntervalY,
   LoopEdgeMarginLeft,
   BranchIntervalMinX,
   DiamondSize,
   IconBrickSize,
   BoxMargin,
 } from '../constants/ElementSizes';
-
-const BranchIntervalX = ElementInterval.x;
-const BranchIntervalY = ElementInterval.y / 2;
 
 export function calculateSequenceBoundary(
   boundaries: Boundary[],

@@ -8,11 +8,14 @@ import {
   calculateForeachBoundary,
 } from '../../src/layouters/calculateNodeBoundary';
 import { Boundary } from '../../src/models/Boundary';
-import { ElementInterval, LoopEdgeMarginLeft } from '../../src/constants/ElementSizes';
+import {
+  ElementInterval,
+  BranchIntervalX,
+  BranchIntervalY,
+  LoopEdgeMarginLeft,
+} from '../../src/constants/ElementSizes';
 
 const boundary = new Boundary();
-const BranchIntervalX = ElementInterval.x;
-const BranchIntervalY = ElementInterval.y / 2;
 describe('calculateSequenceBoundary', () => {
   let boundaries;
   beforeEach(() => {

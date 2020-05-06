@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ElementInterval, BranchIntervalMinX } from '../constants/ElementSizes';
+import { BranchIntervalX, BranchIntervalY, BranchIntervalMinX } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
 import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
-
-const BranchIntervalX = ElementInterval.x;
-const BranchIntervalY = ElementInterval.y / 2;
 
 /**
  *        [switch]
