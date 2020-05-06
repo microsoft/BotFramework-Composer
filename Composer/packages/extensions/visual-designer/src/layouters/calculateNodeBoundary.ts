@@ -4,15 +4,15 @@
 import { Boundary } from '../models/Boundary';
 import {
   ElementInterval,
+  BranchIntervalX,
+  BranchIntervalY,
   LoopEdgeMarginLeft,
-  BranchIntervalMinX,
   DiamondSize,
   IconBrickSize,
   BoxMargin,
 } from '../constants/ElementSizes';
 
-const BranchIntervalX = ElementInterval.x;
-const BranchIntervalY = ElementInterval.y / 2;
+import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 
 export function calculateSequenceBoundary(
   boundaries: Boundary[],
@@ -92,10 +92,9 @@ function measureBranchingContainerBoundary(
   const firstBranchBoundary = branchBoundaries[0] || new Boundary();
 
   const branchGroupBoundary = new Boundary();
-  branchGroupBoundary.width = branchBoundaries.reduce(
-    (acc, x) => acc + Math.max(x.width + BranchIntervalX, BranchIntervalMinX),
-    0
-  );
+  branchGroupBoundary.width = branchBoundaries.reduce((acc, x, currentIndex) => {
+    return acc + x.width + calculateBranchNodesIntervalX(x, branchBoundaries[currentIndex + 1]);
+  }, 0);
   branchGroupBoundary.height = Math.max(...branchBoundaries.map(x => x.height));
   branchGroupBoundary.axisX = firstBranchBoundary.axisX;
 
