@@ -14,6 +14,7 @@ import { root } from './styles';
 import { INotification, NotificationType } from './types';
 import { navigateTo } from './../../utils';
 import { convertPathToUrl, toUrlUtil } from './../../utils/navigation';
+import formatMessage from 'format-message';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
@@ -51,7 +52,9 @@ const Notifications: React.FC<RouteComponentProps> = () => {
     <div css={root} data-testid="notifications-page">
       <ToolBar />
       <NotificationHeader onChange={setFilter} />
-      <NotificationList items={notifications} onItemClick={handleItemClick} />
+      <div role="region" aria-label={formatMessage('')}>
+        <NotificationList items={notifications} onItemClick={handleItemClick} />
+      </div>
     </div>
   );
 };

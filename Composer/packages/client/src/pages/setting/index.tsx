@@ -63,7 +63,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
       </div>
       <MainContent>
         <Fragment>
-          <div css={fileList}>
+          <div css={fileList} role="region" aria-label={formatMessage('Settings categories')}>
             <Tree variant="large">
               <Nav
                 initialSelectedKey={props['*'] || 'dialog-settings'}
@@ -80,9 +80,11 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
               />
             </Tree>
           </div>
-          <Conversation css={contentEditor}>
-            <Routes />
-          </Conversation>
+          <div role="region" aria-label={formatMessage('Settings panel')}>
+            <Conversation css={contentEditor}>
+              <Routes />
+            </Conversation>
+          </div>
         </Fragment>
       </MainContent>
     </Fragment>

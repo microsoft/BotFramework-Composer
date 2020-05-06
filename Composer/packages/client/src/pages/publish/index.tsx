@@ -405,7 +405,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div role="main" css={ContentStyle} data-testid="Publish">
-        <div css={projectContainer}>
+        <div css={projectContainer} role="region" aria-label={formatMessage('Publish Profiles')}>
           <div
             key={'_all'}
             onClick={() => {
@@ -420,7 +420,7 @@ const Publish: React.FC<PublishPageProps> = props => {
           >
             {formatMessage('All profiles')}
           </div>
-          {settings && settings.publishTargets && (
+          {settings?.publishTargets && (
             <TargetList
               list={settings.publishTargets}
               onSelect={item => {
@@ -433,7 +433,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             />
           )}
         </div>
-        <div css={contentEditor}>
+        <div css={contentEditor} role="region" aria-label={formatMessage('Publish History')}>
           <Fragment>
             <PublishStatusList
               items={thisPublishHistory}
