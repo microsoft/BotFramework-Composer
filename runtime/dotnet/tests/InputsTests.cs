@@ -5,6 +5,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -30,6 +31,12 @@ namespace Tests
         {
             string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "AskingQuestionsSample"));
             resourceExplorer.AddFolder(path);
+
+            // register components.
+            ComponentRegistration.Add(new DialogsComponentRegistration());
+            ComponentRegistration.Add(new DeclarativeComponentRegistration());
+            ComponentRegistration.Add(new AdaptiveComponentRegistration());
+            ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
         }
 
         [ClassCleanup]
