@@ -44,7 +44,7 @@ export function getProperties(value: any): string[] {
 }
 
 // find out all properties from given dialog
-function ExtractMemoryPaths(dialog): string[] {
+function ExtractMemoryPaths(dialog: { [key: string]: any }): string[] {
   let properties: string[] = [];
 
   const visitor: VisitorFunc = (path: string, value: any): boolean => {

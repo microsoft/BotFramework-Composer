@@ -18,7 +18,6 @@ import { createPath } from './dialogUtils/dialogChecker';
 import { checkerFuncs } from './dialogUtils/dialogChecker';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
-import ExtractMemoryPaths from './dialogUtils/extractMemoryPaths';
 import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
 // find out all lg templates given dialog
 function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
@@ -207,7 +206,6 @@ function parse(id: string, content: any, schema: any) {
     diagnostics: validate(id, content, schema),
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(id, content),
-    userDefinedVariables: ExtractMemoryPaths(content),
     referredLuIntents: ExtractLuIntents(content, id),
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
