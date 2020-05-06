@@ -122,7 +122,7 @@ const PropertyEditor: React.FC = () => {
         <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
           <AdaptiveForm
             errors={errors}
-            formData={shellData.data}
+            formData={localData}
             pluginConfig={pluginConfig}
             schema={$schema}
             uiOptions={$uiSchema}
