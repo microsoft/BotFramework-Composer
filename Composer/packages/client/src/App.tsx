@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
+import React, { forwardRef, useContext, useEffect, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
@@ -19,6 +19,7 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { AppUpdater } from './components/AppUpdater';
+import onboardingState from './utils/onboardingStorage';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -127,10 +128,15 @@ const bottomLinks = [
 ];
 
 export const App: React.FC = () => {
-  const { state } = useContext(StoreContext);
+  const { actions, state } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
+  const { onboardingSetComplete } = actions;
   const { botName, projectId, dialogs, locale, designPageLocation, announcement } = state;
+
+  useEffect(() => {
+    onboardingSetComplete(onboardingState.getComplete());
+  }, []);
 
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
