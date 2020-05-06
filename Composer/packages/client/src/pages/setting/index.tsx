@@ -58,7 +58,9 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
 
   return (
     <Fragment>
-      <ToolBar toolbarItems={toolbarItems} />
+      <div role="region" aria-label={formatMessage('toolbar')}>
+        <ToolBar toolbarItems={toolbarItems} />
+      </div>
       <MainContent>
         <Fragment>
           <div css={fileList}>

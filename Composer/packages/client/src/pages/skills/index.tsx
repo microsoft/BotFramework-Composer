@@ -62,7 +62,9 @@ const Skills: React.FC<RouteComponentProps> = () => {
 
   return (
     <div data-testid="skills-page" css={ContainerStyle}>
-      <ToolBar toolbarItems={toolbarItems} />
+      <div role="region" aria-label={formatMessage('toolbar')}>
+        <ToolBar toolbarItems={toolbarItems} />
+      </div>
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>

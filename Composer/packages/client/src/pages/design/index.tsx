@@ -397,16 +397,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onDeleteTrigger={handleDeleteTrigger}
         />
         <div role="main" css={contentWrapper}>
-          <ToolBar
-            toolbarItems={toolbarItems}
-            actions={actions}
-            projectId={projectId}
-            currentDialog={currentDialog}
-            openNewTriggerModal={openNewTriggerModal}
-            onCreateDialogComplete={onCreateDialogComplete}
-            onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
-            showSkillManifestModal={() => setExportSkillModalVisible(true)}
-          />
+          <div role="region" aria-label={formatMessage('toolbar')}>
+            <ToolBar
+              toolbarItems={toolbarItems}
+              actions={actions}
+              projectId={projectId}
+              currentDialog={currentDialog}
+              openNewTriggerModal={openNewTriggerModal}
+              onCreateDialogComplete={onCreateDialogComplete}
+              onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+              showSkillManifestModal={() => setExportSkillModalVisible(true)}
+            />
+          </div>
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
               <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>

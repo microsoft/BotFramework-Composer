@@ -101,7 +101,9 @@ const LGPage: React.FC<LGPageProps> = props => {
     <Fragment>
       <div css={pageRoot} data-testid="LGPage">
         <div css={contentWrapper}>
-          <ToolBar toolbarItems={toolbarItems} />
+          <div role="region" aria-label={formatMessage('toolbar')}>
+            <ToolBar toolbarItems={toolbarItems} />
+          </div>
 
           <div css={ContentHeaderStyle}>
             <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>

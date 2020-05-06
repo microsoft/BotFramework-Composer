@@ -398,7 +398,9 @@ const Publish: React.FC<PublishPageProps> = props => {
         <PublishDialog onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} target={selectedTarget} />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
-      <ToolBar toolbarItems={toolbarItems} />
+      <div role="region" aria-label={formatMessage('toolbar')}>
+        <ToolBar toolbarItems={toolbarItems} />
+      </div>
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>

@@ -101,7 +101,9 @@ const LUPage: React.FC<LUPageProps> = props => {
   return (
     <div css={pageRoot} data-testid="LUPage">
       <div css={contentWrapper}>
-        <ToolBar toolbarItems={toolbarItems} />
+        <div role="region" aria-label={formatMessage('toolbar')}>
+          <ToolBar toolbarItems={toolbarItems} />
+        </div>
         <div css={ContentHeaderStyle}>
           <h1 css={HeaderText}>{formatMessage('User Input')}</h1>
           <div css={flexContent}>
