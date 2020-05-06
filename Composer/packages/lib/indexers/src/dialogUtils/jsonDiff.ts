@@ -24,6 +24,10 @@ export interface IJSONChangeUpdate {
   preValue: any;
 }
 
+// TODO
+/**
+ * 1. compare adds <=> deletes, findout `move`
+ */
 export interface IJsonChanges {
   adds: IJSONChangeAdd[];
   deletes: IJSONChangeDelete[];

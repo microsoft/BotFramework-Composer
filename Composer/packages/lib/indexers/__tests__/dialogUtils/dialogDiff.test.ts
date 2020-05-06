@@ -11,7 +11,7 @@ import { JsonInsert, JsonSet } from '../../src/dialogUtils/jsonDiff';
 const baseDialog = JSON.parse(fs.readFileSync(`${__dirname}/data/base.dialog`, 'utf-8'));
 
 describe('dialog diff', () => {
-  it('inserts', () => {
+  it('check action adds', () => {
     const inserts1 = [
       // insert at list start
       {
@@ -33,6 +33,14 @@ describe('dialog diff', () => {
     expect(changes1.updates.length).toEqual(0);
     expect(changes1.adds[0].path).toEqual(`$.${inserts1[0].path}`);
     expect(changes1.adds[0].value).toEqual(inserts1[0].value);
+
+    // delete
+    const changes11 = DialogDiff(dialog1, baseDialog);
+    expect(changes11.deletes.length).toEqual(1);
+    expect(changes11.adds.length).toEqual(0);
+    expect(changes11.updates.length).toEqual(0);
+    expect(changes11.deletes[0].path).toEqual(`$.${inserts1[0].path}`);
+    expect(changes11.deletes[0].value).toEqual(inserts1[0].value);
 
     const inserts2 = [
       // insert at list end
@@ -92,14 +100,37 @@ describe('dialog diff', () => {
     expect(changes3.adds[1].value).toEqual(inserts3[1].value);
   });
 
-  it('updates', () => {
+  it('check action deletes', () => {
+    const inserts4 = [
+      // delete at list middle
+      {
+        path: 'triggers[5].actions[1]',
+        value: {
+          $kind: 'Microsoft.SendActivity',
+          $designer: {
+            id: '677445',
+          },
+          activity: 'Hi 5',
+        },
+      },
+    ];
+
+    const dialog4 = JsonInsert(baseDialog, inserts4);
+    const changes4 = DialogDiff(dialog4, baseDialog); // reverse compaire args position, make add to delete.
+    expect(changes4.adds.length).toEqual(0);
+    expect(changes4.deletes.length).toEqual(1);
+    expect(changes4.updates.length).toEqual(0);
+    expect(changes4.deletes[0].path).toEqual(`$.${inserts4[0].path}`);
+    expect(changes4.deletes[0].value).toEqual(inserts4[0].value);
+  });
+
+  it('check action updates', () => {
     const inserts1 = [
       {
         path: 'triggers[7].actions[0].activity',
         value: 'Hi!',
       },
     ];
-
     const dialog1 = JsonSet(baseDialog, inserts1);
     const changes1 = DialogDiff(baseDialog, dialog1);
     expect(changes1.adds.length).toEqual(0);
@@ -108,5 +139,53 @@ describe('dialog diff', () => {
     expect(changes1.updates[0].path).toEqual(`$.${inserts1[0].path}`);
     expect(changes1.updates[0].value).toEqual(inserts1[0].value);
     expect(changes1.updates[0].preValue).toEqual(get(baseDialog, inserts1[0].path));
+  });
+
+  it('check trigger adds', () => {
+    const inserts1 = [
+      // insert at list start
+      {
+        path: 'triggers[8]',
+        value: {
+          $kind: 'Microsoft.OnIntent',
+          $designer: {
+            id: 'X-Xce_',
+          },
+          intent: 'FooIntent',
+        },
+      },
+    ];
+
+    const dialog1 = JsonInsert(baseDialog, inserts1);
+    const changes1 = DialogDiff(baseDialog, dialog1);
+    expect(changes1.adds.length).toEqual(1);
+    expect(changes1.deletes.length).toEqual(0);
+    expect(changes1.updates.length).toEqual(0);
+    expect(changes1.adds[0].path).toEqual(`$.${inserts1[0].path}`);
+    expect(changes1.adds[0].value).toEqual(inserts1[0].value);
+  });
+
+  it('check trigger deletes', () => {
+    const inserts1 = [
+      // insert at list start
+      {
+        path: 'triggers[8]',
+        value: {
+          $kind: 'Microsoft.OnIntent',
+          $designer: {
+            id: 'X-Xce_',
+          },
+          intent: 'FooIntent',
+        },
+      },
+    ];
+
+    const dialog1 = JsonInsert(baseDialog, inserts1);
+    const changes1 = DialogDiff(dialog1, baseDialog);
+    expect(changes1.deletes.length).toEqual(1);
+    expect(changes1.adds.length).toEqual(0);
+    expect(changes1.updates.length).toEqual(0);
+    expect(changes1.deletes[0].path).toEqual(`$.${inserts1[0].path}`);
+    expect(changes1.deletes[0].value).toEqual(inserts1[0].value);
   });
 });
