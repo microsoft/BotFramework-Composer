@@ -5,13 +5,12 @@
 import { jsx } from '@emotion/core';
 import React, { Suspense, useContext, useEffect, useMemo, useState, useRef } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
 import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
-import { Link } from 'office-ui-fabric-react/lib/Link';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
 
@@ -60,12 +59,7 @@ function onRenderContent(subTitle, style) {
 }
 
 function onRenderBreadcrumbItem(item, render) {
-  return (
-    <span>
-      {!item.isRoot && <Icon iconName="Flow" styles={{ root: { marginLeft: '6px' } }} />}
-      {render(item)}
-    </span>
-  );
+  return <span>{render(item)}</span>;
 }
 
 function getAllRef(targetId, dialogs) {
@@ -91,7 +85,7 @@ const getTabFromFragment = () => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas } = state;
+  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -299,22 +293,25 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           }, [] as IBreadcrumbItem[])
         : [];
     return (
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
         <Breadcrumb
           items={items}
           ariaLabel={formatMessage('Navigation Path')}
           styles={breadcrumbClass}
+          maxDisplayedItems={3}
+          onReduceData={() => undefined}
           data-testid="Breadcrumb"
           onRenderItem={onRenderBreadcrumbItem}
         />
-        <Link
-          style={{ position: 'absolute', right: 0, marginTop: '22px', marginRight: '10px' }}
-          onClick={() => {
-            setDialogJsonVisibility(current => !current);
-          }}
-        >
-          {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-        </Link>
+        <div style={{ padding: '10px' }}>
+          <ActionButton
+            onClick={() => {
+              setDialogJsonVisibility(current => !current);
+            }}
+          >
+            {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+          </ActionButton>
+        </div>
       </div>
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
@@ -428,7 +425,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />
                 )}
               </div>
-              <PropertyEditor />
+              <PropertyEditor key={focusPath} />
             </div>
           </Conversation>
         </div>

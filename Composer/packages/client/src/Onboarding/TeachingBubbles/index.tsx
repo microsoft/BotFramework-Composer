@@ -34,10 +34,6 @@ const TeachingBubbles = () => {
     state: { currentSet, currentStep, teachingBubble },
   } = useContext(OnboardingContext);
 
-  // Since some of the teaching bubbles are positioned with (x, y) coordinates relative
-  // to the extension they exist in and we get the (left, top) position of the extension
-  // to position the bubble relative to the app, we need to re-render the teaching bubble
-  // when the screen is resized.
   const [, forceRender] = useState();
   const rerender = useRef(debounce(() => forceRender({}), 200)).current;
 
@@ -46,27 +42,11 @@ const TeachingBubbles = () => {
     return () => window.removeEventListener('resize', rerender);
   }, [forceRender]);
 
-  const { id, location, setLength = 0, targetId = '' } = teachingBubble || {};
+  const { id, setLength = 0, targetId = '' } = teachingBubble || {};
   const target = coachMarkRefs[targetId];
 
   if (!target) {
     return null;
-  }
-
-  // The teaching bubbles attach themselves to elements in Composer with component refs.
-  // However, the `actions` teaching bubble attaches itself to an element in the Visual
-  // Editor, and we can't access the component ref in the iFrame from the app. As a
-  // workaround, the extension adds an (x, y) coordinate to the `coachMarkRefs` map where
-  // the teaching bubble should be positioned relative to the extension. We can then
-  // add the `top` and `left` position of the extension to position the teaching bubble
-  // relative to the app.
-  let position;
-  const { x, y } = target;
-
-  if (typeof x !== 'undefined' && typeof y !== 'undefined' && location) {
-    const extension = coachMarkRefs[location];
-    const { left = 0, top = 0 } = (extension && extension.getBoundingClientRect()) || {};
-    position = { x: left + x, y: top + y };
   }
 
   const teachingBubbleProps = getTeachingBubble(id);
@@ -93,14 +73,14 @@ const TeachingBubbles = () => {
     teachingBubbleProps.onDismiss = nextStep;
   }
 
-  return target ? (
+  return (
     <TeachingBubble
       styles={teachingBubbleStyles}
-      target={position || target}
+      target={target}
       theme={teachingBubbleTheme}
       {...teachingBubbleProps}
     />
-  ) : null;
+  );
 };
 
 export default TeachingBubbles;
