@@ -4,7 +4,7 @@
     "name": "AddItem",
     "id": "225905"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
