@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import Worker from 'worker-loader!./workers/luParser.worker.ts';
 import { LuIntentSection } from '@bfc/shared';
 
+import Worker from './workers/luParser.worker.ts';
 import { BaseWorker } from './baseWorker';
 
 export type LuPayload = {

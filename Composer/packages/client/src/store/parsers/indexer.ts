@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { FileInfo } from '@bfc/shared';
-import Worker from 'worker-loader!./workers/indexer.worker.ts';
 
+import Worker from './workers/indexer.worker.ts';
 import { BaseWorker } from './baseWorker';
 
 export type IndexPayload = {

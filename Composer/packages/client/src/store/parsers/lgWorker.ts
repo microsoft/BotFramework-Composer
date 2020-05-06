@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { LgFile } from '@bfc/shared';
-import Worker from 'worker-loader!./workers/lgParser.worker.ts';
 
+import Worker from './workers/lgParser.worker.ts';
 import { BaseWorker } from './baseWorker';
 
 export type LgPayload = {

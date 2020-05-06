@@ -8,13 +8,13 @@ import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { Text } from '../../constants';
-import LuParser from '../parsers/luWorker';
+import LuWorker from '../parsers/luWorker';
 
 import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';
 
 export const updateLuFile: ActionCreator = async (store, { id, content }) => {
-  const result = (await LuParser.parse(id, content)) as LuFile;
+  const result = (await LuWorker.parse(id, content)) as LuFile;
   store.dispatch({
     type: ActionTypes.UPDATE_LU,
     payload: { ...result },
