@@ -3,10 +3,27 @@
 
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
+import { pluginLoader } from '@bfc/plugin-loader';
 
 import { BotProjectService } from '../../src/services/project';
 import { ProjectController } from '../../src/controllers/project';
 import { Path } from '../../src/utility/path';
+
+jest.mock('@bfc/plugin-loader', () => {
+  return {
+    pluginLoader: {
+      extensions: {
+        botTemplates: [],
+        baseTemplates: [],
+      },
+    },
+    PluginLoader: {
+      getUserFromRequest: jest.fn(),
+    },
+  };
+});
+
+const mockSampleBotPath = Path.join(__dirname, '../mocks/asset/projects/SampleBot');
 
 let mockRes: Response;
 
@@ -34,6 +51,12 @@ beforeEach(() => {
 });
 
 beforeAll(async () => {
+  pluginLoader.extensions.botTemplates.push({
+    id: 'SampleBot',
+    name: 'Sample Bot',
+    description: 'Sample Bot',
+    path: mockSampleBotPath,
+  });
   const currentProjectId = await BotProjectService.openProject(location1);
   const currentProject = await BotProjectService.getProjectById(currentProjectId);
   await BotProjectService.saveProjectAs(currentProject, location2);
@@ -134,7 +157,7 @@ describe('create a Empty Bot project', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', location: newBotDir, description: '', name: name, templateId: '' },
+      body: { storageId: 'default', location: newBotDir, description: '', name: name, templateId: 'SampleBot' },
     } as Request;
     await ProjectController.createProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
