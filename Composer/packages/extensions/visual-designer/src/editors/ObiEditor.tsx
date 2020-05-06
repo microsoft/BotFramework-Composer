@@ -36,7 +36,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   undo,
   redo,
   announce,
-  addCoachMarkRef,
 }): JSX.Element | null => {
   let divRef;
 
@@ -377,7 +376,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
                 divRef.focus({ preventScroll: true });
                 dispatchEvent(eventName, eventData);
               }}
-              addCoachMarkRef={addCoachMarkRef}
             />
           </div>
         </MarqueeSelection>
@@ -400,7 +398,6 @@ ObiEditor.defaultProps = {
   undo: () => {},
   redo: () => {},
   announce: (message: string) => {},
-  addCoachMarkRef: () => {},
 };
 
 interface ObiEditorProps {
@@ -419,5 +416,4 @@ interface ObiEditorProps {
   undo?: () => any;
   redo?: () => any;
   announce: (message: string) => any;
-  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
