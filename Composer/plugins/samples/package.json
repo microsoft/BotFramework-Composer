@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@bfc/plugin-loader": "file:../../packages/extensions/plugin-loader",
     "path": "^0.12.7",
     "portfinder": "^1.0.25",
     "rimraf": "^3.0.2",

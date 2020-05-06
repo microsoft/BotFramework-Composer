@@ -4,8 +4,6 @@
 import path from 'path';
 import fs from 'fs';
 
-import { ComposerPluginRegistration } from '@bfc/plugin-loader';
-
 const samplesDir = path.resolve(__dirname, '../assets/projects');
 const boilerplateDir = path.resolve(__dirname, '../assets/shared');
 
@@ -110,7 +108,7 @@ function getBoilerplates() {
 const samples = getSamples();
 const boilerplates = getBoilerplates();
 
-export default async (composer: ComposerPluginRegistration): Promise<void> => {
+export default async (composer: any): Promise<void> => {
   // register this publishing method with Composer
   for (const temlate of samples) {
     await composer.addBotTemplate(temlate);
