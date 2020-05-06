@@ -230,10 +230,11 @@ const createDialogCancel: ReducerFunc = state => {
 
 const createDialog: ReducerFunc = (state, { id, content }) => {
   const fixedContent = autofixReferInDialog(id, content);
+  const dialogJson = JSON.parse(fixedContent);
   const dialog = {
     isRoot: false,
     displayName: id,
-    ...dialogIndexer.parse(id, fixedContent, state.schemas.sdk.content),
+    ...dialogIndexer.parse(id, dialogJson, state.schemas.sdk.content),
   };
   state.dialogs.push(dialog);
   state = createLgFile(state, { id, content: '' });

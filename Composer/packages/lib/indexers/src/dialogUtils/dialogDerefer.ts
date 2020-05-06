@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import has from 'lodash/has';
 import { LgFile, LuFile, importResolverGenerator, extractLgTemplateRefs } from '@bfc/shared';
-import { template } from '@babel/core';
 
 import { JsonWalk, VisitorFunc } from '../utils/jsonWalk';
 
