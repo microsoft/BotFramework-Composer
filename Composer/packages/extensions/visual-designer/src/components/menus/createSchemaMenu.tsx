@@ -128,7 +128,7 @@ const createPasteButtonItem = (
               background: rgb(237, 235, 233);
             }
           `}
-          onClick={() => onClick({ key: 'Paste' })}
+          onClick={() => onClick({ key: 'PASTE' })}
         >
           <div>
             <FontIcon
