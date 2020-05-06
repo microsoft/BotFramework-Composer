@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
+import formatMessage from 'format-message';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import useNotifications from './useNotifications';
@@ -14,7 +15,6 @@ import { root } from './styles';
 import { INotification, NotificationType } from './types';
 import { navigateTo } from './../../utils';
 import { convertPathToUrl, toUrlUtil } from './../../utils/navigation';
-import formatMessage from 'format-message';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
