@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import uniqueId from 'lodash/uniqueId';
+
 // Wrapper class
 export class BaseWorker {
   private worker: Worker;
   private resolves = {};
   private rejects = {};
-  private globalMsgId = 0;
 
   constructor(worker: Worker) {
     this.worker = worker;
@@ -14,7 +15,7 @@ export class BaseWorker {
   }
 
   sendMsg = <T>(type: string, payload: T) => {
-    const msgId = this.globalMsgId++;
+    const msgId = uniqueId();
     const msg = { id: msgId, type, payload };
     return new Promise((resolve, reject) => {
       // save callbacks for later
@@ -27,19 +28,12 @@ export class BaseWorker {
   // Handle incoming calculation result
   handleMsg = msg => {
     const { id, error, payload } = msg.data;
-    if (payload) {
+    if (error) {
+      const reject = this.rejects[id];
+      reject(error);
+    } else {
       const resolve = this.resolves[id];
       if (resolve) resolve(payload);
-    } else {
-      // error condition
-      const reject = this.rejects[id];
-      if (reject) {
-        if (error) {
-          reject(error);
-        } else {
-          reject('Got nothing');
-        }
-      }
     }
 
     // purge used callbacks
