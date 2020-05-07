@@ -4,6 +4,7 @@
 import { app, dialog, Menu, MenuItemConstructorOptions, shell } from 'electron';
 
 import { isMac } from './utility/platform';
+import { AppUpdater } from './appUpdater';
 
 function getAppMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
@@ -125,6 +126,13 @@ export function initAppMenu() {
           label: 'Privacy Statement',
           click: async () => {
             await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/master/PRIVACY.md');
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Check for Updates',
+          click: () => {
+            AppUpdater.getInstance().checkForUpdates(true);
           },
         },
         { type: 'separator' },

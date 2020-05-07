@@ -127,7 +127,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private getManifestSrcDir = (srcDir: string) => path.resolve(srcDir, 'manifests');
 
-  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'wwwroot', 'manifests');
+  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'azurewebapp', 'wwwroot', 'manifests');
 
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);

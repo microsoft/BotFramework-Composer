@@ -3,7 +3,6 @@
 
 context('Onboarding', () => {
   beforeEach(() => {
-    window.localStorage.setItem('composer:OnboardingState', JSON.stringify({ complete: false }));
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample', 'Onboarding');
 
