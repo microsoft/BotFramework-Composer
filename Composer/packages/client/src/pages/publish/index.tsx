@@ -405,7 +405,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div role="main" css={ContentStyle} data-testid="Publish">
-        <div css={projectContainer} role="region" aria-label={formatMessage('Publish Profiles')}>
+        <div css={projectContainer} role="region" aria-label={formatMessage('Profile list')}>
           <div
             key={'_all'}
             onClick={() => {
