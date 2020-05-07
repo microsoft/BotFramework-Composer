@@ -63,7 +63,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
       </div>
       <MainContent>
         <Fragment>
-          <div css={fileList} role="region" aria-label={formatMessage('Settings categories')}>
+          <div css={fileList} role="region" aria-label={formatMessage('Settings menu')}>
             <Tree variant="large">
               <Nav
                 initialSelectedKey={props['*'] || 'dialog-settings'}
