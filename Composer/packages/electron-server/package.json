@@ -43,7 +43,7 @@
     "@types/node": "^13.7.7",
     "@types/rimraf": "^2.0.2",
     "electron": "8.0.2",
-    "electron-builder": "^22.4.1",
+    "electron-builder": "^22.6.0",
     "fs-extra": "^9.0.0",
     "js-yaml": "^3.13.1",
     "mock-fs": "^4.10.1",
@@ -51,7 +51,7 @@
     "nodemon": "^2.0.3",
     "path": "^0.12.7",
     "rimraf": "^2.6.3",
-    "source-map-explorer": "^2.1.0",
+    "source-map-explorer": "^2.4.2",
     "ts-node": "^8.4.1"
   },
   "dependencies": {
