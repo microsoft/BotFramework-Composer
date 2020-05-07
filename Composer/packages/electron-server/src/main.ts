@@ -7,6 +7,7 @@ import { mkdirp } from 'fs-extra';
 import { app, ipcMain } from 'electron';
 import fixPath from 'fix-path';
 import { UpdateInfo } from 'electron-updater';
+import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
 
 import { isDevelopment } from './utility/env';
 import { isWindows, isMac } from './utility/platform';
@@ -17,7 +18,6 @@ import { AppUpdater } from './appUpdater';
 import { parseDeepLinkUrl } from './utility/url';
 import { composerProtocol } from './constants';
 import { initAppMenu } from './appMenu';
-import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
 
 const error = log.extend('error');
 let deeplinkUrl = '';

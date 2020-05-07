@@ -43,8 +43,8 @@ describe('<UserSettings />', () => {
     getByText('Code Editor');
     try {
       getByText('Application Updates'); // shouldn't exist and will throw
-      expect(true).toBe(true); // ensure catch is hit
-    } catch (e) {}
+      expect(true).toBe(false); // ensure catch is hit
+    } catch (e) {} // eslint-disable-line
   });
 
   it('should render the user settings page - Electron version', () => {

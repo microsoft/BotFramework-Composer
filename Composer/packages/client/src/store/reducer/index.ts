@@ -16,9 +16,9 @@ import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
+import { isElectron } from '../../utils/electronUtil';
 
 import createReducer from './createReducer';
-import { isElectron } from '../../utils/electronUtil';
 
 const projectFiles = ['bot', 'botproj'];
 

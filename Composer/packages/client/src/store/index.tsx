@@ -5,10 +5,11 @@ import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
 import { LgFile, LuFile, importResolverGenerator, UserSettings } from '@bfc/shared';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 
 import { prepareAxios } from '../utils/auth';
 import storage from '../utils/storage';
+import { isElectron } from '../utils/electronUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -26,7 +27,6 @@ import {
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
 import filePersistence from './persistence/FilePersistence';
-import { isElectron } from '../utils/electronUtil';
 
 const { defaultFileResolver } = TemplatesParser;
 

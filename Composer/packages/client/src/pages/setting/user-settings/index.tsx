@@ -14,9 +14,9 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../../store';
+import { isElectron } from '../../../utils/electronUtil';
 
 import { container, title, description, link, section } from './styles';
-import { isElectron } from '../../../utils/electronUtil';
 
 export const UserSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
