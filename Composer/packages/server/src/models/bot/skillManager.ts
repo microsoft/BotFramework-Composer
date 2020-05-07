@@ -40,7 +40,7 @@ export const extractSkillManifestUrl = async (skills: any[]): Promise<Skill[]> =
       });
       continue;
     } catch (error) {
-      // pass
+      throw new Error('Manifest url can not be accessed.');
     }
     skillsParsed.push(skill);
   }
