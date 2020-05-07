@@ -4,7 +4,8 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
-import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
+import { LgFile, LuFile, importResolverGenerator, UserSettings } from '@bfc/shared';
+import { merge } from 'lodash';
 
 import { prepareAxios } from '../utils/auth';
 import storage from '../utils/storage';
@@ -25,8 +26,35 @@ import {
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
 import filePersistence from './persistence/FilePersistence';
+import { isElectron } from '../utils/electronUtil';
 
 const { defaultFileResolver } = TemplatesParser;
+
+const getUserSettings = (): UserSettings => {
+  const defaultSettings = {
+    appUpdater: {
+      autoDownload: false,
+      useNightly: true,
+    },
+    codeEditor: {
+      lineNumbers: false,
+      wordWrap: false,
+      minimap: false,
+    },
+    propertyEditorWidth: 400,
+    dialogNavWidth: 180,
+  };
+  const loadedSettings = storage.get('userSettings') || {};
+  const settings = merge(defaultSettings, loadedSettings);
+
+  if (isElectron()) {
+    // push the settings to the electron main process
+    const { ipcRenderer } = window as any;
+    ipcRenderer.send('init-user-settings', settings);
+  }
+
+  return settings;
+};
 
 export const initialState: State = {
   dialogs: [],
@@ -82,15 +110,7 @@ export const initialState: State = {
   publishTargets: [],
   runtimeTemplates: [],
   publishHistory: {},
-  userSettings: storage.get('userSettings', {
-    codeEditor: {
-      lineNumbers: false,
-      wordWrap: false,
-      minimap: false,
-    },
-    propertyEditorWidth: 400,
-    dialogNavWidth: 180,
-  }),
+  userSettings: getUserSettings(),
   runtimeSettings: {
     path: '',
     startCommand: '',

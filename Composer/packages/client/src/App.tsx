@@ -20,6 +20,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import { AppUpdater } from './components/AppUpdater';
 import onboardingState from './utils/onboardingStorage';
+import { isElectron } from './utils/electronUtil';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -211,7 +212,7 @@ export const App: React.FC = () => {
           </ErrorBoundary>
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
-        {(window as any).__IS_ELECTRON__ && <AppUpdater />}
+        {isElectron() && <AppUpdater />}
       </div>
     </Fragment>
   );

@@ -16,6 +16,7 @@ import { RouteComponentProps } from '@reach/router';
 import { StoreContext } from '../../../store';
 
 import { container, title, description, link, section } from './styles';
+import { isElectron } from '../../../utils/electronUtil';
 
 export const UserSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
@@ -38,6 +39,13 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
       updateUserSettings({ codeEditor: { [key]: checked } });
     },
     [userSettings.codeEditor]
+  );
+
+  const onAppUpdatesChange = useCallback(
+    (key: string, checked: boolean) => {
+      updateUserSettings({ appUpdater: { [key]: checked } });
+    },
+    [userSettings.appUpdater]
   );
 
   return (
@@ -128,6 +136,37 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
           onText={formatMessage('On')}
         />
       </section>
+
+      {isElectron() && (
+        <section css={section}>
+          <h2>{formatMessage('Application Updates')}</h2>
+          <Toggle
+            checked={userSettings.appUpdater.autoDownload}
+            onChange={(_e, checked) => onAppUpdatesChange('autoDownload', !!checked)}
+            label={formatMessage('Automatically download and install updates')}
+            offText={formatMessage('Off')}
+            onText={formatMessage('On')}
+          />
+          <Toggle
+            checked={userSettings.appUpdater.useNightly}
+            onChange={(_e, checked) => onAppUpdatesChange('useNightly', !!checked)}
+            label={formatMessage('Use nightly builds')}
+            offText={formatMessage('Off')}
+            onText={formatMessage('On')}
+          />
+          <p css={description}>
+            {formatMessage('Nightly builds of Composer contain the latest features but may be unstable.')}
+            <Link
+              href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
+              target="_blank"
+              rel="noopener noreferrer"
+              styles={link}
+            >
+              {formatMessage('Learn more')}
+            </Link>
+          </p>
+        </section>
+      )}
     </div>
   );
 };
