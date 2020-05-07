@@ -21,7 +21,7 @@ const schemaPath = process.argv[2] || path.resolve(__dirname, '../runtime/dotnet
 const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
 const types = Object.keys(schema.definitions).reduce((all, defName) => {
 
-  if (defName.startsWith('Microsoft')) {
+  if (defName.startsWith('Microsoft.') && !defName.startsWith('Microsoft.Test')) {
     all.push(defName);
   }
 
