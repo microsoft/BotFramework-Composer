@@ -24,7 +24,7 @@ export enum LuActionType {
 }
 
 // Wrapper class
-class LuWorker extends BaseWorker {
+class LuWorker extends BaseWorker<string> {
   parse(targetId: string, content: string) {
     return this.sendMsg<LuPayload>(LuActionType.Parse, { targetId, content });
   }

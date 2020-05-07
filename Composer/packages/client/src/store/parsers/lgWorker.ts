@@ -12,7 +12,7 @@ export type LgPayload = {
 };
 
 // Wrapper class
-class LgWorker extends BaseWorker {
+class LgWorker extends BaseWorker<string> {
   parse(targetId: string, content: string, lgFiles: LgFile[]) {
     return this.sendMsg<LgPayload>('', { targetId, content, lgFiles: lgFiles });
   }

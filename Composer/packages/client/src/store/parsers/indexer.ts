@@ -13,7 +13,7 @@ export type IndexPayload = {
 };
 
 // Wrapper class
-class Indexer extends BaseWorker {
+class Indexer extends BaseWorker<string> {
   index(files: FileInfo, botName: string, schemas: any, locale: string) {
     return this.sendMsg<IndexPayload>('', { files, botName, schemas, locale });
   }
