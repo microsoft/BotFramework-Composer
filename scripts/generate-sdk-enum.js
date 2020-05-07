@@ -19,11 +19,10 @@ Usage:
 const schemaPath = process.argv[2] || path.resolve(__dirname, '../runtime/dotnet/azurewebapp/schemas/sdk.schema');
 
 const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
-const types = schema.oneOf.reduce((all, t) => {
-  const ref = schema.definitions[t.$ref.replace('#/definitions/', '')];
-  const $kind = ref && ref.properties && ref.properties.$kind && ref.properties.$kind.const;
-  if ($kind) {
-    all.push($kind);
+const types = Object.keys(schema.definitions).reduce((all, defName) => {
+
+  if (defName.startsWith('Microsoft')) {
+    all.push(defName);
   }
 
   return all;
