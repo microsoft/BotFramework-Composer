@@ -50,9 +50,14 @@ class AzurePublisher {
   }
 
   private getRuntimeFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
-  private getProjectFolder = (key: string, template: string) => path.resolve(__dirname, `../publishBots/${key}/${template}`);
-  private getBotFolder = (key: string, template: string) => path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
-  private getSettingsPath = (key: string, template: string) => path.resolve(this.getBotFolder(key, template), 'settings/appsettings.json');
+  private getProjectFolder = (key: string, template: string) =>
+    path.resolve(__dirname, `../publishBots/${key}/${template}`);
+  private getBotFolder = (key: string, template: string) =>
+    path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
+  private getSettingsPath = (key: string, template: string) =>
+    path.resolve(this.getBotFolder(key, template), 'settings/appsettings.json');
+  private getManifestDstDir = (key: string, template: string) =>
+    path.resolve(this.getProjectFolder(key, template), 'wwwroot');
 
   private init = async (botFiles: any, settings: any, srcTemplate: string, resourcekey: string) => {
     const runtimeExist = await pathExists(this.getRuntimeFolder(resourcekey));
@@ -60,7 +65,7 @@ class AzurePublisher {
     const botFolder = this.getBotFolder(resourcekey, DEFAULT_RUNTIME);
     const runtimeFolder = this.getRuntimeFolder(resourcekey);
     const settingsPath = this.getSettingsPath(resourcekey, DEFAULT_RUNTIME);
-
+    const manifestPath = this.getManifestDstDir(resourcekey, DEFAULT_RUNTIME);
     // deploy resource exist
     await emptyDir(runtimeFolder);
     if (!runtimeExist) {
@@ -69,9 +74,17 @@ class AzurePublisher {
     if (!botExist) {
       mkdirSync(botFolder, { recursive: true });
     }
-    // save bot files
+    // save bot files and manifest files
     for (const file of botFiles) {
-      const filePath = path.resolve(botFolder, file.relativePath);
+      const pattern = /manifests\/[0-9A-z-]*.json/;
+      let filePath;
+      if (file.relativePath.match(pattern)) {
+        // save manifest files into wwwroot
+        filePath = path.resolve(manifestPath, file.relativePath);
+      } else {
+        // save bot files
+        filePath = path.resolve(botFolder, file.relativePath);
+      }
       if (!(await pathExists(path.dirname(filePath)))) {
         mkdirSync(path.dirname(filePath), { recursive: true });
       }
@@ -261,9 +274,12 @@ class AzurePublisher {
       };
 
       // append provision resource into file
-      // TODO: here is where we configure the template for the runtime, and should be parameterized when we 
+      // TODO: here is where we configure the template for the runtime, and should be parameterized when we
       // implement interchangeable runtimes
-      const resourcePath = path.resolve(this.getProjectFolder(resourcekey, DEFAULT_RUNTIME), 'appsettings.deployment.json');
+      const resourcePath = path.resolve(
+        this.getProjectFolder(resourcekey, DEFAULT_RUNTIME),
+        'appsettings.deployment.json'
+      );
       const appSettings = await readJson(resourcePath);
       await writeJson(
         resourcePath,
