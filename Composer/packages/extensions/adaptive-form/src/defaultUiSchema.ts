@@ -4,7 +4,7 @@ import { UISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { IntentField } from './components/fields';
+import { IntentField, RecognizerField } from './components/fields';
 
 const triggerUiSchema = {
   order: ['condition', '*'],
@@ -23,7 +23,7 @@ const DefaultUISchema: UISchema = {
         label: () => formatMessage('Language Understanding'),
         description: () =>
           formatMessage(
-            'To understand what the user says, your dialog needs a "IRecognizer"; that includes example words and sentences that users may use.'
+            'To understand what the user says, your dialog needs a "Recognizer"; that includes example words and sentences that users may use.'
           ),
       },
     },
@@ -115,6 +115,10 @@ const DefaultUISchema: UISchema = {
     label: () => formatMessage('Branch: If/Else'),
     hidden: ['actions', 'elseActions'],
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
+  },
+  [SDKKinds.IRecognizer]: {
+    field: RecognizerField,
+    helpLink: 'https://aka.ms/BFC-Using-LU',
   },
   [SDKKinds.LogAction]: {
     label: () => formatMessage('Log to console'),

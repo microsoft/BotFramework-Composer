@@ -97,6 +97,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.IfCondition]: {
     title: formatMessage('Branch: if/else'),
   },
+  [SDKKinds.LanguagePolicy]: {
+    title: formatMessage('LanguagePolicy'),
+  },
   [SDKKinds.LogAction]: {
     title: formatMessage('Log to console'),
   },
