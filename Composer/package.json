@@ -109,7 +109,7 @@
     "rimraf": "^2.6.3",
     "ts-loader": "^6.2.1",
     "typescript": "3.7.2",
-    "wsrun": "^5.1.0"
+    "wsrun": "^5.2.0"
   },
   "dependencies": {
     "cross-env": "^6.0.3"

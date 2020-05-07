@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "path": "^0.12.7",
-    "portfinder": "^1.0.25",
+    "portfinder": "^1.0.26",
     "rimraf": "^3.0.2",
     "uuid": "^7.0.1"
   }
