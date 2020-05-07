@@ -2,11 +2,14 @@
 // Licensed under the MIT License.
 
 export interface BotProjectDeployConfig {
-  // Subscription Id of Auzre Account
+  // Subscription Id of Azure Account
   subId: string;
 
-  // The credentials from user login
-  creds: any;
+  // credential
+  creds?: any;
+
+  // access token to access azure
+  accessToken: string;
 
   // The project path to deploy
   projPath: string;
@@ -23,7 +26,7 @@ export interface BotProjectDeployConfig {
   // Zip file path, default is 'code.zip'
   zipPath?: string;
 
-  // Pulblishing folder for 'dotnet publish' command, default is 'bin/Release/netcoreapp3.1'
+  // Publishing folder for 'dotnet publish' command, default is 'bin/Release/netcoreapp3.1'
   publishFolder?: string;
 
   // The deployment settings file path, default is 'appsettings.deployment.json'
@@ -32,7 +35,7 @@ export interface BotProjectDeployConfig {
   // The ARM template file path, default is 'DeploymentTemplates/template-with-preexisting-rg.json'
   templatePath?: string;
 
-  // Dotnet project path, default is 'BotProject.csproj'
+  // Dotnet project path, default is 'Microsoft.BotFramework.Composer.WebApp.csproj'
   dotnetProjectPath?: string;
 
   // Lubuild generated folder path, default is 'generated'
@@ -40,4 +43,6 @@ export interface BotProjectDeployConfig {
 
   // Remote bot json dialog path, default is 'ComposerDialogs'
   remoteBotPath?: string;
+
+  [key: string]: any;
 }

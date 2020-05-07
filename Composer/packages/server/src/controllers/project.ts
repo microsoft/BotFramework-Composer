@@ -48,6 +48,10 @@ async function createProject(req: Request, res: Response) {
     const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef, user);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
+
+    // inject shared content into every new project.  this comes from assets/shared
+    await AssectService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
       if (schemaUrl) {
@@ -76,7 +80,6 @@ async function getProjectById(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
     if (currentProject !== undefined && (await currentProject.exists())) {
-      await currentProject.init();
       const project = currentProject.getProject();
       res.status(200).json({
         id: projectId,

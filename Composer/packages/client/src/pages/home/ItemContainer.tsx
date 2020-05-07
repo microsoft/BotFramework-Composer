@@ -4,8 +4,17 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
+import { Button } from 'office-ui-fabric-react/lib/Button';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
-import { itemContainerWrapper, itemContainer, itemContainerContent, itemContainerTitle, disabledItem } from './styles';
+import {
+  itemContainerWrapper,
+  itemContainer,
+  itemContainerContent,
+  itemContainerTitle,
+  disabledItem,
+  childrenContainer,
+} from './styles';
 
 interface ItemContainerProps {
   onClick?: () => void | Promise<void>;
@@ -29,8 +38,25 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   forwardedRef,
   ...rest
 }) => {
+  const onRenderChildren = () => {
+    return (
+      <div css={childrenContainer} ref={forwardedRef}>
+        <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
+          <div css={itemContainerTitle}>{title}</div>
+        </div>
+        <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
+          <div css={itemContainerContent}>
+            <Text variant="large" nowrap>
+              {content}
+            </Text>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div
+    <Button
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async e => {
         e.preventDefault();
@@ -38,16 +64,9 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           await onClick();
         }
       }}
-      ref={forwardedRef}
-      tabIndex={0}
       {...rest}
-    >
-      <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
-        <div css={itemContainerTitle}>{title}</div>
-      </div>
-      <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
-        <div css={itemContainerContent}>{content}</div>
-      </div>
-    </div>
+      onRenderChildren={onRenderChildren}
+      disabled={disabled}
+    />
   );
 };

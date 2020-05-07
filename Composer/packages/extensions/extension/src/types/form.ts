@@ -34,7 +34,7 @@ export type ChangeHandler<T = any> = (newValue?: T) => void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface FieldProps<T = any> {
   className?: string;
-  definitions?: { [key: string]: JSONSchema7Definition };
+  definitions: { [key: string]: JSONSchema7Definition } | undefined;
   depth: number;
   description?: string;
   disabled?: boolean;

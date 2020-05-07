@@ -20,16 +20,26 @@ const getOptions = (enumSchema: JSONSchema7) => {
   return enumSchema.enum.map(o => o as string);
 };
 
+const expectedResponsesPlaceholder = () =>
+  formatMessage(`> add some expected user responses:
+> - Please remind me to '{itemTitle=buy milk}'
+> - remind me to '{itemTitle}'
+> - add '{itemTitle}' to my todo list
+>
+> entity definitions:
+> @ ml itemTitle
+`);
+
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
   const { onChange, getSchema, value, id, uiOptions, getError, definitions, depth, schema = {} } = props;
   const { currentDialog, designerId } = useShellApi();
   const { recognizers } = usePluginConfig();
 
-  const { const: $kind } = (schema?.properties?.['$kind'] as any) || {};
+  const { const: $kind } = (schema?.properties?.$kind as { const: string }) || {};
   const intentName = new LuMetaData(new LuType($kind).toString(), designerId).toString();
 
   const type = recognizerType(currentDialog);
-  const Editor: any = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
+  const Editor = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
 
   return (
@@ -58,10 +68,21 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
           rawErrors={getError('outputFormat')}
         />
       )}
+      <SchemaField
+        name="value"
+        definitions={definitions}
+        depth={depth}
+        id={`${id}.value`}
+        schema={getSchema('value')}
+        uiOptions={uiOptions.properties?.value || {}}
+        value={value?.value}
+        onChange={onChange('value')}
+        rawErrors={getError('value')}
+      />
       {Editor && $kind !== SDKKinds.AttachmentInput && (
         <React.Fragment>
           <FieldLabel id={`${id}.intent`} label={intentLabel} />
-          <Editor {...props} onChange={() => {}} />
+          <Editor {...props} onChange={() => {}} placeholder={expectedResponsesPlaceholder()} />
         </React.Fragment>
       )}
       {getSchema('defaultLocale') && (

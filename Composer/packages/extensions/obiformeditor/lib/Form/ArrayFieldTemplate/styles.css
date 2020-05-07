@@ -1,0 +1,25 @@
+.ArrayContainer {
+  margin: 20px 0;
+}
+.ArrayItem {
+  display: flex;
+}
+.ArrayItem .ArrayItemField {
+  flex: 1;
+}
+.ArrayItem .ArrayItemField .ObjectFieldTemplate > .BaseField {
+  margin-top: 0;
+}
+.ArrayItem .FieldTemplate {
+  padding: 0;
+}
+.ArrayItem .ArrayItemContext {
+  flex-basis: auto;
+  margin-left: 15px;
+}
+.ArrayItem + .ArrayItem {
+  margin-top: 10px;
+}
+.ObjectArray .ObjectItem .ObjectItemField {
+  padding: 0;
+}

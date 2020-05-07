@@ -28,7 +28,7 @@ import filePersistence from './persistence/FilePersistence';
 
 const { defaultFileResolver } = TemplatesParser;
 
-const initialState: State = {
+export const initialState: State = {
   dialogs: [],
   projectId: '',
   botName: '',
@@ -51,6 +51,7 @@ const initialState: State = {
   schemas: {},
   luFiles: [],
   skills: [],
+  skillManifests: [],
   actionsSeed: [],
   designPageLocation: {
     projectId: '',
@@ -102,7 +103,7 @@ const initialState: State = {
   },
 };
 
-interface StoreContextValue {
+export interface StoreContextValue {
   state: State;
   dispatch: React.Dispatch<ActionType>;
   actions: BoundActionHandlers;

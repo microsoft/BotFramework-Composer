@@ -50,6 +50,7 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
+  instructions?: string;
   schema?: JSONSchema7;
   features: {
     history: boolean;
@@ -100,6 +101,7 @@ export interface State {
   lgFiles: LgFile[];
   luFiles: LuFile[];
   skills: Skill[];
+  skillManifests: any[];
   designPageLocation: DesignPageLocation;
   error: StateError | null;
   breadcrumb: BreadcrumbItem[];

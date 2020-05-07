@@ -7,8 +7,10 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 
+import { SkillEndpointField } from './SkillEndpointField';
+
 export const BeginSkillDialogField: React.FC<FieldProps> = props => {
-  const { depth, id, schema, uiOptions, value, onChange } = props;
+  const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
   const { projectId, skills = [] } = useShellApi();
 
   const manifest = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [skills, value.id]);
@@ -27,7 +29,6 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
     onChange({ ...value, skillEndpoint, ...(msAppId ? { skillAppId: msAppId } : {}) });
   };
 
-  const skillEndpointSchema = { ...((schema?.properties?.skillEndpoint as JSONSchema7) || {}), enum: endpointOptions };
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
   skillEndpointUiSchema.serializer = {
     get: value => {
@@ -51,16 +52,19 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
         uiOptions={uiOptions.properties?.id || {}}
         value={value?.id}
         onChange={handleIdChange}
+        definitions={definitions}
       />
-      <SchemaField
+      <SkillEndpointField
         depth={depth + 1}
         id={`${id}.skillEndpoint`}
         name="skillEndpoint"
-        schema={skillEndpointSchema}
+        schema={(schema?.properties?.skillEndpoint as JSONSchema7) || {}}
+        enumOptions={endpointOptions}
         rawErrors={{}}
         uiOptions={skillEndpointUiSchema}
         value={value?.skillEndpoint}
         onChange={handleEndpointChange}
+        definitions={definitions}
       />
       <Link href={`/bot/${projectId}/skills`} styles={{ root: { fontSize: '12px', padding: '0 16px' } }}>
         {formatMessage('Open Skills page for configuration details')}

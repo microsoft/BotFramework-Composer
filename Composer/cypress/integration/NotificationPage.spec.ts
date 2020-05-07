@@ -15,9 +15,9 @@ context('Notification Page', () => {
     cy.get('@switchButton').click();
     cy.get('textarea').type('#');
 
-    cy.get('[data-testid="notifications-info-button"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
+    cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('common.en-us.lg')
         .should('exist')
         .first()
@@ -37,9 +37,9 @@ context('Notification Page', () => {
     cy.get('.toggleEditMode button').click();
     cy.get('textarea').type('t');
 
-    cy.get('[data-testid="notifications-info-button"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
+    cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('__testtodobotwithluissample.en-us.lu')
         .should('exist')
         .first()
@@ -67,12 +67,13 @@ context('Notification Page', () => {
         .should('contain.text', 'expression');
       cy.get('#root\\.condition')
         .click()
-        .type('()');
+        .type('()')
+        .wait(1000);
     });
 
-    cy.get('[data-testid="notifications-info-button"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
+    cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('__testtodobotwithluissample.dialog')
         .should('exist')
         .first()
