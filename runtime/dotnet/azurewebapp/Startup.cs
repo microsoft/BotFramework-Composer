@@ -84,13 +84,12 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
         public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s)
         {
-            HostContext.Current.Set<IConfiguration>(Configuration);
-
             var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
 
             adapter
               .UseStorage(storage)
-              .UseBotState(userState, conversationState);
+              .UseBotState(userState, conversationState)
+              .Use(new RegisterClassMiddleware<IConfiguration>(Configuration));
 
             // Configure Middlewares
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
