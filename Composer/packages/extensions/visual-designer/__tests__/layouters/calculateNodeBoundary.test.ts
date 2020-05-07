@@ -8,11 +8,14 @@ import {
   calculateForeachBoundary,
 } from '../../src/layouters/calculateNodeBoundary';
 import { Boundary } from '../../src/models/Boundary';
-import { ElementInterval, LoopEdgeMarginLeft } from '../../src/constants/ElementSizes';
+import {
+  ElementInterval,
+  BranchIntervalX,
+  BranchIntervalY,
+  LoopEdgeMarginLeft,
+} from '../../src/constants/ElementSizes';
 
 const boundary = new Boundary();
-const BranchIntervalX = ElementInterval.x;
-const BranchIntervalY = ElementInterval.y / 2;
 describe('calculateSequenceBoundary', () => {
   let boundaries;
   beforeEach(() => {
@@ -74,7 +77,7 @@ describe('calculateSwitchCaseBoundary', () => {
   });
   it('should return a box whose property be calcalated by conditionBoundary, choiceBoundary, branchBoundaries', () => {
     const returnBoundary = {
-      width: 580 + BranchIntervalX * 2,
+      width: 580 + BranchIntervalX,
       height: 180 + BranchIntervalY * 3,
       axisX: 140,
       axisY: 0,
