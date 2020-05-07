@@ -133,14 +133,19 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
             services.AddSingleton<IBotTelemetryClient, BotTelemetryClient>();
+            services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
+            {
+                var telemetryClient = sp.GetService<IBotTelemetryClient>();
+                return new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings.Telemetry.LogPersonalInformation);
+            });
+            services.AddSingleton<TelemetryInitializerMiddleware>(sp =>
+            {
+                var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
+                var telemetryLoggerMiddleware = sp.GetService<TelemetryLoggerMiddleware>();
+                return new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings.Telemetry.LogActivities);
+            });
 
-            var sp = services.BuildServiceProvider();
-            var telemetryClient = sp.GetService<IBotTelemetryClient>();
-            var telemetryLoggerMiddleware = new TelemetryLoggerMiddleware(telemetryClient, logPersonalInformation: settings.Telemetry.LogPersonalInformation);
-            var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
-            var telemetryInitializerMiddleware = new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings.Telemetry.LogActivities);
-
-            IStorage storage = ConfigureStorage(settings);
+            var storage = ConfigureStorage(settings);
 
             services.AddSingleton(storage);
             var userState = new UserState(storage);
@@ -157,7 +162,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
             services.AddSingleton(resourceExplorer);
 
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s, telemetryInitializerMiddleware));
+            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s, s.GetService<TelemetryInitializerMiddleware>()));
 
             services.AddSingleton<IBot>(s =>
                 new ComposerBot(
@@ -166,7 +171,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
                     s.GetService<ResourceExplorer>(),
                     s.GetService<BotFrameworkClient>(),
                     s.GetService<SkillConversationIdFactoryBase>(),
-                    telemetryClient,
+                    s.GetService<IBotTelemetryClient>(),
                     rootDialog,
                     defaultLocale));
         }

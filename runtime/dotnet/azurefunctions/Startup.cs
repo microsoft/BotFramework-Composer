@@ -24,6 +24,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Microsoft.Bot.Builder.ApplicationInsights;
 
 [assembly: FunctionsStartup(typeof(Microsoft.BotFramework.Composer.Functions.Startup))]
 
@@ -89,6 +90,7 @@ namespace Microsoft.BotFramework.Composer.Functions
             services.AddApplicationInsightsTelemetry();
             services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
+            services.AddSingleton<IBotTelemetryClient, BotTelemetryClient>();
             services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
             {
                 var telemetryClient = sp.GetService<IBotTelemetryClient>();
@@ -130,12 +132,14 @@ namespace Microsoft.BotFramework.Composer.Functions
                 IStorage storage = s.GetService<IStorage>();
                 UserState userState = s.GetService<UserState>();
                 ConversationState conversationState = s.GetService<ConversationState>();
+                TelemetryInitializerMiddleware telemetryInitializerMiddleware = s.GetService<TelemetryInitializerMiddleware>();
 
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(rootConfiguration));
 
                 adapter
-                  .UseStorage(storage)
-                  .UseState(userState, conversationState);
+                    .UseStorage(storage)
+                    .UseState(userState, conversationState)
+                    .Use(telemetryInitializerMiddleware);
 
                 // Configure Middlewares
                 ConfigureTranscriptLoggerMiddleware(adapter, settings);
