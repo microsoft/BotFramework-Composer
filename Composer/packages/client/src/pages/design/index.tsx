@@ -123,7 +123,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (index >= 0) {
       selectTo(createSelectedPath(index));
     }
-  }, [currentDialog]);
+  }, [currentDialog?.id]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
