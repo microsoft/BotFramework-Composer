@@ -47,7 +47,7 @@ const formSchema: UISchema = {
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
     properties: {
       prompt: {
-        label: () => formatMessage('Choice Input formschema'),
+        label: () => formatMessage('Prompt with multi-choice'),
       },
       validations: {
         label: () => formatMessage('Validation Rules'),
