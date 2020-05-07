@@ -9,11 +9,13 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
+import { Modal } from 'office-ui-fabric-react/lib/Modal';
 
 import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex } from './types';
-import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall } from './styles';
+import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalTitle, FormModalBody } from './styles';
 
 export interface ISkillFormProps {
+  isOpen: boolean;
   editIndex?: number;
   skills: Skill[];
   onSubmit: (skillFormData: ISkillFormData, editIndex: number) => void;
@@ -25,7 +27,7 @@ const defaultFormData = {
 };
 
 const SkillForm: React.FC<ISkillFormProps> = props => {
-  const { editIndex = -1, skills, onSubmit, onDismiss } = props;
+  const { editIndex = -1, skills, onSubmit, onDismiss, isOpen } = props;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
     ? assignDefined(defaultFormData, { manifestUrl: originFormData.manifestUrl, name: originFormData.name })
@@ -86,36 +88,46 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="submit" style={{ display: 'none' }} />
-      <Stack tokens={{ childrenGap: '3rem' }}>
-        <StackItem grow={0}>
-          <TextField
-            css={FormFieldManifestUrl}
-            label={formatMessage('Manifest url')}
-            value={formData.manifestUrl}
-            onChange={updateForm('manifestUrl')}
-            errorMessage={formDataErrors.manifestUrl}
-            data-testid="NewSkillManifestUrl"
-            required
-            autoFocus
-          />
-          <TextField
-            css={FormFieldEditName}
-            label={formatMessage('Custom name (optional)')}
-            value={formData.name}
-            onChange={updateForm('name')}
-            errorMessage={formDataErrors.name}
-            data-testid="NewSkillName"
-          />
-        </StackItem>
+    <Modal titleAriaId="skillConnectionModal" isOpen={isOpen} onDismiss={onDismiss} isBlocking={false}>
+      <h2 css={FormModalTitle}>
+        {editIndex === -1 ? formatMessage('Connect to a new skill') : formatMessage('Edit skill connection')}
+      </h2>
+      <form onSubmit={handleSubmit} css={FormModalBody}>
+        <input type="submit" style={{ display: 'none' }} />
+        <Stack tokens={{ childrenGap: '3rem' }}>
+          <StackItem grow={0}>
+            <TextField
+              css={FormFieldManifestUrl}
+              label={formatMessage('Manifest url')}
+              value={formData.manifestUrl}
+              onChange={updateForm('manifestUrl')}
+              errorMessage={formDataErrors.manifestUrl}
+              data-testid="NewSkillManifestUrl"
+              required
+              autoFocus
+            />
+            <TextField
+              css={FormFieldEditName}
+              label={formatMessage('Custom name (optional)')}
+              value={formData.name}
+              onChange={updateForm('name')}
+              errorMessage={formDataErrors.name}
+              data-testid="NewSkillName"
+            />
+          </StackItem>
 
-        <StackItem>
-          <PrimaryButton onClick={handleSubmit} text={formatMessage('Confirm')} />
-          <DefaultButton css={MarginLeftSmall} onClick={onDismiss} text={formatMessage('Cancel')} />
-        </StackItem>
-      </Stack>
-    </form>
+          <StackItem>
+            <PrimaryButton onClick={handleSubmit} text={formatMessage('Confirm')} />
+            <DefaultButton
+              css={MarginLeftSmall}
+              onClick={onDismiss}
+              text={formatMessage('Cancel')}
+              data-testid="SkillFormCancel"
+            />
+          </StackItem>
+        </Stack>
+      </form>
+    </Modal>
   );
 };
 

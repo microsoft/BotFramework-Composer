@@ -23,6 +23,18 @@ export interface PublishResponse {
   result: PublishResult;
 }
 
+export interface BotTemplate {
+  id: string;
+  name: string;
+  description: string;
+  /* absolute path */
+  path: string;
+  /* tags for further grouping and search secenario */
+  tags?: string[];
+  /* list of supported runtime versions */
+  support?: string[];
+}
+
 // TODO: Add types for project, metadata
 export interface PublishPlugin<Config = any> {
   publish: (config: Config, project: any, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
@@ -59,6 +71,8 @@ export interface ExtensionCollection {
     [key: string]: {
       plugin: ComposerPluginRegistration;
       methods: PublishPlugin;
+      /** (Optional instructions displayed in the UI) */
+      instructions?: string;
       /** (Optional) Schema for publishing configuration. */
       schema?: JSONSchema7;
     };
@@ -71,4 +85,6 @@ export interface ExtensionCollection {
     [key: string]: any;
   };
   runtimeTemplates: RuntimeTemplate[];
+  botTemplates: BotTemplate[];
+  baseTemplates: BotTemplate[];
 }

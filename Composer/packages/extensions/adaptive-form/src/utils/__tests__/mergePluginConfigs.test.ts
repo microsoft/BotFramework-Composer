@@ -62,12 +62,20 @@ describe('mergePluginConfigs', () => {
           },
           "Microsoft.AttachmentInput": Object {
             "helpLink": "https://aka.ms/bfc-ask-for-user-input",
+<<<<<<< HEAD
             "label": "Prompt for a file or an attachment",
             "subtitle": [Function],
           },
           "Microsoft.BeginDialog": Object {
             "helpLink": "https://aka.ms/bfc-understanding-dialogs",
             "label": "Begin a new dialog",
+=======
+            "label": "Prompt for Attachment",
+          },
+          "Microsoft.BeginDialog": Object {
+            "helpLink": "https://aka.ms/bfc-understanding-dialogs",
+            "label": "Begin a Dialog",
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
             "order": Array [
               "dialog",
               "options",
@@ -75,11 +83,17 @@ describe('mergePluginConfigs', () => {
               "includeActivity",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
           },
           "Microsoft.BreakLoop": Object {
             "label": [Function],
             "subtitle": [Function],
+=======
+          },
+          "Microsoft.BreakLoop": Object {
+            "label": [Function],
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.CancelAllDialogs": Object {
             "helpLink": "https://aka.ms/bfc-understanding-dialogs",
@@ -89,26 +103,41 @@ describe('mergePluginConfigs', () => {
               "property",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.ChoiceInput": Object {
             "helpLink": "https://aka.ms/bfc-ask-for-user-input",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.ConfirmInput": Object {
             "helpLink": "https://aka.ms/bfc-ask-for-user-input",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
           },
           "Microsoft.ContinueLoop": Object {
             "label": [Function],
             "subtitle": [Function],
+=======
+          },
+          "Microsoft.ContinueLoop": Object {
+            "label": [Function],
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.DateTimeInput": Object {
             "helpLink": "https://aka.ms/bfc-ask-for-user-input",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.DebugBreak": Object {
             "label": [Function],
@@ -116,36 +145,57 @@ describe('mergePluginConfigs', () => {
           "Microsoft.DeleteProperties": Object {
             "helpLink": "https://aka.ms/bfc-using-memory",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.DeleteProperty": Object {
             "helpLink": "https://aka.ms/bfc-using-memory",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
           },
           "Microsoft.EditActions": Object {
             "label": [Function],
             "subtitle": [Function],
+=======
+          },
+          "Microsoft.EditActions": Object {
+            "label": [Function],
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.EditArray": Object {
             "helpLink": "https://aka.ms/bfc-using-memory",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.EmitEvent": Object {
             "helpLink": "https://aka.ms/bfc-custom-events",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.EndDialog": Object {
             "helpLink": "https://aka.ms/bfc-understanding-dialogs",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.EndTurn": Object {
             "helpLink": "https://aka.ms/bfc-understanding-dialogs",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.Foreach": Object {
             "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
@@ -157,7 +207,10 @@ describe('mergePluginConfigs', () => {
               "itemsProperty",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.ForeachPage": Object {
             "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
@@ -170,7 +223,10 @@ describe('mergePluginConfigs', () => {
               "pageSize",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.HttpRequest": Object {
             "helpLink": "https://aka.ms/bfc-using-http",
@@ -182,7 +238,10 @@ describe('mergePluginConfigs', () => {
               "headers",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.IRecognizer": Object {
             "field": [Function],
@@ -195,17 +254,26 @@ describe('mergePluginConfigs', () => {
               "elseActions",
             ],
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.LogAction": Object {
             "helpLink": "https://aka.ms/bfc-debugging-bots",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.NumberInput": Object {
             "helpLink": "https://aka.ms/bfc-ask-for-user-input",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.OAuthInput": Object {
             "helpLink": "https://aka.ms/bfc-using-oauth",
@@ -214,7 +282,10 @@ describe('mergePluginConfigs', () => {
               "connectionName",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.OnActivity": Object {
             "hidden": Array [
@@ -446,7 +517,10 @@ describe('mergePluginConfigs', () => {
           "Microsoft.QnAMakerDialog": Object {
             "helpLink": "https://aka.ms/bfc-using-QnA",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.RegexRecognizer": Object {
             "hidden": Array [
@@ -461,7 +535,10 @@ describe('mergePluginConfigs', () => {
               "includeActivity",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.ReplaceDialog": Object {
             "helpLink": "https://aka.ms/bfc-understanding-dialogs",
@@ -472,7 +549,10 @@ describe('mergePluginConfigs', () => {
               "includeActivity",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.SendActivity": Object {
             "helpLink": "https://aka.ms/bfc-send-activity",
@@ -481,22 +561,34 @@ describe('mergePluginConfigs', () => {
               "activity",
               "*",
             ],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.SetProperties": Object {
             "helpLink": "https://aka.ms/bfc-using-memory",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.SetProperty": Object {
             "helpLink": "https://aka.ms/bfc-using-memory",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.SkillDialog": Object {
             "helpLink": "https://aka.ms/bfc-call-skill",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.SwitchCondition": Object {
             "helpLink": "https://aka.ms/bfc-controlling-conversation-flow",
@@ -511,17 +603,26 @@ describe('mergePluginConfigs', () => {
                 ],
               },
             },
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.TextInput": Object {
             "helpLink": "https://aka.ms/bfc-ask-for-user-input",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
           "Microsoft.TraceActivity": Object {
             "helpLink": "https://aka.ms/bfc-debugging-bots",
             "label": [Function],
+<<<<<<< HEAD
             "subtitle": [Function],
+=======
+>>>>>>> a9da501221c9976a25e2e740948b3ff311742cd5
           },
         },
         "recognizers": Array [
