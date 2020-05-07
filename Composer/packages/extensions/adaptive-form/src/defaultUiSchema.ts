@@ -285,6 +285,7 @@ const DefaultUISchema: UISchema = {
   },
   [SDKKinds.SendActivity]: {
     label: () => formatMessage('Send a response'),
+
     subtitle: () => formatMessage('Send Activity'),
     helpLink: 'https://aka.ms/bfc-send-activity',
     order: ['activity', '*'],

@@ -47,19 +47,23 @@ function processArgsForWindows(args: string[]): string {
 }
 
 async function createAppDataDir() {
+  // TODO: Move all ENV variable setting to an env file and update build process to leverage those variables too
   const appDataBasePath: string = process.env.APPDATA || process.env.HOME || '';
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
+  const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   log('creating composer app data path at: ', composerAppDataPath);
-  await mkdirp(composerAppDataPath);
+  process.env.LOCAL_PUBLISH_PATH = localPublishPath;
+  log('creating local bot runtime publish path: ', localPublishPath);
+  await mkdirp(localPublishPath);
 }
 
 function initializeAppUpdater() {
   log('Initializing app updater...');
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
-    const appUpdater = new AppUpdater();
+    const appUpdater = AppUpdater.getInstance();
     appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
       // TODO: if auto/silent download is enabled in settings, don't send this event.
       // instead, just download silently
@@ -68,8 +72,8 @@ function initializeAppUpdater() {
     appUpdater.on('progress', progress => {
       mainWindow.webContents.send('app-update', 'progress', progress);
     });
-    appUpdater.on('update-not-available', () => {
-      mainWindow.webContents.send('app-update', 'update-not-available');
+    appUpdater.on('update-not-available', (explicitCheck: boolean) => {
+      mainWindow.webContents.send('app-update', 'update-not-available', explicitCheck);
     });
     appUpdater.on('update-downloaded', () => {
       mainWindow.webContents.send('app-update', 'update-downloaded');
@@ -97,7 +101,7 @@ async function loadServer() {
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
-    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'BotProject', 'Templates');
+    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
     pluginsDir = join(unpackedDir, 'build', 'plugins');
   }
 
