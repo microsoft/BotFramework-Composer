@@ -5,7 +5,6 @@
 import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
-import formatMessage from 'format-message';
 
 import { ToolBar } from './../../components/ToolBar/index';
 import useNotifications from './useNotifications';
