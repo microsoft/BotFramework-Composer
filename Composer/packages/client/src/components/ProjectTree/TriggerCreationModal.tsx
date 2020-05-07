@@ -152,8 +152,16 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
     setFormData({ ...formData, specifiedType: option.key });
   };
 
+  const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
+    const content = '#' + intent + '\n' + triggerPhrases;
+    const { diagnostics } = luIndexer.parse(content);
+    return combineMessage(diagnostics);
+  };
+
   const onNameChange = (e, name) => {
-    setFormData({ ...formData, intent: name });
+    const errors = formData.errors;
+    errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
+    setFormData({ ...formData, intent: name, errors });
   };
 
   const onChangeRegEx = (e, pattern) => {
@@ -162,9 +170,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   const onTriggerPhrasesChange = (body: string) => {
     const errors = formData.errors;
-    const content = '#' + formData.intent + '\n' + body;
-    const { diagnostics } = luIndexer.parse(content);
-    errors.triggerPhrases = combineMessage(diagnostics);
+    errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
     setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
