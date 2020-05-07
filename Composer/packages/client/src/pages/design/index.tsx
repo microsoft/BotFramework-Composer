@@ -424,7 +424,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           </div>
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
-              <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
+              <div
+                css={visualPanel}
+                ref={visualPanelRef}
+                tabIndex={0}
+                role="region"
+                aria-label={formatMessage('Authoring canvas')}
+              >
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
@@ -437,12 +443,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     schema={schemas.sdk.content}
                   />
                 ) : (
-                  <div role="region" aria-Label={formatMessage('Authoring canvas')}>
-                    <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                  </div>
+                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
                 )}
               </div>
-              <div role="region" aria-Label={formatMessage('Properties panel')}>
+              <div role="region" aria-label={formatMessage('Properties panel')}>
                 <PropertyEditor key={focusPath} />
               </div>
             </div>
