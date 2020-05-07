@@ -20,7 +20,7 @@ const config: PluginConfig = {
         },
       },
     },
-    [SDKKinds.ActivityTemplate]: {
+    [SDKKinds.IActivityTemplate]: {
       field: LgField,
     },
   },
