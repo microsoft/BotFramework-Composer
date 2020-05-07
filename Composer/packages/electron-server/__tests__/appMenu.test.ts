@@ -52,7 +52,7 @@ describe('App menu', () => {
 
     // Help
     expect(menuTemplate[4].label).toBe('Help');
-    expect(menuTemplate[4].submenu.length).toBe(10);
+    expect(menuTemplate[4].submenu.length).toBe(12);
 
     expect(mockSetApplicationMenu).toHaveBeenCalledTimes(1);
   });
@@ -87,7 +87,7 @@ describe('App menu', () => {
 
     // Help
     expect(menuTemplate[5].label).toBe('Help');
-    expect(menuTemplate[5].submenu.length).toBe(10);
+    expect(menuTemplate[5].submenu.length).toBe(12);
 
     expect(mockSetApplicationMenu).toHaveBeenCalledTimes(1);
   });

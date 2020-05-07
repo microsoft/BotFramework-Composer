@@ -66,7 +66,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
 
   const data = dataCache.current;
   const {
-    addCoachMarkRef,
     navTo,
     onFocusEvent,
     onFocusSteps,
@@ -137,7 +136,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                 undo={undo}
                 redo={redo}
                 announce={announce}
-                addCoachMarkRef={addCoachMarkRef}
               />
             </div>
           </FlowSchemaContext.Provider>

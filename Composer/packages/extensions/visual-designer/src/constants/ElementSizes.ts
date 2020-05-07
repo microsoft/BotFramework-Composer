@@ -63,7 +63,11 @@ export const ElementInterval = {
   y: 60,
 };
 
-export const BranchIntervalMinX = 150;
+export const BranchIntervalX = ElementInterval.x;
+export const BranchIntervalY = ElementInterval.y / 2;
+
+// Preserve enough space for condition label text on edges.
+export const BranchAxisXIntervalMin = 150;
 
 export const EdgeAddButtonSize = {
   width: 16,

@@ -5,3 +5,7 @@ export const MenuTypes = {
   NodeMenu: 'dot',
   EdgeMenu: '+',
 };
+
+export const MenuEventTypes = {
+  Paste: 'PASTE',
+};
