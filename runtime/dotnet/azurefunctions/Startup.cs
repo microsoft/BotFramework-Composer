@@ -87,7 +87,7 @@ namespace Microsoft.BotFramework.Composer.Functions
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
 
             // Register telemetry client, initializers and middleware
-            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsTelemetry(settings.ApplicationInsights.InstrumentationKey);
             services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
             services.AddSingleton<IBotTelemetryClient, BotTelemetryClient>();
