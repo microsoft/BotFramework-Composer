@@ -8645,7 +8645,7 @@
 					"description": "Value from callers memory to use as arg 2"
 				},
 				"resultProperty": {
-					"$ref": "#/definitions/integerExpression",
+					"$ref": "#/definitions/stringExpression",
 					"title": "Result",
 					"description": "Value from callers memory to store the result"
 				},
