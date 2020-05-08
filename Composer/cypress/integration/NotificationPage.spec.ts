@@ -49,7 +49,7 @@ context('Notification Page', () => {
     cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
   });
 
-  it('can show dialog expression error ', () => {
+  it.skip('can show dialog expression error ', () => {
     cy.visitPage('Design Flow');
 
     cy.findByTestId('ProjectTree').within(() => {
@@ -67,8 +67,7 @@ context('Notification Page', () => {
         .should('contain.text', 'expression');
       cy.get('#root\\.condition')
         .click()
-        .type('()')
-        .wait(1000);
+        .type('()');
     });
 
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();

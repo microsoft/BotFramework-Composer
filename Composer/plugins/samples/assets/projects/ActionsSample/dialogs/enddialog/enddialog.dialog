@@ -19,7 +19,7 @@
   },
   "triggers": [
     {
-      "$kind": "Microsoft.OnCustomEvent",
+      "$kind": "Microsoft.OnDialogEvent",
       "event": "cancelDialog",
       "actions": [
         {

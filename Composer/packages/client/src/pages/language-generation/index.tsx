@@ -101,7 +101,9 @@ const LGPage: React.FC<LGPageProps> = props => {
     <Fragment>
       <div css={pageRoot} data-testid="LGPage">
         <div css={contentWrapper}>
-          <ToolBar toolbarItems={toolbarItems} />
+          <div role="region" aria-label={formatMessage('toolbar')}>
+            <ToolBar toolbarItems={toolbarItems} />
+          </div>
 
           <div css={ContentHeaderStyle}>
             <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>
@@ -118,8 +120,10 @@ const LGPage: React.FC<LGPageProps> = props => {
             </div>
           </div>
           <div role="main" css={ContentStyle}>
-            <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
-            <div css={contentEditor} data-testid="LGEditor">
+            <div role="region" aria-label={formatMessage('LG navigation pane')}>
+              <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+            </div>
+            <div css={contentEditor} data-testid="LGEditor" role="region" aria-label={formatMessage('LG editor')}>
               <Suspense fallback={<LoadingSpinner />}>
                 <Router primary={false} component={Fragment}>
                   <CodeEditor path="/edit/*" dialogId={dialogId} />
