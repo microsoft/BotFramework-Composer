@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
+import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
@@ -135,21 +135,12 @@ const removeLgFile: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
-  const lgFiles = state.lgFiles.map(lgFile => {
-    if (lgFile.id === id) {
-      lgFile.content = content;
+const updateLgTemplate: ReducerFunc = (state, lgFile: LgFile) => {
+  state.lgFiles = state.lgFiles.map(file => {
+    if (file.id === lgFile.id) {
       return lgFile;
     }
-    return lgFile;
-  });
-  const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
-  state.lgFiles = lgFiles.map(lgFile => {
-    const { parse } = lgIndexer;
-    const { id, content } = lgFile;
-    const { templates, diagnostics } = parse(content, id, lgImportresolver);
-
-    return { ...lgFile, templates, diagnostics, content };
+    return file;
   });
   return state;
 };
@@ -184,16 +175,11 @@ const removeLuFile: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
-  state.luFiles = state.luFiles.map(luFile => {
-    if (luFile.id === id) {
-      const { intents, diagnostics } = luIndexer.parse(content, id);
-      return { ...luFile, intents, diagnostics, content };
-    }
-    return luFile;
-  });
+const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
+  const index = state.luFiles.findIndex(file => file.id === luFile.id);
+  state.luFiles[index] = luFile;
 
-  luFileStatusStorage.updateFileStatus(state.botName, id);
+  luFileStatusStorage.updateFileStatus(state.botName, luFile.id);
   return state;
 };
 

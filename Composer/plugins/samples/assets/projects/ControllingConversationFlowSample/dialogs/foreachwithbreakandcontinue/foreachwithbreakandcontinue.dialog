@@ -4,7 +4,7 @@
     "id": "zzWd0o",
     "name": "foreachwithbreakandcontinue"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {

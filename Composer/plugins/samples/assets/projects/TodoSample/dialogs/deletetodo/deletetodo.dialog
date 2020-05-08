@@ -30,7 +30,7 @@
           "$designer": {
             "id": "492096"
           },
-          "changeType": "Remove",
+          "changeType": "remove",
           "itemsProperty": "user.todos",
           "resultProperty": "dialog.removed",
           "value": "=dialog.todo"

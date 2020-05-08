@@ -4,7 +4,7 @@ import { UISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { RecognizerField, IntentField } from './components/fields';
+import { IntentField, RecognizerField } from './components/fields';
 
 const triggerUiSchema = {
   order: ['condition', '*'],
@@ -23,7 +23,7 @@ const DefaultUISchema: UISchema = {
         label: () => formatMessage('Language Understanding'),
         description: () =>
           formatMessage(
-            'To understand what the user says, your dialog needs a "IRecognizer"; that includes example words and sentences that users may use.'
+            'To understand what the user says, your dialog needs a "Recognizer"; that includes example words and sentences that users may use.'
           ),
       },
     },
@@ -138,6 +138,10 @@ const DefaultUISchema: UISchema = {
     hidden: ['actions', 'elseActions'],
     helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
   },
+  [SDKKinds.IRecognizer]: {
+    field: RecognizerField,
+    helpLink: 'https://aka.ms/BFC-Using-LU',
+  },
   [SDKKinds.LogAction]: {
     label: () => formatMessage('Log to console'),
     subtitle: () => formatMessage('Log Action'),
@@ -177,11 +181,6 @@ const DefaultUISchema: UISchema = {
     description: () => formatMessage('Handle the events fired when a user begins a new conversation with the bot.'),
     helpLink:
       'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime',
-  },
-  [SDKKinds.OnCustomEvent]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Handle an Event'),
-    subtitle: () => formatMessage('Custom event'),
   },
   [SDKKinds.OnDialogEvent]: {
     ...triggerUiSchema,
@@ -263,10 +262,6 @@ const DefaultUISchema: UISchema = {
     label: () => formatMessage('Connect to QnA Knowledgebase'),
     subtitle: () => formatMessage('QnA Maker Dialog'),
     helpLink: 'https://aka.ms/bfc-using-QnA',
-  },
-  [SDKKinds.IRecognizer]: {
-    field: RecognizerField,
-    helpLink: 'https://aka.ms/BFC-Using-LU',
   },
   [SDKKinds.RegexRecognizer]: {
     hidden: ['entities'],
