@@ -499,8 +499,6 @@ msRestNodeAuth
       const profile = {
         accessToken: token.accessToken,
         publishName: name,
-        luisAuthoringKey: luisAuthoringKey,
-        luisAuthoringRegion: luisAuthoringRegion,
         environment: environment,
         provision: createResult,
       };

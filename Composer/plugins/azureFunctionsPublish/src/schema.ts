@@ -15,14 +15,6 @@ const schema: JSONSchema7 = {
       type: 'string',
       title: 'Environment',
     },
-    luisAuthoringRegion: {
-      type: 'string',
-      title: 'LUIS authoring region',
-    },
-    luisAuthoringKey: {
-      type: 'string',
-      title: 'LUIS authoring Key',
-    },
     provision: {
       type: 'object',
       title: 'Provision resource',
