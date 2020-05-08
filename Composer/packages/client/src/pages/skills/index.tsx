@@ -62,13 +62,11 @@ const Skills: React.FC<RouteComponentProps> = () => {
 
   return (
     <div data-testid="skills-page" css={ContainerStyle}>
-      <div role="region" aria-label={formatMessage('toolbar')}>
-        <ToolBar toolbarItems={toolbarItems} />
-      </div>
+      <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
-      <div role="main" aria-label={formatMessage('Skill settings')}>
+      <div role="main">
         <SkillSettings
           projectId={projectId}
           botName={botName}
@@ -78,9 +76,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <div role="region" aria-label={formatMessage('Skill list')}>
-        <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} />
-      </div>
+      <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} />
       <SkillForm
         isOpen={typeof editIndex === 'number'}
         skills={skills}
