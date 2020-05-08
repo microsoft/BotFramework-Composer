@@ -24,6 +24,7 @@ using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.BotFramework.Composer.Core;
 using Microsoft.BotFramework.Composer.Core.Settings;
+using Microsoft.BotFramework.Composer.Customize;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -167,6 +168,9 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var botDir = settings.Bot;
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
+
+            // register customized types, please note this is only needed for customized actions. 
+            resourceExplorer.RegisterType<MultiplyDialog>("MultiplyDialog");
 
             var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
 
