@@ -29,7 +29,7 @@ interface PublishPageProps extends RouteComponentProps<{}> {
 
 const Publish: React.FC<PublishPageProps> = props => {
   const selectedTargetName = props.targetName;
-  const [selectedTarget, setSelectedTarget] = useState();
+  const [selectedTarget, setSelectedTarget] = useState<any>();
   const { state, actions } = useContext(StoreContext);
   const { settings, botName, publishTypes, projectId, publishHistory } = state;
 
@@ -41,8 +41,8 @@ const Publish: React.FC<PublishPageProps> = props => {
 
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
-  const [groups, setGroups] = useState();
-  const [selectedVersion, setSelectedVersion] = useState();
+  const [groups, setGroups] = useState<any>();
+  const [selectedVersion, setSelectedVersion] = useState<any>();
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
@@ -403,7 +403,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div role="main" css={ContentStyle} data-testid="Publish">
-        <div css={projectContainer}>
+        <div css={projectContainer} role="region" aria-label={formatMessage('navigation panel')}>
           <div
             key={'_all'}
             onClick={() => {
@@ -431,7 +431,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             />
           )}
         </div>
-        <div css={contentEditor}>
+        <div css={contentEditor} role="region" aria-label={formatMessage('list view')}>
           <Fragment>
             <PublishStatusList
               items={thisPublishHistory}

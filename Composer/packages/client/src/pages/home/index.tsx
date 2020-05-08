@@ -37,7 +37,7 @@ const comingSoonLink = {
   css: home.bluetitle,
 };
 
-const turtorials = [
+const tutorials = [
   {
     title: formatMessage('Tutorial #1'),
     content: formatMessage('Coming soon...'),
@@ -139,7 +139,7 @@ const Home: React.FC<RouteComponentProps> = () => {
       <div css={home.page}>
         <div role="main" css={home.leftPage}>
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
-          <div css={home.introduction}>
+          <div css={home.introduction} role="region" aria-label={formatMessage('Composer introduction')}>
             {formatMessage(
               'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
             )}
@@ -149,6 +149,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <ItemContainer
                 title={addButton}
                 content={formatMessage('New')}
+                ariaLabel={formatMessage('Create new empty bot')}
                 styles={home.newBotItem}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
@@ -160,6 +161,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <ItemContainer
                 title={''}
                 content={recentProjects[0].name}
+                ariaLabel={recentProjects[0].name}
                 styles={home.lastestBotItem}
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
@@ -170,6 +172,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <ItemContainer
                 title={''}
                 content={'ToDoBotWithLuis'}
+                ariaLabel={formatMessage('ToDo Bot with LUIS')}
                 styles={home.lastestBotItem}
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
@@ -179,7 +182,7 @@ const Home: React.FC<RouteComponentProps> = () => {
             )}
           </div>
           {recentProjects.length > 0 && (
-            <div css={home.leftContainer}>
+            <div css={home.leftContainer} role="region" aria-label={formatMessage('List of recent projects')}>
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
                 recentProjects={recentProjects}
@@ -198,11 +201,17 @@ const Home: React.FC<RouteComponentProps> = () => {
                 </span>
               </Link>
             </h2>
-            <div css={home.newBotContainer}>
-              {turtorials.map((item, index) => (
-                <ItemContainer key={index} title={item.title} content={item.content} disabled />
+            <div css={home.newBotContainer} role="region" aria-label={formatMessage('Links to tutorials')}>
+              {tutorials.map((item, index) => (
+                <ItemContainer
+                  key={index}
+                  title={item.title}
+                  content={item.content}
+                  ariaLabel={item.content}
+                  disabled
+                />
               ))}
-              <div css={home.linkContainer}>
+              <div css={home.linkContainer} role="region" aria-label={formatMessage('Links to documentation')}>
                 <div>
                   {formatMessage(
                     'Bot Framework provides the most comprehensive experience for building conversation applications.'
@@ -226,7 +235,7 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        <div css={home.rightPage}>
+        <div css={home.rightPage} role="region" aria-label={formatMessage('Example bot list')}>
           <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
           <p css={home.examplesDescription}>
             {formatMessage(

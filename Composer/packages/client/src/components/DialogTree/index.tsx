@@ -15,10 +15,11 @@ interface IDialogTreeProps {
   navLinks: any[];
   dialogId: string;
   onSelect: (id: string, selected?: string) => void;
+  regionName: string;
 }
 
 export const DialogTree: React.FC<IDialogTreeProps> = props => {
-  const { navLinks, onSelect, dialogId } = props;
+  const { navLinks, onSelect, dialogId, regionName } = props;
   const {
     actions: { updateUserSettings },
     state: {
@@ -40,7 +41,7 @@ export const DialogTree: React.FC<IDialogTreeProps> = props => {
       }}
       onResizeStop={handleResize}
     >
-      <div className="ProjectTree" css={root} data-testid="ProjectTree">
+      <div className="ProjectTree" css={root} data-testid="ProjectTree" role="region" aria-label={regionName}>
         {navLinks.map(item => {
           return (
             <DefaultButton

@@ -416,7 +416,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
-              <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
+              <div
+                css={visualPanel}
+                ref={visualPanelRef}
+                tabIndex={0}
+                role="region"
+                aria-label={formatMessage('Authoring canvas')}
+              >
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
