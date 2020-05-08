@@ -5,6 +5,7 @@ import { OBISchema } from '@bfc/shared';
 
 export const getCustomSchema = (baseSchema?: OBISchema, ejectedSchema?: OBISchema): OBISchema | undefined => {
   if (!baseSchema || !ejectedSchema) return;
+  if (typeof baseSchema.definitions !== 'object' || typeof ejectedSchema.definitions !== 'object') return;
 
   const baseDefinitions = baseSchema.definitions;
   const baseKindHash = Object.keys(baseDefinitions).reduce((hash, $kind) => {
