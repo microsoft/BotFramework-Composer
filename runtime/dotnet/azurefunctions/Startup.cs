@@ -138,7 +138,7 @@ namespace Microsoft.BotFramework.Composer.Functions
 
                 adapter
                   .UseStorage(storage)
-                  .UseBotState(userState, conversationState);
+                  .UseBotState(userState, conversationState)
                   .Use(telemetryInitializerMiddleware);
 
                 // Configure Middlewares

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.AI.QnA;
+using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
@@ -89,7 +90,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             adapter
               .UseStorage(storage)
               .UseBotState(userState, conversationState)
-              .Use(new RegisterClassMiddleware<IConfiguration>(Configuration));
+              .Use(new RegisterClassMiddleware<IConfiguration>(Configuration))
               .Use(telemetryInitializerMiddleware);
 
             // Configure Middlewares
