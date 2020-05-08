@@ -481,13 +481,11 @@ export class BotProjectDeploy {
 
       let luisEndpointKey = '';
 
-      if (luisSettings && !luisAuthoringKey) {
-        luisAuthoringKey = luisSettings.authoringKey;
+      if (luisSettings) {
+        // if luisAuthoringKey is not set, use the one from the luis settings
+        luisAuthoringKey = luisAuthoringKey || luisSettings.authoringKey;
+        luisAuthoringRegion = luisAuthoringRegion || luisSettings.region;
         luisEndpointKey = luisSettings.endpointKey;
-      }
-
-      if (luisSettings && !luisAuthoringRegion) {
-        luisAuthoringRegion = luisSettings.region;
       }
 
       if (!language) {

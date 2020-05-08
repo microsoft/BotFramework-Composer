@@ -31,7 +31,7 @@ namespace Microsoft.BotFramework.Composer.Functions
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation($"Messages endpoint triggered. ");
+            log.LogInformation($"Messages endpoint triggered.");
 
             // Delegate the processing of the HTTP POST to the adapter.
             // The adapter will invoke the bot.

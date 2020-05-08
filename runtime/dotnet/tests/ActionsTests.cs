@@ -5,6 +5,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,7 +21,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\packages\server\assets\projects");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\plugins\samples\assets\projects");
 
         private static string getFolderPath(string path)
         {
@@ -32,6 +33,12 @@ namespace Tests
         public static void ClassInitialize(TestContext context)
         {
             string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory));
+
+            // register components.
+            ComponentRegistration.Add(new DialogsComponentRegistration());
+            ComponentRegistration.Add(new DeclarativeComponentRegistration());
+            ComponentRegistration.Add(new AdaptiveComponentRegistration());
+            ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
         }
 
         public TestContext TestContext { get; set; }
@@ -219,14 +226,14 @@ namespace Tests
             resourceExplorer.AddFolder(folderPath);
             adapter
                 .UseStorage(storage)
-                .UseState(userState, convoState)               
+                .UseBotState(userState, convoState)               
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("actionssample.dialog");
-            var dialog = resourceExplorer.LoadType<Dialog>(resource);
+            var dialog = resourceExplorer.LoadType<AdaptiveDialog>(resource);
             DialogManager dm = new DialogManager(dialog)
                                 .UseResourceExplorer(resourceExplorer)
-                                .UseLanguageGeneration(); ;
+                                .UseLanguageGeneration();
 
             return new TestFlow(adapter, async (turnContext, cancellationToken) =>
             {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
+using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
@@ -89,9 +90,10 @@ namespace Microsoft.BotFramework.Composer.Functions
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
 
             // Register telemetry client, initializers and middleware
-            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsTelemetry(settings.ApplicationInsights.InstrumentationKey);
             services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
+            services.AddSingleton<IBotTelemetryClient, BotTelemetryClient>();
             services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
             {
                 var telemetryClient = sp.GetService<IBotTelemetryClient>();
@@ -129,15 +131,18 @@ namespace Microsoft.BotFramework.Composer.Functions
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>(s =>
             {
                 // Retrieve required dependencies
+                //IConfiguration configuration = s.GetService<IConfiguration>();
                 IStorage storage = s.GetService<IStorage>();
                 UserState userState = s.GetService<UserState>();
                 ConversationState conversationState = s.GetService<ConversationState>();
+                TelemetryInitializerMiddleware telemetryInitializerMiddleware = s.GetService<TelemetryInitializerMiddleware>();
 
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(rootConfiguration));
 
                 adapter
                   .UseStorage(storage)
-                  .UseState(userState, conversationState);
+                  .UseBotState(userState, conversationState)
+                  .Use(telemetryInitializerMiddleware);
 
                 // Configure Middlewares
                 ConfigureTranscriptLoggerMiddleware(adapter, settings);

@@ -8,6 +8,7 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
+import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 export const groupListStyle: Partial<IGroupedListStyles> = {
   root: {
@@ -16,12 +17,11 @@ export const groupListStyle: Partial<IGroupedListStyles> = {
   },
 };
 
-export const searchBox = {
+export const searchBox: ISearchBoxStyles = {
   root: {
-    outline: 'none',
-    border: 'none',
     borderBottom: '1px solid #edebe9',
     height: '45px',
+    borderRadius: '0px',
   },
 };
 export const root = css`
@@ -81,10 +81,17 @@ export const itemText = (depth: number) => css`
   overflow: hidden;
   text-align: left;
   cursor: pointer;
+  width: 100%;
+
+  label: ProjectTreeItemContainer;
 `;
 
 export const content = css`
   outline: none;
+  display: flex;
+  align-items: center;
+
+  label: ProjectTreeItem;
 `;
 
 export const moreButton = (isActive: boolean): IButtonStyles => {
@@ -121,8 +128,11 @@ export const overflowSet = css`
   width: 100%;
   height: 100%;
   padding-left: 12px;
+  padding-right: 12px;
   box-sizing: border-box;
   line-height: 36px;
+  justify-content: space-between;
+  display: flex;
   justify-content: space-between;
 `;
 
@@ -153,7 +163,7 @@ export const dropdownStyles = {
     width: '400px',
   },
   root: {
-    paddingBottom: '20px',
+    marginBottom: '20px',
   },
 };
 
