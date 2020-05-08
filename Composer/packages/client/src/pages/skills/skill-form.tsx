@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import has from 'lodash/has';
 import { jsx } from '@emotion/core';
-import React, { useState, FormEvent, useEffect, useContext } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -12,14 +12,14 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 
-import { StoreContext } from '../../store';
-
 import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex, SkillNameRegex } from './types';
 import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalTitle, FormModalBody } from './styles';
 export interface ISkillFormProps {
   isOpen: boolean;
   editIndex?: number;
   skills: Skill[];
+  projectId: string;
+  checkSkill: (config) => void;
   onSubmit: (skillFormData: ISkillFormData, editIndex: number) => void;
   onDismiss: () => void;
 }
@@ -29,9 +29,7 @@ const defaultFormData = {
 };
 
 const SkillForm: React.FC<ISkillFormProps> = props => {
-  const { editIndex = -1, skills, onSubmit, onDismiss, isOpen } = props;
-  const { state, actions } = useContext(StoreContext);
-  const { projectId } = state;
+  const { editIndex = -1, skills, onSubmit, onDismiss, isOpen, projectId, checkSkill } = props;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
     ? assignDefined(defaultFormData, { manifestUrl: originFormData.manifestUrl, name: originFormData.name })
@@ -65,7 +63,7 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
 
         if (!manifestUrlErrorMsg) {
           try {
-            await actions.checkSkillUrl({ projectId, url: manifestUrl });
+            await checkSkill({ projectId, url: manifestUrl });
           } catch (err) {
             manifestUrlErrorMsg = err.response && err.response.data.message ? err.response.data.message : err;
           }

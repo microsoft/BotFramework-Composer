@@ -73,8 +73,17 @@ describe('<SkillForm />', () => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
     const onDismiss = jest.fn(() => {});
+    const checkSkill = jest.fn(() => {});
     const { getByLabelText, getByText } = render(
-      <SkillForm skills={items} editIndex={0} onSubmit={onSubmit} onDismiss={onDismiss} isOpen />
+      <SkillForm
+        skills={items}
+        editIndex={0}
+        projectId={'243245'}
+        checkSkill={checkSkill}
+        onSubmit={onSubmit}
+        onDismiss={onDismiss}
+        isOpen
+      />
     );
 
     const urlInput = getByLabelText('Manifest url');
@@ -83,6 +92,6 @@ describe('<SkillForm />', () => {
 
     const submitButton = getByText('Confirm');
     fireEvent.click(submitButton);
-    expect(onSubmit).toBeCalled();
+    expect(checkSkill).toBeCalled();
   });
 });

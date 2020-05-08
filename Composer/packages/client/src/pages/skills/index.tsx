@@ -80,6 +80,8 @@ const Skills: React.FC<RouteComponentProps> = () => {
       <SkillForm
         isOpen={typeof editIndex === 'number'}
         skills={skills}
+        projectId={projectId}
+        checkSkill={actions.checkSkillUrl}
         editIndex={editIndex}
         onSubmit={onSubmitForm}
         onDismiss={onDismissForm}
