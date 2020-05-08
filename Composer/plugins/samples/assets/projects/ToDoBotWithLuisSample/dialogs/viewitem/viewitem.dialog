@@ -4,7 +4,7 @@
     "name": "ViewItem",
     "id": "944085"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {

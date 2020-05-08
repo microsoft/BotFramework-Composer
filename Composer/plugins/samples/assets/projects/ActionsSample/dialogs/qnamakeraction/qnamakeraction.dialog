@@ -6,7 +6,7 @@
     "description": "An action to call QnA knowledge base.",
     "id": "901199"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {

@@ -137,9 +137,9 @@ namespace Microsoft.BotFramework.Composer.Functions
                 var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(rootConfiguration));
 
                 adapter
-                    .UseStorage(storage)
-                    .UseState(userState, conversationState)
-                    .Use(telemetryInitializerMiddleware);
+                  .UseStorage(storage)
+                  .UseBotState(userState, conversationState);
+                  .Use(telemetryInitializerMiddleware);
 
                 // Configure Middlewares
                 ConfigureTranscriptLoggerMiddleware(adapter, settings);

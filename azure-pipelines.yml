@@ -83,6 +83,7 @@ jobs:
         scanType: 'Register'
         verbosity: 'Verbose'
         alertWarningLevel: 'High'
+        failOnAlert: true
 
 
 

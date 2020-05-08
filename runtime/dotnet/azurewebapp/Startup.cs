@@ -3,16 +3,18 @@
 
 using System;
 using System.IO;
-using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.ApplicationInsights;
+using Microsoft.Bot.Builder.AI.Luis;
+using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
@@ -82,14 +84,13 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
         public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s, TelemetryInitializerMiddleware telemetryInitializerMiddleware)
         {
-            HostContext.Current.Set<IConfiguration>(Configuration);
-
             var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
 
             adapter
-                .UseStorage(storage)
-                .UseState(userState, conversationState)
-                .Use(telemetryInitializerMiddleware);
+              .UseStorage(storage)
+              .UseBotState(userState, conversationState)
+              .Use(new RegisterClassMiddleware<IConfiguration>(Configuration));
+              .Use(telemetryInitializerMiddleware);
 
             // Configure Middlewares
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
@@ -122,6 +123,14 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
             // Register AuthConfiguration to enable custom claim validation.
             services.AddSingleton<AuthenticationConfiguration>();
+
+            // register components.
+            ComponentRegistration.Add(new DialogsComponentRegistration());
+            ComponentRegistration.Add(new DeclarativeComponentRegistration());
+            ComponentRegistration.Add(new AdaptiveComponentRegistration());
+            ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
+            ComponentRegistration.Add(new QnAMakerComponentRegistration());
+            ComponentRegistration.Add(new LuisComponentRegistration());
 
             // Register the skills client and skills request handler.
             services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
