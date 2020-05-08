@@ -4,7 +4,7 @@
 import uniqueId from 'lodash/uniqueId';
 
 // Wrapper class
-export class BaseWorker<DispatchType> {
+export class BaseWorker {
   private worker: Worker;
   private resolves = {};
   private rejects = {};
@@ -14,9 +14,9 @@ export class BaseWorker<DispatchType> {
     this.worker.onmessage = this.handleMsg;
   }
 
-  sendMsg = <Payload>(type: DispatchType, payload: Payload) => {
+  sendMsg = <Payload>(payload: Payload) => {
     const msgId = uniqueId();
-    const msg = { id: msgId, type, payload };
+    const msg = { id: msgId, payload };
     return new Promise((resolve, reject) => {
       // save callbacks for later
       this.resolves[msgId] = resolve;

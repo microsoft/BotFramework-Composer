@@ -4,41 +4,28 @@ import { LuIntentSection } from '@bfc/shared';
 
 import Worker from './workers/luParser.worker.ts';
 import { BaseWorker } from './baseWorker';
-
-export type LuPayload = {
-  targetId: string;
-  content: string;
-};
-
-export type IntentPayload = {
-  content: string;
-  intentName?: string;
-  intent?: LuIntentSection | null;
-};
-
-export enum LuActionType {
-  Parse = 'parse',
-  AddIntent = 'add-intent',
-  UpdateIntent = 'update-intent',
-  RemoveIntent = 'remove-intent',
-}
+import { LuPayload, LuActionType } from './types';
 
 // Wrapper class
-class LuWorker extends BaseWorker<string> {
-  parse(targetId: string, content: string) {
-    return this.sendMsg<LuPayload>(LuActionType.Parse, { targetId, content });
+class LuWorker extends BaseWorker {
+  parse(id: string, content: string) {
+    const payload = { type: LuActionType.Parse, id, content };
+    return this.sendMsg<LuPayload>(payload);
   }
 
   addIntent(content: string, intent: LuIntentSection) {
-    return this.sendMsg<IntentPayload>(LuActionType.AddIntent, { content, intent });
+    const payload = { type: LuActionType.AddIntent, content, intent };
+    return this.sendMsg<LuPayload>(payload);
   }
 
-  updateIntent(content: string, intentName: string, intent: LuIntentSection | null) {
-    return this.sendMsg<IntentPayload>(LuActionType.UpdateIntent, { content, intentName, intent });
+  updateIntent(content: string, intentName: string, intent?: LuIntentSection) {
+    const payload = { type: LuActionType.UpdateIntent, content, intentName, intent };
+    return this.sendMsg<LuPayload>(payload);
   }
 
   removeIntent(content: string, intentName: string) {
-    return this.sendMsg<IntentPayload>(LuActionType.RemoveIntent, { content, intentName });
+    const payload = { type: LuActionType.RemoveIntent, content, intentName };
+    return this.sendMsg<LuPayload>(payload);
   }
 }
 

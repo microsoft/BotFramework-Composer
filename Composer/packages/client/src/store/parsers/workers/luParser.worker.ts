@@ -2,62 +2,42 @@
 // Licensed under the MIT License.
 import { luIndexer } from '@bfc/indexers';
 import * as luUtil from '@bfc/indexers/lib/utils/luUtil';
-import { LuIntentSection } from '@bfc/shared';
 
-export type LuPayload = {
-  targetId: string;
-  content: string;
-};
-
-export type IntentPayload = {
-  content: string;
-  intentName?: string;
-  intent?: LuIntentSection | null;
-};
-
-export enum LuActionType {
-  Parse = 'parse',
-  AddIntent = 'add-intent',
-  UpdateIntent = 'update-intent',
-  RemoveIntent = 'remove-intent',
-}
-
+import { LuActionType } from './../types';
 const ctx: Worker = self as any;
 
-const parse = (payload: LuPayload) => {
-  const { targetId, content } = payload;
-  const { parse } = luIndexer;
+const parse = (id: string, content: string) => {
+  const { intents, diagnostics } = luIndexer.parse(content, id);
 
-  const { intents, diagnostics } = parse(content, targetId);
-
-  return { id: targetId, content, intents, diagnostics };
+  return { id, content, intents, diagnostics };
 };
 
 ctx.onmessage = function(msg) {
-  const { id, type, payload } = msg.data;
+  const msgId = msg.data.id;
+  const { type, content, id, intentName, intent } = msg.data.payload;
   let result: any = null;
   try {
     switch (type) {
       case LuActionType.Parse: {
-        result = parse(payload);
+        result = parse(id, content);
         break;
       }
       case LuActionType.AddIntent: {
-        result = luUtil.addIntent(payload.content, payload.intent);
+        result = luUtil.addIntent(content, intent);
         break;
       }
       case LuActionType.UpdateIntent: {
-        result = luUtil.updateIntent(payload.content, payload.intentName, payload.intent);
+        result = luUtil.updateIntent(content, intentName, intent || null);
         break;
       }
       case LuActionType.RemoveIntent: {
-        result = luUtil.removeIntent(payload.content, payload.intentName);
+        result = luUtil.removeIntent(content, intentName);
         break;
       }
     }
 
-    ctx.postMessage({ id, payload: result });
+    ctx.postMessage({ id: msgId, payload: result });
   } catch (error) {
-    ctx.postMessage({ id, error });
+    ctx.postMessage({ id: msgId, error });
   }
 };
