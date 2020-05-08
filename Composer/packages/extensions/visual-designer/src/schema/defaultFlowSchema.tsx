@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import React from 'react';
 import get from 'lodash/get';
 import { FlowSchema, FlowWidget } from '@bfc/extension';
-import { FixedInfo, SingleLineDiv, ListOverview } from '@bfc/ui-shared';
+import { FixedInfo, SingleLineDiv, ListOverview, PropertyAssignment } from '@bfc/ui-shared';
 
 import { ObiColors } from '../constants/ElementColors';
 
@@ -130,7 +130,7 @@ export const defaultFlowSchema: FlowSchema = {
   },
   [SDKKinds.SetProperty]: {
     widget: 'ActionCard',
-    body: data => `${data.property || '?'} : ${data.value || '?'}`,
+    body: data => <PropertyAssignment property={data.property} value={data.value} />,
   },
   [SDKKinds.SetProperties]: {
     widget: 'ActionCard',
@@ -138,15 +138,7 @@ export const defaultFlowSchema: FlowSchema = {
       <ListOverview
         items={data.assignments}
         itemPadding={8}
-        renderItem={({ property, value }) => {
-          const v = typeof value === 'object' ? JSON.stringify(value) : value;
-          const content = `${property} : ${v}`;
-          return (
-            <SingleLineDiv height={16} title={content}>
-              {content}
-            </SingleLineDiv>
-          );
-        }}
+        renderItem={({ property, value }) => <PropertyAssignment property={property} value={value} />}
       />
     ),
   },
