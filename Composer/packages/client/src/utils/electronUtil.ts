@@ -5,5 +5,5 @@
  * Returns true if the client is embedded in the Composer Electron environment.
  */
 export function isElectron(): boolean {
-  return !!(window as any).__IS_ELECTRON__;
+  return !!window.__IS_ELECTRON__;
 }

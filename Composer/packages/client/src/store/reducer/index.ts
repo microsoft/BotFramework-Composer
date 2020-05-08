@@ -535,8 +535,7 @@ const setUserSettings: ReducerFunc<Partial<UserSettings>> = (state, settings) =>
   state.userSettings = newSettings;
   if (isElectron()) {
     // push updated settings to electron main process
-    const { ipcRenderer } = window as any;
-    ipcRenderer.send('update-user-settings', newSettings);
+    window.ipcRenderer.send('update-user-settings', newSettings);
   }
   return state;
 };

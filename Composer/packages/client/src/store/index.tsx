@@ -49,8 +49,7 @@ const getUserSettings = (): UserSettings => {
 
   if (isElectron()) {
     // push the settings to the electron main process
-    const { ipcRenderer } = window as any;
-    ipcRenderer.send('init-user-settings', settings);
+    window.ipcRenderer.send('init-user-settings', settings);
   }
 
   return settings;

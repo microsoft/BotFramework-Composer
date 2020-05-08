@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useCallback, useContext, useState } from 'react';
+import { lazy, useCallback, useContext, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -17,6 +17,10 @@ import { StoreContext } from '../../../store';
 import { isElectron } from '../../../utils/electronUtil';
 
 import { container, title, description, link, section } from './styles';
+
+const ElectronSettings = lazy(() =>
+  import('./electronSettings').then(module => ({ default: module.ElectronSettings }))
+);
 
 export const UserSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
@@ -41,12 +45,7 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
     [userSettings.codeEditor]
   );
 
-  const onAppUpdatesChange = useCallback(
-    (key: string, checked: boolean) => {
-      updateUserSettings({ appUpdater: { [key]: checked } });
-    },
-    [userSettings.appUpdater]
-  );
+  const renderElectronSettings = isElectron();
 
   return (
     <div css={container}>
@@ -137,36 +136,7 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
         />
       </section>
 
-      {isElectron() && (
-        <section css={section}>
-          <h2>{formatMessage('Application Updates')}</h2>
-          <Toggle
-            checked={userSettings.appUpdater.autoDownload}
-            onChange={(_e, checked) => onAppUpdatesChange('autoDownload', !!checked)}
-            label={formatMessage('Automatically download and install updates')}
-            offText={formatMessage('Off')}
-            onText={formatMessage('On')}
-          />
-          <Toggle
-            checked={userSettings.appUpdater.useNightly}
-            onChange={(_e, checked) => onAppUpdatesChange('useNightly', !!checked)}
-            label={formatMessage('Use nightly builds')}
-            offText={formatMessage('Off')}
-            onText={formatMessage('On')}
-          />
-          <p css={description}>
-            {formatMessage('Nightly builds of Composer contain the latest features but may be unstable.')}
-            <Link
-              href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
-              target="_blank"
-              rel="noopener noreferrer"
-              styles={link}
-            >
-              {formatMessage('Learn more')}
-            </Link>
-          </p>
-        </section>
-      )}
+      <Suspense fallback={<div />}>{renderElectronSettings && <ElectronSettings />}</Suspense>
     </div>
   );
 };
