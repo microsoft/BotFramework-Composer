@@ -115,7 +115,7 @@ namespace Tests
             var adapter = new TestAdapter(TestAdapter.CreateConversation(TestContext.TestName), sendTrace);
             adapter
                 .UseStorage(storage)
-                .UseState(userState, convoState)
+                .UseBotState(userState, convoState)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("controllingconversationflowsample.dialog");
