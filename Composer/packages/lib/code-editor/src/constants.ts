@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 export const inlineModePlaceholder = formatMessage(`> add some example phrases to trigger this intent:
 > - please tell me the weather
 > - what is the weather like in '{city=Seattle}'
->
+
 > entity definitions:
 > @ ml city`);
 

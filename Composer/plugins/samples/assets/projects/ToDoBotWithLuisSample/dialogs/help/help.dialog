@@ -4,7 +4,7 @@
     "name": "Help",
     "id": "429319"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {

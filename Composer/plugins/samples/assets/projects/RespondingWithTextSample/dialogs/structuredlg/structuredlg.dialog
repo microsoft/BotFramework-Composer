@@ -5,7 +5,7 @@
     "name": "StructuredLG",
     "id": "716869"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {

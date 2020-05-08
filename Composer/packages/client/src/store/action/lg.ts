@@ -1,16 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
+import { LgFile } from '@bfc/shared';
 
 import { ActionTypes } from '../../constants';
 import * as lgUtil from '../../utils/lgUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
+import LgWorker from '../parsers/lgWorker';
 
 export const updateLgFile: ActionCreator = async (store, { id, content }) => {
+  const result = (await LgWorker.parse(id, content, store.getState().lgFiles)) as LgFile;
   store.dispatch({
     type: ActionTypes.UPDATE_LG,
-    payload: { id, content },
+    payload: { ...result },
   });
 };
 

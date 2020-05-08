@@ -17,7 +17,7 @@
           "$designer": {
             "id": "834603"
           },
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "dialog.ids",
           "value": "=10000+1000+100+10+1"
         },
@@ -26,7 +26,7 @@
           "$designer": {
             "id": "048190"
           },
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "dialog.ids",
           "value": "=200*200"
         },
@@ -35,7 +35,7 @@
           "$designer": {
             "id": "434590"
           },
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "dialog.ids",
           "value": "=888888/4"
         },
