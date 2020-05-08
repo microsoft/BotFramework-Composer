@@ -49,7 +49,7 @@ export const Pagination: React.FC<IPaginationProps> = props => {
   };
 
   return (
-    <div css={container}>
+    <div css={container} role="region" aria-label={formatMessage('pagination controls')}>
       <DefaultButton text="< Previous" allowDisabledFocus onClick={hanglePreviousClick} disabled={index === 0} />
       <span css={text}>Page</span>
       <Dropdown

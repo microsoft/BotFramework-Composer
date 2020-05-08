@@ -162,7 +162,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
       }}
       onResizeStop={handleResize}
     >
-      <div className="ProjectTree" css={root} data-testid="ProjectTree">
+      <div
+        className="ProjectTree"
+        css={root}
+        data-testid="ProjectTree"
+        role="region"
+        aria-label={formatMessage('Navigation pane')}
+      >
         <SearchBox
           ariaLabel={formatMessage('Type dialog name')}
           placeholder={formatMessage('Filter Dialog')}

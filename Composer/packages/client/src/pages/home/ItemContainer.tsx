@@ -19,6 +19,7 @@ import {
 interface ItemContainerProps {
   onClick?: () => void | Promise<void>;
   title: string | JSX.Element;
+  ariaLabel: string;
   content: string;
   styles?: {
     container?: SerializedStyles;
@@ -36,6 +37,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   styles = {},
   disabled,
   forwardedRef,
+  ariaLabel,
   ...rest
 }) => {
   const onRenderChildren = () => {
@@ -67,6 +69,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       {...rest}
       onRenderChildren={onRenderChildren}
       disabled={disabled}
+      ariaLabel={ariaLabel}
     />
   );
 };

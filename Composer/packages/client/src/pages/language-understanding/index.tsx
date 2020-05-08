@@ -119,8 +119,13 @@ const LUPage: React.FC<LUPageProps> = props => {
           </div>
         </div>
         <div role="main" css={ContentStyle}>
-          <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
-          <div css={contentEditor} data-testid="LUEditor">
+          <DialogTree
+            navLinks={navLinks}
+            onSelect={onSelect}
+            dialogId={dialogId}
+            regionName={formatMessage('LU navigation pane')}
+          />
+          <div css={contentEditor} data-testid="LUEditor" role="region" aria-label={formatMessage('LU editor')}>
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>
                 <CodeEditor path="/edit" dialogId={dialogId} />
