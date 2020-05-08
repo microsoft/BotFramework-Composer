@@ -12,3 +12,4 @@ export interface ISkillFormDataErrors {
 }
 
 export const SkillUrlRegex = /^http[s]?:\/\/\w+/;
+export const SkillNameRegex = /^\w[-\w]*$/;

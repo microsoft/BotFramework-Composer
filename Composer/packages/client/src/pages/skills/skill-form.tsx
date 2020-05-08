@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import has from 'lodash/has';
 import { jsx } from '@emotion/core';
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent, useEffect, useContext } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -11,9 +12,10 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 
-import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex } from './types';
-import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalTitle, FormModalBody } from './styles';
+import { StoreContext } from '../../store';
 
+import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex, SkillNameRegex } from './types';
+import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalTitle, FormModalBody } from './styles';
 export interface ISkillFormProps {
   isOpen: boolean;
   editIndex?: number;
@@ -28,6 +30,8 @@ const defaultFormData = {
 
 const SkillForm: React.FC<ISkillFormProps> = props => {
   const { editIndex = -1, skills, onSubmit, onDismiss, isOpen } = props;
+  const { state, actions } = useContext(StoreContext);
+  const { projectId } = state;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
     ? assignDefined(defaultFormData, { manifestUrl: originFormData.manifestUrl, name: originFormData.name })
@@ -40,43 +44,71 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
     setFormData(initialFormData);
   }, [editIndex]);
 
-  const validateForm = (newData: ISkillFormData): ISkillFormDataErrors => {
+  const validateForm = async (newData: any): Promise<ISkillFormDataErrors> => {
     const errors: ISkillFormDataErrors = {};
-    const { manifestUrl } = newData;
 
-    if (manifestUrl) {
-      if (!SkillUrlRegex.test(manifestUrl)) {
-        errors.manifestUrl = formatMessage('Url should start with http[s]://');
-      }
+    if (has(newData, 'manifestUrl')) {
+      const { manifestUrl } = newData;
 
-      const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
-      if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
-        errors.manifestUrl = formatMessage('Duplicate manifestUrl');
+      if (manifestUrl) {
+        let manifestUrlErrorMsg = '';
+        if (!SkillUrlRegex.test(manifestUrl)) {
+          manifestUrlErrorMsg = formatMessage('Url should start with http[s]://');
+        }
+
+        if (!manifestUrlErrorMsg) {
+          const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
+          if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
+            manifestUrlErrorMsg = formatMessage('Duplicate skill manifest Url');
+          }
+        }
+
+        if (!manifestUrlErrorMsg) {
+          try {
+            await actions.checkSkillUrl({ projectId, url: manifestUrl });
+          } catch (err) {
+            manifestUrlErrorMsg = err.response && err.response.data.message ? err.response.data.message : err;
+          }
+        }
+        if (manifestUrlErrorMsg) {
+          errors.manifestUrl = manifestUrlErrorMsg;
+        }
+      } else {
+        errors.manifestUrl = formatMessage('Please input a manifest url');
       }
-    } else {
-      errors.manifestUrl = formatMessage('Please input a valid skill manifest url');
+    }
+
+    if (has(newData, 'name')) {
+      const { name } = newData;
+      if (name) {
+        if (!SkillNameRegex.test(name)) {
+          errors.name = formatMessage('Name contains invalid charactors');
+        }
+      }
     }
 
     return errors;
   };
 
-  const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
+  const updateForm = (field: string) => async (e: FormEvent, newValue: string | undefined) => {
     const newData: ISkillFormData = {
       ...formData,
       [field]: newValue,
     };
+    setFormData(newData);
 
     // only update current field error
+    const data = {};
+    data[field] = newValue;
     const errors = { ...formDataErrors };
-    const currentErrors = validateForm(newData);
+    const currentErrors = await validateForm(data);
     errors[field] = currentErrors[field];
     setFormDataErrors(errors);
-    setFormData(newData);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    const errors = validateForm(formData);
+    const errors = await validateForm(formData);
     setFormDataErrors(errors);
 
     if (Object.keys(errors).length > 0) {

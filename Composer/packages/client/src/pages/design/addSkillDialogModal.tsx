@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import has from 'lodash/has';
 import { jsx } from '@emotion/core';
 import React, { FormEvent, useContext, useState } from 'react';
 import formatMessage from 'format-message';
@@ -13,7 +14,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { addSkillDialog } from '../../constants';
 import { DialogWrapper } from '../../components/DialogWrapper';
 import { DialogTypes } from '../../components/DialogWrapper/styles';
-import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex } from '../skills/types';
+import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex, SkillNameRegex } from '../skills/types';
 import { StorageFolder } from '../../store/types';
 import { StoreContext } from '../../store';
 
@@ -28,41 +29,79 @@ interface CreateDialogModalProps {
 }
 
 export const AddSkillDialog: React.FC<CreateDialogModalProps> = props => {
-  const { state } = useContext(StoreContext);
-  const { skills } = state;
+  const { state, actions } = useContext(StoreContext);
+  const { skills, projectId } = state;
   const { isOpen, onDismiss, onSubmit } = props;
   const [formData, setFormData] = useState<ISkillFormData>({ manifestUrl: '', name: '' });
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
 
-  const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
+  const validateForm = async (newData: any): Promise<ISkillFormDataErrors> => {
+    const errors: ISkillFormDataErrors = {};
+
+    if (has(newData, 'manifestUrl')) {
+      const { manifestUrl } = newData;
+
+      if (manifestUrl) {
+        let manifestUrlErrorMsg = '';
+        if (!SkillUrlRegex.test(manifestUrl)) {
+          manifestUrlErrorMsg = formatMessage('Url should start with http[s]://');
+        }
+
+        if (!manifestUrlErrorMsg) {
+          if ((skills || []).some(skill => skill.manifestUrl === manifestUrl)) {
+            manifestUrlErrorMsg = formatMessage('Duplicate skill manifest Url');
+          }
+        }
+
+        if (!manifestUrlErrorMsg) {
+          try {
+            await actions.checkSkillUrl({ projectId, url: manifestUrl });
+          } catch (err) {
+            manifestUrlErrorMsg = err.response && err.response.data.message ? err.response.data.message : err;
+          }
+        }
+        if (manifestUrlErrorMsg) {
+          errors.manifestUrl = manifestUrlErrorMsg;
+        }
+      } else {
+        errors.manifestUrl = formatMessage('Please input a manifest url');
+      }
+    }
+
+    if (has(newData, 'name')) {
+      const { name } = newData;
+      if (name) {
+        if (!SkillNameRegex.test(name)) {
+          errors.name = formatMessage('Name contains invalid charactors');
+        }
+      }
+    }
+
+    return errors;
+  };
+
+  const updateForm = (field: string) => async (e: FormEvent, newValue: string | undefined) => {
     const newData = {
       ...formData,
       [field]: newValue,
     };
-    validateForm(newData);
     setFormData(newData);
-  };
 
-  const validateForm = (newData: ISkillFormData) => {
-    const errors: ISkillFormDataErrors = {};
-    const { manifestUrl } = newData;
-
-    if (manifestUrl) {
-      if (!SkillUrlRegex.test(manifestUrl)) {
-        errors.manifestUrl = formatMessage('Url should start with http[s]://');
-      }
-      if ((skills || []).some(skill => skill.manifestUrl === manifestUrl)) {
-        errors.manifestUrl = formatMessage('Duplicate skill manifest Url');
-      }
-    } else {
-      errors.manifestUrl = formatMessage('Please input a manifest Url');
-    }
+    // only update current field error
+    const data = {};
+    data[field] = newValue;
+    const errors = { ...formDataErrors };
+    const currentErrors = await validateForm(data);
+    errors[field] = currentErrors[field];
     setFormDataErrors(errors);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    if (Object.keys(formDataErrors).length > 0) {
+    const errors = await validateForm(formData);
+    setFormDataErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
       return;
     }
 
