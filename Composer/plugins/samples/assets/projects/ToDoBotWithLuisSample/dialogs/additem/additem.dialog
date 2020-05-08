@@ -94,7 +94,7 @@
             "id": "733511",
             "name": "Edit an Array property"
           },
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "user.lists[dialog.listType]",
           "value": "=$itemTitle"
         },

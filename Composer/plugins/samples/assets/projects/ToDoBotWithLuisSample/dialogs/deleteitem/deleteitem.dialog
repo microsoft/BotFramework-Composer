@@ -160,7 +160,7 @@
                 "id": "747071",
                 "name": "Edit an Array property"
               },
-              "changeType": "Remove",
+              "changeType": "remove",
               "itemsProperty": "user.lists[dialog.listType]",
               "value": "=dialog.itemTitle"
             },
