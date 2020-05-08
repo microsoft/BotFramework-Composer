@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
+import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator, UserSettings } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
@@ -16,6 +16,7 @@ import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
+import { isElectron } from '../../utils/electronUtil';
 
 import createReducer from './createReducer';
 
@@ -514,10 +515,14 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
-const setCodeEditorSettings: ReducerFunc = (state, settings) => {
+const setUserSettings: ReducerFunc<Partial<UserSettings>> = (state, settings) => {
   const newSettings = merge(state.userSettings, settings);
   storage.set('userSettings', newSettings);
   state.userSettings = newSettings;
+  if (isElectron()) {
+    // push updated settings to electron main process
+    window.ipcRenderer.send('update-user-settings', newSettings);
+  }
   return state;
 };
 
@@ -626,7 +631,7 @@ export const reducer = createReducer({
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
   [ActionTypes.SET_RUNTIME_TEMPLATES]: setRuntimeTemplates,
-  [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
+  [ActionTypes.SET_USER_SETTINGS]: setUserSettings,
   [ActionTypes.EJECT_SUCCESS]: ejectSuccess,
   [ActionTypes.SET_MESSAGE]: setMessage,
   [ActionTypes.SET_APP_UPDATE_ERROR]: setAppUpdateError,

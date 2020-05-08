@@ -143,7 +143,7 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
 
   return (
     <div role="main" css={listRoot} data-testid="notifications-table-view">
-      <div css={tableView} role="region" aria-label={formatMessage('Notification list')}>
+      <div css={tableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             css={detailList}
@@ -159,9 +159,7 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
           />
         </ScrollablePane>
       </div>
-      <div role="region" aria-label={formatMessage('Navigation control')}>
-        <Pagination pageCount={pageCount} onChange={setPageIndex} />
-      </div>
+      <Pagination pageCount={pageCount} onChange={setPageIndex} />
     </div>
   );
 };
