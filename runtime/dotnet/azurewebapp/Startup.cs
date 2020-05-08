@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.AI.QnA;
+using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
@@ -82,14 +83,15 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             return storage;
         }
 
-        public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s)
+        public BotFrameworkHttpAdapter GetBotAdapter(IStorage storage, BotSettings settings, UserState userState, ConversationState conversationState, IServiceProvider s, TelemetryInitializerMiddleware telemetryInitializerMiddleware)
         {
             var adapter = new BotFrameworkHttpAdapter(new ConfigurationCredentialProvider(this.Configuration));
 
             adapter
               .UseStorage(storage)
               .UseBotState(userState, conversationState)
-              .Use(new RegisterClassMiddleware<IConfiguration>(Configuration));
+              .Use(new RegisterClassMiddleware<IConfiguration>(Configuration))
+              .Use(telemetryInitializerMiddleware);
 
             // Configure Middlewares
             ConfigureTranscriptLoggerMiddleware(adapter, settings);
@@ -137,9 +139,10 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             services.AddSingleton<ChannelServiceHandler, SkillHandler>();
 
             // Register telemetry client, initializers and middleware
-            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsTelemetry(settings.ApplicationInsights.InstrumentationKey);
             services.AddSingleton<ITelemetryInitializer, OperationCorrelationTelemetryInitializer>();
             services.AddSingleton<ITelemetryInitializer, TelemetryBotIdInitializer>();
+            services.AddSingleton<IBotTelemetryClient, BotTelemetryClient>();
             services.AddSingleton<TelemetryLoggerMiddleware>(sp =>
             {
                 var telemetryClient = sp.GetService<IBotTelemetryClient>();
@@ -152,7 +155,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
                 return new TelemetryInitializerMiddleware(httpContextAccessor, telemetryLoggerMiddleware, settings.Telemetry.LogActivities);
             });
 
-            IStorage storage = ConfigureStorage(settings);
+            var storage = ConfigureStorage(settings);
 
             services.AddSingleton(storage);
             var userState = new UserState(storage);
@@ -169,7 +172,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
             services.AddSingleton(resourceExplorer);
 
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s));
+            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s, s.GetService<TelemetryInitializerMiddleware>()));
 
             services.AddSingleton<IBot>(s =>
                 new ComposerBot(
