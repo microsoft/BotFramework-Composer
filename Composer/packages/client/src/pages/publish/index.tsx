@@ -398,14 +398,12 @@ const Publish: React.FC<PublishPageProps> = props => {
         <PublishDialog onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} target={selectedTarget} />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
-      <div role="region" aria-label={formatMessage('toolbar')}>
-        <ToolBar toolbarItems={toolbarItems} />
-      </div>
+      <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div role="main" css={ContentStyle} data-testid="Publish">
-        <div css={projectContainer} role="region" aria-label={formatMessage('Profile list')}>
+        <div css={projectContainer}>
           <div
             key={'_all'}
             onClick={() => {
@@ -420,7 +418,7 @@ const Publish: React.FC<PublishPageProps> = props => {
           >
             {formatMessage('All profiles')}
           </div>
-          {settings?.publishTargets && (
+          {settings && settings.publishTargets && (
             <TargetList
               list={settings.publishTargets}
               onSelect={item => {
@@ -433,7 +431,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             />
           )}
         </div>
-        <div css={contentEditor} role="region" aria-label={formatMessage('Publish History')}>
+        <div css={contentEditor}>
           <Fragment>
             <PublishStatusList
               items={thisPublishHistory}
