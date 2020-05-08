@@ -185,7 +185,7 @@ export function getDialogGroupByType(type) {
   return dialogType;
 }
 
-const truncateSDKType = $kind => (typeof $kind === 'string' ? $kind.split('Microsoft.')[1] : '');
+const truncateSDKType = $kind => (typeof $kind === 'string' ? $kind.replace('Microsoft.', '') : '');
 
 /**
  * Title priority: $designer.name > title from sdk schema > customize title > $kind suffix
