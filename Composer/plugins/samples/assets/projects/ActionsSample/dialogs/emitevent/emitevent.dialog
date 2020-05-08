@@ -7,7 +7,7 @@
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
-      "$kind": "Microsoft.OnCustomEvent",
+      "$kind": "Microsoft.OnDialogEvent",
       "actions": [
         {
           "$kind": "Microsoft.SendActivity",
