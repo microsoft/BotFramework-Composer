@@ -300,11 +300,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           }, [] as IBreadcrumbItem[])
         : [];
     return (
-      <div
-        role="region"
-        aria-label={formatMessage('Breadcrumb')}
-        style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}
-      >
+      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
         <Breadcrumb
           items={items}
           ariaLabel={formatMessage('Navigation Path')}
@@ -399,38 +395,28 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   return (
     <React.Fragment>
       <div css={pageRoot}>
-        <div role="region" aria-label={formatMessage('Navigation pane')}>
-          <ProjectTree
-            dialogs={dialogs}
-            dialogId={dialogId}
-            selected={selected}
-            onSelect={handleSelect}
-            onDeleteDialog={handleDeleteDialog}
-            onDeleteTrigger={handleDeleteTrigger}
-          />
-        </div>
+        <ProjectTree
+          dialogs={dialogs}
+          dialogId={dialogId}
+          selected={selected}
+          onSelect={handleSelect}
+          onDeleteDialog={handleDeleteDialog}
+          onDeleteTrigger={handleDeleteTrigger}
+        />
         <div role="main" css={contentWrapper}>
-          <div role="region" aria-label={formatMessage('toolbar')}>
-            <ToolBar
-              toolbarItems={toolbarItems}
-              actions={actions}
-              projectId={projectId}
-              currentDialog={currentDialog}
-              openNewTriggerModal={openNewTriggerModal}
-              onCreateDialogComplete={onCreateDialogComplete}
-              onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
-              showSkillManifestModal={() => setExportSkillModalVisible(true)}
-            />
-          </div>
+          <ToolBar
+            toolbarItems={toolbarItems}
+            actions={actions}
+            projectId={projectId}
+            currentDialog={currentDialog}
+            openNewTriggerModal={openNewTriggerModal}
+            onCreateDialogComplete={onCreateDialogComplete}
+            onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+            showSkillManifestModal={() => setExportSkillModalVisible(true)}
+          />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
-              <div
-                css={visualPanel}
-                ref={visualPanelRef}
-                tabIndex={0}
-                role="region"
-                aria-label={formatMessage('Authoring canvas')}
-              >
+              <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
@@ -446,9 +432,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />
                 )}
               </div>
-              <div role="region" aria-label={formatMessage('Properties panel')}>
-                <PropertyEditor key={focusPath} />
-              </div>
+              <PropertyEditor key={focusPath} />
             </div>
           </Conversation>
         </div>
