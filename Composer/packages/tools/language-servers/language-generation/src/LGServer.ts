@@ -41,7 +41,7 @@ import {
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
-const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
+const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG, OPTION } = LGCursorState;
 
 export class LGServer {
   protected workspaceRoot?: URI;
@@ -411,11 +411,14 @@ export class LGServer {
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
     const lineContent = document.getText(range);
+    const lgOptionRegex = /^\s*>\s*!#\s*/;
 
     //initialize the root state to plaintext
     state.push(ROOT);
     if (lineContent.trim().startsWith('#')) {
       return TEMPLATENAME;
+    } else if (lgOptionRegex.test(lineContent)) {
+      return OPTION;
     } else if (lineContent.trim().startsWith('>')) {
       return COMMENTS;
     } else if (lineContent.trim().startsWith('-')) {

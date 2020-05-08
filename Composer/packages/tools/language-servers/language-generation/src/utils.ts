@@ -17,6 +17,7 @@ export enum LGCursorState {
   STRUCTURELG = 'structure_lg',
   SINGLE = 'single',
   DOUBLE = 'double',
+  OPTION = 'option',
 }
 
 export interface LGOption {
@@ -173,4 +174,14 @@ export const cardPropDict = {
   Cards: ['title', 'subtitle', 'text', 'image', 'buttons'],
   Attachment: ['contenttype', 'content'],
   Others: ['type', 'name', 'value'],
+};
+
+export const lgOptionKeys = ['strict', 'replaceNull', 'lineBreakStyle', 'Namespace', 'Exports'];
+
+export const lgOptionsValues = {
+  strict: ['true', 'false'],
+  replaceNull: ['${path} is undefined'],
+  lineBreakStyle: ['markdown', 'default'],
+  Namespace: [],
+  Exports: [],
 };
