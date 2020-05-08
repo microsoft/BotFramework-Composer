@@ -135,7 +135,7 @@ namespace Microsoft.BotFramework.Composer.Functions
 
                 adapter
                   .UseStorage(storage)
-                  .UseState(userState, conversationState);
+                  .UseBotState(userState, conversationState);
 
                 // Configure Middlewares
                 ConfigureTranscriptLoggerMiddleware(adapter, settings);

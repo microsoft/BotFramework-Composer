@@ -4,8 +4,8 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import AdaptiveForm, { resolveBaseSchema, getUIOptions, mergePluginConfigs } from '@bfc/adaptive-form';
-import Extension, { FormErrors } from '@bfc/extension';
+import AdaptiveForm, { resolveRef, getUIOptions, mergePluginConfigs } from '@bfc/adaptive-form';
+import Extension, { FormErrors, JSONSchema7 } from '@bfc/extension';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
@@ -16,6 +16,16 @@ import { useShell } from '../../shell';
 import plugins from '../../plugins';
 
 import { formEditor } from './styles';
+
+function resolveBaseSchema(schema: JSONSchema7, $kind: string): JSONSchema7 | undefined {
+  const defSchema = schema.definitions?.[$kind];
+  if (defSchema && typeof defSchema === 'object') {
+    return {
+      ...resolveRef(defSchema, schema.definitions),
+      definitions: schema.definitions,
+    };
+  }
+}
 
 const PropertyEditor: React.FC = () => {
   const { api: shellApi, data: shellData } = useShell('PropertyEditor');
@@ -48,7 +58,7 @@ const PropertyEditor: React.FC = () => {
 
   const $schema = useMemo(() => {
     if (schemas?.sdk?.content && localData) {
-      return resolveBaseSchema(schemas.sdk.content, localData);
+      return resolveBaseSchema(schemas.sdk.content, localData.$kind);
     }
   }, [schemas?.sdk?.content, localData.$kind]);
 
@@ -122,7 +132,7 @@ const PropertyEditor: React.FC = () => {
         <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
           <AdaptiveForm
             errors={errors}
-            formData={shellData.data}
+            formData={localData}
             pluginConfig={pluginConfig}
             schema={$schema}
             uiOptions={$uiSchema}

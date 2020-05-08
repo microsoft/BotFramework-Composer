@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ElementInterval } from '../constants/ElementSizes';
+import { BranchIntervalX, BranchIntervalY } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
 import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateIfElseBoundary } from './calculateNodeBoundary';
-
-const BranchIntervalX = ElementInterval.x;
-const BranchIntervalY = ElementInterval.y / 2;
 
 export function ifElseLayouter(
   conditionNode: GraphNode | null,

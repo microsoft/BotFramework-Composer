@@ -1,4 +1,0 @@
-[import](common.lg)
-
-# SendActivity_116673
--Successfully added a todo named ${dialog.todo}

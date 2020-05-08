@@ -57,7 +57,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
     // and export the content into that folder as well.
-    if (project.settings.runtime && project.settings.runtime.customRuntime !== true) {
+    if (!settings.runtime || settings.runtime.customRuntime !== true) {
       this.composer.log('Using managed runtime');
       await this.initBot(botId);
       await this.saveContent(botId, version, project.dataDir, user);
@@ -127,7 +127,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private getManifestSrcDir = (srcDir: string) => path.resolve(srcDir, 'manifests');
 
-  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'wwwroot', 'manifests');
+  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'azurewebapp', 'wwwroot', 'manifests');
 
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);

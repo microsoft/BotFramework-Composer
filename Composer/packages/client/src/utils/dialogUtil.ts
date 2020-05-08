@@ -15,6 +15,8 @@ import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import { Expression } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import formatMessage from 'format-message';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -26,7 +28,7 @@ interface DialogsMap {
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $kind: string;
-  specifiedType: string;
+  event: string;
   intent: string;
   triggerPhrases: string;
   regexEx: string;
@@ -35,7 +37,7 @@ export interface TriggerFormData {
 export interface TriggerFormDataErrors {
   $kind?: string;
   intent?: string;
-  specifiedType?: string;
+  event?: string;
   triggerPhrases?: string;
   regexEx?: string;
 }
@@ -48,9 +50,7 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 export const eventTypeKey: string = SDKKinds.OnDialogEvent;
 export const intentTypeKey: string = SDKKinds.OnIntent;
 export const activityTypeKey: string = SDKKinds.OnActivity;
-export const messageTypeKey: string = SDKKinds.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
-
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -60,13 +60,19 @@ function insert(content, path: string, position: number | undefined, data: any) 
 }
 
 function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
-  const optionalAttributes: { intent?: string; event?: string } = {};
-  if (data.specifiedType) {
-    data.$kind = data.specifiedType;
+  const optionalAttributes: { intent?: string; event?: string; $designer: { [key: string]: string } } = {
+    $designer: {},
+  };
+
+  if (data.event) {
+    optionalAttributes.event = data.event;
+    optionalAttributes.$designer.name = formatMessage('Custom Event');
   }
+
   if (data.intent) {
     optionalAttributes.intent = data.intent;
   }
+
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
 }
@@ -173,8 +179,8 @@ export function getTriggerTypes(): IDropdownOption[] {
   return triggerTypes;
 }
 
-export function getEventTypes(): IDropdownOption[] {
-  const eventTypes: IDropdownOption[] = [
+export function getEventTypes(): IComboBoxOption[] {
+  const eventTypes: IComboBoxOption[] = [
     ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map(t => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
