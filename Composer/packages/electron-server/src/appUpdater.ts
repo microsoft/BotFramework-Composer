@@ -6,28 +6,23 @@ import { EventEmitter } from 'events';
 import { autoUpdater, UpdateInfo } from 'electron-updater';
 import { app } from 'electron';
 import { prerelease as isNightly } from 'semver';
+import { AppUpdaterSettings } from '@bfc/shared';
 
 import logger from './utility/logger';
 const log = logger.extend('app-updater');
-
-interface AppUpdaterSettings {
-  autoDownload: boolean;
-  useNightly: boolean;
-}
 
 let appUpdater: AppUpdater | undefined;
 export class AppUpdater extends EventEmitter {
   private checkingForUpdate = false;
   private downloadingUpdate = false;
   private explicitCheck = false;
+  private settings: AppUpdaterSettings = { autoDownload: false, useNightly: true };
 
   constructor() {
     super();
 
-    const settings = this.getSettings();
     autoUpdater.allowDowngrade = false;
     autoUpdater.allowPrerelease = true;
-    autoUpdater.autoDownload = settings.autoDownload;
 
     autoUpdater.on('error', this.onError.bind(this));
     autoUpdater.on('checking-for-update', this.onCheckingForUpdate.bind(this));
@@ -55,6 +50,7 @@ export class AppUpdater extends EventEmitter {
       this.explicitCheck = explicit;
       this.setFeedURL();
       this.determineUpdatePath();
+      autoUpdater.autoDownload = this.settings.autoDownload;
       autoUpdater.checkForUpdates();
     }
   }
@@ -68,6 +64,10 @@ export class AppUpdater extends EventEmitter {
   public quitAndInstall() {
     logger('Quitting and installing...');
     autoUpdater.quitAndInstall();
+  }
+
+  public setSettings(settings: AppUpdaterSettings) {
+    this.settings = settings;
   }
 
   private onError(err: Error) {
@@ -86,24 +86,32 @@ export class AppUpdater extends EventEmitter {
   private onUpdateAvailable(updateInfo: UpdateInfo) {
     log('Update available: %O', updateInfo);
     this.checkingForUpdate = false;
-    this.emit('update-available', updateInfo);
+    if (!this.settings.autoDownload) {
+      this.emit('update-available', updateInfo);
+    }
   }
 
   private onUpdateNotAvailable(updateInfo: UpdateInfo) {
     log('Update not available: %O', updateInfo);
-    this.emit('update-not-available', this.explicitCheck);
+    if (!this.settings.autoDownload) {
+      this.emit('update-not-available', this.explicitCheck);
+    }
     this.resetToIdle();
   }
 
   private onDownloadProgress(progress: any) {
     log('Got update progress: %O', progress);
-    this.emit('progress', progress);
+    if (!this.settings.autoDownload) {
+      this.emit('progress', progress);
+    }
   }
 
   private onUpdateDownloaded(updateInfo: UpdateInfo) {
     log('Update downloaded: %O', updateInfo);
     this.resetToIdle();
-    this.emit('update-downloaded', updateInfo);
+    if (!this.settings.autoDownload) {
+      this.emit('update-downloaded', updateInfo);
+    }
   }
 
   private resetToIdle() {
@@ -114,8 +122,7 @@ export class AppUpdater extends EventEmitter {
   }
 
   private setFeedURL() {
-    const settings = this.getSettings();
-    if (settings.useNightly) {
+    if (this.settings.useNightly) {
       log('Updates set to be retrieved from nightly repo.');
       autoUpdater.setFeedURL({
         provider: 'github',
@@ -141,7 +148,8 @@ export class AppUpdater extends EventEmitter {
     //    nightly -> stable     (1.0.1-nightly.x.x -> 1.0.2)
     //    nightly -> nightly    (1.0.1-nightly.x.x -> 1.0.1-nightly.y.x)
     if (isNightly(currentVersion)) {
-      log(`Updating from nightly to (stable | nightly). Not allowing downgrade.`);
+      const targetChannel = this.settings.useNightly ? 'nightly' : 'stable';
+      log(`Updating from nightly to ${targetChannel}. Not allowing downgrade.`);
       autoUpdater.allowDowngrade = false;
       return;
     }
@@ -149,8 +157,7 @@ export class AppUpdater extends EventEmitter {
     // https://github.com/npm/node-semver/blob/v7.3.2/classes/semver.js#L127
     // The following path needs to allow downgrade to work:
     //    stable -> nightly     (1.0.1 -> 1.0.1-nightly.x.x)
-    const settings = this.getSettings();
-    if (!isNightly(currentVersion) && settings.useNightly) {
+    if (!isNightly(currentVersion) && this.settings.useNightly) {
       log(`Updating from stable to nightly. Allowing downgrade.`);
       autoUpdater.allowDowngrade = true;
       return;
@@ -159,10 +166,5 @@ export class AppUpdater extends EventEmitter {
     // stable -> stable
     log('Updating from stable to stable. Not allowing downgrade.');
     autoUpdater.allowDowngrade = false;
-  }
-
-  private getSettings(): AppUpdaterSettings {
-    // TODO: replace with actual implementation that fetches settings from disk
-    return { autoDownload: false, useNightly: true };
   }
 }

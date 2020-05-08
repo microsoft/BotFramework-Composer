@@ -3,6 +3,7 @@
 
 const mockAutoUpdater = {
   allowDowngrade: false,
+  autoDownload: false,
   checkForUpdates: jest.fn(),
   downloadUpdate: jest.fn(),
   on: jest.fn(),
@@ -28,9 +29,11 @@ describe('App updater', () => {
   let appUpdater: AppUpdater;
   beforeEach(() => {
     mockAutoUpdater.allowDowngrade = false;
+    mockAutoUpdater.autoDownload = false;
     appUpdater = AppUpdater.getInstance();
     (appUpdater as any).checkingForUpdate = false;
     (appUpdater as any).downloadingUpdate = false;
+    (appUpdater as any).settings = { autoDownload: false, useNightly: true };
     mockAutoUpdater.checkForUpdates.mockClear();
     mockAutoUpdater.checkForUpdates.mockClear();
     mockAutoUpdater.downloadUpdate.mockClear();
@@ -41,10 +44,12 @@ describe('App updater', () => {
   });
 
   it('should check for updates from the nightly repo', () => {
-    const getSettingsSpy = jest.spyOn(appUpdater as any, 'getSettings').mockReturnValue({ useNightly: true });
+    (appUpdater as any).settings.autoDownload = true;
+    (appUpdater as any).settings.useNightly = true;
     appUpdater.checkForUpdates(true);
 
     expect(mockAutoUpdater.checkForUpdates).toHaveBeenCalled();
+    expect(mockAutoUpdater.autoDownload).toBe(true);
     expect((appUpdater as any).explicitCheck).toBe(true);
     expect(mockAutoUpdater.setFeedURL).toHaveBeenCalledWith({
       provider: 'github',
@@ -52,11 +57,10 @@ describe('App updater', () => {
       owner: 'microsoft',
       vPrefixedTagName: true,
     });
-    getSettingsSpy.mockRestore();
   });
 
   it('should check for updates from the stable repo', () => {
-    const getSettingsSpy = jest.spyOn(appUpdater as any, 'getSettings').mockReturnValue({ useNightly: false });
+    (appUpdater as any).settings.useNightly = false;
     appUpdater.checkForUpdates(true);
 
     expect(mockAutoUpdater.checkForUpdates).toHaveBeenCalled();
@@ -67,7 +71,6 @@ describe('App updater', () => {
       owner: 'microsoft',
       vPrefixedTagName: true,
     });
-    getSettingsSpy.mockRestore();
   });
 
   it('should not check for updates if it is already checking for an update', () => {
@@ -94,22 +97,20 @@ describe('App updater', () => {
 
   it('should not allow a downgrade when checking for updates from stable to stable', () => {
     mockGetVersion.mockReturnValueOnce('0.0.1');
-    const getSettingsSpy = jest.spyOn(appUpdater as any, 'getSettings').mockReturnValue({ useNightly: false });
+    (appUpdater as any).settings.useNightly = false;
     mockAutoUpdater.allowDowngrade = true;
     appUpdater.checkForUpdates();
 
     expect(mockAutoUpdater.allowDowngrade).toBe(false);
-    getSettingsSpy.mockRestore();
   });
 
   it('should allow a downgrade when checking for updates from stable to nightly', () => {
     mockGetVersion.mockReturnValueOnce('0.0.1');
-    const getSettingsSpy = jest.spyOn(appUpdater as any, 'getSettings').mockReturnValue({ useNightly: true });
+    (appUpdater as any).settings.useNightly = true;
     mockAutoUpdater.allowDowngrade = false;
     appUpdater.checkForUpdates();
 
     expect(mockAutoUpdater.allowDowngrade).toBe(true);
-    getSettingsSpy.mockRestore();
   });
 
   it('should download an update', () => {
@@ -185,5 +186,11 @@ describe('App updater', () => {
 
     expect((appUpdater as any).checkingForUpdate).toBe(false);
     expect((appUpdater as any).downloadingUpdate).toBe(false);
+  });
+
+  it('should set settings', () => {
+    appUpdater.setSettings({ autoDownload: true, useNightly: true });
+
+    expect((appUpdater as any).settings).toEqual({ autoDownload: true, useNightly: true });
   });
 });
