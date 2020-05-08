@@ -118,6 +118,7 @@ export const deepCopyActions = async (
   return copiedActions;
 };
 
+// TODO(zhixzhan): mark to remove
 export const deleteAction = (
   data: MicrosoftIDialog,
   deleteLgTemplates: (templates: string[]) => any,

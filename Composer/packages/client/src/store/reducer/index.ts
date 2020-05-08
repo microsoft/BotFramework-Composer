@@ -5,9 +5,21 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
+import {
+  SensitiveProperties,
+  LuFile,
+  DialogInfo,
+  importResolverGenerator,
+  SDKKinds,
+  LgMetaData,
+  LgType,
+  LgTemplate,
+} from '@bfc/shared';
 import formatMessage from 'format-message';
+import { DialogDiff } from '@bfc/indexers/lib/dialogUtils/dialogDiff';
+import { ExtractLgTemplates, ExtractLuIntents } from '@bfc/indexers/lib/dialogUtils/extractResources';
 
+import * as lgUtil from '../../utils/lgUtil';
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
@@ -198,6 +210,66 @@ const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
 };
 
 const updateDialog: ReducerFunc = (state, { id, content }) => {
+  const { dialogs, lgFiles, locale } = state;
+  const prevContent = dialogs.find(d => d.id === id)?.content;
+  const dialogLgFile = lgFiles.find(f => f.id === `${id}.${locale}`);
+
+  if (!prevContent || !dialogLgFile) {
+    throw new Error(`dialog file "${id}" not found`);
+  }
+
+  /******** use diff find out current dialog related external resource updates (lg/lu) ************/
+  const diffs = DialogDiff(prevContent, content);
+  console.log('dialog diffs result: ', diffs);
+
+  const { adds, deletes } = diffs;
+
+  const deletesTemplateNames: string[] = []; // lg need to delete
+  const addsTemplateNames: LgTemplate[] = []; // lg need to add
+  const deletesLuIntentNames: string[] = []; // lu need to delete
+
+  for (const item of deletes) {
+    deletesTemplateNames.push(...ExtractLgTemplates(id, item.value).map(({ name }) => name)); // if delete dialog node, delete lg template it contains
+    deletesLuIntentNames.push(...ExtractLuIntents(id, item.value).map(({ name }) => name)); // if delete dialog node, delete lu intent it contains
+  }
+  // create lg template if added dialog node needs
+  for (const item of adds) {
+    const kind = item.value.$kind;
+    const designerId = get(item.value, '$designer.id');
+    if (kind === SDKKinds.SendActivity) {
+      const lgType = new LgType(kind, '').toString();
+      const lgName = new LgMetaData(lgType, designerId || '').toString();
+      const lgTemplate: LgTemplate = { name: lgName, body: '- hi', parameters: [] };
+      addsTemplateNames.push(lgTemplate);
+    }
+  }
+  console.log('dialog triggered lg templates adds: ', addsTemplateNames);
+  console.log('dialog triggered lg templates deletes: ', deletesTemplateNames);
+  console.log('dialog triggered lu intents deletes: ', deletesLuIntentNames);
+  /******** use diff end ************/
+
+  /******** update dialog's lg************/
+
+  const lgImportresolver = importResolverGenerator(lgFiles, '.lg', locale);
+  let newDialogLgFileContent = lgUtil.removeTemplates(dialogLgFile.content, deletesTemplateNames);
+  newDialogLgFileContent = lgUtil.addTemplates(newDialogLgFileContent, addsTemplateNames);
+
+  const newlgFiles = lgFiles.map(lgFile => {
+    if (lgFile.id === dialogLgFile.id) {
+      lgFile.content = newDialogLgFileContent;
+      return lgFile;
+    }
+    return lgFile;
+  });
+  state.lgFiles = newlgFiles.map(lgFile => {
+    const { parse } = lgIndexer;
+    const { id, content } = lgFile;
+    const { templates, diagnostics } = parse(content, id, lgImportresolver);
+
+    return { ...lgFile, templates, diagnostics, content };
+  });
+  /******** update dialog's lg end ************/
+
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
       return { ...dialog, ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content) };

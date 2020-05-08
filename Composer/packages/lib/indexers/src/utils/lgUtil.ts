@@ -49,6 +49,15 @@ export function addTemplate(content: string, { name, parameters = [], body }: Lg
   return resource.addTemplate(name, parameters, body).toString();
 }
 
+export function addTemplates(content: string, templates: LgTemplate[]): string {
+  let resource = Templates.parseText(content);
+  templates.forEach(template => {
+    const { name, parameters = [], body } = template;
+    resource = resource.addTemplate(name, parameters, body);
+  });
+  return resource.toString();
+}
+
 // if name exist, add it anyway, with name like `${name}1` `${name}2`
 export function addTemplateAnyway(
   content: string,

@@ -58,6 +58,7 @@ export const deleteAdaptiveAction = (
   walkAdaptiveAction(data, action => collectLgTemplates(action, lgTemplates));
   walkAdaptiveAction(data, action => collectLuIntents(action, luIntents));
 
+  // TODO(zhixzhan): mark to remove
   deleteLgTemplates(lgTemplates.filter(activity => !!activity));
   deleteLuIntents(luIntents);
 };

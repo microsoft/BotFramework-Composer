@@ -15,7 +15,7 @@ export interface DialogApiContext {
 const { appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;
 
 export function useDialogEditApi(shellApi: ShellApi) {
-  const { constructActions, copyActions, deleteAction, deleteActions } = useActionApi(shellApi);
+  const { constructActions, copyActions } = useActionApi(shellApi);
 
   async function insertActions(
     dialogId: string,
@@ -43,14 +43,12 @@ export function useDialogEditApi(shellApi: ShellApi) {
     return appendNodesAfter(dialogData, targetId, newNodes);
   }
 
-  function deleteSelectedAction(dialogId, dialogData, actionId: string) {
-    return deleteNode(dialogData, actionId, node => deleteAction(dialogId, node));
+  function deleteSelectedAction(_dialogId, dialogData, actionId: string) {
+    return deleteNode(dialogData, actionId);
   }
 
-  function deleteSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
-    return deleteNodes(dialogData, actionIds, nodes => {
-      deleteActions(dialogId, nodes);
-    });
+  function deleteSelectedActions(_dialogId: string, dialogData, actionIds: string[]) {
+    return deleteNodes(dialogData, actionIds);
   }
 
   async function copySelectedActions(dialogId, dialogData, actionIds: string[]) {

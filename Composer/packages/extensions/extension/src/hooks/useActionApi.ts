@@ -69,6 +69,7 @@ export const useActionApi = (shellApi: ShellApi) => {
     return await copyActions(dialogId, [action]);
   }
 
+  // TODO(zhixzhan): mark to remove
   async function deleteAction(dialogId: string, action: BaseSchema) {
     return destructAction(
       action,
