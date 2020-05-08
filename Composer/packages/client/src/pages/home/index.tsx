@@ -18,6 +18,7 @@ import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
+
 const linksButtom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
@@ -37,7 +38,7 @@ const comingSoonLink = {
   css: home.bluetitle,
 };
 
-const turtorials = [
+const tutorials = [
   {
     title: formatMessage('Tutorial #1'),
     content: formatMessage('Coming soon...'),
@@ -135,17 +136,19 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar toolbarItems={toolbarItems} onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} />
-      <div css={home.page}>
+      <div role="region" aria-label={formatMessage('toolbar')}>
+        <ToolBar toolbarItems={toolbarItems} onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} />
+      </div>
+      <div css={home.page} role="region" aria-label={formatMessage('Composer home page')}>
         <div role="main" css={home.leftPage}>
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
-          <div css={home.introduction}>
+          <div css={home.introduction} role="region" aria-label={formatMessage('Composer introduction')}>
             {formatMessage(
               'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
             )}
           </div>
           <div css={home.newBotContainer}>
-            <div data-testid={'homePage-body-New'}>
+            <div data-testid={'homePage-body-New'} role="button" aria-label={formatMessage('Create new empty bot')}>
               <ItemContainer
                 title={addButton}
                 content={formatMessage('New')}
@@ -157,29 +160,33 @@ const Home: React.FC<RouteComponentProps> = () => {
               />
             </div>
             {recentProjects.length > 0 ? (
-              <ItemContainer
-                title={''}
-                content={recentProjects[0].name}
-                styles={home.lastestBotItem}
-                onClick={async () => {
-                  await onClickRecentBotProject(recentProjects[0].path);
-                }}
-                forwardedRef={addRef}
-              />
+              <div role="button" aria-label={formatMessage('Open last bot project')}>
+                <ItemContainer
+                  title={''}
+                  content={recentProjects[0].name}
+                  styles={home.lastestBotItem}
+                  onClick={async () => {
+                    await onClickRecentBotProject(recentProjects[0].path);
+                  }}
+                  forwardedRef={addRef}
+                />
+              </div>
             ) : (
-              <ItemContainer
-                title={''}
-                content={'ToDoBotWithLuis'}
-                styles={home.lastestBotItem}
-                onClick={() => {
-                  onClickTemplate('ToDoBotWithLuisSample');
-                }}
-                forwardedRef={addRef}
-              />
+              <div role="button" aria-label={formatMessage('Open the ToDo Bot with LUIS sample')}>
+                <ItemContainer
+                  title={''}
+                  content={'ToDoBotWithLuis'}
+                  styles={home.lastestBotItem}
+                  onClick={() => {
+                    onClickTemplate('ToDoBotWithLuisSample');
+                  }}
+                  forwardedRef={addRef}
+                />
+              </div>
             )}
           </div>
           {recentProjects.length > 0 && (
-            <div css={home.leftContainer}>
+            <div css={home.leftContainer} role="region" aria-label={formatMessage('List of Recent Projects')}>
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
                 recentProjects={recentProjects}
@@ -189,7 +196,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               />
             </div>
           )}
-          <div css={home.leftContainer}>
+          <div css={home.leftContainer} role="region" aria-label={formatMessage('Link to Tutorials')}>
             <h2 css={home.subtitle}>
               {formatMessage('Video tutorials:')}&nbsp;
               <Link href={comingSoonLink.to} key={comingSoonLink.text} target={'_blank'}>
@@ -199,34 +206,34 @@ const Home: React.FC<RouteComponentProps> = () => {
               </Link>
             </h2>
             <div css={home.newBotContainer}>
-              {turtorials.map((item, index) => (
+              {tutorials.map((item, index) => (
                 <ItemContainer key={index} title={item.title} content={item.content} disabled />
               ))}
-              <div css={home.linkContainer}>
-                <div>
-                  {formatMessage(
-                    'Bot Framework provides the most comprehensive experience for building conversation applications.'
-                  )}
-                </div>
-                {linksButtom.map(link => {
-                  return (
-                    <Link
-                      style={{ width: '150px' }}
-                      href={link.to}
-                      tabIndex={0}
-                      key={'homePageLeftLinks-' + link.text}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <div css={link.css}>{link.text}</div>
-                    </Link>
-                  );
-                })}
-              </div>
+            </div>
+          </div>
+          <div css={home.leftContainer} role="region" aria-label={formatMessage('Link to Documentation')}>
+            <div css={home.linkContainer}>
+              {formatMessage(
+                'Bot Framework provides the most comprehensive experience for building conversation applications.'
+              )}
+              {linksButtom.map(link => {
+                return (
+                  <Link
+                    style={{ width: '150px' }}
+                    href={link.to}
+                    tabIndex={0}
+                    key={'homePageLeftLinks-' + link.text}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <div css={link.css}>{link.text}</div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
-        <div css={home.rightPage}>
+        <div css={home.rightPage} role="region" aria-label={formatMessage('Example bot list')}>
           <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
           <p css={home.examplesDescription}>
             {formatMessage(
