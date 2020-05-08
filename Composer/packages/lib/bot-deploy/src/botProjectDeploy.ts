@@ -285,7 +285,7 @@ export class BotProjectDeploy {
     // perform the dotnet publish command
     // this builds the app and prepares it to be deployed
     // results in a built copy in publishFolder/
-    await exec(`dotnet publish ${this.dotnetProjectPath} -c release -o ${publishFolder} -v q`);
+    await exec(`dotnet publish "${this.dotnetProjectPath}" -c release -o "${publishFolder}" -v q`);
     const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
     const localBotPath = path.join(projFolder, 'ComposerDialogs');
     // Then, copy the declarative assets into the build folder.
