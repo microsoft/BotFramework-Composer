@@ -101,9 +101,7 @@ const LUPage: React.FC<LUPageProps> = props => {
   return (
     <div css={pageRoot} data-testid="LUPage">
       <div css={contentWrapper}>
-        <div role="region" aria-label={formatMessage('toolbar')}>
-          <ToolBar toolbarItems={toolbarItems} />
-        </div>
+        <ToolBar toolbarItems={toolbarItems} />
         <div css={ContentHeaderStyle}>
           <h1 css={HeaderText}>{formatMessage('User Input')}</h1>
           <div css={flexContent}>
@@ -121,10 +119,8 @@ const LUPage: React.FC<LUPageProps> = props => {
           </div>
         </div>
         <div role="main" css={ContentStyle}>
-          <div role="region" aria-label={formatMessage('LU Navigation pane')}>
-            <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
-          </div>
-          <div css={contentEditor} data-testid="LUEditor" role="region" aria-label={formatMessage('LU editor')}>
+          <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+          <div css={contentEditor} data-testid="LUEditor">
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>
                 <CodeEditor path="/edit" dialogId={dialogId} />
