@@ -146,6 +146,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         actions.navTo(dialogId);
       }
     },
+    // TODO(zhixzhan): extension's invoke should be less
     ...lgApi,
     ...luApi,
     updateRegExIntent: updateRegExIntentHandler,

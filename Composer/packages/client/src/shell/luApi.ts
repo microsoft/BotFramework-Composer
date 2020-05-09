@@ -13,6 +13,8 @@ const createThrottledFunc = fn => throttle(fn, 1000, { leading: true, trailing: 
 
 function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver: (id: string) => LuFile | undefined) {
   const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
+    // TODO(zhixzhan): remove log for lu change is triggered by centralized dialog action or still by extensions
+    console.log('shell addLuIntent', id, intentName);
     const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
@@ -23,6 +25,8 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
   };
 
   const updateLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
+    // TODO(zhixzhan): remove log
+    console.log('shell updateLuIntent', id, intentName);
     const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
@@ -33,6 +37,8 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
   };
 
   const removeLuIntent = async (id: string, intentName: string) => {
+    // TODO(zhixzhan): remove log
+    console.log('shell removeLuIntent', id, intentName);
     const file = luFileResolver(id);
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);

@@ -7,9 +7,7 @@ import { useActionApi } from './useActionApi';
 
 export interface DialogApiContext {
   copyAction: (actionId: string) => BaseSchema;
-  deleteAction: (actionId: BaseSchema) => BaseSchema;
   copyActions: (actionIds: string[]) => BaseSchema[];
-  deleteActions: (actionIds: BaseSchema[]) => BaseSchema[];
 }
 
 const { appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = DialogUtils;

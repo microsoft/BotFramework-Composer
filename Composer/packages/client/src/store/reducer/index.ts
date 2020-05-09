@@ -20,6 +20,7 @@ import { DialogDiff } from '@bfc/indexers/lib/dialogUtils/dialogDiff';
 import { ExtractLgTemplates, ExtractLuIntents } from '@bfc/indexers/lib/dialogUtils/extractResources';
 
 import * as lgUtil from '../../utils/lgUtil';
+import * as luUtil from '../../utils/luUtil';
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
@@ -27,7 +28,6 @@ import { getExtension, getBaseName } from '../../utils';
 import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { getReferredFiles } from '../../utils/luUtil';
 
 import createReducer from './createReducer';
 
@@ -72,7 +72,7 @@ const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
 const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
   luFileStatusStorage.checkFileStatus(
     botName,
-    getReferredFiles(luFiles, dialogs).map(file => file.id)
+    luUtil.getReferredFiles(luFiles, dialogs).map(file => file.id)
   );
   return updateLuFilesStatus(botName, luFiles);
 };
@@ -209,12 +209,14 @@ const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
+// TODO:(zhixzhan): mark to refactor
 const updateDialog: ReducerFunc = (state, { id, content }) => {
-  const { dialogs, lgFiles, locale } = state;
+  const { dialogs, lgFiles, luFiles, locale } = state;
   const prevContent = dialogs.find(d => d.id === id)?.content;
   const dialogLgFile = lgFiles.find(f => f.id === `${id}.${locale}`);
+  const dialogLuFile = luFiles.find(f => f.id === `${id}.${locale}`);
 
-  if (!prevContent || !dialogLgFile) {
+  if (!prevContent) {
     throw new Error(`dialog file "${id}" not found`);
   }
 
@@ -249,26 +251,48 @@ const updateDialog: ReducerFunc = (state, { id, content }) => {
   /******** use diff end ************/
 
   /******** update dialog's lg************/
+  if (dialogLgFile) {
+    const lgImportresolver = importResolverGenerator(lgFiles, '.lg', locale);
+    let newContent = lgUtil.removeTemplates(dialogLgFile.content, deletesTemplateNames);
+    newContent = lgUtil.addTemplates(newContent, addsTemplateNames);
 
-  const lgImportresolver = importResolverGenerator(lgFiles, '.lg', locale);
-  let newDialogLgFileContent = lgUtil.removeTemplates(dialogLgFile.content, deletesTemplateNames);
-  newDialogLgFileContent = lgUtil.addTemplates(newDialogLgFileContent, addsTemplateNames);
+    const newFiles = lgFiles.map(f => {
+      if (f.id === dialogLgFile.id) {
+        f.content = newContent;
+        return f;
+      }
+      return f;
+    });
+    state.lgFiles = newFiles.map(f => {
+      const { parse } = lgIndexer;
+      const { id, content } = f;
+      const { templates, diagnostics } = parse(content, id, lgImportresolver);
 
-  const newlgFiles = lgFiles.map(lgFile => {
-    if (lgFile.id === dialogLgFile.id) {
-      lgFile.content = newDialogLgFileContent;
-      return lgFile;
-    }
-    return lgFile;
-  });
-  state.lgFiles = newlgFiles.map(lgFile => {
-    const { parse } = lgIndexer;
-    const { id, content } = lgFile;
-    const { templates, diagnostics } = parse(content, id, lgImportresolver);
-
-    return { ...lgFile, templates, diagnostics, content };
-  });
+      return { ...f, templates, diagnostics, content };
+    });
+  }
   /******** update dialog's lg end ************/
+
+  /******** update dialog's lu ************/
+  if (dialogLuFile) {
+    const newContent = luUtil.removeIntents(dialogLuFile.content, deletesLuIntentNames);
+
+    const newFiles = luFiles.map(f => {
+      if (f.id === dialogLuFile.id) {
+        f.content = newContent;
+        return f;
+      }
+      return f;
+    });
+    state.luFiles = newFiles.map(f => {
+      const { parse } = luIndexer;
+      const { id, content } = f;
+      const { intents, diagnostics } = parse(content, id);
+
+      return { ...f, intents, diagnostics, content };
+    });
+  }
+  /******** update dialog's lu end ************/
 
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {

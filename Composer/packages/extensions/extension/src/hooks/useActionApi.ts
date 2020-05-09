@@ -1,22 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  BaseSchema,
-  deepCopyActions,
-  deleteAction as destructAction,
-  deleteActions as destructActions,
-  FieldProcessorAsync,
-  walkAdaptiveActionList,
-  ShellApi,
-} from '@bfc/shared';
+import { BaseSchema, deepCopyActions, FieldProcessorAsync, walkAdaptiveActionList, ShellApi } from '@bfc/shared';
 
 import { useLgApi } from './useLgApi';
 import { useLuApi } from './useLuApi';
 
 export const useActionApi = (shellApi: ShellApi) => {
-  const { createLgTemplate, readLgTemplate, deleteLgTemplates } = useLgApi(shellApi);
-  const { createLuIntent, readLuIntent, deleteLuIntents } = useLuApi(shellApi);
+  const { createLgTemplate, readLgTemplate } = useLgApi(shellApi);
+  const { createLuIntent, readLuIntent } = useLuApi(shellApi);
 
   const luFieldName = '_lu';
 
@@ -45,6 +37,7 @@ export const useActionApi = (shellApi: ShellApi) => {
     return deepCopyActions(actions, referenceLgText, referenceLuIntent);
   }
 
+  // TODO(zhixzhan): need investigate
   async function copyActions(dialogId: string, actions: BaseSchema[]) {
     // 'SendActivity_1234' -> '- hi'
     const dereferenceLg: FieldProcessorAsync<string> = async (fromId, fromAction, toId, toAction, lgFieldName) =>
@@ -69,30 +62,11 @@ export const useActionApi = (shellApi: ShellApi) => {
     return await copyActions(dialogId, [action]);
   }
 
-  // TODO(zhixzhan): mark to remove
-  async function deleteAction(dialogId: string, action: BaseSchema) {
-    return destructAction(
-      action,
-      (templates: string[]) => deleteLgTemplates(dialogId, templates),
-      (luIntents: string[]) => deleteLuIntents(dialogId, luIntents)
-    );
-  }
-
-  async function deleteActions(dialogId: string, actions: BaseSchema[]) {
-    return destructActions(
-      actions,
-      (templates: string[]) => deleteLgTemplates(dialogId, templates),
-      (luIntents: string[]) => deleteLuIntents(dialogId, luIntents)
-    );
-  }
-
   return {
     constructAction,
     constructActions,
     copyAction,
     copyActions,
-    deleteAction,
-    deleteActions,
     actionsContainLuIntent,
   };
 };

@@ -158,6 +158,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
             0,
             actionsToBeMoved
           );
+          //TODO(zhixzhan): need investigate
           if (actionsContainLuIntent(actionsToBeMoved)) {
             // auto assign recognizer type to lu
             newDialogData = updateRecognizer(path, newDialogData, `${newDialogId}.lu`);

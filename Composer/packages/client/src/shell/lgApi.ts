@@ -21,6 +21,8 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
   };
 
   const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
+    // TODO(zhixzhan): remove log for lg change is triggered by centralized dialog action or still by extensions
+    console.log('shell action updateLgTemplate', id, templateName);
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
@@ -39,6 +41,8 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
   };
 
   const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
+    // TODO(zhixzhan): remove log for lg change is triggered by centralized dialog action or still by extensions
+    console.log('shell action copyLgTemplate', id, fromTemplateName, toTemplateName);
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
@@ -54,6 +58,8 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
   };
 
   const removeLgTemplate = async (id, templateName) => {
+    // TODO(zhixzhan): remove log for lg change is triggered by centralized dialog action or still by extensions
+    console.log('shell action removeLgTemplate', id, templateName);
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
@@ -67,6 +73,8 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
   };
 
   const removeLgTemplates = async (id, templateNames) => {
+    // TODO(zhixzhan): remove log for lg change is triggered by centralized dialog action or still by extensions
+    console.log('shell action removeLgTemplates', id, templateNames);
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateNames) throw new Error(`templateName is missing or empty`);

@@ -192,3 +192,22 @@ export function removeIntent(content: string, intentName: string): string {
   }
   return content;
 }
+
+export function removeIntents(content: string, intentNames: string[]): string {
+  let resource = luParser.parse(content);
+  const { Sections } = resource;
+
+  intentNames.forEach(intentName => {
+    if (intentName.includes('/')) {
+      const content1 = updateIntent(content, intentName, null);
+      resource = luParser.parse(content1);
+    } else {
+      const targetSection = Sections.find(({ Name }) => Name === intentName);
+      if (targetSection) {
+        resource = new sectionOperator(resource).deleteSection(targetSection.Id);
+      }
+    }
+  });
+
+  return resource.Content;
+}

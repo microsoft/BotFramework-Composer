@@ -6,8 +6,7 @@ import merge from 'lodash/merge';
 
 import { DesignerData } from './types/sdk';
 import { copyAdaptiveAction } from './copyUtils';
-import { deleteAdaptiveAction, deleteAdaptiveActionList } from './deleteUtils';
-import { MicrosoftIDialog, LuIntentSection } from './types';
+import { LuIntentSection } from './types';
 import { SDKKinds } from './types';
 import { FieldProcessorAsync } from './copyUtils/ExternalApi';
 import { generateDesignerId } from './generateUniqueId';
@@ -116,23 +115,6 @@ export const deepCopyActions = async (
     copiedActions.push(copy);
   }
   return copiedActions;
-};
-
-// TODO(zhixzhan): mark to remove
-export const deleteAction = (
-  data: MicrosoftIDialog,
-  deleteLgTemplates: (templates: string[]) => any,
-  deleteLuIntents: (luIntents: string[]) => any
-) => {
-  return deleteAdaptiveAction(data, deleteLgTemplates, deleteLuIntents);
-};
-
-export const deleteActions = (
-  inputs: MicrosoftIDialog[],
-  deleteLgTemplates: (templates: string[]) => any,
-  deleteLuIntents: (luIntents: string[]) => any
-) => {
-  return deleteAdaptiveActionList(inputs, deleteLgTemplates, deleteLuIntents);
 };
 
 const assignDefaults = (data: {}, currentSeed = {}) => {
