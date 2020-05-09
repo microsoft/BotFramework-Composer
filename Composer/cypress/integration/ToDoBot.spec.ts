@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 context('ToDo Bot', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit(Cypress.env('COMPOSER_URL'));
     cy.createBot('TodoSample');
   });
@@ -19,6 +19,7 @@ context('ToDo Bot', () => {
   it('can open the AddToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('addtodo').click();
+      cy.findByText('addtodo').click();
     });
 
     cy.withinEditor('PropertyEditor', () => {
@@ -28,6 +29,7 @@ context('ToDo Bot', () => {
 
   it('can open the ClearToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('cleartodos').click();
       cy.findByText('cleartodos').click();
     });
 
@@ -39,6 +41,7 @@ context('ToDo Bot', () => {
   it('can open the DeleteToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('deletetodo').click();
+      cy.findByText('deletetodo').click();
     });
 
     cy.withinEditor('PropertyEditor', () => {
@@ -48,6 +51,7 @@ context('ToDo Bot', () => {
 
   it('can open the ShowToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('showtodos').click();
       cy.findByText('showtodos').click();
     });
 

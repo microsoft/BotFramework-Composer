@@ -5,6 +5,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Schema;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,7 +21,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\packages\server\assets\projects");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\plugins\samples\assets\projects");
 
         private static ResourceExplorer resourceExplorer = new ResourceExplorer();
 
@@ -30,6 +31,12 @@ namespace Tests
         {
             string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, samplesDirectory, "TodoSample"));
             resourceExplorer.AddFolder(path);
+
+            // register components.
+            ComponentRegistration.Add(new DialogsComponentRegistration());
+            ComponentRegistration.Add(new DeclarativeComponentRegistration());
+            ComponentRegistration.Add(new AdaptiveComponentRegistration());
+            ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
         }
 
         [ClassCleanup]
@@ -83,7 +90,7 @@ namespace Tests
             var adapter = new TestAdapter(TestAdapter.CreateConversation(TestContext.TestName), sendTrace);
             adapter
                 .UseStorage(storage)
-                .UseState(userState, convoState)
+                .UseBotState(userState, convoState)
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("todosample.dialog");

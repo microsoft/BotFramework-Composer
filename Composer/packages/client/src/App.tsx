@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
+import React, { forwardRef, useContext, useEffect, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
@@ -18,11 +18,13 @@ import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, 
 import { resolveToBasePath } from './utils/fileUtil';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
-import { AppUpdater } from './components/AppUpdater';
+import onboardingState from './utils/onboardingStorage';
+import { isElectron } from './utils/electronUtil';
 
 initializeIcons(undefined, { disableWarnings: true });
 
 const Onboarding = React.lazy(() => import('./Onboarding'));
+const AppUpdater = React.lazy(() => import('./components/AppUpdater').then(module => ({ default: module.AppUpdater })));
 
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
@@ -127,12 +129,19 @@ const bottomLinks = [
 ];
 
 export const App: React.FC = () => {
-  const { state } = useContext(StoreContext);
+  const { actions, state } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
+  const { onboardingSetComplete } = actions;
   const { botName, projectId, dialogs, locale, designPageLocation, announcement } = state;
 
+  useEffect(() => {
+    onboardingSetComplete(onboardingState.getComplete());
+  }, []);
+
   const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
+
+  const renderAppUpdater = isElectron();
 
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
   return (
@@ -205,7 +214,7 @@ export const App: React.FC = () => {
           </ErrorBoundary>
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
-        {(window as any).__IS_ELECTRON__ && <AppUpdater />}
+        <Suspense fallback={<div />}>{renderAppUpdater && <AppUpdater />}</Suspense>
       </div>
     </Fragment>
   );

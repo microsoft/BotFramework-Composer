@@ -16,7 +16,7 @@ import { AppUpdaterStatus } from '../../constants';
 
 import { dialogContent, dialogCopy, dialogFooter, optionRoot, optionIcon, updateAvailableDismissBtn } from './styles';
 
-const { ipcRenderer } = window as any;
+const { ipcRenderer } = window;
 
 function SelectOption(props) {
   const { checked, text, key } = props;
@@ -80,11 +80,16 @@ export const AppUpdater: React.FC<{}> = _props => {
           break;
         }
 
-        case 'update-not-available':
-          // TODO: re-enable once we have implemented explicit "check for updates"
-          // setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
-          // setAppUpdateShowing(true);
+        case 'update-not-available': {
+          const explicit = payload;
+          if (explicit) {
+            // the user has explicitly checked for an update via the Help menu;
+            // we should display some UI feedback if there are no updates available
+            setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
+            setAppUpdateShowing(true);
+          }
           break;
+        }
 
         case 'update-downloaded':
           setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_SUCCEEDED });
@@ -188,7 +193,7 @@ export const AppUpdater: React.FC<{}> = _props => {
       default:
         return undefined;
     }
-  }, [status, progressPercent]);
+  }, [status, progressPercent, error]);
 
   const footer = useMemo(() => {
     switch (status) {

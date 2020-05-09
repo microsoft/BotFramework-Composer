@@ -115,6 +115,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [dialogId, dialogs, location]);
 
   useEffect(() => {
+    const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
+    if (index >= 0) {
+      selectTo(createSelectedPath(index));
+    }
+  }, [currentDialog?.id]);
+
+  useEffect(() => {
     if (location && props.dialogId && props.projectId) {
       const { dialogId, projectId } = props;
       const params = new URLSearchParams(location.search);

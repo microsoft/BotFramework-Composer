@@ -40,7 +40,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 }) => {
   const onRenderChildren = () => {
     return (
-      <div css={childrenContainer}>
+      <div css={childrenContainer} ref={forwardedRef}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
           <div css={itemContainerTitle}>{title}</div>
         </div>
@@ -64,7 +64,6 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
           await onClick();
         }
       }}
-      ref={forwardedRef}
       {...rest}
       onRenderChildren={onRenderChildren}
       disabled={disabled}
