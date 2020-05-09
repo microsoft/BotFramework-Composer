@@ -18,7 +18,7 @@
           "$designer": {
             "id": "832307"
           },
-          "changeType": "Clear",
+          "changeType": "clear",
           "itemsProperty": "user.todos",
           "resultProperty": "dialog.cleared"
         },

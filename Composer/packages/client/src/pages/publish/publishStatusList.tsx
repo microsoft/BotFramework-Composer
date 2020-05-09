@@ -89,7 +89,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
       onColumnClick: sortByDate,
       data: 'string',
       onRender: (item: IStatus) => {
-        return <span>{moment(item.time).format('DD-MM-YYYY')}</span>;
+        return <span>{moment(item.time).format('MM-DD-YYYY')}</span>;
       },
       isPadded: true,
     },

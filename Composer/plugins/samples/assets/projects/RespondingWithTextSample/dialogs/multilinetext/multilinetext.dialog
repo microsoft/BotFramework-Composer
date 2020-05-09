@@ -5,7 +5,7 @@
     "name": "MultiLineText",
     "id": "877352"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {

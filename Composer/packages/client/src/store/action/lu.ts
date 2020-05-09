@@ -1,20 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
+import { LuFile } from '@bfc/shared';
 
 import * as luUtil from '../../utils/luUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { Text } from '../../constants';
+import LuWorker from '../parsers/luWorker';
 
 import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';
 
 export const updateLuFile: ActionCreator = async (store, { id, content }) => {
+  const result = (await LuWorker.parse(id, content)) as LuFile;
   store.dispatch({
     type: ActionTypes.UPDATE_LU,
-    payload: { id, content },
+    payload: { ...result },
   });
 };
 
