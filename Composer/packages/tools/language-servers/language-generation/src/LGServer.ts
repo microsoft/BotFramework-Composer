@@ -36,6 +36,7 @@ import {
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
+  lgOptionKeys,
 } from './utils';
 
 // define init methods call from client
@@ -320,6 +321,7 @@ export class LGServer {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return;
     const position = params.position;
+    const lgOptionRegex = /^\s*>\s*!#\s*/g;
     const range = Range.create(0, 0, position.line, position.character);
     const lines = document.getText(range).split('\n');
     for (const line of lines) {
@@ -327,6 +329,8 @@ export class LGServer {
         state.push(TEMPLATENAME);
       } else if (line.trim().startsWith('-')) {
         state.push(TEMPLATEBODY);
+      } else if (lgOptionRegex.test(line)) {
+        state.push(OPTION);
       } else if (
         (state[state.length - 1] === TEMPLATENAME || templateId) &&
         (line.trim() === '[' || line.trim() === '[]')
@@ -411,14 +415,11 @@ export class LGServer {
     const position = params.position;
     const range = Range.create(position.line, 0, position.line, position.character);
     const lineContent = document.getText(range);
-    const lgOptionRegex = /^\s*>\s*!#\s*/;
 
     //initialize the root state to plaintext
     state.push(ROOT);
     if (lineContent.trim().startsWith('#')) {
       return TEMPLATENAME;
-    } else if (lgOptionRegex.test(lineContent)) {
-      return OPTION;
     } else if (lineContent.trim().startsWith('>')) {
       return COMMENTS;
     } else if (lineContent.trim().startsWith('-')) {
@@ -593,6 +594,23 @@ export class LGServer {
       return Promise.resolve({
         isIncomplete: true,
         items: cardTypesSuggestions,
+      });
+    }
+
+    if (curLineState === OPTION) {
+      console.log(curLineState);
+      const optionsSuggestions: CompletionItem[] = lgOptionKeys.map(type => {
+        return {
+          label: type,
+          kind: CompletionItemKind.Keyword,
+          insertText: type,
+          documentation: `Suggestion for LG Options: ${type}`,
+        };
+      });
+
+      return Promise.resolve({
+        isIncomplete: true,
+        items: optionsSuggestions,
       });
     }
 
