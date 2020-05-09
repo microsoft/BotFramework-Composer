@@ -84,7 +84,7 @@ describe('test all reducer handlers', () => {
         luFiles: [],
         schemas: { sdk: { content: {} } },
       },
-      { type: ActionTypes.CREATE_DIALOG, payload: { id: '3', content: '' } }
+      { type: ActionTypes.CREATE_DIALOG, payload: { id: '3', content: {} } }
     );
     expect(result.dialogs.length).toBe(3);
     expect(result.dialogs[2].id).toBe('3');
@@ -94,7 +94,13 @@ describe('test all reducer handlers', () => {
 
   it('update dialog file', () => {
     const result = reducer(
-      { dialogs: [{ id: '1', content: 'old' }, { id: '2' }], schemas: { sdk: { content: {} } } },
+      {
+        dialogs: [{ id: '1', content: 'old' }, { id: '2' }],
+        locale: 'en-us',
+        lgFiles: [],
+        luFiles: [],
+        schemas: { sdk: { content: {} } },
+      },
       { type: ActionTypes.UPDATE_DIALOG, payload: { id: '1', content: 'new' } }
     );
     expect(result.dialogs.length).toBe(2);

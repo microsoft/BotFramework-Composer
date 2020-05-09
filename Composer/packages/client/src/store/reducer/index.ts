@@ -314,8 +314,7 @@ const createDialogCancel: ReducerFunc = state => {
 };
 
 const createDialog: ReducerFunc = (state, { id, content }) => {
-  const fixedContent = autofixReferInDialog(id, content);
-  const dialogJson = JSON.parse(fixedContent);
+  const dialogJson = autofixReferInDialog(id, content);
   const dialog = {
     isRoot: false,
     displayName: id,

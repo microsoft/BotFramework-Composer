@@ -218,7 +218,7 @@ export class BotProject {
       newDesigner = getNewDesigner(name, description);
     }
     content.$designer = newDesigner;
-    const updatedContent = autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
+    const updatedContent = JSON.stringify(autofixReferInDialog(entryDialogId, content));
     await this._updateFile(relativePath, updatedContent);
     // when create/saveAs bot, serialize entry dialog/lg/lu
     const entryPatterns = [
@@ -548,7 +548,7 @@ export class BotProject {
           TemplateVariables.DIALOGNAME = dialogName;
 
           if (fileType === '.dialog') {
-            content = autofixReferInDialog(dialogName, content);
+            content = JSON.stringify(autofixReferInDialog(dialogName, JSON.parse(content)));
 
             targetRelativePath = templateInterpolate(
               Path.join(pathEndPoint, BotStructureTemplate.dialogs.entry),
