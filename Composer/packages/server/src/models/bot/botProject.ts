@@ -20,7 +20,7 @@ import { ICrossTrainConfig } from './luPublisher';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
-import { extractSkillManifestUrl, getSkillByUrl } from './skillManager';
+import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
@@ -148,11 +148,6 @@ export class BotProject {
 
     this.skills = skills;
     return skills;
-  };
-
-  // get skill by manifest url
-  public getSkillByUrl = async (url: string) => {
-    return await getSkillByUrl(url);
   };
 
   public exportToZip = cb => {
