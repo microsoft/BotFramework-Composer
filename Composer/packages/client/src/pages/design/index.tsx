@@ -85,7 +85,7 @@ const getTabFromFragment = () => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
+  const { dialogs, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -98,7 +98,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
-  const selected = params.get('selected');
+  const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
