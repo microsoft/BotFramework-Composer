@@ -4,7 +4,7 @@
     "id": "uFLBLw",
     "name": "gotoaction"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
