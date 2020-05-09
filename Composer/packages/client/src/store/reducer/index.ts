@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
+import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator, UserSettings } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
@@ -16,6 +16,7 @@ import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
+import { isElectron } from '../../utils/electronUtil';
 
 import createReducer from './createReducer';
 
@@ -135,21 +136,12 @@ const removeLgFile: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
-  const lgFiles = state.lgFiles.map(lgFile => {
-    if (lgFile.id === id) {
-      lgFile.content = content;
+const updateLgTemplate: ReducerFunc = (state, lgFile: LgFile) => {
+  state.lgFiles = state.lgFiles.map(file => {
+    if (file.id === lgFile.id) {
       return lgFile;
     }
-    return lgFile;
-  });
-  const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
-  state.lgFiles = lgFiles.map(lgFile => {
-    const { parse } = lgIndexer;
-    const { id, content } = lgFile;
-    const { templates, diagnostics } = parse(content, id, lgImportresolver);
-
-    return { ...lgFile, templates, diagnostics, content };
+    return file;
   });
   return state;
 };
@@ -184,16 +176,11 @@ const removeLuFile: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
-  state.luFiles = state.luFiles.map(luFile => {
-    if (luFile.id === id) {
-      const { intents, diagnostics } = luIndexer.parse(content, id);
-      return { ...luFile, intents, diagnostics, content };
-    }
-    return luFile;
-  });
+const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
+  const index = state.luFiles.findIndex(file => file.id === luFile.id);
+  state.luFiles[index] = luFile;
 
-  luFileStatusStorage.updateFileStatus(state.botName, id);
+  luFileStatusStorage.updateFileStatus(state.botName, luFile.id);
   return state;
 };
 
@@ -528,10 +515,14 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
-const setCodeEditorSettings: ReducerFunc = (state, settings) => {
+const setUserSettings: ReducerFunc<Partial<UserSettings>> = (state, settings) => {
   const newSettings = merge(state.userSettings, settings);
   storage.set('userSettings', newSettings);
   state.userSettings = newSettings;
+  if (isElectron()) {
+    // push updated settings to electron main process
+    window.ipcRenderer.send('update-user-settings', newSettings);
+  }
   return state;
 };
 
@@ -640,7 +631,7 @@ export const reducer = createReducer({
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
   [ActionTypes.SET_RUNTIME_TEMPLATES]: setRuntimeTemplates,
-  [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
+  [ActionTypes.SET_USER_SETTINGS]: setUserSettings,
   [ActionTypes.EJECT_SUCCESS]: ejectSuccess,
   [ActionTypes.SET_MESSAGE]: setMessage,
   [ActionTypes.SET_APP_UPDATE_ERROR]: setAppUpdateError,

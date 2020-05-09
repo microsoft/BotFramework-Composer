@@ -102,14 +102,7 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.EVENTS]: {
     label: 'Events',
-    types: [
-      SDKKinds.OnIntent,
-      SDKKinds.OnUnknownIntent,
-      SDKKinds.OnDialogEvent,
-      SDKKinds.OnActivity,
-      SDKKinds.OnMessageEventActivity,
-      SDKKinds.OnCustomEvent,
-    ],
+    types: [SDKKinds.OnIntent, SDKKinds.OnUnknownIntent, SDKKinds.OnDialogEvent, SDKKinds.OnActivity],
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {
     label: 'OnDialogEvents Types',
@@ -152,7 +145,7 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.OTHER]: {
     label: 'Other',
-    types: [SDKKinds.AdaptiveDialog, SDKKinds.LanguagePolicy, SDKKinds.QnAMakerDialog],
+    types: [SDKKinds.AdaptiveDialog],
   },
 };
 

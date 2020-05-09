@@ -29,8 +29,6 @@ namespace Microsoft.BotFramework.Composer.Core
 
         public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, IBotTelemetryClient telemetryClient, string rootDialog, string defaultLocale)
         {
-            HostContext.Current.Set(skillClient);
-            HostContext.Current.Set(conversationIdFactory);
             this.conversationState = conversationState;
             this.userState = userState;
             this.dialogState = conversationState.CreateProperty<DialogState>("DialogState");
@@ -40,8 +38,10 @@ namespace Microsoft.BotFramework.Composer.Core
             this.telemetryClient = telemetryClient;
 
             LoadRootDialogAsync();
+            this.dialogManager.InitialTurnState.Set(skillClient);
+            this.dialogManager.InitialTurnState.Set(conversationIdFactory);
         }
-        
+
         public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
         {
             AdaptiveDialog rootDialog = (AdaptiveDialog)this.dialogManager.RootDialog;
@@ -50,7 +50,7 @@ namespace Microsoft.BotFramework.Composer.Core
                 rootDialog.AutoEndDialog = true;
             }
             else
-            {          
+            {
                 rootDialog.AutoEndDialog = false;
             }
 

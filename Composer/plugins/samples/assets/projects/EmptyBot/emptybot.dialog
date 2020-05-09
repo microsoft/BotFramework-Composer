@@ -3,7 +3,7 @@
   "$designer": {
     "description": "<Fill in the description of your bot here>"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
