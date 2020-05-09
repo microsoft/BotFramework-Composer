@@ -43,7 +43,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)
         {
-            if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
+            if (ConfigSectionValid(settings.BlobStorage.ConnectionString) && ConfigSectionValid(settings.BlobStorage.Container))
             {
                 adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
             }
@@ -68,7 +68,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public IStorage ConfigureStorage(BotSettings settings)
         {
             IStorage storage;
-            if (!string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
+            if (ConfigSectionValid(settings.CosmosDb.AuthKey))
             {
                 storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
             }
@@ -208,6 +208,11 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             }
 
             throw new Exception($"Can't locate root dialog in {dir.FullName}");
+        }
+
+        private bool ConfigSectionValid(string val)
+        {
+            return !string.IsNullOrEmpty(val) && !val.StartsWith('<');
         }
     }
 }

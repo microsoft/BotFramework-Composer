@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const msRestNodeAuth = require('@azure/ms-rest-nodeauth');
 const argv = require('minimist')(process.argv.slice(2));
 const path = require('path');
+const rp = require('request-promise')
 const { promisify } = require('util');
 const { GraphRbacManagementClient } = require('@azure/graph');
 const { ResourceManagementClient } = require('@azure/arm-resources');
@@ -20,7 +21,7 @@ const logger = msg => {
     console.log(chalk.green(msg.message));
   }
 };
-const tenantId = '72f988bf-86f1-41af-91ab-2d7cd011db47';
+var tenantId = '';
 
 const usage = () => {
   const options = [
@@ -170,6 +171,23 @@ const unpackObject = output => {
   return unpacked;
 };
 
+const getTenantId = async (accessToken) => {
+  if (!accessToken) {
+    throw new Error('Invalid Access Token');
+  }
+  try {
+    const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
+    const options = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const response = await rp.get(tenantUrl, options);
+    const jsonRes = JSON.parse(response);
+    return jsonRes.value[0].tenantId;
+  } catch (err) {
+    throw new Error(`Get Tenant Id Failed`);
+  }
+}
+
 const getDeploymentTemplateParam = (
   appId,
   appPwd,
@@ -311,6 +329,13 @@ const create = async (
   createStorage = true,
   createAppInsignts = true
 ) => {
+  // If tenantId is empty string, get tenanId from API
+  if (!tenantId) {
+    const token = await creds.getToken();
+    const accessToken = token.accessToken;
+    tenantId = await getTenantId(accessToken);
+  }
+
   const graphCreds = new msRestNodeAuth.DeviceTokenCredentials(
     creds.clientId,
     tenantId,
