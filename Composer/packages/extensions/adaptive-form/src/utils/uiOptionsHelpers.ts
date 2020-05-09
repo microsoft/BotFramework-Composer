@@ -19,7 +19,7 @@ export function getUiLabel(props: FieldProps): string | false | undefined {
     return false;
   }
 
-  return label || startCase(schema?.title || name);
+  return label || schema?.title || startCase(name);
 }
 
 export function getUiDescription(props: FieldProps): string | undefined {
