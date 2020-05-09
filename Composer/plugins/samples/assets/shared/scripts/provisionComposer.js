@@ -47,11 +47,11 @@ const usage = () => {
     ``,
     chalk.bold(`Basic Usage:`),
     chalk.greenBright(`node provisionComposer --subscriptionId=`) +
-      chalk.yellow('<Azure Subscription Id>') +
-      chalk.greenBright(' --name=') +
-      chalk.yellow('<Name for your environment>') +
-      chalk.greenBright(' --appPassword=') +
-      chalk.yellow('<16 character password>'),
+    chalk.yellow('<Azure Subscription Id>') +
+    chalk.greenBright(' --name=') +
+    chalk.yellow('<Name for your environment>') +
+    chalk.greenBright(' --appPassword=') +
+    chalk.yellow('<16 character password>'),
     ``,
     chalk.bold(`All options:`),
     ...options.map(option => {
@@ -270,6 +270,30 @@ const provisionFailed = msg => {
   });
 };
 
+const getErrorMesssage = (err) => {
+  if (err.body) {
+    if (err.body.error) {
+      if (err.body.error.details) {
+        const details = err.body.error.details;
+        let errMsg = "";
+        for (let detail of details) {
+          errMsg += detail.message;
+        }
+        return errMsg;
+      }
+      else {
+        return err.body.error.message;
+      }
+    }
+    else {
+      return JSON.stringify(err.body, null, 2);
+    }
+  }
+  else {
+    return JSON.stringify(err, null, 2);
+  }
+}
+
 /**
  * Provision a set of Azure resources for use with a bot
  */
@@ -333,7 +357,7 @@ const create = async (
   } catch (err) {
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: err.body.message,
+      message: getErrorMesssage(err)
     });
     return provisionFailed();
   }
@@ -403,7 +427,7 @@ const create = async (
     spinner.fail();
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: err.body.message,
+      message: getErrorMesssage(err)
     });
     return provisionFailed();
   }
@@ -424,10 +448,10 @@ const create = async (
       if (failedOperations) {
         failedOperations.forEach(operation => {
           switch (
-            operation &&
-            operation.properties &&
-            operation.properties.statusMessage.error.code &&
-            operation.properties.targetResource
+          operation &&
+          operation.properties &&
+          operation.properties.statusMessage.error.code &&
+          operation.properties.targetResource
           ) {
             case 'MissingRegistrationForLocation':
               logger({
