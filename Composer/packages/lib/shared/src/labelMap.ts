@@ -126,7 +126,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKKinds.OnActivity]: {
     title: formatMessage('Activities'),
-    subtitle: formatMessage('Activity recieved'),
+    subtitle: formatMessage('Activity received'),
   },
   [SDKKinds.OnBeginDialog]: {
     title: formatMessage('Dialog started'),
