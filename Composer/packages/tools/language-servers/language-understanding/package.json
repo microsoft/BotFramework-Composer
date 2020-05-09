@@ -18,7 +18,7 @@
     "start:server": "cd demo && ts-node ./src/server.ts"
   },
   "dependencies": {
-    "@microsoft/bf-cli-command": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.1.tgz",
+    "@microsoft/bf-cli-command": "4.9.0-RC4",
     "@microsoft/bf-lu": "4.9.0-RC4",
     "express": "^4.15.2",
     "monaco-languageclient": "^0.10.0",

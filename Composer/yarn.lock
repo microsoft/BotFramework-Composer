@@ -2797,9 +2797,9 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@microsoft/bf-cli-command@4.9.0-preview.121555":
-  version "4.9.0-preview.121555"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-4.9.0-preview.121555.tgz#5cab42704d346dcc0bcb6f0d997de1bc7e222fc7"
+"@microsoft/bf-cli-command@4.9.0-RC4":
+  version "4.9.0-RC4"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-4.9.0-RC4.tgz#43d5f2902ee3816a40d0fb8bbfea73094e043503"
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -2811,51 +2811,14 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-cli-command@https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.1.tgz":
-  version "1.0.1"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-1.0.1.tgz#5c7f650015f839d80a7739bc70f8cd5fa90a1e48"
+"@microsoft/bf-dispatcher@4.9.0-RC4":
+  version "4.9.0-RC4"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.9.0-RC4.tgz#83db7cab0b2ba51d50470a3026f1a7db9ae1bb78"
   dependencies:
-    "@oclif/command" "~1.5.19"
-    "@oclif/config" "~1.13.3"
-    "@oclif/errors" "~1.2.2"
-    applicationinsights "^1.0.8"
-    chalk "2.4.1"
-    cli-ux "~4.9.3"
-    debug "^4.1.1"
-    fs-extra "^7.0.1"
-    tslib "~1.10.0"
-
-"@microsoft/bf-dispatcher@4.9.0-preview.121555":
-  version "4.9.0-preview.121555"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.9.0-preview.121555.tgz#ee96ac695e49a932c5f3b3b6dff9f5834c603d2d"
-  dependencies:
-    "@microsoft/bf-lu" "4.9.0-preview.121555"
+    "@microsoft/bf-lu" "4.9.0-RC4"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     argparse "~1.0.10"
-    tslib "^1.10.0"
-
-"@microsoft/bf-lu@4.9.0-preview.121555":
-  version "4.9.0-preview.121555"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0-preview.121555#3c9e4959c03117e1fea8360f78ae83022cb4751e"
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@oclif/command" "~1.5.19"
-    "@oclif/errors" "~1.2.2"
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.15"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
     tslib "^1.10.0"
 
 "@microsoft/bf-lu@4.9.0-RC4":
@@ -2882,15 +2845,15 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-luis-cli@4.9.0-preview.121555":
-  version "4.9.0-preview.121555"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-luis-cli/-/@microsoft/bf-luis-cli-4.9.0-preview.121555.tgz#a88c32a1d161e052987f7a165c8cba0b1b9012d7"
+"@microsoft/bf-luis-cli@4.9.0-RC4":
+  version "4.9.0-RC4"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-luis-cli/-/@microsoft/bf-luis-cli-4.9.0-RC4.tgz#4941c45d6dc301d464f7fb0f5fcb36ef6dc8c2ca"
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/cognitiveservices-luis-runtime" "5.0.0"
     "@azure/ms-rest-azure-js" "2.0.1"
-    "@microsoft/bf-cli-command" "4.9.0-preview.121555"
-    "@microsoft/bf-lu" "4.9.0-preview.121555"
+    "@microsoft/bf-cli-command" "4.9.0-RC4"
+    "@microsoft/bf-lu" "4.9.0-RC4"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"
