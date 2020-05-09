@@ -96,8 +96,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     clearUndoHistory,
     onboardingAddCoachMarkRef,
   } = actions;
-  const { location } = props;
-  const { dialogId, selected } = designPageLocation;
+  const { location, dialogId } = props;
+  const params = new URLSearchParams(location?.search);
+  const selected = params.get('selected');
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
