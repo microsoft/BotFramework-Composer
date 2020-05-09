@@ -43,6 +43,18 @@ const Skills: React.FC<RouteComponentProps> = () => {
     },
   ];
 
+  const onItemDelete = useCallback(
+    index => {
+      const payload = {
+        projectId,
+        targetId: index,
+        skillData: null,
+      };
+      actions.updateSkill(payload);
+    },
+    [projectId]
+  );
+
   const onSubmitForm = useCallback(
     (submitFormData: ISkillFormData, editIndex: number) => {
       const payload = {
@@ -76,12 +88,11 @@ const Skills: React.FC<RouteComponentProps> = () => {
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} />
+      <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} onDelete={onItemDelete} />
       <CreateSkillModal
         isOpen={typeof editIndex === 'number'}
         skills={skills}
         projectId={projectId}
-        checkSkill={actions.checkSkillUrl}
         editIndex={editIndex}
         onSubmit={onSubmitForm}
         onDismiss={onDismissForm}

@@ -450,7 +450,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             isOpen={state.showAddSkillDialogModal}
             skills={state.skills}
             projectId={projectId}
-            checkSkill={actions.checkSkillUrl}
             editIndex={-1}
             onDismiss={() => actions.addSkillDialogCancel()}
             onSubmit={handleAddSkillDialogSubmit}

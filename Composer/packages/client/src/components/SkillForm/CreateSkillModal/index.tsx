@@ -11,6 +11,7 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
 
+import httpClient from '../../../utils/httpUtil';
 import { DialogWrapper } from '../../DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { addSkillDialog } from '../../../constants';
@@ -23,7 +24,6 @@ export interface ICreateSkillModalProps {
   editIndex?: number;
   skills: Skill[];
   projectId: string;
-  checkSkill: (config) => void;
   onSubmit: (skillFormData: ISkillFormData, editIndex: number) => void;
   onDismiss: () => void;
 }
@@ -33,92 +33,135 @@ const defaultFormData = {
 };
 
 const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
-  const { editIndex = -1, skills, onSubmit, onDismiss, isOpen, projectId, checkSkill } = props;
+  const { editIndex = -1, skills, onSubmit, onDismiss, isOpen, projectId } = props;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
     ? assignDefined(defaultFormData, { manifestUrl: originFormData.manifestUrl, name: originFormData.name })
     : { ...defaultFormData };
   const [formData, setFormData] = useState<ISkillFormData>(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isModify = editIndex >= 0 && editIndex < skills.length;
   useEffect(() => {
     setFormData(initialFormData);
   }, [editIndex]);
 
-  const validateForm = async (newData: any): Promise<ISkillFormDataErrors> => {
-    const errors: ISkillFormDataErrors = {};
+  const asyncValidateForm = async (newData: any): Promise<ISkillFormDataErrors> => {
+    const errors: ISkillFormDataErrors = { ...formDataErrors };
+
+    const url = newData.manifestUrl;
+
+    // skip validation if has local other errors.
+    if (!url || errors.manifestUrl) return errors;
+
+    try {
+      await httpClient.post(`/projects/${projectId}/skill/check`, { projectId, url });
+      if (errors.manifestUrlFetch) {
+        delete errors.manifestUrlFetch;
+      }
+    } catch (err) {
+      errors.manifestUrlFetch = err.response && err.response.data.message ? err.response.data.message : err;
+    }
+    return errors;
+  };
+
+  const validateForm = (newData: ISkillFormData): ISkillFormDataErrors => {
+    const errors: ISkillFormDataErrors = { ...formDataErrors };
 
     if (has(newData, 'manifestUrl')) {
       const { manifestUrl } = newData;
 
+      let currentError = '';
       if (manifestUrl) {
-        let manifestUrlErrorMsg = '';
         if (!SkillUrlRegex.test(manifestUrl)) {
-          manifestUrlErrorMsg = formatMessage('Url should start with http[s]://');
+          currentError = formatMessage('Url should start with http[s]://');
         }
 
-        if (!manifestUrlErrorMsg) {
-          const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
-          if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
-            manifestUrlErrorMsg = formatMessage('Duplicate skill manifest Url');
-          }
-        }
-
-        if (!manifestUrlErrorMsg) {
-          try {
-            await checkSkill({ projectId, url: manifestUrl });
-          } catch (err) {
-            manifestUrlErrorMsg = err.response && err.response.data.message ? err.response.data.message : err;
-          }
-        }
-        if (manifestUrlErrorMsg) {
-          errors.manifestUrl = manifestUrlErrorMsg;
+        const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
+        if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
+          currentError = formatMessage('Duplicate skill manifest Url');
         }
       } else {
-        errors.manifestUrl = formatMessage('Please input a manifest url');
+        currentError = formatMessage('Please input a manifest url');
+      }
+
+      if (currentError) {
+        errors.manifestUrl = currentError;
+      } else {
+        delete errors.manifestUrl;
       }
     }
 
     if (has(newData, 'name')) {
       const { name } = newData;
+      let currentError = '';
       if (name) {
         if (!SkillNameRegex.test(name)) {
-          errors.name = formatMessage('Name contains invalid charactors');
+          currentError = formatMessage('Name contains invalid charactors');
         }
+
+        const duplicatedItemIndex = skills.findIndex(item => item.name === name);
+        if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
+          currentError = formatMessage('Duplicate skill name');
+        }
+      }
+
+      if (currentError) {
+        errors.name = currentError;
+      } else {
+        delete errors.name;
       }
     }
 
     return errors;
   };
 
-  const updateForm = (field: string) => async (e: FormEvent, newValue: string | undefined) => {
+  // fetch manifest url
+  useEffect(() => {
+    asyncValidateForm(formData).then(errors => {
+      setFormDataErrors(errors);
+    });
+  }, [formData.manifestUrl]);
+
+  const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
     const newData: ISkillFormData = {
       ...formData,
       [field]: newValue,
     };
     setFormData(newData);
-
-    // only update current field error
-    const data = {};
-    data[field] = newValue;
-    const errors = { ...formDataErrors };
-    const currentErrors = await validateForm(data);
-    errors[field] = currentErrors[field];
+    const errors = validateForm(newData);
     setFormDataErrors(errors);
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const errors = await validateForm(formData);
-    setFormDataErrors(errors);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-    if (Object.keys(errors).length > 0) {
+    if (Object.keys(formDataErrors).length > 0) {
+      setIsSubmitting(false);
       return;
     }
-    const newFormData = { ...formData };
 
-    onSubmit(newFormData, editIndex);
+    const errors = validateForm(formData);
+    setFormDataErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    // do async validation
+    asyncValidateForm(formData).then(errors => {
+      setFormDataErrors(errors);
+      if (Object.keys(errors).length > 0) {
+        setIsSubmitting(false);
+        return;
+      }
+      const newFormData = { ...formData };
+      onSubmit(newFormData, editIndex);
+      setIsSubmitting(false);
+    });
   };
 
   const formTitles =
@@ -135,7 +178,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
               label={formatMessage('Manifest url')}
               value={formData.manifestUrl}
               onChange={updateForm('manifestUrl')}
-              errorMessage={formDataErrors.manifestUrl}
+              errorMessage={formDataErrors.manifestUrl || formDataErrors.manifestUrlFetch}
               data-testid="NewSkillManifestUrl"
               required
               autoFocus
@@ -151,7 +194,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
           </StackItem>
 
           <StackItem>
-            <PrimaryButton onClick={handleSubmit} text={formatMessage('Confirm')} />
+            <PrimaryButton onClick={handleSubmit} text={formatMessage('Confirm')} disabled={isSubmitting} />
             <DefaultButton
               css={MarginLeftSmall}
               onClick={onDismiss}

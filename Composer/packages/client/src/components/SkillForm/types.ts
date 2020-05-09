@@ -8,6 +8,7 @@ export interface ISkillFormData {
 
 export interface ISkillFormDataErrors {
   manifestUrl?: string;
+  manifestUrlFetch?: string;
   name?: string;
 }
 

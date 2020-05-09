@@ -7,7 +7,7 @@ import { Skill } from '@bfc/shared';
 
 import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
-import SkillForm from '../../src/pages/skills/skill-form';
+import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal';
 import { renderWithStore } from '../testUtils';
 
 const items: Skill[] = [
@@ -50,14 +50,18 @@ describe('Skill page', () => {
 
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
-    const { container } = render(<SkillList skills={items} projectId="test-project" onEdit={jest.fn()} />);
+    const { container } = render(
+      <SkillList skills={items} projectId="test-project" onEdit={jest.fn()} onDelete={jest.fn()} />
+    );
     expect(container).toHaveTextContent('Email Skill');
     expect(container).toHaveTextContent('Point Of Interest Skill');
   });
 
   it('can edit the skill', () => {
     const onEdit = jest.fn();
-    const { getAllByTestId } = render(<SkillList skills={items} projectId="test-project" onEdit={onEdit} />);
+    const { getAllByTestId } = render(
+      <SkillList skills={items} projectId="test-project" onEdit={onEdit} onDelete={jest.fn()} />
+    );
 
     const editBtns = getAllByTestId('EditSkill');
     editBtns.forEach((btn, i) => {
@@ -73,13 +77,11 @@ describe('<SkillForm />', () => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
     const onDismiss = jest.fn(() => {});
-    const checkSkill = jest.fn(() => {});
     const { getByLabelText, getByText } = render(
-      <SkillForm
+      <CreateSkillModal
         skills={items}
         editIndex={0}
         projectId={'243245'}
-        checkSkill={checkSkill}
         onSubmit={onSubmit}
         onDismiss={onDismiss}
         isOpen
@@ -92,6 +94,6 @@ describe('<SkillForm />', () => {
 
     const submitButton = getByText('Confirm');
     fireEvent.click(submitButton);
-    expect(checkSkill).toBeCalled();
+    expect(onSubmit).not.toBeCalled();
   });
 });
