@@ -10,12 +10,12 @@ import formatMessage from 'format-message';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
 import { StoreContext } from '../../store';
+import { ISkillFormData } from '../../components/SkillForm/types';
+import CreateSkillModal from '../../components/SkillForm/CreateSkillModal';
 
 import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';
 import SkillList from './skill-list';
-import SkillForm from './skill-form';
-import { ISkillFormData } from './types';
 
 const Skills: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
@@ -77,7 +77,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
         />
       </div>
       <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} />
-      <SkillForm
+      <CreateSkillModal
         isOpen={typeof editIndex === 'number'}
         skills={skills}
         projectId={projectId}

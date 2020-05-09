@@ -10,11 +10,15 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
-import { Modal } from 'office-ui-fabric-react/lib/Modal';
 
-import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex, SkillNameRegex } from './types';
-import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalTitle, FormModalBody } from './styles';
-export interface ISkillFormProps {
+import { DialogWrapper } from '../../DialogWrapper';
+import { DialogTypes } from '../../DialogWrapper/styles';
+import { addSkillDialog } from '../../../constants';
+import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex, SkillNameRegex } from '../types';
+
+import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalBody } from './styles';
+
+export interface ICreateSkillModalProps {
   isOpen: boolean;
   editIndex?: number;
   skills: Skill[];
@@ -28,7 +32,7 @@ const defaultFormData = {
   manifestUrl: '',
 };
 
-const SkillForm: React.FC<ISkillFormProps> = props => {
+const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
   const { editIndex = -1, skills, onSubmit, onDismiss, isOpen, projectId, checkSkill } = props;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
@@ -117,11 +121,11 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
     onSubmit(newFormData, editIndex);
   };
 
+  const formTitles =
+    editIndex === -1 ? { ...addSkillDialog.SKILL_MANIFEST_FORM } : { ...addSkillDialog.SKILL_MANIFEST_FORM_EDIT };
+
   return (
-    <Modal titleAriaId="skillConnectionModal" isOpen={isOpen} onDismiss={onDismiss} isBlocking={false}>
-      <h2 css={FormModalTitle}>
-        {editIndex === -1 ? formatMessage('Connect to a new skill') : formatMessage('Edit skill connection')}
-      </h2>
+    <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...formTitles} dialogType={DialogTypes.CreateFlow}>
       <form onSubmit={handleSubmit} css={FormModalBody}>
         <input type="submit" style={{ display: 'none' }} />
         <Stack tokens={{ childrenGap: '3rem' }}>
@@ -157,8 +161,8 @@ const SkillForm: React.FC<ISkillFormProps> = props => {
           </StackItem>
         </Stack>
       </form>
-    </Modal>
+    </DialogWrapper>
   );
 };
 
-export default SkillForm;
+export default CreateSkillModal;
