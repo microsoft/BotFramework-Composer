@@ -16,7 +16,7 @@ import { AppUpdaterStatus } from '../../constants';
 
 import { dialogContent, dialogCopy, dialogFooter, optionRoot, optionIcon, updateAvailableDismissBtn } from './styles';
 
-const { ipcRenderer } = window as any;
+const { ipcRenderer } = window;
 
 function SelectOption(props) {
   const { checked, text, key } = props;

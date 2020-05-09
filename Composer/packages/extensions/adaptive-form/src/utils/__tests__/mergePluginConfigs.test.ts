@@ -249,17 +249,6 @@ describe('mergePluginConfigs', () => {
             ],
             "subtitle": [Function],
           },
-          "Microsoft.OnCustomEvent": Object {
-            "hidden": Array [
-              "actions",
-            ],
-            "label": [Function],
-            "order": Array [
-              "condition",
-              "*",
-            ],
-            "subtitle": [Function],
-          },
           "Microsoft.OnDialogEvent": Object {
             "hidden": Array [
               "actions",

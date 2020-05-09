@@ -7,15 +7,12 @@ import { LuEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { luIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
+import { filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
-import * as luUtil from '../../utils/luUtil';
-
-const { parse } = luIndexer;
 
 const lspServerPath = '/lu-language-server';
 
@@ -28,8 +25,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { luFiles, locale, projectId, userSettings } = state;
   const { dialogId } = props;
   const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
-  const [httpErrorMsg, setHttpErrorMsg] = useState('');
+  const diagnostics = get(file, 'diagnostics', []);
   const [luEditor, setLuEditor] = useState<any>(null);
 
   const search = props.location?.search ?? '';
@@ -105,37 +101,9 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     [file, projectId]
   );
 
-  const updateDiagnostics = useMemo(
-    () =>
-      debounce((value: string) => {
-        if (!file) return;
-        const { id } = file;
-        if (inlineMode) {
-          if (!intent) return;
-          const { Name } = intent;
-          const { content } = file;
-          try {
-            const newContent = luUtil.updateIntent(content, Name, {
-              Name,
-              Body: value,
-            });
-            const { diagnostics } = parse(newContent, id);
-            setDiagnostics(diagnostics);
-          } catch (error) {
-            setHttpErrorMsg(error.error);
-          }
-        } else {
-          const { diagnostics } = parse(value, id);
-          setDiagnostics(diagnostics);
-        }
-      }, 1000),
-    [file, intent, projectId]
-  );
-
   const _onChange = useCallback(
     value => {
       setContent(value);
-      updateDiagnostics(value);
       if (!file) return;
       if (inlineMode) {
         updateLuIntent(value);
@@ -160,7 +128,6 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
     <LuEditor
       editorDidMount={editorDidMount}
       value={content}
-      errorMessage={httpErrorMsg}
       diagnostics={currentDiagnostics}
       luOption={luOption}
       languageServer={{

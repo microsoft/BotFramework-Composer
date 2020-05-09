@@ -5,7 +5,7 @@
     "name": "SwitchCondition",
     "id": "292826"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {

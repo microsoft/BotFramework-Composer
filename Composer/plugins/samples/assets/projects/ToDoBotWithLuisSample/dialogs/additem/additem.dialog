@@ -4,7 +4,7 @@
     "name": "AddItem",
     "id": "225905"
   },
-  "autoEndDialog": "true",
+  "autoEndDialog": true,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
@@ -94,7 +94,7 @@
             "id": "733511",
             "name": "Edit an Array property"
           },
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "user.lists[dialog.listType]",
           "value": "=$itemTitle"
         },

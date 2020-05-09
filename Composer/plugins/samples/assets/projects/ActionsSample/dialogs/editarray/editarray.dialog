@@ -17,7 +17,7 @@
           "$designer": {
             "id": "076427"
           },
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "user.ids",
           "value": "=10000+1000+100+10+1"
         },
@@ -26,13 +26,13 @@
           "$designer": {
             "id": "162360"
           },
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "user.ids",
           "value": "=200*200"
         },
         {
           "$kind": "Microsoft.EditArray",
-          "changeType": "Push",
+          "changeType": "push",
           "itemsProperty": "user.ids",
           "value": "=888888/4",
           "$designer": {

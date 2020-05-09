@@ -57,12 +57,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
     // and export the content into that folder as well.
-    if (project.settings.runtime && project.settings.runtime.customRuntime !== true) {
+    if (!settings.runtime || settings.runtime.customRuntime !== true) {
       this.composer.log('Using managed runtime');
       await this.initBot(botId);
       await this.saveContent(botId, version, project.dataDir, user);
-      await this.saveSkillManifests(botId, project.dataDir);
-    } else if (!project.settings.runtime.path || !project.settings.runtime.command) {
+      await this.saveSkillManifests(this.getBotRuntimeDir(botId), project.dataDir);
+    } else if (project.settings.runtime.path && project.settings.runtime.command) {
+      // update manifst into runtime wwwroot
+      await this.saveSkillManifests(project.settings.runtime.path, project.dataDir);
+    } else {
       return {
         status: 400,
         result: {
@@ -127,7 +130,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private getManifestSrcDir = (srcDir: string) => path.resolve(srcDir, 'manifests');
 
-  private getManifestDstDir = (botId: string) => path.resolve(this.getBotRuntimeDir(botId), 'azurewebapp', 'wwwroot', 'manifests');
+  private getManifestDstDir = (baseDir: string) => path.resolve(baseDir, 'azurewebapp', 'wwwroot', 'manifests');
 
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);
@@ -185,9 +188,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     await this.zipBot(dstPath, srcDir);
   };
 
-  private saveSkillManifests = async (botId: string, srcDir: string) => {
+  private saveSkillManifests = async (dstPath: string, srcDir: string) => {
     const manifestSrcDir = this.getManifestSrcDir(srcDir);
-    const manifestDstDir = this.getManifestDstDir(botId);
+    const manifestDstDir = this.getManifestDstDir(dstPath);
 
     if (await this.dirExist(manifestDstDir)) {
       await rmDir(manifestDstDir);

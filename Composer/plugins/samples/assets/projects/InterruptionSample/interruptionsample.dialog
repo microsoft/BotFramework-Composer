@@ -78,7 +78,7 @@
             "name": "Modify active dialog",
             "id": "216094"
           },
-          "changeType": "ReplaceSequence",
+          "changeType": "replaceSequence",
           "actions": [
             {
               "$kind": "Microsoft.DeleteProperty",

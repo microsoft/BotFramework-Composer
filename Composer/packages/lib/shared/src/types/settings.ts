@@ -8,7 +8,13 @@ export interface CodeEditorSettings {
 }
 
 export interface UserSettings {
+  appUpdater: AppUpdaterSettings;
   codeEditor: CodeEditorSettings;
   propertyEditorWidth: number;
   dialogNavWidth: number;
+}
+
+export interface AppUpdaterSettings {
+  autoDownload: boolean;
+  useNightly: boolean;
 }
