@@ -61,7 +61,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
       <ToolBar toolbarItems={toolbarItems} />
       <MainContent>
         <Fragment>
-          <div css={fileList} role="region" aria-label={formatMessage('settings navigation pane')}>
+          <div css={fileList} role="region" aria-label={formatMessage('settings menu')}>
             <Tree variant="large">
               <Nav
                 initialSelectedKey={props['*'] || 'dialog-settings'}
