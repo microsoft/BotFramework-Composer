@@ -126,7 +126,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                 data={data}
                 focusedSteps={focusedActions}
                 onFocusSteps={onFocusSteps}
-                focusedEvent={focusedEvent}
                 onFocusEvent={onFocusEvent}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
