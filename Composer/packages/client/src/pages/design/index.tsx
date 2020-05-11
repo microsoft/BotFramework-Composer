@@ -45,6 +45,7 @@ import { PropertyEditor } from './PropertyEditor';
 
 const AddSkillDialog = React.lazy(() => import('./addSkillDialogModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
+const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifest'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
 const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
 
@@ -85,8 +86,9 @@ const getTabFromFragment = () => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  const { dialogs, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
+  const { dialogs, displaySkillManifest, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
+    dismissManifestModal,
     removeDialog,
     setDesignPageLocation,
     navTo,
@@ -467,6 +469,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onDismiss={onTriggerCreationDismiss}
             onSubmit={onTriggerCreationSubmit}
           />
+        )}
+        {displaySkillManifest && (
+          <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />
         )}
       </Suspense>
     </React.Fragment>
