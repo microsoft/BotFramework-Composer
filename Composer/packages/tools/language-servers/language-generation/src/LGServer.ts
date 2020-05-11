@@ -37,12 +37,13 @@ import {
   cardPropDict,
   cardPropPossibleValueType,
   lgOptionKeys,
+  lgOptionsValues,
 } from './utils';
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
-const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG, OPTION } = LGCursorState;
+const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
 
 export class LGServer {
   protected workspaceRoot?: URI;
@@ -83,7 +84,7 @@ export class LGServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['.', '[', '[', '\n'],
+            triggerCharacters: ['.', '[', '[', '@', '=', '\n'],
           },
           hoverProvider: true,
           foldingRangeProvider: false,
@@ -321,16 +322,15 @@ export class LGServer {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) return;
     const position = params.position;
-    const lgOptionRegex = /^\s*>\s*!#\s*/g;
     const range = Range.create(0, 0, position.line, position.character);
     const lines = document.getText(range).split('\n');
     for (const line of lines) {
       if (line.trim().startsWith('#')) {
         state.push(TEMPLATENAME);
+      } else if (line.trim().startsWith('>')) {
+        state.push(COMMENTS);
       } else if (line.trim().startsWith('-')) {
         state.push(TEMPLATEBODY);
-      } else if (lgOptionRegex.test(line)) {
-        state.push(OPTION);
       } else if (
         (state[state.length - 1] === TEMPLATENAME || templateId) &&
         (line.trim() === '[' || line.trim() === '[]')
@@ -550,6 +550,10 @@ export class LGServer {
     const lgFile = lgDoc?.index();
     const templateId = lgDoc?.templateId;
     const lines = document.getText(range).split('\n');
+    const curRange = Range.create(position.line, 0, position.line, position.character);
+    const curLineContent = document.getText(curRange);
+    const lgOptionRegex = /^\s*>\s*!#\s*@\s*$/;
+    const lgOptionKeyRegex = /^\s*>\s*!#\s*@\s*(strict|replaceNull|linebreakStyle|namespace|exports)\s*=$/i;
     if (!lgFile) {
       return Promise.resolve(null);
     }
@@ -597,8 +601,7 @@ export class LGServer {
       });
     }
 
-    if (curLineState === OPTION) {
-      console.log(curLineState);
+    if (curLineState === COMMENTS && lgOptionRegex.test(curLineContent)) {
       const optionsSuggestions: CompletionItem[] = lgOptionKeys.map(type => {
         return {
           label: type,
@@ -611,6 +614,30 @@ export class LGServer {
       return Promise.resolve({
         isIncomplete: true,
         items: optionsSuggestions,
+      });
+    }
+
+    if (curLineState === COMMENTS && lgOptionKeyRegex.test(curLineContent)) {
+      const matched = curLineContent.match(lgOptionKeyRegex);
+      let key = '';
+      if (matched) {
+        key = matched[1].toLowerCase();
+      }
+      const values: string[] = lgOptionsValues[key];
+      const optionValueSuggestions: CompletionItem[] = values.map(value => {
+        return {
+          label: value,
+          kind: CompletionItemKind.Keyword,
+          insertText: value,
+          documentation: `Suggested value: ${value} for key in LG Options`,
+        };
+      });
+
+      console.log(optionValueSuggestions);
+
+      return Promise.resolve({
+        isIncomplete: true,
+        items: optionValueSuggestions,
       });
     }
 
