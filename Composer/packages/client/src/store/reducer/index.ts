@@ -376,6 +376,16 @@ const removeSkillManifest: ReducerFunc = (state, { id }) => {
   return state;
 };
 
+const displaySkillManifestModal: ReducerFunc = (state, { id }) => {
+  state.displaySkillManifest = id;
+  return state;
+};
+
+const dismissSkillManifestModal: ReducerFunc = state => {
+  delete state.displaySkillManifest;
+  return state;
+};
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
   state.settings = settings;
   return state;
@@ -638,4 +648,6 @@ export const reducer = createReducer({
   [ActionTypes.SET_APP_UPDATE_PROGRESS]: setAppUpdateProgress,
   [ActionTypes.SET_APP_UPDATE_SHOWING]: setAppUpdateShowing,
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
+  [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
+  [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
 });
