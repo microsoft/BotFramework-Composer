@@ -117,7 +117,6 @@ export function ifElseLayouter(
         x: choiceNode.offset.x + choiceNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: rightNode.offset.x + rightNode.boundary.axisX - choiceNode.boundary.axisX - choiceNode.offset.x,
-        options: { label: rightNodeText },
       },
       {
         id: `edge/${rightNode.id}/right/top->node}`,
@@ -125,6 +124,7 @@ export function ifElseLayouter(
         x: rightNode.offset.x + rightNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: BranchIntervalY,
+        options: { label: rightNodeText },
       },
       {
         id: `edge/${rightNode.id}/right/node->border.bottom`,
