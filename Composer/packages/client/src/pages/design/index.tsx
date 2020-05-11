@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Suspense, useContext, useEffect, useMemo, useState, useRef } from 'react';
+import React, { Suspense, useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
@@ -85,7 +85,6 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
-  const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { dialogs, displaySkillManifest, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
     dismissManifestModal,
@@ -182,9 +181,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       selectTo(selected);
     } else {
       navTo(id);
-    }
-    if (visualPanelRef.current) {
-      visualPanelRef.current.focus();
     }
   }
 
@@ -419,7 +415,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
-              <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
+              <div css={visualPanel}>
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
