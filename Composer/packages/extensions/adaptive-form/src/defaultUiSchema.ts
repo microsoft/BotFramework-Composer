@@ -161,7 +161,7 @@ const DefaultUISchema: UISchema = {
   [SDKKinds.OnActivity]: {
     ...triggerUiSchema,
     label: () => formatMessage('Activities'),
-    subtitle: () => formatMessage('Activity recieved'),
+    subtitle: () => formatMessage('Activity received'),
   },
   [SDKKinds.OnBeginDialog]: {
     ...triggerUiSchema,
