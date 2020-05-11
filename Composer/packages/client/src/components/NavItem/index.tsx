@@ -8,7 +8,7 @@ import { Link } from '@reach/router';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { StoreContext } from '../../store';
-import { useLocation } from '../../utils/hooks';
+import { useLocation, useRouterCache } from '../../utils/hooks';
 
 import { link, icon } from './styles';
 
@@ -36,6 +36,9 @@ export const NavItem: React.FC<INavItemProps> = props => {
   const {
     location: { pathname },
   } = useLocation();
+
+  const linkTo = useRouterCache(to);
+
   const active = pathname.startsWith(to);
 
   const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
@@ -61,7 +64,7 @@ export const NavItem: React.FC<INavItemProps> = props => {
   return (
     <Link
       data-testid={'LeftNav-CommandBarButton' + labelName}
-      to={to}
+      to={linkTo}
       aria-disabled={disabled}
       aria-label={labelName + (active ? '; selected' : '')}
       ref={addRef}
