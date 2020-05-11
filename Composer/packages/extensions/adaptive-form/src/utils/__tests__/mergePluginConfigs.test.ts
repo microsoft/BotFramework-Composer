@@ -35,6 +35,16 @@ describe('mergePluginConfigs', () => {
         },
       },
     };
+
+    expect(mergePluginConfigs(overrides)).toMatchObject({
+      formSchema: {
+        [SDKKinds.AdaptiveDialog]: {
+          ...DefaultUISchema[SDKKinds.AdaptiveDialog],
+          hidden: ['recognizer'],
+          properties: {
+            ...DefaultUISchema[SDKKinds.AdaptiveDialog]?.properties,
+            triggers: {
+              label: 'Foo',
             },
           },
         },
