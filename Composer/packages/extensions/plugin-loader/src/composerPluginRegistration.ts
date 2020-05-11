@@ -121,7 +121,7 @@ export class ComposerPluginRegistration {
       const method = this.loader.webserver[type.toLowerCase()];
 
       if (typeof method === 'function') {
-        method.bind(this.loader.webserver)(url, ...handlers);
+        method.call(this.loader.webserver, url, ...handlers);
       } else {
         throw new Error(`Unhandled web route type ${type}`);
       }
