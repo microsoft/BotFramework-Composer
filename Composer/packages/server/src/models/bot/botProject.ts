@@ -91,7 +91,6 @@ export class BotProject {
     } catch (_e) {
       // when re-index opened bot, file write may error
     }
-    this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
     this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
     this.files = await this._getFiles();

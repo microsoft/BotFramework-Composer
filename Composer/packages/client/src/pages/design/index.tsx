@@ -85,7 +85,7 @@ const getTabFromFragment = () => {
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  const { dialogs, designPageLocation, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
+  const { dialogs, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
     removeDialog,
     setDesignPageLocation,
@@ -96,8 +96,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     clearUndoHistory,
     onboardingAddCoachMarkRef,
   } = actions;
-  const { location } = props;
-  const { dialogId, selected } = designPageLocation;
+  const { location, dialogId } = props;
+  const params = new URLSearchParams(location?.search);
+  const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
@@ -120,10 +121,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   useEffect(() => {
     const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0) {
+    if (index >= 0 && !location?.search) {
       selectTo(createSelectedPath(index));
     }
-  }, [currentDialog?.id]);
+  }, [currentDialog?.id, location]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
