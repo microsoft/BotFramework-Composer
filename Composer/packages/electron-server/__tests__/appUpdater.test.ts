@@ -117,6 +117,7 @@ describe('App updater', () => {
     appUpdater.downloadUpdate();
 
     expect(mockAutoUpdater.downloadUpdate).toHaveBeenCalled();
+    expect((appUpdater as any).downloadingUpdate).toBe(true);
   });
 
   it('should not download an update if it is already downloading an update', () => {

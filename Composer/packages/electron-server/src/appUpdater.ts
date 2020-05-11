@@ -57,6 +57,7 @@ export class AppUpdater extends EventEmitter {
 
   public downloadUpdate() {
     if (!this.downloadingUpdate) {
+      this.downloadingUpdate = true;
       autoUpdater.downloadUpdate();
     }
   }

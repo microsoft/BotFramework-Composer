@@ -40,6 +40,7 @@ export interface TriggerFormDataErrors {
   event?: string;
   triggerPhrases?: string;
   regexEx?: string;
+  activity?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
