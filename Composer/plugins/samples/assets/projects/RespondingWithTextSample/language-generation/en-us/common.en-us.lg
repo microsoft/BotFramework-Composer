@@ -21,9 +21,9 @@
 - SWITCH: ${dayOfWeek(utcNow())}
 - CASE: ${0}
     - Happy Sunday!
--CASE: ${6}
+- CASE: ${6}
     - Happy Saturday!
--DEFAULT:
+- DEFAULT:
     - Working day!
 
 # timeOfDayGreeting(timeOfDay)
@@ -40,7 +40,7 @@
 ]
 
 # multilineText
-- ``` you have such alarms
-alarm1:  7:am
-alarm2: 9:pm
+- ``` You have the following alarms:
+alarm1: 7:00 am
+alarm2: 9:00 pm
 ```
