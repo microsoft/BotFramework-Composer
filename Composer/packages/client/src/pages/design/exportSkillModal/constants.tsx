@@ -24,7 +24,7 @@ export interface SkillManifest {
 export interface ContentProps {
   completeStep: () => void;
   errors: { [key: string]: any };
-  setErrors: (erros: { [key: string]: any }) => void;
+  setErrors: (errors: { [key: string]: any }) => void;
   setSchema: (_: JSONSchema7) => void;
   setSkillManifest: (name: string) => void;
   schema: JSONSchema7;
