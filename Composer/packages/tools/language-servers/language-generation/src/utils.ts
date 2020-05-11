@@ -180,8 +180,8 @@ export const lgOptionKeys = ['strict', 'replaceNull', 'lineBreakStyle', 'Namespa
 
 export const lgOptionsValues = {
   strict: ['true', 'false'],
-  replaceNull: ['${path} is undefined'],
-  lineBreakStyle: ['markdown', 'default'],
-  Namespace: [],
-  Exports: [],
+  replacenull: ['${path} is undefined'],
+  linebreakstyle: ['markdown', 'default'],
+  namespace: [],
+  exports: [],
 };
