@@ -20,6 +20,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
 import onboardingState from './utils/onboardingStorage';
 import { isElectron } from './utils/electronUtil';
+import { useLinks } from './utils/hooks';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -29,111 +30,13 @@ const AppUpdater = React.lazy(() => import('./components/AppUpdater').then(modul
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const topLinks = (projectId: string, openedDialogId: string) => {
-  const botLoaded = !!projectId;
-  let links = [
-    {
-      to: '/home',
-      iconName: 'Home',
-      labelName: formatMessage('Home'),
-      exact: true,
-      disabled: false,
-    },
-    {
-      to: `/bot/${projectId}/dialogs/${openedDialogId}`,
-      iconName: 'SplitObject',
-      labelName: formatMessage('Design Flow'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    // {
-    //   to: '/test-conversation',
-    //   iconName: 'WaitListConfirm',
-    //   labelName: formatMessage('Test Conversation'),
-    //   exact: false,
-    //   disabled: true, // will delete
-    // },
-    {
-      to: `/bot/${projectId}/language-generation`,
-      iconName: 'Robot',
-      labelName: formatMessage('Bot Responses'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/language-understanding`,
-      iconName: 'People',
-      labelName: formatMessage('User Input'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    // {
-    //   to: '/evaluate-performance',
-    //   iconName: 'Chart',
-    //   labelName: formatMessage('Evaluate performance'),
-    //   exact: false,
-    //   disabled: true,
-    // },
-    {
-      to: `/bot/${projectId}/notifications`,
-      iconName: 'Warning',
-      labelName: formatMessage('Notifications'),
-      exact: true,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/publish`,
-      iconName: 'CloudUpload',
-      labelName: formatMessage('Publish'),
-      exact: true,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/skills`,
-      iconName: 'PlugDisconnected',
-      labelName: formatMessage('Skills'),
-      exact: true,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/settings/`,
-      iconName: 'Settings',
-      labelName: formatMessage('Settings'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-  ];
-
-  if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
-    links = links.filter(link => link.to !== '/home');
-  }
-
-  return links;
-};
-
-const bottomLinks = [
-  // {
-  //   to: '/help',
-  //   iconName: 'unknown',
-  //   labelName: formatMessage('Info'),
-  //   exact: true,
-  //   disabled: true,
-  // },
-  {
-    to: '/about',
-    iconName: 'info',
-    labelName: formatMessage('About'),
-    exact: true,
-    disabled: false,
-  },
-];
-
 export const App: React.FC = () => {
   const { actions, state } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
   const { onboardingSetComplete } = actions;
-  const { botName, projectId, dialogs, locale, designPageLocation, announcement } = state;
+  const { botName, locale, announcement } = state;
+  const { topLinks, bottomLinks } = useLinks();
 
   useEffect(() => {
     onboardingSetComplete(onboardingState.getComplete());
@@ -143,7 +46,6 @@ export const App: React.FC = () => {
 
   const renderAppUpdater = isElectron();
 
-  const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
   return (
     <Fragment>
       <div
@@ -176,7 +78,7 @@ export const App: React.FC = () => {
             />
             <div css={dividerTop} />{' '}
             <FocusZone allowFocusRoot={true}>
-              {topLinks(projectId, openedDialogId).map((link, index) => {
+              {topLinks.map((link, index) => {
                 return (
                   <NavItem
                     key={'NavLeftBar' + index}
