@@ -160,7 +160,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <ItemContainer
                 title={''}
                 content={recentProjects[0].name}
-                styles={home.lastestBotItem}
+                styles={home.latestBotItem}
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
@@ -170,7 +170,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <ItemContainer
                 title={''}
                 content={'ToDoBotWithLuis'}
-                styles={home.lastestBotItem}
+                styles={home.latestBotItem}
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
