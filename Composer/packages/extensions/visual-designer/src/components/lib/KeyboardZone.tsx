@@ -32,7 +32,7 @@ const KeyNameByModifierAttr = {
   shiftKey: 'Shift',
 };
 
-const overriddenKeyCodes = ['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+const overriddenKeyCodes = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
 interface KeyboardZoneProps {
   onCommand: (action, e: KeyboardEvent) => object | void;
