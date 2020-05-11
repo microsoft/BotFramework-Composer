@@ -173,7 +173,7 @@ export function ifElseLayouter(
         id: `edge/${leftNode.id}/left/choice->else`,
         direction: EdgeDirection.Down,
         x: containerBoundary.axisX,
-        y: choiceNode.offset.y + choiceNode.boundary.height,
+        y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: BranchIntervalY,
         options: { label: leftNodeText },
       },
@@ -190,7 +190,7 @@ export function ifElseLayouter(
       id: `edge/${choiceNode.id}/left/choice->out`,
       direction: EdgeDirection.Down,
       x: containerBoundary.axisX,
-      y: choiceNode.offset.y + choiceNode.boundary.height,
+      y: choiceNode.offset.y + choiceNode.boundary.axisY,
       length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.height),
       options: { label: leftNodeText },
     });
