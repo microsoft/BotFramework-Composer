@@ -171,9 +171,13 @@ const unpackObject = output => {
   return unpacked;
 };
 
+/**
+ * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
+ * @param {*} accessToken 
+ */
 const getTenantId = async (accessToken) => {
   if (!accessToken) {
-    throw new Error('Invalid Access Token');
+    throw new Error('Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token');
   }
   try {
     const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
@@ -184,7 +188,7 @@ const getTenantId = async (accessToken) => {
     const jsonRes = JSON.parse(response);
     return jsonRes.value[0].tenantId;
   } catch (err) {
-    throw new Error(`Get Tenant Id Failed`);
+    throw new Error(`Get Tenant Id Failed, details: ${getErrorMesssage(err)}`);
   }
 }
 
@@ -293,7 +297,7 @@ const getErrorMesssage = (err) => {
     if (err.body.error) {
       if (err.body.error.details) {
         const details = err.body.error.details;
-        let errMsg = "";
+        let errMsg = '';
         for (let detail of details) {
           errMsg += detail.message;
         }

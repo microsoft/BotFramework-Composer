@@ -40,7 +40,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public IWebHostEnvironment HostingEnvironment { get; }
 
         public IConfiguration Configuration { get; }
-
+        
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)
         {
             if (ConfigSectionValid(settings.BlobStorage.ConnectionString) && ConfigSectionValid(settings.BlobStorage.Container))
@@ -196,6 +196,11 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
                });
         }
 
+        private static bool ConfigSectionValid(string val)
+        {
+            return !string.IsNullOrEmpty(val) && !val.StartsWith('<');
+        }
+
         private string GetRootDialog(string folderPath)
         {
             var dir = new DirectoryInfo(folderPath);
@@ -208,11 +213,6 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             }
 
             throw new Exception($"Can't locate root dialog in {dir.FullName}");
-        }
-
-        private bool ConfigSectionValid(string val)
-        {
-            return !string.IsNullOrEmpty(val) && !val.StartsWith('<');
         }
     }
 }

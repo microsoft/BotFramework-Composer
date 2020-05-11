@@ -85,14 +85,41 @@ export class BotProjectDeploy {
     this.generatedFolder = config.generatedFolder ?? path.join(this.remoteBotPath, 'generated');
   }
 
+  private getErrorMesssage(err) {
+    if (err.body) {
+      if (err.body.error) {
+        if (err.body.error.details) {
+          const details = err.body.error.details;
+          let errMsg = '';
+          for (let detail of details) {
+            errMsg += detail.message;
+          }
+          return errMsg;
+        } else {
+          return err.body.error.message;
+        }
+      } else {
+        return JSON.stringify(err.body, null, 2);
+      }
+    } else {
+      return JSON.stringify(err, null, 2);
+    }
+  }
+
   private pack(scope: any) {
     return {
       value: scope,
     };
   }
+
+  /**
+   * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
+   */
   private async getTenantId() {
     if (!this.accessToken) {
-      throw new Error('Invalid Access Token');
+      throw new Error(
+        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
+      );
     }
     try {
       const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
@@ -103,7 +130,7 @@ export class BotProjectDeploy {
       const jsonRes = JSON.parse(response);
       return jsonRes.value[0].tenantId;
     } catch (err) {
-      throw new Error(`Get Tenant Id Failed`);
+      throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
     }
   }
 
