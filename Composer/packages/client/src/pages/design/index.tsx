@@ -84,7 +84,6 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
-  const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { dialogs, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
     removeDialog,
@@ -180,9 +179,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       selectTo(selected);
     } else {
       navTo(id);
-    }
-    if (visualPanelRef.current) {
-      visualPanelRef.current.focus();
     }
   }
 
@@ -417,7 +413,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
-              <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
+              <div css={visualPanel}>
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
