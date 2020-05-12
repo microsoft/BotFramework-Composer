@@ -6,7 +6,6 @@ import os from 'os';
 import merge from 'lodash/merge';
 
 import log from '../logger';
-import { Path } from '../utility/path';
 
 import { botsFolder, botEndpoint, appDataPath, environment, runtimeFrameworkVersion, platform, diskNames } from './env';
 
@@ -24,7 +23,7 @@ const envSettings: { [env: string]: Settings } = {
   development: {
     botAdminEndpoint: botEndpoint,
     botEndpoint: botEndpoint,
-    botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
+    botsFolder: botsFolder || os.homedir(),
     runtimeFrameworkVersion,
     appDataPath,
     platform,
