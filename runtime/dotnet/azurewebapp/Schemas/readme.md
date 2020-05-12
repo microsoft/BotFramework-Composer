@@ -36,16 +36,16 @@ bf plugins:install @microsoft/bf-dialog
 ##  Adding Custom Actions to your Composer bot
 **NOTE: These steps assume you are using azurewebapp as your deployment solution. Replicating it on azurefunctions would be similar
 **
-- In this tutorial, we will be going over the steps to include a custom action `MultiplyDialog` that multiplies two numbers passed as inputs. We have ejected the runtime with a `customaction` folder that contains this sample.
+- In this tutorial, we will be going over the steps to include a custom action `MultiplyDialog` that multiplies two numbers passed as inputs. Note that the ejected runtime should contain a `customaction` folder that has this sample.
 
-- Navigate to the csproj file inside the `runtime` folder (bot/runtime/azurewebapp/Microsoft.BotFramework.Composer.WebApp.csproj)` and include a project reference to the customActions project like `<ProjectReference Include="..\customaction\Microsoft.BotFramework.Composer.CustomAction.csproj" />`.
+- Navigate to the csproj file inside the `runtime` folder (bot/runtime/azurewebapp/Microsoft.BotFramework.Composer.WebApp.csproj)` and include a project reference to the `customaction` project like `<ProjectReference Include="..\customaction\Microsoft.BotFramework.Composer.CustomAction.csproj" />`.
 
 - Then Uncomment line 28 and 139 in azurewebapp/Startup.cs file so as to register this action.
 using Microsoft.BotFramework.Composer.CustomAction;
 // This is for custom action component registration.
 ComponentRegistration.Add(new CustomActionComponentRegistration());
 `
-- Run a dotnet build on the azurewebapp project to verify if it passes build after adding custom actions to it.
+- Run the command `dotnet build` on the azurewebapp project to verify if it passes build after adding custom actions to it.
 
 - Navigate to to the `Schemas (bot/runtime/azurewebapp/Schemas)` folder and then run the command `sh update.sh`.
 
