@@ -107,6 +107,8 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
         data-testid={`DialogTreeItem${link.id}`}
         onRenderItem={onRenderItem}
         onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
+        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
+        //remove this at that time
         doNotContainWithinFocusZone={true}
       />
     </div>
