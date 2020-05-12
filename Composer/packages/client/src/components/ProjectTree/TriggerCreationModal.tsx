@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -119,7 +119,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   };
   const [formData, setFormData] = useState(initialFormData);
   const [selectedType, setSelectedType] = useState(isNone ? '' : intentTypeKey);
-
   const showIntentName = selectedType === intentTypeKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
   const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
@@ -192,7 +191,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   };
 
   const onNameChange = (e, name) => {
-    const errors = formData.errors;
+    const errors = validateForm(selectedType, { ...formData, intent: name }, isRegEx, regexIntents);
     if (showTriggerPhrase) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
     }
@@ -200,12 +199,17 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   };
 
   const onChangeRegEx = (e, pattern) => {
-    setFormData({ ...formData, regexEx: pattern });
+    const errors = validateForm(selectedType, { ...formData, regexEx: pattern }, isRegEx, regexIntents);
+    setFormData({ ...formData, regexEx: pattern, errors });
   };
 
   const onTriggerPhrasesChange = (body: string) => {
-    const errors = formData.errors;
+    let errors = formData.errors;
     errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
+    if (!errors.triggerPhrases) {
+      errors = validateForm(selectedType, { ...formData, triggerPhrases: body }, isRegEx, regexIntents);
+    }
+
     setFormData({ ...formData, triggerPhrases: body, errors });
   };
 
@@ -308,7 +312,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       </div>
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-        <PrimaryButton data-testid={'triggerFormSubmit'} text={formatMessage('Submit')} onClick={onClickSubmitButton} />
+        <PrimaryButton
+          data-testid={'triggerFormSubmit'}
+          disabled={Object.keys(formData.errors).length > 0}
+          text={formatMessage('Submit')}
+          onClick={onClickSubmitButton}
+        />
       </DialogFooter>
     </Dialog>
   );
