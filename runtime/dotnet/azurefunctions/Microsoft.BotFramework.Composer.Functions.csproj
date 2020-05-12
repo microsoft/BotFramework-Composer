@@ -28,6 +28,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.3" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.3" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\Microsoft.BotFramework.Composer.Core.csproj" />
@@ -45,18 +46,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ComposerDialogs\language-generation\en-us\common.en-us.lg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ComposerDialogs\language-generation\en-us\echobot_0.en-us.lg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ComposerDialogs\language-understanding\en-us\echobot-0.en-us.lu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="ComposerDialogs\Main.dialog">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ComposerDialogs\settings\appsettings.json">
