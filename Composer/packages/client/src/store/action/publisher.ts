@@ -4,6 +4,7 @@
 import formatMessage from 'format-message';
 
 import { ActionCreator } from '../types';
+
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 
