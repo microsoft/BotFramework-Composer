@@ -403,7 +403,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div role="main" css={ContentStyle} data-testid="Publish">
-        <div css={projectContainer} role="region" aria-label={formatMessage('navigation panel')}>
+        <div css={projectContainer} role="region" aria-label={formatMessage('Navigation panel')}>
           <div
             key={'_all'}
             onClick={() => {
@@ -431,7 +431,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             />
           )}
         </div>
-        <div css={contentEditor} role="region" aria-label={formatMessage('list view')}>
+        <div css={contentEditor} role="region" aria-label={formatMessage('List view')}>
           <Fragment>
             <PublishStatusList
               items={thisPublishHistory}

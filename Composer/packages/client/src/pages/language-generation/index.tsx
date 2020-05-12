@@ -124,7 +124,7 @@ const LGPage: React.FC<LGPageProps> = props => {
               dialogId={dialogId}
               regionName={formatMessage('LG Navigation Pane')}
             />
-            <div css={contentEditor} data-testid="LGEditor" role="region" aria-label={formatMessage('LG Editor')}>
+            <div css={contentEditor} data-testid="LGEditor" role="region" aria-label={formatMessage('LG editor')}>
               <Suspense fallback={<LoadingSpinner />}>
                 <Router primary={false} component={Fragment}>
                   <CodeEditor path="/edit/*" dialogId={dialogId} />
