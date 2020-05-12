@@ -50,6 +50,6 @@ export const calloutDescription = css``;
 export const calloutAction = css``;
 
 export const calloutLink = css`
-  margin-top: 12px;
+  margin-top: 24px;
   margin-bottom: 24px;
 `;
