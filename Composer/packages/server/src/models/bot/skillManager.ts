@@ -5,7 +5,9 @@ import get from 'lodash/get';
 import * as msRest from '@azure/ms-rest-js';
 import { Skill } from '@bfc/shared';
 
-import log from './../../logger';
+import logger from './../../logger';
+
+const log = logger.extend('skill-manager');
 
 // http client for fetch skill data from manifest url
 const clientOptions: msRest.ServiceClientOptions = {
@@ -23,6 +25,10 @@ export const getSkillByUrl = async (url: string, name?: string): Promise<Skill> 
     };
 
     const res: msRest.HttpOperationResponse = await client.sendRequest(req);
+
+    if (res.status >= 400) {
+      throw new Error('Manifest url can not be accessed.');
+    }
 
     const resBody = typeof res.bodyAsText === 'string' && JSON.parse(res.bodyAsText);
     return {
