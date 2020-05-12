@@ -35,6 +35,7 @@ interface FileSelectorProps {
     write: boolean;
   };
   focusedStorageFolder: StorageFolder;
+  isWindows: boolean;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onFileChosen: (file: any) => void;
   checkShowItem: (file: File) => boolean;
@@ -81,7 +82,14 @@ const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) =
 };
 
 export const FileSelector: React.FC<FileSelectorProps> = props => {
-  const { onFileChosen, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
+  const {
+    onFileChosen,
+    focusedStorageFolder,
+    checkShowItem,
+    onCurrentPathUpdate,
+    operationMode,
+    isWindows = false,
+  } = props;
   // for detail file list in open panel
   const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
 
@@ -146,7 +154,13 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     const files = focusedStorageFolder.children.reduce((result, file) => {
       const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
       if (check(file)) {
-        result.push(file);
+        if (isWindows) {
+          const newName = file.name.replace(/\//g, '\\');
+          const newfile: File = { ...file, name: newName };
+          result.push(newfile);
+        } else {
+          result.push(file);
+        }
       }
       result.sort((f1, f2) => {
         // NOTE: bringing in Moment for this is not very efficient, but will
@@ -197,7 +211,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
     // add a trailing / if the last path is something like c:
     itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
-    const displayText = itemPath.startsWith('/') ? itemPath : `/${itemPath}`;
+    const displayText = isWindows ? itemPath.replace(/\//g, '\\') : itemPath;
     return {
       text: displayText, // displayed text
       key: itemPath, // value returned
