@@ -141,6 +141,7 @@ export interface State {
   };
   announcement: string | undefined;
   appUpdate: AppUpdateState;
+  displaySkillManifest?: string;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

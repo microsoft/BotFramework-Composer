@@ -118,14 +118,3 @@ export const ActionButton = css`
 export const MarginLeftSmall = css`
   margin-left: ${FontSizes.small};
 `;
-
-export const ManifestModalHeaderStyle = css`
-  margin: 14px 0 0 16px;
-  font-size: 20px;
-  font-weight: bolder;
-  align-items: left;
-`;
-
-export const ManifestModalBodyStyle = css`
-  margin: 15px 15px 15px 15px;
-`;

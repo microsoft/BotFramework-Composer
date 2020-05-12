@@ -65,7 +65,7 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
             itemSchema && itemSchema?.type === 'string'
               ? {
                   get: value => (Array.isArray(value) ? value.join(', ') : value),
-                  set: value => (typeof value === 'string' ? value.split(', ') : value),
+                  set: value => (typeof value === 'string' ? value.split(',').map(s => s.trim()) : value),
                 }
               : null;
 
