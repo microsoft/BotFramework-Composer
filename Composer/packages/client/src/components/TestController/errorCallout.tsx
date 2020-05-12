@@ -14,7 +14,12 @@ export interface IErrorCalloutProps {
   onTry: () => void;
   target: React.RefObject<Element> | null;
   visible: boolean;
-  error: { title: string; message: string; link?: { url: string; text: string } };
+  error: {
+    title: string;
+    message: string;
+    link?: { url: string; text: string };
+    linkAfterMessage?: { url: string; text: string };
+  };
 }
 
 export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
@@ -34,7 +39,12 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
           {error.title}
         </p>
         <p css={calloutDescription} id="callout-description-id">
-          {error.message}
+          {error.message + ' '}
+          {error.linkAfterMessage != null && (
+            <a href={error.linkAfterMessage.url} id="callout-description-id">
+              {error.linkAfterMessage.text}
+            </a>
+          )}
         </p>
         {error.link != null && (
           <p css={calloutLink}>

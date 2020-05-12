@@ -44,14 +44,14 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
         type: ActionTypes.PUBLISH_FAILED_DOTNET,
         payload: {
           error: {
-            message: formatMessage('To run this bot, Composer needs .NET Framework.'),
+            message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
             linkAfterMessage: {
               text: formatMessage('Learn more.'),
-              url: '',
+              url: 'https://docs.microsoft.com/en-us/composer/setup-yarn',
             },
             link: {
-              text: formatMessage('Install Microsoft .NET Core'),
-              url: 'https://dotnet.microsoft.com/download',
+              text: formatMessage('Install Microsoft .NET Core SDK'),
+              url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1',
             },
           },
           target: target,

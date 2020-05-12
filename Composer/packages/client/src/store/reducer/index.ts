@@ -454,7 +454,7 @@ const publishFailure: (title: string) => ReducerFunc = title => (state, { error,
   if (target.name === 'default') {
     state.botStatus = BotStatus.failed;
 
-    state.botLoadErrorMsg = { title, message: error.message, link: error.link };
+    state.botLoadErrorMsg = { ...error, title };
   }
   // prepend the latest publish results to the history
   if (!state.publishHistory[target.name]) {

@@ -126,7 +126,7 @@ export const Text = {
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
-  DOTNETFAILURE: formatMessage('Composer needs .NET Core'),
+  DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK'),
 };
 
 export enum LuisConfig {
