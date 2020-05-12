@@ -38,10 +38,10 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Begin a new dialog'),
   },
   [SDKKinds.CancelAllDialogs]: {
-    title: formatMessage('Cancel all dialogs'),
+    title: formatMessage('Cancel all active dialogs'),
   },
   [SDKKinds.ChoiceInput]: {
-    title: formatMessage('Multiple choice'),
+    title: formatMessage('Multi-choice'),
   },
   [SDKKinds.ConditionalSelector]: {
     title: formatMessage('ConditionalSelector'),
@@ -53,7 +53,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Date or time'),
   },
   [SDKKinds.DebugBreak]: {
-    title: formatMessage('Debug Break'),
+    title: formatMessage('Debug break'),
   },
   [SDKKinds.DeleteProperty]: {
     title: formatMessage('Delete a property'),
@@ -65,7 +65,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Modify this dialog'),
   },
   [SDKKinds.EditArray]: {
-    title: formatMessage('Edit an Array property'),
+    title: formatMessage('Edit an array property'),
   },
   [SDKKinds.EmitEvent]: {
     title: formatMessage('Emit a custom event'),
@@ -80,10 +80,10 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('FirstSelector'),
   },
   [SDKKinds.Foreach]: {
-    title: formatMessage('Loop: for each item'),
+    title: formatMessage('Loop: For each item'),
   },
   [SDKKinds.ForeachPage]: {
-    title: formatMessage('Loop: for each page (multiple items)'),
+    title: formatMessage('Loop: For each page (multiple items)'),
   },
   [SDKKinds.ContinueLoop]: {
     title: formatMessage('Continue loop'),
@@ -95,7 +95,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Send an HTTP request'),
   },
   [SDKKinds.IfCondition]: {
-    title: formatMessage('Branch: if/else'),
+    title: formatMessage('Branch: If/else'),
   },
   [SDKKinds.LanguagePolicy]: {
     title: formatMessage('LanguagePolicy'),
@@ -119,14 +119,14 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Language Understanding'),
   },
   [SDKKinds.NumberInput]: {
-    title: formatMessage('Number input'),
+    title: formatMessage('Number'),
   },
   [SDKKinds.OAuthInput]: {
     title: formatMessage('OAuth login'),
   },
   [SDKKinds.OnActivity]: {
     title: formatMessage('Activities'),
-    subtitle: formatMessage('Activity recieved'),
+    subtitle: formatMessage('Activity received'),
   },
   [SDKKinds.OnBeginDialog]: {
     title: formatMessage('Dialog started'),
@@ -227,14 +227,14 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Set properties'),
   },
   [SDKKinds.SkillDialog]: {
-    title: formatMessage('Begin a skill dialog'),
+    title: formatMessage('Connect to a skill'),
     description: formatMessage('Begin a remote skill dialog.'),
   },
   [SDKKinds.SwitchCondition]: {
-    title: formatMessage('Branch: switch (multiple options)'),
+    title: formatMessage('Branch: Switch (multiple options)'),
   },
   [SDKKinds.TextInput]: {
-    title: formatMessage('Text input'),
+    title: formatMessage('Text'),
   },
   [SDKKinds.TraceActivity]: {
     title: formatMessage('Emit a trace event'),
