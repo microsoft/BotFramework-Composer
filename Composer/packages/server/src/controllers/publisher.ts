@@ -83,7 +83,6 @@ export const PublishController = {
         // set status and return value as json
         res.status(results.status).json(response);
       } catch (err) {
-        console.error('Publishing error: ' + err.message);
         res.status(400).json({
           statusCode: '400',
           message: err.message,
