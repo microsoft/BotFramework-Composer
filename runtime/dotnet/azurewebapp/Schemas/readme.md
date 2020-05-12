@@ -53,5 +53,4 @@ ComponentRegistration.Add(new CustomActionComponentRegistration());
 
 - Copy the newly generated sdk.schema into the `schemas (bot/schemas)` folder at the root of the ejected runtime.
 
-
 The above steps should have generated a new sdk.schema file inside `schemas` folder for Composer to use. Reload the bot and you should be able to include your new custom action!
