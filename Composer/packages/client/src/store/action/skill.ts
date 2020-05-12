@@ -116,3 +116,18 @@ export const addSkillDialogSuccess: ActionCreator = ({ dispatch, getState }) => 
     type: ActionTypes.ADD_SKILL_DIALOG_END,
   });
 };
+
+export const displayManifestModal: ActionCreator = ({ dispatch }, id) => {
+  dispatch({
+    type: ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL,
+    payload: {
+      id,
+    },
+  });
+};
+
+export const dismissManifestModal: ActionCreator = ({ dispatch }) => {
+  dispatch({
+    type: ActionTypes.DISMISS_SKILL_MANIFEST_MODAL,
+  });
+};

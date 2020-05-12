@@ -16,13 +16,13 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { Skill } from '@bfc/shared';
-import { JsonEditor } from '@bfc/code-editor';
 
-import { TableView, TableCell, ManifestModalHeaderStyle, ManifestModalBodyStyle } from './styles';
+import { DisplayManifestModal } from '../../components/Modal/DisplayManifest';
+
+import { TableView, TableCell } from './styles';
 
 export interface ISkillListProps {
   skills: Skill[];
@@ -85,14 +85,16 @@ const columns: IColumn[] = [
 const SkillList: React.FC<ISkillListProps> = props => {
   const { skills, projectId, onEdit, onDelete } = props;
 
-  const [selectedSkillIndex, setSelectedSkillIndex] = useState<number | null>(null);
+  const [selectedSkillUrl, setSelectedSkillUrl] = useState<string | null>(null);
 
-  const onViewManifest = index => {
-    setSelectedSkillIndex(index);
+  const onViewManifest = item => {
+    if (item && item.name && item.body) {
+      setSelectedSkillUrl(item.manifestUrl);
+    }
   };
 
-  const onHideManifest = () => {
-    setSelectedSkillIndex(null);
+  const onDismissManifest = () => {
+    setSelectedSkillUrl(null);
   };
 
   const getColumns = useCallback(() => {
@@ -103,7 +105,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
       maxWidth: 120,
       fieldName: 'buttons',
       data: 'string',
-      onRender: (_item, index) => {
+      onRender: (item, index) => {
         return (
           <div>
             <Stack tokens={{ childrenGap: 8 }} horizontal>
@@ -127,7 +129,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
               />
               <IconButton
                 iconProps={{ iconName: 'ContextMenu' }}
-                onClick={() => onViewManifest(index)}
+                onClick={() => onViewManifest(item)}
                 title="View"
                 ariaLabel="View"
                 data-testid="ViewManifest"
@@ -168,35 +170,12 @@ const SkillList: React.FC<ISkillListProps> = props => {
           />
         </ScrollablePane>
       </div>
-      <Modal
-        titleAriaId={'skillManifestModal'}
-        isOpen={selectedSkillIndex !== null}
-        onDismiss={onHideManifest}
-        isBlocking={false}
-      >
-        <div>
-          <span css={ManifestModalHeaderStyle} id={'skillManifestModalHeader'}>
-            {selectedSkillIndex !== null && skills[selectedSkillIndex] && skills[selectedSkillIndex].name}
-          </span>
-          <IconButton
-            style={{ float: 'right' }}
-            iconProps={{ iconName: 'Cancel' }}
-            ariaLabel={formatMessage('Close popup modal')}
-            onClick={onHideManifest}
-          />
-        </div>
-        <div css={ManifestModalBodyStyle}>
-          <JsonEditor
-            key={'testkey'}
-            id={'modaljsonview'}
-            onChange={() => {}}
-            value={selectedSkillIndex !== null && JSON.parse(skills[selectedSkillIndex].body || '')}
-            height={800}
-            width={800}
-            options={{ readOnly: true }}
-          />
-        </div>
-      </Modal>
+      <DisplayManifestModal
+        isDraggable={false}
+        isModeless={false}
+        manifestId={selectedSkillUrl}
+        onDismiss={onDismissManifest}
+      />
     </React.Fragment>
   );
 };

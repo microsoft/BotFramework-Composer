@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Suspense, useContext, useEffect, useMemo, useState, useRef } from 'react';
+import React, { Suspense, useContext, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
@@ -45,6 +45,7 @@ import { PropertyEditor } from './PropertyEditor';
 
 const CreateSkillModal = React.lazy(() => import('../../components/SkillForm/CreateSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
+const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifest'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
 const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
 
@@ -84,9 +85,9 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
-  const visualPanelRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  const { dialogs, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
+  const { dialogs, displaySkillManifest, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
   const {
+    dismissManifestModal,
     removeDialog,
     setDesignPageLocation,
     navTo,
@@ -180,9 +181,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       selectTo(selected);
     } else {
       navTo(id);
-    }
-    if (visualPanelRef.current) {
-      visualPanelRef.current.focus();
     }
   }
 
@@ -417,7 +415,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
-              <div css={visualPanel} ref={visualPanelRef} tabIndex={0}>
+              <div css={visualPanel}>
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
@@ -470,6 +468,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onDismiss={onTriggerCreationDismiss}
             onSubmit={onTriggerCreationSubmit}
           />
+        )}
+        {displaySkillManifest && (
+          <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />
         )}
       </Suspense>
     </React.Fragment>

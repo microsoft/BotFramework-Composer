@@ -70,7 +70,3 @@ export const ManifestModalHeaderStyle = css`
   font-weight: bolder;
   align-items: left;
 `;
-
-export const ManifestModalBodyStyle = css`
-  margin: 15px 15px 15px 15px;
-`;
