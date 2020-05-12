@@ -3,25 +3,16 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC } from 'react';
+import React from 'react';
 
 import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
 
 const styles = css`
-  position: relative;
+  border: 1px solid transparent;
 
   &:focus {
     outline: none;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      border: 1px solid black;
-    }
+    border-color: black;
   }
 `;
 
@@ -32,10 +23,11 @@ const KeyNameByModifierAttr = {
   shiftKey: 'Shift',
 };
 
-const overriddenKeyCodes = ['Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+const overriddenKeyCodes = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
 interface KeyboardZoneProps {
   onCommand: (action, e: KeyboardEvent) => object | void;
+  children: React.ReactChild;
 }
 
 const isMac = () => {
@@ -52,7 +44,7 @@ const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
   return prefix;
 };
 
-export const KeyboardZone: FC<KeyboardZoneProps> = ({ onCommand, children }): JSX.Element => {
+export const KeyboardZone = React.forwardRef<HTMLDivElement, KeyboardZoneProps>(({ onCommand, children }, ref) => {
   const handleKeyDown = e => {
     if (overriddenKeyCodes.includes(e.key)) {
       e.preventDefault();
@@ -65,8 +57,8 @@ export const KeyboardZone: FC<KeyboardZoneProps> = ({ onCommand, children }): JS
   };
 
   return (
-    <div onKeyDown={handleKeyDown} tabIndex={0} data-test-id="keyboard-zone" css={styles}>
+    <div onKeyDown={handleKeyDown} tabIndex={0} data-test-id="keyboard-zone" css={styles} ref={ref}>
       {children}
     </div>
   );
-};
+});
