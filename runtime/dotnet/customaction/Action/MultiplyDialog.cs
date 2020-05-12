@@ -2,12 +2,11 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using AdaptiveExpressions;
 using AdaptiveExpressions.Properties;
 using Microsoft.Bot.Builder.Dialogs;
 using Newtonsoft.Json;
 
-namespace Microsoft.BotFramework.Composer.Customize
+namespace Microsoft.BotFramework.Composer.CustomAction
 {
     /// <summary>
     /// Custom command which takes takes 2 data bound arguments (arg1 and arg2) and multiplies them returning that as a databound result.
@@ -21,6 +20,9 @@ namespace Microsoft.BotFramework.Composer.Customize
             // enable instances of this command as debug break point
             this.RegisterSourceLocation(sourceFilePath, sourceLineNumber);
         }
+
+        [JsonProperty("$kind")]
+        public const string Kind = "MultiplyDialog";
 
         /// <summary>
         /// Gets or sets memory path to bind to arg1 (ex: conversation.width).

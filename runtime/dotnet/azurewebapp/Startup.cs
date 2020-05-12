@@ -24,9 +24,10 @@ using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.BotFramework.Composer.Core;
 using Microsoft.BotFramework.Composer.Core.Settings;
-using Microsoft.BotFramework.Composer.Customize;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+//using Microsoft.BotFramework.Composer.CustomAction;
 
 namespace Microsoft.BotFramework.Composer.WebAppTemplates
 {
@@ -133,6 +134,9 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
+            
+            // This is for custom action component registration.
+            //ComponentRegistration.Add(new CustomActionComponentRegistration());
 
             // Register the skills client and skills request handler.
             services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
@@ -168,9 +172,6 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var botDir = settings.Bot;
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
-
-            // register customized types, please note this is only needed for customized actions. 
-            resourceExplorer.RegisterType<MultiplyDialog>("MultiplyDialog");
 
             var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
 
