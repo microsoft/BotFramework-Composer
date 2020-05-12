@@ -36,10 +36,6 @@ export const updateSkillManifest: ActionCreator = ({ dispatch }, { content, id }
   });
 };
 
-export const checkSkillUrl = async (_store, { projectId, url }) => {
-  return await httpClient.post(`/projects/${projectId}/skill/check`, { projectId, url });
-};
-
 export const updateSkill: ActionCreator = async (store, { projectId, targetId, skillData }) => {
   const state = store.getState();
   const { onAddSkillDialogComplete, skills: originSkills } = state;
