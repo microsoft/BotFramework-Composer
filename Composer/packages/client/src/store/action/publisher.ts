@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ActionCreator } from '../types';
+import formatMessage from 'format-message';
 
+import { ActionCreator } from '../types';
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 
@@ -37,13 +38,33 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
       },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.PUBLISH_FAILED,
-      payload: {
-        error: err.response.data,
-        target: target,
-      },
-    });
+    // special case to handle dotnet issues
+    if (/dotnet/.test(err.response?.data?.message as string)) {
+      dispatch({
+        type: ActionTypes.PUBLISH_FAILED_DOTNET,
+        payload: {
+          error: {
+            message: formatMessage('To run this bot, Composer needs .NET Framework.'),
+            linkAfterMessage: {
+              text: formatMessage('Learn more.'),
+              url: '',
+            },
+            link: {
+              text: formatMessage('Install Microsoft .NET Core'),
+              url: 'https://dotnet.microsoft.com/download',
+            },
+          },
+          target: target,
+        },
+      });
+    } else
+      dispatch({
+        type: ActionTypes.PUBLISH_FAILED,
+        payload: {
+          error: err.response.data,
+          target: target,
+        },
+      });
   }
 };
 

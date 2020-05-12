@@ -48,3 +48,8 @@ export const calloutContainer = css`
 export const calloutDescription = css``;
 
 export const calloutAction = css``;
+
+export const calloutLink = css`
+  margin-top: 12px;
+  margin-bottom: 24px;
+`;

@@ -450,10 +450,11 @@ const publishSuccess: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, { error, target }) => {
+const publishFailure: (title: string) => ReducerFunc = title => (state, { error, target }) => {
   if (target.name === 'default') {
     state.botStatus = BotStatus.failed;
-    state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+
+    state.botLoadErrorMsg = { title, message: error.message, link: error.link };
   }
   // prepend the latest publish results to the history
   if (!state.publishHistory[target.name]) {
@@ -630,7 +631,8 @@ export const reducer = createReducer({
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
   [ActionTypes.GET_PUBLISH_TYPES_SUCCESS]: setPublishTypes,
   [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
-  [ActionTypes.PUBLISH_FAILED]: publishFailure,
+  [ActionTypes.PUBLISH_FAILED]: publishFailure(Text.CONNECTBOTFAILURE),
+  [ActionTypes.PUBLISH_FAILED_DOTNET]: publishFailure(Text.DOTNETFAILURE),
   [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
   [ActionTypes.GET_PUBLISH_STATUS_FAILED]: getPublishStatus,
   [ActionTypes.GET_PUBLISH_HISTORY]: getPublishHistory,
