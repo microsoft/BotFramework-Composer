@@ -18,6 +18,12 @@
     "build",
     "resources/composerIcon_1024x1024.png"
   ],
+  "extraResources": [
+    {
+      "from": "resources/app-update.yml",
+      "to": "app-update.yml"
+    }
+  ],
   "protocols": [
     {
       "name": "Bot Framework Composer",
