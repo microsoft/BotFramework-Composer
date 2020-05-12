@@ -47,7 +47,7 @@ ComponentRegistration.Add(new CustomActionComponentRegistration());
 `
 - Run a dotnet build on the azurewebapp project to verify if it passes build after adding custom actions to it.
 
-- Navigate to to the `Schemas (bot/runtime/azurewebapp/Schemas)` and then run the command `sh update.sh`.
+- Navigate to to the `Schemas (bot/runtime/azurewebapp/Schemas)` folder and then run the command `sh update.sh`.
 
 - Validate that the partial schema (MultiplyDialog.schema inside customaction/Schema) has been appended to the default sdk.schema file to generate one single consolidated sdk.schema file.
 
