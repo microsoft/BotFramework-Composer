@@ -49,7 +49,7 @@ ComponentRegistration.Add(new CustomActionComponentRegistration());
 
 - Navigate to to the `Schemas (bot/runtime/azurewebapp/Schemas)` and then run the command `sh update.sh`.
 
-- Validate that your partial schema has been appended inside sdk.schema file.
+- Validate that the partial schema (MultiplyDialog.schema inside customaction/Schema) has been appended to the default sdk.schema file to generate one single consolidated sdk.schema file.
 
 - Copy the newly generated sdk.schema into the `schemas (bot/schemas)` folder at the root of the ejected runtime.
 
