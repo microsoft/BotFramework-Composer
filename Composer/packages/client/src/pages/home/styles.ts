@@ -174,7 +174,7 @@ export const disabledItem = {
 const baseBotItem = {
   container: css`
     padding: 0;
-    border-width: 0;
+    border-width: 1px;
     box-shadow: ${Depths.depth4};
     transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
     &:hover,
@@ -198,7 +198,7 @@ export const newBotItem = {
   `,
 };
 
-export const lastestBotItem = {
+export const latestBotItem = {
   ...baseBotItem,
   title: css`
     background-color: #56ccf2;
