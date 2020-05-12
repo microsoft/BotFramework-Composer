@@ -4,20 +4,21 @@
 /** @jsx jsx */
 import has from 'lodash/has';
 import { jsx } from '@emotion/core';
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent, useEffect, useCallback, useMemo, useRef } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
+import debounce from 'lodash/debounce';
 
-import httpClient from '../../../utils/httpUtil';
 import { DialogWrapper } from '../../DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { addSkillDialog } from '../../../constants';
 import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex, SkillNameRegex } from '../types';
 
 import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalBody } from './styles';
+import { validateManifestUrl } from './validateManifestUrl';
 
 export interface ICreateSkillModalProps {
   isOpen: boolean;
@@ -40,31 +41,26 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
     : { ...defaultFormData };
   const [formData, setFormData] = useState<ISkillFormData>(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<ISkillFormDataErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
 
   const isModify = editIndex >= 0 && editIndex < skills.length;
   useEffect(() => {
     setFormData(initialFormData);
   }, [editIndex]);
 
-  const asyncValidateForm = async (newData: any): Promise<ISkillFormDataErrors> => {
-    const errors: ISkillFormDataErrors = { ...formDataErrors };
-
-    const url = newData.manifestUrl;
-
-    // skip validation if has local other errors.
-    if (!url || errors.manifestUrl) return errors;
-
+  const asyncManifestUrlValidation = async (projectId: string, manifestUrl: string) => {
     try {
-      await httpClient.post(`/projects/${projectId}/skill/check`, { projectId, url });
-      if (errors.manifestUrlFetch) {
-        delete errors.manifestUrlFetch;
-      }
+      console.log('doing url validation');
+      await validateManifestUrl(projectId, manifestUrl);
+      console.log('done with url validation');
     } catch (err) {
-      errors.manifestUrlFetch = err.response && err.response.data.message ? err.response.data.message : err;
+      setFormDataErrors(current => ({ ...current, manifestUrl: err }));
+    } finally {
+      setIsValidating(false);
     }
-    return errors;
   };
+
+  const debouncedManifestValidation = useRef(debounce(asyncManifestUrlValidation, 300)).current;
 
   const validateForm = (newData: ISkillFormData): ISkillFormDataErrors => {
     const errors: ISkillFormDataErrors = { ...formDataErrors };
@@ -119,10 +115,15 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
 
   // fetch manifest url
   useEffect(() => {
-    asyncValidateForm(formData).then(errors => {
-      setFormDataErrors(errors);
-    });
-  }, [formData.manifestUrl]);
+    if (!formDataErrors.manifestUrl) {
+      setIsValidating(true);
+      debouncedManifestValidation(projectId, formData.manifestUrl);
+    }
+
+    () => {
+      debouncedManifestValidation.cancel();
+    };
+  }, [formData.manifestUrl, formDataErrors.manifestUrl]);
 
   const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
     const newData: ISkillFormData = {
@@ -134,38 +135,38 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
     setFormDataErrors(errors);
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+  const handleSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      if (isValidating) return;
+      setIsValidating(true);
 
-    if (Object.keys(formDataErrors).length > 0) {
-      setIsSubmitting(false);
-      return;
-    }
-
-    const errors = validateForm(formData);
-    setFormDataErrors(errors);
-    if (Object.keys(errors).length > 0) {
-      setIsSubmitting(false);
-      return;
-    }
-
-    // do async validation
-    asyncValidateForm(formData).then(errors => {
+      const errors = validateForm(formData);
       setFormDataErrors(errors);
       if (Object.keys(errors).length > 0) {
-        setIsSubmitting(false);
+        setIsValidating(false);
         return;
       }
-      const newFormData = { ...formData };
-      onSubmit(newFormData, editIndex);
-      setIsSubmitting(false);
-    });
-  };
+
+      // do async validation
+      validateManifestUrl(projectId, formData.manifestUrl).then(error => {
+        if (error) {
+          setFormDataErrors(current => ({ ...current, manifestUrl: error }));
+          setIsValidating(false);
+          return;
+        }
+        const newFormData = { ...formData };
+        onSubmit(newFormData, editIndex);
+        setIsValidating(false);
+      });
+    },
+    [formData, formDataErrors]
+  );
 
   const formTitles =
     editIndex === -1 ? { ...addSkillDialog.SKILL_MANIFEST_FORM } : { ...addSkillDialog.SKILL_MANIFEST_FORM_EDIT };
+
+  const isDisabled = !Object.values(formData).some(Boolean) || Object.values(formDataErrors).some(Boolean);
 
   return (
     <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...formTitles} dialogType={DialogTypes.CreateFlow}>
@@ -178,7 +179,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
               label={formatMessage('Manifest url')}
               value={formData.manifestUrl}
               onChange={updateForm('manifestUrl')}
-              errorMessage={formDataErrors.manifestUrl || formDataErrors.manifestUrlFetch}
+              errorMessage={formDataErrors.manifestUrl}
               data-testid="NewSkillManifestUrl"
               required
               autoFocus
@@ -194,7 +195,11 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
           </StackItem>
 
           <StackItem>
-            <PrimaryButton onClick={handleSubmit} text={formatMessage('Confirm')} disabled={isSubmitting} />
+            <PrimaryButton
+              onClick={handleSubmit}
+              text={formatMessage('Confirm')}
+              disabled={isDisabled || isValidating}
+            />
             <DefaultButton
               css={MarginLeftSmall}
               onClick={onDismiss}

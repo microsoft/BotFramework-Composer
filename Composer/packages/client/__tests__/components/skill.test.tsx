@@ -2,13 +2,17 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils';
+import { render, fireEvent, getByLabelText, getByTestId, act } from '@bfc/test-utils';
 import { Skill } from '@bfc/shared';
 
 import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
 import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal';
 import { renderWithStore } from '../testUtils';
+
+jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl', () => ({
+  validateManifestUrl: () => {},
+}));
 
 const items: Skill[] = [
   {
@@ -73,6 +77,7 @@ describe('<SkillList />', () => {
 
 describe('<SkillForm />', () => {
   it('should render the skill form, and do update', () => {
+    jest.useFakeTimers();
     const onSubmit = jest.fn(formData => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
