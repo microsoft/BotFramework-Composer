@@ -8,13 +8,18 @@ import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
-import { calloutLabel, calloutDescription, calloutContainer } from './styles';
+import { calloutLabel, calloutDescription, calloutContainer, calloutLink } from './styles';
 export interface IErrorCalloutProps {
   onDismiss: () => void;
   onTry: () => void;
   target: React.RefObject<Element> | null;
   visible: boolean;
-  error: { title: string; message: string };
+  error: {
+    title: string;
+    message: string;
+    link?: { url: string; text: string };
+    linkAfterMessage?: { url: string; text: string };
+  };
 }
 
 export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
@@ -34,8 +39,20 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
           {error.title}
         </p>
         <p css={calloutDescription} id="callout-description-id">
-          {error.message}
+          {error.message + ' '}
+          {error.linkAfterMessage != null && (
+            <a href={error.linkAfterMessage.url} id="callout-description-id">
+              {error.linkAfterMessage.text}
+            </a>
+          )}
         </p>
+        {error.link != null && (
+          <p css={calloutLink}>
+            <a href={error.link.url} id="callout-description-id">
+              {error.link.text}
+            </a>
+          </p>
+        )}
         <Stack
           horizontal
           tokens={{
