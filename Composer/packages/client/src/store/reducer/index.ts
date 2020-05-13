@@ -4,6 +4,7 @@
 import get from 'lodash/get';
 import set from 'lodash/set';
 import merge from 'lodash/merge';
+import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import {
   SensitiveProperties,
@@ -30,14 +31,10 @@ import createReducer from './createReducer';
 
 const projectFiles = ['bot', 'botproj'];
 
-const processSchema = schema => {
-  const resolvedDefs = dereferenceDefinitions(schema.definitions);
-
-  return {
-    ...schema,
-    definitions: resolvedDefs,
-  };
-};
+const processSchema = memoize((projectId: string, schema: any) => ({
+  ...schema,
+  definitions: dereferenceDefinitions(schema.definitions),
+}));
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
@@ -85,7 +82,7 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
-  schemas.sdk.content = processSchema(schemas.sdk.content);
+  schemas.sdk.content = processSchema(id, schemas.sdk.content);
   const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
