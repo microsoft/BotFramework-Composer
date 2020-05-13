@@ -17,7 +17,7 @@ const CIRCULAR_REFS = [
   'Microsoft.AdaptiveDialog',
 ];
 
-const definitionCache = new Map();
+let definitionCache = new Map();
 
 const isCircular = memoize((def: string) => CIRCULAR_REFS.some(kind => def.includes(kind)));
 
@@ -79,6 +79,8 @@ export function dereference<S extends JSONSchema7 | JSONSchema7[] | JSONSchema7D
 
 export function dereferenceDefinitions(definitions: SchemaDefinitions): SchemaDefinitions {
   const resolvedDefs: SchemaDefinitions = {};
+
+  definitionCache = new Map();
 
   Object.entries(definitions).forEach(([key, value]) => {
     if (!CIRCULAR_REFS.includes(key)) {
