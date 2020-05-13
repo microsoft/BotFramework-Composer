@@ -10,12 +10,12 @@ import formatMessage from 'format-message';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
 import { StoreContext } from '../../store';
+import { ISkillFormData } from '../../components/SkillForm/types';
+import CreateSkillModal from '../../components/SkillForm/CreateSkillModal';
 
 import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';
 import SkillList from './skill-list';
-import SkillForm from './skill-form';
-import { ISkillFormData } from './types';
 
 const Skills: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
@@ -42,6 +42,18 @@ const Skills: React.FC<RouteComponentProps> = () => {
       align: 'right',
     },
   ];
+
+  const onItemDelete = useCallback(
+    index => {
+      const payload = {
+        projectId,
+        targetId: index,
+        skillData: null,
+      };
+      actions.updateSkill(payload);
+    },
+    [projectId]
+  );
 
   const onSubmitForm = useCallback(
     (submitFormData: ISkillFormData, editIndex: number) => {
@@ -76,10 +88,11 @@ const Skills: React.FC<RouteComponentProps> = () => {
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} />
-      <SkillForm
+      <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} onDelete={onItemDelete} />
+      <CreateSkillModal
         isOpen={typeof editIndex === 'number'}
         skills={skills}
+        projectId={projectId}
         editIndex={editIndex}
         onSubmit={onSubmitForm}
         onDismiss={onDismissForm}
