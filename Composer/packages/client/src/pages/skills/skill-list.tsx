@@ -10,7 +10,7 @@ import {
   CheckboxVisibility,
   IColumn,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
@@ -21,7 +21,6 @@ import formatMessage from 'format-message';
 import { Skill } from '@bfc/shared';
 
 import { DisplayManifestModal } from '../../components/Modal/DisplayManifest';
-import { StoreContext } from '../../store';
 
 import { TableView, TableCell } from './styles';
 
@@ -29,6 +28,7 @@ export interface ISkillListProps {
   skills: Skill[];
   projectId: string;
   onEdit: (index?: number) => void;
+  onDelete: (index?: number) => void;
 }
 
 const columns: IColumn[] = [
@@ -83,23 +83,9 @@ const columns: IColumn[] = [
 ];
 
 const SkillList: React.FC<ISkillListProps> = props => {
-  const { actions } = useContext(StoreContext);
-
-  const { skills, projectId, onEdit } = props;
+  const { skills, projectId, onEdit, onDelete } = props;
 
   const [selectedSkillUrl, setSelectedSkillUrl] = useState<string | null>(null);
-
-  const onItemDelete = useCallback(
-    index => {
-      const payload = {
-        projectId,
-        targetId: index,
-        skillData: null,
-      };
-      actions.updateSkill(payload);
-    },
-    [projectId]
-  );
 
   const onViewManifest = item => {
     if (item && item.name && item.body) {
@@ -136,7 +122,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
                 iconProps={{
                   iconName: 'Delete',
                 }}
-                onClick={() => onItemDelete(index)}
+                onClick={() => onDelete(index)}
                 title="Delete"
                 ariaLabel="Delete"
                 data-testid="DeleteSkill"

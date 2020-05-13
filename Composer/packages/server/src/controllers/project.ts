@@ -11,6 +11,7 @@ import log from '../logger';
 import { BotProjectService } from '../services/project';
 import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
+import { getSkillByUrl } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
 
@@ -291,6 +292,27 @@ async function updateSkill(req: Request, res: Response) {
   }
 }
 
+async function getSkill(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    try {
+      const skill = await getSkillByUrl(req.body.url);
+      res.status(200).json(skill);
+    } catch (err) {
+      res.status(404).json({
+        message: err.message,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
   currentProject.exportToZip((archive: Archiver) => {
@@ -396,6 +418,7 @@ export const ProjectController = {
   updateEnvSettings,
   updateDefaultSlotEnvSettings,
   updateSkill,
+  getSkill,
   publishLuis,
   exportProject,
   saveProjectAs,
