@@ -6,8 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
+using Microsoft.Bot.Builder.AI.QnA;
+using Microsoft.Bot.Builder.ApplicationInsights;
 using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
@@ -24,7 +29,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Microsoft.Bot.Builder.ApplicationInsights;
 
 [assembly: FunctionsStartup(typeof(Microsoft.BotFramework.Composer.Functions.Startup))]
 
@@ -36,22 +40,23 @@ namespace Microsoft.BotFramework.Composer.Functions
         {
             var config = new ConfigurationBuilder();
 
+            // Config precedence 1: root app.settings
             config
                 .SetBasePath(rootDirectory)
-                .AddJsonFile("ComposerDialogs/settings/appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .UseLuisConfigAdapter()
                 .UseLuisSettings();
 
+            // Config precedence 2: ComposerDialogs/settings settings which are injected by the composer publish
+            // Hard code the settings path to 'ComposerDialogs' for deployment
+            var configFile = Path.GetFullPath(Path.Combine(rootDirectory, @"ComposerDialogs/settings/appsettings.json"));
+            config.AddJsonFile(configFile, optional: true, reloadOnChange: true);
+
+            // Config Precedence 3: Deployment specific config
             config.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
-            if (Debugger.IsAttached)
+
+            if (!Debugger.IsAttached)
             {
-                // Local Debug
-                //config.AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true);
-            }
-            else
-            {
-                //Azure Deploy
-                //config.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
                 config.AddUserSecrets<Startup>();
             }
 
@@ -72,6 +77,8 @@ namespace Microsoft.BotFramework.Composer.Functions
 
             var services = builder.Services;
 
+            services.AddSingleton<IConfiguration>(rootConfiguration);
+
             services.AddLogging();
 
             // Create the credential provider to be used with the Bot Framework Adapter.
@@ -80,6 +87,14 @@ namespace Microsoft.BotFramework.Composer.Functions
 
             // Register AuthConfiguration to enable custom claim validation.
             services.AddSingleton<AuthenticationConfiguration>();
+
+            // Adaptive component registration
+            ComponentRegistration.Add(new DialogsComponentRegistration());
+            ComponentRegistration.Add(new DeclarativeComponentRegistration());
+            ComponentRegistration.Add(new AdaptiveComponentRegistration());
+            ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
+            ComponentRegistration.Add(new QnAMakerComponentRegistration());
+            ComponentRegistration.Add(new LuisComponentRegistration());
 
             // Register the skills client and skills request handler.
             services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
@@ -121,7 +136,7 @@ namespace Microsoft.BotFramework.Composer.Functions
             services.AddSingleton(conversationState);
 
             // Resource explorer to track declarative assets
-            var resourceExplorer = new ResourceExplorer().AddFolder(Path.Combine(rootDirectory, "ComposerDialogs"));
+            var resourceExplorer = new ResourceExplorer().AddFolder(Path.Combine(rootDirectory, settings.Bot ?? "."));
             services.AddSingleton(resourceExplorer);
 
             // Adapter
