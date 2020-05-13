@@ -8,7 +8,9 @@ export interface ISkillFormData {
 
 export interface ISkillFormDataErrors {
   manifestUrl?: string;
+  manifestUrlFetch?: string;
   name?: string;
 }
 
 export const SkillUrlRegex = /^http[s]?:\/\/\w+/;
+export const SkillNameRegex = /^\w[-\w]*$/;
