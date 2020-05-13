@@ -38,7 +38,7 @@ bf plugins:install @microsoft/bf-dialog
 **
 - In this tutorial, we will be going over the steps to include a custom action `MultiplyDialog` that multiplies two numbers passed as inputs. Note that the ejected runtime should contain a `customaction` folder that has this sample.
 
-- Navigate to the csproj file inside the `runtime` folder (bot/runtime/azurewebapp/Microsoft.BotFramework.Composer.WebApp.csproj) and include a project reference to the customaction project like ```<ProjectReference Include="..\customaction\Microsoft.BotFramework.Composer.CustomAction.csproj" />```.
+- Navigate to the csproj file inside the `runtime` folder (bot/runtime/azurewebapp/Microsoft.BotFramework.Composer.WebApp.csproj) and include a project reference to the customaction project like `<ProjectReference Include="..\customaction\Microsoft.BotFramework.Composer.CustomAction.csproj" />`.
 
 - Then Uncomment line 28 and 139 in azurewebapp/Startup.cs file so as to register this action.
 ```
