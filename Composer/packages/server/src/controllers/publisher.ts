@@ -240,4 +240,50 @@ export const PublishController = {
       message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
     });
   },
+  removeLocalRuntimeData: async (req, res) => {
+    const projectId = req.params.projectId;
+    const profile = defaultPublishConfig;
+    const method = profile.type;
+    if (
+      profile &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.stopBot
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+      if (typeof pluginMethod === 'function') {
+        try {
+          await pluginMethod.call(null, projectId);
+        } catch (err) {
+          return res.status(400).json({
+            statusCode: '400',
+            message: err.message,
+          });
+        }
+      }
+    }
+    if (
+      profile &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.removeRuntimeData
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
+      if (typeof pluginMethod === 'function') {
+        try {
+          const result = await pluginMethod.call(null, projectId);
+          return res.status(200).json({ message: result.msg });
+        } catch (err) {
+          return res.status(400).json({
+            statusCode: '400',
+            message: err.message,
+          });
+        }
+      }
+    }
+    res.status(400).json({
+      statusCode: '400',
+      message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+    });
+  },
 };

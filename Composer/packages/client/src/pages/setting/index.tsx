@@ -9,13 +9,16 @@ import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { TestController } from '../../components/TestController';
+import { OpenConfirmModal } from '../../components/Modal/Confirm';
+import { navigateTo } from '../../utils';
+
+import Routes from './router';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
 
-import Routes from './router';
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
-  const { state } = useContext(StoreContext);
+  const { state, actions } = useContext(StoreContext);
   const { projectId } = state;
   const makeProjectLink = (id: string, path: string) => {
     return `/bot/${id}/settings/${path}`;
@@ -37,6 +40,24 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     // { key: 'services', name: formatMessage('Services') },
     // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
   ];
+
+  const openDeleteBotModal = async () => {
+    const subTitle = formatMessage('Warning: are you sure to delete current bot?');
+    const title = formatMessage('Delete Bots');
+    const checkboxLabel = formatMessage('I want to delete this bot');
+    const settings = {
+      onRenderContent: () => {
+        return <div> {subTitle} </div>;
+      },
+      disabled: true,
+      checkboxLabel,
+    };
+    const res = await OpenConfirmModal(title, subTitle, settings);
+    if (res) {
+      actions.deleteBotProject(projectId);
+      navigateTo('home');
+    }
+  };
 
   const toolbarItems = [
     {
