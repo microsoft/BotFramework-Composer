@@ -26,7 +26,6 @@ export enum DialogGroup {
   LOOPING = 'LOOPING',
   EVENTS = 'EVENTS',
   ADVANCED_EVENTS = 'ADVANCED_EVENTS',
-  MESSAGE_EVENTS = 'MESSAGE_EVENTS',
   DIALOG_EVENT_TYPES = 'DIALOG_EVENT_TYPES',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
@@ -118,11 +117,6 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.OnHandoffActivity,
       SDKKinds.OnInvokeActivity,
       SDKKinds.OnTypingActivity,
-    ],
-  },
-  [DialogGroup.MESSAGE_EVENTS]: {
-    label: 'Message events',
-    types: [
       SDKKinds.OnMessageActivity,
       SDKKinds.OnMessageDeleteActivity,
       SDKKinds.OnMessageReactionActivity,
