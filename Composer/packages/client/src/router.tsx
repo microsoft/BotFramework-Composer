@@ -74,7 +74,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = prop
   const { actions, state } = useContext(StoreContext);
 
   useEffect(() => {
-    if (state.projectId !== props.projectId) {
+    if (state.projectId !== props.projectId && props.projectId) {
       actions.fetchProjectById(props.projectId);
     }
   }, [props.projectId, state.projectId]);
