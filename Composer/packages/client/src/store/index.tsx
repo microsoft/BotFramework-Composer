@@ -34,7 +34,7 @@ const getUserSettings = (): UserSettings => {
   const defaultSettings = {
     appUpdater: {
       autoDownload: false,
-      useNightly: true,
+      useNightly: false,
     },
     codeEditor: {
       lineNumbers: false,

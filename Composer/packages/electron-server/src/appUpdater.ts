@@ -16,7 +16,7 @@ export class AppUpdater extends EventEmitter {
   private checkingForUpdate = false;
   private downloadingUpdate = false;
   private explicitCheck = false;
-  private settings: AppUpdaterSettings = { autoDownload: false, useNightly: true };
+  private settings: AppUpdaterSettings = { autoDownload: false, useNightly: false };
 
   constructor() {
     super();
