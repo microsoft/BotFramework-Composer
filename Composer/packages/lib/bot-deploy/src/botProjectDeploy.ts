@@ -128,11 +128,14 @@ export class BotProjectDeploy {
       } as rp.RequestPromiseOptions;
       const response = await rp.get(tenantUrl, options);
       const jsonRes = JSON.parse(response);
-      const tenantId = jsonRes.value[0].tenantId;
-      if (tenantId === undefined) {
+      if (
+        jsonRes.value === undefined ||
+        (jsonRes.value && jsonRes.value.length === 0) ||
+        (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)
+      ) {
         throw new Error(`Get empty tenantId from tenants API`);
       }
-      return tenantId;
+      return jsonRes.value[0].tenantId;
     } catch (err) {
       throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
     }
