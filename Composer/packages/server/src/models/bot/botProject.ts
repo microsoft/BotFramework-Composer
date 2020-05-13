@@ -15,6 +15,7 @@ import StorageService from '../../services/storage';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
+import { BotProjectService } from '../../services/project';
 
 import { ICrossTrainConfig } from './luPublisher';
 import { IFileStorage } from './../storage/interface';
@@ -311,6 +312,33 @@ export class BotProject {
 
   public async exists(): Promise<boolean> {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
+  }
+
+  public async deleteAllFiles(): Promise<boolean> {
+    try {
+      await this.deleteFilesFromBottomToUp(this.dir);
+      await this.fileStorage.rmDir(this.dir);
+      await BotProjectService.cleanProject({ storageId: 'default', path: this.dir });
+      await BotProjectService.deleteRecentProject(this.dir);
+    } catch (e) {
+      throw new Error(e);
+    }
+    return true;
+  }
+
+  private async deleteFilesFromBottomToUp(path) {
+    const files = await this.fileStorage.readDir(path);
+
+    for (let i = 0; i < files.length; i++) {
+      const curPath = Path.join(path, files[i]);
+      const childStat = await this.fileStorage.stat(curPath);
+      if (childStat.isDir && curPath.startsWith(this.dir)) {
+        await this.deleteFilesFromBottomToUp(curPath);
+        await this.fileStorage.rmDir(curPath);
+      } else {
+        await this.fileStorage.removeFile(curPath);
+      }
+    }
   }
 
   private _cleanUp = async (relativePath: string) => {

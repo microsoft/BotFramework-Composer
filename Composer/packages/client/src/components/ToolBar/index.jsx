@@ -40,6 +40,7 @@ export function ToolBar(props) {
     onCreateDialogComplete,
     onboardingAddCoachMarkRef,
     showSkillManifestModal,
+    openDeleteBotModal,
     ...rest
   } = props;
   let left = [];
@@ -81,6 +82,26 @@ export function ToolBar(props) {
                       displayName: currentDialog ? currentDialog.displayName : '',
                     }),
                     onClick: () => openNewTriggerModal(),
+                  },
+                ],
+              }}
+            />
+          </div>
+        )}
+        {window.location.href.indexOf('/dialogs/') !== -1 && (
+          <div ref={addNewRef}>
+            <CommandButton
+              data-testid="DeleteFlyout"
+              css={actionButton}
+              iconProps={{ iconName: 'Delete' }}
+              text={formatMessage('Delete')}
+              menuProps={{
+                items: [
+                  {
+                    'data-testid': 'deleteBot',
+                    key: 'deleteBot',
+                    text: formatMessage('Delete current bot'),
+                    onClick: () => openDeleteBotModal(),
                   },
                 ],
               }}

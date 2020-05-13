@@ -141,6 +141,12 @@ export class BotProjectService {
     });
   };
 
+  public static deleteProject = async (projectId: string): Promise<string> => {
+    const path = BotProjectService.projectLocationMap[projectId];
+    BotProjectService.removeProjectIdFromCache(projectId);
+    return path;
+  };
+
   public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
     BotProjectService.initialize();
 
@@ -250,7 +256,7 @@ export class BotProjectService {
     Store.set('recentBotProjects', BotProjectService.recentBotProjects);
   };
 
-  private static deleteRecentProject = (path: string): void => {
+  public static deleteRecentProject = (path: string): void => {
     const recentBotProjects = BotProjectService.recentBotProjects.filter(
       ref => Path.resolve(path) !== Path.resolve(ref.path)
     );

@@ -29,6 +29,8 @@ import { isElectron } from '../../utils/electronUtil';
 
 import createReducer from './createReducer';
 
+import { initialState } from '..';
+
 const projectFiles = ['bot', 'botproj'];
 
 const processSchema = memoize((projectId: string, schema: any) => ({
@@ -99,6 +101,13 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.skillManifests = skillManifestFiles;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
+  return state;
+};
+
+const removeProjectSuccess: ReducerFunc = state => {
+  for (const key in initialState) {
+    state[key] = initialState[key];
+  }
   return state;
 };
 
@@ -608,6 +617,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
+  [ActionTypes.REMOVE_PROJECT_SUCCESS]: removeProjectSuccess,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,

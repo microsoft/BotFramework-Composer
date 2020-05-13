@@ -77,6 +77,17 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   }
 };
 
+export const deleteBotProject: ActionCreator = async (store, projectId) => {
+  try {
+    await httpClient.delete(`/projects/${projectId}`);
+    store.dispatch({
+      type: ActionTypes.REMOVE_PROJECT_SUCCESS,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const openBotProject: ActionCreator = async (store, absolutePath) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
