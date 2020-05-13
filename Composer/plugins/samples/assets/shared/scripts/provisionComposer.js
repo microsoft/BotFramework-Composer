@@ -493,9 +493,11 @@ msRestNodeAuth
       const token = await creds.getToken();
       const profile = {
         accessToken: token.accessToken,
-        publishName: name,
+        name: name,
         environment: environment,
-        provision: createResult,
+        hostname: `${name}-${environment}`,
+        luisResource: `${name}-${environment}-luis`,
+        settings: createResult,
       };
 
       console.log(chalk.white(JSON.stringify(profile, null, 2)));

@@ -333,7 +333,8 @@ export class BotProjectDeploy {
     language: string,
     luisEndpointKey: string,
     luisAuthoringKey?: string,
-    luisAuthoringRegion?: string
+    luisAuthoringRegion?: string,
+    luisResource?: string
   ) {
     if (luisAuthoringKey && luisAuthoringRegion) {
       // publishing luis
@@ -411,6 +412,7 @@ export class BotProjectDeploy {
         const options = {
           headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
         } as rp.RequestPromiseOptions;
+        console.log('REQUEST TO ', getAccountUri);
         const response = await rp.get(getAccountUri, options);
         jsonRes = JSON.parse(response);
       } catch (err) {
@@ -424,7 +426,7 @@ export class BotProjectDeploy {
           throw err;
         }
       }
-      const account = this.getAccount(jsonRes, `${name}-${environment}-luis`);
+      const account = this.getAccount(jsonRes, luisResource ? luisResource : `${name}-${environment}-luis`);
 
       for (const k in luisAppIds) {
         const luisAppId = luisAppIds[k];
@@ -434,6 +436,7 @@ export class BotProjectDeploy {
         });
 
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
+        console.log('REQUEST TO', luisAssignEndpoint);
         const options = {
           body: account,
           json: true,
@@ -460,7 +463,9 @@ export class BotProjectDeploy {
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
     botPath?: string,
-    language?: string
+    language?: string,
+    hostname?: string,
+    luisResource?: string
   ) {
     try {
       // Check for existing deployment files
@@ -492,7 +497,15 @@ export class BotProjectDeploy {
         language = 'en-us';
       }
 
-      await this.publishLuis(name, environment, language, luisEndpointKey, luisAuthoringKey, luisAuthoringRegion);
+      await this.publishLuis(
+        name,
+        environment,
+        language,
+        luisEndpointKey,
+        luisAuthoringKey,
+        luisAuthoringRegion,
+        luisResource
+      );
 
       // Build a zip file of the project
       this.logger({
@@ -511,7 +524,7 @@ export class BotProjectDeploy {
         message: 'Publishing to Azure ...',
       });
 
-      await this.deployZip(this.accessToken, this.zipPath, name, environment);
+      await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Publish To Azure Success!',
@@ -531,13 +544,13 @@ export class BotProjectDeploy {
   }
 
   // Upload the zip file to Azure
-  private async deployZip(token: string, zipPath: string, name: string, env: string) {
+  private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Retrieve publishing details ...',
     });
 
-    const publishEndpoint = `https://${name}-${env}.scm.azurewebsites.net/zipdeploy`;
+    const publishEndpoint = `https://${hostname ? hostname : name + '-' + env}.scm.azurewebsites.net/zipdeploy`;
     const fileContent = await fs.readFile(zipPath);
     const options = {
       body: fileContent,

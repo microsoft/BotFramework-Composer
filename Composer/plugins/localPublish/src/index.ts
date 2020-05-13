@@ -30,7 +30,7 @@ interface RunningBot {
 interface PublishConfig {
   botId: string;
   version: string;
-  settings: any;
+  fullSettings: any;
   templatePath: string;
 }
 
@@ -48,7 +48,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, metadata, user): Promise<PublishResponse> => {
-    const { templatePath, settings } = config;
+    const { templatePath, fullSettings } = config;
     this.templatePath = templatePath;
     const botId = project.id;
     const version = 'default';
@@ -57,7 +57,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
     // and export the content into that folder as well.
-    if (!settings.runtime || settings.runtime.customRuntime !== true) {
+    if (!project.settings.runtime || project.settings.runtime.customRuntime !== true) {
       this.composer.log('Using managed runtime');
       await this.initBot(botId);
       await this.saveContent(botId, version, project.dataDir, user);
@@ -76,7 +76,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     try {
       // start or restart the bot process
-      const url = await this.setBot(botId, version, settings, project.dataDir);
+      const url = await this.setBot(botId, version, fullSettings, project.dataDir);
 
       return {
         status: 200,
