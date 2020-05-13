@@ -192,7 +192,7 @@ const getTenantId = async (accessToken) => {
     const response = await rp.get(tenantUrl, options);
     const jsonRes = JSON.parse(response);
     if (jsonRes.value === undefined || (jsonRes.value && jsonRes.value.length === 0) || (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)) {
-      throw new Error(`Get empty tenantId from tenants API`);
+      throw new Error(`No tenants found in the account.`);
     }
     return jsonRes.value[0].tenantId;
   } catch (err) {
