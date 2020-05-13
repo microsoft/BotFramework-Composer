@@ -207,18 +207,7 @@ class AzurePublisher {
    *************************************************************************************************/
   publish = async (config: PublishConfig, project, metadata, user) => {
     // templatePath point to the dotnet code
-    const {
-      settings,
-      templatePath,
-      name,
-      subscriptionID,
-      publishName,
-      environment,
-      luisAuthoringKey,
-      luisAuthoringRegion,
-      provision,
-      accessToken,
-    } = config;
+    const { settings, templatePath, name, subscriptionID, publishName, environment, provision, accessToken } = config;
 
     // point to the declarative assets (possibly in remote storage)
     const botFiles = project.files;
@@ -236,8 +225,8 @@ class AzurePublisher {
         publishName,
         environment,
         provision?.MicrosoftAppPassword,
-        luisAuthoringKey,
-        luisAuthoringRegion,
+        provision?.luis?.authoringKey,
+        provision?.luis?.region,
       ].join()
     );
 
@@ -269,8 +258,8 @@ class AzurePublisher {
         subscriptionID,
         publishName,
         environment,
-        luisAuthoringKey,
-        luisAuthoringRegion,
+        luisAuthoringKey: provision?.luis?.authoringKey,
+        luisAuthoringRegion: provision?.luis?.region,
       };
 
       // append provision resource into file
