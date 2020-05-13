@@ -2812,7 +2812,7 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-dispatcher@https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.9.0":
+"@microsoft/bf-dispatcher@4.9.0":
   version "4.9.0"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.9.0#59bf1ac937a08d9fa43c07d862d9efd046d4306d"
   dependencies:
