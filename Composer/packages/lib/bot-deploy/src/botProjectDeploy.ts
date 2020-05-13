@@ -393,6 +393,8 @@ export class BotProjectDeploy {
       const luisConfig: any = {
         endpoint: luisEndpoint,
         endpointKey: luisEndpointKey,
+        authoringRegion: luisAuthoringRegion,
+        authoringKey: luisAuthoringRegion,
       };
 
       Object.assign(luisConfig, luisAppIds);
