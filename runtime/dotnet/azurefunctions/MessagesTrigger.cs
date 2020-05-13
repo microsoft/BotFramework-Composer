@@ -1,18 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Bot.Builder;
-using System.Web.Http;
+using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
+using Microsoft.Bot.Builder.Integration.AspNet.Core;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Microsoft.BotFramework.Composer.Functions
 {
@@ -38,7 +37,18 @@ namespace Microsoft.BotFramework.Composer.Functions
             // The adapter will invoke the bot.
             await _adapter.ProcessAsync(req, req.HttpContext.Response, _bot);
 
-            return new OkResult();
+            if (req.HttpContext.Response.StatusCode == (int) HttpStatusCode.OK || req.HttpContext.Response.StatusCode == (int)HttpStatusCode.Accepted)
+            {
+                return new OkResult();
+            }
+            else
+            {
+                return new ContentResult()
+                {
+                    StatusCode = req.HttpContext.Response.StatusCode,
+                    Content = $"Bot execution failed with status code: {req.HttpContext.Response.StatusCode}"
+                };
+            }    
         }
     }
 }

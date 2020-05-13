@@ -3,14 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { LgEditor } from '@bfc/code-editor';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { LgMetaData, LgTemplateRef, LgType, CodeEditorSettings } from '@bfc/shared';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
-import debounce from 'lodash/debounce';
-import isEqual from 'lodash/isEqual';
 
 const lspServerPath = '/lg-language-server';
 
@@ -68,23 +66,6 @@ const LgField: React.FC<FieldProps<string>> = props => {
 
   const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
 
-  const [localValue, setLocalValue] = useState(template.body);
-  const sync = useRef(
-    debounce((shellData: any, localData: any) => {
-      if (!isEqual(shellData, localData)) {
-        setLocalValue(shellData);
-      }
-    }, 750)
-  ).current;
-
-  useEffect(() => {
-    sync(template.body, localValue);
-
-    return () => {
-      sync.cancel();
-    };
-  }, [template.body]);
-
   const lgOption = {
     projectId,
     fileId: lgFileId,
@@ -92,7 +73,6 @@ const LgField: React.FC<FieldProps<string>> = props => {
   };
 
   const onChange = (body: string) => {
-    setLocalValue(body);
     if (designerId) {
       if (body) {
         updateLgTemplate(body);
@@ -113,7 +93,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
       <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
       <LgEditor
         height={225}
-        value={localValue}
+        value={template.body}
         onChange={onChange}
         diagnostics={diagnostics}
         hidePlaceholder

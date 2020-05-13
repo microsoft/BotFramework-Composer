@@ -43,7 +43,7 @@ import {
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 
-const AddSkillDialog = React.lazy(() => import('./addSkillDialogModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/SkillForm/CreateSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifest'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
@@ -445,8 +445,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         {state.showAddSkillDialogModal && (
-          <AddSkillDialog
+          <CreateSkillModal
             isOpen={state.showAddSkillDialogModal}
+            skills={state.skills}
+            projectId={projectId}
+            editIndex={-1}
             onDismiss={() => actions.addSkillDialogCancel()}
             onSubmit={handleAddSkillDialogSubmit}
           />
