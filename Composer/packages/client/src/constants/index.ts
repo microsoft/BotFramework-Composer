@@ -213,6 +213,10 @@ export const addSkillDialog = {
     title: formatMessage('Add a skill'),
     subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
   },
+  SKILL_MANIFEST_FORM_EDIT: {
+    title: formatMessage('Edit a skill'),
+    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+  },
 };
 
 export const SupportedFileTypes = [
