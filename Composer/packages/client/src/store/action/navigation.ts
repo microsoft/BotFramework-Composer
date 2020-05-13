@@ -29,8 +29,12 @@ export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) =>
 export const selectTo: ActionCreator = ({ getState }, selectPath) => {
   const state = getState();
   if (!selectPath) return;
-  const { dialogId, projectId } = state.designPageLocation;
+  // initial dialogId, projectId maybe empty string  ""
+  let { dialogId, projectId } = state.designPageLocation;
   const { breadcrumb } = state;
+  if (!dialogId) dialogId = 'Main';
+  if (!projectId) projectId = state.projectId;
+
   let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
   currentUri = `${currentUri}?selected=${selectPath}`;
