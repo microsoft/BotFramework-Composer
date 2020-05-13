@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import has from 'lodash/has';
 import { jsx } from '@emotion/core';
-import React, { useState, FormEvent, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, FormEvent, useEffect, useCallback, useRef } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
@@ -49,15 +49,11 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
   }, [editIndex]);
 
   const asyncManifestUrlValidation = async (projectId: string, manifestUrl: string) => {
-    try {
-      console.log('doing url validation');
-      await validateManifestUrl(projectId, manifestUrl);
-      console.log('done with url validation');
-    } catch (err) {
+    const err = await validateManifestUrl(projectId, manifestUrl);
+    if (err) {
       setFormDataErrors(current => ({ ...current, manifestUrl: err }));
-    } finally {
-      setIsValidating(false);
     }
+    setIsValidating(false);
   };
 
   const debouncedManifestValidation = useRef(debounce(asyncManifestUrlValidation, 300)).current;
