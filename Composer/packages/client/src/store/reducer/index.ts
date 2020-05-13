@@ -5,7 +5,15 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import merge from 'lodash/merge';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator, UserSettings } from '@bfc/shared';
+import {
+  SensitiveProperties,
+  LuFile,
+  LgFile,
+  DialogInfo,
+  importResolverGenerator,
+  UserSettings,
+  dereferenceDefinitions,
+} from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
@@ -21,6 +29,15 @@ import { isElectron } from '../../utils/electronUtil';
 import createReducer from './createReducer';
 
 const projectFiles = ['bot', 'botproj'];
+
+const processSchema = schema => {
+  const resolvedDefs = dereferenceDefinitions(schema.definitions);
+
+  return {
+    ...schema,
+    definitions: resolvedDefs,
+  };
+};
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
@@ -68,6 +85,7 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
+  schemas.sdk.content = processSchema(schemas.sdk.content);
   const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
