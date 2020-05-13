@@ -412,7 +412,6 @@ export class BotProjectDeploy {
         const options = {
           headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
         } as rp.RequestPromiseOptions;
-        console.log('REQUEST TO ', getAccountUri);
         const response = await rp.get(getAccountUri, options);
         jsonRes = JSON.parse(response);
       } catch (err) {
@@ -436,7 +435,6 @@ export class BotProjectDeploy {
         });
 
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
-        console.log('REQUEST TO', luisAssignEndpoint);
         const options = {
           body: account,
           json: true,
