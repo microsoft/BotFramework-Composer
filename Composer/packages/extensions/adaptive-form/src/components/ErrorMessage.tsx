@@ -20,6 +20,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = props => {
       dismissButtonAriaLabel={formatMessage('Close')}
       isMultiline={true}
       messageBarType={MessageBarType.error}
+      data-testid="FieldErrorMessage"
     >
       {[label, error].filter(Boolean).join(' ')}
       {helpLink && (
