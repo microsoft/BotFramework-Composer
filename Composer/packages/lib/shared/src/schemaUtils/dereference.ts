@@ -2,52 +2,21 @@
 // Licensed under the MIT License.
 
 import { JSONSchema7, JSONSchema7Definition } from 'json-schema';
-import get from 'lodash/get';
-import memoize from 'lodash/memoize';
 
-type SchemaDefinitions = {
-  [key: string]: JSONSchema7Definition;
-};
-
-const CIRCULAR_REFS = [
-  'Microsoft.IDialog',
-  'Microsoft.IRecognizer',
-  'Microsoft.ILanguageGenerator',
-  'Microsoft.ITriggerSelector',
-  'Microsoft.AdaptiveDialog',
-];
-
-const definitionCache = new Map();
-
-const isCircular = memoize((def: string) => CIRCULAR_REFS.some(kind => def.includes(kind)));
-
-function getRef(ref: string, definitions: SchemaDefinitions) {
-  const defName = ref.replace('#/definitions/', '');
-  let def = definitionCache.get(defName) || get(definitions, defName.split('/'));
-
-  if (!def) {
-    throw new Error(`Definition not found for ${defName}`);
-  }
-
-  if (!isCircular(defName)) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    def = dereference(def, definitions);
-  }
-  definitionCache.set(defName, def);
-
-  return def;
-}
+import { SchemaDefinitions, DefinitionCache } from './types';
+import { getRef } from './getRef';
+import { CIRCULAR_REFS, isCircular } from './circular';
 
 export function dereference<S extends JSONSchema7 | JSONSchema7[] | JSONSchema7Definition>(
   schema: S,
-  definitions: SchemaDefinitions
+  definitions: SchemaDefinitions,
+  cache: DefinitionCache
 ): S extends JSONSchema7[] ? JSONSchema7[] : S extends JSONSchema7 ? JSONSchema7 : JSONSchema7Definition {
-  // properties, oneOf, allOf, anyOf, items, additionalProperties
   if (Array.isArray(schema)) {
     const arraySchema: JSONSchema7[] = [];
 
     (schema as JSONSchema7[]).forEach(s => {
-      arraySchema.push(dereference(s, definitions));
+      arraySchema.push(dereference(s, definitions, cache));
     });
 
     return arraySchema as never;
@@ -56,16 +25,18 @@ export function dereference<S extends JSONSchema7 | JSONSchema7[] | JSONSchema7D
 
     Object.entries(schema).forEach(([key, value]) => {
       if (key === '$ref' && typeof value === 'string') {
-        const def = getRef(value, definitions);
+        const def = !isCircular(value) && getRef(value, definitions, cache);
 
-        if (def) {
+        if (def && typeof def === 'object') {
           newSchema = {
             ...def,
             ...newSchema,
           };
+        } else {
+          newSchema[key] = value;
         }
       } else if (typeof value === 'object' || Array.isArray(value)) {
-        newSchema[key] = dereference(value, definitions);
+        newSchema[key] = dereference(value, definitions, cache);
       } else {
         newSchema[key] = value;
       }
@@ -79,10 +50,11 @@ export function dereference<S extends JSONSchema7 | JSONSchema7[] | JSONSchema7D
 
 export function dereferenceDefinitions(definitions: SchemaDefinitions): SchemaDefinitions {
   const resolvedDefs: SchemaDefinitions = {};
+  const cache: DefinitionCache = new Map();
 
   Object.entries(definitions).forEach(([key, value]) => {
     if (!CIRCULAR_REFS.includes(key)) {
-      resolvedDefs[key] = dereference(value, definitions);
+      resolvedDefs[key] = dereference(value, definitions, cache);
     } else {
       resolvedDefs[key] = value;
     }
