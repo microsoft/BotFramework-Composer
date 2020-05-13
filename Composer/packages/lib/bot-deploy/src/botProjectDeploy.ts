@@ -43,7 +43,8 @@ export class BotProjectDeploy {
   private remoteBotPath: string;
   private logger: (string) => any;
 
-  private readonly tenantId = '72f988bf-86f1-41af-91ab-2d7cd011db47';
+  // Will be assigned by create or deploy
+  private tenantId: string = '';
 
   constructor(config: BotProjectDeployConfig) {
     this.subId = config.subId;
@@ -84,10 +85,60 @@ export class BotProjectDeploy {
     this.generatedFolder = config.generatedFolder ?? path.join(this.remoteBotPath, 'generated');
   }
 
+  private getErrorMesssage(err) {
+    if (err.body) {
+      if (err.body.error) {
+        if (err.body.error.details) {
+          const details = err.body.error.details;
+          let errMsg = '';
+          for (let detail of details) {
+            errMsg += detail.message;
+          }
+          return errMsg;
+        } else {
+          return err.body.error.message;
+        }
+      } else {
+        return JSON.stringify(err.body, null, 2);
+      }
+    } else {
+      return JSON.stringify(err, null, 2);
+    }
+  }
+
   private pack(scope: any) {
     return {
       value: scope,
     };
+  }
+
+  /**
+   * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
+   */
+  private async getTenantId() {
+    if (!this.accessToken) {
+      throw new Error(
+        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
+      );
+    }
+    try {
+      const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
+      const options = {
+        headers: { Authorization: `Bearer ${this.accessToken}` },
+      } as rp.RequestPromiseOptions;
+      const response = await rp.get(tenantUrl, options);
+      const jsonRes = JSON.parse(response);
+      if (
+        jsonRes.value === undefined ||
+        (jsonRes.value && jsonRes.value.length === 0) ||
+        (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)
+      ) {
+        throw new Error(`No tenants found in the account.`);
+      }
+      return jsonRes.value[0].tenantId;
+    } catch (err) {
+      throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
+    }
   }
 
   private unpackObject(output: any) {
@@ -592,6 +643,9 @@ export class BotProjectDeploy {
     createStorage = true,
     createAppInsignts = true
   ) {
+    if (!this.tenantId) {
+      this.tenantId = await this.getTenantId();
+    }
     const graphCreds = new DeviceTokenCredentials(
       this.creds.clientId,
       this.tenantId,
