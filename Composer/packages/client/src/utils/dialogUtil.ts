@@ -52,6 +52,8 @@ export const eventTypeKey: string = SDKKinds.OnDialogEvent;
 export const intentTypeKey: string = SDKKinds.OnIntent;
 export const activityTypeKey: string = SDKKinds.OnActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
+export const customEventKey = 'OnCustomEvent';
+
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -67,7 +69,7 @@ function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
 
   if (data.event) {
     optionalAttributes.event = data.event;
-    optionalAttributes.$designer.name = formatMessage('Custom Event');
+    optionalAttributes.$designer.name = data.event;
   }
 
   if (data.intent) {
@@ -176,6 +178,10 @@ export function getTriggerTypes(): IDropdownOption[] {
 
       return { key: t, text: name || t };
     }),
+    {
+      key: customEventKey,
+      text: formatMessage('Custom events'),
+    },
   ];
   return triggerTypes;
 }
@@ -218,22 +224,6 @@ export function getActivityTypes(): IDropdownOption[] {
     }),
   ];
   return activityTypes;
-}
-
-export function getMessageTypes(): IDropdownOption[] {
-  const messageTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.MESSAGE_EVENTS].types.map(t => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return messageTypes;
 }
 
 function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {

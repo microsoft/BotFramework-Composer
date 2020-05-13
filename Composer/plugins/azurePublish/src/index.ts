@@ -19,17 +19,18 @@ const DEFAULT_RUNTIME = 'azurewebapp';
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
 interface CreateAndDeployResources {
-  publishName: string;
+  name: string;
   environment: string;
+  hostname?: string;
+  luisResource?: string;
   subscriptionID: string;
-  luisAuthoringKey?: string;
-  luisAuthoringRegion?: string;
+  language?: string;
 }
 
 interface PublishConfig {
-  settings: any;
+  fullSettings: any;
   templatePath: string;
-  name: string; //profile name
+  profileName: string; //profile name
   [key: string]: any;
 }
 
@@ -171,10 +172,10 @@ class AzurePublisher {
     resourcekey: string,
     customizeConfiguration: CreateAndDeployResources
   ) => {
-    const { publishName, environment, luisAuthoringKey, luisAuthoringRegion } = customizeConfiguration;
+    const { name, environment, hostname, luisResource, language } = customizeConfiguration;
     try {
       // Perform the deploy
-      await this.azDeployer.deploy(publishName, environment, luisAuthoringKey, luisAuthoringRegion);
+      await this.azDeployer.deploy(name, environment, null, null, null, language, hostname, luisResource);
 
       // update status and history
       const status = this.getLoadingStatus(botId, profileName, jobId);
@@ -208,15 +209,19 @@ class AzurePublisher {
   publish = async (config: PublishConfig, project, metadata, user) => {
     // templatePath point to the dotnet code
     const {
-      settings,
+      // these are provided by Composer
+      fullSettings,
       templatePath,
-      name,
+      profileName,
+
+      // these are specific to the azure publish profile shape
       subscriptionID,
-      publishName,
+      name,
       environment,
-      luisAuthoringKey,
-      luisAuthoringRegion,
-      provision,
+      hostname,
+      luisResource,
+      language,
+      settings,
       accessToken,
     } = config;
 
@@ -230,16 +235,7 @@ class AzurePublisher {
     const jobId = uuid();
 
     // resource key to map to one provision resource
-    const resourcekey = md5(
-      [
-        project.name,
-        publishName,
-        environment,
-        provision?.MicrosoftAppPassword,
-        luisAuthoringKey,
-        luisAuthoringRegion,
-      ].join()
-    );
+    const resourcekey = md5([project.name, name, environment, settings?.MicrosoftAppPassword].join());
 
     // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
     let runtimeCodePath = templatePath;
@@ -252,25 +248,26 @@ class AzurePublisher {
       runtimeCodePath = project.settings.runtime.path;
     }
 
-    await this.init(botFiles, settings, runtimeCodePath, resourcekey);
+    await this.init(botFiles, fullSettings, runtimeCodePath, resourcekey);
 
     try {
       // test creds, if not valid, return 500
       if (!accessToken) {
         throw new Error('Required field `accessToken` is missing from publishing profile.');
       }
-      if (!provision) {
+      if (!settings) {
         throw new Error(
-          'no successful created resource in Azure according to your config, please run provision script to do the provision'
+          'no successful created resource in Azure according to your config, please run provision script included in your bot project.'
         );
       }
 
       const customizeConfiguration: CreateAndDeployResources = {
         subscriptionID,
-        publishName,
+        name,
         environment,
-        luisAuthoringKey,
-        luisAuthoringRegion,
+        hostname,
+        luisResource,
+        language,
       };
 
       // append provision resource into file
@@ -283,7 +280,7 @@ class AzurePublisher {
       const appSettings = await readJson(resourcePath);
       await writeJson(
         resourcePath,
-        { ...appSettings, ...provision },
+        { ...appSettings, ...settings },
         {
           spaces: 4,
         }
@@ -310,9 +307,9 @@ class AzurePublisher {
           comment: metadata.comment,
         },
       };
-      this.addLoadingStatus(botId, name, response);
+      this.addLoadingStatus(botId, profileName, response);
 
-      this.createAndDeploy(botId, name, jobId, resourcekey, customizeConfiguration);
+      this.createAndDeploy(botId, profileName, jobId, resourcekey, customizeConfiguration);
 
       return response;
     } catch (err) {
@@ -328,14 +325,14 @@ class AzurePublisher {
           comment: metadata.comment,
         },
       };
-      this.updateHistory(botId, name, { status: response.status, ...response.result });
+      this.updateHistory(botId, profileName, { status: response.status, ...response.result });
       this.cleanup(resourcekey);
       return response;
     }
   };
 
   getStatus = async (config: PublishConfig, project, user) => {
-    const profileName = config.name;
+    const profileName = config.profileName;
     const botId = project.id;
     // return latest status
     const status = this.getLoadingStatus(botId, profileName);
@@ -356,7 +353,7 @@ class AzurePublisher {
   };
 
   history = async (config: PublishConfig, project, user) => {
-    const profileName = config.name;
+    const profileName = config.profileName;
     const botId = project.id;
     return await this.getHistory(botId, profileName);
   };
