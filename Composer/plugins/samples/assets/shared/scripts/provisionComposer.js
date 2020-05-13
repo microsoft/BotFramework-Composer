@@ -38,6 +38,10 @@ const usage = () => {
     ['createCosmosDb', 'Create a CosmosDB? Default true'],
     ['createStorage', 'Create a storage account? Default true'],
     ['createAppInsights', 'Create an AppInsights resource? Default true'],
+    [
+      'customArmTemplate',
+      'Path to runtime ARM template. By default it will use an Azure WebApp template. Pass `DeploymentTemplates/function-template-with-preexisting-rg.json` for Azure Functions or your own template for a custom deployment.',
+    ],
   ];
 
   const instructions = [
@@ -91,7 +95,8 @@ const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
 const createStorage = argv.createStorage == 'false' ? false : true;
 const createAppInsignts = argv.createAppInsignts == 'false' ? false : true;
 
-const templatePath = path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
+const templatePath =
+  argv.customArmTemplate || path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
 
 const BotProjectDeployLoggerType = {
   // Logger Type for Provision
