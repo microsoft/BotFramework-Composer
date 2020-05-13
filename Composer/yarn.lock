@@ -2824,8 +2824,8 @@
 
 "@microsoft/bf-lu@4.9.0":
   version "4.9.0"
-  uid abd8711aa8daf9af15b6c54116505021d616a0e8
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.9.0#abd8711aa8daf9af15b6c54116505021d616a0e8"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.9.0.tgz#abd8711aa8daf9af15b6c54116505021d616a0e8"
+  integrity sha512-Yojf0xw6rJANP9Jrv8Pr8oRUpMGQVzAiU0zGIcUXlzwDZIyLXjxp+U0WsVo3OQkOVF5hqaqGHDcAnjC5JxHDMg==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -2848,8 +2848,8 @@
 
 "@microsoft/bf-luis-cli@4.9.0":
   version "4.9.0"
-  uid "53c93ff6e81ef737cfa7b0b8890d6d35e1c0a343"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-luis-cli/-/@microsoft/bf-luis-cli-4.9.0#53c93ff6e81ef737cfa7b0b8890d6d35e1c0a343"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-luis-cli/-/bf-luis-cli-4.9.0.tgz#53c93ff6e81ef737cfa7b0b8890d6d35e1c0a343"
+  integrity sha512-4HtelnZhxoQyblvahcTHnH2tNS3Qt7iORZ/ygY3dGbb0Ue8i9tJLWN6MhQ6Qxll/GwtX35LuajPJt2goVIhK0w==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/cognitiveservices-luis-runtime" "5.0.0"
