@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import formatMessage from 'format-message';
+
 import { ActionCreator } from '../types';
 
 import { ActionTypes } from './../../constants/index';
@@ -37,13 +39,33 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
       },
     });
   } catch (err) {
-    dispatch({
-      type: ActionTypes.PUBLISH_FAILED,
-      payload: {
-        error: err.response.data,
-        target: target,
-      },
-    });
+    // special case to handle dotnet issues
+    if (/dotnet/.test(err.response?.data?.message as string)) {
+      dispatch({
+        type: ActionTypes.PUBLISH_FAILED_DOTNET,
+        payload: {
+          error: {
+            message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
+            linkAfterMessage: {
+              text: formatMessage('Learn more.'),
+              url: 'https://docs.microsoft.com/en-us/composer/setup-yarn',
+            },
+            link: {
+              text: formatMessage('Install Microsoft .NET Core SDK'),
+              url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1',
+            },
+          },
+          target: target,
+        },
+      });
+    } else
+      dispatch({
+        type: ActionTypes.PUBLISH_FAILED,
+        payload: {
+          error: err.response.data,
+          target: target,
+        },
+      });
   }
 };
 
