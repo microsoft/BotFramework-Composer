@@ -118,6 +118,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     placeholder,
     hidePlaceholder,
     value,
+    id,
     errorMessage,
     warningMessage,
     diagnostics = [],
@@ -133,7 +134,10 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [editor, setEditor] = useState<any>();
-  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), []);
+
+  // initialValue is designed to imporve local performance
+  // it should be force updated if id change, or previous value is empty.
+  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     setEditor(editor);
