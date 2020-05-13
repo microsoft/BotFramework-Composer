@@ -146,6 +146,19 @@
   },
   "resources": [
     {
+      "apiVersion": "2018-02-01",
+      "name": "1d41002f-62a1-49f3-bd43-2f3f32a19cbb",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": []
+        }
+      }
+    },
+    {
       "comments": "Create a new App Service Plan if no existing App Service Plan name was passed in.",
       "type": "Microsoft.Web/serverfarms",
       "condition": "[not(variables('useExistingAppServicePlan'))]",
