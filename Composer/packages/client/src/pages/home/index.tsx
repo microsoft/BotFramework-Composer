@@ -36,19 +36,19 @@ const turtorials = [
     title: formatMessage('5 Minute Intro'),
     content: formatMessage('Chris Whitten'),
     subContent: formatMessage('Apr 9, 2020'),
-    href: 'https://www.youtube.com/watch?v=8HUsto8cH30',
+    href: 'https://aka.ms/bf-composer-tutorial-chris',
   },
   {
     title: formatMessage('Weather Bot'),
     content: formatMessage('Ben Brown'),
     subContent: formatMessage('Nov 12, 2019'),
-    href: 'https://www.youtube.com/watch?v=P-kKw2HGP3o',
+    href: 'https://aka.ms/bf-composer-tutorial-ben',
   },
   {
     title: formatMessage('MSFT Ignite AI Show'),
     content: formatMessage('Vishwac Sena'),
     subContent: formatMessage('Jan 28, 2020'),
-    href: 'https://www.youtube.com/watch?v=Aiv95e2-Yn0',
+    href: 'https://aka.ms/bf-composer-tutorial-vishwac',
   },
 ];
 
