@@ -2,24 +2,19 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import { ILinkStyles } from 'office-ui-fabric-react/lib/Link';
+import { FontWeights } from '@uifabric/styling';
 
 export const container = css`
-  padding: 16px;
-
-  h1 {
-    margin: 0;
-  }
-
   label: SettingsContainer;
 `;
 
 export const section = css`
   h2 {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: ${FontSizes.size18};
+    margin: 20px 0;
+    font-size: ${FontSizes.size16};
+    font-weight: ${FontWeights.semibold};
   }
 `;
 
@@ -40,3 +35,25 @@ export const link: ILinkStyles = {
     marginLeft: '5px',
   },
 };
+
+export const settingsContainer = css`
+  display: flex;
+  margin-left: 48px;
+  border-top: 1px solid ${NeutralColors.gray20};
+  padding: 20px 0px;
+`;
+
+export const settingsContent = css`
+  width: 245px;
+  margin: 0 32px;
+  font-size: ${FontSizes.size14};
+`;
+
+export const settingsDescription = css`
+  margin: 0;
+  margin-top: 8px;
+`;
+
+export const image = css`
+  width: 86px;
+`;

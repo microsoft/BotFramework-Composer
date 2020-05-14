@@ -3,15 +3,16 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useCallback, useContext } from 'react';
+import { useContext } from 'react';
 import formatMessage from 'format-message';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../../store';
 
-import { description, link, section } from './styles';
+import { link, section } from './styles';
+import { SettingToggle } from './SettingToggle';
+import * as images from './images';
 
 export const ElectronSettings: React.FC<RouteComponentProps> = () => {
   const {
@@ -19,41 +20,43 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
     state: { userSettings },
   } = useContext(StoreContext);
 
-  const onAppUpdatesChange = useCallback(
-    (key: string, checked: boolean) => {
-      updateUserSettings({ appUpdater: { [key]: checked } });
-    },
-    [userSettings.appUpdater]
-  );
+  const onAppUpdatesChange = (key: string) => (checked: boolean) => {
+    updateUserSettings({ appUpdater: { [key]: checked } });
+  };
 
   return (
     <section css={section}>
       <h2>{formatMessage('Application Updates')}</h2>
-      <Toggle
+      <SettingToggle
         checked={userSettings.appUpdater.autoDownload}
-        onChange={(_e, checked) => onAppUpdatesChange('autoDownload', !!checked)}
-        label={formatMessage('Automatically download and install updates')}
-        offText={formatMessage('Off')}
-        onText={formatMessage('On')}
+        onToggle={onAppUpdatesChange('autoDownload')}
+        title={formatMessage('Auto update')}
+        description={formatMessage('Check for updates and installs them automatically.')}
+        image={images.autoUpdate}
       />
-      <Toggle
+      <SettingToggle
         checked={userSettings.appUpdater.useNightly}
-        onChange={(_e, checked) => onAppUpdatesChange('useNightly', !!checked)}
-        label={formatMessage('Use nightly builds')}
-        offText={formatMessage('Off')}
-        onText={formatMessage('On')}
+        onToggle={onAppUpdatesChange('useNightly')}
+        title={formatMessage('Early adopters')}
+        description={
+          formatMessage.rich(
+            'Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>.',
+            {
+              a: props => {
+                <Link
+                  href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  styles={link}
+                >
+                  {props.children}
+                </Link>;
+              },
+            }
+          ) as any
+        }
+        image={images.earlyAdopters}
       />
-      <p css={description}>
-        {formatMessage('Nightly builds of Composer contain the latest features but may be unstable.')}
-        <Link
-          href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
-          target="_blank"
-          rel="noopener noreferrer"
-          styles={link}
-        >
-          {formatMessage('Learn more')}
-        </Link>
-      </p>
     </section>
   );
 };
