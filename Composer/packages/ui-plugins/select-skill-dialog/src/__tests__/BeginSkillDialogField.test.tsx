@@ -19,8 +19,8 @@ const renderBeginSkillDialog = ({ value = {}, onChange } = {}) => {
   const props = {
     depth: 1,
     id: 'select.skillDialog',
-    schema: schema?.[SDKKinds.SkillDialog] || {},
-    uiOptions: formSchema?.[SDKKinds.SkillDialog] || {},
+    schema: schema?.[SDKKinds.BeginSkill] || {},
+    uiOptions: formSchema?.[SDKKinds.BeginSkill] || {},
     value,
     onChange,
   };
