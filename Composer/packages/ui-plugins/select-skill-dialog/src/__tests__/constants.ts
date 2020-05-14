@@ -31,7 +31,7 @@ export const skills = [
 ];
 
 export const schema = {
-  'Microsoft.SkillDialog': {
+  'Microsoft.BeginSkill': {
     $role: 'implements(Microsoft.IDialog)',
     title: 'Begin a skill dialog',
     description: 'Begin a remote skill dialog.',
@@ -42,7 +42,7 @@ export const schema = {
         description: 'Defines the valid properties for the component you are configuring (from a dialog .schema file)',
         type: 'string',
         pattern: '^[a-zA-Z][a-zA-Z0-9.]*$',
-        const: 'Microsoft.SkillDialog',
+        const: 'Microsoft.BeginSkill',
       },
       id: {
         type: 'string',
