@@ -1,7 +1,7 @@
 {
   "name": "azureFunctionsPublish",
   "version": "1.0.0",
-  "description": "Publish bot to an Azure Functions",
+  "description": "Publish bot to an Azure Functions (Preview)",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
