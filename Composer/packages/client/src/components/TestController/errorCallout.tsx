@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { calloutLabel, calloutDescription, calloutContainer, calloutLink } from './styles';
@@ -41,16 +42,16 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
         <p css={calloutDescription} id="callout-description-id">
           {error.message + ' '}
           {error.linkAfterMessage != null && (
-            <a href={error.linkAfterMessage.url} id="callout-description-id">
+            <Link href={error.linkAfterMessage.url} target={'_blank'}>
               {error.linkAfterMessage.text}
-            </a>
+            </Link>
           )}
         </p>
         {error.link != null && (
           <p css={calloutLink}>
-            <a href={error.link.url} id="callout-description-id">
+            <Link href={error.link.url} target={'_blank'}>
               {error.link.text}
-            </a>
+            </Link>
           </p>
         )}
         <Stack
