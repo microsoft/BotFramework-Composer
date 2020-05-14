@@ -21,7 +21,7 @@ export interface INavTreeItem {
 
 interface INavTreeProps {
   navLinks: INavTreeItem[];
-  selectedItem: string;
+  selectedItem?: string;
 }
 
 const NavTree: React.FC<INavTreeProps> = props => {
@@ -49,11 +49,13 @@ const NavTree: React.FC<INavTreeProps> = props => {
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         {navLinks.map(item => {
+          const isSelected = location.pathname.includes(item.url);
+
           return (
             <DefaultButton
               key={item.id}
               text={item.name}
-              styles={item.id === selectedItem ? itemSelected : itemNotSelected}
+              styles={isSelected ? itemSelected : itemNotSelected}
               href={item.url}
               onClick={e => {
                 e.preventDefault();

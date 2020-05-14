@@ -14,64 +14,11 @@ export const iconClass = mergeStyles({
   fontSize: FontSizes.medium,
 });
 
-export const pageRoot = css`
-  height: calc(100vh - 50px);
-  display: flex;
-  flex-direction: row;
-`;
-
-export const contentWrapper = css`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`;
-
 export const flexContentSpaceBetween = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
-export const flexContent = css`
-  display: flex;
-  align-items: center;
-`;
-
-export const ContentHeaderStyle = css`
-  padding: 5px 20px;
-  height: 60px;
-  display: flex;
-  flex-shrink: 0;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const HeaderText = css`
-  font-size: ${FontSizes.xLarge};
-  font-weight: ${FontWeights.semibold};
-`;
-
-export const ContentStyle = css`
-  margin-left: 2px;
-  height: calc(100vh - 180px);
-  display: flex;
-  border-top: 1px solid #dddddd;
-  position: relative;
-  nav {
-    ul {
-      margin-top: 0px;
-    }
-  }
-`;
-
-export const contentEditor = css`
-  flex: 4;
-  margin: 20px;
-  position: relative;
-  overflow: visible;
-
-  label: ContentEditor;
-`;
-
 export const codeEditorContainer = css`
   width: 100%;
 `;

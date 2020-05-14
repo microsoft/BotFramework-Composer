@@ -10,21 +10,12 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
-import { NavTree, INavTreeItem } from '../../components/NavTree';
+import { INavTreeItem } from '../../components/NavTree';
+import { Page } from '../../components/Page';
 
 import TableView from './table-view';
-import {
-  ContentHeaderStyle,
-  ContentStyle,
-  flexContent,
-  actionButton,
-  contentEditor,
-  HeaderText,
-  pageRoot,
-  contentWrapper,
-} from './styles';
+import { actionButton } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LUPageProps extends RouteComponentProps<{}> {
@@ -88,39 +79,37 @@ const LUPage: React.FC<LUPageProps> = props => {
     },
   ];
 
+  const onRenderHeaderContent = () => {
+    if (!isRoot || edit) {
+      return (
+        <Toggle
+          className={'toggleEditMode'}
+          css={actionButton}
+          onText={formatMessage('Edit mode')}
+          offText={formatMessage('Edit mode')}
+          defaultChecked={false}
+          checked={!!edit}
+          onChange={onToggleEditMode}
+        />
+      );
+    }
+  };
+
   return (
-    <div css={pageRoot} data-testid="LUPage">
-      <div css={contentWrapper}>
-        <ToolBar toolbarItems={toolbarItems} />
-        <div css={ContentHeaderStyle}>
-          <h1 css={HeaderText}>{formatMessage('User Input')}</h1>
-          <div css={flexContent}>
-            {(!isRoot || edit) && (
-              <Toggle
-                className={'toggleEditMode'}
-                css={actionButton}
-                onText={formatMessage('Edit mode')}
-                offText={formatMessage('Edit mode')}
-                defaultChecked={false}
-                checked={!!edit}
-                onChange={onToggleEditMode}
-              />
-            )}
-          </div>
-        </div>
-        <div role="main" css={ContentStyle}>
-          <NavTree navLinks={navLinks} selectedItem={dialogId} />
-          <div css={contentEditor} data-testid="LUEditor">
-            <Suspense fallback={<LoadingSpinner />}>
-              <Router primary={false} component={Fragment}>
-                <CodeEditor path="/edit" dialogId={dialogId} />
-                <TableView path="/" dialogId={dialogId} />
-              </Router>
-            </Suspense>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Page
+      title={formatMessage('User Input')}
+      toolbarItems={toolbarItems}
+      navLinks={navLinks}
+      onRenderHeaderContent={onRenderHeaderContent}
+      data-testid="LUPage"
+    >
+      <Suspense fallback={<LoadingSpinner />}>
+        <Router primary={false} component={Fragment}>
+          <CodeEditor path="/edit" dialogId={dialogId} />
+          <TableView path="/" dialogId={dialogId} />
+        </Router>
+      </Suspense>
+    </Page>
   );
 };
 

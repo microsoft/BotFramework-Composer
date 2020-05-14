@@ -10,22 +10,13 @@ import { RouteComponentProps, Router } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
-import {
-  ContentHeaderStyle,
-  ContentStyle,
-  flexContent,
-  actionButton,
-  contentEditor,
-  contentWrapper,
-  HeaderText,
-  pageRoot,
-} from '../language-understanding/styles';
+import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils';
 import { TestController } from '../../components/TestController';
-import { NavTree, INavTreeItem } from '../../components/NavTree';
+import { INavTreeItem } from '../../components/NavTree';
+import { Page } from '../../components/Page';
 
 import TableView from './table-view';
-import { ToolBar } from './../../components/ToolBar/index';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LGPageProps extends RouteComponentProps<{}> {
@@ -88,40 +79,35 @@ const LGPage: React.FC<LGPageProps> = props => {
     },
   ];
 
-  return (
-    <Fragment>
-      <div css={pageRoot} data-testid="LGPage">
-        <div css={contentWrapper}>
-          <ToolBar toolbarItems={toolbarItems} />
+  const onRenderHeaderContent = () => {
+    return (
+      <Toggle
+        className={'toggleEditMode'}
+        css={actionButton}
+        onText={formatMessage('Edit mode')}
+        offText={formatMessage('Edit mode')}
+        defaultChecked={false}
+        checked={!!edit}
+        onChange={onToggleEditMode}
+      />
+    );
+  };
 
-          <div css={ContentHeaderStyle}>
-            <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>
-            <div css={flexContent}>
-              <Toggle
-                className={'toggleEditMode'}
-                css={actionButton}
-                onText={formatMessage('Edit mode')}
-                offText={formatMessage('Edit mode')}
-                defaultChecked={false}
-                checked={!!edit}
-                onChange={onToggleEditMode}
-              />
-            </div>
-          </div>
-          <div role="main" css={ContentStyle}>
-            <NavTree navLinks={navLinks} selectedItem={dialogId} />
-            <div css={contentEditor} data-testid="LGEditor">
-              <Suspense fallback={<LoadingSpinner />}>
-                <Router primary={false} component={Fragment}>
-                  <CodeEditor path="/edit/*" dialogId={dialogId} />
-                  <TableView path="/" dialogId={dialogId} />
-                </Router>
-              </Suspense>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Fragment>
+  return (
+    <Page
+      title={formatMessage('Bot Responses')}
+      toolbarItems={toolbarItems}
+      navLinks={navLinks}
+      onRenderHeaderContent={onRenderHeaderContent}
+      data-testid="LGPage"
+    >
+      <Suspense fallback={<LoadingSpinner />}>
+        <Router primary={false} component={Fragment}>
+          <CodeEditor path="/edit/*" dialogId={dialogId} />
+          <TableView path="/" dialogId={dialogId} />
+        </Router>
+      </Suspense>
+    </Page>
   );
 };
 
