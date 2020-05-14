@@ -62,6 +62,7 @@ export const initialState: State = {
   location: '', // the path to the bot project
   botEnvironment: 'production',
   locale: 'en-us',
+  diagnostics: [],
   botEndpoints: {},
   remoteEndpoints: {},
   focusPath: '', // the data path for PropertyEditor
