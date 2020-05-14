@@ -9,7 +9,7 @@ import { BeginSkillDialogField } from './BeginSkillDialogField';
 import { SelectSkillDialog } from './SelectSkillDialogField';
 
 const formSchema: UISchema = {
-  [SDKKinds.SkillDialog]: {
+  [SDKKinds.BeginSkill]: {
     order: ['skillAppId', '*', 'resultProperty', 'disabled', 'activityProcessed'],
     hidden: ['botId', 'skillEndpoint', 'skillAppId', 'skillHostEndpoint'],
     field: BeginSkillDialogField,
