@@ -64,8 +64,8 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
           const serializer =
             itemSchema && itemSchema?.type === 'string'
               ? {
-                  get: value => (Array.isArray(value) ? value.join(', ') : value),
-                  set: value => (typeof value === 'string' ? value.split(',').map(s => s.trim()) : value),
+                  get: value => (Array.isArray(value) ? value.join(',') : value),
+                  set: value => (typeof value === 'string' ? value.split(/\s*,\s*/) : value),
                 }
               : null;
 
