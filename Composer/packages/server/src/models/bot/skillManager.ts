@@ -3,7 +3,7 @@
 
 import get from 'lodash/get';
 import * as msRest from '@azure/ms-rest-js';
-import { Skill } from '@bfc/shared';
+import { Skill, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
 
 import logger from './../../logger';
 
@@ -46,12 +46,24 @@ export const getSkillByUrl = async (url: string, name?: string): Promise<Skill> 
   }
 };
 
-export const extractSkillManifestUrl = async (skills: any[]): Promise<Skill[]> => {
+export const extractSkillManifestUrl = async (
+  skills: any[]
+): Promise<{ skillsParsed: Skill[]; diagnostics: Diagnostic[] }> => {
   const skillsParsed: Skill[] = [];
+  const diagnostics: Diagnostic[] = [];
   for (const skill of skills) {
     const { manifestUrl, name } = skill;
-    const parsedSkill = await getSkillByUrl(manifestUrl, name);
-    skillsParsed.push(parsedSkill);
+    try {
+      const parsedSkill = await getSkillByUrl(manifestUrl, name);
+      skillsParsed.push(parsedSkill);
+    } catch (error) {
+      const notify = new Diagnostic(
+        `Accessing skill manifest url error, ${manifestUrl}`,
+        'appsettings.json',
+        DiagnosticSeverity.Error
+      );
+      diagnostics.push(notify);
+    }
   }
-  return skillsParsed;
+  return { skillsParsed, diagnostics };
 };

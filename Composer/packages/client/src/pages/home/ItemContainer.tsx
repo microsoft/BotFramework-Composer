@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
-import { Button } from 'office-ui-fabric-react/lib/Button';
+import { Button, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import {
@@ -16,9 +16,10 @@ import {
   childrenContainer,
 } from './styles';
 
-interface ItemContainerProps {
+interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
   onClick?: () => void | Promise<void>;
   title: string | JSX.Element;
+  subContent?: string;
   content: string;
   styles?: {
     container?: SerializedStyles;
@@ -33,6 +34,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   onClick = undefined,
   title,
   content,
+  subContent,
   styles = {},
   disabled,
   forwardedRef,
@@ -42,13 +44,22 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     return (
       <div css={childrenContainer} ref={forwardedRef}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
-          <div css={itemContainerTitle}>{title}</div>
+          <div css={itemContainerTitle}>
+            <Text block variant="large">
+              {title}
+            </Text>
+          </div>
         </div>
         <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
           <div css={itemContainerContent}>
-            <Text variant="large" nowrap>
+            <Text variant={subContent ? 'medium' : 'large'} nowrap>
               {content}
             </Text>
+            {subContent && (
+              <Text variant="medium" nowrap>
+                {subContent}
+              </Text>
+            )}
           </div>
         </div>
       </div>
@@ -59,8 +70,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     <Button
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async e => {
-        e.preventDefault();
         if (onClick) {
+          e.preventDefault();
           await onClick();
         }
       }}
