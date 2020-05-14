@@ -3,11 +3,11 @@
 
 import React from 'react';
 
-import { UserSettings } from '../../src/pages/setting/user-settings/index';
-import { ElectronSettings } from '../../src/pages/setting/user-settings/electronSettings';
+import { AppSettings } from '../../src/pages/setting/app-settings/index';
+import { ElectronSettings } from '../../src/pages/setting/app-settings/electronSettings';
 import { renderWithStore } from '../testUtils';
 
-describe('<UserSettings /> & <ElectronSettings />', () => {
+describe('<AppSettings /> & <ElectronSettings />', () => {
   let state;
   beforeEach(() => {
     window.__IS_ELECTRON__ = undefined;
@@ -34,7 +34,7 @@ describe('<UserSettings /> & <ElectronSettings />', () => {
   });
 
   it('should render the user settings page', () => {
-    const { getByText } = renderWithStore(<UserSettings />, state);
+    const { getByText } = renderWithStore(<AppSettings />, state);
     getByText('User Preferences');
     getByText('General');
     getByText('Code Editor');

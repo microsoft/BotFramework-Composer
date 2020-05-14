@@ -22,7 +22,7 @@ const ElectronSettings = lazy(() =>
   import('./electronSettings').then(module => ({ default: module.ElectronSettings }))
 );
 
-export const UserSettings: React.FC<RouteComponentProps> = () => {
+const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
   const {
@@ -51,7 +51,7 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
     <div css={container}>
       <h1 css={title}>{formatMessage('User Preferences')}</h1>
       <section css={section}>
-        <h2>{formatMessage('General')}</h2>
+        <h2>{formatMessage('Onboarding')}</h2>
         <Toggle
           id={'onboardingToggle'}
           data-testid="onboardingToggle"
@@ -140,3 +140,5 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
     </div>
   );
 };
+
+export { AppSettings };

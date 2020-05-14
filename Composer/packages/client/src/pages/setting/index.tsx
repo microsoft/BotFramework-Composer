@@ -28,8 +28,8 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
 
   const settingLabels = {
     title: formatMessage('Configuration'),
-    settings: formatMessage('Settings'),
-    preferences: formatMessage('User Preferences'),
+    settings: formatMessage('Bot Settings'),
+    preferences: formatMessage('App Settings'),
     runtime: formatMessage('Runtime Config'),
   };
 
