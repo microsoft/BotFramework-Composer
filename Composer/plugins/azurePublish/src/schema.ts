@@ -7,25 +7,29 @@ const schema: JSONSchema7 = {
     accessToken: {
       type: 'string',
     },
-    publishName: {
+    name: {
       type: 'string',
-      title: 'publishName',
+      title: 'name',
     },
     environment: {
       type: 'string',
       title: 'Environment',
     },
-    luisAuthoringRegion: {
+    hostname: {
       type: 'string',
-      title: 'LUIS authoring region',
+      title: 'Custom webapp hostname (if not <name>-<env>)',
     },
-    luisAuthoringKey: {
+    luisResource: {
       type: 'string',
-      title: 'LUIS authoring Key',
+      title: 'Custom luis resource name (if not <name>-<env>-luis)',
     },
-    provision: {
+    language: {
+      type: 'string',
+      title: 'Language for luis - default to en-us',
+    },
+    settings: {
       type: 'object',
-      title: 'Provision resource',
+      title: 'Settings for Azure resources',
       properties: {
         applicationInsights: {
           type: 'object',
@@ -96,9 +100,9 @@ const schema: JSONSchema7 = {
   required: ['subscriptionID', 'publishName', 'provision', 'accessToken'],
   default: {
     accessToken: '<Access token from az account get-access-token>',
-    publishName: '<unique name in your subscription>',
+    name: '<unique name in your subscription>',
     environment: 'dev',
-    provision: {
+    settings: {
       applicationInsights: {
         InstrumentationKey: '<Instrumentation Key>',
       },

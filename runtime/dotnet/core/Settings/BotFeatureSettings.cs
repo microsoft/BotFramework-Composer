@@ -10,16 +10,10 @@ namespace Microsoft.BotFramework.Composer.Core.Settings
 {
     public class BotFeatureSettings
     {
-        // Use TranscriptLoggerMiddleware 
-        public bool UseTranscriptLoggerMiddleware { get; set; }
-
         // Use ShowTypingMiddleware
         public bool UseShowTypingMiddleware { get; set; }
 
         // Use InspectionMiddleware
         public bool UseInspectionMiddleware { get; set; }
-
-        // Use CosmosDb for storage
-        public bool UseCosmosDbPersistentStorage { get; set; }
     }
 }

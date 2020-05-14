@@ -20,10 +20,8 @@ export class DefaultSettingManager extends FileSettingManager {
   protected createDefaultSettings = (): any => {
     return {
       feature: {
-        UseTranscriptLoggerMiddleware: false,
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
-        UseCosmosDbPersistentStorage: false,
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',

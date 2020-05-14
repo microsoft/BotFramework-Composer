@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const msRestNodeAuth = require('@azure/ms-rest-nodeauth');
 const argv = require('minimist')(process.argv.slice(2));
 const path = require('path');
+const rp = require('request-promise')
 const { promisify } = require('util');
 const { GraphRbacManagementClient } = require('@azure/graph');
 const { ResourceManagementClient } = require('@azure/arm-resources');
@@ -20,7 +21,7 @@ const logger = msg => {
     console.log(chalk.green(msg.message));
   }
 };
-const tenantId = '72f988bf-86f1-41af-91ab-2d7cd011db47';
+var tenantId = '';
 
 const usage = () => {
   const options = [
@@ -37,6 +38,10 @@ const usage = () => {
     ['createCosmosDb', 'Create a CosmosDB? Default true'],
     ['createStorage', 'Create a storage account? Default true'],
     ['createAppInsights', 'Create an AppInsights resource? Default true'],
+    [
+      'customArmTemplate',
+      'Path to runtime ARM template. By default it will use an Azure WebApp template. Pass `DeploymentTemplates/function-template-with-preexisting-rg.json` for Azure Functions or your own template for a custom deployment.',
+    ],
   ];
 
   const instructions = [
@@ -47,11 +52,11 @@ const usage = () => {
     ``,
     chalk.bold(`Basic Usage:`),
     chalk.greenBright(`node provisionComposer --subscriptionId=`) +
-      chalk.yellow('<Azure Subscription Id>') +
-      chalk.greenBright(' --name=') +
-      chalk.yellow('<Name for your environment>') +
-      chalk.greenBright(' --appPassword=') +
-      chalk.yellow('<16 character password>'),
+    chalk.yellow('<Azure Subscription Id>') +
+    chalk.greenBright(' --name=') +
+    chalk.yellow('<Name for your environment>') +
+    chalk.greenBright(' --appPassword=') +
+    chalk.yellow('<16 character password>'),
     ``,
     chalk.bold(`All options:`),
     ...options.map(option => {
@@ -90,7 +95,8 @@ const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
 const createStorage = argv.createStorage == 'false' ? false : true;
 const createAppInsignts = argv.createAppInsignts == 'false' ? false : true;
 
-const templatePath = path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
+const templatePath =
+  argv.customArmTemplate || path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
 
 const BotProjectDeployLoggerType = {
   // Logger Type for Provision
@@ -169,6 +175,30 @@ const unpackObject = output => {
   }
   return unpacked;
 };
+
+/**
+ * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
+ * @param {*} accessToken 
+ */
+const getTenantId = async (accessToken) => {
+  if (!accessToken) {
+    throw new Error('Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token');
+  }
+  try {
+    const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
+    const options = {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    };
+    const response = await rp.get(tenantUrl, options);
+    const jsonRes = JSON.parse(response);
+    if (jsonRes.value === undefined || (jsonRes.value && jsonRes.value.length === 0) || (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)) {
+      throw new Error(`No tenants found in the account.`);
+    }
+    return jsonRes.value[0].tenantId;
+  } catch (err) {
+    throw new Error(`Get Tenant Id Failed, details: ${getErrorMesssage(err)}`);
+  }
+}
 
 const getDeploymentTemplateParam = (
   appId,
@@ -270,6 +300,30 @@ const provisionFailed = msg => {
   });
 };
 
+const getErrorMesssage = (err) => {
+  if (err.body) {
+    if (err.body.error) {
+      if (err.body.error.details) {
+        const details = err.body.error.details;
+        let errMsg = '';
+        for (let detail of details) {
+          errMsg += detail.message;
+        }
+        return errMsg;
+      }
+      else {
+        return err.body.error.message;
+      }
+    }
+    else {
+      return JSON.stringify(err.body, null, 2);
+    }
+  }
+  else {
+    return JSON.stringify(err, null, 2);
+  }
+}
+
 /**
  * Provision a set of Azure resources for use with a bot
  */
@@ -287,6 +341,13 @@ const create = async (
   createStorage = true,
   createAppInsignts = true
 ) => {
+  // If tenantId is empty string, get tenanId from API
+  if (!tenantId) {
+    const token = await creds.getToken();
+    const accessToken = token.accessToken;
+    tenantId = await getTenantId(accessToken);
+  }
+
   const graphCreds = new msRestNodeAuth.DeviceTokenCredentials(
     creds.clientId,
     tenantId,
@@ -333,7 +394,7 @@ const create = async (
   } catch (err) {
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: err.body.message,
+      message: getErrorMesssage(err)
     });
     return provisionFailed();
   }
@@ -403,7 +464,7 @@ const create = async (
     spinner.fail();
     logger({
       status: BotProjectDeployLoggerType.PROVISION_ERROR,
-      message: err.body.message,
+      message: getErrorMesssage(err)
     });
     return provisionFailed();
   }
@@ -424,10 +485,10 @@ const create = async (
       if (failedOperations) {
         failedOperations.forEach(operation => {
           switch (
-            operation &&
-            operation.properties &&
-            operation.properties.statusMessage.error.code &&
-            operation.properties.targetResource
+          operation &&
+          operation.properties &&
+          operation.properties.statusMessage.error.code &&
+          operation.properties.targetResource
           ) {
             case 'MissingRegistrationForLocation':
               logger({
@@ -493,9 +554,11 @@ msRestNodeAuth
       const token = await creds.getToken();
       const profile = {
         accessToken: token.accessToken,
-        publishName: name,
+        name: name,
         environment: environment,
-        provision: createResult,
+        hostname: `${name}-${environment}`,
+        luisResource: `${name}-${environment}-luis`,
+        settings: createResult,
       };
 
       console.log(chalk.white(JSON.stringify(profile, null, 2)));

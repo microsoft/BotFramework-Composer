@@ -43,7 +43,7 @@ import {
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 
-const AddSkillDialog = React.lazy(() => import('./addSkillDialogModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/SkillForm/CreateSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifest'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
@@ -85,7 +85,16 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, displaySkillManifest, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
+  const {
+    dialogs,
+    displaySkillManifest,
+    breadcrumb,
+    visualEditorSelection,
+    projectId,
+    schemas,
+    focusPath,
+    designPageLocation,
+  } = state;
   const {
     dismissManifestModal,
     removeDialog,
@@ -122,10 +131,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   useEffect(() => {
     const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0 && !location?.search) {
+    if (index >= 0 && !designPageLocation.selected) {
       selectTo(createSelectedPath(index));
     }
-  }, [currentDialog?.id, location]);
+  }, [currentDialog?.id, designPageLocation]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
@@ -445,8 +454,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         {state.showAddSkillDialogModal && (
-          <AddSkillDialog
+          <CreateSkillModal
             isOpen={state.showAddSkillDialogModal}
+            skills={state.skills}
+            projectId={projectId}
+            editIndex={-1}
             onDismiss={() => actions.addSkillDialogCancel()}
             onSubmit={handleAddSkillDialogSubmit}
           />
