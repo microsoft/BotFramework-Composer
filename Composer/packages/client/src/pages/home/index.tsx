@@ -31,12 +31,6 @@ const linksButtom = [
   },
 ];
 
-const comingSoonLink = {
-  to: '/home',
-  text: formatMessage('Coming soon!'),
-  css: home.bluetitle,
-};
-
 const turtorials = [
   {
     title: formatMessage('5 Minute Intro'),
