@@ -15,7 +15,7 @@ interface IPageProps {
   toolbarItems: any;
   navLinks: INavTreeItem[];
   title: string;
-  onRenderHeaderContent: () => React.ReactChild;
+  onRenderHeaderContent?: () => React.ReactChild;
   'data-testid'?: string;
 }
 

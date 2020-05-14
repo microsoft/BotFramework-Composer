@@ -49,7 +49,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={container}>
-      <h1 css={title}>{formatMessage('User Preferences')}</h1>
       <section css={section}>
         <h2>{formatMessage('Onboarding')}</h2>
         <Toggle
