@@ -47,7 +47,7 @@ export const headerContent = css`
 
 export const main = css`
   margin-left: 2px;
-  height: calc(100vh - 180px);
+  height: calc(100vh - 165px);
   display: flex;
   border-top: 1px solid #dddddd;
   position: relative;
@@ -62,9 +62,9 @@ export const main = css`
 
 export const content = css`
   flex: 4;
-  margin: 20px;
+  padding: 20px;
   position: relative;
-  overflow: visible;
+  overflow: scroll;
 
   label: PageContent;
 `;
