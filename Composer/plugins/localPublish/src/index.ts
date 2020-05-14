@@ -378,6 +378,19 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     delete LocalPublisher.runningBots[botId];
   };
 
+  private removeRuntimeData = async (botId: string) => {
+    const targetDir = path.resolve(__dirname, `../hostedBots/${botId}`);
+    if (!(await this.dirExist(targetDir))) {
+      throw new Error(`no such dir ${targetDir}`);
+    }
+    try {
+      await rmDir(targetDir);
+      console.log(targetDir, '哈哈');
+    } catch (e) {
+      throw new Error(`Failed to remove ${targetDir}`);
+    }
+  };
+
   private copyDir = async (srcDir: string, dstDir: string) => {
     if (!(await this.dirExist(srcDir))) {
       throw new Error(`no such dir ${srcDir}`);

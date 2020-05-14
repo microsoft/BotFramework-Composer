@@ -658,6 +658,8 @@ export const reducer = createReducer({
   [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
   [ActionTypes.PUBLISH_FAILED]: publishFailure(Text.CONNECTBOTFAILURE),
   [ActionTypes.PUBLISH_FAILED_DOTNET]: publishFailure(Text.DOTNETFAILURE),
+  [ActionTypes.DELETE_RUNTIME_DATA_SUCCESS]: noOp,
+  [ActionTypes.DELETE_RUNTIME_DATA_FAILED]: noOp,
   [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
   [ActionTypes.GET_PUBLISH_STATUS_FAILED]: getPublishStatus,
   [ActionTypes.GET_PUBLISH_HISTORY]: getPublishHistory,

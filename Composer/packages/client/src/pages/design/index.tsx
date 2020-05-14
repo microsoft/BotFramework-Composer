@@ -160,6 +160,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const res = await OpenConfirmModal('Delete Bots', 'Are you sure to delete current bot');
     if (res) {
       actions.deleteBotProject(projectId);
+      actions.deleteLocalRuntimeData(projectId);
       navigateTo('home');
     }
   };
