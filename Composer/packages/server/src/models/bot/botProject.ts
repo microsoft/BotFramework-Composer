@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
 import { UserIdentity } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -94,12 +94,9 @@ export class BotProject {
       // when re-index opened bot, file write may error
     }
     this.settings = await this.getEnvSettings('', false);
-    try {
-      this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
-    } catch (_e) {
-      const notify = new Diagnostic('Accessing skill manifest url error', 'settings', DiagnosticSeverity.Error);
-      this.diagnostics.push(notify);
-    }
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || []);
+    this.skills = skillsParsed;
+    this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
   };
 
@@ -146,15 +143,15 @@ export class BotProject {
   // update skill in settings
   public updateSkill = async (config: Skill[]) => {
     const settings = await this.getEnvSettings('', false);
-    const skills = await extractSkillManifestUrl(config);
+    const { skillsParsed } = await extractSkillManifestUrl(config);
 
-    settings.skill = skills.map(({ manifestUrl, name }) => {
+    settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
       return { manifestUrl, name };
     });
     await this.settingManager.set('', settings);
 
-    this.skills = skills;
-    return skills;
+    this.skills = skillsParsed;
+    return skillsParsed;
   };
 
   public exportToZip = cb => {
