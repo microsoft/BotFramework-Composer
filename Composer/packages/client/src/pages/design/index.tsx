@@ -85,7 +85,16 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { dialogs, displaySkillManifest, breadcrumb, visualEditorSelection, projectId, schemas, focusPath } = state;
+  const {
+    dialogs,
+    displaySkillManifest,
+    breadcrumb,
+    visualEditorSelection,
+    projectId,
+    schemas,
+    focusPath,
+    designPageLocation,
+  } = state;
   const {
     dismissManifestModal,
     removeDialog,
@@ -122,10 +131,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   useEffect(() => {
     const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0 && !location?.search) {
+    if (index >= 0 && !designPageLocation.selected) {
       selectTo(createSelectedPath(index));
     }
-  }, [currentDialog?.id, location]);
+  }, [currentDialog?.id, designPageLocation]);
 
   useEffect(() => {
     if (location && props.dialogId && props.projectId) {
