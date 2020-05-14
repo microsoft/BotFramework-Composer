@@ -120,7 +120,7 @@ namespace Microsoft.BotFramework.Composer.Functions
 
             // Storage
             IStorage storage;
-            if (settings.Feature.UseCosmosDbPersistentStorage && !string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
+            if (ConfigSectionValid(settings.CosmosDb.AuthKey))
             {
                 storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
             }
@@ -188,12 +188,9 @@ namespace Microsoft.BotFramework.Composer.Functions
 
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)
         {
-            if (settings.Feature.UseTranscriptLoggerMiddleware)
+            if (ConfigSectionValid(settings.BlobStorage.ConnectionString) && ConfigSectionValid(settings.BlobStorage.Container))
             {
-                if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
-                {
-                    adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
-                }
+                adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
             }
         }
 
@@ -225,6 +222,11 @@ namespace Microsoft.BotFramework.Composer.Functions
             }
 
             throw new Exception($"Can't locate root dialog in {dir.FullName}");
+        }
+
+        private bool ConfigSectionValid(string val)
+        {
+            return !string.IsNullOrEmpty(val) && !val.StartsWith('<');
         }
     }
 }

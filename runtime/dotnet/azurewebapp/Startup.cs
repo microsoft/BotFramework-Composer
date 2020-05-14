@@ -43,15 +43,12 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public IWebHostEnvironment HostingEnvironment { get; }
 
         public IConfiguration Configuration { get; }
-
+        
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)
         {
-            if (settings.Feature.UseTranscriptLoggerMiddleware)
+            if (ConfigSectionValid(settings.BlobStorage.ConnectionString) && ConfigSectionValid(settings.BlobStorage.Container))
             {
-                if (!string.IsNullOrEmpty(settings.BlobStorage.ConnectionString) && !string.IsNullOrEmpty(settings.BlobStorage.Container))
-                {
-                    adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
-                }
+                adapter.Use(new TranscriptLoggerMiddleware(new AzureBlobTranscriptStore(settings.BlobStorage.ConnectionString, settings.BlobStorage.Container)));
             }
         }
 
@@ -74,7 +71,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public IStorage ConfigureStorage(BotSettings settings)
         {
             IStorage storage;
-            if (settings.Feature.UseCosmosDbPersistentStorage && !string.IsNullOrEmpty(settings.CosmosDb.AuthKey))
+            if (ConfigSectionValid(settings.CosmosDb.AuthKey))
             {
                 storage = new CosmosDbPartitionedStorage(settings.CosmosDb);
             }
@@ -203,6 +200,11 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
                {
                    endpoints.MapControllers();
                });
+        }
+
+        private static bool ConfigSectionValid(string val)
+        {
+            return !string.IsNullOrEmpty(val) && !val.StartsWith('<');
         }
 
         private string GetRootDialog(string folderPath)
