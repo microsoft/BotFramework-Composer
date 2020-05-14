@@ -8,17 +8,24 @@ import { Resizable, ResizeCallback } from 're-resizable';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { StoreContext } from '../../store';
+import { navigateTo } from '../../utils';
 
 import { root, itemNotSelected, itemSelected } from './styles';
 
+export interface INavTreeItem {
+  id: string;
+  name: string;
+  ariaLabel?: string;
+  url: string;
+}
+
 interface INavTreeProps {
-  navLinks: any[];
+  navLinks: INavTreeItem[];
   selectedItem: string;
-  onSelect: (id: string, selected?: string) => void;
 }
 
 const NavTree: React.FC<INavTreeProps> = props => {
-  const { navLinks, onSelect, selectedItem } = props;
+  const { navLinks, selectedItem } = props;
   const {
     actions: { updateUserSettings },
     state: {
@@ -45,13 +52,13 @@ const NavTree: React.FC<INavTreeProps> = props => {
           return (
             <DefaultButton
               key={item.id}
-              onClick={() => {
-                onSelect(item.id);
-              }}
-              styles={selectedItem === item.id ? itemSelected : itemNotSelected}
               text={item.name}
-              ariaLabel={item.ariaLabel}
-              ariaHidden={false}
+              styles={item.id === selectedItem ? itemSelected : itemNotSelected}
+              href={item.url}
+              onClick={e => {
+                e.preventDefault();
+                navigateTo(item.url);
+              }}
             />
           );
         })}

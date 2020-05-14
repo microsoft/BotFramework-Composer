@@ -12,7 +12,7 @@ import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
-import { NavTree } from '../../components/NavTree';
+import { NavTree, INavTreeItem } from '../../components/NavTree';
 
 import TableView from './table-view';
 import {
@@ -40,12 +40,11 @@ const LUPage: React.FC<LUPageProps> = props => {
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
 
-  const navLinks = useMemo(() => {
-    const newDialogLinks = dialogs.map(dialog => {
+  const navLinks: INavTreeItem[] = useMemo(() => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map(dialog => {
       return {
         id: dialog.id,
-        url: dialog.id,
-        key: dialog.id,
+        url: `/bot/${projectId}/language-understanding/${dialog.id}`,
         name: dialog.displayName,
         ariaLabel: formatMessage('language understanding file'),
       };
@@ -58,10 +57,9 @@ const LUPage: React.FC<LUPageProps> = props => {
     }
     newDialogLinks.splice(0, 0, {
       id: 'all',
-      key: 'all',
-      name: 'All',
+      name: formatMessage('All'),
       ariaLabel: formatMessage('all language understanding files'),
-      url: '',
+      url: `/bot/${projectId}/language-understanding/all`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -72,14 +70,6 @@ const LUPage: React.FC<LUPageProps> = props => {
       navigateTo(`/bot/${projectId}/language-understanding/all`);
     }
   }, [dialogId, dialogs, projectId]);
-
-  const onSelect = useCallback(
-    id => {
-      const url = `/bot/${projectId}/language-understanding/${id}`;
-      navigateTo(url);
-    },
-    [edit, projectId]
-  );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
@@ -119,7 +109,7 @@ const LUPage: React.FC<LUPageProps> = props => {
           </div>
         </div>
         <div role="main" css={ContentStyle}>
-          <NavTree navLinks={navLinks} onSelect={onSelect} selectedItem={dialogId} />
+          <NavTree navLinks={navLinks} selectedItem={dialogId} />
           <div css={contentEditor} data-testid="LUEditor">
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>

@@ -22,7 +22,7 @@ import {
 } from '../language-understanding/styles';
 import { navigateTo } from '../../utils';
 import { TestController } from '../../components/TestController';
-import { NavTree } from '../../components/NavTree';
+import { NavTree, INavTreeItem } from '../../components/NavTree';
 
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -39,14 +39,14 @@ const LGPage: React.FC<LGPageProps> = props => {
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
-  const navLinks = useMemo(() => {
-    const newDialogLinks = dialogs.map(dialog => {
+
+  const navLinks: INavTreeItem[] = useMemo(() => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map(dialog => {
       return {
         id: dialog.id,
-        url: dialog.id,
-        key: dialog.id,
         name: dialog.displayName,
         ariaLabel: formatMessage('language generation file'),
+        url: `/bot/${projectId}/language-generation/${dialog.id}`,
       };
     });
     const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
@@ -57,10 +57,9 @@ const LGPage: React.FC<LGPageProps> = props => {
     }
     newDialogLinks.splice(0, 0, {
       id: 'common',
-      key: 'common',
       name: 'All',
       ariaLabel: formatMessage('all language generation files'),
-      url: '',
+      url: `/bot/${projectId}/language-generation/common`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -71,14 +70,6 @@ const LGPage: React.FC<LGPageProps> = props => {
       navigateTo(`/bot/${projectId}/language-generation/common`);
     }
   }, [dialogId, dialogs, projectId]);
-
-  const onSelect = useCallback(
-    id => {
-      const url = `/bot/${projectId}/language-generation/${id}`;
-      navigateTo(url);
-    },
-    [edit, projectId]
-  );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
@@ -118,7 +109,7 @@ const LGPage: React.FC<LGPageProps> = props => {
             </div>
           </div>
           <div role="main" css={ContentStyle}>
-            <NavTree navLinks={navLinks} onSelect={onSelect} selectedItem={dialogId} />
+            <NavTree navLinks={navLinks} selectedItem={dialogId} />
             <div css={contentEditor} data-testid="LGEditor">
               <Suspense fallback={<LoadingSpinner />}>
                 <Router primary={false} component={Fragment}>
