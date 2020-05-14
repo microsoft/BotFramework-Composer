@@ -42,3 +42,7 @@ export const confirmation = css`
   white-space: pre-line;
   background: ${SharedColors.red10};
 `;
+
+export const confirmationContent = css`
+  width: 500px;
+`;

@@ -61,7 +61,7 @@ export const dialog = {
 
 export const dialogModal = {
   main: {
-    maxWidth: '450px',
+    maxWidth: '600px !important',
   },
 };
 

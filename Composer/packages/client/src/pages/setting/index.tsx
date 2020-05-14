@@ -20,7 +20,7 @@ import { OpenConfirmModal } from '../../components/Modal/Confirm';
 
 import settingStorage from './../../utils/dialogSettingStorage';
 import Routes from './router';
-import { title, fileList, contentEditor, confirmation } from './styles';
+import { title, fileList, contentEditor, confirmation, confirmationContent } from './styles';
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
   const { state, actions } = useContext(StoreContext);
@@ -51,12 +51,14 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
     const subTitle = 'Warning: are you sure to delete current bot?';
     const title = 'Delete Bots';
     const checkboxLabel = 'I want to delete this bot';
+    const styles = { content: confirmationContent };
     const settings = {
       onRenderContent: () => {
         return <div css={confirmation}> {subTitle} </div>;
       },
-      disabled: false,
+      disabled: true,
       checkboxLabel,
+      styles,
     };
     const res = await OpenConfirmModal(title, subTitle, settings);
     if (res) {

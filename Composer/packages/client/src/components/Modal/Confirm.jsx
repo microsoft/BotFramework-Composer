@@ -22,6 +22,7 @@ const ConfirmDialog = props => {
     cancelBtnText = 'Cancel',
     style = DialogStyle.normalStyle,
     checkboxLabel,
+    styles = { content: {}, main: {}, modal: {} },
   } = setting;
 
   const [disabled, setDisabled] = React.useState(setting.disabled);
@@ -52,7 +53,7 @@ const ConfirmDialog = props => {
         styles: dialogModal,
       }}
     >
-      <div css={confirmationContainer}>
+      <div css={[confirmationContainer, styles.content]}>
         {onRenderContent(subTitle, BuiltInStyles[style])}
         {checkboxLabel && <Checkbox onChange={handleCheckbox} checked={!disabled} label={checkboxLabel} />}
       </div>
