@@ -381,11 +381,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   private removeRuntimeData = async (botId: string) => {
     const targetDir = path.resolve(__dirname, `../hostedBots/${botId}`);
     if (!(await this.dirExist(targetDir))) {
-      throw new Error(`no such dir ${targetDir}`);
+      return { msg: `runtime path ${targetDir} does not exist` };
     }
     try {
       await rmDir(targetDir);
-      console.log(targetDir, '哈哈');
+      return { msg: `successed in removing runtime ${targetDir}` };
     } catch (e) {
       throw new Error(`Failed to remove ${targetDir}`);
     }

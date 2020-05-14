@@ -88,8 +88,8 @@ export function ToolBar(props) {
             />
           </div>
         )}
-        {window.location.href.indexOf('/dialogs/') !== -1 && (
-          <div ref={addNewRef}>
+        {window.location.href.indexOf('/settings/') !== -1 && (
+          <div>
             <CommandButton
               data-testid="DeleteFlyout"
               css={actionButton}

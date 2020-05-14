@@ -271,8 +271,8 @@ export const PublishController = {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
       if (typeof pluginMethod === 'function') {
         try {
-          await pluginMethod.call(null, projectId);
-          return res.status(200).json('succeed in removing runtime folders');
+          const result = await pluginMethod.call(null, projectId);
+          return res.status(200).json({ message: result.msg });
         } catch (err) {
           return res.status(400).json({
             statusCode: '400',

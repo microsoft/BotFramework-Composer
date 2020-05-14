@@ -105,9 +105,19 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
 };
 
 const removeProjectSuccess: ReducerFunc = state => {
-  for (const key in initialState) {
-    state[key] = initialState[key];
-  }
+  state.projectId = initialState.projectId;
+  state.dialogs = initialState.dialogs;
+  state.botEnvironment = initialState.botEnvironment;
+  state.botName = initialState.botName;
+  state.botStatus = initialState.botStatus;
+  state.location = initialState.location;
+  state.lgFiles = initialState.lgFiles;
+  state.skills = initialState.skills;
+  state.schemas = initialState.schemas;
+  state.luFiles = initialState.luFiles;
+  state.settings = initialState.settings;
+  state.locale = initialState.locale;
+  state.skillManifests = initialState.skillManifests;
   return state;
 };
 

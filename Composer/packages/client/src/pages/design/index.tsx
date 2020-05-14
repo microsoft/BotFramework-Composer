@@ -156,15 +156,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const openDeleteBotModal = async () => {
-    const res = await OpenConfirmModal('Delete Bots', 'Are you sure to delete current bot');
-    if (res) {
-      actions.deleteBotProject(projectId);
-      actions.deleteLocalRuntimeData(projectId);
-      navigateTo('home');
-    }
-  };
-
   const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
     const dialogPayload = {
       id: dialog.id,
@@ -418,7 +409,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             projectId={projectId}
             currentDialog={currentDialog}
             openNewTriggerModal={openNewTriggerModal}
-            openDeleteBotModal={openDeleteBotModal}
             onCreateDialogComplete={onCreateDialogComplete}
             onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
