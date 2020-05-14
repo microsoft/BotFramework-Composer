@@ -22,7 +22,7 @@ import {
 } from '../language-understanding/styles';
 import { navigateTo } from '../../utils';
 import { TestController } from '../../components/TestController';
-import { DialogTree } from '../../components/DialogTree';
+import { NavTree } from '../../components/NavTree';
 
 import TableView from './table-view';
 import { ToolBar } from './../../components/ToolBar/index';
@@ -118,7 +118,7 @@ const LGPage: React.FC<LGPageProps> = props => {
             </div>
           </div>
           <div role="main" css={ContentStyle}>
-            <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+            <NavTree navLinks={navLinks} onSelect={onSelect} selectedItem={dialogId} />
             <div css={contentEditor} data-testid="LGEditor">
               <Suspense fallback={<LoadingSpinner />}>
                 <Router primary={false} component={Fragment}>

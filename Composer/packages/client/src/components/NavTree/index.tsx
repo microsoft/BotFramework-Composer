@@ -9,16 +9,16 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { StoreContext } from '../../store';
 
-import { root, dialogItemNotSelected, dialogItemSelected } from './styles';
+import { root, itemNotSelected, itemSelected } from './styles';
 
-interface IDialogTreeProps {
+interface INavTreeProps {
   navLinks: any[];
-  dialogId: string;
+  selectedItem: string;
   onSelect: (id: string, selected?: string) => void;
 }
 
-export const DialogTree: React.FC<IDialogTreeProps> = props => {
-  const { navLinks, onSelect, dialogId } = props;
+const NavTree: React.FC<INavTreeProps> = props => {
+  const { navLinks, onSelect, selectedItem } = props;
   const {
     actions: { updateUserSettings },
     state: {
@@ -48,7 +48,7 @@ export const DialogTree: React.FC<IDialogTreeProps> = props => {
               onClick={() => {
                 onSelect(item.id);
               }}
-              styles={dialogId === item.id ? dialogItemSelected : dialogItemNotSelected}
+              styles={selectedItem === item.id ? itemSelected : itemNotSelected}
               text={item.name}
               ariaLabel={item.ariaLabel}
               ariaHidden={false}
@@ -59,3 +59,5 @@ export const DialogTree: React.FC<IDialogTreeProps> = props => {
     </Resizable>
   );
 };
+
+export { NavTree };

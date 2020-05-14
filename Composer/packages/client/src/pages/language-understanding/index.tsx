@@ -12,7 +12,7 @@ import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
-import { DialogTree } from '../../components/DialogTree';
+import { NavTree } from '../../components/NavTree';
 
 import TableView from './table-view';
 import {
@@ -119,7 +119,7 @@ const LUPage: React.FC<LUPageProps> = props => {
           </div>
         </div>
         <div role="main" css={ContentStyle}>
-          <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
+          <NavTree navLinks={navLinks} onSelect={onSelect} selectedItem={dialogId} />
           <div css={contentEditor} data-testid="LUEditor">
             <Suspense fallback={<LoadingSpinner />}>
               <Router primary={false} component={Fragment}>
