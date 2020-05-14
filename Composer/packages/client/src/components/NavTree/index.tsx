@@ -21,11 +21,10 @@ export interface INavTreeItem {
 
 interface INavTreeProps {
   navLinks: INavTreeItem[];
-  selectedItem?: string;
 }
 
 const NavTree: React.FC<INavTreeProps> = props => {
-  const { navLinks, selectedItem } = props;
+  const { navLinks } = props;
   const {
     actions: { updateUserSettings },
     state: {

@@ -93,6 +93,8 @@ const LUPage: React.FC<LUPageProps> = props => {
         />
       );
     }
+
+    return null;
   };
 
   return (

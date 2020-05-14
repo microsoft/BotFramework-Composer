@@ -34,17 +34,17 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
   });
 
   it('should render the user settings page', () => {
-    const { getByText } = renderWithStore(<AppSettings />, state);
-    getByText('User Preferences');
-    getByText('General');
-    getByText('Code Editor');
+    const { getByText, getAllByText } = renderWithStore(<AppSettings />, state);
+    // there are 2 onboarding texts
+    getAllByText('Onboarding');
+    getByText('Property editor preferences');
     expect(() => getByText('Application Updates')).toThrow();
   });
 
   it('should render the electron settings section', () => {
     const { getByText } = renderWithStore(<ElectronSettings />, state);
     getByText('Application Updates');
-    getByText('Automatically download and install updates');
-    getByText('Use nightly builds');
+    getByText('Auto update');
+    getByText('Early adopters');
   });
 });

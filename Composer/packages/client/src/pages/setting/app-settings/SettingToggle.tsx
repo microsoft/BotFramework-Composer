@@ -27,7 +27,7 @@ const SettingToggle: React.FC<ISettingToggleProps> = props => {
 
   return (
     <div css={styles.settingsContainer}>
-      <div css={styles.image} aria-hidden="true" aria-role="presentation">
+      <div css={styles.image} aria-hidden="true" role="presentation">
         {image && <img src={image} />}
       </div>
       <div css={styles.settingsContent}>
