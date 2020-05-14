@@ -29,7 +29,7 @@ const hostControlLabels = {
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, settings: origSettings, botEnvironment, projectId } = state;
+  const { botName, settings: origSettings, botEnvironment, projectId, settingsSchemas } = state;
   const absHosted = isAbsHosted();
   const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
   const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
@@ -89,7 +89,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor onChange={x => handleChange(x)} value={visibleSettings} />
+        <JsonEditor onChange={x => handleChange(x)} value={visibleSettings} schema={settingsSchemas} />
       </div>
     </div>
   ) : (

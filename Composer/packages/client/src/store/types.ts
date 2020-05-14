@@ -114,6 +114,7 @@ export interface State {
   showAddSkillDialogModal: boolean;
   isEnvSettingUpdated: boolean;
   settings: DialogSetting;
+  settingsSchemas: JSONSchema7;
   actionsSeed: any;
   onCreateDialogComplete?: (dialogId: string | null) => void;
   onAddSkillDialogComplete?: (dialogId: string | null) => void;

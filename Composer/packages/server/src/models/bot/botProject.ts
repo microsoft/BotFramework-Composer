@@ -7,7 +7,7 @@ import fs from 'fs';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity, JSONSchema7 } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -68,6 +68,7 @@ export class BotProject {
   };
   public skills: Skill[] = [];
   public settingManager: ISettingManager;
+  public settingsSchemas: JSONSchema7;
   public settings: DialogSetting | null = null;
   constructor(ref: LocationRef, user?: UserIdentity) {
     this.ref = ref;
@@ -79,6 +80,7 @@ export class BotProject {
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
 
     this.settingManager = new DefaultSettingManager(this.dir);
+    this.settingsSchemas = (this.settingManager as DefaultSettingManager).schema;
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
     this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
   }
@@ -103,6 +105,7 @@ export class BotProject {
       files: this.files,
       location: this.dir,
       schemas: this.getSchemas(),
+      settingsSchemas: this.settingsSchemas,
       skills: this.skills,
       settings: this.settings,
     };

@@ -44,7 +44,7 @@ export class BotProjectDeploy {
   private logger: (string) => any;
 
   // Will be assigned by create or deploy
-  private tenantId: string = '';
+  private tenantId = '';
 
   constructor(config: BotProjectDeployConfig) {
     this.subId = config.subId;
@@ -91,7 +91,7 @@ export class BotProjectDeploy {
         if (err.body.error.details) {
           const details = err.body.error.details;
           let errMsg = '';
-          for (let detail of details) {
+          for (const detail of details) {
             errMsg += detail.message;
           }
           return errMsg;
@@ -445,7 +445,7 @@ export class BotProjectDeploy {
         endpoint: luisEndpoint,
         endpointKey: luisEndpointKey,
         authoringRegion: luisAuthoringRegion,
-        authoringKey: luisAuthoringRegion,
+        authoringKey: luisAuthoringKey,
       };
 
       Object.assign(luisConfig, luisAppIds);

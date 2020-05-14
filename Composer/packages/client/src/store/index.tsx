@@ -92,6 +92,7 @@ export const initialState: State = {
   showAddSkillDialogModal: false,
   isEnvSettingUpdated: false,
   settings: {},
+  settingsSchemas: {},
   currentUser: {
     token: null,
     sessionExpired: false,

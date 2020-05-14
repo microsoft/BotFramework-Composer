@@ -97,7 +97,7 @@ const schema: JSONSchema7 = {
       required: ['MicrosoftAppId', 'MicrosoftAppPassword'],
     },
   },
-  required: ['subscriptionID', 'publishName', 'provision', 'accessToken'],
+  required: ['subscriptionID', 'name', 'settings', 'accessToken'],
   default: {
     accessToken: '<Access token from az account get-access-token>',
     name: '<unique name in your subscription>',

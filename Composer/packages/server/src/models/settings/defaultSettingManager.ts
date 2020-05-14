@@ -3,7 +3,7 @@
 
 import omit from 'lodash/omit';
 import { SensitiveProperties } from '@bfc/shared';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity, JSONSchema7 } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import log from '../../logger';
@@ -13,8 +13,108 @@ import { FileSettingManager } from './fileSettingManager';
 const debug = log.extend('default-settings-manager');
 
 export class DefaultSettingManager extends FileSettingManager {
+  public schema: JSONSchema7;
   constructor(basePath: string, user?: UserIdentity) {
     super(basePath, user);
+    this.schema = {
+      type: 'object',
+      properties: {
+        MicrosoftAppId: {
+          type: 'string',
+        },
+        MicrosoftAppPassword: {
+          type: 'string',
+        },
+        luis: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            authoringKey: {
+              type: 'string',
+            },
+            endpointKey: {
+              type: 'string',
+            },
+            authoringRegion: {
+              type: 'string',
+            },
+            defaultLanguage: {
+              type: 'string',
+            },
+            environment: {
+              type: 'string',
+            },
+          },
+        },
+        feature: {
+          type: 'object',
+          properties: {
+            UseShowTypingMiddleware: {
+              type: 'boolean',
+            },
+            UseInspectionMiddleware: {
+              type: 'boolean',
+            },
+          },
+        },
+        publishTargets: {
+          type: 'array',
+        },
+        qna: {
+          type: 'object',
+          properties: {
+            knowledgebaseid: {
+              type: 'string',
+            },
+            endpointkey: {
+              type: 'string',
+            },
+            hostname: {
+              type: 'string',
+            },
+          },
+        },
+        telemetry: {
+          type: 'object',
+          properties: {
+            logPersonalInformation: {
+              type: 'boolean',
+            },
+            logActivities: {
+              type: 'boolean',
+            },
+          },
+        },
+        runtime: {
+          type: 'object',
+          properties: {
+            customRuntime: {
+              type: 'boolean',
+            },
+            path: {
+              type: 'string',
+            },
+            command: {
+              type: 'string',
+            },
+          },
+        },
+        downsampling: {
+          type: 'object',
+          properties: {
+            maxImbalanceRatio: {
+              type: 'number',
+            },
+            maxUtteranceAllowed: {
+              type: 'number',
+            },
+          },
+        },
+      },
+      default: this.createDefaultSettings(),
+    };
   }
 
   protected createDefaultSettings = (): any => {
