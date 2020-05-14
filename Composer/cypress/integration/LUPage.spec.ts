@@ -16,7 +16,7 @@ context('LU Page', () => {
     cy.get('.toggleEditMode button').should('not.exist');
 
     // by default is table view
-    cy.findByTestId('LUEditor')
+    cy.findByTestId('LUPage')
       .findByTestId('table-view')
       .should('exist');
 
@@ -27,7 +27,7 @@ context('LU Page', () => {
     cy.get('.toggleEditMode button').as('switchButton');
     // goto edit-mode
     cy.get('@switchButton').click();
-    cy.findByTestId('LUEditor')
+    cy.findByTestId('LUPage')
       .get('.monaco-editor')
       .should('exist');
 
@@ -35,7 +35,7 @@ context('LU Page', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('All').click();
     });
-    cy.findByTestId('LUEditor')
+    cy.findByTestId('LUPage')
       .findByTestId('table-view')
       .should('exist');
   });
