@@ -3,7 +3,7 @@
 
 import { css } from '@emotion/core';
 import { FontSizes } from 'office-ui-fabric-react/lib/Styling';
-import { NeutralColors } from '@uifabric/fluent-theme';
+import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
 export const fileList = css`
   width: 255px;
@@ -34,4 +34,11 @@ export const title = css`
   justify-content: space-between;
   align-items: center;
   background-color: ${NeutralColors.gray20};
+`;
+
+export const confirmation = css`
+  padding: 15px;
+  margin-bottom: 20px;
+  white-space: pre-line;
+  background: ${SharedColors.red10};
 `;

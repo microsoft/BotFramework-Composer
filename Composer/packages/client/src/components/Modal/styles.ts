@@ -64,3 +64,8 @@ export const dialogModal = {
     maxWidth: '450px',
   },
 };
+
+export const confirmationContainer = css`
+  display: flex;
+  flex-direction: column;
+`;

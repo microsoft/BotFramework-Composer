@@ -15,13 +15,16 @@ import { Tree } from '../../components/Tree/index';
 import { Conversation } from '../../components/Conversation/index';
 import { MainContent } from '../../components/MainContent/index';
 import { TestController } from '../../components/TestController';
+import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import { OpenConfirmModal } from '../../components/Modal/Confirm';
 
+import settingStorage from './../../utils/dialogSettingStorage';
 import Routes from './router';
-import { title, fileList, contentEditor } from './styles';
+import { title, fileList, contentEditor, confirmation } from './styles';
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
-  const { state } = useContext(StoreContext);
-  const { projectId } = state;
+  const { state, actions } = useContext(StoreContext);
+  const { projectId, botName } = state;
   const makeProjectLink = (id: string, path: string) => {
     return `/bot/${id}/settings/${path}`;
   };
@@ -44,6 +47,27 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
     // { key: 'publishing-staging', name: formatMessage('Publishing and staging'), disabled: true },
   ];
 
+  const openDeleteBotModal = async () => {
+    const subTitle = 'Warning: are you sure to delete current bot?';
+    const title = 'Delete Bots';
+    const checkboxLabel = 'I want to delete this bot';
+    const settings = {
+      onRenderContent: () => {
+        return <div css={confirmation}> {subTitle} </div>;
+      },
+      disabled: false,
+      checkboxLabel,
+    };
+    const res = await OpenConfirmModal(title, subTitle, settings);
+    if (res) {
+      actions.deleteBotProject(projectId);
+      actions.deleteLocalRuntimeData(projectId);
+      luFileStatusStorage.removeAllStatuses(botName);
+      settingStorage.remove(botName);
+      navigateTo('home');
+    }
+  };
+
   const toolbarItems = [
     {
       type: 'element',
@@ -58,7 +82,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
 
   return (
     <Fragment>
-      <ToolBar toolbarItems={toolbarItems} />
+      <ToolBar toolbarItems={toolbarItems} openDeleteBotModal={openDeleteBotModal} />
       <MainContent>
         <Fragment>
           <div css={fileList}>
