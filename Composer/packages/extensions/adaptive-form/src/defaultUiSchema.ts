@@ -295,7 +295,7 @@ const DefaultUISchema: UISchema = {
     subtitle: () => formatMessage('Set Properties'),
     helpLink: 'https://aka.ms/bfc-using-memory',
   },
-  [SDKKinds.SkillDialog]: {
+  [SDKKinds.BeginSkill]: {
     label: () => formatMessage('Connect to a skill'),
     subtitle: () => formatMessage('Skill Dialog'),
     helpLink: 'https://aka.ms/bfc-call-skill',

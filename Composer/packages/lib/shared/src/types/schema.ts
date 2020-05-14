@@ -111,7 +111,7 @@ export enum SDKKinds {
   SetProperties = 'Microsoft.SetProperties',
   SetProperty = 'Microsoft.SetProperty',
   SignOutUser = 'Microsoft.SignOutUser',
-  SkillDialog = 'Microsoft.SkillDialog',
+  BeginSkill = 'Microsoft.BeginSkill',
   StaticActivityTemplate = 'Microsoft.StaticActivityTemplate',
   SwitchCondition = 'Microsoft.SwitchCondition',
   TemperatureEntityRecognizer = 'Microsoft.TemperatureEntityRecognizer',
