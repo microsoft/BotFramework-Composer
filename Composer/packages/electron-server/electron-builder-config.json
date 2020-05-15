@@ -91,6 +91,7 @@
   },
   "dmg": {
     "title": "Bot Framework Composer Installer",
+    "background": "resources/dmgBackground.png",
     "contents": [
       {
         "x": 140,
