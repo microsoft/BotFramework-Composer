@@ -3,7 +3,7 @@
 
 context('Creating a new Dialog', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample');
     cy.findByTestId('LeftNav-CommandBarButtonDesign Flow').click();
   });

@@ -3,7 +3,7 @@
 
 context('Saving As', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('EchoBot', 'TestBot');
   });
 

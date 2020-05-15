@@ -3,7 +3,7 @@
 
 context('Creating a new trigger', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('EmptyBot');
   });
 
