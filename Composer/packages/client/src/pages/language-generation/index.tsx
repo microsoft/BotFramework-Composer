@@ -10,22 +10,13 @@ import { RouteComponentProps, Router } from '@reach/router';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StoreContext } from '../../store';
-import {
-  ContentHeaderStyle,
-  ContentStyle,
-  flexContent,
-  actionButton,
-  contentEditor,
-  contentWrapper,
-  HeaderText,
-  pageRoot,
-} from '../language-understanding/styles';
+import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils';
 import { TestController } from '../../components/TestController';
-import { DialogTree } from '../../components/DialogTree';
+import { INavTreeItem } from '../../components/NavTree';
+import { Page } from '../../components/Page';
 
 import TableView from './table-view';
-import { ToolBar } from './../../components/ToolBar/index';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LGPageProps extends RouteComponentProps<{}> {
@@ -39,14 +30,14 @@ const LGPage: React.FC<LGPageProps> = props => {
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
-  const navLinks = useMemo(() => {
-    const newDialogLinks = dialogs.map(dialog => {
+
+  const navLinks: INavTreeItem[] = useMemo(() => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map(dialog => {
       return {
         id: dialog.id,
-        url: dialog.id,
-        key: dialog.id,
         name: dialog.displayName,
         ariaLabel: formatMessage('language generation file'),
+        url: `/bot/${projectId}/language-generation/${dialog.id}`,
       };
     });
     const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
@@ -57,10 +48,9 @@ const LGPage: React.FC<LGPageProps> = props => {
     }
     newDialogLinks.splice(0, 0, {
       id: 'common',
-      key: 'common',
       name: 'All',
       ariaLabel: formatMessage('all language generation files'),
-      url: '',
+      url: `/bot/${projectId}/language-generation/common`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -71,14 +61,6 @@ const LGPage: React.FC<LGPageProps> = props => {
       navigateTo(`/bot/${projectId}/language-generation/common`);
     }
   }, [dialogId, dialogs, projectId]);
-
-  const onSelect = useCallback(
-    id => {
-      const url = `/bot/${projectId}/language-generation/${id}`;
-      navigateTo(url);
-    },
-    [edit, projectId]
-  );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
@@ -97,40 +79,35 @@ const LGPage: React.FC<LGPageProps> = props => {
     },
   ];
 
-  return (
-    <Fragment>
-      <div css={pageRoot} data-testid="LGPage">
-        <div css={contentWrapper}>
-          <ToolBar toolbarItems={toolbarItems} />
+  const onRenderHeaderContent = () => {
+    return (
+      <Toggle
+        className={'toggleEditMode'}
+        css={actionButton}
+        onText={formatMessage('Edit mode')}
+        offText={formatMessage('Edit mode')}
+        defaultChecked={false}
+        checked={!!edit}
+        onChange={onToggleEditMode}
+      />
+    );
+  };
 
-          <div css={ContentHeaderStyle}>
-            <h1 css={HeaderText}>{formatMessage('Bot Responses')}</h1>
-            <div css={flexContent}>
-              <Toggle
-                className={'toggleEditMode'}
-                css={actionButton}
-                onText={formatMessage('Edit mode')}
-                offText={formatMessage('Edit mode')}
-                defaultChecked={false}
-                checked={!!edit}
-                onChange={onToggleEditMode}
-              />
-            </div>
-          </div>
-          <div role="main" css={ContentStyle}>
-            <DialogTree navLinks={navLinks} onSelect={onSelect} dialogId={dialogId} />
-            <div css={contentEditor} data-testid="LGEditor">
-              <Suspense fallback={<LoadingSpinner />}>
-                <Router primary={false} component={Fragment}>
-                  <CodeEditor path="/edit/*" dialogId={dialogId} />
-                  <TableView path="/" dialogId={dialogId} />
-                </Router>
-              </Suspense>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Fragment>
+  return (
+    <Page
+      title={formatMessage('Bot Responses')}
+      toolbarItems={toolbarItems}
+      navLinks={navLinks}
+      onRenderHeaderContent={onRenderHeaderContent}
+      data-testid="LGPage"
+    >
+      <Suspense fallback={<LoadingSpinner />}>
+        <Router primary={false} component={Fragment}>
+          <CodeEditor path="/edit/*" dialogId={dialogId} />
+          <TableView path="/" dialogId={dialogId} />
+        </Router>
+      </Suspense>
+    </Page>
   );
 };
 
