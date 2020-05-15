@@ -25,7 +25,7 @@
     "packages/ui-plugins/*"
   ],
   "scripts": {
-    "build": "node scripts/update.js && node scripts/begin.js && yarn build:prod && yarn build:plugins",
+    "build": "node scripts/begin.js && yarn build:prod && yarn build:plugins",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
     "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
     "build:lib": "yarn workspace @bfc/libs build:all",
@@ -40,7 +40,7 @@
     "build:plugins:azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
     "build:plugins:azureFunctionsPublish": "cd plugins/azureFunctionsPublish && yarn install && yarn build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
-    "startall": "node scripts/update.js && yarn start",
+    "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:client": "yarn workspace @bfc/client start",
     "start:server": "yarn workspace @bfc/server start",
