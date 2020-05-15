@@ -13,10 +13,10 @@ import { StoreContext } from '../../store';
 import { TestController } from '../../components/TestController';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
 import { navigateTo } from '../../utils';
-
-import Routes from './router';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
+
+import Routes from './router';
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   const { state, actions } = useContext(StoreContext);
