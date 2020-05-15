@@ -3994,6 +3994,14 @@
     "@uifabric/styling" "^7.10.22"
     tslib "^1.10.0"
 
+"@uifabric/merge-styles@^7.12.0":
+  version "7.12.0"
+  resolved "https://registry.yarnpkg.com/@uifabric/merge-styles/-/merge-styles-7.12.0.tgz#47382a81ac694e0118a994204b40e6041f53bbce"
+  integrity sha512-MQt2AqJJAn0boaGm9nBk4d7LntOCCiowgF35bK01WLD2fOymDKr7QberkqfzTzajPN/+9d+KQXguEBUUZd0deQ==
+  dependencies:
+    "@uifabric/set-version" "^7.0.12"
+    tslib "^1.10.0"
+
 "@uifabric/merge-styles@^7.8.9":
   version "7.8.9"
   resolved "https://registry.yarnpkg.com/@uifabric/merge-styles/-/merge-styles-7.8.9.tgz#0abb3a0248c504f9643f544026fd7130b0239ed3"
@@ -4009,6 +4017,22 @@
   dependencies:
     "@uifabric/set-version" "^7.0.8"
     "@uifabric/utilities" "^7.15.2"
+    tslib "^1.10.0"
+
+"@uifabric/react-hooks@^7.3.4":
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/@uifabric/react-hooks/-/react-hooks-7.3.4.tgz#6a19d07a9e80890a9df7e8217d2435855c10cdb0"
+  integrity sha512-ba5V9Vbg59qGWsoG2am6BvLxXich6t+nozUbJeKWjBDnIWuxpbYkfTzGU5BlU1JxejVo9LM+I0QZSKVr9K9lIg==
+  dependencies:
+    "@uifabric/set-version" "^7.0.12"
+    "@uifabric/utilities" "^7.17.0"
+    tslib "^1.10.0"
+
+"@uifabric/set-version@^7.0.12":
+  version "7.0.12"
+  resolved "https://registry.yarnpkg.com/@uifabric/set-version/-/set-version-7.0.12.tgz#542c261fd5d675cff84290ee5c1327c9d4855e7a"
+  integrity sha512-XNqfKwNUoHnkW5sj15Zd0cNf5ga9fFjbTUrvc/ix74tkUPc2vrV3qBteW61IaNTNKWOFns5kewvhCK2jU4LnRg==
+  dependencies:
     tslib "^1.10.0"
 
 "@uifabric/set-version@^7.0.8":
@@ -4036,6 +4060,16 @@
   dependencies:
     "@uifabric/merge-styles" "^7.8.9"
     "@uifabric/set-version" "^7.0.8"
+    prop-types "^15.7.2"
+    tslib "^1.10.0"
+
+"@uifabric/utilities@^7.17.0":
+  version "7.17.0"
+  resolved "https://registry.yarnpkg.com/@uifabric/utilities/-/utilities-7.17.0.tgz#c0f2258a91057c3aa8976fbfbd2ee971499255cd"
+  integrity sha512-Ayd+txIYpb6Q7uWOhl361e2bhKytBaEKHEQDW9jzzNaZlgzgkyRZ65we/iPSn21BaTjipOGJafBfCChz4+dyrg==
+  dependencies:
+    "@uifabric/merge-styles" "^7.12.0"
+    "@uifabric/set-version" "^7.0.12"
     prop-types "^15.7.2"
     tslib "^1.10.0"
 
@@ -13079,8 +13113,8 @@ mixin-object@^2.0.1:
 
 mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@^0.5.2, mkdirp@^0.5.3, mkdirp@^0.5.4, mkdirp@~0.5.1:
   version "0.5.5"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
-  integrity sha1-2Rzv1i0UNsoPQWIOJRKI1CAJne8=
+  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
+  integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
   dependencies:
     minimist "^1.2.5"
 

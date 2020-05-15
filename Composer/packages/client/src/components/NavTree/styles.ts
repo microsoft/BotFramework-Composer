@@ -18,7 +18,7 @@ export const root = css`
   }
 `;
 
-const dialogItem: IButtonStyles = {
+const itemBase: IButtonStyles = {
   root: {
     background: NeutralColors.white,
     fontWeight: FontWeights.semilight,
@@ -34,13 +34,13 @@ const dialogItem: IButtonStyles = {
   },
 };
 
-export const dialogItemNotSelected: IButtonStyles = mergeStyleSets(dialogItem, {
+export const itemNotSelected: IButtonStyles = mergeStyleSets(itemBase, {
   root: {
     background: NeutralColors.white,
     fontWeight: FontWeights.semilight,
   },
 });
-export const dialogItemSelected: IButtonStyles = mergeStyleSets(dialogItem, {
+export const itemSelected: IButtonStyles = mergeStyleSets(itemBase, {
   root: {
     background: NeutralColors.gray20,
     fontWeight: FontWeights.semibold,
