@@ -7,6 +7,7 @@
     "version": "8.0.2"
   },
   "directories": {
+    "buildResources": "resources",
     "output": "dist"
   },
   "asarUnpack": [
@@ -56,6 +57,8 @@
     "runAfterFinish": true,
     "installerIcon": "resources/composerIcon.ico",
     "uninstallerIcon": "resources/composerIcon.ico",
+    "installerHeader": "installerHeader.bmp",
+    "installerSidebar": "installerSidebar.bmp",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
     "shortcutName": "Bot Framework Composer",
