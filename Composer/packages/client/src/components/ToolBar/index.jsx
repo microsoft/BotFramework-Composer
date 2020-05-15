@@ -88,26 +88,6 @@ export function ToolBar(props) {
             />
           </div>
         )}
-        {window.location.href.indexOf('/settings/') !== -1 && (
-          <div>
-            <CommandButton
-              data-testid="DeleteFlyout"
-              css={actionButton}
-              iconProps={{ iconName: 'Delete' }}
-              text={formatMessage('Delete')}
-              menuProps={{
-                items: [
-                  {
-                    'data-testid': 'deleteBot',
-                    key: 'deleteBot',
-                    text: formatMessage('Delete current bot'),
-                    onClick: () => openDeleteBotModal(),
-                  },
-                ],
-              }}
-            />
-          </div>
-        )}
         {left.map(itemList)}{' '}
         {window.location.href.indexOf('/dialogs/') !== -1 && (
           <CommandButton
