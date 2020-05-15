@@ -8,17 +8,23 @@ import { Resizable, ResizeCallback } from 're-resizable';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { StoreContext } from '../../store';
+import { navigateTo } from '../../utils';
 
-import { root, dialogItemNotSelected, dialogItemSelected } from './styles';
+import { root, itemNotSelected, itemSelected } from './styles';
 
-interface IDialogTreeProps {
-  navLinks: any[];
-  dialogId: string;
-  onSelect: (id: string, selected?: string) => void;
+export interface INavTreeItem {
+  id: string;
+  name: string;
+  ariaLabel?: string;
+  url: string;
 }
 
-export const DialogTree: React.FC<IDialogTreeProps> = props => {
-  const { navLinks, onSelect, dialogId } = props;
+interface INavTreeProps {
+  navLinks: INavTreeItem[];
+}
+
+const NavTree: React.FC<INavTreeProps> = props => {
+  const { navLinks } = props;
   const {
     actions: { updateUserSettings },
     state: {
@@ -42,16 +48,18 @@ export const DialogTree: React.FC<IDialogTreeProps> = props => {
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         {navLinks.map(item => {
+          const isSelected = location.pathname.includes(item.url);
+
           return (
             <DefaultButton
               key={item.id}
-              onClick={() => {
-                onSelect(item.id);
-              }}
-              styles={dialogId === item.id ? dialogItemSelected : dialogItemNotSelected}
               text={item.name}
-              ariaLabel={item.ariaLabel}
-              ariaHidden={false}
+              styles={isSelected ? itemSelected : itemNotSelected}
+              href={item.url}
+              onClick={e => {
+                e.preventDefault();
+                navigateTo(item.url);
+              }}
             />
           );
         })}
@@ -59,3 +67,5 @@ export const DialogTree: React.FC<IDialogTreeProps> = props => {
     </Resizable>
   );
 };
+
+export { NavTree };

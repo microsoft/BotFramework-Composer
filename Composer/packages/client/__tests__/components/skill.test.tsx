@@ -7,8 +7,12 @@ import { Skill } from '@bfc/shared';
 
 import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
-import SkillForm from '../../src/pages/skills/skill-form';
+import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal';
 import { renderWithStore } from '../testUtils';
+
+jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl', () => ({
+  validateManifestUrl: () => {},
+}));
 
 const items: Skill[] = [
   {
@@ -50,14 +54,18 @@ describe('Skill page', () => {
 
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
-    const { container } = render(<SkillList skills={items} projectId="test-project" onEdit={jest.fn()} />);
+    const { container } = render(
+      <SkillList skills={items} projectId="test-project" onEdit={jest.fn()} onDelete={jest.fn()} />
+    );
     expect(container).toHaveTextContent('Email Skill');
     expect(container).toHaveTextContent('Point Of Interest Skill');
   });
 
   it('can edit the skill', () => {
     const onEdit = jest.fn();
-    const { getAllByTestId } = render(<SkillList skills={items} projectId="test-project" onEdit={onEdit} />);
+    const { getAllByTestId } = render(
+      <SkillList skills={items} projectId="test-project" onEdit={onEdit} onDelete={jest.fn()} />
+    );
 
     const editBtns = getAllByTestId('EditSkill');
     editBtns.forEach((btn, i) => {
@@ -69,12 +77,20 @@ describe('<SkillList />', () => {
 
 describe('<SkillForm />', () => {
   it('should render the skill form, and do update', () => {
+    jest.useFakeTimers();
     const onSubmit = jest.fn(formData => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
     const onDismiss = jest.fn(() => {});
     const { getByLabelText, getByText } = render(
-      <SkillForm skills={items} editIndex={0} onSubmit={onSubmit} onDismiss={onDismiss} isOpen />
+      <CreateSkillModal
+        skills={items}
+        editIndex={0}
+        projectId={'243245'}
+        onSubmit={onSubmit}
+        onDismiss={onDismiss}
+        isOpen
+      />
     );
 
     const urlInput = getByLabelText('Manifest url');
@@ -83,6 +99,6 @@ describe('<SkillForm />', () => {
 
     const submitButton = getByText('Confirm');
     fireEvent.click(submitButton);
-    expect(onSubmit).toBeCalled();
+    expect(onSubmit).not.toBeCalled();
   });
 });

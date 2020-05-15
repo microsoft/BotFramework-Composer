@@ -14,14 +14,7 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { StoreContext } from '../../../store';
 
 import { EjectModal } from './ejectModal';
-import {
-  breathingSpace,
-  runtimeSettingsStyle,
-  runtimeControls,
-  runtimeControlsTitle,
-  runtimeToggle,
-  controlGroup,
-} from './style';
+import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
@@ -52,7 +45,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
 
   const header = () => (
     <div css={runtimeControls}>
-      <h1 css={runtimeControlsTitle}>{formatMessage('Bot runtime settings')}</h1>
       <p>{formatMessage('Configure Composer to start your bot using runtime code you can customize and control.')}</p>
     </div>
   );

@@ -3,7 +3,7 @@
 
 context('Visual Designer', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample');
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {

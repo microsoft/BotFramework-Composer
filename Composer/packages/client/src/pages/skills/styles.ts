@@ -54,39 +54,6 @@ export const TableCell = css`
   }
 `;
 
-export const ChoiceGroupAlignHorizontal = css`
-  .ms-ChoiceFieldGroup-flexContainer {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
-  .ms-ChoiceField-wrapper {
-    margin-right: 2rem;
-  }
-`;
-
-export const FormModalTitle = css`
-  padding: 0 24px;
-`;
-
-export const FormModalBody = css`
-  padding: 24px;
-`;
-
-export const FormFieldManifestUrl = css`
-  width: 40rem;
-`;
-
-export const FormFieldEditName = css`
-  width: 20rem;
-`;
-
-export const FormFieldAlignHorizontal = css`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-`;
-
 export const FormFieldAlignHorizontalBotSettings = css`
   max-width: 1500px;
   margin-top: 20px;
@@ -97,35 +64,9 @@ export const FormFieldAlignHorizontalBotSettings = css`
   padding-bottom: 15px;
 `;
 
-export const FormFieldName = css`
-  width: 10rem;
-  margin-right: 1rem;
-`;
-
-export const FormFieldAppId = css`
-  width: 20rem;
-`;
-
-export const FormFieldEndpoint = css`
-  width: 40rem;
-`;
-
-export const ActionButton = css`
-  font-size: ${FontSizes.large};
-  margin: 1rem;
-`;
-
-export const MarginLeftSmall = css`
-  margin-left: ${FontSizes.small};
-`;
-
 export const ManifestModalHeaderStyle = css`
   margin: 14px 0 0 16px;
   font-size: 20px;
   font-weight: bolder;
   align-items: left;
-`;
-
-export const ManifestModalBodyStyle = css`
-  margin: 15px 15px 15px 15px;
 `;

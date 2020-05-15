@@ -3,13 +3,13 @@
 
 context('Onboarding', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample', 'Onboarding');
 
     //enable onboarding setting
     cy.visitPage('Settings');
-    cy.findByText('User Preferences').click();
-    cy.findByTestId('onboardingToggle').click();
+    cy.findByText('App Settings').click();
+    cy.findByLabelText('Onboarding').click();
     cy.visitPage('Design Flow');
   });
 
