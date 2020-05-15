@@ -50,9 +50,14 @@ class AzurePublisher {
     this.logMessages = [];
   }
 
-  private getRuntimeFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
-  private getProjectFolder = (key: string, template: string) =>
-    path.resolve(__dirname, `../publishBots/${key}/${template}`);
+  private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `publishBots`);
+
+  private getRuntimeFolder = (key: string) => {
+    return path.resolve(this.baseRuntimeFolder, `${key}`);
+  };
+  private getProjectFolder = (key: string, template: string) => {
+    return path.resolve(this.baseRuntimeFolder, `${key}/${template}`);
+  };
   private getBotFolder = (key: string, template: string) =>
     path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
   private getSettingsPath = (key: string, template: string) =>
