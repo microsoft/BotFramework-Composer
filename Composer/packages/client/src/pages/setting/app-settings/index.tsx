@@ -5,8 +5,6 @@
 import { jsx, css } from '@emotion/core';
 import { lazy, useCallback, useContext, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHint';
@@ -16,13 +14,15 @@ import { RouteComponentProps } from '@reach/router';
 import { StoreContext } from '../../../store';
 import { isElectron } from '../../../utils/electronUtil';
 
-import { container, title, description, link, section } from './styles';
+import { container, section } from './styles';
+import { SettingToggle } from './SettingToggle';
+import * as images from './images';
 
 const ElectronSettings = lazy(() =>
   import('./electronSettings').then(module => ({ default: module.ElectronSettings }))
 );
 
-export const UserSettings: React.FC<RouteComponentProps> = () => {
+const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
   const {
@@ -33,40 +33,33 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
     },
   } = useContext(StoreContext);
 
-  const onOnboardingChange = useCallback(() => {
-    onboardingSetComplete(!complete);
-    showCallout(complete);
-  }, [complete, onboardingSetComplete]);
-
-  const onCodeEditorChange = useCallback(
-    (key: string, checked: boolean) => {
-      updateUserSettings({ codeEditor: { [key]: checked } });
+  const onOnboardingChange = useCallback(
+    (checked: boolean) => {
+      // on means its not complete
+      onboardingSetComplete(!checked);
+      showCallout(checked);
     },
-    [userSettings.codeEditor]
+    [onboardingSetComplete]
   );
+
+  const onCodeEditorChange = (key: string) => (checked: boolean) => {
+    updateUserSettings({ codeEditor: { [key]: checked } });
+  };
 
   const renderElectronSettings = isElectron();
 
   return (
     <div css={container}>
-      <h1 css={title}>{formatMessage('User Preferences')}</h1>
       <section css={section}>
-        <h2>{formatMessage('General')}</h2>
-        <Toggle
-          id={'onboardingToggle'}
-          data-testid="onboardingToggle"
+        <h2>{formatMessage('Onboarding')}</h2>
+        <SettingToggle
+          id="onboardingToggle"
+          title={formatMessage('Onboarding')}
+          image={images.onboarding}
+          description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
           checked={!complete}
-          onChange={onOnboardingChange}
-          label={formatMessage('Onboarding')}
-          offText={formatMessage('Disabled')}
-          onText={formatMessage('Enabled')}
+          onToggle={onOnboardingChange}
         />
-        <p css={description}>
-          {formatMessage('Enabling Onboarding will restart the product tour.')}
-          <Link href="https://aka.ms/bfc-onboarding" target="_blank" rel="noopener noreferrer" styles={link}>
-            {formatMessage('Learn more')}
-          </Link>
-        </p>
         <TeachingBubble
           calloutProps={{
             hidden: !calloutIsShown,
@@ -74,7 +67,7 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
             directionalHint: DirectionalHint.rightCenter,
             isBeakVisible: false,
           }}
-          target={'#onboardingToggle'}
+          target="#onboardingToggle"
           styles={{
             bodyContent: {
               padding: '0px',
@@ -98,7 +91,7 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
                 padding: 4px;
               `}
             >
-              <FontIcon iconName={'SplitObject'} />
+              <FontIcon iconName="SplitObject" />
             </div>
             <div
               css={css`
@@ -112,27 +105,29 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
       </section>
 
       <section css={section}>
-        <h2>{formatMessage('Code Editor')}</h2>
-        <Toggle
-          checked={userSettings.codeEditor.lineNumbers}
-          onChange={(_e, checked) => onCodeEditorChange('lineNumbers', !!checked)}
-          label={formatMessage('Line numbers')}
-          offText={formatMessage('Off')}
-          onText={formatMessage('On')}
-        />
-        <Toggle
-          checked={userSettings.codeEditor.wordWrap}
-          onChange={(_e, checked) => onCodeEditorChange('wordWrap', !!checked)}
-          label={formatMessage('Word wrap')}
-          offText={formatMessage('Off')}
-          onText={formatMessage('On')}
-        />
-        <Toggle
+        <h2>{formatMessage('Property editor preferences')}</h2>
+        <SettingToggle
           checked={userSettings.codeEditor.minimap}
-          onChange={(_e, checked) => onCodeEditorChange('minimap', !!checked)}
-          label={formatMessage('Minimap')}
-          offText={formatMessage('Off')}
-          onText={formatMessage('On')}
+          onToggle={onCodeEditorChange('minimap')}
+          title={formatMessage('Minimap')}
+          description={formatMessage(
+            'A minimap gives a overview of your source code for quick navigation and code understanding.'
+          )}
+          image={images.minimap}
+        />
+        <SettingToggle
+          checked={userSettings.codeEditor.lineNumbers}
+          onToggle={onCodeEditorChange('lineNumbers')}
+          title={formatMessage('Line numbers')}
+          description={formatMessage('Enable line numbers to refer to code lines by number.')}
+          image={images.lineNumbers}
+        />
+        <SettingToggle
+          checked={userSettings.codeEditor.wordWrap}
+          onToggle={onCodeEditorChange('wordWrap')}
+          title={formatMessage('Sentence wrap')}
+          description={formatMessage('Display lines that extends beyond the width of the editor on the next line.')}
+          image={images.wordWrap}
         />
       </section>
 
@@ -140,3 +135,5 @@ export const UserSettings: React.FC<RouteComponentProps> = () => {
     </div>
   );
 };
+
+export { AppSettings };
