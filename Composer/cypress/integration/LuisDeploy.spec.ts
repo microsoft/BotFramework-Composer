@@ -7,7 +7,7 @@ context('Luis Deploy', () => {
     cy.route('POST', '/api/publish/*/publish/default', { endpointURL: 'anything' });
     cy.route('POST', '/api/projects/*/settings', 'OK');
     cy.route('GET', '/api/publish/*/status/default', { endpointURL: 'anything' });
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
   });
 
