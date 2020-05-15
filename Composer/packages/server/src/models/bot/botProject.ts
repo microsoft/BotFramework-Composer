@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
 import { UserIdentity, JSONSchema7 } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -67,6 +67,7 @@ export class BotProject {
     [key: string]: string;
   };
   public skills: Skill[] = [];
+  public diagnostics: Diagnostic[] = [];
   public settingManager: ISettingManager;
   public settingsSchemas: JSONSchema7;
   public settings: DialogSetting | null = null;
@@ -86,6 +87,7 @@ export class BotProject {
   }
 
   public init = async () => {
+    this.diagnostics = [];
     // those 2 migrate methods shall be removed after a period of time
     await this._reformProjectStructure();
     try {
@@ -94,7 +96,9 @@ export class BotProject {
       // when re-index opened bot, file write may error
     }
     this.settings = await this.getEnvSettings('', false);
-    this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || []);
+    this.skills = skillsParsed;
+    this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
   };
 
@@ -107,6 +111,7 @@ export class BotProject {
       schemas: this.getSchemas(),
       settingsSchemas: this.settingsSchemas,
       skills: this.skills,
+      diagnostics: this.diagnostics,
       settings: this.settings,
     };
   };
@@ -141,15 +146,15 @@ export class BotProject {
   // update skill in settings
   public updateSkill = async (config: Skill[]) => {
     const settings = await this.getEnvSettings('', false);
-    const skills = await extractSkillManifestUrl(config);
+    const { skillsParsed } = await extractSkillManifestUrl(config);
 
-    settings.skill = skills.map(({ manifestUrl, name }) => {
+    settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
       return { manifestUrl, name };
     });
     await this.settingManager.set('', settings);
 
-    this.skills = skills;
-    return skills;
+    this.skills = skillsParsed;
+    return skillsParsed;
   };
 
   public exportToZip = cb => {

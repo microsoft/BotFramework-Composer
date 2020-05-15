@@ -31,20 +31,24 @@ const linksButtom = [
   },
 ];
 
-const comingSoonLink = {
-  to: '/home',
-  text: formatMessage('Coming soon!'),
-  css: home.bluetitle,
-};
-
 const turtorials = [
   {
-    title: formatMessage('Tutorial #1'),
-    content: formatMessage('Coming soon...'),
+    title: formatMessage('5 Minute Intro'),
+    content: formatMessage('Chris Whitten'),
+    subContent: formatMessage('Apr 9, 2020'),
+    href: 'https://aka.ms/bf-composer-tutorial-chris',
   },
   {
-    title: formatMessage('Tutorial #2'),
-    content: formatMessage('Coming soon...'),
+    title: formatMessage('Weather Bot'),
+    content: formatMessage('Ben Brown'),
+    subContent: formatMessage('Nov 12, 2019'),
+    href: 'https://aka.ms/bf-composer-tutorial-ben',
+  },
+  {
+    title: formatMessage('MSFT Ignite AI Show'),
+    content: formatMessage('Vishwac Sena'),
+    subContent: formatMessage('Jan 28, 2020'),
+    href: 'https://aka.ms/bf-composer-tutorial-vishwac',
   },
 ];
 
@@ -190,17 +194,19 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           )}
           <div css={home.leftContainer}>
-            <h2 css={home.subtitle}>
-              {formatMessage('Video tutorials:')}&nbsp;
-              <Link href={comingSoonLink.to} key={comingSoonLink.text} target={'_blank'}>
-                <span css={comingSoonLink.css} aria-label={'Video tutorials coming soon'}>
-                  {comingSoonLink.text}
-                </span>
-              </Link>
-            </h2>
+            <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
-                <ItemContainer key={index} title={item.title} content={item.content} disabled />
+                <ItemContainer
+                  styles={home.tutorialTile}
+                  key={index}
+                  title={item.title}
+                  content={item.content}
+                  subContent={item.subContent}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener nofollow"
+                />
               ))}
               <div css={home.linkContainer}>
                 <div>
