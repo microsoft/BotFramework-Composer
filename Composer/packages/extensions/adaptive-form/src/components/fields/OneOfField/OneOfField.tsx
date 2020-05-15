@@ -13,7 +13,7 @@ import { resolveFieldWidget } from '../../../utils';
 import { usePluginConfig } from '../../../hooks';
 import { oneOfField } from '../styles';
 
-import { getOptions, getSelectedOption } from './utils';
+import { getOptions, getSelectedOption, getFieldProps } from './utils';
 
 const OneOfField: React.FC<FieldProps> = props => {
   const { definitions, description, id, label, schema, required, uiOptions, value } = props;
@@ -73,14 +73,7 @@ const OneOfField: React.FC<FieldProps> = props => {
           />
         )}
       </div>
-      <Field
-        {...props}
-        transparentBorder={false}
-        schema={selectedSchema || {}}
-        // allow object fields to render their labels
-        label={selectedSchema?.type === 'object' ? undefined : false}
-        depth={props.depth - 1}
-      />
+      <Field {...getFieldProps(props, selectedSchema)} />
     </div>
   );
 };

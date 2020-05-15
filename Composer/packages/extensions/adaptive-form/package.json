@@ -17,6 +17,7 @@
   },
   "license": "MIT",
   "peerDependencies": {
+    "@bfc/code-editor": "*",
     "@bfc/extension": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
@@ -27,6 +28,7 @@
     "react-dom": "16.13.0"
   },
   "devDependencies": {
+    "@bfc/code-editor": "*",
     "@bfc/extension": "*",
     "@bfc/test-utils": "*",
     "@types/lodash": "^4.14.149",

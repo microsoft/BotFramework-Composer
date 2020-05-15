@@ -1,23 +1,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DesignerData } from '../types';
+import { DesignerData, BaseSchema } from '../types';
 
-export type ExternalResourceHandler<CopiedType> = (
-  actionId: string,
-  actionData: any,
-  resourceFieldName: string,
-  resourceValue?: CopiedType
-) => CopiedType;
+export type FieldProcessor<T> = (
+  fromActionId: string,
+  fromAction: BaseSchema,
+  toActionId: string,
+  toAction: BaseSchema,
+  fieldName: string
+) => T;
 
-export type ExternalResourceHandlerAsync<CopiedType> = (
-  actionId: string,
-  actionData: any,
-  resourceFieldName: string,
-  resourceValue?: CopiedType
-) => Promise<CopiedType>;
+export type FieldProcessorAsync<T> = (
+  fromActionId: string,
+  fromAction: BaseSchema,
+  toActionId: string,
+  toAction: BaseSchema,
+  fieldName: string
+) => Promise<T>;
 
 export interface ExternalApi {
   getDesignerId: (data?: DesignerData) => DesignerData;
-  transformLgField: ExternalResourceHandlerAsync<string>;
+  copyLgField: FieldProcessorAsync<string>;
+  copyLuField: FieldProcessorAsync<any>;
 }

@@ -19,49 +19,6 @@ export const flexContentSpaceBetween = css`
   justify-content: space-between;
   align-items: center;
 `;
-export const flexContent = css`
-  display: flex;
-  align-items: center;
-`;
-
-export const ContentHeaderStyle = css`
-  padding: 5px 20px;
-  height: 60px;
-  display: flex;
-  flex-shrink: 0;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const HeaderText = css`
-  font-size: ${FontSizes.xLarge};
-  font-weight: ${FontWeights.semibold};
-`;
-
-export const ContentStyle = css`
-  margin-left: 2px;
-  display: flex;
-  border-top: 1px solid #dddddd;
-  flex: 1;
-  height: calc(100% - 165px);
-  position: relative;
-  nav {
-    ul {
-      margin-top: 0px;
-    }
-  }
-`;
-
-export const contentEditor = css`
-  flex: 4;
-  margin: 20px;
-  height: calc(100vh - 200px);
-  position: relative;
-  overflow: visible;
-
-  label: ContentEditor;
-`;
-
 export const codeEditorContainer = css`
   width: 100%;
 `;
@@ -135,4 +92,15 @@ export const consoleStyle = css`
   color: #fff;
   padding: 15px;
   margin-bottom: 20px;
+`;
+
+export const tableCell = css`
+  outline: none;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
 `;

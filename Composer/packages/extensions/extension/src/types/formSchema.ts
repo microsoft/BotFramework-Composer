@@ -16,6 +16,8 @@ export interface UIOptions {
   field?: FieldWidget;
   /** Url to docs. Rendered below field description. */
   helpLink?: string;
+  /** Hide errors in SchemaField */
+  hideError?: boolean;
   /**
    * Fields to hide in the form. A function can be used to dynamically hide/show fields.
    * @example
@@ -43,7 +45,7 @@ export interface UIOptions {
     get: (value: any) => any;
     set: (value: any) => any;
   };
-  /** subtitle rendered in form title */
+  /** subtitle rendered in form title, defaults to schema.$kind */
   subtitle?: UIOptionValue<string>;
 }
 

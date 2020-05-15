@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -22,15 +22,19 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     required,
   } = props;
 
-  const options: IDropdownOption[] = (enumOptions ?? []).map(o => ({
-    key: o?.toString(),
-    text: o?.toString(),
-  }));
+  const options: IDropdownOption[] = useMemo(() => {
+    const opts = (enumOptions ?? []).map(o => ({
+      key: o?.toString(),
+      text: o?.toString(),
+    }));
 
-  options.unshift({
-    key: '',
-    text: '',
-  });
+    opts.unshift({
+      key: '',
+      text: '',
+    });
+
+    return opts;
+  }, [enumOptions]);
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {

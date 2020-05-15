@@ -17,12 +17,11 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
-import { Async } from 'office-ui-fabric-react/lib/Utilities';
 
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
-import { actionButton, formCell } from '../language-understanding/styles';
+import { actionButton, formCell, content } from '../language-understanding/styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -36,22 +35,12 @@ const TableView: React.FC<TableViewProps> = props => {
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
-  const setMessage = useRef(debounce(actions.setMessage, 500)).current;
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
   const [focusedIndex, setFocusedIndex] = useState(0);
-
-  const _async = new Async();
-
-  const announce = (message: string) => {
-    setMessage(message);
-    _async.setTimeout(() => {
-      setMessage(undefined);
-    }, 2000);
-  };
 
   useEffect(() => {
     if (!file || isEmpty(file)) return;
@@ -78,6 +67,7 @@ const TableView: React.FC<TableViewProps> = props => {
       },
     };
     createLgTemplate(payload);
+    setFocusedIndex(templates.length);
   }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
@@ -123,7 +113,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'delete',
           name: formatMessage('Delete'),
           onClick: () => {
-            announce('item deleted');
+            actions.setMessage('item deleted');
             onRemoveTemplate(index);
           },
         },
@@ -131,7 +121,7 @@ const TableView: React.FC<TableViewProps> = props => {
           key: 'copy',
           name: formatMessage('Make a copy'),
           onClick: () => {
-            announce('item copied');
+            actions.setMessage('item copied');
             onCopyTemplate(index);
           },
         },
@@ -155,7 +145,9 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           return (
             <div data-is-focusable={true} css={formCell}>
-              #{item.name}
+              <div tabIndex={-1} css={content} aria-label={formatMessage(`Name is {name}`, { name: item.name })}>
+                #{item.name}
+              </div>
             </div>
           );
         },
@@ -171,7 +163,13 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           return (
             <div data-is-focusable={true} css={formCell}>
-              {item.body}
+              <div
+                tabIndex={-1}
+                css={content}
+                aria-label={formatMessage(`Response is {response}`, { response: item.body })}
+              >
+                {item.body}
+              </div>
             </div>
           );
         },
@@ -257,7 +255,7 @@ const TableView: React.FC<TableViewProps> = props => {
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => {
             onCreateNewTemplate();
-            announce('item added');
+            actions.setMessage('item added');
           }}
         >
           {formatMessage('New template')}

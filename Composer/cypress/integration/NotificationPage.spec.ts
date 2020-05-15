@@ -3,7 +3,7 @@
 
 context('Notification Page', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
     cy.visitPage('Notifications');
   });
@@ -15,9 +15,9 @@ context('Notification Page', () => {
     cy.get('@switchButton').click();
     cy.get('textarea').type('#');
 
-    cy.get('[data-testid="notifications-info-button"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
+    cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('common.en-us.lg')
         .should('exist')
         .first()
@@ -30,16 +30,16 @@ context('Notification Page', () => {
   it('can show lu syntax error ', () => {
     cy.visitPage('User Input');
 
-    cy.findByTestId('LUEditor').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestToDoBotWithLuisSample').click();
     });
 
     cy.get('.toggleEditMode button').click();
     cy.get('textarea').type('t');
 
-    cy.get('[data-testid="notifications-info-button"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
+    cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('__testtodobotwithluissample.en-us.lu')
         .should('exist')
         .first()
@@ -64,16 +64,16 @@ context('Notification Page', () => {
       cy.findByText('Condition').should('exist');
       cy.findByTestId('expression-type-dropdown-Condition')
         .focus()
-        .type('{downarrow}')
         .should('contain.text', 'expression');
       cy.get('#root\\.condition')
         .click()
-        .type('()');
+        .type('foo = bar');
+      cy.findByTestId('FieldErrorMessage').should('exist');
     });
 
-    cy.get('[data-testid="notifications-info-button"]').click();
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
-    cy.get('[data-testid="notifications-table-view"]').within(() => {
+    cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('__testtodobotwithluissample.dialog')
         .should('exist')
         .first()

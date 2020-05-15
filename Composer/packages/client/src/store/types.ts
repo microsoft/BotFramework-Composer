@@ -4,9 +4,20 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile, Skill, UserSettings } from '@bfc/shared';
+import {
+  PromptTab,
+  BotSchemas,
+  ProjectTemplate,
+  DialogInfo,
+  LgFile,
+  LuFile,
+  Skill,
+  UserSettings,
+  Diagnostic,
+} from '@bfc/shared';
+import { JSONSchema7 } from '@bfc/extension';
 
-import { CreationFlowStatus, BotStatus } from '../constants';
+import { AppUpdaterStatus, CreationFlowStatus, BotStatus } from '../constants';
 
 import { ActionType } from './action/types';
 
@@ -49,6 +60,8 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
+  instructions?: string;
+  schema?: JSONSchema7;
   features: {
     history: boolean;
     publish: boolean;
@@ -59,8 +72,19 @@ export interface PublishType {
 
 export interface PublishTarget {
   name: string;
-  type: PublishType;
-  configuration: any;
+  type: string;
+  configuration: string;
+}
+
+export interface RuntimeTemplate {
+  /** internal use key */
+  key: string;
+  /** name of runtime template to display in interface */
+  name: string;
+  /** path to runtime template */
+  path: string;
+  /** command used to start runtime */
+  startCommand: string;
 }
 
 export interface State {
@@ -70,6 +94,7 @@ export interface State {
   location: string;
   botEnvironment: string;
   locale: string;
+  diagnostics: Diagnostic[];
   botEndpoints: { [key: string]: string };
   remoteEndpoints: { [key: string]: string };
   /** the data path for PropertyEditor */
@@ -79,7 +104,12 @@ export interface State {
   storages: any[];
   focusedStorageFolder: StorageFolder;
   botStatus: BotStatus;
-  botLoadErrorMsg: { title: string; message: string };
+  botLoadErrorMsg: {
+    title: string;
+    message: string;
+    linkAfterMessage?: { url: string; text: string };
+    link?: { url: string; text: string };
+  };
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;
@@ -87,6 +117,7 @@ export interface State {
   lgFiles: LgFile[];
   luFiles: LuFile[];
   skills: Skill[];
+  skillManifests: any[];
   designPageLocation: DesignPageLocation;
   error: StateError | null;
   breadcrumb: BreadcrumbItem[];
@@ -113,12 +144,20 @@ export interface State {
     complete: boolean;
   };
   clipboardActions: any[];
+  publishTargets: any[];
+  runtimeTemplates: RuntimeTemplate[];
   publishTypes: PublishType[];
   publishHistory: {
     [key: string]: any[];
   };
   userSettings: UserSettings;
+  runtimeSettings: {
+    path: string;
+    startCommand: string;
+  };
   announcement: string | undefined;
+  appUpdate: AppUpdateState;
+  displaySkillManifest?: string;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
@@ -142,7 +181,12 @@ export interface DialogSetting {
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
   publishTargets?: PublishTarget[];
-  [key: string]: any;
+  runtime?: {
+    customRuntime: boolean;
+    path: string;
+    command: string;
+  };
+  [key: string]: unknown;
 }
 
 export interface DesignPageLocation {
@@ -151,4 +195,13 @@ export interface DesignPageLocation {
   selected: string;
   focused: string;
   promptTab?: PromptTab;
+}
+
+export interface AppUpdateState {
+  downloadSizeInBytes?: number;
+  error?: any;
+  progressPercent?: number;
+  showing: boolean;
+  status: AppUpdaterStatus;
+  version?: string;
 }

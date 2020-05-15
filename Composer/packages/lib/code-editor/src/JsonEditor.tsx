@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import merge from 'lodash/merge';
+import schemaDefaults from 'json-schema-defaults';
 
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
@@ -8,10 +10,20 @@ interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | '
   onChange: (jsonData: any) => void;
   value?: object;
   schema?: any;
+  onError?: (error: string) => void;
 }
 
 const JsonEditor: React.FC<JsonEditorProps> = props => {
-  const { options: additionalOptions, value: initialValue, onChange, onInit: onInitProp, schema, id, ...rest } = props;
+  const {
+    options: additionalOptions,
+    value: initialValue,
+    onChange,
+    onInit: onInitProp,
+    onError,
+    schema,
+    id,
+    ...rest
+  } = props;
 
   const [parseError, setParseError] = useState<string>('');
   const options = {
@@ -21,10 +33,15 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     ...additionalOptions,
   };
 
+  useEffect(() => {
+    onError && onError(parseError);
+  }, [parseError]);
+
   const onInit: OnInit = monaco => {
     const disposable = monaco.editor.onDidCreateModel(model => {
       const diagnosticOptions: any = {
         validate: true,
+        enableSchemaRequest: true,
       };
 
       if (schema) {
@@ -76,13 +93,15 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     }
   };
 
+  const json = schema ? merge({}, schemaDefaults(schema), initialValue) : initialValue;
+
   return (
     <BaseEditor
       id={id}
       helpURL="https://www.json.org"
       language="json"
       options={options}
-      value={JSON.stringify(initialValue, null, 2)}
+      value={JSON.stringify(json, null, 2)}
       onChange={handleChange}
       errorMessage={parseError}
       onInit={onInit}

@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
-import { useShellApi, JSONSchema7 } from '@bfc/extension';
+import { useShellApi, JSONSchema7, FlowSchema } from '@bfc/extension';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
@@ -16,6 +16,8 @@ import { SelfHostContext } from './store/SelfHostContext';
 import { FlowSchemaContext } from './store/FlowSchemaContext';
 import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './utils/mergePluginConfig';
+import { getCustomSchema } from './utils/getCustomSchema';
+import { defaultFlowSchema } from './schema/defaultFlowSchema';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -41,7 +43,16 @@ export interface VisualDesignerProps {
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
   const { shellApi, plugins, ...shellData } = useShellApi();
-  const { dialogId, focusedEvent, focusedActions, focusedTab, clipboardActions, data: inputData, hosted } = shellData;
+  const {
+    dialogId,
+    focusedEvent,
+    focusedActions,
+    focusedTab,
+    clipboardActions,
+    data: inputData,
+    hosted,
+    schemas,
+  } = shellData;
 
   const dataCache = useRef({});
 
@@ -56,7 +67,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
 
   const data = dataCache.current;
   const {
-    addCoachMarkRef,
     navTo,
     onFocusEvent,
     onFocusSteps,
@@ -72,9 +82,16 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLuIntent,
     undo,
     redo,
+    announce,
   } = shellApi;
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
+
+  // Compute schema diff
+  const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
+    schemas?.sdk?.content,
+    schemas?.default,
+  ]);
 
   const nodeContext: NodeRendererContextValue = {
     focusedId,
@@ -88,9 +105,17 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLgTemplates,
     removeLuIntent,
     dialogFactory: new DialogFactory(schema),
+    customSchemas: customSchema ? [customSchema] : [],
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);
+  const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
+    const definitionKeys: string[] = Object.keys(s.definitions);
+    definitionKeys.forEach($kind => {
+      result[$kind] = defaultFlowSchema.custom;
+    });
+    return result;
+  }, {} as FlowSchema);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -99,7 +124,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
           <FlowSchemaContext.Provider
             value={{
               widgets: visualEditorConfig.widgets,
-              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema),
+              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema),
             }}
           >
             <div data-testid="visualdesigner-container" css={styles}>
@@ -109,7 +134,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                 data={data}
                 focusedSteps={focusedActions}
                 onFocusSteps={onFocusSteps}
-                focusedEvent={focusedEvent}
                 onFocusEvent={onFocusEvent}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
@@ -118,7 +142,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                 onSelect={onSelect}
                 undo={undo}
                 redo={redo}
-                addCoachMarkRef={addCoachMarkRef}
+                announce={announce}
               />
             </div>
           </FlowSchemaContext.Provider>

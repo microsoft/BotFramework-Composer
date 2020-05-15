@@ -3,7 +3,7 @@
 
 context('LU Page', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
   });
 
@@ -16,26 +16,26 @@ context('LU Page', () => {
     cy.get('.toggleEditMode button').should('not.exist');
 
     // by default is table view
-    cy.findByTestId('LUEditor')
+    cy.findByTestId('LUPage')
       .findByTestId('table-view')
       .should('exist');
 
     // nav to ToDoBotWithLuisSample.main dialog
-    cy.findByTestId('LUEditor').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestToDoBotWithLuisSample').click();
     });
     cy.get('.toggleEditMode button').as('switchButton');
     // goto edit-mode
     cy.get('@switchButton').click();
-    cy.findByTestId('LUEditor')
+    cy.findByTestId('LUPage')
       .get('.monaco-editor')
       .should('exist');
 
     // back to all table view
-    cy.findByTestId('LUEditor').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('All').click();
     });
-    cy.findByTestId('LUEditor')
+    cy.findByTestId('LUPage')
       .findByTestId('table-view')
       .should('exist');
   });

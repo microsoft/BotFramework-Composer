@@ -7,9 +7,12 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ObjectField, SchemaField } from '@bfc/adaptive-form';
 import formatMessage from 'format-message';
 
+import { SkillEndpointField } from './SkillEndpointField';
+
 export const BeginSkillDialogField: React.FC<FieldProps> = props => {
-  const { depth, id, schema, uiOptions, value, onChange } = props;
-  const { projectId, skills = [] } = useShellApi();
+  const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
+  const { projectId, shellApi, skills = [] } = useShellApi();
+  const { displayManifestModal } = shellApi;
 
   const manifest = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [skills, value.id]);
   const endpointOptions = useMemo(() => (manifest?.endpoints || []).map(({ name }) => name), [manifest]);
@@ -27,7 +30,10 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
     onChange({ ...value, skillEndpoint, ...(msAppId ? { skillAppId: msAppId } : {}) });
   };
 
-  const skillEndpointSchema = { ...((schema?.properties?.skillEndpoint as JSONSchema7) || {}), enum: endpointOptions };
+  const handleShowManifestClick = () => {
+    value.id && displayManifestModal(value.id);
+  };
+
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
   skillEndpointUiSchema.serializer = {
     get: value => {
@@ -51,16 +57,26 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
         uiOptions={uiOptions.properties?.id || {}}
         value={value?.id}
         onChange={handleIdChange}
+        definitions={definitions}
       />
-      <SchemaField
+      <Link
+        disabled={!manifest || !manifest.body || !manifest.name}
+        styles={{ root: { fontSize: '12px', padding: '0 16px' } }}
+        onClick={handleShowManifestClick}
+      >
+        {formatMessage('Show skill manifest')}
+      </Link>
+      <SkillEndpointField
         depth={depth + 1}
         id={`${id}.skillEndpoint`}
         name="skillEndpoint"
-        schema={skillEndpointSchema}
+        schema={(schema?.properties?.skillEndpoint as JSONSchema7) || {}}
+        enumOptions={endpointOptions}
         rawErrors={{}}
         uiOptions={skillEndpointUiSchema}
         value={value?.skillEndpoint}
         onChange={handleEndpointChange}
+        definitions={definitions}
       />
       <Link href={`/bot/${projectId}/skills`} styles={{ root: { fontSize: '12px', padding: '0 16px' } }}>
         {formatMessage('Open Skills page for configuration details')}

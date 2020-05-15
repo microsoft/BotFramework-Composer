@@ -1,15 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ElementInterval, BranchIntervalMinX } from '../constants/ElementSizes';
+import { BranchIntervalY } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
 import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
-
-const BranchIntervalX = ElementInterval.x;
-const BranchIntervalY = ElementInterval.y / 2;
+import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 
 /**
  *        [switch]
@@ -45,12 +43,14 @@ export function switchCaseLayouter(
   const BottomelinePositionY = containerBoundary.height;
 
   const firstBranchNode = branchNodes[0] || new GraphNode();
-  branchNodes.reduce((accOffsetX, x) => {
+  branchNodes.reduce((accOffsetX, x, currentIndex) => {
     x.offset = {
       x: accOffsetX,
       y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
     };
-    return accOffsetX + Math.max(BranchIntervalX + x.boundary.width, BranchIntervalMinX);
+    return (
+      accOffsetX + x.boundary.width + calculateBranchNodesIntervalX(x.boundary, branchNodes[currentIndex + 1]?.boundary)
+    );
   }, containerBoundary.axisX - firstBranchNode.boundary.axisX);
 
   /** Calculate edges */
