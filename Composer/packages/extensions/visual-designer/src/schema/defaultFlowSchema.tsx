@@ -19,6 +19,10 @@ export const defaultFlowSchema: FlowSchema = {
   default: {
     widget: 'ActionHeader',
   },
+  custom: {
+    widget: 'ActionHeader',
+    colors: { theme: ObiColors.Gray20, color: ObiColors.White },
+  },
   [SDKKinds.IfCondition]: {
     widget: 'IfConditionWidget',
     nowrap: true,
