@@ -63,9 +63,6 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
     const res = await OpenConfirmModal(title, subTitle, settings);
     if (res) {
       actions.deleteBotProject(projectId);
-      actions.deleteLocalRuntimeData(projectId);
-      luFileStatusStorage.removeAllStatuses(botName);
-      settingStorage.remove(botName);
       navigateTo('home');
     }
   };

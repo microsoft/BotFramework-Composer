@@ -9,6 +9,7 @@ import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
+import luFileStatusStorage from './../../utils/luFileStatusStorage';
 import httpClient from './../../utils/httpUtil';
 
 export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
@@ -80,6 +81,8 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
 export const deleteBotProject: ActionCreator = async (store, projectId) => {
   try {
     await httpClient.delete(`/projects/${projectId}`);
+    luFileStatusStorage.removeAllStatuses(store.getState().botName);
+    settingStorage.remove(store.getState().botName);
     store.dispatch({
       type: ActionTypes.REMOVE_PROJECT_SUCCESS,
     });

@@ -132,16 +132,3 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, 
     });
   }
 };
-
-export const deleteLocalRuntimeData: ActionCreator = async ({ dispatch }, projectId) => {
-  try {
-    await httpClient.delete(`/publish/${projectId}/runtimeData/default`);
-    dispatch({
-      type: ActionTypes.DELETE_RUNTIME_DATA_SUCCESS,
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.DELETE_RUNTIME_DATA_FAILED,
-    });
-  }
-};
