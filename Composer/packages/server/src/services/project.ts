@@ -198,6 +198,15 @@ export class BotProjectService {
     if (indexedCurrentProject) return indexedCurrentProject;
   }
 
+  public static getProjectIdByPath = async (path: string) => {
+    for (const key in BotProjectService.projectLocationMap) {
+      if (BotProjectService.projectLocationMap[key] === path) {
+        return key;
+      }
+    }
+    return null;
+  };
+
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
 

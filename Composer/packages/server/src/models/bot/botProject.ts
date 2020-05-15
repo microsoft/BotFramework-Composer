@@ -7,7 +7,7 @@ import fs from 'fs';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -318,6 +318,10 @@ export class BotProject {
     try {
       await this.deleteFilesFromBottomToUp(this.dir);
       await this.fileStorage.rmDir(this.dir);
+      const projectId = BotProjectService.getProjectIdByPath(this.dir);
+      if (projectId) {
+        await this.removeLocalRuntimeData(projectId);
+      }
       await BotProjectService.cleanProject({ storageId: 'default', path: this.dir });
       await BotProjectService.deleteRecentProject(this.dir);
     } catch (e) {
@@ -325,6 +329,30 @@ export class BotProject {
     }
     return true;
   }
+
+  private removeLocalRuntimeData = async projectId => {
+    const method = 'localpublish';
+    if (
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.stopBot
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+      if (typeof pluginMethod === 'function') {
+        await pluginMethod.call(null, projectId);
+      }
+    }
+    if (
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.removeRuntimeData
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
+      if (typeof pluginMethod === 'function') {
+        await pluginMethod.call(null, projectId);
+      }
+    }
+  };
 
   private async deleteFilesFromBottomToUp(path) {
     const files = await this.fileStorage.readDir(path);
