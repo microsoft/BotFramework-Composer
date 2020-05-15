@@ -6,8 +6,6 @@ import { LgTemplateRef } from '@bfc/shared';
 import get from 'lodash/get';
 import { useShellApi } from '@bfc/extension';
 
-import { normalizeLgTemplate } from './normalizeLgTemplate';
-
 export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): Template | undefined => {
   if (!Array.isArray(lgFiles)) return;
 
@@ -30,8 +28,8 @@ export const useLgTemplate = (str?: string) => {
   const templateId = lgTemplateRef ? lgTemplateRef.name : '';
 
   // fallback to input string
-  if (!templateId) return str;
+  if (!templateId) return str || '';
 
   const lgTemplate = queryLgTemplateFromFiles(templateId, lgFiles);
-  return lgTemplate ? normalizeLgTemplate(lgTemplate) : '';
+  return lgTemplate ? lgTemplate.body : '';
 };
