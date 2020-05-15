@@ -35,22 +35,22 @@ export const DialogStyle = {
 };
 
 export const BuiltInStyles = {
-  [DialogStyle.Normal]: {
-    padding: '15px',
-    marginBottom: '20px',
-    whiteSpace: 'pre-line',
-  },
-  [DialogStyle.Console]: {
-    background: '#000',
-    maxHeight: '90px',
-    overflowY: 'auto',
-    fontSize: '16px',
-    lineHeight: '23px',
-    color: '#fff',
-    padding: '10px 15px',
-    marginBottom: '20px',
-    whiteSpace: 'pre-line',
-  },
+  [DialogStyle.Normal]: css`
+    padding: 15px;
+    margin-bottom: 20px;
+    white-space: pre-line;
+  `,
+  [DialogStyle.Console]: css`
+    background: #000;
+    max-height: 90px;
+    overflow-y: auto;
+    font-size: 16px;
+    line-height: 23px;
+    color: #fff;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    white-space: pre-line;
+  `,
 };
 
 export const dialog = {

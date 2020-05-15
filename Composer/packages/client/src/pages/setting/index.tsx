@@ -15,16 +15,14 @@ import { Tree } from '../../components/Tree/index';
 import { Conversation } from '../../components/Conversation/index';
 import { MainContent } from '../../components/MainContent/index';
 import { TestController } from '../../components/TestController';
-import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
 
-import settingStorage from './../../utils/dialogSettingStorage';
 import Routes from './router';
 import { title, fileList, contentEditor, confirmation, confirmationContent } from './styles';
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { projectId, botName } = state;
+  const { projectId } = state;
   const makeProjectLink = (id: string, path: string) => {
     return `/bot/${id}/settings/${path}`;
   };

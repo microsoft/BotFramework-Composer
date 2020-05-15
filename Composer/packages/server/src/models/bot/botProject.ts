@@ -318,7 +318,7 @@ export class BotProject {
     try {
       await this.deleteFilesFromBottomToUp(this.dir);
       await this.fileStorage.rmDir(this.dir);
-      const projectId = BotProjectService.getProjectIdByPath(this.dir);
+      const projectId = await BotProjectService.getProjectIdByPath(this.dir);
       if (projectId) {
         await this.removeLocalRuntimeData(projectId);
       }
@@ -330,7 +330,7 @@ export class BotProject {
     return true;
   }
 
-  private removeLocalRuntimeData = async projectId => {
+  private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
     if (
       pluginLoader.extensions.publish[method] &&
@@ -352,7 +352,7 @@ export class BotProject {
         await pluginMethod.call(null, projectId);
       }
     }
-  };
+  }
 
   private async deleteFilesFromBottomToUp(path) {
     const files = await this.fileStorage.readDir(path);
