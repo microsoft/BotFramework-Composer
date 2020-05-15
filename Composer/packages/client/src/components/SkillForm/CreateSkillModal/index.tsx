@@ -7,6 +7,7 @@ import { jsx } from '@emotion/core';
 import React, { useState, FormEvent, useEffect, useCallback, useRef } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
@@ -17,7 +18,7 @@ import { DialogTypes } from '../../DialogWrapper/styles';
 import { addSkillDialog } from '../../../constants';
 import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex, SkillNameRegex } from '../types';
 
-import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalBody } from './styles';
+import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalBody, SpinnerLabel } from './styles';
 import { validateManifestUrl } from './validateManifestUrl';
 
 export interface ICreateSkillModalProps {
@@ -180,6 +181,9 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
               required
               autoFocus
             />
+            {isValidating && (
+              <Spinner css={SpinnerLabel} size={SpinnerSize.medium} label="validating..." labelPosition="right" />
+            )}
             <TextField
               css={FormFieldEditName}
               label={formatMessage('Custom name (optional)')}
