@@ -21,7 +21,6 @@ const logger = msg => {
     console.log(chalk.green(msg.message));
   }
 };
-var tenantId = '';
 
 const usage = () => {
   const options = [
@@ -33,6 +32,7 @@ const usage = () => {
     ['appId', 'Microsoft App ID (Will create if absent)'],
     ['luisAuthoringKey', 'LUIS Authoring Key to use when publishing to LUIS'],
     ['luisAuthoringRegion', 'Azure Region used with LUIS (defaults to westus)'],
+    ['tenantId','ID of your tenant if required (will choose first in list by default)'],
     ['createLuisResource', 'Create a LUIS resource? Default true'],
     ['createLuisAuthoringResource', 'Create a LUIS authoring resource? Default true'],
     ['createCosmosDb', 'Create a CosmosDB? Default true'],
@@ -85,8 +85,8 @@ const appPassword = argv.appPassword;
 const environment = argv.environment || 'dev';
 const location = argv.location || 'westus';
 const appId = argv.appId; // MicrosoftAppId - generated if left blank
-const luisAuthoringKey = argv.luisAuthoringKey;
-const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus';
+const luisAuthoringKey = argv.luisAuthoringKey; // not currently used
+const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus'; // not currently used
 
 // Get option flags
 const createLuisResource = argv.createLuisResource == 'false' ? false : true;
@@ -94,6 +94,7 @@ const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'false' 
 const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
 const createStorage = argv.createStorage == 'false' ? false : true;
 const createAppInsignts = argv.createAppInsignts == 'false' ? false : true;
+var tenantId = argv.tenantId ? argv.tenantId : '';
 
 const templatePath =
   argv.customArmTemplate || path.join(__dirname, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
@@ -194,7 +195,27 @@ const getTenantId = async (accessToken) => {
     if (jsonRes.value === undefined || (jsonRes.value && jsonRes.value.length === 0) || (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)) {
       throw new Error(`No tenants found in the account.`);
     }
-    return jsonRes.value[0].tenantId;
+    const selectedTenant = jsonRes.value.shift();
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Using Tenant ${ selectedTenant.displayName } - ID: ${ selectedTenant.tenantId }`,
+    });
+    // if alternatives exist, list htem
+    if (jsonRes.value.length > 0) {
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: chalk.yellow(`  Note: You have access to multiple tenants. To specify an alternative, specify --tenantId=<desired tenant ID>`),
+      });
+      // list all available tenants
+      jsonRes.value.forEach((tenant) => {
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_INFO,
+          message: chalk.yellow(`  * ${ tenant.displayName } - ID: ${ tenant.tenantId }`),
+        });
+      });
+    }
+    
+    return selectedTenant.tenantId;
   } catch (err) {
     throw new Error(`Get Tenant Id Failed, details: ${getErrorMesssage(err)}`);
   }
