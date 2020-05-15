@@ -11,7 +11,8 @@ import { SkillEndpointField } from './SkillEndpointField';
 
 export const BeginSkillDialogField: React.FC<FieldProps> = props => {
   const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
-  const { projectId, skills = [] } = useShellApi();
+  const { projectId, shellApi, skills = [] } = useShellApi();
+  const { displayManifestModal } = shellApi;
 
   const manifest = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === value.id), [skills, value.id]);
   const endpointOptions = useMemo(() => (manifest?.endpoints || []).map(({ name }) => name), [manifest]);
@@ -27,6 +28,10 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
     const { msAppId } =
       (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === skillEndpoint) || ({} as any);
     onChange({ ...value, skillEndpoint, ...(msAppId ? { skillAppId: msAppId } : {}) });
+  };
+
+  const handleShowManifestClick = () => {
+    value.id && displayManifestModal(value.id);
   };
 
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
@@ -54,6 +59,13 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
         onChange={handleIdChange}
         definitions={definitions}
       />
+      <Link
+        disabled={!manifest || !manifest.body || !manifest.name}
+        styles={{ root: { fontSize: '12px', padding: '0 16px' } }}
+        onClick={handleShowManifestClick}
+      >
+        {formatMessage('Show skill manifest')}
+      </Link>
       <SkillEndpointField
         depth={depth + 1}
         id={`${id}.skillEndpoint`}

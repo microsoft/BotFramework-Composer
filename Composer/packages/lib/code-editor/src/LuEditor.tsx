@@ -85,6 +85,12 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
   const { luOption, languageServer, onInit: onInitProp, placeholder = defaultPlaceholder, ...restProps } = props;
   const luServer = languageServer || defaultLUServer;
 
+  let editorId = '';
+  if (luOption) {
+    const { projectId, fileId, sectionId } = luOption;
+    editorId = [projectId, fileId, sectionId].join('/');
+  }
+
   const onInit: OnInit = monaco => {
     registerLULanguage(monaco);
     monacoRef.current = monaco;
@@ -145,6 +151,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     <BaseEditor
       placeholder={placeholder}
       helpURL={LU_HELP}
+      id={editorId}
       {...restProps}
       onInit={onInit}
       theme="lu"

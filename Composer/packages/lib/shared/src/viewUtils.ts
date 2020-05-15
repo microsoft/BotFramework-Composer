@@ -26,7 +26,6 @@ export enum DialogGroup {
   LOOPING = 'LOOPING',
   EVENTS = 'EVENTS',
   ADVANCED_EVENTS = 'ADVANCED_EVENTS',
-  MESSAGE_EVENTS = 'MESSAGE_EVENTS',
   DIALOG_EVENT_TYPES = 'DIALOG_EVENT_TYPES',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
@@ -88,7 +87,7 @@ export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.CODE]: {
     label: 'Access external resources',
     types: [
-      SDKKinds.SkillDialog,
+      SDKKinds.BeginSkill,
       SDKKinds.HttpRequest,
       SDKKinds.EmitEvent,
       SDKKinds.OAuthInput,
@@ -118,11 +117,6 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.OnHandoffActivity,
       SDKKinds.OnInvokeActivity,
       SDKKinds.OnTypingActivity,
-    ],
-  },
-  [DialogGroup.MESSAGE_EVENTS]: {
-    label: 'Message events',
-    types: [
       SDKKinds.OnMessageActivity,
       SDKKinds.OnMessageDeleteActivity,
       SDKKinds.OnMessageReactionActivity,
@@ -178,7 +172,7 @@ export function getDialogGroupByType(type) {
   return dialogType;
 }
 
-const truncateSDKType = $kind => (typeof $kind === 'string' ? $kind.split('Microsoft.')[1] : '');
+const truncateSDKType = $kind => (typeof $kind === 'string' ? $kind.replace('Microsoft.', '') : '');
 
 /**
  * Title priority: $designer.name > title from sdk schema > customize title > $kind suffix

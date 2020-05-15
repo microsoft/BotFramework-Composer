@@ -58,7 +58,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
     },
     {
       key: 'column2',
-      name: formatMessage('Date Modified'),
+      name: formatMessage('Date modified'),
       fieldName: 'dateModifiedValue',
       minWidth: 60,
       maxWidth: 70,
@@ -73,6 +73,29 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
               aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
             >
               {calculateTimeDiff(item.dateModified)}
+            </div>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'column3',
+      name: formatMessage('Location'),
+      fieldName: 'path',
+      minWidth: 200,
+      maxWidth: 400,
+      isResizable: true,
+      data: 'string',
+      onRender: item => {
+        return (
+          <div css={tableCell} data-is-focusable={true}>
+            <div
+              tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`location is {location}`, { location: item.path })}
+            >
+              {item.path}
             </div>
           </div>
         );
@@ -99,7 +122,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           items={recentProjects}
           compact={false}
           columns={tableColums}
-          getKey={item => item.name}
+          getKey={item => `${item.path}/${item.name}`}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
           isHeaderVisible={true}

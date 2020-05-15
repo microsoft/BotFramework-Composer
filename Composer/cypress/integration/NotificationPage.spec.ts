@@ -3,7 +3,7 @@
 
 context('Notification Page', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
     cy.visitPage('Notifications');
   });
@@ -49,7 +49,7 @@ context('Notification Page', () => {
     cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
   });
 
-  it.skip('can show dialog expression error ', () => {
+  it('can show dialog expression error ', () => {
     cy.visitPage('Design Flow');
 
     cy.findByTestId('ProjectTree').within(() => {
@@ -67,7 +67,8 @@ context('Notification Page', () => {
         .should('contain.text', 'expression');
       cy.get('#root\\.condition')
         .click()
-        .type('()');
+        .type('foo = bar');
+      cy.findByTestId('FieldErrorMessage').should('exist');
     });
 
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
