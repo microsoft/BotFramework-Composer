@@ -3,7 +3,7 @@
 
 context('Creating a new bot', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.findByTestId('homePage-ToolBar-New').within(() => {
       cy.findByText('New').click();

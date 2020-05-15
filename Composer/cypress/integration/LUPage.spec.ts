@@ -3,7 +3,7 @@
 
 context('LU Page', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
   });
 
