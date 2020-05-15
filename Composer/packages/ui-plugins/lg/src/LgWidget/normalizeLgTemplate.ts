@@ -8,6 +8,7 @@ export function normalizeLgTemplate(template: Template): string {
   let showText = '';
 
   if (templateTexts[0] && templateTexts[0].trim() === '[Activity') {
+    // TODO: show full text in node block
     showText = templateTexts.find(text => text.includes('Text = '))?.split('Text = ')[1] || '';
   } else {
     showText = templateTexts.join('\n');
