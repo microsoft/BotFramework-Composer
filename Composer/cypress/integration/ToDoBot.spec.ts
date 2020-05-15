@@ -3,7 +3,7 @@
 
 context('ToDo Bot', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample');
   });
 
@@ -22,9 +22,7 @@ context('ToDo Bot', () => {
       cy.findByText('addtodo').click();
     });
 
-    cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('addtodo').should('exist');
-    });
+    cy.url().should('contain', 'addtodo');
   });
 
   it('can open the ClearToDos dialog', () => {
@@ -33,9 +31,7 @@ context('ToDo Bot', () => {
       cy.findByText('cleartodos').click();
     });
 
-    cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('cleartodos').should('exist');
-    });
+    cy.url().should('contain', 'cleartodos');
   });
 
   it('can open the DeleteToDo dialog', () => {
@@ -44,9 +40,7 @@ context('ToDo Bot', () => {
       cy.findByText('deletetodo').click();
     });
 
-    cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('deletetodo').should('exist');
-    });
+    cy.url().should('contain', 'deletetodo');
   });
 
   it('can open the ShowToDos dialog', () => {
@@ -55,8 +49,6 @@ context('ToDo Bot', () => {
       cy.findByText('showtodos').click();
     });
 
-    cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('showtodos').should('exist');
-    });
+    cy.url().should('contain', 'showtodos');
   });
 });
