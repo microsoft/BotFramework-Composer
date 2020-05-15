@@ -64,8 +64,8 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
               iconName="Warning12"
               style={{
                 color: '#DD4400',
-                fontSize: 32,
-                padding: '24px',
+                fontSize: 36,
+                padding: '32px',
               }}
             />
             <div
