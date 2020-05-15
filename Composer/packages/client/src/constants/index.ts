@@ -81,15 +81,26 @@ export enum ActionTypes {
   GET_PUBLISH_TYPES_SUCCESS = 'GET_PUBLISH_TYPES_SUCCESS',
   PUBLISH_SUCCESS = 'PUBLISH_SUCCESS',
   PUBLISH_FAILED = 'PUBLISH_FAILED',
+  PUBLISH_FAILED_DOTNET = 'PUBLISH_FAILED_DOTNET',
   GET_PUBLISH_STATUS = 'GET_PUBLISH_STATUS',
   GET_PUBLISH_STATUS_FAILED = 'GET_PUBLISH_STATUS_FAILED',
   GET_PUBLISH_HISTORY = 'GET_PUBLISH_HISTORY',
   UPDATE_BOTSTATUS = 'UPDATE_BOTSTATUS',
+  SET_RUNTIME_TEMPLATES = 'SET_RUNTIME_TEMPLATES',
   SET_USER_SETTINGS = 'SET_USER_SETTINGS',
   ADD_SKILL_DIALOG_BEGIN = 'ADD_SKILL_DIALOG_BEGIN',
   ADD_SKILL_DIALOG_END = 'ADD_SKILL_DIALOG_END',
-
+  EJECT_SUCCESS = 'EJECT_SUCCESS',
   SET_MESSAGE = 'SET_MESSAGE',
+  SET_APP_UPDATE_ERROR = 'SET_APP_UPDATE_ERROR',
+  SET_APP_UPDATE_PROGRESS = 'SET_APP_UPDATE_PROGRESS',
+  SET_APP_UPDATE_SHOWING = 'SET_APP_UPDATE_SHOWING',
+  SET_APP_UPDATE_STATUS = 'SET_APP_UPDATE_STATUS',
+  CREATE_SKILL_MANIFEST = 'CREATE_SKILL_MANIFEST',
+  UPDATE_SKILL_MANIFEST = 'UPDATE_SKILL_MANIFEST',
+  REMOVE_SKILL_MANIFEST = 'REMOVE_SKILL_MANIFEST',
+  DISPLAY_SKILL_MANIFEST_MODAL = 'DISPLAY_SKILL_MANIFEST_MODAL',
+  DISMISS_SKILL_MANIFEST_MODAL = 'DISMISS_SKILL_MANIFEST_MODAL',
 }
 
 export const Tips = {
@@ -115,6 +126,7 @@ export const Text = {
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
+  DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK'),
 };
 
 export enum LuisConfig {
@@ -201,6 +213,10 @@ export const addSkillDialog = {
     title: formatMessage('Add a skill'),
     subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
   },
+  SKILL_MANIFEST_FORM_EDIT: {
+    title: formatMessage('Edit a skill'),
+    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+  },
 };
 
 export const SupportedFileTypes = [
@@ -223,7 +239,18 @@ export const SupportedFileTypes = [
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
 
+export enum AppUpdaterStatus {
+  IDLE,
+  UPDATE_AVAILABLE,
+  UPDATE_UNAVAILABLE,
+  UPDATE_IN_PROGRESS,
+  UPDATE_FAILED,
+  UPDATE_SUCCEEDED,
+}
+
 export const DefaultPublishConfig = {
   name: 'default',
   type: 'localpublish',
 };
+
+export const EmptyBotTemplateId = 'EmptyBot';

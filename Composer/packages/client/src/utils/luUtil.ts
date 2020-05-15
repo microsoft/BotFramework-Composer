@@ -47,9 +47,14 @@ function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
       ...fileNames.reduce((result, name) => {
         const locale = getFileLocale(name);
         const triggers = triggerRules[key];
-        keys(triggers).forEach(id => {
+        keys(triggers).forEach(trigger => {
           if (!result[name]) result[name] = {};
-          result[name][`${id}.${locale}.lu`] = triggers[id];
+          const ids = triggers[trigger];
+          if (Array.isArray(ids)) {
+            result[name][trigger] = ids.map(id => (id ? `${id}.${locale}.lu` : id));
+          } else {
+            result[name][trigger] = ids ? `${ids}.${locale}.lu` : ids;
+          }
         });
         return result;
       }, {}),
@@ -74,15 +79,15 @@ interface ICrossTrainConfig {
       ],
       triggerRules: {
         'main.en-us.lu': {
-          'dia1.en-us.lu': 'dia1_trigger',
-          'dia2.en-us.lu': 'dia2_trigger'
+          'dia1_trigger': 'dia1.en-us.lu',
+          'dia2_trigger': 'dia2.en-us.lu'
         },
         'dia2.en-us.lu': {
-          'dia3.en-us.lu': 'dia3_trigger',
-          'dia4.en-us.lu': 'dia4_trigger'
+          'dia3_trigger': 'dia3.en-us.lu',
+          'dia4_trigger': 'dia4.en-us.lu'
         },
         'main.fr-fr.lu': {
-          'dia1.fr-fr.lu': 'dia1_trigger'
+          'dia1_trigger': 'dia1.fr-fr.lu'
         }
       },
       intentName: '_Interruption',
@@ -95,7 +100,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
 
   //map all referred lu files
   luFiles.forEach(file => {
-    countMap[getBaseName(file.id)] = 0;
+    countMap[getBaseName(file.id)] = 1;
   });
 
   let rootId = '';
@@ -104,25 +109,24 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
 
     const { intentTriggers } = dialog;
     const fileId = dialog.id;
-    if (intentTriggers.length) {
-      //find the trigger's dialog that use a recognizer
-      intentTriggers.forEach(item => {
-        const used = item.dialogs.filter(dialog => {
-          if (typeof countMap[dialog] === 'number') {
-            countMap[dialog]++;
-            return true;
-          }
-          return false;
-        });
-        if (used.length) {
-          const result = used.reduce((result, temp) => {
-            result[temp] = item.intent;
-            return result;
-          }, {});
-          triggerRules[fileId] = { ...triggerRules[fileId], ...result };
-        }
-      });
-    }
+    //find the trigger's dialog that use a recognizer
+    intentTriggers.forEach(item => {
+      //find all dialogs in trigger that has a luis recognizer
+      const used = item.dialogs.filter(dialog => !!countMap[dialog]);
+
+      const deduped = Array.from(new Set<string>(used));
+
+      const result = {};
+      if (deduped.length === 1) {
+        result[item.intent] = deduped[0];
+      } else if (deduped.length) {
+        result[item.intent] = deduped;
+      } else {
+        result[item.intent] = '';
+      }
+
+      triggerRules[fileId] = { ...triggerRules[fileId], ...result };
+    });
   });
 
   const crossTrainConfig: ICrossTrainConfig = {

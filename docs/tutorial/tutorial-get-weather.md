@@ -65,11 +65,11 @@ Before you can get the weather forecast you need to know the desired location. Y
 
 2.  In the **Unrecognized Prompt** field, enter:
       
-      **Sorry, I do not understand '@{this.value}'. Please specify a zip code in the form 12345**
+      **Sorry, I do not understand '${this.value}'. Please specify a zip code in the form 12345**
 
 3.  In the **Invalid Prompt** field, enter:
 
-      **Sorry, '@{this.value}' is not valid. I'm looking for a 5 digit number as zip code. Please specify a zip code in the form 12345**
+      **Sorry, '${this.value}' is not valid. I'm looking for a 5 digit number as zip code. Please specify a zip code in the form 12345**
 
 4.  In the **Validation Rules** field, enter:
 
@@ -99,9 +99,9 @@ The entire process of adding an HTTP request, capturing the results into a prope
 
       - Enter the following in the **Url** field: 
 
-        **http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode=@{user.zipcode}**
+        **http://weatherbot-ignite-2019.azurewebsites.net/api/getWeather?zipcode=${user.zipcode}**
       
-      This will enable the bot to make an HTTP request to the specified URL. The reference to **@{user.zipcode}** will be replaced by the value from the bots' **user.zipcode** property.
+      This will enable the bot to make an HTTP request to the specified URL. The reference to **${user.zipcode}** will be replaced by the value from the bots' **user.zipcode** property.
 
       ![http url](../media/tutorial-weatherbot/03/http-url.png)
 
@@ -133,7 +133,7 @@ The entire process of adding an HTTP request, capturing the results into a prope
 
 7. Next, enter the following in the **Value** field:
 
-      **dialog.api_response.content**
+      **=dialog.api_response.content**
 
       ![set a property](../media/tutorial-weatherbot/03/set-a-property.png)
 
@@ -141,7 +141,7 @@ The entire process of adding an HTTP request, capturing the results into a prope
 
 9. In the **Properties panel** on the right, enter the following response to send:
    
-      `The weather is @{dialog.weather.weather} and the temp is @{dialog.weather.temp}&deg;`
+      `The weather is ${dialog.weather.weather} and the temp is ${dialog.weather.temp}&deg;`
 
       The flow should now appear in the **Authoring canvas** as follows:
 
@@ -151,7 +151,7 @@ You will now tell the bot what to do in the event that the [statusCode](https://
 
 10.  Select the **+** button in the **False** branch, then select **Send a response** and set the text of the message to:
    
-       **I got an error: @{dialog.api_response.content.message}**
+       **I got an error: ${dialog.api_response.content.message}**
 
 11.  For the purposes of this tutorial we will assume that if you are in this branch, it is because the zip code is invalid, and if it is invalid it should be removed so that the invalid value does not persist in the **user.zipcode** property. To remove the invalid value from this property, select the **+** button that follows the **Send a response** action you created in the previous step, then select **Delete a property** from the **Manage properties** menu.
 

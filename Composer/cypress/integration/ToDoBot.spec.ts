@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 context('ToDo Bot', () => {
-  before(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+  beforeEach(() => {
+    cy.visit('/home');
     cy.createBot('TodoSample');
   });
 
@@ -19,40 +19,36 @@ context('ToDo Bot', () => {
   it('can open the AddToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('addtodo').click();
+      cy.findByText('addtodo').click();
     });
 
-    cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('addtodo').should('exist');
-    });
+    cy.url().should('contain', 'addtodo');
   });
 
   it('can open the ClearToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('cleartodos').click();
+      cy.findByText('cleartodos').click();
     });
 
-    cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('cleartodos').should('exist');
-    });
+    cy.url().should('contain', 'cleartodos');
   });
 
   it('can open the DeleteToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('deletetodo').click();
+      cy.findByText('deletetodo').click();
     });
 
-    cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('deletetodo').should('exist');
-    });
+    cy.url().should('contain', 'deletetodo');
   });
 
   it('can open the ShowToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('showtodos').click();
+      cy.findByText('showtodos').click();
     });
 
-    cy.withinEditor('PropertyEditor', () => {
-      cy.findByDisplayValue('showtodos').should('exist');
-    });
+    cy.url().should('contain', 'showtodos');
   });
 });

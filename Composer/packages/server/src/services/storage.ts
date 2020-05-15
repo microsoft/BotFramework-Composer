@@ -3,13 +3,13 @@
 
 import * as fs from 'fs';
 
+import { UserIdentity } from '@bfc/plugin-loader';
+
 import { Path } from '../utility/path';
 import { StorageConnection, IFileStorage } from '../models/storage/interface';
 import { StorageFactory } from '../models/storage/storageFactory';
 import { Store } from '../store/store';
 import settings from '../settings';
-
-import { UserIdentity } from './pluginLoader';
 
 const fileBlacklist = ['.DS_Store'];
 const isValidFile = (file: string) => {
@@ -137,7 +137,12 @@ class StorageService {
 
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
-    const children = (await storage.readDir(dirPath)).map(async childName => {
+    const children = (
+      await (await storage.readDir(dirPath)).filter(childName => {
+        const regex = /^[.$]/;
+        return !regex.test(childName);
+      })
+    ).map(async childName => {
       try {
         if (childName === '') {
           return;

@@ -12,6 +12,7 @@ export interface FlowEditorConfig {
 export type FlowEditorWidgetMap = { [widgetName: string]: WidgetComponent<any> };
 export enum FlowSchemaBuiltinKeys {
   default = 'default',
+  custom = 'custom',
 }
 
 /** schema */

@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
-import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData } from '@bfc/shared';
+import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData, LuType } from '@bfc/shared';
 import { FieldLabel, recognizerType, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
 import { JSONSchema7, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -20,17 +20,26 @@ const getOptions = (enumSchema: JSONSchema7) => {
   return enumSchema.enum.map(o => o as string);
 };
 
+const expectedResponsesPlaceholder = () =>
+  formatMessage(`> add some expected user responses:
+> - Please remind me to '{itemTitle=buy milk}'
+> - remind me to '{itemTitle}'
+> - add '{itemTitle}' to my todo list
+>
+> entity definitions:
+> @ ml itemTitle
+`);
+
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
   const { onChange, getSchema, value, id, uiOptions, getError, definitions, depth, schema = {} } = props;
   const { currentDialog, designerId } = useShellApi();
   const { recognizers } = usePluginConfig();
 
-  const { const: kind } = (schema?.properties?.['$kind'] as any) || {};
-  const [, promptType] = ((kind as string) || '').split('.');
-  const intentName = new LuMetaData(`${promptType}_Response`, designerId).toString();
+  const { const: $kind } = (schema?.properties?.$kind as { const: string }) || {};
+  const intentName = new LuMetaData(new LuType($kind).toString(), designerId).toString();
 
   const type = recognizerType(currentDialog);
-  const Editor: any = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
+  const Editor = type === SDKKinds.LuisRecognizer && recognizers.find(r => r.id === type)?.editor;
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
 
   return (
@@ -70,10 +79,10 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
         onChange={onChange('value')}
         rawErrors={getError('value')}
       />
-      {Editor && kind !== SDKKinds.AttachmentInput && (
+      {Editor && $kind !== SDKKinds.AttachmentInput && (
         <React.Fragment>
           <FieldLabel id={`${id}.intent`} label={intentLabel} />
-          <Editor {...props} onChange={() => {}} />
+          <Editor {...props} onChange={() => {}} placeholder={expectedResponsesPlaceholder()} />
         </React.Fragment>
       )}
       {getSchema('defaultLocale') && (

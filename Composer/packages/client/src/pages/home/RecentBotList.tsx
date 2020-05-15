@@ -5,6 +5,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { IObjectWithKey } from 'office-ui-fabric-react/lib/MarqueeSelection';
@@ -18,7 +19,7 @@ import formatMessage from 'format-message';
 
 import { calculateTimeDiff } from '../../utils';
 
-import { detailListContainer } from './styles';
+import { detailListContainer, tableCell, content } from './styles';
 
 interface RecentBotListProps {
   onItemChosen: (file: IObjectWithKey) => void;
@@ -42,20 +43,62 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
       onRender: item => {
-        return <span aria-label={item.name}>{item.name}</span>;
+        return (
+          <div css={tableCell} data-is-focusable={true}>
+            <Link
+              aria-label={formatMessage(`Bot name is {botName}`, { botName: item.name })}
+              onClick={() => onItemChosen(item)}
+            >
+              {item.name}
+            </Link>
+          </div>
+        );
       },
       isPadded: true,
     },
     {
       key: 'column2',
-      name: formatMessage('Date Modified'),
+      name: formatMessage('Date modified'),
       fieldName: 'dateModifiedValue',
       minWidth: 60,
       maxWidth: 70,
       isResizable: true,
       data: 'number',
       onRender: item => {
-        return <span>{calculateTimeDiff(item.dateModified)}</span>;
+        return (
+          <div css={tableCell} data-is-focusable={true}>
+            <div
+              tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
+            >
+              {calculateTimeDiff(item.dateModified)}
+            </div>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'column3',
+      name: formatMessage('Location'),
+      fieldName: 'path',
+      minWidth: 200,
+      maxWidth: 400,
+      isResizable: true,
+      data: 'string',
+      onRender: item => {
+        return (
+          <div css={tableCell} data-is-focusable={true}>
+            <div
+              tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`location is {location}`, { location: item.path })}
+            >
+              {item.path}
+            </div>
+          </div>
+        );
       },
       isPadded: true,
     },
@@ -79,7 +122,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           items={recentProjects}
           compact={false}
           columns={tableColums}
-          getKey={item => item.name}
+          getKey={item => `${item.path}/${item.name}`}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
           isHeaderVisible={true}

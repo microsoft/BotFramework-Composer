@@ -3,7 +3,7 @@
 
 context('LG Page', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample');
   });
 
@@ -16,12 +16,12 @@ context('LG Page', () => {
     cy.get('.toggleEditMode button').as('switchButton');
 
     // by default is table view
-    cy.findByTestId('LGEditor')
+    cy.findByTestId('LGPage')
       .findByTestId('table-view')
       .should('exist');
     // goto edit-mode
     cy.get('@switchButton').click();
-    cy.findByTestId('LGEditor')
+    cy.findByTestId('LGPage')
       .get('.monaco-editor')
       .should('exist');
 
@@ -29,7 +29,7 @@ context('LG Page', () => {
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.findByTestId('LGEditor').within(() => {
+    cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestTodoSample').click();
     });
   });

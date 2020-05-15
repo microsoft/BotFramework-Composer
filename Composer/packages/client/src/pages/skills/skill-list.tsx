@@ -10,28 +10,25 @@ import {
   CheckboxVisibility,
   IColumn,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { Skill } from '@bfc/shared';
-import { JsonEditor } from '@bfc/code-editor';
 
-import { StoreContext } from '../../store';
+import { DisplayManifestModal } from '../../components/Modal/DisplayManifest';
 
-import SkillForm from './skill-form';
-import { TableView, ActionButton, TableCell, ManifestModalHeaderStyle, ManifestModalBodyStyle } from './styles';
-import { ISkillFormData } from './types';
+import { TableView, TableCell } from './styles';
 
 export interface ISkillListProps {
   skills: Skill[];
   projectId: string;
+  onEdit: (index?: number) => void;
+  onDelete: (index?: number) => void;
 }
 
 const columns: IColumn[] = [
@@ -51,7 +48,8 @@ const columns: IColumn[] = [
     key: 'msAppId',
     name: formatMessage('App Id'),
     fieldName: 'msAppId',
-    minWidth: 200,
+    minWidth: 150,
+    maxWidth: 280,
     isResizable: true,
     data: 'string',
     onRender: (item: Skill) => {
@@ -62,7 +60,8 @@ const columns: IColumn[] = [
     key: 'endpointUrl',
     name: formatMessage('Skill Endpoint'),
     fieldName: 'endpointUrl',
-    minWidth: 450,
+    minWidth: 250,
+    maxWidth: 400,
     isResizable: true,
     data: 'string',
     onRender: (item: Skill) => {
@@ -73,7 +72,8 @@ const columns: IColumn[] = [
     key: 'description',
     name: formatMessage('Description'),
     fieldName: 'description',
-    minWidth: 300,
+    minWidth: 200,
+    maxWidth: 400,
     isResizable: true,
     data: 'string',
     onRender: (item: Skill) => {
@@ -83,57 +83,18 @@ const columns: IColumn[] = [
 ];
 
 const SkillList: React.FC<ISkillListProps> = props => {
-  const { actions } = useContext(StoreContext);
+  const { skills, projectId, onEdit, onDelete } = props;
 
-  const { skills, projectId } = props;
+  const [selectedSkillUrl, setSelectedSkillUrl] = useState<string | null>(null);
 
-  const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
-  const [selectedSkillIndex, setSelectedSkillIndex] = useState<number | null>(null);
-
-  const onSubmitForm = useCallback(
-    (submitFormData: ISkillFormData, editIndex: number) => {
-      const payload = {
-        projectId,
-        targetId: editIndex,
-        skillData: submitFormData,
-      };
-      actions.updateSkill(payload);
-      setEditIndex(undefined);
-    },
-    [projectId]
-  );
-
-  const onDismissForm = useCallback(() => {
-    setEditIndex(undefined);
-  }, []);
-
-  const onItemEdit = useCallback(index => {
-    setEditIndex(index);
-  }, []);
-
-  const onItemDelete = useCallback(
-    index => {
-      const payload = {
-        projectId,
-        targetId: index,
-        skillData: null,
-      };
-      actions.updateSkill(payload);
-
-      // close form, if delete is current opened
-      if (index === editIndex) {
-        setEditIndex(undefined);
-      }
-    },
-    [projectId, editIndex]
-  );
-
-  const onViewManifest = index => {
-    setSelectedSkillIndex(index);
+  const onViewManifest = item => {
+    if (item && item.name && item.body) {
+      setSelectedSkillUrl(item.manifestUrl);
+    }
   };
 
-  const onHideManifest = () => {
-    setSelectedSkillIndex(null);
+  const onDismissManifest = () => {
+    setSelectedSkillUrl(null);
   };
 
   const getColumns = useCallback(() => {
@@ -144,7 +105,7 @@ const SkillList: React.FC<ISkillListProps> = props => {
       maxWidth: 120,
       fieldName: 'buttons',
       data: 'string',
-      onRender: (_item, index) => {
+      onRender: (item, index) => {
         return (
           <div>
             <Stack tokens={{ childrenGap: 8 }} horizontal>
@@ -152,30 +113,33 @@ const SkillList: React.FC<ISkillListProps> = props => {
                 iconProps={{
                   iconName: 'Edit',
                 }}
-                onClick={() => onItemEdit(index)}
+                onClick={() => onEdit(index)}
                 title="Edit"
                 ariaLabel="Edit"
+                data-testid="EditSkill"
               />
               <IconButton
                 iconProps={{
                   iconName: 'Delete',
                 }}
-                onClick={() => onItemDelete(index)}
+                onClick={() => onDelete(index)}
                 title="Delete"
                 ariaLabel="Delete"
+                data-testid="DeleteSkill"
               />
               <IconButton
                 iconProps={{ iconName: 'ContextMenu' }}
-                onClick={() => onViewManifest(index)}
+                onClick={() => onViewManifest(item)}
                 title="View"
                 ariaLabel="View"
+                data-testid="ViewManifest"
               />
             </Stack>
           </div>
         );
       },
     });
-  }, [projectId, editIndex]);
+  }, [projectId]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
@@ -190,26 +154,8 @@ const SkillList: React.FC<ISkillListProps> = props => {
     );
   }, []);
 
-  const onRenderDetailsFooter = useCallback(() => {
-    // do not allow add template in particular dialog lg, it suppose to be auto generated in form.
-    return (
-      <div css={ActionButton} data-testid="add-skill">
-        {typeof editIndex === 'number' ? (
-          <SkillForm
-            skills={skills}
-            editIndex={editIndex}
-            onSubmit={onSubmitForm}
-            onDismiss={onDismissForm}
-          ></SkillForm>
-        ) : (
-          <Link onClick={() => setEditIndex(-1)}>{formatMessage('Connect to a new skill')}</Link>
-        )}
-      </div>
-    );
-  }, [editIndex, skills]);
-
   return (
-    <div data-testid="skill-list">
+    <React.Fragment>
       <div css={TableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
@@ -220,41 +166,17 @@ const SkillList: React.FC<ISkillListProps> = props => {
             layoutMode={DetailsListLayoutMode.justified}
             isHeaderVisible={true}
             onRenderDetailsHeader={onRenderDetailsHeader}
-            onRenderDetailsFooter={onRenderDetailsFooter}
             checkboxVisibility={CheckboxVisibility.hidden}
           />
         </ScrollablePane>
       </div>
-      <Modal
-        titleAriaId={'skillManifestModal'}
-        isOpen={selectedSkillIndex !== null}
-        onDismiss={onHideManifest}
-        isBlocking={false}
-      >
-        <div>
-          <span css={ManifestModalHeaderStyle} id={'skillManifestModalHeader'}>
-            {selectedSkillIndex !== null && skills[selectedSkillIndex] && skills[selectedSkillIndex].name}
-          </span>
-          <IconButton
-            style={{ float: 'right' }}
-            iconProps={{ iconName: 'Cancel' }}
-            ariaLabel={formatMessage('Close popup modal')}
-            onClick={onHideManifest}
-          />
-        </div>
-        <div css={ManifestModalBodyStyle}>
-          <JsonEditor
-            key={'testkey'}
-            id={'modaljsonview'}
-            onChange={() => {}}
-            value={selectedSkillIndex !== null && JSON.parse(skills[selectedSkillIndex].body || '')}
-            height={800}
-            width={800}
-            options={{ readOnly: true }}
-          />
-        </div>
-      </Modal>
-    </div>
+      <DisplayManifestModal
+        isDraggable={false}
+        isModeless={false}
+        manifestId={selectedSkillUrl}
+        onDismiss={onDismissManifest}
+      />
+    </React.Fragment>
   );
 };
 

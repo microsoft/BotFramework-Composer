@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ElementInterval } from '../constants/ElementSizes';
+import { BranchIntervalX, BranchIntervalY } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
 import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateIfElseBoundary } from './calculateNodeBoundary';
-
-const BranchIntervalX = ElementInterval.x;
-const BranchIntervalY = ElementInterval.y / 2;
 
 export function ifElseLayouter(
   conditionNode: GraphNode | null,
@@ -120,7 +117,6 @@ export function ifElseLayouter(
         x: choiceNode.offset.x + choiceNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: rightNode.offset.x + rightNode.boundary.axisX - choiceNode.boundary.axisX - choiceNode.offset.x,
-        options: { label: rightNodeText },
       },
       {
         id: `edge/${rightNode.id}/right/top->node}`,
@@ -128,6 +124,7 @@ export function ifElseLayouter(
         x: rightNode.offset.x + rightNode.boundary.axisX,
         y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: BranchIntervalY,
+        options: { label: rightNodeText },
       },
       {
         id: `edge/${rightNode.id}/right/node->border.bottom`,
@@ -176,7 +173,7 @@ export function ifElseLayouter(
         id: `edge/${leftNode.id}/left/choice->else`,
         direction: EdgeDirection.Down,
         x: containerBoundary.axisX,
-        y: choiceNode.offset.y + choiceNode.boundary.height,
+        y: choiceNode.offset.y + choiceNode.boundary.axisY,
         length: BranchIntervalY,
         options: { label: leftNodeText },
       },
@@ -193,7 +190,7 @@ export function ifElseLayouter(
       id: `edge/${choiceNode.id}/left/choice->out`,
       direction: EdgeDirection.Down,
       x: containerBoundary.axisX,
-      y: choiceNode.offset.y + choiceNode.boundary.height,
+      y: choiceNode.offset.y + choiceNode.boundary.axisY,
       length: containerBoundary.height - (choiceNode.offset.y + choiceNode.boundary.height),
       options: { label: leftNodeText },
     });

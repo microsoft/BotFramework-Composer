@@ -12,7 +12,7 @@ import * as about from './styles';
 
 export const About: React.FC<RouteComponentProps> = () => {
   return (
-    <div css={about.outline}>
+    <div role="main" css={about.outline}>
       <div css={about.content}>
         <h1 css={about.title}> {formatMessage(`About`)} </h1>
         <div css={about.body}>
@@ -27,7 +27,7 @@ export const About: React.FC<RouteComponentProps> = () => {
               {formatMessage(`Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the
             latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code.`)}
               <Link
-                href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/toc.md'}
+                href={'https://docs.microsoft.com/en-us/composer/'}
                 target={'_blank'}
                 style={{ marginLeft: '5px', textDecoration: 'underline' }}
               >
@@ -37,22 +37,10 @@ export const About: React.FC<RouteComponentProps> = () => {
           </div>
           <div css={about.DiagnosticsInfo}>
             <div css={about.DiagnosticsInfoText}>
-              <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`Application SHA`)}</div>
-              <div css={about.DiagnosticsInfoTextAlignLeft}>
-                <Link
-                  href={`https://github.com/microsoft/BotFramework-Composer/commit/${process.env.GIT_SHA}`}
-                  target={'_blank'}
-                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
-                >
-                  {process.env.GIT_SHA || 'Unknown'}
-                </Link>
-              </div>
-            </div>
-            <div css={about.DiagnosticsInfoText}>
               <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`SDK runtime packages`)}</div>
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
-                  href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSION}`}
+                  href={`https://www.nuget.org/packages/Microsoft.Bot.Builder/${process.env.SDK_PACKAGE_VERSION}`}
                   target={'_blank'}
                   style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >

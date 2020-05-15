@@ -129,7 +129,18 @@ export const TestController: React.FC = () => {
   return (
     <Fragment>
       <div css={bot} ref={botActionRef}>
-        <EmulatorOpenButton botStatus={botStatus} hidden={showError} onClick={handleOpenEmulator} />
+        <EmulatorOpenButton
+          botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
+          botStatus={botStatus}
+          hidden={showError}
+          onClick={handleOpenEmulator}
+        />
+        <div
+          aria-live={'assertive'}
+          aria-label={formatMessage(`{ botStatus}`, {
+            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
+          })}
+        />
         <Loading botStatus={botStatus} />
         <div ref={addRef}>
           <ErrorInfo hidden={!showError} onClick={handleErrorButtonClick} count={errorLength} />

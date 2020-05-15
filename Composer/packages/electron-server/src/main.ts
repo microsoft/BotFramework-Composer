@@ -4,42 +4,107 @@
 import { join, resolve } from 'path';
 
 import { mkdirp } from 'fs-extra';
-import { app } from 'electron';
+import { app, ipcMain } from 'electron';
 import fixPath from 'fix-path';
+import { UpdateInfo } from 'electron-updater';
+import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
 
 import { isDevelopment } from './utility/env';
-import { isWindows } from './utility/platform';
+import { isWindows, isMac } from './utility/platform';
 import { getUnpackedAsarPath } from './utility/getUnpackedAsarPath';
 import ElectronWindow from './electronWindow';
 import log from './utility/logger';
+import { AppUpdater } from './appUpdater';
 import { parseDeepLinkUrl } from './utility/url';
+import { composerProtocol } from './constants';
+import { initAppMenu } from './appMenu';
 
 const error = log.extend('error');
-const baseUrl = isDevelopment ? 'http://localhost:3000/' : 'http://localhost:5000/';
-let deeplinkingUrl = '';
+let deeplinkUrl = '';
+let serverPort;
+// webpack dev server runs on :3000
+const getBaseUrl = () => {
+  if (isDevelopment) {
+    return 'http://localhost:3000/';
+  }
+  if (!serverPort) {
+    throw new Error('getBaseUrl() called before serverPort is defined.');
+  }
+  return `http://localhost:${serverPort}/`;
+};
+
+// set production flag
+if (app.isPackaged) {
+  process.env.NODE_ENV = 'production';
+}
+log(`${process.env.NODE_ENV} environment detected.`);
 
 function processArgsForWindows(args: string[]): string {
-  if (process.argv.length > 1) {
-    return parseDeepLinkUrl(args[args.length - 1]);
+  const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
+  if (deepLinkUrl) {
+    return parseDeepLinkUrl(deepLinkUrl);
   }
   return '';
 }
 
 async function createAppDataDir() {
+  // TODO: Move all ENV variable setting to an env file and update build process to leverage those variables too
   const appDataBasePath: string = process.env.APPDATA || process.env.HOME || '';
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
+  const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
   log('creating composer app data path at: ', composerAppDataPath);
-  await mkdirp(composerAppDataPath);
+  process.env.LOCAL_PUBLISH_PATH = localPublishPath;
+  log('creating local bot runtime publish path: ', localPublishPath);
+  await mkdirp(localPublishPath);
+}
+
+function initializeAppUpdater(settings: AppUpdaterSettings) {
+  log('Initializing app updater...');
+  const mainWindow = ElectronWindow.getInstance().browserWindow;
+  if (mainWindow) {
+    const appUpdater = AppUpdater.getInstance();
+    appUpdater.setSettings(settings);
+    appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
+      mainWindow.webContents.send('app-update', 'update-available', updateInfo);
+    });
+    appUpdater.on('progress', progress => {
+      mainWindow.webContents.send('app-update', 'progress', progress);
+    });
+    appUpdater.on('update-not-available', (explicitCheck: boolean) => {
+      mainWindow.webContents.send('app-update', 'update-not-available', explicitCheck);
+    });
+    appUpdater.on('update-downloaded', () => {
+      mainWindow.webContents.send('app-update', 'update-downloaded');
+    });
+    appUpdater.on('error', err => {
+      mainWindow.webContents.send('app-update', 'error', err);
+    });
+    ipcMain.on('app-update', (_ev, name: string, _payload) => {
+      if (name === 'start-download') {
+        appUpdater.downloadUpdate();
+      }
+      if (name === 'install-update') {
+        appUpdater.quitAndInstall();
+      }
+    });
+    ipcMain.on('update-user-settings', (_ev, settings: UserSettings) => {
+      appUpdater.setSettings(settings.appUpdater);
+    });
+    appUpdater.checkForUpdates();
+  } else {
+    throw new Error('Main application window undefined during app updater initialization.');
+  }
+  log('App updater initialized.');
 }
 
 async function loadServer() {
-  let pluginsDir = '';
+  let pluginsDir = ''; // let this be assigned by start() if in development
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
-    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'build', 'templates');
+    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
     pluginsDir = join(unpackedDir, 'build', 'plugins');
   }
 
@@ -50,49 +115,47 @@ async function loadServer() {
 
   log('Starting server...');
   const { start } = await import('@bfc/server');
-  await start(pluginsDir);
-  log('Server started. Rendering application...');
+  serverPort = await start(pluginsDir);
+  log(`Server started at port: ${serverPort}`);
 }
 
 async function main() {
+  log('Rendering application...');
+  initAppMenu();
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
-    if (isDevelopment) {
+    if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow.webContents.openDevTools();
     }
 
     if (isWindows()) {
-      deeplinkingUrl = processArgsForWindows(process.argv);
+      deeplinkUrl = processArgsForWindows(process.argv);
     }
-    await mainWindow.webContents.loadURL(baseUrl + deeplinkingUrl);
+    await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkUrl);
 
-    mainWindow.maximize();
     mainWindow.show();
 
     mainWindow.on('closed', function() {
       ElectronWindow.destroy();
     });
+    log('Rendered application.');
   }
 }
 
 async function run() {
   fixPath(); // required PATH fix for Mac (https://github.com/electron/electron/issues/5626)
 
-  if (isDevelopment && !app.isDefaultProtocolClient('bfcomposer')) {
-    app.setAsDefaultProtocolClient('bfcomposer');
-  }
-
   // Force Single Instance Application
   const gotTheLock = app.requestSingleInstanceLock();
   if (gotTheLock) {
     app.on('second-instance', async (e, argv) => {
       if (isWindows()) {
-        deeplinkingUrl = processArgsForWindows(argv);
+        deeplinkUrl = processArgsForWindows(argv);
       }
 
       const mainWindow = ElectronWindow.getInstance().browserWindow;
       if (mainWindow) {
-        await mainWindow.webContents.loadURL(baseUrl + deeplinkingUrl);
+        await mainWindow.webContents.loadURL(getBaseUrl() + deeplinkUrl);
         if (mainWindow.isMinimized()) {
           mainWindow.restore();
         }
@@ -105,8 +168,12 @@ async function run() {
 
   app.on('ready', async () => {
     log('App ready');
+    ipcMain.once('init-user-settings', (_ev, settings: UserSettings) => {
+      // we can't synchronously call the main process (due to deadlocks)
+      // so we wait for the initial settings to be loaded from the client
+      initializeAppUpdater(settings.appUpdater);
+    });
     await loadServer();
-    log('Server has been loaded');
     await main();
   });
 
@@ -114,7 +181,7 @@ async function run() {
   app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
+    if (!isMac()) {
       app.quit();
     }
   });
@@ -131,10 +198,10 @@ async function run() {
     // Protocol handler for osx
     app.on('open-url', (event, url) => {
       event.preventDefault();
-      deeplinkingUrl = parseDeepLinkUrl(url);
+      deeplinkUrl = parseDeepLinkUrl(url);
       if (ElectronWindow.isBrowserWindowCreated) {
         const mainWindow = ElectronWindow.getInstance().browserWindow;
-        mainWindow?.loadURL(baseUrl + deeplinkingUrl);
+        mainWindow?.loadURL(getBaseUrl() + deeplinkUrl);
       }
     });
   });

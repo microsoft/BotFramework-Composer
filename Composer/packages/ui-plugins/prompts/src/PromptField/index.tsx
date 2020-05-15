@@ -23,6 +23,7 @@ const OTHER_FIELDS: InputDialogKeys[] = [
   'defaultValue',
   'allowInterruptions',
   'alwaysPrompt',
+  'recognizerOptions',
 ];
 
 const PromptField: React.FC<FieldProps> = props => {
@@ -71,6 +72,7 @@ const PromptField: React.FC<FieldProps> = props => {
               uiOptions={props.uiOptions.properties?.[f] || {}}
               value={props.value?.[f]}
               onChange={updateField(f)}
+              definitions={props.definitions}
             />
           ))}
         </PivotItem>

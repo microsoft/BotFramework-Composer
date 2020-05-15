@@ -35,7 +35,6 @@ export interface DialogInfo {
   luFile: string;
   referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
-  userDefinedVariables: string[];
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
 }
@@ -126,3 +125,9 @@ export interface TextFile {
 export type FileResolver = (id: string) => FileInfo | undefined;
 
 export type MemoryResolver = (id: string) => string[] | undefined;
+
+export interface SkillManifestInfo {
+  content: { [key: string]: any };
+  lastModified: string;
+  id: string;
+}

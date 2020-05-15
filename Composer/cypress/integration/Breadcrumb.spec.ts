@@ -3,7 +3,7 @@
 
 context('breadcrumb', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample');
 
     // Return to Main.dialog

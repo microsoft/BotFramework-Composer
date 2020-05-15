@@ -4,6 +4,12 @@
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { css } from '@emotion/core';
 
+export const ContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
 export const ContentHeaderStyle = css`
   padding: 5px 20px;
   height: 60px;
@@ -34,7 +40,6 @@ export const ContentStyle = css`
 export const TableView = css`
   flex: 4;
   margin: 20px;
-  height: calc(100vh - 200px);
   position: relative;
   overflow: visible;
   fontsize: 16px;
@@ -49,31 +54,6 @@ export const TableCell = css`
   }
 `;
 
-export const ChoiceGroupAlignHorizontal = css`
-  .ms-ChoiceFieldGroup-flexContainer {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
-  .ms-ChoiceField-wrapper {
-    margin-right: 2rem;
-  }
-`;
-
-export const FormFieldManifestUrl = css`
-  width: 40rem;
-`;
-
-export const FormFieldEditName = css`
-  width: 20rem;
-`;
-
-export const FormFieldAlignHorizontal = css`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-`;
-
 export const FormFieldAlignHorizontalBotSettings = css`
   max-width: 1500px;
   margin-top: 20px;
@@ -84,35 +64,9 @@ export const FormFieldAlignHorizontalBotSettings = css`
   padding-bottom: 15px;
 `;
 
-export const FormFieldName = css`
-  width: 10rem;
-  margin-right: 1rem;
-`;
-
-export const FormFieldAppId = css`
-  width: 20rem;
-`;
-
-export const FormFieldEndpoint = css`
-  width: 40rem;
-`;
-
-export const ActionButton = css`
-  font-size: ${FontSizes.large};
-  margin: 1rem;
-`;
-
-export const MarginLeftSmall = css`
-  margin-left: ${FontSizes.small};
-`;
-
 export const ManifestModalHeaderStyle = css`
   margin: 14px 0 0 16px;
-  fon-size: 20px;
+  font-size: 20px;
   font-weight: bolder;
   align-items: left;
-`;
-
-export const ManifestModalBodyStyle = css`
-  margin: 15px 15px 15px 15px;
 `;
