@@ -60,7 +60,7 @@ export const extractSkillManifestUrl = async (
       const notify = new Diagnostic(
         `Accessing skill manifest url error, ${manifestUrl}`,
         'appsettings.json',
-        DiagnosticSeverity.Error
+        DiagnosticSeverity.Warning
       );
       diagnostics.push(notify);
     }
