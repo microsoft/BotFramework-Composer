@@ -3,7 +3,7 @@
 
 context('ToDo Bot', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample');
   });
 
@@ -32,7 +32,7 @@ context('ToDo Bot', () => {
     });
 
     cy.url().should('contain', 'cleartodos');
-    });
+  });
 
   it('can open the DeleteToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
