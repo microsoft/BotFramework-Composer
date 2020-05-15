@@ -385,7 +385,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
     try {
       await rmDir(targetDir);
-      return { msg: `successed in removing runtime ${targetDir}` };
+      return { msg: `successfully removed runtime data in ${targetDir}` };
     } catch (e) {
       throw new Error(`Failed to remove ${targetDir}`);
     }

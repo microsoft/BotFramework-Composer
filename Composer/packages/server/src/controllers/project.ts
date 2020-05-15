@@ -102,7 +102,7 @@ async function removeProject(req: Request, res: Response) {
   const projectId = req.params.projectId;
   if (!projectId) {
     res.status(400).json({
-      message: 'parameters not provided, require storage id and path',
+      message: 'parameters not provided, require project id',
     });
     return;
   }
@@ -110,7 +110,7 @@ async function removeProject(req: Request, res: Response) {
     const currentProject = await BotProjectService.getProjectById(projectId);
     if (currentProject !== undefined) {
       await currentProject.deleteAllFiles();
-      res.status(200).json('success');
+      res.status(200).json({ message: 'success' });
     } else {
       res.status(404).json({ error: 'No bot project opened' });
     }

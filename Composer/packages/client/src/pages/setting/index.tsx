@@ -48,9 +48,9 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = props => {
   ];
 
   const openDeleteBotModal = async () => {
-    const subTitle = 'Warning: are you sure to delete current bot?';
-    const title = 'Delete Bots';
-    const checkboxLabel = 'I want to delete this bot';
+    const subTitle = formatMessage('Warning: are you sure to delete current bot?');
+    const title = formatMessage('Delete Bots');
+    const checkboxLabel = formatMessage('I want to delete this bot');
     const styles = { content: confirmationContent };
     const settings = {
       onRenderContent: () => {
