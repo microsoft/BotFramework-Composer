@@ -28,7 +28,6 @@ interface RecentBotListProps {
 export function RecentBotList(props: RecentBotListProps): JSX.Element {
   const { onItemChosen, recentProjects } = props;
   // for detail file list in open panel
-  console.log(recentProjects);
   const tableColums = [
     {
       key: 'column1',
