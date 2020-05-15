@@ -366,7 +366,18 @@ const create = async (
   if (!tenantId) {
     const token = await creds.getToken();
     const accessToken = token.accessToken;
-    tenantId = await getTenantId(accessToken);
+    // the returned access token will almost surely have a tenantId. 
+    // use this as the default if one isn't specified.
+    // otherwise, fetch a list and use the first, but print available options.
+    if (token.tenantId) {
+      tenantId = token.tenantId;
+      logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> Using Tenant ID: ${ tenantId }`,
+      });
+    } else {
+      tenantId = await getTenantId(accessToken);
+    }
   }
 
   const graphCreds = new msRestNodeAuth.DeviceTokenCredentials(
