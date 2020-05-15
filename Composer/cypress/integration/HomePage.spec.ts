@@ -3,7 +3,7 @@
 
 context('Home Page ', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
   });
 
   it('can open buttons in home page', () => {

@@ -3,7 +3,7 @@
 
 context('Onboarding', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample', 'Onboarding');
 
     //enable onboarding setting

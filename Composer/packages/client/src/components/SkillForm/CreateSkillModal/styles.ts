@@ -19,3 +19,8 @@ export const FormFieldEditName = css`
 export const MarginLeftSmall = css`
   margin-left: ${FontSizes.small};
 `;
+
+export const SpinnerLabel = css`
+  justify-content: left;
+  margin-top: 0.4rem;
+`;
