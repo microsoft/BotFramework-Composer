@@ -34,6 +34,7 @@ interface ItemContainerProps {
   };
   disabled?: boolean;
   forwardedRef?: any;
+  rest?: any;
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
@@ -76,15 +77,24 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     <Button
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async e => {
-        const { href } = rest;
+        // todo: clean this up
+        const { href } = rest as { href: string };
         if (onClick) {
-          if (isElectron() && onClick === true) {
-            e.preventDefault();
-            return openExternal(href, { activate: true });
-          }
-          if (!href) {
-            e.preventDefault();
-            await onClick();
+          switch (typeof onClick) {
+            case 'boolean': {
+              if (isElectron() && onClick === true) {
+                e.preventDefault();
+                return openExternal(href, { activate: true });
+              }
+              break;
+            }
+            default: {
+              if (!href) {
+                e.preventDefault();
+                await onClick();
+              }
+              break;
+            }
           }
         }
       }}
