@@ -12,6 +12,8 @@ interface Window {
    */
   ipcRenderer: IPCRenderer;
 
+  openExternal: (url: string | undefined, options?: { activate?: boolean; workingDirectory?: string }) => Promise<void>;
+
   /**
    * Flag that is set on the window object when the client is embedded within Electron.
    */

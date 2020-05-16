@@ -17,6 +17,7 @@ router.get('/projects/recent', ProjectController.getRecentProjects);
 
 router.get('/projects/:projectId', ProjectController.getProjectById);
 router.put('/projects/open', ProjectController.openProject);
+router.delete('/projects/:projectId', ProjectController.removeProject);
 router.put('/projects/:projectId/files/:name', ProjectController.updateFile);
 router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
