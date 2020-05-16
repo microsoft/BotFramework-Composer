@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
-import { Button } from 'office-ui-fabric-react/lib/Button';
+import { Button, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import {
@@ -16,9 +16,9 @@ import {
   childrenContainer,
 } from './styles';
 
-const { openExternal: openExternalLink } = window;
+const { openExternal: openExternalLink } = window as Window;
 
-interface ItemContainerProps {
+interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
   onClick?: () => void | Promise<void>;
   title: string | JSX.Element;
   subContent?: string;
@@ -29,12 +29,8 @@ interface ItemContainerProps {
     content?: SerializedStyles;
   };
   disabled?: boolean;
-  forwardedRef?: any;
+  forwardedRef?: (project: any) => void | Promise<void>;
   openExternal?: boolean;
-  href?: any;
-  target?: any;
-  rel?: any;
-  rest?: any;
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
