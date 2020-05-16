@@ -13,6 +13,7 @@ import { navigate } from '@reach/router';
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
 import { ToolBar } from '../../components/ToolBar/index';
+import { isElectron } from '../../utils/electronUtil';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -204,10 +205,10 @@ const Home: React.FC<RouteComponentProps> = () => {
                   title={item.title}
                   content={item.content}
                   subContent={item.subContent}
-                  onClick={true}
                   href={item.href}
                   target="_blank"
                   rel="noopener nofollow"
+                  openExternal={isElectron()}
                 />
               ))}
               <div css={home.linkContainer}>

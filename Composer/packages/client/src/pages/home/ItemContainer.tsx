@@ -7,8 +7,6 @@ import React from 'react';
 import { Button } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
-import { isElectron } from '../../utils/electronUtil';
-
 import {
   itemContainerWrapper,
   itemContainer,
@@ -18,12 +16,10 @@ import {
   childrenContainer,
 } from './styles';
 
-const { openExternal } = window;
-
-type onClickFunctionType = () => void | Promise<void>;
+const { openExternal: openExternalLink } = window;
 
 interface ItemContainerProps {
-  onClick?: onClickFunctionType | boolean;
+  onClick?: () => void | Promise<void>;
   title: string | JSX.Element;
   subContent?: string;
   content: string;
@@ -34,6 +30,10 @@ interface ItemContainerProps {
   };
   disabled?: boolean;
   forwardedRef?: any;
+  openExternal?: boolean;
+  href?: any;
+  target?: any;
+  rel?: any;
   rest?: any;
 }
 
@@ -45,6 +45,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   styles = {},
   disabled,
   forwardedRef,
+  openExternal,
   ...rest
 }) => {
   const onRenderChildren = () => {
@@ -78,24 +79,13 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async e => {
         // todo: clean this up
-        const { href } = rest as { href: string };
-        if (onClick) {
-          switch (typeof onClick) {
-            case 'boolean': {
-              if (isElectron() && onClick === true) {
-                e.preventDefault();
-                return openExternal(href, { activate: true });
-              }
-              break;
-            }
-            default: {
-              if (!href) {
-                e.preventDefault();
-                await onClick();
-              }
-              break;
-            }
-          }
+        const { href } = rest as Partial<{ href: string }>;
+        if (openExternal) {
+          e.preventDefault();
+          return openExternalLink(href, { activate: true });
+        } else if (onClick && !href) {
+          e.preventDefault();
+          await onClick();
         }
       }}
       {...rest}
