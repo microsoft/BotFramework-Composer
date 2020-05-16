@@ -222,7 +222,6 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       ]);
       await actions.setSettings(
         projectId,
-        botName,
         {
           ...settings,
           publishTargets: _target,
@@ -250,7 +249,6 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
       await actions.setSettings(
         projectId,
-        botName,
         {
           ...settings,
           publishTargets: _targets,
@@ -358,7 +356,6 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           const _target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
           await actions.setSettings(
             projectId,
-            botName,
             {
               ...settings,
               publishTargets: _target,

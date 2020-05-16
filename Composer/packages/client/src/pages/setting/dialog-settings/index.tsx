@@ -31,7 +31,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const saveChangeResult = (result) => {
     try {
       const mergedResult = result;
-      actions.setSettings(projectId, botName, mergedResult);
+      actions.setSettings(projectId, mergedResult);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err.message);
@@ -65,6 +65,6 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
       </div>
     </div>
   ) : (
-    <div>{formatMessage('Data loading...')}</div>
-  );
+      <div>{formatMessage('Data loading...')}</div>
+    );
 };
