@@ -13,11 +13,13 @@ import { navigate } from '@reach/router';
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
 import { ToolBar } from '../../components/ToolBar/index';
+import { isElectron } from '../../utils/electronUtil';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
+
 const linksButtom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
@@ -206,6 +208,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                   href={item.href}
                   target="_blank"
                   rel="noopener nofollow"
+                  openExternal={isElectron()}
                 />
               ))}
               <div css={home.linkContainer}>
