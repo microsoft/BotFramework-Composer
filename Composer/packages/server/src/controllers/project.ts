@@ -11,6 +11,7 @@ import log from '../logger';
 import { BotProjectService } from '../services/project';
 import AssectService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
+import { getSkillByUrl } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
 import settings from '../settings';
 
@@ -93,6 +94,29 @@ async function getProjectById(req: Request, res: Response) {
   } catch (error) {
     res.status(404).json({
       message: error.message,
+    });
+  }
+}
+
+async function removeProject(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  if (!projectId) {
+    res.status(400).json({
+      message: 'parameters not provided, require project id',
+    });
+    return;
+  }
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId);
+    if (currentProject !== undefined) {
+      await currentProject.deleteAllFiles();
+      res.status(200).json({ message: 'success' });
+    } else {
+      res.status(404).json({ error: 'No bot project opened' });
+    }
+  } catch (e) {
+    res.status(400).json({
+      message: e.message,
     });
   }
 }
@@ -291,6 +315,27 @@ async function updateSkill(req: Request, res: Response) {
   }
 }
 
+async function getSkill(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    try {
+      const skill = await getSkillByUrl(req.body.url);
+      res.status(200).json(skill);
+    } catch (err) {
+      res.status(404).json({
+        message: err.message,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 async function exportProject(req: Request, res: Response) {
   const currentProject = await BotProjectService.getProjectById(req.params.projectId);
   currentProject.exportToZip((archive: Archiver) => {
@@ -388,6 +433,7 @@ async function getAllProjects(req: Request, res: Response) {
 export const ProjectController = {
   getProjectById,
   openProject,
+  removeProject,
   updateFile,
   createFile,
   removeFile,
@@ -396,6 +442,7 @@ export const ProjectController = {
   updateEnvSettings,
   updateDefaultSlotEnvSettings,
   updateSkill,
+  getSkill,
   publishLuis,
   exportProject,
   saveProjectAs,

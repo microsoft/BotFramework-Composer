@@ -37,6 +37,7 @@ export const UNDO_LIMIT = 10;
 export enum ActionTypes {
   GET_PROJECT_SUCCESS = 'GET_PROJECT_SUCCESS',
   GET_PROJECT_FAILURE = 'GET_PROJECT_FAILURE',
+  REMOVE_PROJECT_SUCCESS = 'REMOVE_PROJECT_SUCCESS',
   GET_RECENT_PROJECTS_SUCCESS = 'GET_RECENT_PROJECTS_SUCCESS',
   GET_RECENT_PROJECTS_FAILURE = 'GET_RECENT_PROJECTS_FAILURE',
   GET_TEMPLATE_PROJECTS_SUCCESS = 'GET_TEMPLATE_PROJECTS_SUCCESS',
@@ -81,6 +82,7 @@ export enum ActionTypes {
   GET_PUBLISH_TYPES_SUCCESS = 'GET_PUBLISH_TYPES_SUCCESS',
   PUBLISH_SUCCESS = 'PUBLISH_SUCCESS',
   PUBLISH_FAILED = 'PUBLISH_FAILED',
+  PUBLISH_FAILED_DOTNET = 'PUBLISH_FAILED_DOTNET',
   GET_PUBLISH_STATUS = 'GET_PUBLISH_STATUS',
   GET_PUBLISH_STATUS_FAILED = 'GET_PUBLISH_STATUS_FAILED',
   GET_PUBLISH_HISTORY = 'GET_PUBLISH_HISTORY',
@@ -125,6 +127,7 @@ export const Text = {
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
+  DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK'),
 };
 
 export enum LuisConfig {
@@ -209,6 +212,10 @@ export const DialogDeleting = {
 export const addSkillDialog = {
   SKILL_MANIFEST_FORM: {
     title: formatMessage('Add a skill'),
+    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+  },
+  SKILL_MANIFEST_FORM_EDIT: {
+    title: formatMessage('Edit a skill'),
     subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
   },
 };

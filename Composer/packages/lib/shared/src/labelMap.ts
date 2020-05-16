@@ -226,7 +226,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.SetProperties]: {
     title: formatMessage('Set properties'),
   },
-  [SDKKinds.SkillDialog]: {
+  [SDKKinds.BeginSkill]: {
     title: formatMessage('Connect to a skill'),
     description: formatMessage('Begin a remote skill dialog.'),
   },

@@ -14,7 +14,7 @@ import debounce from 'lodash/debounce';
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
 
-import { hostedSettings, hostedControls, hostedControlsTitle, slotChoice, settingsEditor } from './style';
+import { hostedSettings, hostedControls, slotChoice, settingsEditor } from './style';
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
@@ -66,7 +66,6 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
 
   const hostedControl = () => (
     <div css={hostedControls}>
-      <h1 css={hostedControlsTitle}>{hostControlLabels.botSettings}</h1>
       <p>
         {hostControlLabels.botSettingDescription}
         &nbsp;

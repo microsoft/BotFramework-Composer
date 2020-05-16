@@ -4,8 +4,17 @@
 import get from 'lodash/get';
 import set from 'lodash/set';
 import merge from 'lodash/merge';
+import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, LgFile, DialogInfo, importResolverGenerator, UserSettings } from '@bfc/shared';
+import {
+  SensitiveProperties,
+  LuFile,
+  LgFile,
+  DialogInfo,
+  importResolverGenerator,
+  UserSettings,
+  dereferenceDefinitions,
+} from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
@@ -20,7 +29,14 @@ import { isElectron } from '../../utils/electronUtil';
 
 import createReducer from './createReducer';
 
+import { initialState } from '..';
+
 const projectFiles = ['bot', 'botproj'];
+
+const processSchema = memoize((projectId: string, schema: any) => ({
+  ...schema,
+  definitions: dereferenceDefinitions(schema.definitions),
+}));
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
@@ -67,7 +83,8 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
+  const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
+  schemas.sdk.content = processSchema(id, schemas.sdk.content);
   const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
@@ -81,9 +98,27 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = settings;
   state.locale = locale;
+  state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
+  return state;
+};
+
+const removeProjectSuccess: ReducerFunc = state => {
+  state.projectId = initialState.projectId;
+  state.dialogs = initialState.dialogs;
+  state.botEnvironment = initialState.botEnvironment;
+  state.botName = initialState.botName;
+  state.botStatus = initialState.botStatus;
+  state.location = initialState.location;
+  state.lgFiles = initialState.lgFiles;
+  state.skills = initialState.skills;
+  state.schemas = initialState.schemas;
+  state.luFiles = initialState.luFiles;
+  state.settings = initialState.settings;
+  state.locale = initialState.locale;
+  state.skillManifests = initialState.skillManifests;
   return state;
 };
 
@@ -450,10 +485,11 @@ const publishSuccess: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, { error, target }) => {
+const publishFailure: (title: string) => ReducerFunc = title => (state, { error, target }) => {
   if (target.name === 'default') {
     state.botStatus = BotStatus.failed;
-    state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+
+    state.botLoadErrorMsg = { ...error, title };
   }
   // prepend the latest publish results to the history
   if (!state.publishHistory[target.name]) {
@@ -592,6 +628,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
+  [ActionTypes.REMOVE_PROJECT_SUCCESS]: removeProjectSuccess,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
@@ -630,7 +667,8 @@ export const reducer = createReducer({
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
   [ActionTypes.GET_PUBLISH_TYPES_SUCCESS]: setPublishTypes,
   [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
-  [ActionTypes.PUBLISH_FAILED]: publishFailure,
+  [ActionTypes.PUBLISH_FAILED]: publishFailure(Text.CONNECTBOTFAILURE),
+  [ActionTypes.PUBLISH_FAILED_DOTNET]: publishFailure(Text.DOTNETFAILURE),
   [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
   [ActionTypes.GET_PUBLISH_STATUS_FAILED]: getPublishStatus,
   [ActionTypes.GET_PUBLISH_HISTORY]: getPublishHistory,

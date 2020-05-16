@@ -19,6 +19,10 @@ export const defaultFlowSchema: FlowSchema = {
   default: {
     widget: 'ActionHeader',
   },
+  custom: {
+    widget: 'ActionHeader',
+    colors: { theme: ObiColors.Gray20, color: ObiColors.White },
+  },
   [SDKKinds.IfCondition]: {
     widget: 'IfConditionWidget',
     nowrap: true,
@@ -83,7 +87,7 @@ export const defaultFlowSchema: FlowSchema = {
         </>
       ) : null,
   },
-  [SDKKinds.SkillDialog]: {
+  [SDKKinds.BeginSkill]: {
     widget: 'ActionCard',
     colors: { theme: ObiColors.DarkBlue, color: ObiColors.White, icon: ObiColors.White },
     icon: 'Library',

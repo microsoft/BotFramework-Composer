@@ -75,7 +75,7 @@ export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuI
   return filteredDiags.map(d => {
     const { range } = d;
     if (range) {
-      d.range = offsetRange(range, offset);
+      return { ...d, range: offsetRange(range, offset) };
     }
     return d;
   });
