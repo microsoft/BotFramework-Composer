@@ -118,6 +118,19 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
   };
 
+  removeRuntimeData = async (botId: string) => {
+    const targetDir = path.resolve(__dirname, `../hostedBots/${botId}`);
+    if (!(await this.dirExist(targetDir))) {
+      return { msg: `runtime path ${targetDir} does not exist` };
+    }
+    try {
+      await rmDir(targetDir);
+      return { msg: `successfully removed runtime data in ${targetDir}` };
+    } catch (e) {
+      throw new Error(`Failed to remove ${targetDir}`);
+    }
+  };
+
   private getBotsDir = () => process.env.LOCAL_PUBLISH_PATH || path.resolve(this.baseDir, 'hostedBots');
 
   private getBotDir = (botId: string) => path.resolve(this.getBotsDir(), botId);

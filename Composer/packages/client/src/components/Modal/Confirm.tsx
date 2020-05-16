@@ -1,15 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import * as React from 'react';
-import { PropTypes } from 'prop-types';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import ReactDOM from 'react-dom';
 
-import { DialogStyle, BuiltInStyles, dialog, dialogModal } from './styles';
+import { DialogStyle, BuiltInStyles, dialog, dialogModal, confirmationContainer } from './styles';
 
-const ConfirmDialog = props => {
+interface ConfirmDialogProps {
+  onCancel: () => void;
+  onConfirm: () => void;
+  setting: any;
+}
+
+const ConfirmDialog: React.FC<ConfirmDialogProps> = props => {
   const { setting, onCancel, onConfirm } = props;
   const {
     title,
@@ -17,14 +25,23 @@ const ConfirmDialog = props => {
     onRenderContent = defaultContentRender,
     confirmBtnText = 'Yes',
     cancelBtnText = 'Cancel',
-    style = DialogStyle.normalStyle,
+    style = DialogStyle.Normal,
+    checkboxLabel,
+    styles = { content: {}, main: {}, modal: {} },
   } = setting;
+
+  const [disabled, setDisabled] = React.useState(setting.disabled);
+
+  const handleCheckbox = (event, checked) => {
+    setDisabled(!checked);
+  };
+
   if (!title) {
     throw new Error('confirm modal must give a title');
   }
 
   function defaultContentRender() {
-    return <div style={BuiltInStyles[style]}> {subTitle} </div>;
+    return <div css={BuiltInStyles[style]}> {subTitle} </div>;
   }
 
   return (
@@ -41,19 +58,16 @@ const ConfirmDialog = props => {
         styles: dialogModal,
       }}
     >
-      {onRenderContent(subTitle, BuiltInStyles[style])}
+      <div css={[confirmationContainer, styles.content]}>
+        {onRenderContent(subTitle, BuiltInStyles[style])}
+        {checkboxLabel && <Checkbox onChange={handleCheckbox} checked={!disabled} label={checkboxLabel} />}
+      </div>
       <DialogFooter>
-        <PrimaryButton data-testid="confirmPrompt" onClick={onConfirm} text={confirmBtnText} />
+        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} onClick={onConfirm} text={confirmBtnText} />
         <DefaultButton data-testid="cancelPrompt" onClick={onCancel} text={cancelBtnText} />
       </DialogFooter>
     </Dialog>
   );
-};
-
-ConfirmDialog.propTypes = {
-  setting: PropTypes.object,
-  onCancel: PropTypes.func,
-  onConfirm: PropTypes.func,
 };
 
 export const OpenConfirmModal = (title, subTitle, setting = {}) => {
