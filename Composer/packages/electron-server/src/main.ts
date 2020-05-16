@@ -53,9 +53,14 @@ async function createAppDataDir() {
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
   const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
+  const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
+
   log('creating composer app data path at: ', composerAppDataPath);
+
   process.env.LOCAL_PUBLISH_PATH = localPublishPath;
+  process.env.AZURE_PUBLISH_PATH = azurePublishPath;
+
   log('creating local bot runtime publish path: ', localPublishPath);
   await mkdirp(localPublishPath);
 }
