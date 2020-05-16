@@ -4,8 +4,10 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
-import { Button, IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { Button } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+
+import { isElectron } from '../../utils/electronUtil';
 
 import {
   itemContainerWrapper,
@@ -16,8 +18,12 @@ import {
   childrenContainer,
 } from './styles';
 
-interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
-  onClick?: () => void | Promise<void>;
+const { openExternal } = window;
+
+type onClickFunctionType = () => void | Promise<void>;
+
+interface ItemContainerProps {
+  onClick?: onClickFunctionType | boolean;
   title: string | JSX.Element;
   subContent?: string;
   content: string;
@@ -70,9 +76,16 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     <Button
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async e => {
+        const { href } = rest;
         if (onClick) {
-          e.preventDefault();
-          await onClick();
+          if (isElectron() && onClick === true) {
+            e.preventDefault();
+            return openExternal(href, { activate: true });
+          }
+          if (!href) {
+            e.preventDefault();
+            await onClick();
+          }
         }
       }}
       {...rest}

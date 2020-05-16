@@ -18,6 +18,7 @@ import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
+
 const linksButtom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
@@ -203,6 +204,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                   title={item.title}
                   content={item.content}
                   subContent={item.subContent}
+                  onClick={true}
                   href={item.href}
                   target="_blank"
                   rel="noopener nofollow"
