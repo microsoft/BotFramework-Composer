@@ -89,6 +89,7 @@ export interface RuntimeTemplate {
 
 export interface State {
   dialogs: DialogInfo[];
+  testDialogs: DialogInfo[];
   projectId: string;
   botName: string;
   location: string;

@@ -70,7 +70,7 @@ const getTabFromFragment = () => {
 const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const {
-    dialogs,
+    testDialogs,
     displaySkillManifest,
     breadcrumb,
     visualEditorSelection,
@@ -95,23 +95,23 @@ const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
+  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(testDialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const shell = useShell('ProjectTree');
   const triggerApi = useTriggerApi(shell.api);
 
   useEffect(() => {
-    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+    const currentDialog = testDialogs.find(({ id }) => id === dialogId);
     if (currentDialog) {
       setCurrentDialog(currentDialog);
     }
-    const rootDialog = dialogs.find(({ isRoot }) => isRoot === true);
+    const rootDialog = testDialogs.find(({ isRoot }) => isRoot === true);
     if (!currentDialog && rootDialog) {
       const { search } = location || {};
-      navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
+      navigateTo(`/bot/${projectId}/tests/${rootDialog.id}${search}`);
       return;
     }
-  }, [dialogId, dialogs, location]);
+  }, [dialogId, testDialogs, location]);
 
   useEffect(() => {
     const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
@@ -162,7 +162,7 @@ const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
     <React.Fragment>
       <div css={pageRoot}>
         <ProjectTree
-          dialogs={dialogs}
+          dialogs={testDialogs}
           dialogId={dialogId}
           selected={selected}
           onSelect={handleSelect}

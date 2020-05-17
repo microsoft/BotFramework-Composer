@@ -7,6 +7,7 @@ import merge from 'lodash/merge';
 import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import {
+  FileInfo,
   SensitiveProperties,
   LuFile,
   LgFile,
@@ -28,6 +29,7 @@ import { getReferredFiles } from '../../utils/luUtil';
 import { isElectron } from '../../utils/electronUtil';
 
 import createReducer from './createReducer';
+import { string, any } from 'prop-types';
 
 const projectFiles = ['bot', 'botproj'];
 
@@ -80,12 +82,59 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
   return updateLuFilesStatus(botName, luFiles);
 };
 
+const getTestDialogs = (testDir: string, testFiles: FileInfo[]) => {
+  const folderFile = new Map<string, DialogInfo>();
+  testFiles.forEach(element => {
+    const parts = element.path.substr(testDir.length + 1).split('/');
+    if (!folderFile.has(parts[0])) {
+      const dialog = {
+        content: any,
+        diagnostics: [],
+        displayName: parts[0],
+        id: parts[0],
+        isRoot: folderFile.size == 0,
+        lgFile: testDir + '/' + parts[0],
+        lgTemplates: [],
+        luFile: '',
+        referredLuIntents: [],
+        referredDialogs: [],
+        triggers: [],
+        intentTriggers: [],
+      };
+      folderFile.set(parts[0], dialog);
+    }
+    const trigger = {
+      id: element.name,
+      displayName: element.name,
+      isIntent: false,
+      type: element.path,
+    };
+    const dialog = folderFile.get(parts[0]);
+    if (dialog) dialog.triggers.push(trigger);
+  });
+  return Array.from(folderFile.values());
+};
+
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
+  const {
+    files,
+    botName,
+    botEnvironment,
+    location,
+    schemas,
+    settings,
+    id,
+    locale,
+    diagnostics,
+    testDir,
+    testFiles,
+  } = response.data;
+  const testDialogs = getTestDialogs(testDir, testFiles);
   schemas.sdk.content = processSchema(id, schemas.sdk.content);
   const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
+  state.testDialogs = testDialogs;
   state.botEnvironment = botEnvironment || state.botEnvironment;
   state.botName = botName;
   state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
