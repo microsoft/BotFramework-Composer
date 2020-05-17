@@ -15,6 +15,7 @@ import { StoreContext } from './store';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
 const DesignPage = React.lazy(() => import('./pages/design'));
+const TestsPage = React.lazy(() => import('./pages/tests'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));
 const SettingPage = React.lazy(() => import('./pages/setting'));
@@ -49,6 +50,7 @@ const Routes = props => {
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
+            <TestsPage path="tests/:dialogId/*" />
           </ProjectRouter>
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />

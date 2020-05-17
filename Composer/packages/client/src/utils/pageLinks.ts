@@ -20,6 +20,13 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
+      to: `/bot/${projectId}/tests/${openedDialogId}`,
+      iconName: 'TestPlan',
+      labelName: formatMessage('Tests'),
+      exact: false,
+      disabled: !botLoaded,
+    },
+    {
       to: `/bot/${projectId}/language-generation`,
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),

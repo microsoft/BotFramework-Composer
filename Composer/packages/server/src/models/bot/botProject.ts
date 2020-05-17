@@ -61,6 +61,8 @@ export class BotProject {
   public dir: string;
   public dataDir: string;
   public files: FileInfo[] = [];
+  public testDir: string = '';
+  public testFiles: FileInfo[] = [];
   public fileStorage: IFileStorage;
   public luPublisher: LuPublisher;
   public defaultSDKSchema: {
@@ -98,6 +100,8 @@ export class BotProject {
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
+    this.testDir = await this._getTestDir(this.dir, this.name);
+    this.testFiles = await this._getTestFiles(this.testDir);
   };
 
   public getProject = () => {
@@ -105,6 +109,8 @@ export class BotProject {
       botName: this.name,
       locale: this.locale,
       files: this.files,
+      testDir: this.testDir,
+      testFiles: this.testFiles,
       location: this.dir,
       schemas: this.getSchemas(),
       skills: this.skills,
@@ -480,6 +486,37 @@ export class BotProject {
 
     const schemas = await this._getSchemas();
     fileList.push(...schemas);
+
+    return fileList;
+  };
+
+  private _getTestDir = async (dir: string, name: string) => {
+    const testDir = Path.join(dir, '..', 'tests', `${name}tests`);
+    return testDir;
+  };
+
+  private _getTestFiles = async (testDir: string) => {
+    const isDir = (await this.fileStorage.exists(testDir)) && (await this.fileStorage.stat(testDir)).isDir;
+    const fileList: FileInfo[] = [];
+    if (!isDir) {
+      return fileList;
+    }
+
+    const patterns = ['**/*.dialog'];
+    for (const pattern of patterns) {
+      // load only from the data dir, otherwise may get "build" versions from
+      // deployment process
+      const root = testDir;
+      const paths = await this.fileStorage.glob([pattern, '!(generated/**)'], root);
+
+      for (const filePath of paths.sort()) {
+        const realFilePath: string = Path.join(root, filePath);
+        const fileInfo = await this._getFileInfo(realFilePath);
+        if (fileInfo) {
+          fileList.push(fileInfo);
+        }
+      }
+    }
 
     return fileList;
   };
