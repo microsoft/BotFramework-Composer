@@ -76,7 +76,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = prop
     if (state.projectId !== props.projectId && props.projectId) {
       actions.fetchProjectById(props.projectId);
     }
-  }, [props.projectId, state.projectId]);
+  }, [props.projectId]);
 
   if (state.botOpening || props.projectId !== state.projectId) {
     return <LoadingSpinner />;

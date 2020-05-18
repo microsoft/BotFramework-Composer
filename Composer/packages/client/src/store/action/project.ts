@@ -103,7 +103,13 @@ export const deleteBotProject: ActionCreator = async (store, projectId) => {
       type: ActionTypes.REMOVE_PROJECT_SUCCESS,
     });
   } catch (e) {
-    console.log(e);
+    store.dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: {
+        message: e.message,
+        summary: 'Delete Bot Error',
+      },
+    });
   }
 };
 
