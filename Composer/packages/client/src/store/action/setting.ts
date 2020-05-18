@@ -7,7 +7,12 @@ import { ActionTypes } from './../../constants/index';
 import { BotEnvironments } from './../../utils/envUtil';
 import httpClient from './../../utils/httpUtil';
 
-export const setSettings: ActionCreator = async ({ dispatch }, projectId: string, settings: DialogSetting) => {
+export const setSettings: ActionCreator = async (
+  { dispatch },
+  projectId: string,
+  botName: string,
+  settings: DialogSetting
+) => {
   dispatch({
     type: ActionTypes.SYNC_ENV_SETTING,
     payload: {

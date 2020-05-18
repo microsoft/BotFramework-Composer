@@ -48,7 +48,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const saveChangeResult = result => {
     try {
       const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
-      actions.setSettings(projectId, mergedResult, absHosted ? slot : undefined);
+      actions.setSettings(projectId, botName, mergedResult, absHosted ? slot : undefined);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err.message);
