@@ -69,17 +69,20 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
   }
 };
 
-export const testTarget: ActionCreator = async ({ getState, dispatch }, target) => {
+export const testTarget: ActionCreator = async ({ getState, dispatch }, projectId, target) => {
   try {
     const state = getState();
-    const err = {
-      response: {
-        data: {
-          message: formatMessage(state.testPath),
-        },
+    const response = await httpClient.post(`/projects/${projectId}/test`, {
+      isTestFolder: state.isTestFolder,
+      testPath: state.testPath,
+    });
+    dispatch({
+      type: ActionTypes.PUBLISH_FAILED,
+      payload: {
+        error: response.data,
+        target: target,
       },
-    };
-    throw err;
+    });
   } catch (err) {
     dispatch({
       type: ActionTypes.PUBLISH_FAILED,

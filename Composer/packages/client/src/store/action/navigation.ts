@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import get from 'lodash/get';
+
 import { getSelected } from '../../utils';
 
 import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
-
-import get from 'lodash/get';
 
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },

@@ -229,6 +229,33 @@ async function removeFile(req: Request, res: Response) {
   }
 }
 
+async function runTest(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const tester = '';
+    let cmd = '';
+    if (req.body.isTestFolder) {
+      cmd = `${tester} --debug true --autoDetect true --testSubFolder ${req.body.testPath}`;
+    } else {
+      cmd = `${tester} --debug true --autoDetect true --pattern ${req.body.testPath}`;
+    }
+
+    const result = {
+      message: cmd,
+      target: {
+        name: 'default',
+      },
+      endpointURL: 'http://localhost',
+    };
+    res.status(200).json(result);
+  } else {
+    res.status(404).json({ error: 'No bot project opened' });
+  }
+}
+
 async function getDefaultSlotEnvSettings(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -413,6 +440,7 @@ export const ProjectController = {
   updateFile,
   createFile,
   removeFile,
+  runTest,
   getEnvSettings,
   getDefaultSlotEnvSettings,
   updateEnvSettings,

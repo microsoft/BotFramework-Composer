@@ -20,6 +20,7 @@ router.put('/projects/open', ProjectController.openProject);
 router.put('/projects/:projectId/files/:name', ProjectController.updateFile);
 router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
+router.post('/projects/:projectId/test', ProjectController.runTest);
 router.get('/projects/:projectId/settings', ProjectController.getDefaultSlotEnvSettings); // ?obfuscate=<boolean>
 router.post('/projects/:projectId/settings', ProjectController.updateDefaultSlotEnvSettings);
 router.get('/projects/:projectId/settings/:slot', ProjectController.getEnvSettings); // ?obfuscate=<boolean>

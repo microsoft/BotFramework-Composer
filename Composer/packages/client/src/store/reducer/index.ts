@@ -17,6 +17,7 @@ import {
   dereferenceDefinitions,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
+import { any } from 'prop-types';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
@@ -29,7 +30,6 @@ import { getReferredFiles } from '../../utils/luUtil';
 import { isElectron } from '../../utils/electronUtil';
 
 import createReducer from './createReducer';
-import { string, any } from 'prop-types';
 
 const projectFiles = ['bot', 'botproj'];
 

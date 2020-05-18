@@ -58,6 +58,8 @@ const getUserSettings = (): UserSettings => {
 export const initialState: State = {
   dialogs: [],
   testDialogs: [],
+  isTestFolder: false,
+  testPath: '',
   projectId: '',
   botName: '',
   location: '', // the path to the bot project

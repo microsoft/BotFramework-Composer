@@ -3,61 +3,20 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Suspense, useContext, useEffect, useMemo, useState } from 'react';
-import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
-import formatMessage from 'format-message';
+import React, { useContext, useEffect, useState } from 'react';
 import { globalHistory, RouteComponentProps } from '@reach/router';
-import get from 'lodash/get';
 import { PromptTab } from '@bfc/shared';
-import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import { JsonEditor } from '@bfc/code-editor';
-import { useTriggerApi } from '@bfc/extension';
+import { SDKKinds, DialogInfo } from '@bfc/shared';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestsController } from '../../components/TestsController';
-import { DialogDeleting } from '../../constants';
-import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
-import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
-import { Conversation } from '../../components/Conversation';
-import { DialogStyle } from '../../components/Modal/styles';
-import { OpenConfirmModal } from '../../components/Modal/Confirm';
+import { createSelectedPath } from '../../utils';
 import { ProjectTree } from '../../components/ProjectTree';
 import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
-import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
-import { useShell } from '../../shell';
-
-import { VisualEditorAPI } from '../design/FrameAPI';
-import { breadcrumbClass, contentWrapper, deleteDialogContent, pageRoot } from '../design/styles';
-
-function onRenderContent(subTitle, style) {
-  return (
-    <div css={deleteDialogContent}>
-      <p>{DialogDeleting.CONTENT}</p>
-      {subTitle && <div style={style}>{subTitle}</div>}
-      <p>{DialogDeleting.CONFIRM_CONTENT}</p>
-    </div>
-  );
-}
-
-function onRenderBreadcrumbItem(item, render) {
-  return <span>{render(item)}</span>;
-}
-
-function getAllRef(targetId, dialogs) {
-  let refs: string[] = [];
-  dialogs.forEach(dialog => {
-    if (dialog.id === targetId) {
-      refs = refs.concat(dialog.referredDialogs);
-    } else if (!dialog.referredDialogs.every(item => item !== targetId)) {
-      refs.push(dialog.displayName || dialog.id);
-    }
-  });
-  return refs;
-}
+import { contentWrapper, pageRoot } from '../design/styles';
 
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
@@ -69,36 +28,22 @@ const getTabFromFragment = () => {
 
 const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
+  const { testDialogs, breadcrumb, projectId, designPageLocation } = state;
   const {
-    testDialogs,
-    displaySkillManifest,
-    breadcrumb,
-    visualEditorSelection,
-    projectId,
-    schemas,
-    focusPath,
-    designPageLocation,
-  } = state;
-  const {
-    dismissManifestModal,
-    removeDialog,
     setDesignPageLocation,
     navToTest,
     selectToTest,
     setectAndfocus,
-    updateDialog,
     clearUndoHistory,
     onboardingAddCoachMarkRef,
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
-  const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
-  const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
+  const [, setTriggerModalVisibility] = useState(false);
+  const [] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(testDialogs[0]);
-  const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
-  const shell = useShell('ProjectTree');
-  const triggerApi = useTriggerApi(shell.api);
+  const [, setExportSkillModalVisible] = useState(false);
 
   useEffect(() => {
     const currentDialog = testDialogs.find(({ id }) => id === dialogId);
@@ -174,9 +119,9 @@ const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
     }
   }
 
-  async function handleDeleteDialog(id) {}
+  async function handleDeleteDialog() {}
 
-  async function handleDeleteTrigger(id, index) {}
+  async function handleDeleteTrigger() {}
 
   if (!dialogId) {
     return <LoadingSpinner />;
