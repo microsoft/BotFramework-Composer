@@ -21,7 +21,6 @@ import { RequireAuth } from './components/RequireAuth';
 import onboardingState from './utils/onboardingStorage';
 import { isElectron } from './utils/electronUtil';
 import { useLinks } from './utils/hooks';
-import { LoadingSpinner } from './components/LoadingSpinner';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -36,7 +35,7 @@ export const App: React.FC = () => {
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
   const { onboardingSetComplete } = actions;
-  const { botName, locale, announcement, botOpening } = state;
+  const { botName, locale, announcement } = state;
   const { topLinks, bottomLinks } = useLinks();
 
   useEffect(() => {
@@ -110,7 +109,6 @@ export const App: React.FC = () => {
           </div>
         </nav>
         <div css={rightPanel}>
-          {botOpening && <LoadingSpinner />}
           <ErrorBoundary>
             <RequireAuth>
               <Routes component={Content} />

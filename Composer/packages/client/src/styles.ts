@@ -75,4 +75,6 @@ export const rightPanel = () => css`
 
 export const data = css`
   height: calc(100vh - 50px);
+
+  label: RouteContent;
 `;
