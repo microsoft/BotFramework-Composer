@@ -107,12 +107,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const getProjectPending: ReducerFunc = state => {
-  state.botOpening = true;
-  return state;
-};
-
-const removeProjectSuccess: ReducerFunc = state => {
+const resetProjectState: ReducerFunc = state => {
   state.projectId = initialState.projectId;
   state.dialogs = initialState.dialogs;
   state.botEnvironment = initialState.botEnvironment;
@@ -127,6 +122,11 @@ const removeProjectSuccess: ReducerFunc = state => {
   state.locale = initialState.locale;
   state.skillManifests = initialState.skillManifests;
   return state;
+};
+
+const getProjectPending: ReducerFunc = state => {
+  state.botOpening = true;
+  return resetProjectState(state, undefined);
 };
 
 const getProjectFailure: ReducerFunc = (state, { error }) => {
@@ -645,7 +645,7 @@ export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
-  [ActionTypes.REMOVE_PROJECT_SUCCESS]: removeProjectSuccess,
+  [ActionTypes.REMOVE_PROJECT_SUCCESS]: resetProjectState,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
