@@ -40,6 +40,7 @@ export function ToolBar(props) {
     onCreateDialogComplete,
     onboardingAddCoachMarkRef,
     showSkillManifestModal,
+    openDeleteBotModal,
     ...rest
   } = props;
   let left = [];

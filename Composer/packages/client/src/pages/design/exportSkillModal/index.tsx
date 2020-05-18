@@ -96,6 +96,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
         <div css={styles.content}>
           <Content
             completeStep={handleNext}
+            editJson={handleEditJson}
             errors={errors}
             onChange={(manifestContent) => updateSkillManifest({ ...skillManifest, content: manifestContent })}
             schema={schema}

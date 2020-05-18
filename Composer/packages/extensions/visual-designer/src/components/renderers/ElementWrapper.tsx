@@ -3,9 +3,10 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC, useContext, ReactNode, ReactElement } from 'react';
+import { FC, useCallback, useContext, ReactNode, ReactElement } from 'react';
 import classnames from 'classnames';
 import { generateSDKTitle } from '@bfc/shared';
+import { useShellApi } from '@bfc/extension';
 
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -62,6 +63,11 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
   const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
   const nodeSelected = selectedIds.includes(id);
 
+  const { shellApi } = useShellApi();
+  const { addCoachMarkRef } = shellApi;
+
+  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef({ action }), []);
+
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
       [AttrNames.NodeElement]: true,
@@ -78,6 +84,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
 
   return (
     <div
+      ref={addRef}
       className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
       css={css`
         position: relative;

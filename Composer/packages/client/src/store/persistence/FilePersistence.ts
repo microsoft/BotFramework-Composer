@@ -24,6 +24,7 @@ const actionType2ChangeType = {
   [ActionTypes.CREATE_SKILL_MANIFEST]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
+  [ActionTypes.SYNC_ENV_SETTING]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
 };
 
 class FilePersistence {
@@ -82,47 +83,58 @@ class FilePersistence {
   private init(payload) {
     if (payload) {
       if (this._projectId !== payload.response.data.id) {
-        this._taskQueue = {};
         this._projectId = payload.response.data.id;
       }
     }
   }
 
-  public async flush() {
+  public async flush(): Promise<boolean> {
     try {
-      if (this._isFlushing) return;
+      if (this._isFlushing) {
+        return new Promise((resolve) => {
+          const timer = setInterval(() => {
+            if (!this.isEmpty()) {
+              clearInterval(timer);
+              resolve(true);
+            }
+          }, 100);
+        });
+      }
+
       this._isFlushing = true;
-      while (!this._isEmpty()) {
+      while (!this.isEmpty()) {
         const tasks: Promise<void>[] = [];
         keys(this._taskQueue).forEach((key) => {
           const fileChange = this._mergeChanges(this._taskQueue[key]);
           this._taskQueue[key] = [];
-          if (fileChange) tasks.push(this._operator[fileChange.type](fileChange, this._projectId));
+          if (fileChange) tasks.push(this._operator[fileChange.type](fileChange));
         });
         await Promise.all(tasks);
       }
       this._isFlushing = false;
+      return Promise.resolve(true);
     } catch (error) {
       this._handleError('')(error);
+      return Promise.resolve(false);
     }
   }
 
-  private async _delete(fileChange: IFileChange, projectId: string) {
-    const { id } = fileChange;
+  private async _delete(fileChange: IFileChange) {
+    const { id, projectId } = fileChange;
     await client.deleteFile(projectId, id);
   }
 
-  private async _update(fileChange: IFileChange, projectId: string) {
-    const { id, change } = fileChange;
+  private async _update(fileChange: IFileChange) {
+    const { id, change, projectId } = fileChange;
     await client.updateFile(projectId, id, change);
   }
 
-  private async _create(fileChange: IFileChange, projectId: string) {
-    const { id, change } = fileChange;
+  private async _create(fileChange: IFileChange) {
+    const { id, change, projectId } = fileChange;
     await client.createFile(projectId, id, change);
   }
 
-  private _isEmpty() {
+  private isEmpty() {
     return keys(this._taskQueue).every((key) => !this._taskQueue[key].length);
   }
 
@@ -136,15 +148,22 @@ class FilePersistence {
     return changes[lastIndex];
   }
 
-  private _createChange(file: any, fileExtension: FileExtensions, changeType: ChangeType): IFileChange {
+  private _createChange(
+    file: any,
+    fileExtension: FileExtensions,
+    changeType: ChangeType,
+    projectId: string
+  ): IFileChange {
     let content = file.content;
-    if (fileExtension === FileExtensions.Dialog || fileExtension === FileExtensions.Manifest) {
+    const isJson = [FileExtensions.Dialog, FileExtensions.Manifest, FileExtensions.Setting].includes(fileExtension);
+    if (isJson) {
       content = JSON.stringify(content, null, 2) + '\n';
     }
-    return { id: `${file.id}${fileExtension}`, change: content, type: changeType };
+    return { id: `${file.id}${fileExtension}`, change: content, type: changeType, projectId };
   }
 
   private _getDialogFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+    const projectId = currentState.projectId;
     const fileChanges: IFileChange[] = [];
     let { dialogs, luFiles, lgFiles } = currentState;
 
@@ -160,38 +179,51 @@ class FilePersistence {
       luFiles
         .filter((lu) => getBaseName(lu.id) === id)
         .forEach((lu) => {
-          fileChanges.push(this._createChange(lu, FileExtensions.Lu, changeType));
+          fileChanges.push(this._createChange(lu, FileExtensions.Lu, changeType, projectId));
         });
       lgFiles
         .filter((lg) => getBaseName(lg.id) === id)
         .forEach((lg) => {
-          fileChanges.push(this._createChange(lg, FileExtensions.Lg, changeType));
+          fileChanges.push(this._createChange(lg, FileExtensions.Lg, changeType, projectId));
         });
     }
     const dialog = dialogs.find((dialog) => dialog.id === id);
-    fileChanges.push(this._createChange(dialog, FileExtensions.Dialog, changeType));
+    fileChanges.push(this._createChange(dialog, FileExtensions.Dialog, changeType, projectId));
     return fileChanges;
   }
 
-  private _getLuFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+  private _getLuFileChanges(
+    id: string,
+    previousState: State,
+    currentState: State,
+    changeType: ChangeType,
+    projectId: string
+  ) {
     const fileChanges: IFileChange[] = [];
     const { luFiles } = currentState;
 
     const lu = luFiles.find((lu) => lu.id === id);
-    fileChanges.push(this._createChange(lu, FileExtensions.Lu, changeType));
+    fileChanges.push(this._createChange(lu, FileExtensions.Lu, changeType, projectId));
     return fileChanges;
   }
 
-  private _getLgFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+  private _getLgFileChanges(
+    id: string,
+    previousState: State,
+    currentState: State,
+    changeType: ChangeType,
+    projectId: string
+  ) {
     const fileChanges: IFileChange[] = [];
     const { lgFiles } = currentState;
 
     const lg = lgFiles.find((lg) => lg.id === id);
-    fileChanges.push(this._createChange(lg, FileExtensions.Lg, changeType));
+    fileChanges.push(this._createChange(lg, FileExtensions.Lg, changeType, projectId));
     return fileChanges;
   }
 
   private _getSkillManifestsChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+    const projectId = currentState.projectId;
     const fileChanges: IFileChange[] = [];
     let { skillManifests } = currentState;
 
@@ -199,8 +231,19 @@ class FilePersistence {
       skillManifests = previousState.skillManifests;
     }
     const skillManifest = skillManifests.find((skill) => skill.id === id);
-    fileChanges.push(this._createChange(skillManifest, FileExtensions.Manifest, changeType));
+    fileChanges.push(this._createChange(skillManifest, FileExtensions.Manifest, changeType, projectId));
     return fileChanges;
+  }
+
+  private _getSettingsChanges(previousState: State, currentState: State, projectId: string) {
+    return [
+      {
+        id: `${FileExtensions.Setting}`,
+        change: JSON.stringify(currentState.settings, null, 2),
+        type: ChangeType.UPDATE,
+        projectId,
+      },
+    ];
   }
 
   private _getFileChanges(previousState: State, currentState: State, action: ActionType): IFileChange[] {
@@ -218,16 +261,31 @@ class FilePersistence {
         break;
       }
       case FileExtensions.Lu: {
-        fileChanges = this._getLuFileChanges(targetId, previousState, currentState, changeType);
+        fileChanges = this._getLuFileChanges(
+          targetId,
+          previousState,
+          currentState,
+          changeType,
+          action.payload.projectId
+        );
         break;
       }
       case FileExtensions.Lg: {
-        fileChanges = this._getLgFileChanges(targetId, previousState, currentState, changeType);
+        fileChanges = this._getLgFileChanges(
+          targetId,
+          previousState,
+          currentState,
+          changeType,
+          action.payload.projectId
+        );
         break;
       }
       case FileExtensions.Manifest: {
         fileChanges = this._getSkillManifestsChanges(targetId, previousState, currentState, changeType);
         break;
+      }
+      case FileExtensions.Setting: {
+        fileChanges = this._getSettingsChanges(previousState, currentState, action.payload.projectId);
       }
     }
     return fileChanges;

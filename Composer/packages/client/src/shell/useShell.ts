@@ -173,6 +173,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
     updateUserSettings: actions.updateUserSettings,
     announce: actions.setMessage,
+    displayManifestModal: actions.displayManifestModal,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);

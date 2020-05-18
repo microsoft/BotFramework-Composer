@@ -54,7 +54,6 @@ export const introduction = css`
 
 export const newBotContainer = css`
   display: flex;
-  flex-wrap: wrap;
   margin: 20px 0;
 `;
 
@@ -85,6 +84,8 @@ export const itemContainer = css`
 
 export const itemContainerTitle = css`
   height: 100%;
+  color: white;
+  text-align: left;
   display: flex;
   align-items: center;
   font-size: 20px;
@@ -96,6 +97,8 @@ export const itemContainerTitle = css`
 
 export const itemContainerContent = css`
   height: 100%;
+  display: flex;
+  flex-direction: column;
   font-size: 16px;
   font-weight: 600;
   text-align: left;
@@ -174,7 +177,7 @@ export const disabledItem = {
 const baseBotItem = {
   container: css`
     padding: 0;
-    border-width: 0;
+    border-width: 1px;
     box-shadow: ${Depths.depth4};
     transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
     &:hover,
@@ -198,10 +201,17 @@ export const newBotItem = {
   `,
 };
 
-export const lastestBotItem = {
+export const latestBotItem = {
   ...baseBotItem,
   title: css`
     background-color: #56ccf2;
+  `,
+};
+
+export const tutorialTile = {
+  ...baseBotItem,
+  title: css`
+    background-color: #004c87;
   `,
 };
 

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
+import React, { forwardRef, useContext, useEffect, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
@@ -18,128 +18,41 @@ import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, 
 import { resolveToBasePath } from './utils/fileUtil';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
-import { AppUpdater } from './components/AppUpdater';
+import onboardingState from './utils/onboardingStorage';
+import { isElectron } from './utils/electronUtil';
+import { useLinks } from './utils/hooks';
 
 initializeIcons(undefined, { disableWarnings: true });
 
 const Onboarding = React.lazy(() => import('./Onboarding'));
+const AppUpdater = React.lazy(() =>
+  import('./components/AppUpdater').then((module) => ({ default: module.AppUpdater }))
+);
 
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const topLinks = (projectId: string, openedDialogId: string) => {
-  const botLoaded = !!projectId;
-  let links = [
-    {
-      to: '/home',
-      iconName: 'Home',
-      labelName: formatMessage('Home'),
-      exact: true,
-      disabled: false,
-    },
-    {
-      to: `/bot/${projectId}/dialogs/${openedDialogId}`,
-      iconName: 'SplitObject',
-      labelName: formatMessage('Design Flow'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    // {
-    //   to: '/test-conversation',
-    //   iconName: 'WaitListConfirm',
-    //   labelName: formatMessage('Test Conversation'),
-    //   exact: false,
-    //   disabled: true, // will delete
-    // },
-    {
-      to: `/bot/${projectId}/language-generation`,
-      iconName: 'Robot',
-      labelName: formatMessage('Bot Responses'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/language-understanding`,
-      iconName: 'People',
-      labelName: formatMessage('User Input'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    // {
-    //   to: '/evaluate-performance',
-    //   iconName: 'Chart',
-    //   labelName: formatMessage('Evaluate performance'),
-    //   exact: false,
-    //   disabled: true,
-    // },
-    {
-      to: `/bot/${projectId}/notifications`,
-      iconName: 'Warning',
-      labelName: formatMessage('Notifications'),
-      exact: true,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/publish`,
-      iconName: 'CloudUpload',
-      labelName: formatMessage('Publish'),
-      exact: true,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/skills`,
-      iconName: 'PlugDisconnected',
-      labelName: formatMessage('Skills'),
-      exact: true,
-      disabled: !botLoaded,
-    },
-    {
-      to: `/bot/${projectId}/settings/`,
-      iconName: 'Settings',
-      labelName: formatMessage('Settings'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-  ];
-
-  if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
-    links = links.filter((link) => link.to !== '/home');
-  }
-
-  return links;
-};
-
-const bottomLinks = [
-  // {
-  //   to: '/help',
-  //   iconName: 'unknown',
-  //   labelName: formatMessage('Info'),
-  //   exact: true,
-  //   disabled: true,
-  // },
-  {
-    to: '/about',
-    iconName: 'info',
-    labelName: formatMessage('About'),
-    exact: true,
-    disabled: false,
-  },
-];
-
 export const App: React.FC = () => {
-  const { state } = useContext(StoreContext);
+  const { actions, state } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
-  const { botName, projectId, dialogs, locale, designPageLocation, announcement } = state;
+  const { onboardingSetComplete } = actions;
+  const { botName, locale, announcement } = state;
+  const { topLinks, bottomLinks } = useLinks();
+
+  useEffect(() => {
+    onboardingSetComplete(onboardingState.getComplete());
+  }, []);
 
   const mapNavItemTo = (x) => resolveToBasePath(BASEPATH, x);
 
-  const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
+  const renderAppUpdater = isElectron();
+
   return (
     <Fragment>
       <div
-        aria-live="assertive"
         role="alert"
+        aria-live="assertive"
         style={{
           display: 'block',
           position: 'absolute',
@@ -155,27 +68,27 @@ export const App: React.FC = () => {
         <nav css={sideBar(sideBarExpand)}>
           <div>
             <IconButton
-              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
-              css={globalNav}
-              data-testid={'LeftNavButton'}
               iconProps={{
                 iconName: 'GlobalNavButton',
               }}
+              css={globalNav}
               onClick={() => {
                 setSideBarExpand(!sideBarExpand);
               }}
+              data-testid={'LeftNavButton'}
+              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />
             <div css={dividerTop} />{' '}
-            <FocusZone allowFocusRoot>
-              {topLinks(projectId, openedDialogId).map((link, index) => {
+            <FocusZone allowFocusRoot={true}>
+              {topLinks.map((link, index) => {
                 return (
                   <NavItem
-                    disabled={link.disabled}
-                    exact={link.exact}
-                    iconName={link.iconName}
                     key={'NavLeftBar' + index}
-                    labelName={link.labelName}
                     to={mapNavItemTo(link.to)}
+                    iconName={link.iconName}
+                    labelName={link.labelName}
+                    exact={link.exact}
+                    disabled={link.disabled}
                   />
                 );
               })}
@@ -186,12 +99,12 @@ export const App: React.FC = () => {
             {bottomLinks.map((link, index) => {
               return (
                 <NavItem
-                  disabled={link.disabled}
-                  exact={link.exact}
-                  iconName={link.iconName}
                   key={'NavLeftBar' + index}
-                  labelName={link.labelName}
                   to={mapNavItemTo(link.to)}
+                  iconName={link.iconName}
+                  labelName={link.labelName}
+                  exact={link.exact}
+                  disabled={link.disabled}
                 />
               );
             })}
@@ -205,7 +118,7 @@ export const App: React.FC = () => {
           </ErrorBoundary>
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
-        {(window as any).__IS_ELECTRON__ && <AppUpdater />}
+        <Suspense fallback={<div />}>{renderAppUpdater && <AppUpdater />}</Suspense>
       </div>
     </Fragment>
   );

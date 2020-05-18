@@ -137,7 +137,12 @@ class StorageService {
 
   private getChildren = async (storage: IFileStorage, dirPath: string) => {
     // TODO: filter files, folder which have no read and write
-    const children = (await storage.readDir(dirPath)).map(async (childName) => {
+    const children = (
+      await (await storage.readDir(dirPath)).filter((childName) => {
+        const regex = /^[.$]/;
+        return !regex.test(childName);
+      })
+    ).map(async (childName) => {
       try {
         if (childName === '') {
           return;

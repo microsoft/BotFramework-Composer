@@ -13,7 +13,7 @@ import { copyEditActions } from './copyEditActions';
 
 const CopyConstructorMap = {
   [SDKKinds.SendActivity]: copySendActivity,
-  [SDKKinds.SkillDialog]: copySendActivity,
+  [SDKKinds.BeginSkill]: copySendActivity,
   [SDKKinds.AttachmentInput]: copyInputDialog,
   [SDKKinds.ChoiceInput]: copyInputDialog,
   [SDKKinds.ConfirmInput]: copyInputDialog,

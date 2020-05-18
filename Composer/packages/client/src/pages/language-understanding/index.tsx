@@ -10,21 +10,12 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { ToolBar } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
-import { DialogTree } from '../../components/DialogTree';
+import { INavTreeItem } from '../../components/NavTree';
+import { Page } from '../../components/Page';
 
 import TableView from './table-view';
-import {
-  ContentHeaderStyle,
-  ContentStyle,
-  flexContent,
-  actionButton,
-  contentEditor,
-  HeaderText,
-  pageRoot,
-  contentWrapper,
-} from './styles';
+import { actionButton } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LUPageProps extends RouteComponentProps<{}> {
@@ -40,12 +31,11 @@ const LUPage: React.FC<LUPageProps> = (props) => {
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
 
-  const navLinks = useMemo(() => {
-    const newDialogLinks = dialogs.map((dialog) => {
+  const navLinks: INavTreeItem[] = useMemo(() => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
       return {
         id: dialog.id,
-        url: dialog.id,
-        key: dialog.id,
+        url: `/bot/${projectId}/language-understanding/${dialog.id}`,
         name: dialog.displayName,
         ariaLabel: formatMessage('language understanding file'),
       };
@@ -58,10 +48,9 @@ const LUPage: React.FC<LUPageProps> = (props) => {
     }
     newDialogLinks.splice(0, 0, {
       id: 'all',
-      key: 'all',
-      name: 'All',
+      name: formatMessage('All'),
       ariaLabel: formatMessage('all language understanding files'),
-      url: '',
+      url: `/bot/${projectId}/language-understanding/all`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -72,14 +61,6 @@ const LUPage: React.FC<LUPageProps> = (props) => {
       navigateTo(`/bot/${projectId}/language-understanding/all`);
     }
   }, [dialogId, dialogs, projectId]);
-
-  const onSelect = useCallback(
-    (id) => {
-      const url = `/bot/${projectId}/language-understanding/${id}`;
-      navigateTo(url);
-    },
-    [edit, projectId]
-  );
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
@@ -98,39 +79,39 @@ const LUPage: React.FC<LUPageProps> = (props) => {
     },
   ];
 
+  const onRenderHeaderContent = () => {
+    if (!isRoot || edit) {
+      return (
+        <Toggle
+          className={'toggleEditMode'}
+          css={actionButton}
+          onText={formatMessage('Edit mode')}
+          offText={formatMessage('Edit mode')}
+          defaultChecked={false}
+          checked={!!edit}
+          onChange={onToggleEditMode}
+        />
+      );
+    }
+
+    return null;
+  };
+
   return (
-    <div css={pageRoot} data-testid="LUPage">
-      <div css={contentWrapper}>
-        <ToolBar toolbarItems={toolbarItems} />
-        <div css={ContentHeaderStyle}>
-          <h1 css={HeaderText}>{formatMessage('User Input')}</h1>
-          <div css={flexContent}>
-            {(!isRoot || edit) && (
-              <Toggle
-                checked={!!edit}
-                className={'toggleEditMode'}
-                css={actionButton}
-                defaultChecked={false}
-                offText={formatMessage('Edit mode')}
-                onChange={onToggleEditMode}
-                onText={formatMessage('Edit mode')}
-              />
-            )}
-          </div>
-        </div>
-        <div css={ContentStyle} role="main">
-          <DialogTree dialogId={dialogId} navLinks={navLinks} onSelect={onSelect} />
-          <div css={contentEditor} data-testid="LUEditor">
-            <Suspense fallback={<LoadingSpinner />}>
-              <Router component={Fragment} primary={false}>
-                <CodeEditor dialogId={dialogId} path="/edit" />
-                <TableView dialogId={dialogId} path="/" />
-              </Router>
-            </Suspense>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Page
+      title={formatMessage('User Input')}
+      toolbarItems={toolbarItems}
+      navLinks={navLinks}
+      onRenderHeaderContent={onRenderHeaderContent}
+      data-testid="LUPage"
+    >
+      <Suspense fallback={<LoadingSpinner />}>
+        <Router primary={false} component={Fragment}>
+          <CodeEditor path="/edit" dialogId={dialogId} />
+          <TableView path="/" dialogId={dialogId} />
+        </Router>
+      </Suspense>
+    </Page>
   );
 };
 

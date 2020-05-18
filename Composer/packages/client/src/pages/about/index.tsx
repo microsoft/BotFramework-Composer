@@ -12,7 +12,7 @@ import * as about from './styles';
 
 export const About: React.FC<RouteComponentProps> = () => {
   return (
-    <div css={about.outline} role="main">
+    <div role="main" css={about.outline}>
       <div css={about.content}>
         <h1 css={about.title}> {formatMessage(`About`)} </h1>
         <div css={about.body}>
@@ -27,9 +27,9 @@ export const About: React.FC<RouteComponentProps> = () => {
               {formatMessage(`Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the
             latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code.`)}
               <Link
-                href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/toc.md'}
-                style={{ marginLeft: '5px', textDecoration: 'underline' }}
+                href={'https://docs.microsoft.com/en-us/composer/'}
                 target={'_blank'}
+                style={{ marginLeft: '5px', textDecoration: 'underline' }}
               >
                 {formatMessage(`Learn more`)}
               </Link>
@@ -37,24 +37,12 @@ export const About: React.FC<RouteComponentProps> = () => {
           </div>
           <div css={about.DiagnosticsInfo}>
             <div css={about.DiagnosticsInfoText}>
-              <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`Application SHA`)}</div>
-              <div css={about.DiagnosticsInfoTextAlignLeft}>
-                <Link
-                  href={`https://github.com/microsoft/BotFramework-Composer/commit/${process.env.GIT_SHA}`}
-                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
-                  target={'_blank'}
-                >
-                  {process.env.GIT_SHA || 'Unknown'}
-                </Link>
-              </div>
-            </div>
-            <div css={about.DiagnosticsInfoText}>
               <div css={about.DiagnosticsInfoTextAlignLeft}>{formatMessage(`SDK runtime packages`)}</div>
               <div css={about.DiagnosticsInfoTextAlignLeft}>
                 <Link
-                  href={`https://botbuilder.myget.org/feed/botbuilder-v4-dotnet-daily/package/nuget/Microsoft.Bot.Builder.Dialogs.Adaptive/${process.env.SDK_PACKAGE_VERSION}`}
-                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
+                  href={`https://www.nuget.org/packages/Microsoft.Bot.Builder/${process.env.SDK_PACKAGE_VERSION}`}
                   target={'_blank'}
+                  style={{ marginLeft: '5px', textDecoration: 'underline' }}
                 >
                   {process.env.SDK_PACKAGE_VERSION || 'Unknown'}
                 </Link>
@@ -65,29 +53,29 @@ export const About: React.FC<RouteComponentProps> = () => {
         <div css={about.linkRow}>
           <Link
             href={'https://github.com/microsoft/BotFramework-Composer/issues/new/choose'}
-            styles={about.helpLink}
             target={'_blank'}
+            styles={about.helpLink}
           >
             {formatMessage(`Getting Help`)}
           </Link>
         </div>
         <div css={about.linkContainer}>
           <div css={about.linkRow}>
-            <Icon iconName={'BlockedSite'} styles={about.icon} tabIndex={-1} />
+            <Icon styles={about.icon} iconName={'BlockedSite'} tabIndex={-1} />
             <Link
               href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/LICENSE.md'}
-              styles={about.link}
               target={'_blank'}
+              styles={about.link}
             >
               {formatMessage(`Terms of Use`)}
             </Link>
           </div>
           <div css={about.linkRow}>
-            <Icon ariaLabel={formatMessage('Privacy button')} iconName={'Lock'} styles={about.icon} />
+            <Icon styles={about.icon} ariaLabel={formatMessage('Privacy button')} iconName={'Lock'} />
             <Link
               href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/PRIVACY.md'}
-              styles={about.link}
               target={'_blank'}
+              styles={about.link}
             >
               {formatMessage(`Privacy`)}
             </Link>

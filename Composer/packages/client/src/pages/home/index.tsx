@@ -13,11 +13,13 @@ import { navigate } from '@reach/router';
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
 import { ToolBar } from '../../components/ToolBar/index';
+import { isElectron } from '../../utils/electronUtil';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
 import { RecentBotList } from './RecentBotList';
 import { ExampleList } from './ExampleList';
+
 const linksButtom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
@@ -31,20 +33,24 @@ const linksButtom = [
   },
 ];
 
-const comingSoonLink = {
-  to: '/home',
-  text: formatMessage('Coming soon!'),
-  css: home.bluetitle,
-};
-
 const turtorials = [
   {
-    title: formatMessage('Tutorial #1'),
-    content: formatMessage('Coming soon...'),
+    title: formatMessage('5 Minute Intro'),
+    content: formatMessage('Chris Whitten'),
+    subContent: formatMessage('Apr 9, 2020'),
+    href: 'https://aka.ms/bf-composer-tutorial-chris',
   },
   {
-    title: formatMessage('Tutorial #2'),
-    content: formatMessage('Coming soon...'),
+    title: formatMessage('Weather Bot'),
+    content: formatMessage('Ben Brown'),
+    subContent: formatMessage('Nov 12, 2019'),
+    href: 'https://aka.ms/bf-composer-tutorial-ben',
+  },
+  {
+    title: formatMessage('MSFT Ignite AI Show'),
+    content: formatMessage('Vishwac Sena'),
+    subContent: formatMessage('Jan 28, 2020'),
+    href: 'https://aka.ms/bf-composer-tutorial-vishwac',
   },
 ];
 
@@ -75,7 +81,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     navigate(`projects/create/${id}`);
   };
 
-  const addButton = <Icon iconName="Add" styles={home.button} />;
+  const addButton = <Icon styles={home.button} iconName="Add" />;
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
@@ -135,9 +141,9 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} toolbarItems={toolbarItems} />
+      <ToolBar toolbarItems={toolbarItems} onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} />
       <div css={home.page}>
-        <div css={home.leftPage} role="main">
+        <div role="main" css={home.leftPage}>
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div css={home.introduction}>
             {formatMessage(
@@ -147,34 +153,34 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.newBotContainer}>
             <div data-testid={'homePage-body-New'}>
               <ItemContainer
+                title={addButton}
                 content={formatMessage('New')}
+                styles={home.newBotItem}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
                   navigate('projects/create');
                 }}
-                styles={home.newBotItem}
-                title={addButton}
               />
             </div>
             {recentProjects.length > 0 ? (
               <ItemContainer
+                title={''}
                 content={recentProjects[0].name}
-                forwardedRef={addRef}
+                styles={home.latestBotItem}
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
-                styles={home.lastestBotItem}
-                title={''}
+                forwardedRef={addRef}
               />
             ) : (
               <ItemContainer
+                title={''}
                 content={'ToDoBotWithLuis'}
-                forwardedRef={addRef}
+                styles={home.latestBotItem}
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
-                styles={home.lastestBotItem}
-                title={''}
+                forwardedRef={addRef}
               />
             )}
           </div>
@@ -182,25 +188,28 @@ const Home: React.FC<RouteComponentProps> = () => {
             <div css={home.leftContainer}>
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
+                recentProjects={recentProjects}
                 onItemChosen={async (item) => {
                   await onItemChosen(item);
                 }}
-                recentProjects={recentProjects}
               />
             </div>
           )}
           <div css={home.leftContainer}>
-            <h2 css={home.subtitle}>
-              {formatMessage('Video tutorials:')}&nbsp;
-              <Link href={comingSoonLink.to} key={comingSoonLink.text} target={'_blank'}>
-                <span aria-label={'Video tutorials coming soon'} css={comingSoonLink.css}>
-                  {comingSoonLink.text}
-                </span>
-              </Link>
-            </h2>
+            <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
-                <ItemContainer content={item.content} disabled key={index} title={item.title} />
+                <ItemContainer
+                  styles={home.tutorialTile}
+                  key={index}
+                  title={item.title}
+                  content={item.content}
+                  subContent={item.subContent}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener nofollow"
+                  openExternal={isElectron()}
+                />
               ))}
               <div css={home.linkContainer}>
                 <div>
@@ -211,12 +220,12 @@ const Home: React.FC<RouteComponentProps> = () => {
                 {linksButtom.map((link) => {
                   return (
                     <Link
-                      href={link.to}
-                      key={'homePageLeftLinks-' + link.text}
-                      rel="noopener noreferrer"
                       style={{ width: '150px' }}
+                      href={link.to}
                       tabIndex={0}
+                      key={'homePageLeftLinks-' + link.text}
                       target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <div css={link.css}>{link.text}</div>
                     </Link>

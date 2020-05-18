@@ -60,11 +60,13 @@ describe('<DefineConversation/>', () => {
   });
 
   it('should render the component', () => {
+    storeContext.state.storages = [];
     component = renderComponent();
     expect(component.container).toBeDefined();
   });
 
   it('should update formdata with data passed through location props', async () => {
+    storeContext.state.storages = [];
     storeContext.state.templateId = 'EchoBot';
     locationMock = {
       search:

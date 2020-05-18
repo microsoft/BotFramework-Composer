@@ -30,7 +30,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [errorMessage, setErrorMsg] = useState('');
 
   const targetTypes = useMemo(() => {
-    return props.types.map((t) => ({ key: t.name, text: t.name }));
+    return props.types.map((t) => ({ key: t.name, text: t.description }));
   }, [props.targets]);
 
   const updateType = (_e, option?: IDropdownOption) => {
@@ -56,6 +56,10 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
       }
     }
   };
+
+  const instructions: string | undefined = useMemo((): string | undefined => {
+    return targetType ? props.types.find((t) => t.name === targetType)?.instructions : '';
+  }, [props.targets, targetType]);
 
   const schema = useMemo(() => {
     return targetType ? props.types.find((t) => t.name === targetType)?.schema : undefined;
@@ -86,26 +90,27 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     <Fragment>
       <form onSubmit={submit}>
         <TextField
+          placeholder={formatMessage('My Publish Profile')}
           defaultValue={props.current ? props.current.name : ''}
-          errorMessage={errorMessage}
           label={formatMessage('Name')}
           onChange={updateName}
-          placeholder={formatMessage('My Publish Profile')}
+          errorMessage={errorMessage}
         />
         <Dropdown
-          defaultSelectedKey={props.current ? props.current.type : null}
-          label={formatMessage('Publish Destination Type')}
-          onChange={updateType}
-          options={targetTypes}
           placeholder={formatMessage('Choose One')}
+          label={formatMessage('Publish Destination Type')}
+          options={targetTypes}
+          defaultSelectedKey={props.current ? props.current.type : null}
+          onChange={updateType}
         />
+        {instructions && <p>{instructions}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
-        <JsonEditor height={200} key={targetType} onChange={updateConfig} schema={schema} value={config} />
-        <button disabled={isDisable()} hidden type="submit" />
+        <JsonEditor key={targetType} onChange={updateConfig} height={200} value={config} schema={schema} />
+        <button type="submit" hidden disabled={isDisable()} />
       </form>
       <DialogFooter>
         <DefaultButton onClick={props.closeDialog} text={formatMessage('Cancel')} />
-        <PrimaryButton disabled={isDisable()} onClick={submit} text={formatMessage('Save')} />
+        <PrimaryButton onClick={submit} disabled={isDisable()} text={formatMessage('Save')} />
       </DialogFooter>
     </Fragment>
   );

@@ -1,12 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConceptLabels, DialogGroup, SDKKinds, dialogGroups, DialogInfo, DialogFactory, ITrigger } from '@bfc/shared';
+import {
+  ConceptLabels,
+  DialogGroup,
+  SDKKinds,
+  dialogGroups,
+  DialogInfo,
+  DialogFactory,
+  ITriggerCondition,
+} from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import { Expression } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import formatMessage from 'format-message';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -18,7 +28,7 @@ interface DialogsMap {
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
   $kind: string;
-  specifiedType: string;
+  event: string;
   intent: string;
   triggerPhrases: string;
   regexEx: string;
@@ -27,9 +37,10 @@ export interface TriggerFormData {
 export interface TriggerFormDataErrors {
   $kind?: string;
   intent?: string;
-  specifiedType?: string;
+  event?: string;
   triggerPhrases?: string;
   regexEx?: string;
+  activity?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
@@ -40,8 +51,8 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 export const eventTypeKey: string = SDKKinds.OnDialogEvent;
 export const intentTypeKey: string = SDKKinds.OnIntent;
 export const activityTypeKey: string = SDKKinds.OnActivity;
-export const messageTypeKey: string = SDKKinds.OnMessageEventActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
+export const customEventKey = 'OnCustomEvent';
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
@@ -52,13 +63,19 @@ function insert(content, path: string, position: number | undefined, data: any) 
 }
 
 function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
-  const optionalAttributes: { intent?: string; event?: string } = {};
-  if (data.specifiedType) {
-    data.$kind = data.specifiedType;
+  const optionalAttributes: { intent?: string; event?: string; $designer: { [key: string]: string } } = {
+    $designer: {},
+  };
+
+  if (data.event) {
+    optionalAttributes.event = data.event;
+    optionalAttributes.$designer.name = data.event;
   }
+
   if (data.intent) {
     optionalAttributes.intent = data.intent;
   }
+
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
 }
@@ -132,7 +149,7 @@ export function deleteTrigger(
   dialogs: DialogInfo[],
   dialogId: string,
   index: number,
-  callbackOnDeletedTrigger?: (trigger: ITrigger) => any
+  callbackOnDeletedTrigger?: (trigger: ITriggerCondition) => any
 ) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
@@ -143,7 +160,9 @@ export function deleteTrigger(
   }
   const triggers = get(dialogCopy, 'content.triggers');
   const removedTriggers = triggers.splice(index, 1);
-  callbackOnDeletedTrigger && callbackOnDeletedTrigger(removedTriggers[0]);
+  if (callbackOnDeletedTrigger && removedTriggers[0]) {
+    callbackOnDeletedTrigger(removedTriggers[0]);
+  }
   return dialogCopy.content;
 }
 
@@ -159,12 +178,16 @@ export function getTriggerTypes(): IDropdownOption[] {
 
       return { key: t, text: name || t };
     }),
+    {
+      key: customEventKey,
+      text: formatMessage('Custom events'),
+    },
   ];
   return triggerTypes;
 }
 
-export function getEventTypes(): IDropdownOption[] {
-  const eventTypes: IDropdownOption[] = [
+export function getEventTypes(): IComboBoxOption[] {
+  const eventTypes: IComboBoxOption[] = [
     ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
@@ -201,22 +224,6 @@ export function getActivityTypes(): IDropdownOption[] {
     }),
   ];
   return activityTypes;
-}
-
-export function getMessageTypes(): IDropdownOption[] {
-  const messageTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.MESSAGE_EVENTS].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return messageTypes;
 }
 
 function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {

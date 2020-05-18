@@ -47,6 +47,14 @@ export abstract class Notification implements INotification {
   }
 }
 
+export class ServerNotification extends Notification {
+  type = NotificationType.GENERAL;
+  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, id, location, diagnostic);
+    this.message = diagnostic.message;
+  }
+}
+
 export class DialogNotification extends Notification {
   type = NotificationType.DIALOG;
   constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {

@@ -20,6 +20,8 @@ export const EjectController = {
       let runtimePath;
       try {
         runtimePath = await template.eject(currentProject, new LocalDiskStorage());
+        // init bot project, make sure it include customize schema files
+        await currentProject.init();
       } catch (err) {
         res.status(500).json({
           message: err.message,

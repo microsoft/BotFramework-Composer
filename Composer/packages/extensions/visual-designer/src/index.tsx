@@ -8,7 +8,7 @@ import React, { useRef, useMemo } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
-import { useShellApi, JSONSchema7 } from '@bfc/extension';
+import { useShellApi, JSONSchema7, FlowSchema } from '@bfc/extension';
 
 import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
@@ -17,6 +17,7 @@ import { FlowSchemaContext } from './store/FlowSchemaContext';
 import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './utils/mergePluginConfig';
 import { getCustomSchema } from './utils/getCustomSchema';
+import { defaultFlowSchema } from './schema/defaultFlowSchema';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -66,7 +67,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
 
   const data = dataCache.current;
   const {
-    addCoachMarkRef,
     navTo,
     onFocusEvent,
     onFocusSteps,
@@ -109,6 +109,13 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);
+  const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
+    const definitionKeys: string[] = Object.keys(s.definitions);
+    definitionKeys.forEach(($kind) => {
+      result[$kind] = defaultFlowSchema.custom;
+    });
+    return result;
+  }, {} as FlowSchema);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -117,27 +124,25 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
           <FlowSchemaContext.Provider
             value={{
               widgets: visualEditorConfig.widgets,
-              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema),
+              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema),
             }}
           >
-            <div css={styles} data-testid="visualdesigner-container">
+            <div data-testid="visualdesigner-container" css={styles}>
               <ObiEditor
-                addCoachMarkRef={addCoachMarkRef}
-                announce={announce}
-                data={data}
-                focusedEvent={focusedEvent}
-                focusedSteps={focusedActions}
                 key={dialogId}
-                onChange={(x) => saveData(x)}
+                path={dialogId}
+                data={data}
+                focusedSteps={focusedActions}
+                onFocusSteps={onFocusSteps}
+                onFocusEvent={onFocusEvent}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
-                onFocusEvent={onFocusEvent}
-                onFocusSteps={onFocusSteps}
                 onOpen={(x) => navTo(x)}
+                onChange={(x) => saveData(x)}
                 onSelect={onSelect}
-                path={dialogId}
-                redo={redo}
                 undo={undo}
+                redo={redo}
+                announce={announce}
               />
             </div>
           </FlowSchemaContext.Provider>

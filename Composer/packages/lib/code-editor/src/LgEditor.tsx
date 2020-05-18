@@ -62,6 +62,12 @@ export function LgEditor(props: LGLSPEditorProps) {
   const { lgOption, languageServer, onInit: onInitProp, ...restProps } = props;
   const lgServer = languageServer || defaultLGServer;
 
+  let editorId = '';
+  if (lgOption) {
+    const { projectId, fileId, templateId } = lgOption;
+    editorId = [projectId, fileId, templateId].join('/');
+  }
+
   const onInit: OnInit = (monaco) => {
     registerLGLanguage(monaco);
 
@@ -103,14 +109,15 @@ export function LgEditor(props: LGLSPEditorProps) {
 
   return (
     <BaseEditor
-      helpURL={LG_HELP}
       placeholder={placeholder}
+      helpURL={LG_HELP}
+      id={editorId}
       {...restProps}
-      editorDidMount={editorDidMount}
-      language="botbuilderlg"
       onInit={onInit}
-      options={options}
       theme="lgtheme"
+      language="botbuilderlg"
+      options={options}
+      editorDidMount={editorDidMount}
     />
   );
 }

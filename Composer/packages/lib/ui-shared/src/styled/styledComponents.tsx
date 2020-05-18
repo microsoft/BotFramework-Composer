@@ -61,6 +61,13 @@ export const Text = styled.span(
       color: ${color};
     `
 );
+export const MultilineTextWithEllipsis = styled.div`
+  ${StandardFontCSS};
+  white-space: pre;
+  line-height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 export const FixedInfo = styled.span`
   ${StandardFontCSS};

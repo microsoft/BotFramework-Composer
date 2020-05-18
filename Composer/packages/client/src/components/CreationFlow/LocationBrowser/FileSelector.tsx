@@ -35,6 +35,7 @@ interface FileSelectorProps {
     write: boolean;
   };
   focusedStorageFolder: StorageFolder;
+  isWindows: boolean;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onFileChosen: (file: any) => void;
   checkShowItem: (file: File) => boolean;
@@ -48,21 +49,21 @@ type SortState = {
 const _renderIcon = (file: File) => {
   const iconName = getFileIconName(file);
   if (iconName === FileTypes.FOLDER) {
-    return <Icon iconName="OpenFolderHorizontal" style={{ fontSize: '16px' }} />;
+    return <Icon style={{ fontSize: '16px' }} iconName="OpenFolderHorizontal" />;
   } else if (iconName === FileTypes.BOT) {
-    return <Icon iconName="Robot" style={{ fontSize: '16px' }} />;
+    return <Icon style={{ fontSize: '16px' }} iconName="Robot" />;
   } else if (iconName === FileTypes.UNKNOWN) {
-    return <Icon iconName="Page" style={{ fontSize: '16px' }} />;
+    return <Icon style={{ fontSize: '16px' }} iconName="Page" />;
   }
   // fallback for other possible file types
   const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
-  return <img alt={`${iconName} file icon`} className={detailListClass.fileIconImg} src={url} />;
+  return <img src={url} className={detailListClass.fileIconImg} alt={`${iconName} file icon`} />;
 };
 
 const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) => {
   const iconName = getFileIconName(file);
   return (
-    <div css={tableCell} data-is-focusable>
+    <div data-is-focusable={true} css={tableCell}>
       <Link
         aria-label={
           file.name === '..'
@@ -81,7 +82,14 @@ const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) =
 };
 
 export const FileSelector: React.FC<FileSelectorProps> = (props) => {
-  const { onFileChosen, focusedStorageFolder, checkShowItem, onCurrentPathUpdate, operationMode } = props;
+  const {
+    onFileChosen,
+    focusedStorageFolder,
+    checkShowItem,
+    onCurrentPathUpdate,
+    operationMode,
+    isWindows = false,
+  } = props;
   // for detail file list in open panel
   const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
 
@@ -123,11 +131,11 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       data: 'number',
       onRender: (item: File) => {
         return (
-          <div css={tableCell} data-is-focusable>
+          <div css={tableCell} data-is-focusable={true}>
             <div
-              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.lastModified) })}
-              css={content}
               tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.lastModified) })}
             >
               {calculateTimeDiff(item.lastModified)}
             </div>
@@ -146,7 +154,13 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     const files = focusedStorageFolder.children.reduce((result, file) => {
       const check = typeof checkShowItem === 'function' ? checkShowItem : () => true;
       if (check(file)) {
-        result.push(file);
+        if (isWindows) {
+          const newName = file.name.replace(/\//g, '\\');
+          const newfile: File = { ...file, name: newName };
+          result.push(newfile);
+        } else {
+          result.push(file);
+        }
       }
       result.sort((f1, f2) => {
         // NOTE: bringing in Moment for this is not very efficient, but will
@@ -172,7 +186,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
+      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
         {defaultRender({
           ...props,
           onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -197,7 +211,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
     // add a trailing / if the last path is something like c:
     itemPath = itemPath[itemPath.length - 1] === ':' ? `${itemPath}/` : itemPath;
-    const displayText = itemPath.startsWith('/') ? itemPath : `/${itemPath}`;
+    const displayText = isWindows ? itemPath.replace(/\//g, '\\') : itemPath;
     return {
       text: displayText, // displayed text
       key: itemPath, // value returned
@@ -218,36 +232,39 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
 
   return (
     <Fragment>
-      <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
+      <Stack horizontal tokens={{ childrenGap: '2rem' }} styles={stackinput}>
         <StackItem grow={0} styles={halfstack}>
           <Dropdown
+            label={formatMessage('Location')}
+            styles={dropdown}
+            options={breadcrumbItems}
+            onChange={updateLocation}
+            selectedKey={currentPath}
             errorMessage={
               operationMode.write && !focusedStorageFolder.writable
                 ? formatMessage('You do not have permission to save bots here')
                 : ''
             }
-            label={formatMessage('Location')}
-            onChange={updateLocation}
-            options={breadcrumbItems}
-            selectedKey={currentPath}
-            styles={dropdown}
           />
         </StackItem>
       </Stack>
-      <div css={detailListContainer} data-is-scrollable="true">
+      <div data-is-scrollable="true" css={detailListContainer}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            checkboxVisibility={CheckboxVisibility.hidden}
+            items={storageFiles}
+            compact={false}
             columns={tableColumns.map((col) => ({
               ...col,
               isSorted: col.key === currentSort.key,
               isSortedDescending: currentSort.descending,
             }))}
-            compact={false}
             getKey={(item) => item.name}
-            isHeaderVisible
-            items={storageFiles}
             layoutMode={DetailsListLayoutMode.justified}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+            isHeaderVisible={true}
+            onItemInvoked={onFileChosen}
+            selectionMode={SelectionMode.single}
+            checkboxVisibility={CheckboxVisibility.hidden}
             onColumnHeaderClick={(_, clickedColumn) => {
               if (clickedColumn == null) return;
               if (clickedColumn.key === currentSort.key) {
@@ -259,9 +276,6 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
                 setSort({ key: clickedColumn.key, descending: false });
               }
             }}
-            onItemInvoked={onFileChosen}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            selectionMode={SelectionMode.single}
           />
         </ScrollablePane>
       </div>

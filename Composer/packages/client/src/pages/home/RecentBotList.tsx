@@ -44,7 +44,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'string',
       onRender: (item) => {
         return (
-          <div css={tableCell} data-is-focusable>
+          <div css={tableCell} data-is-focusable={true}>
             <Link
               aria-label={formatMessage(`Bot name is {botName}`, { botName: item.name })}
               onClick={() => onItemChosen(item)}
@@ -58,7 +58,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
     },
     {
       key: 'column2',
-      name: formatMessage('Date Modified'),
+      name: formatMessage('Date modified'),
       fieldName: 'dateModifiedValue',
       minWidth: 60,
       maxWidth: 70,
@@ -66,13 +66,36 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'number',
       onRender: (item) => {
         return (
-          <div css={tableCell} data-is-focusable>
+          <div css={tableCell} data-is-focusable={true}>
             <div
-              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
-              css={content}
               tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
             >
               {calculateTimeDiff(item.dateModified)}
+            </div>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'column3',
+      name: formatMessage('Location'),
+      fieldName: 'path',
+      minWidth: 200,
+      maxWidth: 400,
+      isResizable: true,
+      data: 'string',
+      onRender: (item) => {
+        return (
+          <div css={tableCell} data-is-focusable={true}>
+            <div
+              tabIndex={-1}
+              css={content}
+              aria-label={formatMessage(`location is {location}`, { location: item.path })}
+            >
+              {item.path}
             </div>
           </div>
         );
@@ -83,7 +106,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
+      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
         {defaultRender({
           ...props,
           onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -93,19 +116,19 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
   }
 
   return (
-    <div css={detailListContainer} data-is-scrollable="true">
+    <div data-is-scrollable="true" css={detailListContainer}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
-          checkboxVisibility={CheckboxVisibility.hidden}
-          columns={tableColums}
-          compact={false}
-          getKey={(item) => item.name}
-          isHeaderVisible
           items={recentProjects}
+          compact={false}
+          columns={tableColums}
+          getKey={(item) => `${item.path}/${item.name}`}
           layoutMode={DetailsListLayoutMode.justified}
-          onItemInvoked={onItemChosen}
           onRenderDetailsHeader={onRenderDetailsHeader}
+          isHeaderVisible={true}
+          onItemInvoked={onItemChosen}
           selectionMode={SelectionMode.single}
+          checkboxVisibility={CheckboxVisibility.hidden}
         />
       </ScrollablePane>
     </div>

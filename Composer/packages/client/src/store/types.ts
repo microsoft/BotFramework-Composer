@@ -4,7 +4,17 @@
 // TODO: remove this once we can expand the types
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
-import { PromptTab, BotSchemas, ProjectTemplate, DialogInfo, LgFile, LuFile, Skill, UserSettings } from '@bfc/shared';
+import {
+  PromptTab,
+  BotSchemas,
+  ProjectTemplate,
+  DialogInfo,
+  LgFile,
+  LuFile,
+  Skill,
+  UserSettings,
+  Diagnostic,
+} from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension';
 
 import { AppUpdaterStatus, CreationFlowStatus, BotStatus } from '../constants';
@@ -50,6 +60,7 @@ export interface StorageFolder extends File {
 export interface PublishType {
   name: string;
   description: string;
+  instructions?: string;
   schema?: JSONSchema7;
   features: {
     history: boolean;
@@ -83,6 +94,7 @@ export interface State {
   location: string;
   botEnvironment: string;
   locale: string;
+  diagnostics: Diagnostic[];
   botEndpoints: { [key: string]: string };
   remoteEndpoints: { [key: string]: string };
   /** the data path for PropertyEditor */
@@ -92,7 +104,12 @@ export interface State {
   storages: any[];
   focusedStorageFolder: StorageFolder;
   botStatus: BotStatus;
-  botLoadErrorMsg: { title: string; message: string };
+  botLoadErrorMsg: {
+    title: string;
+    message: string;
+    linkAfterMessage?: { url: string; text: string };
+    link?: { url: string; text: string };
+  };
   creationFlowStatus: CreationFlowStatus;
   templateId: string;
   storageFileLoadingStatus: string;
@@ -140,6 +157,8 @@ export interface State {
   };
   announcement: string | undefined;
   appUpdate: AppUpdateState;
+  displaySkillManifest?: string;
+  botOpening: boolean;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

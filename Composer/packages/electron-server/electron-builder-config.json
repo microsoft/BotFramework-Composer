@@ -7,6 +7,7 @@
     "version": "8.0.2"
   },
   "directories": {
+    "buildResources": "resources",
     "output": "dist"
   },
   "asarUnpack": [
@@ -17,6 +18,12 @@
   "files": [
     "build",
     "resources/composerIcon_1024x1024.png"
+  ],
+  "extraResources": [
+    {
+      "from": "resources/app-update.yml",
+      "to": "app-update.yml"
+    }
   ],
   "protocols": [
     {
@@ -48,8 +55,10 @@
     "packElevateHelper": true,
     "unicode": true,
     "runAfterFinish": true,
-    "installerIcon": "resources/composerIcon.ico",
-    "uninstallerIcon": "resources/composerIcon.ico",
+    "installerIcon": "composerIcon.ico",
+    "uninstallerIcon": "composerIcon.ico",
+    "installerHeader": "installerHeader.bmp",
+    "installerSidebar": "installerSidebar.bmp",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
     "shortcutName": "Bot Framework Composer",
@@ -82,6 +91,7 @@
   },
   "dmg": {
     "title": "Bot Framework Composer Installer",
+    "background": "resources/dmgBackground.png",
     "contents": [
       {
         "x": 140,

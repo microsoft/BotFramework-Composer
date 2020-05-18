@@ -30,7 +30,7 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   };
 };
 
-export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCoachMarkRef }): JSX.Element | null => {
+export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element | null => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { ruleGroup } = nodeMap;
 
@@ -50,13 +50,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCo
   const activeEventData = queryNode(data, focusedEvent);
 
   const eventActions = activeEventData ? (
-    <RuleEditor
-      addCoachMarkRef={addCoachMarkRef}
-      data={activeEventData}
-      id={focusedEvent}
-      key={focusedEvent}
-      onEvent={onEvent}
-    />
+    <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
   ) : null;
 
   if (!EditorConfig.features.showEvents) {
@@ -77,7 +71,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCo
       }}
     >
       {ruleGroup && (
-        <EventsEditor data={ruleGroup.data} id={ruleGroup.id} key={ruleGroup.id} onEvent={interceptRuleEvent} />
+        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
       <Collapse text="Actions">{eventActions}</Collapse>

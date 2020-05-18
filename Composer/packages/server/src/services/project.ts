@@ -3,6 +3,7 @@
 
 import merge from 'lodash/merge';
 import find from 'lodash/find';
+import flatten from 'lodash/flatten';
 import { importResolverGenerator, ResolverResource } from '@bfc/shared';
 import extractMemoryPaths from '@bfc/indexers/lib/dialogUtils/extractMemoryPaths';
 import { UserIdentity } from '@bfc/plugin-loader';
@@ -89,15 +90,15 @@ export class BotProjectService {
       'turn.repeatedIds',
       'turn.activityProcessed',
     ];
-    const projectVariables = BotProjectService.getIndexedProjectById(projectId)
-      ?.files.filter((file) => file.name.endsWith('.dialog'))
-      .map(({ content }) => extractMemoryPaths(content));
+    const projectVariables =
+      BotProjectService.getIndexedProjectById(projectId)
+        ?.files.filter((file) => file.name.endsWith('.dialog'))
+        .map(({ content }) => {
+          const dialogJson = JSON.parse(content);
+          return extractMemoryPaths(dialogJson);
+        }) || [];
 
-    const userDefined: string[] =
-      projectVariables?.reduce((result: string[], variables) => {
-        result = [...variables, ...result];
-        return result;
-      }, []) || [];
+    const userDefined: string[] = flatten(projectVariables);
     return [...defaultProperties, ...userDefined];
   }
 
@@ -138,6 +139,12 @@ export class BotProjectService {
     return recentBots.map((item: any) => {
       return merge(item, find(dateModifiedDict, { path: item.path }));
     });
+  };
+
+  public static deleteProject = async (projectId: string): Promise<string> => {
+    const path = BotProjectService.projectLocationMap[projectId];
+    BotProjectService.removeProjectIdFromCache(projectId);
+    return path;
   };
 
   public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
@@ -191,11 +198,17 @@ export class BotProjectService {
     if (indexedCurrentProject) return indexedCurrentProject;
   }
 
+  public static getProjectIdByPath = async (path: string) => {
+    for (const key in BotProjectService.projectLocationMap) {
+      if (BotProjectService.projectLocationMap[key] === path) {
+        return key;
+      }
+    }
+    return null;
+  };
+
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
-
-    const cachedProject = BotProjectService.getIndexedProjectById(projectId);
-    if (cachedProject) return cachedProject;
 
     if (!BotProjectService.projectLocationMap?.[projectId]) {
       throw new Error('project not found in cache');
@@ -249,7 +262,7 @@ export class BotProjectService {
     Store.set('recentBotProjects', BotProjectService.recentBotProjects);
   };
 
-  private static deleteRecentProject = (path: string): void => {
+  public static deleteRecentProject = (path: string): void => {
     const recentBotProjects = BotProjectService.recentBotProjects.filter(
       (ref) => Path.resolve(path) !== Path.resolve(ref.path)
     );

@@ -5,13 +5,16 @@ import { useContext, useMemo } from 'react';
 
 import { StoreContext } from '../../store';
 
-import { Notification, DialogNotification, LuNotification, LgNotification } from './types';
+import { Notification, DialogNotification, LuNotification, LgNotification, ServerNotification } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
   const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, lgFiles, projectId } = state;
+  const { dialogs, luFiles, lgFiles, projectId, diagnostics } = state;
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];
+    diagnostics.forEach((d) => {
+      notifactions.push(new ServerNotification(projectId, '', d.source, d));
+    });
     dialogs.forEach((dialog) => {
       dialog.diagnostics.map((diagnostic) => {
         const location = `${dialog.id}.dialog`;
@@ -31,7 +34,7 @@ export default function useNotifications(filter?: string) {
       });
     });
     return notifactions;
-  }, [dialogs, luFiles, lgFiles, projectId]);
+  }, [dialogs, luFiles, lgFiles, projectId, diagnostics]);
 
   const notifications: Notification[] = filter ? memoized.filter((x) => x.severity === filter) : memoized;
   return notifications;

@@ -111,14 +111,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       onSelect(props.group!.key);
     };
     return (
-      <span ref={props.group && props.group.data.isRoot && addMainDialogRef} role="grid">
+      <span role="grid" ref={props.group && props.group.data.isRoot && addMainDialogRef}>
         <TreeItem
+          link={props.group!.data}
           depth={0}
           isActive={!props.group!.isCollapsed}
           isSubItemActive={!!selected}
-          link={props.group!.data}
-          onDelete={onDeleteDialog}
           onSelect={toggleCollapse}
+          onDelete={onDeleteDialog}
         />
       </span>
     );
@@ -127,11 +127,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   function onRenderCell(nestingDepth?: number, item?: any): React.ReactNode {
     return (
       <TreeItem
+        link={item}
         depth={nestingDepth}
         isActive={createSelectedPath(item.index) === selected}
-        link={item}
-        onDelete={() => onDeleteTrigger(dialogId, item.index)}
         onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
+        onDelete={() => onDeleteTrigger(dialogId, item.index)}
       />
     );
   }
@@ -154,23 +154,25 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
 
   return (
     <Resizable
+      size={{ width: currentWidth, height: 'auto' }}
+      minWidth={180}
+      maxWidth={500}
       enable={{
         right: true,
       }}
-      maxWidth={500}
-      minWidth={180}
       onResizeStop={handleResize}
-      size={{ width: currentWidth, height: 'auto' }}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         <SearchBox
           ariaLabel={formatMessage('Type dialog name')}
-          iconProps={{ iconName: 'Filter' }}
-          onChange={onFilter}
           placeholder={formatMessage('Filter Dialog')}
           styles={searchBox}
+          onChange={onFilter}
+          iconProps={{ iconName: 'Filter' }}
+          underlined
         />
         <div
+          aria-live={'polite'}
           aria-label={formatMessage(
             `{
             dialogNum, plural,
@@ -185,10 +187,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             }`,
             { dialogNum: res.groups.length }
           )}
-          aria-live={'polite'}
         />
         <GroupedList
           {...res}
+          onRenderCell={onRenderCell}
           componentRef={groupRef}
           groupProps={
             {
@@ -199,7 +201,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               isAllGroupsCollapsed: true,
             } as Partial<IGroupRenderProps>
           }
-          onRenderCell={onRenderCell}
           styles={groupListStyle}
         />
       </div>

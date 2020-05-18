@@ -3,7 +3,7 @@
 
 context('Notification Page', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
     cy.visitPage('Notifications');
   });
@@ -67,8 +67,8 @@ context('Notification Page', () => {
         .should('contain.text', 'expression');
       cy.get('#root\\.condition')
         .click()
-        .type('()')
-        .wait(1000);
+        .type('foo = bar');
+      cy.findByTestId('FieldErrorMessage').should('exist');
     });
 
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();

@@ -14,6 +14,7 @@ const debug = log.extend('file-settings-manager');
 
 // TODO: this causes tests to fail
 const subPath = 'settings/appsettings.json';
+const fileName = 'appsettings.json';
 
 export class FileSettingManager implements ISettingManager {
   private basePath: string;
@@ -62,6 +63,8 @@ export class FileSettingManager implements ISettingManager {
     }
     await this.storage.writeFile(path, JSON.stringify(settings, null, 2));
   };
+
+  public getFileName = () => fileName;
 
   private obfuscateValues = (obj: any): any => {
     if (obj) {

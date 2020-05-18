@@ -3,7 +3,8 @@
   "license": "MIT",
   "private": true,
   "resolutions": {
-    "@types/react": "16.9.23"
+    "@types/react": "16.9.23",
+    "mkdirp": "^0.5.2"
   },
   "engines": {
     "node": ">=12"
@@ -24,7 +25,7 @@
     "packages/ui-plugins/*"
   ],
   "scripts": {
-    "build": "node scripts/update.js && node scripts/begin.js && yarn build:prod && yarn build:plugins",
+    "build": "node scripts/begin.js && yarn build:prod && yarn build:plugins",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
     "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
     "build:lib": "yarn workspace @bfc/libs build:all",
@@ -33,14 +34,18 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
-    "build:plugins": "cd plugins/localPublish && yarn install && yarn build",
+    "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:azureFunctionsPublish",
+    "build:plugins:localpublish": "cd plugins/localPublish && yarn install && yarn build",
+    "build:plugins:samples": "cd plugins/samples && yarn install && yarn build",
+    "build:plugins:azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
+    "build:plugins:azureFunctionsPublish": "cd plugins/azureFunctionsPublish && yarn install && yarn build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
-    "startall": "node scripts/update.js && yarn start",
+    "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
     "start:client": "yarn workspace @bfc/client start",
     "start:server": "yarn workspace @bfc/server start",
     "start:server:dev": "yarn workspace @bfc/server start:dev",
-    "runtime": "cd ../BotProject/CSharp/ && dotnet build && dotnet run",
+    "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
     "test:coverage": "yarn test --coverage --no-cache --reporters=default",
@@ -100,15 +105,12 @@
     "get-port": "^5.1.1",
     "husky": "^1.3.1",
     "lint-staged": "^8.1.0",
-    "mocha": "5.2.0",
-    "mocha-junit-reporter": "^1.22.0",
-    "mocha-multi-reporters": "^1.1.7",
     "prettier": "2.0.4",
     "react-testing-library": "^6.0.2",
     "rimraf": "^2.6.3",
     "ts-loader": "^6.2.1",
     "typescript": "3.8.3",
-    "wsrun": "^5.1.0"
+    "wsrun": "^5.2.0"
   },
   "dependencies": {
     "cross-env": "^6.0.3"

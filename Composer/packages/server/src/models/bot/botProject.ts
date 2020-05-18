@@ -6,8 +6,8 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill } from '@bfc/shared';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
+import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -15,6 +15,7 @@ import StorageService from '../../services/storage';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
+import { BotProjectService } from '../../services/project';
 
 import { ICrossTrainConfig } from './luPublisher';
 import { IFileStorage } from './../storage/interface';
@@ -46,7 +47,7 @@ const BotStructureTemplate = {
     lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
   },
-  skillManifests: 'skill-manifests/${MANIFESTNAME}.manifest',
+  skillManifests: 'manifests/${MANIFESTNAME}.json',
 };
 
 const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
@@ -67,6 +68,7 @@ export class BotProject {
     [key: string]: string;
   };
   public skills: Skill[] = [];
+  public diagnostics: Diagnostic[] = [];
   public settingManager: ISettingManager;
   public settings: DialogSetting | null = null;
   constructor(ref: LocationRef, user?: UserIdentity) {
@@ -84,6 +86,7 @@ export class BotProject {
   }
 
   public init = async () => {
+    this.diagnostics = [];
     // those 2 migrate methods shall be removed after a period of time
     await this._reformProjectStructure();
     try {
@@ -91,9 +94,10 @@ export class BotProject {
     } catch (_e) {
       // when re-index opened bot, file write may error
     }
-    this.files = await this._getFiles();
     this.settings = await this.getEnvSettings('', false);
-    this.skills = await extractSkillManifestUrl(this.settings?.skill || []);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || []);
+    this.skills = skillsParsed;
+    this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();
   };
 
@@ -105,6 +109,7 @@ export class BotProject {
       location: this.dir,
       schemas: this.getSchemas(),
       skills: this.skills,
+      diagnostics: this.diagnostics,
       settings: this.settings,
     };
   };
@@ -133,20 +138,21 @@ export class BotProject {
   // create or update dialog settings
   public updateEnvSettings = async (slot: string, config: DialogSetting) => {
     await this.settingManager.set(slot, config);
+    this.settings = config;
   };
 
   // update skill in settings
   public updateSkill = async (config: Skill[]) => {
     const settings = await this.getEnvSettings('', false);
-    const skills = await extractSkillManifestUrl(config);
+    const { skillsParsed } = await extractSkillManifestUrl(config);
 
-    settings.skill = skills.map(({ manifestUrl, name }) => {
+    settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
       return { manifestUrl, name };
     });
     await this.settingManager.set('', settings);
 
-    this.skills = skills;
-    return skills;
+    this.skills = skillsParsed;
+    return skillsParsed;
   };
 
   public exportToZip = (cb) => {
@@ -240,6 +246,10 @@ export class BotProject {
   };
 
   public updateFile = async (name: string, content: string): Promise<string> => {
+    if (name === this.settingManager.getFileName()) {
+      await this.updateDefaultSlotEnvSettings(JSON.parse(content));
+      return new Date().toDateString();
+    }
     const file = this.files.find((d) => d.name === name);
     if (file === undefined) {
       throw new Error(`no such file ${name}`);
@@ -313,6 +323,61 @@ export class BotProject {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
   }
 
+  public async deleteAllFiles(): Promise<boolean> {
+    try {
+      await this.deleteFilesFromBottomToUp(this.dir);
+      await this.fileStorage.rmDir(this.dir);
+      const projectId = await BotProjectService.getProjectIdByPath(this.dir);
+      if (projectId) {
+        await this.removeLocalRuntimeData(projectId);
+      }
+      await BotProjectService.cleanProject({ storageId: 'default', path: this.dir });
+      await BotProjectService.deleteRecentProject(this.dir);
+    } catch (e) {
+      throw new Error(e);
+    }
+    return true;
+  }
+
+  private async removeLocalRuntimeData(projectId) {
+    const method = 'localpublish';
+    if (
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.stopBot
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+      if (typeof pluginMethod === 'function') {
+        await pluginMethod.call(null, projectId);
+      }
+    }
+    if (
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.removeRuntimeData
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
+      if (typeof pluginMethod === 'function') {
+        await pluginMethod.call(null, projectId);
+      }
+    }
+  }
+
+  private async deleteFilesFromBottomToUp(path) {
+    const files = await this.fileStorage.readDir(path);
+
+    for (let i = 0; i < files.length; i++) {
+      const curPath = Path.join(path, files[i]);
+      const childStat = await this.fileStorage.stat(curPath);
+      if (childStat.isDir && curPath.startsWith(this.dir)) {
+        await this.deleteFilesFromBottomToUp(curPath);
+        await this.fileStorage.rmDir(curPath);
+      } else {
+        await this.fileStorage.removeFile(curPath);
+      }
+    }
+  }
+
   private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
@@ -368,7 +433,7 @@ export class BotProject {
         DIALOGNAME,
         LOCALE,
       });
-    } else if (fileType === '.manifest') {
+    } else if (fileType === '.json') {
       dir = templateInterpolate(
         Path.dirname(Path.join(BotStructureTemplate.folder, BotStructureTemplate.skillManifests)),
         {
@@ -457,7 +522,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.manifest'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

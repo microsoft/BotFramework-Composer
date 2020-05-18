@@ -1,12 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 import { DirectionalHint, TooltipHost, TooltipDelay } from 'office-ui-fabric-react/lib/Tooltip';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import { Link } from 'office-ui-fabric-react/lib/Link';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
+
+import { Link } from './Link';
+import { focusBorder } from './sharedStyles';
 
 interface DescriptionCalloutProps {
   title: string;
@@ -49,7 +53,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
         ),
       }}
     >
-      <div tabIndex={0}>
+      <div tabIndex={0} css={focusBorder}>
         <Icon
           aria-label={title + '; ' + description}
           iconName={'Unknown'}

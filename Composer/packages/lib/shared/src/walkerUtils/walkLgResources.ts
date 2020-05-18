@@ -19,7 +19,7 @@ const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
 
   switch (action.$kind) {
     case SDKKinds.SendActivity:
-    case SDKKinds.SkillDialog:
+    case SDKKinds.BeginSkill:
       onFound('activity');
       break;
     case SDKKinds.AttachmentInput:

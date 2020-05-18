@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useCallback, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
@@ -21,11 +21,11 @@ import { createActionMenu } from './createSchemaMenu';
 
 interface EdgeMenuProps {
   id: string;
+  forwardedRef?: (_: HTMLDivElement) => void;
   onClick: (item: string | null) => void;
-  addCoachMarkRef?: (ref: { [key: string]: HTMLDivElement }) => void;
 }
 
-export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick, ...rest }) => {
+export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, ...rest }) => {
   const { clipboardActions, customSchemas } = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
@@ -39,7 +39,6 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
   };
 
   const [menuSelected, setMenuSelected] = useState<boolean>(false);
-  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef && addCoachMarkRef({ action }), []);
   let boxShaow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
   boxShaow += menuSelected ? `,0 0 0 2px ${ObiColors.AzureBlue}` : nodeSelected ? `, 0 0 0 2px ${ObiColors.Black}` : '';
 
@@ -61,8 +60,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
   );
   return (
     <div
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
-      ref={addRef}
+      ref={forwardedRef}
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,
@@ -72,12 +70,11 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
         overflow: 'hidden',
         background: 'white',
       }}
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
     >
       <IconMenu
-        handleMenuShow={handleMenuShow}
         iconName="Add"
-        iconSize={7}
         iconStyles={{
           background: 'white',
           color: '#005CE6',
@@ -92,9 +89,11 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, addCoachMarkRef, onClick
             },
           },
         }}
-        label={formatMessage('Add')}
-        menuItems={menuItems}
+        iconSize={7}
         nodeSelected={nodeSelected}
+        menuItems={menuItems}
+        label={formatMessage('Add')}
+        handleMenuShow={handleMenuShow}
         {...rest}
       />
     </div>

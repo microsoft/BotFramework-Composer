@@ -5,9 +5,9 @@ import { useContext, useEffect, useState } from 'react';
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import throttle from 'lodash/throttle';
 
-import * as luUtil from '../utils/luUtil';
 import { State, BoundActionHandlers } from '../store/types';
 import { StoreContext } from '../store';
+import luWorker from '../store/parsers/luWorker';
 
 const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
@@ -17,7 +17,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const content = luUtil.addIntent(file.content, intent);
+    const content = await luWorker.addIntent(file.content, intent);
     const projectId = state.projectId;
     return await actions.updateLuFile({ id: file.id, projectId, content });
   };
@@ -27,7 +27,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const content = luUtil.updateIntent(file.content, intentName, intent);
+    const content = await luWorker.updateIntent(file.content, intentName, intent);
     const projectId = state.projectId;
     return await actions.updateLuFile({ id: file.id, projectId, content });
   };
@@ -37,7 +37,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const content = luUtil.removeIntent(file.content, intentName);
+    const content = await luWorker.removeIntent(file.content, intentName);
     const projectId = state.projectId;
     return await actions.updateLuFile({ id: file.id, projectId, content });
   };

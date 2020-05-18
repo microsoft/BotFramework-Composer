@@ -4,10 +4,12 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
-import { LgFile, LuFile, importResolverGenerator } from '@bfc/shared';
+import { LgFile, LuFile, importResolverGenerator, UserSettings } from '@bfc/shared';
+import merge from 'lodash/merge';
 
 import { prepareAxios } from '../utils/auth';
 import storage from '../utils/storage';
+import { isElectron } from '../utils/electronUtil';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
@@ -28,13 +30,39 @@ import filePersistence from './persistence/FilePersistence';
 
 const { defaultFileResolver } = TemplatesParser;
 
-const initialState: State = {
+const getUserSettings = (): UserSettings => {
+  const defaultSettings = {
+    appUpdater: {
+      autoDownload: false,
+      useNightly: false,
+    },
+    codeEditor: {
+      lineNumbers: false,
+      wordWrap: false,
+      minimap: false,
+    },
+    propertyEditorWidth: 400,
+    dialogNavWidth: 180,
+  };
+  const loadedSettings = storage.get('userSettings') || {};
+  const settings = merge(defaultSettings, loadedSettings);
+
+  if (isElectron()) {
+    // push the settings to the electron main process
+    window.ipcRenderer.send('init-user-settings', settings);
+  }
+
+  return settings;
+};
+
+export const initialState: State = {
   dialogs: [],
   projectId: '',
   botName: '',
   location: '', // the path to the bot project
   botEnvironment: 'production',
   locale: 'en-us',
+  diagnostics: [],
   botEndpoints: {},
   remoteEndpoints: {},
   focusPath: '', // the data path for PropertyEditor
@@ -82,15 +110,7 @@ const initialState: State = {
   publishTargets: [],
   runtimeTemplates: [],
   publishHistory: {},
-  userSettings: storage.get('userSettings', {
-    codeEditor: {
-      lineNumbers: false,
-      wordWrap: false,
-      minimap: false,
-    },
-    propertyEditorWidth: 400,
-    dialogNavWidth: 180,
-  }),
+  userSettings: getUserSettings(),
   runtimeSettings: {
     path: '',
     startCommand: '',
@@ -101,9 +121,10 @@ const initialState: State = {
     showing: false,
     status: AppUpdaterStatus.IDLE,
   },
+  botOpening: false,
 };
 
-interface StoreContextValue {
+export interface StoreContextValue {
   state: State;
   dispatch: React.Dispatch<ActionType>;
   actions: BoundActionHandlers;

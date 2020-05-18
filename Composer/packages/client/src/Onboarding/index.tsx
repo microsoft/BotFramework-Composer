@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 
@@ -30,7 +30,22 @@ const Onboarding: React.FC = () => {
 
   const rootDialogId = dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
 
-  const [stepSets, setStepSets] = useState<IStepSet[]>(defaultStepSets(projectId, rootDialogId));
+  const stepSets = useMemo<IStepSet[]>(() => {
+    return defaultStepSets(projectId, rootDialogId)
+      .map((stepSet) => ({
+        ...stepSet,
+        steps: stepSet.steps.filter(({ targetId }) => {
+          if (!dialogs.length) {
+            return !(targetId === 'mainDialog' || targetId === 'newTrigger' || targetId === 'action');
+          } else if (!dialogs[0].triggers.length) {
+            return targetId !== 'action';
+          }
+          return true;
+        }),
+      }))
+      .filter(({ steps }) => steps.length);
+  }, [projectId, rootDialogId]);
+
   const [currentSet, setCurrentSet] = useState<number>(getCurrentSet(stepSets));
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [hideModal, setHideModal] = useState(true);
@@ -40,10 +55,6 @@ const Onboarding: React.FC = () => {
   const {
     location: { pathname },
   } = useLocation();
-
-  useEffect(() => {
-    onboardingSetComplete(onboardingState.getComplete());
-  }, []);
 
   useEffect(() => {
     if (didMount.current && complete) {
@@ -58,8 +69,7 @@ const Onboarding: React.FC = () => {
     const { steps } = stepSets[currentSet] || { steps: [] };
     const coachMark = steps[currentStep] || {};
     const { id, location, navigateTo, targetId } = coachMark;
-    !complete && navigateTo && navigate(navigateTo);
-
+    !complete && projectId && navigateTo && navigate(navigateTo);
     setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
 
     setMinimized(!!~currentStep);
@@ -67,25 +77,7 @@ const Onboarding: React.FC = () => {
     if (currentSet > -1 && currentSet < stepSets.length) {
       onboardingState.setCurrentSet(stepSets[currentSet].id);
     }
-  }, [currentSet, currentStep, setTeachingBubble]);
-
-  useEffect(() => {
-    const sets = defaultStepSets(projectId, rootDialogId)
-      .map((stepSet) => ({
-        ...stepSet,
-        steps: stepSet.steps.filter(({ targetId }) => {
-          if (!dialogs.length) {
-            return !(targetId === 'mainDialog' || targetId === 'newTrigger' || targetId === 'action');
-          } else if (!dialogs[0].triggers.length) {
-            return targetId !== 'action';
-          }
-          return true;
-        }),
-      }))
-      .filter(({ steps }) => steps.length);
-
-    setStepSets(sets);
-  }, [dialogs, rootDialogId]);
+  }, [currentSet, currentStep, setTeachingBubble, projectId]);
 
   useEffect(() => {
     setHideModal(pathname !== `/bot/${projectId}/dialogs/${rootDialogId}`);

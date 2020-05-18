@@ -13,7 +13,7 @@ import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import map from 'lodash/map';
 
-import { getArrayItemProps, getOrderedProperties, useArrayItems } from '../../utils';
+import { getArrayItemProps, getOrderedProperties, useArrayItems, resolveRef } from '../../utils';
 import { FieldLabel } from '../FieldLabel';
 
 import { objectArrayField } from './styles';
@@ -92,9 +92,10 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
 
     return (
       allOrderProps.length > 2 ||
-      !!Object.entries(properties).filter(
-        ([key, { $role }]: any) => allOrderProps.includes(key) && $role === 'expression'
-      ).length
+      Object.entries(properties).some(([key, propSchema]) => {
+        const resolved = resolveRef(propSchema as JSONSchema7, props.definitions);
+        return allOrderProps.includes(key) && resolved.$role === 'expression';
+      })
     );
   }, [itemSchema, orderedProperties]);
 

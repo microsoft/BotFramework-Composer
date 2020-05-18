@@ -3,9 +3,19 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import has from 'lodash/has';
 import merge from 'lodash/merge';
+import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
-import { SensitiveProperties, LuFile, DialogInfo, importResolverGenerator } from '@bfc/shared';
+import {
+  SensitiveProperties,
+  LuFile,
+  LgFile,
+  DialogInfo,
+  importResolverGenerator,
+  UserSettings,
+  dereferenceDefinitions,
+} from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
@@ -16,10 +26,18 @@ import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
+import { isElectron } from '../../utils/electronUtil';
 
 import createReducer from './createReducer';
 
+import { initialState } from '..';
+
 const projectFiles = ['bot', 'botproj'];
+
+const processSchema = memoize((projectId: string, schema: any) => ({
+  ...schema,
+  definitions: dereferenceDefinitions(schema.definitions),
+}));
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
@@ -66,7 +84,8 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
-  const { files, botName, botEnvironment, location, schemas, settings, id, locale } = response.data;
+  const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
+  schemas.sdk.content = processSchema(id, schemas.sdk.content);
   const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
   state.projectId = id;
   state.dialogs = dialogs;
@@ -80,14 +99,39 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
   state.settings = settings;
   state.locale = locale;
+  state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
+  state.botOpening = false;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
   return state;
 };
 
+const resetProjectState: ReducerFunc = (state) => {
+  state.projectId = initialState.projectId;
+  state.dialogs = initialState.dialogs;
+  state.botEnvironment = initialState.botEnvironment;
+  state.botName = initialState.botName;
+  state.botStatus = initialState.botStatus;
+  state.location = initialState.location;
+  state.lgFiles = initialState.lgFiles;
+  state.skills = initialState.skills;
+  state.schemas = initialState.schemas;
+  state.luFiles = initialState.luFiles;
+  state.settings = initialState.settings;
+  state.locale = initialState.locale;
+  state.skillManifests = initialState.skillManifests;
+  return state;
+};
+
+const getProjectPending: ReducerFunc = (state) => {
+  state.botOpening = true;
+  return resetProjectState(state, undefined);
+};
+
 const getProjectFailure: ReducerFunc = (state, { error }) => {
   setError(state, error);
+  state.botOpening = false;
   return state;
 };
 
@@ -135,21 +179,12 @@ const removeLgFile: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const updateLgTemplate: ReducerFunc = (state, { id, content }) => {
-  const lgFiles = state.lgFiles.map((lgFile) => {
-    if (lgFile.id === id) {
-      lgFile.content = content;
+const updateLgTemplate: ReducerFunc = (state, lgFile: LgFile) => {
+  state.lgFiles = state.lgFiles.map((file) => {
+    if (file.id === lgFile.id) {
       return lgFile;
     }
-    return lgFile;
-  });
-  const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
-  state.lgFiles = lgFiles.map((lgFile) => {
-    const { parse } = lgIndexer;
-    const { id, content } = lgFile;
-    const { templates, diagnostics } = parse(content, id, lgImportresolver);
-
-    return { ...lgFile, templates, diagnostics, content };
+    return file;
   });
   return state;
 };
@@ -184,16 +219,11 @@ const removeLuFile: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const updateLuTemplate: ReducerFunc = (state, { id, content }) => {
-  state.luFiles = state.luFiles.map((luFile) => {
-    if (luFile.id === id) {
-      const { intents, diagnostics } = luIndexer.parse(content, id);
-      return { ...luFile, intents, diagnostics, content };
-    }
-    return luFile;
-  });
+const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
+  const index = state.luFiles.findIndex((file) => file.id === luFile.id);
+  state.luFiles[index] = luFile;
 
-  luFileStatusStorage.updateFileStatus(state.botName, id);
+  luFileStatusStorage.updateFileStatus(state.botName, luFile.id);
   return state;
 };
 
@@ -389,7 +419,25 @@ const removeSkillManifest: ReducerFunc = (state, { id }) => {
   return state;
 };
 
+const displaySkillManifestModal: ReducerFunc = (state, { id }) => {
+  state.displaySkillManifest = id;
+  return state;
+};
+
+const dismissSkillManifestModal: ReducerFunc = (state) => {
+  delete state.displaySkillManifest;
+  return state;
+};
+
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
+  const { botName } = state;
+  // set value in local storage
+  for (const property of SensitiveProperties) {
+    if (has(settings, property)) {
+      const propertyValue = get(settings, property, '');
+      settingStorage.setField(botName, property, propertyValue);
+    }
+  }
   state.settings = settings;
   return state;
 };
@@ -453,10 +501,11 @@ const publishSuccess: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const publishFailure: ReducerFunc = (state, { error, target }) => {
+const publishFailure: (title: string) => ReducerFunc = (title) => (state, { error, target }) => {
   if (target.name === 'default') {
     state.botStatus = BotStatus.failed;
-    state.botLoadErrorMsg = { title: Text.CONNECTBOTFAILURE, message: error.message };
+
+    state.botLoadErrorMsg = { ...error, title };
   }
   // prepend the latest publish results to the history
   if (!state.publishHistory[target.name]) {
@@ -528,10 +577,14 @@ const setClipboardActions: ReducerFunc = (state, { clipboardActions }) => {
   return state;
 };
 
-const setCodeEditorSettings: ReducerFunc = (state, settings) => {
+const setUserSettings: ReducerFunc<Partial<UserSettings>> = (state, settings) => {
   const newSettings = merge(state.userSettings, settings);
   storage.set('userSettings', newSettings);
   state.userSettings = newSettings;
+  if (isElectron()) {
+    // push updated settings to electron main process
+    window.ipcRenderer.send('update-user-settings', newSettings);
+  }
   return state;
 };
 
@@ -588,9 +641,11 @@ const noOp: ReducerFunc = (state) => {
 
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.GET_PROJECT_PENDING]: getProjectPending,
   [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
+  [ActionTypes.REMOVE_PROJECT_SUCCESS]: resetProjectState,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
@@ -629,7 +684,8 @@ export const reducer = createReducer({
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
   [ActionTypes.GET_PUBLISH_TYPES_SUCCESS]: setPublishTypes,
   [ActionTypes.PUBLISH_SUCCESS]: publishSuccess,
-  [ActionTypes.PUBLISH_FAILED]: publishFailure,
+  [ActionTypes.PUBLISH_FAILED]: publishFailure(Text.CONNECTBOTFAILURE),
+  [ActionTypes.PUBLISH_FAILED_DOTNET]: publishFailure(Text.DOTNETFAILURE),
   [ActionTypes.GET_PUBLISH_STATUS]: getPublishStatus,
   [ActionTypes.GET_PUBLISH_STATUS_FAILED]: getPublishStatus,
   [ActionTypes.GET_PUBLISH_HISTORY]: getPublishHistory,
@@ -640,11 +696,13 @@ export const reducer = createReducer({
   [ActionTypes.EDITOR_CLIPBOARD]: setClipboardActions,
   [ActionTypes.UPDATE_BOTSTATUS]: setBotStatus,
   [ActionTypes.SET_RUNTIME_TEMPLATES]: setRuntimeTemplates,
-  [ActionTypes.SET_USER_SETTINGS]: setCodeEditorSettings,
+  [ActionTypes.SET_USER_SETTINGS]: setUserSettings,
   [ActionTypes.EJECT_SUCCESS]: ejectSuccess,
   [ActionTypes.SET_MESSAGE]: setMessage,
   [ActionTypes.SET_APP_UPDATE_ERROR]: setAppUpdateError,
   [ActionTypes.SET_APP_UPDATE_PROGRESS]: setAppUpdateProgress,
   [ActionTypes.SET_APP_UPDATE_SHOWING]: setAppUpdateShowing,
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
+  [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
+  [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
 });

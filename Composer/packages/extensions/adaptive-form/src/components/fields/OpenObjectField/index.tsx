@@ -64,27 +64,30 @@ const OpenObjectField: React.FC<FieldProps<{
     onChange(newFormData);
   };
 
+  const keyLabel = formatMessage('Key');
+  const valueLabel = formatMessage('Value');
+
   return (
     <div className="OpenObjectField">
-      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
+      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <div css={styles.labelContainer}>
         <div css={styles.label}>
-          <FieldLabel id={`${id}.key`} label={'Key'} required />
+          <FieldLabel required id={`${id}.key`} label={keyLabel} />
         </div>
         <div css={styles.label}>
-          <FieldLabel id={`${id}.value`} label={'Value'} />
+          <FieldLabel id={`${id}.value`} label={valueLabel} />
         </div>
         <div css={styles.filler} />
       </div>
       {Object.entries(value).map(([name, value], index) => {
         return (
           <ObjectItem
-            formData={value}
             key={index}
-            name={name}
+            formData={value}
             onDelete={handleDropPropertyClick(name)}
             onNameChange={handleNameChange(name)}
             onValueChange={handleValueChange(name)}
+            name={name}
             value={value}
           />
         );
@@ -93,36 +96,38 @@ const OpenObjectField: React.FC<FieldProps<{
         <div css={styles.container}>
           <div css={styles.item}>
             <TextField
+              ariaLabel={keyLabel}
               autoComplete="off"
-              componentRef={fieldRef}
-              onChange={(_, newValue) => setName(newValue || '')}
-              onKeyDown={handleKeyDown}
               placeholder={formatMessage('Add a new key')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
               value={name}
+              onChange={(_, newValue) => setName(newValue || '')}
+              onKeyDown={handleKeyDown}
+              componentRef={fieldRef}
             />
           </div>
           <div css={styles.item}>
             <TextField
+              ariaLabel={valueLabel}
               autoComplete="off"
               iconProps={{
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
               }}
-              onChange={(_, newValue) => setNewValue(newValue || '')}
-              onKeyDown={handleKeyDown}
               placeholder={formatMessage('Add a new value')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
               value={newValue}
+              onChange={(_, newValue) => setNewValue(newValue || '')}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <IconButton
             ariaLabel={formatMessage('Edit Property')}
-            disabled
+            disabled={true}
             menuIconProps={{ iconName: 'MoreVertical' }}
             styles={{
               menuIcon: { fontSize: FontSizes.size16 },

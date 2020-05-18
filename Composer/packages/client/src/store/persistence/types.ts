@@ -9,14 +9,16 @@ export enum ChangeType {
 
 export enum FileExtensions {
   Dialog = '.dialog',
-  Manifest = '.manifest',
+  Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
+  Setting = 'appsettings.json',
 }
 
 export type FileErrorHandler = (error) => void;
 
 export interface IFileChange {
+  projectId: string;
   id: string; //now use file name
   change: string;
   type: ChangeType;

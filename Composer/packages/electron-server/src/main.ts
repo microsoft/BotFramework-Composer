@@ -7,6 +7,7 @@ import { mkdirp } from 'fs-extra';
 import { app, ipcMain } from 'electron';
 import fixPath from 'fix-path';
 import { UpdateInfo } from 'electron-updater';
+import { AppUpdaterSettings, UserSettings } from '@bfc/shared';
 
 import { isDevelopment } from './utility/env';
 import { isWindows, isMac } from './utility/platform';
@@ -47,29 +48,37 @@ function processArgsForWindows(args: string[]): string {
 }
 
 async function createAppDataDir() {
+  // TODO: Move all ENV variable setting to an env file and update build process to leverage those variables too
   const appDataBasePath: string = process.env.APPDATA || process.env.HOME || '';
   const compserAppDataDirectoryName = 'BotFrameworkComposer';
   const composerAppDataPath: string = resolve(appDataBasePath, compserAppDataDirectoryName);
+  const localPublishPath: string = join(composerAppDataPath, 'hostedBots');
+  const azurePublishPath: string = join(composerAppDataPath, 'publishBots');
   process.env.COMPOSER_APP_DATA = join(composerAppDataPath, 'data.json'); // path to the actual data file
+
   log('creating composer app data path at: ', composerAppDataPath);
-  await mkdirp(composerAppDataPath);
+
+  process.env.LOCAL_PUBLISH_PATH = localPublishPath;
+  process.env.AZURE_PUBLISH_PATH = azurePublishPath;
+
+  log('creating local bot runtime publish path: ', localPublishPath);
+  await mkdirp(localPublishPath);
 }
 
-function initializeAppUpdater() {
+function initializeAppUpdater(settings: AppUpdaterSettings) {
   log('Initializing app updater...');
   const mainWindow = ElectronWindow.getInstance().browserWindow;
   if (mainWindow) {
-    const appUpdater = new AppUpdater();
+    const appUpdater = AppUpdater.getInstance();
+    appUpdater.setSettings(settings);
     appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
-      // TODO: if auto/silent download is enabled in settings, don't send this event.
-      // instead, just download silently
       mainWindow.webContents.send('app-update', 'update-available', updateInfo);
     });
     appUpdater.on('progress', (progress) => {
       mainWindow.webContents.send('app-update', 'progress', progress);
     });
-    appUpdater.on('update-not-available', () => {
-      mainWindow.webContents.send('app-update', 'update-not-available');
+    appUpdater.on('update-not-available', (explicitCheck: boolean) => {
+      mainWindow.webContents.send('app-update', 'update-not-available', explicitCheck);
     });
     appUpdater.on('update-downloaded', () => {
       mainWindow.webContents.send('app-update', 'update-downloaded');
@@ -77,13 +86,16 @@ function initializeAppUpdater() {
     appUpdater.on('error', (err) => {
       mainWindow.webContents.send('app-update', 'error', err);
     });
-    ipcMain.on('app-update', (_ev, name, payload) => {
+    ipcMain.on('app-update', (_ev, name: string, _payload) => {
       if (name === 'start-download') {
         appUpdater.downloadUpdate();
       }
       if (name === 'install-update') {
         appUpdater.quitAndInstall();
       }
+    });
+    ipcMain.on('update-user-settings', (_ev, settings: UserSettings) => {
+      appUpdater.setSettings(settings.appUpdater);
     });
     appUpdater.checkForUpdates();
   } else {
@@ -97,7 +109,7 @@ async function loadServer() {
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
-    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'build', 'templates');
+    process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
     pluginsDir = join(unpackedDir, 'build', 'plugins');
   }
 
@@ -161,9 +173,13 @@ async function run() {
 
   app.on('ready', async () => {
     log('App ready');
+    ipcMain.once('init-user-settings', (_ev, settings: UserSettings) => {
+      // we can't synchronously call the main process (due to deadlocks)
+      // so we wait for the initial settings to be loaded from the client
+      initializeAppUpdater(settings.appUpdater);
+    });
     await loadServer();
     await main();
-    initializeAppUpdater();
   });
 
   // Quit when all windows are closed.
