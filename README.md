@@ -43,6 +43,13 @@ $ yarn build // build extensions and libs
 $ yarn startall // start client and server at the same time
 ```
 
+## Extend Composer with Plugins
+
+Many aspects of Composer's functionality can be customized and extended through plugins. Features such as authentication, storage, publishing and even the samples and templates available on the homescreen can be customized by creating new plugins.
+
+[Read more about building Composer plugins &rarr;](Composer/plugins/README.md)
+
+
 ## Support and Feedback
 
 - [Ask a question on Stack Overflow][10]
