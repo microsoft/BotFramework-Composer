@@ -3,6 +3,7 @@
 
 import * as fs from 'fs';
 
+import { execSync } from 'child_process';
 import { Request, Response } from 'express';
 import { Archiver } from 'archiver';
 import { PluginLoader } from '@bfc/plugin-loader';
@@ -238,9 +239,16 @@ async function runTest(req: Request, res: Response) {
     const tester = '';
     let cmd = '';
     if (req.body.isTestFolder) {
-      cmd = `${tester} --debug true --autoDetect true --testSubFolder ${req.body.testPath}`;
+      cmd = `${tester} --autoDetect true --testSubFolder ${req.body.testPath}`;
     } else {
-      cmd = `${tester} --debug true --autoDetect true --pattern ${req.body.testPath}`;
+      cmd = `${tester} --autoDetect true --pattern ${req.body.testPath}`;
+    }
+
+    try {
+      const output = execSync(cmd, { encoding: 'utf8' });
+      cmd = output;
+    } catch (error) {
+      cmd = error.toString();
     }
 
     const result = {
