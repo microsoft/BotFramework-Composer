@@ -155,8 +155,8 @@ class FilePersistence {
     projectId: string
   ): IFileChange {
     let content = file.content;
-    const jsonContent = [FileExtensions.Dialog, FileExtensions.Manifest, FileExtensions.Setting];
-    if (~jsonContent.indexOf(fileExtension)) {
+    const isJson = [FileExtensions.Dialog, FileExtensions.Manifest, FileExtensions.Setting].includes(fileExtension);
+    if (isJson) {
       content = JSON.stringify(content, null, 2) + '\n';
     }
     return { id: `${file.id}${fileExtension}`, change: content, type: changeType, projectId };
