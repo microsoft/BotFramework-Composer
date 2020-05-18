@@ -138,12 +138,11 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
     } else {
       navigate(BASEPATH);
     }
-  } catch (err) {
+  } catch (error) {
     store.dispatch({
-      type: ActionTypes.SET_ERROR,
+      type: ActionTypes.GET_PROJECT_FAILURE,
       payload: {
-        summary: 'Failed to open bot',
-        message: err.response.data.message,
+        error,
       },
     });
     store.dispatch({
