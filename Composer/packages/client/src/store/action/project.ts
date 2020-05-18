@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { navigate } from '@reach/router';
-import get from 'lodash/get';
 
 import { ActionCreator } from '../types';
 import filePersistence from '../persistence/FilePersistence';
@@ -209,7 +208,8 @@ export const createProject: ActionCreator = async (
     await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects`, data);
     const files = response.data.files;
-    settingStorage.remove(get(response, 'id', ''));
+    const projectId = response.data.id;
+    settingStorage.remove(projectId);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
