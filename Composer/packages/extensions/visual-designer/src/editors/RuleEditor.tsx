@@ -61,7 +61,6 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
       }}
     >
       <StepEditor
-        addCoachMarkRef={addCoachMarkRef}
         data={stepGroup.data}
         id={stepGroup.id}
         key={stepGroup.id + '?version=' + outlineVersion.current}

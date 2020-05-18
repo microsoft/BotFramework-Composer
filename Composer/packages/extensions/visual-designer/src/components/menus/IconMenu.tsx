@@ -43,7 +43,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     );
   };
 
-  const buttonRef = useRef<IButton>();
+  const buttonRef = useRef<IButton | null>(null);
 
   useEffect((): void => {
     if (nodeSelected) {
@@ -88,7 +88,6 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     };
     return (
       <IconButton
-        // @ts-ignore
         ariaLabel={label}
         componentRef={buttonRef}
         data-testid="iconMenu"
@@ -104,12 +103,11 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
   return (
     <OverflowSet
-      // @ts-ignore
       aria-label="icon menu"
       onRenderItem={_onRenderItem}
       onRenderOverflowButton={_onRenderOverflowButton}
       overflowItems={menuItems}
-      styles={{ position: 'absolute', top: 0 }}
+      styles={{ root: { position: 'absolute', top: 0 } }}
       vertical
     />
   );
