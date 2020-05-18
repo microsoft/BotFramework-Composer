@@ -265,7 +265,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       try {
         process = spawn(
           startCommand,
-          [...commandAndArgs, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
+          [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
           {
             cwd: botDir,
             stdio: ['ignore', 'pipe', 'pipe'],
@@ -445,6 +445,26 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
         // used to read bot project template from source (bundled in plugin)
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
         await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
+        return destPath;
+      } else {
+        throw new Error(`Runtime already exists at ${destPath}`);
+      }
+    },
+  });
+
+  composer.addRuntimeTemplate({
+    key: 'javescript',
+    name: 'JS',
+    startCommand: 'node azurewebapp/lib/index.js',
+    eject: async (project: any, localDisk: IFileStorage) => {
+      const sourcePath = path.resolve(__dirname, '../../../../runtime/node');
+      const destPath = path.join(project.dir, 'runtime');
+      // const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
+      // const schemaDstPath = path.join(project.dir, 'schemas');
+      if (!(await project.fileStorage.exists(destPath))) {
+        // used to read bot project template from source (bundled in plugin)
+        await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
+        // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         return destPath;
       } else {
         throw new Error(`Runtime already exists at ${destPath}`);
