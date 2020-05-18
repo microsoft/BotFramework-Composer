@@ -15,16 +15,10 @@ import settingStorage from './../../utils/dialogSettingStorage';
 import luFileStatusStorage from './../../utils/luFileStatusStorage';
 import httpClient from './../../utils/httpUtil';
 
-export const checkProjectUpdates = async () => {
-  return new Promise(resolve => {
-    const timer = setInterval(() => {
-      //before open a new bot, we should check the task queue, lu/lg worker
-      if (filePersistence.isEmpty() && lgWorker.isEmpty() && luWorker.isEmpty()) {
-        clearInterval(timer);
-        resolve();
-      }
-    }, 200);
-  });
+const checkProjectUpdates = async () => {
+  const workers = [filePersistence, lgWorker, luWorker];
+
+  return Promise.all(workers.map(w => w.flush()));
 };
 
 export const setOpenPendingStatus: ActionCreator = async store => {

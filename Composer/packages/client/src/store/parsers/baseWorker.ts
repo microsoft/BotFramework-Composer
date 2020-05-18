@@ -3,6 +3,14 @@
 
 import uniqueId from 'lodash/uniqueId';
 
+interface WorkerMsg {
+  data: {
+    id: string;
+    error?: any;
+    payload?: any;
+  };
+}
+
 // Wrapper class
 export class BaseWorker {
   private worker: Worker;
@@ -14,7 +22,7 @@ export class BaseWorker {
     this.worker.onmessage = this.handleMsg;
   }
 
-  sendMsg = <Payload>(payload: Payload) => {
+  public sendMsg<Payload>(payload: Payload) {
     const msgId = uniqueId();
     const msg = { id: msgId, payload };
     return new Promise((resolve, reject) => {
@@ -23,10 +31,10 @@ export class BaseWorker {
       this.rejects[msgId] = reject;
       this.worker.postMessage(msg);
     });
-  };
+  }
 
   // Handle incoming calculation result
-  handleMsg = msg => {
+  public handleMsg(msg: WorkerMsg) {
     const { id, error, payload } = msg.data;
     if (error) {
       const reject = this.rejects[id];
@@ -39,9 +47,20 @@ export class BaseWorker {
     // purge used callbacks
     delete this.resolves[id];
     delete this.rejects[id];
-  };
+  }
 
-  isEmpty = () => {
+  public async flush(): Promise<boolean> {
+    return new Promise(resolve => {
+      const timer = setInterval(() => {
+        if (this.isEmpty()) {
+          clearInterval(timer);
+          resolve(true);
+        }
+      }, 100);
+    });
+  }
+
+  private isEmpty() {
     return !Object.keys(this.resolves).length;
-  };
+  }
 }

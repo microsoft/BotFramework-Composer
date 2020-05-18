@@ -88,9 +88,19 @@ class FilePersistence {
     }
   }
 
-  public async flush() {
+  public async flush(): Promise<boolean> {
     try {
-      if (this._isFlushing) return;
+      if (this._isFlushing) {
+        return new Promise(resolve => {
+          const timer = setInterval(() => {
+            if (!this.isEmpty()) {
+              clearInterval(timer);
+              resolve(true);
+            }
+          }, 100);
+        });
+      }
+
       this._isFlushing = true;
       while (!this.isEmpty()) {
         const tasks: Promise<void>[] = [];
@@ -102,8 +112,10 @@ class FilePersistence {
         await Promise.all(tasks);
       }
       this._isFlushing = false;
+      return Promise.resolve(true);
     } catch (error) {
       this._handleError('')(error);
+      return Promise.resolve(false);
     }
   }
 
@@ -122,7 +134,7 @@ class FilePersistence {
     await client.createFile(projectId, id, change);
   }
 
-  public isEmpty() {
+  private isEmpty() {
     return keys(this._taskQueue).every(key => !this._taskQueue[key].length);
   }
 
