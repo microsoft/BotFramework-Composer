@@ -1,6 +1,6 @@
 # ![Microsoft Bot Framework Composer](./docs/media/gh-banner.png)
 
-# Microsoft Bot Framework Composer [PREVIEW]
+# Microsoft Bot Framework Composer
 
 [![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=master)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=master)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=master)
@@ -22,18 +22,15 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
     <img alt="Bot Framework Composer Home Page" src="./docs/Assets/Screenshot-Composer-overview.png" style="max-width:700px;" />
 </p>
 
-## Who should use this PREVIEW release?
-
-- This preview is for developers looking to build conversation applications using the latest Bot Framework SDK preview features like Adaptive Dialogs, Language Understanding and Language Generation.
-- Composer and the Bot Framework Adaptive Dialog are in-preview and should not be used for production deployments.
-- We designed Composer to be a web app to allow developers to extend Composer as well as embed it within their own solutions. The
-  current version of Composer is a web app that runs locally. Future releases will enable Composer to run as a centralized hosted web application.
-
 ## Get Started
 
+- Download Composer for [Windows][201], [Mac][202] and [Linux][203].
 - To learn about the Bot Framework Composer, read the [documentation][5].
 - To get yourself familiar with the Composer, read [Introduction to Bot Framework Composer][1].
-- [Deploy Bot Framework Composer][2] on your local machine and [create your first bot][3].
+- [Create your first bot][3]!
+
+
+## Build Composer Locally
 
 To build and run the Composer project locally. From the Composer folder, run the following commands
 
@@ -105,3 +102,6 @@ the [Security TechCenter][103].
 [101]: https://opensource.microsoft.com/codeofconduct/faq/
 [102]: https://technet.microsoft.com/en-us/security/dn606155
 [103]: (https://technet.microsoft.com/en-us/security/default)
+[201]: (https://aka.ms/bf-composer-download-win)
+[202]: (https://aka.ms/bf-composer-download-linux)
+[203]: (https://aka.ms/bf-composer-download-mac)
