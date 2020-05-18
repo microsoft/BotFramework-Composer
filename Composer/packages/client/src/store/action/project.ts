@@ -15,9 +15,10 @@ import settingStorage from './../../utils/dialogSettingStorage';
 import luFileStatusStorage from './../../utils/luFileStatusStorage';
 import httpClient from './../../utils/httpUtil';
 
-export const check = async () => {
+export const checkProjectUpdates = async () => {
   return new Promise(resolve => {
     const timer = setInterval(() => {
+      //before open a new bot, we should check the task queue, lu/lg worker
       if (filePersistence.isEmpty() && lgWorker.isEmpty() && luWorker.isEmpty()) {
         clearInterval(timer);
         resolve();
@@ -30,7 +31,7 @@ export const setOpenPendingStatus: ActionCreator = async store => {
   store.dispatch({
     type: ActionTypes.GET_PROJECT_PENDING,
   });
-  await check();
+  await checkProjectUpdates();
 };
 
 export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
@@ -164,6 +165,7 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
       description,
       location,
     };
+    await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
     const files = response.data.files;
     const newProjectId = response.data.id;
@@ -204,7 +206,7 @@ export const createProject: ActionCreator = async (
       location,
       schemaUrl,
     };
-
+    await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects`, data);
     const files = response.data.files;
     settingStorage.remove(name);
