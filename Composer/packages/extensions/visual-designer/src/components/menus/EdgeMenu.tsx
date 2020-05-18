@@ -60,6 +60,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
   );
   return (
     <div
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       ref={forwardedRef}
       style={{
         width: EdgeAddButtonSize.width,
@@ -70,11 +71,12 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
         overflow: 'hidden',
         background: 'white',
       }}
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
     >
       <IconMenu
+        handleMenuShow={handleMenuShow}
         iconName="Add"
+        iconSize={7}
         iconStyles={{
           background: 'white',
           color: '#005CE6',
@@ -89,11 +91,9 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
             },
           },
         }}
-        iconSize={7}
-        nodeSelected={nodeSelected}
-        menuItems={menuItems}
         label={formatMessage('Add')}
-        handleMenuShow={handleMenuShow}
+        menuItems={menuItems}
+        nodeSelected={nodeSelected}
         {...rest}
       />
     </div>

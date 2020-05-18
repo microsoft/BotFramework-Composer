@@ -82,29 +82,29 @@ const LGPage: React.FC<LGPageProps> = (props) => {
   const onRenderHeaderContent = () => {
     return (
       <Toggle
+        checked={!!edit}
         className={'toggleEditMode'}
         css={actionButton}
-        onText={formatMessage('Edit mode')}
-        offText={formatMessage('Edit mode')}
         defaultChecked={false}
-        checked={!!edit}
+        offText={formatMessage('Edit mode')}
         onChange={onToggleEditMode}
+        onText={formatMessage('Edit mode')}
       />
     );
   };
 
   return (
     <Page
-      title={formatMessage('Bot Responses')}
-      toolbarItems={toolbarItems}
+      data-testid="LGPage"
       navLinks={navLinks}
       onRenderHeaderContent={onRenderHeaderContent}
-      data-testid="LGPage"
+      title={formatMessage('Bot Responses')}
+      toolbarItems={toolbarItems}
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <Router primary={false} component={Fragment}>
-          <CodeEditor path="/edit/*" dialogId={dialogId} />
-          <TableView path="/" dialogId={dialogId} />
+        <Router component={Fragment} primary={false}>
+          <CodeEditor dialogId={dialogId} path="/edit/*" />
+          <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>
     </Page>

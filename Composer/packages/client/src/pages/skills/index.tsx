@@ -73,29 +73,29 @@ const Skills: React.FC<RouteComponentProps> = () => {
   }, []);
 
   return (
-    <div data-testid="skills-page" css={ContainerStyle}>
+    <div css={ContainerStyle} data-testid="skills-page">
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
       <div role="main">
         <SkillSettings
-          projectId={projectId}
-          botName={botName}
-          settings={settings}
-          setSettings={actions.setSettings}
           botId={settings.MicrosoftAppId}
+          botName={botName}
+          projectId={projectId}
+          setSettings={actions.setSettings}
+          settings={settings}
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <SkillList skills={skills} projectId={projectId} onEdit={(idx) => setEditIndex(idx)} onDelete={onItemDelete} />
+      <SkillList onDelete={onItemDelete} onEdit={(idx) => setEditIndex(idx)} projectId={projectId} skills={skills} />
       <CreateSkillModal
-        isOpen={typeof editIndex === 'number'}
-        skills={skills}
-        projectId={projectId}
         editIndex={editIndex}
-        onSubmit={onSubmitForm}
+        isOpen={typeof editIndex === 'number'}
         onDismiss={onDismissForm}
+        onSubmit={onSubmitForm}
+        projectId={projectId}
+        skills={skills}
       />
     </div>
   );

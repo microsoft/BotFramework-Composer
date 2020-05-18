@@ -55,7 +55,7 @@ describe('Skill page', () => {
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
     const { container } = render(
-      <SkillList skills={items} projectId="test-project" onEdit={jest.fn()} onDelete={jest.fn()} />
+      <SkillList onDelete={jest.fn()} onEdit={jest.fn()} projectId="test-project" skills={items} />
     );
     expect(container).toHaveTextContent('Email Skill');
     expect(container).toHaveTextContent('Point Of Interest Skill');
@@ -64,7 +64,7 @@ describe('<SkillList />', () => {
   it('can edit the skill', () => {
     const onEdit = jest.fn();
     const { getAllByTestId } = render(
-      <SkillList skills={items} projectId="test-project" onEdit={onEdit} onDelete={jest.fn()} />
+      <SkillList onDelete={jest.fn()} onEdit={onEdit} projectId="test-project" skills={items} />
     );
 
     const editBtns = getAllByTestId('EditSkill');
@@ -84,12 +84,12 @@ describe('<SkillForm />', () => {
     const onDismiss = jest.fn(() => {});
     const { getByLabelText, getByText } = render(
       <CreateSkillModal
-        skills={items}
         editIndex={0}
-        projectId={'243245'}
-        onSubmit={onSubmit}
-        onDismiss={onDismiss}
         isOpen
+        onDismiss={onDismiss}
+        onSubmit={onSubmit}
+        projectId={'243245'}
+        skills={items}
       />
     );
 

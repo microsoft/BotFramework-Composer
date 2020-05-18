@@ -167,44 +167,44 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
 
   return (
     <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...formTitles} dialogType={DialogTypes.CreateFlow}>
-      <form onSubmit={handleSubmit} css={FormModalBody}>
-        <input type="submit" style={{ display: 'none' }} />
+      <form css={FormModalBody} onSubmit={handleSubmit}>
+        <input style={{ display: 'none' }} type="submit" />
         <Stack tokens={{ childrenGap: '3rem' }}>
           <StackItem grow={0}>
             <TextField
-              css={FormFieldManifestUrl}
-              label={formatMessage('Manifest url')}
-              value={formData.manifestUrl}
-              onChange={updateForm('manifestUrl')}
-              errorMessage={formDataErrors.manifestUrl}
-              data-testid="NewSkillManifestUrl"
-              required
               autoFocus
+              css={FormFieldManifestUrl}
+              data-testid="NewSkillManifestUrl"
+              errorMessage={formDataErrors.manifestUrl}
+              label={formatMessage('Manifest url')}
+              onChange={updateForm('manifestUrl')}
+              required
+              value={formData.manifestUrl}
             />
             {isValidating && (
-              <Spinner css={SpinnerLabel} size={SpinnerSize.medium} label="validating..." labelPosition="right" />
+              <Spinner css={SpinnerLabel} label="validating..." labelPosition="right" size={SpinnerSize.medium} />
             )}
             <TextField
               css={FormFieldEditName}
-              label={formatMessage('Custom name (optional)')}
-              value={formData.name}
-              onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
               data-testid="NewSkillName"
+              errorMessage={formDataErrors.name}
+              label={formatMessage('Custom name (optional)')}
+              onChange={updateForm('name')}
+              value={formData.name}
             />
           </StackItem>
 
           <StackItem>
             <PrimaryButton
+              disabled={isDisabled || isValidating}
               onClick={handleSubmit}
               text={formatMessage('Confirm')}
-              disabled={isDisabled || isValidating}
             />
             <DefaultButton
               css={MarginLeftSmall}
+              data-testid="SkillFormCancel"
               onClick={onDismiss}
               text={formatMessage('Cancel')}
-              data-testid="SkillFormCancel"
             />
           </StackItem>
         </Stack>

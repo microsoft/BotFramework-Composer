@@ -17,14 +17,14 @@ const ErrorMessage: React.FC<ErrorMessageProps> = (props) => {
 
   return (
     <MessageBar
-      dismissButtonAriaLabel={formatMessage('Close')}
-      isMultiline={true}
-      messageBarType={MessageBarType.error}
       data-testid="FieldErrorMessage"
+      dismissButtonAriaLabel={formatMessage('Close')}
+      isMultiline
+      messageBarType={MessageBarType.error}
     >
       {[label, error].filter(Boolean).join(' ')}
       {helpLink && (
-        <Link key="a" href={helpLink} target="_blank" rel="noopener noreferrer">
+        <Link href={helpLink} key="a" rel="noopener noreferrer" target="_blank">
           {formatMessage('Refer to the syntax documentation here.')}
         </Link>
       )}

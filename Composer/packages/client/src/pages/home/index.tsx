@@ -81,7 +81,7 @@ const Home: React.FC<RouteComponentProps> = () => {
     navigate(`projects/create/${id}`);
   };
 
-  const addButton = <Icon styles={home.button} iconName="Add" />;
+  const addButton = <Icon iconName="Add" styles={home.button} />;
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
@@ -141,9 +141,9 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar toolbarItems={toolbarItems} onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} />
+      <ToolBar onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} toolbarItems={toolbarItems} />
       <div css={home.page}>
-        <div role="main" css={home.leftPage}>
+        <div css={home.leftPage} role="main">
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div css={home.introduction}>
             {formatMessage(
@@ -153,34 +153,34 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.newBotContainer}>
             <div data-testid={'homePage-body-New'}>
               <ItemContainer
-                title={addButton}
                 content={formatMessage('New')}
-                styles={home.newBotItem}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
                   navigate('projects/create');
                 }}
+                styles={home.newBotItem}
+                title={addButton}
               />
             </div>
             {recentProjects.length > 0 ? (
               <ItemContainer
-                title={''}
                 content={recentProjects[0].name}
-                styles={home.latestBotItem}
+                forwardedRef={addRef}
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
-                forwardedRef={addRef}
+                styles={home.latestBotItem}
+                title={''}
               />
             ) : (
               <ItemContainer
-                title={''}
                 content={'ToDoBotWithLuis'}
-                styles={home.latestBotItem}
+                forwardedRef={addRef}
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
-                forwardedRef={addRef}
+                styles={home.latestBotItem}
+                title={''}
               />
             )}
           </div>
@@ -188,10 +188,10 @@ const Home: React.FC<RouteComponentProps> = () => {
             <div css={home.leftContainer}>
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
-                recentProjects={recentProjects}
                 onItemChosen={async (item) => {
                   await onItemChosen(item);
                 }}
+                recentProjects={recentProjects}
               />
             </div>
           )}
@@ -200,15 +200,15 @@ const Home: React.FC<RouteComponentProps> = () => {
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
                 <ItemContainer
-                  styles={home.tutorialTile}
-                  key={index}
-                  title={item.title}
                   content={item.content}
-                  subContent={item.subContent}
                   href={item.href}
-                  target="_blank"
-                  rel="noopener nofollow"
+                  key={index}
                   openExternal={isElectron()}
+                  rel="noopener nofollow"
+                  styles={home.tutorialTile}
+                  subContent={item.subContent}
+                  target="_blank"
+                  title={item.title}
                 />
               ))}
               <div css={home.linkContainer}>
@@ -220,12 +220,12 @@ const Home: React.FC<RouteComponentProps> = () => {
                 {linksButtom.map((link) => {
                   return (
                     <Link
-                      style={{ width: '150px' }}
                       href={link.to}
-                      tabIndex={0}
                       key={'homePageLeftLinks-' + link.text}
-                      target="_blank"
                       rel="noopener noreferrer"
+                      style={{ width: '150px' }}
+                      tabIndex={0}
+                      target="_blank"
                     >
                       <div css={link.css}>{link.text}</div>
                     </Link>

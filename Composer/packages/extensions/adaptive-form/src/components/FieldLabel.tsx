@@ -53,7 +53,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
         ),
       }}
     >
-      <div tabIndex={0} css={focusBorder}>
+      <div css={focusBorder} tabIndex={0}>
         <Icon
           aria-label={title + '; ' + description}
           iconName={'Unknown'}

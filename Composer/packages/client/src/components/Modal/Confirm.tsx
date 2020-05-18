@@ -46,21 +46,21 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
 
   return (
     <Dialog
-      hidden={false}
-      onDismiss={onCancel}
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
         styles: dialog,
       }}
+      hidden={false}
       modalProps={{
         isBlocking: true,
         styles: dialogModal,
       }}
+      onDismiss={onCancel}
     >
       <div css={[confirmationContainer, styles.content]}>
         {onRenderContent(subTitle, BuiltInStyles[style])}
-        {checkboxLabel && <Checkbox onChange={handleCheckbox} checked={!disabled} label={checkboxLabel} />}
+        {checkboxLabel && <Checkbox checked={!disabled} label={checkboxLabel} onChange={handleCheckbox} />}
       </div>
       <DialogFooter>
         <PrimaryButton data-testid="confirmPrompt" disabled={disabled} onClick={onConfirm} text={confirmBtnText} />
@@ -87,7 +87,7 @@ export const OpenConfirmModal = (title, subTitle, setting = {}) => {
       resolve(false);
     };
 
-    const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onConfirm={onConfirm} onCancel={onCancel} />;
+    const modal = <ConfirmDialog onCancel={onCancel} onConfirm={onConfirm} setting={{ title, subTitle, ...setting }} />;
     ReactDOM.render(modal, node);
   });
 };

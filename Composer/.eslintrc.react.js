@@ -47,7 +47,6 @@ module.exports = {
     'jsx-a11y/aria-proptypes': 'warn',
     'jsx-a11y/aria-role': 'warn',
     'jsx-a11y/aria-unsupported-elements': 'warn',
-    'jsx-a11y/autocomplete-valid': 'warn',
     'jsx-a11y/click-events-have-key-events': 'warn',
     'jsx-a11y/control-has-associated-label': [
       'off',

@@ -368,24 +368,24 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   return (
     <SelectionContext.Provider value={selectionContext}>
       <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
-        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+        <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
           <div
             className="obi-editor-container"
-            data-testid="obi-editor-container"
             css={{
               width: '100%',
               height: '100%',
               padding: '48px 20px',
               boxSizing: 'border-box',
             }}
+            data-testid="obi-editor-container"
             onClick={(e) => {
               e.stopPropagation();
               dispatchEvent(NodeEventTypes.Focus, { id: '' });
             }}
           >
             <AdaptiveDialogEditor
-              id={path}
               data={data}
+              id={path}
               onEvent={(eventName, eventData) => {
                 divRef.current?.focus({ preventScroll: true });
                 dispatchEvent(eventName, eventData);

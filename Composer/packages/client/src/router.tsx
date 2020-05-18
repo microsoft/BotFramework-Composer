@@ -33,16 +33,16 @@ const Routes = (props) => {
         <Router basepath={BASEPATH} {...props}>
           <Redirect
             from="/bot/:projectId/language-generation"
-            to="/bot/:projectId/language-generation/common"
             noThrow
+            to="/bot/:projectId/language-generation/common"
           />
           <Redirect
             from="/bot/:projectId/language-understanding"
-            to="/bot/:projectId/language-understanding/all"
             noThrow
+            to="/bot/:projectId/language-understanding/all"
           />
-          <Redirect from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" noThrow />
-          <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
+          <Redirect from="/bot/:projectId/publish" noThrow to="/bot/:projectId/publish/all" />
+          <Redirect from="/" noThrow to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
             <SettingPage path="settings/*" />

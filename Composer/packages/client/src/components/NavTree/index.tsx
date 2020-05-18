@@ -38,13 +38,13 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
 
   return (
     <Resizable
-      size={{ width: currentWidth, height: 'auto' }}
-      minWidth={180}
-      maxWidth={500}
       enable={{
         right: true,
       }}
+      maxWidth={500}
+      minWidth={180}
       onResizeStop={handleResize}
+      size={{ width: currentWidth, height: 'auto' }}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
         {navLinks.map((item) => {
@@ -52,14 +52,14 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
 
           return (
             <DefaultButton
-              key={item.id}
-              text={item.name}
-              styles={isSelected ? itemSelected : itemNotSelected}
               href={item.url}
+              key={item.id}
               onClick={(e) => {
                 e.preventDefault();
                 navigateTo(item.url);
               }}
+              styles={isSelected ? itemSelected : itemNotSelected}
+              text={item.name}
             />
           );
         })}

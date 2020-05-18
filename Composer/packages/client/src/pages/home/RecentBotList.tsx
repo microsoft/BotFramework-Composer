@@ -44,7 +44,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'string',
       onRender: (item) => {
         return (
-          <div css={tableCell} data-is-focusable={true}>
+          <div css={tableCell} data-is-focusable>
             <Link
               aria-label={formatMessage(`Bot name is {botName}`, { botName: item.name })}
               onClick={() => onItemChosen(item)}
@@ -66,11 +66,11 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'number',
       onRender: (item) => {
         return (
-          <div css={tableCell} data-is-focusable={true}>
+          <div css={tableCell} data-is-focusable>
             <div
-              tabIndex={-1}
-              css={content}
               aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
+              css={content}
+              tabIndex={-1}
             >
               {calculateTimeDiff(item.dateModified)}
             </div>
@@ -89,11 +89,11 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'string',
       onRender: (item) => {
         return (
-          <div css={tableCell} data-is-focusable={true}>
+          <div css={tableCell} data-is-focusable>
             <div
-              tabIndex={-1}
-              css={content}
               aria-label={formatMessage(`location is {location}`, { location: item.path })}
+              css={content}
+              tabIndex={-1}
             >
               {item.path}
             </div>
@@ -106,7 +106,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
           ...props,
           onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -116,19 +116,19 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
   }
 
   return (
-    <div data-is-scrollable="true" css={detailListContainer}>
+    <div css={detailListContainer} data-is-scrollable="true">
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
-          items={recentProjects}
-          compact={false}
-          columns={tableColums}
-          getKey={(item) => `${item.path}/${item.name}`}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-          isHeaderVisible={true}
-          onItemInvoked={onItemChosen}
-          selectionMode={SelectionMode.single}
           checkboxVisibility={CheckboxVisibility.hidden}
+          columns={tableColums}
+          compact={false}
+          getKey={(item) => `${item.path}/${item.name}`}
+          isHeaderVisible
+          items={recentProjects}
+          layoutMode={DetailsListLayoutMode.justified}
+          onItemInvoked={onItemChosen}
+          onRenderDetailsHeader={onRenderDetailsHeader}
+          selectionMode={SelectionMode.single}
         />
       </ScrollablePane>
     </div>

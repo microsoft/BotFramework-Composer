@@ -21,8 +21,8 @@ const Routes = () => {
   return (
     <ErrorBoundary>
       <Router>
-        <Redirect from="/" to={getRedirect()} noThrow />
-        <DialogSettings path="dialog-settings" default />
+        <Redirect from="/" noThrow to={getRedirect()} />
+        <DialogSettings default path="dialog-settings" />
         <AppSettings path="preferences" />
         <RuntimeSettings path="runtime" />
       </Router>

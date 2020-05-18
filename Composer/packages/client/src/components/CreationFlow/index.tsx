@@ -114,26 +114,26 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       <Home />
       <Router>
         <DefineConversation
-          onSubmit={handleSubmit}
-          onDismiss={handleDismiss}
-          onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
+          onCurrentPathUpdate={updateCurrentPath}
+          onDismiss={handleDismiss}
+          onSubmit={handleSubmit}
           path="create/:templateId"
           saveTemplateId={saveTemplateId}
         />
-        <CreateOptions templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} path="create" />
+        <CreateOptions onDismiss={handleDismiss} onNext={handleCreateNext} path="create" templates={templateProjects} />
         <DefineConversation
-          onSubmit={handleSubmit}
-          onDismiss={handleDismiss}
-          onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
+          onCurrentPathUpdate={updateCurrentPath}
+          onDismiss={handleDismiss}
+          onSubmit={handleSubmit}
           path=":projectId/:templateId/save"
         />
         <OpenProject
-          onOpen={openBot}
-          onDismiss={handleDismiss}
-          onCurrentPathUpdate={updateCurrentPath}
           focusedStorageFolder={focusedStorageFolder}
+          onCurrentPathUpdate={updateCurrentPath}
+          onDismiss={handleDismiss}
+          onOpen={openBot}
           path="open"
         />
       </Router>

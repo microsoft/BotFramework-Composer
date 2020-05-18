@@ -61,8 +61,8 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
       />
       <Link
         disabled={!manifest || !manifest.body || !manifest.name}
-        styles={{ root: { fontSize: '12px', padding: '0 16px' } }}
         onClick={handleShowManifestClick}
+        styles={{ root: { fontSize: '12px', padding: '0 16px' } }}
       >
         {formatMessage('Show skill manifest')}
       </Link>

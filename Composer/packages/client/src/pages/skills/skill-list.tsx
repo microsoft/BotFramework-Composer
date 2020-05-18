@@ -108,31 +108,31 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
       onRender: (item, index) => {
         return (
           <div>
-            <Stack tokens={{ childrenGap: 8 }} horizontal>
+            <Stack horizontal tokens={{ childrenGap: 8 }}>
               <IconButton
+                ariaLabel="Edit"
+                data-testid="EditSkill"
                 iconProps={{
                   iconName: 'Edit',
                 }}
                 onClick={() => onEdit(index)}
                 title="Edit"
-                ariaLabel="Edit"
-                data-testid="EditSkill"
               />
               <IconButton
+                ariaLabel="Delete"
+                data-testid="DeleteSkill"
                 iconProps={{
                   iconName: 'Delete',
                 }}
                 onClick={() => onDelete(index)}
                 title="Delete"
-                ariaLabel="Delete"
-                data-testid="DeleteSkill"
               />
               <IconButton
+                ariaLabel="View"
+                data-testid="ViewManifest"
                 iconProps={{ iconName: 'ContextMenu' }}
                 onClick={() => onViewManifest(item)}
                 title="View"
-                ariaLabel="View"
-                data-testid="ViewManifest"
               />
             </Stack>
           </div>
@@ -144,7 +144,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
       <div data-testid="tableHeader">
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
             onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
@@ -159,14 +159,14 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
       <div css={TableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            items={skills}
-            styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}
-            columns={getColumns()}
-            selectionMode={SelectionMode.single}
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            onRenderDetailsHeader={onRenderDetailsHeader}
             checkboxVisibility={CheckboxVisibility.hidden}
+            columns={getColumns()}
+            isHeaderVisible
+            items={skills}
+            layoutMode={DetailsListLayoutMode.justified}
+            onRenderDetailsHeader={onRenderDetailsHeader}
+            selectionMode={SelectionMode.single}
+            styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}
           />
         </ScrollablePane>
       </div>

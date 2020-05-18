@@ -53,12 +53,12 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       <section css={section}>
         <h2>{formatMessage('Onboarding')}</h2>
         <SettingToggle
-          id="onboardingToggle"
-          title={formatMessage('Onboarding')}
-          image={images.onboarding}
-          description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
           checked={!complete}
+          description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
+          id="onboardingToggle"
+          image={images.onboarding}
           onToggle={onOnboardingChange}
+          title={formatMessage('Onboarding')}
         />
         <TeachingBubble
           calloutProps={{
@@ -67,7 +67,6 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             directionalHint: DirectionalHint.rightCenter,
             isBeakVisible: false,
           }}
-          target="#onboardingToggle"
           styles={{
             bodyContent: {
               padding: '0px',
@@ -76,6 +75,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
               margin: '0px',
             },
           }}
+          target="#onboardingToggle"
         >
           <div
             css={css`
@@ -108,26 +108,26 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <h2>{formatMessage('Property editor preferences')}</h2>
         <SettingToggle
           checked={userSettings.codeEditor.minimap}
-          onToggle={onCodeEditorChange('minimap')}
-          title={formatMessage('Minimap')}
           description={formatMessage(
             'A minimap gives a overview of your source code for quick navigation and code understanding.'
           )}
           image={images.minimap}
+          onToggle={onCodeEditorChange('minimap')}
+          title={formatMessage('Minimap')}
         />
         <SettingToggle
           checked={userSettings.codeEditor.lineNumbers}
-          onToggle={onCodeEditorChange('lineNumbers')}
-          title={formatMessage('Line numbers')}
           description={formatMessage('Enable line numbers to refer to code lines by number.')}
           image={images.lineNumbers}
+          onToggle={onCodeEditorChange('lineNumbers')}
+          title={formatMessage('Line numbers')}
         />
         <SettingToggle
           checked={userSettings.codeEditor.wordWrap}
-          onToggle={onCodeEditorChange('wordWrap')}
-          title={formatMessage('Sentence wrap')}
           description={formatMessage('Display lines that extends beyond the width of the editor on the next line.')}
           image={images.wordWrap}
+          onToggle={onCodeEditorChange('wordWrap')}
+          title={formatMessage('Sentence wrap')}
         />
       </section>
 
