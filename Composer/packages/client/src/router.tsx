@@ -40,7 +40,6 @@ const Routes = props => {
           />
           <Redirect from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" noThrow />
           <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
-          {/* <Redirect from="/bot/:projectId" to="/bot/:projectId/dialogs/Main" noThrow /> */}
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
             <SettingPage path="settings/*" />
@@ -79,7 +78,7 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = prop
     }
   }, [props.projectId, state.projectId]);
 
-  if (props.projectId !== state.projectId) {
+  if (state.botOpening || props.projectId !== state.projectId) {
     return <LoadingSpinner />;
   }
 

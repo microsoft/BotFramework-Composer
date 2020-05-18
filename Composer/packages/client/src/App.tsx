@@ -21,7 +21,7 @@ import { RequireAuth } from './components/RequireAuth';
 import onboardingState from './utils/onboardingStorage';
 import { isElectron } from './utils/electronUtil';
 import { useLinks } from './utils/hooks';
-import { LoadingModal } from './components/LoadingModal';
+import { LoadingSpinner } from './components/LoadingSpinner';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -110,6 +110,7 @@ export const App: React.FC = () => {
           </div>
         </nav>
         <div css={rightPanel}>
+          {botOpening && <LoadingSpinner />}
           <ErrorBoundary>
             <RequireAuth>
               <Routes component={Content} />
@@ -118,7 +119,6 @@ export const App: React.FC = () => {
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
         <Suspense fallback={<div />}>{renderAppUpdater && <AppUpdater />}</Suspense>
-        <LoadingModal isOpen={botOpening} />
       </div>
     </Fragment>
   );
