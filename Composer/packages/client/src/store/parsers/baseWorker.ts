@@ -19,7 +19,7 @@ export class BaseWorker {
 
   constructor(worker: Worker) {
     this.worker = worker;
-    this.worker.onmessage = this.handleMsg;
+    this.worker.onmessage = this.handleMsg.bind(this);
   }
 
   public sendMsg<Payload>(payload: Payload) {
