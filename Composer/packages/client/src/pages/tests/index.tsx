@@ -15,7 +15,7 @@ import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../components/TestController';
+import { TestsController } from '../../components/TestsController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
@@ -83,8 +83,8 @@ const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
     dismissManifestModal,
     removeDialog,
     setDesignPageLocation,
-    navTo,
-    selectTo,
+    navToTest,
+    selectToTest,
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
@@ -116,7 +116,7 @@ const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
   useEffect(() => {
     const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
     if (index >= 0 && !designPageLocation.selected) {
-      selectTo(createSelectedPath(index));
+      selectToTest(createSelectedPath(index));
     }
   }, [currentDialog?.id, designPageLocation]);
 
@@ -141,7 +141,31 @@ const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
     }
   }, [location]);
 
-  function handleSelect(id, selected = '') {}
+  const openNewTriggerModal = () => {
+    setTriggerModalVisibility(true);
+  };
+
+  function handleSelect(id, selected = '') {
+    if (selected) {
+      selectToTest(selected);
+    } else {
+      navToTest(id);
+    }
+  }
+
+  const onCreateDialogComplete = newDialog => {
+    if (newDialog) {
+      navToTest(newDialog);
+    }
+  };
+
+  const toolbarItems = [
+    {
+      type: 'element',
+      element: <TestsController />,
+      align: 'right',
+    },
+  ];
 
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
@@ -169,6 +193,18 @@ const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
         />
+        <div role="main" css={contentWrapper}>
+          <ToolBar
+            toolbarItems={toolbarItems}
+            actions={actions}
+            projectId={projectId}
+            currentDialog={currentDialog}
+            openNewTriggerModal={openNewTriggerModal}
+            onCreateDialogComplete={onCreateDialogComplete}
+            onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+            showSkillManifestModal={() => setExportSkillModalVisible(true)}
+          />
+        </div>
       </div>
     </React.Fragment>
   );

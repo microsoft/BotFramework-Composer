@@ -90,6 +90,8 @@ export interface RuntimeTemplate {
 export interface State {
   dialogs: DialogInfo[];
   testDialogs: DialogInfo[];
+  isTestFolder: boolean;
+  testPath: string;
   projectId: string;
   botName: string;
   location: string;

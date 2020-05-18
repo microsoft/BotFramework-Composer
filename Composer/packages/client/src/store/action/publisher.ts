@@ -69,6 +69,28 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
   }
 };
 
+export const testTarget: ActionCreator = async ({ getState, dispatch }, target) => {
+  try {
+    const state = getState();
+    const err = {
+      response: {
+        data: {
+          message: formatMessage(state.testPath),
+        },
+      },
+    };
+    throw err;
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.PUBLISH_FAILED,
+      payload: {
+        error: err.response.data,
+        target: target,
+      },
+    });
+  }
+};
+
 export const rollbackToVersion: ActionCreator = async ({ dispatch }, projectId, target, version, sensitiveSettings) => {
   try {
     const response = await httpClient.post(`/publish/${projectId}/rollback/${target.name}`, {

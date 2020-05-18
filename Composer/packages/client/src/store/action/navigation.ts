@@ -7,6 +7,8 @@ import { ActionCreator } from './../types';
 import { ActionTypes } from './../../constants';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
 
+import get from 'lodash/get';
+
 export const setDesignPageLocation: ActionCreator = (
   { dispatch },
   { projectId = '', dialogId = '', selected = '', focused = '', breadcrumb = [], onBreadcrumbItemClick, promptTab }
@@ -41,6 +43,57 @@ export const selectTo: ActionCreator = ({ getState }, selectPath) => {
 
   if (checkUrl(currentUri, state.designPageLocation)) return;
   navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
+};
+
+export const navToTest: ActionCreator = ({ getState, dispatch }, dialogId, breadcrumb = []) => {
+  const state = getState();
+  const currentUri = `/bot/${state.projectId}/tests/${dialogId}`;
+
+  if (checkUrl(currentUri, state.designPageLocation)) return;
+  //if dialog change we should flush some debounced functions
+  navigateTo(currentUri, { state: { breadcrumb } });
+
+  state.testDialogs.find((item, index) => {
+    if (item.id == dialogId) {
+      dispatch({
+        type: ActionTypes.SET_TEST_PARAMS,
+        payload: { isTestFolder: true, testPath: item.lgFile },
+      });
+      return true;
+    }
+    return false;
+  });
+};
+
+export const selectToTest: ActionCreator = ({ getState, dispatch }, selectPath) => {
+  const state = getState();
+  if (!selectPath) return;
+  // initial dialogId, projectId maybe empty string  ""
+  let { dialogId, projectId } = state.designPageLocation;
+  const { breadcrumb } = state;
+  if (!dialogId) dialogId = 'Main';
+  if (!projectId) projectId = state.projectId;
+
+  let currentUri = `/bot/${projectId}/tests/${dialogId}`;
+
+  currentUri = `${currentUri}?selected=${selectPath}`;
+
+  if (checkUrl(currentUri, state.designPageLocation)) return;
+  navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
+
+  state.testDialogs.find((item, index) => {
+    if (item.id == dialogId) {
+      const trigger = get(item, selectPath);
+      if (trigger != null) {
+        dispatch({
+          type: ActionTypes.SET_TEST_PARAMS,
+          payload: { isTestFolder: false, testPath: trigger.type },
+        });
+        return true;
+      }
+    }
+    return false;
+  });
 };
 
 export const focusTo: ActionCreator = ({ getState }, focusPath, fragment) => {
