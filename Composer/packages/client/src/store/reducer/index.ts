@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import has from 'lodash/has';
 import merge from 'lodash/merge';
 import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
@@ -429,6 +430,14 @@ const dismissSkillManifestModal: ReducerFunc = state => {
 };
 
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
+  const { botName } = state;
+  // set value in local storage
+  for (const property of SensitiveProperties) {
+    if (has(settings, property)) {
+      const propertyValue = get(settings, property, '');
+      settingStorage.setField(botName, property, propertyValue);
+    }
+  }
   state.settings = settings;
   return state;
 };

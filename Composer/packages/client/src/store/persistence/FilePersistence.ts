@@ -24,6 +24,7 @@ const actionType2ChangeType = {
   [ActionTypes.CREATE_SKILL_MANIFEST]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
+  [ActionTypes.SYNC_ENV_SETTING]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
 };
 
 class FilePersistence {
@@ -142,7 +143,8 @@ class FilePersistence {
     projectId: string
   ): IFileChange {
     let content = file.content;
-    if (fileExtension === FileExtensions.Dialog || fileExtension === FileExtensions.Manifest) {
+    const jsonContent = [FileExtensions.Dialog, FileExtensions.Manifest, FileExtensions.Setting];
+    if (~jsonContent.indexOf(fileExtension)) {
       content = JSON.stringify(content, null, 2) + '\n';
     }
     return { id: `${file.id}${fileExtension}`, change: content, type: changeType, projectId };
@@ -221,6 +223,17 @@ class FilePersistence {
     return fileChanges;
   }
 
+  private _getSettingsChanges(previousState: State, currentState: State, projectId: string) {
+    return [
+      {
+        id: `${FileExtensions.Setting}`,
+        change: JSON.stringify(currentState.settings, null, 2),
+        type: ChangeType.UPDATE,
+        projectId,
+      },
+    ];
+  }
+
   private _getFileChanges(previousState: State, currentState: State, action: ActionType): IFileChange[] {
     let fileChanges: IFileChange[] = [];
     const fileChangeType = actionType2ChangeType[action.type];
@@ -258,6 +271,9 @@ class FilePersistence {
       case FileExtensions.Manifest: {
         fileChanges = this._getSkillManifestsChanges(targetId, previousState, currentState, changeType);
         break;
+      }
+      case FileExtensions.Setting: {
+        fileChanges = this._getSettingsChanges(previousState, currentState, action.payload.projectId);
       }
     }
     return fileChanges;

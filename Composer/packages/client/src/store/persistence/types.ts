@@ -12,6 +12,7 @@ export enum FileExtensions {
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
+  Setting = 'appsettings.json',
 }
 
 export type FileErrorHandler = (error) => void;
