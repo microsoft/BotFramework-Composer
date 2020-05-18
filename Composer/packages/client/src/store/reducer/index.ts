@@ -100,8 +100,14 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.locale = locale;
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
+  state.botOpening = false;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
+  return state;
+};
+
+const getProjectPending: ReducerFunc = state => {
+  state.botOpening = true;
   return state;
 };
 
@@ -124,6 +130,7 @@ const removeProjectSuccess: ReducerFunc = state => {
 
 const getProjectFailure: ReducerFunc = (state, { error }) => {
   setError(state, error);
+  state.botOpening = false;
   return state;
 };
 
@@ -625,6 +632,7 @@ const noOp: ReducerFunc = state => {
 
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.GET_PROJECT_PENDING]: getProjectPending,
   [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,

@@ -21,6 +21,7 @@ import { RequireAuth } from './components/RequireAuth';
 import onboardingState from './utils/onboardingStorage';
 import { isElectron } from './utils/electronUtil';
 import { useLinks } from './utils/hooks';
+import { LoadingModal } from './components/LoadingModal';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -35,7 +36,7 @@ export const App: React.FC = () => {
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
   const { onboardingSetComplete } = actions;
-  const { botName, locale, announcement } = state;
+  const { botName, locale, announcement, botOpening } = state;
   const { topLinks, bottomLinks } = useLinks();
 
   useEffect(() => {
@@ -117,6 +118,7 @@ export const App: React.FC = () => {
         </div>
         <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
         <Suspense fallback={<div />}>{renderAppUpdater && <AppUpdater />}</Suspense>
+        <LoadingModal isOpen={botOpening} />
       </div>
     </Fragment>
   );

@@ -40,4 +40,8 @@ export class BaseWorker {
     delete this.resolves[id];
     delete this.rejects[id];
   };
+
+  isEmpty = () => {
+    return !Object.keys(this.resolves).length;
+  };
 }

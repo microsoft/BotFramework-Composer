@@ -4,6 +4,9 @@
 import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
+import filePersistence from '../persistence/FilePersistence';
+import lgWorker from '../parsers/lgWorker';
+import luWorker from '../parsers/luWorker';
 
 import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
@@ -11,6 +14,24 @@ import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
 import luFileStatusStorage from './../../utils/luFileStatusStorage';
 import httpClient from './../../utils/httpUtil';
+
+export const check = async () => {
+  return new Promise(resolve => {
+    const timer = setInterval(() => {
+      if (filePersistence.isEmpty() && lgWorker.isEmpty() && luWorker.isEmpty()) {
+        clearInterval(timer);
+        resolve();
+      }
+    }, 200);
+  });
+};
+
+export const setOpenPendingStatus: ActionCreator = async store => {
+  store.dispatch({
+    type: ActionTypes.GET_PROJECT_PENDING,
+  });
+  await check();
+};
 
 export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
   dispatch({
@@ -99,6 +120,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       storageId,
       path: absolutePath,
     };
+    await setOpenPendingStatus(store);
     const response = await httpClient.put(`/projects/open`, data);
     const files = response.data.files;
     const projectId = response.data.id;

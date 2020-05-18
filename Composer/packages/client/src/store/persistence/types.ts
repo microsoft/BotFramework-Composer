@@ -17,6 +17,7 @@ export enum FileExtensions {
 export type FileErrorHandler = (error) => void;
 
 export interface IFileChange {
+  projectId: string;
   id: string; //now use file name
   change: string;
   type: ChangeType;
