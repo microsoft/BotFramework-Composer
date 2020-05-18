@@ -16,7 +16,7 @@ Bot Framework Composer is an integrated development tool for developers and mult
 - Language generation and templating system
 - A ready-to-use bot runtime executable
 
-The Bot Framework Composer is an open source tool based on the Bot Framework SDK.
+The Bot Framework Composer is an open source tool based on the Bot Framework SDK. It is available as a [desktop application](#get-started) as well as a [web-based component](#build-composer-locally)
 
 <p align="center">
     <img alt="Bot Framework Composer Home Page" src="./docs/Assets/Screenshot-Composer-overview.png" style="max-width:700px;" />
@@ -32,9 +32,11 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 
 ## Build Composer Locally
 
-To build and run the Composer project locally. From the Composer folder, run the following commands
+To build and run the Composer project locally as a web application, clone the source code from Github and build the application using the instructions below.
 
 ```
+$ git clone git@github.com:microsoft/BotFramework-Composer.git
+$ cd BotFramework-Composer
 $ cd Composer // switch to Composer folder
 $ yarn install // install dependencies
 $ yarn build // build extensions and libs
@@ -101,7 +103,7 @@ the [Security TechCenter][103].
 [100]: https://opensource.microsoft.com/codeofconduct/
 [101]: https://opensource.microsoft.com/codeofconduct/faq/
 [102]: https://technet.microsoft.com/en-us/security/dn606155
-[103]: (https://technet.microsoft.com/en-us/security/default)
-[201]: (https://aka.ms/bf-composer-download-win)
-[202]: (https://aka.ms/bf-composer-download-linux)
-[203]: (https://aka.ms/bf-composer-download-mac)
+[103]: https://technet.microsoft.com/en-us/security/default
+[201]: https://aka.ms/bf-composer-download-win
+[202]: https://aka.ms/bf-composer-download-linux
+[203]: https://aka.ms/bf-composer-download-mac
