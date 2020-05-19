@@ -88,20 +88,20 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     );
   };
 
-  const handleSubmit = formData => {
+  const handleSubmit = async formData => {
+    handleDismiss();
     switch (creationFlowStatus) {
       case CreationFlowStatus.NEW_FROM_SCRATCH:
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
-        handleCreateNew(formData);
+        await handleCreateNew(formData);
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
         break;
 
       default:
-        handleCreateNew(formData);
+        await handleCreateNew(formData);
     }
-    handleDismiss();
   };
 
   const handleCreateNext = async data => {
