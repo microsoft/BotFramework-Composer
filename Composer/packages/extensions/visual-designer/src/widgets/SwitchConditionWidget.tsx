@@ -85,7 +85,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={switchNode.offset}>
-        <ElementWrapper id={switchNode.id} onEvent={onEvent}>
+        <ElementWrapper id={switchNode.id} data={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(switchNode.data, boundary);

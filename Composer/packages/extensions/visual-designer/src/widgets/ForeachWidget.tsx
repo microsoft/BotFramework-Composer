@@ -71,7 +71,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
-        <ElementWrapper id={id} onEvent={onEvent}>
+        <ElementWrapper id={id} data={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(foreachNode.data, boundary);

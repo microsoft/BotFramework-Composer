@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC, useContext, ReactNode, ReactElement } from 'react';
+import { FC, useContext } from 'react';
 import classnames from 'classnames';
-import { generateSDKTitle } from '@bfc/shared';
+import { generateSDKTitle, PromptTab } from '@bfc/shared';
 
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -26,35 +26,12 @@ const nodeBorderDoubleSelectedStyle = css`
 `;
 export interface ElementWrapperProps {
   id: string;
-  tab?: string;
-  titleInHeader?: boolean;
+  tab?: PromptTab;
+  data: any;
   onEvent: (eventName: NodeEventTypes, eventData: any) => any;
 }
 
-function checkHasProps(node: ReactNode): node is ReactElement {
-  return (node as ReactElement).props != null;
-}
-
-function extractNodeTitle(node: ReactNode, titleInHeader: boolean): string {
-  if (node == null || typeof node !== 'object') {
-    return '';
-  }
-  if (checkHasProps(node)) {
-    const { props } = node;
-    if (props?.header != null && titleInHeader) {
-      return props?.header?.props?.title || '';
-    } else if (props?.data != null) {
-      return generateSDKTitle(props.data);
-    } else if (props?.children != null) {
-      return extractNodeTitle(props.children, titleInHeader);
-    } else {
-      return '';
-    }
-  }
-  return '';
-}
-
-export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader, onEvent, children }): JSX.Element => {
+export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, data, onEvent, children }): JSX.Element => {
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
@@ -74,8 +51,6 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
     };
   };
 
-  const ariaLabel = extractNodeTitle(children, titleInHeader ?? false);
-
   return (
     <div
       className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
@@ -94,7 +69,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}
-      aria-label={ariaLabel}
+      aria-label={generateSDKTitle(data, '', tab)}
     >
       {children}
     </div>

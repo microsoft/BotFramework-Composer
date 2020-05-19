@@ -74,7 +74,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={conditionNode.offset}>
-        <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
+        <ElementWrapper id={conditionNode.id} data={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(conditionNode.data, boundary);

@@ -5,6 +5,7 @@ import get from 'lodash/get';
 
 import { SDKKinds } from './types';
 import { ConceptLabels } from './labelMap';
+import { PromptTab, PropmtTabTitles } from './promptTabs';
 
 export const PROMPT_TYPES = [
   SDKKinds.AttachmentInput,
@@ -178,12 +179,17 @@ const truncateSDKType = $kind => (typeof $kind === 'string' ? $kind.replace('Mic
  * Title priority: $designer.name > title from sdk schema > customize title > $kind suffix
  * @param customizedTitile customized title
  */
-export function generateSDKTitle(data, customizedTitle?: string) {
+export function generateSDKTitle(data, customizedTitle?: string, tab?: PromptTab) {
   const $kind = get(data, '$kind');
   const titleFrom$designer = get(data, '$designer.name');
   const titleFromShared = get(ConceptLabels, [$kind, 'title']);
   const titleFrom$kind = truncateSDKType($kind);
-  return titleFrom$designer || customizedTitle || titleFromShared || titleFrom$kind;
+
+  const title = titleFrom$designer || customizedTitle || titleFromShared || titleFrom$kind;
+  if (tab) {
+    return `${PropmtTabTitles} (${title})`;
+  }
+  return title;
 }
 
 export function getInputType($kind: string): string {

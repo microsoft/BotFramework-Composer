@@ -66,7 +66,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={botAsksNode.offset}>
-        <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
+        <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} data={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(botAsksNode.data, boundary);
@@ -78,7 +78,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent} titleInHeader={true}>
+        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} data={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
@@ -90,7 +90,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
-        <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER} onEvent={onEvent}>
+        <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER} data={data} onEvent={onEvent}>
           <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />
         </ElementWrapper>
       </OffsetContainer>
