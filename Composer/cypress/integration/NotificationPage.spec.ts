@@ -3,9 +3,7 @@
 
 context('Notification Page', () => {
   beforeEach(() => {
-    cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
-    cy.visitPage('Notifications');
   });
 
   it('can show lg syntax error ', () => {
@@ -13,7 +11,7 @@ context('Notification Page', () => {
 
     cy.get('.toggleEditMode button').as('switchButton');
     cy.get('@switchButton').click();
-    cy.get('textarea').type('#');
+    cy.get('textarea').type('#', { delay: 200 });
 
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
@@ -32,7 +30,7 @@ context('Notification Page', () => {
     });
 
     cy.get('.toggleEditMode button').click();
-    cy.get('textarea').type('t');
+    cy.get('textarea').type('t', { delay: 200 });
 
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
@@ -57,7 +55,7 @@ context('Notification Page', () => {
     cy.withinEditor('PropertyEditor', () => {
       cy.findByText('Condition').should('exist');
       cy.findByTestId('expression-type-dropdown-Condition').focus().should('contain.text', 'expression');
-      cy.get('#root\\.condition').click().type('foo = bar');
+      cy.get('#root\\.condition').click().type('foo = bar', { delay: 200 });
       cy.findByTestId('FieldErrorMessage').should('exist');
     });
 
