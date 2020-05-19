@@ -8,7 +8,7 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { moreButton, overflowSet, menuStyle, navItem, itemText, content } from './styles';
+import { overflowSet, menuStyle, navItem, itemText, content } from './styles';
 
 interface ITreeItemProps {
   link: any;
@@ -21,7 +21,14 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div css={itemText(item.depth)} onBlur={item.onBlur} onFocus={item.onFocus} role="cell" tabIndex={0}>
+    <div
+      css={itemText(item.depth)}
+      data-is-focusable
+      onBlur={item.onBlur}
+      onFocus={item.onFocus}
+      role="cell"
+      tabIndex={0}
+    >
       <div css={content} tabIndex={-1}>
         {item.depth !== 0 && (
           <Icon
@@ -47,11 +54,16 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
     return showIcon ? (
       <IconButton
         className="dialog-more-btn"
+        data-is-focusable={isActive}
         data-testid="dialogMoreButton"
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.stopPropagation();
+          }
+        }}
         role="cell"
-        styles={moreButton(isActive)}
       />
     ) : null;
   };
@@ -76,6 +88,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
       <OverflowSet
         css={overflowSet}
         data-testid={`DialogTreeItem${link.id}`}
+        doNotContainWithinFocusZone
         items={[
           {
             key: link.id,
@@ -93,6 +106,8 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
           },
         ]}
         role="row"
+        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
+        //remove this at that time
         styles={{ item: { flex: 1 } }}
       />
     </div>

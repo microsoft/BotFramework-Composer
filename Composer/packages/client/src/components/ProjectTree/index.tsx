@@ -12,6 +12,7 @@ import {
   IGroupedList,
 } from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
@@ -163,17 +164,18 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       size={{ width: currentWidth, height: 'auto' }}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
-        <SearchBox
-          ariaLabel={formatMessage('Type dialog name')}
-          iconProps={{ iconName: 'Filter' }}
-          onChange={onFilter}
-          placeholder={formatMessage('Filter Dialog')}
-          styles={searchBox}
-          underlined
-        />
-        <div
-          aria-label={formatMessage(
-            `{
+        <FocusZone direction={FocusZoneDirection.vertical} isCircularNavigation>
+          <SearchBox
+            ariaLabel={formatMessage('Type dialog name')}
+            iconProps={{ iconName: 'Filter' }}
+            onChange={onFilter}
+            placeholder={formatMessage('Filter Dialog')}
+            styles={searchBox}
+            underlined
+          />
+          <div
+            aria-label={formatMessage(
+              `{
             dialogNum, plural,
                 =0 {No dialogs}
                 =1 {One dialog}
@@ -184,25 +186,26 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-            { dialogNum: res.groups.length }
-          )}
-          aria-live={'polite'}
-        />
-        <GroupedList
-          {...res}
-          componentRef={groupRef}
-          groupProps={
-            {
-              onRenderHeader: onRenderHeader,
-              onRenderShowAll: onRenderShowAll,
-              showEmptyGroups: true,
-              showAllProps: false,
-              isAllGroupsCollapsed: true,
-            } as Partial<IGroupRenderProps>
-          }
-          onRenderCell={onRenderCell}
-          styles={groupListStyle}
-        />
+              { dialogNum: res.groups.length }
+            )}
+            aria-live={'polite'}
+          />
+          <GroupedList
+            {...res}
+            componentRef={groupRef}
+            groupProps={
+              {
+                onRenderHeader: onRenderHeader,
+                onRenderShowAll: onRenderShowAll,
+                showEmptyGroups: true,
+                showAllProps: false,
+                isAllGroupsCollapsed: true,
+              } as Partial<IGroupRenderProps>
+            }
+            onRenderCell={onRenderCell}
+            styles={groupListStyle}
+          />
+        </FocusZone>
       </div>
     </Resizable>
   );

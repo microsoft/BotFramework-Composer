@@ -428,7 +428,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    id={'dialogjson'}
+                    id={currentDialog.id}
                     key={'dialogjson'}
                     onChange={(data) => {
                       actions.updateDialog({ id: currentDialog.id, projectId, content: data });
