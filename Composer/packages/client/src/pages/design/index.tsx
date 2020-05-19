@@ -429,7 +429,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {dialogJsonVisible ? (
                   <JsonEditor
                     key={'dialogjson'}
-                    id={'dialogjson'}
+                    id={currentDialog.id}
                     onChange={data => {
                       actions.updateDialog({ id: currentDialog.id, projectId, content: data });
                     }}
