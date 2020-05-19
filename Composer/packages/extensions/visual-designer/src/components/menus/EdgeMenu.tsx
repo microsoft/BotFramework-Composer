@@ -21,11 +21,10 @@ import { createActionMenu } from './createSchemaMenu';
 
 interface EdgeMenuProps {
   id: string;
-  forwardedRef?: (_: HTMLDivElement) => void;
   onClick: (item: string | null) => void;
 }
 
-export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, ...rest }) => {
+export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
   const { clipboardActions, customSchemas } = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
@@ -60,7 +59,6 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
   );
   return (
     <div
-      ref={forwardedRef}
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,

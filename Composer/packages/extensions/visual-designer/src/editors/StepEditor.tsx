@@ -31,7 +31,6 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
     <EdgeMenu
-      forwardedRef={addRef}
       onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
       data-testid="StepGroupAdd"
       id={`${id}[0]`}
@@ -95,6 +94,10 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
           <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
         </div>
+      </OffsetContainer>
+      <OffsetContainer offset={{ x: editorAxisX + ElementInterval.x, y: HeadSize.height + ElementInterval.y }}>
+        {/* Coarchmark bubble appears here */}
+        <div ref={addRef}></div>
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - contentBoundary.axisX, y: HeadSize.height }}>
         {content}
