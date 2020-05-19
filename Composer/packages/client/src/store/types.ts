@@ -159,6 +159,7 @@ export interface State {
   announcement: string | undefined;
   appUpdate: AppUpdateState;
   displaySkillManifest?: string;
+  botOpening: boolean;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
