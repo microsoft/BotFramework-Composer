@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useState, useContext, useEffect } from 'react';
-import formatMessage from 'format-message';
+import formatMessage, { select } from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Label } from 'office-ui-fabric-react/lib/Label';
@@ -35,9 +35,88 @@ import {
 import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
 
-import { styles, dropdownStyles, dialogWindow, intent } from './styles';
+import { styles, dropdownStyles, dialogWindow, intent, triggerPhrases } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
+const initialFormDataErrors = {
+  $kind: '',
+  intent: '',
+  event: '',
+  triggerPhrases: '',
+  regEx: '',
+  activity: '',
+};
+
+const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
+  const content = '#' + intent + '\n' + triggerPhrases;
+  const { diagnostics } = luIndexer.parse(content);
+  return combineMessage(diagnostics);
+};
+
+const validateIntentName = (selectedType: string, intent: string): string => {
+  if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
+    return formatMessage(
+      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
+    );
+  }
+  return '';
+};
+
+const validateDupRegExIntent = (
+  selectedType: string,
+  intent: string,
+  isRegEx: boolean,
+  regExIntents: [{ intent: string; pattern: string }]
+): string => {
+  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
+    return `regEx ${intent} is already defined`;
+  }
+  return '';
+};
+
+const validateRegExPattern = (selectedType: string, isRegEx: boolean, regEx: string): string => {
+  if (selectedType === intentTypeKey && isRegEx && !regEx) {
+    return formatMessage('Please input regEx pattern');
+  }
+  return '';
+};
+
+const validateEventName = (selectedType: string, $kind: string, eventName: string): string => {
+  if (selectedType === customEventKey && $kind === eventTypeKey && !eventName) {
+    return formatMessage('Please enter an event name');
+  }
+  return '';
+};
+
+const validateEventKind = (selectedType: string, $kind: string): string => {
+  if (selectedType === eventTypeKey && !$kind) {
+    return formatMessage('Please select a event type');
+  }
+
+  if (selectedType === activityTypeKey && !$kind) {
+    return formatMessage('Please select an activity type');
+  }
+  return '';
+};
+
+const validateTriggerKind = (selectedType: string): string => {
+  if (!selectedType) {
+    return formatMessage('Please select a trigger type');
+  }
+  return '';
+};
+
+const validateTriggerPhrases = (selectedType: string, isRegEx: boolean, intent: string, triggerPhrases: string) => {
+  if (selectedType === intentTypeKey && !isRegEx) {
+    if (triggerPhrases) {
+      return getLuDiagnostics(intent, triggerPhrases);
+    } else {
+      return formatMessage('Please input trigger phrases');
+    }
+  }
+  return '';
+};
+
 const validateForm = (
   selectedType: string,
   data: TriggerFormData,
@@ -45,46 +124,23 @@ const validateForm = (
   regExIntents: [{ intent: string; pattern: string }]
 ): TriggerFormDataErrors => {
   const errors: TriggerFormDataErrors = {};
-  const { $kind, event: eventName, intent, triggerPhrases, regexEx } = data;
+  const { $kind, event: eventName, intent, regEx, triggerPhrases } = data;
 
-  if (selectedType === customEventKey && $kind === eventTypeKey && !eventName) {
-    errors.event = formatMessage('Please enter an event name');
-  }
+  errors.event = validateEventName(selectedType, $kind, eventName);
+  errors.event = validateEventKind(selectedType, $kind);
+  errors.$kind = validateTriggerKind(selectedType);
+  errors.intent = validateIntentName(selectedType, intent);
+  errors.regEx = validateDupRegExIntent(selectedType, intent, isRegEx, regExIntents);
+  errors.regEx = validateRegExPattern(selectedType, isRegEx, regEx);
+  errors.triggerPhrases = validateTriggerPhrases(selectedType, isRegEx, intent, triggerPhrases);
+  // if (selectedType === intentTypeKey && !isRegEx && !triggerPhrases) {
+  //   errors.triggerPhrases = formatMessage('Please input trigger phrases');
+  // }
 
-  if (selectedType === eventTypeKey && !$kind) {
-    errors.event = formatMessage('Please select a event type');
-  }
-
-  if (selectedType === activityTypeKey && !$kind) {
-    errors.activity = formatMessage('Please select an activity type');
-  }
-
-  if (!selectedType) {
-    errors.$kind = formatMessage('Please select a trigger type');
-  }
-
-  if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
-    errors.intent = formatMessage(
-      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-    );
-  }
-
-  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
-    errors.intent = `regEx ${intent} is already defined`;
-  }
-
-  if (selectedType === intentTypeKey && isRegEx && !regexEx) {
-    errors.regexEx = formatMessage('Please input regEx pattern');
-  }
-
-  if (selectedType === intentTypeKey && !isRegEx && !triggerPhrases) {
-    errors.triggerPhrases = formatMessage('Please input trigger phrases');
-  }
-
-  //errors from lu parser
-  if (data.errors.triggerPhrases && selectedType === intentTypeKey && !isRegEx) {
-    errors.triggerPhrases = data.errors.triggerPhrases;
-  }
+  // //errors from lu parser
+  // if (data.errors.triggerPhrases && selectedType === intentTypeKey && !isRegEx) {
+  //   errors.triggerPhrases = data.errors.triggerPhrases;
+  // }
   return errors;
 };
 
@@ -110,14 +166,15 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const isNone = !get(dialogFile, 'content.recognizer');
   const initialFormData: TriggerFormData = {
-    errors: {},
+    errors: initialFormDataErrors,
     $kind: isNone ? '' : intentTypeKey,
     event: '',
     intent: '',
     triggerPhrases: '',
-    regexEx: '',
+    regEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
+  //const [disable, setDisable] = useState(true);
   const [selectedType, setSelectedType] = useState(isNone ? '' : intentTypeKey);
   const showIntentName = selectedType === intentTypeKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
@@ -134,11 +191,22 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
   }
 
+  const shouldDisable = (errors: TriggerFormDataErrors) => {
+    for (const key in errors) {
+      if (errors[key]) {
+        console.log(key);
+        return true;
+      }
+    }
+    return false;
+  };
+
   const onClickSubmitButton = (e) => {
     e.preventDefault();
-    const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
 
-    if (Object.keys(errors).length) {
+    //If still have some errors here, it is a bug.
+    const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+    if (shouldDisable(errors)) {
       setFormData({
         ...formData,
         errors,
@@ -166,52 +234,58 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     setSelectedType(option.key || '');
     const compoundTypes = [activityTypeKey, eventTypeKey];
     const isCompound = compoundTypes.some((t) => option.key === t);
-
+    let newFormData: TriggerFormData = initialFormData;
     if (isCompound) {
-      setFormData({ ...initialFormData, $kind: '' });
+      newFormData = { ...newFormData, $kind: '' };
     } else {
-      setFormData({ ...initialFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key });
+      newFormData = { ...newFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key };
     }
+    setFormData({ ...newFormData, errors: initialFormDataErrors });
   };
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
-    setFormData({ ...formData, $kind: SDKKinds.OnDialogEvent, event: value || '' });
+    const errors: TriggerFormDataErrors = {};
+    errors.event = validateEventName(selectedType, SDKKinds.OnDialogEvent, value || '');
+    setFormData({
+      ...formData,
+      $kind: SDKKinds.OnDialogEvent,
+      event: value || '',
+      errors: { ...formData.errors, ...errors },
+    });
   };
 
   const handleEventTypeChange = (e: React.FormEvent, option?: IDropdownOption) => {
     if (option) {
-      setFormData({ ...formData, $kind: option.key as string });
+      const errors: TriggerFormDataErrors = {};
+      errors.event = validateEventKind(selectedType, option.key as string);
+      setFormData({ ...formData, $kind: option.key as string, errors: { ...formData.errors, ...errors } });
     }
-  };
-
-  const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
-    const content = '#' + intent + '\n' + triggerPhrases;
-    const { diagnostics } = luIndexer.parse(content);
-    return combineMessage(diagnostics);
   };
 
   const onNameChange = (e, name) => {
-    const errors = validateForm(selectedType, { ...formData, intent: name }, isRegEx, regexIntents);
+    const errors: TriggerFormDataErrors = {};
+    errors.intent = validateIntentName(selectedType, name);
     if (showTriggerPhrase) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
     }
-    setFormData({ ...formData, intent: name, errors });
+    setFormData({ ...formData, intent: name, errors: { ...formData.errors, ...errors } });
   };
 
   const onChangeRegEx = (e, pattern) => {
-    const errors = validateForm(selectedType, { ...formData, regexEx: pattern }, isRegEx, regexIntents);
-    setFormData({ ...formData, regexEx: pattern, errors });
+    const errors: TriggerFormDataErrors = {};
+    errors.regEx = validateRegExPattern(selectedType, isRegEx, pattern);
+    setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
   };
 
   const onTriggerPhrasesChange = (body: string) => {
-    let errors = formData.errors;
+    const errors: TriggerFormDataErrors = {};
     errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
-    if (!errors.triggerPhrases) {
-      errors = validateForm(selectedType, { ...formData, triggerPhrases: body }, isRegEx, regexIntents);
-    }
-
-    setFormData({ ...formData, triggerPhrases: body, errors });
+    setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
+  console.log(formData);
+  const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+  console.log(errors);
+  const disable = shouldDisable(errors);
 
   return (
     <Dialog
@@ -286,7 +360,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
           {showRegExDropDown && (
             <TextField
               data-testid="RegExField"
-              errorMessage={formData.errors.regexEx}
+              errorMessage={formData.errors.regEx}
               label={formatMessage('Please input regex pattern')}
               onChange={onChangeRegEx}
             />
