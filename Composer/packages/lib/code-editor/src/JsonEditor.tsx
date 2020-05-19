@@ -93,7 +93,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     }
   };
 
-  const json = schema ? merge({}, schemaDefaults(schema), initialValue) : initialValue;
+  const json = schema?.type === 'object' ? merge({}, schemaDefaults(schema), initialValue) : initialValue;
 
   return (
     <BaseEditor
