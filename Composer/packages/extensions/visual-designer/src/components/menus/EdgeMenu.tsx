@@ -24,7 +24,7 @@ interface EdgeMenuProps {
   onClick: (item: string | null) => void;
 }
 
-export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
+export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
   const { clipboardActions, customSchemas } = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
   const { selectedIds } = useContext(SelectionContext);
@@ -92,7 +92,6 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick, ...rest }) => {
         menuItems={menuItems}
         label={formatMessage('Add')}
         handleMenuShow={handleMenuShow}
-        {...rest}
       />
     </div>
   );
