@@ -124,6 +124,7 @@ export const initialState: State = {
     showing: false,
     status: AppUpdaterStatus.IDLE,
   },
+  botOpening: false,
 };
 
 export interface StoreContextValue {

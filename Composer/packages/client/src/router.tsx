@@ -25,6 +25,9 @@ const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow'));
 
 const Routes = props => {
+  const { state } = useContext(StoreContext);
+  const { botOpening } = state;
+
   return (
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>
@@ -41,7 +44,6 @@ const Routes = props => {
           />
           <Redirect from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" noThrow />
           <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
-          {/* <Redirect from="/bot/:projectId" to="/bot/:projectId/dialogs/Main" noThrow /> */}
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
             <SettingPage path="settings/*" />
@@ -58,6 +60,13 @@ const Routes = props => {
           <NotFound default />
         </Router>
       </Suspense>
+      {botOpening && (
+        <div
+          css={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)' }}
+        >
+          <LoadingSpinner />
+        </div>
+      )}
     </div>
   );
 };
@@ -79,9 +88,9 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = prop
     if (state.projectId !== props.projectId && props.projectId) {
       actions.fetchProjectById(props.projectId);
     }
-  }, [props.projectId, state.projectId]);
+  }, [props.projectId]);
 
-  if (props.projectId !== state.projectId) {
+  if (state.botOpening || props.projectId !== state.projectId) {
     return <LoadingSpinner />;
   }
 

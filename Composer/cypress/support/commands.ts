@@ -3,16 +3,20 @@
 
 import '@testing-library/cypress/add-commands';
 
-Cypress.Commands.add('createBot', (bobotId: string, botName?: string) => {
-  cy.findByTestId('LeftNav-CommandBarButtonHome').click();
-  cy.findByTestId('homePage-ToolBar-New').within(() => {
-    cy.findByText('New').click();
+Cypress.Commands.add('createBot', (botId: string, botName?: string) => {
+  const name = `__Test${botName || botId}`;
+
+  const params = {
+    storageId: 'default',
+    name,
+    description: '',
+    templateId: botId,
+  };
+
+  cy.request('post', '/api/projects', params).then(res => {
+    const { id: projectId } = res.body;
+    cy.visit(`/bot/${projectId}/dialogs/${name.toLowerCase()}`);
   });
-  cy.findByTestId('Create from template').click({ force: true });
-  cy.findByTestId(`${bobotId}`).click({ force: true });
-  cy.findByTestId('NextStepButton').click();
-  cy.enterTextAndSubmit('NewDialogName', `__Test${botName || bobotId}`, 'SubmitNewBotBtn');
-  cy.url().should('match', /\/bot\/.*\/dialogs/);
 });
 
 Cypress.Commands.add('withinEditor', (editorName, cb) => {

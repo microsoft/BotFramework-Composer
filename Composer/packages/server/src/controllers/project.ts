@@ -99,6 +99,29 @@ async function getProjectById(req: Request, res: Response) {
   }
 }
 
+async function removeProject(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  if (!projectId) {
+    res.status(400).json({
+      message: 'parameters not provided, require project id',
+    });
+    return;
+  }
+  try {
+    const currentProject = await BotProjectService.getProjectById(projectId);
+    if (currentProject !== undefined) {
+      await currentProject.deleteAllFiles();
+      res.status(200).json({ message: 'success' });
+    } else {
+      res.status(404).json({ error: 'No bot project opened' });
+    }
+  } catch (e) {
+    res.status(400).json({
+      message: e.message,
+    });
+  }
+}
+
 async function openProject(req: Request, res: Response) {
   if (!req.body.storageId || !req.body.path) {
     res.status(400).json({
@@ -445,6 +468,7 @@ async function getAllProjects(req: Request, res: Response) {
 export const ProjectController = {
   getProjectById,
   openProject,
+  removeProject,
   updateFile,
   createFile,
   removeFile,

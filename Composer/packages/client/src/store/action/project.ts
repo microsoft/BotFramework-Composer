@@ -4,12 +4,29 @@
 import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
+import filePersistence from '../persistence/FilePersistence';
+import lgWorker from '../parsers/lgWorker';
+import luWorker from '../parsers/luWorker';
 
 import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
+import luFileStatusStorage from './../../utils/luFileStatusStorage';
 import httpClient from './../../utils/httpUtil';
+
+const checkProjectUpdates = async () => {
+  const workers = [filePersistence, lgWorker, luWorker];
+
+  return Promise.all(workers.map(w => w.flush()));
+};
+
+export const setOpenPendingStatus: ActionCreator = async store => {
+  store.dispatch({
+    type: ActionTypes.GET_PROJECT_PENDING,
+  });
+  await checkProjectUpdates();
+};
 
 export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowStatus) => {
   dispatch({
@@ -77,6 +94,25 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
   }
 };
 
+export const deleteBotProject: ActionCreator = async (store, projectId) => {
+  try {
+    await httpClient.delete(`/projects/${projectId}`);
+    luFileStatusStorage.removeAllStatuses(store.getState().botName);
+    settingStorage.remove(store.getState().botName);
+    store.dispatch({
+      type: ActionTypes.REMOVE_PROJECT_SUCCESS,
+    });
+  } catch (e) {
+    store.dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: {
+        message: e.message,
+        summary: 'Delete Bot Error',
+      },
+    });
+  }
+};
+
 export const openBotProject: ActionCreator = async (store, absolutePath) => {
   //set storageId = 'default' now. Some other storages will be added later.
   const storageId = 'default';
@@ -85,6 +121,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
       storageId,
       path: absolutePath,
     };
+    await setOpenPendingStatus(store);
     const response = await httpClient.put(`/projects/open`, data);
     const files = response.data.files;
     const projectId = response.data.id;
@@ -101,12 +138,11 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
     } else {
       navigate(BASEPATH);
     }
-  } catch (err) {
+  } catch (error) {
     store.dispatch({
-      type: ActionTypes.SET_ERROR,
+      type: ActionTypes.GET_PROJECT_FAILURE,
       payload: {
-        summary: 'Failed to open bot',
-        message: err.response.data.message,
+        error,
       },
     });
     store.dispatch({
@@ -128,6 +164,7 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
       description,
       location,
     };
+    await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
     const files = response.data.files;
     const newProjectId = response.data.id;
@@ -168,7 +205,7 @@ export const createProject: ActionCreator = async (
       location,
       schemaUrl,
     };
-
+    await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects`, data);
     const files = response.data.files;
     settingStorage.remove(name);

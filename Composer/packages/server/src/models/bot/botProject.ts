@@ -7,7 +7,7 @@ import fs from 'fs';
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
-import { UserIdentity } from '@bfc/plugin-loader';
+import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -15,6 +15,7 @@ import StorageService from '../../services/storage';
 import { ISettingManager, OBFUSCATED_VALUE } from '../settings';
 import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
+import { BotProjectService } from '../../services/project';
 
 import { ICrossTrainConfig } from './luPublisher';
 import { IFileStorage } from './../storage/interface';
@@ -251,6 +252,10 @@ export class BotProject {
   };
 
   public updateFile = async (name: string, content: string): Promise<string> => {
+    if (name === this.settingManager.getFileName()) {
+      await this.updateDefaultSlotEnvSettings(JSON.parse(content));
+      return new Date().toDateString();
+    }
     const file = this.files.find(d => d.name === name);
     if (file === undefined) {
       throw new Error(`no such file ${name}`);
@@ -322,6 +327,61 @@ export class BotProject {
 
   public async exists(): Promise<boolean> {
     return (await this.fileStorage.exists(this.dir)) && (await this.fileStorage.stat(this.dir)).isDir;
+  }
+
+  public async deleteAllFiles(): Promise<boolean> {
+    try {
+      await this.deleteFilesFromBottomToUp(this.dir);
+      await this.fileStorage.rmDir(this.dir);
+      const projectId = await BotProjectService.getProjectIdByPath(this.dir);
+      if (projectId) {
+        await this.removeLocalRuntimeData(projectId);
+      }
+      await BotProjectService.cleanProject({ storageId: 'default', path: this.dir });
+      await BotProjectService.deleteRecentProject(this.dir);
+    } catch (e) {
+      throw new Error(e);
+    }
+    return true;
+  }
+
+  private async removeLocalRuntimeData(projectId) {
+    const method = 'localpublish';
+    if (
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.stopBot
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+      if (typeof pluginMethod === 'function') {
+        await pluginMethod.call(null, projectId);
+      }
+    }
+    if (
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.removeRuntimeData
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
+      if (typeof pluginMethod === 'function') {
+        await pluginMethod.call(null, projectId);
+      }
+    }
+  }
+
+  private async deleteFilesFromBottomToUp(path) {
+    const files = await this.fileStorage.readDir(path);
+
+    for (let i = 0; i < files.length; i++) {
+      const curPath = Path.join(path, files[i]);
+      const childStat = await this.fileStorage.stat(curPath);
+      if (childStat.isDir && curPath.startsWith(this.dir)) {
+        await this.deleteFilesFromBottomToUp(curPath);
+        await this.fileStorage.rmDir(curPath);
+      } else {
+        await this.fileStorage.removeFile(curPath);
+      }
+    }
   }
 
   private _cleanUp = async (relativePath: string) => {

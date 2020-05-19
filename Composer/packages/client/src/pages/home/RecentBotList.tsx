@@ -122,7 +122,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           items={recentProjects}
           compact={false}
           columns={tableColums}
-          getKey={item => item.name}
+          getKey={item => `${item.path}/${item.name}`}
           layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
           isHeaderVisible={true}
