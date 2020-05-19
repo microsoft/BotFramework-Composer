@@ -3,13 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, useMemo } from 'react';
+import { useState, useContext } from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
-import debounce from 'lodash/debounce';
 
 import { StoreContext } from '../../../store';
 import { isAbsHosted } from '../../../utils/envUtil';
@@ -56,13 +55,9 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     }
   };
 
-  const handleChange = useMemo(
-    () =>
-      debounce((result: any) => {
-        saveChangeResult(result);
-      }, 200),
-    [projectId]
-  );
+  const handleChange = (result: any) => {
+    saveChangeResult(result);
+  };
 
   const hostedControl = () => (
     <div css={hostedControls}>

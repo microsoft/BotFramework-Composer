@@ -104,7 +104,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     };
     const res = await OpenConfirmModal(title, null, settings);
     if (res) {
-      actions.deleteBotProject(projectId);
+      await actions.deleteBotProject(projectId);
       navigateTo('home');
     }
   };
