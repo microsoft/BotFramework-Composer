@@ -7,16 +7,18 @@ import React, { useContext, useEffect, useState } from 'react';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import { PromptTab } from '@bfc/shared';
 import { SDKKinds, DialogInfo } from '@bfc/shared';
+import { JsonEditor } from '@bfc/code-editor';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestsController } from '../../components/TestsController';
 import { createSelectedPath } from '../../utils';
+import { Conversation } from '../../components/Conversation';
 import { ProjectTree } from '../../components/ProjectTree';
 import { StoreContext } from '../../store';
 import { ToolBar } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils';
-import { contentWrapper, pageRoot } from '../design/styles';
+import { contentWrapper, editorContainer, editorWrapper, pageRoot, visualPanel } from '../design/styles';
 
 const getTabFromFragment = () => {
   const tab = window.location.hash.substring(1);
@@ -28,7 +30,7 @@ const getTabFromFragment = () => {
 
 const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
-  const { testDialogs, breadcrumb, projectId, designPageLocation } = state;
+  const { testDialogs, breadcrumb, projectId, schemas, designPageLocation } = state;
   const {
     setDesignPageLocation,
     navToTest,
@@ -149,6 +151,23 @@ const TestsPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: str
             onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
           />
+          <Conversation css={editorContainer}>
+            <div css={editorWrapper}>
+              <div css={visualPanel}>
+                {
+                  <JsonEditor
+                    key={'testdialogjson'}
+                    id={currentDialog.id}
+                    onChange={data => {
+                      //actions.updateDialog({ id: currentDialog.id, projectId, content: data });
+                    }}
+                    value={currentDialog.content || undefined}
+                    schema={schemas.sdk.content}
+                  />
+                }
+              </div>
+            </div>
+          </Conversation>
         </div>
       </div>
     </React.Fragment>

@@ -91,7 +91,7 @@ const getTestDialogs = (testDir: string, testFiles: FileInfo[]) => {
     const parts = element.path.substr(testDir.length + 1).split('/');
     if (!folderFile.has(parts[0])) {
       const dialog = {
-        content: any,
+        content: JSON.parse(element.content),
         diagnostics: [],
         displayName: parts[0],
         id: parts[0],
