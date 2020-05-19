@@ -3,8 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useContext, useEffect } from 'react';
-import formatMessage, { select } from 'format-message';
+import React, { useState, useContext } from 'react';
+import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Label } from 'office-ui-fabric-react/lib/Label';
@@ -35,7 +35,7 @@ import {
 import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
 
-import { styles, dropdownStyles, dialogWindow, intent, triggerPhrases } from './styles';
+import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const initialFormDataErrors = {
@@ -133,14 +133,6 @@ const validateForm = (
   errors.regEx = validateDupRegExIntent(selectedType, intent, isRegEx, regExIntents);
   errors.regEx = validateRegExPattern(selectedType, isRegEx, regEx);
   errors.triggerPhrases = validateTriggerPhrases(selectedType, isRegEx, intent, triggerPhrases);
-  // if (selectedType === intentTypeKey && !isRegEx && !triggerPhrases) {
-  //   errors.triggerPhrases = formatMessage('Please input trigger phrases');
-  // }
-
-  // //errors from lu parser
-  // if (data.errors.triggerPhrases && selectedType === intentTypeKey && !isRegEx) {
-  //   errors.triggerPhrases = data.errors.triggerPhrases;
-  // }
   return errors;
 };
 
@@ -174,7 +166,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     regEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-  //const [disable, setDisable] = useState(true);
   const [selectedType, setSelectedType] = useState(isNone ? '' : intentTypeKey);
   const showIntentName = selectedType === intentTypeKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
@@ -194,7 +185,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const shouldDisable = (errors: TriggerFormDataErrors) => {
     for (const key in errors) {
       if (errors[key]) {
-        console.log(key);
         return true;
       }
     }
@@ -282,9 +272,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
-  console.log(formData);
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
-  console.log(errors);
   const disable = shouldDisable(errors);
 
   return (
