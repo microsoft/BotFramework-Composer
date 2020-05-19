@@ -415,8 +415,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <ToolBar
             actions={actions}
             currentDialog={currentDialog}
-            onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
             onCreateDialogComplete={onCreateDialogComplete}
+            onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
             openNewTriggerModal={openNewTriggerModal}
             projectId={projectId}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
