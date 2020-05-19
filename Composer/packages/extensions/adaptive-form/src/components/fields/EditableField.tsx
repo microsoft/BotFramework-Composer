@@ -72,29 +72,31 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
         onChange={handleChange}
         onFocus={() => setHasFocus(true)}
         placeholder={placeholder || value}
-        styles={mergeStyleSets(
-          {
-            root: { margin: '0', width: '100%' },
-            field: {
-              fontSize: fontSize,
-              selectors: {
-                '::placeholder': {
-                  fontSize: fontSize,
+        styles={
+          mergeStyleSets(
+            {
+              root: { margin: '0', width: '100%' },
+              field: {
+                fontSize: fontSize,
+                selectors: {
+                  '::placeholder': {
+                    fontSize: fontSize,
+                  },
+                },
+              },
+              fieldGroup: {
+                borderColor,
+                transition: 'border-color 0.1s linear',
+                selectors: {
+                  ':hover': {
+                    borderColor: hasFocus ? undefined : NeutralColors.gray30,
+                  },
                 },
               },
             },
-            fieldGroup: {
-              borderColor,
-              transition: 'border-color 0.1s linear',
-              selectors: {
-                ':hover': {
-                  borderColor: hasFocus ? undefined : NeutralColors.gray30,
-                },
-              },
-            },
-          },
-          styles
-        )}
+            styles
+          ) as Partial<ITextFieldStyles>
+        }
         value={localValue}
       />
     </div>

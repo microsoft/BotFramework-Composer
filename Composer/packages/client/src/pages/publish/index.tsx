@@ -21,7 +21,7 @@ import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
-import { PublishStatusList } from './publishStatusList';
+import { PublishStatusList, IStatus } from './publishStatusList';
 
 interface PublishPageProps extends RouteComponentProps<{}> {
   targetName?: string;
@@ -29,7 +29,7 @@ interface PublishPageProps extends RouteComponentProps<{}> {
 
 const Publish: React.FC<PublishPageProps> = (props) => {
   const selectedTargetName = props.targetName;
-  const [selectedTarget, setSelectedTarget] = useState();
+  const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
   const { state, actions } = useContext(StoreContext);
   const { settings, botName, publishTypes, projectId, publishHistory } = state;
 
@@ -41,8 +41,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
-  const [groups, setGroups] = useState();
-  const [selectedVersion, setSelectedVersion] = useState();
+  const [groups, setGroups] = useState<any[]>([]);
+  const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
@@ -145,7 +145,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     if (projectId) {
       actions.getPublishTargetTypes();
       // init selected status
-      setSelectedVersion(undefined);
+      setSelectedVersion(null);
     }
   }, [projectId]);
 

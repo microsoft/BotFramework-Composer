@@ -49,7 +49,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
   const { items, onItemClick, groups } = props;
-  const [selectIndex, setSelectedIndex] = useState();
+  const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
@@ -163,7 +163,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
 
   useEffect(() => {
     // init the selected publish status after switch to another target
-    setSelectedIndex(null);
+    setSelectedIndex(undefined);
   }, [groups]);
 
   useEffect(() => {

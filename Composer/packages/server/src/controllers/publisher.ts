@@ -29,10 +29,10 @@ export const PublishController = {
             instructions: instructions,
             schema,
             features: {
-              history: methods.history ? true : false,
-              publish: methods.publish ? true : false,
-              status: methods.getStatus ? true : false,
-              rollback: methods.rollback ? true : false,
+              history: typeof methods.history === 'function',
+              publish: typeof methods.publish === 'function',
+              status: typeof methods.getStatus === 'function',
+              rollback: typeof methods.rollback === 'function',
             },
           };
         })
