@@ -195,11 +195,16 @@ class AzurePublisher {
       }
     } catch (error) {
       console.log(error);
+      if (typeof error === 'object') {
+        this.logMessages.push(JSON.stringify(error));
+      } else {
+        this.logMessages.push(error);
+      }
       // update status and history
       const status = this.getLoadingStatus(botId, profileName, jobId);
       if (status) {
         status.status = 500;
-        status.result.message = error ? error.message : 'publish error';
+        status.result.message = error && error.message ? error.message : 'publish error';
         status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
@@ -319,7 +324,11 @@ class AzurePublisher {
       return response;
     } catch (err) {
       console.log(err);
-      this.logMessages.push(err.message);
+      if (typeof err === 'object') {
+        this.logMessages.push(JSON.stringify(err));
+      } else {
+        this.logMessages.push(err);
+      }
       const response = {
         status: 500,
         result: {
