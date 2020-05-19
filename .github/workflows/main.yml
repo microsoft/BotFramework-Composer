@@ -48,9 +48,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./Composer/coverage/lcov.info
-          base-path: ./Composer
-        env:
-          NODE_COVERALLS_DEBUG: 1
 
   botproject:
     name: BotProject
