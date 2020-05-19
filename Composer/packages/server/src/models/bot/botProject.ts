@@ -246,6 +246,10 @@ export class BotProject {
   };
 
   public updateFile = async (name: string, content: string): Promise<string> => {
+    if (name === this.settingManager.getFileName()) {
+      await this.updateDefaultSlotEnvSettings(JSON.parse(content));
+      return new Date().toDateString();
+    }
     const file = this.files.find(d => d.name === name);
     if (file === undefined) {
       throw new Error(`no such file ${name}`);

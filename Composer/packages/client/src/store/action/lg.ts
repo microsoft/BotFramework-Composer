@@ -9,11 +9,11 @@ import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import LgWorker from '../parsers/lgWorker';
 
-export const updateLgFile: ActionCreator = async (store, { id, content }) => {
+export const updateLgFile: ActionCreator = async (store, { id, content, projectId }) => {
   const result = (await LgWorker.parse(id, content, store.getState().lgFiles)) as LgFile;
   store.dispatch({
     type: ActionTypes.UPDATE_LG,
-    payload: { ...result },
+    payload: { ...result, projectId },
   });
 };
 
@@ -36,8 +36,9 @@ export const undoableUpdateLgFile = undoable(
   (state: State, args: any[], isEmpty) => {
     if (isEmpty) {
       const id = args[0].id;
+      const projectId = args[0].projectId;
       const content = clonedeep(state.lgFiles.find(lgFile => lgFile.id === id)?.content);
-      return [{ id, content }];
+      return [{ id, content, projectId }];
     } else {
       return args;
     }

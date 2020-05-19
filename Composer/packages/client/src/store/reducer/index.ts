@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import has from 'lodash/has';
 import merge from 'lodash/merge';
 import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
@@ -100,12 +101,13 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.locale = locale;
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
+  state.botOpening = false;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
   return state;
 };
 
-const removeProjectSuccess: ReducerFunc = state => {
+const resetProjectState: ReducerFunc = state => {
   state.projectId = initialState.projectId;
   state.dialogs = initialState.dialogs;
   state.botEnvironment = initialState.botEnvironment;
@@ -122,8 +124,14 @@ const removeProjectSuccess: ReducerFunc = state => {
   return state;
 };
 
+const getProjectPending: ReducerFunc = state => {
+  state.botOpening = true;
+  return resetProjectState(state, undefined);
+};
+
 const getProjectFailure: ReducerFunc = (state, { error }) => {
   setError(state, error);
+  state.botOpening = false;
   return state;
 };
 
@@ -422,6 +430,14 @@ const dismissSkillManifestModal: ReducerFunc = state => {
 };
 
 const syncEnvSetting: ReducerFunc = (state, { settings }) => {
+  const { botName } = state;
+  // set value in local storage
+  for (const property of SensitiveProperties) {
+    if (has(settings, property)) {
+      const propertyValue = get(settings, property, '');
+      settingStorage.setField(botName, property, propertyValue);
+    }
+  }
   state.settings = settings;
   return state;
 };
@@ -625,10 +641,11 @@ const noOp: ReducerFunc = state => {
 
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.GET_PROJECT_PENDING]: getProjectPending,
   [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
-  [ActionTypes.REMOVE_PROJECT_SUCCESS]: removeProjectSuccess,
+  [ActionTypes.REMOVE_PROJECT_SUCCESS]: resetProjectState,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
