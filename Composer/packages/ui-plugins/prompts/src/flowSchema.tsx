@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { FlowWidget } from '@bfc/extension';
-import { SDKKinds, getInputType } from '@bfc/shared';
+import { SDKKinds, getInputType, PromptTab, PropmtTabTitles } from '@bfc/shared';
 import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } from '@bfc/ui-shared';
 
 const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
@@ -13,7 +13,7 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: data => `Bot Asks (${getInputType(data.$kind)})`,
+      title: data => `${PropmtTabTitles[PromptTab.BOT_ASKS]} (${getInputType(data.$kind)})`,
       icon: 'MessageBot',
       colors: {
         theme: Colors.BlueMagenta20,
@@ -30,7 +30,7 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: data => `User Input (${getInputType(data.$kind)})`,
+      title: data => `${PropmtTabTitles[PromptTab.USER_INPUT]} (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: 'User',
       menu: 'none',
