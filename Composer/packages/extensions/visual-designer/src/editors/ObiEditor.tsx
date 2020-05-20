@@ -92,6 +92,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           announce(ScreenReaderMessage.EventFocused);
         };
         break;
+      case NodeEventTypes.MoveCursor:
+        handler = eventData => {
+          const { selected, focused, tab } = eventData;
+          setSelectionContext({
+            getNodeIndex: selectionContext.getNodeIndex,
+            selectedIds: [selected as string],
+          });
+          focused && onFocusSteps([focused], tab);
+          scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
+          announce(ScreenReaderMessage.ActionFocused);
+        };
+        break;
       case NodeEventTypes.OpenDialog:
         handler = ({ caller, callee }) => {
           onOpen(callee, caller);
@@ -328,20 +340,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case KeyboardPrimaryTypes.Cursor: {
         const currentSelectedId = selectionContext.selectedIds[0] || focusedId || '';
-        const { selected, focused, tab } = currentSelectedId
+        const cursor = currentSelectedId
           ? moveCursor(selectableElements, currentSelectedId, command)
           : {
               selected: `${focusedEvent}.actions[0]${MenuTypes.EdgeMenu}`,
               focused: undefined,
               tab: '',
             };
-        setSelectionContext({
-          getNodeIndex: selectionContext.getNodeIndex,
-          selectedIds: [selected as string],
-        });
-        focused && onFocusSteps([focused], tab);
-        scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
-        announce(ScreenReaderMessage.ActionFocused);
+        dispatchEvent(NodeEventTypes.MoveCursor, cursor);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
