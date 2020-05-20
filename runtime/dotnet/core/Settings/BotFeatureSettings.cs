@@ -15,5 +15,8 @@ namespace Microsoft.BotFramework.Composer.Core.Settings
 
         // Use InspectionMiddleware
         public bool UseInspectionMiddleware { get; set; }
+
+        // Use RemoveRecipientMentionExtensions, only works in Teams channel
+        public bool RemoveRecipientMention { get; set; }
     }
 }

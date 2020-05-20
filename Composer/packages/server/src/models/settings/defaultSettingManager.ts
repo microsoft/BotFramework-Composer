@@ -22,6 +22,7 @@ export class DefaultSettingManager extends FileSettingManager {
       feature: {
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
+        RemoveRecipientMention: false
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
