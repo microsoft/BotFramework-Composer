@@ -52,6 +52,23 @@ if (fs.existsSync(settingsPath)) {
     const items = require(settingsPath);
     settings = Object.assign(settings, items); // merge settings
 }
+for (let key in argv) {
+    if (key.indexOf(':') >= 0) {
+        const segments = key.split(':');
+        let base = settings;
+        for (let i = 0; i < segments.length - 1; i++) {
+            const segment = segments[i];
+            if (!base.hasOwnProperty(segment)) {
+                base[segment] = {};
+            }
+            base = base[segment];
+        }
+        base[segments[segments.length - 1]] = argv[key];
+    }
+    else {
+        settings[key] = argv[key];
+    }
+}
 console.log(settings);
 bot.initialTurnState.set('settings', settings);
 server.post('/api/messages', (req, res) => {
