@@ -137,11 +137,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
 
   // initialValue is designed to imporve local performance
   // it should be force updated if id change, or previous value is empty.
-  useEffect(() => {
-    if (editor) {
-      editor.setValue(value || (hidePlaceholder ? '' : placeholder));
-    }
-  }, [id, !!value, editor]);
+  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     setEditor(editor);
@@ -226,7 +222,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} editorDidMount={onEditorMount} options={editorOptions} />
+        <Editor {...rest} key={id} value={initialValue || ''} editorDidMount={onEditorMount} options={editorOptions} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
