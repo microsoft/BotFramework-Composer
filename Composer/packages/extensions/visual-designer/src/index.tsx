@@ -42,7 +42,7 @@ export interface VisualDesignerProps {
   schema?: JSONSchema7;
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
-  const { shellApi, plugins, ...shellData } = useShellApi();
+  const { plugins, ...shellData } = useShellApi();
   const {
     dialogId,
     focusedEvent,
@@ -66,25 +66,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   }
 
   const data = dataCache.current;
-  const {
-    navTo,
-    onFocusEvent,
-    onFocusSteps,
-    onSelect,
-    onCopy,
-    saveData,
-    createDialog,
-    updateLgTemplate,
-    getLgTemplates,
-    copyLgTemplate,
-    removeLgTemplate,
-    removeLgTemplates,
-    removeLuIntent,
-    undo,
-    redo,
-    announce,
-  } = shellApi;
-
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // Compute schema diff
@@ -98,12 +79,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     focusedEvent,
     focusedTab,
     clipboardActions: clipboardActions || [],
-    updateLgTemplate,
-    getLgTemplates,
-    copyLgTemplate: (id: string, from: string, to?: string) => copyLgTemplate(id, from, to).catch(() => undefined),
-    removeLgTemplate,
-    removeLgTemplates,
-    removeLuIntent,
     dialogFactory: new DialogFactory(schema),
     customSchemas: customSchema ? [customSchema] : [],
   };
