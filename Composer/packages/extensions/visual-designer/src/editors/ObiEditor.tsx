@@ -72,7 +72,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     actionPaths.forEach(x => trackActionChange(x));
   };
 
-  const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
+  const dispatchEvent = (eventName: NodeEventTypes, eventData: any = {}): any => {
     let handler;
     switch (eventName) {
       case NodeEventTypes.Focus:
@@ -134,15 +134,17 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         }
         break;
       case NodeEventTypes.CopySelection:
-        handler = e => {
-          copySelectedActions(path, data, e.actionIds).then(copiedNodes => onClipboardChange(copiedNodes));
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          copySelectedActions(path, data, actionIds).then(copiedNodes => onClipboardChange(copiedNodes));
           announce(ScreenReaderMessage.ActionsCopied);
         };
         break;
       case NodeEventTypes.CutSelection:
-        trackActionListChange(eventData.actionIds);
-        handler = e => {
-          cutSelectedActions(path, data, e.actionIds).then(({ dialog, cutActions }) => {
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          trackActionListChange(actionIds);
+          cutSelectedActions(path, data, actionIds).then(({ dialog, cutActions }) => {
             onChange(dialog);
             onFocusSteps([]);
             onClipboardChange(cutActions);
@@ -151,8 +153,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.MoveSelection:
-        handler = async e => {
-          if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
+        handler = async () => {
+          const actionIds = getClipboardTargetsFromContext();
+          if (!Array.isArray(actionIds) || !actionIds.length) return;
 
           // Create target dialog
           const newDialogId = await createDialog();
@@ -160,7 +163,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           let newDialogData = readDialog(newDialogId);
 
           // Using copy->paste->delete pattern is safer than using cut->paste
-          const actionsToBeMoved = await copySelectedActions(path, data, e.actionIds);
+          const actionsToBeMoved = await copySelectedActions(path, data, actionIds);
           newDialogData = await insertActions(
             newDialogId,
             newDialogData,
@@ -175,10 +178,10 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           updateDialog(newDialogId, newDialogData);
 
           // Delete moved actions
-          const deleteResult = deleteSelectedActions(path, data, e.actionIds);
+          const deleteResult = deleteSelectedActions(path, data, actionIds);
 
           // Insert a BeginDialog as placeholder
-          const placeholderPosition = DialogUtils.parseNodePath(e.actionIds[0]);
+          const placeholderPosition = DialogUtils.parseNodePath(actionIds[0]);
           if (!placeholderPosition) return;
 
           const placeholderAction = dialogFactory.create(SDKKinds.BeginDialog, { dialog: newDialogId });
@@ -195,16 +198,17 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.DeleteSelection:
-        trackActionListChange(eventData.actionIds);
-        handler = e => {
-          onChange(deleteSelectedActions(path, data, e.actionIds));
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          trackActionListChange(actionIds);
+          onChange(deleteSelectedActions(path, data, actionIds));
           onFocusSteps([]);
           announce(ScreenReaderMessage.ActionsDeleted);
         };
         break;
       case NodeEventTypes.AppendSelection:
-        trackActionListChange(eventData.target);
         handler = e => {
+          trackActionListChange(e.target);
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;
           onChange(insertActionsAfter(path, data, e.target, e.actions));
@@ -297,27 +301,23 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   };
 
   // HACK: use global handler before we solve iframe state sync problem
-  (window as any).copySelection = () =>
-    dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
-  (window as any).cutSelection = () =>
-    dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
-  (window as any).moveSelection = () =>
-    dispatchEvent(NodeEventTypes.MoveSelection, { actionIds: getClipboardTargetsFromContext() });
-  (window as any).deleteSelection = () =>
-    dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
+  (window as any).copySelection = () => dispatchEvent(NodeEventTypes.CopySelection);
+  (window as any).cutSelection = () => dispatchEvent(NodeEventTypes.CutSelection);
+  (window as any).moveSelection = () => dispatchEvent(NodeEventTypes.MoveSelection);
+  (window as any).deleteSelection = () => dispatchEvent(NodeEventTypes.DeleteSelection);
 
   const handleKeyboardCommand = ({ area, command }) => {
     switch (area) {
       case KeyboardPrimaryTypes.Node:
         switch (command) {
           case KeyboardCommandTypes.Node.Delete:
-            dispatchEvent(NodeEventTypes.DeleteSelection, { actionIds: getClipboardTargetsFromContext() });
+            dispatchEvent(NodeEventTypes.DeleteSelection);
             break;
           case KeyboardCommandTypes.Node.Copy:
-            dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });
+            dispatchEvent(NodeEventTypes.CopySelection);
             break;
           case KeyboardCommandTypes.Node.Cut:
-            dispatchEvent(NodeEventTypes.CutSelection, { actionIds: getClipboardTargetsFromContext() });
+            dispatchEvent(NodeEventTypes.CutSelection);
             break;
           case KeyboardCommandTypes.Node.Paste: {
             const currentSelectedId = selectionContext.selectedIds[0];
