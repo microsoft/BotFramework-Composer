@@ -15,7 +15,7 @@ import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/Keyboar
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { moveCursor, querySelectableElements, SelectorElement } from '../utils/cursorTracker';
+import { moveCursor, querySelectableElements } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
@@ -78,10 +78,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Focus:
         handler = (e: { id: string; tab?: string }) => {
           const newFocusedIds = e.id ? [e.id] : [];
-          setSelectionContext({
-            ...selectionContext,
-            selectedIds: [...newFocusedIds],
-          });
+          setSelectedIds([...newFocusedIds]);
           onFocusSteps([...newFocusedIds], e.tab);
           announce(ScreenReaderMessage.ActionFocused);
         };
@@ -95,10 +92,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.MoveCursor:
         handler = eventData => {
           const { selected, focused, tab } = eventData;
-          setSelectionContext({
-            getNodeIndex: selectionContext.getNodeIndex,
-            selectedIds: [selected as string],
-          });
+          setSelectedIds([selected as string]);
           focused && onFocusSteps([focused], tab);
           scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
           announce(ScreenReaderMessage.ActionFocused);
@@ -240,11 +234,18 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     return null;
   };
 
-  const resetSelectionData = () => {
+  const initSelectionData = () => {
     nodeIndexGenerator.current.reset();
     setSelectionContext({
       getNodeIndex: selectionContext.getNodeIndex,
       selectedIds: [],
+      selectableElements: querySelectableElements(),
+    });
+  };
+  const setSelectedIds = (selectedIds: string[]) => {
+    setSelectionContext({
+      ...selectionContext,
+      selectedIds: selectedIds || [],
     });
   };
   const nodeIndexGenerator = useRef(new NodeIndexGenerator());
@@ -252,6 +253,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const [selectionContext, setSelectionContext] = useState<SelectionContextData>({
     getNodeIndex: (nodeId: string): number => nodeIndexGenerator.current.getNodeIndex(nodeId),
     selectedIds: [],
+    selectableElements: querySelectableElements(),
   });
 
   useEffect((): void => {
@@ -264,13 +266,12 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   });
 
   useEffect((): void => {
-    resetSelectionData();
-    setSelectableElements(querySelectableElements());
+    initSelectionData();
   }, [data, focusedEvent]);
 
   useEffect((): void => {
     if (!focusedId) {
-      resetSelectionData();
+      setSelectedIds([]);
     }
   }, [focusedId]);
 
@@ -283,15 +284,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         // TODO: Change to focus all selected nodes after Form Editor support showing multiple nodes.
         onFocusSteps(selectedIds);
       }
-
-      setSelectionContext({
-        ...selectionContext,
-        selectedIds,
-      });
+      setSelectedIds(selectedIds);
     },
   });
-
-  const [selectableElements, setSelectableElements] = useState<SelectorElement[]>(querySelectableElements());
 
   const getClipboardTargetsFromContext = (): string[] => {
     const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
@@ -341,7 +336,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case KeyboardPrimaryTypes.Cursor: {
         const currentSelectedId = selectionContext.selectedIds[0] || focusedId || '';
         const cursor = currentSelectedId
-          ? moveCursor(selectableElements, currentSelectedId, command)
+          ? moveCursor(selectionContext.selectableElements, currentSelectedId, command)
           : {
               selected: `${focusedEvent}.actions[0]${MenuTypes.EdgeMenu}`,
               focused: undefined,
