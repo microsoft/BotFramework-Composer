@@ -222,7 +222,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} editorDidMount={onEditorMount} options={editorOptions} value={initialValue || ''} />
+        <Editor {...rest} editorDidMount={onEditorMount} key={id} options={editorOptions} value={initialValue || ''} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
