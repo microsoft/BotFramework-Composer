@@ -11,17 +11,17 @@ import get from 'lodash/get';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
-import { KeyboardCommandTypes, KeyboardPrimaryTypes } from '../constants/KeyboardCommandTypes';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { moveCursor, querySelectableElements } from '../utils/cursorTracker';
+import { querySelectableElements } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
 import { designerCache } from '../store/DesignerCache';
-import { MenuTypes, MenuEventTypes } from '../constants/MenuTypes';
+import { MenuEventTypes } from '../constants/MenuTypes';
+import { useKeyboardApi } from '../hooks/useKeyboardApi';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -233,6 +233,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     }
     return handler(eventData);
   };
+  const { handleKeyboardCommand } = useKeyboardApi(dispatchEvent);
 
   const renderFallbackContent = () => {
     return null;
@@ -306,60 +307,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   (window as any).moveSelection = () => dispatchEvent(NodeEventTypes.MoveSelection);
   (window as any).deleteSelection = () => dispatchEvent(NodeEventTypes.DeleteSelection);
 
-  const handleKeyboardCommand = ({ area, command }) => {
-    switch (area) {
-      case KeyboardPrimaryTypes.Node:
-        switch (command) {
-          case KeyboardCommandTypes.Node.Delete:
-            dispatchEvent(NodeEventTypes.DeleteSelection);
-            break;
-          case KeyboardCommandTypes.Node.Copy:
-            dispatchEvent(NodeEventTypes.CopySelection);
-            break;
-          case KeyboardCommandTypes.Node.Cut:
-            dispatchEvent(NodeEventTypes.CutSelection);
-            break;
-          case KeyboardCommandTypes.Node.Paste: {
-            const currentSelectedId = selectionContext.selectedIds[0];
-            if (currentSelectedId.endsWith('+')) {
-              const { arrayPath, arrayIndex } = DialogUtils.parseNodePath(currentSelectedId.slice(0, -1)) || {};
-              dispatchEvent(NodeEventTypes.Insert, {
-                id: arrayPath,
-                position: arrayIndex,
-                $kind: MenuEventTypes.Paste,
-              });
-            }
-            break;
-          }
-        }
-        break;
-      case KeyboardPrimaryTypes.Cursor: {
-        const currentSelectedId = selectionContext.selectedIds[0] || focusedId || '';
-        const cursor = currentSelectedId
-          ? moveCursor(selectionContext.selectableElements, currentSelectedId, command)
-          : {
-              selected: `${focusedEvent}.actions[0]${MenuTypes.EdgeMenu}`,
-              focused: undefined,
-              tab: '',
-            };
-        dispatchEvent(NodeEventTypes.MoveCursor, cursor);
-        break;
-      }
-      case KeyboardPrimaryTypes.Operation: {
-        switch (command) {
-          case KeyboardCommandTypes.Operation.Undo:
-            dispatchEvent(NodeEventTypes.Undo, {});
-            break;
-          case KeyboardCommandTypes.Operation.Redo:
-            dispatchEvent(NodeEventTypes.Redo, {});
-            break;
-        }
-        break;
-      }
-      default:
-        break;
-    }
-  };
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
