@@ -47,10 +47,38 @@ bot.conversationState = new botbuilder_1.ConversationState(new botbuilder_1.Memo
 bot.rootDialog = resourceExplorer.loadType(mainDialog);
 // Find settings json file
 let settings = {};
-const settingsPath = path.join(projectPath, 'settings/appsettings.json');
-if (fs.existsSync(settingsPath)) {
-    const items = require(settingsPath);
+// load appsettings.json 
+const appsettingsPath = path.join(projectPath, 'settings/appsettings.json');
+if (fs.existsSync(appsettingsPath)) {
+    const items = require(appsettingsPath);
     settings = Object.assign(settings, items); // merge settings
+}
+// load generated settings
+const generatedPath = path.join(projectPath, 'generated');
+const generatedFiles = fs.readdirSync(generatedPath);
+for (let file of generatedFiles) {
+    if (file.endsWith('.json')) {
+        const items = require(path.join(generatedPath, file));
+        settings = Object.assign(settings, items); // merge settings
+    }
+}
+// load settings from arguments
+for (let key in argv) {
+    if (key.indexOf(':') >= 0) {
+        const segments = key.split(':');
+        let base = settings;
+        for (let i = 0; i < segments.length - 1; i++) {
+            const segment = segments[i];
+            if (!base.hasOwnProperty(segment)) {
+                base[segment] = {};
+            }
+            base = base[segment];
+        }
+        base[segments[segments.length - 1]] = argv[key];
+    }
+    else {
+        settings[key] = argv[key];
+    }
 }
 console.log(settings);
 bot.initialTurnState.set('settings', settings);
