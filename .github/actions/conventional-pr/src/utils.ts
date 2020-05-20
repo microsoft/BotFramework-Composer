@@ -54,7 +54,7 @@ export function validateBody(body: string): ValidationResult {
 
   if (!refMatch.test(body)) {
     errors.push(
-      `[Body] Must either reference an issue (ex. 'fixes #1234') or, if this is a minor change with no related issue, tags it as '#minor'.\nSee ${helpLink} for more details.`
+      `[Body] Must either reference an issue (ex. 'fixes #1234') or, if this is a minor change with no related issue, tag it as '#minor'.\nSee ${helpLink} for more details.`
     );
   }
 
