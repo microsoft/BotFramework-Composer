@@ -408,6 +408,7 @@
 				},
 				"schema": {
 					"title": "Schema",
+					"$kind": "Microsoft.ISchema",
 					"description": "Schema to fill in.",
 					"anyOf": [
 						{

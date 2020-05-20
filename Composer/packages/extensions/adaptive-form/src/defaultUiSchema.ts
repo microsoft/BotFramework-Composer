@@ -4,7 +4,7 @@ import { UISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
-import { IntentField, RecognizerField } from './components/fields';
+import { IntentField, RecognizerField, DialogSchemaField } from './components/fields';
 
 const triggerUiSchema = {
   order: ['condition', '*'],
@@ -17,7 +17,7 @@ const DefaultUISchema: UISchema = {
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
     helpLink: 'https://aka.ms/botframework',
     order: ['recognizer', '*'],
-    hidden: ['triggers', 'autoEndDialog', 'generator', 'selector', 'schema'],
+    hidden: ['triggers', 'autoEndDialog', 'generator', 'selector'],
     properties: {
       recognizer: {
         label: () => formatMessage('Language Understanding'),
@@ -140,6 +140,10 @@ const DefaultUISchema: UISchema = {
   },
   [SDKKinds.IRecognizer]: {
     field: RecognizerField,
+    helpLink: 'https://aka.ms/BFC-Using-LU',
+  },
+  [SDKKinds.ISchema]: {
+    field: DialogSchemaField,
     helpLink: 'https://aka.ms/BFC-Using-LU',
   },
   [SDKKinds.LogAction]: {

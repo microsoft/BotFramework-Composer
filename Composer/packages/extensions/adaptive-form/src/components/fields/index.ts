@@ -14,3 +14,4 @@ export * from './RecognizerField';
 export * from './SelectField';
 export * from './StringField';
 export * from './UnsupportedField';
+export * from './DialogSchemaField';

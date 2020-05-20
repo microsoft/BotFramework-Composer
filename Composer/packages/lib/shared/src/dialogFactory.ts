@@ -169,12 +169,13 @@ class DialogFactory {
     }
 
     const { $designer, isFormDialog, ...propertyOverrides } = overrides;
-    const defaultProperties = isFormDialog ? {} : initialDialogShape()[$kind] || {};
+    const defaultProperties = isFormDialog ? { schema: '' } : initialDialogShape()[$kind] || {};
 
     return merge(
       { $kind, $designer: merge({ id: generateDesignerId() }, $designer) },
       this.seedDefaults($kind),
       defaultProperties,
+      { isFormDialog },
       propertyOverrides
     );
   }

@@ -54,6 +54,7 @@ export enum SDKKinds {
   IEntityRecognizer = 'Microsoft.IEntityRecognizer',
   ILanguageGenerator = 'Microsoft.ILanguageGenerator',
   IRecognizer = 'Microsoft.IRecognizer',
+  ISchema = 'Microsoft.ISchema',
   ITextTemplate = 'Microsoft.ITextTemplate',
   ITrigger = 'Microsoft.ITrigger',
   ITriggerSelector = 'Microsoft.ITriggerSelector',
