@@ -45,7 +45,9 @@ describe('test persistence layer', () => {
     filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
     expect(JSON.parse(filePersistence.taskQueue['a.dialog'][0].change).a).toBe('a');
     filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LG, payload: { id: 'a.en-us' } });
+    filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LG, payload: { id: 'a.en-us' } });
     expect(filePersistence.taskQueue['a.en-us.lg'][0].change).toBe('a.lg');
+    filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LU, payload: { id: 'a.en-us' } });
     filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LU, payload: { id: 'a.en-us' } });
     expect(filePersistence.taskQueue['a.en-us.lu'][0].change).toBe('a.lu');
   });
