@@ -112,5 +112,5 @@ the [Security TechCenter][103].
 [102]: https://technet.microsoft.com/en-us/security/dn606155
 [103]: https://technet.microsoft.com/en-us/security/default
 [201]: https://aka.ms/bf-composer-download-win
-[202]: https://aka.ms/bf-composer-download-linux
-[203]: https://aka.ms/bf-composer-download-mac
+[202]: https://aka.ms/bf-composer-download-mac
+[203]: https://aka.ms/bf-composer-download-linux
