@@ -14,13 +14,14 @@ import { StoreContext } from '../../../store';
 import { modalControlGroup } from './style';
 
 export interface EjectModalProps {
-  ejectRuntime: (templateKey: string) => void;
+  ejectRuntime: (templateKey: string) => Promise<void>;
   hidden: boolean;
   closeModal: () => void;
 }
 
 export const EjectModal: React.FC<EjectModalProps> = props => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>();
+  const [copying, setCopy] = useState(false);
   const { state, actions } = useContext(StoreContext);
   const { runtimeTemplates } = state;
 
@@ -43,9 +44,11 @@ export const EjectModal: React.FC<EjectModalProps> = props => {
     }
   };
 
-  const doEject = () => {
+  const doEject = async () => {
     if (selectedTemplate) {
-      props.ejectRuntime(selectedTemplate);
+      setCopy(true);
+      await props.ejectRuntime(selectedTemplate);
+      setCopy(false);
     }
   };
 
@@ -67,7 +70,7 @@ export const EjectModal: React.FC<EjectModalProps> = props => {
       </div>
       <DialogFooter>
         <DefaultButton onClick={props.closeModal}>Cancel</DefaultButton>
-        <PrimaryButton onClick={doEject} disabled={!selectedTemplate}>
+        <PrimaryButton onClick={doEject} disabled={selectedTemplate && !copying ? false : true}>
           {formatMessage('Okay')}
         </PrimaryButton>
       </DialogFooter>
