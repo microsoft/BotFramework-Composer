@@ -11,9 +11,11 @@ import { moveCursor } from '../utils/cursorTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { useSelectionApi } from './useSelectionApi';
+import { useEditorEventApi } from './useEditorEventApi';
 
-export const useKeyboardApi = dispatchEvent => {
+export const useKeyboardApi = () => {
   const { focusedEvent, focusedId } = useContext(NodeRendererContext);
+  const { handleEditorEvent } = useEditorEventApi();
   const { selectedIds, selectableElements } = useSelectionApi();
 
   const handleKeyboardCommand = ({ area, command }) => {
@@ -21,19 +23,19 @@ export const useKeyboardApi = dispatchEvent => {
       case KeyboardPrimaryTypes.Node:
         switch (command) {
           case KeyboardCommandTypes.Node.Delete:
-            dispatchEvent(NodeEventTypes.DeleteSelection);
+            handleEditorEvent(NodeEventTypes.DeleteSelection);
             break;
           case KeyboardCommandTypes.Node.Copy:
-            dispatchEvent(NodeEventTypes.CopySelection);
+            handleEditorEvent(NodeEventTypes.CopySelection);
             break;
           case KeyboardCommandTypes.Node.Cut:
-            dispatchEvent(NodeEventTypes.CutSelection);
+            handleEditorEvent(NodeEventTypes.CutSelection);
             break;
           case KeyboardCommandTypes.Node.Paste: {
             const currentSelectedId = selectedIds[0];
             if (currentSelectedId.endsWith('+')) {
               const { arrayPath, arrayIndex } = DialogUtils.parseNodePath(currentSelectedId.slice(0, -1)) || {};
-              dispatchEvent(NodeEventTypes.Insert, {
+              handleEditorEvent(NodeEventTypes.Insert, {
                 id: arrayPath,
                 position: arrayIndex,
                 $kind: MenuEventTypes.Paste,
@@ -52,16 +54,16 @@ export const useKeyboardApi = dispatchEvent => {
               focused: undefined,
               tab: '',
             };
-        dispatchEvent(NodeEventTypes.MoveCursor, cursor);
+        handleEditorEvent(NodeEventTypes.MoveCursor, cursor);
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
         switch (command) {
           case KeyboardCommandTypes.Operation.Undo:
-            dispatchEvent(NodeEventTypes.Undo, {});
+            handleEditorEvent(NodeEventTypes.Undo, {});
             break;
           case KeyboardCommandTypes.Operation.Redo:
-            dispatchEvent(NodeEventTypes.Redo, {});
+            handleEditorEvent(NodeEventTypes.Redo, {});
             break;
         }
         break;
