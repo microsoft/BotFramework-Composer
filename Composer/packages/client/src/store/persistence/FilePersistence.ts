@@ -111,12 +111,12 @@ class FilePersistence {
         });
         await Promise.all(tasks);
       }
-      this._isFlushing = false;
       return Promise.resolve(true);
     } catch (error) {
       this._handleError('')(error);
-      this._isFlushing = false;
       return Promise.resolve(false);
+    } finally {
+      this._isFlushing = false;
     }
   }
 
