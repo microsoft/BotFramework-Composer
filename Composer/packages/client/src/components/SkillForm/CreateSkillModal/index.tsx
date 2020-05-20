@@ -173,13 +173,13 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
           <StackItem grow={0}>
             <TextField
               autoFocus
+              required
               css={FormFieldManifestUrl}
               data-testid="NewSkillManifestUrl"
               errorMessage={formDataErrors.manifestUrl}
               label={formatMessage('Manifest url')}
-              onChange={updateForm('manifestUrl')}
-              required
               value={formData.manifestUrl}
+              onChange={updateForm('manifestUrl')}
             />
             {isValidating && (
               <Spinner css={SpinnerLabel} label="validating..." labelPosition="right" size={SpinnerSize.medium} />
@@ -189,22 +189,22 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
               data-testid="NewSkillName"
               errorMessage={formDataErrors.name}
               label={formatMessage('Custom name (optional)')}
-              onChange={updateForm('name')}
               value={formData.name}
+              onChange={updateForm('name')}
             />
           </StackItem>
 
           <StackItem>
             <PrimaryButton
               disabled={isDisabled || isValidating}
-              onClick={handleSubmit}
               text={formatMessage('Confirm')}
+              onClick={handleSubmit}
             />
             <DefaultButton
               css={MarginLeftSmall}
               data-testid="SkillFormCancel"
-              onClick={onDismiss}
               text={formatMessage('Cancel')}
+              onClick={onDismiss}
             />
           </StackItem>
         </Stack>

@@ -101,10 +101,10 @@ const JsonEditor: React.FC<JsonEditorProps> = (props) => {
       helpURL="https://www.json.org"
       id={id}
       language="json"
-      onChange={handleChange}
-      onInit={onInit}
       options={options}
       value={JSON.stringify(json, null, 2)}
+      onChange={handleChange}
+      onInit={onInit}
       {...rest}
     />
   );

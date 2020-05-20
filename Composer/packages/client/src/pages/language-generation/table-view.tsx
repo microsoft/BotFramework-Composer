@@ -144,7 +144,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return (
-            <div css={formCell} data-is-focusable>
+            <div data-is-focusable css={formCell}>
               <div aria-label={formatMessage(`Name is {name}`, { name: item.name })} css={content} tabIndex={-1}>
                 #{item.name}
               </div>
@@ -162,7 +162,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isPadded: true,
         onRender: (item) => {
           return (
-            <div css={formCell} data-is-focusable>
+            <div data-is-focusable css={formCell}>
               <div
                 aria-label={formatMessage(`Response is {response}`, { response: item.body })}
                 css={content}
@@ -221,7 +221,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               }}
             />
           ) : (
-            <div aria-label={formatMessage('Unused') + ';'} data-is-focusable />
+            <div data-is-focusable aria-label={formatMessage('Unused') + ';'} />
           );
         },
       };
@@ -278,8 +278,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
           items={templates}
           // getKey={item => item.name}
           layoutMode={DetailsListLayoutMode.justified}
-          onRenderDetailsFooter={onRenderDetailsFooter}
-          onRenderDetailsHeader={onRenderDetailsHeader}
           selectionMode={SelectionMode.none}
           styles={{
             root: {
@@ -292,6 +290,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
               },
             },
           }}
+          onRenderDetailsFooter={onRenderDetailsFooter}
+          onRenderDetailsHeader={onRenderDetailsHeader}
         />
       </ScrollablePane>
     </div>

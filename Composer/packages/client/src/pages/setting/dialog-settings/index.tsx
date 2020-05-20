@@ -75,7 +75,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
           {hostControlLabels.learnMore}
         </Link>
       </p>
-      {absHosted ? <ChoiceGroup css={slotChoice} onChange={changeSlot} options={slots} selectedKey={slot} /> : null}
+      {absHosted ? <ChoiceGroup css={slotChoice} options={slots} selectedKey={slot} onChange={changeSlot} /> : null}
     </div>
   );
 
@@ -83,7 +83,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor onChange={(x) => handleChange(x)} value={visibleSettings} />
+        <JsonEditor value={visibleSettings} onChange={(x) => handleChange(x)} />
       </div>
     </div>
   ) : (

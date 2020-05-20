@@ -63,8 +63,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
         {checkboxLabel && <Checkbox checked={!disabled} label={checkboxLabel} onChange={handleCheckbox} />}
       </div>
       <DialogFooter>
-        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} onClick={onConfirm} text={confirmBtnText} />
-        <DefaultButton data-testid="cancelPrompt" onClick={onCancel} text={cancelBtnText} />
+        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} text={confirmBtnText} onClick={onConfirm} />
+        <DefaultButton data-testid="cancelPrompt" text={cancelBtnText} onClick={onCancel} />
       </DialogFooter>
     </Dialog>
   );
@@ -87,7 +87,7 @@ export const OpenConfirmModal = (title, subTitle, setting = {}) => {
       resolve(false);
     };
 
-    const modal = <ConfirmDialog onCancel={onCancel} onConfirm={onConfirm} setting={{ title, subTitle, ...setting }} />;
+    const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onCancel={onCancel} onConfirm={onConfirm} />;
     ReactDOM.render(modal, node);
   });
 };

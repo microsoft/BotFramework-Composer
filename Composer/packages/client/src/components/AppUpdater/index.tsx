@@ -21,7 +21,7 @@ const { ipcRenderer } = window;
 function SelectOption(props) {
   const { checked, text, key } = props;
   return (
-    <div css={optionRoot} key={key}>
+    <div key={key} css={optionRoot}>
       <Icon css={optionIcon(checked)} iconName={checked ? 'RadioBtnOn' : 'RadioBtnOff'} />
       <span>{text}</span>
     </div>
@@ -138,8 +138,8 @@ export const AppUpdater: React.FC<{}> = (_props) => {
       case AppUpdaterStatus.UPDATE_AVAILABLE:
         return (
           <ChoiceGroup
+            required
             defaultSelectedKey={downloadOptions.installAndUpdate}
-            onChange={handleDownloadOptionChange}
             options={[
               {
                 key: downloadOptions.installAndUpdate,
@@ -152,7 +152,7 @@ export const AppUpdater: React.FC<{}> = (_props) => {
                 onRenderField: SelectOption,
               },
             ]}
-            required
+            onChange={handleDownloadOptionChange}
           />
         );
 
@@ -200,19 +200,19 @@ export const AppUpdater: React.FC<{}> = (_props) => {
       case AppUpdaterStatus.UPDATE_AVAILABLE:
         return (
           <div>
-            <DefaultButton onClick={handleDismiss} styles={updateAvailableDismissBtn} text={formatMessage('Cancel')} />
-            <PrimaryButton onClick={handlePreDownloadOkay} text={formatMessage('Okay')} />
+            <DefaultButton styles={updateAvailableDismissBtn} text={formatMessage('Cancel')} onClick={handleDismiss} />
+            <PrimaryButton text={formatMessage('Okay')} onClick={handlePreDownloadOkay} />
           </div>
         );
 
       case AppUpdaterStatus.UPDATE_SUCCEEDED:
-        return <PrimaryButton onClick={handlePostDownloadOkay} text={formatMessage('Okay')} />;
+        return <PrimaryButton text={formatMessage('Okay')} onClick={handlePostDownloadOkay} />;
 
       case AppUpdaterStatus.UPDATE_FAILED:
-        return <PrimaryButton onClick={handleDismiss} text={formatMessage('Okay')} />;
+        return <PrimaryButton text={formatMessage('Okay')} onClick={handleDismiss} />;
 
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
-        return <PrimaryButton onClick={handleDismiss} text={formatMessage('Okay')} />;
+        return <PrimaryButton text={formatMessage('Okay')} onClick={handleDismiss} />;
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
         return undefined;

@@ -44,7 +44,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'string',
       onRender: (item) => {
         return (
-          <div css={tableCell} data-is-focusable>
+          <div data-is-focusable css={tableCell}>
             <Link
               aria-label={formatMessage(`Bot name is {botName}`, { botName: item.name })}
               onClick={() => onItemChosen(item)}
@@ -66,7 +66,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'number',
       onRender: (item) => {
         return (
-          <div css={tableCell} data-is-focusable>
+          <div data-is-focusable css={tableCell}>
             <div
               aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
               css={content}
@@ -89,7 +89,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       data: 'string',
       onRender: (item) => {
         return (
-          <div css={tableCell} data-is-focusable>
+          <div data-is-focusable css={tableCell}>
             <div
               aria-label={formatMessage(`location is {location}`, { location: item.path })}
               css={content}
@@ -119,16 +119,16 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
     <div css={detailListContainer} data-is-scrollable="true">
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
+          isHeaderVisible
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={tableColums}
           compact={false}
           getKey={(item) => `${item.path}/${item.name}`}
-          isHeaderVisible
           items={recentProjects}
           layoutMode={DetailsListLayoutMode.justified}
+          selectionMode={SelectionMode.single}
           onItemInvoked={onItemChosen}
           onRenderDetailsHeader={onRenderDetailsHeader}
-          selectionMode={SelectionMode.single}
         />
       </ScrollablePane>
     </div>

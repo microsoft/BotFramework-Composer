@@ -129,8 +129,8 @@ const createPasteButtonItem = (
           `}
           disabled={disabled}
           name="Paste"
-          onClick={() => onClick({ key: MenuEventTypes.Paste })}
           role="menuitem"
+          onClick={() => onClick({ key: MenuEventTypes.Paste })}
         >
           <div>
             <FontIcon

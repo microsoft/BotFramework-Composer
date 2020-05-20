@@ -51,7 +51,7 @@ export const RequireAuth: React.FC = (props) => {
     >
       <div css={consoleStyle}>{formatMessage('Please log in before continuing.')}</div>
       <DialogFooter>
-        <PrimaryButton onClick={() => actions.loginUser()} text={formatMessage('Login')} />
+        <PrimaryButton text={formatMessage('Login')} onClick={() => actions.loginUser()} />
       </DialogFooter>
     </Dialog>
   );

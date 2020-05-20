@@ -65,13 +65,13 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
         <JsonEditor
           height={'100%'}
           id={'modaljsonview'}
-          onChange={() => {}}
           options={{ readOnly: true }}
           value={JSON.parse(selectedSkill.body || '')}
+          onChange={() => {}}
         />
       </div>
       <DialogFooter>
-        <PrimaryButton onClick={onDismiss} text={formatMessage('Close')} />
+        <PrimaryButton text={formatMessage('Close')} onClick={onDismiss} />
       </DialogFooter>
     </Dialog>
   );

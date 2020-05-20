@@ -97,9 +97,9 @@ const LGPage: React.FC<LGPageProps> = (props) => {
     <Page
       data-testid="LGPage"
       navLinks={navLinks}
-      onRenderHeaderContent={onRenderHeaderContent}
       title={formatMessage('Bot Responses')}
       toolbarItems={toolbarItems}
+      onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>

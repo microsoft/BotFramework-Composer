@@ -230,19 +230,19 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             defaultSelectedKey={selectedType}
             errorMessage={formData.errors.$kind}
             label={formatMessage('What is the type of this trigger?')}
-            onChange={onSelectTriggerType}
             options={triggerTypeOptions}
             styles={dropdownStyles}
+            onChange={onSelectTriggerType}
           />
           {showEventDropDown && (
             <Dropdown
               data-testid={'eventTypeDropDown'}
               errorMessage={formData.errors.event}
               label={formatMessage('Which event?')}
-              onChange={handleEventTypeChange}
               options={eventTypes}
               placeholder={formatMessage('Select a event type')}
               styles={dropdownStyles}
+              onChange={handleEventTypeChange}
             />
           )}
           {showCustomEvent && (
@@ -250,8 +250,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               data-testid="CustomEventName"
               errorMessage={formData.errors.event}
               label={formatMessage('What is the name of the custom event?')}
-              onChange={handleEventNameChange}
               styles={intent}
+              onChange={handleEventNameChange}
             />
           )}
           {showActivityDropDown && (
@@ -259,10 +259,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               data-testid={'activityTypeDropDown'}
               errorMessage={formData.errors.activity}
               label={formatMessage('Which activity type')}
-              onChange={handleEventTypeChange}
               options={activityTypes}
               placeholder={formatMessage('Select an activity type')}
               styles={dropdownStyles}
+              onChange={handleEventTypeChange}
             />
           )}
           {showIntentName && (
@@ -274,8 +274,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                   ? formatMessage('What is the name of this trigger (RegEx)')
                   : formatMessage('What is the name of this trigger (Luis)')
               }
-              onChange={onNameChange}
               styles={intent}
+              onChange={onNameChange}
             />
           )}
 
@@ -298,17 +298,17 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                   fileId: dialogId,
                   sectionId: formData.intent || PlaceHolderSectionName,
                 }}
-                onChange={onTriggerPhrasesChange}
                 placeholder={inlineModePlaceholder}
                 value={formData.triggerPhrases}
+                onChange={onTriggerPhrasesChange}
               />
             </React.Fragment>
           )}
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton data-testid={'triggerFormSubmit'} onClick={onClickSubmitButton} text={formatMessage('Submit')} />
+        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        <PrimaryButton data-testid={'triggerFormSubmit'} text={formatMessage('Submit')} onClick={onClickSubmitButton} />
       </DialogFooter>
     </Dialog>
   );

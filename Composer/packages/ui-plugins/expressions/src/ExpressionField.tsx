@@ -78,12 +78,12 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
       const defaultValue = selectedSchema.type === 'object' ? {} : [];
       return (
         <JsonEditor
+          key={selectedSchema.type}
           height={100}
           id={props.id}
-          key={selectedSchema.type}
-          onChange={props.onChange}
           schema={selectedSchema}
           value={value || defaultValue}
+          onChange={props.onChange}
         />
       );
     }
@@ -127,8 +127,6 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
               data-testid={`expression-type-dropdown-${label}`}
               dropdownWidth={dropdownWidth}
               id={`${props.id}-type`}
-              onChange={handleTypeChange}
-              onRenderTitle={renderTypeTitle}
               options={options}
               responsiveMode={ResponsiveMode.large}
               selectedKey={selectedKey}
@@ -137,6 +135,8 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
                 root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
                 title: { height: '24px', lineHeight: '20px' },
               }}
+              onChange={handleTypeChange}
+              onRenderTitle={renderTypeTitle}
             />
           )}
         </div>

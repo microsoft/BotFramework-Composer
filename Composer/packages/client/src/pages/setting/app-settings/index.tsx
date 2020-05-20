@@ -57,8 +57,8 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
           description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
           id="onboardingToggle"
           image={images.onboarding}
-          onToggle={onOnboardingChange}
           title={formatMessage('Onboarding')}
+          onToggle={onOnboardingChange}
         />
         <TeachingBubble
           calloutProps={{
@@ -112,22 +112,22 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             'A minimap gives a overview of your source code for quick navigation and code understanding.'
           )}
           image={images.minimap}
-          onToggle={onCodeEditorChange('minimap')}
           title={formatMessage('Minimap')}
+          onToggle={onCodeEditorChange('minimap')}
         />
         <SettingToggle
           checked={userSettings.codeEditor.lineNumbers}
           description={formatMessage('Enable line numbers to refer to code lines by number.')}
           image={images.lineNumbers}
-          onToggle={onCodeEditorChange('lineNumbers')}
           title={formatMessage('Line numbers')}
+          onToggle={onCodeEditorChange('lineNumbers')}
         />
         <SettingToggle
           checked={userSettings.codeEditor.wordWrap}
           description={formatMessage('Display lines that extends beyond the width of the editor on the next line.')}
           image={images.wordWrap}
-          onToggle={onCodeEditorChange('wordWrap')}
           title={formatMessage('Sentence wrap')}
+          onToggle={onCodeEditorChange('wordWrap')}
         />
       </section>
 

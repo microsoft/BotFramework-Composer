@@ -138,7 +138,6 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
         <div css={styles.create}>
           <Dropdown
             errorMessage={errors?.version}
-            onChange={handleChange}
             options={options}
             responsiveMode={ResponsiveMode.large}
             styles={{
@@ -146,14 +145,15 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
                 width: '250px',
               },
             }}
+            onChange={handleChange}
           />
           <PrimaryButton
-            onClick={handleCreate}
             styles={{
               root: {
                 marginLeft: 8,
               },
             }}
+            onClick={handleCreate}
           >
             {formatMessage('Create')}
           </PrimaryButton>
@@ -162,16 +162,16 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       <div css={styles.detailListContainer}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
+            isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
             columns={tableColumns}
             compact={false}
             getKey={(item) => item.name}
-            isHeaderVisible
             items={skillManifests}
             layoutMode={DetailsListLayoutMode.justified}
+            selectionMode={SelectionMode.single}
             onActiveItemChanged={({ id }) => setSkillManifest(id)}
             onRenderDetailsHeader={onRenderDetailsHeader}
-            selectionMode={SelectionMode.single}
           />
         </ScrollablePane>
       </div>

@@ -112,11 +112,11 @@ export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX
       icon={ElementIcon.Play}
       iconColor={EventColor.iconColor}
       label={label}
-      onChildDialogClick={openChildDialog}
-      onClick={onCardBodyClick}
       summary={summary}
       themeColor={EventColor.expanded}
       trigger={trigger}
+      onChildDialogClick={openChildDialog}
+      onClick={onCardBodyClick}
     />
   );
 };

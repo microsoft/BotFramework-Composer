@@ -98,13 +98,13 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             completeStep={handleNext}
             editJson={handleEditJson}
             errors={errors}
-            onChange={(manifestContent) => updateSkillManifest({ ...skillManifest, content: manifestContent })}
             schema={schema}
             setErrors={setErrors}
             setSchema={setSchema}
             setSkillManifest={handleSelectManifest}
             skillManifests={skillManifests as SkillManifest[]}
             value={content}
+            onChange={(manifestContent) => updateSkillManifest({ ...skillManifest, content: manifestContent })}
           />
         </div>
         <DialogFooter>
@@ -117,8 +117,10 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
                 return (
                   <Button
-                    disabled={isDisabled}
                     key={index}
+                    disabled={isDisabled}
+                    styles={{ root: { marginLeft: '8px' } }}
+                    text={buttonText}
                     onClick={onClick({
                       setCurrentStep,
                       onDismiss,
@@ -126,13 +128,11 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                       onSave: handleSave,
                       onSubmit,
                     })}
-                    styles={{ root: { marginLeft: '8px' } }}
-                    text={buttonText}
                   />
                 );
               })}
             </div>
-            {editJson && <DefaultButton onClick={handleEditJson} text={formatMessage('Edit in JSON')} />}
+            {editJson && <DefaultButton text={formatMessage('Edit in JSON')} onClick={handleEditJson} />}
           </div>
         </DialogFooter>
       </div>

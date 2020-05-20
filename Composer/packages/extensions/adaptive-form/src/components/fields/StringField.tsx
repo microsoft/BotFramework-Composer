@@ -53,9 +53,6 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         disabled={disabled}
         errorMessage={error}
         id={id}
-        onBlur={handleBlur}
-        onChange={handleChange}
-        onFocus={handleFocus}
         placeholder={placeholder}
         readOnly={readonly}
         styles={{
@@ -76,6 +73,9 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
           errorMessage: { display: 'none' },
         }}
         value={value}
+        onBlur={handleBlur}
+        onChange={handleChange}
+        onFocus={handleFocus}
       />
     </>
   );

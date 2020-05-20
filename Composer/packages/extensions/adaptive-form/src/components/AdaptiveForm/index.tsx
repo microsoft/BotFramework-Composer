@@ -43,20 +43,20 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
         <FormTitle
           formData={formData}
           id={formData.$designer?.id || 'unknown'}
-          onChange={($designer) => onChange({ ...formData, $designer })}
           schema={schema}
           uiOptions={uiOptions}
+          onChange={($designer) => onChange({ ...formData, $designer })}
         />
         <SchemaField
           definitions={schema?.definitions}
           depth={-1}
           id="root"
           name="root"
-          onChange={onChange}
           rawErrors={errors}
           schema={schema}
           uiOptions={uiOptions}
           value={formData}
+          onChange={onChange}
         />
       </PluginContext.Provider>
     </ErrorBoundary>

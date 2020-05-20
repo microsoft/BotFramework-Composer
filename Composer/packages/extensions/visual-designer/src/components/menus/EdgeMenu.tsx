@@ -60,8 +60,8 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
   );
   return (
     <div
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       ref={forwardedRef}
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,

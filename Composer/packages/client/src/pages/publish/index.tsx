@@ -395,9 +395,9 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         {editDialogProps.children}
       </Dialog>
       {!publishDialogHidden && (
-        <PublishDialog onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} target={selectedTarget} />
+        <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
       )}
-      {showLog && <LogDialog onDismiss={() => setShowLog(false)} version={selectedVersion} />}
+      {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
@@ -405,15 +405,15 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div css={projectContainer}>
           <div
-            css={selectedTargetName === 'all' ? targetSelected : overflowSet}
             key={'_all'}
-            onClick={() => {
-              setSelectedTarget(undefined);
-              onSelectTarget('all');
-            }}
+            css={selectedTargetName === 'all' ? targetSelected : overflowSet}
             style={{
               height: '36px',
               cursor: 'pointer',
+            }}
+            onClick={() => {
+              setSelectedTarget(undefined);
+              onSelectTarget('all');
             }}
           >
             {formatMessage('All profiles')}
@@ -421,13 +421,13 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           {settings && settings.publishTargets && (
             <TargetList
               list={settings.publishTargets}
+              selectedTarget={selectedTargetName}
               onDelete={async (index) => await onDelete(index)}
               onEdit={async (item, target) => await onEdit(item, target)}
               onSelect={(item) => {
                 setSelectedTarget(item);
                 onSelectTarget(item.name);
               }}
-              selectedTarget={selectedTargetName}
             />
           )}
         </div>
@@ -436,8 +436,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
             <PublishStatusList
               groups={groups}
               items={thisPublishHistory}
-              onItemClick={setSelectedVersion}
               updateItems={setThisPublishHistory}
+              onItemClick={setSelectedVersion}
             />
             {!thisPublishHistory || thisPublishHistory.length === 0 ? (
               <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>

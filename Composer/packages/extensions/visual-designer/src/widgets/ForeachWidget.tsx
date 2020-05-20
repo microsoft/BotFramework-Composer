@@ -84,9 +84,9 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
       </OffsetContainer>
       <OffsetContainer offset={loopActionsNode.offset}>
         <StepGroup
+          key={loopActionsNode.id}
           data={loopActionsNode.data}
           id={loopActionsNode.id}
-          key={loopActionsNode.id}
           onEvent={onEvent}
           onResize={(size) => {
             updateNodeBoundary(ForeachNodes.LoopActions, size);

@@ -57,7 +57,7 @@ export const KeyboardZone = React.forwardRef<HTMLDivElement, KeyboardZoneProps>(
   };
 
   return (
-    <div css={styles} data-test-id="keyboard-zone" onKeyDown={handleKeyDown} ref={ref} tabIndex={0}>
+    <div ref={ref} css={styles} data-test-id="keyboard-zone" tabIndex={0} onKeyDown={handleKeyDown}>
       {children}
     </div>
   );

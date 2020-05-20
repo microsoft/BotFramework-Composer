@@ -63,6 +63,7 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
 
   return (
     <Link
+      ref={addRef}
       aria-disabled={disabled}
       aria-label={labelName + (active ? '; selected' : '')}
       css={css`
@@ -91,7 +92,6 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
         }
       `}
       data-testid={'LeftNav-CommandBarButton' + labelName}
-      ref={addRef}
       to={linkTo}
     >
       {activeArea}

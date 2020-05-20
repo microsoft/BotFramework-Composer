@@ -129,10 +129,13 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
           >
             <div css={styles} data-testid="visualdesigner-container">
               <ObiEditor
+                key={dialogId}
                 announce={announce}
                 data={data}
                 focusedSteps={focusedActions}
-                key={dialogId}
+                path={dialogId}
+                redo={redo}
+                undo={undo}
                 onChange={(x) => saveData(x)}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
@@ -140,9 +143,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                 onFocusSteps={onFocusSteps}
                 onOpen={(x) => navTo(x)}
                 onSelect={onSelect}
-                path={dialogId}
-                redo={redo}
-                undo={undo}
               />
             </div>
           </FlowSchemaContext.Provider>

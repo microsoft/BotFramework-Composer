@@ -63,7 +63,7 @@ const _renderIcon = (file: File) => {
 const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) => {
   const iconName = getFileIconName(file);
   return (
-    <div css={tableCell} data-is-focusable>
+    <div data-is-focusable css={tableCell}>
       <Link
         aria-label={
           file.name === '..'
@@ -131,7 +131,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       data: 'number',
       onRender: (item: File) => {
         return (
-          <div css={tableCell} data-is-focusable>
+          <div data-is-focusable css={tableCell}>
             <div
               aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.lastModified) })}
               css={content}
@@ -241,16 +241,17 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
                 : ''
             }
             label={formatMessage('Location')}
-            onChange={updateLocation}
             options={breadcrumbItems}
             selectedKey={currentPath}
             styles={dropdown}
+            onChange={updateLocation}
           />
         </StackItem>
       </Stack>
       <div css={detailListContainer} data-is-scrollable="true">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
+            isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
             columns={tableColumns.map((col) => ({
               ...col,
@@ -259,9 +260,9 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             }))}
             compact={false}
             getKey={(item) => item.name}
-            isHeaderVisible
             items={storageFiles}
             layoutMode={DetailsListLayoutMode.justified}
+            selectionMode={SelectionMode.single}
             onColumnHeaderClick={(_, clickedColumn) => {
               if (clickedColumn == null) return;
               if (clickedColumn.key === currentSort.key) {
@@ -275,7 +276,6 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             }}
             onItemInvoked={onFileChosen}
             onRenderDetailsHeader={onRenderDetailsHeader}
-            selectionMode={SelectionMode.single}
           />
         </ScrollablePane>
       </div>

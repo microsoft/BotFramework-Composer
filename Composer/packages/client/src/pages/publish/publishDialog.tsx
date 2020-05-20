@@ -33,16 +33,16 @@ export const PublishDialog = (props) => {
         <div css={publishDialogText}>{props.target.name}</div>
         <form onSubmit={submit}>
           <TextField
-            label={formatMessage('Comment')}
             multiline
+            label={formatMessage('Comment')}
             // styles={styles.textarea}
-            onChange={(e, newvalue) => setComment(newvalue || '')}
             placeholder="Provide a brief description of this publish. It will appear on the publish history list"
+            onChange={(e, newvalue) => setComment(newvalue || '')}
           />
         </form>
         <DialogFooter>
-          <DefaultButton onClick={props.onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={submit} text={formatMessage('Okay')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <PrimaryButton text={formatMessage('Okay')} onClick={submit} />
         </DialogFooter>
       </Fragment>
     </Dialog>

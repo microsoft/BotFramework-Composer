@@ -84,6 +84,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
 
   return (
     <div
+      ref={addRef}
       className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
       css={css`
         position: relative;
@@ -95,7 +96,6 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
           ${!nodeFocused && nodeBorderHoveredStyle}
         }
       `}
-      ref={addRef}
       {...declareElementAttributes(selectableId, id)}
       aria-label={ariaLabel}
       onClick={(e) => {

@@ -46,7 +46,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 }) => {
   const onRenderChildren = () => {
     return (
-      <div css={childrenContainer} ref={forwardedRef}>
+      <div ref={forwardedRef} css={childrenContainer}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
           <div css={itemContainerTitle}>
             <Text block variant="large">

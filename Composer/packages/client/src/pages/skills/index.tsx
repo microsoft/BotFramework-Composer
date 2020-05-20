@@ -88,14 +88,14 @@ const Skills: React.FC<RouteComponentProps> = () => {
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <SkillList onDelete={onItemDelete} onEdit={(idx) => setEditIndex(idx)} projectId={projectId} skills={skills} />
+      <SkillList projectId={projectId} skills={skills} onDelete={onItemDelete} onEdit={(idx) => setEditIndex(idx)} />
       <CreateSkillModal
         editIndex={editIndex}
         isOpen={typeof editIndex === 'number'}
-        onDismiss={onDismissForm}
-        onSubmit={onSubmitForm}
         projectId={projectId}
         skills={skills}
+        onDismiss={onDismissForm}
+        onSubmit={onSubmitForm}
       />
     </div>
   );

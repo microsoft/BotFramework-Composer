@@ -101,9 +101,9 @@ const LUPage: React.FC<LUPageProps> = (props) => {
     <Page
       data-testid="LUPage"
       navLinks={navLinks}
-      onRenderHeaderContent={onRenderHeaderContent}
       title={formatMessage('User Input')}
       toolbarItems={toolbarItems}
+      onRenderHeaderContent={onRenderHeaderContent}
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>

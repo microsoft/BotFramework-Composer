@@ -83,10 +83,10 @@ export const App: React.FC = () => {
               {topLinks.map((link, index) => {
                 return (
                   <NavItem
+                    key={'NavLeftBar' + index}
                     disabled={link.disabled}
                     exact={link.exact}
                     iconName={link.iconName}
-                    key={'NavLeftBar' + index}
                     labelName={link.labelName}
                     to={mapNavItemTo(link.to)}
                   />
@@ -99,10 +99,10 @@ export const App: React.FC = () => {
             {bottomLinks.map((link, index) => {
               return (
                 <NavItem
+                  key={'NavLeftBar' + index}
                   disabled={link.disabled}
                   exact={link.exact}
                   iconName={link.iconName}
-                  key={'NavLeftBar' + index}
                   labelName={link.labelName}
                   to={mapNavItemTo(link.to)}
                 />

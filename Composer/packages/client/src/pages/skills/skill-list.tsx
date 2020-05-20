@@ -115,8 +115,8 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
                 iconProps={{
                   iconName: 'Edit',
                 }}
-                onClick={() => onEdit(index)}
                 title="Edit"
+                onClick={() => onEdit(index)}
               />
               <IconButton
                 ariaLabel="Delete"
@@ -124,15 +124,15 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
                 iconProps={{
                   iconName: 'Delete',
                 }}
-                onClick={() => onDelete(index)}
                 title="Delete"
+                onClick={() => onDelete(index)}
               />
               <IconButton
                 ariaLabel="View"
                 data-testid="ViewManifest"
                 iconProps={{ iconName: 'ContextMenu' }}
-                onClick={() => onViewManifest(item)}
                 title="View"
+                onClick={() => onViewManifest(item)}
               />
             </Stack>
           </div>
@@ -159,14 +159,14 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
       <div css={TableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
+            isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
             columns={getColumns()}
-            isHeaderVisible
             items={skills}
             layoutMode={DetailsListLayoutMode.justified}
-            onRenderDetailsHeader={onRenderDetailsHeader}
             selectionMode={SelectionMode.single}
             styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}
+            onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </ScrollablePane>
       </div>

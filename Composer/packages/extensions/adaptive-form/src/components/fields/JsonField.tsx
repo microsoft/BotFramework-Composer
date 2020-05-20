@@ -22,7 +22,7 @@ const JsonField: React.FC<FieldProps> = (props) => {
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <div css={fieldStyle}>
-        <JsonEditor height={200} onChange={onChange} schema={schema} value={value} />
+        <JsonEditor height={200} schema={schema} value={value} onChange={onChange} />
       </div>
     </React.Fragment>
   );

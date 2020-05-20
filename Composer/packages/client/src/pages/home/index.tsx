@@ -154,33 +154,33 @@ const Home: React.FC<RouteComponentProps> = () => {
             <div data-testid={'homePage-body-New'}>
               <ItemContainer
                 content={formatMessage('New')}
+                styles={home.newBotItem}
+                title={addButton}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
                   navigate('projects/create');
                 }}
-                styles={home.newBotItem}
-                title={addButton}
               />
             </div>
             {recentProjects.length > 0 ? (
               <ItemContainer
                 content={recentProjects[0].name}
                 forwardedRef={addRef}
+                styles={home.latestBotItem}
+                title={''}
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
-                styles={home.latestBotItem}
-                title={''}
               />
             ) : (
               <ItemContainer
                 content={'ToDoBotWithLuis'}
                 forwardedRef={addRef}
+                styles={home.latestBotItem}
+                title={''}
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
-                styles={home.latestBotItem}
-                title={''}
               />
             )}
           </div>
@@ -188,10 +188,10 @@ const Home: React.FC<RouteComponentProps> = () => {
             <div css={home.leftContainer}>
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
+                recentProjects={recentProjects}
                 onItemChosen={async (item) => {
                   await onItemChosen(item);
                 }}
-                recentProjects={recentProjects}
               />
             </div>
           )}
@@ -200,9 +200,9 @@ const Home: React.FC<RouteComponentProps> = () => {
             <div css={home.newBotContainer}>
               {turtorials.map((item, index) => (
                 <ItemContainer
+                  key={index}
                   content={item.content}
                   href={item.href}
-                  key={index}
                   openExternal={isElectron()}
                   rel="noopener nofollow"
                   styles={home.tutorialTile}
@@ -220,8 +220,8 @@ const Home: React.FC<RouteComponentProps> = () => {
                 {linksButtom.map((link) => {
                   return (
                     <Link
-                      href={link.to}
                       key={'homePageLeftLinks-' + link.text}
+                      href={link.to}
                       rel="noopener noreferrer"
                       style={{ width: '150px' }}
                       tabIndex={0}

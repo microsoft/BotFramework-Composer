@@ -30,12 +30,12 @@ describe('<ProjectTree/>', () => {
       <ProjectTree
         dialogId={dialogId}
         dialogs={dialogs}
+        openNewTriggerModal={openNewTriggerModal}
+        selected={selected}
         onAdd={handleAddDialog}
         onDeleteDialog={handleDeleteDialog}
         onDeleteTrigger={handleDeleteTrigger}
         onSelect={handleSelect}
-        openNewTriggerModal={openNewTriggerModal}
-        selected={selected}
       />
     );
     const node = await findByText('addtodo');

@@ -125,18 +125,18 @@ const PropertyEditor: React.FC = () => {
       }}
       maxWidth={800}
       minWidth={400}
-      onResizeStop={handleResize}
       size={{ width: currentWidth, height: 'auto' }}
+      onResizeStop={handleResize}
     >
       <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor">
         <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
           <AdaptiveForm
             errors={errors}
             formData={localData}
-            onChange={handleDataChange}
             pluginConfig={pluginConfig}
             schema={$schema}
             uiOptions={$uiSchema}
+            onChange={handleDataChange}
           />
         </Extension>
       </div>

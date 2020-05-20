@@ -61,11 +61,11 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
       }}
     >
       <StepEditor
+        key={stepGroup.id + '?version=' + outlineVersion.current}
         data={stepGroup.data}
         id={stepGroup.id}
-        key={stepGroup.id + '?version=' + outlineVersion.current}
-        onEvent={onEvent}
         trigger={<Trigger data={data} />}
+        onEvent={onEvent}
       />
     </div>
   );

@@ -107,9 +107,9 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
       {(casesNodes as any).map((x, index) => (
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
           <StepGroup
+            key={x.id}
             data={x.data}
             id={x.id}
-            key={x.id}
             onEvent={onEvent}
             onResize={(size) => {
               updateNodeBoundary(getCaseKey(index), size);

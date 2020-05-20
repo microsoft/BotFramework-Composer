@@ -53,16 +53,16 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
         depth={depth + 1}
         id={`${id}.id`}
         name="id"
-        onChange={handleIdChange}
         rawErrors={{}}
         schema={(schema?.properties?.id as JSONSchema7) || {}}
         uiOptions={uiOptions.properties?.id || {}}
         value={value?.id}
+        onChange={handleIdChange}
       />
       <Link
         disabled={!manifest || !manifest.body || !manifest.name}
-        onClick={handleShowManifestClick}
         styles={{ root: { fontSize: '12px', padding: '0 16px' } }}
+        onClick={handleShowManifestClick}
       >
         {formatMessage('Show skill manifest')}
       </Link>
@@ -72,11 +72,11 @@ export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
         enumOptions={endpointOptions}
         id={`${id}.skillEndpoint`}
         name="skillEndpoint"
-        onChange={handleEndpointChange}
         rawErrors={{}}
         schema={(schema?.properties?.skillEndpoint as JSONSchema7) || {}}
         uiOptions={skillEndpointUiSchema}
         value={value?.skillEndpoint}
+        onChange={handleEndpointChange}
       />
       <Link href={`/bot/${projectId}/skills`} styles={{ root: { fontSize: '12px', padding: '0 16px' } }}>
         {formatMessage('Open Skills page for configuration details')}

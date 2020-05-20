@@ -45,28 +45,28 @@ const SkillSettings: React.FC<ISkillFormProps> = (props) => {
     <div css={FormFieldAlignHorizontalBotSettings}>
       <div style={{ marginLeft: '20px' }}>
         <TextField
+          underlined
           aria-labelledby={'microsoftAppId'}
           data-testid="SkillBotId"
           description={formatMessage('The Microsoft App Id that will be calling the skill.')}
           id={'MicrosoftAppId'}
           label={formatMessage('Microsoft App Id')}
-          onChange={handleFieldChange}
           style={{ maxWidth: '300px' }}
-          underlined
           value={skillSettings.botId}
+          onChange={handleFieldChange}
         />
       </div>
       <div style={{ marginLeft: '50px' }}>
         <TextField
+          underlined
           aria-labelledby={'skillHostEndpoint'}
           data-testid="SkillHostEndpoint"
           description={formatMessage('The callback url for the skill host.')}
           id={'skillHostEndpoint'}
           label={formatMessage('Skill Host Endpoint')}
-          onChange={handleFieldChange}
           style={{ width: '400px' }}
-          underlined
           value={skillSettings.skillHostEndpoint}
+          onChange={handleFieldChange}
         />
       </div>
     </div>

@@ -23,11 +23,11 @@ describe('<IconCard />', () => {
         icon={icon}
         iconColor={'red'}
         label={label}
-        onChildDialogClick={() => {}}
-        onClick={onClick}
         summary={''}
         themeColor={themeColor}
         trigger={''}
+        onChildDialogClick={() => {}}
+        onClick={onClick}
       />
     );
   });

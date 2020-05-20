@@ -314,9 +314,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           data-testid="Breadcrumb"
           items={items}
           maxDisplayedItems={3}
+          styles={breadcrumbClass}
           onReduceData={() => undefined}
           onRenderItem={onRenderBreadcrumbItem}
-          styles={breadcrumbClass}
         />
         <div style={{ padding: '10px' }}>
           <ActionButton
@@ -406,21 +406,21 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <ProjectTree
           dialogId={dialogId}
           dialogs={dialogs}
+          selected={selected}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
           onSelect={handleSelect}
-          selected={selected}
         />
         <div css={contentWrapper} role="main">
           <ToolBar
             actions={actions}
             currentDialog={currentDialog}
-            onCreateDialogComplete={onCreateDialogComplete}
             onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
             openNewTriggerModal={openNewTriggerModal}
             projectId={projectId}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
             toolbarItems={toolbarItems}
+            onCreateDialogComplete={onCreateDialogComplete}
           />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
@@ -428,13 +428,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    id={currentDialog.id}
                     key={'dialogjson'}
+                    id={currentDialog.id}
+                    schema={schemas.sdk.content}
+                    value={currentDialog.content || undefined}
                     onChange={(data) => {
                       actions.updateDialog({ id: currentDialog.id, projectId, content: data });
                     }}
-                    schema={schemas.sdk.content}
-                    value={currentDialog.content || undefined}
                   />
                 ) : (
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />
@@ -457,10 +457,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <CreateSkillModal
             editIndex={-1}
             isOpen={state.showAddSkillDialogModal}
-            onDismiss={() => actions.addSkillDialogCancel()}
-            onSubmit={handleAddSkillDialogSubmit}
             projectId={projectId}
             skills={state.skills}
+            onDismiss={() => actions.addSkillDialogCancel()}
+            onSubmit={handleAddSkillDialogSubmit}
           />
         )}
         {exportSkillModalVisible && (

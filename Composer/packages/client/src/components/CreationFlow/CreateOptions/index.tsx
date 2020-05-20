@@ -63,7 +63,7 @@ export function CreateOptions(props) {
   function SelectOption(props) {
     const { checked, text, key } = props;
     return (
-      <div css={optionRoot} key={key}>
+      <div key={key} css={optionRoot}>
         <Icon css={optionIcon(checked)} iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} />
         <span>{text}</span>
       </div>
@@ -98,7 +98,7 @@ export function CreateOptions(props) {
       data: 'string',
       styles: rowTitle(disabled),
       onRender: (item) => (
-        <div css={tableCell} data-is-focusable>
+        <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
             {item.name}
           </div>
@@ -115,7 +115,7 @@ export function CreateOptions(props) {
       data: 'string',
       styles: rowTitle(disabled),
       onRender: (item) => (
-        <div css={tableCell} data-is-focusable>
+        <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
             {item.description}
           </div>
@@ -179,35 +179,35 @@ export function CreateOptions(props) {
       >
         <ChoiceGroup
           label={formatMessage('Choose how to create your bot')}
-          onChange={handleChange}
           options={choiceOptions}
           selectedKey={option}
+          onChange={handleChange}
         />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
         <div css={detailListContainer} data-is-scrollable="true">
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <DetailsList
+              isHeaderVisible
               checkboxVisibility={CheckboxVisibility.hidden}
               columns={tableColums}
               compact={false}
               getKey={(item) => item.name}
-              isHeaderVisible
               items={templates}
               layoutMode={DetailsListLayoutMode.justified}
-              onRenderDetailsHeader={onRenderDetailsHeader}
-              onRenderRow={onRenderRow}
               selection={selection}
               selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
+              onRenderDetailsHeader={onRenderDetailsHeader}
+              onRenderRow={onRenderRow}
             />
           </ScrollablePane>
         </div>
         <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="NextStepButton"
             disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
-            onClick={handleJumpToNext}
             text={formatMessage('Next')}
+            onClick={handleJumpToNext}
           />
         </DialogFooter>
       </DialogWrapper>

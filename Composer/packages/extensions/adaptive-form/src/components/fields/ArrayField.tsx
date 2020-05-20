@@ -61,13 +61,13 @@ const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
         {arrayItems.map((element, idx) => (
           <ArrayFieldItem
             {...rest}
+            key={element.id}
+            transparentBorder
             error={rawErrors[idx]}
             id={id}
-            key={element.id}
             label={false}
             rawErrors={rawErrors[idx]}
             schema={itemSchema}
-            transparentBorder
             uiOptions={uiOptions}
             value={element.value}
             {...getArrayItemProps(arrayItems, idx, handleChange)}
@@ -83,14 +83,14 @@ const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
               iconName: 'ReturnKey',
               style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
             }}
-            onChange={handleNewChange}
-            onKeyDown={handleKeyDown}
             styles={{ root: { width: '100%' } }}
             value={newValue}
+            onChange={handleNewChange}
+            onKeyDown={handleKeyDown}
           />
           <IconButton
-            ariaLabel={formatMessage('Item Actions')}
             disabled
+            ariaLabel={formatMessage('Item Actions')}
             menuIconProps={{ iconName: 'MoreVertical' }}
             styles={{
               menuIcon: {

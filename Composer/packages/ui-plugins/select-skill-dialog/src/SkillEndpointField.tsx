@@ -42,9 +42,9 @@ export const SkillEndpointField: React.FC<FieldProps> = (props) => {
         {...props}
         description={description}
         label={label}
-        onChange={handleChange}
         placeholder={placeholder}
         value={deserializedValue}
+        onChange={handleChange}
       />
     </div>
   );

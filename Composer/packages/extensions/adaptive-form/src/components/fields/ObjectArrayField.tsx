@@ -115,11 +115,11 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
 
                 if (propSchema && propSchema !== true) {
                   return (
-                    <div css={objectArrayField.objectItemValueLabel} key={index}>
+                    <div key={index} css={objectArrayField.objectItemValueLabel}>
                       <FieldLabel
+                        inline
                         description={propSchema.description}
                         id={`${id}.${key}`}
-                        inline
                         label={propSchema.title}
                       />
                     </div>
@@ -134,10 +134,10 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
           <ArrayFieldItem
             key={item.id}
             {...props}
+            transparentBorder
             id={`${id}.${idx}`}
             schema={itemSchema as JSONSchema7}
             stackArrayItems={stackArrayItems}
-            transparentBorder
             value={item.value}
             {...getArrayItemProps(arrayItems, idx, handleChange)}
           />
@@ -153,7 +153,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                   const lastField = index === allProperties.length - 1;
                   if (typeof property === 'string') {
                     return (
-                      <div css={objectArrayField.objectItemInputField} key={index}>
+                      <div key={index} css={objectArrayField.objectItemInputField}>
                         <TextField
                           ariaLabel={lastField ? END_OF_ROW_LABEL : INSIDE_ROW_LABEL}
                           autoComplete="off"
@@ -169,11 +169,11 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                                 }
                               : {}),
                           }}
-                          onChange={handleNewObjectChange(property)}
-                          onKeyDown={handleKeyDown}
                           placeholder={getNewPlaceholder(props, property)}
                           styles={{ field: { padding: '0 24px 0 8px' } }}
                           value={newObject[property] || ''}
+                          onChange={handleNewObjectChange(property)}
+                          onKeyDown={handleKeyDown}
                         />
                       </div>
                     );
@@ -181,8 +181,8 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                 })}
             </div>
             <IconButton
-              ariaLabel="Item Actions"
               disabled
+              ariaLabel="Item Actions"
               menuIconProps={{ iconName: 'MoreVertical' }}
               styles={{
                 menuIcon: {
@@ -197,7 +197,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
             />
           </React.Fragment>
         ) : (
-          <DefaultButton onClick={handleAdd} type="button">
+          <DefaultButton type="button" onClick={handleAdd}>
             {formatMessage('Add')}
           </DefaultButton>
         )}

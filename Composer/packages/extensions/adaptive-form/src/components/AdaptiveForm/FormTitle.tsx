@@ -77,7 +77,6 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
           fontSize={FontSizes.size20}
           id="form-title"
           name="$designer.name"
-          onChange={handleTitleChange}
           schema={{}}
           styles={{
             field: { fontWeight: FontWeights.semibold },
@@ -85,6 +84,7 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
           }}
           uiOptions={{}}
           value={initialValue}
+          onChange={handleTitleChange}
         />
         <p css={styles.subtitle}>{getSubTitle()}</p>
         <p css={styles.description}>

@@ -178,6 +178,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     <div css={listRoot}>
       <div css={tableView}>
         <DetailsList
+          isHeaderVisible
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={columns.map((col) => ({
             ...col,
@@ -190,9 +191,11 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             showEmptyGroups: true,
           }}
           groups={groups}
-          isHeaderVisible
           items={items}
           layoutMode={DetailsListLayoutMode.justified}
+          selection={selection}
+          selectionMode={SelectionMode.single}
+          setKey="none"
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
             if (clickedCol.key === currentSort.key) {
@@ -203,9 +206,6 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
             }
           }}
           onRenderDetailsHeader={onRenderDetailsHeader}
-          selection={selection}
-          selectionMode={SelectionMode.single}
-          setKey="none"
         />
       </div>
     </div>

@@ -87,30 +87,30 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               autoFocus
+              required
               data-testid="NewDialogName"
               errorMessage={formDataErrors.name}
               label={formatMessage('Name')}
-              onChange={updateForm('name')}
-              required
               styles={name}
               value={formData.name}
+              onChange={updateForm('name')}
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
-              label={formatMessage('Description')}
               multiline
-              onChange={updateForm('description')}
+              label={formatMessage('Description')}
               resizable={false}
               styles={description}
               value={formData.description}
+              onChange={updateForm('description')}
             />
           </StackItem>
         </Stack>
 
         <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <PrimaryButton text={formatMessage('Next')} onClick={handleSubmit} />
         </DialogFooter>
       </form>
     </DialogWrapper>

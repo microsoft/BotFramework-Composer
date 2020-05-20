@@ -68,9 +68,6 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
         ariaLabel={ariaLabel}
         autoComplete="off"
         errorMessage={error as string}
-        onBlur={handleCommit}
-        onChange={handleChange}
-        onFocus={() => setHasFocus(true)}
         placeholder={placeholder || value}
         styles={
           mergeStyleSets(
@@ -98,6 +95,9 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
           ) as Partial<ITextFieldStyles>
         }
         value={localValue}
+        onBlur={handleCommit}
+        onChange={handleChange}
+        onFocus={() => setHasFocus(true)}
       />
     </div>
   );

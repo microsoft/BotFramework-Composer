@@ -155,9 +155,9 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
       {...restProps}
       editorDidMount={editorDidMount}
       language="lu"
-      onInit={onInit}
       options={options}
       theme="lu"
+      onInit={onInit}
     />
   );
 };

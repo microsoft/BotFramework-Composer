@@ -128,7 +128,7 @@ export const TestController: React.FC = () => {
 
   return (
     <Fragment>
-      <div css={bot} ref={botActionRef}>
+      <div ref={botActionRef} css={bot}>
         <EmulatorOpenButton
           botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
           botStatus={botStatus}
@@ -148,17 +148,17 @@ export const TestController: React.FC = () => {
             css={botButton}
             disabled={showError || publishing || reloading}
             id={'publishAndConnect'}
-            onClick={handleStart}
             text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
+            onClick={handleStart}
           />
         </div>
       </div>
       <ErrorCallout
         error={botLoadErrorMsg}
-        onDismiss={dismissCallout}
-        onTry={handleStart}
         target={botActionRef.current}
         visible={calloutVisible}
+        onDismiss={dismissCallout}
+        onTry={handleStart}
       />
       <PublishLuisDialog botName={botName} isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} />
     </Fragment>

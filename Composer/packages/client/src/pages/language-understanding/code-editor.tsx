@@ -133,9 +133,9 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         path: lspServerPath,
       }}
       luOption={luOption}
+      value={content}
       onChange={_onChange}
       onChangeSettings={handleSettingsChange}
-      value={content}
     />
   );
 };

@@ -52,8 +52,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const toggle = () => (
     <div css={runtimeToggle}>
       <Toggle
-        checked={settings.runtime && settings.runtime.customRuntime === true}
         inlineLabel
+        checked={settings.runtime && settings.runtime.customRuntime === true}
         label={formatMessage('Use custom runtime')}
         onChange={changeEnabled}
       />
@@ -78,14 +78,14 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       {toggle()}
       <div css={controlGroup}>
         <TextField
+          required
           data-testid="runtimeCodeLocation"
           disabled={!settings.runtime || !settings.runtime.customRuntime}
           errorMessage={formDataErrors.path}
           label={formatMessage('Runtime code location')}
-          onChange={updateSetting('path')}
-          required
           styles={name}
           value={settings.runtime ? settings.runtime.path : ''}
+          onChange={updateSetting('path')}
         />
         {formatMessage('Or: ')}
         <Link
@@ -97,14 +97,14 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
         </Link>
 
         <TextField
+          required
           data-testid="runtimeCommand"
           disabled={!settings.runtime || !settings.runtime.customRuntime}
           errorMessage={formDataErrors.command}
           label={formatMessage('Start command')}
-          onChange={updateSetting('command')}
-          required
           styles={name}
           value={settings.runtime ? settings.runtime.command : ''}
+          onChange={updateSetting('command')}
         />
       </div>
       <EjectModal closeModal={closeEjectModal} ejectRuntime={ejectRuntime} hidden={!ejectModalVisible} />

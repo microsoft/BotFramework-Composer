@@ -63,7 +63,7 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
       onDismiss={props.closeModal}
     >
       <div css={modalControlGroup}>
-        <ChoiceGroup onChange={selectTemplate} options={availableRuntimeTemplates} required />
+        <ChoiceGroup required options={availableRuntimeTemplates} onChange={selectTemplate} />
       </div>
       <DialogFooter>
         <DefaultButton onClick={props.closeModal}>Cancel</DefaultButton>

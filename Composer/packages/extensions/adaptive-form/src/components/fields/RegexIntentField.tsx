@@ -32,7 +32,7 @@ const RegexIntentField: React.FC<FieldProps> = ({ value: intentName, ...rest }) 
     shellApi.updateRegExIntent(currentDialog.id, intentName, pattern);
   };
 
-  return <StringField {...rest} label={false} onChange={handleIntentchange} value={localValue} />;
+  return <StringField {...rest} label={false} value={localValue} onChange={handleIntentchange} />;
 };
 
 export { RegexIntentField };

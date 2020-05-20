@@ -30,9 +30,9 @@ describe('<EmulatorOpenButton />', () => {
     const onClick = jest.fn(() => {});
     const { container } = render(
       <EmulatorOpenButton
+        hidden
         botEndpoint={'http://localhost:3979/api/messages'}
         botStatus={BotStatus.connected}
-        hidden
         onClick={onClick}
       />
     );

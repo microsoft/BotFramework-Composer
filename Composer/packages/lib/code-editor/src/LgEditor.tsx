@@ -115,9 +115,9 @@ export function LgEditor(props: LGLSPEditorProps) {
       {...restProps}
       editorDidMount={editorDidMount}
       language="botbuilderlg"
-      onInit={onInit}
       options={options}
       theme="lgtheme"
+      onInit={onInit}
     />
   );
 }

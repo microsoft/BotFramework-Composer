@@ -55,7 +55,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div css={tableCell} data-is-focusable>
+        <div data-is-focusable css={tableCell}>
           <div
             aria-label={formatMessage(`This is a {severity} notification`, { severity: item.severity })}
             css={content}
@@ -79,7 +79,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div css={tableCell} data-is-focusable>
+        <div data-is-focusable css={tableCell}>
           <div
             aria-label={formatMessage(`Location is {location}`, { location: item.location })}
             css={content}
@@ -105,7 +105,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div css={tableCell} data-is-focusable>
+        <div data-is-focusable css={tableCell}>
           <div
             aria-label={formatMessage(`Notification Message {msg}`, { msg: item.message })}
             css={content}
@@ -146,20 +146,20 @@ export const NotificationList: React.FC<INotificationListProps> = (props) => {
       <div css={tableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
+            isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
             columns={columns}
             css={detailList}
-            isHeaderVisible
             items={showItems}
             layoutMode={DetailsListLayoutMode.justified}
-            onItemInvoked={onItemClick}
-            onRenderDetailsHeader={onRenderDetailsHeader}
             selectionMode={SelectionMode.single}
             setKey="none"
+            onItemInvoked={onItemClick}
+            onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </ScrollablePane>
       </div>
-      <Pagination onChange={setPageIndex} pageCount={pageCount} />
+      <Pagination pageCount={pageCount} onChange={setPageIndex} />
     </div>
   );
 };

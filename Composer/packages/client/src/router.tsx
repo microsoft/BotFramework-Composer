@@ -32,17 +32,17 @@ const Routes = (props) => {
       <Suspense fallback={<LoadingSpinner />}>
         <Router basepath={BASEPATH} {...props}>
           <Redirect
-            from="/bot/:projectId/language-generation"
             noThrow
+            from="/bot/:projectId/language-generation"
             to="/bot/:projectId/language-generation/common"
           />
           <Redirect
-            from="/bot/:projectId/language-understanding"
             noThrow
+            from="/bot/:projectId/language-understanding"
             to="/bot/:projectId/language-understanding/all"
           />
-          <Redirect from="/bot/:projectId/publish" noThrow to="/bot/:projectId/publish/all" />
-          <Redirect from="/" noThrow to={resolveToBasePath(BASEPATH, 'home')} />
+          <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
+          <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
             <SettingPage path="settings/*" />

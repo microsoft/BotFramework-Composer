@@ -176,39 +176,39 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             <StackItem grow={0} styles={halfstack}>
               <TextField
                 autoFocus
+                required
                 data-testid="NewDialogName"
                 errorMessage={formDataErrors.name}
                 label={formatMessage('Name')}
-                onChange={updateForm('name')}
-                required
                 styles={name}
                 value={formData.name}
+                onChange={updateForm('name')}
               />
             </StackItem>
             <StackItem grow={0} styles={halfstack}>
               <TextField
-                label={formatMessage('Description')}
                 multiline
-                onChange={updateForm('description')}
+                label={formatMessage('Description')}
                 resizable={false}
                 styles={description}
                 value={formData.description}
+                onChange={updateForm('description')}
               />
             </StackItem>
           </Stack>
           <LocationSelectContent
             focusedStorageFolder={focusedStorageFolder}
-            onCurrentPathUpdate={onCurrentPathUpdate}
             operationMode={{ read: true, write: true }}
+            onCurrentPathUpdate={onCurrentPathUpdate}
           />
 
           <DialogFooter>
-            <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+            <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
               disabled={disable}
-              onClick={handleSubmit}
               text={formatMessage('Next')}
+              onClick={handleSubmit}
             />
           </DialogFooter>
         </form>

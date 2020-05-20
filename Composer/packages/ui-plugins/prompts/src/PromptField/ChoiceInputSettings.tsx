@@ -33,13 +33,13 @@ const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = (props) => {
         depth={depth}
         id={`${id}.${choiceProperty}`}
         name={choiceProperty}
-        onBlur={() => {}}
-        onChange={onChange(choiceProperty)}
-        onFocus={() => {}}
         rawErrors={getError(choiceProperty)}
         schema={getSchema(choiceProperty)}
         uiOptions={uiOptions.properties?.[choiceProperty] || {}}
         value={value?.[choiceProperty]}
+        onBlur={() => {}}
+        onChange={onChange(choiceProperty)}
+        onFocus={() => {}}
       />
       <SchemaField
         css={styles.choiceOptions}
@@ -47,13 +47,13 @@ const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = (props) => {
         depth={depth + 1}
         id={`${id}.choiceOptions`}
         name="choiceOptions"
-        onBlur={() => {}}
-        onChange={onChange('choiceOptions')}
-        onFocus={() => {}}
         rawErrors={getError('choiceOptions')}
         schema={getSchema('choiceOptions')}
         uiOptions={uiOptions.properties?.choiceOptions || {}}
         value={value?.choiceOptions || {}}
+        onBlur={() => {}}
+        onChange={onChange('choiceOptions')}
+        onFocus={() => {}}
       />
       {getSchema('appendChoices') && (
         <SchemaField
@@ -62,11 +62,11 @@ const ChoiceInputSettings: React.FC<ChoiceInputSettingsProps> = (props) => {
           id={`${id}.appendChoices`}
           label={formatMessage('Append choices')}
           name="appendChoices"
-          onChange={onChange('appendChoices')}
           rawErrors={getError('appendChoices')}
           schema={getSchema('appendChoices')}
           uiOptions={uiOptions.properties?.appendChoices || {}}
           value={((value as unknown) as ChoiceInput)?.appendChoices}
+          onChange={onChange('appendChoices')}
         />
       )}
     </Fragment>

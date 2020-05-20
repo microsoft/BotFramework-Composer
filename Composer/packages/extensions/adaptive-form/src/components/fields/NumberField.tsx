@@ -48,14 +48,14 @@ const NumberField: React.FC<FieldProps> = (props) => {
         id={id}
         incrementButtonAriaLabel={formatMessage('increment by { step }', { step })}
         label={label || formatMessage('numeric field')}
-        onDecrement={updateValue(-step)}
-        onIncrement={updateValue(step)}
-        onValidate={updateValue(0)}
         step={step}
         styles={{
           labelWrapper: { display: 'none' },
         }}
         value={displayValue}
+        onDecrement={updateValue(-step)}
+        onIncrement={updateValue(step)}
+        onValidate={updateValue(0)}
       />
     </>
   );

@@ -15,7 +15,7 @@ describe('<Home/>', () => {
     ];
     const onItemChosen = jest.fn((item) => item.path);
     const { container, queryByLabelText } = render(
-      <RecentBotList onItemChosen={onItemChosen} recentProjects={recentProjects} />
+      <RecentBotList recentProjects={recentProjects} onItemChosen={onItemChosen} />
     );
     expect(container).toHaveTextContent('a');
     expect(container).toHaveTextContent('b');

@@ -97,9 +97,9 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
         return (
           <OffsetContainer key={`${node.id}/offset`} offset={node.offset}>
             <StepGroup
+              key={node.id}
               data={node.data}
               id={node.id}
-              key={node.id}
               onEvent={onEvent}
               onResize={(size) => {
                 updateNodeBoundary(nodeName, size);

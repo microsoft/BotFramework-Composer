@@ -55,10 +55,10 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
         <Dropdown
           data-testid={'recognizerTypeDropdown'}
           label={formatMessage('Recognizer Type')}
-          onChange={handleChangeRecognizerType}
           options={options}
           responsiveMode={ResponsiveMode.large}
           selectedKey={selectedType}
+          onChange={handleChangeRecognizerType}
         />
       ) : (
         `Unable to determine recognizer type from data: ${value}`

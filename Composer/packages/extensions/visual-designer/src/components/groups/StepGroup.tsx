@@ -51,16 +51,16 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer height={boundary.height} hidden width={boundary.width}>
+      <SVGContainer hidden height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       {nodes
         ? nodes.map((node, index) => (
             <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={node.offset}>
               <StepRenderer
+                key={`stepGroup/${node.id}`}
                 data={node.data}
                 id={node.id}
-                key={`stepGroup/${node.id}`}
                 onEvent={onEvent}
                 onResize={(size) => {
                   designerCache.cacheBoundary(node.data, size);
@@ -83,8 +83,8 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
       {nodes
         ? nodes.map((x, idx) => (
             <OffsetContainer
-              css={{ zIndex: 100 }}
               key={`stepGroup/${x.id}/footer/offset`}
+              css={{ zIndex: 100 }}
               offset={{
                 x: boundary.axisX - EdgeAddButtonSize.width / 2,
                 y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,

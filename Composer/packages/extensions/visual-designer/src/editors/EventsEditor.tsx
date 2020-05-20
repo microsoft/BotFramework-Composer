@@ -17,13 +17,13 @@ export const EventsEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Elemen
     <Panel
       addMenu={null}
       collapsedItems={<CollapsedRuleGroup count={ruleCount} />}
+      title={title}
       onClickContent={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.FocusEvent, '');
       }}
-      title={title}
     >
-      <RuleGroup data={data} id={id} key={id} onEvent={onEvent} />
+      <RuleGroup key={id} data={data} id={id} onEvent={onEvent} />
     </Panel>
   );
 };

@@ -116,7 +116,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             displayName = `##${childName}`;
           }
           return (
-            <div css={formCell} data-is-focusable>
+            <div data-is-focusable css={formCell}>
               <div aria-label={formatMessage(`Name is {name}`, { name: displayName })} css={content} tabIndex={-1}>
                 {displayName}
               </div>
@@ -134,7 +134,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return (
-            <div css={luPhraseCell} data-is-focusable>
+            <div data-is-focusable css={luPhraseCell}>
               <div
                 aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: item.phrases })}
                 css={content}
@@ -159,9 +159,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
           const id = item.dialogId;
           return (
             <div
-              aria-label={formatMessage(`link to where this luis intent defined`)}
-              data-is-focusable
               key={id}
+              data-is-focusable
+              aria-label={formatMessage(`link to where this luis intent defined`)}
               onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
             >
               <Link>{id}</Link>
@@ -219,7 +219,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item) => {
           return (
-            <div css={tableCell} data-is-focusable>
+            <div data-is-focusable css={tableCell}>
               <div aria-label={formatMessage(`State is {state}`, { state: item.state })} css={content} tabIndex={-1}>
                 {item.state}
               </div>
@@ -260,7 +260,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
           getKey={(item) => item.Name}
           items={intents}
           layoutMode={DetailsListLayoutMode.justified}
-          onRenderDetailsHeader={onRenderDetailsHeader}
           selectionMode={SelectionMode.none}
           styles={{
             root: {
@@ -273,6 +272,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               },
             },
           }}
+          onRenderDetailsHeader={onRenderDetailsHeader}
         />
       </ScrollablePane>
     </div>

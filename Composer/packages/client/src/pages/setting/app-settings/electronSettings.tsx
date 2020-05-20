@@ -31,8 +31,8 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
         checked={userSettings.appUpdater.autoDownload}
         description={formatMessage('Check for updates and installs them automatically.')}
         image={images.autoUpdate}
-        onToggle={onAppUpdatesChange('autoDownload')}
         title={formatMessage('Auto update')}
+        onToggle={onAppUpdatesChange('autoDownload')}
       />
       <SettingToggle
         checked={userSettings.appUpdater.useNightly}
@@ -54,8 +54,8 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
           ) as any
         }
         image={images.earlyAdopters}
-        onToggle={onAppUpdatesChange('useNightly')}
         title={formatMessage('Early adopters')}
+        onToggle={onAppUpdatesChange('useNightly')}
       />
     </section>
   );

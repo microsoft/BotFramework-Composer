@@ -33,12 +33,12 @@ export class RuleGroup extends React.Component<NodeProps> {
     const elementId = `${id}[${index}]`;
     return (
       <div
+        key={elementId + 'block'}
         css={{
           width: RuleBlockWidth,
           height: RuleBlockHeight,
           boxSizing: 'border-box',
         }}
-        key={elementId + 'block'}
       >
         <EventRenderer
           data={rule}
@@ -58,14 +58,14 @@ export class RuleGroup extends React.Component<NodeProps> {
 
     return (
       <div
+        ref={(el) => {
+          this.containerElement = el;
+          this.propagateBoundary();
+        }}
         css={{
           boxSizing: 'border-box',
           display: 'flex',
           flexWrap: 'wrap',
-        }}
-        ref={(el) => {
-          this.containerElement = el;
-          this.propagateBoundary();
         }}
       >
         {rules.map((x, i) => this.renderRule(x, i))}

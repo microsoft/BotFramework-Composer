@@ -22,12 +22,12 @@ interface ITreeItemProps {
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
     <div
-      css={itemText(item.depth)}
       data-is-focusable
-      onBlur={item.onBlur}
-      onFocus={item.onFocus}
+      css={itemText(item.depth)}
       role="cell"
       tabIndex={0}
+      onBlur={item.onBlur}
+      onFocus={item.onFocus}
     >
       <div css={content} tabIndex={-1}>
         {item.depth !== 0 && (
@@ -58,12 +58,12 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
         data-testid="dialogMoreButton"
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
+        role="cell"
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             e.stopPropagation();
           }
         }}
-        role="cell"
       />
     ) : null;
   };
@@ -75,6 +75,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
   return (
     <div
       css={navItem(isActive, !!isSubItemActive)}
+      role="presentation"
       onClick={() => {
         onSelect(link.id);
       }}
@@ -83,12 +84,11 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
           onSelect(link.id);
         }
       }}
-      role="presentation"
     >
       <OverflowSet
+        doNotContainWithinFocusZone
         css={overflowSet}
         data-testid={`DialogTreeItem${link.id}`}
-        doNotContainWithinFocusZone
         items={[
           {
             key: link.id,
@@ -96,8 +96,6 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             ...link,
           },
         ]}
-        onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
         overflowItems={[
           {
             key: 'delete',
@@ -106,9 +104,11 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
           },
         ]}
         role="row"
+        styles={{ item: { flex: 1 } }}
+        onRenderItem={onRenderItem}
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
-        styles={{ item: { flex: 1 } }}
+        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
       />
     </div>
   );

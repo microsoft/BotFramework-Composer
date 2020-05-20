@@ -16,11 +16,11 @@ const BotAsks: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
       depth={depth}
       id={`${id}.prompt`}
       name="prompt"
-      onChange={onChange('prompt')}
       rawErrors={getError('prompt')}
       schema={getSchema('prompt')}
       uiOptions={uiOptions.properties?.prompt || {}}
       value={value?.prompt}
+      onChange={onChange('prompt')}
     />
   );
 };

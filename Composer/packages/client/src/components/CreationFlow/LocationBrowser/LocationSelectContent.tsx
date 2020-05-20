@@ -59,9 +59,9 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
           checkShowItem={checkShowItem}
           focusedStorageFolder={focusedStorageFolder}
           isWindows={isWindows}
+          operationMode={operationMode}
           onCurrentPathUpdate={onCurrentPathUpdate}
           onFileChosen={onFileChosen}
-          operationMode={operationMode}
         />
       )}
       {storageFileLoadingStatus === 'pending' && (

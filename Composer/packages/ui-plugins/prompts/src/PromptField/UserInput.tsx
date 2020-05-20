@@ -49,11 +49,11 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
         depth={depth}
         id={`${id}.property`}
         name="property"
-        onChange={onChange('property')}
         rawErrors={getError('property')}
         schema={getSchema('property')}
         uiOptions={uiOptions.properties?.property || {}}
         value={value?.property}
+        onChange={onChange('property')}
       />
       {getSchema('outputFormat') && (
         <SchemaField
@@ -61,11 +61,11 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
           depth={depth}
           id={`${id}.outputFormat`}
           name="outputFormat"
-          onChange={onChange('outputFormat')}
           rawErrors={getError('outputFormat')}
           schema={getSchema('outputFormat')}
           uiOptions={uiOptions.properties?.outputFormat || {}}
           value={value?.outputFormat}
+          onChange={onChange('outputFormat')}
         />
       )}
       <SchemaField
@@ -73,16 +73,16 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
         depth={depth}
         id={`${id}.value`}
         name="value"
-        onChange={onChange('value')}
         rawErrors={getError('value')}
         schema={getSchema('value')}
         uiOptions={uiOptions.properties?.value || {}}
         value={value?.value}
+        onChange={onChange('value')}
       />
       {Editor && $kind !== SDKKinds.AttachmentInput && (
         <React.Fragment>
           <FieldLabel id={`${id}.intent`} label={intentLabel} />
-          <Editor {...props} onChange={() => {}} placeholder={expectedResponsesPlaceholder()} />
+          <Editor {...props} placeholder={expectedResponsesPlaceholder()} onChange={() => {}} />
         </React.Fragment>
       )}
       {getSchema('defaultLocale') && (
@@ -91,11 +91,11 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
           depth={depth}
           id={`${id}.defaultLocale`}
           name="defaultLocale"
-          onChange={onChange('defaultLocale')}
           rawErrors={getError('defaultLocale')}
           schema={getSchema('defaultLocale')}
           uiOptions={uiOptions.properties?.defaultLocale || {}}
           value={((value as unknown) as ChoiceInput).defaultLocale}
+          onChange={onChange('defaultLocale')}
         />
       )}
       {getSchema('style') && (
@@ -105,11 +105,11 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
           enumOptions={getOptions(getSchema('style'))}
           id={`${id}.style`}
           name="style"
-          onChange={onChange('style')}
           rawErrors={getError('style')}
           schema={getSchema('style')}
           uiOptions={uiOptions.properties?.style || {}}
           value={((value as unknown) as ChoiceInput).style}
+          onChange={onChange('style')}
         />
       )}
       {value?.$kind === SDKKinds.ChoiceInput && (

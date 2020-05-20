@@ -64,23 +64,23 @@ const FormRow: React.FC<FormRowProps> = (props) => {
       <div css={formRow.row}>
         {row.map((property) => (
           <SchemaField
+            key={`${id}.${property}`}
             className={className}
             css={formRow.property}
             definitions={definitions}
             depth={depth}
             id={`${id}.${property}`}
-            key={`${id}.${property}`}
             label={label === false ? false : undefined}
             name={property}
-            onBlur={onBlur}
-            onChange={onChange(property)}
-            onFocus={onFocus}
             rawErrors={rawErrors?.[property]}
             required={required.includes(property)}
             schema={resolvePropSchema(schema, property, definitions) || {}}
             transparentBorder={transparentBorder}
             uiOptions={(uiOptions.properties?.[property] as UIOptions) ?? {}}
             value={value && value[property]}
+            onBlur={onBlur}
+            onChange={onChange(property)}
+            onFocus={onFocus}
           />
         ))}
       </div>
@@ -91,23 +91,23 @@ const FormRow: React.FC<FormRowProps> = (props) => {
   if (propSchema) {
     return (
       <SchemaField
+        key={`${id}.${row}`}
         className={className}
         css={formRow.full}
         definitions={definitions}
         depth={depth}
         id={`${id}.${row}`}
-        key={`${id}.${row}`}
         label={label === false ? false : undefined}
         name={row}
-        onBlur={onBlur}
-        onChange={onChange(row)}
-        onFocus={onFocus}
         rawErrors={rawErrors?.[row]}
         required={required.includes(row)}
         schema={propSchema}
         transparentBorder={transparentBorder}
         uiOptions={(uiOptions.properties?.[row] as UIOptions) ?? {}}
         value={value && value[row]}
+        onBlur={onBlur}
+        onChange={onChange(row)}
+        onFocus={onFocus}
       />
     );
   }

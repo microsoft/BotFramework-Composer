@@ -60,8 +60,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
           <Dropdown
             ariaLabel={formatMessage('select property type')}
             id={`${props.id}-oneOf`}
-            onChange={handleTypeChange}
-            onRenderTitle={renderTypeTitle}
             options={options}
             responsiveMode={ResponsiveMode.large}
             selectedKey={selectedKey}
@@ -70,6 +68,8 @@ const OneOfField: React.FC<FieldProps> = (props) => {
               root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
               title: { height: '24px', lineHeight: '20px' },
             }}
+            onChange={handleTypeChange}
+            onRenderTitle={renderTypeTitle}
           />
         )}
       </div>

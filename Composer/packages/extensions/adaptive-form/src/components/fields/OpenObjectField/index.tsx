@@ -72,7 +72,7 @@ const OpenObjectField: React.FC<FieldProps<{
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <div css={styles.labelContainer}>
         <div css={styles.label}>
-          <FieldLabel id={`${id}.key`} label={keyLabel} required />
+          <FieldLabel required id={`${id}.key`} label={keyLabel} />
         </div>
         <div css={styles.label}>
           <FieldLabel id={`${id}.value`} label={valueLabel} />
@@ -82,13 +82,13 @@ const OpenObjectField: React.FC<FieldProps<{
       {Object.entries(value).map(([name, value], index) => {
         return (
           <ObjectItem
-            formData={value}
             key={index}
+            formData={value}
             name={name}
+            value={value}
             onDelete={handleDropPropertyClick(name)}
             onNameChange={handleNameChange(name)}
             onValueChange={handleValueChange(name)}
-            value={value}
           />
         );
       })}
@@ -99,13 +99,13 @@ const OpenObjectField: React.FC<FieldProps<{
               ariaLabel={keyLabel}
               autoComplete="off"
               componentRef={fieldRef}
-              onChange={(_, newValue) => setName(newValue || '')}
-              onKeyDown={handleKeyDown}
               placeholder={formatMessage('Add a new key')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
               value={name}
+              onChange={(_, newValue) => setName(newValue || '')}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div css={styles.item}>
@@ -116,18 +116,18 @@ const OpenObjectField: React.FC<FieldProps<{
                 iconName: 'ReturnKey',
                 style: { color: SharedColors.cyanBlue10, opacity: 0.6 },
               }}
-              onChange={(_, newValue) => setNewValue(newValue || '')}
-              onKeyDown={handleKeyDown}
               placeholder={formatMessage('Add a new value')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
               }}
               value={newValue}
+              onChange={(_, newValue) => setNewValue(newValue || '')}
+              onKeyDown={handleKeyDown}
             />
           </div>
           <IconButton
-            ariaLabel={formatMessage('Edit Property')}
             disabled
+            ariaLabel={formatMessage('Edit Property')}
             menuIconProps={{ iconName: 'MoreVertical' }}
             styles={{
               menuIcon: { fontSize: FontSizes.size16 },

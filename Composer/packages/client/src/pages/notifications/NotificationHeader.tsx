@@ -38,11 +38,11 @@ export const NotificationHeader: React.FC<INotificationHeader> = (props) => {
       <Dropdown
         ariaLabel={formatMessage('Notification type')}
         data-testid="notifications-dropdown"
+        options={createOptions()}
+        styles={dropdownStyles}
         onChange={(event, option) => {
           if (option) onChange(option.data);
         }}
-        options={createOptions()}
-        styles={dropdownStyles}
       />
     </div>
   );

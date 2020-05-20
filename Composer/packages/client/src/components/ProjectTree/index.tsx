@@ -160,18 +160,18 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       }}
       maxWidth={500}
       minWidth={180}
-      onResizeStop={handleResize}
       size={{ width: currentWidth, height: 'auto' }}
+      onResizeStop={handleResize}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
-        <FocusZone direction={FocusZoneDirection.vertical} isCircularNavigation>
+        <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
           <SearchBox
+            underlined
             ariaLabel={formatMessage('Type dialog name')}
             iconProps={{ iconName: 'Filter' }}
-            onChange={onFilter}
             placeholder={formatMessage('Filter Dialog')}
             styles={searchBox}
-            underlined
+            onChange={onFilter}
           />
           <div
             aria-label={formatMessage(
@@ -202,8 +202,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
                 isAllGroupsCollapsed: true,
               } as Partial<IGroupRenderProps>
             }
-            onRenderCell={onRenderCell}
             styles={groupListStyle}
+            onRenderCell={onRenderCell}
           />
         </FocusZone>
       </div>

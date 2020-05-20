@@ -42,17 +42,17 @@ export const ExampleList: React.FC<ExampleListProps> = (props) => {
 
     return (
       <div
+        key={item.id}
+        data-is-focusable
         aria-label={item.name + '; ' + item.description}
         css={exampleListCell}
-        data-is-focusable
-        key={item.id}
+        tabIndex={0}
         onClick={() => onClick(item.id)}
         onKeyDown={(ev) => {
           if (ev.key === 'Enter') {
             onClick(item.id);
           }
         }}
-        tabIndex={0}
       >
         <img css={exampleListCellIcon} role="presentation" src={resolveIcon(item.id)} />
         <div css={exampleListCellContent}>

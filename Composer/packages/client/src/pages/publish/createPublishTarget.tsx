@@ -93,24 +93,24 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
           defaultValue={props.current ? props.current.name : ''}
           errorMessage={errorMessage}
           label={formatMessage('Name')}
-          onChange={updateName}
           placeholder={formatMessage('My Publish Profile')}
+          onChange={updateName}
         />
         <Dropdown
           defaultSelectedKey={props.current ? props.current.type : null}
           label={formatMessage('Publish Destination Type')}
-          onChange={updateType}
           options={targetTypes}
           placeholder={formatMessage('Choose One')}
+          onChange={updateType}
         />
         {instructions && <p>{instructions}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
-        <JsonEditor height={200} key={targetType} onChange={updateConfig} schema={schema} value={config} />
-        <button disabled={isDisable()} hidden type="submit" />
+        <JsonEditor key={targetType} height={200} schema={schema} value={config} onChange={updateConfig} />
+        <button hidden disabled={isDisable()} type="submit" />
       </form>
       <DialogFooter>
-        <DefaultButton onClick={props.closeDialog} text={formatMessage('Cancel')} />
-        <PrimaryButton disabled={isDisable()} onClick={submit} text={formatMessage('Save')} />
+        <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
+        <PrimaryButton disabled={isDisable()} text={formatMessage('Save')} onClick={submit} />
       </DialogFooter>
     </Fragment>
   );

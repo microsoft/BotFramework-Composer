@@ -40,11 +40,11 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
           key={`${props.id}.${typeof row === 'string' ? row : row.join('_')}`}
           {...rest}
           depth={newDepth}
-          onChange={handleChange}
           row={row}
           schema={schema}
           uiOptions={uiOptions}
           value={value}
+          onChange={handleChange}
         />
       ))}
     </React.Fragment>

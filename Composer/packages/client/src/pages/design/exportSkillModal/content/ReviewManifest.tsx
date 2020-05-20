@@ -11,5 +11,5 @@ export const ReviewManifest: React.FC<ContentProps> = ({ setErrors, value, onCha
     setErrors(error ? { error } : {});
   };
 
-  return <JsonEditor height={'100%'} onChange={onChange} onError={handleError} value={value} />;
+  return <JsonEditor height={'100%'} value={value} onChange={onChange} onError={handleError} />;
 };

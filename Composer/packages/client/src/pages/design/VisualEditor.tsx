@@ -73,10 +73,10 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   return (
     <React.Fragment>
       <div
+        ref={addRef}
         aria-label={formatMessage('visual editor')}
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
-        ref={addRef}
       >
         <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
           <VisualDesigner schema={schemas.sdk?.content} />

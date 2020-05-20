@@ -154,20 +154,20 @@ export const IconCard = ({
               <FabricIcon
                 data-testid="OpenIcon"
                 iconName="OpenSource"
+                style={{ lineHeight: '12px', fontSize: '12px', color: 'blue', paddingRight: '5px' }}
                 onClick={(e) => {
                   e.stopPropagation();
                   onChildDialogClick();
                 }}
-                style={{ lineHeight: '12px', fontSize: '12px', color: 'blue', paddingRight: '5px' }}
               />
               <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onChildDialogClick();
-                }}
                 style={{
                   cursor: 'pointer',
                   color: 'blue',
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChildDialogClick();
                 }}
               >
                 {childDialog}

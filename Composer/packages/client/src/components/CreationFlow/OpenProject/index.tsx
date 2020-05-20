@@ -27,22 +27,22 @@ export const OpenProject: React.FC<OpenProjectProps> = (props) => {
   return (
     <DialogWrapper
       {...DialogCreationCopy.SELECT_LOCATION}
-      dialogType={DialogTypes.CreateFlow}
       isOpen
+      dialogType={DialogTypes.CreateFlow}
       onDismiss={onDismiss}
     >
       <div data-testid="SelectLocation">
         <LocationSelectContent
           focusedStorageFolder={focusedStorageFolder}
-          onCurrentPathUpdate={onCurrentPathUpdate}
-          onOpen={onOpen}
           operationMode={{
             read: true,
             write: false,
           }}
+          onCurrentPathUpdate={onCurrentPathUpdate}
+          onOpen={onOpen}
         />
         <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </div>
     </DialogWrapper>

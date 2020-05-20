@@ -367,7 +367,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
+      <KeyboardZone ref={divRef} onCommand={handleKeyboardCommand}>
         <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
           <div
             className="obi-editor-container"

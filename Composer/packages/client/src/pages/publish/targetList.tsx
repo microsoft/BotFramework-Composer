@@ -29,7 +29,7 @@ export const TargetList = (props) => {
     <Fragment>
       {props.list.map((target, index) => {
         return (
-          <div key={index} onClick={() => props.onSelect(target)} style={{ cursor: 'pointer' }}>
+          <div key={index} style={{ cursor: 'pointer' }} onClick={() => props.onSelect(target)}>
             <OverflowSet
               css={props.selectedTarget === target.name ? targetSelected : overflowSet}
               items={[
@@ -38,8 +38,6 @@ export const TargetList = (props) => {
                   key: target.name,
                 },
               ]}
-              onRenderItem={onRenderItem}
-              onRenderOverflowButton={onRenderOverflowButton}
               overflowItems={[
                 {
                   key: 'delete',
@@ -52,6 +50,8 @@ export const TargetList = (props) => {
                   onClick: () => props.onEdit(index, target),
                 },
               ]}
+              onRenderItem={onRenderItem}
+              onRenderOverflowButton={onRenderOverflowButton}
             />
           </div>
         );

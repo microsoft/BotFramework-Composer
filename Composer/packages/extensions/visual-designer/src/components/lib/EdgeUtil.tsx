@@ -111,8 +111,8 @@ export const drawSVGEdge = (
   if (typeof label === 'string' || typeof label === 'number') {
     const text = (
       <text
-        fontSize={labelOptions?.fontSize}
         key={`edge-${id}__text`}
+        fontSize={labelOptions?.fontSize}
         x={startPoint.x + (labelOptions?.offset?.x || 0)}
         y={startPoint.y + (labelOptions?.offset?.y || 0)}
       >
