@@ -83,7 +83,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor value={visibleSettings} onChange={(x) => handleChange(x)} />
+        <JsonEditor value={visibleSettings} onChange={handleChange} />
       </div>
     </div>
   ) : (
