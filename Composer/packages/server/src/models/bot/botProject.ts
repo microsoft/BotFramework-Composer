@@ -778,16 +778,6 @@ export class BotProject {
 
     for (const file of files) {
       const { realFilePath, content } = file;
-      await this.fileStorage.removeFile(realFilePath);
-
-      try {
-        const dirPath = Path.dirname(realFilePath);
-        await this.fileStorage.rmDir(dirPath);
-      } catch (_error) {
-        // pass , dir may not empty
-      }
-
-      await this.ensureDirExists(Path.dirname(realFilePath));
       await this.fileStorage.writeFile(realFilePath, content);
     }
   };
