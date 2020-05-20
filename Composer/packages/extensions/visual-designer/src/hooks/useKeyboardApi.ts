@@ -8,12 +8,13 @@ import { KeyboardPrimaryTypes, KeyboardCommandTypes } from '../constants/Keyboar
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';
 import { moveCursor } from '../utils/cursorTracker';
-import { SelectionContext } from '../store/SelectionContext';
 import { NodeRendererContext } from '../store/NodeRendererContext';
+
+import { useSelectionApi } from './useSelectionApi';
 
 export const useKeyboardApi = dispatchEvent => {
   const { focusedEvent, focusedId } = useContext(NodeRendererContext);
-  const { selectedIds, selectableElements } = useContext(SelectionContext);
+  const { selectedIds, selectableElements } = useSelectionApi();
 
   const handleKeyboardCommand = ({ area, command }) => {
     switch (area) {

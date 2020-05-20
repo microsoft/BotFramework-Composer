@@ -3,8 +3,8 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, FC, useEffect, useState, useRef } from 'react';
-import { MarqueeSelection, Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
+import { useContext, FC, useEffect, useRef } from 'react';
+import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { SDKKinds, DialogUtils } from '@bfc/shared';
 import { useDialogApi, useDialogEditApi, useActionApi, useShellApi } from '@bfc/extension';
 import get from 'lodash/get';
@@ -13,15 +13,13 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
-import { SelectionContext, SelectionContextData } from '../store/SelectionContext';
-import { querySelectableElements } from '../utils/cursorTracker';
-import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
 import { designerCache } from '../store/DesignerCache';
 import { MenuEventTypes } from '../constants/MenuTypes';
 import { useKeyboardApi } from '../hooks/useKeyboardApi';
+import { useSelectionApi } from '../hooks/useSelectionApi';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
@@ -33,7 +31,6 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onClipboardChange,
   onOpen,
   onChange,
-  onSelect,
   undo,
   redo,
   announce,
@@ -52,6 +49,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { actionsContainLuIntent } = useActionApi(shellApi);
+  const { selection, selectedIds } = useSelectionApi();
   const divRef = useRef<HTMLDivElement>(null);
 
   // send focus to the keyboard area when navigating to a new trigger
@@ -239,62 +237,8 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     return null;
   };
 
-  const initSelectionData = () => {
-    nodeIndexGenerator.current.reset();
-    setSelectionContext({
-      getNodeIndex: selectionContext.getNodeIndex,
-      selectedIds: [],
-      selectableElements: querySelectableElements(),
-    });
-  };
-  const setSelectedIds = (selectedIds: string[]) => {
-    setSelectionContext({
-      ...selectionContext,
-      selectedIds: selectedIds || [],
-    });
-  };
-  const nodeIndexGenerator = useRef(new NodeIndexGenerator());
-  const nodeItems = nodeIndexGenerator.current.getItemList();
-  const [selectionContext, setSelectionContext] = useState<SelectionContextData>({
-    getNodeIndex: (nodeId: string): number => nodeIndexGenerator.current.getNodeIndex(nodeId),
-    selectedIds: [],
-    selectableElements: querySelectableElements(),
-  });
-
-  useEffect((): void => {
-    // Notify container at every selection change.
-    onSelect(selectionContext.selectedIds.length ? selectionContext.selectedIds : focusedId ? [focusedId] : []);
-  }, [focusedId, selectionContext]);
-
-  useEffect((): void => {
-    selection.setItems(nodeIndexGenerator.current.getItemList());
-  });
-
-  useEffect((): void => {
-    initSelectionData();
-  }, [data, focusedEvent]);
-
-  useEffect((): void => {
-    if (!focusedId) {
-      setSelectedIds([]);
-    }
-  }, [focusedId]);
-
-  const selection = new Selection({
-    onSelectionChanged: (): void => {
-      const selectedIndices = selection.getSelectedIndices();
-      const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
-
-      if (selectedIds.length === 1) {
-        // TODO: Change to focus all selected nodes after Form Editor support showing multiple nodes.
-        onFocusSteps(selectedIds);
-      }
-      setSelectedIds(selectedIds);
-    },
-  });
-
   const getClipboardTargetsFromContext = (): string[] => {
-    const selectedActionIds = normalizeSelection(selectionContext.selectedIds);
+    const selectedActionIds = normalizeSelection(selectedIds);
     if (selectedActionIds.length === 0 && focusedId) {
       selectedActionIds.push(focusedId);
     }
@@ -309,35 +253,33 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   if (!data) return renderFallbackContent();
   return (
-    <SelectionContext.Provider value={selectionContext}>
-      <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
-        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
-          <div
-            className="obi-editor-container"
-            data-testid="obi-editor-container"
-            css={{
-              width: '100%',
-              height: '100%',
-              padding: '48px 20px',
-              boxSizing: 'border-box',
+    <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
+      <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+        <div
+          className="obi-editor-container"
+          data-testid="obi-editor-container"
+          css={{
+            width: '100%',
+            height: '100%',
+            padding: '48px 20px',
+            boxSizing: 'border-box',
+          }}
+          onClick={e => {
+            e.stopPropagation();
+            dispatchEvent(NodeEventTypes.Focus, { id: '' });
+          }}
+        >
+          <AdaptiveDialogEditor
+            id={path}
+            data={data}
+            onEvent={(eventName, eventData) => {
+              divRef.current?.focus({ preventScroll: true });
+              dispatchEvent(eventName, eventData);
             }}
-            onClick={e => {
-              e.stopPropagation();
-              dispatchEvent(NodeEventTypes.Focus, { id: '' });
-            }}
-          >
-            <AdaptiveDialogEditor
-              id={path}
-              data={data}
-              onEvent={(eventName, eventData) => {
-                divRef.current?.focus({ preventScroll: true });
-                dispatchEvent(eventName, eventData);
-              }}
-            />
-          </div>
-        </MarqueeSelection>
-      </KeyboardZone>
-    </SelectionContext.Provider>
+          />
+        </div>
+      </MarqueeSelection>
+    </KeyboardZone>
   );
 };
 

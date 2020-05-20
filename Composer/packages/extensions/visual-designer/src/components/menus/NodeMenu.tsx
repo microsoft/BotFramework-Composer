@@ -3,14 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
-import { SelectionContext } from '../../store/SelectionContext';
+import { useSelectionApi } from '../../hooks/useSelectionApi';
 
 import { IconMenu } from './IconMenu';
 
@@ -31,7 +30,7 @@ export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
       onClick: () => onEvent(NodeEventTypes.Delete, { id }),
     },
   ];
-  const { selectedIds } = useContext(SelectionContext);
+  const { selectedIds } = useSelectionApi();
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.NodeMenu}`);
 
   return (

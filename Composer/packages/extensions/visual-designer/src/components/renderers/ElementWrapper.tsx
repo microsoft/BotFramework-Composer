@@ -10,8 +10,8 @@ import { useShellApi } from '@bfc/extension';
 
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
-import { SelectionContext } from '../../store/SelectionContext';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { useSelectionApi } from '../../hooks/useSelectionApi';
 
 const nodeBorderHoveredStyle = css`
   box-shadow: 0px 0px 0px 1px #323130;
@@ -58,7 +58,7 @@ function extractNodeTitle(node: ReactNode, titleInHeader: boolean): string {
 export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader, onEvent, children }): JSX.Element => {
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
-  const { selectedIds, getNodeIndex } = useContext(SelectionContext);
+  const { selectedIds, getNodeIndex } = useSelectionApi();
   const nodeFocused = focusedId === id || focusedEvent === id;
   const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
   const nodeSelected = selectedIds.includes(id);

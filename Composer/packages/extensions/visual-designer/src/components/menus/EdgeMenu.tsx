@@ -10,11 +10,11 @@ import { DefinitionSummary } from '@bfc/shared';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
-import { SelectionContext } from '../../store/SelectionContext';
 import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { ObiColors } from '../../constants/ElementColors';
+import { useSelectionApi } from '../../hooks/useSelectionApi';
 
 import { IconMenu } from './IconMenu';
 import { createActionMenu } from './createSchemaMenu';
@@ -28,7 +28,7 @@ interface EdgeMenuProps {
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, ...rest }) => {
   const { clipboardActions, customSchemas } = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
-  const { selectedIds } = useContext(SelectionContext);
+  const { selectedIds } = useSelectionApi();
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
   const declareElementAttributes = (id: string) => {
     return {
