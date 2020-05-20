@@ -9,7 +9,7 @@
     "build": "yarn build:clean && yarn build:ts",
     "build:ts": "tsc",
     "build:clean": "rimraf lib && rimraf build",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src"
+    "lint": "eslint --quiet ./src"
   },
   "devDependencies": {
     "@types/express": "^4.17.6",

@@ -15,7 +15,7 @@
     "copy-runtime": "node scripts/copy-runtime.js",
     "dist": "node scripts/electronBuilderDist.js",
     "dist:full": "yarn clean && yarn build && yarn run pack && yarn copy-runtime && yarn copy-plugins && yarn dist",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src",
+    "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix",
     "pack": "node scripts/electronBuilderPack.js",
     "start": "cross-env NODE_ENV=development electron .",

@@ -10,7 +10,7 @@
     "clean": "rimraf lib demo/dist",
     "start": "cd demo && ts-node ./src/server.ts",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+    "lint": "eslint --quiet ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit"
   },
