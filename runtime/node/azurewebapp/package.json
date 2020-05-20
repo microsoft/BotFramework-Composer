@@ -15,10 +15,10 @@
   "dependencies": {
     "@conversationlearner/sdk": "0.318.3",
     "@types/node": "^10.12.18",
-    "botbuilder": "^4.9.0-preview",
-    "botbuilder-dialogs": "^4.9.0-preview",
-    "botbuilder-dialogs-adaptive": "^4.9.0-preview",
-    "botbuilder-dialogs-declarative": "^4.9.0-preview",
+    "botbuilder": "^4.10.0-preview",
+    "botbuilder-dialogs": "^4.10.0-preview",
+    "botbuilder-dialogs-adaptive": "^4.10.0-preview",
+    "botbuilder-dialogs-declarative": "^4.10.0-preview",
     "restify": "^7.7.0",
     "minimist": "^1.2.5"
   },
