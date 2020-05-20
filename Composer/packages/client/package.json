@@ -12,7 +12,7 @@
     "build": "node scripts/build.js",
     "clean": "rimraf build",
     "test": "jest",
-    "lint": "eslint --quiet ./src ./__tests__",
+    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "typecheck": "tsc --noEmit"
   },
