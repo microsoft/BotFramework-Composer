@@ -195,7 +195,7 @@ class AzurePublisher {
       }
     } catch (error) {
       console.log(error);
-      if (typeof error === 'object') {
+      if (typeof error === 'object' && !(error instanceof Error)) {
         this.logMessages.push(JSON.stringify(error));
       } else {
         this.logMessages.push(error);
@@ -204,7 +204,7 @@ class AzurePublisher {
       const status = this.getLoadingStatus(botId, profileName, jobId);
       if (status) {
         status.status = 500;
-        status.result.message = error && error.message ? error.message : 'publish error';
+        status.result.message = error?.message || 'publish error';
         status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
@@ -324,7 +324,7 @@ class AzurePublisher {
       return response;
     } catch (err) {
       console.log(err);
-      if (typeof err === 'object') {
+      if (typeof err === 'object' && !(err instanceof Error)) {
         this.logMessages.push(JSON.stringify(err));
       } else {
         this.logMessages.push(err);
