@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 module.exports = {
   extends: ['./.eslintrc.js', 'plugin:react/recommended'],
   plugins: ['react-hooks', 'format-message', 'emotion', 'jsx-a11y'],
@@ -31,7 +34,11 @@ module.exports = {
     'react/no-unknown-property': 'error',
     'react/jsx-boolean-value': ['error', 'never'],
     'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }],
-    'react/jsx-sort-props': 'error',
+    // https://github.com/yannickcr/eslint-plugin-react/blob/HEAD/docs/rules/jsx-sort-props.md
+    'react/jsx-sort-props': [
+      'error',
+      { callbacksLast: true, ignoreCase: true, shorthandFirst: true, reservedFirst: true },
+    ],
 
     // emotion
     'emotion/jsx-import': 'error',
