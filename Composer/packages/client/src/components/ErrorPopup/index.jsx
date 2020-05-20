@@ -34,7 +34,7 @@ export const ErrorPopup = (props) => {
     >
       <div css={consoleStyle}>{props.error}</div>
       <DialogFooter>
-        <PrimaryButton onClick={_closeDialog} text="Ok" />
+        <PrimaryButton text="Ok" onClick={_closeDialog} />
       </DialogFooter>
     </Dialog>
   );

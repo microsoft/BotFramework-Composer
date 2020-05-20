@@ -15,8 +15,8 @@ function itemList(action, index) {
   } else {
     return (
       <ActionButton
-        css={actionButton}
         key={index}
+        css={actionButton}
         {...action.buttonProps}
         data-testid={action.dataTestid}
         disabled={action.disabled}

@@ -8,7 +8,7 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { overflowSet, menuStyle, navItem, itemText, content } from './styles';
+import { moreButton, overflowSet, menuStyle, navItem, itemText, content } from './styles';
 
 interface ITreeItemProps {
   link: any;
@@ -59,6 +59,7 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
         role="cell"
+        styles={moreButton(isActive)}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             e.stopPropagation();

@@ -46,9 +46,9 @@ export const Header = (props) => {
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}
-          onClick={onUpdateAvailableClick}
           styles={updateAvailableIcon}
           title={formatMessage('Update available')}
+          onClick={onUpdateAvailableClick}
         />
       )}
     </div>

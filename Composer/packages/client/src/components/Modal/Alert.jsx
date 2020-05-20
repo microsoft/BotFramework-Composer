@@ -36,7 +36,7 @@ const AlertDialog = (props) => {
       {subTitle && <div style={BuiltInStyles[style]}>{subTitle}</div>}
 
       <DialogFooter>
-        <PrimaryButton onClick={onConfirm} text={confirmBtnText} />
+        <PrimaryButton text={confirmBtnText} onClick={onConfirm} />
       </DialogFooter>
     </Dialog>
   );
@@ -65,7 +65,7 @@ export const OpenAlertModal = (title, subTitle, setting = {}) => {
       resolve(false);
     };
 
-    const modal = <AlertDialog onCancel={onCancel} onConfirm={onConfirm} setting={{ title, subTitle, ...setting }} />;
+    const modal = <AlertDialog setting={{ title, subTitle, ...setting }} onCancel={onCancel} onConfirm={onConfirm} />;
     ReactDOM.render(modal, node);
   });
 };

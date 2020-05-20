@@ -78,7 +78,7 @@ const DeploySuccess = (props) => {
         <span>{formatMessage(' or return to your previous task')}</span>
       </div>
       <DialogFooter>
-        <PrimaryButton onClick={props.onDismiss} text={formatMessage('Return')} />
+        <PrimaryButton text={formatMessage('Return')} onClick={props.onDismiss} />
       </DialogFooter>
     </Fragment>
   );
@@ -90,8 +90,8 @@ const DeployFailure = (props) => {
       <div css={consoleStyle}>{props.error}</div>
       <div css={dialogSubTitle}>{Text.LUISDEPLOYFAILURE}</div>
       <DialogFooter>
-        <PrimaryButton onClick={props.tryAgain} text={formatMessage('Try again')} />
-        <DefaultButton onClick={props.onDismiss} text={formatMessage('Cancel')} />
+        <PrimaryButton text={formatMessage('Try again')} onClick={props.tryAgain} />
+        <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
       </DialogFooter>
     </Fragment>
   );
@@ -169,24 +169,24 @@ export const PublishLuis = (props) => {
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
           />
           <TextField
-            defaultValue={formData.authoringRegion || defaultFields.authoringRegion}
             disabled
+            defaultValue={formData.authoringRegion || defaultFields.authoringRegion}
             label={formatMessage('Authoring Region')}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
           />
           <TextField
-            defaultValue={formData.defaultLanguage || defaultFields.defaultLanguage}
             disabled
+            defaultValue={formData.defaultLanguage || defaultFields.defaultLanguage}
             label={formatMessage('Default Language')}
             onRenderLabel={onRenderLabel(Tips.DEFAULT_LANGUAGE)}
           />
         </Stack>
       </form>
       <DialogFooter>
-        <PrimaryButton disabled={workState === STATE.PUBLISHPENDING} onClick={handlePublish} text={formatMessage('OK')}>
+        <PrimaryButton disabled={workState === STATE.PUBLISHPENDING} text={formatMessage('OK')} onClick={handlePublish}>
           {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
         </PrimaryButton>
-        <DefaultButton data-testid={'publish-LUIS-models-cancel'} onClick={onDismiss} text={formatMessage('Cancel')} />
+        <DefaultButton data-testid={'publish-LUIS-models-cancel'} text={formatMessage('Cancel')} onClick={onDismiss} />
       </DialogFooter>
     </Fragment>
   );
@@ -226,12 +226,12 @@ export function PublishLuisModal(props) {
       }}
       onDismiss={handleDismiss}
     >
-      {workState === STATE.PUBLISHSUCCESS && <DeploySuccess onDismiss={handleDismiss} status={response.status} />}
+      {workState === STATE.PUBLISHSUCCESS && <DeploySuccess status={response.status} onDismiss={handleDismiss} />}
       {workState === STATE.PUBLISHFAILURE && (
-        <DeployFailure error={response.error} onDismiss={handleDismiss} tryAgain={() => setWorkState(STATE.INPUT)} />
+        <DeployFailure error={response.error} tryAgain={() => setWorkState(STATE.INPUT)} onDismiss={handleDismiss} />
       )}
       {(workState === STATE.INPUT || workState === STATE.PUBLISHPENDING) && (
-        <PublishLuis botName={botName} onDismiss={handleDismiss} onPublish={handlePublish} workState={workState} />
+        <PublishLuis botName={botName} workState={workState} onDismiss={handleDismiss} onPublish={handlePublish} />
       )}
     </Dialog>
   );
