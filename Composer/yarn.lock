@@ -2873,7 +2873,7 @@
   resolved "https://registry.yarnpkg.com/@microsoft/load-themed-styles/-/load-themed-styles-1.10.39.tgz#23024bfa264a01ab2f05a9fda9c97c1f90ef80d8"
   integrity sha512-KKeQSM0FMTR7VtvkVF+D488zUmO3YoImxJ3O2xyLDEu9GqxqthF3Zvv1GddC2Jyoj2vuAJ0RGGgrI/T+MxLLDg==
 
-"@microsoft/recognizers-text-data-types-timex-expression@1.1.4", "@microsoft/recognizers-text-data-types-timex-expression@^1.1.4":
+"@microsoft/recognizers-text-data-types-timex-expression@1.1.4":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@microsoft/recognizers-text-data-types-timex-expression/-/recognizers-text-data-types-timex-expression-1.1.4.tgz#623453ae65e8df212d8156f6a314675c30696c1d"
   integrity sha512-2vICaEJfV9EpaDKs5P1PLAEs+WpNqrtpkl7CLsmc5gKmxgpQtsojG4tk6km5JRKg1mYuLV5ZzJ/65oOEeyTMvQ==
@@ -4498,21 +4498,24 @@ adaptive-expressions@4.10.0-preview-132360:
     moment "^2.25.1"
     moment-timezone "^0.5.28"
 
-adaptive-expressions@^4.8.0-preview-110700:
-  version "4.8.0-rc2-preview"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.8.0-rc2-preview.tgz#a533cdb1a5b2415f6b5b906f7eaa80133ca8981f"
-  integrity sha1-pTPNsaWyQV9rW5BvfqqAEzyomB8=
+adaptive-expressions@^4.10.0-preview-132670:
+  version "4.10.0-preview-132670"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-132670.tgz#5db10a8b94cf87e326bfec4ca5756ea7d64af114"
+  integrity sha1-XbEKi5TPh+Mmv+xMpXVup9ZK8RQ=
   dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob" "^2.1.2"
     "@types/lru-cache" "^5.1.0"
     "@types/moment-timezone" "^0.5.12"
     "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.1"
+    antlr4ts "0.5.0-alpha.3"
+    atob "^2.1.2"
+    big-integer "^1.6.48"
     jspath "^0.4.0"
     lodash "^4.17.15"
     lru-cache "^5.1.1"
-    moment "2.24.0"
-    moment-timezone "^0.5.25"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
 
 address@1.0.3, address@^1.0.1:
   version "1.0.3"
@@ -4670,11 +4673,6 @@ antlr4@^4.7.2:
   version "4.7.2"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/antlr4/-/antlr4-4.7.2.tgz#9d0b5987bb63660de658055ee9149141b4d9b462"
   integrity sha1-nQtZh7tjZg3mWAVe6RSRQbTZtGI=
-
-antlr4ts@0.5.0-alpha.1:
-  version "0.5.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/antlr4ts/-/antlr4ts-0.5.0-alpha.1.tgz#c421d8269523356c42c5533603aec0410b423806"
-  integrity sha512-LU5FLWq2fUwg2cTL/DeIL16ucUm5jv6SNVFoMjbYLviXAp6p5g1ZzkTAnWiOKX/muEEy0PY78perPj6WUBSQCw==
 
 antlr4ts@0.5.0-alpha.3:
   version "0.5.0-alpha.3"
@@ -13156,13 +13154,6 @@ mock-fs@^4.10.1:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.10.1.tgz#50a07a20114a6cdb119f35762f61f46266a1e323"
   integrity sha512-w22rOL5ZYu6HbUehB5deurghGM0hS/xBVyHMGKOuQctkk93J9z9VEOhDsiWrXOprVNQpP9uzGKdl8v9mFspKuw==
-
-moment-timezone@^0.5.25:
-  version "0.5.26"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/moment-timezone/-/moment-timezone-0.5.26.tgz#c0267ca09ae84631aa3dc33f65bedbe6e8e0d772"
-  integrity sha1-wCZ8oJroRjGqPcM/Zb7b5ujg13I=
-  dependencies:
-    moment ">= 2.9.0"
 
 moment-timezone@^0.5.28:
   version "0.5.31"
