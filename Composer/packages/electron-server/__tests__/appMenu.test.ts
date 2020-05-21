@@ -14,8 +14,8 @@ jest.mock('electron', () => ({
   app: {},
   dialog: {},
   Menu: {
-    buildFromTemplate: template => mockBuildFromTemplate(template),
-    setApplicationMenu: menu => mockSetApplicationMenu(menu),
+    buildFromTemplate: (template) => mockBuildFromTemplate(template),
+    setApplicationMenu: (menu) => mockSetApplicationMenu(menu),
   },
   shell: {},
 }));

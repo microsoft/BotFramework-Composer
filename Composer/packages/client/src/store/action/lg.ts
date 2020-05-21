@@ -37,7 +37,7 @@ export const undoableUpdateLgFile = undoable(
     if (isEmpty) {
       const id = args[0].id;
       const projectId = args[0].projectId;
-      const content = clonedeep(state.lgFiles.find(lgFile => lgFile.id === id)?.content);
+      const content = clonedeep(state.lgFiles.find((lgFile) => lgFile.id === id)?.content);
       return [{ id, content, projectId }];
     } else {
       return args;

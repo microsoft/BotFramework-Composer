@@ -16,11 +16,11 @@ if (folder && folder.endsWith(':')) {
 }
 
 let names: string[] = [];
-const getDiskNames = text => {
+const getDiskNames = (text) => {
   names = text
     .split('\r\r\n')
-    .filter(token => token.indexOf(':') > -1)
-    .map(token => token.trim().replace(/\\/g, '/'));
+    .filter((token) => token.indexOf(':') > -1)
+    .map((token) => token.trim().replace(/\\/g, '/'));
   return names;
 };
 if (os.platform() === 'win32') {

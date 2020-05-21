@@ -48,7 +48,7 @@ interface DefineConversationProps
 
 const initialFormDataError: FormDataError = {};
 
-const DefineConversation: React.FC<DefineConversationProps> = props => {
+const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { onSubmit, onDismiss, onCurrentPathUpdate, saveTemplateId, templateId, focusedStorageFolder } = props;
   const files = get(focusedStorageFolder, 'children', []);
   const getDefaultName = () => {
@@ -60,7 +60,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
       defaultName = `${bot}-${i}`;
     } while (
       files &&
-      files.find(file => {
+      files.find((file) => {
         return file.name.toLowerCase() === defaultName.toLowerCase();
       }) &&
       i < MAXTRYTIMES
@@ -73,7 +73,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
   const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
   const [disable, setDisable] = useState(false);
 
-  const updateForm = field => (e, newValue) => {
+  const updateForm = (field) => (e, newValue) => {
     setFormData({
       ...formData,
       [field]: newValue,
@@ -96,7 +96,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
     if (
       name &&
       files &&
-      files.find(bot => {
+      files.find((bot) => {
         return bot.path.toLowerCase() === newBotPath.toLowerCase();
       })
     ) {
@@ -150,7 +150,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
     }
   }, [templateId]);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const errors = validateForm(formData);
     if (Object.keys(errors).length) {
@@ -165,50 +165,50 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
   return (
     <Fragment>
       <DialogWrapper
-        isOpen={true}
+        isOpen
         {...DialogCreationCopy.DEFINE_CONVERSATION_OBJECTIVE}
-        onDismiss={onDismiss}
         dialogType={DialogTypes.CreateFlow}
+        onDismiss={onDismiss}
       >
         <form onSubmit={handleSubmit}>
-          <input type="submit" style={{ display: 'none' }} />
-          <Stack horizontal={true} tokens={{ childrenGap: '2rem' }} styles={stackinput}>
+          <input style={{ display: 'none' }} type="submit" />
+          <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
             <StackItem grow={0} styles={halfstack}>
               <TextField
-                label={formatMessage('Name')}
-                value={formData.name}
-                styles={name}
-                onChange={updateForm('name')}
-                errorMessage={formDataErrors.name}
-                data-testid="NewDialogName"
-                required
                 autoFocus
+                required
+                data-testid="NewDialogName"
+                errorMessage={formDataErrors.name}
+                label={formatMessage('Name')}
+                styles={name}
+                value={formData.name}
+                onChange={updateForm('name')}
               />
             </StackItem>
             <StackItem grow={0} styles={halfstack}>
               <TextField
+                multiline
+                label={formatMessage('Description')}
+                resizable={false}
                 styles={description}
                 value={formData.description}
-                label={formatMessage('Description')}
-                multiline
-                resizable={false}
                 onChange={updateForm('description')}
               />
             </StackItem>
           </Stack>
           <LocationSelectContent
+            focusedStorageFolder={focusedStorageFolder}
             operationMode={{ read: true, write: true }}
             onCurrentPathUpdate={onCurrentPathUpdate}
-            focusedStorageFolder={focusedStorageFolder}
           />
 
           <DialogFooter>
-            <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+            <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
             <PrimaryButton
-              onClick={handleSubmit}
-              text={formatMessage('Next')}
-              disabled={disable}
               data-testid="SubmitNewBotBtn"
+              disabled={disable}
+              text={formatMessage('Next')}
+              onClick={handleSubmit}
             />
           </DialogFooter>
         </form>

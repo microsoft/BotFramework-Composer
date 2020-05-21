@@ -16,14 +16,10 @@ context('LG Page', () => {
     cy.get('.toggleEditMode button').as('switchButton');
 
     // by default is table view
-    cy.findByTestId('LGPage')
-      .findByTestId('table-view')
-      .should('exist');
+    cy.findByTestId('LGPage').findByTestId('table-view').should('exist');
     // goto edit-mode
     cy.get('@switchButton').click();
-    cy.findByTestId('LGPage')
-      .get('.monaco-editor')
-      .should('exist');
+    cy.findByTestId('LGPage').get('.monaco-editor').should('exist');
 
     // back to table view
     cy.get('@switchButton').click();

@@ -17,7 +17,7 @@ export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): 
     }
   }
 
-  const result = allTemplates.find(x => get(x, 'name') === lgTemplateName);
+  const result = allTemplates.find((x) => get(x, 'name') === lgTemplateName);
   return result;
 };
 

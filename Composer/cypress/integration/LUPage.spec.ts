@@ -16,9 +16,7 @@ context('LU Page', () => {
     cy.get('.toggleEditMode button').should('not.exist');
 
     // by default is table view
-    cy.findByTestId('LUPage')
-      .findByTestId('table-view')
-      .should('exist');
+    cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
 
     // nav to ToDoBotWithLuisSample.main dialog
     cy.findByTestId('ProjectTree').within(() => {
@@ -27,16 +25,12 @@ context('LU Page', () => {
     cy.get('.toggleEditMode button').as('switchButton');
     // goto edit-mode
     cy.get('@switchButton').click();
-    cy.findByTestId('LUPage')
-      .get('.monaco-editor')
-      .should('exist');
+    cy.findByTestId('LUPage').get('.monaco-editor').should('exist');
 
     // back to all table view
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('All').click();
     });
-    cy.findByTestId('LUPage')
-      .findByTestId('table-view')
-      .should('exist');
+    cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
   });
 });

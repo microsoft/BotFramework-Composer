@@ -62,13 +62,13 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
 
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={botAsksNode.offset}>
         <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(botAsksNode.data, boundary);
               updateNodeBoundary(PromptNodes.BotAsks, boundary);
             }}
@@ -78,9 +78,9 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent} titleInHeader={true}>
+        <ElementWrapper titleInHeader id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
               updateNodeBoundary(PromptNodes.UserAnswers, boundary);
             }}
