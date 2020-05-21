@@ -9,7 +9,7 @@ import { querySelectableElements, SelectorElement } from '../utils/cursorTracker
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
-export const useSelection = () => {
+export const useSelectionEffect = () => {
   const { shellApi, data } = useShellApi();
   const { focusedEvent, focusedId } = useContext(NodeRendererContext);
   const { onSelect, onFocusSteps } = shellApi;

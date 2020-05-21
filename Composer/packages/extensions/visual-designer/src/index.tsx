@@ -21,7 +21,7 @@ import { defaultFlowSchema } from './schema/defaultFlowSchema';
 import { SelectionContext } from './store/SelectionContext';
 import { KeyboardZone } from './components/lib/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent.ts';
-import { useSelection } from './hooks/useSelection';
+import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
 import { NodeEventTypes } from './constants/NodeEventTypes';
 import { AdaptiveDialogEditor } from './editors/AdaptiveDialogEditor';
@@ -106,7 +106,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     divRef.current?.focus();
   }, [focusedEvent]);
 
-  const { selection, selectedIds, getNodeIndex } = useSelection();
+  const { selection, selectedIds, getNodeIndex } = useSelectionEffect();
   const { handleEditorEvent } = useEditorEventApi();
 
   return (
