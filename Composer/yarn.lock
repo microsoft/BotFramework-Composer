@@ -3220,10 +3220,10 @@
   dependencies:
     "@types/glob" "*"
 
-"@types/atob@^2.1.2":
-  version "2.1.2"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/atob/-/@types/atob-2.1.2.tgz#157eb0cc46264a8c55f2273a836c7a1a644fb820"
-  integrity sha1-FX6wzEYmSoxV8ic6g2x6GmRPuCA=
+"@types/atob-lite@^2.0.0":
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/atob-lite/-/@types/atob-lite-2.0.0.tgz#bd44ca72e65a58477e81309a66e401524f187053"
+  integrity sha1-vUTKcuZaWEd+gTCaZuQBUk8YcFM=
 
 "@types/babel__core@^7.1.7":
   version "7.1.7"
@@ -4479,37 +4479,18 @@ adal-node@^0.1.28:
     xmldom ">= 0.1.x"
     xpath.js "~1.1.0"
 
-adaptive-expressions@4.10.0-preview-132360:
-  version "4.10.0-preview-132360"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-132360.tgz#1d2f7bbb15de61d7571fe60f833ccd626db7ab7a"
-  integrity sha1-HS97uxXeYddXH+YPgzzNYm23q3o=
+adaptive-expressions@4.1.6, adaptive-expressions@^4.1.6:
+  version "4.1.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/adaptive-expressions/-/adaptive-expressions-4.1.6.tgz#8cbc4621c29bc46117c0dc6a8a1e47f3d4f51945"
+  integrity sha1-jLxGIcKbxGEXwNxqih5H89T1GUU=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
-    "@types/atob" "^2.1.2"
+    "@types/atob-lite" "^2.0.0"
     "@types/lru-cache" "^5.1.0"
     "@types/moment-timezone" "^0.5.12"
     "@types/xmldom" "^0.1.29"
     antlr4ts "0.5.0-alpha.3"
-    atob "^2.1.2"
-    big-integer "^1.6.48"
-    jspath "^0.4.0"
-    lodash "^4.17.15"
-    lru-cache "^5.1.1"
-    moment "^2.25.1"
-    moment-timezone "^0.5.28"
-
-adaptive-expressions@^4.10.0-preview-132670:
-  version "4.10.0-preview-132670"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-132670.tgz#5db10a8b94cf87e326bfec4ca5756ea7d64af114"
-  integrity sha1-XbEKi5TPh+Mmv+xMpXVup9ZK8RQ=
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
-    "@types/atob" "^2.1.2"
-    "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.12"
-    "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.3"
-    atob "^2.1.2"
+    atob-lite "^2.0.0"
     big-integer "^1.6.48"
     jspath "^0.4.0"
     lodash "^4.17.15"
@@ -5046,7 +5027,12 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-atob@^2.1.1, atob@^2.1.2:
+atob-lite@^2.0.0:
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/atob-lite/-/atob-lite-2.0.0.tgz#0fef5ad46f1bd7a8502c65727f0367d5ee43d696"
+  integrity sha1-D+9a1G8b16hQLGVyfwNn1e5D1pY=
+
+atob@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
@@ -5574,12 +5560,12 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@^4.10.0-preview-132360:
-  version "4.10.0-preview-132360"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-132360.tgz#fde97071ba251855496b44957069c5e503b5ce99"
-  integrity sha1-/elwcbolGFVJa0SVcGnF5QO1zpk=
+botbuilder-lg@^4.1.6:
+  version "4.1.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/botbuilder-lg-4.1.6.tgz#4e771fd6a5269998e14d53f9ad0125910a9e2dd9"
+  integrity sha1-Tncf1qUmmZjhTVP5rQElkQqeLdk=
   dependencies:
-    adaptive-expressions "4.10.0-preview-132360"
+    adaptive-expressions "4.1.6"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.11"
     path "^0.12.7"

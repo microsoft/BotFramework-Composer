@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@bfc/indexers": "*",
-    "botbuilder-lg": "^4.10.0-preview-132360",
+    "botbuilder-lg": "^4.1.6",
     "request-light": "^0.2.2",
     "vscode-languageserver": "^5.3.0-next"
   },
