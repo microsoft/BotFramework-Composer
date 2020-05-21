@@ -7,6 +7,7 @@ import path from 'path';
 
 import glob from 'globby';
 import archiver from 'archiver';
+import rimraf from 'rimraf';
 
 import { IFileStorage, Stat, MakeDirectoryOptions } from './interface';
 
@@ -17,6 +18,7 @@ const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
 const rmDir = promisify(fs.rmdir);
+const forceRmDir = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
 const rename = promisify(fs.rename);
 
@@ -61,8 +63,12 @@ export class LocalDiskStorage implements IFileStorage {
     await mkDir(path, options);
   }
 
-  async rmDir(path: string): Promise<void> {
-    await rmDir(path);
+  async rmDir(path: string, force?: boolean): Promise<void> {
+    if (force) {
+      await forceRmDir(path);
+    } else {
+      await rmDir(path);
+    }
   }
 
   async glob(pattern: string | string[], path: string): Promise<string[]> {

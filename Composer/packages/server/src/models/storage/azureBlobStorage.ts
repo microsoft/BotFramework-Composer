@@ -249,7 +249,7 @@ export class AzureBlobStorage implements IFileStorage {
     });
   }
   //ToDo
-  async rmDir(_path: string): Promise<void> {
+  async rmDir(_path: string, _force: boolean): Promise<void> {
     return new Promise((resolve, _reject) => {
       resolve();
     });

@@ -54,7 +54,7 @@ class MongoStorage implements IFileStorage {
       MongoStorage.db.on('error', err => {
         throw new Error(err);
       });
-      MongoStorage.db.once('open', function() {
+      MongoStorage.db.once('open', function () {
         // we're connected!
         // eslint-disable-next-line no-console
         // console.log('CONNECTED TO MONGO');
@@ -229,7 +229,7 @@ class MongoStorage implements IFileStorage {
     });
   }
 
-  async rmDir(path: string): Promise<void> {
+  async rmDir(path: string, force?: boolean): Promise<void> {
     path = cleanPath(path);
 
     return new Promise((resolve, reject) => {
