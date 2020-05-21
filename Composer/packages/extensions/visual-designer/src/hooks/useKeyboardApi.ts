@@ -10,13 +10,13 @@ import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';
 import { moveCursor } from '../utils/cursorTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
-import { useSelectionApi } from './useSelectionApi';
+import { useSelection } from './useSelection';
 import { useEditorEventHandler } from './useEditorEventHandler';
 
 export const useKeyboardApi = () => {
   const { focusedEvent, focusedId } = useContext(NodeRendererContext);
   const { handleEditorEvent } = useEditorEventHandler();
-  const { selectedIds, selectableElements } = useSelectionApi();
+  const { selectedIds, selectableElements } = useSelection();
 
   const handleKeyboardCommand = ({ area, command }) => {
     switch (area) {

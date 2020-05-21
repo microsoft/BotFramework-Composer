@@ -10,7 +10,7 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { useKeyboardApi } from '../hooks/useKeyboardApi';
-import { useSelectionApi } from '../hooks/useSelectionApi';
+import { useSelection } from '../hooks/useSelection';
 import { useEditorEventHandler } from '../hooks/useEditorEventHandler';
 import { SelectionContext } from '../store/SelectionContext';
 
@@ -18,7 +18,7 @@ import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
 export const ObiEditor: FC<ObiEditorProps> = ({ path, data }): JSX.Element | null => {
   const { focusedEvent } = useContext(NodeRendererContext);
-  const { selection, selectedIds, getNodeIndex } = useSelectionApi();
+  const { selection, selectedIds, getNodeIndex } = useSelection();
   const { handleEditorEvent } = useEditorEventHandler();
   const { handleKeyboardCommand } = useKeyboardApi();
   const divRef = useRef<HTMLDivElement>(null);

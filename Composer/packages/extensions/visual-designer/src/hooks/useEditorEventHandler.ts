@@ -15,7 +15,7 @@ import { normalizeSelection } from '../utils/normalizeSelection';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
-import { useSelectionApi } from './useSelectionApi';
+import { useSelection } from './useSelection';
 
 export const useEditorEventHandler = () => {
   const { shellApi, dialogId: path, data } = useShellApi();
@@ -32,7 +32,7 @@ export const useEditorEventHandler = () => {
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { actionsContainLuIntent } = useActionApi(shellApi);
   const { focusedId, focusedEvent, clipboardActions, dialogFactory } = useContext(NodeRendererContext);
-  const { selectedIds, setSelectedIds } = useSelectionApi();
+  const { selectedIds, setSelectedIds } = useSelection();
 
   const {
     onFocusSteps,
