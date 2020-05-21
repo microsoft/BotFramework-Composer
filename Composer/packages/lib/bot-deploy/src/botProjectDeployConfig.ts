@@ -1,3 +1,5 @@
+import { BotProjectRuntimeType } from './botProjectRuntimeType';
+
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
@@ -43,6 +45,9 @@ export interface BotProjectDeployConfig {
 
   // Remote bot json dialog path, default is 'ComposerDialogs'
   remoteBotPath?: string;
+
+  // Runtime Type for botproject
+  runtimeType?: BotProjectRuntimeType;
 
   [key: string]: any;
 }
