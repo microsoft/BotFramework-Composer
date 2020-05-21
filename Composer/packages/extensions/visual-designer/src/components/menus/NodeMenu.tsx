@@ -36,10 +36,10 @@ export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
 
   return (
     <div
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       css={{
         marginRight: '1px',
       }}
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
     >
       <IconMenu
@@ -58,10 +58,10 @@ export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
             },
           },
         }}
+        label={formatMessage('node menu')}
         menuItems={menuItems}
         menuWidth={100}
         nodeSelected={nodeSelected}
-        label={formatMessage('node menu')}
       />
     </div>
   );

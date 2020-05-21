@@ -19,7 +19,7 @@ interface ArrayItemState {
 }
 
 const generateArrayItems = (value: any[]): ArrayItem[] => {
-  return value.map(i => ({
+  return value.map((i) => ({
     id: generateUniqueId(),
     value: i,
   }));

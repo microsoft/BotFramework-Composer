@@ -64,7 +64,7 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
-    links = links.filter(link => link.to !== '/home');
+    links = links.filter((link) => link.to !== '/home');
   }
 
   return links;

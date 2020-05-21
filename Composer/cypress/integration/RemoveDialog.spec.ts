@@ -10,10 +10,7 @@ context('RemoveDialog', () => {
   it('can remove dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByTestId('DialogTreeItemtriggers[4]').within(() => {
-        cy.findByTestId('dialogMoreButton')
-          .first()
-          .invoke('attr', 'style', 'visibility: visible')
-          .click();
+        cy.findByTestId('dialogMoreButton').first().invoke('attr', 'style', 'visibility: visible').click();
       });
     });
 

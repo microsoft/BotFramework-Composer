@@ -55,7 +55,7 @@ export class PluginLoader {
       if (this.extensions.authentication.middleware) {
         // and the url is not in the allowed urls array
         if (
-          this.extensions.authentication.allowedUrls.filter(pattern => {
+          this.extensions.authentication.allowedUrls.filter((pattern) => {
             const regexp = pathToRegexp(pattern);
             return req.url.match(regexp);
           }).length === 0

@@ -33,13 +33,13 @@ export const headerIcon = css`
   transform: rotate(0.01deg);
 `;
 
-export const headerButton = collapsed => css`
+export const headerButton = (collapsed) => css`
   transform: ${collapsed ? 'rotate(270deg)' : 'rotate(90deg)'};
   margin-left: 12px;
   transition: transform 0.2s linear;
 `;
 
-export const collapseContent = collapsed =>
+export const collapseContent = (collapsed) =>
   css`
     display: ${collapsed ? 'none' : 'block'};
   `;

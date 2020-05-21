@@ -12,7 +12,7 @@
     "build": "yarn clean && yarn build:ts",
     "build:ts": "tsc --build ./tsconfig.build.json",
     "clean": "rimraf lib demo/dist",
-    "lint": "eslint --quiet --ext .ts,.tsx src",
+    "lint": "eslint --quiet src",
     "prepare": "yarn build"
   },
   "license": "MIT",

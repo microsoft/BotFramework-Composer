@@ -50,7 +50,7 @@ export class BaseWorker {
   }
 
   public async flush(): Promise<boolean> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const timer = setInterval(() => {
         if (this.isEmpty()) {
           clearInterval(timer);

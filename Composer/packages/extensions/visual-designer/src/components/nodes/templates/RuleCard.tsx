@@ -20,7 +20,7 @@ import { IconCard } from './IconCard';
 
 const StepsKey = ObiFieldNames.Actions;
 
-const getDirectJumpDialog = data => {
+const getDirectJumpDialog = (data) => {
   const steps = data[StepsKey];
   if (!Array.isArray(steps) || steps.length !== 1) {
     return null;
@@ -103,20 +103,20 @@ export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX
 
   return (
     <IconCard
-      themeColor={EventColor.expanded}
-      iconColor={EventColor.iconColor}
+      childDialog={dialog}
       corner={
         <div css={{ display: 'flex' }}>
           <NodeMenu colors={colors} id={id} onEvent={onEvent} />
         </div>
       }
-      label={label}
-      trigger={trigger}
-      summary={summary}
-      childDialog={dialog}
       icon={ElementIcon.Play}
-      onClick={onCardBodyClick}
+      iconColor={EventColor.iconColor}
+      label={label}
+      summary={summary}
+      themeColor={EventColor.expanded}
+      trigger={trigger}
       onChildDialogClick={openChildDialog}
+      onClick={onCardBodyClick}
     />
   );
 };

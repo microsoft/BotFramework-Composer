@@ -9,7 +9,7 @@ export const main = css`
   display: flex;
 `;
 
-export const sideBar = isExpand => css`
+export const sideBar = (isExpand) => css`
   width: ${isExpand ? '175' : '48'}px;
   background-color: ${NeutralColors.gray20};
   height: 100%;
@@ -28,7 +28,7 @@ export const dividerTop = css`
   margin: 0 auto;
 `;
 
-export const divider = isExpand => css`
+export const divider = (isExpand) => css`
   width: ${isExpand ? '85%' : '40%'};
   border-bottom: 1px solid ${NeutralColors.gray40};
   margin: 0 auto;
@@ -57,7 +57,7 @@ export const content = css`
   label: Content;
 `;
 
-export const showDesign = show => css`
+export const showDesign = (show) => css`
   display: ${show ? 'block' : 'none'} !important;
   height: 100%;
 `;

@@ -5,7 +5,7 @@ import { dialogGroups, DialogGroup, PromptTab } from '@bfc/shared';
 
 export function parseTypeToFragment(type: string, property: string): string {
   const inputTypes = dialogGroups[DialogGroup.INPUT].types;
-  const index = inputTypes.findIndex(t => t === type);
+  const index = inputTypes.findIndex((t) => t === type);
   if (index >= 0) {
     switch (property) {
       case 'prompt':

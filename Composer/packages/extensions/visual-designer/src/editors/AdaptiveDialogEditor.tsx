@@ -50,7 +50,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   const activeEventData = queryNode(data, focusedEvent);
 
   const eventActions = activeEventData ? (
-    <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
+    <RuleEditor key={focusedEvent} data={activeEventData} id={focusedEvent} onEvent={onEvent} />
   ) : null;
 
   if (!EditorConfig.features.showEvents) {
@@ -65,13 +65,13 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
         flexDirection: 'column',
         alignItems: 'center',
       }}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id: '' });
       }}
     >
       {ruleGroup && (
-        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
+        <EventsEditor key={ruleGroup.id} data={ruleGroup.data} id={ruleGroup.id} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
       <Collapse text="Actions">{eventActions}</Collapse>

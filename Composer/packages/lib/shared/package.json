@@ -15,7 +15,7 @@
     "clean": "rimraf lib demo/dist",
     "prepublishOnly": "npm run build",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+    "lint": "eslint --quiet ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
