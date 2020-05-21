@@ -51,6 +51,7 @@ const InlineLabelField: React.FC<FieldProps> = (props) => {
 export const Description: React.FC<ContentProps> = ({ errors, value, schema, onChange }) => {
   const { state } = useContext(StoreContext);
   const { botName } = state;
+  const { $schema, ...rest } = value;
 
   const { hidden, properties } = useMemo(
     () =>
@@ -80,7 +81,9 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
   );
 
   useEffect(() => {
-    onChange({ $id: botName, name: botName, ...value });
+    if (!value.$id) {
+      onChange({ $schema, $id: botName, name: botName, ...rest });
+    }
   }, []);
 
   const required = schema?.required || [];
