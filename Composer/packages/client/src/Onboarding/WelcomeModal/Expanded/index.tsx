@@ -18,7 +18,7 @@ import {
   statusStyle,
   subtitleStyle,
   titleStyle,
-  topBarStyle
+  topBarStyle,
 } from './styles';
 import welcomeImage from './welcome.png';
 
@@ -37,7 +37,7 @@ const StepStatus = ({ isComplete, steps = 0, title }) => (
 const WelcomeModal = () => {
   const {
     actions: { exit, nextSet, onComplete, toggleMinimized },
-    state: { currentSet, currentStep, stepSets }
+    state: { currentSet, currentStep, stepSets },
   } = useContext(OnboardingContext);
 
   return (

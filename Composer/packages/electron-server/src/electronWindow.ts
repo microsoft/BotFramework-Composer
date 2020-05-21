@@ -34,10 +34,10 @@ export default class ElectronWindow {
       height: adjustedHeight,
       webPreferences: {
         nodeIntegration: false,
-        preload: join(__dirname, 'preload.js')
+        preload: join(__dirname, 'preload.js'),
       },
       show: false,
-      title: `Bot Framework Composer (v${app.getVersion()})`
+      title: `Bot Framework Composer (v${app.getVersion()})`,
     };
     if (isLinux() && !isDevelopment) {
       // workaround for broken .AppImage icons since electron-builder@21.0.1 removed .AppImage desktop integration
@@ -45,7 +45,7 @@ export default class ElectronWindow {
       browserWindowOptions.icon = join(getUnpackedAsarPath(), 'resources/composerIcon_1024x1024.png');
     }
     this._currentBrowserWindow = new BrowserWindow(browserWindowOptions);
-    this._currentBrowserWindow.on('page-title-updated', ev => ev.preventDefault()); // preserve explicit window title
+    this._currentBrowserWindow.on('page-title-updated', (ev) => ev.preventDefault()); // preserve explicit window title
     log('Rendered Electron window dimensions: ', this._currentBrowserWindow.getSize());
   }
 

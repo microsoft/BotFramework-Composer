@@ -11,10 +11,10 @@ export const useLgApi = (shellApi: ShellApi) => {
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
-      .map(x => {
+      .map((x) => {
         return LgTemplateRef.parse(x)?.name;
       })
-      .filter(x => x != null) as string[];
+      .filter((x) => x != null) as string[];
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
 
@@ -27,7 +27,7 @@ export const useLgApi = (shellApi: ShellApi) => {
     const lgTemplates = getLgTemplates(inputLgRef.name);
     if (!Array.isArray(lgTemplates) || !lgTemplates.length) return lgText;
 
-    const targetTemplate = lgTemplates.find(x => x.name === inputLgRef.name);
+    const targetTemplate = lgTemplates.find((x) => x.name === inputLgRef.name);
     return targetTemplate ? targetTemplate.body : lgText;
   };
 
@@ -50,6 +50,6 @@ export const useLgApi = (shellApi: ShellApi) => {
     createLgTemplate,
     readLgTemplate,
     deleteLgTemplate: (lgFileId: string, lgTemplate: string) => deleteLgTemplates(lgFileId, [lgTemplate]),
-    deleteLgTemplates
+    deleteLgTemplates,
   };
 };

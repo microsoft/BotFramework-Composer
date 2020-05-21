@@ -8,7 +8,7 @@ export const ExpressionType = {
   number: 'number',
   integer: 'integer',
   boolean: 'boolean',
-  string: 'string'
+  string: 'string',
 };
 
 const isExpression = (value: string | boolean | number, types: string[]): boolean => {

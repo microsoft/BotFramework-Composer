@@ -23,7 +23,7 @@ const defaultOptions = {
   quickSuggestions: false,
   minimap: {
     enabled: false,
-    maxColumn: 0
+    maxColumn: 0,
   },
   lineDecorationsWidth: 10,
   lineNumbersMinChars: 3,
@@ -31,7 +31,7 @@ const defaultOptions = {
   folding: false,
   renderLineHighlight: 'none',
   formatOnType: true,
-  fixedOverflowWidgets: true
+  fixedOverflowWidgets: true,
 };
 
 const styles = {
@@ -79,7 +79,7 @@ const styles = {
     margin-bottom: 5px;
 
     label: BaseEditorSettings;
-  `
+  `,
 };
 
 const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSettings> = {}) => {
@@ -89,8 +89,8 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     wordWrap: overrides.wordWrap ? 'on' : 'off',
     minimap: {
       enabled: overrides.minimap,
-      maxColumn: overrides.minimap ? 120 : 0
-    }
+      maxColumn: overrides.minimap ? 120 : 0,
+    },
   };
 };
 
@@ -111,7 +111,7 @@ export interface BaseEditorProps extends EditorProps {
   onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
 }
 
-const BaseEditor: React.FC<BaseEditorProps> = props => {
+const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   const {
     onChange,
     editorDidMount,
@@ -148,7 +148,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   };
 
   useEffect(() => {
-    monaco.init().then(instance => {
+    monaco.init().then((instance) => {
       typeof onInit === 'function' && onInit(instance);
     });
   }, []);
@@ -186,7 +186,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
     const { errors, warnings } = findProblems(diagnostics);
     return {
       errorMsgFromDiagnostics: errors.length > 0 ? combineSimpleMessage(errors) : null,
-      warningMsgFromDiagnostics: warnings.length > 0 ? combineSimpleMessage(warnings) : null
+      warningMsgFromDiagnostics: warnings.length > 0 ? combineSimpleMessage(warnings) : null,
     };
   }, [diagnostics]);
 
@@ -215,7 +215,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
           focused,
           error: hasError,
           warning: hasWarning,
-          height
+          height,
         })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -238,7 +238,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
 
 BaseEditor.defaultProps = {
   language: 'markdown',
-  theme: 'vs'
+  theme: 'vs',
 };
 
 export { BaseEditor };
