@@ -12,11 +12,11 @@ type CheckerFunc = (path: string, value: any, type: string, schema: any) => Diag
 
 export const createPath = (path: string, type: string): string => {
   let list = path.split('.');
-  const matches = list.filter((x) => {
+  const matches = list.filter(x => {
     if (/\[|\]/.test(x)) {
       const reg = /\[.*\]/;
       x = x.replace(reg, '');
-      return ~values(FieldNames).indexOf(x);
+      return values(FieldNames).includes(x);
     }
   });
 
@@ -27,19 +27,19 @@ export const createPath = (path: string, type: string): string => {
   return `${list[0]}${focused}#${type}#${list[1]}`;
 };
 
-function findAllRequiredProperties(schema: any): { [key: string]: boolean } {
-  if (!schema) return {};
-  const types = schema.anyOf?.filter((x) => x.title === 'Type');
-  const required = {};
-  if (types && types.length) {
+function findAllRequiredProperties(schema: any): Set<string> {
+  if (!schema) return new Set<string>();
+  const types = schema.anyOf?.filter(x => x.title === 'Type');
+  const required = new Set<string>();
+  if (types?.length >= 1) {
     types[0].required.forEach((element: string) => {
-      required[element] = true;
+      required.add(element);
     });
   }
 
   if (schema.required) {
     schema.required.forEach((element: string) => {
-      required[element] = true;
+      required.add(element);
     });
   }
   return required;
@@ -55,7 +55,7 @@ function findAllTypes(schema: any): string[] {
       types.push(schema.type);
     }
   } else {
-    types = schema.oneOf?.filter((item) => !!ExpressionType[item.type]).map((item) => item.type);
+    types = schema.oneOf?.filter(item => !!ExpressionType[item.type]).map(item => item.type);
   }
 
   return Array.from(new Set<string>(types));
@@ -65,7 +65,7 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
   if (!schema) return [];
   const diagnostics: Diagnostic[] = [];
   const requiredProperties = findAllRequiredProperties(schema);
-  Object.keys(value).forEach((key) => {
+  Object.keys(value).forEach(key => {
     const property = value[key];
     if (Array.isArray(property)) {
       const itemsSchema = get(schema, ['properties', key, 'items'], null);
@@ -73,7 +73,7 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
         property.forEach((child, index) => {
           const diagnostic = validate(
             child,
-            !!requiredProperties[key],
+            requiredProperties.has(key),
             createPath(`${path}.${key}[${index}]`, type),
             findAllTypes(itemsSchema)
           );
@@ -88,7 +88,7 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
     } else if (get(schema.properties[key], '$role') === 'expression') {
       const diagnostic = validate(
         property,
-        !!requiredProperties[key],
+        requiredProperties.has(key),
         createPath(`${path}.${key}`, type),
         findAllTypes(schema.properties[key])
       );
@@ -99,5 +99,5 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
 };
 
 export const checkerFuncs: { [type: string]: CheckerFunc[] } = {
-  '.': [IsExpression], //this will check all types
+  '.': [IsExpression] //this will check all types
 };

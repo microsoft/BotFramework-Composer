@@ -1,33 +1,33 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { createSingleMessage, combineMessage, findErrors, isValid } from '../../src/utils';
+import { createSingleMessage, combineMessage, findProblems, isValid } from '../../src/utils';
 
 const diagnostics = [
   {
     message: 'syntax error',
     range: { start: { line: 15, character: 0 }, end: { line: 15, character: 1 } },
     severity: 0,
-    source: 'a.lu',
+    source: 'a.lu'
   },
   {
     message: 'syntax error',
     range: { start: { line: 0, character: 0 }, end: { line: 0, character: 1 } },
     severity: 0,
-    source: 'b.lu',
+    source: 'b.lu'
   },
   {
     message: 'syntax error',
     range: { start: { line: 1, character: 0 }, end: { line: 1, character: 1 } },
     severity: 0,
-    source: 'c.lu',
+    source: 'c.lu'
   },
   {
     message: 'file empty',
     range: { start: { line: 2, character: 0 }, end: { line: 2, character: 1 } },
     severity: 1,
-    source: 'd.lu',
-  },
+    source: 'd.lu'
+  }
 ];
 
 const diagnostics1 = [
@@ -35,8 +35,8 @@ const diagnostics1 = [
     message: 'file empty',
     range: { start: { line: 2, character: 0 }, end: { line: 2, character: 1 } },
     severity: 1,
-    source: 'd.lu',
-  },
+    source: 'd.lu'
+  }
 ];
 
 describe('diagnostic utils', () => {
@@ -45,8 +45,12 @@ describe('diagnostic utils', () => {
     expect(isValid(diagnostics1)).toBe(true);
   });
   it('should find all errors', () => {
-    expect(findErrors(diagnostics).length).toBe(3);
-    expect(findErrors(diagnostics1).length).toBe(0);
+    expect(findProblems(diagnostics).errors.length).toBe(3);
+    expect(findProblems(diagnostics1).errors.length).toBe(0);
+  });
+  it('should find all warnings', () => {
+    expect(findProblems(diagnostics).warnings.length).toBe(1);
+    expect(findProblems(diagnostics1).warnings.length).toBe(1);
   });
   it('should create a message for single diagnostic', () => {
     expect(createSingleMessage(diagnostics[0])).toContain('line 15:0 - line 15:1');

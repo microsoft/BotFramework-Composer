@@ -33,7 +33,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const [selectedManifest, setSelectedManifest] = useState<string>('');
   const skillManifest = useMemo(() => skillManifests.find(({ id }) => id === selectedManifest), [
     selectedManifest,
-    skillManifests,
+    skillManifests
   ]);
   const { content = {} } = skillManifest || {};
 
@@ -41,8 +41,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const { buttons = [], content: Content, editJson, helpLink, subText, title, validate } = editorSteps[editorStep];
 
   const handleEditJson = () => {
-    const step = order.findIndex((step) => step === ManifestEditorSteps.MANIFEST_REVIEW);
-    if (~step) {
+    const step = order.findIndex(step => step === ManifestEditorSteps.MANIFEST_REVIEW);
+    if (step >= 0) {
       setCurrentStep(step);
       setErrors({});
     }
@@ -52,7 +52,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     const validated = typeof validate === 'function' ? validate(content, schema) : errors;
 
     if (!Object.keys(validated).length) {
-      setCurrentStep((current) => (current + 1 < order.length ? current + 1 : current));
+      setCurrentStep(current => (current + 1 < order.length ? current + 1 : current));
       setErrors({});
     } else {
       setErrors(validated);
@@ -63,7 +63,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     updateSkillManifest(manifest || content);
   };
 
-  const handleSelectManifest = (manifest) => {
+  const handleSelectManifest = manifest => {
     setSelectedManifest(manifest);
   };
 
@@ -72,12 +72,12 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
       dialogContentProps={{
         type: DialogType.close,
         title: title(),
-        styles: styles.dialog,
+        styles: styles.dialog
       }}
       hidden={false}
       modalProps={{
         isBlocking: false,
-        styles: styles.modal,
+        styles: styles.modal
       }}
       onDismiss={onDismiss}
     >
@@ -104,7 +104,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             setSkillManifest={handleSelectManifest}
             skillManifests={skillManifests as SkillManifest[]}
             value={content}
-            onChange={(manifestContent) => updateSkillManifest({ ...skillManifest, content: manifestContent })}
+            onChange={manifestContent => updateSkillManifest({ ...skillManifest, content: manifestContent })}
           />
         </div>
         <DialogFooter>
@@ -126,7 +126,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                       onDismiss,
                       onNext: handleNext,
                       onSave: handleSave,
-                      onSubmit,
+                      onSubmit
                     })}
                   />
                 );

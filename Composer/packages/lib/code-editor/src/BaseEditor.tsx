@@ -10,7 +10,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
-import { findErrors, combineSimpleMessage, findWarnings } from '@bfc/indexers';
+import { findProblems, combineSimpleMessage } from '@bfc/indexers';
 import { CodeEditorSettings, assignDefined } from '@bfc/shared';
 
 const defaultOptions = {
@@ -23,7 +23,7 @@ const defaultOptions = {
   quickSuggestions: false,
   minimap: {
     enabled: false,
-    maxColumn: 0,
+    maxColumn: 0
   },
   lineDecorationsWidth: 10,
   lineNumbersMinChars: 3,
@@ -31,7 +31,7 @@ const defaultOptions = {
   folding: false,
   renderLineHighlight: 'none',
   formatOnType: true,
-  fixedOverflowWidgets: true,
+  fixedOverflowWidgets: true
 };
 
 const styles = {
@@ -79,7 +79,7 @@ const styles = {
     margin-bottom: 5px;
 
     label: BaseEditorSettings;
-  `,
+  `
 };
 
 const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSettings> = {}) => {
@@ -89,8 +89,8 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     wordWrap: overrides.wordWrap ? 'on' : 'off',
     minimap: {
       enabled: overrides.minimap,
-      maxColumn: overrides.minimap ? 120 : 0,
-    },
+      maxColumn: overrides.minimap ? 120 : 0
+    }
   };
 };
 
@@ -111,7 +111,7 @@ export interface BaseEditorProps extends EditorProps {
   onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
 }
 
-const BaseEditor: React.FC<BaseEditorProps> = (props) => {
+const BaseEditor: React.FC<BaseEditorProps> = props => {
   const {
     onChange,
     editorDidMount,
@@ -137,7 +137,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   // initialValue is designed to imporve local performance
   // it should be force updated if id change, or previous value is empty.
-  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
+  const initialValue = useMemo(() => value ?? (hidePlaceholder ? '' : placeholder), [id, value == null]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     setEditor(editor);
@@ -148,7 +148,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   };
 
   useEffect(() => {
-    monaco.init().then((instance) => {
+    monaco.init().then(instance => {
       typeof onInit === 'function' && onInit(instance);
     });
   }, []);
@@ -182,18 +182,16 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
     }
   }, [onChange, editor]);
 
-  const errorMsgFromDiagnostics = useMemo(() => {
-    const errors = findErrors(diagnostics);
-    return errors.length ? combineSimpleMessage(errors) : '';
+  const { errorMsgFromDiagnostics, warningMsgFromDiagnostics } = useMemo(() => {
+    const { errors, warnings } = findProblems(diagnostics);
+    return {
+      errorMsgFromDiagnostics: errors.length > 0 ? combineSimpleMessage(errors) : null,
+      warningMsgFromDiagnostics: warnings.length > 0 ? combineSimpleMessage(warnings) : null
+    };
   }, [diagnostics]);
 
-  const warningMsgFromDiagnostics = useMemo(() => {
-    const warnings = findWarnings(diagnostics);
-    return warnings.length ? combineSimpleMessage(warnings) : '';
-  }, [diagnostics]);
-
-  const hasError = !!errorMessage || !!errorMsgFromDiagnostics;
-  const hasWarning = !!warningMessage || !!warningMsgFromDiagnostics;
+  const hasError = errorMessage ?? errorMsgFromDiagnostics;
+  const hasWarning = warningMessage ?? warningMsgFromDiagnostics;
 
   const messageHelp = errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics;
 
@@ -217,7 +215,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
           focused,
           error: hasError,
           warning: hasWarning,
-          height,
+          height
         })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -240,7 +238,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
 BaseEditor.defaultProps = {
   language: 'markdown',
-  theme: 'vs',
+  theme: 'vs'
 };
 
 export { BaseEditor };

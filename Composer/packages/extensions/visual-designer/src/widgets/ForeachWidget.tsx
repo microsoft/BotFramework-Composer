@@ -24,7 +24,7 @@ enum ForeachNodes {
   Foreach = 'foreachNode',
   LoopBegin = 'loopBeginNode',
   LoopEnd = 'loopEndNode',
-  LoopActions = 'loopActionsNode',
+  LoopActions = 'loopActionsNode'
 }
 
 const calculateNodeMap = (jsonpath, data): GraphNodeMap<ForeachNodes> => {
@@ -34,7 +34,7 @@ const calculateNodeMap = (jsonpath, data): GraphNodeMap<ForeachNodes> => {
       [ForeachNodes.Foreach]: new GraphNode(),
       [ForeachNodes.LoopActions]: new GraphNode(),
       [ForeachNodes.LoopBegin]: new GraphNode(),
-      [ForeachNodes.LoopEnd]: new GraphNode(),
+      [ForeachNodes.LoopEnd]: new GraphNode()
     };
 
   const { foreachDetail, stepGroup, loopBegin, loopEnd } = result;
@@ -42,7 +42,7 @@ const calculateNodeMap = (jsonpath, data): GraphNodeMap<ForeachNodes> => {
     [ForeachNodes.Foreach]: GraphNode.fromIndexedJson(foreachDetail),
     [ForeachNodes.LoopActions]: GraphNode.fromIndexedJson(stepGroup),
     [ForeachNodes.LoopBegin]: GraphNode.fromIndexedJson(loopBegin),
-    [ForeachNodes.LoopEnd]: GraphNode.fromIndexedJson(loopEnd),
+    [ForeachNodes.LoopEnd]: GraphNode.fromIndexedJson(loopEnd)
   };
 };
 
@@ -73,7 +73,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={(boundary) => {
+            onResize={boundary => {
               designerCache.cacheBoundary(foreachNode.data, boundary);
               updateNodeBoundary(ForeachNodes.Foreach, boundary);
             }}
@@ -88,13 +88,13 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
           data={loopActionsNode.data}
           id={loopActionsNode.id}
           onEvent={onEvent}
-          onResize={(size) => {
+          onResize={size => {
             updateNodeBoundary(ForeachNodes.LoopActions, size);
           }}
         />
       </OffsetContainer>
       {[loopBeginNode, loopEndNode]
-        .filter((x) => !!x)
+        .filter(x => x != null)
         .map((x, index) => (
           <OffsetContainer key={`${id}/loopicon-${index}/offset`} offset={x.offset}>
             <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />
@@ -105,5 +105,5 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
 };
 
 ForeachWidget.defaultProps = {
-  onResize: () => null,
+  onResize: () => null
 };

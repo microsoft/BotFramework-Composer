@@ -8,7 +8,7 @@ export const ExpressionType = {
   number: 'number',
   integer: 'integer',
   boolean: 'boolean',
-  string: 'string',
+  string: 'string'
 };
 
 const isExpression = (value: string | boolean | number, types: string[]): boolean => {
@@ -19,8 +19,8 @@ const isExpression = (value: string | boolean | number, types: string[]): boolea
 //The return type should match the schema type
 const checkReturnType = (returnType: ReturnType, types: string[]): string => {
   return returnType === ReturnType.Object ||
-    ~types.indexOf(returnType) ||
-    (returnType === ReturnType.Number && ~types.indexOf(ExpressionType.integer))
+    types.includes(returnType) ||
+    (returnType === ReturnType.Number && types.includes(ExpressionType.integer))
     ? ''
     : formatMessage('the expression type is not match');
 };

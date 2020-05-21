@@ -34,7 +34,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
     return {
       [AttrNames.SelectableElement]: true,
       [AttrNames.EdgeMenuElement]: true,
-      [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`,
+      [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`
     };
   };
 
@@ -42,21 +42,21 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
   let boxShaow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
   boxShaow += menuSelected ? `,0 0 0 2px ${ObiColors.AzureBlue}` : nodeSelected ? `, 0 0 0 2px ${ObiColors.Black}` : '';
 
-  const handleMenuShow = (menuSelected) => {
+  const handleMenuShow = menuSelected => {
     setMenuSelected(menuSelected);
   };
 
   const menuItems = createActionMenu(
-    (item) => {
+    item => {
       if (!item) return;
       onClick(item.key);
     },
     {
       isSelfHosted: selfHosted,
-      enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
+      enablePaste: Array.isArray(clipboardActions) && clipboardActions.length > 0
     },
     // Custom Action 'oneOf' arrays from schema file
-    customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
+    customSchemas.map(x => x.oneOf).filter(oneOf => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
   );
   return (
     <div
@@ -69,7 +69,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
         backdropFilter: 'white',
         boxShadow: boxShaow,
         overflow: 'hidden',
-        background: 'white',
+        background: 'white'
       }}
       {...declareElementAttributes(id)}
     >
@@ -85,11 +85,11 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
               outline: 'none',
               selectors: {
                 '::after': {
-                  outline: 'none !important',
-                },
-              },
-            },
-          },
+                  outline: 'none !important'
+                }
+              }
+            }
+          }
         }}
         label={formatMessage('Add')}
         menuItems={menuItems}

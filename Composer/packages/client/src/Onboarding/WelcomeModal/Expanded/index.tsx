@@ -18,7 +18,7 @@ import {
   statusStyle,
   subtitleStyle,
   titleStyle,
-  topBarStyle,
+  topBarStyle
 } from './styles';
 import welcomeImage from './welcome.png';
 
@@ -37,7 +37,7 @@ const StepStatus = ({ isComplete, steps = 0, title }) => (
 const WelcomeModal = () => {
   const {
     actions: { exit, nextSet, onComplete, toggleMinimized },
-    state: { currentSet, currentStep, stepSets },
+    state: { currentSet, currentStep, stepSets }
   } = useContext(OnboardingContext);
 
   return (
@@ -57,14 +57,14 @@ const WelcomeModal = () => {
         {stepSets.map(({ steps: { length }, title }, index) => (
           <StepStatus
             key={index}
-            isComplete={index < currentSet || (index === currentSet && !~currentStep)}
+            isComplete={index < currentSet || (index === currentSet && currentStep >= 0)}
             steps={length}
             title={title}
           />
         ))}
       </div>
       <div css={footerStyle}>
-        {!~currentStep && (
+        {currentStep >= 0 && (
           <div>
             {currentSet + 1 < stepSets.length && (
               <PrimaryButton data-testid="onboardingNextSet" text={stepSets[currentSet + 1].title} onClick={nextSet} />
