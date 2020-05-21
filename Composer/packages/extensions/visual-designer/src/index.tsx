@@ -111,7 +111,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   const visualEditorConfig = mergePluginConfig(...plugins);
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
     const definitionKeys: string[] = Object.keys(s.definitions);
-    definitionKeys.forEach($kind => {
+    definitionKeys.forEach(($kind) => {
       result[$kind] = defaultFlowSchema.custom;
     });
     return result;
@@ -127,22 +127,22 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
               schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema),
             }}
           >
-            <div data-testid="visualdesigner-container" css={styles}>
+            <div css={styles} data-testid="visualdesigner-container">
               <ObiEditor
                 key={dialogId}
-                path={dialogId}
+                announce={announce}
                 data={data}
                 focusedSteps={focusedActions}
-                onFocusSteps={onFocusSteps}
-                onFocusEvent={onFocusEvent}
+                path={dialogId}
+                redo={redo}
+                undo={undo}
+                onChange={(x) => saveData(x)}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
-                onOpen={x => navTo(x)}
-                onChange={x => saveData(x)}
+                onFocusEvent={onFocusEvent}
+                onFocusSteps={onFocusSteps}
+                onOpen={(x) => navTo(x)}
                 onSelect={onSelect}
-                undo={undo}
-                redo={redo}
-                announce={announce}
               />
             </div>
           </FlowSchemaContext.Provider>

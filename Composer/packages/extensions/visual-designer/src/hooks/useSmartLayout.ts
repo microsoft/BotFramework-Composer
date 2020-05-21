@@ -49,7 +49,7 @@ export function useSmartLayout<T extends string>(
 
   const layout = useMemo(() => {
     // write updated boundaries to nodes
-    Object.keys(nodeMap).map(nodeName => {
+    Object.keys(nodeMap).map((nodeName) => {
       const node = nodeMap[nodeName];
       if (node) {
         node.boundary = boundaryMap[nodeName] || node.boundary;

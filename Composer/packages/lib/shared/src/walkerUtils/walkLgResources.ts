@@ -37,9 +37,9 @@ const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
 };
 
 export const walkLgResourcesInAction = (action, handleLgResource: LgFieldHandler) => {
-  walkAdaptiveAction(action, action => findLgFields(action, handleLgResource));
+  walkAdaptiveAction(action, (action) => findLgFields(action, handleLgResource));
 };
 
 export const walkLgResourcesInActionList = (actionList: any[], handleLgResource: LgFieldHandler) => {
-  walkAdaptiveActionList(actionList, action => findLgFields(action, handleLgResource));
+  walkAdaptiveActionList(actionList, (action) => findLgFields(action, handleLgResource));
 };

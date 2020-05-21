@@ -31,7 +31,7 @@ switch (process.platform) {
 }
 
 // copy bot runtime to build directory to be packaged
-fs.copy(source, destination, err => {
+fs.copy(source, destination, (err) => {
   if (err) {
     console.error('[copy-runtime.js] Error while copying runtime:');
     return;

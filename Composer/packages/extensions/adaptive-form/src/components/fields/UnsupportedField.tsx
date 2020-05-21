@@ -16,7 +16,7 @@ export const UnsupportedField: React.FC<FieldProps> = function UnsupportedField(
     <React.Fragment>
       <div css={unsupportedField.container}>
         {props.label} (Unsupported Field)
-        <Link styles={unsupportedField.link} onClick={() => setShowDetails(prev => !prev)}>
+        <Link styles={unsupportedField.link} onClick={() => setShowDetails((prev) => !prev)}>
           Toggle Details
         </Link>
       </div>

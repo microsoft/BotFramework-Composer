@@ -15,25 +15,25 @@ interface IPublishLuisDialogProps {
   onPublish: () => void;
 }
 
-export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = props => {
+export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
   const { isOpen, onDismiss, onPublish, botName } = props;
 
   return (
     <Dialog
-      hidden={!isOpen}
-      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Publish LUIS models'),
         styles: dialog,
       }}
+      hidden={!isOpen}
       modalProps={{
         isBlocking: false,
         isModeless: true,
         styles: dialogModal,
       }}
+      onDismiss={onDismiss}
     >
-      <PublishLuis onPublish={onPublish} onDismiss={onDismiss} botName={botName} />
+      <PublishLuis botName={botName} onDismiss={onDismiss} onPublish={onPublish} />
     </Dialog>
   );
 };

@@ -20,9 +20,9 @@ const mockLocationRef: LocationRef = {
   storageId: 'default',
   path: Path.join(__dirname, `${botDir}`),
 };
-const luFileLength = files => files.filter(file => file.name.endsWith('.lu')).length;
-const lgFileLength = files => files.filter(file => file.name.endsWith('.lg')).length;
-const dialogFileLength = files => files.filter(file => file.name.endsWith('.dialog')).length;
+const luFileLength = (files) => files.filter((file) => file.name.endsWith('.lu')).length;
+const lgFileLength = (files) => files.filter((file) => file.name.endsWith('.lg')).length;
+const dialogFileLength = (files) => files.filter((file) => file.name.endsWith('.dialog')).length;
 let proj: BotProject;
 
 beforeEach(async () => {
@@ -84,7 +84,7 @@ describe('copyTo', () => {
         let files: string[] = [];
         if (fs.existsSync(path)) {
           files = fs.readdirSync(path);
-          files.forEach(function(file) {
+          files.forEach(function (file) {
             const curPath = path + '/' + file;
             if (fs.statSync(curPath).isDirectory()) {
               // recurse
@@ -159,7 +159,7 @@ describe('lg operations', () => {
 
     content = '# hello \n - hello2';
     await proj.updateFile(id, content);
-    const result = proj.files.find(f => f.name === id);
+    const result = proj.files.find((f) => f.name === id);
 
     expect(proj.files.length).toEqual(filesCount + 1);
     expect(lgFileLength(proj.files)).toEqual(lgFilesCount + 1);
@@ -179,7 +179,7 @@ describe('lg operations', () => {
     const lgFilesCount = lgFileLength(proj.files);
 
     await proj.deleteFile(id);
-    const result = proj.files.find(f => f.name === id);
+    const result = proj.files.find((f) => f.name === id);
 
     expect(proj.files.length).toEqual(filesCount - 1);
     expect(lgFileLength(proj.files)).toEqual(lgFilesCount - 1);
@@ -227,7 +227,7 @@ describe('lu operations', () => {
     content = '## hello \n - hello2';
 
     await proj.updateFile(id, content);
-    const result = proj.files.find(f => f.name === id);
+    const result = proj.files.find((f) => f.name === id);
 
     expect(proj.files.length).toEqual(filesCount + 1);
     expect(luFileLength(proj.files)).toEqual(luFilesCount + 1);
@@ -244,7 +244,7 @@ describe('lu operations', () => {
     const luFilesCount = luFileLength(proj.files);
 
     await proj.deleteFile(id);
-    const result = proj.files.find(f => f.name === id);
+    const result = proj.files.find((f) => f.name === id);
 
     expect(proj.files.length).toEqual(filesCount - 1);
     expect(luFileLength(proj.files)).toEqual(luFilesCount - 1);

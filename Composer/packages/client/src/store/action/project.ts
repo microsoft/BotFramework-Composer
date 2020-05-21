@@ -18,10 +18,10 @@ import httpClient from './../../utils/httpUtil';
 const checkProjectUpdates = async () => {
   const workers = [filePersistence, lgWorker, luWorker];
 
-  return Promise.all(workers.map(w => w.flush()));
+  return Promise.all(workers.map((w) => w.flush()));
 };
 
-export const setOpenPendingStatus: ActionCreator = async store => {
+export const setOpenPendingStatus: ActionCreator = async (store) => {
   store.dispatch({
     type: ActionTypes.GET_PROJECT_PENDING,
   });
@@ -69,7 +69,7 @@ export const fetchProjectById: ActionCreator = async (store, projectId) => {
   }
 };
 
-export const fetchProject: ActionCreator = async store => {
+export const fetchProject: ActionCreator = async (store) => {
   const state = store.getState();
   const projectId = state.projectId;
   return fetchProjectById(store, projectId);

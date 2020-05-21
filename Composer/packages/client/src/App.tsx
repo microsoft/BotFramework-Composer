@@ -25,7 +25,9 @@ import { useLinks } from './utils/hooks';
 initializeIcons(undefined, { disableWarnings: true });
 
 const Onboarding = React.lazy(() => import('./Onboarding'));
-const AppUpdater = React.lazy(() => import('./components/AppUpdater').then(module => ({ default: module.AppUpdater })));
+const AppUpdater = React.lazy(() =>
+  import('./components/AppUpdater').then((module) => ({ default: module.AppUpdater }))
+);
 
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
@@ -42,15 +44,15 @@ export const App: React.FC = () => {
     onboardingSetComplete(onboardingState.getComplete());
   }, []);
 
-  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
+  const mapNavItemTo = (x) => resolveToBasePath(BASEPATH, x);
 
   const renderAppUpdater = isElectron();
 
   return (
     <Fragment>
       <div
-        role="alert"
         aria-live="assertive"
+        role="alert"
         style={{
           display: 'block',
           position: 'absolute',
@@ -66,27 +68,27 @@ export const App: React.FC = () => {
         <nav css={sideBar(sideBarExpand)}>
           <div>
             <IconButton
+              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
+              css={globalNav}
+              data-testid={'LeftNavButton'}
               iconProps={{
                 iconName: 'GlobalNavButton',
               }}
-              css={globalNav}
               onClick={() => {
                 setSideBarExpand(!sideBarExpand);
               }}
-              data-testid={'LeftNavButton'}
-              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />
             <div css={dividerTop} />{' '}
-            <FocusZone allowFocusRoot={true}>
+            <FocusZone allowFocusRoot>
               {topLinks.map((link, index) => {
                 return (
                   <NavItem
                     key={'NavLeftBar' + index}
-                    to={mapNavItemTo(link.to)}
+                    disabled={link.disabled}
+                    exact={link.exact}
                     iconName={link.iconName}
                     labelName={link.labelName}
-                    exact={link.exact}
-                    disabled={link.disabled}
+                    to={mapNavItemTo(link.to)}
                   />
                 );
               })}
@@ -98,11 +100,11 @@ export const App: React.FC = () => {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={mapNavItemTo(link.to)}
+                  disabled={link.disabled}
+                  exact={link.exact}
                   iconName={link.iconName}
                   labelName={link.labelName}
-                  exact={link.exact}
-                  disabled={link.disabled}
+                  to={mapNavItemTo(link.to)}
                 />
               );
             })}
