@@ -4,13 +4,13 @@
 /** @jsx jsx */
 import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
 import { useShellApi, JSONSchema7, FlowSchema } from '@bfc/extension';
+import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
-import { ObiEditor } from './editors/ObiEditor';
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
 import { FlowSchemaContext } from './store/FlowSchemaContext';
@@ -18,6 +18,13 @@ import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './utils/mergePluginConfig';
 import { getCustomSchema } from './utils/getCustomSchema';
 import { defaultFlowSchema } from './schema/defaultFlowSchema';
+import { SelectionContext } from './store/SelectionContext';
+import { KeyboardZone } from './components/lib/KeyboardZone';
+import { useKeyboardApi } from './hooks/useKeyboardApi';
+import { useSelection } from './hooks/useSelection';
+import { useEditorEventApi } from './hooks/useEditorEventApi';
+import { NodeEventTypes } from './constants/NodeEventTypes';
+import { AdaptiveDialogEditor } from './editors/AdaptiveDialogEditor';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -92,6 +99,17 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     return result;
   }, {} as FlowSchema);
 
+  const divRef = useRef<HTMLDivElement>(null);
+
+  // send focus to the keyboard area when navigating to a new trigger
+  useEffect(() => {
+    divRef.current?.focus();
+  }, [focusedEvent]);
+
+  const { selection, selectedIds, getNodeIndex } = useSelection();
+  const { handleEditorEvent } = useEditorEventApi();
+  const { handleKeyboardCommand } = useKeyboardApi();
+
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
@@ -103,7 +121,35 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
             }}
           >
             <div data-testid="visualdesigner-container" css={styles}>
-              <ObiEditor key={dialogId} path={dialogId} data={data} />
+              <SelectionContext.Provider value={{ selectedIds, getNodeIndex }}>
+                <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
+                  <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+                    <div
+                      className="visual-editor-container"
+                      data-testid="visual-editor-container"
+                      css={{
+                        width: '100%',
+                        height: '100%',
+                        padding: '48px 20px',
+                        boxSizing: 'border-box',
+                      }}
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleEditorEvent(NodeEventTypes.Focus, { id: '' });
+                      }}
+                    >
+                      <AdaptiveDialogEditor
+                        id={dialogId}
+                        data={data}
+                        onEvent={(eventName, eventData) => {
+                          divRef.current?.focus({ preventScroll: true });
+                          handleEditorEvent(eventName, eventData);
+                        }}
+                      />
+                    </div>
+                  </MarqueeSelection>
+                </KeyboardZone>
+              </SelectionContext.Provider>
             </div>
           </FlowSchemaContext.Provider>
         </SelfHostContext.Provider>
