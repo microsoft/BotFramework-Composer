@@ -65,6 +65,6 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
       </div>
     </div>
   ) : (
-      <div>{formatMessage('Data loading...')}</div>
-    );
+    <div>{formatMessage('Data loading...')}</div>
+  );
 };

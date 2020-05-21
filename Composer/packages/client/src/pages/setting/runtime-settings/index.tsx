@@ -110,6 +110,6 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       <EjectModal closeModal={closeEjectModal} ejectRuntime={ejectRuntime} hidden={!ejectModalVisible} />
     </div>
   ) : (
-      <LoadingSpinner />
-    );
+    <LoadingSpinner />
+  );
 };
