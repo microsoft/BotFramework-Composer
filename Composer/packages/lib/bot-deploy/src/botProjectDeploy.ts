@@ -20,6 +20,7 @@ import * as rp from 'request-promise';
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import archiver = require('archiver');
+import { BotProjectRuntimeType } from './botProjectRuntimeType';
 
 const exec = util.promisify(require('child_process').exec);
 const { promisify } = require('util');
@@ -41,6 +42,7 @@ export class BotProjectDeploy {
   private dotnetProjectPath: string;
   private generatedFolder: string;
   private remoteBotPath: string;
+  private runtimeType: BotProjectRuntimeType;
   private logger: (string) => any;
 
   // Will be assigned by create or deploy
@@ -83,6 +85,9 @@ export class BotProjectDeploy {
 
     // path to the ready to deploy generated folder
     this.generatedFolder = config.generatedFolder ?? path.join(this.remoteBotPath, 'generated');
+
+    // Set the default value to CSHARP
+    this.runtimeType = config.runtimeType ?? BotProjectRuntimeType.CSHARP;
   }
 
   private getErrorMesssage(err) {
@@ -519,18 +524,20 @@ export class BotProjectDeploy {
     luisResource?: string
   ) {
     try {
-      // Check for existing deployment files
-      if (!fs.pathExistsSync(this.deployFilePath)) {
-        await this.botPrepareDeploy(this.deployFilePath);
+      // For Node Runtime, don't need to publish the assets, For Csharp runtime, need to compile and publish the assets to a folder
+      if (this.runtimeType === BotProjectRuntimeType.CSHARP) {
+        // Check for existing deployment files
+        if (!fs.pathExistsSync(this.deployFilePath)) {
+          await this.botPrepareDeploy(this.deployFilePath);
+        }
+
+        if (await fs.pathExists(this.zipPath)) {
+          await fs.remove(this.zipPath);
+        }
+
+        // dotnet publish
+        await this.dotnetPublish(this.publishFolder, this.projPath, botPath);
       }
-
-      if (await fs.pathExists(this.zipPath)) {
-        await fs.remove(this.zipPath);
-      }
-
-      // dotnet publish
-      await this.dotnetPublish(this.publishFolder, this.projPath, botPath);
-
       // LUIS build
       const settings = await fs.readJSON(this.settingsPath);
       const luisSettings = settings.luis;
