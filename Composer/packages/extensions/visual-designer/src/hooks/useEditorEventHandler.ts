@@ -228,6 +228,12 @@ export const useEditorEventHandler = () => {
     return handler(eventData);
   };
 
+  // HACK: use global handler before we solve iframe state sync problem
+  (window as any).copySelection = () => handleEditorEvent(NodeEventTypes.CopySelection);
+  (window as any).cutSelection = () => handleEditorEvent(NodeEventTypes.CutSelection);
+  (window as any).moveSelection = () => handleEditorEvent(NodeEventTypes.MoveSelection);
+  (window as any).deleteSelection = () => handleEditorEvent(NodeEventTypes.DeleteSelection);
+
   return {
     handleEditorEvent,
   };
