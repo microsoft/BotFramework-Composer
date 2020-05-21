@@ -18,6 +18,7 @@ import { moveCursor } from '../utils/cursorTracker';
 
 import { useSelection } from './useSelection';
 
+// TODO(ze): useEditorEvent api is almost a reducer, consider transforming it to a useReducer.
 export const useEditorEventApi = () => {
   const { shellApi, dialogId: path, data } = useShellApi();
   const {
