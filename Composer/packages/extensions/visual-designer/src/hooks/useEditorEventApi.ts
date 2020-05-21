@@ -10,10 +10,11 @@ import { designerCache } from '../store/DesignerCache';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
-import { MenuEventTypes } from '../constants/MenuTypes';
+import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
+import { moveCursor } from '../utils/cursorTracker';
 
 import { useSelection } from './useSelection';
 
@@ -32,7 +33,7 @@ export const useEditorEventApi = () => {
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { actionsContainLuIntent } = useActionApi(shellApi);
   const { focusedId, focusedEvent, clipboardActions, dialogFactory } = useContext(NodeRendererContext);
-  const { selectedIds, setSelectedIds } = useSelection();
+  const { selectedIds, setSelectedIds, selectableElements } = useSelection();
 
   const {
     onFocusSteps,
@@ -85,7 +86,16 @@ export const useEditorEventApi = () => {
         break;
       case NodeEventTypes.MoveCursor:
         handler = eventData => {
-          const { selected, focused, tab } = eventData;
+          const { command } = eventData;
+          const currentSelectedId = selectedIds[0] || focusedId || '';
+          const cursor = currentSelectedId
+            ? moveCursor(selectableElements, currentSelectedId, command)
+            : {
+                selected: `${focusedEvent}.actions[0]${MenuTypes.EdgeMenu}`,
+                focused: undefined,
+                tab: '',
+              };
+          const { focused, selected, tab } = cursor;
           setSelectedIds([selected as string]);
           focused && onFocusSteps([focused], tab);
           scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
@@ -144,6 +154,19 @@ export const useEditorEventApi = () => {
             onClipboardChange(cutActions);
           });
           announce(ScreenReaderMessage.ActionsCut);
+        };
+        break;
+      case NodeEventTypes.PasteSelection:
+        handler = () => {
+          const currentSelectedId = selectedIds[0];
+          if (currentSelectedId.endsWith('+')) {
+            const { arrayPath, arrayIndex } = DialogUtils.parseNodePath(currentSelectedId.slice(0, -1)) || {};
+            handleEditorEvent(NodeEventTypes.Insert, {
+              id: arrayPath,
+              position: arrayIndex,
+              $kind: MenuEventTypes.Paste,
+            });
+          }
         };
         break;
       case NodeEventTypes.MoveSelection:

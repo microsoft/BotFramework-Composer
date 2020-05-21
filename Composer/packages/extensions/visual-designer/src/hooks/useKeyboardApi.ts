@@ -1,22 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogUtils } from '@bfc/shared';
-import { useContext } from 'react';
-
 import { KeyboardPrimaryTypes, KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';
-import { moveCursor } from '../utils/cursorTracker';
-import { NodeRendererContext } from '../store/NodeRendererContext';
 
-import { useSelection } from './useSelection';
 import { useEditorEventApi } from './useEditorEventApi';
 
 export const useKeyboardApi = () => {
-  const { focusedEvent, focusedId } = useContext(NodeRendererContext);
   const { handleEditorEvent } = useEditorEventApi();
-  const { selectedIds, selectableElements } = useSelection();
 
   const handleKeyboardCommand = ({ area, command }) => {
     switch (area) {
@@ -32,29 +23,13 @@ export const useKeyboardApi = () => {
             handleEditorEvent(NodeEventTypes.CutSelection);
             break;
           case KeyboardCommandTypes.Node.Paste: {
-            const currentSelectedId = selectedIds[0];
-            if (currentSelectedId.endsWith('+')) {
-              const { arrayPath, arrayIndex } = DialogUtils.parseNodePath(currentSelectedId.slice(0, -1)) || {};
-              handleEditorEvent(NodeEventTypes.Insert, {
-                id: arrayPath,
-                position: arrayIndex,
-                $kind: MenuEventTypes.Paste,
-              });
-            }
+            handleEditorEvent(NodeEventTypes.PasteSelection);
             break;
           }
         }
         break;
       case KeyboardPrimaryTypes.Cursor: {
-        const currentSelectedId = selectedIds[0] || focusedId || '';
-        const cursor = currentSelectedId
-          ? moveCursor(selectableElements, currentSelectedId, command)
-          : {
-              selected: `${focusedEvent}.actions[0]${MenuTypes.EdgeMenu}`,
-              focused: undefined,
-              tab: '',
-            };
-        handleEditorEvent(NodeEventTypes.MoveCursor, cursor);
+        handleEditorEvent(NodeEventTypes.MoveCursor, { command });
         break;
       }
       case KeyboardPrimaryTypes.Operation: {
