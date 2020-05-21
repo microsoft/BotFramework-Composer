@@ -152,11 +152,8 @@ function generateErrorMessage(invalidLuFile: LuFile[]) {
 }
 
 function isLuFileEmpty(file: LuFile) {
-  const { content, intents } = file;
-  if (content && intents?.length) {
-    return false;
-  }
-  return true;
+  const { content, intents, importSections } = file;
+  return !(content && (intents?.length || importSections.length));
 }
 
 export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
