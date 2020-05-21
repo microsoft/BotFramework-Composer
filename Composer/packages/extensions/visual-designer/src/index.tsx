@@ -106,7 +106,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     divRef.current?.focus();
   }, [focusedEvent]);
 
-  const { selection, selectedIds, getNodeIndex } = useSelectionEffect();
+  const { selection, selectedIds, selectableElements, setSelectedIds, getNodeIndex } = useSelectionEffect();
   const { handleEditorEvent } = useEditorEventApi();
 
   return (
@@ -120,7 +120,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
             }}
           >
             <div data-testid="visualdesigner-container" css={styles}>
-              <SelectionContext.Provider value={{ selectedIds, getNodeIndex }}>
+              <SelectionContext.Provider value={{ selectableElements, selectedIds, setSelectedIds, getNodeIndex }}>
                 <KeyboardZone
                   onCommand={command => {
                     const editorEvent = mapKeyboardCommandToEditorEvent(command);

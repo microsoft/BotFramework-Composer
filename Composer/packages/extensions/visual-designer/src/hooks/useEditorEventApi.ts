@@ -15,8 +15,7 @@ import { normalizeSelection } from '../utils/normalizeSelection';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { moveCursor } from '../utils/cursorTracker';
-
-import { useSelectionEffect } from './useSelectionEffect';
+import { SelectionContext } from '../store/SelectionContext';
 
 // TODO(ze): useEditorEvent api is almost a reducer, consider transforming it to a useReducer.
 export const useEditorEventApi = () => {
@@ -34,7 +33,7 @@ export const useEditorEventApi = () => {
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { actionsContainLuIntent } = useActionApi(shellApi);
   const { focusedId, focusedEvent, clipboardActions, dialogFactory } = useContext(NodeRendererContext);
-  const { selectedIds, setSelectedIds, selectableElements } = useSelectionEffect();
+  const { selectedIds, setSelectedIds, selectableElements } = useContext(SelectionContext);
 
   const {
     onFocusSteps,
