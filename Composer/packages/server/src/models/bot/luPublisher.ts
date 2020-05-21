@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 import { FileInfo } from '@bfc/shared';
+// import * as rp from 'request-promise';
+import axios, { AxiosRequestConfig } from 'axios';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -167,7 +169,24 @@ export class LuPublisher {
       loadResult.settings
     );
     await this.builder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
+    // authoring luis application, make endpointKey can query the application
+    await this._auth(config.authoringKey, config.region);
   }
+
+  private _auth = async (authoringKey: string, region: string) => {
+    try {
+      const luisEndpoint = `https://${region}.api.cognitive.microsoft.com`;
+      // Assign a LUIS key to the endpoint of each app
+      const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
+      const options = {
+        headers: { Authorization: `Bearer ${token}`, 'Ocp-Apim-Subscription-Key': authoringKey },
+      } as AxiosRequestConfig;
+      const response = await axios.get(getAccountUri, options);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   //delete files in generated folder
   private async _deleteDir(path: string) {

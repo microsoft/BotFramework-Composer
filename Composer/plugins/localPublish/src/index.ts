@@ -289,14 +289,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push(config.MicrosoftAppPassword);
     }
     if (config.luis) {
-      if (config.luis.authoringKey) {
-        configList.push('--luis:endpointKey');
-        configList.push(config.luis.authoringKey);
-      }
-      if (config.luis.authoringRegion) {
-        configList.push('--luis:endpoint');
-        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
-      }
+      configList.push('--luis:endpointKey');
+      configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
     return configList;
   };
