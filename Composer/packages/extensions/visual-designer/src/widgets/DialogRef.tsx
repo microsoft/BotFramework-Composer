@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import get from 'lodash/get';
 import { WidgetContainerProps, WidgetComponent } from '@bfc/extension';
 import { LinkBtn } from '@bfc/ui-shared';
-import { useEffect, useRef, useContext } from 'react';
+import { useEffect, useContext, useRef } from 'react';
 import { ILink } from 'office-ui-fabric-react/lib/Link';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';

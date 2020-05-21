@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
-import { useContext } from 'react';
 
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';

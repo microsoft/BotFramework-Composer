@@ -10,11 +10,11 @@ import { DefinitionSummary } from '@bfc/shared';
 
 import { EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
+import { SelectionContext } from '../../store/SelectionContext';
 import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { ObiColors } from '../../constants/ElementColors';
-import { SelectionContext } from '../../store/SelectionContext';
 
 import { IconMenu } from './IconMenu';
 import { createActionMenu } from './createSchemaMenu';
