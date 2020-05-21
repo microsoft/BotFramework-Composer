@@ -11,14 +11,14 @@ import { NodeRendererContext } from '../store/NodeRendererContext';
 import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { useKeyboardApi } from '../hooks/useKeyboardApi';
 import { useSelectionApi } from '../hooks/useSelectionApi';
-import { useEditorEventApi } from '../hooks/useEditorEventApi';
+import { useEditorEventHandler } from '../hooks/useEditorEventHandler';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
 export const ObiEditor: FC<ObiEditorProps> = ({ path, data }): JSX.Element | null => {
   const { focusedEvent } = useContext(NodeRendererContext);
   const { selection } = useSelectionApi();
-  const { handleEditorEvent } = useEditorEventApi();
+  const { handleEditorEvent } = useEditorEventHandler();
   const { handleKeyboardCommand } = useKeyboardApi();
   const divRef = useRef<HTMLDivElement>(null);
 

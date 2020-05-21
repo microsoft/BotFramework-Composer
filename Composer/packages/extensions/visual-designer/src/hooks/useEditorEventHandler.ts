@@ -17,7 +17,7 @@ import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { useSelectionApi } from './useSelectionApi';
 
-export const useEditorEventApi = () => {
+export const useEditorEventHandler = () => {
   const { shellApi, dialogId: path, data } = useShellApi();
   const {
     insertAction,

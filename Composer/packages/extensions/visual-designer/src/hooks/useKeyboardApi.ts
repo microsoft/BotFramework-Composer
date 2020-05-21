@@ -11,11 +11,11 @@ import { moveCursor } from '../utils/cursorTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 
 import { useSelectionApi } from './useSelectionApi';
-import { useEditorEventApi } from './useEditorEventApi';
+import { useEditorEventHandler } from './useEditorEventHandler';
 
 export const useKeyboardApi = () => {
   const { focusedEvent, focusedId } = useContext(NodeRendererContext);
-  const { handleEditorEvent } = useEditorEventApi();
+  const { handleEditorEvent } = useEditorEventHandler();
   const { selectedIds, selectableElements } = useSelectionApi();
 
   const handleKeyboardCommand = ({ area, command }) => {
