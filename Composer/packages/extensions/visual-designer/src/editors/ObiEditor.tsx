@@ -12,12 +12,13 @@ import { KeyboardZone } from '../components/lib/KeyboardZone';
 import { useKeyboardApi } from '../hooks/useKeyboardApi';
 import { useSelectionApi } from '../hooks/useSelectionApi';
 import { useEditorEventHandler } from '../hooks/useEditorEventHandler';
+import { SelectionContext } from '../store/SelectionContext';
 
 import { AdaptiveDialogEditor } from './AdaptiveDialogEditor';
 
 export const ObiEditor: FC<ObiEditorProps> = ({ path, data }): JSX.Element | null => {
   const { focusedEvent } = useContext(NodeRendererContext);
-  const { selection } = useSelectionApi();
+  const { selection, selectedIds, getNodeIndex } = useSelectionApi();
   const { handleEditorEvent } = useEditorEventHandler();
   const { handleKeyboardCommand } = useKeyboardApi();
   const divRef = useRef<HTMLDivElement>(null);
@@ -35,33 +36,35 @@ export const ObiEditor: FC<ObiEditorProps> = ({ path, data }): JSX.Element | nul
 
   if (!data) return null;
   return (
-    <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
-      <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
-        <div
-          className="obi-editor-container"
-          data-testid="obi-editor-container"
-          css={{
-            width: '100%',
-            height: '100%',
-            padding: '48px 20px',
-            boxSizing: 'border-box',
-          }}
-          onClick={e => {
-            e.stopPropagation();
-            handleEditorEvent(NodeEventTypes.Focus, { id: '' });
-          }}
-        >
-          <AdaptiveDialogEditor
-            id={path}
-            data={data}
-            onEvent={(eventName, eventData) => {
-              divRef.current?.focus({ preventScroll: true });
-              handleEditorEvent(eventName, eventData);
+    <SelectionContext.Provider value={{ selectedIds, getNodeIndex }}>
+      <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
+        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+          <div
+            className="obi-editor-container"
+            data-testid="obi-editor-container"
+            css={{
+              width: '100%',
+              height: '100%',
+              padding: '48px 20px',
+              boxSizing: 'border-box',
             }}
-          />
-        </div>
-      </MarqueeSelection>
-    </KeyboardZone>
+            onClick={e => {
+              e.stopPropagation();
+              handleEditorEvent(NodeEventTypes.Focus, { id: '' });
+            }}
+          >
+            <AdaptiveDialogEditor
+              id={path}
+              data={data}
+              onEvent={(eventName, eventData) => {
+                divRef.current?.focus({ preventScroll: true });
+                handleEditorEvent(eventName, eventData);
+              }}
+            />
+          </div>
+        </MarqueeSelection>
+      </KeyboardZone>
+    </SelectionContext.Provider>
   );
 };
 

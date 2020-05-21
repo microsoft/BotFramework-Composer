@@ -14,7 +14,7 @@ import { SelfHostContext } from '../../store/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { ObiColors } from '../../constants/ElementColors';
-import { useSelectionApi } from '../../hooks/useSelectionApi';
+import { SelectionContext } from '../../store/SelectionContext';
 
 import { IconMenu } from './IconMenu';
 import { createActionMenu } from './createSchemaMenu';
@@ -28,7 +28,7 @@ interface EdgeMenuProps {
 export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, ...rest }) => {
   const { clipboardActions, customSchemas } = useContext(NodeRendererContext);
   const selfHosted = useContext(SelfHostContext);
-  const { selectedIds } = useSelectionApi();
+  const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.EdgeMenu}`);
   const declareElementAttributes = (id: string) => {
     return {
