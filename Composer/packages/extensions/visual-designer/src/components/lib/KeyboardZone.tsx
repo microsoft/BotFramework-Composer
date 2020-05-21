@@ -25,8 +25,13 @@ const KeyNameByModifierAttr = {
 
 const overriddenKeyCodes = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
+interface KeyboardCommand {
+  area: string;
+  command: string;
+}
+
 interface KeyboardZoneProps {
-  onCommand: (action, e: KeyboardEvent) => object | void;
+  onCommand: (action: KeyboardCommand, e: KeyboardEvent) => object | void;
   children: React.ReactChild;
 }
 

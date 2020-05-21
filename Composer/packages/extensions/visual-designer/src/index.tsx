@@ -20,7 +20,7 @@ import { getCustomSchema } from './utils/getCustomSchema';
 import { defaultFlowSchema } from './schema/defaultFlowSchema';
 import { SelectionContext } from './store/SelectionContext';
 import { KeyboardZone } from './components/lib/KeyboardZone';
-import { useKeyboardApi } from './hooks/useKeyboardApi';
+import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent.ts';
 import { useSelection } from './hooks/useSelection';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
 import { NodeEventTypes } from './constants/NodeEventTypes';
@@ -108,7 +108,6 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
 
   const { selection, selectedIds, getNodeIndex } = useSelection();
   const { handleEditorEvent } = useEditorEventApi();
-  const { handleKeyboardCommand } = useKeyboardApi();
 
   return (
     <CacheProvider value={emotionCache}>
@@ -122,7 +121,13 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
           >
             <div data-testid="visualdesigner-container" css={styles}>
               <SelectionContext.Provider value={{ selectedIds, getNodeIndex }}>
-                <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
+                <KeyboardZone
+                  onCommand={command => {
+                    const editorEvent = mapKeyboardCommandToEditorEvent(command);
+                    editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
+                  }}
+                  ref={divRef}
+                >
                   <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
                     <div
                       className="visual-editor-container"
