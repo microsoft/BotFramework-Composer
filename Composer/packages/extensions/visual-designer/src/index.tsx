@@ -49,7 +49,7 @@ export interface VisualDesignerProps {
   schema?: JSONSchema7;
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
-  const { plugins, ...shellData } = useShellApi();
+  const { shellApi, plugins, ...shellData } = useShellApi();
   const {
     dialogId,
     focusedEvent,
@@ -106,8 +106,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     divRef.current?.focus();
   }, [focusedEvent]);
 
-  const { selection, selectedIds, selectableElements, setSelectedIds, getNodeIndex } = useSelectionEffect();
-  const { handleEditorEvent } = useEditorEventApi();
+  const { selection, ...selectionContext } = useSelectionEffect({ data, nodeContext }, shellApi);
+  const { handleEditorEvent } = useEditorEventApi({ path: dialogId, data, nodeContext, selectionContext }, shellApi);
 
   return (
     <CacheProvider value={emotionCache}>
@@ -120,7 +120,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
             }}
           >
             <div data-testid="visualdesigner-container" css={styles}>
-              <SelectionContext.Provider value={{ selectableElements, selectedIds, setSelectedIds, getNodeIndex }}>
+              <SelectionContext.Provider value={selectionContext}>
                 <KeyboardZone
                   onCommand={command => {
                     const editorEvent = mapKeyboardCommandToEditorEvent(command);

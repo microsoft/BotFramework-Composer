@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Selection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { useShellApi } from '@bfc/extension';
+import { ShellApi } from '@bfc/shared';
 
 import { querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
-import { NodeRendererContext } from '../store/NodeRendererContext';
+import { NodeRendererContextValue } from '../store/NodeRendererContext';
 
-export const useSelectionEffect = () => {
-  const { shellApi, data } = useShellApi();
-  const { focusedEvent, focusedId } = useContext(NodeRendererContext);
+export const useSelectionEffect = (state: { data: any; nodeContext: NodeRendererContextValue }, shellApi: ShellApi) => {
+  const { data, nodeContext } = state;
+  const { focusedEvent, focusedId } = nodeContext;
   const { onSelect, onFocusSteps } = shellApi;
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

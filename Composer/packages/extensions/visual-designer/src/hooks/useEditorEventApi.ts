@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogUtils, SDKKinds } from '@bfc/shared';
+import { DialogUtils, SDKKinds, ShellApi } from '@bfc/shared';
 import get from 'lodash/get';
-import { useDialogEditApi, useShellApi, useDialogApi, useActionApi } from '@bfc/extension';
-import { useContext } from 'react';
+import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 
 import { designerCache } from '../store/DesignerCache';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
@@ -12,14 +11,15 @@ import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
 import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';
 import { normalizeSelection } from '../utils/normalizeSelection';
-import { AttrNames } from '../constants/ElementAttributes';
-import { NodeRendererContext } from '../store/NodeRendererContext';
 import { moveCursor } from '../utils/cursorTracker';
-import { SelectionContext } from '../store/SelectionContext';
+import { AttrNames } from '../constants/ElementAttributes';
+import { NodeRendererContextValue } from '../store/NodeRendererContext';
+import { SelectionContextData } from '../store/SelectionContext';
 
-// TODO(ze): useEditorEvent api is almost a reducer, consider transforming it to a useReducer.
-export const useEditorEventApi = () => {
-  const { shellApi, dialogId: path, data } = useShellApi();
+export const useEditorEventApi = (
+  state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },
+  shellApi: ShellApi
+) => {
   const {
     insertAction,
     insertActions,
@@ -32,8 +32,9 @@ export const useEditorEventApi = () => {
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { actionsContainLuIntent } = useActionApi(shellApi);
-  const { focusedId, focusedEvent, clipboardActions, dialogFactory } = useContext(NodeRendererContext);
-  const { selectedIds, setSelectedIds, selectableElements } = useContext(SelectionContext);
+  const { path, data, nodeContext, selectionContext } = state;
+  const { focusedId, focusedEvent, clipboardActions, dialogFactory } = nodeContext;
+  const { selectedIds, setSelectedIds, selectableElements } = selectionContext;
 
   const {
     onFocusSteps,
