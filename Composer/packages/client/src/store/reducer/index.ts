@@ -227,6 +227,36 @@ const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
   return state;
 };
 
+const createFormDialogFile: ReducerFunc = (state, { id, content }) => {
+  const { formDialogFiles } = state;
+  id = `${id}`;
+  if (formDialogFiles.find(qna => qna.id === id)) {
+    state.error = {
+      message: `${id} ${formatMessage(`schema file already exist`)}`,
+      summary: formatMessage('Creation Rejected'),
+    };
+    return state;
+  }
+
+  const formDialogFile = { id, content };
+  state.formDialogFiles.push(formDialogFile);
+  return state;
+};
+const removeFormDialogFile: ReducerFunc = (state, { id }) => {
+  state.formDialogFiles = state.formDialogFiles.filter(file => getBaseName(file.id) !== id && file.id !== id);
+  return state;
+};
+
+const updateFormDialogFile: ReducerFunc = (state, { id, content }) => {
+  state.formDialogFiles = state.formDialogFiles.map(formDialogFile => {
+    if (formDialogFile.id === id) {
+      return { ...formDialogFile, content };
+    }
+    return formDialogFile;
+  });
+
+  return state;
+};
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map(dialog => {
     if (dialog.id === id) {
@@ -268,6 +298,9 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs.push(dialog);
   state = createLgFile(state, { id, content: '' });
   state = createLuFile(state, { id, content: '' });
+  if (dialog.content && dialog.content.isFormDialog && dialog.content.formDialogType === 'sandwich') {
+    state = createFormDialogFile(state, { id, content: '' });
+  }
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
   delete state.onCreateDialogComplete;
@@ -665,6 +698,9 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LU]: updateLuTemplate,
   [ActionTypes.CREATE_LU]: createLuFile,
   [ActionTypes.REMOVE_LU]: removeLuFile,
+  [ActionTypes.UPDATE_FORMDIALOG]: updateFormDialogFile,
+  [ActionTypes.CREATE_FORMDIALOG]: createFormDialogFile,
+  [ActionTypes.REMOVE_FORMDIALOG]: removeFormDialogFile,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: publishLuisSuccess,
   [ActionTypes.PUBLISH_LU_FAILED]: publishLuisFailure,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,

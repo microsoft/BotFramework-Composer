@@ -83,6 +83,11 @@ export interface LuFile {
   intents: LuIntentSection[];
   [key: string]: any;
 }
+export interface FormDialogFile {
+  id: string;
+  content: string;
+  [key: string]: any;
+}
 export interface CodeRange {
   startLineNumber: number;
   endLineNumber: number;

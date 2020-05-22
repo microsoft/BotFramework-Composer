@@ -418,7 +418,7 @@ export class BotProject {
     const LOCALE = this.getLocale(id) || this.locale;
     const folder = BotStructureTemplate.dialogs.folder;
     let dir = BotStructureTemplate.folder;
-    if (fileType === '.dialog') {
+    if (fileType === '.dialog' || fileType === '.schema') {
       dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.entry)), {
         DIALOGNAME,
         LOCALE,
@@ -522,7 +522,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json', '**/*.schema'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

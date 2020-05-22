@@ -13,7 +13,6 @@ import React, { useState, Fragment, useEffect } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { DialogCreationCopy } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
@@ -28,7 +27,6 @@ interface FormData {
   name: string;
   description: string;
   schemaUrl: string;
-  isFormDialog: number;
 }
 
 interface FormDataError {
@@ -70,18 +68,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
     return defaultName;
   };
 
-  const formDialogOptions: IDropdownOption[] = [
-    {
-      key: 0,
-      text: 'false',
-    },
-    {
-      key: 1,
-      text: 'true',
-    },
-  ];
-
-  const initalFormData: FormData = { name: '', description: '', schemaUrl: '', isFormDialog: 0 };
+  const initalFormData: FormData = { name: '', description: '', schemaUrl: '' };
   const [formData, setFormData] = useState(initalFormData);
   const [formDataErrors, setFormDataErrors] = useState(initialFormDataError);
   const [disable, setDisable] = useState(false);
@@ -137,7 +124,7 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
   });
 
   useEffect(() => {
-    const formData: FormData = { name: getDefaultName(), description: '', schemaUrl: '', isFormDialog: 0 };
+    const formData: FormData = { name: getDefaultName(), description: '', schemaUrl: '' };
     setFormData(formData);
     if (props.location && props.location.search) {
       const updatedFormData = {
@@ -196,15 +183,6 @@ const DefineConversation: React.FC<DefineConversationProps> = props => {
                 data-testid="NewDialogName"
                 required
                 autoFocus
-              />
-            </StackItem>
-            <StackItem grow={0} styles={halfstack}>
-              <Dropdown
-                label={formatMessage('Is form dialog?')}
-                options={formDialogOptions}
-                onChange={updateForm('isFormDialog')}
-                data-testid={'isFormDialogDropDown'}
-                defaultSelectedKey={formData.isFormDialog}
               />
             </StackItem>
             <StackItem grow={0} styles={halfstack}>

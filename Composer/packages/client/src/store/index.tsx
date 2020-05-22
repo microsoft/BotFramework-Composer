@@ -4,7 +4,7 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
-import { LgFile, LuFile, importResolverGenerator, UserSettings } from '@bfc/shared';
+import { LgFile, LuFile, FormDialogFile, importResolverGenerator, UserSettings } from '@bfc/shared';
 import merge from 'lodash/merge';
 
 import { prepareAxios } from '../utils/auth';
@@ -78,6 +78,7 @@ export const initialState: State = {
   lgFiles: [],
   schemas: {},
   luFiles: [],
+  formDialogFiles: [],
   skills: [],
   skillManifests: [],
   actionsSeed: [],
@@ -132,6 +133,7 @@ export interface StoreContextValue {
     lgImportresolver: ImportResolverDelegate;
     lgFileResolver: (id: string) => LgFile | undefined;
     luFileResolver: (id: string) => LuFile | undefined;
+    formDialogFileResolver: (id: string) => FormDialogFile | undefined;
   };
 }
 
@@ -143,6 +145,7 @@ export const StoreContext = React.createContext<StoreContextValue>({
     lgImportresolver: defaultFileResolver,
     lgFileResolver: () => undefined,
     luFileResolver: () => undefined,
+    formDialogFileResolver: () => undefined,
   },
 });
 
@@ -198,6 +201,11 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
         const { locale, luFiles } = state;
         const fileId = id.includes('.') ? id : `${id}.${locale}`;
         return luFiles.find(({ id }) => id === fileId);
+      },
+      formDialogFileResolver: function(fileId: string) {
+        const state = getState();
+        const { formDialogFiles } = state;
+        return formDialogFiles.find(({ id }) => id === fileId);
       },
     },
   };

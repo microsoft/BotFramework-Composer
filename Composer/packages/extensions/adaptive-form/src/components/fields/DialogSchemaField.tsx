@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useState } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -13,7 +13,6 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
   const {
     id,
     value = '',
-    onChange,
     disabled,
     label,
     description,
@@ -26,8 +25,12 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
     uiOptions,
     required,
   } = props;
-  const { currentDialog } = useShellApi();
-  const isFormDialog = currentDialog.content.isFormDialog;
+  const { currentDialog, shellApi, formDialogFiles } = useShellApi();
+  const { isFormDialog, formDialogType } = currentDialog.content;
+  const formDialogFile = formDialogFiles.find(file => file.id === currentDialog.id);
+  const [formDialogContent, setFormDialogContent] = useState<string | undefined>(
+    formDialogFile && formDialogFile.content
+  );
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     if (typeof onFocus === 'function') {
       e.stopPropagation();
@@ -43,10 +46,11 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
   };
 
   const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-    onChange(newValue);
+    setFormDialogContent(newValue);
+    formDialogFile && shellApi.updateFormDialogContent(formDialogFile.id, newValue || '');
   };
 
-  return isFormDialog ? (
+  return isFormDialog && formDialogType === 'sandwich' ? (
     <>
       <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
       <TextField
@@ -72,7 +76,7 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
           root: { width: '100%' },
           errorMessage: { display: 'none' },
         }}
-        value={value}
+        value={formDialogContent}
         multiline
         rows={6}
         onBlur={handleBlur}

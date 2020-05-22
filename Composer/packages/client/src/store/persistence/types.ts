@@ -12,6 +12,7 @@ export enum FileExtensions {
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
+  FormDialog = '.schema',
   Setting = 'appsettings.json',
 }
 

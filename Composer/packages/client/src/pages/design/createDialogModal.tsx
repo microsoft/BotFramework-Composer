@@ -20,6 +20,7 @@ interface DialogFormData {
   name: string;
   description: string;
   isFormDialog: number;
+  formDialogType: string;
 }
 
 interface CreateDialogModalProps {
@@ -34,7 +35,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;
-  const initialFormData: DialogFormData = { name: '', description: '', isFormDialog: 0 };
+  const initialFormData: DialogFormData = { name: '', description: '', isFormDialog: 0, formDialogType: 'sandwich' };
   const [formData, setFormData] = useState(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
   const formDialogOptions: IDropdownOption[] = [
@@ -45,6 +46,16 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
     {
       key: 1,
       text: 'true',
+    },
+  ];
+  const formDialogTypeOptions: IDropdownOption[] = [
+    {
+      key: 'sandwich',
+      text: 'Sandwich',
+    },
+    {
+      key: 'swagger',
+      text: 'Swagger',
     },
   ];
   const updateForm = (field: string) => (e: FormEvent, newValue: string | IDropdownOption | undefined) => {
@@ -116,6 +127,17 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
               defaultSelectedKey={formData.isFormDialog}
             />
           </StackItem>
+          {formData.isFormDialog && (
+            <StackItem grow={0} styles={wizardStyles.halfstack}>
+              <Dropdown
+                label={formatMessage('Is form dialog?')}
+                options={formDialogTypeOptions}
+                onChange={updateForm('dialogType')}
+                data-testid={'formDialogTypeDropDown'}
+                defaultSelectedKey={formData.formDialogType}
+              />
+            </StackItem>
+          )}
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               styles={description}

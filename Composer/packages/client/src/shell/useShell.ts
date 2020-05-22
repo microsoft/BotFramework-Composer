@@ -21,7 +21,8 @@ const FORM_EDITOR = 'PropertyEditor';
 type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
-  const { state, actions } = useContext(StoreContext);
+  const { state, actions, resolvers } = useContext(StoreContext);
+  const { formDialogFileResolver } = resolvers;
   const dialogMapRef = useRef({});
   const {
     botName,
@@ -32,6 +33,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     lgFiles,
     locale,
     luFiles,
+    formDialogFiles,
     projectId,
     schemas,
     userSettings,
@@ -40,6 +42,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const lgApi = useLgApi();
   const luApi = useLuApi();
   const updateDialog = actions.updateDialog;
+  const updateFormDialogFile = actions.updateFormDialogFile;
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
@@ -55,6 +58,13 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
     return await updateDialog({ id, content: newDialog.content });
+  }
+
+  async function updateFormDialogContentHandler(id, content) {
+    const file = formDialogFileResolver(id);
+    if (!file) throw new Error(`form dialog schema file ${id} not found`);
+
+    return await updateFormDialogFile({ id, projectId, content });
   }
 
   function cleanData() {
@@ -149,6 +159,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     ...lgApi,
     ...luApi,
     updateRegExIntent: updateRegExIntentHandler,
+    updateFormDialogContent: updateFormDialogContentHandler,
     navTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
@@ -195,6 +206,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         schemas,
         lgFiles,
         luFiles,
+        formDialogFiles,
         currentDialog,
         userSettings,
         designerId: get(editorData, '$designer.id'),

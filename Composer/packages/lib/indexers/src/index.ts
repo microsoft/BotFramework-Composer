@@ -5,6 +5,7 @@ import { FileInfo, importResolverGenerator } from '@bfc/shared';
 import { dialogIndexer } from './dialogIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
+import { formDialogIndexer } from './formDialogIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
@@ -40,6 +41,7 @@ class Indexer {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName, schema),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
+      formDialogFiles: formDialogIndexer.index(result[FileExtensions.FormDialog]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
     };
   }
@@ -50,5 +52,6 @@ export const indexer = new Indexer();
 export * from './dialogIndexer';
 export * from './lgIndexer';
 export * from './luIndexer';
+export * from './formDialogIndexer';
 export * from './dialogUtils';
 export * from './utils';
