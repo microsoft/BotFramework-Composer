@@ -4,7 +4,7 @@
 import { css } from '@emotion/core';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
-export const optionIcon = checked => css`
+export const optionIcon = (checked) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
@@ -29,7 +29,7 @@ export const listHeader = css`
   margin-bottom: 0;
 `;
 
-export const rowDetails = disabled => {
+export const rowDetails = (disabled) => {
   return {
     root: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,
@@ -47,7 +47,7 @@ export const rowDetails = disabled => {
   };
 };
 
-export const rowTitle = disabled => {
+export const rowTitle = (disabled) => {
   return {
     cellTitle: {
       color: disabled ? NeutralColors.gray80 : NeutralColors.black,

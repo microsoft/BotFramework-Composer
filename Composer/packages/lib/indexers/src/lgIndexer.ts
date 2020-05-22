@@ -26,7 +26,7 @@ function parse(
   importResolver: ImportResolverDelegate = defaultFileResolver
 ): { templates: LgTemplate[]; diagnostics: Diagnostic[] } {
   const lgFile = Templates.parseText(content, id, importResolver);
-  const templates = lgFile.toArray().map(t => {
+  const templates = lgFile.toArray().map((t) => {
     return {
       name: t.name,
       body: t.body,

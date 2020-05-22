@@ -67,13 +67,13 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
   const { foreachNode, loopActionsNode, loopBeginNode, loopEndNode } = nodeMap;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(foreachNode.data, boundary);
               updateNodeBoundary(ForeachNodes.Foreach, boundary);
             }}
@@ -85,16 +85,16 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
       <OffsetContainer offset={loopActionsNode.offset}>
         <StepGroup
           key={loopActionsNode.id}
-          id={loopActionsNode.id}
           data={loopActionsNode.data}
+          id={loopActionsNode.id}
           onEvent={onEvent}
-          onResize={size => {
+          onResize={(size) => {
             updateNodeBoundary(ForeachNodes.LoopActions, size);
           }}
         />
       </OffsetContainer>
       {[loopBeginNode, loopEndNode]
-        .filter(x => !!x)
+        .filter((x) => !!x)
         .map((x, index) => (
           <OffsetContainer key={`${id}/loopicon-${index}/offset`} offset={x.offset}>
             <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />

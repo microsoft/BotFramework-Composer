@@ -23,7 +23,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
   } = props;
 
   const options: IDropdownOption[] = useMemo(() => {
-    const opts = (enumOptions ?? []).map(o => ({
+    const opts = (enumOptions ?? []).map((o) => ({
       key: o?.toString(),
       text: o?.toString(),
     }));
@@ -46,8 +46,9 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <Dropdown
+        ariaLabel={label || formatMessage('selection field')}
         errorMessage={error as string}
         id={id}
         options={options}
@@ -59,7 +60,6 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
         onBlur={() => onBlur && onBlur(id, value)}
         onChange={handleChange}
         onFocus={() => onFocus && onFocus(id, value)}
-        ariaLabel={label || formatMessage('selection field')}
       />
     </>
   );

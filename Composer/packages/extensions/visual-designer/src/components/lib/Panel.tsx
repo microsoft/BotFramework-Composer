@@ -24,12 +24,12 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
       { condition: window.matchMedia('(max-width: 679px)'), length: PanelSize.minWidth },
     ];
 
-    PanelWidthList.forEach(panelWidth => {
+    PanelWidthList.forEach((panelWidth) => {
       const query = panelWidth.condition;
       if (query.matches) {
         setWidth(panelWidth.length);
       }
-      panelWidth.condition.addListener(e => {
+      panelWidth.condition.addListener((e) => {
         if (e.matches) {
           setWidth(panelWidth.length);
         }
@@ -37,8 +37,8 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
     });
 
     return () => {
-      PanelWidthList.forEach(panelWidth => {
-        panelWidth.condition.removeListener(e => {
+      PanelWidthList.forEach((panelWidth) => {
+        panelWidth.condition.removeListener((e) => {
           if (e.matches) {
             setWidth(panelWidth.length);
           }
@@ -71,17 +71,16 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
           {title}
         </div>
         <IconButton
-          iconProps={{ iconName: 'PageRight' }}
           css={{
             transform: collapsed ? 'rotate(270deg)' : 'rotate(90deg)',
             marginRight: '-15px',
             transition: 'transform 0.2s linear',
           }}
+          iconProps={{ iconName: 'PageRight' }}
           onClick={collapseFuc}
         />
       </div>
       <div
-        onClick={onClickContent}
         css={{
           border: '1px solid #656565',
           boxSizing: 'border-box',
@@ -92,6 +91,7 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
           margin: '0 auto',
           position: 'relative',
         }}
+        onClick={onClickContent}
       >
         {collapsed ? <div>{collapsedItems}</div> : <div>{children}</div>}
         <div>{addMenu}</div>

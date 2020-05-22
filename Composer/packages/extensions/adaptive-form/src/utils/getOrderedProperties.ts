@@ -16,7 +16,7 @@ export function getOrderedProperties(
   const { hidden: hidden, order: order = ['*'] } = cloneDeep(uiOptions);
 
   const hiddenFieldSet = new Set(typeof hidden === 'function' ? hidden(data) : hidden || []);
-  globalHiddenProperties.forEach(f => hiddenFieldSet.add(f));
+  globalHiddenProperties.forEach((f) => hiddenFieldSet.add(f));
 
   const uiOrder = typeof order === 'function' ? order(data) : order || [];
   const orderedFieldSet = new Set<string>();
@@ -63,7 +63,7 @@ export function getOrderedProperties(
     throw new Error(`Error in ui schema for ${schema.title}: ${errorMsg}\n${JSON.stringify(uiOptions, null, 2)}`);
   }
 
-  const restFields = Object.keys(schema.properties || {}).filter(p => {
+  const restFields = Object.keys(schema.properties || {}).filter((p) => {
     return !orderedFieldSet.has(p) && !hiddenFieldSet.has(p) && !p.startsWith('$');
   });
 

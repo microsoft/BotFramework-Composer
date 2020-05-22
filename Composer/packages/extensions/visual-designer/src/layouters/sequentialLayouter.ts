@@ -17,7 +17,7 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
   }
 
   const box = calculateSequenceBoundary(
-    nodes.map(x => x.boundary),
+    nodes.map((x) => x.boundary),
     withHeadEdge,
     withTrailingEdge
   );
@@ -43,10 +43,10 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
   }
 
   if (withHeadEdge) {
-    nodes.forEach(node => {
+    nodes.forEach((node) => {
       node.offset.y += ExtraEdgeLength;
     });
-    edges.forEach(edge => {
+    edges.forEach((edge) => {
       edge.y += ExtraEdgeLength;
     });
     edges.unshift({

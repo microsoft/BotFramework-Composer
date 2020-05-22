@@ -15,7 +15,7 @@ import {
   usePluginConfig,
 } from '@bfc/adaptive-form';
 
-export const SkillEndpointField: React.FC<FieldProps> = props => {
+export const SkillEndpointField: React.FC<FieldProps> = (props) => {
   const { depth, schema, uiOptions: baseUIOptions, value, onChange } = props;
   const pluginConfig = usePluginConfig();
 
@@ -40,10 +40,10 @@ export const SkillEndpointField: React.FC<FieldProps> = props => {
     <div css={schemaField.container(depth)}>
       <SelectField
         {...props}
-        value={deserializedValue}
         description={description}
         label={label}
         placeholder={placeholder}
+        value={deserializedValue}
         onChange={handleChange}
       />
     </div>

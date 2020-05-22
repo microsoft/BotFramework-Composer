@@ -89,12 +89,12 @@ export class LocalDiskStorage implements IFileStorage {
       path.format({ dir: `${source}/language-understanding/` }),
       path.format({ dir: `${source}/language-generation/` }),
       path.format({ dir: `${source}/settings/` }),
-    ].forEach(directory => {
+    ].forEach((directory) => {
       archive.directory(directory, directory.split(source)[1]);
     });
 
     const files = await glob('*.dialog', { cwd: source, dot: true });
-    files.forEach(file => {
+    files.forEach((file) => {
       archive.file(path.format({ dir: `${source}/`, base: `${file}` }), { name: path.basename(file) });
     });
 

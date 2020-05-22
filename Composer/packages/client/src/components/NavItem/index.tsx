@@ -27,7 +27,7 @@ export interface INavItemProps {
   disabled: boolean;
 }
 
-export const NavItem: React.FC<INavItemProps> = props => {
+export const NavItem: React.FC<INavItemProps> = (props) => {
   const {
     actions: { onboardingAddCoachMarkRef },
   } = useContext(StoreContext);
@@ -41,15 +41,15 @@ export const NavItem: React.FC<INavItemProps> = props => {
 
   const active = pathname.startsWith(to);
 
-  const addRef = useCallback(ref => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
+  const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
   const activeArea = (
     <div
-      css={link(active, disabled)}
-      aria-hidden="true"
-      tabIndex={-1}
       aria-disabled={disabled}
+      aria-hidden="true"
+      css={link(active, disabled)}
       data-testid={active ? 'ActiveLeftNavItem' : undefined}
+      tabIndex={-1}
     >
       <Icon iconName={iconName} styles={icon(active, disabled)} />
       {labelName}
@@ -63,11 +63,9 @@ export const NavItem: React.FC<INavItemProps> = props => {
 
   return (
     <Link
-      data-testid={'LeftNav-CommandBarButton' + labelName}
-      to={linkTo}
+      ref={addRef}
       aria-disabled={disabled}
       aria-label={labelName + (active ? '; selected' : '')}
-      ref={addRef}
       css={css`
         display: block;
 
@@ -93,6 +91,8 @@ export const NavItem: React.FC<INavItemProps> = props => {
           }
         }
       `}
+      data-testid={'LeftNav-CommandBarButton' + labelName}
+      to={linkTo}
     >
       {activeArea}
     </Link>

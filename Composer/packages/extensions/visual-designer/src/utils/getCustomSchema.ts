@@ -14,7 +14,7 @@ export const getCustomSchema = (baseSchema?: OBISchema, ejectedSchema?: OBISchem
   }, {});
 
   const ejectedDefinitions = ejectedSchema.definitions;
-  const diffKinds = Object.keys(ejectedDefinitions).filter($kind => !baseKindHash[$kind]);
+  const diffKinds = Object.keys(ejectedDefinitions).filter(($kind) => !baseKindHash[$kind]);
   if (diffKinds.length === 0) return;
 
   const diffSchema = diffKinds.reduce(

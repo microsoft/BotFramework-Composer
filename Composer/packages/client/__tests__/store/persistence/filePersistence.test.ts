@@ -10,9 +10,9 @@ jest.mock('axios', () => {
   return {
     create: jest.fn(() => {
       return {
-        put: new Promise(resolve => setTimeout(() => resolve({ data: {} }), 10)),
-        post: new Promise(resolve => setTimeout(() => resolve({ data: {} }), 10)),
-        delete: new Promise(resolve => setTimeout(() => resolve({ data: {} }), 10)),
+        put: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
+        post: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
+        delete: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
       };
     }),
   };

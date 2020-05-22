@@ -29,25 +29,23 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
       <h2>{formatMessage('Application Updates')}</h2>
       <SettingToggle
         checked={userSettings.appUpdater.autoDownload}
-        onToggle={onAppUpdatesChange('autoDownload')}
-        title={formatMessage('Auto update')}
         description={formatMessage('Check for updates and installs them automatically.')}
         image={images.autoUpdate}
+        title={formatMessage('Auto update')}
+        onToggle={onAppUpdatesChange('autoDownload')}
       />
       <SettingToggle
         checked={userSettings.appUpdater.useNightly}
-        onToggle={onAppUpdatesChange('useNightly')}
-        title={formatMessage('Early adopters')}
         description={
           formatMessage.rich(
             'Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>.',
             {
-              a: props => {
+              a: (props) => {
                 <Link
                   href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
-                  target="_blank"
                   rel="noopener noreferrer"
                   styles={link}
+                  target="_blank"
                 >
                   {props.children}
                 </Link>;
@@ -56,6 +54,8 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
           ) as any
         }
         image={images.earlyAdopters}
+        title={formatMessage('Early adopters')}
+        onToggle={onAppUpdatesChange('useNightly')}
       />
     </section>
   );
