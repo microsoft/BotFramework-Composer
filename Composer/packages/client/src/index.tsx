@@ -12,12 +12,12 @@ import { App } from './App';
 import { StoreProvider } from './store';
 
 formatMessage.setup({
-  missingTranslation: 'ignore'
+  missingTranslation: 'ignore',
 });
 
 const emotionCache = createCache({
   // @ts-ignore
-  nonce: window.__nonce__
+  nonce: window.__nonce__,
 });
 
 ReactDOM.render(

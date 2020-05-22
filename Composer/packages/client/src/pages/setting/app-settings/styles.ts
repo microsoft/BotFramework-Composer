@@ -32,8 +32,8 @@ export const description = css`
 
 export const link: ILinkStyles = {
   root: {
-    marginLeft: '5px'
-  }
+    marginLeft: '5px',
+  },
 };
 
 export const settingsContainer = css`

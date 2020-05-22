@@ -17,21 +17,21 @@ export const updateLuFile: ActionCreator = async (store, { id, projectId, conten
   const result = (await LuWorker.parse(id, content)) as LuFile;
   store.dispatch({
     type: ActionTypes.UPDATE_LU,
-    payload: { ...result, projectId }
+    payload: { ...result, projectId },
   });
 };
 
 export const removeLuFile: ActionCreator = async (store, id) => {
   store.dispatch({
     type: ActionTypes.REMOVE_LU,
-    payload: { id }
+    payload: { id },
   });
 };
 
 export const createLuFile: ActionCreator = async (store, { id, content }) => {
   store.dispatch({
     type: ActionTypes.CREATE_LU,
-    payload: { id, content }
+    payload: { id, content },
   });
 };
 
@@ -41,7 +41,7 @@ export const undoableUpdateLuFile = undoable(
     if (isEmpty) {
       const id = args[0].id;
       const projectId = args[0].projectId;
-      const content = clonedeep(state.luFiles.find(luFile => luFile.id === id)?.content);
+      const content = clonedeep(state.luFiles.find((luFile) => luFile.id === id)?.content);
       return [{ id, projectId, content }];
     } else {
       return args;
@@ -76,17 +76,17 @@ export const publishLuis: ActionCreator = async ({ dispatch, getState }, authori
       authoringKey,
       projectId,
       crossTrainConfig,
-      luFiles: referred.map(file => file.id)
+      luFiles: referred.map((file) => file.id),
     });
     luFileStatusStorage.publishAll(getState().botName);
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
-      payload: { response }
+      payload: { response },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.PUBLISH_LU_FAILED,
-      payload: { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message }
+      payload: { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message },
     });
   }
 };

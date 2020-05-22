@@ -27,7 +27,7 @@ interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
-const TableView: React.FC<TableViewProps> = props => {
+const TableView: React.FC<TableViewProps> = (props) => {
   const { state, actions } = useContext(StoreContext);
   const { dialogs, lgFiles, projectId, locale } = state;
   const { dialogId } = props;
@@ -63,19 +63,19 @@ const TableView: React.FC<TableViewProps> = props => {
       projectId,
       template: {
         name: newName,
-        body: '-TemplateValue'
-      }
+        body: '-TemplateValue',
+      },
     };
     createLgTemplate(payload);
     setFocusedIndex(templates.length);
   }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
-    index => {
+    (index) => {
       const payload = {
         file,
         projectId,
-        templateName: templates[index].name
+        templateName: templates[index].name,
       };
 
       removeLgTemplate(payload);
@@ -84,14 +84,14 @@ const TableView: React.FC<TableViewProps> = props => {
   );
 
   const onCopyTemplate = useCallback(
-    index => {
+    (index) => {
       const name = templates[index].name;
       const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
       const payload = {
         file,
         projectId,
         fromTemplateName: name,
-        toTemplateName: resolvedName
+        toTemplateName: resolvedName,
       };
       copyLgTemplate(payload);
       setFocusedIndex(templates.length);
@@ -107,7 +107,7 @@ const TableView: React.FC<TableViewProps> = props => {
           name: formatMessage('Edit'),
           onClick: () => {
             onClickEdit(templates[index]);
-          }
+          },
         },
         {
           key: 'delete',
@@ -115,7 +115,7 @@ const TableView: React.FC<TableViewProps> = props => {
           onClick: () => {
             actions.setMessage('item deleted');
             onRemoveTemplate(index);
-          }
+          },
         },
         {
           key: 'copy',
@@ -123,8 +123,8 @@ const TableView: React.FC<TableViewProps> = props => {
           onClick: () => {
             actions.setMessage('item copied');
             onCopyTemplate(index);
-          }
-        }
+          },
+        },
       ];
 
       return buttons;
@@ -142,7 +142,7 @@ const TableView: React.FC<TableViewProps> = props => {
         maxWidth: 150,
         isResizable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           return (
             <div data-is-focusable css={formCell}>
               <div aria-label={formatMessage(`Name is {name}`, { name: item.name })} css={content} tabIndex={-1}>
@@ -150,7 +150,7 @@ const TableView: React.FC<TableViewProps> = props => {
               </div>
             </div>
           );
-        }
+        },
       },
       {
         key: 'responses',
@@ -160,7 +160,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         data: 'string',
         isPadded: true,
-        onRender: item => {
+        onRender: (item) => {
           return (
             <div data-is-focusable css={formCell}>
               <div
@@ -172,7 +172,7 @@ const TableView: React.FC<TableViewProps> = props => {
               </div>
             </div>
           );
-        }
+        },
       },
       {
         key: 'buttons',
@@ -188,13 +188,13 @@ const TableView: React.FC<TableViewProps> = props => {
               menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index)
+                items: getTemplatesMoreButtons(item, index),
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
             />
           );
-        }
-      }
+        },
+      },
     ];
 
     // all view, show used in column
@@ -208,7 +208,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         isCollapsable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
             <Icon
               ariaLabel={formatMessage('Used') + ';'}
@@ -216,14 +216,14 @@ const TableView: React.FC<TableViewProps> = props => {
               styles={{
                 root: {
                   fontSize: '16px',
-                  paddingTop: '8px'
-                }
+                  paddingTop: '8px',
+                },
               }}
             />
           ) : (
             <div data-is-focusable aria-label={formatMessage('Unused') + ';'} />
           );
-        }
+        },
       };
       tableColums.splice(2, 0, beenUsedColumn);
     }
@@ -237,7 +237,7 @@ const TableView: React.FC<TableViewProps> = props => {
         <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
+            onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
           })}
         </Sticky>
       </div>
@@ -264,7 +264,7 @@ const TableView: React.FC<TableViewProps> = props => {
     );
   }, [activeDialog, templates]);
 
-  const getKeyCallback = useCallback(item => item.name, []);
+  const getKeyCallback = useCallback((item) => item.name, []);
 
   return (
     <div className={'table-view'} data-testid={'table-view'}>
@@ -285,10 +285,10 @@ const TableView: React.FC<TableViewProps> = props => {
               // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
               selectors: {
                 'div[role="row"]:hover': {
-                  background: 'none'
-                }
-              }
-            }
+                  background: 'none',
+                },
+              },
+            },
           }}
           onRenderDetailsFooter={onRenderDetailsFooter}
           onRenderDetailsHeader={onRenderDetailsHeader}

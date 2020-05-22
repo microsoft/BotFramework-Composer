@@ -61,7 +61,7 @@ export function prepareAxios(store: Store) {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     const cancelSource = axios.CancelToken.source();
 
-    httpClient.interceptors.request.use(config => {
+    httpClient.interceptors.request.use((config) => {
       // only attach cancellation token to api requests
       if (config.url && config.url.includes('/api/')) {
         config.cancelToken = cancelSource.token;
@@ -75,10 +75,10 @@ export function prepareAxios(store: Store) {
     });
 
     httpClient.interceptors.response.use(
-      res => {
+      (res) => {
         return res;
       },
-      err => {
+      (err) => {
         if (err.response && err.response.status === 401) {
           // cancel all other requests
           cancelSource.cancel('Unauthorized');
@@ -88,7 +88,7 @@ export function prepareAxios(store: Store) {
 
           store.dispatch({
             type: ActionTypes.USER_SESSION_EXPIRED,
-            payload: { expired: true }
+            payload: { expired: true },
           });
         }
 
@@ -103,7 +103,7 @@ const MAX_WAIT = 1000 * 60 * 2; // 2 minutes
 export async function loginPopup(): Promise<string | null> {
   const windowLoc = window.location;
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const loginUrl = BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
 
     /**

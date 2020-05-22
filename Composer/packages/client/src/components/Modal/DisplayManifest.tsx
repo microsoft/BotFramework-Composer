@@ -18,7 +18,7 @@ import { displayManifest as styles } from './styles';
 const dragOptions: IDragOptions = {
   moveMenuItemText: 'Move',
   closeMenuItemText: 'Close',
-  menu: ContextualMenu
+  menu: ContextualMenu,
 };
 
 interface DisplayManifestModalProps {
@@ -32,7 +32,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   isDraggable = true,
   isModeless = true,
   manifestId,
-  onDismiss
+  onDismiss,
 }) => {
   const { state } = useContext(StoreContext);
   const { skills } = state;
@@ -50,14 +50,14 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
       dialogContentProps={{
         type: DialogType.close,
         title: formatMessage('{skillName} Manifest', { skillName: selectedSkill.name }),
-        styles: styles.dialog
+        styles: styles.dialog,
       }}
       hidden={false}
       modalProps={{
         dragOptions: isDraggable ? dragOptions : undefined,
         isBlocking: false,
         isModeless,
-        styles: styles.modal
+        styles: styles.modal,
       }}
       onDismiss={onDismiss}
     >

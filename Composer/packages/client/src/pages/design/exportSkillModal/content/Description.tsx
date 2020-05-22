@@ -20,10 +20,10 @@ const styles = {
   `,
   field: css`
     flex-basis: 350px;
-  `
+  `,
 };
 
-const InlineLabelField: React.FC<FieldProps> = props => {
+const InlineLabelField: React.FC<FieldProps> = (props) => {
   const { id, placeholder, rawErrors, value = '', onChange } = props;
 
   const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
@@ -65,14 +65,14 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
           const serializer =
             itemSchema && itemSchema?.type === 'string'
               ? {
-                  get: value => (Array.isArray(value) ? value.join(',') : value),
-                  set: value => (typeof value === 'string' ? value.split(/\s*,\s*/) : value)
+                  get: (value) => (Array.isArray(value) ? value.join(',') : value),
+                  set: (value) => (typeof value === 'string' ? value.split(/\s*,\s*/) : value),
                 }
               : null;
 
           return {
             hidden,
-            properties: { ...properties, [key]: { field: InlineLabelField, hideError: true, serializer } }
+            properties: { ...properties, [key]: { field: InlineLabelField, hideError: true, serializer } },
           };
         },
         { hidden: [], properties: {} } as any
@@ -92,7 +92,7 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
     hidden,
     label: false,
     order: [...required, '*'],
-    properties
+    properties,
   };
 
   return <AdaptiveForm errors={errors} formData={value} schema={schema} uiOptions={uiOptions} onChange={onChange} />;

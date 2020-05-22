@@ -30,19 +30,19 @@ const itemBase: IButtonStyles = {
     border: 0,
     textAlign: 'left',
     marginLeft: 0,
-    marginRight: 0
-  }
+    marginRight: 0,
+  },
 };
 
 export const itemNotSelected: IButtonStyles = mergeStyleSets(itemBase, {
   root: {
     background: NeutralColors.white,
-    fontWeight: FontWeights.semilight
-  }
+    fontWeight: FontWeights.semilight,
+  },
 });
 export const itemSelected: IButtonStyles = mergeStyleSets(itemBase, {
   root: {
     background: NeutralColors.gray20,
-    fontWeight: FontWeights.semibold
-  }
+    fontWeight: FontWeights.semibold,
+  },
 });

@@ -25,5 +25,5 @@ export const palette: Partial<IPalette> = {
   neutralPrimary: '#333333',
   neutralDark: '#646464',
   black: '#8d8d8d',
-  white: '#ffffff'
+  white: '#ffffff',
 };

@@ -97,8 +97,8 @@ export const link = {
     fontWeight: FontWeights.regular,
     color: '#0078d4',
     marginLeft: '10px',
-    textDecoration: 'underline'
-  }
+    textDecoration: 'underline',
+  },
 };
 
 export const helpLink = {
@@ -107,13 +107,13 @@ export const helpLink = {
     fontWeight: FontWeights.regular,
     color: '#0078d4',
     marginLeft: '60px',
-    textDecoration: 'underline'
-  }
+    textDecoration: 'underline',
+  },
 };
 
 export const icon = {
   root: {
     color: '#0078d4',
-    fontSize: '20px'
-  }
+    fontSize: '20px',
+  },
 };

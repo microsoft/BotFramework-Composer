@@ -6,7 +6,7 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IDialogContentStyles, IDialogFooterStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
-export const optionIcon = checked => css`
+export const optionIcon = (checked) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;
@@ -25,17 +25,17 @@ export const dialogCopy = css`
 
 export const dialogContent: Partial<IDialogContentStyles> = {
   subText: { color: NeutralColors.black },
-  header: { paddingBottom: '6px' }
+  header: { paddingBottom: '6px' },
 };
 
 export const dialogFooter: Partial<IDialogFooterStyles> = {
   actions: {
-    marginTop: '46px'
-  }
+    marginTop: '46px',
+  },
 };
 
 export const updateAvailableDismissBtn: Partial<IButtonStyles> = {
   root: {
-    marginRight: '6px;'
-  }
+    marginRight: '6px;',
+  },
 };

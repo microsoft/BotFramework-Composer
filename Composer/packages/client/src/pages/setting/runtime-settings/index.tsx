@@ -26,7 +26,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
     actions.setSettings(projectId, botName, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
   };
 
-  const updateSetting = field => (e, newValue) => {
+  const updateSetting = (field) => (e, newValue) => {
     let valid = true;
     let error = 'There was an error';
     if (newValue === '') {

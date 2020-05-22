@@ -12,8 +12,8 @@ export const fetchStorages: ActionCreator = async ({ dispatch }) => {
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: {
-        response
-      }
+        response,
+      },
     });
     return response.data;
   } catch (err) {
@@ -28,13 +28,13 @@ export async function fetchTemplates({ dispatch }) {
     dispatch({
       type: ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS,
       payload: {
-        response
-      }
+        response,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE,
-      error: err
+      error: err,
     });
   }
 }
@@ -45,8 +45,8 @@ export const addNewStorage: ActionCreator = async ({ dispatch }, storageData) =>
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: {
-        response
-      }
+        response,
+      },
     });
   } catch (err) {
     dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
@@ -60,8 +60,8 @@ export const fetchStorageByName: ActionCreator = async ({ dispatch }, fileName) 
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: {
-        response
-      }
+        response,
+      },
     });
   } catch (err) {
     dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
@@ -73,23 +73,23 @@ export const fetchFolderItemsByPath: ActionCreator = async ({ dispatch }, id, pa
     dispatch({
       type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
       payload: {
-        status: 'pending'
-      }
+        status: 'pending',
+      },
     });
     const response = await httpClient.get(`/storages/${id}/blobs`, { params: { path } });
     dispatch({
       type: ActionTypes.GET_STORAGEFILE_SUCCESS,
       payload: {
-        response
-      }
+        response,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
       payload: {
-        status: 'failure'
+        status: 'failure',
       },
-      error: err
+      error: err,
     });
   }
 };
@@ -100,8 +100,8 @@ export const updateCurrentPath: ActionCreator = async ({ dispatch }, path, stora
     dispatch({
       type: ActionTypes.GET_STORAGE_SUCCESS,
       payload: {
-        response
-      }
+        response,
+      },
     });
   } catch (err) {
     dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });

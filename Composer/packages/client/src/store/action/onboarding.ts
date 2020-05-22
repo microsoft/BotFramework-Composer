@@ -9,14 +9,14 @@ import { ActionTypes } from './../../constants';
 export const onboardingAddCoachMarkRef: ActionCreator = ({ dispatch }, ref) => {
   dispatch({
     type: ActionTypes.ONBOARDING_ADD_COACH_MARK_REF,
-    payload: { ref }
+    payload: { ref },
   });
 };
 
 export const onboardingSetComplete: ActionCreator = ({ dispatch }, complete) => {
   dispatch({
     type: ActionTypes.ONBOARDING_SET_COMPLETE,
-    payload: { complete }
+    payload: { complete },
   });
   OnboardingState.setComplete(complete);
 };

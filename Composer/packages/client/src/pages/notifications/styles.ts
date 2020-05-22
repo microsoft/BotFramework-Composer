@@ -7,28 +7,28 @@ import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const icons = {
   Error: { iconName: 'ErrorBadge', color: '#A80000', background: '#FED9CC' },
-  Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' }
+  Warning: { iconName: 'Warning', color: '#8A8780', background: '#FFF4CE' },
 };
 
 export const notification = mergeStyleSets({
   typeIconHeaderIcon: {
     padding: 0,
-    fontSize: '16px'
+    fontSize: '16px',
   },
   typeIconCell: {
     textAlign: 'center',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   columnCell: {
-    cursor: 'pointer'
-  }
+    cursor: 'pointer',
+  },
 });
 
 export const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 180, marginLeft: 'auto' }
+  dropdown: { width: 180, marginLeft: 'auto' },
 };
 
-export const typeIcon = icon => css`
+export const typeIcon = (icon) => css`
   vertical-align: middle;
   font-size: 16px;
   width: 24px;

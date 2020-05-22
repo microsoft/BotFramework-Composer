@@ -16,20 +16,20 @@ export const content = css`
 
 export const buttonStyles: IButtonStyles = {
   icon: {
-    color: palette.white
+    color: palette.white,
   },
   root: {
     selectors: {
       ':hover .ms-Button-icon': {
         background: palette.themeDarkAlt,
-        color: palette.white
+        color: palette.white,
       },
       ':active .ms-Button-icon': {
         background: palette.themeDark,
-        color: palette.white
-      }
-    }
+        color: palette.white,
+      },
+    },
   },
   rootHovered: { backgroundColor: palette.themeDarkAlt },
-  rootPressed: { backgroundColor: palette.themeDark }
+  rootPressed: { backgroundColor: palette.themeDark },
 };

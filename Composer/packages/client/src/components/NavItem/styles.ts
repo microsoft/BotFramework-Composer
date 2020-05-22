@@ -52,6 +52,6 @@ export const icon = (active: boolean, disabled: boolean) =>
       marginRight: '12px',
       boxSizing: 'border-box',
       fontSize: `${FontSizes.size16}`,
-      width: '40px'
-    }
+      width: '40px',
+    },
   } as IButtonStyles);

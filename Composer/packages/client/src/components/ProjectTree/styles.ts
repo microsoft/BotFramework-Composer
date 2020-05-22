@@ -13,16 +13,16 @@ import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 export const groupListStyle: Partial<IGroupedListStyles> = {
   root: {
     width: '100%',
-    boxSizing: 'border-box'
-  }
+    boxSizing: 'border-box',
+  },
 };
 
 export const searchBox: ISearchBoxStyles = {
   root: {
     borderBottom: '1px solid #edebe9',
     height: '45px',
-    borderRadius: '0px'
-  }
+    borderRadius: '0px',
+  },
 };
 export const root = css`
   width: 100%;
@@ -101,27 +101,27 @@ export const moreButton = (isActive: boolean): IButtonStyles => {
       alignSelf: 'stretch',
       visibility: isActive ? 'visible' : 'hidden',
       height: 'auto',
-      width: '16px'
+      width: '16px',
     },
     menuIcon: {
       fontSize: '14px',
-      color: '#000'
-    }
+      color: '#000',
+    },
   };
 };
 
 export const moreMenu: Partial<ICalloutContentStyles> = {
   root: {
     marginTop: '-7px',
-    width: '100px'
-  }
+    width: '100px',
+  },
 };
 
 export const menuStyle: Partial<IContextualMenuStyles> = {
   subComponentStyles: {
     menuItem: {},
-    callout: moreMenu
-  }
+    callout: moreMenu,
+  },
 };
 
 export const overflowSet = css`
@@ -142,29 +142,29 @@ export const styles = {
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.size20,
       paddingTop: '14px',
-      paddingBottom: '11px'
+      paddingBottom: '11px',
     },
     subText: {
-      fontSize: FontSizes.size14
-    }
+      fontSize: FontSizes.size14,
+    },
   },
   modal: {
     main: {
-      maxWidth: '600px !important'
-    }
-  }
+      maxWidth: '600px !important',
+    },
+  },
 };
 
 export const dropdownStyles = {
   label: {
-    fontWeight: FontWeights.semibold
+    fontWeight: FontWeights.semibold,
   },
   dropdown: {
-    width: '400px'
+    width: '400px',
   },
   root: {
-    marginBottom: '20px'
-  }
+    marginBottom: '20px',
+  },
 };
 
 export const dialogWindow = css`
@@ -178,24 +178,24 @@ export const textFieldlabel = {
   label: {
     root: [
       {
-        fontWeight: FontWeights.semibold
-      }
-    ]
-  }
+        fontWeight: FontWeights.semibold,
+      },
+    ],
+  },
 };
 
 export const intent = {
   root: {
     width: '400px',
-    paddingBottom: '20px'
-  }
+    paddingBottom: '20px',
+  },
 };
 
 export const triggerPhrases = {
   root: {
-    width: '400px'
+    width: '400px',
   },
   fieldGroup: {
-    height: 80
-  }
+    height: 80,
+  },
 };

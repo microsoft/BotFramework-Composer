@@ -11,7 +11,7 @@ import { BASEPATH } from './../constants/index';
 import { resolveToBasePath } from './fileUtil';
 export const BreadcrumbUpdateType = {
   Selected: 'selected',
-  Focused: 'focused'
+  Focused: 'focused',
 };
 
 export function getFocusPath(selected: string, focused: string): string {

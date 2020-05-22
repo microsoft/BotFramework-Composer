@@ -8,17 +8,17 @@ import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 export const textFieldlabel = {
   root: [
     {
-      fontWeight: FontWeights.semibold
-    }
-  ]
+      fontWeight: FontWeights.semibold,
+    },
+  ],
 };
 
 export const dropdown: Partial<IDropdownStyles> = {
   subComponentStyles: {
     label: textFieldlabel,
     panel: {},
-    multiSelectItem: {}
-  }
+    multiSelectItem: {},
+  },
   // root: [
   //   {
   //     marginTop: '2rem',
@@ -63,7 +63,7 @@ export const loading = css`
 export const detailListClass = mergeStyleSets({
   fileIconHeaderIcon: {
     padding: 0,
-    fontSize: '16px'
+    fontSize: '16px',
   },
   fileIconCell: {
     textAlign: 'center',
@@ -74,15 +74,15 @@ export const detailListClass = mergeStyleSets({
         verticalAlign: 'middle',
         height: '100%',
         width: '0px',
-        visibility: 'hidden'
-      }
-    }
+        visibility: 'hidden',
+      },
+    },
   },
   fileIconImg: {
     verticalAlign: 'middle',
     maxHeight: '16px',
-    maxWidth: '16px'
-  }
+    maxWidth: '16px',
+  },
 });
 
 export const tableCell = css`
@@ -99,15 +99,15 @@ export const content = css`
 export const halfstack = {
   root: [
     {
-      flexBasis: '50%'
-    }
-  ]
+      flexBasis: '50%',
+    },
+  ],
 };
 
 export const stackinput = {
   root: [
     {
-      marginBottom: '1rem'
-    }
-  ]
+      marginBottom: '1rem',
+    },
+  ],
 };

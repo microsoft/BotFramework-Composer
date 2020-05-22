@@ -19,7 +19,7 @@ interface IPageProps {
   'data-testid'?: string;
 }
 
-const Page: React.FC<IPageProps> = props => {
+const Page: React.FC<IPageProps> = (props) => {
   const { title, navLinks, toolbarItems, onRenderHeaderContent, children } = props;
 
   return (

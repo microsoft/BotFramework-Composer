@@ -9,7 +9,7 @@ import { Store } from './../types';
 export const removeDialog: ActionCreator = (store, id) => {
   store.dispatch({
     type: ActionTypes.REMOVE_DIALOG,
-    payload: { id }
+    payload: { id },
   });
 };
 
@@ -20,14 +20,14 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
   }
   store.dispatch({
     type: ActionTypes.CREATE_DIALOG,
-    payload: { id, content }
+    payload: { id, content },
   });
 };
 
 export const updateDialogBase: ActionCreator = async (store, { id, content }) => {
   store.dispatch({
     type: ActionTypes.UPDATE_DIALOG,
-    payload: { id, content }
+    payload: { id, content },
   });
 };
 
@@ -36,7 +36,7 @@ export const updateDialog: ActionCreator = undoable(
   (state: State, args: any[], isEmpty) => {
     if (isEmpty) {
       const id = state.designPageLocation.dialogId;
-      const dialog = state.dialogs.find(dialog => dialog.id === id);
+      const dialog = state.dialogs.find((dialog) => dialog.id === id);
       return [{ id, content: dialog ? dialog.content : {} }];
     } else {
       return args;
@@ -51,17 +51,17 @@ export const createDialogBegin: ActionCreator = ({ dispatch }, actions, onComple
     type: ActionTypes.CREATE_DIALOG_BEGIN,
     payload: {
       actionsSeed: actions,
-      onComplete
-    }
+      onComplete,
+    },
   });
 };
 
-export const createDialogCancel: ActionCreator = store => {
+export const createDialogCancel: ActionCreator = (store) => {
   const onCreateDialogComplete = store.getState().onCreateDialogComplete;
   if (typeof onCreateDialogComplete === 'function') {
     onCreateDialogComplete(null);
   }
   store.dispatch({
-    type: ActionTypes.CREATE_DIALOG_CANCEL
+    type: ActionTypes.CREATE_DIALOG_CANCEL,
   });
 };

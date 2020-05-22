@@ -16,16 +16,16 @@ describe('<AppSettings /> & <ElectronSettings />', () => {
       userSettings: {
         appUpdater: {
           autoDownload: false,
-          useNightly: true
+          useNightly: true,
         },
         codeEditor: {
           lineNumbers: false,
           wordWrap: false,
-          minimap: false
+          minimap: false,
         },
         propertyEditorWidth: 400,
-        dialogNavWidth: 180
-      }
+        dialogNavWidth: 180,
+      },
     };
   });
 

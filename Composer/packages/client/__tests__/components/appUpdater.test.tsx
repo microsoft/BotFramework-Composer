@@ -14,8 +14,8 @@ describe('<AppUpdater />', () => {
       appUpdate: {
         progressPercent: 0,
         showing: true,
-        status: AppUpdaterStatus.IDLE
-      }
+        status: AppUpdaterStatus.IDLE,
+      },
     };
   });
 

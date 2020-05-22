@@ -16,10 +16,10 @@ const createOptions = (): IDropdownOption[] => {
       text: formatMessage('All'),
       ariaLabel: formatMessage('Show All Notifications'),
       data: '',
-      isSelected: true
-    }
+      isSelected: true,
+    },
   ];
-  DiagnosticSeverity.forEach(item => {
+  DiagnosticSeverity.forEach((item) => {
     return defaultOptions.push({ key: item, text: item, data: item, ariaLabel: `Show ${item} Notifications` });
   });
   return defaultOptions;
@@ -29,7 +29,7 @@ export interface INotificationHeader {
   onChange: (text: string) => void;
 }
 
-export const NotificationHeader: React.FC<INotificationHeader> = props => {
+export const NotificationHeader: React.FC<INotificationHeader> = (props) => {
   const { onChange } = props;
 
   return (

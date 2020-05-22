@@ -23,7 +23,7 @@ interface LGPageProps extends RouteComponentProps<{}> {
   dialogId?: string;
 }
 
-const LGPage: React.FC<LGPageProps> = props => {
+const LGPage: React.FC<LGPageProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, projectId } = state;
 
@@ -32,15 +32,15 @@ const LGPage: React.FC<LGPageProps> = props => {
   const edit = /\/edit(\/)?$/.test(path);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map(dialog => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
       return {
         id: dialog.id,
         name: dialog.displayName,
         ariaLabel: formatMessage('language generation file'),
-        url: `/bot/${projectId}/language-generation/${dialog.id}`
+        url: `/bot/${projectId}/language-generation/${dialog.id}`,
       };
     });
-    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
@@ -50,7 +50,7 @@ const LGPage: React.FC<LGPageProps> = props => {
       id: 'common',
       name: 'All',
       ariaLabel: formatMessage('all language generation files'),
-      url: `/bot/${projectId}/language-generation/common`
+      url: `/bot/${projectId}/language-generation/common`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -75,8 +75,8 @@ const LGPage: React.FC<LGPageProps> = props => {
     {
       type: 'element',
       element: <TestController />,
-      align: 'right'
-    }
+      align: 'right',
+    },
   ];
 
   const onRenderHeaderContent = () => {

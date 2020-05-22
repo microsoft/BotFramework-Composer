@@ -11,7 +11,7 @@ import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal';
 import { renderWithStore } from '../testUtils';
 
 jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl', () => ({
-  validateManifestUrl: () => {}
+  validateManifestUrl: () => {},
 }));
 
 const items: Skill[] = [
@@ -23,7 +23,7 @@ const items: Skill[] = [
     msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
     protocol: '',
     endpoints: [],
-    body: ''
+    body: '',
   },
   {
     manifestUrl: 'https://hualxielearn2-snskill.azurewebsites.net/manifest/manifest-1.0.json',
@@ -33,8 +33,8 @@ const items: Skill[] = [
     msAppId: 'e2852590-ea71-4a69-9e44-e74b5b6cbe89',
     protocol: '',
     endpoints: [],
-    body: ''
-  }
+    body: '',
+  },
 ];
 
 describe('Skill page', () => {
@@ -78,7 +78,7 @@ describe('<SkillList />', () => {
 describe('<SkillForm />', () => {
   it('should render the skill form, and do update', () => {
     jest.useFakeTimers();
-    const onSubmit = jest.fn(formData => {
+    const onSubmit = jest.fn((formData) => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
     const onDismiss = jest.fn(() => {});

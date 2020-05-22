@@ -15,7 +15,7 @@ describe('<NotificationList/>', () => {
       type: 'dialog',
       location: formatMessage('test1'),
       message: formatMessage('error1'),
-      diagnostic: ''
+      diagnostic: '',
     },
     {
       id: 'Main.lu',
@@ -23,7 +23,7 @@ describe('<NotificationList/>', () => {
       type: 'lu',
       location: formatMessage('test2'),
       message: formatMessage('error2'),
-      diagnostic: ''
+      diagnostic: '',
     },
     {
       id: 'common.lg',
@@ -31,8 +31,8 @@ describe('<NotificationList/>', () => {
       type: 'lg',
       location: formatMessage('test3'),
       message: formatMessage('error3'),
-      diagnostic: ''
-    }
+      diagnostic: '',
+    },
   ];
   it('should render the NotificationList', () => {
     const { container } = render(<NotificationList items={items} />);

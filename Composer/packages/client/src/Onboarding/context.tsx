@@ -34,7 +34,7 @@ const OnboardingContext = createContext<OnboardingContext>({
     onComplete: () => {},
     previousStep: () => {},
     setMinimized: (_: boolean) => {},
-    toggleMinimized: () => {}
+    toggleMinimized: () => {},
   },
   state: {
     complete: true,
@@ -43,8 +43,8 @@ const OnboardingContext = createContext<OnboardingContext>({
     hideModal: true,
     minimized: false,
     stepSets: [],
-    teachingBubble: null
-  }
+    teachingBubble: null,
+  },
 });
 
 export default OnboardingContext;

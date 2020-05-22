@@ -27,5 +27,5 @@ export enum LuActionType {
   Parse = 'parse',
   AddIntent = 'add-intent',
   UpdateIntent = 'update-intent',
-  RemoveIntent = 'remove-intent'
+  RemoveIntent = 'remove-intent',
 }

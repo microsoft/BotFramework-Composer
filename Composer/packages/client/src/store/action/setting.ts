@@ -17,8 +17,8 @@ export const setSettings: ActionCreator = async (
     type: ActionTypes.SYNC_ENV_SETTING,
     payload: {
       projectId,
-      settings
-    }
+      settings,
+    },
   });
 };
 
@@ -32,16 +32,16 @@ export const setDialogSettingsSlot = async ({ dispatch }, projectId: string, slo
     dispatch({
       type: ActionTypes.GET_ENV_SETTING,
       payload: {
-        settings
-      }
+        settings,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
       payload: {
         message: err.response && err.response.data.message ? err.reponse.data.message : err,
-        summary: 'DLG SETTINGS ERROR'
-      }
+        summary: 'DLG SETTINGS ERROR',
+      },
     });
   }
 };

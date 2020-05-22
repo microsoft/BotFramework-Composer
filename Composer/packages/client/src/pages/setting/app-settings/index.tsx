@@ -19,7 +19,7 @@ import { SettingToggle } from './SettingToggle';
 import * as images from './images';
 
 const ElectronSettings = lazy(() =>
-  import('./electronSettings').then(module => ({ default: module.ElectronSettings }))
+  import('./electronSettings').then((module) => ({ default: module.ElectronSettings }))
 );
 
 const AppSettings: React.FC<RouteComponentProps> = () => {
@@ -29,8 +29,8 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     actions: { onboardingSetComplete, updateUserSettings },
     state: {
       onboarding: { complete },
-      userSettings
-    }
+      userSettings,
+    },
   } = useContext(StoreContext);
 
   const onOnboardingChange = useCallback(
@@ -65,15 +65,15 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             hidden: !calloutIsShown,
             role: 'status',
             directionalHint: DirectionalHint.rightCenter,
-            isBeakVisible: false
+            isBeakVisible: false,
           }}
           styles={{
             bodyContent: {
-              padding: '0px'
+              padding: '0px',
             },
             body: {
-              margin: '0px'
-            }
+              margin: '0px',
+            },
           }}
           target="#onboardingToggle"
         >

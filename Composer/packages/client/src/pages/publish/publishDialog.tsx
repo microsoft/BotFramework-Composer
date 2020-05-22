@@ -11,12 +11,12 @@ import formatMessage from 'format-message';
 
 import { publishDialogText } from './styles';
 
-export const PublishDialog = props => {
+export const PublishDialog = (props) => {
   const [comment, setComment] = useState('');
   const publishDialogProps = {
     title: 'Publish',
     type: DialogType.normal,
-    subText: 'You are about to publish your bot to the profile below. Do you want to proceed?'
+    subText: 'You are about to publish your bot to the profile below. Do you want to proceed?',
   };
   const submit = async () => {
     props.onDismiss();

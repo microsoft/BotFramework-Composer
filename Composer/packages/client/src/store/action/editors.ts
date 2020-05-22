@@ -7,7 +7,7 @@ import { ActionTypes } from './../../constants';
 export const resetVisualEditor: ActionCreator = ({ dispatch }, isReset) => {
   dispatch({
     type: ActionTypes.EDITOR_RESET_VISUAL,
-    payload: { isReset }
+    payload: { isReset },
   });
 };
 
@@ -15,8 +15,8 @@ export const setVisualEditorSelection: ActionCreator = ({ dispatch }, selection)
   dispatch({
     type: ActionTypes.EDITOR_SELECTION_VISUAL,
     payload: {
-      selection
-    }
+      selection,
+    },
   });
 };
 
@@ -24,7 +24,7 @@ export const setVisualEditorClipboard: ActionCreator = ({ dispatch }, clipboardA
   dispatch({
     type: ActionTypes.EDITOR_CLIPBOARD,
     payload: {
-      clipboardActions
-    }
+      clipboardActions,
+    },
   });
 };

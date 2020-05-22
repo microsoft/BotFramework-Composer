@@ -36,7 +36,7 @@ interface Intent {
   state: string;
 }
 
-const TableView: React.FC<TableViewProps> = props => {
+const TableView: React.FC<TableViewProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, locale, projectId } = state;
   const { dialogId } = props;
@@ -62,7 +62,7 @@ const TableView: React.FC<TableViewProps> = props => {
 
     const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
       const items: Intent[] = [];
-      const luDialog = dialogs.find(dialog => luFile.id === `${dialog.id}.${locale}`);
+      const luDialog = dialogs.find((dialog) => luFile.id === `${dialog.id}.${locale}`);
       get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
         const state = getIntentState(luFile);
 
@@ -71,8 +71,8 @@ const TableView: React.FC<TableViewProps> = props => {
           phrases,
           fileId: luFile.id,
           dialogId: luDialog?.id || '',
-          used: !!luDialog && luDialog.referredLuIntents.some(lu => lu.name === name), // used by it's dialog or not
-          state
+          used: !!luDialog && luDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+          state,
         });
       });
       return result.concat(items);
@@ -81,7 +81,7 @@ const TableView: React.FC<TableViewProps> = props => {
     if (!activeDialog) {
       setIntents(allIntents);
     } else {
-      const dialogIntents = allIntents.filter(t => t.dialogId === activeDialog.id);
+      const dialogIntents = allIntents.filter((t) => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
     }
   }, [luFiles, activeDialog, projectId]);
@@ -94,8 +94,8 @@ const TableView: React.FC<TableViewProps> = props => {
         onClick: () => {
           const { name, dialogId } = intents[index];
           navigateTo(`/bot/${projectId}/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
-        }
-      }
+        },
+      },
     ];
     return buttons;
   };
@@ -122,7 +122,7 @@ const TableView: React.FC<TableViewProps> = props => {
               </div>
             </div>
           );
-        }
+        },
       },
       {
         key: 'phrases',
@@ -132,7 +132,7 @@ const TableView: React.FC<TableViewProps> = props => {
         maxWidth: 500,
         isResizable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           return (
             <div data-is-focusable css={luPhraseCell}>
               <div
@@ -144,7 +144,7 @@ const TableView: React.FC<TableViewProps> = props => {
               </div>
             </div>
           );
-        }
+        },
       },
       {
         key: 'definedIn',
@@ -155,7 +155,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         isCollapsable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           const id = item.dialogId;
           return (
             <div
@@ -167,7 +167,7 @@ const TableView: React.FC<TableViewProps> = props => {
               <Link>{id}</Link>
             </div>
           );
-        }
+        },
       },
       // {
       //   key: 'beenUsed',
@@ -201,12 +201,12 @@ const TableView: React.FC<TableViewProps> = props => {
               menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index)
+                items: getTemplatesMoreButtons(item, index),
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
             />
           );
-        }
+        },
       },
       {
         key: 'Activity',
@@ -217,7 +217,7 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         isCollapsable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           return (
             <div data-is-focusable css={tableCell}>
               <div aria-label={formatMessage(`State is {state}`, { state: item.state })} css={content} tabIndex={-1}>
@@ -225,8 +225,8 @@ const TableView: React.FC<TableViewProps> = props => {
               </div>
             </div>
           );
-        }
-      }
+        },
+      },
     ];
 
     // all view, hide defineIn column
@@ -243,7 +243,7 @@ const TableView: React.FC<TableViewProps> = props => {
         <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
+            onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
           })}
         </Sticky>
       </div>
@@ -257,7 +257,7 @@ const TableView: React.FC<TableViewProps> = props => {
           className="table-view-list"
           columns={getTableColums()}
           componentRef={listRef}
-          getKey={item => item.Name}
+          getKey={(item) => item.Name}
           items={intents}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.none}
@@ -267,10 +267,10 @@ const TableView: React.FC<TableViewProps> = props => {
               // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
               selectors: {
                 'div[role="row"]:hover': {
-                  background: 'none'
-                }
-              }
-            }
+                  background: 'none',
+                },
+              },
+            },
           }}
           onRenderDetailsHeader={onRenderDetailsHeader}
         />

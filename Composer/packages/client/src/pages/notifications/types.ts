@@ -12,7 +12,7 @@ export enum NotificationType {
   DIALOG,
   LG,
   LU,
-  GENERAL
+  GENERAL,
 }
 
 export interface INotification {
@@ -80,15 +80,15 @@ export class LgNotification extends Notification {
   }
   private findDialogPath(lgFile: LgFile, dialogs: DialogInfo[], diagnostic: Diagnostic) {
     const mappedTemplate = lgFile.templates.find(
-      t =>
+      (t) =>
         get(diagnostic, 'range.start.line') >= get(t, 'range.startLineNumber') &&
         get(diagnostic, 'range.end.line') <= get(t, 'range.endLineNumber')
     );
     if (mappedTemplate && mappedTemplate.name.match(LgNamePattern)) {
       //should navigate to design page
       const lgTemplateName = mappedTemplate.name;
-      const dialog = dialogs.find(d => d.lgFile === this.resourceId);
-      const lgTemplate = dialog ? dialog.lgTemplates.find(lg => lg.name === lgTemplateName) : null;
+      const dialog = dialogs.find((d) => d.lgFile === this.resourceId);
+      const lgTemplate = dialog ? dialog.lgTemplates.find((lg) => lg.name === lgTemplateName) : null;
       const path = lgTemplate ? lgTemplate.path : '';
       return path;
     }
@@ -111,13 +111,14 @@ export class LuNotification extends Notification {
   }
 
   private findDialogPath(luFile: LuFile, dialogs: DialogInfo[], d: Diagnostic) {
-    const intentName = luFile.intents.find(intent => {
+    const intentName = luFile.intents.find((intent) => {
       const { range } = intent;
       if (!range) return false;
       return isDiagnosticWithInRange(d, range);
     })?.Name;
 
-    return dialogs.find(dialog => dialog.id === this.resourceId)?.referredLuIntents.find(lu => lu.name === intentName)
-      ?.path;
+    return dialogs
+      .find((dialog) => dialog.id === this.resourceId)
+      ?.referredLuIntents.find((lu) => lu.name === intentName)?.path;
   }
 }

@@ -12,7 +12,7 @@ import { App } from './../src/App';
 function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory(createMemorySource(route)) } = {}) {
   return {
     ...render(<LocationProvider history={history}>{ui}</LocationProvider>),
-    history
+    history,
   };
 }
 
@@ -26,7 +26,7 @@ describe('<Router/> router test', () => {
   test('full app rendering/navigating', () => {
     const {
       container,
-      history: { navigate }
+      history: { navigate },
     } = renderWithRouter(<AppTest />);
 
     const appContainer = container;
@@ -38,7 +38,7 @@ describe('<Router/> router test', () => {
 
   test('landing on a not found', () => {
     const { container } = renderWithRouter(<AppTest />, {
-      route: '/something-that-does-not-match'
+      route: '/something-that-does-not-match',
     });
 
     expect(container.innerHTML).toMatch('404');

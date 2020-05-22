@@ -46,14 +46,14 @@ export function ToolBar(props) {
   let left = [];
   let right = [];
   if (toolbarItems && toolbarItems.length > 0) {
-    left = toolbarItems.filter(item => {
+    left = toolbarItems.filter((item) => {
       return item.align === 'left';
     });
-    right = toolbarItems.filter(item => {
+    right = toolbarItems.filter((item) => {
       return item.align === 'right';
     });
   }
-  const addNewRef = useCallback(addNew => {
+  const addNewRef = useCallback((addNew) => {
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
@@ -72,17 +72,17 @@ export function ToolBar(props) {
                     'data-testid': 'FlyoutNewDialog',
                     key: 'adddialog',
                     text: formatMessage('Add new dialog'),
-                    onClick: () => actions.createDialogBegin([], onCreateDialogComplete)
+                    onClick: () => actions.createDialogBegin([], onCreateDialogComplete),
                   },
                   {
                     'data-testid': 'FlyoutNewTrigger',
                     key: 'addtrigger',
                     text: formatMessage(`Add new trigger on {displayName}`, {
-                      displayName: currentDialog ? currentDialog.displayName : ''
+                      displayName: currentDialog ? currentDialog.displayName : '',
                     }),
-                    onClick: () => openNewTriggerModal()
-                  }
-                ]
+                    onClick: () => openNewTriggerModal(),
+                  },
+                ],
               }}
               text={formatMessage('Add')}
             />
@@ -98,14 +98,14 @@ export function ToolBar(props) {
                 {
                   key: 'zipexport',
                   text: formatMessage('Export assets to .zip'),
-                  onClick: () => actions.exportToZip({ projectId })
+                  onClick: () => actions.exportToZip({ projectId }),
                 },
                 {
                   key: 'exportAsSkill',
                   text: formatMessage('Export as skill'),
-                  onClick: showSkillManifestModal
-                }
-              ]
+                  onClick: showSkillManifestModal,
+                },
+              ],
             }}
             text={formatMessage('Export')}
           />

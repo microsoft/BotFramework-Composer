@@ -27,7 +27,7 @@ interface PublishPageProps extends RouteComponentProps<{}> {
   targetName?: string;
 }
 
-const Publish: React.FC<PublishPageProps> = props => {
+const Publish: React.FC<PublishPageProps> = (props) => {
   const selectedTargetName = props.targetName;
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
   const { state, actions } = useContext(StoreContext);
@@ -46,19 +46,19 @@ const Publish: React.FC<PublishPageProps> = props => {
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
-    children: {}
+    children: {},
   });
   const [editDialogProps, setEditDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
-    children: {}
+    children: {},
   });
   const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
 
   const isRollbackSupported = useMemo(
     () => (target, version): boolean => {
       if (version.id && version.status === 200 && target) {
-        const type = publishTypes?.filter(t => t.name === target.type)[0];
+        const type = publishTypes?.filter((t) => t.name === target.type)[0];
         if (type?.features?.rollback) {
           return true;
         }
@@ -74,64 +74,64 @@ const Publish: React.FC<PublishPageProps> = props => {
       text: formatMessage('Add new profile'),
       buttonProps: {
         iconProps: {
-          iconName: 'Add'
+          iconName: 'Add',
         },
-        onClick: () => setAddDialogHidden(false)
+        onClick: () => setAddDialogHidden(false),
       },
       align: 'left',
       dataTestid: 'publishPage-ToolBar-Add',
-      disabled: false
+      disabled: false,
     },
     {
       type: 'action',
       text: formatMessage('Publish to selected profile'),
       buttonProps: {
         iconProps: {
-          iconName: 'CloudUpload'
+          iconName: 'CloudUpload',
         },
-        onClick: () => setPublishDialogHidden(false)
+        onClick: () => setPublishDialogHidden(false),
       },
       align: 'left',
       dataTestid: 'publishPage-ToolBar-Publish',
-      disabled: selectedTargetName !== 'all' ? false : true
+      disabled: selectedTargetName !== 'all' ? false : true,
     },
     {
       type: 'action',
       text: formatMessage('See Log'),
       buttonProps: {
         iconProps: {
-          iconName: 'ClipboardList'
+          iconName: 'ClipboardList',
         },
-        onClick: () => setShowLog(true)
+        onClick: () => setShowLog(true),
       },
       align: 'left',
       disabled: selectedVersion ? false : true,
-      dataTestid: 'publishPage-ToolBar-Log'
+      dataTestid: 'publishPage-ToolBar-Log',
     },
     {
       type: 'action',
       text: formatMessage('Rollback'),
       buttonProps: {
         iconProps: {
-          iconName: 'ClipboardList'
+          iconName: 'ClipboardList',
         },
-        onClick: () => rollbackToVersion(selectedVersion)
+        onClick: () => rollbackToVersion(selectedVersion),
       },
       align: 'left',
       disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
-      dataTestid: 'publishPage-ToolBar-Log'
-    }
+      dataTestid: 'publishPage-ToolBar-Log',
+    },
   ];
 
   const onSelectTarget = useCallback(
-    targetName => {
+    (targetName) => {
       const url = `/bot/${projectId}/publish/${targetName}`;
       navigateTo(url);
     },
     [projectId]
   );
 
-  const getUpdatedStatus = target => {
+  const getUpdatedStatus = (target) => {
     if (target) {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
@@ -151,7 +151,7 @@ const Publish: React.FC<PublishPageProps> = props => {
 
   useEffect(() => {
     if (settings.publishTargets && settings.publishTargets.length > 0) {
-      const _selected = settings.publishTargets.find(item => item.name === selectedTargetName);
+      const _selected = settings.publishTargets.find((item) => item.name === selectedTargetName);
       setSelectedTarget(_selected);
       // load publish histories
       if (selectedTargetName === 'all') {
@@ -178,7 +178,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             name: target.name,
             startIndex: startIndex,
             count: publishHistory[target.name].length,
-            level: 0
+            level: 0,
           });
           startIndex += publishHistory[target.name].length;
         }
@@ -193,8 +193,8 @@ const Publish: React.FC<PublishPageProps> = props => {
           name: selectedTargetName,
           startIndex: 0,
           count: publishHistory[selectedTargetName].length,
-          level: 0
-        }
+          level: 0,
+        },
       ]);
     }
   }, [publishHistory, selectedTargetName]);
@@ -217,15 +217,15 @@ const Publish: React.FC<PublishPageProps> = props => {
         {
           name,
           type,
-          configuration
-        }
+          configuration,
+        },
       ]);
       await actions.setSettings(
         projectId,
         botName,
         {
           ...settings,
-          publishTargets: _target
+          publishTargets: _target,
         },
         undefined
       );
@@ -245,7 +245,7 @@ const Publish: React.FC<PublishPageProps> = props => {
       _targets[editTarget.index] = {
         name,
         type,
-        configuration
+        configuration,
       };
 
       await actions.setSettings(
@@ -253,7 +253,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         botName,
         {
           ...settings,
-          publishTargets: _targets
+          publishTargets: _targets,
         },
         undefined
       );
@@ -275,7 +275,7 @@ const Publish: React.FC<PublishPageProps> = props => {
           types={publishTypes}
           updateSettings={savePublishTarget}
         />
-      )
+      ),
     });
   }, [publishTypes, savePublishTarget, settings.publishTargets]);
 
@@ -287,16 +287,16 @@ const Publish: React.FC<PublishPageProps> = props => {
         <CreatePublishTarget
           closeDialog={() => setEditDialogHidden(true)}
           current={editTarget ? editTarget.item : null}
-          targets={(settings.publishTargets || []).filter(item => editTarget && item.name != editTarget.item.name)}
+          targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
           types={publishTypes}
           updateSettings={updatePublishTarget}
         />
-      )
+      ),
     });
   }, [editTarget, publishTypes, updatePublishTarget]);
 
   const rollbackToVersion = useMemo(
-    () => async version => {
+    () => async (version) => {
       const sensitiveSettings = settingsStorage.get(botName);
       await actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
     },
@@ -304,18 +304,18 @@ const Publish: React.FC<PublishPageProps> = props => {
   );
 
   const publish = useMemo(
-    () => async comment => {
+    () => async (comment) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
         const sensitiveSettings = settingsStorage.get(botName);
         await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
         // update the target with a lastPublished date
-        const updatedPublishTargets = settings.publishTargets.map(profile => {
+        const updatedPublishTargets = settings.publishTargets.map((profile) => {
           if (profile.name === selectedTarget.name) {
             return {
               ...profile,
-              lastPublished: new Date()
+              lastPublished: new Date(),
             };
           } else {
             return profile;
@@ -327,7 +327,7 @@ const Publish: React.FC<PublishPageProps> = props => {
           botName,
           {
             ...settings,
-            publishTargets: updatedPublishTargets
+            publishTargets: updatedPublishTargets,
           },
           undefined
         );
@@ -349,7 +349,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         null,
         {
           confirmBtnText: formatMessage('Yes'),
-          cancelBtnText: formatMessage('Cancel')
+          cancelBtnText: formatMessage('Cancel'),
         }
       );
 
@@ -361,7 +361,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             botName,
             {
               ...settings,
-              publishTargets: _target
+              publishTargets: _target,
             },
             undefined
           );
@@ -409,7 +409,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             css={selectedTargetName === 'all' ? targetSelected : overflowSet}
             style={{
               height: '36px',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
             onClick={() => {
               setSelectedTarget(undefined);
@@ -422,9 +422,9 @@ const Publish: React.FC<PublishPageProps> = props => {
             <TargetList
               list={settings.publishTargets}
               selectedTarget={selectedTargetName}
-              onDelete={async index => await onDelete(index)}
+              onDelete={async (index) => await onDelete(index)}
               onEdit={async (item, target) => await onEdit(item, target)}
-              onSelect={item => {
+              onSelect={(item) => {
                 setSelectedTarget(item);
                 onSelectTarget(item.name);
               }}
@@ -450,9 +450,9 @@ const Publish: React.FC<PublishPageProps> = props => {
 };
 
 export default Publish;
-const LogDialog = props => {
+const LogDialog = (props) => {
   const logDialogProps = {
-    title: 'Publish Log'
+    title: 'Publish Log',
   };
   return (
     <Dialog

@@ -28,7 +28,7 @@ interface CreateDialogModalProps {
   isOpen: boolean;
 }
 
-export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
+export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;
@@ -39,7 +39,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
     const newData: DialogFormData = {
       ...formData,
-      [field]: newValue
+      [field]: newValue,
     };
     validateForm(newData);
     setFormData(newData);
@@ -54,7 +54,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
       if (!nameRegex.test(name)) {
         errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
       }
-      if (dialogs.some(dialog => dialog.id === name)) {
+      if (dialogs.some((dialog) => dialog.id === name)) {
         errors.name = formatMessage('Duplicate dialog name');
       }
     } else {
@@ -63,14 +63,14 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
     setFormDataErrors(errors);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (Object.keys(formDataErrors).length > 0) {
       return;
     }
 
     onSubmit({
-      ...formData
+      ...formData,
     });
   };
 

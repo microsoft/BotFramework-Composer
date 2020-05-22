@@ -15,7 +15,7 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
-  CheckboxVisibility
+  CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
@@ -70,7 +70,7 @@ const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) =
             ? formatMessage('previous folder')
             : formatMessage('{icon} name is {file}', {
                 icon: iconName,
-                file: file.name
+                file: file.name,
               })
         }
         onClick={() => onFileChosen(file)}
@@ -81,14 +81,14 @@ const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) =
   );
 };
 
-export const FileSelector: React.FC<FileSelectorProps> = props => {
+export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const {
     onFileChosen,
     focusedStorageFolder,
     checkShowItem,
     onCurrentPathUpdate,
     operationMode,
-    isWindows = false
+    isWindows = false,
   } = props;
   // for detail file list in open panel
   const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
@@ -105,7 +105,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       fieldName: 'name',
       minWidth: 16,
       maxWidth: 16,
-      onRender: _renderIcon
+      onRender: _renderIcon,
     },
     {
       key: 'name',
@@ -119,7 +119,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
       onRender: _renderNameColumn(onFileChosen),
-      isPadded: true
+      isPadded: true,
     },
     {
       key: 'lastModified',
@@ -142,8 +142,8 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
           </div>
         );
       },
-      isPadded: true
-    }
+      isPadded: true,
+    },
   ];
 
   const [currentSort, setSort] = useState<SortState>({ key: tableColumns[0].key, descending: true });
@@ -179,7 +179,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     files.unshift({
       name: '..',
       type: 'folder',
-      path: diskRootPattern.test(currentPath) || currentPath === '/' ? '/' : focusedStorageFolder.parent
+      path: diskRootPattern.test(currentPath) || currentPath === '/' ? '/' : focusedStorageFolder.parent,
     });
     return files;
   }, [focusedStorageFolder, currentSort.key, currentSort.descending]);
@@ -189,7 +189,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
       <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
           ...props,
-          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
+          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
         })}
       </Sticky>
     );
@@ -204,7 +204,7 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
   }
 
   const separator = path.sep;
-  const pathItems = currentPath.split(separator).filter(p => p !== '');
+  const pathItems = currentPath.split(separator).filter((p) => p !== '');
   const breadcrumbItems = pathItems.map((item, index) => {
     let itemPath = getNavItemPath(pathItems, separator, 0, index);
     // put a leading / back on the path if it started as a unix style path
@@ -215,14 +215,14 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
     return {
       text: displayText, // displayed text
       key: itemPath, // value returned
-      title: item // title shown on hover
+      title: item, // title shown on hover
     };
   });
   if (currentPath) {
     breadcrumbItems.splice(0, 0, {
       text: '/', // displayed text
       key: '/', // value returned
-      title: '/' // title shown on hover
+      title: '/', // title shown on hover
     });
   }
   breadcrumbItems.reverse();
@@ -253,13 +253,13 @@ export const FileSelector: React.FC<FileSelectorProps> = props => {
           <DetailsList
             isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
-            columns={tableColumns.map(col => ({
+            columns={tableColumns.map((col) => ({
               ...col,
               isSorted: col.key === currentSort.key,
-              isSortedDescending: currentSort.descending
+              isSortedDescending: currentSort.descending,
             }))}
             compact={false}
-            getKey={item => item.name}
+            getKey={(item) => item.name}
             items={storageFiles}
             layoutMode={DetailsListLayoutMode.justified}
             selectionMode={SelectionMode.single}

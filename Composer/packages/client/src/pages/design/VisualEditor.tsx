@@ -19,7 +19,7 @@ import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEdi
 
 const addIconProps = {
   iconName: 'CircleAddition',
-  styles: { root: { fontSize: '12px' } }
+  styles: { root: { fontSize: '12px' } },
 };
 
 function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
@@ -53,7 +53,7 @@ interface VisualEditorProps {
   openNewTriggerModal: () => void;
 }
 
-const VisualEditor: React.FC<VisualEditorProps> = props => {
+const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { api: shellApi, data: shellData } = useShell('VisualEditor');
   const { openNewTriggerModal } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
@@ -62,10 +62,10 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
   const { dialogs, schemas, designPageLocation } = state;
   const { dialogId, selected } = designPageLocation;
 
-  const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
+  const addRef = useCallback((visualEditor) => onboardingAddCoachMarkRef({ visualEditor }), []);
 
   useEffect(() => {
-    const dialog = dialogs.find(d => d.id === dialogId);
+    const dialog = dialogs.find((d) => d.id === dialogId);
     const visible = get(dialog, 'triggers', []).length === 0;
     setTriggerButtonVisibility(visible);
   }, [dialogs, dialogId]);

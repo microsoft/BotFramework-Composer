@@ -8,7 +8,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   IColumn,
-  CheckboxVisibility
+  CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -41,7 +41,7 @@ const columns: IColumn[] = [
     onRender: (item: INotification) => {
       const icon = icons[item.severity];
       return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
-    }
+    },
   },
   {
     key: 'NotificationType',
@@ -66,7 +66,7 @@ const columns: IColumn[] = [
         </div>
       );
     },
-    isPadded: true
+    isPadded: true,
   },
   {
     key: 'NotificationLocation',
@@ -90,7 +90,7 @@ const columns: IColumn[] = [
         </div>
       );
     },
-    isPadded: true
+    isPadded: true,
   },
   {
     key: 'NotificationDetail',
@@ -116,8 +116,8 @@ const columns: IColumn[] = [
         </div>
       );
     },
-    isPadded: true
-  }
+    isPadded: true,
+  },
 ];
 
 function onRenderDetailsHeader(props, defaultRender) {
@@ -125,13 +125,13 @@ function onRenderDetailsHeader(props, defaultRender) {
     <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
       {defaultRender({
         ...props,
-        onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
+        onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
       })}
     </Sticky>
   );
 }
 
-export const NotificationList: React.FC<INotificationListProps> = props => {
+export const NotificationList: React.FC<INotificationListProps> = (props) => {
   const { items, onItemClick } = props;
   const [pageIndex, setPageIndex] = useState<number>(1);
 

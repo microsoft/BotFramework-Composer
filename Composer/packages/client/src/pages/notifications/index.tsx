@@ -42,7 +42,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       const { projectId, id, dialogPath } = item;
       const uri = convertPathToUrl(projectId, id, dialogPath);
       navigateTo(uri);
-    }
+    },
   };
   const handleItemClick = (item: INotification) => {
     navigations[item.type](item);

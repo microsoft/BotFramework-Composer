@@ -12,8 +12,8 @@ export const createSkillManifest: ActionCreator = ({ dispatch }, { content, id }
     type: ActionTypes.CREATE_SKILL_MANIFEST,
     payload: {
       content,
-      id
-    }
+      id,
+    },
   });
 };
 
@@ -21,8 +21,8 @@ export const removeSkillManifest: ActionCreator = ({ dispatch }, id) => {
   dispatch({
     type: ActionTypes.REMOVE_SKILL_MANIFEST,
     payload: {
-      id
-    }
+      id,
+    },
   });
 };
 
@@ -31,8 +31,8 @@ export const updateSkillManifest: ActionCreator = ({ dispatch }, { content, id }
     type: ActionTypes.UPDATE_SKILL_MANIFEST,
     payload: {
       content,
-      id
-    }
+      id,
+    },
   });
 };
 
@@ -69,14 +69,14 @@ export const updateSkill: ActionCreator = async (store, { projectId, targetId, s
     store.dispatch({
       type: ActionTypes.UPDATE_SKILL_SUCCESS,
       payload: {
-        skills: response.data
-      }
+        skills: response.data,
+      },
     });
   } catch (err) {
     setError(store, {
       status: err.response.status,
       message: err.response && err.response.data.message ? err.response.data.message : err,
-      summary: 'UPDATE SKILL ERROR'
+      summary: 'UPDATE SKILL ERROR',
     });
   }
 };
@@ -85,8 +85,8 @@ export const addSkillDialogBegin: ActionCreator = ({ dispatch }, onComplete) => 
   dispatch({
     type: ActionTypes.ADD_SKILL_DIALOG_BEGIN,
     payload: {
-      onComplete
-    }
+      onComplete,
+    },
   });
 };
 
@@ -98,7 +98,7 @@ export const addSkillDialogCancel: ActionCreator = ({ dispatch, getState }) => {
   }
 
   dispatch({
-    type: ActionTypes.ADD_SKILL_DIALOG_END
+    type: ActionTypes.ADD_SKILL_DIALOG_END,
   });
 };
 
@@ -109,7 +109,7 @@ export const addSkillDialogSuccess: ActionCreator = ({ dispatch, getState }) => 
   }
 
   dispatch({
-    type: ActionTypes.ADD_SKILL_DIALOG_END
+    type: ActionTypes.ADD_SKILL_DIALOG_END,
   });
 };
 
@@ -117,13 +117,13 @@ export const displayManifestModal: ActionCreator = ({ dispatch }, id) => {
   dispatch({
     type: ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL,
     payload: {
-      id
-    }
+      id,
+    },
   });
 };
 
 export const dismissManifestModal: ActionCreator = ({ dispatch }) => {
   dispatch({
-    type: ActionTypes.DISMISS_SKILL_MANIFEST_MODAL
+    type: ActionTypes.DISMISS_SKILL_MANIFEST_MODAL,
   });
 };

@@ -31,10 +31,10 @@ export interface ICreateSkillModalProps {
 }
 
 const defaultFormData = {
-  manifestUrl: ''
+  manifestUrl: '',
 };
 
-const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
+const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
   const { editIndex = -1, skills, onSubmit, onDismiss, isOpen, projectId } = props;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
@@ -52,7 +52,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
   const asyncManifestUrlValidation = async (projectId: string, manifestUrl: string) => {
     const err = await validateManifestUrl(projectId, manifestUrl);
     if (err) {
-      setFormDataErrors(current => ({ ...current, manifestUrl: err }));
+      setFormDataErrors((current) => ({ ...current, manifestUrl: err }));
     }
     setIsValidating(false);
   };
@@ -71,7 +71,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
           currentError = formatMessage('Url should start with http[s]://');
         }
 
-        const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
+        const duplicatedItemIndex = skills.findIndex((item) => item.manifestUrl === manifestUrl);
         if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
           currentError = formatMessage('Duplicate skill manifest Url');
         }
@@ -94,7 +94,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
           currentError = formatMessage('Name contains invalid charactors');
         }
 
-        const duplicatedItemIndex = skills.findIndex(item => item.name === name);
+        const duplicatedItemIndex = skills.findIndex((item) => item.name === name);
         if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
           currentError = formatMessage('Duplicate skill name');
         }
@@ -125,7 +125,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
   const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
     const newData: ISkillFormData = {
       ...formData,
-      [field]: newValue
+      [field]: newValue,
     };
     setFormData(newData);
     const errors = validateForm(newData);
@@ -133,7 +133,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
   };
 
   const handleSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (isValidating) return;
       setIsValidating(true);
@@ -146,9 +146,9 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
       }
 
       // do async validation
-      validateManifestUrl(projectId, formData.manifestUrl).then(error => {
+      validateManifestUrl(projectId, formData.manifestUrl).then((error) => {
         if (error) {
-          setFormDataErrors(current => ({ ...current, manifestUrl: error }));
+          setFormDataErrors((current) => ({ ...current, manifestUrl: error }));
           setIsValidating(false);
           return;
         }

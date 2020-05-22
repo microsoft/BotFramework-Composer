@@ -25,11 +25,11 @@ const STATE = {
   INPUT: 0,
   PUBLISHPENDING: 1,
   PUBLISHSUCCESS: 2,
-  PUBLISHFAILURE: 3
+  PUBLISHFAILURE: 3,
 };
 
 // eslint-disable-next-line react/display-name
-const onRenderLabel = info => props => (
+const onRenderLabel = (info) => (props) => (
   <Stack horizontal verticalAlign="center">
     <span css={textFieldLabel}>{props.label}</span>
     <TooltipHost calloutProps={{ gapSpace: 0 }} content={info}>
@@ -41,11 +41,11 @@ const onRenderLabel = info => props => (
 const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validationProperties = ['name', 'authoringKey', 'environment'];
 const defaultFields = { authoringRegion: 'westus', defaultLanguage: 'en-us' };
-const validateForm = data => {
+const validateForm = (data) => {
   const result = { errors: {} };
   const dataKeys = keys(data);
 
-  dataKeys.forEach(key => {
+  dataKeys.forEach((key) => {
     const value = data[key];
     if (validationProperties.includes(key) && (!value || !nameRegex.test(value))) {
       result.errors[key] = formatMessage(
@@ -59,13 +59,13 @@ const validateForm = data => {
   return result;
 };
 
-const DeploySuccess = props => {
+const DeploySuccess = (props) => {
   const status = props.status;
   const appNames = keys(status);
   return (
     <Fragment>
       <div css={consoleStyle}>
-        {appNames.map(item => {
+        {appNames.map((item) => {
           return <div key={item}>{`${item}:${status[item].version}`}</div>;
         })}
       </div>
@@ -84,7 +84,7 @@ const DeploySuccess = props => {
   );
 };
 
-const DeployFailure = props => {
+const DeployFailure = (props) => {
   return (
     <Fragment>
       <div css={consoleStyle}>{props.error}</div>
@@ -97,7 +97,7 @@ const DeployFailure = props => {
   );
 };
 
-export const PublishLuis = props => {
+export const PublishLuis = (props) => {
   const { state, actions } = useContext(StoreContext);
   const { setSettings } = actions;
   const { botName, settings } = state;
@@ -110,16 +110,16 @@ export const PublishLuis = props => {
     authoringRegion: settings.luis.authoringRegion,
     defaultLanguage: settings.luis.defaultLanguage,
     environment: settings.luis.environment,
-    errors: {}
+    errors: {},
   };
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const updateForm = field => (e, newValue) => {
+  const updateForm = (field) => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
   };
 
-  const handlePublish = async e => {
+  const handlePublish = async (e) => {
     e.preventDefault();
 
     const result = validateForm(formData);
@@ -201,7 +201,7 @@ export function PublishLuisModal(props) {
     onDismiss();
   };
 
-  const handlePublish = async formData => {
+  const handlePublish = async (formData) => {
     setWorkState(STATE.PUBLISHPENDING);
     const response = await onPublish({ ...formData });
     setResponse(response);
@@ -217,12 +217,12 @@ export function PublishLuisModal(props) {
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Publish LUIS models'),
-        styles: dialog
+        styles: dialog,
       }}
       hidden={!isOpen}
       modalProps={{
         isBlocking: false,
-        styles: dialogModal
+        styles: dialogModal,
       }}
       onDismiss={handleDismiss}
     >
@@ -240,5 +240,5 @@ export function PublishLuisModal(props) {
 PublishLuisModal.propTypes = {
   isOpen: PropTypes.bool,
   onDismiss: PropTypes.func,
-  onPublish: PropTypes.func
+  onPublish: PropTypes.func,
 };

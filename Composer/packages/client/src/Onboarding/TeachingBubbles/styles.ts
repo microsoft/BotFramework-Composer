@@ -8,43 +8,43 @@ import { palette } from '../palette';
 
 export const teachingBubbleTheme: ITheme = createTheme({
   defaultFontStyle: {
-    color: palette.themePrimary
+    color: palette.themePrimary,
   },
-  palette
+  palette,
 });
 
 export const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
   bodyContent: {
     selectors: {
       a: {
-        color: palette.white
-      }
-    }
+        color: palette.white,
+      },
+    },
   },
   footer: {
     flexDirection: 'row-reverse',
     justifyContent: 'space-between',
     selectors: {
       span: {
-        marginRight: 'auto'
+        marginRight: 'auto',
       },
       '.ms-Button:first-child': {
-        marginLeft: '10px'
-      }
-    }
+        marginLeft: '10px',
+      },
+    },
   },
   primaryButton: {
     background: '#ffffff',
     selectors: {
       ':active': {
-        background: '#dadada'
+        background: '#dadada',
       },
       ':hover': {
-        background: '#f4f4f4'
+        background: '#f4f4f4',
       },
       ':focus': {
-        background: '#f4f4f4'
-      }
-    }
-  }
+        background: '#f4f4f4',
+      },
+    },
+  },
 };

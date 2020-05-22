@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { IDropdownStyles } from 'office-ui-fabric-react/lib/Dropdown';
 
 export const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 80 }
+  dropdown: { width: 80 },
 };
 
 export const container = css`

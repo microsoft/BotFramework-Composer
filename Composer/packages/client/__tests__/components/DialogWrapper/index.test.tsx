@@ -13,7 +13,7 @@ describe('<DialogWrapper />', () => {
     title: 'My Dialog',
     subText: 'Create new dialog',
     onDismiss: jest.fn(),
-    dialogType: DialogTypes.CreateFlow
+    dialogType: DialogTypes.CreateFlow,
   };
 
   it('renders null when not open', () => {

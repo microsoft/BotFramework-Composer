@@ -23,7 +23,7 @@ const createDropdownOption = (pageCount: number) => {
   return options;
 };
 
-export const Pagination: React.FC<IPaginationProps> = props => {
+export const Pagination: React.FC<IPaginationProps> = (props) => {
   const [index, setIndex] = useState(0);
   const { pageCount, onChange } = props;
 

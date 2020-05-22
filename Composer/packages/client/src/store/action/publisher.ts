@@ -14,13 +14,13 @@ export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
     dispatch({
       type: ActionTypes.GET_PUBLISH_TYPES_SUCCESS,
       payload: {
-        typelist: response.data
-      }
+        typelist: response.data,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
-      payload: err
+      payload: err,
     });
   }
 };
@@ -29,14 +29,14 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
   try {
     const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
       metadata,
-      sensitiveSettings
+      sensitiveSettings,
     });
     dispatch({
       type: ActionTypes.PUBLISH_SUCCESS,
       payload: {
         ...response.data,
-        target: target
-      }
+        target: target,
+      },
     });
   } catch (err) {
     // special case to handle dotnet issues
@@ -48,23 +48,23 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
             message: formatMessage('To run this bot, Composer needs .NET Core SDK.'),
             linkAfterMessage: {
               text: formatMessage('Learn more.'),
-              url: 'https://docs.microsoft.com/en-us/composer/setup-yarn'
+              url: 'https://docs.microsoft.com/en-us/composer/setup-yarn',
             },
             link: {
               text: formatMessage('Install Microsoft .NET Core SDK'),
-              url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1'
-            }
+              url: 'https://dotnet.microsoft.com/download/dotnet-core/3.1',
+            },
           },
-          target: target
-        }
+          target: target,
+        },
       });
     } else
       dispatch({
         type: ActionTypes.PUBLISH_FAILED,
         payload: {
           error: err.response.data,
-          target: target
-        }
+          target: target,
+        },
       });
   }
 };
@@ -73,22 +73,22 @@ export const rollbackToVersion: ActionCreator = async ({ dispatch }, projectId, 
   try {
     const response = await httpClient.post(`/publish/${projectId}/rollback/${target.name}`, {
       version,
-      sensitiveSettings
+      sensitiveSettings,
     });
     dispatch({
       type: ActionTypes.PUBLISH_SUCCESS,
       payload: {
         ...response.data,
-        target: target
-      }
+        target: target,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.PUBLISH_FAILED,
       payload: {
         error: err.response.data,
-        target: target
-      }
+        target: target,
+      },
     });
   }
 };
@@ -101,16 +101,16 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
       type: ActionTypes.GET_PUBLISH_STATUS,
       payload: {
         ...response.data,
-        target: target
-      }
+        target: target,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.GET_PUBLISH_STATUS_FAILED,
       payload: {
         ...err.response.data,
-        target: target
-      }
+        target: target,
+      },
     });
   }
 };
@@ -122,13 +122,13 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, 
       type: ActionTypes.GET_PUBLISH_HISTORY,
       payload: {
         history: response.data,
-        target: target
-      }
+        target: target,
+      },
     });
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
-      payload: err
+      payload: err,
     });
   }
 };

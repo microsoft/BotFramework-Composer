@@ -13,7 +13,7 @@ import { collapsedStyles, expandedStyles } from './style';
 const WelcomeModal = () => {
   const {
     actions: { exit },
-    state: { complete, hideModal, minimized }
+    state: { complete, hideModal, minimized },
   } = useContext(OnboardingContext);
 
   return !(complete || hideModal) ? (

@@ -17,7 +17,7 @@ interface IEmulatorOpenButtonProps {
   onClick: () => void;
 }
 
-export const EmulatorOpenButton: React.FC<IEmulatorOpenButtonProps> = props => {
+export const EmulatorOpenButton: React.FC<IEmulatorOpenButtonProps> = (props) => {
   const { onClick, botStatus, hidden, botEndpoint } = props;
   const connected = botStatus === BotStatus.connected;
 
@@ -34,7 +34,7 @@ export const EmulatorOpenButton: React.FC<IEmulatorOpenButtonProps> = props => {
     >
       <ActionButton
         iconProps={{
-          iconName: 'OpenInNewTab'
+          iconName: 'OpenInNewTab',
         }}
         onClick={onClick}
       >

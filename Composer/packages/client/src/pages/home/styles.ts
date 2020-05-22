@@ -155,8 +155,8 @@ export const button: IIconStyles = {
   root: {
     fontSize: '24px',
     fontWeight: 600,
-    color: 'white'
-  }
+    color: 'white',
+  },
 };
 
 export const disabledItem = {
@@ -171,7 +171,7 @@ export const disabledItem = {
     word-wrap: break-word;
     color: #a19f9d;
     background: white;
-  `
+  `,
 };
 
 const baseBotItem = {
@@ -191,28 +191,28 @@ const baseBotItem = {
   `,
   content: css`
     background-color: #f2f2f2;
-  `
+  `,
 };
 
 export const newBotItem = {
   ...baseBotItem,
   title: css`
     background-color: #0078d4;
-  `
+  `,
 };
 
 export const latestBotItem = {
   ...baseBotItem,
   title: css`
     background-color: #56ccf2;
-  `
+  `,
 };
 
 export const tutorialTile = {
   ...baseBotItem,
   title: css`
     background-color: #004c87;
-  `
+  `,
 };
 
 export const childrenContainer = css`

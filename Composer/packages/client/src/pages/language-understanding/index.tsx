@@ -23,7 +23,7 @@ interface LUPageProps extends RouteComponentProps<{}> {
   path: string;
 }
 
-const LUPage: React.FC<LUPageProps> = props => {
+const LUPage: React.FC<LUPageProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, projectId } = state;
   const path = props.location?.pathname ?? '';
@@ -32,15 +32,15 @@ const LUPage: React.FC<LUPageProps> = props => {
   const isRoot = dialogId === 'all';
 
   const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map(dialog => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
       return {
         id: dialog.id,
         url: `/bot/${projectId}/language-understanding/${dialog.id}`,
         name: dialog.displayName,
-        ariaLabel: formatMessage('language understanding file')
+        ariaLabel: formatMessage('language understanding file'),
       };
     });
-    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
@@ -50,7 +50,7 @@ const LUPage: React.FC<LUPageProps> = props => {
       id: 'all',
       name: formatMessage('All'),
       ariaLabel: formatMessage('all language understanding files'),
-      url: `/bot/${projectId}/language-understanding/all`
+      url: `/bot/${projectId}/language-understanding/all`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -75,8 +75,8 @@ const LUPage: React.FC<LUPageProps> = props => {
     {
       type: 'element',
       element: <TestController />,
-      align: 'right'
-    }
+      align: 'right',
+    },
   ];
 
   const onRenderHeaderContent = () => {

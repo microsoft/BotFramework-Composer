@@ -23,33 +23,33 @@ interface CreatePublishTargetProps {
   updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
 }
 
-const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
+const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [targetType, setTargetType] = useState<string | undefined>(props.current?.type);
   const [name, setName] = useState(props.current ? props.current.name : '');
   const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
 
   const targetTypes = useMemo(() => {
-    return props.types.map(t => ({ key: t.name, text: t.description }));
+    return props.types.map((t) => ({ key: t.name, text: t.description }));
   }, [props.targets]);
 
   const updateType = (_e, option?: IDropdownOption) => {
-    const type = props.types.find(t => t.name === option?.key);
+    const type = props.types.find((t) => t.name === option?.key);
 
     if (type) {
       setTargetType(type.name);
     }
   };
 
-  const updateConfig = newConfig => {
+  const updateConfig = (newConfig) => {
     setConfig(newConfig);
   };
 
-  const isNameValid = newName => {
+  const isNameValid = (newName) => {
     if (!newName || newName.trim() === '') {
       setErrorMsg(formatMessage('Must have a name'));
     } else {
-      const exists = !!props.targets?.find(t => t.name.toLowerCase() === newName?.toLowerCase);
+      const exists = !!props.targets?.find((t) => t.name.toLowerCase() === newName?.toLowerCase);
 
       if (exists) {
         setErrorMsg(formatMessage('A profile with that name already exists.'));
@@ -58,11 +58,11 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
   };
 
   const instructions: string | undefined = useMemo((): string | undefined => {
-    return targetType ? props.types.find(t => t.name === targetType)?.instructions : '';
+    return targetType ? props.types.find((t) => t.name === targetType)?.instructions : '';
   }, [props.targets, targetType]);
 
   const schema = useMemo(() => {
-    return targetType ? props.types.find(t => t.name === targetType)?.schema : undefined;
+    return targetType ? props.types.find((t) => t.name === targetType)?.schema : undefined;
   }, [props.targets, targetType]);
 
   const updateName = (e, newName) => {

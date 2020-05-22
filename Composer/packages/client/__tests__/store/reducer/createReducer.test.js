@@ -7,8 +7,8 @@ jest.mock('../../../src/constants/index', () => {
   return {
     ActionTypes: {
       mockActionType: 'mockActionType',
-      newActionTypeWithoutReducer: 'newActionTypeWithoutReducer'
-    }
+      newActionTypeWithoutReducer: 'newActionTypeWithoutReducer',
+    },
   };
 });
 
@@ -18,7 +18,7 @@ describe('test create reducer', () => {
       state.a = payload.a;
     });
     const reducer = createReducer({
-      mockActionType: mockActionHandler
+      mockActionType: mockActionHandler,
     });
     // test else branch
     const mockState = { a: 2 };

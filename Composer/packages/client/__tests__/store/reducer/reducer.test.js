@@ -7,8 +7,8 @@ import { reducer } from '../../../src/store/reducer/index';
 const mockResponse = {
   data: {
     files: ['test files'],
-    schemas: 'test schemas'
-  }
+    schemas: 'test schemas',
+  },
 };
 
 describe('test all reducer handlers', () => {
@@ -18,18 +18,18 @@ describe('test all reducer handlers', () => {
         children: [
           {
             type: FileTypes.FOLDER,
-            path: 'mock path'
+            path: 'mock path',
           },
           {
             type: FileTypes.FILE,
-            path: 'a.bot'
+            path: 'a.bot',
           },
           {
             type: FileTypes.FILE,
-            path: 'mock path'
-          }
-        ]
-      }
+            path: 'mock path',
+          },
+        ],
+      },
     };
     const result = reducer({}, { type: ActionTypes.GET_STORAGEFILE_SUCCESS, payload: { response: mockStorageFile } });
     expect(result.storageFileLoadingStatus).toBe('success');
@@ -82,7 +82,7 @@ describe('test all reducer handlers', () => {
         locale: 'en-us',
         lgFiles: [],
         luFiles: [],
-        schemas: { sdk: { content: {} } }
+        schemas: { sdk: { content: {} } },
       },
       { type: ActionTypes.CREATE_DIALOG, payload: { id: '3', content: '' } }
     );

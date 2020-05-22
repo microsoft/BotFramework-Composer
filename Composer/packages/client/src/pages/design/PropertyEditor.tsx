@@ -22,7 +22,7 @@ function resolveBaseSchema(schema: JSONSchema7, $kind: string): JSONSchema7 | un
   if (defSchema && typeof defSchema === 'object') {
     return {
       ...resolveRef(defSchema, schema.definitions),
-      definitions: schema.definitions
+      definitions: schema.definitions,
     };
   }
 }
@@ -90,7 +90,7 @@ const PropertyEditor: React.FC = () => {
 
           return {
             ...errors,
-            ...propErr
+            ...propErr,
           };
         }
 
@@ -121,7 +121,7 @@ const PropertyEditor: React.FC = () => {
   return (
     <Resizable
       enable={{
-        left: true
+        left: true,
       }}
       maxWidth={800}
       minWidth={400}

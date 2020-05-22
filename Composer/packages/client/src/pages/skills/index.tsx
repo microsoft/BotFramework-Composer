@@ -28,27 +28,27 @@ const Skills: React.FC<RouteComponentProps> = () => {
       text: formatMessage('Connect to a new skill'),
       buttonProps: {
         iconProps: {
-          iconName: 'Add'
+          iconName: 'Add',
         },
         onClick: () => {
           setEditIndex(-1);
-        }
+        },
       },
-      align: 'left'
+      align: 'left',
     },
     {
       type: 'element',
       element: <TestController />,
-      align: 'right'
-    }
+      align: 'right',
+    },
   ];
 
   const onItemDelete = useCallback(
-    index => {
+    (index) => {
       const payload = {
         projectId,
         targetId: index,
-        skillData: null
+        skillData: null,
       };
       actions.updateSkill(payload);
     },
@@ -60,7 +60,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
       const payload = {
         projectId,
         targetId: editIndex,
-        skillData: submitFormData
+        skillData: submitFormData,
       };
       actions.updateSkill(payload);
       setEditIndex(undefined);
@@ -88,7 +88,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <SkillList projectId={projectId} skills={skills} onDelete={onItemDelete} onEdit={idx => setEditIndex(idx)} />
+      <SkillList projectId={projectId} skills={skills} onDelete={onItemDelete} onEdit={(idx) => setEditIndex(idx)} />
       <CreateSkillModal
         editIndex={editIndex}
         isOpen={typeof editIndex === 'number'}

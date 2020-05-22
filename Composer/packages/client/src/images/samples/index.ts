@@ -28,5 +28,5 @@ export {
   RespondingWithCardsSample,
   RespondingWithTextSample,
   ToDoBotWithLuisSample,
-  TodoSample
+  TodoSample,
 };

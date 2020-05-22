@@ -17,7 +17,7 @@ import * as images from './images';
 export const ElectronSettings: React.FC<RouteComponentProps> = () => {
   const {
     actions: { updateUserSettings },
-    state: { userSettings }
+    state: { userSettings },
   } = useContext(StoreContext);
 
   const onAppUpdatesChange = (key: string) => (checked: boolean) => {
@@ -40,7 +40,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
           formatMessage.rich(
             'Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>.',
             {
-              a: props => {
+              a: (props) => {
                 <Link
                   href="https://github.com/microsoft/BotFramework-Composer-Nightlies"
                   rel="noopener noreferrer"
@@ -49,7 +49,7 @@ export const ElectronSettings: React.FC<RouteComponentProps> = () => {
                 >
                   {props.children}
                 </Link>;
-              }
+              },
             }
           ) as any
         }

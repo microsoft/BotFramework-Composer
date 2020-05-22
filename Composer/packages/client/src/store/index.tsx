@@ -22,7 +22,7 @@ import {
   MiddlewareApi,
   MiddlewareFunc,
   StorageFolder,
-  Store
+  Store,
 } from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
@@ -34,15 +34,15 @@ const getUserSettings = (): UserSettings => {
   const defaultSettings = {
     appUpdater: {
       autoDownload: false,
-      useNightly: false
+      useNightly: false,
     },
     codeEditor: {
       lineNumbers: false,
       wordWrap: false,
-      minimap: false
+      minimap: false,
     },
     propertyEditorWidth: 400,
-    dialogNavWidth: 180
+    dialogNavWidth: 180,
   };
   const loadedSettings = storage.get('userSettings') || {};
   const settings = merge(defaultSettings, loadedSettings);
@@ -85,7 +85,7 @@ export const initialState: State = {
     projectId: '',
     dialogId: '',
     focused: '',
-    selected: ''
+    selected: '',
   },
   breadcrumb: [],
   error: null, // a object with structure {summary: "", message: ""}
@@ -96,7 +96,7 @@ export const initialState: State = {
   settingsSchemas: {},
   currentUser: {
     token: null,
-    sessionExpired: false
+    sessionExpired: false,
   },
   publishVersions: {},
   publishStatus: 'inactive',
@@ -104,7 +104,7 @@ export const initialState: State = {
   visualEditorSelection: [],
   onboarding: {
     complete: true,
-    coachMarkRefs: {}
+    coachMarkRefs: {},
   },
   clipboardActions: [],
   publishTypes: [],
@@ -114,15 +114,15 @@ export const initialState: State = {
   userSettings: getUserSettings(),
   runtimeSettings: {
     path: '',
-    startCommand: ''
+    startCommand: '',
   },
   announcement: undefined,
   appUpdate: {
     progressPercent: 0,
     showing: false,
-    status: AppUpdaterStatus.IDLE
+    status: AppUpdaterStatus.IDLE,
   },
-  botOpening: false
+  botOpening: false,
 };
 
 export interface StoreContextValue {
@@ -143,8 +143,8 @@ export const StoreContext = React.createContext<StoreContextValue>({
   resolvers: {
     lgImportresolver: defaultFileResolver,
     lgFileResolver: () => undefined,
-    luFileResolver: () => undefined
-  }
+    luFileResolver: () => undefined,
+  },
 });
 
 interface StoreProviderProps {
@@ -157,9 +157,9 @@ export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) 
   let dispatch: React.Dispatch<ActionType> = () => {};
   const middlewareApi: MiddlewareApi = {
     getState: store.getState,
-    dispatch: (...args) => dispatch(...args)
+    dispatch: (...args) => dispatch(...args),
   };
-  const chain = middlewares.map(middleware => middleware(middlewareApi));
+  const chain = middlewares.map((middleware) => middleware(middlewareApi));
   dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(store.dispatch);
   return dispatch;
 };
@@ -170,7 +170,7 @@ export const wrappedReducer = (state: State, action: ActionType) => {
   return currentState;
 };
 
-export const StoreProvider: React.FC<StoreProviderProps> = props => {
+export const StoreProvider: React.FC<StoreProviderProps> = (props) => {
   const [state, dispatch] = useReducer(wrappedReducer, initialState);
   const stateRef = useRef<State>(initialState);
 
@@ -188,19 +188,19 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     dispatch: interceptDispatch,
     resolvers: {
       lgImportresolver: importResolverGenerator(getState().lgFiles, '.lg'),
-      lgFileResolver: function(id: string) {
+      lgFileResolver: function (id: string) {
         const state = getState();
         const { locale, lgFiles } = state;
         const fileId = id.includes('.') ? id : `${id}.${locale}`;
         return lgFiles.find(({ id }) => id === fileId);
       },
-      luFileResolver: function(id: string) {
+      luFileResolver: function (id: string) {
         const state = getState();
         const { locale, luFiles } = state;
         const fileId = id.includes('.') ? id : `${id}.${locale}`;
         return luFiles.find(({ id }) => id === fileId);
-      }
-    }
+      },
+    },
   };
 
   prepareAxiosWithStore({ dispatch, getState });
