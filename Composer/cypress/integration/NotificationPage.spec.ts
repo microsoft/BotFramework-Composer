@@ -42,7 +42,7 @@ context('Notification Page', () => {
   });
 
   it('can show dialog expression error ', () => {
-    cy.visitPage('Design Flow');
+    cy.visitPage('Design');
 
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('WelcomeUser').click();
