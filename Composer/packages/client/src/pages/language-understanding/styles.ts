@@ -11,7 +11,7 @@ export const actionButton = css`
 `;
 
 export const iconClass = mergeStyles({
-  fontSize: FontSizes.medium,
+  fontSize: FontSizes.medium
 });
 
 export const flexContentSpaceBetween = css`
@@ -67,14 +67,14 @@ export const textFieldLabel = css`
 
 export const dialog = {
   title: {
-    fontWeight: FontWeights.bold,
-  },
+    fontWeight: FontWeights.bold
+  }
 };
 
 export const dialogModal = {
   main: {
-    maxWidth: '450px !important',
-  },
+    maxWidth: '450px !important'
+  }
 };
 
 export const dialogSubTitle = css`

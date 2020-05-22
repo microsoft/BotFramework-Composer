@@ -8,7 +8,7 @@ import { ContentProps } from '../constants';
 
 export const FetchManifestSchema: React.FC<ContentProps> = ({ completeStep, editJson, value, setSchema }) => {
   useEffect(() => {
-    (async function () {
+    (async function() {
       try {
         if (value && value?.$schema) {
           const res = await fetch(value.$schema);

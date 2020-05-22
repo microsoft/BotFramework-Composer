@@ -34,8 +34,8 @@ export const TestController: React.FC = () => {
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
-  const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
-  const errorLength = notifications.filter((n) => n.severity === 'Error').length;
+  const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
+  const errorLength = notifications.filter(n => n.severity === 'Error').length;
   const showError = errorLength > 0;
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export const TestController: React.FC = () => {
         />
         <div
           aria-label={formatMessage(`{ botStatus}`, {
-            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
+            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : ''
           })}
           aria-live={'assertive'}
         />

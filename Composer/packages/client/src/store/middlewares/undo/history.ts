@@ -58,7 +58,7 @@ class UndoHistory {
   public clear() {
     this.history = [];
     this.pointer = -1;
-    keys(this.stacks).every((key) => {
+    keys(this.stacks).every(key => {
       this.stacks[key].clear();
     });
   }

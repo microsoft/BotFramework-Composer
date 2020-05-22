@@ -20,7 +20,7 @@ describe('fetchFolderItemsByPath', () => {
     await fetchFolderItemsByPath(store, id, path);
 
     expect(dispatch).toBeDispatchedWith(ActionTypes.SET_STORAGEFILE_FETCHING_STATUS, {
-      status: 'pending',
+      status: 'pending'
     });
   });
 
@@ -39,7 +39,7 @@ describe('fetchFolderItemsByPath', () => {
       await fetchFolderItemsByPath(store, id, path);
 
       expect(dispatch).toBeDispatchedWith(ActionTypes.GET_STORAGEFILE_SUCCESS, {
-        response: { some: 'response' },
+        response: { some: 'response' }
       });
     });
   });
@@ -55,7 +55,7 @@ describe('fetchFolderItemsByPath', () => {
       expect(dispatch).toBeDispatchedWith(
         ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
         {
-          status: 'failure',
+          status: 'failure'
         },
         'some error'
       );

@@ -17,6 +17,6 @@ export const dialogSubTitle = css`
 
 export const dialog = {
   title: {
-    fontWeight: FontWeights.bold,
-  },
+    fontWeight: FontWeights.bold
+  }
 };

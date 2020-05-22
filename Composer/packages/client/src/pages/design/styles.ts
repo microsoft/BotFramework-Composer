@@ -105,21 +105,21 @@ export const breadcrumbClass = mergeStyleSets({
   root: {
     width: '500px',
     margin: '0',
-    padding: '10px',
+    padding: '10px'
   },
   itemLink: {
     selectors: {
       '.ms-TooltipHost': {
         fontSize: FontSizes.size18,
-        fontWeight: FontWeights.regular,
-      },
+        fontWeight: FontWeights.regular
+      }
     },
     color: '#333',
-    padding: '4px 8px',
+    padding: '4px 8px'
   },
   chevron: {
-    fontSize: FontSizes.size10,
-  },
+    fontSize: FontSizes.size10
+  }
 });
 
 export const deleteDialogContent = css`
@@ -156,52 +156,52 @@ export const styles = {
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.size20,
       paddingTop: '14px',
-      paddingBottom: '11px',
+      paddingBottom: '11px'
     },
     subText: {
-      fontSize: FontSizes.size14,
-    },
+      fontSize: FontSizes.size14
+    }
   },
   modal: {
     main: {
       maxWidth: '80% !important',
-      width: '960px !important',
-    },
+      width: '960px !important'
+    }
   },
   halfstack: {
     root: [
       {
-        flexBasis: '50%',
-      },
-    ],
+        flexBasis: '50%'
+      }
+    ]
   },
   stackinput: {
     root: [
       {
-        marginBottom: '1rem',
-      },
-    ],
-  },
+        marginBottom: '1rem'
+      }
+    ]
+  }
 };
 
 export const textFieldlabel = {
   label: {
     root: [
       {
-        fontWeight: FontWeights.semibold,
-      },
-    ],
-  },
+        fontWeight: FontWeights.semibold
+      }
+    ]
+  }
 };
 
 export const name = {
-  subComponentStyles: textFieldlabel,
+  subComponentStyles: textFieldlabel
 };
 
 export const description = {
-  subComponentStyles: textFieldlabel,
+  subComponentStyles: textFieldlabel
 };
 
 export const manifestUrl = {
-  subComponentStyles: textFieldlabel,
+  subComponentStyles: textFieldlabel
 };

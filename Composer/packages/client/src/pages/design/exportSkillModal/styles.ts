@@ -13,18 +13,18 @@ export const styles: { dialog: Partial<IDialogContentStyles>; modal: Partial<IMo
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.size20,
       paddingTop: '14px',
-      paddingBottom: '11px',
+      paddingBottom: '11px'
     },
     subText: {
-      fontSize: FontSizes.size14,
-    },
+      fontSize: FontSizes.size14
+    }
   },
   modal: {
     main: {
       height: '600px !important',
       maxWidth: '80% !important',
-      width: '960px !important',
-    },
+      width: '960px !important'
+    }
   },
   container: css`
     height: 550px;
@@ -42,5 +42,5 @@ export const styles: { dialog: Partial<IDialogContentStyles>; modal: Partial<IMo
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
-  `,
+  `
 };

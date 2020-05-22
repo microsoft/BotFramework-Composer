@@ -25,9 +25,9 @@ describe('<DefineConversation/>', () => {
         type: 'bot',
         path: 'Desktop/EchoBot-11299',
         lastModified: 'Wed Apr 22 2020 17:51:07 GMT-0700 (Pacific Daylight Time)',
-        size: 1,
-      },
-    ],
+        size: 1
+      }
+    ]
   };
   function renderComponent() {
     return render(
@@ -48,12 +48,12 @@ describe('<DefineConversation/>', () => {
     locationMock = {};
     storeContext = {
       actions: {
-        saveTemplateId: saveTemplateMock,
+        saveTemplateId: saveTemplateMock
       },
       state: {
         templateId: '',
-        focusedStorageFolder: '',
-      },
+        focusedStorageFolder: ''
+      }
     };
 
     onSubmitMock = jest.fn();
@@ -70,7 +70,7 @@ describe('<DefineConversation/>', () => {
     storeContext.state.templateId = 'EchoBot';
     locationMock = {
       search:
-        'schemaUrl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2Fbotframework-sdk%2Fmaster%2Fschemas%2Fcomponent%2Fcomponent.schema%26name%3DEchoBot-11299%26description%3DTest%20Echo',
+        'schemaUrl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2Fbotframework-sdk%2Fmaster%2Fschemas%2Fcomponent%2Fcomponent.schema%26name%3DEchoBot-11299%26description%3DTest%20Echo'
     };
     component = renderComponent();
     const node = await component.findByText('Next');
@@ -79,7 +79,7 @@ describe('<DefineConversation/>', () => {
       description: 'Test Echo',
       name: 'EchoBot-11299',
       schemaUrl:
-        'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
+        'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema'
     });
   });
 });

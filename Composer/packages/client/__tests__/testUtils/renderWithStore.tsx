@@ -13,18 +13,18 @@ export function renderWithStore(subject, state: Partial<State> = {}, actions = {
   const store: StoreContextValue = {
     actions: {
       ...mapValues(initialActions, () => jest.fn()),
-      ...actions,
+      ...actions
     },
     state: {
       ...initialState,
-      ...state,
+      ...state
     },
     dispatch: jest.fn(),
     resolvers: {
       lgImportresolver: jest.fn(),
       lgFileResolver: jest.fn(),
-      luFileResolver: jest.fn(),
-    },
+      luFileResolver: jest.fn()
+    }
   };
 
   return render(<StoreContext.Provider value={store}>{subject}</StoreContext.Provider>);

@@ -14,7 +14,7 @@ export const useLocation = () => {
   const { location, navigate } = globalHistory;
   const [state, setState] = useState({ location, navigate });
 
-  useEffect(() => globalHistory.listen(({ location }) => setState((state) => ({ ...state, location }))), []);
+  useEffect(() => globalHistory.listen(({ location }) => setState(state => ({ ...state, location }))), []);
 
   return state;
 };
@@ -37,7 +37,7 @@ export const useRouterCache = (to: string) => {
       const links = linksRef.current;
       const { href, origin } = location;
       const uri = replace(href, origin, '');
-      const target = find(links, (link) => uri.startsWith(link.to));
+      const target = find(links, link => uri.startsWith(link.to));
       if (target) {
         routerCache.set(target.to, uri);
         setState(routerCache.getAll());

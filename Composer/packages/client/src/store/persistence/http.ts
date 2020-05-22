@@ -6,7 +6,7 @@ import httpClient from '../../utils/httpUtil';
 export const createFile = async (projectId: string, name: string, content: string) => {
   const response = await httpClient.post(`/projects/${projectId}/files`, {
     name,
-    content,
+    content
   });
   return response.data;
 };
@@ -18,7 +18,7 @@ export const deleteFile = async (projectId: string, name: string) => {
 export const updateFile = async (projectId: string, name: string, content: string) => {
   const response = await httpClient.put(`/projects/${projectId}/files/${name}`, {
     name,
-    content,
+    content
   });
   return response.data;
 };

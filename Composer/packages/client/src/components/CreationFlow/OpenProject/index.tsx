@@ -21,7 +21,7 @@ interface OpenProjectProps extends RouteComponentProps<{}> {
   onDismiss: () => void;
 }
 
-export const OpenProject: React.FC<OpenProjectProps> = (props) => {
+export const OpenProject: React.FC<OpenProjectProps> = props => {
   const { onOpen, onDismiss, onCurrentPathUpdate, focusedStorageFolder } = props;
 
   return (
@@ -36,7 +36,7 @@ export const OpenProject: React.FC<OpenProjectProps> = (props) => {
           focusedStorageFolder={focusedStorageFolder}
           operationMode={{
             read: true,
-            write: false,
+            write: false
           }}
           onCurrentPathUpdate={onCurrentPathUpdate}
           onOpen={onOpen}

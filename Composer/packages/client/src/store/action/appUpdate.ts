@@ -7,7 +7,7 @@ import { ActionTypes } from './../../constants';
 export const setAppUpdateError: ActionCreator = ({ dispatch }, error) => {
   dispatch({
     type: ActionTypes.SET_APP_UPDATE_ERROR,
-    payload: error,
+    payload: error
   });
 };
 
@@ -16,15 +16,15 @@ export const setAppUpdateProgress: ActionCreator = ({ dispatch }, { progressPerc
     type: ActionTypes.SET_APP_UPDATE_PROGRESS,
     payload: {
       downloadSizeInBytes,
-      progressPercent,
-    },
+      progressPercent
+    }
   });
 };
 
 export const setAppUpdateShowing: ActionCreator = ({ dispatch }, showing) => {
   dispatch({
     type: ActionTypes.SET_APP_UPDATE_SHOWING,
-    payload: showing,
+    payload: showing
   });
 };
 
@@ -33,7 +33,7 @@ export const setAppUpdateStatus: ActionCreator = ({ dispatch }, { status, versio
     type: ActionTypes.SET_APP_UPDATE_STATUS,
     payload: {
       status,
-      version,
-    },
+      version
+    }
   });
 };

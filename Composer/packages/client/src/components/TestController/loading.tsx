@@ -12,7 +12,7 @@ interface ILoadingProps {
   botStatus: BotStatus;
 }
 
-export const Loading: React.FC<ILoadingProps> = (props) => {
+export const Loading: React.FC<ILoadingProps> = props => {
   const { botStatus } = props;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;

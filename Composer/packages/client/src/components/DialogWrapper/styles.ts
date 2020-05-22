@@ -8,7 +8,7 @@ import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 
 export enum DialogTypes {
   CreateFlow,
-  DesignFlow,
+  DesignFlow
 }
 
 export const styles: {
@@ -21,19 +21,19 @@ export const styles: {
         fontWeight: FontWeights.bold,
         fontSize: FontSizes.size20,
         paddingTop: '14px',
-        paddingBottom: '11px',
+        paddingBottom: '11px'
       },
       subText: {
-        fontSize: FontSizes.size14,
-      },
+        fontSize: FontSizes.size14
+      }
     },
     modal: {
       main: {
         // maxWidth: '416px !important',
         maxWidth: '80% !important',
-        width: '960px !important',
-      },
-    },
+        width: '960px !important'
+      }
+    }
   },
   [DialogTypes.DesignFlow]: {
     dialog: {
@@ -41,16 +41,16 @@ export const styles: {
         fontWeight: FontWeights.bold,
         fontSize: FontSizes.size20,
         paddingTop: '14px',
-        paddingBottom: '11px',
+        paddingBottom: '11px'
       },
       subText: {
-        fontSize: FontSizes.size14,
-      },
+        fontSize: FontSizes.size14
+      }
     },
     modal: {
       main: {
-        maxWidth: '416px !important',
-      },
-    },
-  },
+        maxWidth: '416px !important'
+      }
+    }
+  }
 };

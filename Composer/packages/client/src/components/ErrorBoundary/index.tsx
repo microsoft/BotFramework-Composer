@@ -17,9 +17,9 @@ const errorToShow = {
       <a key="a" href={githubIssueUrl} rel="noopener noreferrer" style={{ color: `greenyellow` }} target="_blank">
         {children}
       </a>
-    ),
+    )
   }),
-  summary: formatMessage('Something went wrong!'),
+  summary: formatMessage('Something went wrong!')
 };
 
 interface ErrorBoundaryProps {

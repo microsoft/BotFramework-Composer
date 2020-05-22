@@ -25,13 +25,13 @@ function getPrimaryButtonText(currentStep, setLength) {
 const TeachingBubbles = () => {
   const {
     state: {
-      onboarding: { coachMarkRefs },
-    },
+      onboarding: { coachMarkRefs }
+    }
   } = useContext(StoreContext);
 
   const {
     actions: { nextStep, previousStep },
-    state: { currentSet, currentStep, teachingBubble },
+    state: { currentSet, currentStep, teachingBubble }
   } = useContext(OnboardingContext);
 
   const [, forceRender] = useState();
@@ -54,14 +54,14 @@ const TeachingBubbles = () => {
   teachingBubbleProps.primaryButtonProps = {
     children: getPrimaryButtonText(currentStep, setLength),
     onClick: nextStep,
-    'data-testid': 'onboardingNext',
+    'data-testid': 'onboardingNext'
   };
 
   if (currentStep > 0) {
     teachingBubbleProps.secondaryButtonProps = {
       children: formatMessage('Previous'),
       onClick: previousStep,
-      'data-testid': 'onboardingPrevious',
+      'data-testid': 'onboardingPrevious'
     };
   }
 

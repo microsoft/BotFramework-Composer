@@ -23,7 +23,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = (props) => {
+const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state, resolvers } = useContext(StoreContext);
   const { lgFiles, locale, projectId, userSettings } = state;
   const { lgImportresolver } = resolvers;
@@ -84,8 +84,8 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           template: {
             name,
             parameters,
-            body,
-          },
+            body
+          }
         };
         actions.updateLgTemplate(payload);
       }, 500),
@@ -100,7 +100,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         const payload = {
           id,
           projectId,
-          content,
+          content
         };
         actions.updateLgFile(payload);
       }, 500),
@@ -108,7 +108,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   );
 
   const _onChange = useCallback(
-    (value) => {
+    value => {
       setContent(value);
       if (!file) return;
       const { id } = file;
@@ -120,7 +120,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           const newContent = lgUtil.updateTemplate(content, name, {
             name,
             parameters,
-            body: value,
+            body: value
           });
           setDiagnostics(parse(newContent, id, lgImportresolver).diagnostics);
           updateLgTemplate(value);
@@ -143,7 +143,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const lgOption = {
     projectId,
     fileId: file?.id || dialogId,
-    templateId: template?.name,
+    templateId: template?.name
   };
 
   return (
@@ -154,7 +154,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
       errorMessage={errorMsg}
       hidePlaceholder={inlineMode}
       languageServer={{
-        path: lspServerPath,
+        path: lspServerPath
       }}
       lgOption={lgOption}
       value={content}

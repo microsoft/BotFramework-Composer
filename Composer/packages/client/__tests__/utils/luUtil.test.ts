@@ -26,51 +26,51 @@ describe('getReferredFiles', () => {
           { intent: 'dias_trigger', dialogs: ['dia5', 'dia6'] },
           { intent: 'no_dialog', dialogs: [] },
           { intent: 'dialog_without_lu', dialogs: ['dialog_without_lu'] },
-          { intent: '', dialogs: ['start_dialog_without_intent'] },
-        ],
+          { intent: '', dialogs: ['start_dialog_without_intent'] }
+        ]
       },
       {
         id: 'dia1',
         luFile: 'dia1',
         intentTriggers: [
           { intent: 'dia3_trigger', dialogs: ['dia3'] },
-          { intent: 'dia4_trigger', dialogs: ['dia4'] },
-        ],
+          { intent: 'dia4_trigger', dialogs: ['dia4'] }
+        ]
       },
       {
         id: 'dia2',
         luFile: 'dia2',
-        intentTriggers: [],
+        intentTriggers: []
       },
       {
         id: 'dia3',
         luFile: 'dia3',
-        intentTriggers: [],
+        intentTriggers: []
       },
       {
         id: 'dia4',
         luFile: 'dia4',
-        intentTriggers: [],
+        intentTriggers: []
       },
       {
         id: 'dia5',
         luFile: 'dia5',
-        intentTriggers: [],
+        intentTriggers: []
       },
       {
         id: 'dia6',
         luFile: 'dia6',
-        intentTriggers: [],
+        intentTriggers: []
       },
       {
         id: 'start_dialog_without_intent',
         luFile: 'start_dialog_without_intent',
-        intentTriggers: [],
+        intentTriggers: []
       },
       {
         id: 'dialog_without_lu',
-        intentTriggers: [],
-      },
+        intentTriggers: []
+      }
     ];
     const luFiles = [
       { id: 'main.en-us' },
@@ -79,7 +79,7 @@ describe('getReferredFiles', () => {
       { id: 'dia3.en-us' },
       { id: 'dia5.en-us' },
       { id: 'dia6.en-us' },
-      { id: 'start_dialog_without_intent.en-us' },
+      { id: 'start_dialog_without_intent.en-us' }
     ];
     const config = createCrossTrainConfig(dialogs as DialogInfo[], luFiles as LuFile[]);
     expect(config.rootIds.length).toEqual(1);
@@ -100,7 +100,7 @@ describe('getReferredFiles', () => {
     const luFiles = [
       { id: 'a.en-us', diagnostics, content: 'test', intents: [{ Name: '1', Body: '1' }] },
       { id: 'b.en-us', diagnostics },
-      { id: 'c.en-us', diagnostics },
+      { id: 'c.en-us', diagnostics }
     ] as LuFile[];
     const referred = checkLuisPublish(luFiles, dialogs);
     expect(referred.length).toEqual(1);

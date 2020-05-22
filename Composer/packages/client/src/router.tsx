@@ -23,7 +23,7 @@ const Publish = React.lazy(() => import('./pages/publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow'));
 
-const Routes = (props) => {
+const Routes = props => {
   const { state } = useContext(StoreContext);
   const { botOpening } = state;
 
@@ -79,7 +79,7 @@ const projectStyle = css`
   label: ProjectRouter;
 `;
 
-const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = props => {
   const { actions, state } = useContext(StoreContext);
 
   useEffect(() => {

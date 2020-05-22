@@ -23,7 +23,7 @@ const hostControlLabels = {
   botSettingDescription: formatMessage(
     'Settings contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings.'
   ),
-  learnMore: formatMessage('Learn more.'),
+  learnMore: formatMessage('Learn more.')
 };
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
@@ -37,7 +37,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
 
   const slots = [
     { key: 'production', text: hostControlLabels.productionSlot, checked: slot === 'production' },
-    { key: 'integration', text: hostControlLabels.integrationSlot, checked: slot === 'integration' },
+    { key: 'integration', text: hostControlLabels.integrationSlot, checked: slot === 'integration' }
   ];
 
   const changeSlot = (_, option) => {
@@ -45,7 +45,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     actions.setDialogSettingsSlot(projectId, option.key);
   };
 
-  const saveChangeResult = (result) => {
+  const saveChangeResult = result => {
     try {
       const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
       actions.setSettings(projectId, botName, mergedResult, absHosted ? slot : undefined);

@@ -7,43 +7,43 @@ export const textFieldlabel = {
   label: {
     root: [
       {
-        fontWeight: FontWeights.semibold,
-      },
-    ],
-  },
+        fontWeight: FontWeights.semibold
+      }
+    ]
+  }
 };
 
 export const name = {
-  subComponentStyles: textFieldlabel,
+  subComponentStyles: textFieldlabel
 };
 
 export const description = {
-  subComponentStyles: textFieldlabel,
+  subComponentStyles: textFieldlabel
 };
 
 export const locationBrowse = {
   root: {
-    marginTop: '20px',
+    marginTop: '20px'
   },
-  subComponentStyles: textFieldlabel,
+  subComponentStyles: textFieldlabel
 };
 
 export const locationOnly = {
-  subComponentStyles: textFieldlabel,
+  subComponentStyles: textFieldlabel
 };
 
 export const halfstack = {
   root: [
     {
-      flexBasis: '50%',
-    },
-  ],
+      flexBasis: '50%'
+    }
+  ]
 };
 
 export const stackinput = {
   root: [
     {
-      marginBottom: '1rem',
-    },
-  ],
+      marginBottom: '1rem'
+    }
+  ]
 };

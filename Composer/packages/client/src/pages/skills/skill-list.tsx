@@ -8,7 +8,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
-  IColumn,
+  IColumn
 } from 'office-ui-fabric-react/lib/DetailsList';
 import React, { useState, useCallback } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -42,7 +42,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: Skill) => {
       return <div css={TableCell}>{item.name}</div>;
-    },
+    }
   },
   {
     key: 'msAppId',
@@ -54,7 +54,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: Skill) => {
       return <div css={TableCell}>{item.msAppId}</div>;
-    },
+    }
   },
   {
     key: 'endpointUrl',
@@ -66,7 +66,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: Skill) => {
       return <div css={TableCell}>{item.endpointUrl}</div>;
-    },
+    }
   },
   {
     key: 'description',
@@ -78,16 +78,16 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: Skill) => {
       return <div css={TableCell}>{item.description}</div>;
-    },
-  },
+    }
+  }
 ];
 
-const SkillList: React.FC<ISkillListProps> = (props) => {
+const SkillList: React.FC<ISkillListProps> = props => {
   const { skills, projectId, onEdit, onDelete } = props;
 
   const [selectedSkillUrl, setSelectedSkillUrl] = useState<string | null>(null);
 
-  const onViewManifest = (item) => {
+  const onViewManifest = item => {
     if (item && item.name && item.body) {
       setSelectedSkillUrl(item.manifestUrl);
     }
@@ -113,7 +113,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
                 ariaLabel="Edit"
                 data-testid="EditSkill"
                 iconProps={{
-                  iconName: 'Edit',
+                  iconName: 'Edit'
                 }}
                 title="Edit"
                 onClick={() => onEdit(index)}
@@ -122,7 +122,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
                 ariaLabel="Delete"
                 data-testid="DeleteSkill"
                 iconProps={{
-                  iconName: 'Delete',
+                  iconName: 'Delete'
                 }}
                 title="Delete"
                 onClick={() => onDelete(index)}
@@ -137,7 +137,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
             </Stack>
           </div>
         );
-      },
+      }
     });
   }, [projectId]);
 
@@ -147,7 +147,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
         <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
+            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
           })}
         </Sticky>
       </div>

@@ -13,8 +13,8 @@ export const collapsedStyles: Partial<IModalStyles> = {
     color: 'white',
     paddingLeft: '15px',
     position: 'absolute',
-    right: '20px',
-  },
+    right: '20px'
+  }
 };
 
 export const expandedStyles: Partial<IModalStyles> = {
@@ -22,6 +22,6 @@ export const expandedStyles: Partial<IModalStyles> = {
     bottom: '30px',
     padding: '15px',
     position: 'absolute',
-    right: '30px',
-  },
+    right: '30px'
+  }
 };

@@ -36,8 +36,8 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
             styles={{
               root: {
                 marginRight: '8px',
-                outline: 'none',
-              },
+                outline: 'none'
+              }
             }}
             tabIndex={-1}
           />
@@ -50,7 +50,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
 
 const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
   const showIcon = !isRoot;
-  return (overflowItems) => {
+  return overflowItems => {
     return showIcon ? (
       <IconButton
         className="dialog-more-btn"
@@ -60,7 +60,7 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
         menuProps={{ items: overflowItems, styles: menuStyle }}
         role="cell"
         styles={moreButton(isActive)}
-        onKeyDown={(e) => {
+        onKeyDown={e => {
           if (e.key === 'Enter') {
             e.stopPropagation();
           }
@@ -70,7 +70,7 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
   };
 };
 
-export const TreeItem: React.FC<ITreeItemProps> = (props) => {
+export const TreeItem: React.FC<ITreeItemProps> = props => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
 
   return (
@@ -80,7 +80,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
       onClick={() => {
         onSelect(link.id);
       }}
-      onKeyDown={(e) => {
+      onKeyDown={e => {
         if (e.key === 'Enter') {
           onSelect(link.id);
         }
@@ -96,15 +96,15 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
           {
             key: link.id,
             depth,
-            ...link,
-          },
+            ...link
+          }
         ]}
         overflowItems={[
           {
             key: 'delete',
             name: 'Delete',
-            onClick: () => onDelete(link.id),
-          },
+            onClick: () => onDelete(link.id)
+          }
         ]}
         role="row"
         styles={{ item: { flex: 1 } }}

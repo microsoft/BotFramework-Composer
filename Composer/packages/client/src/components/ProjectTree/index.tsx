@@ -9,7 +9,7 @@ import {
   IGroup,
   IGroupHeaderProps,
   IGroupRenderProps,
-  IGroupedList,
+  IGroupedList
 } from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
@@ -34,7 +34,7 @@ function createGroupItem(dialog: DialogInfo, currentId: string, position: number
     count: dialog.triggers.length,
     hasMoreData: true,
     isCollapsed: dialog.id !== currentId,
-    data: dialog,
+    data: dialog
   };
 }
 
@@ -42,7 +42,7 @@ function createItem(trigger: ITrigger, index: number) {
   return {
     ...trigger,
     index,
-    displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
+    displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type })
   };
 }
 
@@ -62,7 +62,7 @@ function sortDialog(dialogs: DialogInfo[]) {
 function createGroup(dialogs: DialogInfo[], dialogId: string, filter: string): { items: any[]; groups: IGroup[] } {
   let position = 0;
   const result = dialogs
-    .filter((dialog) => {
+    .filter(dialog => {
       return dialog.displayName.toLowerCase().includes(filter.toLowerCase());
     })
     .reduce(
@@ -88,18 +88,18 @@ interface IProjectTreeProps {
   onDeleteDialog: (id: string) => void;
 }
 
-export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
+export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const {
     actions: { onboardingAddCoachMarkRef, updateUserSettings },
     state: {
-      userSettings: { dialogNavWidth: currentWidth },
-    },
+      userSettings: { dialogNavWidth: currentWidth }
+    }
   } = useContext(StoreContext);
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');
-  const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
-  const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
+  const delayedSetFilter = debounce(newValue => setFilter(newValue), 1000);
+  const addMainDialogRef = useCallback(mainDialog => onboardingAddCoachMarkRef({ mainDialog }), []);
 
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);
@@ -156,7 +156,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   return (
     <Resizable
       enable={{
-        right: true,
+        right: true
       }}
       maxWidth={500}
       minWidth={180}
@@ -199,7 +199,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
                 onRenderShowAll: onRenderShowAll,
                 showEmptyGroups: true,
                 showAllProps: false,
-                isAllGroupsCollapsed: true,
+                isAllGroupsCollapsed: true
               } as Partial<IGroupRenderProps>
             }
             styles={groupListStyle}

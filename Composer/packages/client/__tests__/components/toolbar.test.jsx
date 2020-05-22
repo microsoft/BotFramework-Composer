@@ -6,45 +6,45 @@ import { fireEvent, render } from '@bfc/test-utils';
 
 import { ToolBar } from '../../src/components/ToolBar';
 
-const toolbarItems = (onClick) => [
+const toolbarItems = onClick => [
   {
     type: 'action',
     text: 'New',
     buttonProps: {
       iconProps: {
-        iconName: 'Add',
+        iconName: 'Add'
       },
-      onClick: onClick,
+      onClick: onClick
     },
-    align: 'left',
+    align: 'left'
   },
   {
     type: 'action',
     text: 'Open',
     buttonProps: {
       iconProps: {
-        iconName: 'OpenFolderHorizontal',
+        iconName: 'OpenFolderHorizontal'
       },
-      onClick: onClick,
+      onClick: onClick
     },
-    align: 'left',
+    align: 'left'
   },
   {
     type: 'action',
     text: 'Save as',
     buttonProps: {
       iconProps: {
-        iconName: 'Save',
+        iconName: 'Save'
       },
-      onClick: onClick,
+      onClick: onClick
     },
-    align: 'left',
+    align: 'left'
   },
   {
     type: 'element',
     element: <div>Connect</div>,
-    align: 'right',
-  },
+    align: 'right'
+  }
 ];
 
 describe('<ToolBar />', () => {

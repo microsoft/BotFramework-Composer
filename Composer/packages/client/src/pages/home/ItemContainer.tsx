@@ -13,7 +13,7 @@ import {
   itemContainerContent,
   itemContainerTitle,
   disabledItem,
-  childrenContainer,
+  childrenContainer
 } from './styles';
 
 const { openExternal: openExternalLink } = window as Window;
@@ -73,7 +73,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   return (
     <Button
       css={[itemContainerWrapper(disabled), styles.container]}
-      onClick={async (e) => {
+      onClick={async e => {
         // todo: clean this up
         const { href } = rest as Partial<{ href: string }>;
         if (openExternal) {

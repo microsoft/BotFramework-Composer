@@ -21,7 +21,7 @@ export const exportToZip: ActionCreator = async (store, { projectId }) => {
     setError(store, {
       status: err.response.status,
       message: err.response && err.response.data.message ? err.response.data.message : err,
-      summary: 'EXPORT ZIP ERROR',
+      summary: 'EXPORT ZIP ERROR'
     });
   }
 };

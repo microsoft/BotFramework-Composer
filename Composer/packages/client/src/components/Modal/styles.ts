@@ -17,21 +17,21 @@ export const displayManifest: { content: any; dialog: Partial<IDialogContentStyl
       fontSize: FontSizes.size20,
       fontWeight: FontWeights.bold,
       paddingBottom: '11px',
-      paddingTop: '14px',
-    },
+      paddingTop: '14px'
+    }
   },
   modal: {
     main: {
       height: '800px !important',
       maxWidth: '80% !important',
-      width: '600px !important',
-    },
-  },
+      width: '600px !important'
+    }
+  }
 };
 
 export const DialogStyle = {
   Normal: 'NORMAL',
-  Console: 'CONSOLE',
+  Console: 'CONSOLE'
 };
 
 export const BuiltInStyles = {
@@ -50,19 +50,19 @@ export const BuiltInStyles = {
     padding: 10px 15px;
     margin-bottom: 20px;
     white-space: pre-line;
-  `,
+  `
 };
 
 export const dialog = {
   title: {
-    fontWeight: FontWeights.bold,
-  },
+    fontWeight: FontWeights.bold
+  }
 };
 
 export const dialogModal = {
   main: {
-    maxWidth: '600px !important',
-  },
+    maxWidth: '600px !important'
+  }
 };
 
 export const confirmationContainer = css`

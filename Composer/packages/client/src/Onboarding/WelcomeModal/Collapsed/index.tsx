@@ -14,7 +14,7 @@ import { buttonStyles, content } from './styles';
 
 const CollapsedWelcomeModal = () => {
   const {
-    actions: { exit, toggleMinimized },
+    actions: { exit, toggleMinimized }
   } = useContext(OnboardingContext);
 
   return (

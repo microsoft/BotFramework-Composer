@@ -7,12 +7,12 @@ import { PropTypes } from 'prop-types';
 
 import { contentContainer } from './styles';
 
-export const MainContent = (props) => (
+export const MainContent = props => (
   <div css={contentContainer} role="main">
     {props.children}
   </div>
 );
 
 MainContent.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.element
 };

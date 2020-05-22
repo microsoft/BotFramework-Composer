@@ -17,7 +17,7 @@ interface ConfirmDialogProps {
   setting: any;
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
+const ConfirmDialog: React.FC<ConfirmDialogProps> = props => {
   const { setting, onCancel, onConfirm } = props;
   const {
     title,
@@ -27,7 +27,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     cancelBtnText = 'Cancel',
     style = DialogStyle.Normal,
     checkboxLabel,
-    styles = { content: {}, main: {}, modal: {} },
+    styles = { content: {}, main: {}, modal: {} }
   } = setting;
 
   const [disabled, setDisabled] = React.useState(setting.disabled);
@@ -49,12 +49,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
-        styles: dialog,
+        styles: dialog
       }}
       hidden={false}
       modalProps={{
         isBlocking: true,
-        styles: dialogModal,
+        styles: dialogModal
       }}
       onDismiss={onCancel}
     >
@@ -71,7 +71,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
 };
 
 export const OpenConfirmModal = (title, subTitle, setting = {}) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const node = document.createElement('div');
     document.body.appendChild(node);
     const removeNode = () => {

@@ -25,9 +25,7 @@ import { useLinks } from './utils/hooks';
 initializeIcons(undefined, { disableWarnings: true });
 
 const Onboarding = React.lazy(() => import('./Onboarding'));
-const AppUpdater = React.lazy(() =>
-  import('./components/AppUpdater').then((module) => ({ default: module.AppUpdater }))
-);
+const AppUpdater = React.lazy(() => import('./components/AppUpdater').then(module => ({ default: module.AppUpdater })));
 
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
@@ -44,7 +42,7 @@ export const App: React.FC = () => {
     onboardingSetComplete(onboardingState.getComplete());
   }, []);
 
-  const mapNavItemTo = (x) => resolveToBasePath(BASEPATH, x);
+  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
 
   const renderAppUpdater = isElectron();
 
@@ -58,7 +56,7 @@ export const App: React.FC = () => {
           position: 'absolute',
           top: '-9999px',
           height: '1px',
-          width: '1px',
+          width: '1px'
         }}
       >
         {announcement}
@@ -72,7 +70,7 @@ export const App: React.FC = () => {
               css={globalNav}
               data-testid={'LeftNavButton'}
               iconProps={{
-                iconName: 'GlobalNavButton',
+                iconName: 'GlobalNavButton'
               }}
               onClick={() => {
                 setSideBarExpand(!sideBarExpand);

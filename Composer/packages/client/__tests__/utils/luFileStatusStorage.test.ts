@@ -17,7 +17,7 @@ describe('luFileStatusStorage', () => {
   it('the statuses after publishing', () => {
     luFileStatusStorage.publishAll(botName);
     const result = luFileStatusStorage.get(botName);
-    Object.keys(result).forEach((id) => {
+    Object.keys(result).forEach(id => {
       expect(result[id]).toBeTruthy();
     });
   });

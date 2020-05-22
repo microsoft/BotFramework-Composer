@@ -21,7 +21,7 @@ interface ISettingToggleProps {
   title: string;
 }
 
-const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
+const SettingToggle: React.FC<ISettingToggleProps> = props => {
   const { id, title, description, image, checked, onToggle } = props;
   const uniqueId = useId(kebabCase(title));
 

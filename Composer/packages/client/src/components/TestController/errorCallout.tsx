@@ -23,7 +23,7 @@ export interface IErrorCalloutProps {
   };
 }
 
-export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
+export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
   const { onDismiss, onTry, target, visible, error } = props;
   return (
     <Callout
@@ -57,7 +57,7 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
         <Stack
           horizontal
           tokens={{
-            childrenGap: 'm',
+            childrenGap: 'm'
           }}
         >
           <PrimaryButton text={formatMessage('Try again')} onClick={onTry} />

@@ -23,13 +23,13 @@ interface INavTreeProps {
   navLinks: INavTreeItem[];
 }
 
-const NavTree: React.FC<INavTreeProps> = (props) => {
+const NavTree: React.FC<INavTreeProps> = props => {
   const { navLinks } = props;
   const {
     actions: { updateUserSettings },
     state: {
-      userSettings: { dialogNavWidth: currentWidth },
-    },
+      userSettings: { dialogNavWidth: currentWidth }
+    }
   } = useContext(StoreContext);
 
   const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
@@ -39,7 +39,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
   return (
     <Resizable
       enable={{
-        right: true,
+        right: true
       }}
       maxWidth={500}
       minWidth={180}
@@ -47,7 +47,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
       onResizeStop={handleResize}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
-        {navLinks.map((item) => {
+        {navLinks.map(item => {
           const isSelected = location.pathname.includes(item.url);
 
           return (
@@ -56,7 +56,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
               href={item.url}
               styles={isSelected ? itemSelected : itemNotSelected}
               text={item.name}
-              onClick={(e) => {
+              onClick={e => {
                 e.preventDefault();
                 navigateTo(item.url);
               }}

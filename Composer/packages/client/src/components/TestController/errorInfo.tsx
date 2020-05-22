@@ -13,7 +13,7 @@ interface IErrorInfoProps {
   onClick: () => void;
 }
 
-export const ErrorInfo: React.FC<IErrorInfoProps> = (props) => {
+export const ErrorInfo: React.FC<IErrorInfoProps> = props => {
   const { hidden, count, onClick } = props;
 
   if (hidden) return null;

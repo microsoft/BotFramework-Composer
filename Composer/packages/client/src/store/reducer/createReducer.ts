@@ -14,10 +14,10 @@ type CreateReducerFunc = (
   }
 ) => (state: State, action: ActionType) => State;
 
-const createReducer: CreateReducerFunc = (handlers) => {
+const createReducer: CreateReducerFunc = handlers => {
   // ensure action created is defined in constants/index.js#ActionTypes
   // when we switch to typescript, this is not need anymore.
-  Object.keys(handlers).forEach((type) => {
+  Object.keys(handlers).forEach(type => {
     if (Object.prototype.hasOwnProperty.call(ActionTypes, type) === false) {
       throw new Error(`action created is not defined in constants/index.js#ActionTypes`);
     }
@@ -32,7 +32,7 @@ const createReducer: CreateReducerFunc = (handlers) => {
     }
 
     if (Object.prototype.hasOwnProperty.call(handlers, type)) {
-      return producer(state, (nextState) => {
+      return producer(state, nextState => {
         handlers[type](nextState, payload);
       });
     } else {

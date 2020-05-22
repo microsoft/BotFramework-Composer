@@ -24,13 +24,13 @@ const linksButtom = [
   {
     to: 'https://aka.ms/BF-Composer-Getting-Started',
     text: formatMessage('Getting Started'),
-    css: home.linkInfo,
+    css: home.linkInfo
   },
   {
     to: 'https://aka.ms/BF-Composer-Build-First-Bot',
     text: formatMessage('Build your first bot'),
-    css: home.linkInfo,
-  },
+    css: home.linkInfo
+  }
 ];
 
 const turtorials = [
@@ -38,20 +38,20 @@ const turtorials = [
     title: formatMessage('5 Minute Intro'),
     content: formatMessage('Chris Whitten'),
     subContent: formatMessage('Apr 9, 2020'),
-    href: 'https://aka.ms/bf-composer-tutorial-chris',
+    href: 'https://aka.ms/bf-composer-tutorial-chris'
   },
   {
     title: formatMessage('Weather Bot'),
     content: formatMessage('Ben Brown'),
     subContent: formatMessage('Nov 12, 2019'),
-    href: 'https://aka.ms/bf-composer-tutorial-ben',
+    href: 'https://aka.ms/bf-composer-tutorial-ben'
   },
   {
     title: formatMessage('MSFT Ignite AI Show'),
     content: formatMessage('Vishwac Sena'),
     subContent: formatMessage('Jan 28, 2020'),
-    href: 'https://aka.ms/bf-composer-tutorial-vishwac',
-  },
+    href: 'https://aka.ms/bf-composer-tutorial-vishwac'
+  }
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
@@ -62,14 +62,14 @@ const Home: React.FC<RouteComponentProps> = () => {
     setCreationFlowStatus,
     saveTemplateId,
     fetchRecentProjects,
-    onboardingAddCoachMarkRef,
+    onboardingAddCoachMarkRef
   } = actions;
 
-  const onClickRecentBotProject = async (path) => {
+  const onClickRecentBotProject = async path => {
     await openBotProject(path);
   };
 
-  const onItemChosen = async (item) => {
+  const onItemChosen = async item => {
     if (item && item.path) {
       await onClickRecentBotProject(item.path);
     }
@@ -83,7 +83,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const addButton = <Icon iconName="Add" styles={home.button} />;
 
-  const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
+  const addRef = useCallback(project => onboardingAddCoachMarkRef({ project }), []);
 
   const toolbarItems = [
     {
@@ -91,48 +91,48 @@ const Home: React.FC<RouteComponentProps> = () => {
       text: formatMessage('New'),
       buttonProps: {
         iconProps: {
-          iconName: 'CirclePlus',
+          iconName: 'CirclePlus'
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.NEW);
           navigate(`projects/create`);
-        },
+        }
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-New',
-      disabled: false,
+      disabled: false
     },
     {
       type: 'action',
       text: formatMessage('Open'),
       buttonProps: {
         iconProps: {
-          iconName: 'OpenFolderHorizontal',
+          iconName: 'OpenFolderHorizontal'
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.OPEN);
           navigate(`projects/open`);
-        },
+        }
       },
       align: 'left',
       dataTestid: 'homePage-ToolBar-Open',
-      disabled: false,
+      disabled: false
     },
     {
       type: 'action',
       text: formatMessage('Save as'),
       buttonProps: {
         iconProps: {
-          iconName: 'Save',
+          iconName: 'Save'
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
           navigate(`projects/${state.projectId}/${state.templateId}/save`);
-        },
+        }
       },
       align: 'left',
-      disabled: botName ? false : true,
-    },
+      disabled: botName ? false : true
+    }
   ];
 
   useEffect(() => {
@@ -189,7 +189,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
                 recentProjects={recentProjects}
-                onItemChosen={async (item) => {
+                onItemChosen={async item => {
                   await onItemChosen(item);
                 }}
               />
@@ -217,7 +217,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                     'Bot Framework provides the most comprehensive experience for building conversation applications.'
                   )}
                 </div>
-                {linksButtom.map((link) => {
+                {linksButtom.map(link => {
                   return (
                     <Link
                       key={'homePageLeftLinks-' + link.text}

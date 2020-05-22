@@ -11,9 +11,9 @@ import { CreationFlowStatus } from '../../../src/constants';
 
 jest.mock('../../../src/components/DialogWrapper', () => {
   return {
-    DialogWrapper: jest.fn((props) => {
+    DialogWrapper: jest.fn(props => {
       return props.children;
-    }),
+    })
   };
 });
 
@@ -31,7 +31,7 @@ describe('<CreationFlow/>', () => {
   function renderWithRouter(ui, { route = '', history = createHistory(createMemorySource(route)) } = {}) {
     return {
       ...render(<LocationProvider history={history}>{ui}</LocationProvider>),
-      history,
+      history
     };
   }
 
@@ -49,15 +49,15 @@ describe('<CreationFlow/>', () => {
         fetchFolderItemsByPath: jest.fn(),
         setCreationFlowStatus: jest.fn(),
         onboardingAddCoachMarkRef: jest.fn(),
-        fetchRecentProjects: jest.fn(),
+        fetchRecentProjects: jest.fn()
       },
       state: {
         templateId: '',
         templateProjects: [],
         recentProjects: [],
         storages: [],
-        creationFlowStatus: CreationFlowStatus.NEW_FROM_TEMPLATE,
-      },
+        creationFlowStatus: CreationFlowStatus.NEW_FROM_TEMPLATE
+      }
     };
   });
 
@@ -78,12 +78,12 @@ describe('<CreationFlow/>', () => {
           type: 'bot',
           path: 'Desktop/EchoBot-11299',
           lastModified: 'Wed Apr 22 2020 17:51:07 GMT-0700 (Pacific Daylight Time)',
-          size: 1,
-        },
-      ],
+          size: 1
+        }
+      ]
     };
     const {
-      history: { navigate },
+      history: { navigate }
     } = renderWithRouter(
       <StoreContext.Provider value={storeContext}>
         <CreationFlow location={locationMock} />

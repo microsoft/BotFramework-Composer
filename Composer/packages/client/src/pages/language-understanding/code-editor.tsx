@@ -20,7 +20,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = (props) => {
+const CodeEditor: React.FC<CodeEditorProps> = props => {
   const { actions, state } = useContext(StoreContext);
   const { luFiles, locale, projectId, userSettings } = state;
   const { dialogId } = props;
@@ -78,8 +78,8 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           intentName: Name,
           intent: {
             Name,
-            Body,
-          },
+            Body
+          }
         };
         actions.updateLuIntent(payload);
       }, 500),
@@ -94,7 +94,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         const payload = {
           projectId,
           id,
-          content,
+          content
         };
         actions.updateLuFile(payload);
       }, 500),
@@ -102,7 +102,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   );
 
   const _onChange = useCallback(
-    (value) => {
+    value => {
       setContent(value);
       if (!file) return;
       if (inlineMode) {
@@ -117,7 +117,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const luOption = {
     projectId,
     fileId: file?.id || dialogId,
-    sectionId: intent?.Name,
+    sectionId: intent?.Name
   };
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
@@ -130,7 +130,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
       editorDidMount={editorDidMount}
       editorSettings={userSettings.codeEditor}
       languageServer={{
-        path: lspServerPath,
+        path: lspServerPath
       }}
       luOption={luOption}
       value={content}

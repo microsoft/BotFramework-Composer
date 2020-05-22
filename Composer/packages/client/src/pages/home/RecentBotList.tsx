@@ -13,7 +13,7 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
-  CheckboxVisibility,
+  CheckboxVisibility
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 
@@ -42,7 +42,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: (item) => {
+      onRender: item => {
         return (
           <div data-is-focusable css={tableCell}>
             <Link
@@ -54,7 +54,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           </div>
         );
       },
-      isPadded: true,
+      isPadded: true
     },
     {
       key: 'column2',
@@ -64,7 +64,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       maxWidth: 70,
       isResizable: true,
       data: 'number',
-      onRender: (item) => {
+      onRender: item => {
         return (
           <div data-is-focusable css={tableCell}>
             <div
@@ -77,7 +77,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           </div>
         );
       },
-      isPadded: true,
+      isPadded: true
     },
     {
       key: 'column3',
@@ -87,7 +87,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       maxWidth: 400,
       isResizable: true,
       data: 'string',
-      onRender: (item) => {
+      onRender: item => {
         return (
           <div data-is-focusable css={tableCell}>
             <div
@@ -100,8 +100,8 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           </div>
         );
       },
-      isPadded: true,
-    },
+      isPadded: true
+    }
   ];
 
   function onRenderDetailsHeader(props, defaultRender) {
@@ -109,7 +109,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
           ...props,
-          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
+          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
         })}
       </Sticky>
     );
@@ -123,7 +123,7 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
           checkboxVisibility={CheckboxVisibility.hidden}
           columns={tableColums}
           compact={false}
-          getKey={(item) => `${item.path}/${item.name}`}
+          getKey={item => `${item.path}/${item.name}`}
           items={recentProjects}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.single}

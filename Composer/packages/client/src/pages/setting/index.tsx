@@ -28,13 +28,13 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   const settingLabels = {
     botSettings: formatMessage('Bot Settings'),
     appSettings: formatMessage('App Settings'),
-    runtime: formatMessage('Runtime Config'),
+    runtime: formatMessage('Runtime Config')
   };
 
   const links: INavTreeItem[] = [
     { id: 'dialog-settings', name: settingLabels.botSettings, url: makeProjectLink(projectId, 'dialog-settings') },
     { id: 'preferences', name: settingLabels.appSettings, url: makeProjectLink(projectId, 'preferences') },
-    { id: 'runtime', name: settingLabels.runtime, url: makeProjectLink(projectId, 'runtime') },
+    { id: 'runtime', name: settingLabels.runtime, url: makeProjectLink(projectId, 'runtime') }
 
     // { key: '/settings/publish', name: settingLabels.publish, url: '' },
 
@@ -57,7 +57,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
               background: '#ffddcc',
               display: 'flex',
               flexDirection: 'row',
-              marginBottom: '24px',
+              marginBottom: '24px'
             }}
           >
             <FontIcon
@@ -65,13 +65,13 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
               style={{
                 color: '#DD4400',
                 fontSize: 36,
-                padding: '32px',
+                padding: '32px'
               }}
             />
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'column'
               }}
             >
               <Text
@@ -80,7 +80,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
                   fontWeight: 'bold',
                   marginTop: '24px',
                   marginRight: '24px',
-                  marginBottom: '24px',
+                  marginBottom: '24px'
                 }}
               >
                 {boldWarningText}
@@ -89,7 +89,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
                 block
                 style={{
                   marginRight: '24px',
-                  marginBottom: '24px',
+                  marginBottom: '24px'
                 }}
               >
                 {warningText}
@@ -100,7 +100,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
       },
       disabled: true,
       checkboxLabel,
-      confirmBtnText: formatMessage('Delete'),
+      confirmBtnText: formatMessage('Delete')
     };
     const res = await OpenConfirmModal(title, null, settings);
     if (res) {
@@ -115,21 +115,21 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
       text: formatMessage('Delete'),
       buttonProps: {
         iconProps: {
-          iconName: 'Delete',
+          iconName: 'Delete'
         },
-        onClick: openDeleteBotModal,
+        onClick: openDeleteBotModal
       },
-      align: 'left',
+      align: 'left'
     },
     {
       type: 'element',
       element: <TestController />,
-      align: 'right',
-    },
+      align: 'right'
+    }
   ];
 
   const title = useMemo(() => {
-    const page = links.find((l) => location.pathname.includes(l.url));
+    const page = links.find(l => location.pathname.includes(l.url));
     if (page) {
       return page.name;
     }

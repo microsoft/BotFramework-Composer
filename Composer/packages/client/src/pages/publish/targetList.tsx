@@ -9,7 +9,7 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 
 import { overflowSet, targetSelected } from './styles';
 
-export const TargetList = (props) => {
+export const TargetList = props => {
   const onRenderOverflowButton = (overflowItems: any[] | undefined) => {
     return (
       <IconButton
@@ -35,20 +35,20 @@ export const TargetList = (props) => {
               items={[
                 {
                   name: target.name,
-                  key: target.name,
-                },
+                  key: target.name
+                }
               ]}
               overflowItems={[
                 {
                   key: 'delete',
                   name: 'Delete',
-                  onClick: () => props.onDelete(index, target),
+                  onClick: () => props.onDelete(index, target)
                 },
                 {
                   key: 'edit',
                   name: 'Edit',
-                  onClick: () => props.onEdit(index, target),
-                },
+                  onClick: () => props.onEdit(index, target)
+                }
               ]}
               onRenderItem={onRenderItem}
               onRenderOverflowButton={onRenderOverflowButton}

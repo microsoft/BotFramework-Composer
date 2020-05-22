@@ -13,7 +13,7 @@ import {
   LuFile,
   Skill,
   UserSettings,
-  Diagnostic,
+  Diagnostic
 } from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension';
 

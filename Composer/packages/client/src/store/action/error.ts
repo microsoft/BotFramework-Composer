@@ -10,21 +10,21 @@ import { ActionTypes } from './../../constants';
 export const setError: ActionCreator = ({ dispatch }, error) => {
   dispatch({
     type: ActionTypes.SET_ERROR,
-    payload: error,
+    payload: error
   });
 };
 
 const _setMessage = debounce((dispatch, message: string) => {
   dispatch({
     type: ActionTypes.SET_MESSAGE,
-    payload: message,
+    payload: message
   });
 
   setTimeout(
     () =>
       dispatch({
         type: ActionTypes.SET_MESSAGE,
-        payload: undefined,
+        payload: undefined
       }),
     2000
   );

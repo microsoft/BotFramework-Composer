@@ -10,11 +10,11 @@ const Store = React.createContext({
   actions: {
     setError: () => {
       // no-op
-    },
+    }
   },
   state: {
-    error: null,
-  },
+    error: null
+  }
 });
 
 const ProblemChild = () => {

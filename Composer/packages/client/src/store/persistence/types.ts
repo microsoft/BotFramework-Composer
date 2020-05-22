@@ -4,7 +4,7 @@
 export enum ChangeType {
   DELETE = 1,
   UPDATE,
-  CREATE,
+  CREATE
 }
 
 export enum FileExtensions {
@@ -12,7 +12,7 @@ export enum FileExtensions {
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
-  Setting = 'appsettings.json',
+  Setting = 'appsettings.json'
 }
 
 export type FileErrorHandler = (error) => void;

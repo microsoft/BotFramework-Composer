@@ -36,21 +36,21 @@ export const divider = css`
 export const updateAvailableIcon = {
   icon: {
     color: '#FFF',
-    fontSize: '20px',
+    fontSize: '20px'
   },
   root: {
     position: 'absolute',
     height: '20px',
     width: '20px',
     top: 'calc(50% - 10px)',
-    right: '20px',
+    right: '20px'
   },
   rootHovered: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   rootPressed: {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: 'transparent'
+  }
 };
 
 export const headerTextContainer = css`

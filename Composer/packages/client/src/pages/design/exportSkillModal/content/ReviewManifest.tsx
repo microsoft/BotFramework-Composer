@@ -7,7 +7,7 @@ import { JsonEditor } from '@bfc/code-editor';
 import { ContentProps } from '../constants';
 
 export const ReviewManifest: React.FC<ContentProps> = ({ setErrors, value, onChange }) => {
-  const handleError = (error) => {
+  const handleError = error => {
     setErrors(error ? { error } : {});
   };
 

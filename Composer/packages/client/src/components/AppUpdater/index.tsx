@@ -30,13 +30,13 @@ function SelectOption(props) {
 
 const downloadOptions = {
   downloadOnly: 'downloadOnly',
-  installAndUpdate: 'installAndUpdate',
+  installAndUpdate: 'installAndUpdate'
 };
 
-export const AppUpdater: React.FC<{}> = (_props) => {
+export const AppUpdater: React.FC<{}> = _props => {
   const {
     actions: { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus },
-    state: { appUpdate },
+    state: { appUpdate }
   } = useContext(StoreContext);
   const { downloadSizeInBytes, error, progressPercent, showing, status, version } = appUpdate;
   const [downloadOption, setDownloadOption] = useState(downloadOptions.installAndUpdate);
@@ -144,13 +144,13 @@ export const AppUpdater: React.FC<{}> = (_props) => {
               {
                 key: downloadOptions.installAndUpdate,
                 text: formatMessage('Install the update and restart Composer.'),
-                onRenderField: SelectOption,
+                onRenderField: SelectOption
               },
               {
                 key: downloadOptions.downloadOnly,
                 text: formatMessage('Download now and install when you close Composer.'),
-                onRenderField: SelectOption,
-              },
+                onRenderField: SelectOption
+              }
             ]}
             onChange={handleDownloadOptionChange}
           />
@@ -234,13 +234,13 @@ export const AppUpdater: React.FC<{}> = (_props) => {
         styles: dialogContent,
         subText: subText,
         type: DialogType.close,
-        title,
+        title
       }}
       hidden={false}
       maxWidth={427}
       minWidth={427}
       modalProps={{
-        isBlocking: false,
+        isBlocking: false
       }}
       onDismiss={handleDismiss}
     >

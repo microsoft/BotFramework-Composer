@@ -7,23 +7,23 @@ const dialogsMap = {
   Dialog1: {
     steps: [
       {
-        $kind: 'Step1',
+        $kind: 'Step1'
       },
       {
-        $kind: 'Step2',
-      },
-    ],
+        $kind: 'Step2'
+      }
+    ]
   },
   'Dialog2.main': {
     steps: [
       {
-        $kind: 'Step3',
+        $kind: 'Step3'
       },
       {
-        $kind: 'Step4',
-      },
-    ],
-  },
+        $kind: 'Step4'
+      }
+    ]
+  }
 };
 
 describe('getDialogData', () => {

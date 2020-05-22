@@ -18,12 +18,12 @@ import httpClient from './../../utils/httpUtil';
 const checkProjectUpdates = async () => {
   const workers = [filePersistence, lgWorker, luWorker];
 
-  return Promise.all(workers.map((w) => w.flush()));
+  return Promise.all(workers.map(w => w.flush()));
 };
 
-export const setOpenPendingStatus: ActionCreator = async (store) => {
+export const setOpenPendingStatus: ActionCreator = async store => {
   store.dispatch({
-    type: ActionTypes.GET_PROJECT_PENDING,
+    type: ActionTypes.GET_PROJECT_PENDING
   });
   await checkProjectUpdates();
 };
@@ -32,8 +32,8 @@ export const setCreationFlowStatus: ActionCreator = ({ dispatch }, creationFlowS
   dispatch({
     type: ActionTypes.SET_CREATION_FLOW_STATUS,
     payload: {
-      creationFlowStatus,
-    },
+      creationFlowStatus
+    }
   });
 };
 
@@ -41,15 +41,15 @@ export const saveTemplateId: ActionCreator = ({ dispatch }, templateId) => {
   dispatch({
     type: ActionTypes.SAVE_TEMPLATE_ID,
     payload: {
-      templateId,
-    },
+      templateId
+    }
   });
 };
 
 export const setBotStatus: ActionCreator = ({ dispatch }, status: BotStatus) => {
   dispatch({
     type: ActionTypes.UPDATE_BOTSTATUS,
-    payload: { status },
+    payload: { status }
   });
 };
 
@@ -59,8 +59,8 @@ export const fetchProjectById: ActionCreator = async (store, projectId) => {
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
-        response,
-      },
+        response
+      }
     });
     return response.data;
   } catch (error) {
@@ -69,7 +69,7 @@ export const fetchProjectById: ActionCreator = async (store, projectId) => {
   }
 };
 
-export const fetchProject: ActionCreator = async (store) => {
+export const fetchProject: ActionCreator = async store => {
   const state = store.getState();
   const projectId = state.projectId;
   return fetchProjectById(store, projectId);
@@ -81,15 +81,15 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
     dispatch({
       type: ActionTypes.GET_RECENT_PROJECTS_SUCCESS,
       payload: {
-        response,
-      },
+        response
+      }
     });
   } catch (error) {
     dispatch({
       type: ActionTypes.GET_RECENT_PROJECTS_FAILURE,
       payload: {
-        error,
-      },
+        error
+      }
     });
   }
 };
@@ -100,15 +100,15 @@ export const deleteBotProject: ActionCreator = async (store, projectId) => {
     luFileStatusStorage.removeAllStatuses(store.getState().botName);
     settingStorage.remove(store.getState().botName);
     store.dispatch({
-      type: ActionTypes.REMOVE_PROJECT_SUCCESS,
+      type: ActionTypes.REMOVE_PROJECT_SUCCESS
     });
   } catch (e) {
     store.dispatch({
       type: ActionTypes.SET_ERROR,
       payload: {
         message: e.message,
-        summary: 'Delete Bot Error',
-      },
+        summary: 'Delete Bot Error'
+      }
     });
   }
 };
@@ -119,7 +119,7 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
   try {
     const data = {
       storageId,
-      path: absolutePath,
+      path: absolutePath
     };
     await setOpenPendingStatus(store);
     const response = await httpClient.put(`/projects/open`, data);
@@ -128,8 +128,8 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
-        response,
-      },
+        response
+      }
     });
     if (files && files.length > 0) {
       // navTo(store, 'Main');
@@ -142,14 +142,14 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
     store.dispatch({
       type: ActionTypes.GET_PROJECT_FAILURE,
       payload: {
-        error,
-      },
+        error
+      }
     });
     store.dispatch({
       type: ActionTypes.REMOVE_RECENT_PROJECT,
       payload: {
-        path: absolutePath,
-      },
+        path: absolutePath
+      }
     });
   }
 };
@@ -162,7 +162,7 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
       storageId,
       name,
       description,
-      location,
+      location
     };
     await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, data);
@@ -170,7 +170,7 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
     const newProjectId = response.data.id;
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
-      payload: { response },
+      payload: { response }
     });
     if (files && files.length > 0) {
       const mainUrl = `/bot/${newProjectId}/dialogs/Main`;
@@ -180,8 +180,8 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
     store.dispatch({
       type: ActionTypes.GET_PROJECT_FAILURE,
       payload: {
-        error,
-      },
+        error
+      }
     });
   }
 };
@@ -203,7 +203,7 @@ export const createProject: ActionCreator = async (
       name,
       description,
       location,
-      schemaUrl,
+      schemaUrl
     };
     await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects`, data);
@@ -212,8 +212,8 @@ export const createProject: ActionCreator = async (
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {
-        response,
-      },
+        response
+      }
     });
     if (files && files.length > 0) {
       navTo(store, 'Main');
@@ -223,8 +223,8 @@ export const createProject: ActionCreator = async (
     store.dispatch({
       type: ActionTypes.GET_PROJECT_FAILURE,
       payload: {
-        error,
-      },
+        error
+      }
     });
   }
 };

@@ -22,7 +22,7 @@ const loginOnce = once((login: BoundAction) => {
   }
 });
 
-export const RequireAuth: React.FC = (props) => {
+export const RequireAuth: React.FC = props => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { state, actions } = useContext(StoreContext);
   const { currentUser } = state;
@@ -40,12 +40,12 @@ export const RequireAuth: React.FC = (props) => {
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Session expired'),
-        styles: dialog,
+        styles: dialog
       }}
       hidden={false}
       modalProps={{
         isBlocking: false,
-        styles: { main: { maxWidth: 450 } },
+        styles: { main: { maxWidth: 450 } }
       }}
       onDismiss={() => false}
     >

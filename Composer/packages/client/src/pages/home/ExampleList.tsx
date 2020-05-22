@@ -16,7 +16,7 @@ import {
   exampleListCellIcon,
   exampleListCellContent,
   exampleListCellName,
-  exampleListCellDescription,
+  exampleListCellDescription
 } from './styles';
 
 interface ExampleListProps {
@@ -32,7 +32,7 @@ const resolveIcon = (exampleId: string): string => {
   return exampleIcons.DefaultIcon;
 };
 
-export const ExampleList: React.FC<ExampleListProps> = (props) => {
+export const ExampleList: React.FC<ExampleListProps> = props => {
   const { onClick, examples } = props;
 
   function _onRenderCell(item?: ProjectTemplate): React.ReactNode {
@@ -48,7 +48,7 @@ export const ExampleList: React.FC<ExampleListProps> = (props) => {
         css={exampleListCell}
         tabIndex={0}
         onClick={() => onClick(item.id)}
-        onKeyDown={(ev) => {
+        onKeyDown={ev => {
           if (ev.key === 'Enter') {
             onClick(item.id);
           }

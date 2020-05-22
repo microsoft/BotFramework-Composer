@@ -13,10 +13,10 @@ import { StoreContext } from '../../store';
 
 import { updateAvailableIcon, headerContainer, title, botName, divider, headerTextContainer } from './styles';
 
-export const Header = (props) => {
+export const Header = props => {
   const {
     actions: { setAppUpdateShowing },
-    state: { appUpdate },
+    state: { appUpdate }
   } = useContext(StoreContext);
   const { showing, status } = appUpdate;
 

@@ -38,7 +38,7 @@ import {
   editorContainer,
   editorWrapper,
   pageRoot,
-  visualPanel,
+  visualPanel
 } from './styles';
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
@@ -65,10 +65,10 @@ function onRenderBreadcrumbItem(item, render) {
 
 function getAllRef(targetId, dialogs) {
   let refs: string[] = [];
-  dialogs.forEach((dialog) => {
+  dialogs.forEach(dialog => {
     if (dialog.id === targetId) {
       refs = refs.concat(dialog.referredDialogs);
-    } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
+    } else if (!dialog.referredDialogs.every(item => item !== targetId)) {
       refs.push(dialog.displayName || dialog.id);
     }
   });
@@ -83,7 +83,7 @@ const getTabFromFragment = () => {
   }
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
   const { state, actions } = useContext(StoreContext);
   const {
     dialogs,
@@ -93,7 +93,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     projectId,
     schemas,
     focusPath,
-    designPageLocation,
+    designPageLocation
   } = state;
   const {
     dismissManifestModal,
@@ -104,7 +104,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
-    onboardingAddCoachMarkRef,
+    onboardingAddCoachMarkRef
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
@@ -147,7 +147,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         focused: params.get('focused'),
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
         onBreadcrumbItemClick: handleBreadcrumbItemClick,
-        promptTab: getTabFromFragment(),
+        promptTab: getTabFromFragment()
       });
       // @ts-ignore
       globalHistory._onTransitionComplete();
@@ -169,13 +169,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const dialogPayload = {
       id: dialog.id,
       projectId,
-      content: dialog.content,
+      content: dialog.content
     };
     if (luFile) {
       const luFilePayload = {
         id: luFile.id,
         content: luFile.content,
-        projectId,
+        projectId
       };
       actions.updateLuFile(luFilePayload);
     }
@@ -193,7 +193,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  const onCreateDialogComplete = (newDialog) => {
+  const onCreateDialogComplete = newDialog => {
     if (newDialog) {
       navTo(newDialog);
     }
@@ -207,78 +207,78 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       text: formatMessage('Undo'),
       buttonProps: {
         iconProps: {
-          iconName: 'Undo',
+          iconName: 'Undo'
         },
-        onClick: () => actions.undo(),
+        onClick: () => actions.undo()
       },
       align: 'left',
-      disabled: !undoHistory.canUndo(),
+      disabled: !undoHistory.canUndo()
     },
     {
       type: 'action',
       text: formatMessage('Redo'),
       buttonProps: {
         iconProps: {
-          iconName: 'Redo',
+          iconName: 'Redo'
         },
-        onClick: () => actions.redo(),
+        onClick: () => actions.redo()
       },
       align: 'left',
-      disabled: !undoHistory.canRedo(),
+      disabled: !undoHistory.canRedo()
     },
     {
       type: 'action',
       text: formatMessage('Cut'),
       buttonProps: {
         iconProps: {
-          iconName: 'Cut',
+          iconName: 'Cut'
         },
-        onClick: () => VisualEditorAPI.cutSelection(),
+        onClick: () => VisualEditorAPI.cutSelection()
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !nodeOperationAvailable
     },
     {
       type: 'action',
       text: formatMessage('Copy'),
       buttonProps: {
         iconProps: {
-          iconName: 'Copy',
+          iconName: 'Copy'
         },
-        onClick: () => VisualEditorAPI.copySelection(),
+        onClick: () => VisualEditorAPI.copySelection()
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !nodeOperationAvailable
     },
     {
       type: 'action',
       text: formatMessage('Move'),
       buttonProps: {
         iconProps: {
-          iconName: 'Share',
+          iconName: 'Share'
         },
-        onClick: () => VisualEditorAPI.moveSelection(),
+        onClick: () => VisualEditorAPI.moveSelection()
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !nodeOperationAvailable
     },
     {
       type: 'action',
       text: formatMessage('Delete'),
       buttonProps: {
         iconProps: {
-          iconName: 'Delete',
+          iconName: 'Delete'
         },
-        onClick: () => VisualEditorAPI.deleteSelection(),
+        onClick: () => VisualEditorAPI.deleteSelection()
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !nodeOperationAvailable
     },
     {
       type: 'element',
       element: <TestController />,
-      align: 'right',
-    },
+      align: 'right'
+    }
   ];
 
   function handleBreadcrumbItemClick(_event, item) {
@@ -301,7 +301,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 isRoot: !selected && !focused,
                 text,
                 ...item,
-                onClick: handleBreadcrumbItemClick,
+                onClick: handleBreadcrumbItemClick
               });
             }
             return result;
@@ -321,7 +321,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <div style={{ padding: '10px' }}>
           <ActionButton
             onClick={() => {
-              setDialogJsonVisibility((current) => !current);
+              setDialogJsonVisibility(current => !current);
             }}
           >
             {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
@@ -338,7 +338,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
-      generator: `${data.name}.lg`,
+      generator: `${data.name}.lg`
     });
     if (seededContent.triggers && seededContent.triggers[0]) {
       seededContent.triggers[0].actions = state.actionsSeed;
@@ -351,7 +351,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const refs = getAllRef(id, dialogs);
     let setting: any = {
       confirmBtnText: formatMessage('Yes'),
-      cancelBtnText: formatMessage('Cancel'),
+      cancelBtnText: formatMessage('Cancel')
     };
     let title = '';
     let subTitle = '';
@@ -360,7 +360,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
       setting = {
         onRenderContent,
-        style: DialogStyle.Console,
+        style: DialogStyle.Console
       };
     } else {
       title = DialogDeleting.NO_LINKED_TITLE;
@@ -373,7 +373,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }
 
   async function handleDeleteTrigger(id, index) {
-    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
+    const content = deleteTrigger(dialogs, id, index, trigger => triggerApi.deleteTrigger(id, trigger));
 
     if (content) {
       await updateDialog({ id, projectId, content });
@@ -432,7 +432,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     id={currentDialog.id}
                     schema={schemas.sdk.content}
                     value={currentDialog.content || undefined}
-                    onChange={(data) => {
+                    onChange={data => {
                       actions.updateDialog({ id: currentDialog.id, projectId, content: data });
                     }}
                   />

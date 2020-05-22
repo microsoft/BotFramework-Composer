@@ -30,7 +30,7 @@ import {
   activityTypeKey,
   getEventTypes,
   getActivityTypes,
-  regexRecognizerKey,
+  regexRecognizerKey
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
@@ -69,7 +69,7 @@ const validateForm = (
     );
   }
 
-  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
+  if (selectedType === intentTypeKey && isRegEx && regExIntents.find(ri => ri.intent === intent)) {
     errors.intent = `regEx ${intent} is already defined`;
   }
 
@@ -100,12 +100,12 @@ interface TriggerCreationModalProps {
   onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
 }
 
-export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
+export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, locale, projectId, schemas } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
+  const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$kind', '') === regexRecognizerKey;
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const isNone = !get(dialogFile, 'content.recognizer');
@@ -115,7 +115,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     event: '',
     intent: '',
     triggerPhrases: '',
-    regexEx: '',
+    regexEx: ''
   };
   const [formData, setFormData] = useState(initialFormData);
   const [selectedType, setSelectedType] = useState(isNone ? '' : intentTypeKey);
@@ -132,17 +132,17 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
   if (isNone) {
-    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
+    triggerTypeOptions = triggerTypeOptions.filter(t => t.key !== intentTypeKey);
   }
 
-  const onClickSubmitButton = (e) => {
+  const onClickSubmitButton = e => {
     e.preventDefault();
     const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
 
     if (Object.keys(errors).length) {
       setFormData({
         ...formData,
-        errors,
+        errors
       });
       return;
     }
@@ -154,7 +154,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
       const updateLuFile = {
         id: luFileId,
-        content: newContent,
+        content: newContent
       };
       onSubmit(newDialog, updateLuFile);
     } else {
@@ -166,7 +166,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const onSelectTriggerType = (e, option) => {
     setSelectedType(option.key || '');
     const compoundTypes = [activityTypeKey, eventTypeKey];
-    const isCompound = compoundTypes.some((t) => option.key === t);
+    const isCompound = compoundTypes.some(t => option.key === t);
 
     if (isCompound) {
       setFormData({ ...initialFormData, $kind: '' });
@@ -214,12 +214,12 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Create a trigger'),
-        styles: styles.dialog,
+        styles: styles.dialog
       }}
       hidden={!isOpen}
       modalProps={{
         isBlocking: false,
-        styles: styles.modal,
+        styles: styles.modal
       }}
       onDismiss={onDismiss}
     >
@@ -296,7 +296,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                 luOption={{
                   projectId,
                   fileId: dialogId,
-                  sectionId: formData.intent || PlaceHolderSectionName,
+                  sectionId: formData.intent || PlaceHolderSectionName
                 }}
                 placeholder={inlineModePlaceholder}
                 value={formData.triggerPhrases}

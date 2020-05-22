@@ -20,22 +20,22 @@ export interface ISkillFormProps {
   settings: DialogSetting;
 }
 
-const SkillSettings: React.FC<ISkillFormProps> = (props) => {
+const SkillSettings: React.FC<ISkillFormProps> = props => {
   const [skillSettings, setSkillSettings] = useState({
     botId: props.botId,
-    skillHostEndpoint: props.skillHostEndpoint,
+    skillHostEndpoint: props.skillHostEndpoint
   });
   useEffect(() => {
     setSkillSettings({
       botId: props.botId,
-      skillHostEndpoint: props.skillHostEndpoint,
+      skillHostEndpoint: props.skillHostEndpoint
     });
   }, [props.botId, props.skillHostEndpoint]);
 
-  const handleFieldChange = (event) => {
+  const handleFieldChange = event => {
     const localSettings = {
       ...skillSettings,
-      [event.target.id]: event.target.value,
+      [event.target.id]: event.target.value
     };
     setSkillSettings({ ...localSettings });
     props.setSettings(props.projectId, props.botName, { ...props.settings, ...localSettings }, undefined);

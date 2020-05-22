@@ -11,12 +11,12 @@ import { ActionTypes } from '../../constants';
 enum ClaimNames {
   upn = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn',
   name = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name',
-  expiration = 'exp',
+  expiration = 'exp'
 }
 
 const REFRESH_WATERMARK = 1000 * 60 * 5; // 5 minutes
 
-export const loginUser: ActionCreator = async (store) => {
+export const loginUser: ActionCreator = async store => {
   if (!process.env.COMPOSER_REQUIRE_AUTH) {
     return;
   }
@@ -38,8 +38,8 @@ export const loginUser: ActionCreator = async (store) => {
         token,
         email: decoded[ClaimNames.upn],
         name: decoded[ClaimNames.name],
-        expiration: (decoded[ClaimNames.expiration] || 0) * 1000, // convert to ms
-      },
+        expiration: (decoded[ClaimNames.expiration] || 0) * 1000 // convert to ms
+      }
     });
 
     // try to refresh the token before the expiration
@@ -62,7 +62,7 @@ export const loginUser: ActionCreator = async (store) => {
     }
   } else {
     store.dispatch({
-      type: ActionTypes.USER_LOGIN_FAILURE,
+      type: ActionTypes.USER_LOGIN_FAILURE
     });
   }
 };
@@ -70,6 +70,6 @@ export const loginUser: ActionCreator = async (store) => {
 export const updateUserSettings: ActionCreator = ({ dispatch }, settings: Partial<UserSettings>) => {
   dispatch({
     type: ActionTypes.SET_USER_SETTINGS,
-    payload: settings,
+    payload: settings
   });
 };

@@ -13,7 +13,7 @@ export const setDesignPageLocation: ActionCreator = (
 ) => {
   dispatch({
     type: ActionTypes.SET_DESIGN_PAGE_LOCATION,
-    payload: { dialogId, projectId, focused, selected, breadcrumb, onBreadcrumbItemClick, promptTab },
+    payload: { dialogId, projectId, focused, selected, breadcrumb, onBreadcrumbItemClick, promptTab }
   });
 };
 

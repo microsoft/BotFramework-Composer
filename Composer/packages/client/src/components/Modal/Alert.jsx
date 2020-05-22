@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 
 import { DialogStyle, BuiltInStyles } from './styles';
 
-const AlertDialog = (props) => {
+const AlertDialog = props => {
   const { setting, onCancel, onConfirm } = props;
   const { title, subTitle = '', confirmBtnText = 'Ok', style = DialogStyle.normalStyle } = setting;
   if (!title) {
@@ -20,7 +20,7 @@ const AlertDialog = (props) => {
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: title,
+        title: title
         // subText: subTitle,
       }}
       hidden={false}
@@ -28,8 +28,8 @@ const AlertDialog = (props) => {
       modalProps={{
         isBlocking: true,
         styles: {
-          main: { maxWidth: 450 },
-        },
+          main: { maxWidth: 450 }
+        }
       }}
       onDismiss={onCancel}
     >
@@ -45,11 +45,11 @@ const AlertDialog = (props) => {
 AlertDialog.propTypes = {
   setting: PropTypes.object,
   onCancel: PropTypes.func,
-  onConfirm: PropTypes.func,
+  onConfirm: PropTypes.func
 };
 
 export const OpenAlertModal = (title, subTitle, setting = {}) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const node = document.createElement('div');
     document.body.appendChild(node);
     const removeNode = () => {
