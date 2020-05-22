@@ -45,7 +45,7 @@ function createKeywordsProposals(monaco: Monaco, range) {
 
 export function registerLGLanguage(monaco: Monaco) {
   // return if we've already registered this language to the editor
-  if (monaco.languages.getLanguages().some(lang => lang.id === LANGUAGE_NAME)) return;
+  if (monaco.languages.getLanguages().some((lang) => lang.id === LANGUAGE_NAME)) return;
 
   monaco.languages.setMonarchTokensProvider(LANGUAGE_NAME, {
     ignoreCase: true,
@@ -156,7 +156,7 @@ export function registerLGLanguage(monaco: Monaco) {
   });
 
   monaco.languages.registerCompletionItemProvider(LANGUAGE_NAME, {
-    provideCompletionItems: function(model, position) {
+    provideCompletionItems: function (model, position) {
       const lineText = model.getValueInRange({
         startLineNumber: position.lineNumber,
         startColumn: 1,

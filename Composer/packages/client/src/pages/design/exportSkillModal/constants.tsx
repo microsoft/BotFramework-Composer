@@ -107,7 +107,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       const required = schema?.required || [];
 
       return required
-        .filter(key => {
+        .filter((key) => {
           const property = schema?.properties?.[key];
           return property && !['array', 'object'].includes(property.type);
         })

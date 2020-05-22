@@ -17,7 +17,7 @@ function isParentRect(parentRect, childRect) {
 
 function findSelectableChildren(element: SelectorElement, elementList: SelectorElement[]) {
   const rect = element.bounds;
-  return elementList.filter(el => {
+  return elementList.filter((el) => {
     const candidateRect = el.bounds;
     return isParentRect(rect, candidateRect);
   });
@@ -25,7 +25,7 @@ function findSelectableChildren(element: SelectorElement, elementList: SelectorE
 
 function findSelectableParent(element: SelectorElement, elementList: SelectorElement[]) {
   const rect = element.bounds;
-  return elementList.find(el => {
+  return elementList.find((el) => {
     const candidateRect = el.bounds;
     return isParentRect(candidateRect, rect);
   });
@@ -35,8 +35,8 @@ export function handleTabMove(currentElement: SelectorElement, selectableElement
   let nextElement: SelectorElement;
   const selectableChildren = findSelectableChildren(currentElement, selectableElements);
   const selectableParent = findSelectableParent(currentElement, selectableElements);
-  const findElementWithSuffix = suffix => {
-    return selectableElements.find(element => element.selectedId === `${selectableParent?.selectedId}${suffix}`);
+  const findElementWithSuffix = (suffix) => {
+    return selectableElements.find((element) => element.selectedId === `${selectableParent?.selectedId}${suffix}`);
   };
   if (command === KeyboardCommandTypes.Cursor.MoveNext) {
     if (selectableChildren.length > 0) {

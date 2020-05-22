@@ -41,7 +41,7 @@ export const undoableUpdateLuFile = undoable(
     if (isEmpty) {
       const id = args[0].id;
       const projectId = args[0].projectId;
-      const content = clonedeep(state.luFiles.find(luFile => luFile.id === id)?.content);
+      const content = clonedeep(state.luFiles.find((luFile) => luFile.id === id)?.content);
       return [{ id, projectId, content }];
     } else {
       return args;
@@ -76,7 +76,7 @@ export const publishLuis: ActionCreator = async ({ dispatch, getState }, authori
       authoringKey,
       projectId,
       crossTrainConfig,
-      luFiles: referred.map(file => file.id),
+      luFiles: referred.map((file) => file.id),
     });
     luFileStatusStorage.publishAll(getState().botName);
     dispatch({

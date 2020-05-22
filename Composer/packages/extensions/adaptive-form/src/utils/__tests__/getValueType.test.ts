@@ -36,7 +36,7 @@ describe('getValueType', () => {
       },
     ];
 
-    tests.forEach(t => {
+    tests.forEach((t) => {
       expect(getValueType(t.value)).toEqual(t.type);
     });
   });

@@ -46,11 +46,11 @@ const WelcomeModal = () => {
         <div css={topBarStyle}>
           <div css={titleStyle}>{formatMessage('Welcome!')}</div>
           <div css={buttonStyle}>
-            <IconButton iconProps={{ iconName: 'ChromeMinimize' }} onClick={toggleMinimized} title="Collapse" />
-            <IconButton iconProps={{ iconName: 'ChromeClose' }} onClick={exit} title="Close" />
+            <IconButton iconProps={{ iconName: 'ChromeMinimize' }} title="Collapse" onClick={toggleMinimized} />
+            <IconButton iconProps={{ iconName: 'ChromeClose' }} title="Close" onClick={exit} />
           </div>
         </div>
-        <img src={welcomeImage} alt="Welcome" />
+        <img alt="Welcome" src={welcomeImage} />
         <div css={subtitleStyle}>{formatMessage('Your bot creation journey on Composer')}</div>
       </div>
       <div>
@@ -67,7 +67,7 @@ const WelcomeModal = () => {
         {!~currentStep && (
           <div>
             {currentSet + 1 < stepSets.length && (
-              <PrimaryButton data-testid="onboardingNextSet" onClick={nextSet} text={stepSets[currentSet + 1].title} />
+              <PrimaryButton data-testid="onboardingNextSet" text={stepSets[currentSet + 1].title} onClick={nextSet} />
             )}
             {currentSet + 1 === stepSets.length && (
               <PrimaryButton data-testid="onboardingDone" text={formatMessage('Done!')} onClick={onComplete} />

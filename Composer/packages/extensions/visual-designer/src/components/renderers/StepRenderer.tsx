@@ -25,7 +25,7 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
   }
   return (
     <ElementWrapper id={id} onEvent={onEvent}>
-      <ElementMeasurer onResize={boundary => onResize(boundary)}>{content}</ElementMeasurer>
+      <ElementMeasurer onResize={(boundary) => onResize(boundary)}>{content}</ElementMeasurer>
     </ElementWrapper>
   );
 };

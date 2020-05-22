@@ -26,7 +26,7 @@ const styles = {
   `,
 };
 
-const ExpressionField: React.FC<FieldProps> = props => {
+const ExpressionField: React.FC<FieldProps> = (props) => {
   const { id, value, label, description, schema, uiOptions, definitions, required, className } = props;
   const { $role, ...expressionSchema } = schema;
   const pluginConfig = usePluginConfig();
@@ -79,11 +79,11 @@ const ExpressionField: React.FC<FieldProps> = props => {
       return (
         <JsonEditor
           key={selectedSchema.type}
-          id={props.id}
-          onChange={props.onChange}
-          value={value || defaultValue}
           height={100}
+          id={props.id}
           schema={selectedSchema}
+          value={value || defaultValue}
+          onChange={props.onChange}
         />
       );
     }
@@ -93,12 +93,12 @@ const ExpressionField: React.FC<FieldProps> = props => {
       <Field
         key={selectedSchema.type}
         {...props}
+        css={{ label: 'ExpressionFieldValue' }}
         enumOptions={enumOptions}
+        label={selectedSchema.type !== 'object' ? false : undefined}
+        // allow object fields to render their labels
         placeholder={placeholder}
         schema={selectedSchema}
-        // allow object fields to render their labels
-        label={selectedSchema.type !== 'object' ? false : undefined}
-        css={{ label: 'ExpressionFieldValue' }}
         transparentBorder={false}
       />
     );
@@ -115,28 +115,28 @@ const ExpressionField: React.FC<FieldProps> = props => {
       {shouldRenderContainer && (
         <div css={styles.container}>
           <FieldLabel
-            id={id}
-            label={label}
             description={description}
             helpLink={uiOptions?.helpLink}
+            id={id}
+            label={label}
             required={required}
           />
           {options && options.length > 1 && (
             <Dropdown
-              id={`${props.id}-type`}
+              ariaLabel={formatMessage('select property type')}
+              data-testid={`expression-type-dropdown-${label}`}
               dropdownWidth={dropdownWidth}
+              id={`${props.id}-type`}
               options={options}
               responsiveMode={ResponsiveMode.large}
               selectedKey={selectedKey}
-              onChange={handleTypeChange}
-              onRenderTitle={renderTypeTitle}
               styles={{
                 caretDownWrapper: { height: '24px', lineHeight: '24px' },
                 root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
                 title: { height: '24px', lineHeight: '20px' },
               }}
-              data-testid={`expression-type-dropdown-${label}`}
-              ariaLabel={formatMessage('select property type')}
+              onChange={handleTypeChange}
+              onRenderTitle={renderTypeTitle}
             />
           )}
         </div>
