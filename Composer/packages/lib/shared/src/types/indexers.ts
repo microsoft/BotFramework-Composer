@@ -61,15 +61,9 @@ export interface LuIntentSection {
   range?: CodeRange;
 }
 
-export interface ImportSection {
-  id: string;
-  description?: string;
-  path: string;
-}
-
 export interface LuParsed {
+  empty: boolean;
   intents: LuIntentSection[];
-  importSections: ImportSection[];
   diagnostics: Diagnostic[];
 }
 
@@ -77,7 +71,6 @@ export enum LuSectionTypes {
   SIMPLEINTENTSECTION = 'simpleIntentSection',
   NESTEDINTENTSECTION = 'nestedIntentSection',
   MODELINFOSECTION = 'modelInfoSection',
-  IMPORTSECTION = 'importSection',
 }
 
 export interface LuEntity {
@@ -89,6 +82,7 @@ export interface LuFile {
   content: string;
   diagnostics: Diagnostic[];
   intents: LuIntentSection[];
+  empty: boolean;
   [key: string]: any;
 }
 export interface CodeRange {

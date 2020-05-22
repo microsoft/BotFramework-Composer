@@ -13,7 +13,6 @@ import {
   Position,
   Range,
   DiagnosticSeverity,
-  ImportSection,
 } from '@bfc/shared';
 
 import { getBaseName } from './utils/help';
@@ -40,7 +39,6 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
 function parse(content: string, id = ''): LuParsed {
   const { Sections, Errors } = luParser.parse(content);
   const intents: LuIntentSection[] = [];
-  const importSections: ImportSection[] = [];
   Sections.forEach(section => {
     const { Name, Body, SectionType } = section;
     const range = {
@@ -84,15 +82,12 @@ function parse(content: string, id = ''): LuParsed {
           };
         })
       );
-    } else if (SectionType === LuSectionTypes.IMPORTSECTION) {
-      const { Id, Description, Path } = section;
-      importSections.push({ id: Id, description: Description, path: Path });
     }
   });
   const diagnostics = Errors.map(e => convertLuDiagnostic(e, id));
   return {
+    empty: !Sections.length,
     intents,
-    importSections,
     diagnostics,
   };
 }

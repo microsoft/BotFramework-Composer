@@ -7,9 +7,7 @@ import { LuActionType } from './../types';
 const ctx: Worker = self as any;
 
 const parse = (id: string, content: string) => {
-  const { intents, diagnostics } = luIndexer.parse(content, id);
-
-  return { id, content, intents, diagnostics };
+  return { id, content, ...luIndexer.parse(content, id) };
 };
 
 ctx.onmessage = function(msg) {
