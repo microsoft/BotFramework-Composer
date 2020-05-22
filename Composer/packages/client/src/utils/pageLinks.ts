@@ -15,7 +15,7 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
     {
       to: `/bot/${projectId}/dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
-      labelName: formatMessage('Design Flow'),
+      labelName: formatMessage('Design'),
       exact: false,
       disabled: !botLoaded,
     },
