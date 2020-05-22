@@ -162,7 +162,7 @@ export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
     const msg = generateErrorMessage(invalidLuFile);
     throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
   }
-  const emptyLuFiles = referred.filter(file => file.empty);
+  const emptyLuFiles = referred.filter((file) => file.empty);
   if (emptyLuFiles.length !== 0) {
     const msg = emptyLuFiles.map((file) => file.id).join(' ');
     throw new Error(`You have the following empty LuFile(s): ` + msg);
