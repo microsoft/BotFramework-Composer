@@ -44,11 +44,11 @@ export function useDialogEditApi(shellApi: ShellApi) {
   }
 
   function deleteSelectedAction(dialogId, dialogData, actionId: string) {
-    return deleteNode(dialogData, actionId, node => deleteAction(dialogId, node));
+    return deleteNode(dialogData, actionId, (node) => deleteAction(dialogId, node));
   }
 
   function deleteSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
-    return deleteNodes(dialogData, actionIds, nodes => {
+    return deleteNodes(dialogData, actionIds, (nodes) => {
       deleteActions(dialogId, nodes);
     });
   }

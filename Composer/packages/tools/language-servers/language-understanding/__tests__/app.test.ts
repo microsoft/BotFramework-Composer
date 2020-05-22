@@ -16,7 +16,7 @@ type messageResolver = (data) => void;
 
 const subscribers: messageResolver[] = [];
 
-ws.on('message', data => {
+ws.on('message', (data) => {
   const subscriber = subscribers.shift();
   if (subscriber) {
     subscriber(data);
@@ -25,9 +25,9 @@ ws.on('message', data => {
 
 function send(data, resolvers?: messageResolver[]): Promise<any> {
   ws.send(data);
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (typeof resolvers === 'undefined') {
-      subscribers.push(data => {
+      subscribers.push((data) => {
         resolve(data);
       });
       return;
@@ -37,8 +37,8 @@ function send(data, resolvers?: messageResolver[]): Promise<any> {
       return;
     }
     let count = 0;
-    const readers = resolvers.map(resolver => {
-      return data => {
+    const readers = resolvers.map((resolver) => {
+      return (data) => {
         count++;
         resolver(JSON.parse(data));
         if (resolvers.length === count) {
@@ -51,10 +51,7 @@ function send(data, resolvers?: messageResolver[]): Promise<any> {
 }
 
 function jsonEscape(str) {
-  return str
-    .replace(/\n/g, '\\n')
-    .replace(/\r/g, '\\r')
-    .replace(/\t/g, '\\t');
+  return str.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
 }
 
 const content = jsonEscape(luFile);
@@ -62,25 +59,25 @@ const content = jsonEscape(luFile);
 describe('lu lsp server', () => {
   const server = startServer();
   beforeAll(async () => {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       ws.on('open', () => {
         resolve();
       });
     });
   });
 
-  afterAll(async done => {
+  afterAll(async (done) => {
     ws.close();
     server.close();
     done();
   });
   it('websocket should connect server', async () => {
     await send(`{ "jsonrpc":"2.0","id":0,"method":"initialize","params": ${initializeParams} }`, [
-      response => {
+      (response) => {
         expect(response.method).toEqual('window/logMessage');
         expect(response.params.type).toEqual(4);
       },
-      response => {
+      (response) => {
         expect(response.id).toEqual(0);
       },
     ]);

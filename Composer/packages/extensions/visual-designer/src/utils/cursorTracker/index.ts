@@ -13,7 +13,7 @@ export function moveCursor(
   id: string,
   command: string
 ): { [key: string]: string | undefined } {
-  const currentElement = selectableElements.find(element => element.selectedId === id || element.focusedId === id);
+  const currentElement = selectableElements.find((element) => element.selectedId === id || element.focusedId === id);
   if (!currentElement) return { selected: id, focused: undefined };
   let element: SelectorElement = currentElement;
 
@@ -37,7 +37,7 @@ export function moveCursor(
 
 export function querySelectableElements(): SelectorElement[] {
   const items: SelectorElement[] = [];
-  Array.from(document.querySelectorAll(`[${AttrNames.SelectableElement}]`)).forEach(ele => {
+  Array.from(document.querySelectorAll(`[${AttrNames.SelectableElement}]`)).forEach((ele) => {
     items.push(new SelectorElement(ele as HTMLElement));
   });
   return items;

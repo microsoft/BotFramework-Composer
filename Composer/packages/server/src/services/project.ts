@@ -92,7 +92,7 @@ export class BotProjectService {
     ];
     const projectVariables =
       BotProjectService.getIndexedProjectById(projectId)
-        ?.files.filter(file => file.name.endsWith('.dialog'))
+        ?.files.filter((file) => file.name.endsWith('.dialog'))
         .map(({ content }) => {
           const dialogJson = JSON.parse(content);
           return extractMemoryPaths(dialogJson);
@@ -108,7 +108,7 @@ export class BotProjectService {
 
   public static getProjectsDateModifiedDict = async (projects: LocationRef[], user?: UserIdentity): Promise<any> => {
     const dateModifiedDict: any = [];
-    const promises = projects.map(async project => {
+    const promises = projects.map(async (project) => {
       let dateModified = '';
       try {
         dateModified = await StorageService.getBlobDateModified(project.storageId, project.path, user);
@@ -231,7 +231,7 @@ export class BotProjectService {
 
   private static updateCurrentProjects = (project: BotProject): void => {
     const { id } = project;
-    const idx = BotProjectService.currentBotProjects.findIndex(item => item.id === id);
+    const idx = BotProjectService.currentBotProjects.findIndex((item) => item.id === id);
     if (idx > -1) {
       BotProjectService.currentBotProjects.splice(idx, 1);
     }
@@ -247,7 +247,7 @@ export class BotProjectService {
     //   return;
     // }
     const currDir = Path.resolve(path);
-    const idx = BotProjectService.recentBotProjects.findIndex(ref => currDir === Path.resolve(ref.path));
+    const idx = BotProjectService.recentBotProjects.findIndex((ref) => currDir === Path.resolve(ref.path));
     if (idx > -1) {
       BotProjectService.recentBotProjects.splice(idx, 1);
     }
@@ -264,7 +264,7 @@ export class BotProjectService {
 
   public static deleteRecentProject = (path: string): void => {
     const recentBotProjects = BotProjectService.recentBotProjects.filter(
-      ref => Path.resolve(path) !== Path.resolve(ref.path)
+      (ref) => Path.resolve(path) !== Path.resolve(ref.path)
     );
     BotProjectService.recentBotProjects = recentBotProjects;
     Store.set('recentBotProjects', recentBotProjects);

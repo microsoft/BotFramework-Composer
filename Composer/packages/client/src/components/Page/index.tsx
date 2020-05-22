@@ -19,7 +19,7 @@ interface IPageProps {
   'data-testid'?: string;
 }
 
-const Page: React.FC<IPageProps> = props => {
+const Page: React.FC<IPageProps> = (props) => {
   const { title, navLinks, toolbarItems, onRenderHeaderContent, children } = props;
 
   return (
@@ -30,7 +30,7 @@ const Page: React.FC<IPageProps> = props => {
           <h1 css={styles.headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={styles.headerContent}>{onRenderHeaderContent()}</div>}
         </div>
-        <div role="main" css={styles.main}>
+        <div css={styles.main} role="main">
           <NavTree navLinks={navLinks} />
           <div css={styles.content} data-testid="PageContent">
             {children}

@@ -19,6 +19,6 @@ function getTitle(data): string {
 }
 
 export const ConversationUpdateActivityRule: FunctionComponent<NodeProps> = ({ id, data, focused, onEvent }) => {
-  return <RuleCard id={id} data={data} focused={focused} label={getTitle(data)} onEvent={onEvent} />;
+  return <RuleCard data={data} focused={focused} id={id} label={getTitle(data)} onEvent={onEvent} />;
 };
 ConversationUpdateActivityRule.defaultProps = defaultNodeProps;

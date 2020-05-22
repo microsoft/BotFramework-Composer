@@ -158,7 +158,7 @@ export class BotProject {
     return skillsParsed;
   };
 
-  public exportToZip = cb => {
+  public exportToZip = (cb) => {
     try {
       this.fileStorage.zip(this.dataDir, cb);
     } catch (e) {
@@ -170,7 +170,7 @@ export class BotProject {
     let sdkSchema = this.defaultSDKSchema;
     const diagnostics: string[] = [];
 
-    const userSDKSchemaFile = this.files.find(f => f.name === 'sdk.schema');
+    const userSDKSchemaFile = this.files.find((f) => f.name === 'sdk.schema');
 
     if (userSDKSchemaFile !== undefined) {
       debug('Customized SDK schema found');
@@ -208,7 +208,7 @@ export class BotProject {
   }
 
   public updateBotInfo = async (name: string, description: string) => {
-    const mainDialogFile = this.files.find(file => !file.relativePath.includes('/') && file.name.endsWith('.dialog'));
+    const mainDialogFile = this.files.find((file) => !file.relativePath.includes('/') && file.name.endsWith('.dialog'));
     if (!mainDialogFile) return;
     const entryDialogId = name.trim().toLowerCase();
     const { relativePath } = mainDialogFile;
@@ -253,7 +253,7 @@ export class BotProject {
       await this.updateDefaultSlotEnvSettings(JSON.parse(content));
       return new Date().toDateString();
     }
-    const file = this.files.find(d => d.name === name);
+    const file = this.files.find((d) => d.name === name);
     if (file === undefined) {
       throw new Error(`no such file ${name}`);
     }
@@ -268,7 +268,7 @@ export class BotProject {
       throw new Error(`Main dialog can't be removed`);
     }
 
-    const file = this.files.find(d => d.name === name);
+    const file = this.files.find((d) => d.name === name);
     if (file === undefined) {
       throw new Error(`no such file ${name}`);
     }
@@ -277,7 +277,7 @@ export class BotProject {
   };
 
   public createFile = async (name: string, content = '', dir: string = this.defaultDir(name)) => {
-    const file = this.files.find(d => d.name === name);
+    const file = this.files.find((d) => d.name === name);
     if (file) {
       throw new Error(`${name} dialog already exist`);
     }
@@ -291,7 +291,7 @@ export class BotProject {
         result[id] = true;
         return result;
       }, {});
-      const files = this.files.filter(file => map[Path.basename(file.name, '.lu')]);
+      const files = this.files.filter((file) => map[Path.basename(file.name, '.lu')]);
       this.luPublisher.setPublishConfig(
         { ...this.settings.luis, authoringKey },
         crossTrainConfig,
@@ -475,7 +475,7 @@ export class BotProject {
   // update file in this project this function will gurantee the memory cache
   // (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
-    const index = this.files.findIndex(f => f.relativePath === relativePath);
+    const index = this.files.findIndex((f) => f.relativePath === relativePath);
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
@@ -498,7 +498,7 @@ export class BotProject {
   // remove file in this project this function will gurantee the memory cache
   // (this.files, all indexes) also gets updated
   private _removeFile = async (relativePath: string) => {
-    const index = this.files.findIndex(f => f.relativePath === relativePath);
+    const index = this.files.findIndex((f) => f.relativePath === relativePath);
     if (index === -1) {
       throw new Error(`no such file at ${relativePath}`);
     }
@@ -708,7 +708,7 @@ export class BotProject {
               // lg name line
               if (templateNamePattern.test(line) && line.includes('-')) {
                 let newLine = line;
-                replacers.map(replacer => {
+                replacers.map((replacer) => {
                   newLine = replacer(newLine);
                 });
                 newLine = newLine.replace('-', '_');
@@ -718,7 +718,7 @@ export class BotProject {
                 // lg body line
               } else if (templateBodyLinePattern.test(line) && (line.includes('@{') || line.includes('${'))) {
                 let newContentLine = line;
-                replacers.map(replacer => {
+                replacers.map((replacer) => {
                   newContentLine = replacer(newContentLine);
                 });
                 newContentLines.push(newContentLine);
@@ -737,7 +737,7 @@ export class BotProject {
             for (const line of lines) {
               if (callingTempaltePattern.test(line) && line.includes('-')) {
                 let newLine = line;
-                replacers.map(replacer => {
+                replacers.map((replacer) => {
                   newLine = replacer(newLine);
                 });
                 newContentLines.push(newLine);
@@ -757,7 +757,7 @@ export class BotProject {
             for (const line of lines) {
               if (activityInJson.test(line) && line.includes('-')) {
                 let newLine = line;
-                replacers.map(replacer => {
+                replacers.map((replacer) => {
                   newLine = replacer(newLine);
                 });
                 newLine = newLine.replace('-', '_');

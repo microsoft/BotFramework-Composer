@@ -34,7 +34,7 @@ const defaultFormData = {
   manifestUrl: '',
 };
 
-const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
+const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
   const { editIndex = -1, skills, onSubmit, onDismiss, isOpen, projectId } = props;
   const originFormData = skills[editIndex];
   const initialFormData = originFormData
@@ -52,7 +52,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
   const asyncManifestUrlValidation = async (projectId: string, manifestUrl: string) => {
     const err = await validateManifestUrl(projectId, manifestUrl);
     if (err) {
-      setFormDataErrors(current => ({ ...current, manifestUrl: err }));
+      setFormDataErrors((current) => ({ ...current, manifestUrl: err }));
     }
     setIsValidating(false);
   };
@@ -71,7 +71,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
           currentError = formatMessage('Url should start with http[s]://');
         }
 
-        const duplicatedItemIndex = skills.findIndex(item => item.manifestUrl === manifestUrl);
+        const duplicatedItemIndex = skills.findIndex((item) => item.manifestUrl === manifestUrl);
         if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
           currentError = formatMessage('Duplicate skill manifest Url');
         }
@@ -94,7 +94,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
           currentError = formatMessage('Name contains invalid charactors');
         }
 
-        const duplicatedItemIndex = skills.findIndex(item => item.name === name);
+        const duplicatedItemIndex = skills.findIndex((item) => item.name === name);
         if (duplicatedItemIndex !== -1 && (!isModify || (isModify && duplicatedItemIndex !== editIndex))) {
           currentError = formatMessage('Duplicate skill name');
         }
@@ -133,7 +133,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
   };
 
   const handleSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (isValidating) return;
       setIsValidating(true);
@@ -146,9 +146,9 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
       }
 
       // do async validation
-      validateManifestUrl(projectId, formData.manifestUrl).then(error => {
+      validateManifestUrl(projectId, formData.manifestUrl).then((error) => {
         if (error) {
-          setFormDataErrors(current => ({ ...current, manifestUrl: error }));
+          setFormDataErrors((current) => ({ ...current, manifestUrl: error }));
           setIsValidating(false);
           return;
         }
@@ -167,44 +167,44 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
 
   return (
     <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...formTitles} dialogType={DialogTypes.CreateFlow}>
-      <form onSubmit={handleSubmit} css={FormModalBody}>
-        <input type="submit" style={{ display: 'none' }} />
+      <form css={FormModalBody} onSubmit={handleSubmit}>
+        <input style={{ display: 'none' }} type="submit" />
         <Stack tokens={{ childrenGap: '3rem' }}>
           <StackItem grow={0}>
             <TextField
+              autoFocus
+              required
               css={FormFieldManifestUrl}
+              data-testid="NewSkillManifestUrl"
+              errorMessage={formDataErrors.manifestUrl}
               label={formatMessage('Manifest url')}
               value={formData.manifestUrl}
               onChange={updateForm('manifestUrl')}
-              errorMessage={formDataErrors.manifestUrl}
-              data-testid="NewSkillManifestUrl"
-              required
-              autoFocus
             />
             {isValidating && (
-              <Spinner css={SpinnerLabel} size={SpinnerSize.medium} label="validating..." labelPosition="right" />
+              <Spinner css={SpinnerLabel} label="validating..." labelPosition="right" size={SpinnerSize.medium} />
             )}
             <TextField
               css={FormFieldEditName}
+              data-testid="NewSkillName"
+              errorMessage={formDataErrors.name}
               label={formatMessage('Custom name (optional)')}
               value={formData.name}
               onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
-              data-testid="NewSkillName"
             />
           </StackItem>
 
           <StackItem>
             <PrimaryButton
-              onClick={handleSubmit}
-              text={formatMessage('Confirm')}
               disabled={isDisabled || isValidating}
+              text={formatMessage('Confirm')}
+              onClick={handleSubmit}
             />
             <DefaultButton
               css={MarginLeftSmall}
-              onClick={onDismiss}
-              text={formatMessage('Cancel')}
               data-testid="SkillFormCancel"
+              text={formatMessage('Cancel')}
+              onClick={onDismiss}
             />
           </StackItem>
         </Stack>

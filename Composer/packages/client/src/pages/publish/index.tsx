@@ -21,15 +21,15 @@ import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
-import { PublishStatusList } from './publishStatusList';
+import { PublishStatusList, IStatus } from './publishStatusList';
 
 interface PublishPageProps extends RouteComponentProps<{}> {
   targetName?: string;
 }
 
-const Publish: React.FC<PublishPageProps> = props => {
+const Publish: React.FC<PublishPageProps> = (props) => {
   const selectedTargetName = props.targetName;
-  const [selectedTarget, setSelectedTarget] = useState();
+  const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
   const { state, actions } = useContext(StoreContext);
   const { settings, botName, publishTypes, projectId, publishHistory } = state;
 
@@ -41,8 +41,8 @@ const Publish: React.FC<PublishPageProps> = props => {
 
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
-  const [groups, setGroups] = useState();
-  const [selectedVersion, setSelectedVersion] = useState();
+  const [groups, setGroups] = useState<any[]>([]);
+  const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
@@ -58,7 +58,7 @@ const Publish: React.FC<PublishPageProps> = props => {
   const isRollbackSupported = useMemo(
     () => (target, version): boolean => {
       if (version.id && version.status === 200 && target) {
-        const type = publishTypes?.filter(t => t.name === target.type)[0];
+        const type = publishTypes?.filter((t) => t.name === target.type)[0];
         if (type?.features?.rollback) {
           return true;
         }
@@ -124,14 +124,14 @@ const Publish: React.FC<PublishPageProps> = props => {
   ];
 
   const onSelectTarget = useCallback(
-    targetName => {
+    (targetName) => {
       const url = `/bot/${projectId}/publish/${targetName}`;
       navigateTo(url);
     },
     [projectId]
   );
 
-  const getUpdatedStatus = target => {
+  const getUpdatedStatus = (target) => {
     if (target) {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
@@ -145,13 +145,13 @@ const Publish: React.FC<PublishPageProps> = props => {
     if (projectId) {
       actions.getPublishTargetTypes();
       // init selected status
-      setSelectedVersion(undefined);
+      setSelectedVersion(null);
     }
   }, [projectId]);
 
   useEffect(() => {
     if (settings.publishTargets && settings.publishTargets.length > 0) {
-      const _selected = settings.publishTargets.find(item => item.name === selectedTargetName);
+      const _selected = settings.publishTargets.find((item) => item.name === selectedTargetName);
       setSelectedTarget(_selected);
       // load publish histories
       if (selectedTargetName === 'all') {
@@ -269,11 +269,11 @@ const Publish: React.FC<PublishPageProps> = props => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          types={publishTypes}
-          targets={settings.publishTargets || []}
-          updateSettings={savePublishTarget}
-          current={null}
           closeDialog={() => setAddDialogHidden(true)}
+          current={null}
+          targets={settings.publishTargets || []}
+          types={publishTypes}
+          updateSettings={savePublishTarget}
         />
       ),
     });
@@ -285,18 +285,18 @@ const Publish: React.FC<PublishPageProps> = props => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          types={publishTypes}
-          current={editTarget ? editTarget.item : null}
-          targets={(settings.publishTargets || []).filter(item => editTarget && item.name != editTarget.item.name)}
-          updateSettings={updatePublishTarget}
           closeDialog={() => setEditDialogHidden(true)}
+          current={editTarget ? editTarget.item : null}
+          targets={(settings.publishTargets || []).filter((item) => editTarget && item.name != editTarget.item.name)}
+          types={publishTypes}
+          updateSettings={updatePublishTarget}
         />
       ),
     });
   }, [editTarget, publishTypes, updatePublishTarget]);
 
   const rollbackToVersion = useMemo(
-    () => async version => {
+    () => async (version) => {
       const sensitiveSettings = settingsStorage.get(botName);
       await actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
     },
@@ -304,14 +304,14 @@ const Publish: React.FC<PublishPageProps> = props => {
   );
 
   const publish = useMemo(
-    () => async comment => {
+    () => async (comment) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
         const sensitiveSettings = settingsStorage.get(botName);
         await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
         // update the target with a lastPublished date
-        const updatedPublishTargets = settings.publishTargets.map(profile => {
+        const updatedPublishTargets = settings.publishTargets.map((profile) => {
           if (profile.name === selectedTarget.name) {
             return {
               ...profile,
@@ -377,43 +377,43 @@ const Publish: React.FC<PublishPageProps> = props => {
   return (
     <Fragment>
       <Dialog
-        hidden={addDialogHidden}
-        onDismiss={() => setAddDialogHidden(true)}
         dialogContentProps={dialogProps}
-        modalProps={{ isBlocking: true }}
+        hidden={addDialogHidden}
         minWidth={450}
+        modalProps={{ isBlocking: true }}
+        onDismiss={() => setAddDialogHidden(true)}
       >
         {dialogProps.children}
       </Dialog>
       <Dialog
-        hidden={editDialogHidden}
-        onDismiss={() => setEditDialogHidden(true)}
         dialogContentProps={editDialogProps}
-        modalProps={{ isBlocking: true }}
+        hidden={editDialogHidden}
         minWidth={450}
+        modalProps={{ isBlocking: true }}
+        onDismiss={() => setEditDialogHidden(true)}
       >
         {editDialogProps.children}
       </Dialog>
       {!publishDialogHidden && (
-        <PublishDialog onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} target={selectedTarget} />
+        <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
-      <div role="main" css={ContentStyle} data-testid="Publish">
+      <div css={ContentStyle} data-testid="Publish" role="main">
         <div css={projectContainer}>
           <div
             key={'_all'}
-            onClick={() => {
-              setSelectedTarget(undefined);
-              onSelectTarget('all');
-            }}
             css={selectedTargetName === 'all' ? targetSelected : overflowSet}
             style={{
               height: '36px',
               cursor: 'pointer',
+            }}
+            onClick={() => {
+              setSelectedTarget(undefined);
+              onSelectTarget('all');
             }}
           >
             {formatMessage('All profiles')}
@@ -421,23 +421,23 @@ const Publish: React.FC<PublishPageProps> = props => {
           {settings && settings.publishTargets && (
             <TargetList
               list={settings.publishTargets}
-              onSelect={item => {
+              selectedTarget={selectedTargetName}
+              onDelete={async (index) => await onDelete(index)}
+              onEdit={async (item, target) => await onEdit(item, target)}
+              onSelect={(item) => {
                 setSelectedTarget(item);
                 onSelectTarget(item.name);
               }}
-              onEdit={async (item, target) => await onEdit(item, target)}
-              onDelete={async index => await onDelete(index)}
-              selectedTarget={selectedTargetName}
             />
           )}
         </div>
         <div css={contentEditor}>
           <Fragment>
             <PublishStatusList
-              items={thisPublishHistory}
               groups={groups}
-              onItemClick={setSelectedVersion}
+              items={thisPublishHistory}
               updateItems={setThisPublishHistory}
+              onItemClick={setSelectedVersion}
             />
             {!thisPublishHistory || thisPublishHistory.length === 0 ? (
               <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
@@ -450,23 +450,23 @@ const Publish: React.FC<PublishPageProps> = props => {
 };
 
 export default Publish;
-const LogDialog = props => {
+const LogDialog = (props) => {
   const logDialogProps = {
     title: 'Publish Log',
   };
   return (
     <Dialog
-      hidden={false}
-      onDismiss={props.onDismiss}
       dialogContentProps={logDialogProps}
-      modalProps={{ isBlocking: true }}
+      hidden={false}
       minWidth={450}
+      modalProps={{ isBlocking: true }}
+      onDismiss={props.onDismiss}
     >
       <TextField
-        value={props && props.version ? props.version.log : ''}
+        multiline
         placeholder="Log Output"
-        multiline={true}
         style={{ minHeight: 300 }}
+        value={props && props.version ? props.version.log : ''}
       />
     </Dialog>
   );

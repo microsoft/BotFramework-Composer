@@ -10,7 +10,7 @@ export const walkSwitchCondition = (input, visitor: AdaptiveActionVisitor) => {
   walkAdaptiveActionList(input.default, visitor);
 
   if (Array.isArray(input.cases)) {
-    input.cases.forEach(currentCase => {
+    input.cases.forEach((currentCase) => {
       walkAdaptiveActionList(currentCase.actions, visitor);
     });
   }

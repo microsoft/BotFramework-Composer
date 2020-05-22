@@ -159,7 +159,7 @@ export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) 
     getState: store.getState,
     dispatch: (...args) => dispatch(...args),
   };
-  const chain = middlewares.map(middleware => middleware(middlewareApi));
+  const chain = middlewares.map((middleware) => middleware(middlewareApi));
   dispatch = chain.reduce((result, fun) => (...args) => result(fun(...args)))(store.dispatch);
   return dispatch;
 };
@@ -170,7 +170,7 @@ export const wrappedReducer = (state: State, action: ActionType) => {
   return currentState;
 };
 
-export const StoreProvider: React.FC<StoreProviderProps> = props => {
+export const StoreProvider: React.FC<StoreProviderProps> = (props) => {
   const [state, dispatch] = useReducer(wrappedReducer, initialState);
   const stateRef = useRef<State>(initialState);
 
@@ -188,13 +188,13 @@ export const StoreProvider: React.FC<StoreProviderProps> = props => {
     dispatch: interceptDispatch,
     resolvers: {
       lgImportresolver: importResolverGenerator(getState().lgFiles, '.lg'),
-      lgFileResolver: function(id: string) {
+      lgFileResolver: function (id: string) {
         const state = getState();
         const { locale, lgFiles } = state;
         const fileId = id.includes('.') ? id : `${id}.${locale}`;
         return lgFiles.find(({ id }) => id === fileId);
       },
-      luFileResolver: function(id: string) {
+      luFileResolver: function (id: string) {
         const state = getState();
         const { locale, luFiles } = state;
         const fileId = id.includes('.') ? id : `${id}.${locale}`;
