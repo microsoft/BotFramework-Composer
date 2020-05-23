@@ -6,5 +6,6 @@ export enum FileExtensions {
   Lu = '.lu',
   lg = '.lg',
   FormDialog = '.schema',
+  CMD = '.cmd',
   Manifest = '.json',
 }

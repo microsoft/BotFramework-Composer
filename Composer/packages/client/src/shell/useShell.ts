@@ -43,6 +43,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const luApi = useLuApi();
   const updateDialog = actions.updateDialog;
   const updateFormDialogFile = actions.updateFormDialogFile;
+  const copyFile = actions.copyFile;
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
@@ -53,6 +54,9 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     }, {});
   }, [dialogs]);
 
+  async function copyFileHandler(fileName, content) {
+    return await copyFile({ projectId, fileName, content });
+  }
   async function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find(dialog => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
@@ -60,11 +64,11 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     return await updateDialog({ id, content: newDialog.content });
   }
 
-  async function updateFormDialogContentHandler(id, content) {
+  async function updateFormDialogContentHandler(id, content, dialogType) {
     const file = formDialogFileResolver(id);
     if (!file) throw new Error(`form dialog schema file ${id} not found`);
 
-    return await updateFormDialogFile({ id, projectId, content });
+    return await updateFormDialogFile({ id, projectId, content, dialogType });
   }
 
   function cleanData() {
@@ -185,6 +189,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     updateUserSettings: actions.updateUserSettings,
     announce: actions.setMessage,
     displayManifestModal: actions.displayManifestModal,
+    copyFile: copyFileHandler,
   };
 
   const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs, dialogId]);

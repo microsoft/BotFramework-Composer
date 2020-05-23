@@ -227,10 +227,10 @@ const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
   return state;
 };
 
-const createFormDialogFile: ReducerFunc = (state, { id, content }) => {
+const createFormDialogFile: ReducerFunc = (state, { id, content, dialogType }) => {
   const { formDialogFiles } = state;
   id = `${id}`;
-  if (formDialogFiles.find(qna => qna.id === id)) {
+  if (formDialogFiles.find(formDialog => formDialog.id === id)) {
     state.error = {
       message: `${id} ${formatMessage(`schema file already exist`)}`,
       summary: formatMessage('Creation Rejected'),
@@ -298,8 +298,8 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs.push(dialog);
   state = createLgFile(state, { id, content: '' });
   state = createLuFile(state, { id, content: '' });
-  if (dialog.content && dialog.content.isFormDialog && dialog.content.formDialogType === 'sandwich') {
-    state = createFormDialogFile(state, { id, content: '' });
+  if (dialog.content && dialog.content.dialogType !== 'none') {
+    state = createFormDialogFile(state, { id, content: '', dialogType: dialog.content.dialogType });
   }
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
@@ -701,6 +701,9 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_FORMDIALOG]: updateFormDialogFile,
   [ActionTypes.CREATE_FORMDIALOG]: createFormDialogFile,
   [ActionTypes.REMOVE_FORMDIALOG]: removeFormDialogFile,
+  [ActionTypes.UPDATE_CMD]: updateFormDialogFile,
+  [ActionTypes.CREATE_CMD]: createFormDialogFile,
+  [ActionTypes.REMOVE_CMD]: removeFormDialogFile,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: publishLuisSuccess,
   [ActionTypes.PUBLISH_LU_FAILED]: publishLuisFailure,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,

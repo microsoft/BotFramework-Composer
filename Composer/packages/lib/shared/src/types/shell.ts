@@ -73,7 +73,7 @@ export interface ShellApi {
   removeLuIntent: (id: string, intentName: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   createDialog: (actions: any) => Promise<string | null>;
-  updateFormDialogContent: (id: string, content: string) => void;
+  updateFormDialogContent: (id: string, content: string, dialogType: string) => void;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;
@@ -82,4 +82,5 @@ export interface ShellApi {
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
+  copyFile: (fileName: string, content: string) => void;
 }

@@ -14,6 +14,10 @@ function index(files: FileInfo[]): FormDialogFile[] {
       const id = getBaseName(name, '.schema');
       formDialogFiles.push({ id, content });
     }
+    if (name.endsWith('.cmd')) {
+      const id = getBaseName(name, '.cmd');
+      formDialogFiles.push({ id, content });
+    }
   }
   return formDialogFiles;
 }

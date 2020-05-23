@@ -19,8 +19,7 @@ import { name, description, styles as wizardStyles } from './styles';
 interface DialogFormData {
   name: string;
   description: string;
-  isFormDialog: number;
-  formDialogType: string;
+  dialogType: string;
 }
 
 interface CreateDialogModalProps {
@@ -35,27 +34,21 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;
-  const initialFormData: DialogFormData = { name: '', description: '', isFormDialog: 0, formDialogType: 'sandwich' };
+  const initialFormData: DialogFormData = { name: '', description: '', dialogType: 'sandwich' };
   const [formData, setFormData] = useState(initialFormData);
   const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
-  const formDialogOptions: IDropdownOption[] = [
+  const dialogTypeOptions: IDropdownOption[] = [
     {
-      key: 0,
-      text: 'false',
+      key: 'none',
+      text: 'None',
     },
     {
-      key: 1,
-      text: 'true',
-    },
-  ];
-  const formDialogTypeOptions: IDropdownOption[] = [
-    {
-      key: 'sandwich',
-      text: 'Sandwich',
+      key: 'formDialog',
+      text: 'FormDialog',
     },
     {
-      key: 'swagger',
-      text: 'Swagger',
+      key: 'swaggerDialog',
+      text: 'SwaggerDialog',
     },
   ];
   const updateForm = (field: string) => (e: FormEvent, newValue: string | IDropdownOption | undefined) => {
@@ -120,24 +113,13 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <Dropdown
-              label={formatMessage('Is form dialog?')}
-              options={formDialogOptions}
-              onChange={updateForm('isFormDialog')}
-              data-testid={'isFormDialogDropDown'}
-              defaultSelectedKey={formData.isFormDialog}
+              label={formatMessage('choose dialog type?')}
+              options={dialogTypeOptions}
+              onChange={updateForm('dialogType')}
+              data-testid={'dialogTypeDropdown'}
+              defaultSelectedKey={formData.dialogType}
             />
           </StackItem>
-          {formData.isFormDialog && (
-            <StackItem grow={0} styles={wizardStyles.halfstack}>
-              <Dropdown
-                label={formatMessage('Is form dialog?')}
-                options={formDialogTypeOptions}
-                onChange={updateForm('dialogType')}
-                data-testid={'formDialogTypeDropDown'}
-                defaultSelectedKey={formData.formDialogType}
-              />
-            </StackItem>
-          )}
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
               styles={description}

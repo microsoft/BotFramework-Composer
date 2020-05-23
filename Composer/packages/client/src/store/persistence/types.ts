@@ -13,6 +13,7 @@ export enum FileExtensions {
   Lu = '.lu',
   Lg = '.lg',
   FormDialog = '.schema',
+  CMD = '.cmd',
   Setting = 'appsettings.json',
 }
 

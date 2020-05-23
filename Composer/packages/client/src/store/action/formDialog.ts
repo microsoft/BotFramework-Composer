@@ -5,26 +5,59 @@ import clonedeep from 'lodash/cloneDeep';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import { ActionTypes } from '../../constants/index';
+import httpClient from '../../utils/httpUtil';
 
-export const updateFormDialogFile: ActionCreator = async (store, { id, content }) => {
-  store.dispatch({
-    type: ActionTypes.UPDATE_FORMDIALOG,
-    payload: { id, content },
-  });
+export const updateFormDialogFile: ActionCreator = async (store, { id, content, dialogType }) => {
+  if (dialogType === 'formDialog') {
+    store.dispatch({
+      type: ActionTypes.UPDATE_FORMDIALOG,
+      payload: { id, content },
+    });
+  } else {
+    store.dispatch({
+      type: ActionTypes.UPDATE_CMD,
+      payload: { id, content },
+    });
+  }
 };
 
-export const removeFormDialogFile: ActionCreator = async (store, id) => {
-  store.dispatch({
-    type: ActionTypes.REMOVE_FORMDIALOG,
-    payload: { id },
-  });
+export const copyFile: ActionCreator = async (store, { projectId, fileName, content }) => {
+  try {
+    const response = await httpClient.post(`/projects/${projectId}/files`, {
+      name: fileName,
+      content,
+    });
+    return response.data;
+  } catch (error) {
+    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: { error } });
+  }
+};
+export const removeFormDialogFile: ActionCreator = async (store, id, dialogType) => {
+  if (dialogType === 'formDialog') {
+    store.dispatch({
+      type: ActionTypes.REMOVE_FORMDIALOG,
+      payload: { id },
+    });
+  } else {
+    store.dispatch({
+      type: ActionTypes.REMOVE_CMD,
+      payload: { id },
+    });
+  }
 };
 
-export const createFormDialogFile: ActionCreator = async (store, { id, content }) => {
-  store.dispatch({
-    type: ActionTypes.CREATE_FORMDIALOG,
-    payload: { id, content },
-  });
+export const createFormDialogFile: ActionCreator = async (store, { id, content, dialogType }) => {
+  if (dialogType === 'formDialog') {
+    store.dispatch({
+      type: ActionTypes.CREATE_FORMDIALOG,
+      payload: { id, content },
+    });
+  } else {
+    store.dispatch({
+      type: ActionTypes.CREATE_CMD,
+      payload: { id, content },
+    });
+  }
 };
 
 export const undoableUpdateFormDialogFile = undoable(

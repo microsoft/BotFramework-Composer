@@ -168,14 +168,14 @@ class DialogFactory {
       throw new Error('DialogFactory missing schema.');
     }
 
-    const { $designer, isFormDialog, ...propertyOverrides } = overrides;
-    const defaultProperties = isFormDialog ? { schema: '' } : initialDialogShape()[$kind] || {};
+    const { $designer, dialogType, ...propertyOverrides } = overrides;
+    const defaultProperties = dialogType !== 'none' ? { schema: '' } : initialDialogShape()[$kind] || {};
 
     return merge(
       { $kind, $designer: merge({ id: generateDesignerId() }, $designer) },
       this.seedDefaults($kind),
       defaultProperties,
-      { isFormDialog },
+      { dialogType },
       propertyOverrides
     );
   }

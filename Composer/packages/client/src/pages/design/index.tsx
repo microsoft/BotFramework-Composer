@@ -335,17 +335,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     await actions.updateSkill({ projectId, targetId: -1, skillData });
   }
 
-  async function handleCreateDialogSubmit(data: {
-    name: string;
-    description: string;
-    isFormDialog: number;
-    formDialogType: string;
-  }) {
+  async function handleCreateDialogSubmit(data: { name: string; description: string; dialogType: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
-      isFormDialog: data.isFormDialog,
-      formDialogType: data.formDialogType,
+      dialogType: data.dialogType,
     });
     if (seededContent.triggers && seededContent.triggers[0]) {
       seededContent.triggers[0].actions = state.actionsSeed;

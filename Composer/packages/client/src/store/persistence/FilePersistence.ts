@@ -24,6 +24,9 @@ const actionType2ChangeType = {
   [ActionTypes.UPDATE_FORMDIALOG]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.FormDialog },
   [ActionTypes.CREATE_FORMDIALOG]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.FormDialog },
   [ActionTypes.REMOVE_FORMDIALOG]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.FormDialog },
+  [ActionTypes.UPDATE_CMD]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.CMD },
+  [ActionTypes.CREATE_CMD]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.CMD },
+  [ActionTypes.REMOVE_CMD]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.CMD },
   [ActionTypes.CREATE_SKILL_MANIFEST]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
@@ -193,7 +196,11 @@ class FilePersistence {
       formDialogFiles
         .filter(formDialog => getBaseName(formDialog.id) === id)
         .forEach(formDialog => {
-          fileChanges.push(this._createChange(formDialog, FileExtensions.FormDialog, changeType, projectId));
+          const fileType =
+            currentState.dialogs.find(dialog => dialog.id === id)?.content.dialogType === 'formDialog'
+              ? FileExtensions.FormDialog
+              : FileExtensions.CMD;
+          fileChanges.push(this._createChange(formDialog, fileType, changeType, projectId));
         });
     }
     const dialog = dialogs.find(dialog => dialog.id === id);
@@ -238,6 +245,15 @@ class FilePersistence {
 
     const formDialogFile = formDialogFiles.find(formDialog => formDialog.id === id);
     fileChanges.push(this._createChange(formDialogFile, FileExtensions.FormDialog, changeType, projectId));
+    return fileChanges;
+  }
+  private _getCmdFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+    const projectId = currentState.projectId;
+    const fileChanges: IFileChange[] = [];
+    const { formDialogFiles } = currentState;
+
+    const formDialogFile = formDialogFiles.find(formDialog => formDialog.id === id);
+    fileChanges.push(this._createChange(formDialogFile, FileExtensions.CMD, changeType, projectId));
     return fileChanges;
   }
   private _getSkillManifestsChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
@@ -304,6 +320,10 @@ class FilePersistence {
       }
       case FileExtensions.FormDialog: {
         fileChanges = this._getFormDialogFileChanges(targetId, previousState, currentState, changeType);
+        break;
+      }
+      case FileExtensions.CMD: {
+        fileChanges = this._getCmdFileChanges(targetId, previousState, currentState, changeType);
         break;
       }
       case FileExtensions.Setting: {
