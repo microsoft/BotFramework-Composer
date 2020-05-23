@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
+import { BotProjectDeploy, BotProjectRuntimeType } from '@bfc/libs/bot-deploy';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
@@ -299,6 +299,7 @@ class AzurePublisher {
         },
         accessToken: accessToken,
         projPath: this.getProjectFolder(resourcekey, 'azurewebapp'),
+        runtimeType: project?.settings?.runtime?.customRuntime ? BotProjectRuntimeType.NODE : BotProjectRuntimeType.CSHARP,
       });
 
       this.logMessages = ['Publish starting...'];

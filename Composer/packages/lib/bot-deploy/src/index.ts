@@ -4,3 +4,4 @@
 export * from './botProjectDeploy';
 export * from './botProjectDeployConfig';
 export * from './botProjectLoggerType';
+export * from './botProjectRuntimeType';

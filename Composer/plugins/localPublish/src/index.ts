@@ -57,14 +57,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
     // and export the content into that folder as well.
+    const runtimeType = project.settings.runtime?.name || 'C#';
     if (!project.settings.runtime || project.settings.runtime.customRuntime !== true) {
       this.composer.log('Using managed runtime');
-      await this.initBot(botId);
+      await this.initBot(botId, runtimeType);
       await this.saveContent(botId, version, project.dataDir, user);
-      await this.saveSkillManifests(this.getBotRuntimeDir(botId), project.dataDir);
+      await this.saveSkillManifests(this.getBotRuntimeDir(botId), project.dataDir, runtimeType);
     } else if (project.settings.runtime.path && project.settings.runtime.command) {
       // update manifst into runtime wwwroot
-      await this.saveSkillManifests(project.settings.runtime.path, project.dataDir);
+      await this.saveSkillManifests(project.settings.runtime.path, project.dataDir, runtimeType);
     } else {
       return {
         status: 400,
@@ -76,7 +77,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     try {
       // start or restart the bot process
-      const url = await this.setBot(botId, version, fullSettings, project.dataDir);
+      const url = await this.setBot(botId, version, fullSettings, project.dataDir, runtimeType);
 
       return {
         status: 200,
@@ -166,7 +167,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
   };
 
-  private initBot = async (botId: string) => {
+  private initBot = async (botId: string, runtimeType: string) => {
     this.composer.log('Initializing bot');
     const isExist = await this.botExist(botId);
     if (!isExist) {
@@ -183,15 +184,22 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // copy runtime template in folder
       await this.copyDir(this.templatePath, runtimeDir);
 
-      try {
-        // TODO ccastro: discuss with benbrown. Consider init command as template metadata. Remove azurewebapp from here.
-        execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir, stdio: 'inherit' });
-        execSync('dotnet build', { cwd: runtimeDir, stdio: 'inherit' });
-      } catch (error) {
-        // delete the folder to make sure build again.
-        rmDir(botDir);
-        throw new Error(error.toString());
+      if (runtimeType === 'C#') {
+        try {
+          // TODO ccastro: discuss with benbrown. Consider init command as template metadata. Remove azurewebapp from here.
+          execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir, stdio: 'inherit' });
+          execSync('dotnet build', { cwd: runtimeDir, stdio: 'inherit' });
+        } catch (error) {
+          // delete the folder to make sure build again.
+          rmDir(botDir);
+          throw new Error(error.toString());
+        }
       }
+    } else {
+      // in order to change runtime type
+      await this.removeRuntimeData(botId);
+      // copy runtime template in folder
+      await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
     }
   };
 
@@ -201,21 +209,23 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     await this.zipBot(dstPath, srcDir);
   };
 
-  private saveSkillManifests = async (dstPath: string, srcDir: string) => {
-    const manifestSrcDir = this.getManifestSrcDir(srcDir);
-    const manifestDstDir = this.getManifestDstDir(dstPath);
+  private saveSkillManifests = async (dstPath: string, srcDir: string, runtimeType: string) => {
+    if (runtimeType === 'C#') {
+      const manifestSrcDir = this.getManifestSrcDir(srcDir);
+      const manifestDstDir = this.getManifestDstDir(dstPath);
 
-    if (await this.dirExist(manifestDstDir)) {
-      await rmDir(manifestDstDir);
-    }
+      if (await this.dirExist(manifestDstDir)) {
+        await rmDir(manifestDstDir);
+      }
 
-    if (await this.dirExist(manifestSrcDir)) {
-      this.copyDir(manifestSrcDir, manifestDstDir);
+      if (await this.dirExist(manifestSrcDir)) {
+        this.copyDir(manifestSrcDir, manifestDstDir);
+      }
     }
   };
 
   // start bot in current version
-  private setBot = async (botId: string, version: string, settings: any, project: any = undefined) => {
+  private setBot = async (botId: string, version: string, settings: any, project: any = undefined, runtimeType) => {
     // get port, and stop previous bot if exist
     let port;
     if (LocalPublisher.runningBots[botId]) {
@@ -234,7 +244,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     // start the bot process
     try {
-      await this.startBot(botId, port, settings);
+      await this.startBot(botId, port, settings, runtimeType);
       return `http://localhost:${port}`;
     } catch (error) {
       this.stopBot(botId);
@@ -242,15 +252,14 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
   };
 
-  private startBot = async (botId: string, port: number, settings: any): Promise<string> => {
-    const botDir =
-      settings.runtime && settings.runtime.customRuntime === true
-        ? settings.runtime.path
-        : this.getBotRuntimeDir(botId);
+  private startBot = async (botId: string, port: number, settings: any, runtimeType: string): Promise<string> => {
+    const botDir = settings.runtime?.customRuntime === true ? settings.runtime.path : this.getBotRuntimeDir(botId);
     const commandAndArgs =
-      settings.runtime && settings.runtime.customRuntime === true
+      settings.runtime?.customRuntime === true
         ? settings.runtime.command.split(/\s+/)
-        : ['dotnet', 'run', '--project', 'azurewebapp']; //TODO: ccastro should pick up the bot start command here. After, remove azurewebapp arg
+        : runtimeType === 'C#'
+          ? ['dotnet', 'run', '--project', 'azurewebapp']
+          : ['node', 'azurewebapp/lib/index.js']; //TODO: ccastro should pick up the bot start command here. After, remove azurewebapp arg
 
     return new Promise((resolve, reject) => {
       // ensure the specified runtime path exists
@@ -433,7 +442,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
 
   // register the bundled c# runtime used by the local publisher with the eject feature
   composer.addRuntimeTemplate({
-    key: 'azurewebapp',
+    key: 'csharp-azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
     eject: async (project: any, localDisk: IFileStorage) => {
@@ -453,7 +462,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
   });
 
   composer.addRuntimeTemplate({
-    key: 'javescript',
+    key: 'javescript-azurewebapp',
     name: 'JS',
     startCommand: 'node azurewebapp/lib/index.js',
     eject: async (project: any, localDisk: IFileStorage) => {
