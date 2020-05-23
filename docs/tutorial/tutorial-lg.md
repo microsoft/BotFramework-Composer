@@ -91,7 +91,7 @@ Let's start by adding some variation to the welcome message.
 
     > This creates a new Language Generation template named `DescribeWeather`. This template enables the LG system to use the data returned from the weather service that was placed into the weather.weather variable to respond to the user with a more user friendly response.
 
-9.  Select **Design Flow** from the Composer Menu.
+9.  Select **Design** from the Composer Menu.
 
 10. Select the **getWeather** dialog, then its **BeginDialog** trigger in the **Navigation** pane.
 
