@@ -50,7 +50,6 @@
               "value": "AllCards"
             }
           ],
-          "appendChoices": "true",
           "defaultLocale": "en-us",
           "style": "List",
           "choiceOptions": {

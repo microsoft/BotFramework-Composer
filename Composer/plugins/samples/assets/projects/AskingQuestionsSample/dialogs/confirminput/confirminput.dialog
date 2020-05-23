@@ -23,7 +23,7 @@
           "alwaysPrompt": true,
           "allowInterruptions": "false",
           "defaultLocale": "en-us",
-          "style": "Auto",
+          "style": "auto",
           "choiceOptions": {
             "inlineSeparator": ", ",
             "inlineOr": " or ",

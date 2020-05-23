@@ -34,7 +34,6 @@
               "value": "Tom"
             }
           ],
-          "appendChoices": "true",
           "defaultLocale": "en-us",
           "style": "List",
           "choiceOptions": {
