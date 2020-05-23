@@ -61,13 +61,16 @@ if (fs.existsSync(appsettingsPath)) {
 
 // load generated settings
 const generatedPath = path.join(projectPath, 'generated');
-const generatedFiles = fs.readdirSync(generatedPath);
-for (let file of generatedFiles) {
-    if (file.endsWith('.json')) {
-        const items = require(path.join(generatedPath, file));
-        settings = Object.assign(settings, items); // merge settings
+if (fs.existsSync(generatedPath)) {
+    const generatedFiles = fs.readdirSync(generatedPath);
+    for (let file of generatedFiles) {
+        if (file.endsWith('.json')) {
+            const items = require(path.join(generatedPath, file));
+            settings = Object.assign(settings, items); // merge settings
+        }
     }
 }
+
 
 // load settings from arguments
 for (let key in argv) {
@@ -82,7 +85,7 @@ for (let key in argv) {
             base = base[segment];
         }
         base[segments[segments.length - 1]] = argv[key];
-    } else { 
+    } else {
         settings[key] = argv[key];
     }
 }
