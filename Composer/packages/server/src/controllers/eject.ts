@@ -31,6 +31,8 @@ export const EjectController = {
 
       res.json({
         settings: {
+          key: template.key,
+          name: template.name,
           path: runtimePath,
           startCommand: template.startCommand,
         },

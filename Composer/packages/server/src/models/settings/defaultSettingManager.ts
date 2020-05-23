@@ -4,12 +4,12 @@
 import omit from 'lodash/omit';
 import { SensitiveProperties } from '@bfc/shared';
 import { UserIdentity } from '@bfc/plugin-loader';
+import { pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
 import log from '../../logger';
 
 import { FileSettingManager } from './fileSettingManager';
-
 const debug = log.extend('default-settings-manager');
 
 export class DefaultSettingManager extends FileSettingManager {
@@ -45,6 +45,7 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       runtime: {
         customRuntime: false,
+        name: pluginLoader.extensions.runtimeTemplates[0]?.name,
         path: '',
         command: '',
       },

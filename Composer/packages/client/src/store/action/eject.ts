@@ -37,6 +37,8 @@ export const ejectRuntime: ActionCreator = async (store, projectId, name) => {
         runtime: {
           ...oldsettings.runtime,
           customRuntime: true,
+          key: response.data.settings.key,
+          name: response.data.settings.name,
           path: response.data.settings.path,
           command: response.data.settings.startCommand,
         },

@@ -15,6 +15,11 @@ const defaultPublishConfig = {
   configuration: JSON.stringify({}),
 };
 const DEFAULT_RUNTIME = 'dotnet';
+const RUNTIME = {
+  DOTNET: 'dotnet',
+  NODE: 'node',
+};
+
 export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
@@ -53,11 +58,13 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
 
+    // get runtime type
+    const runtimeType = currentProject.settings?.runtime?.name === 'C#' ? DEFAULT_RUNTIME : RUNTIME.NODE;
     // append config from client(like sensitive settings)
     const configuration = {
       profileName: profile.name,
       fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-      templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
+      templatePath: path.resolve(runtimeFolder, runtimeType),
       ...JSON.parse(profile.configuration),
     };
 
