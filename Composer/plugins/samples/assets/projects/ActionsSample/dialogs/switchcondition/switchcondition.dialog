@@ -31,7 +31,6 @@
               "value": "Test3"
             }
           ],
-          "appendChoices": true,
           "defaultLocale": "en-us",
           "style": "List",
           "choiceOptions": {

@@ -98,7 +98,6 @@
               "value": "SwitchCondition"
             }
           ],
-          "appendChoices": true,
           "defaultLocale": "en-us",
           "style": "List",
           "choiceOptions": {
