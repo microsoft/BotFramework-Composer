@@ -19,22 +19,32 @@ server.listen(process.env.port || process.env.PORT || argv.port || 3978, (): voi
     console.log(`\nTo talk to your bot, open echobot.bot file in the Emulator.`);
 });
 
-const projectPath = path.join(__dirname, '../../../');
-console.log(projectPath);
+
+// Load project settings
+let projectSettings = {
+    bot: '../../',
+    root: '../../'
+};
+if (process.env.NODE_ENV === 'development') {
+    projectSettings = require('./appsettings.development.json');
+} else if (process.env.NODE_ENV === 'production') {
+    projectSettings = require('./appsettings.deployment.json');
+}
+
+const projectRoot = path.join(__dirname, '../', projectSettings.root);
+
 // Find entry dialog file
 let mainDialog = 'main.dialog';
-const files = fs.readdirSync(projectPath);
-console.log(files);
+const files = fs.readdirSync(projectRoot);
 for (let file of files) {
     if (file.endsWith('.dialog')) {
         mainDialog = file;
         break;
     }
 }
-console.log(mainDialog);
 
 // Create resource explorer.
-const resourceExplorer = new ResourceExplorer().addFolders(projectPath, ['runtime'], false)
+const resourceExplorer = new ResourceExplorer().addFolders(projectRoot, ['runtime'], false)
 resourceExplorer.addComponent(new AdaptiveDialogComponentRegistration(resourceExplorer));
 
 // Create adapter.
@@ -53,14 +63,14 @@ bot.rootDialog = resourceExplorer.loadType(mainDialog) as AdaptiveDialog;
 // Find settings json file
 let settings = {};
 // load appsettings.json 
-const appsettingsPath = path.join(projectPath, 'settings/appsettings.json');
+const appsettingsPath = path.join(projectRoot, 'settings/appsettings.json');
 if (fs.existsSync(appsettingsPath)) {
     const items = require(appsettingsPath);
     settings = Object.assign(settings, items); // merge settings
 }
 
 // load generated settings
-const generatedPath = path.join(projectPath, 'generated');
+const generatedPath = path.join(projectRoot, 'generated');
 const generatedFiles = fs.readdirSync(generatedPath);
 for (let file of generatedFiles) {
     if (file.endsWith('.json')) {
