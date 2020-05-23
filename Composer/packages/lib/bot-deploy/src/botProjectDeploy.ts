@@ -19,8 +19,8 @@ import * as rp from 'request-promise';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import archiver = require('archiver');
 import { BotProjectRuntimeType } from './botProjectRuntimeType';
+import archiver = require('archiver');
 
 const exec = util.promisify(require('child_process').exec);
 const { promisify } = require('util');
@@ -46,7 +46,7 @@ export class BotProjectDeploy {
   private logger: (string) => any;
 
   // Will be assigned by create or deploy
-  private tenantId: string = '';
+  private tenantId = '';
 
   constructor(config: BotProjectDeployConfig) {
     this.subId = config.subId;
@@ -62,7 +62,10 @@ export class BotProjectDeploy {
     this.zipPath = config.zipPath ?? path.join(this.projPath, 'code.zip');
 
     // path to the built, ready to deploy code assets
-    this.publishFolder = config.publishFolder ?? path.join(this.projPath, 'bin', 'Release', 'netcoreapp3.1');
+    this.publishFolder =
+      config.publishFolder ?? config.runtimeType === BotProjectRuntimeType.CSHARP
+        ? path.join(this.projPath, 'bin', 'Release', 'netcoreapp3.1')
+        : this.projPath;
 
     // path to the source appsettings.deployment.json file
     this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
@@ -96,7 +99,7 @@ export class BotProjectDeploy {
         if (err.body.error.details) {
           const details = err.body.error.details;
           let errMsg = '';
-          for (let detail of details) {
+          for (const detail of details) {
             errMsg += detail.message;
           }
           return errMsg;
