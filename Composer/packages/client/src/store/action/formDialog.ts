@@ -79,3 +79,14 @@ export const undoableUpdateFormDialogFile = undoable(
 export const updateFormDialogContent: ActionCreator = async (store, { projectId, file, content }) => {
   return await undoableUpdateFormDialogFile(store, { id: file.id, projectId, content });
 };
+
+export const buildFormDialog: ActionCreator = async (store, { projectId, dialogs }) => {
+  try {
+    const response = await httpClient.post(`/projects/${projectId}/buildFormDialogs`, {
+      dialogs,
+    });
+    return response.data;
+  } catch (error) {
+    store.dispatch({ type: ActionTypes.GET_PROJECT_FAILURE, payload: { error } });
+  }
+};

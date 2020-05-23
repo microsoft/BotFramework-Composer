@@ -430,6 +430,21 @@ async function getAllProjects(req: Request, res: Response) {
   }
 }
 
+async function buildFormDialogs(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const dialogs = req.body.dialogs;
+  const user = await PluginLoader.getUserFromRequest(req);
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    currentProject.buildFormDialogs(dialogs);
+    res.status(200).json();
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -449,4 +464,5 @@ export const ProjectController = {
   createProject,
   getAllProjects,
   getRecentProjects,
+  buildFormDialogs,
 };

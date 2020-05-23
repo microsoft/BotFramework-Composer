@@ -30,7 +30,14 @@ export const TestController: React.FC = () => {
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const { botEndpoints, botName, botStatus, dialogs, luFiles, settings, projectId, botLoadErrorMsg } = state;
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, getPublishStatus, setBotStatus } = actions;
+  const {
+    publishToTarget,
+    onboardingAddCoachMarkRef,
+    publishLuis,
+    getPublishStatus,
+    setBotStatus,
+    buildFormDialog,
+  } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
@@ -111,6 +118,10 @@ export const TestController: React.FC = () => {
     }
   }
 
+  async function handleBuild() {
+    await buildFormDialog({ projectId, dialogs });
+    location.reload();
+  }
   function handleErrorButtonClick() {
     navigateTo(`/bot/${state.projectId}/notifications`);
   }
@@ -127,7 +138,14 @@ export const TestController: React.FC = () => {
   }
 
   return (
-    <Fragment>
+    <div style={{ display: 'flex', alignItems: 'center', padding: '5px' }}>
+      <PrimaryButton
+        css={botButton}
+        text={formatMessage('Build form dialog')}
+        onClick={handleBuild}
+        id={'publishAndConnect'}
+        disabled={showError || publishing || reloading}
+      />
       <div css={bot} ref={botActionRef}>
         <EmulatorOpenButton
           botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
@@ -161,6 +179,6 @@ export const TestController: React.FC = () => {
         error={botLoadErrorMsg}
       />
       <PublishLuisDialog isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} botName={botName} />
-    </Fragment>
+    </div>
   );
 };

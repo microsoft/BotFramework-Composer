@@ -3,6 +3,7 @@
 
 import { promisify } from 'util';
 import fs from 'fs';
+import childProcess from 'child_process';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
@@ -282,6 +283,36 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
+  public buildFormDialogs = async dialogs => {
+    Array.isArray(dialogs) &&
+      dialogs.forEach(async dialog => {
+        const dialogType = dialog.content.dialogType;
+        if (dialogType === 'formDialog') {
+          this._createFile(
+            `dialogs/${dialog.id}/generated.cmd`,
+            `C:/Users/julong/Documents/code/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate ${dialog.id}.schema -o . --singleton --force --verbose `
+          );
+          try {
+            const absolutePath = Path.resolve(this.dir, `/dialogs/${dialog.id}`);
+            childProcess.execSync(`generated.cmd`, { cwd: absolutePath }).toString();
+          } catch (err) {
+            console.log(err);
+          }
+        } else if (dialogType === 'swaggerDialog') {
+          this._createFile(
+            `dialogs/${dialog.id}/generated.cmd`,
+            `C:/Users/julong/Documents/code/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate ${dialog.id}.schema -o . --singleton --force --verbose `
+          );
+          try {
+            const absolutePath = Path.resolve(this.dir, `/dialogs/${dialog.id}`);
+            await childProcess.execSync(`${dialog.id}.cmd`, { cwd: absolutePath });
+            await childProcess.execSync(`generated.cmd`, { cwd: absolutePath });
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      });
+  };
   public publishLuis = async (authoringKey: string, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
     if (fileIds.length && this.settings) {
       const map = fileIds.reduce((result, id) => {
