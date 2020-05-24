@@ -24,10 +24,10 @@ let projectSettings = {
     root: '../../'
 };
 if (process.env.NODE_ENV === 'development') {
-    projectSettings = require('./appsettings.development.json');
+    projectSettings = require('../appsettings.development.json');
 }
 else if (process.env.NODE_ENV === 'production') {
-    projectSettings = require('./appsettings.deployment.json');
+    projectSettings = require('../appsettings.deployment.json');
 }
 const projectRoot = path.join(__dirname, '../', projectSettings.root);
 // Find entry dialog file
