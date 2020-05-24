@@ -72,6 +72,8 @@ if (fs.existsSync(generatedPath)) {
         }
     }
 }
+// merge with project settings
+settings = Object.assign(settings, projectSettings);
 // load settings from arguments
 for (let key in argv) {
     if (key.indexOf(':') >= 0) {
