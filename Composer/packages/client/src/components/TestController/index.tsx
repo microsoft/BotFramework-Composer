@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useContext, useEffect, useCallback } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
