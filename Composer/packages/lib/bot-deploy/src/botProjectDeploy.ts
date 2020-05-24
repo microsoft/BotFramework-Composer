@@ -371,7 +371,10 @@ export class BotProjectDeploy {
 
     return new Promise((resolve, reject) => {
       archive
-        .directory(source, false)
+        .glob('**/*', {
+          cwd: source,
+          ignore: ['code.zip'],
+        })
         .on('error', err => reject(err))
         .pipe(stream);
 
