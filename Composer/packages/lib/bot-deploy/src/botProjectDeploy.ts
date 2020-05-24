@@ -614,19 +614,17 @@ export class BotProjectDeploy {
       message: 'Retrieve publishing details ...',
     });
 
-    const publishEndpoint = `https://${hostname ? hostname : name + '-' + env}.scm.azurewebsites.net/zipdeploy`;
-    const fileContent = await fs.readFile(zipPath);
-    const options = {
-      body: fileContent,
-      encoding: null,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/zip',
-        'Content-Length': fileContent.length,
-      },
-    } as rp.RequestPromiseOptions;
+    const publishEndpoint = `https://${
+      hostname ? hostname : name + '-' + env
+    }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
     try {
-      const response = await rp.post(publishEndpoint, options);
+      const response = await rp.post({
+        uri: publishEndpoint,
+        auth: {
+          bearer: token,
+        },
+        body: fs.createReadStream(zipPath),
+      });
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: response,
