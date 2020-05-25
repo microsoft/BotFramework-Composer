@@ -196,8 +196,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         }
       }
     } else {
+      // stop bot
+      this.stopBot(botId);
       // in order to change runtime type
-      await this.removeRuntimeData(botId);
+      await rmDir(this.getBotRuntimeDir(botId));
       // copy runtime template in folder
       await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
     }
