@@ -296,10 +296,11 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
     ...dialogIndexer.parse(id, fixedContent, state.schemas.sdk.content),
   };
   state.dialogs.push(dialog);
-  state = createLgFile(state, { id, content: '' });
-  state = createLuFile(state, { id, content: '' });
   if (dialog.content && dialog.content.dialogType !== 'none') {
     state = createFormDialogFile(state, { id, content: '', dialogType: dialog.content.dialogType });
+  } else {
+    state = createLgFile(state, { id, content: '' });
+    state = createLuFile(state, { id, content: '' });
   }
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
