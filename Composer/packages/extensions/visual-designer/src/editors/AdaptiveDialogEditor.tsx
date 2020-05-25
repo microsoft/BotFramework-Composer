@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import get from 'lodash/get';
 
-import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { EditorEventHandler } from '../constants/NodeEventTypes';
 import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
 
 import { RuleEditor } from './RuleEditor';
@@ -22,7 +22,7 @@ export interface AdaptiveDialogEditorProps {
   activeTrigger: string;
 
   /** Editor event handler */
-  onEvent: (eventName: NodeEventTypes, eventData: any) => any;
+  onEvent: EditorEventHandler;
 
   /** Edge Menu renderer. Could be a fly-out '+' menu. */
   EdgeMenu?: EdgeMenuComponent;

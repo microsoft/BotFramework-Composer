@@ -22,3 +22,5 @@ export enum NodeEventTypes {
   Undo = 'event.operation.undo',
   Redo = 'event.operation.redo',
 }
+
+export type EditorEventHandler = (eventType: NodeEventTypes, eventData: any) => any;
