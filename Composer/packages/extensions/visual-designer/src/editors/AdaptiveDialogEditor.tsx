@@ -3,31 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo, FC } from 'react';
-import { DialogUtils } from '@bfc/shared';
+import { FC } from 'react';
+import get from 'lodash/get';
 
-import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { GraphNode } from '../models/GraphNode';
-import { Collapse } from '../components/lib/Collapse';
 import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
 
-import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
-import { EditorConfig } from './editorConfig';
-
-const { queryNode } = DialogUtils;
-
-const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
-  const result = transformRootDialog(data);
-  if (!result) return {};
-
-  const { ruleGroup, stepGroup } = result;
-  return {
-    ruleGroup: GraphNode.fromIndexedJson(ruleGroup),
-    stepGroup: GraphNode.fromIndexedJson(stepGroup),
-  };
-};
 
 export interface AdaptiveDialogEditorProps {
   /** Dialog ID */
@@ -57,53 +39,12 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   dialogData,
   activeTrigger,
   onEvent,
-  EdgeMenu,
-  NodeMenu,
-  NodeWrapper,
 }): JSX.Element | null => {
-  const nodeMap = useMemo(() => calculateNodeMap(dialogId, dialogData), [dialogId, dialogData]);
-  const { ruleGroup } = nodeMap;
+  const activeTriggerData = get(dialogData, activeTrigger, null);
 
-  const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
-    if (eventName === NodeEventTypes.Expand) {
-      const selectedRulePath = eventData;
-      return onEvent(NodeEventTypes.FocusEvent, selectedRulePath);
-    }
-    if (eventName === NodeEventTypes.Insert) {
-      return onEvent(NodeEventTypes.InsertEvent, eventData);
-    }
-    return onEvent(eventName, eventData);
-  };
-
-  const activeEventData = queryNode(dialogData, activeTrigger);
-
-  const eventActions = activeEventData ? (
-    <RuleEditor key={activeTrigger} id={activeTrigger} data={activeEventData} onEvent={onEvent} />
-  ) : null;
-
-  if (!EditorConfig.features.showEvents) {
-    return eventActions;
-  }
-
+  if (!activeTriggerData) return null;
   return (
-    <div
-      css={{
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-      onClick={e => {
-        e.stopPropagation();
-        onEvent(NodeEventTypes.Focus, { id: '' });
-      }}
-    >
-      {ruleGroup && (
-        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
-      )}
-      <div className="editor-interval" style={{ height: 50 }} />
-      <Collapse text="Actions">{eventActions}</Collapse>
-    </div>
+    <RuleEditor key={`${dialogId}/${activeTrigger}`} id={activeTrigger} data={activeTriggerData} onEvent={onEvent} />
   );
 };
 
