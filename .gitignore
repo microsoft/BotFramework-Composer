@@ -397,3 +397,6 @@ Composer/.vscode/
 # Docker App Data
 .appdata
 docker-compose.override.yml
+
+# settings file which may included sensitive values
+**/appsettings.json
