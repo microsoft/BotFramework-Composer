@@ -144,8 +144,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                       }}
                     >
                       <AdaptiveDialogEditor
-                        id={dialogId}
-                        data={data}
+                        dialogId={dialogId}
+                        dialogData={data}
+                        activeTrigger={focusedEvent}
                         onEvent={(eventName, eventData) => {
                           divRef.current?.focus({ preventScroll: true });
                           handleEditorEvent(eventName, eventData);

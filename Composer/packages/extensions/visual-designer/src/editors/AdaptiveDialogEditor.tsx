@@ -3,18 +3,17 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo, FC, useContext } from 'react';
+import { useMemo, FC } from 'react';
 import { DialogUtils } from '@bfc/shared';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { NodeRendererContext } from '../store/NodeRendererContext';
 import { Collapse } from '../components/lib/Collapse';
+import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
 
 import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
-import { EditorProps, defaultEditorProps } from './editorProps';
 import { EditorConfig } from './editorConfig';
 
 const { queryNode } = DialogUtils;
@@ -30,11 +29,40 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   };
 };
 
-export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element | null => {
-  const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
-  const { ruleGroup } = nodeMap;
+export interface AdaptiveDialogEditorProps {
+  /** Dialog ID */
+  dialogId: string;
 
-  const { focusedEvent } = useContext(NodeRendererContext);
+  /** Dialog JSON */
+  dialogData: any;
+
+  /** Current active trigger path such as 'triggers[0]' */
+  activeTrigger: string;
+
+  /** Editor event handler */
+  onEvent: (eventName: NodeEventTypes, eventData: any) => any;
+
+  /** Edge Menu renderer. Could be a fly-out '+' menu. */
+  EdgeMenu?: EdgeMenuComponent;
+
+  /** Node Menu renderer. Could be a fly-out '...' menu. */
+  NodeMenu?: NodeMenuComponent;
+
+  /** Element container renderer. Could be used to show the focus effect. */
+  NodeWrapper?: NodeWrapperComponent;
+}
+
+export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
+  dialogId,
+  dialogData,
+  activeTrigger,
+  onEvent,
+  EdgeMenu,
+  NodeMenu,
+  NodeWrapper,
+}): JSX.Element | null => {
+  const nodeMap = useMemo(() => calculateNodeMap(dialogId, dialogData), [dialogId, dialogData]);
+  const { ruleGroup } = nodeMap;
 
   const interceptRuleEvent = (eventName: NodeEventTypes, eventData: any) => {
     if (eventName === NodeEventTypes.Expand) {
@@ -47,10 +75,10 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
     return onEvent(eventName, eventData);
   };
 
-  const activeEventData = queryNode(data, focusedEvent);
+  const activeEventData = queryNode(dialogData, activeTrigger);
 
   const eventActions = activeEventData ? (
-    <RuleEditor key={focusedEvent} id={focusedEvent} data={activeEventData} onEvent={onEvent} />
+    <RuleEditor key={activeTrigger} id={activeTrigger} data={activeEventData} onEvent={onEvent} />
   ) : null;
 
   if (!EditorConfig.features.showEvents) {
@@ -79,4 +107,8 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JS
   );
 };
 
-AdaptiveDialogEditor.defaultProps = defaultEditorProps;
+AdaptiveDialogEditor.defaultProps = {
+  dialogId: '',
+  dialogData: {},
+  onEvent: () => null,
+};
