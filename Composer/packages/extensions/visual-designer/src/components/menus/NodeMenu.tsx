@@ -7,10 +7,11 @@ import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
 
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { NodeEventTypes, EditorEventHandler } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { SelectionContext } from '../../store/SelectionContext';
+import { ElementColor } from '../../constants/ElementColors';
 
 import { IconMenu } from './IconMenu';
 
@@ -20,7 +21,13 @@ const declareElementAttributes = (id: string) => {
     [AttrNames.SelectedId]: `${id}${MenuTypes.NodeMenu}`,
   };
 };
-export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
+
+interface NodeMenuProps {
+  id: string;
+  onEvent: EditorEventHandler;
+  colors: ElementColor;
+}
+export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' }, id, onEvent }) => {
   const menuItems = [
     {
       key: 'delete',

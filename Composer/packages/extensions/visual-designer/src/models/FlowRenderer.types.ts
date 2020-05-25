@@ -2,18 +2,26 @@
 // Licensed under the MIT License.
 
 import { EditorEventHandler } from '../constants/NodeEventTypes';
+import { ElementColor } from '../constants/ElementColors';
+
+interface EventBasedElement {
+  onEvent: EditorEventHandler;
+}
+
+interface StyledElement {
+  colors?: ElementColor;
+}
 
 // by default, show a '+' fly-out menu on edge
-export interface EdgeMenuProps {
+export interface EdgeMenuProps extends EventBasedElement, StyledElement {
   arrayId: string;
   arrayPosition: number;
   arrayData: any;
-  onEvent: EditorEventHandler;
 }
 export type EdgeMenuComponent = React.FC<EdgeMenuProps>;
 
 // by default, show '...' menu on a node right-top corner
-export interface NodeMenuProps {
+export interface NodeMenuProps extends EventBasedElement, StyledElement {
   nodeId: string;
   nodeData: any;
   onEvent: EditorEventHandler;
@@ -22,7 +30,7 @@ export interface NodeMenuProps {
 export type NodeMenuComponent = React.FC<NodeMenuProps>;
 
 // by default, show a wrapper with focus effect
-export interface NodeWrapperProps {
+export interface NodeWrapperProps extends EventBasedElement, StyledElement {
   nodeId: string;
   nodeData: any;
   onEvent: EditorEventHandler;

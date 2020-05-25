@@ -54,7 +54,13 @@ export const EventColor = {
   collapsed: Colors.DarkGreen,
 };
 
-export const DefaultColors = {
+export interface ElementColor {
+  theme?: string;
+  icon?: string;
+  color?: string;
+}
+
+export const DefaultColors: ElementColor = {
   theme: ObiColors.AzureGray3,
   icon: ObiColors.AzureGray2,
   color: ObiColors.Black,
