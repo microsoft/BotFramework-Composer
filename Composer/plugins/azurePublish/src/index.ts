@@ -50,7 +50,7 @@ class AzurePublisher {
     this.logMessages = [];
   }
 
-  private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `publishBots`);
+  private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../publishBots`);
 
   private getRuntimeFolder = (key: string) => {
     return path.resolve(this.baseRuntimeFolder, `${key}`);
@@ -299,7 +299,8 @@ class AzurePublisher {
         },
         accessToken: accessToken,
         projPath: this.getProjectFolder(resourcekey, 'azurewebapp'),
-        runtimeType: project?.settings?.runtime?.customRuntime ? BotProjectRuntimeType.NODE : BotProjectRuntimeType.CSHARP,
+        runtimeType:
+          project?.settings?.runtime?.name === 'JS' ? BotProjectRuntimeType.NODE : BotProjectRuntimeType.CSHARP,
       });
 
       this.logMessages = ['Publish starting...'];
