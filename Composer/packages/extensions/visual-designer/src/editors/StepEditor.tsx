@@ -3,25 +3,25 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useContext } from 'react';
 import { useShellApi } from '@bfc/extension';
 
 import { StepGroup } from '../components/groups';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { EdgeMenu } from '../components/menus/EdgeMenu';
 import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { EdgeDirection } from '../models/EdgeData';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { drawSVGEdge } from '../components/lib/EdgeUtil';
 import { ObiColors } from '../constants/ElementColors';
+import { FlowRendererContext } from '../store/FlowRendererContext';
 
 const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);
 
 export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
+  const { EdgeMenu } = useContext(FlowRendererContext);
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
   const { shellApi } = useShellApi();
   const { addCoachMarkRef } = shellApi;
@@ -30,7 +30,7 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
-    <EdgeMenu id={`${id}[0]`} onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })} />
+    <EdgeMenu arrayId={id} arrayData={data} arrayPosition={0} onEvent={onEvent} />
   ) : (
     <StepGroup
       id={id}

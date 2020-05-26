@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import { useContext } from 'react';
 import { jsx, css } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
 import { WidgetComponent, WidgetContainerProps } from '@bfc/extension';
@@ -9,9 +10,9 @@ import { TruncatedCSS, ColorlessFontCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
 import { DefaultColors } from '../constants/ElementColors';
-import { NodeMenu } from '../components/menus/NodeMenu';
 import { ElementIcon } from '../utils/obiPropertyResolver';
 import { Icon } from '../components/decorations/icon';
+import { FlowRendererContext } from '../store/FlowRendererContext';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title?: string;
@@ -48,6 +49,10 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
     ${ColorlessFontCSS};
     ${TruncatedCSS};
   `;
+
+  const { NodeMenu } = useContext(FlowRendererContext);
+  const menuNode =
+    menu === 'none' ? null : menu || <NodeMenu colors={colors} nodeId={id} nodeData={data} onEvent={onEvent} />;
 
   return (
     <div
@@ -92,7 +97,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
           {headerContent}
         </div>
       </div>
-      <div>{menu === 'none' ? null : menu || <NodeMenu colors={colors} id={id} onEvent={onEvent} />}</div>
+      <div>{menuNode}</div>
     </div>
   );
 };

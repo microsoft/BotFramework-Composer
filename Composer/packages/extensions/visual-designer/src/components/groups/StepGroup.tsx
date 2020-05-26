@@ -3,22 +3,21 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo, FunctionComponent } from 'react';
+import { useMemo, FunctionComponent, useContext } from 'react';
 
 import { GraphNode } from '../../models/GraphNode';
 import { sequentialLayouter } from '../../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { transformStepGroup } from '../../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { OffsetContainer } from '../lib/OffsetContainer';
 import { StepRenderer } from '../renderers/StepRenderer';
 import { GraphLayout } from '../../models/GraphLayout';
-import { EdgeMenu } from '../menus/EdgeMenu';
 import { SVGContainer } from '../lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
 import { FlowEdges } from '../lib/FlowEdges';
+import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 const StepInterval = ElementInterval.y;
 
@@ -44,6 +43,7 @@ const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
 };
 
 export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
+  const { EdgeMenu } = useContext(FlowRendererContext);
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(initialNodes, calculateLayout, onResize);
 
@@ -74,7 +74,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
         offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         css={{ zIndex: 100 }}
       >
-        <EdgeMenu id={`${id}[0]`} onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })} />
+        <EdgeMenu arrayId={id} arrayData={data} arrayPosition={0} onEvent={onEvent} />
       </OffsetContainer>
       {nodes
         ? nodes.map((x, idx) => (
@@ -86,10 +86,7 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
               }}
               css={{ zIndex: 100 }}
             >
-              <EdgeMenu
-                id={`${id}[${idx + 1}]`}
-                onClick={$kind => onEvent(NodeEventTypes.Insert, { id, $kind, position: idx + 1 })}
-              />
+              <EdgeMenu arrayId={id} arrayData={data} arrayPosition={idx + 1} onEvent={onEvent} />
             </OffsetContainer>
           ))
         : null}

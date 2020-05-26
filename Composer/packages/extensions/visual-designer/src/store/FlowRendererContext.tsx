@@ -12,7 +12,7 @@ export interface FlowRendererContextData {
 }
 
 export const FlowRendererContext = React.createContext<FlowRendererContextData>({
-  EdgeMenu: () => null,
-  NodeMenu: () => null,
-  NodeWrapper: () => null,
+  EdgeMenu: () => <></>,
+  NodeMenu: () => <></>,
+  NodeWrapper: ({ children }) => <>{children}</>,
 });
