@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 
 import { designerCache } from '../store/DesignerCache';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { NodeEventTypes } from '../adaptive-sdk/constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
 import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';

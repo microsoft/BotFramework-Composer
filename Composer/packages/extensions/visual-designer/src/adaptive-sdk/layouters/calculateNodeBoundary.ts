@@ -10,7 +10,7 @@ import {
   DiamondSize,
   IconBrickSize,
   BoxMargin,
-} from '../../constants/ElementSizes';
+} from '../constants/ElementSizes';
 
 import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
 

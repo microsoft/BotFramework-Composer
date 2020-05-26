@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import { FlowSchema, FlowWidget } from '@bfc/extension';
 import { FixedInfo, SingleLineDiv, ListOverview, PropertyAssignment } from '@bfc/ui-shared';
 
-import { ObiColors } from '../constants/ElementColors';
+import { ObiColors } from '../adaptive-sdk/constants/ElementColors';
 
 const BaseInputSchema: FlowWidget = {
   widget: 'ActionCard',

@@ -7,11 +7,11 @@ import { useContext } from 'react';
 import classnames from 'classnames';
 import formatMessage from 'format-message';
 
-import { NodeEventTypes, EditorEventHandler } from '../../constants/NodeEventTypes';
+import { NodeEventTypes, EditorEventHandler } from '../../adaptive-sdk/constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { SelectionContext } from '../../store/SelectionContext';
-import { ElementColor } from '../../constants/ElementColors';
+import { ElementColor } from '../../adaptive-sdk/constants/ElementColors';
 import { IconMenu } from '../lib/IconMenu';
 
 const declareElementAttributes = (id: string) => {

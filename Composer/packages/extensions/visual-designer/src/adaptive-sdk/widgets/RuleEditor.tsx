@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { transformObiRules } from '../transformers/transformObiRules';
 import { outlineObiJson } from '../../utils/outlineObiJson';

@@ -8,13 +8,13 @@ import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 
-import { EdgeAddButtonSize } from '../../../constants/ElementSizes';
+import { EdgeAddButtonSize } from '../../../adaptive-sdk/constants/ElementSizes';
 import { NodeRendererContext } from '../../../store/NodeRendererContext';
 import { SelectionContext } from '../../../store/SelectionContext';
 import { SelfHostContext } from '../../../store/SelfHostContext';
 import { AttrNames } from '../../../constants/ElementAttributes';
 import { MenuTypes } from '../../../constants/MenuTypes';
-import { ObiColors } from '../../../constants/ElementColors';
+import { ObiColors } from '../../../adaptive-sdk/constants/ElementColors';
 import { IconMenu } from '../../lib/IconMenu';
 
 import { createActionMenu } from './createSchemaMenu';

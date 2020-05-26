@@ -10,7 +10,7 @@ import { generateSDKTitle, PromptTab } from '@bfc/shared';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../../adaptive-sdk/constants/NodeEventTypes';
 
 const nodeBorderHoveredStyle = css`
   box-shadow: 0px 0px 0px 1px #323130;

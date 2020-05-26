@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiFieldNames } from '../../constants/ObiFieldNames';
-import { ObiTypes } from '../../constants/ObiTypes';
+import { ObiFieldNames } from '../constants/ObiFieldNames';
+import { ObiTypes } from '../constants/ObiTypes';
 import { IndexedNode } from '../models/IndexedNode';
 
 const StepsKey = ObiFieldNames.Actions;

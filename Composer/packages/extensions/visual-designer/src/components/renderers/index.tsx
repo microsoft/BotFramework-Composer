@@ -4,7 +4,7 @@
 import React from 'react';
 
 import { NodeMenuComponent, EdgeMenuComponent, NodeWrapperComponent } from '../../models/FlowRenderer.types';
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../../adaptive-sdk/constants/NodeEventTypes';
 
 import { NodeMenu } from './NodeMenu';
 import { EdgeMenu } from './EdgeMenu';

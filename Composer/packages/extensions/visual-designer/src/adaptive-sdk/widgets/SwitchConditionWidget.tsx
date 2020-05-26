@@ -6,14 +6,14 @@ import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 import { GraphNode } from '../models/GraphNode';
-import { OffsetContainer } from '../../components/lib/OffsetContainer';
+import { OffsetContainer } from '../lib/OffsetContainer';
 import { Diamond } from '../lib/Diamond';
 import { ElementMeasurer } from '../lib/ElementMeasurer';
-import { SVGContainer } from '../../components/lib/SVGContainer';
+import { SVGContainer } from '../lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
 import { FlowEdges } from '../lib/FlowEdges';

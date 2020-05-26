@@ -6,14 +6,14 @@ import { jsx } from '@emotion/core';
 import { useState, useCallback, useContext } from 'react';
 import { useShellApi } from '@bfc/extension';
 
-import { OffsetContainer } from '../../components/lib/OffsetContainer';
-import { ElementInterval, TriggerSize, TerminatorSize } from '../../constants/ElementSizes';
+import { OffsetContainer } from '../lib/OffsetContainer';
+import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { EdgeDirection } from '../models/EdgeData';
-import { SVGContainer } from '../../components/lib/SVGContainer';
+import { SVGContainer } from '../lib/SVGContainer';
 import { drawSVGEdge } from '../lib/EdgeUtil';
-import { ObiColors } from '../../constants/ElementColors';
+import { ObiColors } from '../constants/ElementColors';
 import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 import { ActionGroup } from '.';

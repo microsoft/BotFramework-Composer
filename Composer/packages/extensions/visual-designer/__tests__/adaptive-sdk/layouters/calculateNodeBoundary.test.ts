@@ -13,7 +13,7 @@ import {
   BranchIntervalX,
   BranchIntervalY,
   LoopEdgeMarginLeft,
-} from '../../../src/constants/ElementSizes';
+} from '../../../src/adaptive-sdk/constants/ElementSizes';
 
 const boundary = new Boundary();
 describe('calculateSequenceBoundary', () => {

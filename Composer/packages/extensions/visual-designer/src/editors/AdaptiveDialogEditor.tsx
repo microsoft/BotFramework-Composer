@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import get from 'lodash/get';
 
-import { EditorEventHandler } from '../constants/NodeEventTypes';
+import { EditorEventHandler } from '../adaptive-sdk/constants/NodeEventTypes';
 import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
 import { FlowRendererContext, DefaultFlowRenderers } from '../store/FlowRendererContext';
 import { RuleEditor } from '../adaptive-sdk/widgets/RuleEditor';

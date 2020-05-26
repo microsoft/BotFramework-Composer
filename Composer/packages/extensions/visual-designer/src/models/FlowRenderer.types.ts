@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { EditorEventHandler } from '../constants/NodeEventTypes';
-import { ElementColor } from '../constants/ElementColors';
+import { EditorEventHandler } from '../adaptive-sdk/constants/NodeEventTypes';
+import { ElementColor } from '../adaptive-sdk/constants/ElementColors';
 
 interface EventBasedElement {
   onEvent: EditorEventHandler;

@@ -23,7 +23,7 @@ import { KeyboardZone } from './components/lib/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent.ts';
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
-import { NodeEventTypes } from './constants/NodeEventTypes';
+import { NodeEventTypes } from './adaptive-sdk/constants/NodeEventTypes';
 import { AdaptiveDialogEditor } from './editors/AdaptiveDialogEditor';
 import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './components/renderers';
 

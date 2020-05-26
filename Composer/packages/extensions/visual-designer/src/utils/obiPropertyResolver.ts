@@ -3,7 +3,7 @@
 
 import { DialogGroup, getDialogGroupByType } from '@bfc/shared';
 
-import { NodeColors } from '../constants/ElementColors';
+import { NodeColors } from '../adaptive-sdk/constants/ElementColors';
 
 export function getElementColor($kind) {
   const nodeGroup = getDialogGroupByType($kind);

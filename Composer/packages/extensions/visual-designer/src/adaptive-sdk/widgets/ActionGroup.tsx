@@ -7,11 +7,11 @@ import { useMemo, FunctionComponent, useContext } from 'react';
 
 import { GraphNode } from '../models/GraphNode';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
-import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
+import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
 import { transformStepGroup } from '../transformers/transformStepGroup';
-import { OffsetContainer } from '../../components/lib/OffsetContainer';
+import { OffsetContainer } from '../lib/OffsetContainer';
 import { GraphLayout } from '../models/GraphLayout';
-import { SVGContainer } from '../../components/lib/SVGContainer';
+import { SVGContainer } from '../lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
 import { FlowEdges } from '../lib/FlowEdges';

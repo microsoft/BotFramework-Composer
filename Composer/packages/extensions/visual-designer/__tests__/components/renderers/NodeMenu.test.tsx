@@ -5,7 +5,7 @@ import React from 'react';
 import { render, fireEvent, findAllByText } from '@bfc/test-utils';
 
 import { NodeMenu } from '../../../src/components/renderers/NodeMenu';
-import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';
+import { NodeEventTypes } from '../../../src/adaptive-sdk/constants/NodeEventTypes';
 
 describe('<NodeMenu />', () => {
   let id, onEvent, renderResult, clickResults;
