@@ -11,13 +11,14 @@ import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
 import { transformStepGroup } from '../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../components/nodes/nodeProps';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { StepRenderer } from '../components/renderers/StepRenderer';
 import { GraphLayout } from '../models/GraphLayout';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
 import { FlowRendererContext } from '../store/FlowRendererContext';
+
+import { StepRenderer } from './StepRenderer';
 
 const StepInterval = ElementInterval.y;
 
