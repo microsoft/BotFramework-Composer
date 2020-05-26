@@ -6,7 +6,7 @@ import { FieldProps } from '@bfc/extension';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-const ExpressionEditor: React.FC<FieldProps> = props => {
+const ExpressionEditor: React.FC<FieldProps> = (props) => {
   const { id, value = '', onChange, disabled, placeholder, readonly, error } = props;
 
   const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {

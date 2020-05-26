@@ -32,19 +32,19 @@ export const ListOverview: FC<ListOverviewProps<any>> = ({
     >
       {items.slice(0, maxCount).map((item, index) => {
         return (
-          <div style={{ marginTop: index ? itemInterval : 0 }} key={index}>
+          <div key={index} style={{ marginTop: index ? itemInterval : 0 }}>
             {renderItem(item)}
           </div>
         );
       })}
       {items.length > maxCount ? (
         <SingleLineDiv
-          data-testid="hasMore"
           css={{
             marginTop: '3px',
             textAlign: 'center',
             color: '#757575',
           }}
+          data-testid="hasMore"
         >
           {`${items.length - maxCount} more`}
         </SingleLineDiv>

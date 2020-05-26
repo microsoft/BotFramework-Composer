@@ -5,7 +5,7 @@ import { isCircular, CIRCULAR_REFS } from '../../src/schemaUtils/circular';
 
 describe('isCircular', () => {
   it('returns true for kinds in CIRCULAR_REFS', () => {
-    CIRCULAR_REFS.forEach(k => {
+    CIRCULAR_REFS.forEach((k) => {
       expect(isCircular(k)).toBe(true);
     });
   });

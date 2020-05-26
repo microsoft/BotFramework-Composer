@@ -66,7 +66,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
   };
 
   const handleCreate = () => {
-    if (skillManifests.some(manifest => manifest.id === fileName)) {
+    if (skillManifests.some((manifest) => manifest.id === fileName)) {
       setErrors({ version: formatMessage('{fileName} already exists', { fileName }) });
       return;
     } else if (!version) {
@@ -93,7 +93,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: item => {
+      onRender: (item) => {
         return <span aria-label={item.name}>{item.id}</span>;
       },
       isPadded: true,
@@ -106,7 +106,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       maxWidth: 70,
       isResizable: true,
       data: 'number',
-      onRender: item => {
+      onRender: (item) => {
         return <span>{calculateTimeDiff(item.dateModified)}</span>;
       },
       isPadded: true,
@@ -115,10 +115,10 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
           ...props,
-          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
         })}
       </Sticky>
     );
@@ -162,16 +162,16 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       <div css={styles.detailListContainer}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            items={skillManifests}
-            compact={false}
-            columns={tableColumns}
-            getKey={item => item.name}
-            layoutMode={DetailsListLayoutMode.justified}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            isHeaderVisible={true}
-            onActiveItemChanged={({ id }) => setSkillManifest(id)}
-            selectionMode={SelectionMode.single}
+            isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
+            columns={tableColumns}
+            compact={false}
+            getKey={(item) => item.name}
+            items={skillManifests}
+            layoutMode={DetailsListLayoutMode.justified}
+            selectionMode={SelectionMode.single}
+            onActiveItemChanged={({ id }) => setSkillManifest(id)}
+            onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </ScrollablePane>
       </div>

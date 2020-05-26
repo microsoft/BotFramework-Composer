@@ -12,12 +12,12 @@ const config: PluginConfig = {
       id: SDKKinds.LuisRecognizer,
       displayName: 'LUIS',
       editor: LuisIntentEditor,
-      isSelected: data => {
+      isSelected: (data) => {
         return typeof data === 'string' && data.endsWith('.lu');
       },
       handleRecognizerChange: (props, shellData) => {
         const { luFiles, currentDialog, locale } = shellData;
-        const luFile = luFiles.find(f => f.id === `${currentDialog.id}.${locale}`);
+        const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
 
         if (luFile) {
           // strip locale out of id so it doesn't get serialized

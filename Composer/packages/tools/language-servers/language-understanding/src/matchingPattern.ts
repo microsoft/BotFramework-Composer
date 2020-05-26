@@ -22,7 +22,7 @@ export function getCompositesEntities(luisJson: any): string[] {
   const suggestionCompositesList: string[] = [];
   if (luisJson !== undefined) {
     if (luisJson.composites !== undefined && luisJson.composites.length > 0) {
-      luisJson.composites.forEach(entity => {
+      luisJson.composites.forEach((entity) => {
         suggestionCompositesList.push(entity.name);
       });
     }
@@ -121,7 +121,7 @@ export function getRegexEntities(luisJson: any): string[] {
   const suggestionRegexList: string[] = [];
   if (luisJson !== undefined) {
     if (luisJson.regex_entities !== undefined && luisJson.regex_entities.length > 0) {
-      luisJson.regex_entities.forEach(entity => {
+      luisJson.regex_entities.forEach((entity) => {
         suggestionRegexList.push(entity.name);
       });
     }
@@ -133,9 +133,9 @@ export function getRegexEntities(luisJson: any): string[] {
 export function getSuggestionEntities(luisJson: any, suggestionEntityTypes: string[]): string[] {
   const suggestionEntityList: string[] = [];
   if (luisJson !== undefined) {
-    suggestionEntityTypes.forEach(entityType => {
+    suggestionEntityTypes.forEach((entityType) => {
       if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
-        luisJson[entityType].forEach(entity => {
+        luisJson[entityType].forEach((entity) => {
           if (entity && entity.name) {
             suggestionEntityList.push(entity.name);
           }
@@ -178,11 +178,11 @@ export const suggestionNoCompositeEntityTypes = [
 export function getSuggestionRoles(luisJson: any, suggestionEntityTypes: string[]): string[] {
   const suggestionRolesList: string[] = [];
   if (luisJson !== undefined) {
-    suggestionEntityTypes.forEach(entityType => {
+    suggestionEntityTypes.forEach((entityType) => {
       if (luisJson[entityType] !== undefined && luisJson[entityType].length > 0) {
-        luisJson[entityType].forEach(entity => {
+        luisJson[entityType].forEach((entity) => {
           if (entity.roles !== undefined && entity.roles.length > 0) {
-            entity.roles.forEach(role => {
+            entity.roles.forEach((role) => {
               if (role) {
                 suggestionRolesList.push(role);
               }

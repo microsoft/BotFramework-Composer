@@ -14,9 +14,9 @@ describe('<Onboarding />', () => {
   let value;
   let onboardingValue;
 
-  const stepSets = defaultStepSets().map(stepSet => ({
+  const stepSets = defaultStepSets().map((stepSet) => ({
     ...stepSet,
-    steps: stepSet.steps.map(step => ({ ...step, targetId: 'test', location: 'VisualDesigner' })),
+    steps: stepSet.steps.map((step) => ({ ...step, targetId: 'test', location: 'VisualDesigner' })),
   }));
 
   beforeEach(() => {

@@ -16,7 +16,7 @@ context('breadcrumb', () => {
     cy.get('[data-testid="Breadcrumb"]')
       .last()
       .get('li')
-      .should($li => {
+      .should(($li) => {
         items.forEach((item, idx) => {
           expect($li.eq(idx)).to.contain(item);
         });

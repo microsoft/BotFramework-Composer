@@ -94,7 +94,7 @@ export function queryNode(inputDialog, path?: string) {
 }
 
 export function queryNodes(inputDialog, nodeIds: string[]) {
-  return nodeIds.map(id => queryNode(inputDialog, id)).filter(x => x !== null);
+  return nodeIds.map((id) => queryNode(inputDialog, id)).filter((x) => x !== null);
 }
 
 export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedData: any) => any) {
@@ -124,11 +124,11 @@ export function deleteNode(inputDialog, path, callbackOnRemovedData?: (removedDa
 export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNodes?: (nodes: any[]) => any) {
   const dialog = cloneDeep(inputDialog);
 
-  const nodeLocations = nodeIds.map(id => locateNode(dialog, id));
+  const nodeLocations = nodeIds.map((id) => locateNode(dialog, id));
   const deletedNodes: any[] = [];
 
   // mark deletion
-  nodeLocations.forEach(location => {
+  nodeLocations.forEach((location) => {
     if (!location) return;
     deletedNodes.push(location.currentData);
 
@@ -140,7 +140,7 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNod
   });
 
   // delete empty slots in array
-  nodeLocations.forEach(location => {
+  nodeLocations.forEach((location) => {
     if (!location || !Array.isArray(location.parentData)) return;
     for (let i = location.parentData.length - 1; i >= 0; i--) {
       if (location.parentData[i] === null) location.parentData.splice(i, 1);

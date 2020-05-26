@@ -7,7 +7,7 @@ import { PropTypes } from 'prop-types';
 
 import { container } from './styles';
 
-export const Tree = props => (
+export const Tree = (props) => (
   <div css={container(props.variant)} data-testid="ProjectTree" {...props}>
     {props.children}
   </div>

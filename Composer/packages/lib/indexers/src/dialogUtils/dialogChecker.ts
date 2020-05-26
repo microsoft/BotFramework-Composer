@@ -12,7 +12,7 @@ type CheckerFunc = (path: string, value: any, type: string, schema: any) => Diag
 
 export const createPath = (path: string, type: string): string => {
   let list = path.split('.');
-  const matches = list.filter(x => {
+  const matches = list.filter((x) => {
     if (/\[|\]/.test(x)) {
       const reg = /\[.*\]/;
       x = x.replace(reg, '');
@@ -29,7 +29,7 @@ export const createPath = (path: string, type: string): string => {
 
 function findAllRequiredProperties(schema: any): { [key: string]: boolean } {
   if (!schema) return {};
-  const types = schema.anyOf?.filter(x => x.title === 'Type');
+  const types = schema.anyOf?.filter((x) => x.title === 'Type');
   const required = {};
   if (types && types.length) {
     types[0].required.forEach((element: string) => {
@@ -55,7 +55,7 @@ function findAllTypes(schema: any): string[] {
       types.push(schema.type);
     }
   } else {
-    types = schema.oneOf?.filter(item => !!ExpressionType[item.type]).map(item => item.type);
+    types = schema.oneOf?.filter((item) => !!ExpressionType[item.type]).map((item) => item.type);
   }
 
   return Array.from(new Set<string>(types));
@@ -65,7 +65,7 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
   if (!schema) return [];
   const diagnostics: Diagnostic[] = [];
   const requiredProperties = findAllRequiredProperties(schema);
-  Object.keys(value).forEach(key => {
+  Object.keys(value).forEach((key) => {
     const property = value[key];
     if (Array.isArray(property)) {
       const itemsSchema = get(schema, ['properties', key, 'items'], null);

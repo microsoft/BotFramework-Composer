@@ -16,7 +16,7 @@ enum ClaimNames {
 
 const REFRESH_WATERMARK = 1000 * 60 * 5; // 5 minutes
 
-export const loginUser: ActionCreator = async store => {
+export const loginUser: ActionCreator = async (store) => {
   if (!process.env.COMPOSER_REQUIRE_AUTH) {
     return;
   }

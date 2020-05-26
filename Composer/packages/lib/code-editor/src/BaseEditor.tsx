@@ -111,7 +111,7 @@ export interface BaseEditorProps extends EditorProps {
   onChangeSettings?: (settings: Partial<CodeEditorSettings>) => void;
 }
 
-const BaseEditor: React.FC<BaseEditorProps> = props => {
+const BaseEditor: React.FC<BaseEditorProps> = (props) => {
   const {
     onChange,
     editorDidMount,
@@ -148,7 +148,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   };
 
   useEffect(() => {
-    monaco.init().then(instance => {
+    monaco.init().then((instance) => {
       typeof onInit === 'function' && onInit(instance);
     });
   }, []);
@@ -198,7 +198,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   const messageHelp = errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics;
 
   const syntaxLink = (
-    <Link key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
+    <Link key="a" href={helpURL} rel="noopener noreferrer" target="_blank">
       {formatMessage('Refer to the syntax documentation here.')}
     </Link>
   );
@@ -222,13 +222,13 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} key={id} value={initialValue || ''} editorDidMount={onEditorMount} options={editorOptions} />
+        <Editor {...rest} key={id} editorDidMount={onEditorMount} options={editorOptions} value={initialValue || ''} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
-          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
-          isMultiline={true}
+          isMultiline
           dismissButtonAriaLabel={formatMessage('Close')}
+          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
         >
           {messageHelp}
           {syntaxLink}
