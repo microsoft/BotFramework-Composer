@@ -4479,10 +4479,10 @@ adal-node@^0.1.28:
     xmldom ">= 0.1.x"
     xpath.js "~1.1.0"
 
-adaptive-expressions@4.1.6, adaptive-expressions@^4.1.6:
-  version "4.1.6"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/adaptive-expressions/-/adaptive-expressions-4.1.6.tgz#8cbc4621c29bc46117c0dc6a8a1e47f3d4f51945"
-  integrity sha1-jLxGIcKbxGEXwNxqih5H89T1GUU=
+adaptive-expressions@4.10.0-preview-133287, adaptive-expressions@^4.10.0-preview-133287:
+  version "4.10.0-preview-133287"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-133287.tgz#1a763d0b48bc639cf130f55e32e4c87cd6bfb255"
+  integrity sha1-GnY9C0i8Y5zxMPVeMuTIfNa/slU=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"
@@ -5560,12 +5560,12 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@^4.1.6:
-  version "4.1.6"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/botbuilder-lg/-/botbuilder-lg-4.1.6.tgz#4e771fd6a5269998e14d53f9ad0125910a9e2dd9"
-  integrity sha1-Tncf1qUmmZjhTVP5rQElkQqeLdk=
+botbuilder-lg@^4.10.0-preview-133287:
+  version "4.10.0-preview-133287"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-133287.tgz#0f07eaf6e202146bb177c980a1ca8fce23751473"
+  integrity sha1-Dwfq9uICFGuxd8mAocqPziN1FHM=
   dependencies:
-    adaptive-expressions "4.1.6"
+    adaptive-expressions "4.10.0-preview-133287"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.11"
     path "^0.12.7"
@@ -13114,8 +13114,8 @@ mixin-object@^2.0.1:
 
 mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@^0.5.2, mkdirp@^0.5.3, mkdirp@^0.5.4, mkdirp@~0.5.1:
   version "0.5.5"
-  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
-  integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
+  integrity sha1-2Rzv1i0UNsoPQWIOJRKI1CAJne8=
   dependencies:
     minimist "^1.2.5"
 
