@@ -68,6 +68,7 @@ const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
             label={false}
             rawErrors={rawErrors[idx]}
             schema={itemSchema}
+            stackArrayItems={true}
             uiOptions={uiOptions}
             value={element.value}
             {...getArrayItemProps(arrayItems, idx, handleChange)}
