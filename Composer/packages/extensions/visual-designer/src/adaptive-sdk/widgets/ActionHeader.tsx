@@ -10,7 +10,7 @@ import { TruncatedCSS, ColorlessFontCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
 import { DefaultColors } from '../constants/ElementColors';
-import { ElementIcon } from '../../utils/obiPropertyResolver';
+import { ElementIcon } from '../constants/ElementIcon';
 import { Icon } from '../../components/decorations/icon';
 import { FlowRendererContext } from '../../store/FlowRendererContext';
 
