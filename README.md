@@ -1,6 +1,6 @@
 # ![Microsoft Bot Framework Composer](./docs/media/gh-banner.png)
 
-# Microsoft Bot Framework Composer [PREVIEW]
+# Microsoft Bot Framework Composer
 
 [![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=master)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=master)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=master)
@@ -8,7 +8,7 @@
 
 ## Overview
 
-Bot Framework Composer is an integrated development tool for developers and multi-disciplinary teams to build bots and conversational experiences with the Microsoft Bot Framework. Within this tool, you'll find everything you need to build a sophisticated conversational experience.
+Bot Framework Composer is an open-source, visual authoring canvas for developers and multi-disciplinary to design and build conversational experiences with Language Understanding and QnA Maker, and a sophisticated composition of bot replies (Language Generation). Within this tool, you'll have everything you need to build a sophisticated conversational experience.
 
 - A visual editing canvas for conversation flows
 - In context editing for language understanding (NLU)
