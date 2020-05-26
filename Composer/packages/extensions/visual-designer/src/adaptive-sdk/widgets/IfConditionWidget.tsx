@@ -11,7 +11,7 @@ import { ifElseLayouter } from '../layouters/ifelseLayouter';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../lib/OffsetContainer';
-import { Diamond } from '../lib/Diamond';
+import { Diamond } from '../lib/decorations/Diamond';
 import { ElementMeasurer } from '../lib/ElementMeasurer';
 import { SVGContainer } from '../lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';

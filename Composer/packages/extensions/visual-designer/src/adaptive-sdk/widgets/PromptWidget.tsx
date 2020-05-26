@@ -12,7 +12,7 @@ import { transformBaseInput } from '../transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../lib/OffsetContainer';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { IconBrick } from '../../components/decorations/IconBrick';
+import { IconBrick } from '../lib/decorations/IconBrick';
 import { SVGContainer } from '../lib/SVGContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { ElementMeasurer } from '../lib/ElementMeasurer';

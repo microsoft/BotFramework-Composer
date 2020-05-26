@@ -11,7 +11,7 @@ import { transformSwitchCondition } from '../transformers/transformSwitchConditi
 import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../lib/OffsetContainer';
-import { Diamond } from '../lib/Diamond';
+import { Diamond } from '../lib/decorations/Diamond';
 import { ElementMeasurer } from '../lib/ElementMeasurer';
 import { SVGContainer } from '../lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';

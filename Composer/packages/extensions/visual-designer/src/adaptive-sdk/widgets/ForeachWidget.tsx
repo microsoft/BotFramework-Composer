@@ -11,7 +11,7 @@ import { foreachLayouter } from '../layouters/foreachLayouter';
 import { GraphNode } from '../models/GraphNode';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { OffsetContainer } from '../lib/OffsetContainer';
-import { LoopIndicator } from '../../components/decorations/LoopIndicator';
+import { LoopIndicator } from '../lib/decorations/LoopIndicator';
 import { ElementMeasurer } from '../lib/ElementMeasurer';
 import { SVGContainer } from '../lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
