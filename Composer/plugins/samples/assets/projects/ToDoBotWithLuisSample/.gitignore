@@ -7,3 +7,5 @@
 
 !Properties/launchSettings.json
 !packages/packages.json
+
+**/appsettings.json
