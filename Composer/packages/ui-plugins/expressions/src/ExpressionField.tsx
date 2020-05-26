@@ -116,7 +116,7 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
   );
 
   return (
-    <div css={styles.container} className={className}>
+    <div className={className} css={styles.container}>
       {shouldRenderContainer && (
         <div css={styles.labelContainer}>
           <FieldLabel

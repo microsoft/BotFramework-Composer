@@ -62,13 +62,13 @@ const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
           <ArrayFieldItem
             {...rest}
             key={element.id}
+            stackArrayItems
             transparentBorder
             error={rawErrors[idx]}
             id={id}
             label={false}
             rawErrors={rawErrors[idx]}
             schema={itemSchema}
-            stackArrayItems={true}
             uiOptions={uiOptions}
             value={element.value}
             {...getArrayItemProps(arrayItems, idx, handleChange)}
