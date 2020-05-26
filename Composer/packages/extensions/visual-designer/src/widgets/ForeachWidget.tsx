@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useMemo, FunctionComponent } from 'react';
+import { useMemo, FunctionComponent, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
 import { transformForeach } from '../transformers/transformForeach';
@@ -13,12 +13,12 @@ import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { LoopIndicator } from '../components/decorations/LoopIndicator';
 import { StepGroup } from '../components/groups';
-import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
+import { FlowRendererContext } from '../store/FlowRendererContext';
 
 enum ForeachNodes {
   Foreach = 'foreachNode',
@@ -56,6 +56,7 @@ export interface ForeachWidgetProps extends WidgetContainerProps {
 }
 
 export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data, onEvent, onResize, loop }) => {
+  const { NodeWrapper } = useContext(FlowRendererContext);
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout<ForeachNodes>(nodeMap, calculateForeachLayout, onResize);
 
@@ -71,7 +72,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
-        <ElementWrapper id={id} data={data} onEvent={onEvent}>
+        <NodeWrapper nodeId={id} nodeData={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(foreachNode.data, boundary);
@@ -80,7 +81,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
           >
             {loop}
           </ElementMeasurer>
-        </ElementWrapper>
+        </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={loopActionsNode.offset}>
         <StepGroup

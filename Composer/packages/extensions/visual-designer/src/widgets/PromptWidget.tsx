@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useContext } from 'react';
 import { PromptTab } from '@bfc/shared';
 import { WidgetContainerProps } from '@bfc/extension';
 
@@ -11,7 +11,6 @@ import { baseInputLayouter } from '../layouters/baseInputLayouter';
 import { transformBaseInput } from '../transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { IconBrick } from '../components/decorations/IconBrick';
 import { SVGContainer } from '../components/lib/SVGContainer';
@@ -20,6 +19,7 @@ import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
+import { FlowRendererContext } from '../store/FlowRendererContext';
 
 enum PromptNodes {
   BotAsks = 'botAsksNode',
@@ -54,6 +54,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
   botAsks,
   userInput,
 }): JSX.Element => {
+  const { NodeWrapper } = useContext(FlowRendererContext);
   const nodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout<PromptNodes>(nodes, calculateLayout, onResize);
 
@@ -66,7 +67,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={botAsksNode.offset}>
-        <ElementWrapper id={botAsksNode.id} tab={PromptTab.BOT_ASKS} data={data} onEvent={onEvent}>
+        <NodeWrapper nodeId={botAsksNode.id} nodeTab={PromptTab.BOT_ASKS} nodeData={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(botAsksNode.data, boundary);
@@ -75,10 +76,10 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
           >
             {botAsks}
           </ElementMeasurer>
-        </ElementWrapper>
+        </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} data={data} onEvent={onEvent}>
+        <NodeWrapper nodeId={userAnswersNode.id} nodeTab={PromptTab.USER_INPUT} nodeData={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
@@ -87,12 +88,12 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
           >
             {userInput}
           </ElementMeasurer>
-        </ElementWrapper>
+        </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
-        <ElementWrapper id={brickNode.id} tab={PromptTab.OTHER} data={data} onEvent={onEvent}>
+        <NodeWrapper nodeId={brickNode.id} nodeTab={PromptTab.OTHER} nodeData={data} onEvent={onEvent}>
           <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />
-        </ElementWrapper>
+        </NodeWrapper>
       </OffsetContainer>
     </div>
   );

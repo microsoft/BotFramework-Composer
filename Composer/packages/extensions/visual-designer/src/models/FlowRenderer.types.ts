@@ -34,6 +34,11 @@ export interface NodeWrapperProps extends EventBasedElement, StyledElement {
   nodeId: string;
   nodeData: any;
   onEvent: EditorEventHandler;
+
+  /** Additional child id for multipart nodes such as 'BotAsks/UserInputs' in TextInput
+   * to fit complicated view features like double-selection.
+   * */
+  nodeTab?: string;
 }
 
 export type NodeWrapperComponent = React.FC<NodeWrapperProps>;

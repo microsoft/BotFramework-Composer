@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
 import { transformIfCondtion } from '../transformers/transformIfCondition';
@@ -13,12 +13,12 @@ import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
-import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
+import { FlowRendererContext } from '../store/FlowRendererContext';
 
 enum IfElseNodes {
   Condition = 'conditionNode',
@@ -62,6 +62,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
   onResize,
   judgement,
 }) => {
+  const { NodeWrapper } = useContext(FlowRendererContext);
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(nodeMap, calculateIfElseLayout, onResize);
 
@@ -74,7 +75,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={conditionNode.offset}>
-        <ElementWrapper id={conditionNode.id} data={data} onEvent={onEvent}>
+        <NodeWrapper nodeId={conditionNode.id} nodeData={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(conditionNode.data, boundary);
@@ -83,7 +84,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           >
             {judgement}
           </ElementMeasurer>
-        </ElementWrapper>
+        </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choiceNode.offset}>
         <Diamond

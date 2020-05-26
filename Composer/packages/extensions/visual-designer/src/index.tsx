@@ -25,7 +25,7 @@ import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
 import { NodeEventTypes } from './constants/NodeEventTypes';
 import { AdaptiveDialogEditor } from './editors/AdaptiveDialogEditor';
-import { VisualEditorNodeMenu, VisualEditorEdgeMenu } from './renderers';
+import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './renderers';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -152,8 +152,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                           divRef.current?.focus({ preventScroll: true });
                           handleEditorEvent(eventName, eventData);
                         }}
-                        NodeMenu={VisualEditorNodeMenu}
                         EdgeMenu={VisualEditorEdgeMenu}
+                        NodeMenu={VisualEditorNodeMenu}
+                        NodeWrapper={VisualEditorNodeWrapper}
                       />
                     </div>
                   </MarqueeSelection>

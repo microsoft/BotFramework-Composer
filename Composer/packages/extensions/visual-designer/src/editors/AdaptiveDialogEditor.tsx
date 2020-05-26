@@ -42,6 +42,7 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   onEvent,
   EdgeMenu,
   NodeMenu,
+  NodeWrapper,
 }): JSX.Element => {
   const activeTriggerData = get(dialogData, activeTrigger, null);
   const content = activeTriggerData ? (
@@ -53,7 +54,7 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
       value={{
         EdgeMenu: EdgeMenu || DefaultFlowRenderers.EdgeMenu,
         NodeMenu: NodeMenu || DefaultFlowRenderers.NodeMenu,
-        NodeWrapper: DefaultFlowRenderers.NodeWrapper,
+        NodeWrapper: NodeWrapper || DefaultFlowRenderers.NodeWrapper,
       }}
     >
       {content}

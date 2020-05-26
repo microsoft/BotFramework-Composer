@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FunctionComponent, useMemo } from 'react';
+import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
@@ -13,12 +13,12 @@ import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
-import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
+import { FlowRendererContext } from '../store/FlowRendererContext';
 
 enum SwitchNodes {
   Switch = 'switchNode',
@@ -72,6 +72,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
   onResize,
   judgement,
 }) => {
+  const { NodeWrapper } = useContext(FlowRendererContext);
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout<SwitchNodes | CaseNodeKey>(nodeMap, calculateLayout, onResize);
 
@@ -85,7 +86,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={switchNode.offset}>
-        <ElementWrapper id={switchNode.id} data={data} onEvent={onEvent}>
+        <NodeWrapper nodeId={switchNode.id} nodeData={data} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(switchNode.data, boundary);
@@ -94,7 +95,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
           >
             {judgement}
           </ElementMeasurer>
-        </ElementWrapper>
+        </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
         <Diamond
