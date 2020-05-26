@@ -56,7 +56,10 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   };
 
   const handleChange = (result: any) => {
-    saveChangeResult(result);
+    // prevent result was undefined, it will cause error
+    if (result && typeof result === 'object') {
+      saveChangeResult(result);
+    }
   };
 
   const hostedControl = () => (
