@@ -5,17 +5,17 @@
 import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
 
-import { GraphNode } from '../models/GraphNode';
-import { sequentialLayouter } from '../adaptive-sdk/layouters/sequentialLayouter';
-import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
-import { transformStepGroup } from '../adaptive-sdk/transformers/transformStepGroup';
-import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { GraphLayout } from '../models/GraphLayout';
-import { SVGContainer } from '../components/lib/SVGContainer';
-import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
-import { designerCache } from '../store/DesignerCache';
-import { FlowEdges } from '../components/lib/FlowEdges';
-import { FlowRendererContext } from '../store/FlowRendererContext';
+import { GraphNode } from '../../models/GraphNode';
+import { sequentialLayouter } from '../layouters/sequentialLayouter';
+import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
+import { transformStepGroup } from '../transformers/transformStepGroup';
+import { OffsetContainer } from '../../components/lib/OffsetContainer';
+import { GraphLayout } from '../../models/GraphLayout';
+import { SVGContainer } from '../../components/lib/SVGContainer';
+import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
+import { designerCache } from '../../store/DesignerCache';
+import { FlowEdges } from '../../components/lib/FlowEdges';
+import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 import { NodeProps, defaultNodeProps } from './types/NodeProps.types';
 import { StepRenderer } from './AdaptiveAction';

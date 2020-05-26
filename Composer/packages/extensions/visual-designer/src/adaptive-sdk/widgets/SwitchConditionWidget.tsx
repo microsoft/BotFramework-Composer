@@ -6,18 +6,18 @@ import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { transformSwitchCondition } from '../adaptive-sdk/transformers/transformSwitchCondition';
-import { switchCaseLayouter } from '../adaptive-sdk/layouters/switchCaseLayouter';
-import { GraphNode } from '../models/GraphNode';
-import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { Diamond } from '../components/lib/Diamond';
-import { ElementMeasurer } from '../components/lib/ElementMeasurer';
-import { SVGContainer } from '../components/lib/SVGContainer';
-import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
-import { designerCache } from '../store/DesignerCache';
-import { FlowEdges } from '../components/lib/FlowEdges';
-import { FlowRendererContext } from '../store/FlowRendererContext';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
+import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
+import { GraphNode } from '../../models/GraphNode';
+import { OffsetContainer } from '../../components/lib/OffsetContainer';
+import { Diamond } from '../../components/lib/Diamond';
+import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
+import { SVGContainer } from '../../components/lib/SVGContainer';
+import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
+import { designerCache } from '../../store/DesignerCache';
+import { FlowEdges } from '../../components/lib/FlowEdges';
+import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 import { ActionGroup } from './ActionGroup';
 

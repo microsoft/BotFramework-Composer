@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Boundary } from '../../models/Boundary';
+import { Boundary } from '../../../models/Boundary';
 
 export interface NodeProps {
   id: string;

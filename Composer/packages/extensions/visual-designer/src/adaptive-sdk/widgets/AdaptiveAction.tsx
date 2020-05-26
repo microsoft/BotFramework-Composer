@@ -6,10 +6,10 @@ import { jsx } from '@emotion/core';
 import { FC, useContext } from 'react';
 import get from 'lodash/get';
 
-import { renderUIWidget } from '../schema/flowSchemaRenderer';
-import { FlowSchemaContext } from '../store/FlowSchemaContext';
-import { FlowRendererContext } from '../store/FlowRendererContext';
-import { ElementMeasurer } from '../components/lib/ElementMeasurer';
+import { renderUIWidget } from '../../schema/flowSchemaRenderer';
+import { FlowSchemaContext } from '../../store/FlowSchemaContext';
+import { FlowRendererContext } from '../../store/FlowRendererContext';
+import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
 
 import { NodeProps, defaultNodeProps } from './types/NodeProps.types';
 
