@@ -18,7 +18,7 @@ import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
 import { FlowRendererContext } from '../store/FlowRendererContext';
 
-import { StepRenderer } from './StepRenderer';
+import { StepRenderer } from './AdaptiveAction';
 
 const StepInterval = ElementInterval.y;
 
