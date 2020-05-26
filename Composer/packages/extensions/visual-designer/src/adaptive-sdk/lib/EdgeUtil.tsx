@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import { EdgeDirection, EdgeOptions, Edge } from '../../models/EdgeData';
+import { EdgeDirection, EdgeOptions, Edge } from '../models/EdgeData';
 import { ObiColors } from '../../constants/ElementColors';
 
 interface Coord2D {

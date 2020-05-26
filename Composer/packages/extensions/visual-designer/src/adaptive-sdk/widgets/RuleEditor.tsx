@@ -6,12 +6,12 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 
-import { Trigger } from '../adaptive-sdk/widgets/Trigger';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { transformObiRules } from '../adaptive-sdk/transformers/transformObiRules';
-import { outlineObiJson } from '../utils/outlineObiJson';
+import { transformObiRules } from '../transformers/transformObiRules';
+import { outlineObiJson } from '../../utils/outlineObiJson';
 
+import { Trigger } from './Trigger';
 import { StepEditor } from './StepEditor';
 
 const calculateNodeMap = (ruleId, data): { [id: string]: GraphNode } => {

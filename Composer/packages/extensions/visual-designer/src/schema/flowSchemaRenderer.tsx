@@ -5,7 +5,7 @@ import React from 'react';
 import { BaseSchema } from '@bfc/shared';
 import { FlowWidget, FlowEditorWidgetMap, FlowWidgetProp, WidgetEventHandler } from '@bfc/extension';
 
-import { Boundary } from '../models/Boundary';
+import { Boundary } from '../adaptive-sdk/models/Boundary';
 
 export interface UIWidgetContext {
   /** The uniq id of current schema data. Usually a json path. */

@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { GraphNode } from '../../models/GraphNode';
+import { GraphNode } from '../models/GraphNode';
 import { ElementInterval } from '../../constants/ElementSizes';
-import { GraphLayout } from '../../models/GraphLayout';
-import { Edge, EdgeDirection } from '../../models/EdgeData';
+import { GraphLayout } from '../models/GraphLayout';
+import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateSequenceBoundary } from './calculateNodeBoundary';
 

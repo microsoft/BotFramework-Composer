@@ -4,8 +4,8 @@
 import React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { drawSVGEdge } from '../../../src/components/lib/EdgeUtil';
-import { EdgeDirection } from '../../../src/models/EdgeData';
+import { drawSVGEdge } from '../../../src/adaptive-sdk/lib/EdgeUtil';
+import { EdgeDirection } from '../../../src/adaptive-sdk/models/EdgeData';
 
 describe('drawSVGEdge', () => {
   it('should render normal edge line', async () => {

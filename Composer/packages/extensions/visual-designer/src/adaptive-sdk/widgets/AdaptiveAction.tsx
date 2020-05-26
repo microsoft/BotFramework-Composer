@@ -9,7 +9,7 @@ import get from 'lodash/get';
 import { renderUIWidget } from '../../schema/flowSchemaRenderer';
 import { FlowSchemaContext } from '../../store/FlowSchemaContext';
 import { FlowRendererContext } from '../../store/FlowRendererContext';
-import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
+import { ElementMeasurer } from '../lib/ElementMeasurer';
 
 import { NodeProps, defaultNodeProps } from './types/NodeProps.types';
 

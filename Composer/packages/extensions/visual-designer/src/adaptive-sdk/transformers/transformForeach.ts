@@ -3,7 +3,7 @@
 
 import { ObiFieldNames } from '../../constants/ObiFieldNames';
 import { ObiTypes } from '../../constants/ObiTypes';
-import { IndexedNode } from '../../models/IndexedNode';
+import { IndexedNode } from '../models/IndexedNode';
 
 const StepsKey = ObiFieldNames.Actions;
 

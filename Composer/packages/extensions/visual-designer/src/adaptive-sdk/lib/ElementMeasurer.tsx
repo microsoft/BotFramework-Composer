@@ -4,7 +4,7 @@
 import React from 'react';
 import Measure from 'react-measure';
 
-import { Boundary } from '../../models/Boundary';
+import { Boundary } from '../models/Boundary';
 
 export interface ElementMeasurerProps {
   children: React.ReactNode;

@@ -3,7 +3,7 @@
 
 import { ObiFieldNames } from '../../constants/ObiFieldNames';
 import { ObiTypes } from '../../constants/ObiTypes';
-import { IndexedNode } from '../../models/IndexedNode';
+import { IndexedNode } from '../models/IndexedNode';
 import { normalizeObiStep } from '../../utils/stepBuilder';
 
 export function transformObiRules(input, parentPath = ''): { stepGroup: IndexedNode } | null {

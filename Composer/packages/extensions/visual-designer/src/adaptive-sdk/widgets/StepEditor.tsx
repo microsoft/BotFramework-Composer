@@ -6,16 +6,17 @@ import { jsx } from '@emotion/core';
 import { useState, useCallback, useContext } from 'react';
 import { useShellApi } from '@bfc/extension';
 
-import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
-import { measureJsonBoundary } from '../adaptive-sdk/layouters/measureJsonBoundary';
+import { OffsetContainer } from '../../components/lib/OffsetContainer';
+import { ElementInterval, TriggerSize, TerminatorSize } from '../../constants/ElementSizes';
+import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { EdgeDirection } from '../models/EdgeData';
-import { SVGContainer } from '../components/lib/SVGContainer';
-import { drawSVGEdge } from '../components/lib/EdgeUtil';
-import { ObiColors } from '../constants/ElementColors';
-import { FlowRendererContext } from '../store/FlowRendererContext';
-import { ActionGroup } from '../adaptive-sdk/widgets';
+import { SVGContainer } from '../../components/lib/SVGContainer';
+import { drawSVGEdge } from '../lib/EdgeUtil';
+import { ObiColors } from '../../constants/ElementColors';
+import { FlowRendererContext } from '../../store/FlowRendererContext';
+
+import { ActionGroup } from '.';
 
 const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);

@@ -9,8 +9,7 @@ import get from 'lodash/get';
 import { EditorEventHandler } from '../constants/NodeEventTypes';
 import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
 import { FlowRendererContext, DefaultFlowRenderers } from '../store/FlowRendererContext';
-
-import { RuleEditor } from './RuleEditor';
+import { RuleEditor } from '../adaptive-sdk/widgets/RuleEditor';
 
 export interface AdaptiveDialogEditorProps {
   /** Dialog ID */

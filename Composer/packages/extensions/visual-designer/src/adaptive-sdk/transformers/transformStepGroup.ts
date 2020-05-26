@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { ObiTypes } from '../../constants/ObiTypes';
-import { IndexedNode } from '../../models/IndexedNode';
+import { IndexedNode } from '../models/IndexedNode';
 import { normalizeObiStep } from '../../utils/stepBuilder';
 
 export function transformStepGroup(input, groupId): IndexedNode[] {

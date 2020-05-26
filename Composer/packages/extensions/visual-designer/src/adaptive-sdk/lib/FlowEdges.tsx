@@ -3,7 +3,7 @@
 
 import React, { FC } from 'react';
 
-import { Edge } from '../../models/EdgeData';
+import { Edge } from '../models/EdgeData';
 
 import { renderEdge } from './EdgeUtil';
 

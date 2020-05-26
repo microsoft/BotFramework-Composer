@@ -4,7 +4,7 @@
 import { BaseSchema } from '@bfc/shared';
 import get from 'lodash/get';
 
-import { Boundary } from '../models/Boundary';
+import { Boundary } from '../adaptive-sdk/models/Boundary';
 
 const MAX_CACHE_SIZE = 99999;
 
