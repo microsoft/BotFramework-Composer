@@ -6,8 +6,8 @@ import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { transformIfCondtion } from '../transformers/transformIfCondition';
-import { ifElseLayouter } from '../layouters/ifelseLayouter';
+import { transformIfCondtion } from '../adaptive-sdk/transformers/transformIfCondition';
+import { ifElseLayouter } from '../adaptive-sdk/layouters/ifelseLayouter';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';

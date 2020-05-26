@@ -7,8 +7,8 @@ import { FC, useMemo, useContext } from 'react';
 import { PromptTab } from '@bfc/shared';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { baseInputLayouter } from '../layouters/baseInputLayouter';
-import { transformBaseInput } from '../transformers/transformBaseInput';
+import { baseInputLayouter } from '../adaptive-sdk/layouters/baseInputLayouter';
+import { transformBaseInput } from '../adaptive-sdk/transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { NodeEventTypes } from '../constants/NodeEventTypes';

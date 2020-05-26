@@ -9,7 +9,7 @@ import isEqual from 'lodash/isEqual';
 import { Trigger } from '../widgets/Trigger';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { transformObiRules } from '../transformers/transformObiRules';
+import { transformObiRules } from '../adaptive-sdk/transformers/transformObiRules';
 import { outlineObiJson } from '../utils/outlineObiJson';
 
 import { StepEditor } from './StepEditor';

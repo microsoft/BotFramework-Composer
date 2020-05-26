@@ -7,8 +7,8 @@ import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
-import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
+import { transformSwitchCondition } from '../adaptive-sdk/transformers/transformSwitchCondition';
+import { switchCaseLayouter } from '../adaptive-sdk/layouters/switchCaseLayouter';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { Diamond } from '../components/lib/Diamond';

@@ -6,9 +6,9 @@ import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
 
 import { GraphNode } from '../models/GraphNode';
-import { sequentialLayouter } from '../layouters/sequentialLayouter';
+import { sequentialLayouter } from '../adaptive-sdk/layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
-import { transformStepGroup } from '../transformers/transformStepGroup';
+import { transformStepGroup } from '../adaptive-sdk/transformers/transformStepGroup';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { SVGContainer } from '../components/lib/SVGContainer';
