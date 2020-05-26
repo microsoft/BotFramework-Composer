@@ -11,7 +11,6 @@ import { ifElseLayouter } from '../layouters/ifelseLayouter';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { SVGContainer } from '../components/lib/SVGContainer';
@@ -19,6 +18,8 @@ import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
 import { FlowRendererContext } from '../store/FlowRendererContext';
+
+import { StepGroup } from './StepGroup';
 
 enum IfElseNodes {
   Condition = 'conditionNode',

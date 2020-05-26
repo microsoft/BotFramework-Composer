@@ -5,19 +5,19 @@
 import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
 
-import { GraphNode } from '../../models/GraphNode';
-import { sequentialLayouter } from '../../layouters/sequentialLayouter';
-import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
-import { transformStepGroup } from '../../transformers/transformStepGroup';
-import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
-import { OffsetContainer } from '../lib/OffsetContainer';
-import { StepRenderer } from '../renderers/StepRenderer';
-import { GraphLayout } from '../../models/GraphLayout';
-import { SVGContainer } from '../lib/SVGContainer';
-import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
-import { designerCache } from '../../store/DesignerCache';
-import { FlowEdges } from '../lib/FlowEdges';
-import { FlowRendererContext } from '../../store/FlowRendererContext';
+import { GraphNode } from '../models/GraphNode';
+import { sequentialLayouter } from '../layouters/sequentialLayouter';
+import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
+import { transformStepGroup } from '../transformers/transformStepGroup';
+import { NodeProps, defaultNodeProps } from '../components/nodes/nodeProps';
+import { OffsetContainer } from '../components/lib/OffsetContainer';
+import { StepRenderer } from '../components/renderers/StepRenderer';
+import { GraphLayout } from '../models/GraphLayout';
+import { SVGContainer } from '../components/lib/SVGContainer';
+import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
+import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
+import { FlowRendererContext } from '../store/FlowRendererContext';
 
 const StepInterval = ElementInterval.y;
 

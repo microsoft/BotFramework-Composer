@@ -12,13 +12,14 @@ import { GraphNode } from '../models/GraphNode';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { LoopIndicator } from '../components/decorations/LoopIndicator';
-import { StepGroup } from '../components/groups';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
 import { FlowRendererContext } from '../store/FlowRendererContext';
+
+import { StepGroup } from './StepGroup';
 
 enum ForeachNodes {
   Foreach = 'foreachNode',
