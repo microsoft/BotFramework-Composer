@@ -49,11 +49,11 @@ export function isDiagnosticWithInRange(diagnostic: Diagnostic, range: CodeRange
 
 export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
   if (!range) return [];
-  const filteredDiags = diagnostics.filter(d => {
+  const filteredDiags = diagnostics.filter((d) => {
     return d.range && isDiagnosticWithInRange(d, range);
   });
   const offset = range.startLineNumber;
-  return filteredDiags.map(d => {
+  return filteredDiags.map((d) => {
     const { range } = d;
     if (range) {
       return {
@@ -68,11 +68,11 @@ export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: 
 export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuIntentSection): Diagnostic[] {
   const { range } = section;
   if (!range) return diagnostics;
-  const filteredDiags = diagnostics.filter(d => {
+  const filteredDiags = diagnostics.filter((d) => {
     return isDiagnosticWithInRange(d, range);
   });
   const offset = range.startLineNumber;
-  return filteredDiags.map(d => {
+  return filteredDiags.map((d) => {
     const { range } = d;
     if (range) {
       return { ...d, range: offsetRange(range, offset) };
@@ -82,13 +82,13 @@ export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuI
 }
 
 export function findErrors(diagnostics: Diagnostic[]): Diagnostic[] {
-  return diagnostics.filter(d => d.severity === DiagnosticSeverity.Error);
+  return diagnostics.filter((d) => d.severity === DiagnosticSeverity.Error);
 }
 
 export function findWarnings(diagnostics: Diagnostic[]): Diagnostic[] {
-  return diagnostics.filter(d => d.severity === DiagnosticSeverity.Warning);
+  return diagnostics.filter((d) => d.severity === DiagnosticSeverity.Warning);
 }
 
 export function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
+  return diagnostics.every((d) => d.severity !== DiagnosticSeverity.Error);
 }

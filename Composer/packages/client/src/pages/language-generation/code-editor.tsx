@@ -23,7 +23,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = props => {
+const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const { actions, state, resolvers } = useContext(StoreContext);
   const { lgFiles, locale, projectId, userSettings } = state;
   const { lgImportresolver } = resolvers;
@@ -108,7 +108,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   );
 
   const _onChange = useCallback(
-    value => {
+    (value) => {
       setContent(value);
       if (!file) return;
       const { id } = file;
@@ -148,17 +148,17 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LgEditor
-      hidePlaceholder={inlineMode}
-      editorDidMount={editorDidMount}
-      value={content}
-      errorMessage={errorMsg}
       diagnostics={currentDiagnostics}
-      lgOption={lgOption}
+      editorDidMount={editorDidMount}
+      editorSettings={userSettings.codeEditor}
+      errorMessage={errorMsg}
+      hidePlaceholder={inlineMode}
       languageServer={{
         path: lspServerPath,
       }}
+      lgOption={lgOption}
+      value={content}
       onChange={_onChange}
-      editorSettings={userSettings.codeEditor}
       onChangeSettings={handleSettingsChange}
     />
   );

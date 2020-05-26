@@ -51,7 +51,7 @@ export class LuPublisher {
     verbose: true,
   };
 
-  private builder = new luBuild.Builder(message => {
+  private builder = new luBuild.Builder((message) => {
     log(message);
   });
 
@@ -100,7 +100,7 @@ export class LuPublisher {
 
   private async _crossTrain(files: FileInfo[]) {
     if (!this._needCrossTrain()) return;
-    const luContents = files.map(file => {
+    const luContents = files.map((file) => {
       return { content: file.content, id: file.name };
     });
 
@@ -127,7 +127,7 @@ export class LuPublisher {
 
   private async _downSizeUtterances(luContents: any) {
     return await Promise.all(
-      luContents.map(async luContent => {
+      luContents.map(async (luContent) => {
         const result = await LuisBuilder.fromLUAsync(luContent.content);
         const sampledResult = this._doDownSampling(result);
         const content = luisToLuContent(sampledResult);
@@ -203,11 +203,11 @@ export class LuPublisher {
     let paths: string[] = [];
     if (this._needCrossTrain()) {
       paths = await this.storage.glob('**/*.lu', this.interuptionFolderPath);
-      luConfig.models = paths.map(filePath => Path.join(this.interuptionFolderPath, filePath));
+      luConfig.models = paths.map((filePath) => Path.join(this.interuptionFolderPath, filePath));
     }
 
     //add the lu file that are not in interuption folder.
-    files.forEach(file => {
+    files.forEach((file) => {
       if (!~paths.indexOf(file.name)) {
         luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
       }

@@ -31,7 +31,7 @@ describe('<RuleCard />', () => {
       beforeEach(() => {
         data = {};
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
@@ -59,7 +59,7 @@ describe('<RuleCard />', () => {
           ],
         };
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
@@ -99,7 +99,7 @@ describe('<RuleCard />', () => {
       beforeEach(() => {
         data = {};
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
@@ -134,7 +134,7 @@ describe('<RuleCard />', () => {
           ],
         };
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 

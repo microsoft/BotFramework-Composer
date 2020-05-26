@@ -13,7 +13,7 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: data => `Bot Asks (${getInputType(data.$kind)})`,
+      title: (data) => `Bot Asks (${getInputType(data.$kind)})`,
       icon: 'MessageBot',
       colors: {
         theme: Colors.BlueMagenta20,
@@ -30,7 +30,7 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: data => `User Input (${getInputType(data.$kind)})`,
+      title: (data) => `User Input (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: 'User',
       menu: 'none',
@@ -44,18 +44,18 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
   },
 });
 
-const PropertyInfo = data =>
+const PropertyInfo = (data) =>
   data.property ? (
     <>
       {data.property} <FixedInfo>= Input({getInputType(data.$kind)})</FixedInfo>
     </>
   ) : null;
 
-const ChoiceInputBody = data =>
+const ChoiceInputBody = (data) =>
   Array.isArray(data.choices) && data.choices.length ? (
     <ListOverview
       items={data.choices}
-      renderItem={item => {
+      renderItem={(item) => {
         const value = typeof item === 'object' ? item.value : item;
         return (
           <BorderedDiv height={20} title={value}>

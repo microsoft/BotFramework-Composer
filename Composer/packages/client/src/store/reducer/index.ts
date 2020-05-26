@@ -27,10 +27,9 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
 import { isElectron } from '../../utils/electronUtil';
+import { initialState } from '..';
 
 import createReducer from './createReducer';
-
-import { initialState } from '..';
 
 const projectFiles = ['bot', 'botproj'];
 
@@ -66,7 +65,7 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
 
 const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
   const status = luFileStatusStorage.get(botName);
-  return luFiles.map(luFile => {
+  return luFiles.map((luFile) => {
     if (typeof status[luFile.id] === 'boolean') {
       return { ...luFile, published: status[luFile.id] };
     } else {
@@ -78,7 +77,7 @@ const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
 const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
   luFileStatusStorage.checkFileStatus(
     botName,
-    getReferredFiles(luFiles, dialogs).map(file => file.id)
+    getReferredFiles(luFiles, dialogs).map((file) => file.id)
   );
   return updateLuFilesStatus(botName, luFiles);
 };
@@ -107,7 +106,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   return state;
 };
 
-const resetProjectState: ReducerFunc = state => {
+const resetProjectState: ReducerFunc = (state) => {
   state.projectId = initialState.projectId;
   state.dialogs = initialState.dialogs;
   state.botEnvironment = initialState.botEnvironment;
@@ -124,7 +123,7 @@ const resetProjectState: ReducerFunc = state => {
   return state;
 };
 
-const getProjectPending: ReducerFunc = state => {
+const getProjectPending: ReducerFunc = (state) => {
   state.botOpening = true;
   return resetProjectState(state, undefined);
 };
@@ -142,7 +141,7 @@ const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
 
 const removeRecentProject: ReducerFunc = (state, { path }) => {
   const recentProjects = state.recentProjects;
-  const index = recentProjects.findIndex(p => p.path == path);
+  const index = recentProjects.findIndex((p) => p.path == path);
   recentProjects.splice(index, 1);
   state.recentProjects = recentProjects;
   return state;
@@ -151,7 +150,7 @@ const removeRecentProject: ReducerFunc = (state, { path }) => {
 const createLgFile: ReducerFunc = (state, { id, content }) => {
   const { lgFiles, locale } = state;
   id = `${id}.${locale}`;
-  if (lgFiles.find(lg => lg.id === id)) {
+  if (lgFiles.find((lg) => lg.id === id)) {
     state.error = {
       message: `${id} ${formatMessage(`lg file already exist`)}`,
       summary: formatMessage('Creation Rejected'),
@@ -175,12 +174,12 @@ const createLgFile: ReducerFunc = (state, { id, content }) => {
 };
 
 const removeLgFile: ReducerFunc = (state, { id }) => {
-  state.lgFiles = state.lgFiles.filter(file => getBaseName(file.id) !== id && file.id !== id);
+  state.lgFiles = state.lgFiles.filter((file) => getBaseName(file.id) !== id && file.id !== id);
   return state;
 };
 
 const updateLgTemplate: ReducerFunc = (state, lgFile: LgFile) => {
-  state.lgFiles = state.lgFiles.map(file => {
+  state.lgFiles = state.lgFiles.map((file) => {
     if (file.id === lgFile.id) {
       return lgFile;
     }
@@ -192,7 +191,7 @@ const updateLgTemplate: ReducerFunc = (state, lgFile: LgFile) => {
 const createLuFile: ReducerFunc = (state, { id, content }) => {
   const { luFiles, locale } = state;
   id = `${id}.${locale}`;
-  if (luFiles.find(lu => lu.id === id)) {
+  if (luFiles.find((lu) => lu.id === id)) {
     state.error = {
       message: `${id} ${formatMessage(`lu file already exist`)}`,
       summary: formatMessage('Creation Rejected'),
@@ -220,7 +219,7 @@ const removeLuFile: ReducerFunc = (state, { id }) => {
 };
 
 const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
-  const index = state.luFiles.findIndex(file => file.id === luFile.id);
+  const index = state.luFiles.findIndex((file) => file.id === luFile.id);
   state.luFiles[index] = luFile;
 
   luFileStatusStorage.updateFileStatus(state.botName, luFile.id);
@@ -228,7 +227,7 @@ const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
 };
 
 const updateDialog: ReducerFunc = (state, { id, content }) => {
-  state.dialogs = state.dialogs.map(dialog => {
+  state.dialogs = state.dialogs.map((dialog) => {
     if (dialog.id === id) {
       return { ...dialog, ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content) };
     }
@@ -238,7 +237,7 @@ const updateDialog: ReducerFunc = (state, { id, content }) => {
 };
 
 const removeDialog: ReducerFunc = (state, { id }) => {
-  state.dialogs = state.dialogs.filter(dialog => dialog.id !== id);
+  state.dialogs = state.dialogs.filter((dialog) => dialog.id !== id);
   //remove dialog should remove all locales lu and lg files
   state = removeLgFile(state, { id });
   state = removeLuFile(state, { id });
@@ -252,7 +251,7 @@ const createDialogBegin: ReducerFunc = (state, { actionsSeed, onComplete }) => {
   return state;
 };
 
-const createDialogCancel: ReducerFunc = state => {
+const createDialogCancel: ReducerFunc = (state) => {
   state.showCreateDialogModal = false;
   delete state.onCreateDialogComplete;
   return state;
@@ -274,7 +273,7 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const publishLuisSuccess: ReducerFunc = state => {
+const publishLuisSuccess: ReducerFunc = (state) => {
   state.botStatus = BotStatus.published;
   return state;
 };
@@ -398,7 +397,7 @@ const addSkillDialogBegin: ReducerFunc = (state, { onComplete }) => {
   return state;
 };
 
-const addSkillDialogCancel: ReducerFunc = state => {
+const addSkillDialogCancel: ReducerFunc = (state) => {
   state.showAddSkillDialogModal = false;
   delete state.onAddSkillDialogComplete;
   return state;
@@ -410,12 +409,12 @@ const createSkillManifest: ReducerFunc = (state, { content = {}, id }) => {
 };
 
 const updateSkillManifest: ReducerFunc = (state, payload) => {
-  state.skillManifests = state.skillManifests.map(manifest => (manifest.id === payload.id ? payload : manifest));
+  state.skillManifests = state.skillManifests.map((manifest) => (manifest.id === payload.id ? payload : manifest));
   return state;
 };
 
 const removeSkillManifest: ReducerFunc = (state, { id }) => {
-  state.skillManifests = state.skillManifests.filter(manifest => manifest.name === id);
+  state.skillManifests = state.skillManifests.filter((manifest) => manifest.name === id);
   return state;
 };
 
@@ -424,7 +423,7 @@ const displaySkillManifestModal: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const dismissSkillManifestModal: ReducerFunc = state => {
+const dismissSkillManifestModal: ReducerFunc = (state) => {
   delete state.displaySkillManifest;
   return state;
 };
@@ -501,7 +500,7 @@ const publishSuccess: ReducerFunc = (state, payload) => {
   return state;
 };
 
-const publishFailure: (title: string) => ReducerFunc = title => (state, { error, target }) => {
+const publishFailure: (title: string) => ReducerFunc = (title) => (state, { error, target }) => {
   if (target.name === 'default') {
     state.botStatus = BotStatus.failed;
 
@@ -635,7 +634,7 @@ const setAppUpdateStatus: ReducerFunc<{ status: AppUpdaterStatus; version?: stri
   return state;
 };
 
-const noOp: ReducerFunc = state => {
+const noOp: ReducerFunc = (state) => {
   return state;
 };
 

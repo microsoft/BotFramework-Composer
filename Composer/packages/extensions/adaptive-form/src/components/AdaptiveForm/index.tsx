@@ -44,8 +44,8 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
           formData={formData}
           id={formData.$designer?.id || 'unknown'}
           schema={schema}
-          onChange={$designer => onChange({ ...formData, $designer })}
           uiOptions={uiOptions}
+          onChange={($designer) => onChange({ ...formData, $designer })}
         />
         <SchemaField
           definitions={schema?.definitions}

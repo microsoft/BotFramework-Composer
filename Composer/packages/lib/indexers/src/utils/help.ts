@@ -20,7 +20,7 @@ export function splitNewlineText(text: string): string[] {
 export function buildNewlineText(lineArray: string[]): string {
   if (lineArray.length < 2) return lineArray.join('');
   const lastLine = lineArray.pop();
-  const linesWithRN = lineArray.map(line => {
+  const linesWithRN = lineArray.map((line) => {
     if (line.endsWith('\r\n')) {
       return line;
     } else if (line.endsWith('\r')) {

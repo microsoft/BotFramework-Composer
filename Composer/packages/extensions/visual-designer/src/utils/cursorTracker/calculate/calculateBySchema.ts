@@ -46,25 +46,27 @@ export function filterPromptElementsBySchema(
     case Direction.Up:
       if (currentElement.tab === PromptTab.OTHER || currentElement.tab === PromptTab.USER_INPUT) {
         candidateElements = elements.filter(
-          ele => ele.selectedId === `${currentElement.focusedId}${PromptTab.BOT_ASKS}`
+          (ele) => ele.selectedId === `${currentElement.focusedId}${PromptTab.BOT_ASKS}`
         );
       }
       break;
     case Direction.Down:
       if (currentElement.tab === PromptTab.USER_INPUT) {
-        candidateElements = elements.filter(ele => ele.tab !== PromptTab.OTHER);
+        candidateElements = elements.filter((ele) => ele.tab !== PromptTab.OTHER);
       }
       break;
     case Direction.Left:
       if (currentElement.tab === PromptTab.OTHER) {
-        candidateElements = elements.filter(ele => ele.tab === PromptTab.USER_INPUT);
+        candidateElements = elements.filter((ele) => ele.tab === PromptTab.USER_INPUT);
       }
       break;
     case Direction.Right:
       if (!currentElement.tab) {
-        candidateElements = elements.filter(ele => ele.tab !== PromptTab.OTHER);
+        candidateElements = elements.filter((ele) => ele.tab !== PromptTab.OTHER);
       } else if (currentElement.tab === PromptTab.BOT_ASKS || currentElement.tab === PromptTab.USER_INPUT) {
-        candidateElements = elements.filter(ele => ele.selectedId === `${currentElement.focusedId}${PromptTab.OTHER}`);
+        candidateElements = elements.filter(
+          (ele) => ele.selectedId === `${currentElement.focusedId}${PromptTab.OTHER}`
+        );
       }
       break;
     default:
@@ -75,7 +77,7 @@ export function filterPromptElementsBySchema(
 
 function handleNextMoveFilter(currentElement: SelectorElement, elements: SelectorElement[]): SelectorElement[] {
   const currentElementSelectors = parseSelector(transformDefaultBranch(currentElement.selectedId)) as string[];
-  return elements.filter(ele => {
+  return elements.filter((ele) => {
     const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
     const condition1 =
       eleSelectors.length === currentElementSelectors.length &&
@@ -96,7 +98,7 @@ function handleNextMoveFilter(currentElement: SelectorElement, elements: Selecto
 
 function handlePrevMoveFilter(currentElement: SelectorElement, elements: SelectorElement[]): SelectorElement[] {
   const currentElementSelectors = parseSelector(transformDefaultBranch(currentElement.selectedId)) as string[];
-  return elements.filter(ele => {
+  return elements.filter((ele) => {
     const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
     const condition1 =
       eleSelectors.length === currentElementSelectors.length &&
@@ -126,7 +128,7 @@ function handleSwitchCasePrevMoveFilter(
   swicthPosition = currentElementSelectors.lastIndexOf('cases');
   const samePath = currentElementSelectors.slice(0, swicthPosition).join('.');
   const sortedElement = elements
-    .filter(ele => {
+    .filter((ele) => {
       const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
       return (
         eleSelectors.slice(0, swicthPosition).join('.') === samePath &&
@@ -140,7 +142,7 @@ function handleSwitchCasePrevMoveFilter(
     });
   const minSwitchCasesElement = parseSelector(transformDefaultBranch(sortedElement[0].selectedId)) as string[];
   const minSwitchCasesIndex = Number(minSwitchCasesElement[swicthPosition + 1]);
-  candidateElements = elements.filter(ele => {
+  candidateElements = elements.filter((ele) => {
     const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
     return Number(eleSelectors[swicthPosition + 1]) === minSwitchCasesIndex;
   });
@@ -158,7 +160,7 @@ function handleSwitchCaseNextMoveFilter(currentElement: SelectorElement, element
   }
   const samePath = currentElementSelectors.slice(0, swicthPosition).join('.');
   const sortedElement = elements
-    .filter(ele => {
+    .filter((ele) => {
       const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
       return (
         eleSelectors.slice(0, swicthPosition).join('.') === samePath &&
@@ -172,7 +174,7 @@ function handleSwitchCaseNextMoveFilter(currentElement: SelectorElement, element
     });
   const minSwitchCasesElement = parseSelector(transformDefaultBranch(sortedElement[0].selectedId)) as string[];
   const minSwitchCasesIndex = Number(minSwitchCasesElement[swicthPosition + 1]);
-  candidateElements = elements.filter(ele => {
+  candidateElements = elements.filter((ele) => {
     const eleSelectors = parseSelector(transformDefaultBranch(ele.selectedId)) as string[];
     return Number(eleSelectors[swicthPosition + 1]) === minSwitchCasesIndex;
   });

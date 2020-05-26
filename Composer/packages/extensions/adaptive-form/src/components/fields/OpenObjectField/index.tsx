@@ -16,7 +16,7 @@ import { ObjectItem } from './ObjectItem';
 
 const OpenObjectField: React.FC<FieldProps<{
   [key: string]: any;
-}>> = props => {
+}>> = (props) => {
   const {
     value = {},
     schema: { additionalProperties },
@@ -32,7 +32,7 @@ const OpenObjectField: React.FC<FieldProps<{
   const [newValue, setNewValue] = useState<string>('');
   const fieldRef = useRef<ITextField>(null);
 
-  const handleKeyDown = event => {
+  const handleKeyDown = (event) => {
     if (event.key.toLowerCase() === 'enter') {
       event.preventDefault();
 
@@ -69,7 +69,7 @@ const OpenObjectField: React.FC<FieldProps<{
 
   return (
     <div className="OpenObjectField">
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <div css={styles.labelContainer}>
         <div css={styles.label}>
           <FieldLabel required id={`${id}.key`} label={keyLabel} />
@@ -84,11 +84,11 @@ const OpenObjectField: React.FC<FieldProps<{
           <ObjectItem
             key={index}
             formData={value}
+            name={name}
+            value={value}
             onDelete={handleDropPropertyClick(name)}
             onNameChange={handleNameChange(name)}
             onValueChange={handleValueChange(name)}
-            name={name}
-            value={value}
           />
         );
       })}
@@ -98,6 +98,7 @@ const OpenObjectField: React.FC<FieldProps<{
             <TextField
               ariaLabel={keyLabel}
               autoComplete="off"
+              componentRef={fieldRef}
               placeholder={formatMessage('Add a new key')}
               styles={{
                 root: { margin: '7px 0 7px 0' },
@@ -105,7 +106,6 @@ const OpenObjectField: React.FC<FieldProps<{
               value={name}
               onChange={(_, newValue) => setName(newValue || '')}
               onKeyDown={handleKeyDown}
-              componentRef={fieldRef}
             />
           </div>
           <div css={styles.item}>
@@ -126,8 +126,8 @@ const OpenObjectField: React.FC<FieldProps<{
             />
           </div>
           <IconButton
+            disabled
             ariaLabel={formatMessage('Edit Property')}
-            disabled={true}
             menuIconProps={{ iconName: 'MoreVertical' }}
             styles={{
               menuIcon: { fontSize: FontSizes.size16 },

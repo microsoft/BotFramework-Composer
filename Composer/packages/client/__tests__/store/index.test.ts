@@ -15,14 +15,14 @@ describe('applyMiddleware', () => {
     const mockFunction1 = jest.fn();
     const mockFunction2 = jest.fn();
 
-    const middleWare1 = (store: Store) => next => {
+    const middleWare1 = (store: Store) => (next) => {
       return () => {
         mockFunction1();
         return next();
       };
     };
 
-    const middleWare2 = (store: Store) => next => {
+    const middleWare2 = (store: Store) => (next) => {
       return () => {
         mockFunction2();
         return next();

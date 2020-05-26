@@ -12,19 +12,19 @@ interface ErrorMessageProps {
   helpLink?: string;
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = props => {
+const ErrorMessage: React.FC<ErrorMessageProps> = (props) => {
   const { error, label, helpLink } = props;
 
   return (
     <MessageBar
-      dismissButtonAriaLabel={formatMessage('Close')}
-      isMultiline={true}
-      messageBarType={MessageBarType.error}
+      isMultiline
       data-testid="FieldErrorMessage"
+      dismissButtonAriaLabel={formatMessage('Close')}
+      messageBarType={MessageBarType.error}
     >
       {[label, error].filter(Boolean).join(' ')}
       {helpLink && (
-        <Link key="a" href={helpLink} target="_blank" rel="noopener noreferrer">
+        <Link key="a" href={helpLink} rel="noopener noreferrer" target="_blank">
           {formatMessage('Refer to the syntax documentation here.')}
         </Link>
       )}

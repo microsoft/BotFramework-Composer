@@ -18,7 +18,7 @@ function getRegexIntentPattern(currentDialog: DialogInfo, intent: string): strin
   }
 
   if (recognizer.intents) {
-    pattern = recognizer.intents.find(i => i.intent === intent)?.pattern || '';
+    pattern = recognizer.intents.find((i) => i.intent === intent)?.pattern || '';
   }
 
   return pattern;

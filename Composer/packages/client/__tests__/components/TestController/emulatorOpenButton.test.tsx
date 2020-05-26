@@ -13,9 +13,9 @@ describe('<EmulatorOpenButton />', () => {
     const { container, getByText } = render(
       <EmulatorOpenButton
         botEndpoint={'http://localhost:3979/api/messages'}
-        onClick={onClick}
         botStatus={BotStatus.connected}
         hidden={false}
+        onClick={onClick}
       />
     );
 
@@ -30,10 +30,10 @@ describe('<EmulatorOpenButton />', () => {
     const onClick = jest.fn(() => {});
     const { container } = render(
       <EmulatorOpenButton
+        hidden
         botEndpoint={'http://localhost:3979/api/messages'}
-        onClick={onClick}
         botStatus={BotStatus.connected}
-        hidden={true}
+        onClick={onClick}
       />
     );
 
@@ -45,9 +45,9 @@ describe('<EmulatorOpenButton />', () => {
     const { container } = render(
       <EmulatorOpenButton
         botEndpoint={'http://localhost:3979/api/messages'}
-        onClick={onClick}
         botStatus={BotStatus.publishing}
         hidden={false}
+        onClick={onClick}
       />
     );
 

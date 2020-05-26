@@ -8,7 +8,7 @@ import { Link as FluentLink, ILinkProps } from 'office-ui-fabric-react/lib/Link'
 
 import { focusBorder } from './sharedStyles';
 
-const Link: React.FC<ILinkProps> = props => {
+const Link: React.FC<ILinkProps> = (props) => {
   return (
     <FluentLink css={focusBorder} {...props}>
       {props.children}

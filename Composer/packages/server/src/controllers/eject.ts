@@ -15,7 +15,7 @@ export const EjectController = {
     const projectId = req.params.projectId;
     const currentProject = await BotProjectService.getProjectById(projectId, user);
 
-    const template = pluginLoader.extensions.runtimeTemplates.find(i => i.key === req.params.template);
+    const template = pluginLoader.extensions.runtimeTemplates.find((i) => i.key === req.params.template);
     if (template) {
       let runtimePath;
       try {
