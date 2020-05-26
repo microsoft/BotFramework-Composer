@@ -10,8 +10,7 @@ import { NodeProps, defaultNodeProps } from '../nodes/nodeProps';
 import { renderUIWidget } from '../../schema/flowSchemaRenderer';
 import { FlowSchemaContext } from '../../store/FlowSchemaContext';
 import { FlowRendererContext } from '../../store/FlowRendererContext';
-
-import { ElementMeasurer } from './ElementMeasurer';
+import { ElementMeasurer } from '../lib/ElementMeasurer';
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const { widgets, schemaProvider } = useContext(FlowSchemaContext);

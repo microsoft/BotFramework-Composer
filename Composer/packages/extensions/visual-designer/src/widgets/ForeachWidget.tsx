@@ -12,7 +12,7 @@ import { GraphNode } from '../models/GraphNode';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { LoopIndicator } from '../components/decorations/LoopIndicator';
-import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
+import { ElementMeasurer } from '../components/lib/ElementMeasurer';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
