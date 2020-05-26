@@ -42,7 +42,7 @@ const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
   return sequentialLayouter(nodes);
 };
 
-export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
+export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
   const { EdgeMenu } = useContext(FlowRendererContext);
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(initialNodes, calculateLayout, onResize);
@@ -93,4 +93,4 @@ export const StepGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onR
     </div>
   );
 };
-StepGroup.defaultProps = defaultNodeProps;
+ActionGroup.defaultProps = defaultNodeProps;

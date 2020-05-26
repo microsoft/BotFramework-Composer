@@ -15,7 +15,7 @@ import { SVGContainer } from '../components/lib/SVGContainer';
 import { drawSVGEdge } from '../components/lib/EdgeUtil';
 import { ObiColors } from '../constants/ElementColors';
 import { FlowRendererContext } from '../store/FlowRendererContext';
-import { StepGroup } from '../widgets';
+import { ActionGroup } from '../widgets';
 
 const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);
@@ -32,7 +32,7 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
   const content = hasNoSteps ? (
     <EdgeMenu arrayId={id} arrayData={data} arrayPosition={0} onEvent={onEvent} />
   ) : (
-    <StepGroup
+    <ActionGroup
       id={id}
       data={data}
       onEvent={onEvent}

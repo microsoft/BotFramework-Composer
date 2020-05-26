@@ -8,4 +8,4 @@ export { IfConditionWidget } from './IfConditionWidget';
 export { SwitchConditionWidget } from './SwitchConditionWidget';
 export { ForeachWidget } from './ForeachWidget';
 export { ActionHeader } from './ActionHeader';
-export { StepGroup } from './StepGroup';
+export { ActionGroup } from './ActionGroup';

@@ -19,7 +19,7 @@ import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
 import { FlowRendererContext } from '../store/FlowRendererContext';
 
-import { StepGroup } from './StepGroup';
+import { ActionGroup } from './ActionGroup';
 
 enum SwitchNodes {
   Switch = 'switchNode',
@@ -108,7 +108,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
       </OffsetContainer>
       {(casesNodes as any).map((x, index) => (
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
-          <StepGroup
+          <ActionGroup
             key={x.id}
             id={x.id}
             data={x.data}

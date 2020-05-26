@@ -19,7 +19,7 @@ import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
 import { FlowRendererContext } from '../store/FlowRendererContext';
 
-import { StepGroup } from './StepGroup';
+import { ActionGroup } from './ActionGroup';
 
 enum IfElseNodes {
   Condition = 'conditionNode',
@@ -98,7 +98,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
         const node = nodeMap[nodeName];
         return (
           <OffsetContainer key={`${node.id}/offset`} offset={node.offset}>
-            <StepGroup
+            <ActionGroup
               key={node.id}
               id={node.id}
               data={node.data}

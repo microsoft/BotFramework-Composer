@@ -19,7 +19,7 @@ import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
 import { FlowRendererContext } from '../store/FlowRendererContext';
 
-import { StepGroup } from './StepGroup';
+import { ActionGroup } from './ActionGroup';
 
 enum ForeachNodes {
   Foreach = 'foreachNode',
@@ -85,7 +85,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
         </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={loopActionsNode.offset}>
-        <StepGroup
+        <ActionGroup
           key={loopActionsNode.id}
           id={loopActionsNode.id}
           data={loopActionsNode.data}
