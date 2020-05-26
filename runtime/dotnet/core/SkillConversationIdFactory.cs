@@ -34,7 +34,7 @@ namespace Microsoft.BotFramework.Composer.Core
 
             // Create the storage key based on the SkillConversationIdFactoryOptions.
             var conversationReference = options.Activity.GetConversationReference();
-            var skillConversationId = $"{conversationReference.Conversation.Id}-{options.BotFrameworkSkill.Id}-{conversationReference.ChannelId}-skillconvo";
+            var skillConversationId = $"{options.FromBotId}-{options.BotFrameworkSkill.AppId}-{conversationReference.Conversation.Id}-{conversationReference.ChannelId}-skillconvo";
 
             // Create the SkillConversationReference instance.
             var skillConversationReference = new SkillConversationReference
