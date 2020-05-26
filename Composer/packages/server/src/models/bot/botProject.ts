@@ -150,7 +150,7 @@ export class BotProject {
     try {
       this.fileStorage.zip(this.dataDir, cb);
     } catch (e) {
-      console.log('error zipping assets', e);
+      debug('error zipping assets', e);
     }
   };
 
@@ -187,10 +187,28 @@ export class BotProject {
         url: schemaUrl,
         responseType: 'stream',
       });
-      const pathToSchema = `${pathToSave}/Schemas`;
-      await mkDirAsync(pathToSchema);
-      response.data.pipe(fs.createWriteStream(`${pathToSchema}/sdk.schema`));
+      const dirToSchema = `${pathToSave}/schemas`;
+      await mkDirAsync(dirToSchema);
+      const writer = fs.createWriteStream(`${dirToSchema}/sdk.schema`);
+      const err = await new Promise((resolve, reject) => {
+        response.data.pipe(writer);
+        let error;
+        writer.on('error', (err) => {
+          error = err;
+          writer.close();
+          reject(err);
+        });
+        writer.on('close', () => {
+          if (!error) {
+            resolve();
+          }
+        });
+      });
+      if (err) {
+        throw err;
+      }
     } catch (ex) {
+      debug(`Custom Schema download error: ${ex}`);
       throw new Error('Schema file could not be downloaded. Please check the url to the schema.');
     }
   }

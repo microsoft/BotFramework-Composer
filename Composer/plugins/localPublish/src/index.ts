@@ -20,7 +20,7 @@ const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
-const rmDir = promisify(rimraf);
+const removeDirAndFiles = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
 
 interface RunningBot {
@@ -124,7 +124,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       return { msg: `runtime path ${targetDir} does not exist` };
     }
     try {
-      await rmDir(targetDir);
+      await removeDirAndFiles(targetDir);
       return { msg: `successfully removed runtime data in ${targetDir}` };
     } catch (e) {
       throw new Error(`Failed to remove ${targetDir}`);
@@ -189,7 +189,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         execSync('dotnet build', { cwd: runtimeDir, stdio: 'inherit' });
       } catch (error) {
         // delete the folder to make sure build again.
-        rmDir(botDir);
+        removeDirAndFiles(botDir);
         throw new Error(error.toString());
       }
     }
@@ -206,7 +206,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const manifestDstDir = this.getManifestDstDir(dstPath);
 
     if (await this.dirExist(manifestDstDir)) {
-      await rmDir(manifestDstDir);
+      await removeDirAndFiles(manifestDstDir);
     }
 
     if (await this.dirExist(manifestSrcDir)) {
@@ -430,25 +430,31 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
-    eject: async (project: any, localDisk: IFileStorage) => {
+    eject: async (project, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
-      const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
-      const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
-        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
+        const schemaDstPath = path.join(project.dir, 'schemas');
+        const schemaSrcPath = path.join(sourcePath, 'azurewebapp/schemas');
+        const customSchemaExists = fs.existsSync(schemaDstPath);
+        const excludeItems = [];
+        if (customSchemaExists) {
+          excludeItems.push('sdk.schema');
+        }
+        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, excludeItems);
+        const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/schemas');
+        await removeDirAndFiles(schemaFolderInRuntime);
         return destPath;
-      } else {
-        throw new Error(`Runtime already exists at ${destPath}`);
       }
+      throw new Error(`Runtime already exists at ${destPath}`);
     },
   });
 };
 
 // stop all the runningBot when process exit
-const cleanup = (signal: NodeJS.Signals) => {
+const cleanup = () => {
   LocalPublisher.stopAll();
   process.exit(0);
 };
