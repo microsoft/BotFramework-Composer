@@ -12,8 +12,7 @@ import { MenuTypes } from '../../constants/MenuTypes';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { SelectionContext } from '../../store/SelectionContext';
 import { ElementColor } from '../../constants/ElementColors';
-
-import { IconMenu } from './IconMenu';
+import { IconMenu } from '../lib/IconMenu';
 
 const declareElementAttributes = (id: string) => {
   return {
