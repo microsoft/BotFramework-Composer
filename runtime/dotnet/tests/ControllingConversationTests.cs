@@ -63,7 +63,7 @@ namespace Tests
         {
             await BuildTestFlow()
             .Send(CreateConversationUpdateActivity())
-                .AssertReply(String.Format("Welcome to the Controlling Conversation sample. Choose from the list below to try.{0}You can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.", Environment.NewLine))
+                .AssertReply(String.Format("Welcome to the Controlling Conversation sample. Choose from the list below to try.{0}You can also type \"Cancel\" to cancel any dialog or \"Endturn\" to explicitly accept an input.", "\n"))
             .Send("01")
                 .AssertReply("Hello, What's your age?")
             .Send("18")
