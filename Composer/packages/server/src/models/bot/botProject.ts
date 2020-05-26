@@ -325,7 +325,7 @@ export class BotProject {
 
   public async deleteAllFiles(): Promise<boolean> {
     try {
-      await this.fileStorage.rmDir(this.dir, true);
+      await this.fileStorage.rmrfDir(this.dir);
       const projectId = await BotProjectService.getProjectIdByPath(this.dir);
       if (projectId) {
         await this.removeLocalRuntimeData(projectId);

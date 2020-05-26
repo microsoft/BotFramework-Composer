@@ -229,7 +229,7 @@ class MongoStorage implements IFileStorage {
     });
   }
 
-  async rmDir(path: string, force?: boolean): Promise<void> {
+  async rmDir(path: string): Promise<void> {
     path = cleanPath(path);
 
     return new Promise((resolve, reject) => {
@@ -246,6 +246,8 @@ class MongoStorage implements IFileStorage {
       });
     });
   }
+  //To do
+  async rmrfDir(path: string): Promise<void> { }
 
   async glob(pattern: string, path: string): Promise<string[]> {
     path = cleanPath(path);
