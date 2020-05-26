@@ -11,8 +11,9 @@ export interface FlowRendererContextData {
   NodeWrapper: NodeWrapperComponent;
 }
 
-export const FlowRendererContext = React.createContext<FlowRendererContextData>({
-  EdgeMenu: () => <></>,
-  NodeMenu: () => <></>,
-  NodeWrapper: ({ children }) => <>{children}</>,
-});
+export const DefaultFlowRenderers = {
+  EdgeMenu: (() => <></>) as EdgeMenuComponent,
+  NodeMenu: (() => <></>) as NodeMenuComponent,
+  NodeWrapper: (({ children }) => <>{children}</>) as NodeWrapperComponent,
+};
+export const FlowRendererContext = React.createContext<FlowRendererContextData>(DefaultFlowRenderers);

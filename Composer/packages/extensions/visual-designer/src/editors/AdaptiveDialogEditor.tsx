@@ -8,7 +8,7 @@ import get from 'lodash/get';
 
 import { EditorEventHandler } from '../constants/NodeEventTypes';
 import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
-import { FlowRendererContext } from '../store/FlowRendererContext';
+import { FlowRendererContext, DefaultFlowRenderers } from '../store/FlowRendererContext';
 
 import { RuleEditor } from './RuleEditor';
 
@@ -48,7 +48,17 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
     <RuleEditor key={`${dialogId}/${activeTrigger}`} id={activeTrigger} data={activeTriggerData} onEvent={onEvent} />
   ) : null;
 
-  return <FlowRendererContext.Provider value={{ EdgeMenu, NodeMenu }}>{content}</FlowRendererContext.Provider>;
+  return (
+    <FlowRendererContext.Provider
+      value={{
+        EdgeMenu: EdgeMenu || DefaultFlowRenderers.EdgeMenu,
+        NodeMenu: NodeMenu || DefaultFlowRenderers.NodeMenu,
+        NodeWrapper: DefaultFlowRenderers.NodeWrapper,
+      }}
+    >
+      {content}
+    </FlowRendererContext.Provider>
+  );
 };
 
 AdaptiveDialogEditor.defaultProps = {
