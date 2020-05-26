@@ -25,7 +25,7 @@ import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
 import { NodeEventTypes } from './constants/NodeEventTypes';
 import { AdaptiveDialogEditor } from './editors/AdaptiveDialogEditor';
-import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './renderers';
+import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './components/renderers';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
