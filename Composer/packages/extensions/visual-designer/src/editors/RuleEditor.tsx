@@ -6,8 +6,7 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 
-import { Trigger } from '../components/nodes/Trigger';
-import { defaultNodeProps } from '../components/nodes/nodeProps';
+import { Trigger } from '../widgets/Trigger';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { transformObiRules } from '../transformers/transformObiRules';
@@ -70,5 +69,3 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
     </div>
   );
 };
-
-RuleEditor.defaultProps = defaultNodeProps;

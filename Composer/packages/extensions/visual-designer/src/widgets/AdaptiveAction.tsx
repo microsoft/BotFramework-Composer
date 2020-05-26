@@ -6,11 +6,12 @@ import { jsx } from '@emotion/core';
 import { FC, useContext } from 'react';
 import get from 'lodash/get';
 
-import { NodeProps, defaultNodeProps } from '../components/nodes/nodeProps';
 import { renderUIWidget } from '../schema/flowSchemaRenderer';
 import { FlowSchemaContext } from '../store/FlowSchemaContext';
 import { FlowRendererContext } from '../store/FlowRendererContext';
 import { ElementMeasurer } from '../components/lib/ElementMeasurer';
+
+import { NodeProps, defaultNodeProps } from './types/NodeProps.types';
 
 export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
   const { widgets, schemaProvider } = useContext(FlowSchemaContext);

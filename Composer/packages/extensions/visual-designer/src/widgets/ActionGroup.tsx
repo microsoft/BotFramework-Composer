@@ -9,7 +9,6 @@ import { GraphNode } from '../models/GraphNode';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
 import { transformStepGroup } from '../transformers/transformStepGroup';
-import { NodeProps, defaultNodeProps } from '../components/nodes/nodeProps';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { SVGContainer } from '../components/lib/SVGContainer';
@@ -18,6 +17,7 @@ import { designerCache } from '../store/DesignerCache';
 import { FlowEdges } from '../components/lib/FlowEdges';
 import { FlowRendererContext } from '../store/FlowRendererContext';
 
+import { NodeProps, defaultNodeProps } from './types/NodeProps.types';
 import { StepRenderer } from './AdaptiveAction';
 
 const StepInterval = ElementInterval.y;

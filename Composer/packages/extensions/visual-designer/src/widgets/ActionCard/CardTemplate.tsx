@@ -6,9 +6,9 @@ import { jsx, css } from '@emotion/core';
 import { FC, ReactNode } from 'react';
 import { TextDiv } from '@bfc/ui-shared';
 
-import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../../constants/ElementSizes';
-import { ObiColors } from '../../../constants/ElementColors';
-import { ArrowLine } from '../../lib/ArrowLine';
+import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../constants/ElementSizes';
+import { ObiColors } from '../../constants/ElementColors';
+import { ArrowLine } from '../../components/lib/ArrowLine';
 
 const containerCSS = css`
   font-size: 12px;
