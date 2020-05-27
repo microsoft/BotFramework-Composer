@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 
 import { SkillEndpointField } from './SkillEndpointField';
 
-export const BeginSkillDialogField: React.FC<FieldProps> = props => {
+export const BeginSkillDialogField: React.FC<FieldProps> = (props) => {
   const { depth, id, schema, uiOptions, value, onChange, definitions } = props;
   const { projectId, shellApi, skills = [] } = useShellApi();
   const { displayManifestModal } = shellApi;
@@ -24,7 +24,7 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
     }
   };
 
-  const handleEndpointChange = skillEndpoint => {
+  const handleEndpointChange = (skillEndpoint) => {
     const { msAppId } =
       (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === skillEndpoint) || ({} as any);
     onChange({ ...value, skillEndpoint, ...(msAppId ? { skillAppId: msAppId } : {}) });
@@ -36,11 +36,11 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
 
   const skillEndpointUiSchema = uiOptions.properties?.skillEndpoint || {};
   skillEndpointUiSchema.serializer = {
-    get: value => {
+    get: (value) => {
       const endpoint = (manifest?.endpoints || []).find(({ endpointUrl }) => endpointUrl === value);
       return endpoint?.name;
     },
-    set: value => {
+    set: (value) => {
       const endpoint = (manifest?.endpoints || []).find(({ name }) => name === value);
       return endpoint?.endpointUrl;
     },
@@ -49,15 +49,15 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
   return (
     <React.Fragment>
       <SchemaField
+        definitions={definitions}
         depth={depth + 1}
         id={`${id}.id`}
         name="id"
-        schema={(schema?.properties?.id as JSONSchema7) || {}}
         rawErrors={{}}
+        schema={(schema?.properties?.id as JSONSchema7) || {}}
         uiOptions={uiOptions.properties?.id || {}}
         value={value?.id}
         onChange={handleIdChange}
-        definitions={definitions}
       />
       <Link
         disabled={!manifest || !manifest.body || !manifest.name}
@@ -67,16 +67,16 @@ export const BeginSkillDialogField: React.FC<FieldProps> = props => {
         {formatMessage('Show skill manifest')}
       </Link>
       <SkillEndpointField
+        definitions={definitions}
         depth={depth + 1}
+        enumOptions={endpointOptions}
         id={`${id}.skillEndpoint`}
         name="skillEndpoint"
-        schema={(schema?.properties?.skillEndpoint as JSONSchema7) || {}}
-        enumOptions={endpointOptions}
         rawErrors={{}}
+        schema={(schema?.properties?.skillEndpoint as JSONSchema7) || {}}
         uiOptions={skillEndpointUiSchema}
         value={value?.skillEndpoint}
         onChange={handleEndpointChange}
-        definitions={definitions}
       />
       <Link href={`/bot/${projectId}/skills`} styles={{ root: { fontSize: '12px', padding: '0 16px' } }}>
         {formatMessage('Open Skills page for configuration details')}

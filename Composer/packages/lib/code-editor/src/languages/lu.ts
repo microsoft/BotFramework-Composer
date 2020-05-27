@@ -7,7 +7,7 @@ const LANGUAGE_NAME = 'lu';
 
 export function registerLULanguage(monaco: Monaco) {
   // return if we've already registered this language to the editor
-  if (monaco.languages.getLanguages().some(lang => lang.id === LANGUAGE_NAME)) return;
+  if (monaco.languages.getLanguages().some((lang) => lang.id === LANGUAGE_NAME)) return;
 
   monaco.languages.setMonarchTokensProvider(LANGUAGE_NAME, {
     tokenizer: {

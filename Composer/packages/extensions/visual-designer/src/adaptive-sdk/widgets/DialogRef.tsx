@@ -38,7 +38,7 @@ export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, di
   const dialogRef = calleeDialog ? (
     <LinkBtn
       componentRef={linkBtnRef}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.OpenDialog, { caller: id, callee: calleeDialog });
       }}

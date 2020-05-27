@@ -25,22 +25,22 @@ const OTHER_FIELDS: InputDialogKeys[] = [
   'recognizerOptions',
 ];
 
-const PromptField: React.FC<FieldProps> = props => {
+const PromptField: React.FC<FieldProps> = (props) => {
   const { shellApi, focusedSteps, focusedTab } = useShellApi();
 
-  const getSchema: GetSchema = field => {
+  const getSchema: GetSchema = (field) => {
     const fieldSchema = get(props.schema, ['properties', field]);
 
     return fieldSchema;
   };
 
-  const getError = field => {
+  const getError = (field) => {
     if (typeof props.rawErrors === 'object') {
       return props.rawErrors[field];
     }
   };
 
-  const updateField: PromptFieldChangeHandler = field => data => {
+  const updateField: PromptFieldChangeHandler = (field) => (data) => {
     props.onChange({ ...props.value, [field]: data });
   };
 
@@ -53,6 +53,7 @@ const PromptField: React.FC<FieldProps> = props => {
   return (
     <div>
       <Pivot linkSize={PivotLinkSize.large} selectedKey={focusedTab} styles={tabs} onLinkClick={handleTabChange}>
+<<<<<<< HEAD
         <PivotItem headerText={PropmtTabTitles[PromptTab.BOT_ASKS]} itemKey={PromptTab.BOT_ASKS}>
           <BotAsks {...props} getSchema={getSchema} onChange={updateField} getError={getError} />
         </PivotItem>
@@ -61,8 +62,19 @@ const PromptField: React.FC<FieldProps> = props => {
         </PivotItem>
         <PivotItem headerText={PropmtTabTitles[PromptTab.OTHER]} itemKey={PromptTab.OTHER}>
           {OTHER_FIELDS.filter(f => getSchema(f)).map(f => (
+=======
+        <PivotItem headerText={formatMessage('Bot Asks')} itemKey={PromptTab.BOT_ASKS}>
+          <BotAsks {...props} getError={getError} getSchema={getSchema} onChange={updateField} />
+        </PivotItem>
+        <PivotItem headerText={formatMessage('User Input')} itemKey={PromptTab.USER_INPUT}>
+          <UserInput {...props} getError={getError} getSchema={getSchema} onChange={updateField} />
+        </PivotItem>
+        <PivotItem headerText={formatMessage('Other')} itemKey={PromptTab.OTHER}>
+          {OTHER_FIELDS.filter((f) => getSchema(f)).map((f) => (
+>>>>>>> master
             <SchemaField
               key={f}
+              definitions={props.definitions}
               depth={props.depth}
               id={`${props.id}.${f}`}
               name={f}
@@ -71,7 +83,6 @@ const PromptField: React.FC<FieldProps> = props => {
               uiOptions={props.uiOptions.properties?.[f] || {}}
               value={props.value?.[f]}
               onChange={updateField(f)}
-              definitions={props.definitions}
             />
           ))}
         </PivotItem>

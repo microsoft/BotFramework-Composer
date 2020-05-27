@@ -13,7 +13,7 @@ interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | '
   onError?: (error: string) => void;
 }
 
-const JsonEditor: React.FC<JsonEditorProps> = props => {
+const JsonEditor: React.FC<JsonEditorProps> = (props) => {
   const {
     options: additionalOptions,
     value: initialValue,
@@ -37,8 +37,8 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     onError && onError(parseError);
   }, [parseError]);
 
-  const onInit: OnInit = monaco => {
-    const disposable = monaco.editor.onDidCreateModel(model => {
+  const onInit: OnInit = (monaco) => {
+    const disposable = monaco.editor.onDidCreateModel((model) => {
       const diagnosticOptions: any = {
         validate: true,
         enableSchemaRequest: true,
@@ -47,7 +47,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
       if (schema) {
         const uri = btoa(JSON.stringify(schema));
         const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
-        const currentSchema = otherSchemas.find(s => s.uri === uri);
+        const currentSchema = otherSchemas.find((s) => s.uri === uri);
 
         /**
          * Because we mutate the global language settings, we need to
@@ -56,7 +56,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
          * by taking advantage of the `fileMatch` property + the model's uri.
          */
         diagnosticOptions.schemas = [
-          ...otherSchemas.filter(s => s.uri !== uri),
+          ...otherSchemas.filter((s) => s.uri !== uri),
           {
             uri,
             schema,
@@ -78,7 +78,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     }
   };
 
-  const handleChange = value => {
+  const handleChange = (value) => {
     if (value) {
       try {
         const data = JSON.parse(value);
@@ -97,13 +97,13 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
 
   return (
     <BaseEditor
-      id={id}
+      errorMessage={parseError}
       helpURL="https://www.json.org"
+      id={id}
       language="json"
       options={options}
       value={JSON.stringify(json, null, 2)}
       onChange={handleChange}
-      errorMessage={parseError}
       onInit={onInit}
       {...rest}
     />

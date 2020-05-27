@@ -23,33 +23,33 @@ interface CreatePublishTargetProps {
   updateSettings: (name: string, type: string, configuration: string) => Promise<void>;
 }
 
-const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
+const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [targetType, setTargetType] = useState<string | undefined>(props.current?.type);
   const [name, setName] = useState(props.current ? props.current.name : '');
   const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
 
   const targetTypes = useMemo(() => {
-    return props.types.map(t => ({ key: t.name, text: t.description }));
+    return props.types.map((t) => ({ key: t.name, text: t.description }));
   }, [props.targets]);
 
   const updateType = (_e, option?: IDropdownOption) => {
-    const type = props.types.find(t => t.name === option?.key);
+    const type = props.types.find((t) => t.name === option?.key);
 
     if (type) {
       setTargetType(type.name);
     }
   };
 
-  const updateConfig = newConfig => {
+  const updateConfig = (newConfig) => {
     setConfig(newConfig);
   };
 
-  const isNameValid = newName => {
+  const isNameValid = (newName) => {
     if (!newName || newName.trim() === '') {
       setErrorMsg(formatMessage('Must have a name'));
     } else {
-      const exists = !!props.targets?.find(t => t.name.toLowerCase() === newName?.toLowerCase);
+      const exists = !!props.targets?.find((t) => t.name.toLowerCase() === newName?.toLowerCase);
 
       if (exists) {
         setErrorMsg(formatMessage('A profile with that name already exists.'));
@@ -58,11 +58,11 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
   };
 
   const instructions: string | undefined = useMemo((): string | undefined => {
-    return targetType ? props.types.find(t => t.name === targetType)?.instructions : '';
+    return targetType ? props.types.find((t) => t.name === targetType)?.instructions : '';
   }, [props.targets, targetType]);
 
   const schema = useMemo(() => {
-    return targetType ? props.types.find(t => t.name === targetType)?.schema : undefined;
+    return targetType ? props.types.find((t) => t.name === targetType)?.schema : undefined;
   }, [props.targets, targetType]);
 
   const updateName = (e, newName) => {
@@ -90,27 +90,27 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = props => {
     <Fragment>
       <form onSubmit={submit}>
         <TextField
-          placeholder={formatMessage('My Publish Profile')}
           defaultValue={props.current ? props.current.name : ''}
-          label={formatMessage('Name')}
-          onChange={updateName}
           errorMessage={errorMessage}
+          label={formatMessage('Name')}
+          placeholder={formatMessage('My Publish Profile')}
+          onChange={updateName}
         />
         <Dropdown
-          placeholder={formatMessage('Choose One')}
+          defaultSelectedKey={props.current ? props.current.type : null}
           label={formatMessage('Publish Destination Type')}
           options={targetTypes}
-          defaultSelectedKey={props.current ? props.current.type : null}
+          placeholder={formatMessage('Choose One')}
           onChange={updateType}
         />
         {instructions && <p>{instructions}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
-        <JsonEditor key={targetType} onChange={updateConfig} height={200} value={config} schema={schema} />
-        <button type="submit" hidden disabled={isDisable()} />
+        <JsonEditor key={targetType} height={200} schema={schema} value={config} onChange={updateConfig} />
+        <button hidden disabled={isDisable()} type="submit" />
       </form>
       <DialogFooter>
-        <DefaultButton onClick={props.closeDialog} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={submit} disabled={isDisable()} text={formatMessage('Save')} />
+        <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
+        <PrimaryButton disabled={isDisable()} text={formatMessage('Save')} onClick={submit} />
       </DialogFooter>
     </Fragment>
   );

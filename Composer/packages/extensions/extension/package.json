@@ -10,7 +10,7 @@
   "scripts": {
     "start": "tsc --watch --preserveWatchOutput",
     "build": "tsc --build ./tsconfig.build.json",
-    "lint": "eslint --quiet --ext .ts,.tsx src",
+    "lint": "eslint --quiet src",
     "prepare": "yarn build"
   },
   "license": "MIT",

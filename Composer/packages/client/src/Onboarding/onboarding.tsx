@@ -211,8 +211,8 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
             a: ({ children }) => (
               <a
                 href="https://github.com/microsoft/BotFramework-Emulator/releases/latest"
-                target="_blank"
                 rel="noopener noreferrer"
+                target="_blank"
               >
                 {children}
               </a>

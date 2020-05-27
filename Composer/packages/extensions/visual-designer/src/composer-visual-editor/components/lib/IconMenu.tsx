@@ -43,14 +43,14 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     );
   };
 
-  const buttonRef = useRef<IButton>();
+  const buttonRef = useRef<IButton | null>(null);
 
   useEffect((): void => {
     if (nodeSelected) {
       buttonRef.current && buttonRef.current.focus();
     }
   }, [nodeSelected]);
-  const _onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = overflowItems => {
+  const _onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = (overflowItems) => {
     if (!overflowItems) {
       return null;
     }
@@ -88,15 +88,14 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     };
     return (
       <IconButton
-        // @ts-ignore
+        ariaLabel={label}
         componentRef={buttonRef}
         data-testid="iconMenu"
-        styles={buttonStyles}
         menuIconProps={{ iconName, style: { fontSize: iconSize, fontWeight: 'bold', color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
-        onMenuClick={onMenuClick}
+        styles={buttonStyles}
         onAfterMenuDismiss={onAfterMenuDismiss}
-        ariaLabel={label}
+        onMenuClick={onMenuClick}
         {...rest}
       />
     );
@@ -104,13 +103,12 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
   return (
     <OverflowSet
-      // @ts-ignore
-      styles={{ position: 'absolute', top: 0 }}
-      aria-label="icon menu"
       vertical
+      aria-label="icon menu"
       overflowItems={menuItems}
-      onRenderOverflowButton={_onRenderOverflowButton}
+      styles={{ root: { position: 'absolute', top: 0 } }}
       onRenderItem={_onRenderItem}
+      onRenderOverflowButton={_onRenderOverflowButton}
     />
   );
 };

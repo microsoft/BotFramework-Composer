@@ -63,13 +63,13 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
 
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={botAsksNode.offset}>
         <NodeWrapper nodeId={botAsksNode.id} nodeTab={PromptTab.BOT_ASKS} nodeData={data} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(botAsksNode.data, boundary);
               updateNodeBoundary(PromptNodes.BotAsks, boundary);
             }}
@@ -79,9 +79,13 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </NodeWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
+<<<<<<< HEAD:Composer/packages/extensions/visual-designer/src/adaptive-sdk/widgets/PromptWidget.tsx
         <NodeWrapper nodeId={userAnswersNode.id} nodeTab={PromptTab.USER_INPUT} nodeData={data} onEvent={onEvent}>
+=======
+        <ElementWrapper titleInHeader id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
+>>>>>>> master:Composer/packages/extensions/visual-designer/src/widgets/PromptWidget.tsx
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
               updateNodeBoundary(PromptNodes.UserAnswers, boundary);
             }}

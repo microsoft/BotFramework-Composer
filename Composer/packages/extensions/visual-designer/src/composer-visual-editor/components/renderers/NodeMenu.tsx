@@ -42,10 +42,10 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
 
   return (
     <div
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       css={{
         marginRight: '1px',
       }}
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
     >
       <IconMenu
@@ -64,10 +64,10 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
             },
           },
         }}
+        label={formatMessage('node menu')}
         menuItems={menuItems}
         menuWidth={100}
         nodeSelected={nodeSelected}
-        label={formatMessage('node menu')}
       />
     </div>
   );

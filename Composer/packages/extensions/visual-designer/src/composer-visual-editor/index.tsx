@@ -94,7 +94,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   const visualEditorConfig = mergePluginConfig(...plugins);
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
     const definitionKeys: string[] = Object.keys(s.definitions);
-    definitionKeys.forEach($kind => {
+    definitionKeys.forEach(($kind) => {
       result[$kind] = defaultFlowSchema.custom;
     });
     return result;
@@ -120,6 +120,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
               schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema),
             }}
           >
+<<<<<<< HEAD:Composer/packages/extensions/visual-designer/src/composer-visual-editor/index.tsx
             <div data-testid="visualdesigner-container" css={styles}>
               <SelectionContext.Provider value={selectionContext}>
                 <KeyboardZone
@@ -160,6 +161,25 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                   </MarqueeSelection>
                 </KeyboardZone>
               </SelectionContext.Provider>
+=======
+            <div css={styles} data-testid="visualdesigner-container">
+              <ObiEditor
+                key={dialogId}
+                announce={announce}
+                data={data}
+                focusedSteps={focusedActions}
+                path={dialogId}
+                redo={redo}
+                undo={undo}
+                onChange={(x) => saveData(x)}
+                onClipboardChange={onCopy}
+                onCreateDialog={createDialog}
+                onFocusEvent={onFocusEvent}
+                onFocusSteps={onFocusSteps}
+                onOpen={(x) => navTo(x)}
+                onSelect={onSelect}
+              />
+>>>>>>> master:Composer/packages/extensions/visual-designer/src/index.tsx
             </div>
           </FlowSchemaContext.Provider>
         </SelfHostContext.Provider>

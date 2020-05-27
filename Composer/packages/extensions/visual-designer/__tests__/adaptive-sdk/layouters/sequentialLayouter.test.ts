@@ -21,7 +21,7 @@ describe('sequentialLayouter', () => {
     expect(sequentialLayouter([]).boundary).toEqual(new Boundary());
   });
   it('should reuturn a graphLayout whose boundary be calcalated by calculateSequenceBoundary function', () => {
-    expect(sequentialLayouter(nodes).boundary).toEqual(calculateSequenceBoundary(nodes.map(x => x.boundary)));
+    expect(sequentialLayouter(nodes).boundary).toEqual(calculateSequenceBoundary(nodes.map((x) => x.boundary)));
   });
   it('should reuturn a graphLayout whose edges count is 4 when nodes.length is 3', () => {
     expect(sequentialLayouter(nodes).edges.length).toEqual(4);

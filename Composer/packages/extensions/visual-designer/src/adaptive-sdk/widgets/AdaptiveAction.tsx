@@ -25,9 +25,15 @@ export const StepRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JS
     return content;
   }
   return (
+<<<<<<< HEAD:Composer/packages/extensions/visual-designer/src/adaptive-sdk/widgets/AdaptiveAction.tsx
     <NodeWrapper nodeId={id} nodeData={data} onEvent={onEvent}>
       <ElementMeasurer onResize={boundary => onResize(boundary)}>{content}</ElementMeasurer>
     </NodeWrapper>
+=======
+    <ElementWrapper id={id} onEvent={onEvent}>
+      <ElementMeasurer onResize={(boundary) => onResize(boundary)}>{content}</ElementMeasurer>
+    </ElementWrapper>
+>>>>>>> master:Composer/packages/extensions/visual-designer/src/components/renderers/StepRenderer.tsx
   );
 };
 

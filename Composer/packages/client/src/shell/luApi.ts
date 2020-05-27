@@ -9,7 +9,7 @@ import { State, BoundActionHandlers } from '../store/types';
 import { StoreContext } from '../store';
 import luWorker from '../store/parsers/luWorker';
 
-const createThrottledFunc = fn => throttle(fn, 1000, { leading: true, trailing: true });
+const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
 function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver: (id: string) => LuFile | undefined) {
   const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
@@ -76,7 +76,7 @@ export function useLuApi() {
     setApi(newApi);
 
     return () => {
-      Object.keys(newApi).forEach(apiName => {
+      Object.keys(newApi).forEach((apiName) => {
         if (typeof newApi[apiName].flush === 'function') {
           newApi[apiName].flush();
         }

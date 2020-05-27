@@ -7,8 +7,8 @@ import { defaultFlowSchema } from '../schema/defaultFlowSchema';
 import { defaultFlowWidgets } from '../schema/defaultFlowWidgets';
 
 export const mergePluginConfig = (...plugins: PluginConfig[]): Required<FlowEditorConfig> => {
-  const externalWidgets = plugins.map(x => x.visualSchema?.widgets).filter(x => !!x);
-  const externalSchema = plugins.map(x => x.visualSchema?.schema).filter(x => !!x);
+  const externalWidgets = plugins.map((x) => x.visualSchema?.widgets).filter((x) => !!x);
+  const externalSchema = plugins.map((x) => x.visualSchema?.schema).filter((x) => !!x);
   return {
     widgets: Object.assign({}, defaultFlowWidgets, ...externalWidgets),
     schema: Object.assign({}, defaultFlowSchema, ...externalSchema),

@@ -9,7 +9,7 @@ context('Left Nav Bar', () => {
 
   it('can expand left Nav Bar', () => {
     cy.findByTestId('LeftNavButton').click();
-    cy.findByTestId('LeftNav-CommandBarButtonDesign Flow').should('exist');
+    cy.findByTestId('LeftNav-CommandBarButtonDesign').should('exist');
     cy.findByTestId('LeftNav-CommandBarButtonBot Responses').click();
     cy.url().should('include', 'language-generation');
     cy.findByTestId('LeftNav-CommandBarButtonUser Input').click();

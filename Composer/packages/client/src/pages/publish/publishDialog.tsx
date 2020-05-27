@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 
 import { publishDialogText } from './styles';
 
-export const PublishDialog = props => {
+export const PublishDialog = (props) => {
   const [comment, setComment] = useState('');
   const publishDialogProps = {
     title: 'Publish',
@@ -24,25 +24,25 @@ export const PublishDialog = props => {
   };
   return props.target ? (
     <Dialog
-      hidden={false}
-      onDismiss={props.onDismiss}
       dialogContentProps={publishDialogProps}
+      hidden={false}
       modalProps={{ isBlocking: true }}
+      onDismiss={props.onDismiss}
     >
       <Fragment>
         <div css={publishDialogText}>{props.target.name}</div>
         <form onSubmit={submit}>
           <TextField
-            placeholder="Provide a brief description of this publish. It will appear on the publish history list"
+            multiline
             label={formatMessage('Comment')}
             // styles={styles.textarea}
+            placeholder="Provide a brief description of this publish. It will appear on the publish history list"
             onChange={(e, newvalue) => setComment(newvalue || '')}
-            multiline={true}
           />
         </form>
         <DialogFooter>
-          <DefaultButton onClick={props.onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={submit} text={formatMessage('Okay')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+          <PrimaryButton text={formatMessage('Okay')} onClick={submit} />
         </DialogFooter>
       </Fragment>
     </Dialog>

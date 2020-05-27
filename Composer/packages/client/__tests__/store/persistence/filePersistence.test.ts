@@ -10,9 +10,9 @@ jest.mock('axios', () => {
   return {
     create: jest.fn(() => {
       return {
-        put: new Promise(resolve => setTimeout(() => resolve({ data: {} }), 10)),
-        post: new Promise(resolve => setTimeout(() => resolve({ data: {} }), 10)),
-        delete: new Promise(resolve => setTimeout(() => resolve({ data: {} }), 10)),
+        put: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
+        post: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
+        delete: new Promise((resolve) => setTimeout(() => resolve({ data: {} }), 10)),
       };
     }),
   };
@@ -41,11 +41,13 @@ describe('test persistence layer', () => {
       luFiles: [{ id: 'a.en-us', content: 'a.lu' }] as LuFile[],
     } as State;
 
-    await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
+    filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
     filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
     expect(JSON.parse(filePersistence.taskQueue['a.dialog'][0].change).a).toBe('a');
     filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LG, payload: { id: 'a.en-us' } });
+    filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LG, payload: { id: 'a.en-us' } });
     expect(filePersistence.taskQueue['a.en-us.lg'][0].change).toBe('a.lg');
+    filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LU, payload: { id: 'a.en-us' } });
     filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_LU, payload: { id: 'a.en-us' } });
     expect(filePersistence.taskQueue['a.en-us.lu'][0].change).toBe('a.lu');
   });
@@ -72,7 +74,7 @@ describe('test persistence layer', () => {
       ] as LuFile[],
     } as State;
 
-    await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
+    filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
     filePersistence.notify(state1, state2, { type: ActionTypes.CREATE_DIALOG, payload: { id: 'b' } });
     expect(JSON.parse(filePersistence.taskQueue['b.dialog'][0].change).b).toBe('b');
     expect(filePersistence.taskQueue['b.en-us.lg'][0].change).toBe('b.lg');
@@ -100,10 +102,10 @@ describe('test persistence layer', () => {
       lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
     } as State;
-    await filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
+    filePersistence.notify(state1, state2, { type: ActionTypes.UPDATE_DIALOG, payload: { id: 'a' } });
     filePersistence.notify(state1, state2, { type: ActionTypes.REMOVE_DIALOG, payload: { id: 'b' } });
-    expect(JSON.parse(filePersistence.taskQueue['b.dialog'][1].change).b).toBe('b.pre');
-    expect(filePersistence.taskQueue['b.en-us.lg'][1].change).toBe('b.pre.lg');
-    expect(filePersistence.taskQueue['b.en-us.lu'][1].change).toBe('b.pre.lu');
+    expect(JSON.parse(filePersistence.taskQueue['b.dialog'][0].change).b).toBe('b.pre');
+    expect(filePersistence.taskQueue['b.en-us.lg'][0].change).toBe('b.pre.lg');
+    expect(filePersistence.taskQueue['b.en-us.lu'][0].change).toBe('b.pre.lu');
   });
 });

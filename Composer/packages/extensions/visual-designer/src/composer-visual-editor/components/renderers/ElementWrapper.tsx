@@ -65,11 +65,15 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, data, onEvent
         }
       `}
       {...declareElementAttributes(selectableId, id)}
-      onClick={e => {
+      aria-label={ariaLabel}
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}
+<<<<<<< HEAD:Composer/packages/extensions/visual-designer/src/composer-visual-editor/components/renderers/ElementWrapper.tsx
       aria-label={generateSDKTitle(data, '', tab)}
+=======
+>>>>>>> master:Composer/packages/extensions/visual-designer/src/components/renderers/ElementWrapper.tsx
     >
       {children}
     </div>

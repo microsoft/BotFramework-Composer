@@ -72,13 +72,13 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={conditionNode.offset}>
         <NodeWrapper nodeId={conditionNode.id} nodeData={data} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(conditionNode.data, boundary);
               updateNodeBoundary(IfElseNodes.Condition, boundary);
             }}
@@ -94,16 +94,16 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           }}
         />
       </OffsetContainer>
-      {[IfElseNodes.IfBranch, IfElseNodes.ElseBranch].map(nodeName => {
+      {[IfElseNodes.IfBranch, IfElseNodes.ElseBranch].map((nodeName) => {
         const node = nodeMap[nodeName];
         return (
           <OffsetContainer key={`${node.id}/offset`} offset={node.offset}>
             <ActionGroup
               key={node.id}
-              id={node.id}
               data={node.data}
+              id={node.id}
               onEvent={onEvent}
-              onResize={size => {
+              onResize={(size) => {
                 updateNodeBoundary(nodeName, size);
               }}
             />

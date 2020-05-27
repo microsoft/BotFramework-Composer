@@ -39,7 +39,7 @@ const calculateNodes = (groupId: string, data): GraphNodeMap<StepNodeKey> => {
 const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
   const nodes = Object.keys(nodeMap)
     .sort((a, b) => parseStepIndex(a) - parseStepIndex(b))
-    .map(stepName => nodeMap[stepName]);
+    .map((stepName) => nodeMap[stepName]);
   return sequentialLayouter(nodes);
 };
 
@@ -52,7 +52,7 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height} hidden>
+      <SVGContainer hidden height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       {nodes
@@ -60,10 +60,10 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
             <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={node.offset}>
               <StepRenderer
                 key={`stepGroup/${node.id}`}
-                id={node.id}
                 data={node.data}
+                id={node.id}
                 onEvent={onEvent}
-                onResize={size => {
+                onResize={(size) => {
                   designerCache.cacheBoundary(node.data, size);
                   updateNodeBoundary(getStepKey(index), size);
                 }}
@@ -72,22 +72,38 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
           ))
         : null}
       <OffsetContainer
-        offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         css={{ zIndex: 100 }}
+        offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
       >
+<<<<<<< HEAD:Composer/packages/extensions/visual-designer/src/adaptive-sdk/widgets/ActionGroup.tsx
         <EdgeMenu arrayId={id} arrayData={data} arrayPosition={0} onEvent={onEvent} />
+=======
+        <EdgeMenu
+          data-testid="StepGroupAdd"
+          id={`${id}[0]`}
+          onClick={($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
+        />
+>>>>>>> master:Composer/packages/extensions/visual-designer/src/components/groups/StepGroup.tsx
       </OffsetContainer>
       {nodes
         ? nodes.map((x, idx) => (
             <OffsetContainer
               key={`stepGroup/${x.id}/footer/offset`}
+              css={{ zIndex: 100 }}
               offset={{
                 x: boundary.axisX - EdgeAddButtonSize.width / 2,
                 y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
               }}
-              css={{ zIndex: 100 }}
             >
+<<<<<<< HEAD:Composer/packages/extensions/visual-designer/src/adaptive-sdk/widgets/ActionGroup.tsx
               <EdgeMenu arrayId={id} arrayData={data} arrayPosition={idx + 1} onEvent={onEvent} />
+=======
+              <EdgeMenu
+                data-testid="StepGroupAdd"
+                id={`${id}[${idx + 1}]`}
+                onClick={($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: idx + 1 })}
+              />
+>>>>>>> master:Composer/packages/extensions/visual-designer/src/components/groups/StepGroup.tsx
             </OffsetContainer>
           ))
         : null}
