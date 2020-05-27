@@ -21,7 +21,7 @@ import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';
 import { transformBaseInput } from '../transformers/transformBaseInput';
-import { designerCache } from '../../store/DesignerCache';
+import { designerCache } from '../utils/visual/DesignerCache';
 
 import {
   calculateIfElseBoundary,

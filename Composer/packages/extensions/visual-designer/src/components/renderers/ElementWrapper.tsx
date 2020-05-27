@@ -7,9 +7,9 @@ import { FC, useContext } from 'react';
 import classnames from 'classnames';
 import { generateSDKTitle, PromptTab } from '@bfc/shared';
 
-import { AttrNames } from '../../constants/ElementAttributes';
-import { NodeRendererContext } from '../../store/NodeRendererContext';
-import { SelectionContext } from '../../store/SelectionContext';
+import { AttrNames } from '../../composer-flow-editor/constants/ElementAttributes';
+import { NodeRendererContext } from '../../composer-flow-editor/contexts/NodeRendererContext';
+import { SelectionContext } from '../../composer-flow-editor/contexts/SelectionContext';
 import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
 
 const nodeBorderHoveredStyle = css`

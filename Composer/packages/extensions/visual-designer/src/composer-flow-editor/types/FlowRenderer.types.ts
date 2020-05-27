@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { EditorEventHandler } from '../adaptive-visual-sdk/constants/NodeEventTypes';
-import { ElementColor } from '../adaptive-visual-sdk/constants/ElementColors';
+import { EditorEventHandler } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
+import { ElementColor } from '../../adaptive-visual-sdk/constants/ElementColors';
 
 interface EventBasedElement {
   onEvent: EditorEventHandler;

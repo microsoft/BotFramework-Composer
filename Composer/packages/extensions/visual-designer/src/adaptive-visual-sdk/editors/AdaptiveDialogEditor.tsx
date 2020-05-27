@@ -7,7 +7,11 @@ import { FC } from 'react';
 import get from 'lodash/get';
 
 import { EditorEventHandler } from '../constants/NodeEventTypes';
-import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../../models/FlowRenderer.types';
+import {
+  EdgeMenuComponent,
+  NodeMenuComponent,
+  NodeWrapperComponent,
+} from '../../composer-flow-editor/types/FlowRenderer.types';
 import { FlowRendererContext, DefaultFlowRenderers } from '../contexts/FlowRendererContext';
 
 import { RuleEditor } from './RuleEditor';

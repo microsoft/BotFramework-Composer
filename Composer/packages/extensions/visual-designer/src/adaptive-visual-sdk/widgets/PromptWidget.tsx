@@ -17,7 +17,7 @@ import { SVGContainer } from '../components/SVGContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { ElementMeasurer } from '../components/ElementMeasurer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
-import { designerCache } from '../../store/DesignerCache';
+import { designerCache } from '../utils/visual/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
 import { FlowRendererContext } from '../contexts/FlowRendererContext';
 

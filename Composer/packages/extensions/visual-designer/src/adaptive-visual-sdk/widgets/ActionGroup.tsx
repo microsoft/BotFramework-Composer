@@ -14,7 +14,7 @@ import { OffsetContainer } from '../components/OffsetContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { SVGContainer } from '../components/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
-import { designerCache } from '../../store/DesignerCache';
+import { designerCache } from '../utils/visual/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
 import { FlowRendererContext } from '../contexts/FlowRendererContext';
 

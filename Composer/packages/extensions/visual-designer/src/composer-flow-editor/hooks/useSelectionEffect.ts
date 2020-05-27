@@ -7,7 +7,7 @@ import { ShellApi } from '@bfc/shared';
 
 import { querySelectableElements, SelectorElement } from '../utils/cursorTracker';
 import { NodeIndexGenerator } from '../utils/NodeIndexGetter';
-import { NodeRendererContextValue } from '../store/NodeRendererContext';
+import { NodeRendererContextValue } from '../contexts/NodeRendererContext';
 
 export const useSelectionEffect = (state: { data: any; nodeContext: NodeRendererContextValue }, shellApi: ShellApi) => {
   const { data, nodeContext } = state;
@@ -43,7 +43,7 @@ export const useSelectionEffect = (state: { data: any; nodeContext: NodeRenderer
     onSelectionChanged: (): void => {
       const selectedIndices = selection.getSelectedIndices();
       const nodeItems = nodeIndexGenerator.current.getItemList();
-      const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
+      const selectedIds = selectedIndices.map((index) => nodeItems[index].key as string);
 
       if (selectedIds.length === 1) {
         // TODO: Change to focus all selected nodes after Form Editor support showing multiple nodes.

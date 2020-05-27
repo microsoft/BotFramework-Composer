@@ -3,8 +3,8 @@
 
 import { PluginConfig, FlowEditorConfig } from '@bfc/extension';
 
-import { defaultFlowSchema } from '../schema/defaultFlowSchema';
-import { defaultFlowWidgets } from '../schema/defaultFlowWidgets';
+import { defaultFlowSchema } from '../../schema/defaultFlowSchema';
+import { defaultFlowWidgets } from '../../schema/defaultFlowWidgets';
 
 export const mergePluginConfig = (...plugins: PluginConfig[]): Required<FlowEditorConfig> => {
   const externalWidgets = plugins.map((x) => x.visualSchema?.widgets).filter((x) => !!x);

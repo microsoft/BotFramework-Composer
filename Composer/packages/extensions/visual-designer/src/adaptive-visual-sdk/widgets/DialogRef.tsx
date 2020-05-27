@@ -10,8 +10,8 @@ import { useEffect, useContext, useRef } from 'react';
 import { ILink } from 'office-ui-fabric-react/lib/Link';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { AttrNames, LinkTag } from '../../constants/ElementAttributes';
-import { SelectionContext } from '../../store/SelectionContext';
+import { AttrNames, LinkTag } from '../../composer-flow-editor/constants/ElementAttributes';
+import { SelectionContext } from '../../composer-flow-editor/contexts/SelectionContext';
 
 export interface DialogRefCardProps extends WidgetContainerProps {
   dialog: string | object;

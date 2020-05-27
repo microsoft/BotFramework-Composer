@@ -15,7 +15,7 @@ import { LoopIndicator } from '../components/LoopIndicator';
 import { ElementMeasurer } from '../components/ElementMeasurer';
 import { SVGContainer } from '../components/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
-import { designerCache } from '../../store/DesignerCache';
+import { designerCache } from '../utils/visual/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
 import { FlowRendererContext } from '../contexts/FlowRendererContext';
 

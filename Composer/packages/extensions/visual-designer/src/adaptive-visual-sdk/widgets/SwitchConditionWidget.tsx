@@ -15,7 +15,7 @@ import { Diamond } from '../components/Diamond';
 import { ElementMeasurer } from '../components/ElementMeasurer';
 import { SVGContainer } from '../components/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
-import { designerCache } from '../../store/DesignerCache';
+import { designerCache } from '../utils/visual/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
 import { FlowRendererContext } from '../contexts/FlowRendererContext';
 

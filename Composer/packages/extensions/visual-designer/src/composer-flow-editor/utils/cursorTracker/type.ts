@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
 import { AttrNames } from '../../constants/ElementAttributes';
 
 export class SelectorElement {

@@ -5,16 +5,16 @@ import { DialogUtils, SDKKinds, ShellApi } from '@bfc/shared';
 import get from 'lodash/get';
 import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 
-import { designerCache } from '../store/DesignerCache';
-import { NodeEventTypes } from '../adaptive-visual-sdk/constants/NodeEventTypes';
+import { designerCache } from '../../adaptive-visual-sdk/utils/visual/DesignerCache';
+import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
 import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { moveCursor } from '../utils/cursorTracker';
 import { AttrNames } from '../constants/ElementAttributes';
-import { NodeRendererContextValue } from '../store/NodeRendererContext';
-import { SelectionContextData } from '../store/SelectionContext';
+import { NodeRendererContextValue } from '../contexts/NodeRendererContext';
+import { SelectionContextData } from '../contexts/SelectionContext';
 
 export const useEditorEventApi = (
   state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },

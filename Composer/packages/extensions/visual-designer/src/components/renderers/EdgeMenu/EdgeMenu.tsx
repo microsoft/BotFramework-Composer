@@ -9,11 +9,11 @@ import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 
 import { EdgeAddButtonSize } from '../../../adaptive-visual-sdk/constants/ElementSizes';
-import { NodeRendererContext } from '../../../store/NodeRendererContext';
-import { SelectionContext } from '../../../store/SelectionContext';
-import { SelfHostContext } from '../../../store/SelfHostContext';
-import { AttrNames } from '../../../constants/ElementAttributes';
-import { MenuTypes } from '../../../constants/MenuTypes';
+import { NodeRendererContext } from '../../../composer-flow-editor/contexts/NodeRendererContext';
+import { SelectionContext } from '../../../composer-flow-editor/contexts/SelectionContext';
+import { SelfHostContext } from '../../../composer-flow-editor/contexts/SelfHostContext';
+import { AttrNames } from '../../../composer-flow-editor/constants/ElementAttributes';
+import { MenuTypes } from '../../../composer-flow-editor/constants/MenuTypes';
 import { ObiColors } from '../../../adaptive-visual-sdk/constants/ElementColors';
 import { IconMenu } from '../../IconMenu';
 

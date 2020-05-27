@@ -3,7 +3,11 @@
 
 import React from 'react';
 
-import { NodeMenuComponent, EdgeMenuComponent, NodeWrapperComponent } from '../../models/FlowRenderer.types';
+import {
+  NodeMenuComponent,
+  EdgeMenuComponent,
+  NodeWrapperComponent,
+} from '../../composer-flow-editor/types/FlowRenderer.types';
 import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
 
 import { NodeMenu } from './NodeMenu';
