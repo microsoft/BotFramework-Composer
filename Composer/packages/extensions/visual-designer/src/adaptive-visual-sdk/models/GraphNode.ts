@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { measureJsonBoundary } from '../adaptive-visual-sdk/layouters/measureJsonBoundary';
+import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 
 import { IndexedNode } from './IndexedNode';
 import { Boundary } from './Boundary';

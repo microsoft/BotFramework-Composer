@@ -9,7 +9,7 @@ import { WidgetContainerProps } from '@bfc/extension';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
-import { GraphNode } from '../../models/GraphNode';
+import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../../components/lib/OffsetContainer';
 import { Diamond } from '../../components/nodes/templates/Diamond';
 import { ElementMeasurer } from '../../components/lib/ElementMeasurer';

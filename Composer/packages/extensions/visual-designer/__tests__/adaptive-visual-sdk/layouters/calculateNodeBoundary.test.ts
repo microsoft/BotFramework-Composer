@@ -7,7 +7,7 @@ import {
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
 } from '../../../src/adaptive-visual-sdk/layouters/calculateNodeBoundary';
-import { Boundary } from '../../../src/models/Boundary';
+import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
 import {
   ElementInterval,
   BranchIntervalX,

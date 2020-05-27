@@ -9,12 +9,12 @@ import { WidgetContainerProps } from '@bfc/extension';
 
 import { baseInputLayouter } from '../layouters/baseInputLayouter';
 import { transformBaseInput } from '../transformers/transformBaseInput';
-import { GraphNode } from '../../models/GraphNode';
+import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../../components/lib/OffsetContainer';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { IconBrick } from '../../components/decorations/IconBrick';
 import { SVGContainer } from '../../components/lib/SVGContainer';
-import { GraphLayout } from '../../models/GraphLayout';
+import { GraphLayout } from '../models/GraphLayout';
 import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
 import { useSmartLayout, GraphNodeMap } from '../../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';

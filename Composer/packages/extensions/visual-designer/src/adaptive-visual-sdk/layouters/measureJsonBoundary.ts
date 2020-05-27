@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { ObiTypes } from '../../constants/ObiTypes';
-import { Boundary } from '../../models/Boundary';
+import { Boundary } from '../models/Boundary';
 import {
   StandardNodeWidth,
   HeaderHeight,

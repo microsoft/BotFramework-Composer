@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Boundary } from '../../../src/models/Boundary';
+import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
 import { measureJsonBoundary } from '../../../src/adaptive-visual-sdk/layouters/measureJsonBoundary';
 import { ObiTypes } from '../../../src/constants/ObiTypes';
 import {

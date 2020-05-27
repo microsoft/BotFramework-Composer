@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { ifElseLayouter } from '../../../src/adaptive-visual-sdk/layouters/ifelseLayouter';
-import { Boundary } from '../../../src/models/Boundary';
-import { GraphNode } from '../../../src/models/GraphNode';
+import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
+import { GraphNode } from '../../../src/adaptive-visual-sdk/models/GraphNode';
 
 describe('ifElseLayouter', () => {
   let ifNode, elseNode, conditionNode, choiceNode;

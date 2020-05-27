@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { sequentialLayouter } from '../../../src/adaptive-visual-sdk/layouters/sequentialLayouter';
-import { Boundary } from '../../../src/models/Boundary';
-import { GraphNode } from '../../../src/models/GraphNode';
+import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
+import { GraphNode } from '../../../src/adaptive-visual-sdk/models/GraphNode';
 import { calculateSequenceBoundary } from '../../../src/adaptive-visual-sdk/layouters/calculateNodeBoundary';
 
 describe('sequentialLayouter', () => {

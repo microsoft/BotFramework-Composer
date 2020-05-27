@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Boundary } from '../../../src/models/Boundary';
-import { GraphNode } from '../../../src/models/GraphNode';
+import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
+import { GraphNode } from '../../../src/adaptive-visual-sdk/models/GraphNode';
 import { switchCaseLayouter } from '../../../src/adaptive-visual-sdk/layouters/switchCaseLayouter';
 
 describe('switchCaseLayouter', () => {

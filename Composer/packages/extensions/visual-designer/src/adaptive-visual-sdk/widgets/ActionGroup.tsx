@@ -5,13 +5,13 @@
 import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
 
-import { GraphNode } from '../../models/GraphNode';
+import { GraphNode } from '../models/GraphNode';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { transformStepGroup } from '../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../../components/nodes/nodeProps';
 import { OffsetContainer } from '../../components/lib/OffsetContainer';
-import { GraphLayout } from '../../models/GraphLayout';
+import { GraphLayout } from '../models/GraphLayout';
 import { SVGContainer } from '../../components/lib/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';

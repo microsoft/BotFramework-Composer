@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { BranchIntervalY } from '../../constants/ElementSizes';
-import { GraphNode } from '../../models/GraphNode';
-import { GraphLayout } from '../../models/GraphLayout';
-import { Edge, EdgeDirection } from '../../models/EdgeData';
+import { GraphNode } from '../models/GraphNode';
+import { GraphLayout } from '../models/GraphLayout';
+import { Edge, EdgeDirection } from '../models/EdgeData';
 
 import { calculateSwitchCaseBoundary } from './calculateNodeBoundary';
 import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';
