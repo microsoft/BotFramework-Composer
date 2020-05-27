@@ -8,7 +8,7 @@ import get from 'lodash/get';
 
 import { EditorEventHandler } from '../adaptive-visual-sdk/constants/NodeEventTypes';
 import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
-import { FlowRendererContext, DefaultFlowRenderers } from '../store/FlowRendererContext';
+import { FlowRendererContext, DefaultFlowRenderers } from '../adaptive-visual-sdk/contexts/FlowRendererContext';
 
 import { RuleEditor } from './RuleEditor';
 

@@ -10,7 +10,7 @@ import { TruncatedCSS, ColorlessFontCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../../constants/ElementSizes';
 import { DefaultColors } from '../../constants/ElementColors';
-import { FlowRendererContext } from '../../../store/FlowRendererContext';
+import { FlowRendererContext } from '../../contexts/FlowRendererContext';
 
 import { Icon, BuiltinIcons } from './icon';
 

@@ -14,7 +14,7 @@ import { EdgeDirection } from '../adaptive-visual-sdk/models/EdgeData';
 import { SVGContainer } from '../adaptive-visual-sdk/components/SVGContainer';
 import { drawSVGEdge } from '../adaptive-visual-sdk/utils/visual/EdgeUtil';
 import { ObiColors } from '../adaptive-visual-sdk/constants/ElementColors';
-import { FlowRendererContext } from '../store/FlowRendererContext';
+import { FlowRendererContext } from '../adaptive-visual-sdk/contexts/FlowRendererContext';
 import { ActionGroup } from '../adaptive-visual-sdk/widgets';
 
 const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);

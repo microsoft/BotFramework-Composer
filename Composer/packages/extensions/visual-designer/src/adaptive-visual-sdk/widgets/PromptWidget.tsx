@@ -19,7 +19,7 @@ import { ElementMeasurer } from '../components/ElementMeasurer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
-import { FlowRendererContext } from '../../store/FlowRendererContext';
+import { FlowRendererContext } from '../contexts/FlowRendererContext';
 
 enum PromptNodes {
   BotAsks = 'botAsksNode',

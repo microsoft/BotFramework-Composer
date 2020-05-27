@@ -13,7 +13,7 @@ import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeRendererContext, NodeRendererContextValue } from './store/NodeRendererContext';
 import { SelfHostContext } from './store/SelfHostContext';
-import { FlowSchemaContext } from './store/FlowSchemaContext';
+import { FlowSchemaContext } from './adaptive-visual-sdk/contexts/FlowSchemaContext';
 import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './utils/mergePluginConfig';
 import { getCustomSchema } from './utils/getCustomSchema';
