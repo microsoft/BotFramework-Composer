@@ -23,7 +23,7 @@ interface ArrayFieldItemProps extends FieldProps {
   onRemove: () => void;
 }
 
-const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
+const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
   const {
     canMoveUp,
     canMoveDown,
@@ -31,6 +31,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
     onReorder,
     onRemove,
     index,
+    label,
     depth,
     onBlur,
     stackArrayItems,
@@ -43,7 +44,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
   } = props;
 
   // This needs to return true to dismiss the menu after a click.
-  const fabricMenuItemClickHandler = fn => e => {
+  const fabricMenuItemClickHandler = (fn) => (e) => {
     fn(e);
     return true;
   };
@@ -87,10 +88,10 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
       <div css={arrayItem.field}>
         <SchemaField
           {...rest}
-          rawErrors={typeof rawErrors === 'object' ? rawErrors[index] : rawErrors}
           css={arrayItem.schemaFieldOverride(!!stackArrayItems)}
           depth={depth + 1}
-          label={!stackArrayItems ? false : undefined}
+          label={!stackArrayItems || label === false ? false : undefined}
+          rawErrors={typeof rawErrors === 'object' ? rawErrors[index] : rawErrors}
           transparentBorder={!stackArrayItems ? transparentBorder : undefined}
           uiOptions={uiOptions}
           value={value}

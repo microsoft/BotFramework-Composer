@@ -10,7 +10,7 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import { consoleStyle, dialog } from './styles';
 
-export const ErrorPopup = props => {
+export const ErrorPopup = (props) => {
   const [hidden, setHidden] = useState(props.error ? false : true);
 
   const _closeDialog = () => {
@@ -20,21 +20,21 @@ export const ErrorPopup = props => {
 
   return (
     <Dialog
-      hidden={hidden}
-      onDismiss={_closeDialog}
       dialogContentProps={{
         type: DialogType.normal,
         title: props.title,
         styles: dialog,
       }}
+      hidden={hidden}
       modalProps={{
         isBlocking: false,
         styles: { main: { maxWidth: 450 } },
       }}
+      onDismiss={_closeDialog}
     >
       <div css={consoleStyle}>{props.error}</div>
       <DialogFooter>
-        <PrimaryButton onClick={_closeDialog} text="Ok" />
+        <PrimaryButton text="Ok" onClick={_closeDialog} />
       </DialogFooter>
     </Dialog>
   );

@@ -9,7 +9,7 @@ import { BASEPATH } from '../../constants';
 
 import { notfoundbody, notfoundcontainer, description, notfoundicon } from './style';
 
-export const NotFound = props => {
+export const NotFound = (props) => {
   const { uri } = props;
   if (uri === BASEPATH) {
     return null;

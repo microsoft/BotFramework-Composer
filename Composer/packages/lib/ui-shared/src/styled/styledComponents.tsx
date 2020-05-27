@@ -10,12 +10,12 @@ import { VisualEditorColors as Colors } from '../constants/VisualEditorColors';
 import { DivProps } from './styledComponents.types';
 import { StandardFontCSS, TruncatedCSS, MultilineCSS } from './sharedCSS';
 
-const dynamicStyle = props =>
+const dynamicStyle = (props) =>
   css`
     color: ${props.color || Colors.Black};
   `;
 
-export const LinkBtn = styled(Link)(props => ({
+export const LinkBtn = styled<any>(Link)((props) => ({
   color: props.color || Colors.AzureBlue,
 }));
 
@@ -31,7 +31,7 @@ export const BorderedDiv = styled.div<DivProps>(
     border: 1px solid #c4c4c4;
     box-sizing: border-box;
   `,
-  props => ({
+  (props) => ({
     color: props.color || Colors.Black,
     width: props.width,
     height: props.height,
@@ -41,7 +41,7 @@ export const BorderedDiv = styled.div<DivProps>(
 export const SingleLineDiv = styled.div<DivProps>`
   ${StandardFontCSS};
   ${TruncatedCSS};
-  line-height: ${height => (height ? height + 'px' : undefined)};
+  line-height: ${(height) => (height ? height + 'px' : undefined)};
 `;
 
 export const TextDiv = styled.div`

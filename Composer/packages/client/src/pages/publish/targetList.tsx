@@ -9,14 +9,14 @@ import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/O
 
 import { overflowSet, targetSelected } from './styles';
 
-export const TargetList = props => {
+export const TargetList = (props) => {
   const onRenderOverflowButton = (overflowItems: any[] | undefined) => {
     return (
       <IconButton
-        role="menuitem"
-        title="More options"
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems! }}
+        role="menuitem"
+        title="More options"
       />
     );
   };

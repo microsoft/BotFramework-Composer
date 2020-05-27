@@ -120,16 +120,16 @@ const PropertyEditor: React.FC = () => {
 
   return (
     <Resizable
-      size={{ width: currentWidth, height: 'auto' }}
-      minWidth={400}
-      maxWidth={800}
       enable={{
         left: true,
       }}
+      maxWidth={800}
+      minWidth={400}
+      size={{ width: currentWidth, height: 'auto' }}
       onResizeStop={handleResize}
     >
-      <div css={formEditor} aria-label={formatMessage('form editor')} data-testid="PropertyEditor">
-        <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
+      <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor">
+        <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
           <AdaptiveForm
             errors={errors}
             formData={localData}

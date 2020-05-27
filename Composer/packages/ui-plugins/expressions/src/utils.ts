@@ -78,7 +78,7 @@ export function getOptions(schema: JSONSchema7, definitions): SchemaOption[] {
   };
 
   if (type && Array.isArray(type)) {
-    const options: SchemaOption[] = type.map(t => ({
+    const options: SchemaOption[] = type.map((t) => ({
       key: t,
       text: t,
       data: { schema: { ...schema, type: t } },
@@ -117,7 +117,7 @@ export function getSelectedOption(value: any | undefined, options: SchemaOption[
   // if its an array, we know it's not an expression
   if (valueType === 'array') {
     const item = value[0];
-    const firstArrayOption = options.find(o => o.data.schema.type === 'array');
+    const firstArrayOption = options.find((o) => o.data.schema.type === 'array');
 
     // if there is nothing in the array, default to the first array type
     if (!item) {
@@ -126,7 +126,7 @@ export function getSelectedOption(value: any | undefined, options: SchemaOption[
 
     // else, find the option with an item schema that matches item type
     return (
-      options.find(o => {
+      options.find((o) => {
         const {
           data: { schema },
         } = o;

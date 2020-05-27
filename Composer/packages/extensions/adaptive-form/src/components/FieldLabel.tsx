@@ -35,16 +35,16 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
         styles: { root: { width: '288px', padding: '17px 28px' } },
         onRenderContent: () => (
           <div>
-            <h3 style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }} aria-label={title + '.'}>
+            <h3 aria-label={title + '.'} style={{ fontSize: '20px', margin: '0', marginBottom: '10px' }}>
               {title}
             </h3>
             <p>{description}</p>
             {helpLink && (
               <Link
-                href={helpLink}
-                target="_blank"
-                rel="noopener noreferrer"
                 aria-label={formatMessage('Learn more about {title}', { title: title.toLowerCase() })}
+                href={helpLink}
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 {formatMessage('Learn more')}
               </Link>
@@ -53,7 +53,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
         ),
       }}
     >
-      <div tabIndex={0} css={focusBorder}>
+      <div css={focusBorder} tabIndex={0}>
         <Icon
           aria-label={title + '; ' + description}
           iconName={'Unknown'}
@@ -84,7 +84,7 @@ interface FieldLabelProps {
   required?: boolean;
 }
 
-const FieldLabel: React.FC<FieldLabelProps> = props => {
+const FieldLabel: React.FC<FieldLabelProps> = (props) => {
   const { label, description, id, inline, helpLink, required } = props;
 
   if (!label) {
@@ -115,7 +115,7 @@ const FieldLabel: React.FC<FieldLabelProps> = props => {
       >
         {label}
       </Label>
-      <DescriptionCallout description={description} id={id} title={label} helpLink={helpLink} />
+      <DescriptionCallout description={description} helpLink={helpLink} id={id} title={label} />
     </div>
   );
 };

@@ -25,14 +25,14 @@ const NEWLINE = '\r\n';
 export const PlaceHolderSectionName = `_NewSectionPlaceHolderSectionName`;
 
 export function isValid(diagnostics: any[]) {
-  return diagnostics.every(item => {
+  return diagnostics.every((item) => {
     item.Severity !== 'ERROR';
   });
 }
 
 export function escapeBodyText(body: string, nestedLevel = 1): string {
   const lines = splitNewlineText(body);
-  const fixedLines = lines.map(line => {
+  const fixedLines = lines.map((line) => {
     // #hi  -->
     // -\#hi
     // eslint-disable-next-line security/detect-non-literal-regexp
@@ -66,7 +66,7 @@ export function textFromIntent(intent: LuIntentSection | null, nestedLevel = 1, 
 }
 
 export function textFromIntents(intents: LuIntentSection[], nestedLevel = 1): string {
-  return intents.map(intent => textFromIntent(intent, nestedLevel)).join(`${NEWLINE}${NEWLINE}`);
+  return intents.map((intent) => textFromIntent(intent, nestedLevel)).join(`${NEWLINE}${NEWLINE}`);
 }
 
 export function checkSection(intent: LuIntentSection, enableSections = true): Diagnostic[] {
@@ -77,7 +77,7 @@ export function checkSection(intent: LuIntentSection, enableSections = true): Di
 export function checkIsSingleSection(intent: LuIntentSection, enableSections = true): boolean {
   const text = textFromIntent(intent, 1, enableSections);
   const { Sections } = luParser.parse(text);
-  return Sections.filter(section => section.SectionType !== LuSectionTypes.MODELINFOSECTION).length === 1;
+  return Sections.filter((section) => section.SectionType !== LuSectionTypes.MODELINFOSECTION).length === 1;
 }
 
 function updateInSections(
@@ -95,7 +95,7 @@ function updateInSections(
     return sections;
   }
   // update
-  return sections.map(section => {
+  return sections.map((section) => {
     if (section.Name === intentName) {
       return updatedIntent;
     }

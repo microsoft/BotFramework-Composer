@@ -47,12 +47,12 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
 
   return (
     <Dialog
-      hidden={false}
       dialogContentProps={{
         type: DialogType.close,
         title: formatMessage('{skillName} Manifest', { skillName: selectedSkill.name }),
         styles: styles.dialog,
       }}
+      hidden={false}
       modalProps={{
         dragOptions: isDraggable ? dragOptions : undefined,
         isBlocking: false,
@@ -63,11 +63,11 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
     >
       <div css={styles.content}>
         <JsonEditor
-          id={'modaljsonview'}
-          onChange={() => {}}
-          value={JSON.parse(selectedSkill.body || '')}
           height={'100%'}
+          id={'modaljsonview'}
           options={{ readOnly: true }}
+          value={JSON.parse(selectedSkill.body || '')}
+          onChange={() => {}}
         />
       </div>
       <DialogFooter>

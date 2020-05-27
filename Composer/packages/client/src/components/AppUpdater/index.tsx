@@ -22,7 +22,7 @@ function SelectOption(props) {
   const { checked, text, key } = props;
   return (
     <div key={key} css={optionRoot}>
-      <Icon iconName={checked ? 'RadioBtnOn' : 'RadioBtnOff'} css={optionIcon(checked)} />
+      <Icon css={optionIcon(checked)} iconName={checked ? 'RadioBtnOn' : 'RadioBtnOff'} />
       <span>{text}</span>
     </div>
   );
@@ -33,7 +33,7 @@ const downloadOptions = {
   installAndUpdate: 'installAndUpdate',
 };
 
-export const AppUpdater: React.FC<{}> = _props => {
+export const AppUpdater: React.FC<{}> = (_props) => {
   const {
     actions: { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus },
     state: { appUpdate },
@@ -138,6 +138,7 @@ export const AppUpdater: React.FC<{}> = _props => {
       case AppUpdaterStatus.UPDATE_AVAILABLE:
         return (
           <ChoiceGroup
+            required
             defaultSelectedKey={downloadOptions.installAndUpdate}
             options={[
               {
@@ -152,7 +153,6 @@ export const AppUpdater: React.FC<{}> = _props => {
               },
             ]}
             onChange={handleDownloadOptionChange}
-            required={true}
           />
         );
 
@@ -169,8 +169,8 @@ export const AppUpdater: React.FC<{}> = _props => {
         const progressInHundredths = (progressPercent || 0) / 100;
         return (
           <ProgressIndicator
-            label={formatMessage('Downloading...')}
             description={`${progressPercent}% ${formatMessage('of')} ${trimmedTotalInMB}`}
+            label={formatMessage('Downloading...')}
             percentComplete={progressInHundredths}
           />
         );
@@ -200,19 +200,19 @@ export const AppUpdater: React.FC<{}> = _props => {
       case AppUpdaterStatus.UPDATE_AVAILABLE:
         return (
           <div>
-            <DefaultButton onClick={handleDismiss} styles={updateAvailableDismissBtn} text={formatMessage('Cancel')} />
-            <PrimaryButton onClick={handlePreDownloadOkay} text={formatMessage('Okay')} />
+            <DefaultButton styles={updateAvailableDismissBtn} text={formatMessage('Cancel')} onClick={handleDismiss} />
+            <PrimaryButton text={formatMessage('Okay')} onClick={handlePreDownloadOkay} />
           </div>
         );
 
       case AppUpdaterStatus.UPDATE_SUCCEEDED:
-        return <PrimaryButton onClick={handlePostDownloadOkay} text={formatMessage('Okay')} />;
+        return <PrimaryButton text={formatMessage('Okay')} onClick={handlePostDownloadOkay} />;
 
       case AppUpdaterStatus.UPDATE_FAILED:
-        return <PrimaryButton onClick={handleDismiss} text={formatMessage('Okay')} />;
+        return <PrimaryButton text={formatMessage('Okay')} onClick={handleDismiss} />;
 
       case AppUpdaterStatus.UPDATE_UNAVAILABLE:
-        return <PrimaryButton onClick={handleDismiss} text={formatMessage('Okay')} />;
+        return <PrimaryButton text={formatMessage('Okay')} onClick={handleDismiss} />;
 
       case AppUpdaterStatus.UPDATE_IN_PROGRESS:
         return undefined;
@@ -230,19 +230,19 @@ export const AppUpdater: React.FC<{}> = _props => {
 
   return showing ? (
     <Dialog
-      hidden={false}
-      onDismiss={handleDismiss}
       dialogContentProps={{
         styles: dialogContent,
         subText: subText,
         type: DialogType.close,
         title,
       }}
-      minWidth={427}
+      hidden={false}
       maxWidth={427}
+      minWidth={427}
       modalProps={{
         isBlocking: false,
       }}
+      onDismiss={handleDismiss}
     >
       {content}
       <DialogFooter styles={dialogFooter}>{footer}</DialogFooter>

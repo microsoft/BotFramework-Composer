@@ -28,7 +28,7 @@ interface CreateDialogModalProps {
   isOpen: boolean;
 }
 
-export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
+export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;
@@ -54,7 +54,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
       if (!nameRegex.test(name)) {
         errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
       }
-      if (dialogs.some(dialog => dialog.id === name)) {
+      if (dialogs.some((dialog) => dialog.id === name)) {
         errors.name = formatMessage('Duplicate dialog name');
       }
     } else {
@@ -63,7 +63,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
     setFormDataErrors(errors);
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (Object.keys(formDataErrors).length > 0) {
       return;
@@ -82,35 +82,35 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
       dialogType={DialogTypes.DesignFlow}
     >
       <form onSubmit={handleSubmit}>
-        <input type="submit" style={{ display: 'none' }} />
-        <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+        <input style={{ display: 'none' }} type="submit" />
+        <Stack styles={wizardStyles.stackinput} tokens={{ childrenGap: '2rem' }}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
-              label={formatMessage('Name')}
-              value={formData.name}
-              styles={name}
-              onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
-              data-testid="NewDialogName"
-              required
               autoFocus
+              required
+              data-testid="NewDialogName"
+              errorMessage={formDataErrors.name}
+              label={formatMessage('Name')}
+              styles={name}
+              value={formData.name}
+              onChange={updateForm('name')}
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
+              multiline
+              label={formatMessage('Description')}
+              resizable={false}
               styles={description}
               value={formData.description}
-              label={formatMessage('Description')}
-              multiline
-              resizable={false}
               onChange={updateForm('description')}
             />
           </StackItem>
         </Stack>
 
         <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <PrimaryButton text={formatMessage('Next')} onClick={handleSubmit} />
         </DialogFooter>
       </form>
     </DialogWrapper>

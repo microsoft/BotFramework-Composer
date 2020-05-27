@@ -69,7 +69,7 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
   }
 }
 
-const LuEditor: React.FC<LULSPEditorProps> = props => {
+const LuEditor: React.FC<LULSPEditorProps> = (props) => {
   const monacoRef = useRef<Monaco>();
   const options = {
     quickSuggestions: true,
@@ -91,7 +91,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     editorId = [projectId, fileId, sectionId].join('/');
   }
 
-  const onInit: OnInit = monaco => {
+  const onInit: OnInit = (monaco) => {
     registerLULanguage(monaco);
     monacoRef.current = monaco;
 
@@ -119,15 +119,15 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
 
           const m = monacoRef.current;
           if (m) {
-            editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, function() {
+            editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, function () {
               const position = editor.getPosition();
               languageClient.sendRequest('labelingExperienceRequest', { uri, position });
             });
           }
           initializeDocuments(luOption, uri);
           languageClient.onReady().then(() =>
-            languageClient.onNotification('addUnlabelUtterance', result => {
-              const edits = result.edits.map(e => {
+            languageClient.onNotification('addUnlabelUtterance', (result) => {
+              const edits = result.edits.map((e) => {
                 return convertEdit(e);
               });
               editor.executeEdits(uri, edits);
@@ -149,15 +149,15 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
 
   return (
     <BaseEditor
-      placeholder={placeholder}
       helpURL={LU_HELP}
       id={editorId}
+      placeholder={placeholder}
       {...restProps}
-      onInit={onInit}
-      theme="lu"
+      editorDidMount={editorDidMount}
       language="lu"
       options={options}
-      editorDidMount={editorDidMount}
+      theme="lu"
+      onInit={onInit}
     />
   );
 };

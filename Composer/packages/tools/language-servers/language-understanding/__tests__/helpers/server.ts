@@ -14,15 +14,15 @@ import { LUServer } from '../../src';
 
 function createSocketHandler(webSocket: any): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {
-    send: content =>
-      webSocket.send(content, error => {
+    send: (content) =>
+      webSocket.send(content, (error) => {
         if (error) {
           throw error;
         }
       }),
-    onMessage: cb => webSocket.on('message', cb),
-    onError: cb => webSocket.on('error', cb),
-    onClose: cb => webSocket.on('close', cb),
+    onMessage: (cb) => webSocket.on('message', cb),
+    onError: (cb) => webSocket.on('error', cb),
+    onClose: (cb) => webSocket.on('close', cb),
     dispose: () => webSocket.close(),
   };
   return socket;
@@ -32,7 +32,7 @@ function attachLSPServer(wss: ws.Server, server: http.Server, path: string, hand
   server.on('upgrade', (request: http.IncomingMessage, socket: net.Socket, head: Buffer) => {
     const pathname = request.url ? url.parse(request.url).pathname : undefined;
     if (pathname === path) {
-      wss.handleUpgrade(request, socket, head, webSocket => {
+      wss.handleUpgrade(request, socket, head, (webSocket) => {
         const socketHandler = createSocketHandler(webSocket);
         handler(socketHandler);
       });
@@ -59,7 +59,7 @@ export function startServer() {
     noServer: true,
     perMessageDeflate: false,
   });
-  attachLSPServer(wss, server, '/lu-language-server', webSocket => {
+  attachLSPServer(wss, server, '/lu-language-server', (webSocket) => {
     // const socketHandler = createSocketHandler(webSocket);
 
     // launch language server when the web socket is opened
