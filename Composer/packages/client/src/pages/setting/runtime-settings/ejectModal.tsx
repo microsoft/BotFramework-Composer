@@ -70,7 +70,7 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
       </div>
       <DialogFooter>
         <DefaultButton onClick={props.closeModal}>Cancel</DefaultButton>
-        <PrimaryButton onClick={doEject} disabled={selectedTemplate && !copying ? false : true}>
+        <PrimaryButton disabled={selectedTemplate && !copying ? false : true} onClick={doEject}>
           {formatMessage('Okay')}
         </PrimaryButton>
       </DialogFooter>
