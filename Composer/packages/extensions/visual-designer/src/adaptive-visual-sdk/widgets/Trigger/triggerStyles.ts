@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { TriggerSize } from '../../adaptive-visual-sdk/constants/ElementSizes';
-import { ObiColors } from '../../adaptive-visual-sdk/constants/ElementColors';
+import { TriggerSize } from '../../constants/ElementSizes';
+import { ObiColors } from '../../constants/ElementColors';
 
 export const triggerContainerStyle: any = {
   ...TriggerSize,
