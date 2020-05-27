@@ -553,7 +553,7 @@ const create = async (
 
 console.log(chalk.bold('Login to Azure:'));
 msRestNodeAuth
-  .interactiveLogin()
+  .interactiveLogin({ domain: tenantId })
   .then(async creds => {
     const createResult = await create(
       creds,
