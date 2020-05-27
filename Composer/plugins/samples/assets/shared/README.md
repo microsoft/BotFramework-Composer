@@ -18,13 +18,11 @@ This project includes a script that can be used to provision the resources neces
 It will look like this:
 ```
 {
-  "publishName": "<NAME OF YOUR RESOURCE GROUP>",
-  "location": "westus",
-  "subscriptionID": "<YOUR SUBSCRIPTION ID>",
+  "accessToken": "<SOME VALUE>",
+  "name": "<NAME OF YOUR RESOURCE GROUP>",
   "appPassword": "<YOUR APP PASSWORD>",
-  "luisAuthoringRegion": "westus",
   "environment": "<ENVIRONMENT>",
-  "provision": {
+  "settings": {
     "applicationInsights": {
       "InstrumentationKey": "<SOME VALUE>"
     },
@@ -46,8 +44,7 @@ It will look like this:
     },
     "MicrosoftAppId": "<SOME VALUE>",
     "MicrosoftAppPassword": "<SOME VALUE>"
-  },
-  "accessToken": "<SOME VALUE>"
+  }
 }```
 
 When completed, you will see a message with a JSON "publishing profile" and instructions for using it in Composer.

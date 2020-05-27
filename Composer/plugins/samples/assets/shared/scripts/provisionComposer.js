@@ -30,8 +30,6 @@ const usage = () => {
     ['environment', 'Environment name (Defaults to dev)'],
     ['location', 'Azure Region (Defaults to westus)'],
     ['appId', 'Microsoft App ID (Will create if absent)'],
-    ['luisAuthoringKey', 'LUIS Authoring Key to use when publishing to LUIS'],
-    ['luisAuthoringRegion', 'Azure Region used with LUIS (defaults to westus)'],
     ['tenantId', 'ID of your tenant if required (will choose first in list by default)'],
     ['createLuisResource', 'Create a LUIS resource? Default true'],
     ['createLuisAuthoringResource', 'Create a LUIS authoring resource? Default true'],
@@ -85,8 +83,6 @@ const appPassword = argv.appPassword;
 const environment = argv.environment || 'dev';
 const location = argv.location || 'westus';
 const appId = argv.appId; // MicrosoftAppId - generated if left blank
-const luisAuthoringKey = argv.luisAuthoringKey; // not currently used
-const luisAuthoringRegion = argv.luisAuthoringRegion || 'westus'; // not currently used
 
 // Get option flags
 const createLuisResource = argv.createLuisResource == 'false' ? false : true;
