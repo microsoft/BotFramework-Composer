@@ -4,7 +4,7 @@
 import React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { Icon } from '../../../src/components/decorations/icon';
+import { Icon } from '../../../src/adaptive-visual-sdk/widgets/ActionHeader/icon';
 
 describe('<Icon />', () => {
   let iconList, icon, iconColor;

@@ -96,3 +96,12 @@ export const Icon = ({ icon, color, size = 18, fill = 'white' }) => {
     />
   );
 };
+
+export enum BuiltinIcons {
+  MessageBot = 'MessageBot',
+  User = 'User',
+  Friend = 'Friend',
+  Play = 'Play',
+  Flow = 'Flow',
+  None = 'None',
+}
