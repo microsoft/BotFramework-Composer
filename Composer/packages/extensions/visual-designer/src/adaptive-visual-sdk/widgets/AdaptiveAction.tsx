@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { FC, useContext } from 'react';
 import get from 'lodash/get';
 
-import { NodeProps, defaultNodeProps } from '../../components/nodes/nodeProps';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 import { renderUIWidget } from '../../schema/flowSchemaRenderer';
 import { FlowSchemaContext } from '../contexts/FlowSchemaContext';
 import { FlowRendererContext } from '../contexts/FlowRendererContext';

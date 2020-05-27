@@ -9,7 +9,7 @@ import { GraphNode } from '../models/GraphNode';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
 import { transformStepGroup } from '../transformers/transformStepGroup';
-import { NodeProps, defaultNodeProps } from '../../components/nodes/nodeProps';
+import { NodeProps, defaultNodeProps } from '../types/nodeProps';
 import { OffsetContainer } from '../components/OffsetContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { SVGContainer } from '../components/SVGContainer';

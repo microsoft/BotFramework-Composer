@@ -15,7 +15,7 @@ import { SelfHostContext } from '../../../store/SelfHostContext';
 import { AttrNames } from '../../../constants/ElementAttributes';
 import { MenuTypes } from '../../../constants/MenuTypes';
 import { ObiColors } from '../../../adaptive-visual-sdk/constants/ElementColors';
-import { IconMenu } from '../../lib/IconMenu';
+import { IconMenu } from '../../IconMenu';
 
 import { createActionMenu } from './createSchemaMenu';
 

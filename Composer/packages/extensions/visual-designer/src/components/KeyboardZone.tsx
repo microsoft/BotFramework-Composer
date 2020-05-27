@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 
-import { mapShortcutToKeyboardCommand } from '../../constants/KeyboardCommandTypes';
+import { mapShortcutToKeyboardCommand } from '../constants/KeyboardCommandTypes';
 
 const styles = css`
   border: 1px solid transparent;

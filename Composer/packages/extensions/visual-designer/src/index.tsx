@@ -19,7 +19,7 @@ import { mergePluginConfig } from './utils/mergePluginConfig';
 import { getCustomSchema } from './utils/getCustomSchema';
 import { defaultFlowSchema } from './schema/defaultFlowSchema';
 import { SelectionContext } from './store/SelectionContext';
-import { KeyboardZone } from './components/lib/KeyboardZone';
+import { KeyboardZone } from './components/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent.ts';
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
