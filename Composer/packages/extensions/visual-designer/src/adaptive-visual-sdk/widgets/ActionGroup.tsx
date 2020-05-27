@@ -13,7 +13,7 @@ import { NodeProps, defaultNodeProps } from '../../components/nodes/nodeProps';
 import { OffsetContainer } from '../../components/lib/OffsetContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { SVGContainer } from '../../components/lib/SVGContainer';
-import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
+import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
 import { FlowEdges } from '../../components/lib/FlowEdges';
 import { FlowRendererContext } from '../../store/FlowRendererContext';

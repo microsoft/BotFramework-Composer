@@ -16,7 +16,7 @@ import { IconBrick } from '../../components/decorations/IconBrick';
 import { SVGContainer } from '../../components/lib/SVGContainer';
 import { GraphLayout } from '../models/GraphLayout';
 import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
-import { useSmartLayout, GraphNodeMap } from '../../hooks/useSmartLayout';
+import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
 import { FlowEdges } from '../../components/lib/FlowEdges';
 import { FlowRendererContext } from '../../store/FlowRendererContext';

@@ -14,7 +14,7 @@ import { OffsetContainer } from '../../components/lib/OffsetContainer';
 import { LoopIndicator } from '../../components/decorations/LoopIndicator';
 import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
 import { SVGContainer } from '../../components/lib/SVGContainer';
-import { useSmartLayout, GraphNodeMap } from '../../hooks/useSmartLayout';
+import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
 import { FlowEdges } from '../../components/lib/FlowEdges';
 import { FlowRendererContext } from '../../store/FlowRendererContext';

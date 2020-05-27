@@ -14,7 +14,7 @@ import { OffsetContainer } from '../../components/lib/OffsetContainer';
 import { Diamond } from '../../components/nodes/templates/Diamond';
 import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
 import { SVGContainer } from '../../components/lib/SVGContainer';
-import { GraphNodeMap, useSmartLayout } from '../../hooks/useSmartLayout';
+import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
 import { FlowEdges } from '../../components/lib/FlowEdges';
 import { FlowRendererContext } from '../../store/FlowRendererContext';

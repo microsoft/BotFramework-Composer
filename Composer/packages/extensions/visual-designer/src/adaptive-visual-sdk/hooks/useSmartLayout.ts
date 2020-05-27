@@ -3,9 +3,9 @@
 
 import { useState, useEffect, useMemo } from 'react';
 
-import { Boundary, areBoundariesEqual } from '../adaptive-visual-sdk/models/Boundary';
-import { GraphLayout } from '../adaptive-visual-sdk/models/GraphLayout';
-import { GraphNode } from '../adaptive-visual-sdk/models/GraphNode';
+import { Boundary, areBoundariesEqual } from '../models/Boundary';
+import { GraphLayout } from '../models/GraphLayout';
+import { GraphNode } from '../models/GraphNode';
 
 // 'T extends string' means an Enum. Reference: https://github.com/microsoft/TypeScript/issues/30611#issuecomment-565384924
 type MapWithEnumKey<KeyType extends string, ValueType> = { [key in KeyType]: ValueType };
