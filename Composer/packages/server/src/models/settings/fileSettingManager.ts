@@ -26,23 +26,21 @@ export class FileSettingManager implements ISettingManager {
     this.storage = StorageService.getStorageClient('default', user);
   }
 
-  public async get(slot = '', obfuscate = false): Promise<any> {
-    this.validateSlot(slot);
-
-    const path = this.getPath(slot);
-    const settings = await this._getFromStorage(path, slot);
+  public async get(obfuscate = false): Promise<any> {
+    const path = this.getPath();
+    const settings = await this._getFromStorage(path);
 
     return obfuscate ? this.obfuscateValues(settings) : settings;
   }
 
-  private _getFromStorage = async (path: string, slot: string) => {
+  private _getFromStorage = async (path: string) => {
     if (await this.storage.exists(path)) {
       const file = await this.storage.readFile(path);
       return JSON.parse(file);
     } else {
       // does not have setting file, return default value
       const defaultValue = this.createDefaultSettings();
-      await this.set(slot, defaultValue);
+      await this.set(defaultValue);
       return defaultValue;
     }
   };
@@ -51,10 +49,8 @@ export class FileSettingManager implements ISettingManager {
     return {};
   };
 
-  public set = async (slot: string, settings: any): Promise<void> => {
-    this.validateSlot(slot);
-
-    const path = this.getPath(slot);
+  public set = async (settings: any): Promise<void> => {
+    const path = this.getPath();
 
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
@@ -86,13 +82,7 @@ export class FileSettingManager implements ISettingManager {
     return OBFUSCATED_VALUE;
   };
 
-  protected validateSlot = (_: string): void => {};
-
-  protected getPath = (slot: string): string => {
-    if (slot && slot.length > 0) {
-      return Path.join(this.basePath, slot, subPath);
-    } else {
-      return Path.join(this.basePath, subPath);
-    }
+  protected getPath = (): string => {
+    return Path.join(this.basePath, subPath);
   };
 }
