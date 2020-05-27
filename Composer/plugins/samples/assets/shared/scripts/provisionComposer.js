@@ -32,7 +32,7 @@ const usage = () => {
     ['appId', 'Microsoft App ID (Will create if absent)'],
     ['luisAuthoringKey', 'LUIS Authoring Key to use when publishing to LUIS'],
     ['luisAuthoringRegion', 'Azure Region used with LUIS (defaults to westus)'],
-    ['tenantId','ID of your tenant if required (will choose first in list by default)'],
+    ['tenantId', 'ID of your tenant if required (will choose first in list by default)'],
     ['createLuisResource', 'Create a LUIS resource? Default true'],
     ['createLuisAuthoringResource', 'Create a LUIS authoring resource? Default true'],
     ['createCosmosDb', 'Create a CosmosDB? Default true'],
@@ -198,7 +198,7 @@ const getTenantId = async (accessToken) => {
     const selectedTenant = jsonRes.value.shift();
     logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Using Tenant ${ selectedTenant.displayName } - ID: ${ selectedTenant.tenantId }`,
+      message: `> Using Tenant ${selectedTenant.displayName} - ID: ${selectedTenant.tenantId}`,
     });
     // if alternatives exist, list htem
     if (jsonRes.value.length > 0) {
@@ -210,11 +210,11 @@ const getTenantId = async (accessToken) => {
       jsonRes.value.forEach((tenant) => {
         logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: chalk.yellow(`  * ${ tenant.displayName } - ID: ${ tenant.tenantId }`),
+          message: chalk.yellow(`  * ${tenant.displayName} - ID: ${tenant.tenantId}`),
         });
       });
     }
-    
+
     return selectedTenant.tenantId;
   } catch (err) {
     throw new Error(`Get Tenant Id Failed, details: ${getErrorMesssage(err)}`);
@@ -373,7 +373,7 @@ const create = async (
       tenantId = token.tenantId;
       logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: `> Using Tenant ID: ${ tenantId }`,
+        message: `> Using Tenant ID: ${tenantId}`,
       });
     } else {
       tenantId = await getTenantId(accessToken);
@@ -557,7 +557,7 @@ const create = async (
 
 console.log(chalk.bold('Login to Azure:'));
 msRestNodeAuth
-  .interactiveLogin()
+  .interactiveLogin({ domain: tenantId })
   .then(async creds => {
     const createResult = await create(
       creds,
