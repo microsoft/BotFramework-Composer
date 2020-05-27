@@ -6,9 +6,9 @@ import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import get from 'lodash/get';
 
-import { EditorEventHandler } from '../adaptive-visual-sdk/constants/NodeEventTypes';
-import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
-import { FlowRendererContext, DefaultFlowRenderers } from '../adaptive-visual-sdk/contexts/FlowRendererContext';
+import { EditorEventHandler } from '../constants/NodeEventTypes';
+import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../../models/FlowRenderer.types';
+import { FlowRendererContext, DefaultFlowRenderers } from '../contexts/FlowRendererContext';
 
 import { RuleEditor } from './RuleEditor';
 

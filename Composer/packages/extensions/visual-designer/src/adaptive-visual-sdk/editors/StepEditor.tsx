@@ -6,16 +6,16 @@ import { jsx } from '@emotion/core';
 import { useState, useCallback, useContext } from 'react';
 import { useShellApi } from '@bfc/extension';
 
-import { OffsetContainer } from '../adaptive-visual-sdk/components/OffsetContainer';
-import { ElementInterval, TriggerSize, TerminatorSize } from '../adaptive-visual-sdk/constants/ElementSizes';
-import { measureJsonBoundary } from '../adaptive-visual-sdk/layouters/measureJsonBoundary';
-import { Boundary } from '../adaptive-visual-sdk/models/Boundary';
-import { EdgeDirection } from '../adaptive-visual-sdk/models/EdgeData';
-import { SVGContainer } from '../adaptive-visual-sdk/components/SVGContainer';
-import { drawSVGEdge } from '../adaptive-visual-sdk/utils/visual/EdgeUtil';
-import { ObiColors } from '../adaptive-visual-sdk/constants/ElementColors';
-import { FlowRendererContext } from '../adaptive-visual-sdk/contexts/FlowRendererContext';
-import { ActionGroup } from '../adaptive-visual-sdk/widgets';
+import { OffsetContainer } from '../components/OffsetContainer';
+import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
+import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { Boundary } from '../models/Boundary';
+import { EdgeDirection } from '../models/EdgeData';
+import { SVGContainer } from '../components/SVGContainer';
+import { drawSVGEdge } from '../utils/visual/EdgeUtil';
+import { ObiColors } from '../constants/ElementColors';
+import { FlowRendererContext } from '../contexts/FlowRendererContext';
+import { ActionGroup } from '../widgets';
 
 const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);

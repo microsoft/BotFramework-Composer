@@ -24,7 +24,7 @@ import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEdi
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
 import { NodeEventTypes } from './adaptive-visual-sdk/constants/NodeEventTypes';
-import { AdaptiveDialogEditor } from './editors/AdaptiveDialogEditor';
+import { AdaptiveDialogEditor } from './adaptive-visual-sdk/editors/AdaptiveDialogEditor';
 import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './components/renderers';
 
 formatMessage.setup({
