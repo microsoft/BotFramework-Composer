@@ -26,7 +26,7 @@ interface LocationSelectContentProps {
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
 }
 
-export const LocationSelectContent: React.FC<LocationSelectContentProps> = props => {
+export const LocationSelectContent: React.FC<LocationSelectContentProps> = (props) => {
   const { onOpen, onCurrentPathUpdate, operationMode, focusedStorageFolder } = props;
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
@@ -45,7 +45,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
     }
   };
 
-  const checkShowItem = item => {
+  const checkShowItem = (item) => {
     if (item.type === 'bot' || item.type === 'folder') {
       return true;
     }
@@ -56,17 +56,17 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
     <div css={fileSelectorContainer}>
       {Object.keys(focusedStorageFolder).length > 0 && storageFileLoadingStatus === 'success' && (
         <FileSelector
-          operationMode={operationMode}
           checkShowItem={checkShowItem}
           focusedStorageFolder={focusedStorageFolder}
+          isWindows={isWindows}
+          operationMode={operationMode}
           onCurrentPathUpdate={onCurrentPathUpdate}
           onFileChosen={onFileChosen}
-          isWindows={isWindows}
         />
       )}
       {storageFileLoadingStatus === 'pending' && (
         <div>
-          <Spinner size={SpinnerSize.medium} css={loading} />
+          <Spinner css={loading} size={SpinnerSize.medium} />
         </div>
       )}
       {storageFileLoadingStatus === 'failure' && (

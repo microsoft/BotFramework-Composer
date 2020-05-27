@@ -58,7 +58,7 @@ const calculateLayout = (nodeMap: GraphNodeMap<SwitchNodes | CaseNodeKey>) => {
   const { switchNode, choiceNode, ...cases } = nodeMap as GraphNodeMap<SwitchNodes>;
   const casesNodes = Object.keys(cases)
     .sort((a, b) => parseCaseIndex(a) - parseCaseIndex(b))
-    .map(caseName => nodeMap[caseName]);
+    .map((caseName) => nodeMap[caseName]);
   return switchCaseLayouter(switchNode, choiceNode, casesNodes);
 };
 
@@ -79,17 +79,17 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
 
   const { boundary, edges } = layout;
   const { switchNode, choiceNode, ...cases } = nodeMap as GraphNodeMap<SwitchNodes>;
-  const casesNodes = Object.keys(cases).map(x => nodeMap[x]);
+  const casesNodes = Object.keys(cases).map((x) => nodeMap[x]);
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={switchNode.offset}>
         <NodeWrapper nodeId={switchNode.id} nodeData={data} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(switchNode.data, boundary);
               updateNodeBoundary(SwitchNodes.Switch, boundary);
             }}
@@ -98,7 +98,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
           </ElementMeasurer>
         </NodeWrapper>
       </OffsetContainer>
-      <OffsetContainer offset={choiceNode.offset} css={{ zIndex: 100 }}>
+      <OffsetContainer css={{ zIndex: 100 }} offset={choiceNode.offset}>
         <Diamond
           data-testid="SwitchConditionDiamond"
           onClick={() => {
@@ -110,10 +110,10 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
         <OffsetContainer key={`${x.id}/offset`} offset={x.offset}>
           <ActionGroup
             key={x.id}
-            id={x.id}
             data={x.data}
+            id={x.id}
             onEvent={onEvent}
-            onResize={size => {
+            onResize={(size) => {
               updateNodeBoundary(getCaseKey(index), size);
             }}
           />

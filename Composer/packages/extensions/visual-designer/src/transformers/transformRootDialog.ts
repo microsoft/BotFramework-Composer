@@ -21,7 +21,7 @@ function transformSimpleDialog(input): { ruleGroup: IndexedNode; stepGroup: Inde
 
   const stepGroup = new IndexedNode(Actions, {
     $kind: ObiTypes.StepGroup,
-    children: steps.map(x => normalizeObiStep(x)),
+    children: steps.map((x) => normalizeObiStep(x)),
   });
   return {
     ruleGroup,

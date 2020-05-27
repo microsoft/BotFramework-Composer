@@ -22,7 +22,7 @@ export const useActionApi = (shellApi: ShellApi) => {
 
   function actionsContainLuIntent(actions: BaseSchema[]): boolean {
     let containLuIntents = false;
-    walkAdaptiveActionList(actions, action => {
+    walkAdaptiveActionList(actions, (action) => {
       if (action[luFieldName]) {
         containLuIntents = true;
       }

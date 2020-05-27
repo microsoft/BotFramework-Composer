@@ -17,7 +17,7 @@ interface ConfirmDialogProps {
   setting: any;
 }
 
-const ConfirmDialog: React.FC<ConfirmDialogProps> = props => {
+const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   const { setting, onCancel, onConfirm } = props;
   const {
     title,
@@ -46,32 +46,32 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = props => {
 
   return (
     <Dialog
-      hidden={false}
-      onDismiss={onCancel}
       dialogContentProps={{
         type: DialogType.normal,
         title: title,
         styles: dialog,
       }}
+      hidden={false}
       modalProps={{
         isBlocking: true,
         styles: dialogModal,
       }}
+      onDismiss={onCancel}
     >
       <div css={[confirmationContainer, styles.content]}>
         {onRenderContent(subTitle, BuiltInStyles[style])}
-        {checkboxLabel && <Checkbox onChange={handleCheckbox} checked={!disabled} label={checkboxLabel} />}
+        {checkboxLabel && <Checkbox checked={!disabled} label={checkboxLabel} onChange={handleCheckbox} />}
       </div>
       <DialogFooter>
-        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} onClick={onConfirm} text={confirmBtnText} />
-        <DefaultButton data-testid="cancelPrompt" onClick={onCancel} text={cancelBtnText} />
+        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} text={confirmBtnText} onClick={onConfirm} />
+        <DefaultButton data-testid="cancelPrompt" text={cancelBtnText} onClick={onCancel} />
       </DialogFooter>
     </Dialog>
   );
 };
 
 export const OpenConfirmModal = (title, subTitle, setting = {}) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const node = document.createElement('div');
     document.body.appendChild(node);
     const removeNode = () => {
@@ -87,7 +87,7 @@ export const OpenConfirmModal = (title, subTitle, setting = {}) => {
       resolve(false);
     };
 
-    const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onConfirm={onConfirm} onCancel={onCancel} />;
+    const modal = <ConfirmDialog setting={{ title, subTitle, ...setting }} onCancel={onCancel} onConfirm={onConfirm} />;
     ReactDOM.render(modal, node);
   });
 };

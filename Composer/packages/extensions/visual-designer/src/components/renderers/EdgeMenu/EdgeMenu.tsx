@@ -33,7 +33,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     return {
       [AttrNames.SelectableElement]: true,
       [AttrNames.EdgeMenuElement]: true,
-      [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`,
+      [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`
     };
   };
 
@@ -52,13 +52,14 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     },
     {
       isSelfHosted: selfHosted,
-      enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
+      enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length
     },
     // Custom Action 'oneOf' arrays from schema file
     customSchemas.map(x => x.oneOf).filter(oneOf => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
   );
   return (
     <div
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,
@@ -66,13 +67,14 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
         backdropFilter: 'white',
         boxShadow: boxShaow,
         overflow: 'hidden',
-        background: 'white',
+        background: 'white'
       }}
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
     >
       <IconMenu
+        handleMenuShow={handleMenuShow}
         iconName="Add"
+        iconSize={7}
         iconStyles={{
           background: 'white',
           color: '#005CE6',
@@ -81,17 +83,15 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
               outline: 'none',
               selectors: {
                 '::after': {
-                  outline: 'none !important',
-                },
-              },
-            },
-          },
+                  outline: 'none !important'
+                }
+              }
+            }
+          }
         }}
-        iconSize={7}
-        nodeSelected={nodeSelected}
-        menuItems={menuItems}
         label={formatMessage('Add')}
-        handleMenuShow={handleMenuShow}
+        menuItems={menuItems}
+        nodeSelected={nodeSelected}
       />
     </div>
   );

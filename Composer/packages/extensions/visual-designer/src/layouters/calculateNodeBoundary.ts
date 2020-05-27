@@ -24,10 +24,10 @@ export function calculateSequenceBoundary(
     return box;
   }
 
-  box.axisX = Math.max(0, ...boundaries.map(x => x.axisX));
-  box.width = box.axisX + Math.max(0, ...boundaries.map(x => x.width - x.axisX));
+  box.axisX = Math.max(0, ...boundaries.map((x) => x.axisX));
+  box.width = box.axisX + Math.max(0, ...boundaries.map((x) => x.width - x.axisX));
   box.height =
-    boundaries.map(x => x.height).reduce((sum, val) => sum + val, 0) +
+    boundaries.map((x) => x.height).reduce((sum, val) => sum + val, 0) +
     ElementInterval.y * Math.max(boundaries.length - 1, 0);
 
   if (widthHeadEdge) box.height += ElementInterval.y / 2;
@@ -95,7 +95,7 @@ function measureBranchingContainerBoundary(
   branchGroupBoundary.width = branchBoundaries.reduce((acc, x, currentIndex) => {
     return acc + x.width + calculateBranchNodesIntervalX(x, branchBoundaries[currentIndex + 1]);
   }, 0);
-  branchGroupBoundary.height = Math.max(...branchBoundaries.map(x => x.height));
+  branchGroupBoundary.height = Math.max(...branchBoundaries.map((x) => x.height));
   branchGroupBoundary.axisX = firstBranchBoundary.axisX;
 
   /** Calculate boundary */

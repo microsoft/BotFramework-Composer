@@ -8,7 +8,7 @@ import undoHistory from './history';
 
 export type Pick = (state: State, args: any[], isStackEmpty: boolean) => any;
 
-export const undoActionsMiddleware = (store: Store) => next => {
+export const undoActionsMiddleware = (store: Store) => (next) => {
   return async (action: ActionType) => {
     if (action.type === ActionTypes.UNDO && undoHistory.canUndo()) {
       const undoStacks = undoHistory.undo();

@@ -28,12 +28,12 @@ import { AdaptiveDialogEditor } from './editors/AdaptiveDialogEditor';
 import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './components/renderers';
 
 formatMessage.setup({
-  missingTranslation: 'ignore',
+  missingTranslation: 'ignore'
 });
 
 const emotionCache = createCache({
   // @ts-ignore
-  nonce: window.__nonce__,
+  nonce: window.__nonce__
 });
 
 const styles = css`
@@ -59,7 +59,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     clipboardActions,
     data: inputData,
     hosted,
-    schemas,
+    schemas
   } = shellData;
 
   const dataCache = useRef({});
@@ -79,7 +79,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   // Compute schema diff
   const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
     schemas?.sdk?.content,
-    schemas?.default,
+    schemas?.default
   ]);
 
   const nodeContext: NodeRendererContextValue = {
@@ -88,7 +88,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     focusedTab,
     clipboardActions: clipboardActions || [],
     dialogFactory: new DialogFactory(schema),
-    customSchemas: customSchema ? [customSchema] : [],
+    customSchemas: customSchema ? [customSchema] : []
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);
@@ -117,44 +117,44 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
           <FlowSchemaContext.Provider
             value={{
               widgets: visualEditorConfig.widgets,
-              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema),
+              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema)
             }}
           >
-            <div data-testid="visualdesigner-container" css={styles}>
+            <div css={styles} data-testid="visualdesigner-container">
               <SelectionContext.Provider value={selectionContext}>
                 <KeyboardZone
+                  ref={divRef}
                   onCommand={command => {
                     const editorEvent = mapKeyboardCommandToEditorEvent(command);
                     editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
                   }}
-                  ref={divRef}
                 >
-                  <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+                  <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
                     <div
                       className="visual-editor-container"
-                      data-testid="visual-editor-container"
                       css={{
                         width: '100%',
                         height: '100%',
                         padding: '48px 20px',
-                        boxSizing: 'border-box',
+                        boxSizing: 'border-box'
                       }}
+                      data-testid="visual-editor-container"
                       onClick={e => {
                         e.stopPropagation();
                         handleEditorEvent(NodeEventTypes.Focus, { id: '' });
                       }}
                     >
                       <AdaptiveDialogEditor
-                        dialogId={dialogId}
-                        dialogData={data}
                         activeTrigger={focusedEvent}
+                        dialogData={data}
+                        dialogId={dialogId}
+                        EdgeMenu={VisualEditorEdgeMenu}
+                        NodeMenu={VisualEditorNodeMenu}
+                        NodeWrapper={VisualEditorNodeWrapper}
                         onEvent={(eventName, eventData) => {
                           divRef.current?.focus({ preventScroll: true });
                           handleEditorEvent(eventName, eventData);
                         }}
-                        EdgeMenu={VisualEditorEdgeMenu}
-                        NodeMenu={VisualEditorNodeMenu}
-                        NodeWrapper={VisualEditorNodeWrapper}
                       />
                     </div>
                   </MarqueeSelection>

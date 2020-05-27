@@ -29,7 +29,7 @@ export function getProperties(value: any): string[] {
       properties = [value.tokenProperty];
       break;
     case SDKKinds.SetProperties:
-      properties = value.assignments?.map(assignment => assignment.property);
+      properties = value.assignments?.map((assignment) => assignment.property);
       break;
     case SDKKinds.HttpRequest:
       properties = [value.resultProperty];

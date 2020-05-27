@@ -52,7 +52,7 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height} hidden>
+      <SVGContainer hidden height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       {nodes
@@ -60,8 +60,8 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
             <OffsetContainer key={`stepGroup/${node.id}/offset`} offset={node.offset}>
               <StepRenderer
                 key={`stepGroup/${node.id}`}
-                id={node.id}
                 data={node.data}
+                id={node.id}
                 onEvent={onEvent}
                 onResize={size => {
                   designerCache.cacheBoundary(node.data, size);
@@ -72,22 +72,22 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
           ))
         : null}
       <OffsetContainer
-        offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
         css={{ zIndex: 100 }}
+        offset={{ x: boundary.axisX - EdgeAddButtonSize.width / 2, y: 0 - EdgeAddButtonSize.height / 2 }}
       >
-        <EdgeMenu arrayId={id} arrayData={data} arrayPosition={0} onEvent={onEvent} />
+        <EdgeMenu arrayData={data} arrayId={id} arrayPosition={0} onEvent={onEvent} />
       </OffsetContainer>
       {nodes
         ? nodes.map((x, idx) => (
             <OffsetContainer
               key={`stepGroup/${x.id}/footer/offset`}
+              css={{ zIndex: 100 }}
               offset={{
                 x: boundary.axisX - EdgeAddButtonSize.width / 2,
-                y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
+                y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2
               }}
-              css={{ zIndex: 100 }}
             >
-              <EdgeMenu arrayId={id} arrayData={data} arrayPosition={idx + 1} onEvent={onEvent} />
+              <EdgeMenu arrayData={data} arrayId={id} arrayPosition={idx + 1} onEvent={onEvent} />
             </OffsetContainer>
           ))
         : null}

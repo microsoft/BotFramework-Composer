@@ -47,7 +47,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, data, onEvent
       [AttrNames.SelectableElement]: true,
       [AttrNames.SelectedId]: selectedId,
       [AttrNames.SelectionIndex]: getNodeIndex(id),
-      [AttrNames.Tab]: tab,
+      [AttrNames.Tab]: tab
     };
   };
 
@@ -65,11 +65,11 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, data, onEvent
         }
       `}
       {...declareElementAttributes(selectableId, id)}
+      aria-label={generateSDKTitle(data, '', tab)}
       onClick={e => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}
-      aria-label={generateSDKTitle(data, '', tab)}
     >
       {children}
     </div>

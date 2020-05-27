@@ -103,7 +103,7 @@ export default function App() {
 
   const props1 = {
     value: value1,
-    onChange: value => {
+    onChange: (value) => {
       setValue1(value);
     },
     languageServer: 'localhost:5000/lg-language-server',
@@ -111,7 +111,7 @@ export default function App() {
 
   const props2 = {
     value: value2,
-    onChange: value => {
+    onChange: (value) => {
       setValue2(value);
     },
   };

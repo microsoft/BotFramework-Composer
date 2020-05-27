@@ -147,7 +147,7 @@ export const dialogGroups: DialogGroupsMap = {
 export function getDialogGroupByType(type) {
   let dialogType = DialogGroup.OTHER;
 
-  Object.keys(dialogGroups).forEach(key => {
+  Object.keys(dialogGroups).forEach((key) => {
     if (dialogGroups[key].types.indexOf(type) > -1) {
       switch (key) {
         case DialogGroup.INPUT:
@@ -173,7 +173,7 @@ export function getDialogGroupByType(type) {
   return dialogType;
 }
 
-const truncateSDKType = $kind => (typeof $kind === 'string' ? $kind.replace('Microsoft.', '') : '');
+const truncateSDKType = ($kind) => (typeof $kind === 'string' ? $kind.replace('Microsoft.', '') : '');
 
 /**
  * Title priority: $designer.name > title from sdk schema > customize title > $kind suffix

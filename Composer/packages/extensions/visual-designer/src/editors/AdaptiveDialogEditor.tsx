@@ -42,11 +42,11 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   onEvent,
   EdgeMenu,
   NodeMenu,
-  NodeWrapper,
+  NodeWrapper
 }): JSX.Element => {
   const activeTriggerData = get(dialogData, activeTrigger, null);
   const content = activeTriggerData ? (
-    <RuleEditor key={`${dialogId}/${activeTrigger}`} id={activeTrigger} data={activeTriggerData} onEvent={onEvent} />
+    <RuleEditor key={`${dialogId}/${activeTrigger}`} data={activeTriggerData} id={activeTrigger} onEvent={onEvent} />
   ) : null;
 
   return (
@@ -54,7 +54,7 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
       value={{
         EdgeMenu: EdgeMenu || DefaultFlowRenderers.EdgeMenu,
         NodeMenu: NodeMenu || DefaultFlowRenderers.NodeMenu,
-        NodeWrapper: NodeWrapper || DefaultFlowRenderers.NodeWrapper,
+        NodeWrapper: NodeWrapper || DefaultFlowRenderers.NodeWrapper
       }}
     >
       {content}
@@ -65,5 +65,5 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
 AdaptiveDialogEditor.defaultProps = {
   dialogId: '',
   dialogData: {},
-  onEvent: () => null,
+  onEvent: () => null
 };

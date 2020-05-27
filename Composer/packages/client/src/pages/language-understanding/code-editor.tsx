@@ -20,7 +20,7 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = props => {
+const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const { actions, state } = useContext(StoreContext);
   const { luFiles, locale, projectId, userSettings } = state;
   const { dialogId } = props;
@@ -102,7 +102,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   );
 
   const _onChange = useCallback(
-    value => {
+    (value) => {
       setContent(value);
       if (!file) return;
       if (inlineMode) {
@@ -126,15 +126,15 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LuEditor
-      editorDidMount={editorDidMount}
-      value={content}
       diagnostics={currentDiagnostics}
-      luOption={luOption}
+      editorDidMount={editorDidMount}
+      editorSettings={userSettings.codeEditor}
       languageServer={{
         path: lspServerPath,
       }}
+      luOption={luOption}
+      value={content}
       onChange={_onChange}
-      editorSettings={userSettings.codeEditor}
       onChangeSettings={handleSettingsChange}
     />
   );

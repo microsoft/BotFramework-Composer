@@ -30,11 +30,11 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
-    <EdgeMenu arrayId={id} arrayData={data} arrayPosition={0} onEvent={onEvent} />
+    <EdgeMenu arrayData={data} arrayId={id} arrayPosition={0} onEvent={onEvent} />
   ) : (
     <ActionGroup
-      id={id}
       data={data}
+      id={id}
       onEvent={onEvent}
       onResize={boundary => {
         if (boundary) {
@@ -58,16 +58,16 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
 
   return (
     <div
-      className="step-editor"
+      aria-label="step-editor"
       /**
        * `maxWith: 100%` is important here. (refs https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)
        * If the cross-size of an item is larger than the flex container, it will overflow equally in both directions.
        * Limit the max width to parent width to avoid left overfow.
        */
+      className="step-editor"
       css={{ position: 'relative', width: editorWidth, height: editorHeight, maxWidth: '100%' }}
-      aria-label="step-editor"
     >
-      <SVGContainer width={editorWidth} height={editorHeight}>
+      <SVGContainer height={editorHeight} width={editorWidth}>
         {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
         {drawSVGEdge(
           'editor-edge__tail',
@@ -78,10 +78,10 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
           { directed: true }
         )}
         <circle
-          r={TerminatorSize.height / 2 - 1}
           cx={editorAxisX}
           cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
           fill="none"
+          r={TerminatorSize.height / 2 - 1}
           stroke={ObiColors.LightGray}
           strokeWidth="2"
         />

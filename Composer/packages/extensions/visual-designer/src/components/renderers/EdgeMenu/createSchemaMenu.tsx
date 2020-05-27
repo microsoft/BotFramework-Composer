@@ -36,12 +36,12 @@ const createBaseActionMenu = (
     DialogGroup.LOG,
   ];
   const stepMenuItems = pickedGroups
-    .map(key => dialogGroups[key])
-    .filter(groupItem => groupItem && Array.isArray(groupItem.types) && groupItem.types.length)
+    .map((key) => dialogGroups[key])
+    .filter((groupItem) => groupItem && Array.isArray(groupItem.types) && groupItem.types.length)
     .map(({ label, types: actionKinds }) => {
       const subMenuItems: IContextualMenuItem[] = actionKinds
-        .filter($kind => (filter ? filter($kind) : true))
-        .map($kind => ({
+        .filter(($kind) => (filter ? filter($kind) : true))
+        .map(($kind) => ({
           key: $kind,
           name: resolveMenuTitle($kind),
           onClick: (e, itemData) => onClick(itemData),
@@ -74,8 +74,8 @@ const createCustomActionSubMenu = (
   }
 
   const itemGroups: IContextualMenuItem[][] = customizedActionGroups
-    .filter(actionGroup => Array.isArray(actionGroup) && actionGroup.length)
-    .map(actionGroup => {
+    .filter((actionGroup) => Array.isArray(actionGroup) && actionGroup.length)
+    .map((actionGroup) => {
       return actionGroup.map(
         ({ title, $ref }) =>
           ({
@@ -111,9 +111,6 @@ const createPasteButtonItem = (
     onRender: () => {
       return (
         <button
-          disabled={disabled}
-          role="menuitem"
-          name="Paste"
           aria-posinset={1}
           aria-setsize={menuItemCount + 1}
           css={css`
@@ -130,14 +127,17 @@ const createPasteButtonItem = (
               background: rgb(237, 235, 233);
             }
           `}
+          disabled={disabled}
+          name="Paste"
+          role="menuitem"
           onClick={() => onClick({ key: MenuEventTypes.Paste })}
         >
           <div>
             <FontIcon
-              iconName="Paste"
               css={css`
                 margin-right: 4px;
               `}
+              iconName="Paste"
             />
             <span>Paste</span>
           </div>

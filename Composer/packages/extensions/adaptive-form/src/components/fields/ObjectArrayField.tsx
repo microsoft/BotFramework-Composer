@@ -31,7 +31,7 @@ const getNewPlaceholder = (props: FieldProps<any[]>, propertyName: string): stri
   return formatMessage('Add new {propertyName}', { propertyName });
 };
 
-const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
+const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
   const { value = [], schema, id, onChange, className, uiOptions, label, description, required } = props;
   const { items } = schema;
   const itemSchema = Array.isArray(items) ? items[0] : items;
@@ -105,7 +105,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
 
   return (
     <div className={className}>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <div>
         {orderedProperties.length > 1 && !stackArrayItems && (
           <div css={objectArrayField.objectItemLabel}>
@@ -117,9 +117,9 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                   return (
                     <div key={index} css={objectArrayField.objectItemValueLabel}>
                       <FieldLabel
+                        inline
                         description={propSchema.description}
                         id={`${id}.${key}`}
-                        inline
                         label={propSchema.title}
                       />
                     </div>
@@ -134,10 +134,10 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           <ArrayFieldItem
             key={item.id}
             {...props}
+            transparentBorder
             id={`${id}.${idx}`}
             schema={itemSchema as JSONSchema7}
             stackArrayItems={stackArrayItems}
-            transparentBorder
             value={item.value}
             {...getArrayItemProps(arrayItems, idx, handleChange)}
           />
@@ -148,14 +148,16 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           <React.Fragment>
             <div css={objectArrayField.arrayItemField}>
               {orderedProperties
-                .filter(p => !Array.isArray(p))
+                .filter((p) => !Array.isArray(p))
                 .map((property, index, allProperties) => {
                   const lastField = index === allProperties.length - 1;
                   if (typeof property === 'string') {
                     return (
                       <div key={index} css={objectArrayField.objectItemInputField}>
                         <TextField
+                          ariaLabel={lastField ? END_OF_ROW_LABEL : INSIDE_ROW_LABEL}
                           autoComplete="off"
+                          componentRef={index === 0 ? firstNewFieldRef : undefined}
                           iconProps={{
                             ...(lastField
                               ? {
@@ -172,8 +174,6 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                           value={newObject[property] || ''}
                           onChange={handleNewObjectChange(property)}
                           onKeyDown={handleKeyDown}
-                          ariaLabel={lastField ? END_OF_ROW_LABEL : INSIDE_ROW_LABEL}
-                          componentRef={index === 0 ? firstNewFieldRef : undefined}
                         />
                       </div>
                     );

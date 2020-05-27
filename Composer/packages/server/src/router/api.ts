@@ -56,7 +56,7 @@ const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, 
   Promise.resolve(handler(req, res, next)).catch(next);
 };
 
-router.stack.map(layer => {
+router.stack.map((layer) => {
   const fn: RequestHandler = layer.route.stack[0].handle;
   layer.route.stack[0].handle = ErrorHandler(fn);
 });
