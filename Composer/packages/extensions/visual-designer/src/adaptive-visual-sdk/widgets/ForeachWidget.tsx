@@ -6,18 +6,18 @@ import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { transformForeach } from '../adaptive-visual-sdk/transformers/transformForeach';
-import { foreachLayouter } from '../adaptive-visual-sdk/layouters/foreachLayouter';
-import { GraphNode } from '../models/GraphNode';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { LoopIndicator } from '../components/decorations/LoopIndicator';
-import { ElementMeasurer } from '../components/lib/ElementMeasurer';
-import { SVGContainer } from '../components/lib/SVGContainer';
-import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
-import { designerCache } from '../store/DesignerCache';
-import { FlowEdges } from '../components/lib/FlowEdges';
-import { FlowRendererContext } from '../store/FlowRendererContext';
+import { transformForeach } from '../transformers/transformForeach';
+import { foreachLayouter } from '../layouters/foreachLayouter';
+import { GraphNode } from '../../models/GraphNode';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { OffsetContainer } from '../../components/lib/OffsetContainer';
+import { LoopIndicator } from '../../components/decorations/LoopIndicator';
+import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
+import { SVGContainer } from '../../components/lib/SVGContainer';
+import { useSmartLayout, GraphNodeMap } from '../../hooks/useSmartLayout';
+import { designerCache } from '../../store/DesignerCache';
+import { FlowEdges } from '../../components/lib/FlowEdges';
+import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 import { ActionGroup } from './ActionGroup';
 

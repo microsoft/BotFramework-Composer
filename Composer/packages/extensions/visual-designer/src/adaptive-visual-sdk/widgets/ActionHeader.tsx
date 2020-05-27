@@ -8,11 +8,11 @@ import { generateSDKTitle } from '@bfc/shared';
 import { WidgetComponent, WidgetContainerProps } from '@bfc/extension';
 import { TruncatedCSS, ColorlessFontCSS } from '@bfc/ui-shared';
 
-import { StandardNodeWidth, HeaderHeight } from '../constants/ElementSizes';
-import { DefaultColors } from '../constants/ElementColors';
-import { ElementIcon } from '../utils/obiPropertyResolver';
-import { Icon } from '../components/decorations/icon';
-import { FlowRendererContext } from '../store/FlowRendererContext';
+import { StandardNodeWidth, HeaderHeight } from '../../constants/ElementSizes';
+import { DefaultColors } from '../../constants/ElementColors';
+import { ElementIcon } from '../../utils/obiPropertyResolver';
+import { Icon } from '../../components/decorations/icon';
+import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title?: string;
@@ -52,7 +52,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
 
   const { NodeMenu } = useContext(FlowRendererContext);
   const menuNode =
-    menu === 'none' ? null : menu || <NodeMenu colors={colors} nodeId={id} nodeData={data} onEvent={onEvent} />;
+    menu === 'none' ? null : menu || <NodeMenu colors={colors} nodeData={data} nodeId={id} onEvent={onEvent} />;
 
   return (
     <div

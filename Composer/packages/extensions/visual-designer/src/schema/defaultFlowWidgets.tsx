@@ -11,7 +11,7 @@ import {
   SwitchConditionWidget,
   ForeachWidget,
   ActionHeader,
-} from '../widgets';
+} from '../adaptive-visual-sdk/widgets';
 
 export const defaultFlowWidgets: FlowEditorWidgetMap = {
   ActionCard,

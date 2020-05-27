@@ -7,19 +7,19 @@ import { FC, useMemo, useContext } from 'react';
 import { PromptTab } from '@bfc/shared';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { baseInputLayouter } from '../adaptive-visual-sdk/layouters/baseInputLayouter';
-import { transformBaseInput } from '../adaptive-visual-sdk/transformers/transformBaseInput';
-import { GraphNode } from '../models/GraphNode';
-import { OffsetContainer } from '../components/lib/OffsetContainer';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { IconBrick } from '../components/decorations/IconBrick';
-import { SVGContainer } from '../components/lib/SVGContainer';
-import { GraphLayout } from '../models/GraphLayout';
-import { ElementMeasurer } from '../components/lib/ElementMeasurer';
-import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
-import { designerCache } from '../store/DesignerCache';
-import { FlowEdges } from '../components/lib/FlowEdges';
-import { FlowRendererContext } from '../store/FlowRendererContext';
+import { baseInputLayouter } from '../layouters/baseInputLayouter';
+import { transformBaseInput } from '../transformers/transformBaseInput';
+import { GraphNode } from '../../models/GraphNode';
+import { OffsetContainer } from '../../components/lib/OffsetContainer';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { IconBrick } from '../../components/decorations/IconBrick';
+import { SVGContainer } from '../../components/lib/SVGContainer';
+import { GraphLayout } from '../../models/GraphLayout';
+import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
+import { useSmartLayout, GraphNodeMap } from '../../hooks/useSmartLayout';
+import { designerCache } from '../../store/DesignerCache';
+import { FlowEdges } from '../../components/lib/FlowEdges';
+import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 enum PromptNodes {
   BotAsks = 'botAsksNode',

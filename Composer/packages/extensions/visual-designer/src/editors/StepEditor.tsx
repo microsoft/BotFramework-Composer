@@ -15,7 +15,7 @@ import { SVGContainer } from '../components/lib/SVGContainer';
 import { drawSVGEdge } from '../components/lib/EdgeUtil';
 import { ObiColors } from '../constants/ElementColors';
 import { FlowRendererContext } from '../store/FlowRendererContext';
-import { ActionGroup } from '../widgets';
+import { ActionGroup } from '../adaptive-visual-sdk/widgets';
 
 const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);

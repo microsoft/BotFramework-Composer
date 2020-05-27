@@ -4,7 +4,7 @@
 import React, { ReactNode } from 'react';
 import { WidgetContainerProps, WidgetComponent } from '@bfc/extension';
 
-import { CardTemplate } from '../components/nodes/templates/CardTemplate';
+import { CardTemplate } from '../../components/nodes/templates/CardTemplate';
 
 import { ActionHeader } from './ActionHeader';
 

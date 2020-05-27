@@ -9,9 +9,9 @@ import { LinkBtn } from '@bfc/ui-shared';
 import { useEffect, useContext, useRef } from 'react';
 import { ILink } from 'office-ui-fabric-react/lib/Link';
 
-import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { AttrNames, LinkTag } from '../constants/ElementAttributes';
-import { SelectionContext } from '../store/SelectionContext';
+import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { AttrNames, LinkTag } from '../../constants/ElementAttributes';
+import { SelectionContext } from '../../store/SelectionContext';
 
 export interface DialogRefCardProps extends WidgetContainerProps {
   dialog: string | object;
