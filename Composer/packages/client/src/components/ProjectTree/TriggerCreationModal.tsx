@@ -37,7 +37,7 @@ import { StoreContext } from '../../store';
 
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
-const nameRegex = /^[a-zA-Z0-9-_.]+$/;
+const nameRegex = /^[a-zA-Z0-9-_]+$/;
 const validateForm = (
   selectedType: string,
   data: TriggerFormData,

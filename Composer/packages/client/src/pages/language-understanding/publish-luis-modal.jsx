@@ -38,7 +38,7 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
-const nameRegex = /^[a-zA-Z0-9-_.]+$/;
+const nameRegex = /^[a-zA-Z0-9-_]+$/;
 const validationProperties = ['name', 'authoringKey', 'environment'];
 const defaultFields = { authoringRegion: 'westus', defaultLanguage: 'en-us' };
 const validateForm = (data) => {
