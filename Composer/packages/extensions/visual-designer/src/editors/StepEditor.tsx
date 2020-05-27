@@ -12,7 +12,7 @@ import { measureJsonBoundary } from '../adaptive-visual-sdk/layouters/measureJso
 import { Boundary } from '../adaptive-visual-sdk/models/Boundary';
 import { EdgeDirection } from '../adaptive-visual-sdk/models/EdgeData';
 import { SVGContainer } from '../adaptive-visual-sdk/components/SVGContainer';
-import { drawSVGEdge } from '../adaptive-visual-sdk/utils/EdgeUtil';
+import { drawSVGEdge } from '../adaptive-visual-sdk/utils/visual/EdgeUtil';
 import { ObiColors } from '../adaptive-visual-sdk/constants/ElementColors';
 import { FlowRendererContext } from '../store/FlowRendererContext';
 import { ActionGroup } from '../adaptive-visual-sdk/widgets';

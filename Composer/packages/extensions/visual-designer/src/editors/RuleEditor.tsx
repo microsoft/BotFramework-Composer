@@ -11,7 +11,7 @@ import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { NodeEventTypes } from '../adaptive-visual-sdk/constants/NodeEventTypes';
 import { GraphNode } from '../adaptive-visual-sdk/models/GraphNode';
 import { transformObiRules } from '../adaptive-visual-sdk/transformers/transformObiRules';
-import { outlineObiJson } from '../utils/outlineObiJson';
+import { outlineObiJson } from '../adaptive-visual-sdk/utils/adaptive/outlineObiJson';
 
 import { StepEditor } from './StepEditor';
 

@@ -4,7 +4,7 @@
 import { ObiFieldNames } from '../constants/ObiFieldNames';
 import { ObiTypes } from '../constants/ObiTypes';
 import { IndexedNode } from '../models/IndexedNode';
-import { normalizeObiStep } from '../../utils/stepBuilder';
+import { normalizeObiStep } from '../utils/adaptive/stepBuilder';
 
 const { Events, Actions } = ObiFieldNames;
 

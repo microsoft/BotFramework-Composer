@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiFieldNames } from '../adaptive-visual-sdk/constants/ObiFieldNames';
-import { ObiTypes } from '../adaptive-visual-sdk/constants/ObiTypes';
+import { ObiFieldNames } from '../../constants/ObiFieldNames';
+import { ObiTypes } from '../../constants/ObiTypes';
 
 const DEFAULT_CHILDREN_KEYS = [ObiFieldNames.Actions];
 const childrenMap = {

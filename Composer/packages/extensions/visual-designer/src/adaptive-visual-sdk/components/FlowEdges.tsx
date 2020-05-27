@@ -4,7 +4,7 @@
 import React, { FC } from 'react';
 
 import { Edge } from '../models/EdgeData';
-import { renderEdge } from '../utils/EdgeUtil';
+import { renderEdge } from '../utils/visual/EdgeUtil';
 
 export interface FlowEdgesProps {
   edges: Edge[];
