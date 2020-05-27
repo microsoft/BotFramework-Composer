@@ -4,7 +4,7 @@
 import React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { drawSVGEdge } from '../../../src/components/lib/EdgeUtil';
+import { drawSVGEdge } from '../../../src/adaptive-visual-sdk/utils/EdgeUtil';
 import { EdgeDirection } from '../../../src/adaptive-visual-sdk/models/EdgeData';
 
 describe('drawSVGEdge', () => {

@@ -10,13 +10,13 @@ import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
 import { GraphNode } from '../models/GraphNode';
-import { OffsetContainer } from '../../components/lib/OffsetContainer';
-import { Diamond } from '../../components/nodes/templates/Diamond';
-import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
-import { SVGContainer } from '../../components/lib/SVGContainer';
+import { OffsetContainer } from '../components/OffsetContainer';
+import { Diamond } from '../components/Diamond';
+import { ElementMeasurer } from '../components/ElementMeasurer';
+import { SVGContainer } from '../components/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
-import { FlowEdges } from '../../components/lib/FlowEdges';
+import { FlowEdges } from '../components/FlowEdges';
 import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 import { ActionGroup } from './ActionGroup';

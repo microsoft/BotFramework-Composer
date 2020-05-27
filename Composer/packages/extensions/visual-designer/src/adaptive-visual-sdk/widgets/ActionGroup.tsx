@@ -10,12 +10,12 @@ import { sequentialLayouter } from '../layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
 import { transformStepGroup } from '../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../../components/nodes/nodeProps';
-import { OffsetContainer } from '../../components/lib/OffsetContainer';
+import { OffsetContainer } from '../components/OffsetContainer';
 import { GraphLayout } from '../models/GraphLayout';
-import { SVGContainer } from '../../components/lib/SVGContainer';
+import { SVGContainer } from '../components/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
-import { FlowEdges } from '../../components/lib/FlowEdges';
+import { FlowEdges } from '../components/FlowEdges';
 import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 import { StepRenderer } from './AdaptiveAction';

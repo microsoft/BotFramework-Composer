@@ -10,13 +10,13 @@ import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { OffsetContainer } from '../../components/lib/OffsetContainer';
-import { Diamond } from '../../components/nodes/templates/Diamond';
-import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
-import { SVGContainer } from '../../components/lib/SVGContainer';
+import { OffsetContainer } from '../components/OffsetContainer';
+import { Diamond } from '../components/Diamond';
+import { ElementMeasurer } from '../components/ElementMeasurer';
+import { SVGContainer } from '../components/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
-import { FlowEdges } from '../../components/lib/FlowEdges';
+import { FlowEdges } from '../components/FlowEdges';
 import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 import { ActionGroup } from './ActionGroup';

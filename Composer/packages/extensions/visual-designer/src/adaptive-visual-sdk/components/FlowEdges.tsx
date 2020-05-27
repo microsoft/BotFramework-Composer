@@ -3,9 +3,8 @@
 
 import React, { FC } from 'react';
 
-import { Edge } from '../../adaptive-visual-sdk/models/EdgeData';
-
-import { renderEdge } from './EdgeUtil';
+import { Edge } from '../models/EdgeData';
+import { renderEdge } from '../utils/EdgeUtil';
 
 export interface FlowEdgesProps {
   edges: Edge[];

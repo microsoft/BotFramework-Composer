@@ -8,7 +8,7 @@ import { TextDiv } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../../constants/ElementSizes';
 import { ObiColors } from '../../../constants/ElementColors';
-import { ArrowLine } from '../../lib/ArrowLine';
+import { ArrowLine } from '../../../adaptive-visual-sdk/components/ArrowLine';
 
 const containerCSS = css`
   font-size: 12px;

@@ -10,13 +10,13 @@ import { transformForeach } from '../transformers/transformForeach';
 import { foreachLayouter } from '../layouters/foreachLayouter';
 import { GraphNode } from '../models/GraphNode';
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
-import { OffsetContainer } from '../../components/lib/OffsetContainer';
-import { LoopIndicator } from '../../components/decorations/LoopIndicator';
-import { ElementMeasurer } from '../../components/lib/ElementMeasurer';
-import { SVGContainer } from '../../components/lib/SVGContainer';
+import { OffsetContainer } from '../components/OffsetContainer';
+import { LoopIndicator } from '../components/LoopIndicator';
+import { ElementMeasurer } from '../components/ElementMeasurer';
+import { SVGContainer } from '../components/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../../store/DesignerCache';
-import { FlowEdges } from '../../components/lib/FlowEdges';
+import { FlowEdges } from '../components/FlowEdges';
 import { FlowRendererContext } from '../../store/FlowRendererContext';
 
 import { ActionGroup } from './ActionGroup';
