@@ -9,6 +9,15 @@ export const ExpressionType = {
   integer: 'integer',
   boolean: 'boolean',
   string: 'string',
+  array: 'array',
+};
+
+const ExpressionTypeMapString = {
+  [ReturnType.Number]: 'number',
+  [ReturnType.String]: 'string',
+  [ReturnType.Boolean]: 'boolean',
+  [ReturnType.Object]: 'object',
+  [ReturnType.Array]: 'array',
 };
 
 const isExpression = (value: string | boolean | number, types: string[]): boolean => {
@@ -17,9 +26,10 @@ const isExpression = (value: string | boolean | number, types: string[]): boolea
 };
 
 //The return type should match the schema type
+//TODO: returnType is number, schem type is string, need map or unify
 const checkReturnType = (returnType: ReturnType, types: string[]): string => {
   return returnType === ReturnType.Object ||
-    ~types.indexOf(returnType) ||
+    ~types.indexOf(ExpressionTypeMapString[returnType]) ||
     (returnType === ReturnType.Number && ~types.indexOf(ExpressionType.integer))
     ? ''
     : formatMessage('the expression type is not match');
