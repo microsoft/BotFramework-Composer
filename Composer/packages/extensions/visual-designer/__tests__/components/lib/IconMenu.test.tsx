@@ -4,7 +4,7 @@
 import React from 'react';
 import { render, fireEvent, findByText } from '@bfc/test-utils';
 
-import { IconMenu } from '../../../src/components/IconMenu';
+import { IconMenu } from '../../../src/composer-flow-editor/components/IconMenu';
 
 describe('<IconMenu />', () => {
   let menuItems, iconName, onClick;

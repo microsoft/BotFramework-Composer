@@ -8,11 +8,11 @@ import classnames from 'classnames';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes, EditorEventHandler } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
-import { MenuTypes } from '../../composer-flow-editor/constants/MenuTypes';
-import { AttrNames } from '../../composer-flow-editor/constants/ElementAttributes';
-import { SelectionContext } from '../../composer-flow-editor/contexts/SelectionContext';
+import { MenuTypes } from '../constants/MenuTypes';
+import { AttrNames } from '../constants/ElementAttributes';
+import { SelectionContext } from '../contexts/SelectionContext';
 import { ElementColor } from '../../adaptive-visual-sdk/constants/ElementColors';
-import { IconMenu } from '../IconMenu';
+import { IconMenu } from '../components/IconMenu';
 
 const declareElementAttributes = (id: string) => {
   return {

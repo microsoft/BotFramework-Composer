@@ -19,13 +19,13 @@ import { mergePluginConfig } from './composer-flow-editor/utils/mergePluginConfi
 import { getCustomSchema } from './composer-flow-editor/utils/getCustomSchema';
 import { defaultFlowSchema } from './schema/defaultFlowSchema';
 import { SelectionContext } from './composer-flow-editor/contexts/SelectionContext';
-import { KeyboardZone } from './components/KeyboardZone';
+import { KeyboardZone } from './composer-flow-editor/components/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './composer-flow-editor/utils/mapKeyboardCommandToEditorEvent.ts';
 import { useSelectionEffect } from './composer-flow-editor/hooks/useSelectionEffect';
 import { useEditorEventApi } from './composer-flow-editor/hooks/useEditorEventApi';
 import { NodeEventTypes } from './adaptive-visual-sdk/constants/NodeEventTypes';
 import { AdaptiveDialogEditor } from './adaptive-visual-sdk/editors/AdaptiveDialogEditor';
-import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './components/renderers';
+import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './composer-flow-editor/renderers';
 
 formatMessage.setup({
   missingTranslation: 'ignore',

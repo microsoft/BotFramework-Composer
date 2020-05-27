@@ -4,7 +4,7 @@
 import React from 'react';
 import { render, fireEvent, findAllByText } from '@bfc/test-utils';
 
-import { NodeMenu } from '../../../src/components/renderers/NodeMenu';
+import { NodeMenu } from '../../../src/composer-flow-editor/renderers/NodeMenu';
 import { NodeEventTypes } from '../../../src/adaptive-visual-sdk/constants/NodeEventTypes';
 
 describe('<NodeMenu />', () => {

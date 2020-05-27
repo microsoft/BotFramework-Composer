@@ -11,7 +11,7 @@ import { ConceptLabels, DialogGroup, dialogGroups, SDKKinds, DefinitionSummary }
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
-import { MenuEventTypes } from '../../../composer-flow-editor/constants/MenuTypes';
+import { MenuEventTypes } from '../../constants/MenuTypes';
 
 const resolveMenuTitle = ($kind: SDKKinds): string => {
   const conceptLabel = ConceptLabels[$kind];
