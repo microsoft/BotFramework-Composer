@@ -87,7 +87,7 @@ export class BotProject {
 
   public init = async () => {
     this.diagnostics = [];
-    this.settings = await this.getEnvSettings('', false);
+    this.settings = await this.getEnvSettings(false);
     const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || []);
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
@@ -108,12 +108,11 @@ export class BotProject {
   };
 
   public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {
-    const defaultSlot = '';
-    return await this.settingManager.get(defaultSlot, obfuscate);
+    return await this.settingManager.get(obfuscate);
   };
 
-  public getEnvSettings = async (slot: string, obfuscate: boolean) => {
-    const settings = await this.settingManager.get(slot, obfuscate);
+  public getEnvSettings = async (obfuscate: boolean) => {
+    const settings = await this.settingManager.get(obfuscate);
     if (settings && oauthInput().MicrosoftAppId && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
     }
@@ -124,25 +123,24 @@ export class BotProject {
   };
 
   public updateDefaultSlotEnvSettings = async (config: DialogSetting) => {
-    const defaultSlot = '';
-    await this.updateEnvSettings(defaultSlot, config);
+    await this.updateEnvSettings(config);
   };
 
   // create or update dialog settings
-  public updateEnvSettings = async (slot: string, config: DialogSetting) => {
-    await this.settingManager.set(slot, config);
+  public updateEnvSettings = async (config: DialogSetting) => {
+    await this.settingManager.set(config);
     this.settings = config;
   };
 
   // update skill in settings
   public updateSkill = async (config: Skill[]) => {
-    const settings = await this.getEnvSettings('', false);
+    const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
 
     settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
       return { manifestUrl, name };
     });
-    await this.settingManager.set('', settings);
+    await this.settingManager.set(settings);
 
     this.skills = skillsParsed;
     return skillsParsed;
