@@ -260,8 +260,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       settings.runtime?.customRuntime === true
         ? settings.runtime.command.split(/\s+/)
         : runtimeType === 'C#'
-          ? ['dotnet', 'run', '--project', 'azurewebapp']
-          : ['node', 'azurewebapp/lib/index.js']; //TODO: ccastro should pick up the bot start command here. After, remove azurewebapp arg
+        ? ['dotnet', 'run', '--project', 'azurewebapp']
+        : ['node', 'azurewebapp/lib/index.js']; //TODO: ccastro should pick up the bot start command here. After, remove azurewebapp arg
 
     return new Promise((resolve, reject) => {
       // ensure the specified runtime path exists
@@ -352,7 +352,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     if (fs.existsSync(dstPath)) {
       await removeFile(dstPath);
     }
-    const files = await glob('**/*', { cwd: srcDir, dot: true });
+    const files = await glob('**/*', { cwd: srcDir, dot: true, ignore: ['runtime'] });
     return new Promise((resolve, reject) => {
       const archive = archiver('zip');
       const output = fs.createWriteStream(dstPath);
