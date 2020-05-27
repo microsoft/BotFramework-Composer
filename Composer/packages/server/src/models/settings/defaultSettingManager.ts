@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import omit from 'lodash/omit';
+import set from 'lodash/set';
 import { SensitiveProperties } from '@bfc/shared';
 import { UserIdentity } from '@bfc/plugin-loader';
 
@@ -22,6 +22,7 @@ export class DefaultSettingManager extends FileSettingManager {
       feature: {
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
+        RemoveRecipientMention: false,
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
@@ -66,7 +67,10 @@ export class DefaultSettingManager extends FileSettingManager {
 
   private filterOutSensitiveValue = (obj: any) => {
     if (obj && typeof obj === 'object') {
-      return omit(obj, SensitiveProperties);
+      SensitiveProperties.map((key) => {
+        set(obj, key, '');
+      });
+      return obj;
     }
   };
 
