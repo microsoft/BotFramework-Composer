@@ -1,0 +1,26 @@
+{
+  "name": "@bfc/test-utils",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "types": "types.d.ts",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
+    "@testing-library/jest-dom": "^5.7.0",
+    "@testing-library/react": "^10.0.4",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.3"
+  }
+}

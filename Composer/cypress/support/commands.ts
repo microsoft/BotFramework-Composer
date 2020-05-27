@@ -3,30 +3,40 @@
 
 import '@testing-library/cypress/add-commands';
 
-Cypress.Commands.add('createBot', (bobotId: string, botName?: string) => {
-  cy.findByTestId('LeftNav-CommandBarButtonHome').click();
-  cy.findByTestId('homePage-ToolBar-New').within(() => {
-    cy.findByText('New').click();
+Cypress.Commands.add('createBot', (botId: string, botName?: string) => {
+  const name = `__Test${botName || botId}`;
+
+  const params = {
+    storageId: 'default',
+    name,
+    description: '',
+    templateId: botId,
+  };
+
+  cy.request('post', '/api/projects', params).then((res) => {
+    const { id: projectId } = res.body;
+    cy.visit(`/bot/${projectId}/dialogs/${name.toLowerCase()}`);
   });
-  cy.findByTestId('Create from template').click({ force: true });
-  cy.findByTestId(`${bobotId}`).click();
-  cy.findByTestId('NextStepButton').click();
-  cy.findByTestId('NewDialogName').type(`{selectall}__Test${botName || bobotId}{enter}`);
-  cy.wait(1000);
 });
 
 Cypress.Commands.add('withinEditor', (editorName, cb) => {
-  cy.get(`iframe[name="${editorName}"]`).then(editor => {
-    cy.wrap<HTMLElement>(editor.contents().find('body') as JQuery<HTMLElement>).within(cb);
-  });
+  cy.findByTestId(editorName).within(cb);
 });
 
-Cypress.Commands.add('visitPage', page => {
+Cypress.Commands.add('visitPage', (page) => {
   cy.findByTestId(`LeftNav-CommandBarButton${page}`).click();
-  cy.wait(3000);
+  cy.findByTestId('ActiveLeftNavItem').should('contain', page);
 });
 
-Cypress.on('uncaught:exception', (err, runnable) => {
+Cypress.Commands.add('enterTextAndSubmit', (textElement: string, text: string, submitBtn?: string) => {
+  cy.findByTestId(textElement).clear().type(text);
+  if (submitBtn) {
+    cy.findByTestId(submitBtn).click();
+  }
+});
+
+Cypress.on('uncaught:exception', (err) => {
+  // eslint-disable-next-line no-console
   console.log('uncaught exception', err);
   return false;
 });

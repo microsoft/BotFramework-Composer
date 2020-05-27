@@ -3,11 +3,19 @@
 
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import get from 'lodash/get';
-import { LuIntentSection } from '@bfc/shared';
+import {
+  FileInfo,
+  LuFile,
+  LuParsed,
+  LuSectionTypes,
+  LuIntentSection,
+  Diagnostic,
+  Position,
+  Range,
+  DiagnosticSeverity,
+} from '@bfc/shared';
 
-import { FileInfo, LuFile, LuParsed, LuSectionTypes } from './type';
 import { getBaseName } from './utils/help';
-import { Diagnostic, Position, Range, DiagnosticSeverity } from './diagnostic';
 import { FileExtensions } from './utils/fileExtensions';
 
 const { luParser } = sectionHandler;
@@ -21,8 +29,8 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
   };
   const result = new Diagnostic(d.Message, source, severityMap[d.Severity]);
 
-  const start: Position = new Position(d.Range.Start.Line, d.Range.Start.Character);
-  const end: Position = new Position(d.Range.End.Line, d.Range.End.Character);
+  const start: Position = d.Range ? new Position(d.Range.Start.Line, d.Range.Start.Character) : new Position(0, 0);
+  const end: Position = d.Range ? new Position(d.Range.End.Line, d.Range.End.Character) : new Position(0, 0);
   result.range = new Range(start, end);
 
   return result;
@@ -31,7 +39,7 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
 function parse(content: string, id = ''): LuParsed {
   const { Sections, Errors } = luParser.parse(content);
   const intents: LuIntentSection[] = [];
-  Sections.forEach(section => {
+  Sections.forEach((section) => {
     const { Name, Body, SectionType } = section;
     const range = {
       startLineNumber: get(section, 'ParseTree.start.line', 0),
@@ -46,7 +54,7 @@ function parse(content: string, id = ''): LuParsed {
         range,
       });
     } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
-      const Children = section.SimpleIntentSections.map(subSection => {
+      const Children = section.SimpleIntentSections.map((subSection) => {
         const { Name, Body } = subSection;
         const range = {
           startLineNumber: get(subSection, 'ParseTree.start.line', 0),
@@ -67,7 +75,7 @@ function parse(content: string, id = ''): LuParsed {
         range,
       });
       intents.push(
-        ...Children.map(subSection => {
+        ...Children.map((subSection) => {
           return {
             ...subSection,
             Name: `${section.Name}/${subSection.Name}`,
@@ -76,7 +84,7 @@ function parse(content: string, id = ''): LuParsed {
       );
     }
   });
-  const diagnostics = Errors.map(e => convertLuDiagnostic(e, id));
+  const diagnostics = Errors.map((e) => convertLuDiagnostic(e, id));
   return {
     intents,
     diagnostics,
@@ -86,13 +94,13 @@ function parse(content: string, id = ''): LuParsed {
 function index(files: FileInfo[]): LuFile[] {
   if (files.length === 0) return [];
 
-  const filtered = files.filter(file => file.name.endsWith(FileExtensions.Lu));
+  const filtered = files.filter((file) => file.name.endsWith(FileExtensions.Lu));
 
-  const luFiles = filtered.map(file => {
-    const { name, content, relativePath } = file;
+  const luFiles = filtered.map((file) => {
+    const { name, content } = file;
     const id = getBaseName(name);
     const { intents, diagnostics } = parse(content, id);
-    return { id, relativePath, content, intents, diagnostics };
+    return { id, content, intents, diagnostics };
   });
 
   return luFiles;

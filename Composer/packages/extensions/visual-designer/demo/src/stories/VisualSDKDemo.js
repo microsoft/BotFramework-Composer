@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { seedNewDialog, SDKTypes, dialogGroups, DialogGroup } from '@bfc/shared';
+import { DialogFactory, dialogGroups, DialogGroup } from '@bfc/shared';
 
 import { EdgeMenu } from '../../../src/components/menus/EdgeMenu';
 import { JsonBlock } from '../components/json-block';
-import { renderUIWidget } from '../../../src/schema/uischemaRenderer';
-import { UISchemaProvider } from '../../../src/schema/uischemaProvider';
-import { uiSchema } from '../../../src/schema/uischema';
+import { renderUIWidget } from '../../../src/schema/flowSchemaRenderer';
+import { FlowSchemaProvider } from '../../../src/schema/flowSchemaProvider';
+import { defaultFlowSchema } from '../../../src/schema/defaultFlowSchema';
 
 import './story.css';
 
-const uiSchemaPrivider = new UISchemaProvider(uiSchema);
+const uiSchemaPrivider = new FlowSchemaProvider(defaultFlowSchema);
+const actionFactory = new DialogFactory({});
 
 export class VisualSDKDemo extends Component {
   state = {
@@ -21,18 +22,19 @@ export class VisualSDKDemo extends Component {
       ...dialogGroups[DialogGroup.RESPONSE].types,
       ...dialogGroups[DialogGroup.INPUT].types,
       ...dialogGroups[DialogGroup.BRANCHING].types,
+      ...dialogGroups[DialogGroup.LOOPING].types,
       ...dialogGroups[DialogGroup.MEMORY].types,
       ...dialogGroups[DialogGroup.STEP].types,
       ...dialogGroups[DialogGroup.CODE].types,
       ...dialogGroups[DialogGroup.LOG].types,
     ];
-    const initalActions = initialTypes.map(t => seedNewDialog(t));
+    const initalActions = initialTypes.map(t => actionFactory.create(t));
     return initalActions;
   }
 
-  insertActionPreview($type) {
+  insertActionPreview($kind) {
     this.setState({
-      actions: [seedNewDialog($type), ...this.state.actions],
+      actions: [this.factory.create($kind), ...this.state.actions],
     });
   }
 
@@ -61,7 +63,7 @@ export class VisualSDKDemo extends Component {
           />
         </div>
         <div className="action-preview--visual" style={{ marginLeft: 20 }}>
-          {renderUIWidget(uiSchemaPrivider.get(action.$type), {
+          {renderUIWidget(uiSchemaPrivider.get(action.$kind), {
             id: `actions[${index}]`,
             data: action,
             onEvent: () => null,
@@ -74,8 +76,8 @@ export class VisualSDKDemo extends Component {
   renderActionFactory() {
     return (
       <div style={{ width: '100%', height: 100, margin: 20 }}>
-        <h3>Create action by $type</h3>
-        <EdgeMenu id="visual-sdk-demo" onClick={$type => this.insertActionPreview($type)} />
+        <h3>Create action by $kind</h3>
+        <EdgeMenu id="visual-sdk-demo" onClick={$kind => this.insertActionPreview($kind)} />
       </div>
     );
   }

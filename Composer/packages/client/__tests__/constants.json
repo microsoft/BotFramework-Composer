@@ -1,16 +1,16 @@
 {"dialogs": [
   {
-      "id": "AddToDo",
+      "id": "addtodo",
       "isRoot": false,
-      "displayName": "AddToDo",
+      "displayName": "addtodo",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "808722"
           },
           "rules": [
               {
-                  "$type": "Microsoft.OnEvent",
+                  "$kind": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "335456"
                   },
@@ -28,17 +28,17 @@
       ]
   },
   {
-      "id": "ClearToDos",
+      "id": "cleartodo",
       "isRoot": false,
-      "displayName": "ClearToDos",
+      "displayName": "cleartodo",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "316336"
           },
           "rules": [
               {
-                  "$type": "Microsoft.OnEvent",
+                  "$kind": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "480162"
                   },
@@ -59,11 +59,11 @@
       ]
   },
   {
-      "id": "DeleteToDo",
+      "id": "deletetodo",
       "isRoot": false,
-      "displayName": "DeleteToDo",
+      "displayName": "deletetodo",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "114909"
           },
@@ -71,7 +71,7 @@
           "$schema": "../../app.schema",
           "rules": [
               {
-                  "$type": "Microsoft.OnEvent",
+                  "$kind": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "768658"
                   },
@@ -89,25 +89,25 @@
       ]
   },
   {
-      "id": "Main",
+      "id": "todobot",
       "isRoot": true,
-      "displayName": "ToDoBot.Main",
+      "displayName": "ToDoBot",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "288769",
               "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
           },
           "rules": [
               {
-                  "$type": "Microsoft.OnConversationUpdateActivity",
+                  "$kind": "Microsoft.OnConversationUpdateActivity",
                   "$designer": {
                       "id": "376720"
                   },
                   "steps": []
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "064505"
                   },
@@ -115,7 +115,7 @@
                   "intent": "AddIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "114961"
                   },
@@ -123,7 +123,7 @@
                   "intent": "DeleteIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "088050"
                   },
@@ -131,7 +131,7 @@
                   "intent": "ClearIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "633942"
                   },
@@ -139,7 +139,7 @@
                   "intent": "HelpIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "794124"
                   },
@@ -147,7 +147,7 @@
                   "intent": "ShowIntent"
               },
               {
-                  "$type": "Microsoft.OnIntent",
+                  "$kind": "Microsoft.OnIntent",
                   "$designer": {
                       "id": "179728"
                   },
@@ -155,7 +155,7 @@
                   "intent": "CancelIntent"
               },
               {
-                  "$type": "Microsoft.OnUnknownIntent",
+                  "$kind": "Microsoft.OnUnknownIntent",
                   "$designer": {
                       "id": "677447"
                   },
@@ -216,17 +216,17 @@
       ]
   },
   {
-      "id": "ShowToDos",
+      "id": "showtodos",
       "isRoot": false,
-      "displayName": "ShowToDos",
+      "displayName": "showtodos",
       "content": {
-          "$type": "Microsoft.AdaptiveDialog",
+          "$kind": "Microsoft.AdaptiveDialog",
           "$designer": {
               "id": "709692"
           },
           "rules": [
               {
-                  "$type": "Microsoft.OnEvent",
+                  "$kind": "Microsoft.OnEvent",
                   "$designer": {
                       "id": "783343"
                   },

@@ -32,7 +32,7 @@ import {
 } from './calculateNodeBoundary';
 
 function measureStepGroupBoundary(stepGroup): Boundary {
-  const boundaries = (stepGroup.children || []).map(x => measureJsonBoundary(x));
+  const boundaries = (stepGroup.children || []).map((x) => measureJsonBoundary(x));
   return calculateSequenceBoundary(boundaries);
 }
 
@@ -41,7 +41,7 @@ function measureForeachBoundary(json): Boundary {
   if (!result) return new Boundary();
 
   const { foreachDetail, stepGroup, loopBegin, loopEnd } = result;
-  const inputs: Boundary[] = [foreachDetail, stepGroup, loopBegin, loopEnd].map(x => measureJsonBoundary(x.json));
+  const inputs: Boundary[] = [foreachDetail, stepGroup, loopBegin, loopEnd].map((x) => measureJsonBoundary(x.json));
   return calculateForeachBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
@@ -50,7 +50,7 @@ function measureIfConditionBoundary(json): Boundary {
   if (!result) return new Boundary();
 
   const { condition, choice, ifGroup, elseGroup } = result;
-  const inputs: Boundary[] = [condition, choice, ifGroup, elseGroup].map(x => measureJsonBoundary(x.json));
+  const inputs: Boundary[] = [condition, choice, ifGroup, elseGroup].map((x) => measureJsonBoundary(x.json));
   return calculateIfElseBoundary(inputs[0], inputs[1], inputs[2], inputs[3]);
 }
 
@@ -62,7 +62,7 @@ function measureSwitchConditionBoundary(json): Boundary {
   return calculateSwitchCaseBoundary(
     measureJsonBoundary(condition.json),
     measureJsonBoundary(choice.json),
-    branches.map(x => measureJsonBoundary(x.json))
+    branches.map((x) => measureJsonBoundary(x.json))
   );
 }
 
@@ -99,14 +99,14 @@ function measureBaseInputBoundary(data): Boundary {
 
 export function measureJsonBoundary(json): Boundary {
   let boundary = new Boundary();
-  if (!json || !json.$type) return boundary;
+  if (!json || !json.$kind) return boundary;
 
   const cachedBoundary = designerCache.loadBounary(json);
   if (cachedBoundary) {
     return cachedBoundary;
   }
 
-  switch (json.$type) {
+  switch (json.$kind) {
     case ObiTypes.ChoiceDiamond:
       boundary = new Boundary(DiamondSize.width, DiamondSize.height);
       break;

@@ -1,10 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
+import { Monaco } from '@monaco-editor/react';
 
-export function registerLULanguage(monaco: typeof monacoEditor) {
-  monaco.languages.setMonarchTokensProvider('lu', {
+const LANGUAGE_NAME = 'lu';
+
+export function registerLULanguage(monaco: Monaco) {
+  // return if we've already registered this language to the editor
+  if (monaco.languages.getLanguages().some((lang) => lang.id === LANGUAGE_NAME)) return;
+
+  monaco.languages.setMonarchTokensProvider(LANGUAGE_NAME, {
     tokenizer: {
       root: [
         [/^\s*#/, { token: 'intent', next: '@intent' }],
@@ -52,13 +57,13 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
   });
 
   monaco.languages.register({
-    id: 'lu',
+    id: LANGUAGE_NAME,
     extensions: ['.lu'],
     aliases: ['LU', 'language-understanding'],
     mimetypes: ['application/lu'],
   });
 
-  monaco.languages.setLanguageConfiguration('lu', {
+  monaco.languages.setLanguageConfiguration(LANGUAGE_NAME, {
     autoClosingPairs: [
       { open: '{', close: '}' },
       { open: '[', close: ']' },
@@ -66,7 +71,7 @@ export function registerLULanguage(monaco: typeof monacoEditor) {
     ],
   });
 
-  monaco.editor.defineTheme('lu', {
+  monaco.editor.defineTheme(LANGUAGE_NAME, {
     base: 'vs',
     inherit: false,
     colors: {},

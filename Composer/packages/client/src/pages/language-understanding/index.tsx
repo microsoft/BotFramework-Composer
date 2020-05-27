@@ -8,73 +8,67 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
 
 import { StoreContext } from '../../store';
-import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { ToolBar } from '../../components/ToolBar/index';
-import { TestController } from '../../TestController';
-import { NavLinks } from '../../components/NavLinks';
+import { TestController } from '../../components/TestController';
+import { INavTreeItem } from '../../components/NavTree';
+import { Page } from '../../components/Page';
 
 import TableView from './table-view';
-import {
-  ContentHeaderStyle,
-  ContentStyle,
-  flexContent,
-  actionButton,
-  contentEditor,
-  dialogItem,
-  HeaderText,
-} from './styles';
+import { actionButton } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface LUPageProps extends RouteComponentProps<{}> {
-  fileId?: string;
+  dialogId?: string;
   path: string;
 }
 
-const LUPage: React.FC<LUPageProps> = props => {
+const LUPage: React.FC<LUPageProps> = (props) => {
   const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const { dialogs, projectId } = state;
   const path = props.location?.pathname ?? '';
-  const { fileId = '' } = props;
+  const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
-  const isRoot = fileId === 'all';
+  const isRoot = dialogId === 'all';
 
-  const navLinks = useMemo(() => {
-    const newDialogLinks = dialogs.map(dialog => {
-      return { id: dialog.id, url: dialog.id, key: dialog.id, name: dialog.displayName };
+  const navLinks: INavTreeItem[] = useMemo(() => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
+      return {
+        id: dialog.id,
+        url: `/bot/${projectId}/language-understanding/${dialog.id}`,
+        name: dialog.displayName,
+        ariaLabel: formatMessage('language understanding file'),
+      };
     });
-    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
       newDialogLinks.splice(0, 0, mainDialog);
     }
+    newDialogLinks.splice(0, 0, {
+      id: 'all',
+      name: formatMessage('All'),
+      ariaLabel: formatMessage('all language understanding files'),
+      url: `/bot/${projectId}/language-understanding/all`,
+    });
     return newDialogLinks;
   }, [dialogs]);
 
   useEffect(() => {
-    const activeDialog = dialogs.find(({ id }) => id === fileId);
-    if (!activeDialog && fileId !== 'all' && dialogs.length) {
-      navigateTo('/language-understanding/all');
+    const activeDialog = dialogs.find(({ id }) => id === dialogId);
+    if (!activeDialog && dialogId !== 'all' && dialogs.length) {
+      navigateTo(`/bot/${projectId}/language-understanding/all`);
     }
-  }, [fileId, dialogs]);
-
-  const onSelect = useCallback(
-    id => {
-      const url = `/language-understanding/${id}`;
-      navigateTo(url);
-    },
-    [edit]
-  );
+  }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/language-understanding/${fileId}`;
+      let url = `/bot/${projectId}/language-understanding/${dialogId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },
-    [fileId]
+    [dialogId, projectId]
   );
 
   const toolbarItems = [
@@ -85,48 +79,39 @@ const LUPage: React.FC<LUPageProps> = props => {
     },
   ];
 
+  const onRenderHeaderContent = () => {
+    if (!isRoot || edit) {
+      return (
+        <Toggle
+          checked={!!edit}
+          className={'toggleEditMode'}
+          css={actionButton}
+          defaultChecked={false}
+          offText={formatMessage('Edit mode')}
+          onChange={onToggleEditMode}
+          onText={formatMessage('Edit mode')}
+        />
+      );
+    }
+
+    return null;
+  };
+
   return (
-    <Fragment>
-      <ToolBar toolbarItems={toolbarItems} />
-      <div css={ContentHeaderStyle}>
-        <div css={HeaderText}>{formatMessage('User Input')}</div>
-        <div css={flexContent}>
-          {(!isRoot || edit) && (
-            <Toggle
-              className={'toggleEditMode'}
-              css={actionButton}
-              onText={formatMessage('Edit mode')}
-              offText={formatMessage('Edit mode')}
-              defaultChecked={false}
-              checked={!!edit}
-              onChange={onToggleEditMode}
-            />
-          )}
-        </div>
-      </div>
-      <div css={ContentStyle} data-testid="LUEditor">
-        <div css={projectContainer}>
-          <div
-            css={dialogItem(isRoot)}
-            key={'_all'}
-            onClick={() => {
-              onSelect('all');
-            }}
-          >
-            {'All'}
-          </div>
-          <NavLinks navLinks={navLinks} onSelect={onSelect} fileId={fileId} />
-        </div>
-        <div css={contentEditor}>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Router primary={false} component={Fragment}>
-              <CodeEditor path="/edit" fileId={fileId} />
-              <TableView path="/" fileId={fileId} />
-            </Router>
-          </Suspense>
-        </div>
-      </div>
-    </Fragment>
+    <Page
+      data-testid="LUPage"
+      navLinks={navLinks}
+      title={formatMessage('User Input')}
+      toolbarItems={toolbarItems}
+      onRenderHeaderContent={onRenderHeaderContent}
+    >
+      <Suspense fallback={<LoadingSpinner />}>
+        <Router component={Fragment} primary={false}>
+          <CodeEditor dialogId={dialogId} path="/edit" />
+          <TableView dialogId={dialogId} path="/" />
+        </Router>
+      </Suspense>
+    </Page>
   );
 };
 

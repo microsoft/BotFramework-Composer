@@ -15,11 +15,13 @@ import {
   CompletionItem,
   Range,
   DiagnosticSeverity,
+  TextEdit,
 } from 'vscode-languageserver-types';
-import { TextDocumentPositionParams } from 'vscode-languageserver-protocol';
+import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { lgIndexer, filterTemplateDiagnostics, isValid, MemoryResolver, LgTemplate } from '@bfc/indexers';
-import { ImportResolverDelegate, LGParser } from 'botbuilder-lg';
+import { filterTemplateDiagnostics, isValid } from '@bfc/indexers';
+import { MemoryResolver } from '@bfc/shared';
+import { ImportResolverDelegate, Templates } from 'botbuilder-lg';
 
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
@@ -31,14 +33,15 @@ import {
   LGOption,
   LGCursorState,
   updateTemplate,
+  cardTypes,
+  cardPropDict,
+  cardPropPossibleValueType,
 } from './utils';
-
-const { check, parse } = lgIndexer;
 
 // define init methods call from client
 const InitializeDocumentsMethodName = 'initializeDocuments';
 
-const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE } = LGCursorState;
+const { ROOT, TEMPLATENAME, TEMPLATEBODY, EXPRESSION, COMMENTS, SINGLE, DOUBLE, STRUCTURELG } = LGCursorState;
 
 export class LGServer {
   protected workspaceRoot?: URI;
@@ -49,17 +52,24 @@ export class LGServer {
 
   constructor(
     protected readonly connection: IConnection,
-    protected readonly importResolver?: ImportResolverDelegate,
+    protected readonly importResolver?: (
+      source: string,
+      resourceId: string,
+      projectId: string
+    ) => {
+      content: string;
+      id: string;
+    },
     protected readonly memoryResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
-    this.documents.onDidChangeContent(change => this.validate(change.document));
-    this.documents.onDidClose(event => {
+    this.documents.onDidChangeContent((change) => this.validate(change.document));
+    this.documents.onDidClose((event) => {
       this.cleanPendingValidation(event.document);
       this.cleanDiagnostics(event.document);
     });
 
-    this.connection.onInitialize(params => {
+    this.connection.onInitialize((params) => {
       if (params.rootPath) {
         this.workspaceRoot = URI.file(params.rootPath);
       } else if (params.rootUri) {
@@ -72,15 +82,19 @@ export class LGServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['.'],
+            triggerCharacters: ['.', '[', '[', '\n'],
           },
           hoverProvider: true,
           foldingRangeProvider: false,
+          documentOnTypeFormattingProvider: {
+            firstTriggerCharacter: '\n',
+          },
         },
       };
     });
-    this.connection.onCompletion(params => this.completion(params));
-    this.connection.onHover(params => this.hover(params));
+    this.connection.onCompletion((params) => this.completion(params));
+    this.connection.onHover((params) => this.hover(params));
+    this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
 
     this.connection.onRequest((method, params) => {
       if (InitializeDocumentsMethodName === method) {
@@ -121,12 +135,16 @@ export class LGServer {
       return;
     }
 
-    const memoryFileInfo: string[] | undefined = this.memoryResolver(uri);
+    const document = this.documents.get(uri);
+    if (!document) return;
+    const projectId = this.getLGDocument(document)?.projectId;
+    if (!projectId) return;
+    const memoryFileInfo: string[] | undefined = this.memoryResolver(projectId);
     if (!memoryFileInfo || memoryFileInfo.length === 0) {
       return;
     }
 
-    memoryFileInfo.forEach(variable => {
+    memoryFileInfo.forEach((variable) => {
       const propertyList = variable.split('.');
       if (propertyList.length >= 1) {
         this.updateObject(propertyList);
@@ -155,7 +173,7 @@ export class LGServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map(errorMsg => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
     );
   }
 
@@ -167,12 +185,12 @@ export class LGServer {
         content: editorContent,
       };
     };
-    const { fileId, templateId } = this.getLGDocument(document) || {};
+    const { fileId, templateId, projectId } = this.getLGDocument(document) || {};
 
-    if (this.importResolver && fileId) {
+    if (this.importResolver && fileId && projectId) {
       const resolver = this.importResolver;
       return (source: string, id: string) => {
-        const lgFile = resolver(source, id);
+        const lgFile = resolver(source, id, projectId);
         if (!lgFile) {
           this.sendDiagnostics(document, [
             generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
@@ -196,7 +214,7 @@ export class LGServer {
 
   protected addLGDocument(document: TextDocument, lgOption?: LGOption) {
     const { uri } = document;
-    const { fileId, templateId } = lgOption || {};
+    const { fileId, templateId, projectId } = lgOption || {};
     const index = () => {
       const importResolver: ImportResolverDelegate = this.getImportResolver(document);
       let content: string = document.getText();
@@ -210,24 +228,13 @@ export class LGServer {
       }
 
       const id = fileId || uri;
-      const diagnostics = check(content, id, importResolver);
-      let templates: LgTemplate[] = [];
-      try {
-        templates = parse(content, id);
-        const { imports } = LGParser.parse(content, id);
-        imports.forEach(({ id }) => {
-          const importedContent = importResolver('.', id).content;
-          const importedTemplates = parse(importedContent, '');
-          templates.push(...importedTemplates);
-        });
-      } catch (_error) {
-        // ignore
-      }
+      const { allTemplates, diagnostics } = Templates.parseText(content, id, importResolver);
 
-      return { templates, diagnostics };
+      return { templates: allTemplates, diagnostics };
     };
     const lgDocument: LGDocument = {
       uri,
+      projectId,
       fileId,
       templateId,
       index,
@@ -254,7 +261,7 @@ export class LGServer {
     }
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
-    const matchItem = templates.find(u => u.name === word);
+    const matchItem = templates.find((u) => u.name === word);
     if (matchItem) {
       const hoveritem: Hover = { contents: [matchItem.body] };
       return Promise.resolve(hoveritem);
@@ -299,10 +306,102 @@ export class LGServer {
   }
 
   private removeParamFormat(params: string): string {
-    const resultArr = params.split(',').map(element => {
+    const resultArr = params.split(',').map((element) => {
       return element.trim().split(':')[0];
     });
     return resultArr.join(' ,');
+  }
+
+  private matchLineState(
+    params: TextDocumentPositionParams,
+    templateId: string | undefined
+  ): LGCursorState | undefined {
+    const state: LGCursorState[] = [];
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    for (const line of lines) {
+      if (line.trim().startsWith('#')) {
+        state.push(TEMPLATENAME);
+      } else if (line.trim().startsWith('-')) {
+        state.push(TEMPLATEBODY);
+      } else if (
+        (state[state.length - 1] === TEMPLATENAME || templateId) &&
+        (line.trim() === '[' || line.trim() === '[]')
+      ) {
+        state.push(STRUCTURELG);
+      }
+    }
+
+    return state.length >= 1 ? state.pop() : undefined;
+  }
+
+  private matchCardTypeState(params: TextDocumentPositionParams, templateId: string | undefined): string | undefined {
+    const state: LGCursorState[] = [];
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    const keyValueRegex = /.+=.+/;
+    let cardName = '';
+    for (const line of lines) {
+      if (line.trim().startsWith('#')) {
+        state.push(TEMPLATENAME);
+      } else if (line.trim().startsWith('-')) {
+        state.push(TEMPLATEBODY);
+      } else if ((state[state.length - 1] === TEMPLATENAME || templateId) && line.trim().startsWith('[')) {
+        state.push(STRUCTURELG);
+        cardName = line.trim().substring(1);
+      } else if (state[state.length - 1] === STRUCTURELG && (line.trim() === '' || keyValueRegex.test(line))) {
+        state.push(STRUCTURELG);
+      } else {
+        state.push(ROOT);
+      }
+    }
+
+    if (state[state.length - 1] === STRUCTURELG) {
+      return cardName;
+    }
+
+    return undefined;
+  }
+
+  private findLastStructureLGProps(
+    params: TextDocumentPositionParams,
+    templateId: string | undefined
+  ): string[] | undefined {
+    const state: LGCursorState[] = [];
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) return;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    const keyValueRegex = /.+=.+/;
+    let props: string[] = [];
+    for (const line of lines) {
+      if (line.trim().startsWith('#')) {
+        state.push(TEMPLATENAME);
+      } else if (line.trim().startsWith('-')) {
+        state.push(TEMPLATEBODY);
+      } else if ((state[state.length - 1] === TEMPLATENAME || templateId) && line.trim().startsWith('[')) {
+        state.push(STRUCTURELG);
+        props = [];
+      } else if (state[state.length - 1] === STRUCTURELG && (line.trim() === '' || keyValueRegex.test(line))) {
+        state.push(STRUCTURELG);
+        props.push(line.split('=')[0].trim());
+      } else {
+        state.push(ROOT);
+      }
+    }
+
+    if (state[state.length - 1] === STRUCTURELG) {
+      return props;
+    }
+
+    return undefined;
   }
 
   private matchState(params: TextDocumentPositionParams): LGCursorState | undefined {
@@ -386,7 +485,7 @@ export class LGServer {
         continue;
       }
 
-      Object.keys(tempVariable).forEach(e => {
+      Object.keys(tempVariable).forEach((e) => {
         if (e.toString() !== normalizedAnyPattern) {
           const item = {
             label: e.toString(),
@@ -413,7 +512,7 @@ export class LGServer {
     const endWithDot = wordAtCurRange.endsWith('.');
 
     this.updateMemoryVariables(params.textDocument.uri);
-    const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map(e => {
+    const memoryVariblesRootCompletionList = Object.keys(this.memoryVariables).map((e) => {
       return {
         label: e.toString(),
         kind: CompletionItemKind.Property,
@@ -443,13 +542,16 @@ export class LGServer {
     const range = getRangeAtPosition(document, position);
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
-    const lgFile = this.getLGDocument(document)?.index();
+    const lgDoc = this.getLGDocument(document);
+    const lgFile = lgDoc?.index();
+    const templateId = lgDoc?.templateId;
+    const lines = document.getText(range).split('\n');
     if (!lgFile) {
       return Promise.resolve(null);
     }
-    const { templates } = lgFile;
 
-    const completionTemplateList: CompletionItem[] = templates.map(template => {
+    const { templates } = lgFile;
+    const completionTemplateList: CompletionItem[] = templates.map((template) => {
       return {
         label: template.name,
         kind: CompletionItemKind.Reference,
@@ -461,7 +563,7 @@ export class LGServer {
       };
     });
 
-    const completionFunctionList: CompletionItem[] = Array.from(buildInfunctionsMap).map(item => {
+    const completionFunctionList: CompletionItem[] = Array.from(buildInfunctionsMap).map((item) => {
       const [key, value] = item;
       return {
         label: key,
@@ -472,6 +574,78 @@ export class LGServer {
     });
 
     const completionPropertyResult = this.findValidMemoryVariables(params);
+
+    const curLineState = this.matchLineState(params, templateId);
+
+    if (curLineState === STRUCTURELG) {
+      const cardTypesSuggestions: CompletionItem[] = cardTypes.map((type) => {
+        return {
+          label: type,
+          kind: CompletionItemKind.Keyword,
+          insertText: type,
+          documentation: `Suggestion for Card or Activity: ${type}`,
+        };
+      });
+
+      return Promise.resolve({
+        isIncomplete: true,
+        items: cardTypesSuggestions,
+      });
+    }
+
+    const cardType = this.matchCardTypeState(params, templateId);
+    const propsList = this.findLastStructureLGProps(params, templateId);
+    const cardNameRegex = /^\s*\[[\w]+/;
+    const lastLine = lines[lines.length - 2];
+    const paddingIndent = cardNameRegex.test(lastLine) ? '\t' : '';
+    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment'];
+    if (cardType && cardTypes.includes(cardType)) {
+      const items: CompletionItem[] = [];
+      if (normalCardTypes.includes(cardType)) {
+        cardPropDict[cardType].forEach((u) => {
+          if (!propsList?.includes(u)) {
+            const item = {
+              label: `${u}: ${cardPropPossibleValueType[u]}`,
+              kind: CompletionItemKind.Snippet,
+              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`,
+            };
+            items.push(item);
+          }
+        });
+      } else if (cardType.endsWith('Card')) {
+        cardPropDict.Cards.forEach((u) => {
+          if (!propsList?.includes(u)) {
+            const item = {
+              label: `${u}: ${cardPropPossibleValueType[u]}`,
+              kind: CompletionItemKind.Snippet,
+              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`,
+            };
+            items.push(item);
+          }
+        });
+      } else {
+        cardPropDict.Others.forEach((u) => {
+          if (!propsList?.includes(u)) {
+            const item = {
+              label: `${u}: ${cardPropPossibleValueType[u]}`,
+              kind: CompletionItemKind.Snippet,
+              insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`,
+            };
+            items.push(item);
+          }
+        });
+      }
+
+      if (items.length > 0) {
+        return Promise.resolve({
+          isIncomplete: true,
+          items: items,
+        });
+      }
+    }
 
     const matchedState = this.matchState(params);
     if (matchedState === EXPRESSION) {
@@ -489,6 +663,81 @@ export class LGServer {
     } else {
       return Promise.resolve(null);
     }
+  }
+
+  protected async docTypeFormat(params: DocumentOnTypeFormattingParams): Promise<TextEdit[] | null> {
+    const document = this.documents.get(params.textDocument.uri);
+    if (!document) {
+      return Promise.resolve(null);
+    }
+
+    const edits: TextEdit[] = [];
+    const key = params.ch;
+    const position = params.position;
+    const range = Range.create(0, 0, position.line, position.character);
+    const lines = document.getText(range).split('\n');
+    const isInStructureLGMode = this.matchStructureLG(lines);
+    const lgDoc = this.getLGDocument(document);
+    const templateId = lgDoc?.templateId;
+    const cardType = this.matchCardTypeState(params, templateId);
+    const propsList = this.findLastStructureLGProps(params, templateId);
+    const normalCardTypes = ['CardAction', 'Suggestions', 'Attachment'];
+    let expectedPropsList: string[] = [];
+    let matchedAllProps = false;
+    if (cardType) {
+      if (normalCardTypes.includes(cardType)) {
+        expectedPropsList = cardPropDict[cardType];
+      } else if (cardType.endsWith('Card')) {
+        expectedPropsList = cardPropDict.Cards;
+      } else {
+        expectedPropsList = cardPropDict.Others;
+      }
+    }
+
+    if (expectedPropsList.length > 0 && propsList !== undefined && this.isSubList(expectedPropsList, propsList)) {
+      matchedAllProps = true;
+    }
+    if (key === '\n' && isInStructureLGMode && matchedAllProps) {
+      const length = templateId ? 4 : 2;
+      const deleteRange = Range.create(position.line, 0, position.line, length);
+      const deleteItem: TextEdit = TextEdit.del(deleteRange);
+      if (document.getText(deleteRange).trim() === '') {
+        edits.push(deleteItem);
+      }
+    }
+
+    return Promise.resolve(edits);
+  }
+
+  private matchStructureLG(lines: string[]): boolean {
+    if (lines.length === 0) return false;
+    let state = ROOT;
+    const propertyDefinitionRegex = /[^=]+=.*/;
+    for (const line of lines) {
+      if (state === ROOT && line.trim().startsWith('[')) {
+        state = STRUCTURELG;
+      } else if ((state === STRUCTURELG && propertyDefinitionRegex.test(line)) || line.trim() === '') {
+        continue;
+      } else {
+        state = ROOT;
+      }
+    }
+
+    if (state === ROOT) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private isSubList(list1: string[], list2: string[]): boolean {
+    for (const item of list1) {
+      if (!list2.includes(item)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   protected validate(document: TextDocument): void {
@@ -551,7 +800,7 @@ export class LGServer {
       this.sendDiagnostics(document, lspDiagnostics);
       return;
     }
-    const lgDiagnostics = check(text, fileId || uri, this.getImportResolver(document));
+    const lgDiagnostics = Templates.parseText(text, fileId || uri, this.getImportResolver(document)).diagnostics;
     const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);
   }

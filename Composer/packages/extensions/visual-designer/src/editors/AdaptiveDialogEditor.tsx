@@ -4,11 +4,11 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo, FC, useContext } from 'react';
+import { DialogUtils } from '@bfc/shared';
 
 import { transformRootDialog } from '../transformers/transformRootDialog';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { queryNode } from '../utils/jsonTracker';
 import { NodeRendererContext } from '../store/NodeRendererContext';
 import { Collapse } from '../components/lib/Collapse';
 
@@ -16,6 +16,8 @@ import { EventsEditor } from './EventsEditor';
 import { RuleEditor } from './RuleEditor';
 import { EditorProps, defaultEditorProps } from './editorProps';
 import { EditorConfig } from './editorConfig';
+
+const { queryNode } = DialogUtils;
 
 const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   const result = transformRootDialog(data);
@@ -28,7 +30,7 @@ const calculateNodeMap = (_, data): { [id: string]: GraphNode } => {
   };
 };
 
-export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCoachMarkRef }): JSX.Element | null => {
+export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent }): JSX.Element | null => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { ruleGroup } = nodeMap;
 
@@ -48,13 +50,7 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCo
   const activeEventData = queryNode(data, focusedEvent);
 
   const eventActions = activeEventData ? (
-    <RuleEditor
-      key={focusedEvent}
-      id={focusedEvent}
-      data={activeEventData}
-      onEvent={onEvent}
-      addCoachMarkRef={addCoachMarkRef}
-    />
+    <RuleEditor key={focusedEvent} data={activeEventData} id={focusedEvent} onEvent={onEvent} />
   ) : null;
 
   if (!EditorConfig.features.showEvents) {
@@ -69,13 +65,13 @@ export const AdaptiveDialogEditor: FC<EditorProps> = ({ id, data, onEvent, addCo
         flexDirection: 'column',
         alignItems: 'center',
       }}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id: '' });
       }}
     >
       {ruleGroup && (
-        <EventsEditor key={ruleGroup.id} id={ruleGroup.id} data={ruleGroup.data} onEvent={interceptRuleEvent} />
+        <EventsEditor key={ruleGroup.id} data={ruleGroup.data} id={ruleGroup.id} onEvent={interceptRuleEvent} />
       )}
       <div className="editor-interval" style={{ height: 50 }} />
       <Collapse text="Actions">{eventActions}</Collapse>

@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo } from 'react';
+import { WidgetContainerProps } from '@bfc/extension';
 
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { ifElseLayouter } from '../layouters/ifelseLayouter';
@@ -14,11 +15,10 @@ import { StepGroup } from '../components/groups';
 import { Diamond } from '../components/nodes/templates/Diamond';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { WidgetContainerProps } from '../schema/uischema.types';
 import { SVGContainer } from '../components/lib/SVGContainer';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum IfElseNodes {
   Condition = 'conditionNode',
@@ -70,10 +70,13 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       <OffsetContainer offset={conditionNode.offset}>
         <ElementWrapper id={conditionNode.id} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(conditionNode.data, boundary);
               updateNodeBoundary(IfElseNodes.Condition, boundary);
             }}
@@ -89,23 +92,22 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           }}
         />
       </OffsetContainer>
-      {[IfElseNodes.IfBranch, IfElseNodes.ElseBranch].map(nodeName => {
+      {[IfElseNodes.IfBranch, IfElseNodes.ElseBranch].map((nodeName) => {
         const node = nodeMap[nodeName];
         return (
           <OffsetContainer key={`${node.id}/offset`} offset={node.offset}>
             <StepGroup
               key={node.id}
-              id={node.id}
               data={node.data}
+              id={node.id}
               onEvent={onEvent}
-              onResize={size => {
+              onResize={(size) => {
                 updateNodeBoundary(nodeName, size);
               }}
             />
           </OffsetContainer>
         );
       })}
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
     </div>
   );
 };

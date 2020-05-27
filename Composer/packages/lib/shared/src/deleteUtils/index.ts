@@ -1,27 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { MicrosoftIDialog, SDKTypes } from '../types';
-
-import { walkAdaptiveAction } from './walkAdaptiveAction';
-import { walkAdaptiveActionList } from './walkAdaptiveActionList';
+import { MicrosoftIDialog, SDKKinds } from '../types';
+import { LuMetaData, LuType } from '../luNameBuilder';
+import { walkAdaptiveAction } from '../walkerUtils/walkAdaptiveAction';
+import { walkAdaptiveActionList } from '../walkerUtils/walkAdaptiveActionList';
 
 // TODO: (ze) considering refactoring it with the `walkLgResources` util
 const collectLgTemplates = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$type) return;
+  if (!action || !action.$kind) return;
 
-  switch (action.$type) {
-    case SDKTypes.SendActivity:
-    case SDKTypes.SkillDialog:
+  switch (action.$kind) {
+    case SDKKinds.SendActivity:
+    case SDKKinds.BeginSkill:
       outputTemplates.push(action.activity);
       break;
-    case SDKTypes.AttachmentInput:
-    case SDKTypes.ChoiceInput:
-    case SDKTypes.ConfirmInput:
-    case SDKTypes.DateTimeInput:
-    case SDKTypes.NumberInput:
-    case SDKTypes.TextInput:
+    case SDKKinds.AttachmentInput:
+    case SDKKinds.ChoiceInput:
+    case SDKKinds.ConfirmInput:
+    case SDKKinds.DateTimeInput:
+    case SDKKinds.NumberInput:
+    case SDKKinds.TextInput:
       outputTemplates.push(action.prompt, action.unrecognizedPrompt, action.invalidPrompt, action.defaultValueResponse);
       break;
   }
@@ -30,17 +30,17 @@ const collectLgTemplates = (action: any, outputTemplates: string[]) => {
 // TODO: (ze) considering refactoring it by implementing a new `walkLuResources` util
 const collectLuIntents = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$type) return;
+  if (!action || !action.$kind) return;
 
-  switch (action.$type) {
-    case SDKTypes.AttachmentInput:
-    case SDKTypes.ChoiceInput:
-    case SDKTypes.ConfirmInput:
-    case SDKTypes.DateTimeInput:
-    case SDKTypes.NumberInput:
-    case SDKTypes.TextInput: {
-      const [, promptType] = action.$type.split('.');
-      const intentName = `${promptType}.response-${action?.$designer?.id}`;
+  switch (action.$kind) {
+    case SDKKinds.AttachmentInput:
+    case SDKKinds.ChoiceInput:
+    case SDKKinds.ConfirmInput:
+    case SDKKinds.DateTimeInput:
+    case SDKKinds.NumberInput:
+    case SDKKinds.TextInput: {
+      const [, promptType] = action.$kind.split('.');
+      const intentName = new LuMetaData(new LuType(action?.$kind).toString(), action?.$designer?.id).toString();
       promptType && intentName && outputTemplates.push(intentName);
       break;
     }
@@ -55,10 +55,10 @@ export const deleteAdaptiveAction = (
   const lgTemplates: string[] = [];
   const luIntents: string[] = [];
 
-  walkAdaptiveAction(data, action => collectLgTemplates(action, lgTemplates));
-  walkAdaptiveAction(data, action => collectLuIntents(action, luIntents));
+  walkAdaptiveAction(data, (action) => collectLgTemplates(action, lgTemplates));
+  walkAdaptiveAction(data, (action) => collectLuIntents(action, luIntents));
 
-  deleteLgTemplates(lgTemplates.filter(activity => !!activity));
+  deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
   deleteLuIntents(luIntents);
 };
 
@@ -70,9 +70,9 @@ export const deleteAdaptiveActionList = (
   const lgTemplates: string[] = [];
   const luIntents: string[] = [];
 
-  walkAdaptiveActionList(data, action => collectLgTemplates(action, lgTemplates));
-  walkAdaptiveAction(data, action => collectLuIntents(action, luIntents));
+  walkAdaptiveActionList(data, (action) => collectLgTemplates(action, lgTemplates));
+  walkAdaptiveActionList(data, (action) => collectLuIntents(action, luIntents));
 
-  deleteLgTemplates(lgTemplates.filter(activity => !!activity));
+  deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
   deleteLuIntents(luIntents);
 };

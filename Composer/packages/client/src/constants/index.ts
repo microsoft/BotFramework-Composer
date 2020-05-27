@@ -36,29 +36,26 @@ export const UNDO_LIMIT = 10;
 
 export enum ActionTypes {
   GET_PROJECT_SUCCESS = 'GET_PROJECT_SUCCESS',
+  GET_PROJECT_PENDING = 'GET_PROJECT_PENDING',
   GET_PROJECT_FAILURE = 'GET_PROJECT_FAILURE',
+  REMOVE_PROJECT_SUCCESS = 'REMOVE_PROJECT_SUCCESS',
   GET_RECENT_PROJECTS_SUCCESS = 'GET_RECENT_PROJECTS_SUCCESS',
   GET_RECENT_PROJECTS_FAILURE = 'GET_RECENT_PROJECTS_FAILURE',
   GET_TEMPLATE_PROJECTS_SUCCESS = 'GET_TEMPLATE_PROJECTS_SUCCESS',
   GET_TEMPLATE_PROJECTS_FAILURE = 'GET_TEMPLATE_PROJECTS_FAILURE',
   CREATE_DIALOG_BEGIN = 'CREATE_DIALOG_BEGIN',
   CREATE_DIALOG_CANCEL = 'CREATE_DIALOG_CANCEL',
-  CREATE_DIALOG_SUCCESS = 'CREATE_DIALOG_SUCCESS',
+  CREATE_DIALOG = 'CREATE_DIALOG',
   UPDATE_DIALOG = 'UPDATE_DIALOG',
   REMOVE_DIALOG = 'REMOVE_DIALOG',
-  UPDATE_LG_SUCCESS = 'UPDATE_LG_SUCCESS',
-  UPDATE_LG_FAILURE = 'UPDATE_LG_FAILURE',
-  CREATE_LG_SUCCCESS = 'CREATE_LG_SUCCCESS',
-  CREATE_LG_FAILURE = 'CREATE_LG_FAILURE',
-  REMOVE_LG_SUCCCESS = 'REMOVE_LG_SUCCCESS',
-  REMOVE_LG_FAILURE = 'REMOVE_LG_FAILURE',
-  UPDATE_LU_SUCCESS = 'UPDATE_LU_SUCCESS',
-  UPDATE_LU_FAILURE = 'UPDATE_LU_FAILURE',
-  CREATE_LU_SUCCCESS = 'CREATE_LU_SUCCCESS',
-  CREATE_LU_FAILURE = 'CREATE_LU_FAILURE',
-  REMOVE_LU_SUCCCESS = 'REMOVE_LU_SUCCCESS',
-  REMOVE_LU_FAILURE = 'REMOVE_LU_FAILURE',
+  UPDATE_LG = 'UPDATE_LG',
+  CREATE_LG = 'CREATE_LG',
+  REMOVE_LG = 'REMOVE_LG',
+  UPDATE_LU = 'UPDATE_LU',
+  CREATE_LU = 'CREATE_LU',
+  REMOVE_LU = 'REMOVE_LU',
   PUBLISH_LU_SUCCCESS = 'PUBLISH_LU_SUCCCESS',
+  PUBLISH_LU_FAILED = 'PUBLISH_LU_FAILED',
   SAVE_TEMPLATE_ID = 'SAVE_TEMPLATE_ID',
   GET_STORAGE_SUCCESS = 'GET_STORAGE_SUCCESS',
   GET_STORAGE_FAILURE = 'GET_STORAGE_FAILURE',
@@ -66,14 +63,11 @@ export enum ActionTypes {
   GET_STORAGEFILE_SUCCESS = 'GET_STORAGEFILE_SUCCESS',
   SET_CREATION_FLOW_STATUS = 'SET_CREATION_FLOW_STATUS',
   SET_DESIGN_PAGE_LOCATION = 'SET_DESIGN_PAGE_LOCATION',
-  CONNECT_BOT_SUCCESS = 'CONNECT_BOT_SUCCESS',
-  CONNECT_BOT_FAILURE = 'CONNECT_BOT_FAILURE',
-  RELOAD_BOT_SUCCESS = 'RELOAD_BOT_SUCCESS',
+  RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
+  UPDATE_SKILL_SUCCESS = 'UPDATE_SKILL_SUCCESS',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
-  GET_ENV_SETTING = 'GET_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
-  TO_START_BOT = 'TO_START_BOT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
   EDITOR_SELECTION_VISUAL = 'EDITOR_SELECTION_VISUAL',
   EDITOR_CLIPBOARD = 'EDITOR_CLIPBOARD',
@@ -83,13 +77,31 @@ export enum ActionTypes {
   UNDO = 'UNDO',
   REDO = 'REDO',
   HISTORY_CLEAR = 'HISTORY_CLEAR',
-  GET_PUBLISH_VERSIONS_SUCCESS = 'GET_PUBLISH_VERSIONS_SUCCESS', // remote publish
-  PUBLISH_BEGIN = 'PUBLISH_BEGIN', // remote publish
-  PUBLISH_SUCCESS = 'PUBLISH_SUCCESS', // remote publish
-  PUBLISH_ERROR = 'PUBLISH_ERROR', // remote publish
-  GET_ENDPOINT_SUCCESS = 'GET_ENDPOINT_SUCCESS', // remote publish
   ONBOARDING_ADD_COACH_MARK_REF = 'ONBOARDING_ADD_COACH_MARK_REF',
   ONBOARDING_SET_COMPLETE = 'ONBOARDING_SET_COMPLETE',
+  GET_PUBLISH_TYPES_SUCCESS = 'GET_PUBLISH_TYPES_SUCCESS',
+  PUBLISH_SUCCESS = 'PUBLISH_SUCCESS',
+  PUBLISH_FAILED = 'PUBLISH_FAILED',
+  PUBLISH_FAILED_DOTNET = 'PUBLISH_FAILED_DOTNET',
+  GET_PUBLISH_STATUS = 'GET_PUBLISH_STATUS',
+  GET_PUBLISH_STATUS_FAILED = 'GET_PUBLISH_STATUS_FAILED',
+  GET_PUBLISH_HISTORY = 'GET_PUBLISH_HISTORY',
+  UPDATE_BOTSTATUS = 'UPDATE_BOTSTATUS',
+  SET_RUNTIME_TEMPLATES = 'SET_RUNTIME_TEMPLATES',
+  SET_USER_SETTINGS = 'SET_USER_SETTINGS',
+  ADD_SKILL_DIALOG_BEGIN = 'ADD_SKILL_DIALOG_BEGIN',
+  ADD_SKILL_DIALOG_END = 'ADD_SKILL_DIALOG_END',
+  EJECT_SUCCESS = 'EJECT_SUCCESS',
+  SET_MESSAGE = 'SET_MESSAGE',
+  SET_APP_UPDATE_ERROR = 'SET_APP_UPDATE_ERROR',
+  SET_APP_UPDATE_PROGRESS = 'SET_APP_UPDATE_PROGRESS',
+  SET_APP_UPDATE_SHOWING = 'SET_APP_UPDATE_SHOWING',
+  SET_APP_UPDATE_STATUS = 'SET_APP_UPDATE_STATUS',
+  CREATE_SKILL_MANIFEST = 'CREATE_SKILL_MANIFEST',
+  UPDATE_SKILL_MANIFEST = 'UPDATE_SKILL_MANIFEST',
+  REMOVE_SKILL_MANIFEST = 'REMOVE_SKILL_MANIFEST',
+  DISPLAY_SKILL_MANIFEST_MODAL = 'DISPLAY_SKILL_MANIFEST_MODAL',
+  DISMISS_SKILL_MANIFEST_MODAL = 'DISMISS_SKILL_MANIFEST_MODAL',
 }
 
 export const Tips = {
@@ -115,6 +127,7 @@ export const Text = {
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
+  DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK'),
 };
 
 export enum LuisConfig {
@@ -130,7 +143,7 @@ export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
   BOT: 'bot',
-  UNKNOW: 'unknow',
+  UNKNOWN: 'unknown',
 };
 
 export const OpenStatus = {
@@ -143,6 +156,11 @@ export const OpenStatus = {
 export enum BotStatus {
   connected = 'connected',
   unConnected = 'unConnected',
+  publishing = 'publishing',
+  published = 'published',
+  reloading = 'loading',
+  pending = 'pending',
+  failed = 'failed',
 }
 
 export enum CreationFlowStatus {
@@ -163,7 +181,7 @@ export const Steps = {
 
 export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
-    title: formatMessage('Create from scratch?'),
+    title: formatMessage('Create bot from template or scratch?'),
     subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
   },
   DEFINE_CONVERSATION_OBJECTIVE: {
@@ -191,6 +209,17 @@ export const DialogDeleting = {
   CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
 };
 
+export const addSkillDialog = {
+  SKILL_MANIFEST_FORM: {
+    title: formatMessage('Add a skill'),
+    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+  },
+  SKILL_MANIFEST_FORM_EDIT: {
+    title: formatMessage('Edit a skill'),
+    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+  },
+};
+
 export const SupportedFileTypes = [
   'accdb',
   'csv',
@@ -210,3 +239,19 @@ export const SupportedFileTypes = [
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
+
+export enum AppUpdaterStatus {
+  IDLE,
+  UPDATE_AVAILABLE,
+  UPDATE_UNAVAILABLE,
+  UPDATE_IN_PROGRESS,
+  UPDATE_FAILED,
+  UPDATE_SUCCEEDED,
+}
+
+export const DefaultPublishConfig = {
+  name: 'default',
+  type: 'localpublish',
+};
+
+export const EmptyBotTemplateId = 'EmptyBot';

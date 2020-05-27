@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import classnames from 'classnames';
+import formatMessage from 'format-message';
 
 import { NodeEventTypes } from '../../constants/NodeEventTypes';
 import { MenuTypes } from '../../constants/MenuTypes';
@@ -19,7 +20,7 @@ const declareElementAttributes = (id: string) => {
     [AttrNames.SelectedId]: `${id}${MenuTypes.NodeMenu}`,
   };
 };
-export const NodeMenu = ({ id, onEvent }) => {
+export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
   const menuItems = [
     {
       key: 'delete',
@@ -35,18 +36,17 @@ export const NodeMenu = ({ id, onEvent }) => {
 
   return (
     <div
-      data-name="nodeMenu"
+      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       css={{
         marginRight: '1px',
       }}
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       {...declareElementAttributes(id)}
     >
       <IconMenu
         iconName="MoreVertical"
         iconSize={12}
         iconStyles={{
-          color: '#000000',
+          color: `${colors.color}`,
           selectors: {
             ':focus': {
               outline: 'none',
@@ -58,6 +58,7 @@ export const NodeMenu = ({ id, onEvent }) => {
             },
           },
         }}
+        label={formatMessage('node menu')}
         menuItems={menuItems}
         menuWidth={100}
         nodeSelected={nodeSelected}

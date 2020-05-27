@@ -4,7 +4,6 @@
 import rimraf from 'rimraf';
 
 import { Path } from '../../src/utility/path';
-import { BotProject } from '../../src/models/bot/botProject';
 import { BotProjectService } from '../../src/services/project';
 
 // offer a bot project ref which to open
@@ -20,6 +19,7 @@ jest.mock('../../src/store/store', () => {
       },
     ],
     recentBotProjects: [] as any[],
+    projectLocationMap: {},
   } as any;
   return {
     Store: {
@@ -39,30 +39,36 @@ const projPath = Path.resolve(__dirname, '../mocks/samplebots/bot1');
 
 const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/saveas');
 
+const location1 = {
+  storageId: 'default',
+  path: projPath,
+};
+
+const location2 = {
+  storageId: 'default',
+  path: saveAsDir,
+};
+
+afterAll(() => {
+  // remove the saveas files
+  try {
+    rimraf.sync(saveAsDir);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 describe('test BotProjectService', () => {
   it('openProject', async () => {
-    expect(BotProjectService.getCurrentBotProject()).toBeUndefined();
-
-    const botProj = {
-      storageId: 'default',
-      path: projPath,
-    };
-    await BotProjectService.openProject(botProj);
-    expect(BotProjectService.getCurrentBotProject()).toBeDefined();
-    expect((BotProjectService.getCurrentBotProject() as BotProject).dir).toBe(projPath);
+    const projectId = await BotProjectService.openProject(location1);
+    await expect(BotProjectService.getProjectById('123')).rejects.toThrowError('project not found in cache');
+    expect((await BotProjectService.getProjectById(projectId)).dir).toBe(projPath);
   });
+
   it('saveProjectAs', async () => {
-    const botProj = {
-      storageId: 'default',
-      path: saveAsDir,
-    };
-    await BotProjectService.saveProjectAs(botProj);
-    expect((BotProjectService.getCurrentBotProject() as BotProject).dir).toBe(`${saveAsDir}`);
-    // remove the saveas files
-    try {
-      rimraf.sync(saveAsDir);
-    } catch (error) {
-      throw new Error(error);
-    }
+    const currentProjectId = await BotProjectService.openProject(location1);
+    const currentProject = await BotProjectService.getProjectById(currentProjectId);
+    const targetProjectId = await BotProjectService.saveProjectAs(currentProject, location2);
+    expect((await BotProjectService.getProjectById(targetProjectId)).dir).toBe(saveAsDir);
   });
 });

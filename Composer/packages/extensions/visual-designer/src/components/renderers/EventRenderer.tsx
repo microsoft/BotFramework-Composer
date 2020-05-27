@@ -19,8 +19,8 @@ const rendererByObiType = {
 };
 const DEFAULT_RENDERER = UnknownIntentRule;
 
-function chooseRendererByType($type): FC<NodeProps> | ComponentClass<NodeProps> {
-  const renderer = rendererByObiType[$type] || DEFAULT_RENDERER;
+function chooseRendererByType($kind): FC<NodeProps> | ComponentClass<NodeProps> {
+  const renderer = rendererByObiType[$kind] || DEFAULT_RENDERER;
   return renderer;
 }
 
@@ -29,7 +29,7 @@ const nodeBorderStyle = css`
 `;
 
 export const EventRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): JSX.Element => {
-  const ChosenRenderer = chooseRendererByType(data.$type);
+  const ChosenRenderer = chooseRendererByType(data.$kind);
 
   const { focusedId, focusedEvent } = useContext(NodeRendererContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
@@ -44,11 +44,11 @@ export const EventRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): J
       `}
     >
       <ChosenRenderer
-        id={id}
         data={data}
         focused={nodeFocused}
+        id={id}
         onEvent={onEvent}
-        onResize={size => {
+        onResize={(size) => {
           onResize(size, 'node');
         }}
       />

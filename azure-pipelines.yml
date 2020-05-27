@@ -42,7 +42,7 @@ jobs:
       - script: yarn build
         displayName: yarn build
         workingDirectory: Composer
-      - script: ./scripts/e2e.sh
+      - script: ./scripts/e2e-ci.sh
         displayName: Run E2E Tests
         workingDirectory: Composer
         env:
@@ -66,3 +66,24 @@ jobs:
         condition: always()
         continueOnError: true
         workingDirectory: Composer
+  - job: security
+    displayName: Security Analysis
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        version: '3.1.x'
+        packageType: runtime
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build'
+      inputs:
+        projects: runtime/dotnet
+    - task: ComponentGovernanceComponentDetection@0
+      displayName: Component Detection
+      inputs:
+        scanType: 'Register'
+        verbosity: 'Verbose'
+        alertWarningLevel: 'High'
+        failOnAlert: false
+
+
+

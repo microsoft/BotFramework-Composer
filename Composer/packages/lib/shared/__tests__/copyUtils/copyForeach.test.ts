@@ -2,30 +2,30 @@
 // Licensed under the MIT License
 
 import { copyForeach } from '../../src/copyUtils/copyForeach';
-import { externalApiStub as externalApi } from '../jestMocks/externalApiStub';
+import { externalApiStub as externalApi } from '../__mocks__/externalApiStub';
 
 describe('#copyForeach', () => {
   it('can copy Foreach action', async () => {
     const foreachInstance = {
-      $type: 'Microsoft.Foreach',
+      $kind: 'Microsoft.Foreach',
       itemsProperty: 'name',
       actions: [
         {
-          $type: 'Microsoft.SendActivity',
+          $kind: 'Microsoft.SendActivity',
           activity: 'hello',
         },
       ],
     };
 
     expect(await copyForeach(foreachInstance, externalApi)).toEqual({
-      $type: 'Microsoft.Foreach',
+      $kind: 'Microsoft.Foreach',
       itemsProperty: 'name',
       $designer: {
         id: '5678',
       },
       actions: [
         {
-          $type: 'Microsoft.SendActivity',
+          $kind: 'Microsoft.SendActivity',
           $designer: {
             id: '5678',
           },
@@ -37,19 +37,19 @@ describe('#copyForeach', () => {
 
   it('can copy ForeachPage action', async () => {
     const foreachPageInstance = {
-      $type: 'Microsoft.Foreach',
+      $kind: 'Microsoft.Foreach',
       itemsProperty: 'name',
       pageSize: 10,
       actions: [
         {
-          $type: 'Microsoft.SendActivity',
+          $kind: 'Microsoft.SendActivity',
           activity: 'hello',
         },
       ],
     };
 
     expect(await copyForeach(foreachPageInstance, externalApi)).toEqual({
-      $type: 'Microsoft.Foreach',
+      $kind: 'Microsoft.Foreach',
       itemsProperty: 'name',
       pageSize: 10,
       $designer: {
@@ -57,7 +57,7 @@ describe('#copyForeach', () => {
       },
       actions: [
         {
-          $type: 'Microsoft.SendActivity',
+          $kind: 'Microsoft.SendActivity',
           $designer: {
             id: '5678',
           },

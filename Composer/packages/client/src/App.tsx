@@ -3,9 +3,10 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { forwardRef, useContext, useState, Fragment, Suspense } from 'react';
+import React, { forwardRef, useContext, useEffect, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
@@ -15,139 +16,83 @@ import Routes from './router';
 import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
-import { CreationFlow } from './CreationFlow';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
-import { CreationFlowStatus } from './constants';
-import { LoadingSpinner } from './components/LoadingSpinner';
+import onboardingState from './utils/onboardingStorage';
+import { isElectron } from './utils/electronUtil';
+import { useLinks } from './utils/hooks';
 
 initializeIcons(undefined, { disableWarnings: true });
 
 const Onboarding = React.lazy(() => import('./Onboarding'));
+const AppUpdater = React.lazy(() =>
+  import('./components/AppUpdater').then((module) => ({ default: module.AppUpdater }))
+);
+
 // eslint-disable-next-line react/display-name
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
-const topLinks = (botLoaded: boolean) => {
-  let links = [
-    {
-      to: '/home',
-      iconName: 'Home',
-      labelName: formatMessage('Home'),
-      exact: true,
-      disabled: false,
-    },
-    {
-      to: '/dialogs/Main',
-      iconName: 'SplitObject',
-      labelName: formatMessage('Design Flow'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    // {
-    //   to: '/test-conversation',
-    //   iconName: 'WaitListConfirm',
-    //   labelName: formatMessage('Test Conversation'),
-    //   exact: false,
-    //   disabled: true, // will delete
-    // },
-    {
-      to: '/language-generation',
-      iconName: 'Robot',
-      labelName: formatMessage('Bot Responses'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    {
-      to: '/language-understanding',
-      iconName: 'People',
-      labelName: formatMessage('User Input'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    // {
-    //   to: '/evaluate-performance',
-    //   iconName: 'Chart',
-    //   labelName: formatMessage('Evaluate performance'),
-    //   exact: false,
-    //   disabled: true,
-    // },
-    {
-      to: '/notifications',
-      iconName: 'Warning',
-      labelName: formatMessage('Notifications'),
-      exact: true,
-      disabled: !botLoaded,
-    },
-    {
-      to: '/setting/',
-      iconName: 'Settings',
-      labelName: formatMessage('Settings'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-  ];
-
-  if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
-    links = links.filter(link => link.to !== '/home');
-  }
-
-  return links;
-};
-
-const bottomLinks = [
-  // {
-  //   to: '/help',
-  //   iconName: 'unknown',
-  //   labelName: formatMessage('Info'),
-  //   exact: true,
-  //   disabled: true,
-  // },
-  {
-    to: '/about',
-    iconName: 'info',
-    labelName: formatMessage('About'),
-    exact: true,
-    disabled: false,
-  },
-];
-
 export const App: React.FC = () => {
-  const { state, actions } = useContext(StoreContext);
+  const { actions, state } = useContext(StoreContext);
   const [sideBarExpand, setSideBarExpand] = useState(false);
-  const { botName, creationFlowStatus } = state;
-  const { setCreationFlowStatus } = actions;
-  const mapNavItemTo = x => resolveToBasePath(BASEPATH, x);
+
+  const { onboardingSetComplete } = actions;
+  const { botName, locale, announcement } = state;
+  const { topLinks, bottomLinks } = useLinks();
+
+  useEffect(() => {
+    onboardingSetComplete(onboardingState.getComplete());
+  }, []);
+
+  const mapNavItemTo = (x) => resolveToBasePath(BASEPATH, x);
+
+  const renderAppUpdater = isElectron();
 
   return (
     <Fragment>
-      <Header botName={botName} />
+      <div
+        aria-live="assertive"
+        role="alert"
+        style={{
+          display: 'block',
+          position: 'absolute',
+          top: '-9999px',
+          height: '1px',
+          width: '1px',
+        }}
+      >
+        {announcement}
+      </div>
+      <Header botName={botName} locale={locale} />
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
           <div>
             <IconButton
+              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
+              css={globalNav}
+              data-testid={'LeftNavButton'}
               iconProps={{
                 iconName: 'GlobalNavButton',
               }}
-              css={globalNav}
               onClick={() => {
                 setSideBarExpand(!sideBarExpand);
               }}
-              data-testid={'LeftNavButton'}
-              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />
             <div css={dividerTop} />{' '}
-            {topLinks(!!botName).map((link, index) => {
-              return (
-                <NavItem
-                  key={'NavLeftBar' + index}
-                  to={mapNavItemTo(link.to)}
-                  iconName={link.iconName}
-                  labelName={link.labelName}
-                  exact={link.exact}
-                  disabled={link.disabled}
-                />
-              );
-            })}
+            <FocusZone allowFocusRoot>
+              {topLinks.map((link, index) => {
+                return (
+                  <NavItem
+                    key={'NavLeftBar' + index}
+                    disabled={link.disabled}
+                    exact={link.exact}
+                    iconName={link.iconName}
+                    labelName={link.labelName}
+                    to={mapNavItemTo(link.to)}
+                  />
+                );
+              })}
+            </FocusZone>
           </div>
           <div css={leftNavBottom}>
             <div css={divider(sideBarExpand)} />{' '}
@@ -155,11 +100,11 @@ export const App: React.FC = () => {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={mapNavItemTo(link.to)}
+                  disabled={link.disabled}
+                  exact={link.exact}
                   iconName={link.iconName}
                   labelName={link.labelName}
-                  exact={link.exact}
-                  disabled={link.disabled}
+                  to={mapNavItemTo(link.to)}
                 />
               );
             })}
@@ -168,14 +113,12 @@ export const App: React.FC = () => {
         <div css={rightPanel}>
           <ErrorBoundary>
             <RequireAuth>
-              {creationFlowStatus !== CreationFlowStatus.CLOSE && (
-                <CreationFlow creationFlowStatus={creationFlowStatus} setCreationFlowStatus={setCreationFlowStatus} />
-              )}
               <Routes component={Content} />
             </RequireAuth>
           </ErrorBoundary>
         </div>
-        <Suspense fallback={<LoadingSpinner />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
+        <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
+        <Suspense fallback={<div />}>{renderAppUpdater && <AppUpdater />}</Suspense>
       </div>
     </Fragment>
   );

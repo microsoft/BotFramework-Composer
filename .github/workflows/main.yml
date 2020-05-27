@@ -48,6 +48,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./Composer/coverage/lcov.info
+          base-path: ./Composer
 
   botproject:
     name: BotProject
@@ -63,10 +64,10 @@ jobs:
           dotnet-version: "3.1.102" # SDK Version to use.
       - name: dotnet build
         run: dotnet build
-        working-directory: BotProject/Templates/CSharp
+        working-directory: runtime/dotnet
       - name: dotnet test
         run: dotnet test
-        working-directory: BotProject/Templates/CSharp
+        working-directory: runtime/dotnet/tests
 
   docker-build:
     name: Docker Build

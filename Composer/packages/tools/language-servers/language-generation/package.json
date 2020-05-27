@@ -10,25 +10,23 @@
     "clean": "rimraf lib demo/dist",
     "start": "cd demo && ts-node ./src/server.ts",
     "test": "jest",
-    "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+    "lint": "eslint --quiet ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@bfc/indexers": "*",
-    "botbuilder-lg": "^4.8.0-preview.106823",
-    "botframework-expressions": "^4.8.0-preview.106476",
+    "botbuilder-lg": "^4.10.0-preview-133287",
     "request-light": "^0.2.2",
     "vscode-languageserver": "^5.3.0-next"
   },
   "devDependencies": {
+    "@bfc/test-utils": "*",
     "@types/node": "^12.0.4",
     "express": "^4.17.1",
-    "jest": "24.0.0",
     "rimraf": "^2.6.3",
-    "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
-    "typescript": "3.7.2",
+    "typescript": "3.9.2",
     "vscode-ws-jsonrpc": "^0.1.1",
     "ws": "^7.2.0"
   }

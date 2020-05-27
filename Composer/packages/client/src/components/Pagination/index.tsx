@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { useState, useEffect } from 'react';
+import formatMessage from 'format-message';
 
 import { container, dropdownStyles, text } from './style';
 
@@ -22,7 +23,7 @@ const createDropdownOption = (pageCount: number) => {
   return options;
 };
 
-export const Pagination: React.FC<IPaginationProps> = props => {
+export const Pagination: React.FC<IPaginationProps> = (props) => {
   const [index, setIndex] = useState(0);
   const { pageCount, onChange } = props;
 
@@ -49,17 +50,18 @@ export const Pagination: React.FC<IPaginationProps> = props => {
 
   return (
     <div css={container}>
-      <DefaultButton text="< Previous" allowDisabledFocus onClick={hanglePreviousClick} disabled={index === 0} />
+      <DefaultButton allowDisabledFocus disabled={index === 0} text="< Previous" onClick={hanglePreviousClick} />
       <span css={text}>Page</span>
       <Dropdown
-        placeholder="Select options"
+        ariaLabel={formatMessage('Page number')}
         options={createDropdownOption(pageCount)}
-        styles={dropdownStyles}
+        placeholder="Select options"
         selectedKey={`page${index + 1}`}
+        styles={dropdownStyles}
         onChange={handlePageSelected}
       />
       <span css={text}>of {pageCount}</span>
-      <DefaultButton text="Next >" allowDisabledFocus onClick={hangleNextClick} disabled={index === pageCount - 1} />
+      <DefaultButton allowDisabledFocus disabled={index === pageCount - 1} text="Next >" onClick={hangleNextClick} />
     </div>
   );
 };

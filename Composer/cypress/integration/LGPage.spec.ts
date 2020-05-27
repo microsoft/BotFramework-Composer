@@ -3,34 +3,30 @@
 
 context('LG Page', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample');
   });
 
   it('can open language generation page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonBot Responses').click();
     // left nav tree
-    cy.contains('TodoSample.Main');
+    cy.contains('TodoSample');
     cy.contains('All');
 
     cy.get('.toggleEditMode button').as('switchButton');
 
     // by default is table view
-    cy.findByTestId('LGEditor')
-      .findByTestId('table-view')
-      .should('exist');
+    cy.findByTestId('LGPage').findByTestId('table-view').should('exist');
     // goto edit-mode
     cy.get('@switchButton').click();
-    cy.findByTestId('LGEditor')
-      .get('.monaco-editor')
-      .should('exist');
+    cy.findByTestId('LGPage').get('.monaco-editor').should('exist');
 
     // back to table view
     cy.get('@switchButton').click();
 
     // nav to Main dialog
-    cy.findByTestId('LGEditor').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('__TestTodoSample').click();
     });
   });
 });

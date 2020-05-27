@@ -14,12 +14,12 @@ function renderTitle(data): string {
   if (data.$designer && data.$designer.name) {
     return data.$designer.name;
   } else {
-    // data.$type.split('.')[1]
+    // data.$kind.split('.')[1]
     return formatMessage('Handle Unknown Intent');
   }
 }
 
 export const UnknownIntentRule: FunctionComponent<NodeProps> = ({ id, data, focused, onEvent }) => {
-  return <RuleCard id={id} data={data} label={renderTitle(data)} focused={focused} onEvent={onEvent} />;
+  return <RuleCard data={data} focused={focused} id={id} label={renderTitle(data)} onEvent={onEvent} />;
 };
 UnknownIntentRule.defaultProps = defaultNodeProps;

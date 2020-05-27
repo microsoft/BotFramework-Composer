@@ -73,7 +73,7 @@ If you made some changes after first run and you would like to rebuild the image
 If you are developing some components and you want fast iteraction without re-building container images on every change, please refer to the document to each component for setup instuctions
     
 - [Designer App](https://github.com/microsoft/BotFramework-Designer/tree/master/Composer)
-- [Bot Runtime](https://github.com/microsoft/BotFramework-Composer/tree/master/BotProject/CSharp)
+- [Bot Runtime](https://github.com/microsoft/BotFramework-Composer/tree/master/runtime/dotnet/azurewebapp)
 
 
 ## Build the Composer project and run it locally 
@@ -106,26 +106,13 @@ This command builds the Composer app. The build process can take few minutes.
 ```
 yarn start
 ```
-This command starts the Composer authoring application and the CSharp Bot runtime. 
+This command starts the Composer authoring application and the dotnet Azure WebApp Bot runtime which is running on http://localhost:3979/api/messages.
 
- To use Composer, open a browser and navigate to http://localhost:3000
-
-#### Run the Bot Project 
-
-To test the bot you are creating using the Composer you need to run the Bot Project that comes with the Composer. 
-
-Open a new terminal window. Navigate to the Bot Framework Composer repo. In the repo, navigate to the **BotProject\CSharp** folder. Run the following command:
-```
-dotnet run
-```
-This will build and run a Bot Framework bot that the Composer connects to.
-
-The bot is running on http://localhost:3979/api/messages.
-
+To use Composer, open a browser and navigate to http://localhost:3000
 
 Alternatively you can use one command to start both the Composer and the Bot runtime
 ```
 yarn startall
 ```
-This command starts the Composer authoring application and the CSharp Bot runtime. 
+This command starts the Composer authoring application and the dotnet Azure WebApp  Bot runtime. 
 

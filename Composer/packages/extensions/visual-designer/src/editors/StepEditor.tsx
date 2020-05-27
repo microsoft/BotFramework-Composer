@@ -3,46 +3,45 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useEffect, useState } from 'react';
+import { useState, useCallback } from 'react';
+import { useShellApi } from '@bfc/extension';
 
 import { StepGroup } from '../components/groups';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { EdgeMenu } from '../components/menus/EdgeMenu';
-import { ElementInterval, TriggerSize, TerminatorSize, InitNodeSize } from '../constants/ElementSizes';
+import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { EdgeDirection } from '../models/EdgeData';
-import { useWindowDimensions } from '../utils/hooks';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { drawSVGEdge } from '../components/lib/EdgeUtil';
 import { ObiColors } from '../constants/ElementColors';
 
-const HeadSize = {
-  width: TriggerSize.width,
-  height: TriggerSize.height + ElementInterval.y / 2,
-};
-const TailSize = {
-  width: TerminatorSize.width,
-  height: TerminatorSize.height + ElementInterval.y / 2 + 5,
-};
+const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
+const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);
 
-export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX.Element => {
+export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
+  const { shellApi } = useShellApi();
+  const { addCoachMarkRef } = shellApi;
+
+  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef({ action }), []);
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
     <EdgeMenu
-      onClick={$type => onEvent(NodeEventTypes.Insert, { id, $type, position: 0 })}
       data-testid="StepGroupAdd"
+      forwardedRef={addRef}
       id={`${id}[0]`}
+      onClick={($kind) => onEvent(NodeEventTypes.Insert, { id, $kind, position: 0 })}
     />
   ) : (
     <StepGroup
-      id={id}
       data={data}
+      id={id}
       onEvent={onEvent}
-      onResize={boundary => {
+      onResize={(boundary) => {
         if (boundary) {
           setStepGroupBoundary(boundary);
         }
@@ -51,28 +50,29 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
   );
   const contentBoundary = hasNoSteps ? new Boundary(TerminatorSize.width, TerminatorSize.height) : stepGroupBoundary;
 
+  const editorAxisX = Math.max(0, HeadSize.axisX, TailSize.axisX, contentBoundary.axisX);
   const editorWidth =
-    Math.min(
-      Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.axisX),
-      Math.max(0, HeadSize.width / 2, TailSize.width / 2, contentBoundary.width - contentBoundary.axisX)
-    ) * 2;
+    editorAxisX +
+    Math.max(
+      0,
+      HeadSize.width - HeadSize.axisX,
+      TailSize.width - TailSize.axisX,
+      contentBoundary.width - contentBoundary.axisX
+    );
   const editorHeight = HeadSize.height + TailSize.height + contentBoundary.height;
-  const editorAxisX = editorWidth / 2;
-
-  const { width } = useWindowDimensions();
-
-  useEffect(() => {
-    addCoachMarkRef({
-      action: {
-        x: (width + editorWidth) / 2,
-        y: (hasNoSteps ? InitNodeSize.height / 2 : (3 * InitNodeSize.height) / 2 + ElementInterval.y) + 48,
-      },
-    });
-  }, [width]);
 
   return (
-    <div className="step-editor" css={{ position: 'relative', width: editorWidth, height: editorHeight }}>
-      <SVGContainer>
+    <div
+      aria-label="step-editor"
+      /**
+       * `maxWith: 100%` is important here. (refs https://developer.mozilla.org/en-US/docs/Web/CSS/align-items)
+       * If the cross-size of an item is larger than the flex container, it will overflow equally in both directions.
+       * Limit the max width to parent width to avoid left overfow.
+       */
+      className="step-editor"
+      css={{ position: 'relative', width: editorWidth, height: editorHeight, maxWidth: '100%' }}
+    >
+      <SVGContainer height={editorHeight} width={editorWidth}>
         {drawSVGEdge('editor-edge__head', editorAxisX, TriggerSize.height, EdgeDirection.Down, ElementInterval.y / 2)}
         {drawSVGEdge(
           'editor-edge__tail',
@@ -83,16 +83,15 @@ export const StepEditor = ({ id, data, onEvent, trigger, addCoachMarkRef }): JSX
           { directed: true }
         )}
         <circle
-          name="editor__end"
-          r={TerminatorSize.height / 2 - 1}
           cx={editorAxisX}
           cy={contentBoundary.height + HeadSize.height + ElementInterval.y / 2 + TerminatorSize.height / 2}
           fill="none"
+          r={TerminatorSize.height / 2 - 1}
           stroke={ObiColors.LightGray}
           strokeWidth="2"
         />
       </SVGContainer>
-      <OffsetContainer offset={{ x: editorAxisX - HeadSize.width / 2, y: 0 }}>
+      <OffsetContainer offset={{ x: editorAxisX - HeadSize.axisX, y: 0 }}>
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
           <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
         </div>

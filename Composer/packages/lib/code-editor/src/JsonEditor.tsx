@@ -1,44 +1,91 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState, useEffect } from 'react';
-import { editor } from '@bfcomposer/monaco-editor';
-import { EditorWillMount } from '@bfcomposer/react-monaco-editor';
+import React, { useEffect, useState } from 'react';
+import merge from 'lodash/merge';
+import schemaDefaults from 'json-schema-defaults';
 
-import * as utils from './utils';
-import { RichEditor, RichEditorProps } from './RichEditor';
+import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 
-interface JsonEditorProps extends Omit<RichEditorProps, 'language' | 'value' | 'errorMsg' | 'onChange'> {
+interface JsonEditorProps extends Omit<BaseEditorProps, 'language' | 'value' | 'errorMessage' | 'onChange'> {
   onChange: (jsonData: any) => void;
   value?: object;
-  obfuscate?: boolean;
+  schema?: any;
+  onError?: (error: string) => void;
 }
 
-export function JsonEditor(props: JsonEditorProps) {
-  const { options: additionalOptions, value: initialValue, onChange, editorWillMount, obfuscate, ...rest } = props;
-  const [value, setValue] = useState<string>(JSON.stringify(initialValue, null, 2));
-  const [parseError, setParseError] = useState<string>('');
+const JsonEditor: React.FC<JsonEditorProps> = (props) => {
+  const {
+    options: additionalOptions,
+    value: initialValue,
+    onChange,
+    onInit: onInitProp,
+    onError,
+    schema,
+    id,
+    ...rest
+  } = props;
 
-  const options: editor.IEditorConstructionOptions = {
+  const [parseError, setParseError] = useState<string>('');
+  const options = {
     quickSuggestions: true,
     folding: false,
+    readOnly: false,
     ...additionalOptions,
   };
 
   useEffect(() => {
-    const result = obfuscate ? utils.obfuscate(initialValue) : initialValue;
-    setValue(JSON.stringify(result, null, 2));
-  }, [obfuscate]);
+    onError && onError(parseError);
+  }, [parseError]);
 
-  const handleChange = value => {
-    setValue(value);
+  const onInit: OnInit = (monaco) => {
+    const disposable = monaco.editor.onDidCreateModel((model) => {
+      const diagnosticOptions: any = {
+        validate: true,
+        enableSchemaRequest: true,
+      };
 
+      if (schema) {
+        const uri = btoa(JSON.stringify(schema));
+        const otherSchemas = monaco.languages.json.jsonDefaults.diagnosticsOptions.schemas || [];
+        const currentSchema = otherSchemas.find((s) => s.uri === uri);
+
+        /**
+         * Because we mutate the global language settings, we need to
+         * add new schemas / new models to existing schemas.
+         * This lets us have multiple editors active using different schemas
+         * by taking advantage of the `fileMatch` property + the model's uri.
+         */
+        diagnosticOptions.schemas = [
+          ...otherSchemas.filter((s) => s.uri !== uri),
+          {
+            uri,
+            schema,
+            fileMatch: [...(currentSchema?.fileMatch || []), model.uri.toString()],
+          },
+        ];
+      }
+
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions(diagnosticOptions);
+
+      if (disposable) {
+        // only do this once per model being created
+        disposable.dispose();
+      }
+    });
+
+    if (typeof onInitProp === 'function') {
+      onInitProp(monaco);
+    }
+  };
+
+  const handleChange = (value) => {
     if (value) {
       try {
         const data = JSON.parse(value);
         onChange(data);
         setParseError('');
       } catch (err) {
-        setParseError('invalid json');
+        setParseError('Invalid json');
       }
     } else {
       onChange(undefined);
@@ -46,26 +93,21 @@ export function JsonEditor(props: JsonEditorProps) {
     }
   };
 
-  const handleMount: EditorWillMount = monaco => {
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-      validate: true,
-    });
-
-    if (typeof editorWillMount === 'function') {
-      editorWillMount(monaco);
-    }
-  };
+  const json = schema?.type === 'object' ? merge({}, schemaDefaults(schema), initialValue) : initialValue;
 
   return (
-    <RichEditor
+    <BaseEditor
+      errorMessage={parseError}
       helpURL="https://www.json.org"
+      id={id}
       language="json"
       options={options}
-      value={value}
+      value={JSON.stringify(json, null, 2)}
       onChange={handleChange}
-      editorWillMount={handleMount}
-      errorMsg={parseError}
+      onInit={onInit}
       {...rest}
     />
   );
-}
+};
+
+export { JsonEditor };

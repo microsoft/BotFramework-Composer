@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent } from 'react-testing-library';
+import { render, fireEvent } from '@bfc/test-utils';
 
 import { IconCard } from '../../../src/components/nodes/templates/IconCard';
 
@@ -18,16 +18,16 @@ describe('<IconCard />', () => {
 
     renderResult = render(
       <IconCard
-        icon={icon}
-        label={label}
-        corner={corner}
-        summary={''}
-        trigger={''}
         childDialog={''}
-        themeColor={themeColor}
+        corner={corner}
+        icon={icon}
         iconColor={'red'}
-        onClick={onClick}
+        label={label}
+        summary={''}
+        themeColor={themeColor}
+        trigger={''}
         onChildDialogClick={() => {}}
+        onClick={onClick}
       />
     );
   });

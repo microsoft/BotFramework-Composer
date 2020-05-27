@@ -1,18 +1,25 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ConceptLabels, DialogGroup, SDKTypes, dialogGroups, seedNewDialog } from '@bfc/shared';
+import {
+  ConceptLabels,
+  DialogGroup,
+  SDKKinds,
+  dialogGroups,
+  DialogInfo,
+  DialogFactory,
+  ITriggerCondition,
+} from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { ExpressionEngine } from 'botframework-expressions';
+import { Expression } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DialogInfo } from '@bfc/indexers';
+import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import formatMessage from 'format-message';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
-
-const ExpressionParser = new ExpressionEngine();
 
 interface DialogsMap {
   [dialogId: string]: any;
@@ -20,49 +27,34 @@ interface DialogsMap {
 
 export interface TriggerFormData {
   errors: TriggerFormDataErrors;
-  $type: string;
-  specifiedType: string;
+  $kind: string;
+  event: string;
   intent: string;
   triggerPhrases: string;
   regexEx: string;
 }
 
 export interface TriggerFormDataErrors {
-  $type?: string;
+  $kind?: string;
   intent?: string;
-  specifiedType?: string;
+  event?: string;
   triggerPhrases?: string;
   regexEx?: string;
+  activity?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
-  const dialog = dialogs.find(item => item.id === dialogId);
+  const dialog = dialogs.find((item) => item.id === dialogId);
   return cloneDeep(dialog);
 }
 
-export const eventTypeKey: string = SDKTypes.OnDialogEvent;
-export const intentTypeKey: string = SDKTypes.OnIntent;
-export const activityTypeKey: string = SDKTypes.OnActivity;
-export const messageTypeKey: string = SDKTypes.OnMessageEventActivity;
-export const regexRecognizerKey: string = SDKTypes.RegexRecognizer;
+export const eventTypeKey: string = SDKKinds.OnDialogEvent;
+export const intentTypeKey: string = SDKKinds.OnIntent;
+export const activityTypeKey: string = SDKKinds.OnActivity;
+export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
+export const customEventKey = 'OnCustomEvent';
 
-export function getFriendlyName(data) {
-  if (get(data, '$designer.name')) {
-    return get(data, '$designer.name');
-  }
-
-  if (get(data, 'intent')) {
-    return `${get(data, 'intent')}`;
-  }
-
-  if (ConceptLabels[data.$type] && ConceptLabels[data.$type].title) {
-    return ConceptLabels[data.$type].title;
-  }
-
-  return data.$type;
-}
-
-export function insert(content, path: string, position: number | undefined, data: any) {
+function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
   const insertAt = typeof position === 'undefined' ? current.length : position;
   current.splice(insertAt, 0, data);
@@ -70,33 +62,36 @@ export function insert(content, path: string, position: number | undefined, data
   return content;
 }
 
-export function generateNewTrigger(data: TriggerFormData) {
-  const optionalAttributes: { intent?: string; event?: string } = {};
-  if (data.specifiedType) {
-    data.$type = data.specifiedType;
+function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
+  const optionalAttributes: { intent?: string; event?: string; $designer: { [key: string]: string } } = {
+    $designer: {},
+  };
+
+  if (data.event) {
+    optionalAttributes.event = data.event;
+    optionalAttributes.$designer.name = data.event;
   }
+
   if (data.intent) {
     optionalAttributes.intent = data.intent;
   }
-  const newStep = {
-    $type: data.$type,
-    ...seedNewDialog(data.$type, {}, optionalAttributes),
-  };
+
+  const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   return newStep;
 }
 
-export function generateRegexExpression(intent: string, pattern: string) {
+function generateRegexExpression(intent: string, pattern: string) {
   return { intent, pattern };
 }
 
-export function createTrigger(dialog: DialogInfo, data: TriggerFormData): DialogInfo {
+function createTrigger(dialog: DialogInfo, data: TriggerFormData, factory: DialogFactory): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
-  const trigger = generateNewTrigger(data);
+  const trigger = generateNewTrigger(data, factory);
   insert(dialogCopy.content, 'triggers', undefined, trigger);
   return dialogCopy;
 }
 
-export function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
+function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   const regex = generateRegexExpression(intent, pattern);
   const dialogCopy = cloneDeep(dialog);
   insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
@@ -106,7 +101,7 @@ export function createRegExIntent(dialog: DialogInfo, intent: string, pattern: s
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   let dialogCopy = cloneDeep(dialog);
   const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
-  const targetIntent = regexIntents.find(ri => ri.intent === intent);
+  const targetIntent = regexIntents.find((ri) => ri.intent === intent);
   if (!targetIntent) {
     dialogCopy = createRegExIntent(dialog, intent, pattern);
   } else {
@@ -117,21 +112,27 @@ export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: s
 
 //it is possible that we cannot find a RegEx. Because it will clear all regEx when we
 //switch to another recognizer type
-export function deleteRegExIntent(dialog: DialogInfo, intent: string): DialogInfo {
+function deleteRegExIntent(dialog: DialogInfo, intent: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
   const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
-  const index = regexIntents.findIndex(ri => ri.intent === intent);
+  const index = regexIntents.findIndex((ri) => ri.intent === intent);
   if (index > -1) {
     regexIntents.splice(index, 1);
   }
   return dialogCopy;
 }
 
-export function generateNewDialog(dialogs: DialogInfo[], dialogId: string, data: TriggerFormData): DialogInfo {
+export function generateNewDialog(
+  dialogs: DialogInfo[],
+  dialogId: string,
+  data: TriggerFormData,
+  schema: any
+): DialogInfo {
   //add new trigger
-  const dialog = dialogs.find(dialog => dialog.id === dialogId);
+  const dialog = dialogs.find((dialog) => dialog.id === dialogId);
   if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
-  let updatedDialog = createTrigger(dialog, data);
+  const factory = new DialogFactory(schema);
+  let updatedDialog = createTrigger(dialog, data, factory);
 
   //add regex expression
   if (data.regexEx) {
@@ -144,26 +145,30 @@ export function createSelectedPath(selected: number) {
   return `triggers[${selected}]`;
 }
 
-export function createFocusedPath(selected: number, focused: number) {
-  return `triggers[${selected}].actions[${focused}]`;
-}
-
-export function deleteTrigger(dialogs: DialogInfo[], dialogId: string, index: number) {
+export function deleteTrigger(
+  dialogs: DialogInfo[],
+  dialogId: string,
+  index: number,
+  callbackOnDeletedTrigger?: (trigger: ITriggerCondition) => any
+) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const isRegEx = get(dialogCopy, 'content.recognizer.$type', '') === regexRecognizerKey;
+  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === regexRecognizerKey;
   if (isRegEx) {
     const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
   }
   const triggers = get(dialogCopy, 'content.triggers');
-  triggers.splice(index, 1);
+  const removedTriggers = triggers.splice(index, 1);
+  if (callbackOnDeletedTrigger && removedTriggers[0]) {
+    callbackOnDeletedTrigger(removedTriggers[0]);
+  }
   return dialogCopy.content;
 }
 
 export function getTriggerTypes(): IDropdownOption[] {
   const triggerTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
+    ...dialogGroups[DialogGroup.EVENTS].types.map((t) => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
 
@@ -173,13 +178,17 @@ export function getTriggerTypes(): IDropdownOption[] {
 
       return { key: t, text: name || t };
     }),
+    {
+      key: customEventKey,
+      text: formatMessage('Custom events'),
+    },
   ];
   return triggerTypes;
 }
 
-export function getEventTypes(): IDropdownOption[] {
-  const eventTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map(t => {
+export function getEventTypes(): IComboBoxOption[] {
+  const eventTypes: IComboBoxOption[] = [
+    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
 
@@ -199,7 +208,7 @@ export function getEventTypes(): IDropdownOption[] {
 
 export function getActivityTypes(): IDropdownOption[] {
   const activityTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map(t => {
+    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map((t) => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
 
@@ -217,27 +226,27 @@ export function getActivityTypes(): IDropdownOption[] {
   return activityTypes;
 }
 
-export function getMessageTypes(): IDropdownOption[] {
-  const messageTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.MESSAGE_EVENTS].types.map(t => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return messageTypes;
-}
-
-export function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
+function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   return dialogs.reduce((result, dialog) => {
     result[dialog.id] = dialog.content;
     return result;
   }, {});
+}
+
+export function getFriendlyName(data) {
+  if (get(data, '$designer.name')) {
+    return get(data, '$designer.name');
+  }
+
+  if (get(data, 'intent')) {
+    return `${get(data, 'intent')}`;
+  }
+
+  if (ConceptLabels[data.$kind] && ConceptLabels[data.$kind].title) {
+    return ConceptLabels[data.$kind].title;
+  }
+
+  return data.$kind;
 }
 
 const getLabel = (dialog: DialogInfo, dataPath: string) => {
@@ -250,7 +259,7 @@ export function getbreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, sele
   let label = '';
   const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
-    const dialog = dialogs.find(d => d.id === dialogId);
+    const dialog = dialogs.find((d) => d.id === dialogId);
     label = (dialog && dialog.displayName) || '';
   } else {
     const dialogsMap = getDialogsMap(dialogs);
@@ -274,8 +283,7 @@ export function getDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
 }
 
 export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath: string, data: any) {
-  const dialogsMapClone = cloneDeep(dialogsMap);
-  const dialog = dialogsMapClone[dialogId];
+  const dialog = cloneDeep(dialogsMap[dialogId]);
 
   if (!dataPath) {
     return data;
@@ -333,7 +341,7 @@ export function sanitizeDialogData(dialogData: any) {
 
 export function isExpression(str: string): boolean {
   try {
-    ExpressionParser.parse(str);
+    Expression.parse(str);
   } catch (error) {
     return false;
   }
@@ -349,7 +357,7 @@ export function getSelected(focused: string): string {
 export function replaceDialogDiagnosticLabel(path?: string): string {
   if (!path) return '';
   let list = path.split('#');
-  list = list.map(item => {
+  list = list.map((item) => {
     return ConceptLabels[item]?.title || item;
   });
   return list.join(': ');

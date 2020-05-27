@@ -3,13 +3,13 @@
 
 context('Home Page ', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
   });
 
   it('can open buttons in home page', () => {
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
     cy.findByTestId('homePage-ToolBar-New').click();
-    cy.findByText('Create from scratch?').should('exist');
+    cy.findByText('Create bot from template or scratch?').should('exist');
     cy.findByText('Cancel').should('exist');
     cy.findByText('Cancel').click();
     cy.findByTestId('homePage-ToolBar-Open').click();
@@ -17,6 +17,6 @@ context('Home Page ', () => {
     cy.findByText('Cancel').should('exist');
     cy.findByText('Cancel').click();
     cy.findByTestId('homePage-body-New').click();
-    cy.findByText('Create from scratch?').should('exist');
+    cy.findByText('Create bot from template or scratch?').should('exist');
   });
 });

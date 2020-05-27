@@ -2,32 +2,32 @@
 // Licensed under the MIT License.
 import get from 'lodash/get';
 
-import { ExternalResourceHandler } from '../copyUtils/ExternalApi';
-import { walkAdaptiveAction } from '../deleteUtils/walkAdaptiveAction';
-import { walkAdaptiveActionList } from '../deleteUtils/walkAdaptiveActionList';
-import { SDKTypes } from '../types';
+import { SDKKinds } from '../types';
 
-type LgFieldHandler = ExternalResourceHandler<string>;
+import { walkAdaptiveAction } from './walkAdaptiveAction';
+import { walkAdaptiveActionList } from './walkAdaptiveActionList';
+
+type LgFieldHandler = (actionId: string, lgFieldName: string, lgFieldValue: string) => string;
 
 const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$type) return;
+  if (!action || !action.$kind) return;
 
   const onFound = (fieldName: string) => {
-    action[fieldName] && handleLgField(get(action, '$designer.id'), action, fieldName, action[fieldName]);
+    action[fieldName] && handleLgField(get(action, '$designer.id', ''), fieldName, action[fieldName]);
   };
 
-  switch (action.$type) {
-    case SDKTypes.SendActivity:
-    case SDKTypes.SkillDialog:
+  switch (action.$kind) {
+    case SDKKinds.SendActivity:
+    case SDKKinds.BeginSkill:
       onFound('activity');
       break;
-    case SDKTypes.AttachmentInput:
-    case SDKTypes.ChoiceInput:
-    case SDKTypes.ConfirmInput:
-    case SDKTypes.DateTimeInput:
-    case SDKTypes.NumberInput:
-    case SDKTypes.TextInput:
+    case SDKKinds.AttachmentInput:
+    case SDKKinds.ChoiceInput:
+    case SDKKinds.ConfirmInput:
+    case SDKKinds.DateTimeInput:
+    case SDKKinds.NumberInput:
+    case SDKKinds.TextInput:
       onFound('prompt');
       onFound('unrecognizedPrompt');
       onFound('invalidPrompt');
@@ -37,9 +37,9 @@ const findLgFields = (action: any, handleLgField: LgFieldHandler) => {
 };
 
 export const walkLgResourcesInAction = (action, handleLgResource: LgFieldHandler) => {
-  walkAdaptiveAction(action, action => findLgFields(action, handleLgResource));
+  walkAdaptiveAction(action, (action) => findLgFields(action, handleLgResource));
 };
 
 export const walkLgResourcesInActionList = (actionList: any[], handleLgResource: LgFieldHandler) => {
-  walkAdaptiveActionList(actionList, action => findLgFields(action, handleLgResource));
+  walkAdaptiveActionList(actionList, (action) => findLgFields(action, handleLgResource));
 };

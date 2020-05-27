@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import jwtDecode from 'jwt-decode';
+import { UserSettings } from '@bfc/shared';
 
 import { ActionCreator } from '../types';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
@@ -15,7 +16,7 @@ enum ClaimNames {
 
 const REFRESH_WATERMARK = 1000 * 60 * 5; // 5 minutes
 
-export const loginUser: ActionCreator = async store => {
+export const loginUser: ActionCreator = async (store) => {
   if (!process.env.COMPOSER_REQUIRE_AUTH) {
     return;
   }
@@ -64,4 +65,11 @@ export const loginUser: ActionCreator = async store => {
       type: ActionTypes.USER_LOGIN_FAILURE,
     });
   }
+};
+
+export const updateUserSettings: ActionCreator = ({ dispatch }, settings: Partial<UserSettings>) => {
+  dispatch({
+    type: ActionTypes.SET_USER_SETTINGS,
+    payload: settings,
+  });
 };

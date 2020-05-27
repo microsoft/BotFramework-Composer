@@ -16,22 +16,21 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js",
     "test": "jest",
-    "lint": "eslint --quiet --ext .ts,.tsx ./src",
+    "lint": "eslint --quiet ./src",
     "lint:fix": "yarn lint --fix",
     "lint:typecheck": "tsc --noEmit",
     "watch": "yarn build:ts --watch"
   },
   "devDependencies": {
+    "@bfc/test-utils": "*",
     "@types/lodash": "^4.14.146",
-    "jest": "24.0.0",
-    "rimraf": "^2.6.3",
-    "ts-jest": "^24.1.0"
+    "rimraf": "^2.6.3"
   },
   "dependencies": {
     "@bfc/shared": "*",
-    "@microsoft/bf-lu": "4.8.0-preview.111952",
-    "botbuilder-lg": "^4.8.0-preview.106823",
-    "botframework-expressions": "^4.8.0-preview.106476",
+    "@microsoft/bf-lu": "4.9.0",
+    "adaptive-expressions": "^4.10.0-preview-133287",
+    "botbuilder-lg": "^4.10.0-preview-133287",
     "lodash": "^4.17.15"
   }
 }

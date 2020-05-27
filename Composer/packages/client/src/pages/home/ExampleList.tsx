@@ -32,7 +32,7 @@ const resolveIcon = (exampleId: string): string => {
   return exampleIcons.DefaultIcon;
 };
 
-export const ExampleList: React.FC<ExampleListProps> = props => {
+export const ExampleList: React.FC<ExampleListProps> = (props) => {
   const { onClick, examples } = props;
 
   function _onRenderCell(item?: ProjectTemplate): React.ReactNode {
@@ -41,8 +41,20 @@ export const ExampleList: React.FC<ExampleListProps> = props => {
     }
 
     return (
-      <div css={exampleListCell} data-is-focusable={true} key={item.id} onClick={() => onClick(item.id)}>
-        <img role="presentation" src={resolveIcon(item.id)} css={exampleListCellIcon} />
+      <div
+        key={item.id}
+        data-is-focusable
+        aria-label={item.name + '; ' + item.description}
+        css={exampleListCell}
+        tabIndex={0}
+        onClick={() => onClick(item.id)}
+        onKeyDown={(ev) => {
+          if (ev.key === 'Enter') {
+            onClick(item.id);
+          }
+        }}
+      >
+        <img css={exampleListCellIcon} role="presentation" src={resolveIcon(item.id)} />
         <div css={exampleListCellContent}>
           <div css={exampleListCellName}>{item.name}</div>
           <div css={exampleListCellDescription}>{item.description}</div>
@@ -52,7 +64,7 @@ export const ExampleList: React.FC<ExampleListProps> = props => {
   }
 
   return (
-    <div data-is-scrollable="true" css={exampleListContainer}>
+    <div css={exampleListContainer} data-is-scrollable="true">
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <List items={examples} onRenderCell={_onRenderCell} />
       </ScrollablePane>

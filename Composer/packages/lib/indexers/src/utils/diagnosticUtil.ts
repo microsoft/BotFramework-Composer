@@ -1,10 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuIntentSection } from '@bfc/shared';
-
-import { Diagnostic, DiagnosticSeverity, Range, Position } from '../diagnostic';
-import { CodeRange } from '../type';
+import { LuIntentSection, Diagnostic, DiagnosticSeverity, Range, Position, CodeRange } from '@bfc/shared';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
@@ -23,6 +20,21 @@ export function combineMessage(diagnostics: Diagnostic[]): string {
   }, '');
 }
 
+export function combineSimpleMessage(diagnostics: Diagnostic[]): string {
+  const diagnostic = diagnostics[0];
+  if (diagnostic) {
+    let msg = '';
+    if (diagnostic.range) {
+      const { start, end } = diagnostic.range;
+      const position = `L${start.line}:${start.character} - L${end.line}:${end.character} `;
+      msg += position;
+    }
+    const [, errorInfo] = diagnostic.message.split('error message: ');
+    return msg + errorInfo;
+  }
+  return '';
+}
+
 export function offsetRange(range: Range, offset: number): Range {
   return new Range(
     new Position(range.start.line - offset, range.start.character),
@@ -36,12 +48,12 @@ export function isDiagnosticWithInRange(diagnostic: Diagnostic, range: CodeRange
 }
 
 export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
-  if (!range) return diagnostics;
-  const filteredDiags = diagnostics.filter(d => {
+  if (!range) return [];
+  const filteredDiags = diagnostics.filter((d) => {
     return d.range && isDiagnosticWithInRange(d, range);
   });
   const offset = range.startLineNumber;
-  return filteredDiags.map(d => {
+  return filteredDiags.map((d) => {
     const { range } = d;
     if (range) {
       return {
@@ -56,23 +68,27 @@ export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: 
 export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuIntentSection): Diagnostic[] {
   const { range } = section;
   if (!range) return diagnostics;
-  const filteredDiags = diagnostics.filter(d => {
+  const filteredDiags = diagnostics.filter((d) => {
     return isDiagnosticWithInRange(d, range);
   });
   const offset = range.startLineNumber;
-  return filteredDiags.map(d => {
+  return filteredDiags.map((d) => {
     const { range } = d;
     if (range) {
-      d.range = offsetRange(range, offset);
+      return { ...d, range: offsetRange(range, offset) };
     }
     return d;
   });
 }
 
 export function findErrors(diagnostics: Diagnostic[]): Diagnostic[] {
-  return diagnostics.filter(d => d.severity === DiagnosticSeverity.Error);
+  return diagnostics.filter((d) => d.severity === DiagnosticSeverity.Error);
+}
+
+export function findWarnings(diagnostics: Diagnostic[]): Diagnostic[] {
+  return diagnostics.filter((d) => d.severity === DiagnosticSeverity.Warning);
 }
 
 export function isValid(diagnostics: Diagnostic[]): boolean {
-  return diagnostics.every(d => d.severity !== DiagnosticSeverity.Error);
+  return diagnostics.every((d) => d.severity !== DiagnosticSeverity.Error);
 }

@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 import { ITheme, getTheme } from 'office-ui-fabric-react/lib/Styling';
 import { Depths, MotionTimings, MotionDurations } from '@uifabric/fluent-theme';
-import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 export const outline = css`
   display: flex;
   flex-direction: column;
@@ -14,7 +14,9 @@ export const outline = css`
 
 export const page = css`
   display: flex;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  flex-wrap: wrap;
 `;
 
 export const leftPage = css`
@@ -33,7 +35,7 @@ export const rightPage = css`
 
 export const title = css`
   display: block;
-  font-size: 28px;
+  font-size: ${FontSizes.xxLarge};
   line-height: 36px;
   font-weight: ${FontWeights.semibold};
   margin: 0;
@@ -52,12 +54,10 @@ export const introduction = css`
 
 export const newBotContainer = css`
   display: flex;
-  flex-wrap: wrap;
   margin: 20px 0;
 `;
 
 export const leftContainer = css`
-  min-width: 535px;
   margin-top: 10px;
   margin-bottom: 10px;
   flex: auto;
@@ -67,34 +67,46 @@ export const leftContainer = css`
 
 export const itemContainerWrapper = (disabled?: boolean) => css`
   border-radius: 2px;
+  border-width: 0;
   cursor: ${disabled ? 'auto' : 'pointer'};
   display: block;
   min-width: 180px;
   height: 130px;
   width: 11vw;
   margin-right: 30px;
+  padding: 0;
 `;
 
 export const itemContainer = css`
+  outline: none;
   height: 50%;
 `;
 
 export const itemContainerTitle = css`
   height: 100%;
+  color: white;
+  text-align: left;
   display: flex;
   align-items: center;
   font-size: 20px;
   font-weight: 600;
   padding: 0.5rem 1rem;
   box-sizing: border-box;
+  outline: none;
 `;
 
 export const itemContainerContent = css`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
   font-weight: 600;
+  text-align: left;
+  padding: 10px 0 0 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
-  padding: 0.5rem 1rem;
+  outline: none;
 `;
 
 export const subtitle = css`
@@ -158,14 +170,16 @@ export const disabledItem = {
     font-size: smaller;
     word-wrap: break-word;
     color: #a19f9d;
+    background: white;
   `,
 };
 
 const baseBotItem = {
   container: css`
+    padding: 0;
+    border-width: 1px;
     box-shadow: ${Depths.depth4};
     transition: box-shadow ${MotionDurations.duration2} ${MotionTimings.standard};
-
     &:hover,
     &:focus {
       box-shadow: ${Depths.depth16};
@@ -187,12 +201,26 @@ export const newBotItem = {
   `,
 };
 
-export const lastestBotItem = {
+export const latestBotItem = {
   ...baseBotItem,
   title: css`
     background-color: #56ccf2;
   `,
 };
+
+export const tutorialTile = {
+  ...baseBotItem,
+  title: css`
+    background-color: #004c87;
+  `,
+};
+
+export const childrenContainer = css`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
 
 export const detailListContainer = css`
   position: relative;
@@ -224,7 +252,9 @@ export const exampleListCell = css`
   padding: 16px;
   box-sizing: border-box;
   display: flex;
-
+  &:focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
   &:hover {
     background: ${palette.neutralLight};
   }
@@ -251,4 +281,16 @@ export const exampleListCellName = css`
 export const exampleListCellDescription = css`
   font-size: ${fonts.small.fontSize};
   color: ${palette.neutralTertiary};
+`;
+
+export const tableCell = css`
+  outline: none;
+  width: auto;
+  :focus {
+    outline: rgb(102, 102, 102) solid 1px;
+  }
+`;
+
+export const content = css`
+  outline: none;
 `;

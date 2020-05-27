@@ -3,8 +3,10 @@
 
 import fs from 'fs';
 import { promisify } from 'util';
+import path from 'path';
 
 import glob from 'globby';
+import archiver from 'archiver';
 
 import { IFileStorage, Stat, MakeDirectoryOptions } from './interface';
 
@@ -24,7 +26,7 @@ export class LocalDiskStorage implements IFileStorage {
     return {
       isDir: fstat.isDirectory(),
       isFile: fstat.isFile(),
-      lastModified: fstat.ctime.toString(),
+      lastModified: fstat.mtime.toString(),
       size: fstat.isFile() ? fstat.size.toString() : '',
     };
   }
@@ -73,5 +75,30 @@ export class LocalDiskStorage implements IFileStorage {
 
   async rename(oldPath: string, newPath: string): Promise<void> {
     return await rename(oldPath, newPath);
+  }
+
+  async zip(source: string, cb): Promise<void> {
+    const archive = archiver('zip');
+    cb(archive);
+
+    // We're selectively adding specific directories/files to the archive.
+    // If a user has ejected the runtime into the path, we don't want to include
+    // these files into the archive
+    [
+      path.format({ dir: `${source}/dialogs/` }),
+      path.format({ dir: `${source}/language-understanding/` }),
+      path.format({ dir: `${source}/language-generation/` }),
+      path.format({ dir: `${source}/settings/` }),
+      path.format({ dir: `${source}/generated/` }),
+    ].forEach((directory) => {
+      archive.directory(directory, directory.split(source)[1]);
+    });
+
+    const files = await glob('*.dialog', { cwd: source, dot: true });
+    files.forEach((file) => {
+      archive.file(path.format({ dir: `${source}/`, base: `${file}` }), { name: path.basename(file) });
+    });
+
+    archive.finalize();
   }
 }

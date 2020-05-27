@@ -18,7 +18,7 @@ import {
   TextEdit,
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
-import { updateIntent, isValid, checkSection } from '@bfc/indexers/lib/utils/luUtil';
+import { updateIntent, isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { luIndexer } from '@bfc/indexers';
 import { parser } from '@microsoft/bf-lu/lib/parser';
 
@@ -39,15 +39,25 @@ export class LUServer {
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LUDocuments: LUDocument[] = [];
 
-  constructor(protected readonly connection: IConnection, protected readonly importResolver?: ImportResolverDelegate) {
+  constructor(
+    protected readonly connection: IConnection,
+    protected readonly importResolver?: (
+      source: string,
+      resourceId: string,
+      projectId: string
+    ) => {
+      content: string;
+      id: string;
+    }
+  ) {
     this.documents.listen(this.connection);
-    this.documents.onDidChangeContent(change => this.validate(change.document));
-    this.documents.onDidClose(event => {
+    this.documents.onDidChangeContent((change) => this.validate(change.document));
+    this.documents.onDidClose((event) => {
       this.cleanPendingValidation(event.document);
       this.cleanDiagnostics(event.document);
     });
 
-    this.connection.onInitialize(params => {
+    this.connection.onInitialize((params) => {
       if (params.rootPath) {
         this.workspaceRoot = URI.file(params.rootPath);
       } else if (params.rootUri) {
@@ -69,8 +79,8 @@ export class LUServer {
         },
       };
     });
-    this.connection.onCompletion(params => this.completion(params));
-    this.connection.onDocumentOnTypeFormatting(docTypingParams => this.docTypeFormat(docTypingParams));
+    this.connection.onCompletion((params) => this.completion(params));
+    this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
     this.connection.onRequest((method, params) => {
       if (method === LABELEXPERIENCEREQUEST) {
         this.labelingExperienceHandler(params);
@@ -102,7 +112,7 @@ export class LUServer {
       const luFile = this.getLUDocument(document)?.index();
       if (!luFile) {
         diagnostics.push(`[Error luOption] File ${fileId}.lu do not exist`);
-      } else if (sectionId) {
+      } else if (sectionId && sectionId !== PlaceHolderSectionName) {
         const { sections } = luFile;
         const section = sections.find(({ Name }) => Name === sectionId);
         if (!section) diagnostics.push(`Section ${fileId}.lu#${sectionId} do not exist`);
@@ -111,7 +121,7 @@ export class LUServer {
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
       document,
-      diagnostics.map(errorMsg => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
+      diagnostics.map((errorMsg) => generageDiagnostic(errorMsg, DiagnosticSeverity.Error, document))
     );
   }
 
@@ -123,12 +133,12 @@ export class LUServer {
         content: editorContent,
       };
     };
-    const { fileId, sectionId } = this.getLUDocument(document) || {};
+    const { fileId, sectionId, projectId } = this.getLUDocument(document) || {};
 
-    if (this.importResolver && fileId) {
+    if (this.importResolver && fileId && projectId) {
       const resolver = this.importResolver;
       return (source: string, id: string) => {
-        const luFile = resolver(source, id);
+        const luFile = resolver(source, id, projectId);
         if (!luFile) {
           this.sendDiagnostics(document, [
             generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
@@ -152,7 +162,7 @@ export class LUServer {
 
   protected addLUDocument(document: TextDocument, luOption?: LUOption) {
     const { uri } = document;
-    const { fileId, sectionId } = luOption || {};
+    const { fileId, sectionId, projectId } = luOption || {};
     const index = () => {
       const importResolver: ImportResolverDelegate = this.getImportResolver(document);
       let content: string = document.getText();
@@ -173,6 +183,7 @@ export class LUServer {
     };
     const luDocument: LUDocument = {
       uri,
+      projectId,
       fileId,
       sectionId,
       index,
@@ -296,7 +307,7 @@ export class LUServer {
       const tabStr = lineContent.split('-')[0];
       let numOfTab = 0;
       let validIndentStr = true;
-      tabStr.split('').forEach(u => {
+      tabStr.split('').forEach((u) => {
         if (u === '\t') {
           numOfTab += 1;
         } else {
@@ -400,7 +411,7 @@ export class LUServer {
       const triggerChar = curLineContent[position.character - 1];
       const extraWhiteSpace = triggerChar === '@' ? ' ' : '';
       const entityTypes: string[] = EntityTypesObj.EntityType;
-      entityTypes.forEach(entity => {
+      entityTypes.forEach((entity) => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Keyword,
@@ -416,7 +427,7 @@ export class LUServer {
       const prebuiltTypes: string[] = EntityTypesObj.Prebuilt;
       const triggerChar = curLineContent[position.character - 1];
       const extraWhiteSpace = triggerChar !== ' ' ? ' ' : '';
-      prebuiltTypes.forEach(entity => {
+      prebuiltTypes.forEach((entity) => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Keyword,
@@ -502,7 +513,7 @@ export class LUServer {
 
     // auto suggest pattern
     if (util.matchedEnterPattern(curLineContent)) {
-      suggestionEntityList.forEach(name => {
+      suggestionEntityList.forEach((name) => {
         const item = {
           label: `Entity: ${name}`,
           kind: CompletionItemKind.Property,
@@ -516,7 +527,7 @@ export class LUServer {
 
     // suggestions for entities in a seperated line
     if (util.isEntityType(curLineContent)) {
-      suggestionEntityList.forEach(entity => {
+      suggestionEntityList.forEach((entity) => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Property,
@@ -529,7 +540,7 @@ export class LUServer {
     }
 
     if (util.isCompositeEntity(curLineContent)) {
-      util.getSuggestionEntities(luisJson, util.suggestionNoCompositeEntityTypes).forEach(entity => {
+      util.getSuggestionEntities(luisJson, util.suggestionNoCompositeEntityTypes).forEach((entity) => {
         const item = {
           label: entity,
           kind: CompletionItemKind.Property,
@@ -544,7 +555,7 @@ export class LUServer {
     const suggestionRolesList = util.getSuggestionRoles(luisJson, util.suggestionAllEntityTypes);
     // auto suggest roles
     if (util.matchedRolesPattern(curLineContent)) {
-      suggestionRolesList.forEach(name => {
+      suggestionRolesList.forEach((name) => {
         const item = {
           label: `Role: ${name}`,
           kind: CompletionItemKind.Property,
@@ -557,7 +568,7 @@ export class LUServer {
     }
 
     if (util.matchedEntityPattern(curLineContent)) {
-      suggestionEntityList.forEach(name => {
+      suggestionEntityList.forEach((name) => {
         const item = {
           label: `Entity: ${name}`,
           kind: CompletionItemKind.Property,
@@ -571,7 +582,7 @@ export class LUServer {
     if (util.matchedEntityCanUsesFeature(curLineContent, text, luisJson)) {
       const enitityName = util.extractEntityNameInUseFeature(curLineContent);
       const suggestionFeatureList = util.getSuggestionEntities(luisJson, util.suggestionNoPatternAnyEntityTypes);
-      suggestionFeatureList.forEach(name => {
+      suggestionFeatureList.forEach((name) => {
         if (name !== enitityName) {
           const item = {
             label: `Entity: ${name}`,
@@ -598,7 +609,7 @@ export class LUServer {
 
     if (util.matchIntentUsesFeatures(curLineContent)) {
       const suggestionFeatureList = util.getSuggestionEntities(luisJson, util.suggestionNoPatternAnyEntityTypes);
-      suggestionFeatureList.forEach(name => {
+      suggestionFeatureList.forEach((name) => {
         const item = {
           label: `Entity: ${name}`,
           kind: CompletionItemKind.Method,

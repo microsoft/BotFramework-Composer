@@ -1,27 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
-import * as monacoEditor from '@bfcomposer/monaco-editor/esm/vs/editor/editor.api';
-import * as monacoCore from 'monaco-editor-core';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
+import { EditorDidMount, Monaco } from '@monaco-editor/react';
 
 import { registerLULanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient } from './utils/lspUtil';
-import { RichEditor, RichEditorProps } from './RichEditor';
-
-const LU_HELP = 'https://aka.ms/lu-file-format';
-const placeholder = `> To learn more about the LU file format, read the documentation at
-> ${LU_HELP}`;
+import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
+import { defaultPlaceholder, LU_HELP } from './constants';
 
 export interface LUOption {
+  projectId?: string;
   fileId: string;
   sectionId?: string;
 }
 
-export interface LULSPEditorProps extends RichEditorProps {
+export interface LULSPEditorProps extends BaseEditorProps {
   luOption?: LUOption;
   languageServer?:
     | {
@@ -72,37 +69,40 @@ async function initializeDocuments(luOption: LUOption | undefined, uri: string) 
   }
 }
 
-export function LuEditor(props: LULSPEditorProps) {
-  const options: monacoEditor.editor.IEditorConstructionOptions = {
+const LuEditor: React.FC<LULSPEditorProps> = (props) => {
+  const monacoRef = useRef<Monaco>();
+  const options = {
     quickSuggestions: true,
-    wordBasedSuggestions: false,
     formatOnType: true,
-    lineNumbers: 'on',
-    minimap: {
-      enabled: true,
-    },
-    lineDecorationsWidth: undefined,
-    glyphMargin: true,
-    autoClosingBrackets: 'always',
-    autoIndent: true,
+    autoClosingBrackets: 'always' as const,
+    autoIndent: 'full' as const,
     lightbulb: {
       enabled: true,
     },
     ...props.options,
   };
 
-  const { luOption, languageServer, ...restProps } = props;
+  const { luOption, languageServer, onInit: onInitProp, placeholder = defaultPlaceholder, ...restProps } = props;
   const luServer = languageServer || defaultLUServer;
 
-  const editorWillMount = (monaco: typeof monacoEditor) => {
+  let editorId = '';
+  if (luOption) {
+    const { projectId, fileId, sectionId } = luOption;
+    editorId = [projectId, fileId, sectionId].join('/');
+  }
+
+  const onInit: OnInit = (monaco) => {
     registerLULanguage(monaco);
-    if (typeof props.editorWillMount === 'function') {
-      return props.editorWillMount(monaco);
+    monacoRef.current = monaco;
+
+    if (typeof onInitProp === 'function') {
+      onInitProp(monaco);
     }
   };
-  const editorDidMount = (editor: monacoEditor.editor.IStandaloneCodeEditor, monaco: typeof monacoEditor) => {
+
+  const editorDidMount: EditorDidMount = (_getValue, editor) => {
     if (!window.monacoServiceInstance) {
-      window.monacoServiceInstance = MonacoServices.install(editor as monacoCore.editor.IStandaloneCodeEditor | any);
+      window.monacoServiceInstance = MonacoServices.install(editor as any);
     }
 
     if (!window.monacoLUEditorInstance) {
@@ -117,14 +117,17 @@ export function LuEditor(props: LULSPEditorProps) {
             window.monacoLUEditorInstance = languageClient;
           }
 
-          editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, function() {
-            const position = editor.getPosition();
-            languageClient.sendRequest('labelingExperienceRequest', { uri, position });
-          });
+          const m = monacoRef.current;
+          if (m) {
+            editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, function () {
+              const position = editor.getPosition();
+              languageClient.sendRequest('labelingExperienceRequest', { uri, position });
+            });
+          }
           initializeDocuments(luOption, uri);
           languageClient.onReady().then(() =>
-            languageClient.onNotification('addUnlabelUtterance', result => {
-              const edits = result.edits.map(e => {
+            languageClient.onNotification('addUnlabelUtterance', (result) => {
+              const edits = result.edits.map((e) => {
                 return convertEdit(e);
               });
               editor.executeEdits(uri, edits);
@@ -140,20 +143,23 @@ export function LuEditor(props: LULSPEditorProps) {
     }
 
     if (typeof props.editorDidMount === 'function') {
-      return props.editorDidMount(editor, monaco);
+      return props.editorDidMount(_getValue, editor);
     }
   };
 
   return (
-    <RichEditor
-      placeholder={placeholder}
+    <BaseEditor
       helpURL={LU_HELP}
+      id={editorId}
+      placeholder={placeholder}
       {...restProps}
-      theme={'lu'}
-      language={'lu'}
-      options={options}
-      editorWillMount={editorWillMount}
       editorDidMount={editorDidMount}
+      language="lu"
+      options={options}
+      theme="lu"
+      onInit={onInit}
     />
   );
-}
+};
+
+export { LuEditor };

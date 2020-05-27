@@ -3,17 +3,14 @@
 
 context('RemoveDialog', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('ToDoBotWithLuisSample');
   });
 
   it('can remove dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByTestId('DialogTreeItemtriggers[4]').within(() => {
-        cy.findByTestId('dialogMoreButton')
-          .first()
-          .invoke('attr', 'style', 'visibility: visible')
-          .click();
+        cy.findByTestId('dialogMoreButton').first().invoke('attr', 'style', 'visibility: visible').click();
       });
     });
 

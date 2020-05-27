@@ -18,16 +18,16 @@ import {
 } from './triggerStyles';
 
 function getLabel(data: any): string {
-  const labelOverrides = ConceptLabels[data.$type];
+  const labelOverrides = ConceptLabels[data.$kind];
   if (labelOverrides) {
     return labelOverrides.subtitle || labelOverrides.title;
   }
-  return data.$type;
+  return data.$kind;
 }
 
 function getName(data: any): string {
   return (
-    data.intent || get(data, '$designer.name', ConceptLabels[data.$type] ? ConceptLabels[data.$type].title : data.$type)
+    data.intent || get(data, '$designer.name', ConceptLabels[data.$kind] ? ConceptLabels[data.$kind].title : data.$kind)
   );
 }
 
@@ -42,7 +42,7 @@ export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
           <Icon iconName="Flow" style={triggerIconStyle} />
           <h1 css={titleContentStyle}>{name}</h1>
         </div>
-        <div css={subtitleStyle} className="trigger__content-label">
+        <div className="trigger__content-label" css={subtitleStyle}>
           {label}
         </div>
       </div>

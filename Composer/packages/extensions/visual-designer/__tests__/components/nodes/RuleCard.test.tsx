@@ -2,13 +2,14 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, cleanup } from 'react-testing-library';
+import { render, fireEvent, RenderResult } from '@bfc/test-utils';
 
 import { RuleCard } from '../../../src/components/nodes/templates/RuleCard';
 import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';
 
 describe('<RuleCard />', () => {
-  let renderResult, data, label, onEvent, focusedId, id, clickResults;
+  let renderResult: RenderResult;
+  let data, label, onEvent, focusedId, id, clickResults;
 
   beforeEach(() => {
     clickResults = {
@@ -21,7 +22,6 @@ describe('<RuleCard />', () => {
     };
   });
 
-  afterEach(cleanup);
   describe('focusedId is equal to id', () => {
     beforeEach(() => {
       focusedId = id = 'actions[0]';
@@ -31,13 +31,13 @@ describe('<RuleCard />', () => {
       beforeEach(() => {
         data = {};
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
       it(`shouldn't render openIcon`, () => {
-        const { findByTestId } = renderResult;
-        expect(findByTestId('OpenIcon')).rejects.toThrow();
+        const { queryByTestId } = renderResult;
+        expect(queryByTestId('OpenIcon')).toBe(null);
       });
 
       it('should trigger open node function when id = focusedId', async () => {
@@ -53,13 +53,13 @@ describe('<RuleCard />', () => {
         data = {
           actions: [
             {
-              $type: 'Microsoft.BeginDialog',
+              $kind: 'Microsoft.BeginDialog',
               dialog: 'CalleeDialog',
             },
           ],
         };
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
@@ -99,13 +99,13 @@ describe('<RuleCard />', () => {
       beforeEach(() => {
         data = {};
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
       it(`shouldn't render openIcon & IconCard can be clicked`, async () => {
-        const { findByTestId } = renderResult;
-        expect(findByTestId('OpenIcon')).rejects.toThrow();
+        const { queryByTestId, findByTestId } = renderResult;
+        expect(queryByTestId('OpenIcon')).toBe(null);
 
         const card = await findByTestId('IconCard');
         expect(card).toBeTruthy();
@@ -128,13 +128,13 @@ describe('<RuleCard />', () => {
         data = {
           actions: [
             {
-              $type: 'Microsoft.BeginDialog',
+              $kind: 'Microsoft.BeginDialog',
               dialog: 'CalleeDialog',
             },
           ],
         };
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 

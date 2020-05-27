@@ -1,5 +1,5 @@
 {
-    "$type": "Microsoft.AdaptiveDialog",
+    "$kind": "Microsoft.AdaptiveDialog",
     "$designer": {
       "createdAt": "2019-07-03T06:51:37.526Z",
       "updatedAt": "2019-07-16T20:00:39.131Z",
@@ -9,14 +9,14 @@
     "$schema": "../../app.schema",
     "triggers": [
       {
-        "$type": "Microsoft.OnBeginDialog",
+        "$kind": "Microsoft.OnBeginDialog",
         "$designer": {
           "id": "335456",
           "updatedAt": "2019-07-22T08:10:44.402Z"
         },      
         "actions": [
           {
-            "$type": "Microsoft.SetProperty",
+            "$kind": "Microsoft.SetProperty",
             "$designer": {
               "createdAt": "2019-07-16T20:00:51.769Z",
               "updatedAt": "2019-08-02T22:30:32.704Z",
@@ -26,7 +26,7 @@
             "value": "@title"
           },      
           {
-            "$type": "Microsoft.TextInput",
+            "$kind": "Microsoft.TextInput",
             "$designer": {
               "createdAt": "2019-07-16T20:00:55.825Z",
               "updatedAt": "2019-07-16T20:00:59.346Z",
@@ -40,7 +40,7 @@
             "outputFormat": "none"
           },
           {
-            "$type": "Microsoft.IfCondition",
+            "$kind": "Microsoft.IfCondition",
             "$designer": {
               "createdAt": "2019-07-16T20:01:05.970Z",
               "updatedAt": "2019-07-16T20:01:13.866Z",
@@ -49,7 +49,7 @@
             "condition": "user.todos == null",
             "actions": [
               {
-                "$type": "Microsoft.SetProperty",
+                "$kind": "Microsoft.SetProperty",
                 "$designer": {
                   "createdAt": "2019-07-16T20:01:05.970Z",
                   "updatedAt": "2019-07-16T20:01:13.866Z",
@@ -61,7 +61,7 @@
             ]
           },
           {
-            "$type": "Microsoft.EditArray",
+            "$kind": "Microsoft.EditArray",
             "$designer": {
               "createdAt": "2019-07-01T22:02:54.672Z",
               "updatedAt": "2019-08-02T22:32:37.062Z",
@@ -72,13 +72,13 @@
             "value": "dialog.todo"
           },
           {
-            "$type": "Microsoft.SendActivity",
+            "$kind": "Microsoft.SendActivity",
             "$designer": {
               "createdAt": "2019-07-01T22:02:53.545Z",
               "updatedAt": "2019-07-16T20:01:26.980Z",
               "id": "116673"
             },
-            "activity": "[bfdactivity-116673]"
+            "activity": "[SendActivity_116673]"
           }
         ]
       }

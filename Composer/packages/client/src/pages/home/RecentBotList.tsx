@@ -4,8 +4,8 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { IObjectWithKey } from 'office-ui-fabric-react/lib/MarqueeSelection';
@@ -19,14 +19,14 @@ import formatMessage from 'format-message';
 
 import { calculateTimeDiff } from '../../utils';
 
-import { detailListContainer } from './styles';
+import { detailListContainer, tableCell, content } from './styles';
 
 interface RecentBotListProps {
-  onSelectionChanged: (file: IObjectWithKey) => void;
+  onItemChosen: (file: IObjectWithKey) => void;
   recentProjects: any;
 }
 export function RecentBotList(props: RecentBotListProps): JSX.Element {
-  const { onSelectionChanged, recentProjects } = props;
+  const { onItemChosen, recentProjects } = props;
   // for detail file list in open panel
   const tableColums = [
     {
@@ -42,21 +42,63 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: item => {
-        return <span aria-label={item.name}>{item.name}</span>;
+      onRender: (item) => {
+        return (
+          <div data-is-focusable css={tableCell}>
+            <Link
+              aria-label={formatMessage(`Bot name is {botName}`, { botName: item.name })}
+              onClick={() => onItemChosen(item)}
+            >
+              {item.name}
+            </Link>
+          </div>
+        );
       },
       isPadded: true,
     },
     {
       key: 'column2',
-      name: formatMessage('Date Modified'),
+      name: formatMessage('Date modified'),
       fieldName: 'dateModifiedValue',
       minWidth: 60,
       maxWidth: 70,
       isResizable: true,
       data: 'number',
-      onRender: item => {
-        return <span>{calculateTimeDiff(item.dateModified)}</span>;
+      onRender: (item) => {
+        return (
+          <div data-is-focusable css={tableCell}>
+            <div
+              aria-label={formatMessage(`Last modified time is {time}`, { time: calculateTimeDiff(item.dateModified) })}
+              css={content}
+              tabIndex={-1}
+            >
+              {calculateTimeDiff(item.dateModified)}
+            </div>
+          </div>
+        );
+      },
+      isPadded: true,
+    },
+    {
+      key: 'column3',
+      name: formatMessage('Location'),
+      fieldName: 'path',
+      minWidth: 200,
+      maxWidth: 400,
+      isResizable: true,
+      data: 'string',
+      onRender: (item) => {
+        return (
+          <div data-is-focusable css={tableCell}>
+            <div
+              aria-label={formatMessage(`location is {location}`, { location: item.path })}
+              css={content}
+              tabIndex={-1}
+            >
+              {item.path}
+            </div>
+          </div>
+        );
       },
       isPadded: true,
     },
@@ -64,38 +106,29 @@ export function RecentBotList(props: RecentBotListProps): JSX.Element {
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
           ...props,
-          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+          onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
         })}
       </Sticky>
     );
   }
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const file = selection.getSelection()[0];
-      // selected item will be cleaned when folder path changed file will be undefine
-      // when no item selected.
-      onSelectionChanged(file);
-    },
-  });
-
   return (
-    <div data-is-scrollable="true" css={detailListContainer}>
+    <div css={detailListContainer} data-is-scrollable="true">
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
-          items={recentProjects}
-          compact={false}
-          columns={tableColums}
-          getKey={item => item.name}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderDetailsHeader={onRenderDetailsHeader}
-          isHeaderVisible={true}
-          selection={selection}
-          selectionMode={SelectionMode.single}
+          isHeaderVisible
           checkboxVisibility={CheckboxVisibility.hidden}
+          columns={tableColums}
+          compact={false}
+          getKey={(item) => `${item.path}/${item.name}`}
+          items={recentProjects}
+          layoutMode={DetailsListLayoutMode.justified}
+          selectionMode={SelectionMode.single}
+          onItemInvoked={onItemChosen}
+          onRenderDetailsHeader={onRenderDetailsHeader}
         />
       </ScrollablePane>
     </div>

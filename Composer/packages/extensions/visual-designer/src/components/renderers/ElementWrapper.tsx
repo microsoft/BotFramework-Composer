@@ -3,8 +3,10 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC, useContext } from 'react';
+import { FC, useCallback, useContext, ReactNode, ReactElement } from 'react';
 import classnames from 'classnames';
+import { generateSDKTitle } from '@bfc/shared';
+import { useShellApi } from '@bfc/extension';
 
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
@@ -26,16 +28,45 @@ const nodeBorderDoubleSelectedStyle = css`
 export interface ElementWrapperProps {
   id: string;
   tab?: string;
+  titleInHeader?: boolean;
   onEvent: (eventName: NodeEventTypes, eventData: any) => any;
 }
 
-export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, children }): JSX.Element => {
+function checkHasProps(node: ReactNode): node is ReactElement {
+  return (node as ReactElement).props != null;
+}
+
+function extractNodeTitle(node: ReactNode, titleInHeader: boolean): string {
+  if (node == null || typeof node !== 'object') {
+    return '';
+  }
+  if (checkHasProps(node)) {
+    const { props } = node;
+    if (props?.header != null && titleInHeader) {
+      return props?.header?.props?.title || '';
+    } else if (props?.data != null) {
+      return generateSDKTitle(props.data);
+    } else if (props?.children != null) {
+      return extractNodeTitle(props.children, titleInHeader);
+    } else {
+      return '';
+    }
+  }
+  return '';
+}
+
+export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader, onEvent, children }): JSX.Element => {
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
   const nodeFocused = focusedId === id || focusedEvent === id;
   const nodeDoubleSelected = tab && nodeFocused && tab === focusedTab;
   const nodeSelected = selectedIds.includes(id);
+
+  const { shellApi } = useShellApi();
+  const { addCoachMarkRef } = shellApi;
+
+  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef({ action }), []);
 
   const declareElementAttributes = (selectedId: string, id: string) => {
     return {
@@ -49,8 +80,11 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, chil
     };
   };
 
+  const ariaLabel = extractNodeTitle(children, titleInHeader ?? false);
+
   return (
     <div
+      ref={addRef}
       className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
       css={css`
         position: relative;
@@ -63,7 +97,8 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, onEvent, chil
         }
       `}
       {...declareElementAttributes(selectableId, id)}
-      onClick={e => {
+      aria-label={ariaLabel}
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}

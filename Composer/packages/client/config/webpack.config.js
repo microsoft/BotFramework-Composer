@@ -17,7 +17,6 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const MonacoWebpackPlugin = require('@bfcomposer/monaco-editor-webpack-plugin');
 
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
@@ -31,7 +30,7 @@ const cssModuleRegex = /\.module\.css$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function(webpackEnv) {
+module.exports = function (webpackEnv) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -121,7 +120,6 @@ module.exports = function(webpackEnv) {
         // initialization, it doesn't blow up the WebpackDevServer client, and
         // changing JS code would still trigger a refresh.
       ].filter(Boolean),
-      extension: paths.extensionIndexJs,
     },
     output: {
       // The build folder.
@@ -140,8 +138,8 @@ module.exports = function(webpackEnv) {
       publicPath: publicPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
-        ? info => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
-        : isEnvDevelopment && (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+        ? (info) => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/')
+        : isEnvDevelopment && ((info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
     },
     optimization: {
       minimize: isEnvProduction,
@@ -227,7 +225,7 @@ module.exports = function(webpackEnv) {
       // https://github.com/facebook/create-react-app/issues/290
       // `web` extension prefixes have been added for better support
       // for React Native Web.
-      extensions: paths.moduleFileExtensions.map(ext => `.${ext}`),
+      extensions: paths.moduleFileExtensions.map((ext) => `.${ext}`),
       alias: {
         // Support lsp code editor
         vscode: require.resolve('monaco-languageclient/lib/vscode-compatibility'),
@@ -273,6 +271,10 @@ module.exports = function(webpackEnv) {
             },
           ],
           include: paths.appSrc,
+        },
+        {
+          test: /\.worker\.ts$/,
+          use: { loader: 'worker-loader' },
         },
         {
           // "oneOf" will traverse all following loaders until one will
@@ -404,10 +406,6 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
-      new MonacoWebpackPlugin({
-        // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
-        languages: ['markdown', 'json'],
-      }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -418,26 +416,6 @@ module.exports = function(webpackEnv) {
             filename: isEnvProduction ? 'index.ejs' : 'index.html',
             template: paths.appHtml,
             chunks: ['main'],
-          },
-          isEnvProduction
-            ? {
-                minify: {
-                  removeComments: true,
-                },
-              }
-            : undefined
-        )
-      ),
-      // Generates an `extension.html` file with the <script> injected.
-      new HtmlWebpackPlugin(
-        Object.assign(
-          {},
-          {
-            inject: true,
-            // only emit ejs in production because the dev server cannot render ejs templates
-            filename: isEnvProduction ? 'extensionContainer.ejs' : 'extensionContainer.html',
-            template: paths.extensionContainerHtml,
-            chunks: ['extension'],
           },
           isEnvProduction
             ? {

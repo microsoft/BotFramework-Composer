@@ -3,56 +3,52 @@
 
 context('ToDo Bot', () => {
   beforeEach(() => {
-    cy.visit(Cypress.env('COMPOSER_URL'));
+    cy.visit('/home');
     cy.createBot('TodoSample');
   });
 
   it('can open the main dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample.Main').click();
+      cy.findByText('__TestTodoSample').click();
     });
-    cy.withinEditor('FormEditor', () => {
+    cy.withinEditor('PropertyEditor', () => {
       cy.findByDisplayValue('__TestTodoSample').should('exist');
     });
   });
 
   it('can open the AddToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('AddToDo').click();
+      cy.findByText('addtodo').click();
+      cy.findByText('addtodo').click();
     });
 
-    cy.withinEditor('FormEditor', () => {
-      cy.findByDisplayValue('AddToDo').should('exist');
-    });
+    cy.url().should('contain', 'addtodo');
   });
 
   it('can open the ClearToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('ClearToDos').click();
+      cy.findByText('cleartodos').click();
+      cy.findByText('cleartodos').click();
     });
 
-    cy.withinEditor('FormEditor', () => {
-      cy.findByDisplayValue('ClearToDos').should('exist');
-    });
+    cy.url().should('contain', 'cleartodos');
   });
 
   it('can open the DeleteToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('DeleteToDo').click();
+      cy.findByText('deletetodo').click();
+      cy.findByText('deletetodo').click();
     });
 
-    cy.withinEditor('FormEditor', () => {
-      cy.findByDisplayValue('DeleteToDo').should('exist');
-    });
+    cy.url().should('contain', 'deletetodo');
   });
 
   it('can open the ShowToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('ShowToDos').click();
+      cy.findByText('showtodos').click();
+      cy.findByText('showtodos').click();
     });
 
-    cy.withinEditor('FormEditor', () => {
-      cy.findByDisplayValue('ShowToDos').should('exist');
-    });
+    cy.url().should('contain', 'showtodos');
   });
 });

@@ -6,29 +6,28 @@ import os from 'os';
 import merge from 'lodash/merge';
 
 import log from '../logger';
-import { Path } from '../utility/path';
 
-import { botsFolder, botEndpoint, appDataPath, environment, runtimeFolder, runtimeFrameworkVersion } from './env';
+import { botsFolder, botEndpoint, appDataPath, environment, runtimeFrameworkVersion, platform, diskNames } from './env';
 
 interface Settings {
   botAdminEndpoint: string;
   botEndpoint: string;
-  assetsLibray: string;
-  runtimeFolder: string;
   runtimeFrameworkVersion: string;
   botsFolder: string;
   appDataPath: string;
+  platform: string;
+  diskNames: string[];
 }
 
 const envSettings: { [env: string]: Settings } = {
   development: {
     botAdminEndpoint: botEndpoint,
     botEndpoint: botEndpoint,
-    assetsLibray: Path.resolve(__dirname, '../../assets'),
-    botsFolder: botsFolder || Path.join(os.homedir(), 'Documents', 'Composer'),
-    runtimeFolder,
+    botsFolder: botsFolder || os.homedir(),
     runtimeFrameworkVersion,
     appDataPath,
+    platform,
+    diskNames,
   },
 };
 

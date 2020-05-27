@@ -2,9 +2,11 @@
 // Licensed under the MIT License.
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
-import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic, offsetRange } from '@bfc/indexers';
+import { offsetRange } from '@bfc/indexers';
+import { DiagnosticSeverity as BFDiagnosticSeverity, Diagnostic as BFDiagnostic } from '@bfc/shared';
 
 export interface LUOption {
+  projectId: string;
   fileId: string;
   sectionId: string;
 }
@@ -17,6 +19,7 @@ export interface Template {
 
 export interface LUDocument {
   uri: string;
+  projectId?: string;
   fileId?: string;
   sectionId?: string;
   index: () => any;
@@ -54,7 +57,7 @@ export function generageDiagnostic(message: string, severity: DiagnosticSeverity
 export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextDocument, offset = 0): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
   const defaultRange = Range.create(Position.create(0, 0), Position.create(0, 0));
-  lgDiags.forEach(diag => {
+  lgDiags.forEach((diag) => {
     const range = diag.range ? offsetRange(diag.range, offset) : defaultRange;
     const diagnostic: Diagnostic = {
       severity: convertSeverity(diag.severity),

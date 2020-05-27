@@ -21,6 +21,7 @@ interface IconMenuProps {
   label?: string;
   menuItems: any[];
   menuWidth?: number;
+  handleMenuShow?: (menuShowed: boolean) => void;
 }
 
 export const IconMenu: React.FC<IconMenuProps> = ({
@@ -31,6 +32,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
   label,
   menuItems,
   menuWidth,
+  handleMenuShow,
   ...rest
 }): JSX.Element => {
   const _onRenderItem = (item): React.ReactNode => {
@@ -41,14 +43,14 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     );
   };
 
-  const buttonRef = useRef<IButton>();
+  const buttonRef = useRef<IButton | null>(null);
 
   useEffect((): void => {
     if (nodeSelected) {
       buttonRef.current && buttonRef.current.focus();
     }
   }, [nodeSelected]);
-  const _onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = overflowItems => {
+  const _onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = (overflowItems) => {
     if (!overflowItems) {
       return null;
     }
@@ -78,15 +80,22 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       },
     };
 
+    const onMenuClick = () => {
+      handleMenuShow && handleMenuShow(true);
+    };
+    const onAfterMenuDismiss = () => {
+      handleMenuShow && handleMenuShow(false);
+    };
     return (
       <IconButton
-        // @ts-ignore
+        ariaLabel={label}
         componentRef={buttonRef}
         data-testid="iconMenu"
-        styles={buttonStyles}
         menuIconProps={{ iconName, style: { fontSize: iconSize, fontWeight: 'bold', color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
-        ariaLabel={label}
+        styles={buttonStyles}
+        onAfterMenuDismiss={onAfterMenuDismiss}
+        onMenuClick={onMenuClick}
         {...rest}
       />
     );
@@ -94,12 +103,11 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
   return (
     <OverflowSet
-      // @ts-ignore
-      styles={{ position: 'absolute', top: 0 }}
       vertical
+      aria-label="icon menu"
       overflowItems={menuItems}
-      onRenderOverflowButton={_onRenderOverflowButton}
       onRenderItem={_onRenderItem}
+      onRenderOverflowButton={_onRenderOverflowButton}
     />
   );
 };

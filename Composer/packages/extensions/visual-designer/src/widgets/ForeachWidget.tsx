@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent } from 'react';
+import { WidgetContainerProps } from '@bfc/extension';
 
 import { transformForeach } from '../transformers/transformForeach';
 import { foreachLayouter } from '../layouters/foreachLayouter';
@@ -14,11 +15,10 @@ import { LoopIndicator } from '../components/decorations/LoopIndicator';
 import { StepGroup } from '../components/groups';
 import { ElementWrapper } from '../components/renderers/ElementWrapper';
 import { ElementMeasurer } from '../components/renderers/ElementMeasurer';
-import { WidgetContainerProps } from '../schema/uischema.types';
-import { renderEdge } from '../components/lib/EdgeUtil';
 import { SVGContainer } from '../components/lib/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../store/DesignerCache';
+import { FlowEdges } from '../components/lib/FlowEdges';
 
 enum ForeachNodes {
   Foreach = 'foreachNode',
@@ -67,10 +67,13 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
   const { foreachNode, loopActionsNode, loopBeginNode, loopEndNode } = nodeMap;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
+        <FlowEdges edges={edges} />
+      </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
         <ElementWrapper id={id} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(foreachNode.data, boundary);
               updateNodeBoundary(ForeachNodes.Foreach, boundary);
             }}
@@ -82,22 +85,21 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
       <OffsetContainer offset={loopActionsNode.offset}>
         <StepGroup
           key={loopActionsNode.id}
-          id={loopActionsNode.id}
           data={loopActionsNode.data}
+          id={loopActionsNode.id}
           onEvent={onEvent}
-          onResize={size => {
+          onResize={(size) => {
             updateNodeBoundary(ForeachNodes.LoopActions, size);
           }}
         />
       </OffsetContainer>
       {[loopBeginNode, loopEndNode]
-        .filter(x => !!x)
+        .filter((x) => !!x)
         .map((x, index) => (
           <OffsetContainer key={`${id}/loopicon-${index}/offset`} offset={x.offset}>
             <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />
           </OffsetContainer>
         ))}
-      <SVGContainer>{Array.isArray(edges) ? edges.map(x => renderEdge(x)) : null}</SVGContainer>
     </div>
   );
 };

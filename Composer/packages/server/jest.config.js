@@ -1,21 +1,8 @@
 const path = require('path');
 
-module.exports = {
-  preset: 'ts-jest/presets/js-with-babel',
-  testPathIgnorePatterns: ['/node_modules/'],
-  watchPathIgnorePatterns: ['<rootDir>/__tests__/mocks'],
+const { createConfig } = require('@bfc/test-utils');
 
-  moduleNameMapper: {
-    // allow tests to import src code from '@src'
-    '^@src/(.*)$': '<rootDir>/src/$1',
-  },
-
-  globals: {
-    'ts-jest': {
-      tsConfig: path.resolve(__dirname, './tsconfig.json'),
-      diagnostics: {
-        warnOnly: true,
-      },
-    },
-  },
-};
+module.exports = createConfig('server', 'node', {
+  setupFiles: [path.resolve(__dirname, '__tests__/setupEnv.ts')],
+  testPathIgnorePatterns: ['__tests__/setupEnv.ts'],
+});
