@@ -9,7 +9,7 @@ import { WidgetContainerProps } from '@bfc/extension';
 import { transformForeach } from '../transformers/transformForeach';
 import { foreachLayouter } from '../layouters/foreachLayouter';
 import { GraphNode } from '../models/GraphNode';
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { OffsetContainer } from '../components/OffsetContainer';
 import { LoopIndicator } from '../components/LoopIndicator';
 import { ElementMeasurer } from '../components/ElementMeasurer';

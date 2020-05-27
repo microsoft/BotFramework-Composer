@@ -3,7 +3,7 @@
 
 import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
 import { measureJsonBoundary } from '../../../src/adaptive-visual-sdk/layouters/measureJsonBoundary';
-import { ObiTypes } from '../../../src/constants/ObiTypes';
+import { ObiTypes } from '../../../src/adaptive-visual-sdk/constants/ObiTypes';
 import {
   DiamondSize,
   InitNodeSize,
@@ -13,7 +13,7 @@ import {
   ChoiceInputMarginBottom,
   StandardNodeWidth,
   HeaderHeight,
-} from '../../../src/constants/ElementSizes';
+} from '../../../src/adaptive-visual-sdk/constants/ElementSizes';
 
 describe('measureJsonBoundary', () => {
   const boundary = new Boundary();

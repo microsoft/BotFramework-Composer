@@ -6,7 +6,7 @@ import get from 'lodash/get';
 import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 
 import { designerCache } from '../store/DesignerCache';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { NodeEventTypes } from '../adaptive-visual-sdk/constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
 import { scrollNodeIntoView } from '../utils/nodeOperation';
 import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';
@@ -65,7 +65,7 @@ export const useEditorEventApi = (
 
   const trackActionListChange = (actionPaths: string[]) => {
     if (!Array.isArray(actionPaths)) return;
-    actionPaths.forEach(x => trackActionChange(x));
+    actionPaths.forEach((x) => trackActionChange(x));
   };
 
   const handleEditorEvent = (eventName: NodeEventTypes, eventData: any = {}): any => {
@@ -80,13 +80,13 @@ export const useEditorEventApi = (
         };
         break;
       case NodeEventTypes.FocusEvent:
-        handler = eventData => {
+        handler = (eventData) => {
           onFocusEvent(eventData);
           announce(ScreenReaderMessage.EventFocused);
         };
         break;
       case NodeEventTypes.MoveCursor:
-        handler = eventData => {
+        handler = (eventData) => {
           const { command } = eventData;
           const currentSelectedId = selectedIds[0] || focusedId || '';
           const cursor = currentSelectedId
@@ -111,7 +111,7 @@ export const useEditorEventApi = (
         break;
       case NodeEventTypes.Delete:
         trackActionChange(eventData.id);
-        handler = e => {
+        handler = (e) => {
           onChange(deleteSelectedAction(path, data, e.id));
           onFocusSteps([]);
           announce(ScreenReaderMessage.ActionDeleted);
@@ -120,17 +120,17 @@ export const useEditorEventApi = (
       case NodeEventTypes.Insert:
         trackActionChange(eventData.id);
         if (eventData.$kind === MenuEventTypes.Paste) {
-          handler = e => {
-            insertActions(path, data, e.id, e.position, clipboardActions).then(dialog => {
+          handler = (e) => {
+            insertActions(path, data, e.id, e.position, clipboardActions).then((dialog) => {
               onChange(dialog);
               onFocusSteps([`${e.id}[${e.position || 0}]`]);
             });
             announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
-          handler = e => {
+          handler = (e) => {
             const newAction = dialogFactory.create(e.$kind);
-            insertAction(path, data, e.id, e.position, newAction).then(dialog => {
+            insertAction(path, data, e.id, e.position, newAction).then((dialog) => {
               onChange(dialog);
               onFocusSteps([`${e.id}[${e.position || 0}]`]);
               announce(ScreenReaderMessage.ActionCreated);
@@ -141,7 +141,7 @@ export const useEditorEventApi = (
       case NodeEventTypes.CopySelection:
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
-          copySelectedActions(path, data, actionIds).then(copiedNodes => onClipboardChange(copiedNodes));
+          copySelectedActions(path, data, actionIds).then((copiedNodes) => onClipboardChange(copiedNodes));
           announce(ScreenReaderMessage.ActionsCopied);
         };
         break;
@@ -225,7 +225,7 @@ export const useEditorEventApi = (
         };
         break;
       case NodeEventTypes.AppendSelection:
-        handler = e => {
+        handler = (e) => {
           trackActionListChange(e.target);
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;

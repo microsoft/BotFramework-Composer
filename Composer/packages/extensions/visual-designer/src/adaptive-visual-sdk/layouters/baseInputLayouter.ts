@@ -3,7 +3,7 @@
 
 import { GraphLayout } from '../models/GraphLayout';
 import { Edge, EdgeDirection } from '../models/EdgeData';
-import { ElementInterval, LoopEdgeMarginLeft } from '../../constants/ElementSizes';
+import { ElementInterval, LoopEdgeMarginLeft } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 
 import { calculateBaseInputBoundary } from './calculateNodeBoundary';

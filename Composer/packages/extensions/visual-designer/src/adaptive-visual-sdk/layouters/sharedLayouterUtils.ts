@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BranchIntervalX, BranchAxisXIntervalMin } from '../../constants/ElementSizes';
+import { BranchIntervalX, BranchAxisXIntervalMin } from '../constants/ElementSizes';
 import { Boundary } from '../models/Boundary';
 
 /**

@@ -6,8 +6,12 @@ import { jsx, css } from '@emotion/core';
 import { FC, ReactNode } from 'react';
 import { TextDiv } from '@bfc/ui-shared';
 
-import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../../constants/ElementSizes';
-import { ObiColors } from '../../../constants/ElementColors';
+import {
+  StandardNodeWidth,
+  HeaderHeight,
+  StandardSectionHeight,
+} from '../../../adaptive-visual-sdk/constants/ElementSizes';
+import { ObiColors } from '../../../adaptive-visual-sdk/constants/ElementColors';
 import { ArrowLine } from '../../../adaptive-visual-sdk/components/ArrowLine';
 
 const containerCSS = css`

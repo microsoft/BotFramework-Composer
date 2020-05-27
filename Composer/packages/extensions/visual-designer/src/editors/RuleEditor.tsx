@@ -8,7 +8,7 @@ import isEqual from 'lodash/isEqual';
 
 import { Trigger } from '../components/nodes/Trigger';
 import { defaultNodeProps } from '../components/nodes/nodeProps';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { NodeEventTypes } from '../adaptive-visual-sdk/constants/NodeEventTypes';
 import { GraphNode } from '../adaptive-visual-sdk/models/GraphNode';
 import { transformObiRules } from '../adaptive-visual-sdk/transformers/transformObiRules';
 import { outlineObiJson } from '../utils/outlineObiJson';

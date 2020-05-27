@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { transformStepGroup } from '../../../src/adaptive-visual-sdk/transformers/transformStepGroup';
-import { ObiTypes } from '../../../src/constants/ObiTypes';
+import { ObiTypes } from '../../../src/adaptive-visual-sdk/constants/ObiTypes';
 
 test('should return safely when input null value', () => {
   const result = transformStepGroup(null, '');

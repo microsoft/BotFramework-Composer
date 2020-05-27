@@ -10,7 +10,7 @@ import { generateSDKTitle, PromptTab } from '@bfc/shared';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { NodeRendererContext } from '../../store/NodeRendererContext';
 import { SelectionContext } from '../../store/SelectionContext';
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
 
 const nodeBorderHoveredStyle = css`
   box-shadow: 0px 0px 0px 1px #323130;
@@ -47,7 +47,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, data, onEvent
       [AttrNames.SelectableElement]: true,
       [AttrNames.SelectedId]: selectedId,
       [AttrNames.SelectionIndex]: getNodeIndex(id),
-      [AttrNames.Tab]: tab
+      [AttrNames.Tab]: tab,
     };
   };
 
@@ -66,7 +66,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, data, onEvent
       `}
       {...declareElementAttributes(selectableId, id)}
       aria-label={generateSDKTitle(data, '', tab)}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}

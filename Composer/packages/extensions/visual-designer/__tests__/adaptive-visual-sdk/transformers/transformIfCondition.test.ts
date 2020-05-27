@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { transformIfCondtion } from '../../../src/adaptive-visual-sdk/transformers/transformIfCondition';
-import { ObiTypes } from '../../../src/constants/ObiTypes';
+import { ObiTypes } from '../../../src/adaptive-visual-sdk/constants/ObiTypes';
 
 test('should return {} when input is not IfCondition', () => {
   const json = { $kind: '' };

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiTypes } from '../constants/ObiTypes';
+import { ObiTypes } from '../adaptive-visual-sdk/constants/ObiTypes';
 
 export function normalizeObiStep(data) {
   let step = data;

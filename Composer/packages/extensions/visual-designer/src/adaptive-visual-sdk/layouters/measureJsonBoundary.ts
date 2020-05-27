@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiTypes } from '../../constants/ObiTypes';
+import { ObiTypes } from '../constants/ObiTypes';
 import { Boundary } from '../models/Boundary';
 import {
   StandardNodeWidth,
@@ -16,7 +16,7 @@ import {
   AssignmentMarginTop,
   PropertyAssignmentSize,
   AssignmentMarginBottom,
-} from '../../constants/ElementSizes';
+} from '../constants/ElementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
 import { transformForeach } from '../transformers/transformForeach';

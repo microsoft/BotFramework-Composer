@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { IconBrickSize } from '../../constants/ElementSizes';
+import { IconBrickSize } from '../constants/ElementSizes';
 
 export const IconBrick = ({ onClick }): JSX.Element => {
   return (

@@ -11,7 +11,7 @@ import { baseInputLayouter } from '../layouters/baseInputLayouter';
 import { transformBaseInput } from '../transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/OffsetContainer';
-import { NodeEventTypes } from '../../constants/NodeEventTypes';
+import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { IconBrick } from '../components/IconBrick';
 import { SVGContainer } from '../components/SVGContainer';
 import { GraphLayout } from '../models/GraphLayout';

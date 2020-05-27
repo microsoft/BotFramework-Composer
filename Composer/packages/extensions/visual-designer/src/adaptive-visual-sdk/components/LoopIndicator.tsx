@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
-import { LoopIconSize } from '../../constants/ElementSizes';
+import { LoopIconSize } from '../constants/ElementSizes';
 
 export const LoopIndicator = ({ onClick }) => {
   return (

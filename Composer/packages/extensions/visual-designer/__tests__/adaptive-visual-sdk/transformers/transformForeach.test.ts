@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { transformForeach } from '../../../src/adaptive-visual-sdk/transformers/transformForeach';
-import { ObiTypes } from '../../../src/constants/ObiTypes';
+import { ObiTypes } from '../../../src/adaptive-visual-sdk/constants/ObiTypes';
 
 test('should return NULL when input is invalid', () => {
   expect(transformForeach(null, '')).toBeNull();

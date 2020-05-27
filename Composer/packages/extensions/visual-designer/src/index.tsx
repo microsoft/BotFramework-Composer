@@ -23,17 +23,17 @@ import { KeyboardZone } from './components/lib/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent.ts';
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
-import { NodeEventTypes } from './constants/NodeEventTypes';
+import { NodeEventTypes } from './adaptive-visual-sdk/constants/NodeEventTypes';
 import { AdaptiveDialogEditor } from './editors/AdaptiveDialogEditor';
 import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './components/renderers';
 
 formatMessage.setup({
-  missingTranslation: 'ignore'
+  missingTranslation: 'ignore',
 });
 
 const emotionCache = createCache({
   // @ts-ignore
-  nonce: window.__nonce__
+  nonce: window.__nonce__,
 });
 
 const styles = css`
@@ -59,7 +59,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     clipboardActions,
     data: inputData,
     hosted,
-    schemas
+    schemas,
   } = shellData;
 
   const dataCache = useRef({});
@@ -79,7 +79,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   // Compute schema diff
   const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
     schemas?.sdk?.content,
-    schemas?.default
+    schemas?.default,
   ]);
 
   const nodeContext: NodeRendererContextValue = {
@@ -88,13 +88,13 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     focusedTab,
     clipboardActions: clipboardActions || [],
     dialogFactory: new DialogFactory(schema),
-    customSchemas: customSchema ? [customSchema] : []
+    customSchemas: customSchema ? [customSchema] : [],
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
     const definitionKeys: string[] = Object.keys(s.definitions);
-    definitionKeys.forEach($kind => {
+    definitionKeys.forEach(($kind) => {
       result[$kind] = defaultFlowSchema.custom;
     });
     return result;
@@ -117,14 +117,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
           <FlowSchemaContext.Provider
             value={{
               widgets: visualEditorConfig.widgets,
-              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema)
+              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema),
             }}
           >
             <div css={styles} data-testid="visualdesigner-container">
               <SelectionContext.Provider value={selectionContext}>
                 <KeyboardZone
                   ref={divRef}
-                  onCommand={command => {
+                  onCommand={(command) => {
                     const editorEvent = mapKeyboardCommandToEditorEvent(command);
                     editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
                   }}
@@ -136,10 +136,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                         width: '100%',
                         height: '100%',
                         padding: '48px 20px',
-                        boxSizing: 'border-box'
+                        boxSizing: 'border-box',
                       }}
                       data-testid="visual-editor-container"
-                      onClick={e => {
+                      onClick={(e) => {
                         e.stopPropagation();
                         handleEditorEvent(NodeEventTypes.Focus, { id: '' });
                       }}

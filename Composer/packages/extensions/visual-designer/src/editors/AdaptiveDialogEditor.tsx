@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import get from 'lodash/get';
 
-import { EditorEventHandler } from '../constants/NodeEventTypes';
+import { EditorEventHandler } from '../adaptive-visual-sdk/constants/NodeEventTypes';
 import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../models/FlowRenderer.types';
 import { FlowRendererContext, DefaultFlowRenderers } from '../store/FlowRendererContext';
 
@@ -42,7 +42,7 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   onEvent,
   EdgeMenu,
   NodeMenu,
-  NodeWrapper
+  NodeWrapper,
 }): JSX.Element => {
   const activeTriggerData = get(dialogData, activeTrigger, null);
   const content = activeTriggerData ? (
@@ -54,7 +54,7 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
       value={{
         EdgeMenu: EdgeMenu || DefaultFlowRenderers.EdgeMenu,
         NodeMenu: NodeMenu || DefaultFlowRenderers.NodeMenu,
-        NodeWrapper: NodeWrapper || DefaultFlowRenderers.NodeWrapper
+        NodeWrapper: NodeWrapper || DefaultFlowRenderers.NodeWrapper,
       }}
     >
       {content}
@@ -65,5 +65,5 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
 AdaptiveDialogEditor.defaultProps = {
   dialogId: '',
   dialogData: {},
-  onEvent: () => null
+  onEvent: () => null,
 };

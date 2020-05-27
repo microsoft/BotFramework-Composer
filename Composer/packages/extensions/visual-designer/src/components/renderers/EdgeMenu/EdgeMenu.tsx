@@ -8,13 +8,13 @@ import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 
-import { EdgeAddButtonSize } from '../../../constants/ElementSizes';
+import { EdgeAddButtonSize } from '../../../adaptive-visual-sdk/constants/ElementSizes';
 import { NodeRendererContext } from '../../../store/NodeRendererContext';
 import { SelectionContext } from '../../../store/SelectionContext';
 import { SelfHostContext } from '../../../store/SelfHostContext';
 import { AttrNames } from '../../../constants/ElementAttributes';
 import { MenuTypes } from '../../../constants/MenuTypes';
-import { ObiColors } from '../../../constants/ElementColors';
+import { ObiColors } from '../../../adaptive-visual-sdk/constants/ElementColors';
 import { IconMenu } from '../../lib/IconMenu';
 
 import { createActionMenu } from './createSchemaMenu';
@@ -33,7 +33,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     return {
       [AttrNames.SelectableElement]: true,
       [AttrNames.EdgeMenuElement]: true,
-      [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`
+      [AttrNames.SelectedId]: `${id}${MenuTypes.EdgeMenu}`,
     };
   };
 
@@ -41,21 +41,21 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
   let boxShaow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
   boxShaow += menuSelected ? `,0 0 0 2px ${ObiColors.AzureBlue}` : nodeSelected ? `, 0 0 0 2px ${ObiColors.Black}` : '';
 
-  const handleMenuShow = menuSelected => {
+  const handleMenuShow = (menuSelected) => {
     setMenuSelected(menuSelected);
   };
 
   const menuItems = createActionMenu(
-    item => {
+    (item) => {
       if (!item) return;
       onClick(item.key);
     },
     {
       isSelfHosted: selfHosted,
-      enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length
+      enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
     },
     // Custom Action 'oneOf' arrays from schema file
-    customSchemas.map(x => x.oneOf).filter(oneOf => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
+    customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
   );
   return (
     <div
@@ -67,7 +67,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
         backdropFilter: 'white',
         boxShadow: boxShaow,
         overflow: 'hidden',
-        background: 'white'
+        background: 'white',
       }}
       {...declareElementAttributes(id)}
     >
@@ -83,11 +83,11 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
               outline: 'none',
               selectors: {
                 '::after': {
-                  outline: 'none !important'
-                }
-              }
-            }
-          }
+                  outline: 'none !important',
+                },
+              },
+            },
+          },
         }}
         label={formatMessage('Add')}
         menuItems={menuItems}

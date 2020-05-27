@@ -7,7 +7,7 @@ import { useMemo, FunctionComponent, useContext } from 'react';
 
 import { GraphNode } from '../models/GraphNode';
 import { sequentialLayouter } from '../layouters/sequentialLayouter';
-import { ElementInterval, EdgeAddButtonSize } from '../../constants/ElementSizes';
+import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
 import { transformStepGroup } from '../transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../../components/nodes/nodeProps';
 import { OffsetContainer } from '../components/OffsetContainer';
