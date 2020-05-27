@@ -97,11 +97,11 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
         }
       `}
       {...declareElementAttributes(selectableId, id)}
-      onClick={e => {
+      aria-label={ariaLabel}
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}
-      aria-label={ariaLabel}
     >
       {children}
     </div>

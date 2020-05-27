@@ -129,7 +129,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   ];
 
   const title = useMemo(() => {
-    const page = links.find(l => location.pathname.includes(l.url));
+    const page = links.find((l) => location.pathname.includes(l.url));
     if (page) {
       return page.name;
     }
@@ -138,7 +138,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   }, [location.pathname]);
 
   return (
-    <Page title={title} toolbarItems={toolbarItems} navLinks={links}>
+    <Page navLinks={links} title={title} toolbarItems={toolbarItems}>
       <Routes />
     </Page>
   );

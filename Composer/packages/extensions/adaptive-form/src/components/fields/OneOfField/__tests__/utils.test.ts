@@ -62,7 +62,7 @@ describe('getOptions', () => {
     };
 
     it('returns one of options', () => {
-      const options = getOptions(schema, definitions).map(o => o.key);
+      const options = getOptions(schema, definitions).map((o) => o.key);
       expect(options).toEqual(['my awesome string', 'boolean', 'number', 'an enum', 'dropdown', 'another type']);
     });
   });

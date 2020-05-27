@@ -10,7 +10,7 @@ context('Onboarding', () => {
     cy.visitPage('Settings');
     cy.findByText('App Settings').click();
     cy.findByLabelText('Onboarding').click();
-    cy.visitPage('Design Flow');
+    cy.visitPage('Design');
   });
 
   it('walk through product tour teaching bubbles', () => {

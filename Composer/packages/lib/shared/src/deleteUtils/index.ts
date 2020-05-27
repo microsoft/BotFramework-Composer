@@ -55,10 +55,10 @@ export const deleteAdaptiveAction = (
   const lgTemplates: string[] = [];
   const luIntents: string[] = [];
 
-  walkAdaptiveAction(data, action => collectLgTemplates(action, lgTemplates));
-  walkAdaptiveAction(data, action => collectLuIntents(action, luIntents));
+  walkAdaptiveAction(data, (action) => collectLgTemplates(action, lgTemplates));
+  walkAdaptiveAction(data, (action) => collectLuIntents(action, luIntents));
 
-  deleteLgTemplates(lgTemplates.filter(activity => !!activity));
+  deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
   deleteLuIntents(luIntents);
 };
 
@@ -70,9 +70,9 @@ export const deleteAdaptiveActionList = (
   const lgTemplates: string[] = [];
   const luIntents: string[] = [];
 
-  walkAdaptiveActionList(data, action => collectLgTemplates(action, lgTemplates));
-  walkAdaptiveActionList(data, action => collectLuIntents(action, luIntents));
+  walkAdaptiveActionList(data, (action) => collectLgTemplates(action, lgTemplates));
+  walkAdaptiveActionList(data, (action) => collectLuIntents(action, luIntents));
 
-  deleteLgTemplates(lgTemplates.filter(activity => !!activity));
+  deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
   deleteLuIntents(luIntents);
 };

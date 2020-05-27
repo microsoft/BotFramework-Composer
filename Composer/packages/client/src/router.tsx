@@ -23,7 +23,7 @@ const Publish = React.lazy(() => import('./pages/publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow'));
 
-const Routes = props => {
+const Routes = (props) => {
   const { state } = useContext(StoreContext);
   const { botOpening } = state;
 
@@ -32,17 +32,17 @@ const Routes = props => {
       <Suspense fallback={<LoadingSpinner />}>
         <Router basepath={BASEPATH} {...props}>
           <Redirect
+            noThrow
             from="/bot/:projectId/language-generation"
             to="/bot/:projectId/language-generation/common"
-            noThrow
           />
           <Redirect
+            noThrow
             from="/bot/:projectId/language-understanding"
             to="/bot/:projectId/language-understanding/all"
-            noThrow
           />
-          <Redirect from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" noThrow />
-          <Redirect from="/" to={resolveToBasePath(BASEPATH, 'home')} noThrow />
+          <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
+          <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
             <SettingPage path="settings/*" />
@@ -79,7 +79,7 @@ const projectStyle = css`
   label: ProjectRouter;
 `;
 
-const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = props => {
+const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const { actions, state } = useContext(StoreContext);
 
   useEffect(() => {

@@ -65,10 +65,10 @@ function onRenderBreadcrumbItem(item, render) {
 
 function getAllRef(targetId, dialogs) {
   let refs: string[] = [];
-  dialogs.forEach(dialog => {
+  dialogs.forEach((dialog) => {
     if (dialog.id === targetId) {
       refs = refs.concat(dialog.referredDialogs);
-    } else if (!dialog.referredDialogs.every(item => item !== targetId)) {
+    } else if (!dialog.referredDialogs.every((item) => item !== targetId)) {
       refs.push(dialog.displayName || dialog.id);
     }
   });
@@ -83,7 +83,7 @@ const getTabFromFragment = () => {
   }
 };
 
-const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = props => {
+const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const { state, actions } = useContext(StoreContext);
   const {
     dialogs,
@@ -193,7 +193,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  const onCreateDialogComplete = newDialog => {
+  const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
       navTo(newDialog);
     }
@@ -310,18 +310,18 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return (
       <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
         <Breadcrumb
-          items={items}
           ariaLabel={formatMessage('Navigation Path')}
-          styles={breadcrumbClass}
-          maxDisplayedItems={3}
-          onReduceData={() => undefined}
           data-testid="Breadcrumb"
+          items={items}
+          maxDisplayedItems={3}
+          styles={breadcrumbClass}
+          onReduceData={() => undefined}
           onRenderItem={onRenderBreadcrumbItem}
         />
         <div style={{ padding: '10px' }}>
           <ActionButton
             onClick={() => {
-              setDialogJsonVisibility(current => !current);
+              setDialogJsonVisibility((current) => !current);
             }}
           >
             {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
@@ -373,7 +373,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }
 
   async function handleDeleteTrigger(id, index) {
-    const content = deleteTrigger(dialogs, id, index, trigger => triggerApi.deleteTrigger(id, trigger));
+    const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
 
     if (content) {
       await updateDialog({ id, projectId, content });
@@ -404,23 +404,23 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     <React.Fragment>
       <div css={pageRoot}>
         <ProjectTree
-          dialogs={dialogs}
           dialogId={dialogId}
+          dialogs={dialogs}
           selected={selected}
-          onSelect={handleSelect}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
+          onSelect={handleSelect}
         />
-        <div role="main" css={contentWrapper}>
+        <div css={contentWrapper} role="main">
           <ToolBar
-            toolbarItems={toolbarItems}
             actions={actions}
-            projectId={projectId}
             currentDialog={currentDialog}
-            openNewTriggerModal={openNewTriggerModal}
-            onCreateDialogComplete={onCreateDialogComplete}
             onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
+            openNewTriggerModal={openNewTriggerModal}
+            projectId={projectId}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
+            toolbarItems={toolbarItems}
+            onCreateDialogComplete={onCreateDialogComplete}
           />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
@@ -429,12 +429,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {dialogJsonVisible ? (
                   <JsonEditor
                     key={'dialogjson'}
-                    id={'dialogjson'}
-                    onChange={data => {
+                    id={currentDialog.id}
+                    schema={schemas.sdk.content}
+                    value={currentDialog.content || undefined}
+                    onChange={(data) => {
                       actions.updateDialog({ id: currentDialog.id, projectId, content: data });
                     }}
-                    value={currentDialog.content || undefined}
-                    schema={schemas.sdk.content}
                   />
                 ) : (
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />
@@ -455,10 +455,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         )}
         {state.showAddSkillDialogModal && (
           <CreateSkillModal
-            isOpen={state.showAddSkillDialogModal}
-            skills={state.skills}
-            projectId={projectId}
             editIndex={-1}
+            isOpen={state.showAddSkillDialogModal}
+            projectId={projectId}
+            skills={state.skills}
             onDismiss={() => actions.addSkillDialogCancel()}
             onSubmit={handleAddSkillDialogSubmit}
           />

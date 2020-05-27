@@ -13,5 +13,5 @@ export interface FlowEdgesProps {
 
 export const FlowEdges: FC<FlowEdgesProps> = ({ edges }) => {
   if (!Array.isArray(edges)) return null;
-  return <>{edges.map(edge => renderEdge(edge))}</>;
+  return <>{edges.map((edge) => renderEdge(edge))}</>;
 };

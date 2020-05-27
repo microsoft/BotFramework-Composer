@@ -74,6 +74,7 @@ export interface PublishTarget {
   name: string;
   type: string;
   configuration: string;
+  lastPublished?: Date;
 }
 
 export interface RuntimeTemplate {

@@ -29,7 +29,7 @@ describe('getOneOfOptions', () => {
   };
 
   it('returns options of each one of entry', () => {
-    const options = getOneOfOptions(schema.oneOf, schema, {}).map(o => o.key);
+    const options = getOneOfOptions(schema.oneOf, schema, {}).map((o) => o.key);
     expect(options).toEqual(['array (string)', 'array (object)', 'string']);
   });
 });
@@ -43,7 +43,7 @@ describe('getOptions', () => {
       };
 
       it('returns the types and expression', () => {
-        const options = getOptions(schema, {}).map(o => o.key);
+        const options = getOptions(schema, {}).map((o) => o.key);
         expect(options).toEqual(['boolean', 'expression', 'number', 'string']);
       });
     });
@@ -55,7 +55,7 @@ describe('getOptions', () => {
       };
 
       it('returns the types without expression', () => {
-        const options = getOptions(schema, {}).map(o => o.key);
+        const options = getOptions(schema, {}).map((o) => o.key);
         expect(options).toEqual(['boolean', 'number']);
       });
     });
@@ -96,7 +96,7 @@ describe('getOptions', () => {
     };
 
     it('returns one of options', () => {
-      const options = getOptions(schema, definitions).map(o => o.key);
+      const options = getOptions(schema, definitions).map((o) => o.key);
       expect(options).toEqual(['my awesome string', 'boolean', 'number', 'an enum', 'dropdown', 'another type']);
     });
   });
@@ -109,13 +109,13 @@ describe('getOptions', () => {
     };
 
     it('returns dropdown and expression options', () => {
-      const options = getOptions(schema, {}).map(o => o.key);
+      const options = getOptions(schema, {}).map((o) => o.key);
       expect(options).toEqual(['dropdown', 'expression']);
     });
   });
 
   it('returns expression option by default', () => {
-    const options = getOptions({}, {}).map(o => o.key);
+    const options = getOptions({}, {}).map((o) => o.key);
     expect(options).toEqual(['expression']);
   });
 });

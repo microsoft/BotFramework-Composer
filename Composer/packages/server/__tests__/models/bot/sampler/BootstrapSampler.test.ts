@@ -15,11 +15,11 @@ describe('BootstrapSampler', () => {
     ];
     const sampler = new ComposerBootstrapSampler(utterances, 2);
     const result = sampler.getSampledUtterances();
-    const intent1 = result.filter(e => e.intent === '1').length;
+    const intent1 = result.filter((e) => e.intent === '1').length;
     expect(2 / intent1).toBeCloseTo(0.5, 2);
     const sampler1 = new ComposerBootstrapSampler(utterances, 5);
     const result1 = sampler1.getSampledUtterances();
-    const intent11 = result1.filter(e => e.intent === '1').length;
+    const intent11 = result1.filter((e) => e.intent === '1').length;
     expect(intent11).toBeCloseTo(5);
   });
 });

@@ -11,4 +11,4 @@ export const CIRCULAR_REFS = [
   'Microsoft.AdaptiveDialog',
 ];
 
-export const isCircular = memoize((def: string) => CIRCULAR_REFS.some(kind => def.includes(kind)));
+export const isCircular = memoize((def: string) => CIRCULAR_REFS.some((kind) => def.includes(kind)));

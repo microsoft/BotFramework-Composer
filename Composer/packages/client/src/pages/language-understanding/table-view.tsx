@@ -36,7 +36,7 @@ interface Intent {
   state: string;
 }
 
-const TableView: React.FC<TableViewProps> = props => {
+const TableView: React.FC<TableViewProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, locale, projectId } = state;
   const { dialogId } = props;
@@ -62,7 +62,7 @@ const TableView: React.FC<TableViewProps> = props => {
 
     const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
       const items: Intent[] = [];
-      const luDialog = dialogs.find(dialog => luFile.id === `${dialog.id}.${locale}`);
+      const luDialog = dialogs.find((dialog) => luFile.id === `${dialog.id}.${locale}`);
       get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
         const state = getIntentState(luFile);
 
@@ -71,7 +71,7 @@ const TableView: React.FC<TableViewProps> = props => {
           phrases,
           fileId: luFile.id,
           dialogId: luDialog?.id || '',
-          used: !!luDialog && luDialog.referredLuIntents.some(lu => lu.name === name), // used by it's dialog or not
+          used: !!luDialog && luDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
           state,
         });
       });
@@ -81,7 +81,7 @@ const TableView: React.FC<TableViewProps> = props => {
     if (!activeDialog) {
       setIntents(allIntents);
     } else {
-      const dialogIntents = allIntents.filter(t => t.dialogId === activeDialog.id);
+      const dialogIntents = allIntents.filter((t) => t.dialogId === activeDialog.id);
       setIntents(dialogIntents);
     }
   }, [luFiles, activeDialog, projectId]);
@@ -116,8 +116,8 @@ const TableView: React.FC<TableViewProps> = props => {
             displayName = `##${childName}`;
           }
           return (
-            <div data-is-focusable={true} css={formCell}>
-              <div tabIndex={-1} css={content} aria-label={formatMessage(`Name is {name}`, { name: displayName })}>
+            <div data-is-focusable css={formCell}>
+              <div aria-label={formatMessage(`Name is {name}`, { name: displayName })} css={content} tabIndex={-1}>
                 {displayName}
               </div>
             </div>
@@ -132,13 +132,13 @@ const TableView: React.FC<TableViewProps> = props => {
         maxWidth: 500,
         isResizable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           return (
-            <div data-is-focusable={true} css={luPhraseCell}>
+            <div data-is-focusable css={luPhraseCell}>
               <div
-                tabIndex={-1}
-                css={content}
                 aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: item.phrases })}
+                css={content}
+                tabIndex={-1}
               >
                 {item.phrases}
               </div>
@@ -155,14 +155,14 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         isCollapsable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           const id = item.dialogId;
           return (
             <div
-              data-is-focusable={true}
               key={id}
-              onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
+              data-is-focusable
               aria-label={formatMessage(`link to where this luis intent defined`)}
+              onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
             >
               <Link>{id}</Link>
             </div>
@@ -197,13 +197,13 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: (item, index) => {
           return (
             <IconButton
+              ariaLabel={formatMessage('Open inline editor')}
               menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
                 items: getTemplatesMoreButtons(item, index),
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              ariaLabel={formatMessage('Open inline editor')}
             />
           );
         },
@@ -217,10 +217,10 @@ const TableView: React.FC<TableViewProps> = props => {
         isResizable: true,
         isCollapsable: true,
         data: 'string',
-        onRender: item => {
+        onRender: (item) => {
           return (
-            <div data-is-focusable={true} css={tableCell}>
-              <div tabIndex={-1} css={content} aria-label={formatMessage(`State is {state}`, { state: item.state })}>
+            <div data-is-focusable css={tableCell}>
+              <div aria-label={formatMessage(`State is {state}`, { state: item.state })} css={content} tabIndex={-1}>
                 {item.state}
               </div>
             </div>
@@ -240,10 +240,10 @@ const TableView: React.FC<TableViewProps> = props => {
   function onRenderDetailsHeader(props, defaultRender) {
     return (
       <div data-testid="tableHeader">
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+            onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
           })}
         </Sticky>
       </div>
@@ -254,8 +254,13 @@ const TableView: React.FC<TableViewProps> = props => {
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
+          className="table-view-list"
+          columns={getTableColums()}
           componentRef={listRef}
+          getKey={(item) => item.Name}
           items={intents}
+          layoutMode={DetailsListLayoutMode.justified}
+          selectionMode={SelectionMode.none}
           styles={{
             root: {
               overflowX: 'hidden',
@@ -267,12 +272,7 @@ const TableView: React.FC<TableViewProps> = props => {
               },
             },
           }}
-          className="table-view-list"
-          columns={getTableColums()}
-          getKey={item => item.Name}
-          layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
-          selectionMode={SelectionMode.none}
         />
       </ScrollablePane>
     </div>

@@ -30,7 +30,7 @@ export function getOptions(
   const { type, oneOf } = schema;
 
   if (type && Array.isArray(type)) {
-    const options: IDropdownOption[] = type.map(t => ({
+    const options: IDropdownOption[] = type.map((t) => ({
       key: t,
       text: t,
       data: { schema: { ...schema, type: t } },
@@ -43,7 +43,7 @@ export function getOptions(
 
   if (oneOf && Array.isArray(oneOf)) {
     return oneOf
-      .map(s => {
+      .map((s) => {
         if (typeof s === 'object') {
           const resolved = resolveRef(s, definitions);
           const merged = merge({}, omit(schema, 'oneOf'), resolved);
@@ -76,7 +76,7 @@ export function getSelectedOption(value: any | undefined, options: IDropdownOpti
 
   if (valueType === 'array') {
     const item = value[0];
-    const firstArrayOption = options.find(o => o.data.schema.type === 'array');
+    const firstArrayOption = options.find((o) => o.data.schema.type === 'array');
 
     // if there is nothing in the array, default to the first array type
     if (!item) {
@@ -85,7 +85,7 @@ export function getSelectedOption(value: any | undefined, options: IDropdownOpti
 
     // else, find the option with an item schema that matches item type
     return (
-      options.find(o => {
+      options.find((o) => {
         const {
           data: { schema },
         } = o;

@@ -6,7 +6,7 @@ import { fireEvent, render } from '@bfc/test-utils';
 
 import { ToolBar } from '../../src/components/ToolBar';
 
-const toolbarItems = onClick => [
+const toolbarItems = (onClick) => [
   {
     type: 'action',
     text: 'New',

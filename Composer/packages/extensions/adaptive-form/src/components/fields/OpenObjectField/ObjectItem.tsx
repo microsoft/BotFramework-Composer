@@ -60,6 +60,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
       <div css={item}>
         <EditableField
           transparentBorder
+          ariaLabel={formatMessage('key')}
           depth={0}
           error={errorMessage}
           id={`${name}.key`}
@@ -73,13 +74,13 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           uiOptions={{}}
           value={name}
           onBlur={handleBlur}
-          onChange={newValue => setName(newValue || '')}
-          ariaLabel={formatMessage('key')}
+          onChange={(newValue) => setName(newValue || '')}
         />
       </div>
       <div css={item}>
         <EditableField
           transparentBorder
+          ariaLabel={formatMessage('value')}
           depth={0}
           id={`${name}.value`}
           name="value"
@@ -91,7 +92,6 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           uiOptions={{}}
           value={value}
           onChange={onValueChange}
-          ariaLabel={formatMessage('value')}
         />
       </div>
       <IconButton

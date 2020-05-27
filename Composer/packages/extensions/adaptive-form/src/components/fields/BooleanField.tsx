@@ -42,22 +42,22 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
       <FieldLabel
         inline
         description={description}
+        helpLink={uiOptions?.helpLink}
         id={id}
         label={label}
-        helpLink={uiOptions?.helpLink}
         required={required}
       />
       <Dropdown
+        ariaLabel={label || formatMessage('boolean field')}
         id={id}
         options={options}
         responsiveMode={ResponsiveMode.large}
         selectedKey={selectedKey}
-        onChange={handleChange}
         styles={{
           root: { width: '100%' },
           errorMessage: { display: 'none' },
         }}
-        ariaLabel={label || formatMessage('boolean field')}
+        onChange={handleChange}
       />
     </React.Fragment>
   );

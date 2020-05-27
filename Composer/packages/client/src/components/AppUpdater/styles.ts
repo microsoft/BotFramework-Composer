@@ -6,7 +6,7 @@ import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IDialogContentStyles, IDialogFooterStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 
-export const optionIcon = checked => css`
+export const optionIcon = (checked) => css`
   vertical-align: text-bottom;
   font-size: 18px;
   margin-right: 10px;

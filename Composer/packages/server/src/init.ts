@@ -3,6 +3,6 @@
 
 import { start } from './server';
 
-start().catch(err => {
+start().catch((err) => {
   console.error('Error occurred while starting server: ', err);
 });
