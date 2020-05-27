@@ -46,7 +46,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
 }) => {
   const onRenderChildren = () => {
     return (
-      <div css={childrenContainer} ref={forwardedRef}>
+      <div ref={forwardedRef} css={childrenContainer}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
           <div css={itemContainerTitle}>
             <Text block variant="large">
@@ -56,11 +56,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         </div>
         <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
           <div css={itemContainerContent}>
-            <Text variant={subContent ? 'medium' : 'large'} nowrap>
+            <Text nowrap variant={subContent ? 'medium' : 'large'}>
               {content}
             </Text>
             {subContent && (
-              <Text variant="medium" nowrap>
+              <Text nowrap variant="medium">
                 {subContent}
               </Text>
             )}
@@ -73,7 +73,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   return (
     <Button
       css={[itemContainerWrapper(disabled), styles.container]}
-      onClick={async e => {
+      onClick={async (e) => {
         // todo: clean this up
         const { href } = rest as Partial<{ href: string }>;
         if (openExternal) {
@@ -85,8 +85,8 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         }
       }}
       {...rest}
-      onRenderChildren={onRenderChildren}
       disabled={disabled}
+      onRenderChildren={onRenderChildren}
     />
   );
 };

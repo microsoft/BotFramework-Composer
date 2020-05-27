@@ -32,7 +32,7 @@ const getInitialTemplate = (fieldName: string, formData?: string): string => {
   return lgText.startsWith('-') ? lgText : `- ${lgText}`;
 };
 
-const LgField: React.FC<FieldProps<string>> = props => {
+const LgField: React.FC<FieldProps<string>> = (props) => {
   const { label, id, description, value, name, uiOptions, required } = props;
   const { designerId, currentDialog, lgFiles, shellApi, projectId, locale, userSettings, data } = useShellApi();
 
@@ -45,7 +45,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
   const lgTemplateRef = LgTemplateRef.parse(value);
   const lgName = lgTemplateRef ? lgTemplateRef.name : new LgMetaData(lgType, designerId || '').toString();
   const lgFileId = `${currentDialog.lgFile}.${locale}`;
-  const lgFile = lgFiles && lgFiles.find(file => file.id === lgFileId);
+  const lgFile = lgFiles && lgFiles.find((file) => file.id === lgFileId);
 
   const updateLgTemplate = useCallback(
     (body: string) => {
@@ -56,7 +56,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
 
   const template = (lgFile &&
     lgFile.templates &&
-    lgFile.templates.find(template => {
+    lgFile.templates.find((template) => {
       return template.name === lgName;
     })) || {
     name: lgName,
@@ -90,18 +90,18 @@ const LgField: React.FC<FieldProps<string>> = props => {
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <LgEditor
-        height={225}
-        value={template.body}
-        onChange={onChange}
-        diagnostics={diagnostics}
         hidePlaceholder
+        diagnostics={diagnostics}
+        editorSettings={userSettings.codeEditor}
+        height={225}
         languageServer={{
           path: lspServerPath,
         }}
         lgOption={lgOption}
-        editorSettings={userSettings.codeEditor}
+        value={template.body}
+        onChange={onChange}
         onChangeSettings={handleSettingsChange}
       />
     </React.Fragment>

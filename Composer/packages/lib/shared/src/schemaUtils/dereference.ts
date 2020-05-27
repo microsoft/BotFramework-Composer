@@ -15,7 +15,7 @@ export function dereference<S extends JSONSchema7 | JSONSchema7[] | JSONSchema7D
   if (Array.isArray(schema)) {
     const arraySchema: JSONSchema7[] = [];
 
-    (schema as JSONSchema7[]).forEach(s => {
+    (schema as JSONSchema7[]).forEach((s) => {
       arraySchema.push(dereference(s, definitions, cache));
     });
 

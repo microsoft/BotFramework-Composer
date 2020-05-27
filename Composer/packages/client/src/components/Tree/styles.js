@@ -4,7 +4,7 @@
 import { css } from '@emotion/core';
 import { SharedColors } from '@uifabric/fluent-theme';
 
-export const container = variant => {
+export const container = (variant) => {
   let height = '350px';
   switch (variant) {
     case 'large':

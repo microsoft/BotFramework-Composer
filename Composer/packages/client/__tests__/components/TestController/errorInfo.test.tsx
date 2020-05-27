@@ -9,7 +9,7 @@ import { ErrorInfo } from '../../../src/components/TestController/errorInfo';
 describe('<ErrorInfo />', () => {
   it('should render <ErrorInfo />', () => {
     const onClick = jest.fn(() => {});
-    const { container, getByText } = render(<ErrorInfo onClick={onClick} count={5} hidden={false} />);
+    const { container, getByText } = render(<ErrorInfo count={5} hidden={false} onClick={onClick} />);
 
     expect(container).toHaveTextContent('5');
 

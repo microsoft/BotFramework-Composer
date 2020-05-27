@@ -22,7 +22,7 @@ export function increaseNameUtilNotExist(templates: LgTemplate[], name: string):
   let repeatIndex = 0;
   let newName = name;
 
-  while (templates.findIndex(item => item.name === newName) !== -1) {
+  while (templates.findIndex((item) => item.name === newName) !== -1) {
     repeatIndex += 1;
     newName = name + repeatIndex.toString();
   }
@@ -36,7 +36,7 @@ export function updateTemplate(
 ): string {
   const resource = Templates.parseText(content);
   // add if not exist
-  if (resource.toArray().findIndex(t => t.name === templateName) === -1) {
+  if (resource.toArray().findIndex((t) => t.name === templateName) === -1) {
     return resource.addTemplate(name, parameters, body).toString();
   } else {
     return resource.updateTemplate(templateName, name, parameters, body).toString();
@@ -63,7 +63,7 @@ export function addTemplateAnyway(
 // if toTemplateName exist, throw error.
 export function copyTemplate(content: string, fromTemplateName: string, toTemplateName: string): string {
   const resource = Templates.parseText(content);
-  const fromTemplate = resource.toArray().find(t => t.name === fromTemplateName);
+  const fromTemplate = resource.toArray().find((t) => t.name === fromTemplateName);
   if (!fromTemplate) {
     throw new Error('fromTemplateName no exist');
   }
@@ -74,7 +74,7 @@ export function copyTemplate(content: string, fromTemplateName: string, toTempla
 // if toTemplateName exist, add it anyway, with name like `${toTemplateName}1` `${toTemplateName}2`
 export function copyTemplateAnyway(content: string, fromTemplateName: string, toTemplateName?: string): string {
   const resource = Templates.parseText(content);
-  const fromTemplate = resource.toArray().find(t => t.name === fromTemplateName);
+  const fromTemplate = resource.toArray().find((t) => t.name === fromTemplateName);
   if (!fromTemplate) {
     return resource.toString();
   }
@@ -95,7 +95,7 @@ export function removeTemplate(content: string, templateName: string): string {
 
 export function removeTemplates(content: string, templateNames: string[]): string {
   let resource = Templates.parseText(content);
-  templateNames.forEach(templateName => {
+  templateNames.forEach((templateName) => {
     resource = resource.deleteTemplate(templateName);
   });
   return resource.toString();
@@ -117,7 +117,7 @@ export function textFromTemplate(template: LgTemplate): string {
 export function textFromTemplates(templates: LgTemplate[]): string {
   const textBuilder: string[] = [];
 
-  templates.forEach(template => {
+  templates.forEach((template) => {
     textBuilder.push(`${textFromTemplate(template)}\n`);
   });
 

@@ -40,7 +40,7 @@ if (app.isPackaged) {
 log(`${process.env.NODE_ENV} environment detected.`);
 
 function processArgsForWindows(args: string[]): string {
-  const deepLinkUrl = args.find(arg => arg.startsWith(composerProtocol));
+  const deepLinkUrl = args.find((arg) => arg.startsWith(composerProtocol));
   if (deepLinkUrl) {
     return parseDeepLinkUrl(deepLinkUrl);
   }
@@ -74,7 +74,7 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     appUpdater.on('update-available', (updateInfo: UpdateInfo) => {
       mainWindow.webContents.send('app-update', 'update-available', updateInfo);
     });
-    appUpdater.on('progress', progress => {
+    appUpdater.on('progress', (progress) => {
       mainWindow.webContents.send('app-update', 'progress', progress);
     });
     appUpdater.on('update-not-available', (explicitCheck: boolean) => {
@@ -83,7 +83,7 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     appUpdater.on('update-downloaded', () => {
       mainWindow.webContents.send('app-update', 'update-downloaded');
     });
-    appUpdater.on('error', err => {
+    appUpdater.on('error', (err) => {
       mainWindow.webContents.send('app-update', 'error', err);
     });
     ipcMain.on('app-update', (_ev, name: string, _payload) => {
@@ -140,7 +140,7 @@ async function main() {
 
     mainWindow.show();
 
-    mainWindow.on('closed', function() {
+    mainWindow.on('closed', function () {
       ElectronWindow.destroy();
     });
     log('Rendered application.');
@@ -183,7 +183,7 @@ async function run() {
   });
 
   // Quit when all windows are closed.
-  app.on('window-all-closed', function() {
+  app.on('window-all-closed', function () {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (!isMac()) {
@@ -191,7 +191,7 @@ async function run() {
     }
   });
 
-  app.on('activate', function() {
+  app.on('activate', function () {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (!ElectronWindow.isBrowserWindowCreated) {
@@ -199,7 +199,7 @@ async function run() {
     }
   });
 
-  app.on('will-finish-launching', function() {
+  app.on('will-finish-launching', function () {
     // Protocol handler for osx
     app.on('open-url', (event, url) => {
       event.preventDefault();
@@ -213,7 +213,7 @@ async function run() {
 }
 
 run()
-  .catch(e => {
+  .catch((e) => {
     error('Error occurred while starting Composer Electron: ', e);
     app.quit();
   })

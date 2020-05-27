@@ -320,7 +320,7 @@ export class BotProjectDeploy {
   private async getFiles(dir: string): Promise<string[]> {
     const dirents = await readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
-      dirents.map(dirent => {
+      dirents.map((dirent) => {
         const res = path.resolve(dir, dirent.name);
         return dirent.isDirectory() ? this.getFiles(res) : res;
       })
@@ -331,7 +331,7 @@ export class BotProjectDeploy {
   private async botPrepareDeploy(pathToDeploymentFile: string) {
     return new Promise((resolve, reject) => {
       const data = `[config]\nproject = Microsoft.BotFramework.Composer.WebApp.csproj`;
-      fs.writeFile(pathToDeploymentFile, data, err => {
+      fs.writeFile(pathToDeploymentFile, data, (err) => {
         if (err) {
           reject(err);
         }
@@ -375,7 +375,7 @@ export class BotProjectDeploy {
           cwd: source,
           ignore: ['code.zip'],
         })
-        .on('error', err => reject(err))
+        .on('error', (err) => reject(err))
         .pipe(stream);
 
       stream.on('close', () => resolve());
@@ -401,14 +401,14 @@ export class BotProjectDeploy {
     if (luisAuthoringKey && luisAuthoringRegion) {
       // publishing luis
       const botFiles = await this.getFiles(this.remoteBotPath);
-      const modelFiles = botFiles.filter(name => {
+      const modelFiles = botFiles.filter((name) => {
         return name.endsWith('.lu') && this.notEmptyLuisModel(name);
       });
 
       if (!(await fs.pathExists(this.generatedFolder))) {
         await fs.mkdir(this.generatedFolder);
       }
-      const builder = new luBuild.Builder(msg =>
+      const builder = new luBuild.Builder((msg) =>
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
           message: msg,
@@ -441,7 +441,7 @@ export class BotProjectDeploy {
         message: `lubuild succeed`,
       });
 
-      const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter(filename =>
+      const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter((filename) =>
         filename.includes('luis.settings')
       );
       const luisAppIds: any = {};
@@ -819,9 +819,9 @@ export class BotProjectDeploy {
     if (!updateResult) {
       const operations = await client.deploymentOperations.list(resourceGroupName, timeStamp);
       if (operations) {
-        const failedOperations = operations.filter(value => value?.properties?.statusMessage.error !== null);
+        const failedOperations = operations.filter((value) => value?.properties?.statusMessage.error !== null);
         if (failedOperations) {
-          failedOperations.forEach(operation => {
+          failedOperations.forEach((operation) => {
             switch (operation?.properties?.statusMessage.error.code) {
               case 'MissingRegistrationForLocation':
                 this.logger({

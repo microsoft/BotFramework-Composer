@@ -20,6 +20,23 @@ describe('update lg template', () => {
     expect(templates[0].name).toEqual('Exit');
     expect(templates[0].body).toEqual('-Bye');
   });
+
+  it('should update lg template with error', () => {
+    const content = `# Exit
+-Thanks for using todo bot.\${ 
+
+# Greeting
+-What's up bro`;
+
+    const templates0 = Templates.parseText(content).toArray();
+    expect(templates0.length).toEqual(2);
+    const template = { name: 'Exit', parameters: [], body: '-Bye' };
+    const newContent = updateTemplate(content, 'Exit', template);
+    const templates = Templates.parseText(newContent).toArray();
+    expect(templates.length).toEqual(2);
+    expect(templates[0].name).toEqual('Exit');
+    expect(templates[0].body).toEqual('-Bye');
+  });
 });
 
 describe('add lg template', () => {

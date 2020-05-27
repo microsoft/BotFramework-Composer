@@ -69,7 +69,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
   const trackActionListChange = (actionPaths: string[]) => {
     if (!Array.isArray(actionPaths)) return;
-    actionPaths.forEach(x => trackActionChange(x));
+    actionPaths.forEach((x) => trackActionChange(x));
   };
 
   const dispatchEvent = (eventName: NodeEventTypes, eventData: any): any => {
@@ -87,7 +87,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.FocusEvent:
-        handler = eventData => {
+        handler = (eventData) => {
           onFocusEvent(eventData);
           announce(ScreenReaderMessage.EventFocused);
         };
@@ -100,7 +100,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.Delete:
         trackActionChange(eventData.id);
-        handler = e => {
+        handler = (e) => {
           onChange(deleteSelectedAction(path, data, e.id));
           onFocusSteps([]);
           announce(ScreenReaderMessage.ActionDeleted);
@@ -109,17 +109,17 @@ export const ObiEditor: FC<ObiEditorProps> = ({
       case NodeEventTypes.Insert:
         trackActionChange(eventData.id);
         if (eventData.$kind === MenuEventTypes.Paste) {
-          handler = e => {
-            insertActions(path, data, e.id, e.position, clipboardActions).then(dialog => {
+          handler = (e) => {
+            insertActions(path, data, e.id, e.position, clipboardActions).then((dialog) => {
               onChange(dialog);
               onFocusSteps([`${e.id}[${e.position || 0}]`]);
             });
             announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
-          handler = e => {
+          handler = (e) => {
             const newAction = dialogFactory.create(e.$kind);
-            insertAction(path, data, e.id, e.position, newAction).then(dialog => {
+            insertAction(path, data, e.id, e.position, newAction).then((dialog) => {
               onChange(dialog);
               onFocusSteps([`${e.id}[${e.position || 0}]`]);
               announce(ScreenReaderMessage.ActionCreated);
@@ -128,14 +128,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         }
         break;
       case NodeEventTypes.CopySelection:
-        handler = e => {
-          copySelectedActions(path, data, e.actionIds).then(copiedNodes => onClipboardChange(copiedNodes));
+        handler = (e) => {
+          copySelectedActions(path, data, e.actionIds).then((copiedNodes) => onClipboardChange(copiedNodes));
           announce(ScreenReaderMessage.ActionsCopied);
         };
         break;
       case NodeEventTypes.CutSelection:
         trackActionListChange(eventData.actionIds);
-        handler = e => {
+        handler = (e) => {
           cutSelectedActions(path, data, e.actionIds).then(({ dialog, cutActions }) => {
             onChange(dialog);
             onFocusSteps([]);
@@ -145,7 +145,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         };
         break;
       case NodeEventTypes.MoveSelection:
-        handler = async e => {
+        handler = async (e) => {
           if (!Array.isArray(e.actionIds) || !e.actionIds.length) return;
 
           // Create target dialog
@@ -190,7 +190,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.DeleteSelection:
         trackActionListChange(eventData.actionIds);
-        handler = e => {
+        handler = (e) => {
           onChange(deleteSelectedActions(path, data, e.actionIds));
           onFocusSteps([]);
           announce(ScreenReaderMessage.ActionsDeleted);
@@ -198,7 +198,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
         break;
       case NodeEventTypes.AppendSelection:
         trackActionListChange(eventData.target);
-        handler = e => {
+        handler = (e) => {
           // forbid paste to root level.
           if (!e.target || e.target === focusedEvent) return;
           onChange(insertActionsAfter(path, data, e.target, e.actions));
@@ -265,7 +265,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   const selection = new Selection({
     onSelectionChanged: (): void => {
       const selectedIndices = selection.getSelectedIndices();
-      const selectedIds = selectedIndices.map(index => nodeItems[index].key as string);
+      const selectedIds = selectedIndices.map((index) => nodeItems[index].key as string);
 
       if (selectedIds.length === 1) {
         // TODO: Change to focus all selected nodes after Form Editor support showing multiple nodes.
@@ -367,25 +367,25 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
-        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+      <KeyboardZone ref={divRef} onCommand={handleKeyboardCommand}>
+        <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
           <div
             className="obi-editor-container"
-            data-testid="obi-editor-container"
             css={{
               width: '100%',
               height: '100%',
               padding: '48px 20px',
               boxSizing: 'border-box',
             }}
-            onClick={e => {
+            data-testid="obi-editor-container"
+            onClick={(e) => {
               e.stopPropagation();
               dispatchEvent(NodeEventTypes.Focus, { id: '' });
             }}
           >
             <AdaptiveDialogEditor
-              id={path}
               data={data}
+              id={path}
               onEvent={(eventName, eventData) => {
                 divRef.current?.focus({ preventScroll: true });
                 dispatchEvent(eventName, eventData);
