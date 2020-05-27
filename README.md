@@ -8,7 +8,7 @@
 
 ## Overview
 
-Bot Framework Composer is an open-source, visual authoring canvas for developers and multi-disciplinary to design and build conversational experiences with Language Understanding and QnA Maker, and a sophisticated composition of bot replies (Language Generation). Within this tool, you'll have everything you need to build a sophisticated conversational experience.
+Bot Framework Composer is an open-source, visual authoring canvas for developers and multi-disciplinary teams to design and build conversational experiences with Language Understanding and QnA Maker, and a sophisticated composition of bot replies (Language Generation). Within this tool, you'll have everything you need to build a sophisticated conversational experience.
 
 - A visual editing canvas for conversation flows
 - In context editing for language understanding (NLU)
@@ -22,10 +22,9 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
     <img alt="Bot Framework Composer Home Page" src="./docs/Assets/Screenshot-Composer-overview.png" style="max-width:700px;" />
 </p>
 
-## Who should use this PREVIEW release?
+## Who should use this release?
 
-- This preview is for developers looking to build conversation applications using the latest Bot Framework SDK preview features like Adaptive Dialogs, Language Understanding and Language Generation.
-- Composer and the Bot Framework Adaptive Dialog are in-preview and should not be used for production deployments.
+- Composer is an application for developers looking to build conversation applications using the latest Bot Framework SDK features like Adaptive Dialogs, Language Understanding and Language Generation.
 - We designed Composer to be a web app to allow developers to extend Composer as well as embed it within their own solutions. The
   current version of Composer is a web app that runs locally. Future releases will enable Composer to run as a centralized hosted web application.
 
