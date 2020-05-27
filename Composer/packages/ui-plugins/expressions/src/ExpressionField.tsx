@@ -15,14 +15,19 @@ import { getOptions, getSelectedOption, SchemaOption } from './utils';
 
 const styles = {
   container: css`
+    width: 100%;
+
+    label: ExpressionFieldContainer;
+  `,
+  field: css`
+    min-height: 66px;
+  `,
+  labelContainer: css`
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     label: ExpressionField;
-  `,
-  field: css`
-    min-height: 66px;
   `,
 };
 
@@ -111,9 +116,9 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
   );
 
   return (
-    <div className={className}>
+    <div className={className} css={styles.container}>
       {shouldRenderContainer && (
-        <div css={styles.container}>
+        <div css={styles.labelContainer}>
           <FieldLabel
             description={description}
             helpLink={uiOptions?.helpLink}

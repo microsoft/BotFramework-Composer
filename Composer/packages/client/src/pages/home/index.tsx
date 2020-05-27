@@ -27,7 +27,7 @@ const linksButtom = [
     css: home.linkInfo,
   },
   {
-    to: 'https://aka.ms/BF-Composer-Build-First-Bot',
+    to: 'https://aka.ms/bf-composer-docs-create-first-bot',
     text: formatMessage('Build your first bot'),
     css: home.linkInfo,
   },
