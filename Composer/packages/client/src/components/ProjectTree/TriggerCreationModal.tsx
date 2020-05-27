@@ -64,9 +64,7 @@ const validateForm = (
   }
 
   if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
-    errors.intent = formatMessage(
-      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-    );
+    errors.intent = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 
   if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
