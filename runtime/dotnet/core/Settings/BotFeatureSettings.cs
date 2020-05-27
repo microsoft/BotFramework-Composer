@@ -15,5 +15,8 @@ namespace Microsoft.BotFramework.Composer.Core.Settings
 
         // Use InspectionMiddleware
         public bool UseInspectionMiddleware { get; set; }
+
+        // Use RemoveRecipientMention Activity Extensions
+        public bool RemoveRecipientMention { get; set; }
     }
 }
