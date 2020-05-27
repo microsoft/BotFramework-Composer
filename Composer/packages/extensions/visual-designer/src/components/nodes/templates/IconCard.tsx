@@ -40,9 +40,9 @@ export const IconCard = ({
   return (
     <div
       className="card"
-      data-testid="IconCard"
       css={containerStyle}
-      onClick={e => {
+      data-testid="IconCard"
+      onClick={(e) => {
         e.stopPropagation();
         onClick();
       }}
@@ -81,7 +81,7 @@ export const IconCard = ({
           }}
         >
           <div css={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
-            <Icon icon={icon} color={iconColor} size={20} />
+            <Icon color={iconColor} icon={icon} size={20} />
           </div>
           <div
             css={{
@@ -111,7 +111,7 @@ export const IconCard = ({
           }}
         >
           <div css={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
-            <Icon icon={ElementIcon.MessageBot} color="#656565" size={20} />
+            <Icon color="#656565" icon={ElementIcon.MessageBot} size={20} />
           </div>
           <div
             css={{
@@ -152,10 +152,10 @@ export const IconCard = ({
               }}
             >
               <FabricIcon
-                style={{ lineHeight: '12px', fontSize: '12px', color: 'blue', paddingRight: '5px' }}
-                iconName="OpenSource"
                 data-testid="OpenIcon"
-                onClick={e => {
+                iconName="OpenSource"
+                style={{ lineHeight: '12px', fontSize: '12px', color: 'blue', paddingRight: '5px' }}
+                onClick={(e) => {
                   e.stopPropagation();
                   onChildDialogClick();
                 }}
@@ -165,7 +165,7 @@ export const IconCard = ({
                   cursor: 'pointer',
                   color: 'blue',
                 }}
-                onClick={e => {
+                onClick={(e) => {
                   e.stopPropagation();
                   onChildDialogClick();
                 }}

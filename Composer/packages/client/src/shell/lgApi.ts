@@ -9,10 +9,10 @@ import * as lgUtil from '../utils/lgUtil';
 import { State, BoundActionHandlers } from '../store/types';
 import { StoreContext } from '../store';
 
-const createThrottledFunc = fn => throttle(fn, 1000, { leading: true, trailing: true });
+const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
 function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver: (id: string) => LgFile | undefined) {
-  const getLgTemplates = id => {
+  const getLgTemplates = (id) => {
     if (id === undefined) throw new Error('must have a file id');
     const focusedDialogId = state.focusPath.split('#').shift() || id;
     const file = lgFileResolver(focusedDialogId);
@@ -100,7 +100,7 @@ export function useLgApi() {
     setApi(newApi);
 
     return () => {
-      Object.keys(newApi).forEach(apiName => {
+      Object.keys(newApi).forEach((apiName) => {
         if (typeof newApi[apiName].flush === 'function') {
           newApi[apiName].flush();
         }

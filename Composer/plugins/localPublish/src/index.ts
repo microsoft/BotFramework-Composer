@@ -289,14 +289,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push(config.MicrosoftAppPassword);
     }
     if (config.luis) {
-      if (config.luis.authoringKey) {
-        configList.push('--luis:endpointKey');
-        configList.push(config.luis.authoringKey);
-      }
-      if (config.luis.authoringRegion) {
-        configList.push('--luis:endpoint');
-        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
-      }
+      configList.push('--luis:endpointKey');
+      configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
     return configList;
   };
@@ -320,18 +314,18 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         erroutput += err.toString();
       });
 
-    child.on('exit', code => {
+    child.on('exit', (code) => {
       if (code !== 0) {
         reject(erroutput);
       }
     });
 
-    child.on('error', err => {
+    child.on('error', (err) => {
       logger('error: %s', err.message);
       reject(`Could not launch bot runtime process: ${err.message}`);
     });
 
-    child.on('message', msg => {
+    child.on('message', (msg) => {
       logger('%s', msg);
     });
   };
@@ -347,7 +341,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     if (fs.existsSync(dstPath)) {
       await removeFile(dstPath);
     }
-    const files = await glob('**/*', { cwd: srcDir, dot: true });
+    const files = await glob('**/*', { cwd: srcDir, dot: true, ignore: ['runtime'] });
     return new Promise((resolve, reject) => {
       const archive = archiver('zip');
       const output = fs.createWriteStream(dstPath);
@@ -358,7 +352,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       }
       archive.finalize();
       output.on('close', () => resolve(dstPath));
-      output.on('error', err => {
+      output.on('error', (err) => {
         reject(err);
       });
     });

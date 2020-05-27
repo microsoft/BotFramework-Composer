@@ -57,7 +57,7 @@ export function generageDiagnostic(message: string, severity: DiagnosticSeverity
 export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextDocument, offset = 0): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
   const defaultRange = Range.create(Position.create(0, 0), Position.create(0, 0));
-  lgDiags.forEach(diag => {
+  lgDiags.forEach((diag) => {
     const range = diag.range ? offsetRange(diag.range, offset) : defaultRange;
     const diagnostic: Diagnostic = {
       severity: convertSeverity(diag.severity),

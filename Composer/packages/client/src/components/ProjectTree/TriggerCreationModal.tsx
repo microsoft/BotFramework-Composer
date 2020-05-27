@@ -69,7 +69,7 @@ const validateForm = (
     );
   }
 
-  if (selectedType === intentTypeKey && isRegEx && regExIntents.find(ri => ri.intent === intent)) {
+  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
     errors.intent = `regEx ${intent} is already defined`;
   }
 
@@ -100,12 +100,12 @@ interface TriggerCreationModalProps {
   onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
 }
 
-export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props => {
+export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useContext(StoreContext);
   const { dialogs, luFiles, locale, projectId, schemas } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const dialogFile = dialogs.find(dialog => dialog.id === dialogId);
+  const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$kind', '') === regexRecognizerKey;
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const isNone = !get(dialogFile, 'content.recognizer');
@@ -132,10 +132,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
   if (isNone) {
-    triggerTypeOptions = triggerTypeOptions.filter(t => t.key !== intentTypeKey);
+    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
   }
 
-  const onClickSubmitButton = e => {
+  const onClickSubmitButton = (e) => {
     e.preventDefault();
     const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
 
@@ -166,7 +166,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
   const onSelectTriggerType = (e, option) => {
     setSelectedType(option.key || '');
     const compoundTypes = [activityTypeKey, eventTypeKey];
-    const isCompound = compoundTypes.some(t => option.key === t);
+    const isCompound = compoundTypes.some((t) => option.key === t);
 
     if (isCompound) {
       setFormData({ ...initialFormData, $kind: '' });
@@ -211,62 +211,64 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
 
   return (
     <Dialog
-      hidden={!isOpen}
-      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Create a trigger'),
         styles: styles.dialog,
       }}
+      hidden={!isOpen}
       modalProps={{
         isBlocking: false,
         styles: styles.modal,
       }}
+      onDismiss={onDismiss}
     >
       <div css={dialogWindow}>
         <Stack>
           <Dropdown
+            data-testid={'triggerTypeDropDown'}
+            defaultSelectedKey={selectedType}
+            errorMessage={formData.errors.$kind}
             label={formatMessage('What is the type of this trigger?')}
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
-            errorMessage={formData.errors.$kind}
-            data-testid={'triggerTypeDropDown'}
-            defaultSelectedKey={selectedType}
           />
           {showEventDropDown && (
             <Dropdown
-              placeholder={formatMessage('Select a event type')}
+              data-testid={'eventTypeDropDown'}
+              errorMessage={formData.errors.event}
               label={formatMessage('Which event?')}
               options={eventTypes}
+              placeholder={formatMessage('Select a event type')}
               styles={dropdownStyles}
               onChange={handleEventTypeChange}
-              errorMessage={formData.errors.event}
-              data-testid={'eventTypeDropDown'}
             />
           )}
           {showCustomEvent && (
             <TextField
+              data-testid="CustomEventName"
+              errorMessage={formData.errors.event}
               label={formatMessage('What is the name of the custom event?')}
               styles={intent}
               onChange={handleEventNameChange}
-              errorMessage={formData.errors.event}
-              data-testid="CustomEventName"
             />
           )}
           {showActivityDropDown && (
             <Dropdown
-              placeholder={formatMessage('Select an activity type')}
+              data-testid={'activityTypeDropDown'}
+              errorMessage={formData.errors.activity}
               label={formatMessage('Which activity type')}
               options={activityTypes}
+              placeholder={formatMessage('Select an activity type')}
               styles={dropdownStyles}
               onChange={handleEventTypeChange}
-              errorMessage={formData.errors.activity}
-              data-testid={'activityTypeDropDown'}
             />
           )}
           {showIntentName && (
             <TextField
+              data-testid="TriggerName"
+              errorMessage={formData.errors.intent}
               label={
                 isRegEx
                   ? formatMessage('What is the name of this trigger (RegEx)')
@@ -274,41 +276,39 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = props =
               }
               styles={intent}
               onChange={onNameChange}
-              errorMessage={formData.errors.intent}
-              data-testid="TriggerName"
             />
           )}
 
           {showRegExDropDown && (
             <TextField
+              data-testid="RegExField"
+              errorMessage={formData.errors.regexEx}
               label={formatMessage('Please input regex pattern')}
               onChange={onChangeRegEx}
-              errorMessage={formData.errors.regexEx}
-              data-testid="RegExField"
             />
           )}
           {showTriggerPhrase && (
             <React.Fragment>
               <Label>{formatMessage('Trigger phrases')}</Label>
               <LuEditor
-                onChange={onTriggerPhrasesChange}
-                value={formData.triggerPhrases}
                 errorMessage={formData.errors.triggerPhrases}
+                height={225}
                 luOption={{
                   projectId,
                   fileId: dialogId,
                   sectionId: formData.intent || PlaceHolderSectionName,
                 }}
-                height={225}
                 placeholder={inlineModePlaceholder}
+                value={formData.triggerPhrases}
+                onChange={onTriggerPhrasesChange}
               />
             </React.Fragment>
           )}
         </Stack>
       </div>
       <DialogFooter>
-        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-        <PrimaryButton onClick={onClickSubmitButton} text={formatMessage('Submit')} data-testid={'triggerFormSubmit'} />
+        <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+        <PrimaryButton data-testid={'triggerFormSubmit'} text={formatMessage('Submit')} onClick={onClickSubmitButton} />
       </DialogFooter>
     </Dialog>
   );

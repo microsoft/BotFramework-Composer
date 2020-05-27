@@ -5,7 +5,7 @@ export const normalizeSelection = (selectedIds: string[]): string[] => {
   if (!Array.isArray(selectedIds)) return [];
 
   // filter invalid ids such as 'actions[0].diamond'
-  const validIds = selectedIds.filter(id => id.match(/.*\w+\[\d+\]$/));
+  const validIds = selectedIds.filter((id) => id.match(/.*\w+\[\d+\]$/));
   // events[0] < events[0].actions[0] < events[1] < events[1].actions[0]
   const ascendingIds = sortActionIds(validIds);
 
@@ -19,16 +19,16 @@ export const normalizeSelection = (selectedIds: string[]): string[] => {
     }
   }
 
-  return ascendingIds.filter(id => id);
+  return ascendingIds.filter((id) => id);
 };
 
 export const sortActionIds = (actionIds: string[]): string[] => {
-  const parsedActionIds = actionIds.map(id => ({
+  const parsedActionIds = actionIds.map((id) => ({
     id,
     paths: id
       .split('.')
-      .map(x => x.replace(/\w+\[(\d+)\]/, '$1'))
-      .map(x => parseInt(x) || 0),
+      .map((x) => x.replace(/\w+\[(\d+)\]/, '$1'))
+      .map((x) => parseInt(x) || 0),
   }));
   const sorted = parsedActionIds.sort((a, b) => {
     const aPaths = a.paths;
@@ -56,5 +56,5 @@ export const sortActionIds = (actionIds: string[]): string[] => {
         return 0;
     }
   });
-  return sorted.map(x => x.id);
+  return sorted.map((x) => x.id);
 };

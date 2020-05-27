@@ -6,6 +6,6 @@ import { MicrosoftIDialog } from '../types';
 import { walkAdaptiveAction } from './walkAdaptiveAction';
 export const walkAdaptiveActionList = (inputs: MicrosoftIDialog[], visit: (action: MicrosoftIDialog) => void): void => {
   if (Array.isArray(inputs)) {
-    inputs.forEach(action => walkAdaptiveAction(action, visit));
+    inputs.forEach((action) => walkAdaptiveAction(action, visit));
   }
 };

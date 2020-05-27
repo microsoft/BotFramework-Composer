@@ -5,7 +5,7 @@ import { lgIndexer } from '@bfc/indexers';
 
 const ctx: Worker = self as any;
 
-ctx.onmessage = function(msg) {
+ctx.onmessage = function (msg) {
   const { id, payload } = msg.data;
   const { targetId, content, lgFiles } = payload;
   const { parse } = lgIndexer;

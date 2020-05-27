@@ -211,9 +211,9 @@ function CollapseContent({
   return (
     <div
       ref={contentRef}
-      style={style}
       className={className}
       css={cssTransition}
+      style={style}
       onTransitionEnd={onTransitionEnd}
       {...attrs}
     >
