@@ -6,9 +6,9 @@ import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
 
 import { GraphNode } from '../models/GraphNode';
-import { sequentialLayouter } from '../layouters/sequentialLayouter';
+import { sequentialLayouter } from '../adaptive-visual-sdk/layouters/sequentialLayouter';
 import { ElementInterval, EdgeAddButtonSize } from '../constants/ElementSizes';
-import { transformStepGroup } from '../transformers/transformStepGroup';
+import { transformStepGroup } from '../adaptive-visual-sdk/transformers/transformStepGroup';
 import { NodeProps, defaultNodeProps } from '../components/nodes/nodeProps';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { GraphLayout } from '../models/GraphLayout';
@@ -39,7 +39,7 @@ const calculateNodes = (groupId: string, data): GraphNodeMap<StepNodeKey> => {
 const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
   const nodes = Object.keys(nodeMap)
     .sort((a, b) => parseStepIndex(a) - parseStepIndex(b))
-    .map(stepName => nodeMap[stepName]);
+    .map((stepName) => nodeMap[stepName]);
   return sequentialLayouter(nodes);
 };
 
@@ -63,7 +63,7 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
                 data={node.data}
                 id={node.id}
                 onEvent={onEvent}
-                onResize={size => {
+                onResize={(size) => {
                   designerCache.cacheBoundary(node.data, size);
                   updateNodeBoundary(getStepKey(index), size);
                 }}
@@ -84,7 +84,7 @@ export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, o
               css={{ zIndex: 100 }}
               offset={{
                 x: boundary.axisX - EdgeAddButtonSize.width / 2,
-                y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2
+                y: x.offset.y + x.boundary.height + StepInterval / 2 - EdgeAddButtonSize.height / 2,
               }}
             >
               <EdgeMenu arrayData={data} arrayId={id} arrayPosition={idx + 1} onEvent={onEvent} />

@@ -6,8 +6,8 @@ import { jsx } from '@emotion/core';
 import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { transformIfCondtion } from '../transformers/transformIfCondition';
-import { ifElseLayouter } from '../layouters/ifelseLayouter';
+import { transformIfCondtion } from '../adaptive-visual-sdk/transformers/transformIfCondition';
+import { ifElseLayouter } from '../adaptive-visual-sdk/layouters/ifelseLayouter';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
@@ -76,7 +76,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={conditionNode.offset}>
-        <NodeWrapper nodeId={conditionNode.id} nodeData={data} onEvent={onEvent}>
+        <NodeWrapper nodeData={data} nodeId={conditionNode.id} onEvent={onEvent}>
           <ElementMeasurer
             onResize={(boundary) => {
               designerCache.cacheBoundary(conditionNode.data, boundary);

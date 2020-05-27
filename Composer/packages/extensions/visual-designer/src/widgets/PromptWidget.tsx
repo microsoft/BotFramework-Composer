@@ -7,8 +7,8 @@ import { FC, useMemo, useContext } from 'react';
 import { PromptTab } from '@bfc/shared';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { baseInputLayouter } from '../layouters/baseInputLayouter';
-import { transformBaseInput } from '../transformers/transformBaseInput';
+import { baseInputLayouter } from '../adaptive-visual-sdk/layouters/baseInputLayouter';
+import { transformBaseInput } from '../adaptive-visual-sdk/transformers/transformBaseInput';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
@@ -24,7 +24,7 @@ import { FlowRendererContext } from '../store/FlowRendererContext';
 enum PromptNodes {
   BotAsks = 'botAsksNode',
   UserAnswers = 'userAnswersNode',
-  InvalidPrompt = 'invalidPromptyNode'
+  InvalidPrompt = 'invalidPromptyNode',
 }
 
 const calculateNodes = (jsonpath: string, data) => {
@@ -32,7 +32,7 @@ const calculateNodes = (jsonpath: string, data) => {
   return {
     [PromptNodes.BotAsks]: GraphNode.fromIndexedJson(botAsks),
     [PromptNodes.UserAnswers]: GraphNode.fromIndexedJson(userAnswers),
-    [PromptNodes.InvalidPrompt]: GraphNode.fromIndexedJson(invalidPrompt)
+    [PromptNodes.InvalidPrompt]: GraphNode.fromIndexedJson(invalidPrompt),
   };
 };
 
@@ -52,7 +52,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
   onEvent,
   onResize,
   botAsks,
-  userInput
+  userInput,
 }): JSX.Element => {
   const { NodeWrapper } = useContext(FlowRendererContext);
   const nodes = useMemo(() => calculateNodes(id, data), [id, data]);
@@ -69,7 +69,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
       <OffsetContainer offset={botAsksNode.offset}>
         <NodeWrapper nodeData={data} nodeId={botAsksNode.id} nodeTab={PromptTab.BOT_ASKS} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(botAsksNode.data, boundary);
               updateNodeBoundary(PromptNodes.BotAsks, boundary);
             }}
@@ -81,7 +81,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
       <OffsetContainer offset={userAnswersNode.offset}>
         <NodeWrapper nodeData={data} nodeId={userAnswersNode.id} nodeTab={PromptTab.USER_INPUT} onEvent={onEvent}>
           <ElementMeasurer
-            onResize={boundary => {
+            onResize={(boundary) => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);
               updateNodeBoundary(PromptNodes.UserAnswers, boundary);
             }}

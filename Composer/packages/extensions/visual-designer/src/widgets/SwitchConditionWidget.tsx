@@ -7,8 +7,8 @@ import { FunctionComponent, useMemo, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
 import { NodeEventTypes } from '../constants/NodeEventTypes';
-import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
-import { switchCaseLayouter } from '../layouters/switchCaseLayouter';
+import { transformSwitchCondition } from '../adaptive-visual-sdk/transformers/transformSwitchCondition';
+import { switchCaseLayouter } from '../adaptive-visual-sdk/layouters/switchCaseLayouter';
 import { GraphNode } from '../models/GraphNode';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { Diamond } from '../components/nodes/templates/Diamond';
@@ -87,7 +87,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={switchNode.offset}>
-        <NodeWrapper nodeId={switchNode.id} nodeData={data} onEvent={onEvent}>
+        <NodeWrapper nodeData={data} nodeId={switchNode.id} onEvent={onEvent}>
           <ElementMeasurer
             onResize={(boundary) => {
               designerCache.cacheBoundary(switchNode.data, boundary);

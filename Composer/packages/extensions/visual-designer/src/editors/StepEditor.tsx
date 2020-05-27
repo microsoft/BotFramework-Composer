@@ -8,7 +8,7 @@ import { useShellApi } from '@bfc/extension';
 
 import { OffsetContainer } from '../components/lib/OffsetContainer';
 import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
-import { measureJsonBoundary } from '../layouters/measureJsonBoundary';
+import { measureJsonBoundary } from '../adaptive-visual-sdk/layouters/measureJsonBoundary';
 import { Boundary } from '../models/Boundary';
 import { EdgeDirection } from '../models/EdgeData';
 import { SVGContainer } from '../components/lib/SVGContainer';
@@ -36,7 +36,7 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
       data={data}
       id={id}
       onEvent={onEvent}
-      onResize={boundary => {
+      onResize={(boundary) => {
         if (boundary) {
           setStepGroupBoundary(boundary);
         }

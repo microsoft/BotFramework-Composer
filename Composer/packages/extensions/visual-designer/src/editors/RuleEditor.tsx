@@ -10,7 +10,7 @@ import { Trigger } from '../components/nodes/Trigger';
 import { defaultNodeProps } from '../components/nodes/nodeProps';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
-import { transformObiRules } from '../transformers/transformObiRules';
+import { transformObiRules } from '../adaptive-visual-sdk/transformers/transformObiRules';
 import { outlineObiJson } from '../utils/outlineObiJson';
 
 import { StepEditor } from './StepEditor';

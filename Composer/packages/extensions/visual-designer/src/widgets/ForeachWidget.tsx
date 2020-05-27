@@ -6,8 +6,8 @@ import { jsx } from '@emotion/core';
 import { useMemo, FunctionComponent, useContext } from 'react';
 import { WidgetContainerProps } from '@bfc/extension';
 
-import { transformForeach } from '../transformers/transformForeach';
-import { foreachLayouter } from '../layouters/foreachLayouter';
+import { transformForeach } from '../adaptive-visual-sdk/transformers/transformForeach';
+import { foreachLayouter } from '../adaptive-visual-sdk/layouters/foreachLayouter';
 import { GraphNode } from '../models/GraphNode';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { OffsetContainer } from '../components/lib/OffsetContainer';
@@ -73,7 +73,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
-        <NodeWrapper nodeId={id} nodeData={data} onEvent={onEvent}>
+        <NodeWrapper nodeData={data} nodeId={id} onEvent={onEvent}>
           <ElementMeasurer
             onResize={(boundary) => {
               designerCache.cacheBoundary(foreachNode.data, boundary);
