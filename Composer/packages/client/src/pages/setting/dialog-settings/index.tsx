@@ -10,7 +10,6 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../../store';
-import { isAbsHosted } from '../../../utils/envUtil';
 
 import { hostedSettings, hostedControls, settingsEditor } from './style';
 
@@ -27,15 +26,11 @@ const hostControlLabels = {
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, settings: origSettings, projectId } = state;
-  const absHosted = isAbsHosted();
-  const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
-  const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
-  const visibleSettings = absHosted ? settings : origSettings;
+  const { botName, settings, projectId } = state;
 
   const saveChangeResult = (result) => {
     try {
-      const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
+      const mergedResult = result;
       actions.setSettings(projectId, botName, mergedResult);
     } catch (err) {
       // eslint-disable-next-line no-console
@@ -56,11 +51,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
         {hostControlLabels.botSettingDescription}
         &nbsp;
         <Link
-          href={
-            absHosted
-              ? 'https://aka.ms/absh/docs/settings'
-              : 'https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/deploy-bot.md'
-          }
+          href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/deploy-bot.md'}
           target="_blank"
         >
           {hostControlLabels.learnMore}
@@ -73,7 +64,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor value={visibleSettings} onChange={handleChange} />
+        <JsonEditor value={settings} onChange={handleChange} />
       </div>
     </div>
   ) : (
