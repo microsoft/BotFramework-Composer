@@ -12,7 +12,7 @@ import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTyp
 
 import { NodeMenu } from './NodeMenu';
 import { EdgeMenu } from './EdgeMenu';
-import { ElementWrapper } from './ElementWrapper';
+import { ActionNodeWrapper } from './NodeWrapper';
 
 export const VisualEditorNodeMenu: NodeMenuComponent = ({ nodeId, onEvent, colors = { color: 'black' } }) => {
   return <NodeMenu colors={colors} id={nodeId} onEvent={onEvent} />;
@@ -29,8 +29,8 @@ export const VisualEditorEdgeMenu: EdgeMenuComponent = ({ arrayId, arrayPosition
 
 export const VisualEditorNodeWrapper: NodeWrapperComponent = ({ nodeId, nodeData, nodeTab, onEvent, children }) => {
   return (
-    <ElementWrapper data={nodeData} id={nodeId} tab={nodeTab as any} onEvent={onEvent}>
+    <ActionNodeWrapper data={nodeData} id={nodeId} tab={nodeTab as any} onEvent={onEvent}>
       {children}
-    </ElementWrapper>
+    </ActionNodeWrapper>
   );
 };

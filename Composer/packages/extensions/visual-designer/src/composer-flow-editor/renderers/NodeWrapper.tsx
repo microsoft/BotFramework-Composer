@@ -24,14 +24,14 @@ const nodeBorderSelectedStyle = css`
 const nodeBorderDoubleSelectedStyle = css`
   box-shadow: 0px 0px 0px 2px #0078d4, 0px 0px 0px 6px rgba(0, 120, 212, 0.3);
 `;
-export interface ElementWrapperProps {
+export interface NodeWrapperProps {
   id: string;
   tab?: PromptTab;
   data: any;
   onEvent: (eventName: NodeEventTypes, eventData: any) => any;
 }
 
-export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, data, onEvent, children }): JSX.Element => {
+export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent, children }): JSX.Element => {
   const selectableId = tab ? `${id}${tab}` : id;
   const { focusedId, focusedEvent, focusedTab } = useContext(NodeRendererContext);
   const { selectedIds, getNodeIndex } = useContext(SelectionContext);
