@@ -5,8 +5,8 @@ import React from 'react';
 import { FlowEditorWidgetMap } from '@bfc/extension';
 
 import { FlowSchemaProvider } from '../../schema/flowSchemaProvider';
-import { defaultFlowSchema } from '../../schema/defaultFlowSchema';
-import { defaultFlowWidgets } from '../../schema/defaultFlowWidgets';
+import { defaultFlowSchema } from '../configs/defaultFlowSchema';
+import { defaultFlowWidgets } from '../configs/defaultFlowWidgets';
 
 const defaultProvider = new FlowSchemaProvider(defaultFlowSchema);
 

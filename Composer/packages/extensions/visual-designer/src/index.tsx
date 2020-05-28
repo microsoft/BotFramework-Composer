@@ -17,7 +17,7 @@ import { FlowSchemaContext } from './adaptive-visual-sdk/contexts/FlowSchemaCont
 import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './composer-flow-editor/utils/mergePluginConfig';
 import { getCustomSchema } from './composer-flow-editor/utils/getCustomSchema';
-import { defaultFlowSchema } from './schema/defaultFlowSchema';
+import { defaultFlowSchema } from './adaptive-visual-sdk/configs/defaultFlowSchema';
 import { SelectionContext } from './composer-flow-editor/contexts/SelectionContext';
 import { KeyboardZone } from './composer-flow-editor/components/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './composer-flow-editor/utils/mapKeyboardCommandToEditorEvent.ts';
