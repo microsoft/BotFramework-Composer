@@ -42,3 +42,14 @@ export interface NodeWrapperProps extends EventBasedElement, StyledElement {
 }
 
 export type NodeWrapperComponent = React.FC<NodeWrapperProps>;
+
+// wraps elements inside a node to make them interactable
+export interface ElementWrapperProps {
+  /** The owner node's id */
+  nodeId: string;
+
+  /** A tag name to identify the role of wrapped element. E.g. hyper link / button */
+  tagId: string;
+}
+
+export type ElementWrapperComponent = React.FC<ElementWrapperProps>;

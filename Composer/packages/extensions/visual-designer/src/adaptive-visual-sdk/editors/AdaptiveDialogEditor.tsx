@@ -8,8 +8,7 @@ import get from 'lodash/get';
 import { FlowSchema as VisualSDKSchema, FlowEditorWidgetMap as NodeWidgetMap } from '@bfc/extension';
 
 import { EditorEventHandler } from '../constants/NodeEventTypes';
-import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../types/PluggableComponents.types';
-import { RendererContext, DefaultRenderers } from '../contexts/RendererContext';
+import { RendererContext, DefaultRenderers, RendererContextData } from '../contexts/RendererContext';
 import builtinSchema from '../configs/builtinSchema';
 import builtinWidgets from '../configs/builtinWidgets';
 import { SchemaContext } from '../contexts/SchemaContext';
@@ -35,15 +34,7 @@ export interface AdaptiveDialogEditorProps {
 
   /** All available widgets to render a node */
   widgets: NodeWidgetMap;
-
-  /** Edge Menu renderer. Could be a fly-out '+' menu. */
-  EdgeMenu?: EdgeMenuComponent;
-
-  /** Node Menu renderer. Could be a fly-out '...' menu. */
-  NodeMenu?: NodeMenuComponent;
-
-  /** Element container renderer. Could be used to show the focus effect. */
-  NodeWrapper?: NodeWrapperComponent;
+  renderers?: Partial<RendererContextData>;
 }
 
 export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
@@ -53,9 +44,7 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   onEvent,
   schema = builtinSchema,
   widgets = builtinWidgets,
-  EdgeMenu,
-  NodeMenu,
-  NodeWrapper,
+  renderers = {},
 }): JSX.Element => {
   const activeTriggerData = get(dialogData, activeTrigger, null);
   const content = activeTriggerData ? (
@@ -71,9 +60,8 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
     >
       <RendererContext.Provider
         value={{
-          EdgeMenu: EdgeMenu || DefaultRenderers.EdgeMenu,
-          NodeMenu: NodeMenu || DefaultRenderers.NodeMenu,
-          NodeWrapper: NodeWrapper || DefaultRenderers.NodeWrapper,
+          ...DefaultRenderers,
+          ...renderers,
         }}
       >
         {content}

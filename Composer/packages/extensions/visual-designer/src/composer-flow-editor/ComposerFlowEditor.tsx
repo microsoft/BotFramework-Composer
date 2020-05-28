@@ -23,7 +23,12 @@ import { KeyboardZone } from './components/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent.ts';
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
-import { VisualEditorNodeMenu, VisualEditorEdgeMenu, VisualEditorNodeWrapper } from './renderers';
+import {
+  VisualEditorNodeMenu,
+  VisualEditorEdgeMenu,
+  VisualEditorNodeWrapper,
+  VisualEditorElementWrapper,
+} from './renderers';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -143,9 +148,12 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                       activeTrigger={focusedEvent}
                       dialogData={data}
                       dialogId={dialogId}
-                      EdgeMenu={VisualEditorEdgeMenu}
-                      NodeMenu={VisualEditorNodeMenu}
-                      NodeWrapper={VisualEditorNodeWrapper}
+                      renderers={{
+                        EdgeMenu: VisualEditorEdgeMenu,
+                        NodeMenu: VisualEditorNodeMenu,
+                        NodeWrapper: VisualEditorNodeWrapper,
+                        ElementWrapper: VisualEditorElementWrapper,
+                      }}
                       schema={{ ...schemaFromPlugins, ...customFlowSchema }}
                       widgets={widgetsFromPlugins}
                       onEvent={(eventName, eventData) => {
