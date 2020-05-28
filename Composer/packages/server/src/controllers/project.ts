@@ -252,48 +252,6 @@ async function removeFile(req: Request, res: Response) {
   }
 }
 
-async function getDefaultSlotEnvSettings(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    try {
-      const settings = await currentProject.getDefaultSlotEnvSettings(req.query.obfuscate);
-      res.send(settings);
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
-async function getEnvSettings(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    try {
-      const settings = await currentProject.getEnvSettings(req.params.slot, req.query.obfuscate);
-      res.send(settings);
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
 async function updateSkill(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -349,48 +307,6 @@ async function exportProject(req: Request, res: Response) {
   });
 }
 
-async function updateEnvSettings(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    try {
-      await currentProject.updateEnvSettings(req.params.slot, req.body.settings);
-      res.send('ok');
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
-async function updateDefaultSlotEnvSettings(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    try {
-      await currentProject.updateDefaultSlotEnvSettings(req.body.settings);
-      res.send('ok');
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
 async function publishLuis(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
@@ -437,10 +353,6 @@ export const ProjectController = {
   updateFile,
   createFile,
   removeFile,
-  getEnvSettings,
-  getDefaultSlotEnvSettings,
-  updateEnvSettings,
-  updateDefaultSlotEnvSettings,
   updateSkill,
   getSkill,
   publishLuis,

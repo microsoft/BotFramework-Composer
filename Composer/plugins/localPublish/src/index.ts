@@ -341,7 +341,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     if (fs.existsSync(dstPath)) {
       await removeFile(dstPath);
     }
-    const files = await glob('**/*', { cwd: srcDir, dot: true });
+    const files = await glob('**/*', { cwd: srcDir, dot: true, ignore: ['runtime'] });
     return new Promise((resolve, reject) => {
       const archive = archiver('zip');
       const output = fs.createWriteStream(dstPath);
