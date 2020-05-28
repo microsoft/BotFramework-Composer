@@ -7,7 +7,7 @@ import { FC, useContext } from 'react';
 import get from 'lodash/get';
 
 import { NodeProps, defaultNodeProps } from '../types/nodeProps';
-import { renderUIWidget } from '../../schema/flowSchemaRenderer';
+import { renderUIWidget } from '../utils/visual/flowSchemaRenderer';
 import { FlowSchemaContext } from '../contexts/FlowSchemaContext';
 import { FlowRendererContext } from '../contexts/FlowRendererContext';
 import { ElementMeasurer } from '../components/ElementMeasurer';

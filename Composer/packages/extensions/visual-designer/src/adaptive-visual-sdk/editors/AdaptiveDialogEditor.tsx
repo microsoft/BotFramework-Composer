@@ -13,7 +13,7 @@ import { FlowRendererContext, DefaultFlowRenderers } from '../contexts/FlowRende
 import builtinSchema from '../configs/builtinSchema';
 import builtinWidgets from '../configs/builtinWidgets';
 import { FlowSchemaContext } from '../contexts/FlowSchemaContext';
-import { FlowSchemaProvider } from '../../schema/flowSchemaProvider';
+import { FlowSchemaProvider } from '../utils/visual/flowSchemaProvider';
 
 import { RuleEditor } from './RuleEditor';
 

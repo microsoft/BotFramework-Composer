@@ -4,7 +4,7 @@
 import React from 'react';
 import { FlowEditorWidgetMap } from '@bfc/extension';
 
-import { FlowSchemaProvider } from '../../schema/flowSchemaProvider';
+import { FlowSchemaProvider } from '../utils/visual/flowSchemaProvider';
 import defaultFlowSchema from '../configs/builtinSchema';
 import builtinActionWidgets from '../configs/builtinWidgets';
 
