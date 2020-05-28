@@ -113,7 +113,6 @@ describe('useForm', () => {
     it('validates using an asyn validator', async () => {
       asyncValidate.mockResolvedValue('my async validation');
       const { result, waitForNextUpdate } = hooks.renderHook(() => useForm(fields));
-      // await waitForNextUpdate();
 
       await hooks.act(async () => {
         result.current.updateField('asyncValidationField', 'foo');
