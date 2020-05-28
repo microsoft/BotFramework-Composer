@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogGroup } from '@bfc/shared';
-
 const Colors = {
   // Neutral Colors
   Black: '#000000',
@@ -48,12 +46,6 @@ const Colors = {
 
 export const ObiColors = Colors;
 
-export const EventColor = {
-  expanded: Colors.AcidGreen,
-  iconColor: Colors.DarkGreen,
-  collapsed: Colors.DarkGreen,
-};
-
 export interface ElementColor {
   theme?: string;
   icon?: string;
@@ -64,42 +56,4 @@ export const DefaultColors: ElementColor = {
   theme: ObiColors.AzureGray3,
   icon: ObiColors.AzureGray2,
   color: ObiColors.Black,
-};
-
-export const NodeColors = {
-  [DialogGroup.INPUT]: {
-    themeColor: Colors.LightBlue,
-    iconColor: Colors.AzureBlue,
-  },
-  [DialogGroup.BRANCHING]: {
-    themeColor: Colors.AzureGray3,
-    iconColor: Colors.AzureGray2,
-  },
-  [DialogGroup.MEMORY]: {
-    themeColor: Colors.AzureGray3,
-    iconColor: Colors.AzureGray2,
-  },
-  [DialogGroup.CODE]: {
-    themeColor: Colors.AzureGray3,
-    iconColor: Colors.AzureGray2,
-  },
-  [DialogGroup.LOOPING]: {
-    themeColor: Colors.AzureGray3,
-    iconColor: Colors.AzureGray2,
-  },
-  [DialogGroup.LOG]: {
-    themeColor: Colors.AzureGray3,
-    iconColor: Colors.AzureGray2,
-  },
-  [DialogGroup.RESPONSE]: {
-    themeColor: Colors.BlueMagenta20,
-    iconColor: Colors.BlueMagenta30,
-  },
-  [DialogGroup.STEP]: {
-    themeColor: Colors.AzureGray2,
-  },
-  [DialogGroup.OTHER]: {
-    themeColor: Colors.AzureGray3,
-    iconColor: Colors.AzureGray2,
-  },
 };
