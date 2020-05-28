@@ -20,7 +20,6 @@ It will look like this:
 {
   "accessToken": "<SOME VALUE>",
   "name": "<NAME OF YOUR RESOURCE GROUP>",
-  "appPassword": "<YOUR APP PASSWORD>",
   "environment": "<ENVIRONMENT>",
   "settings": {
     "applicationInsights": {
