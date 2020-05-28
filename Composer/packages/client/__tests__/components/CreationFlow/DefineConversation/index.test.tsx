@@ -82,4 +82,14 @@ describe('<DefineConversation/>', () => {
         'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
     });
   });
+
+  it('disable submit button', async () => {
+    storeContext.state.storages = [];
+    storeContext.state.templateId = 'EchoBot';
+    component = renderComponent();
+    const nameField = await component.getByTestId('NewDialogName');
+    fireEvent.change(nameField, { target: { value: 'invalidName;' } });
+    const node = await component.getByTestId('SubmitNewBotBtn');
+    expect(node).toBeDisabled();
+  });
 });
