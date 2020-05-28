@@ -17,7 +17,7 @@ enum VirtualElementTypes {
   ChoiceInputDetail = 'VisualSDK.ChoiceInputDetail',
 }
 
-export const ObiTypes = {
+export const AdaptiveKinds = {
   ...SDKKinds,
   ...VirtualElementTypes,
 };

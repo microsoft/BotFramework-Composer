@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiTypes } from '../../constants/ObiTypes';
+import { AdaptiveKinds } from '../../constants/AdaptiveKinds';
 
 export function normalizeObiStep(data) {
   let step = data;
   // Grammar sugar provide by OBI runtime.
   if (typeof data === 'string') {
     step = {
-      $kind: ObiTypes.BeginDialog,
+      $kind: AdaptiveKinds.BeginDialog,
       dialog: step,
     };
   }

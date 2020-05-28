@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiFieldNames } from '../constants/ObiFieldNames';
-import { ObiTypes } from '../constants/ObiTypes';
+import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
+import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 import { normalizeObiStep } from '../utils/adaptive/stepBuilder';
 
-const { Events, Actions } = ObiFieldNames;
+const { Events, Actions } = AdaptiveFieldNames;
 
 function transformSimpleDialog(input): { ruleGroup: IndexedNode; stepGroup: IndexedNode } | null {
   if (!input) return null;
@@ -15,12 +15,12 @@ function transformSimpleDialog(input): { ruleGroup: IndexedNode; stepGroup: Inde
   const steps = input[Actions] || [];
 
   const ruleGroup = new IndexedNode(Events, {
-    $kind: ObiTypes.RuleGroup,
+    $kind: AdaptiveKinds.RuleGroup,
     children: [...rules],
   });
 
   const stepGroup = new IndexedNode(Actions, {
-    $kind: ObiTypes.StepGroup,
+    $kind: AdaptiveKinds.StepGroup,
     children: steps.map((x) => normalizeObiStep(x)),
   });
   return {

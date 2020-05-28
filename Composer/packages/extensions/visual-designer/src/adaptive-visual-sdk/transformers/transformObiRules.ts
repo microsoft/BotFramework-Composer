@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiFieldNames } from '../constants/ObiFieldNames';
-import { ObiTypes } from '../constants/ObiTypes';
+import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
+import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 import { normalizeObiStep } from '../utils/adaptive/stepBuilder';
 
@@ -10,9 +10,9 @@ export function transformObiRules(input, parentPath = ''): { stepGroup: IndexedN
   if (!input) return null;
 
   const prefix = parentPath ? parentPath + '.' : '';
-  const steps = input[ObiFieldNames.Actions] || [];
-  const stepGroup = new IndexedNode(`${prefix}${ObiFieldNames.Actions}`, {
-    $kind: ObiTypes.StepGroup,
+  const steps = input[AdaptiveFieldNames.Actions] || [];
+  const stepGroup = new IndexedNode(`${prefix}${AdaptiveFieldNames.Actions}`, {
+    $kind: AdaptiveKinds.StepGroup,
     children: steps.map((x) => normalizeObiStep(x)),
   });
   return {

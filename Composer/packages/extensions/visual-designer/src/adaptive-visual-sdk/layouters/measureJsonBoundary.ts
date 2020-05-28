@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiTypes } from '../constants/ObiTypes';
+import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { Boundary } from '../models/Boundary';
 import {
   StandardNodeWidth,
@@ -107,51 +107,51 @@ export function measureJsonBoundary(json): Boundary {
   }
 
   switch (json.$kind) {
-    case ObiTypes.ChoiceDiamond:
+    case AdaptiveKinds.ChoiceDiamond:
       boundary = new Boundary(DiamondSize.width, DiamondSize.height);
       break;
-    case ObiTypes.ConditionNode:
+    case AdaptiveKinds.ConditionNode:
       boundary = new Boundary(InitNodeSize.width, InitNodeSize.height);
       break;
-    case ObiTypes.LoopIndicator:
+    case AdaptiveKinds.LoopIndicator:
       boundary = new Boundary(LoopIconSize.width, LoopIconSize.height);
       break;
-    case ObiTypes.StepGroup:
+    case AdaptiveKinds.StepGroup:
       boundary = measureStepGroupBoundary(json);
       break;
-    case ObiTypes.IfCondition:
+    case AdaptiveKinds.IfCondition:
       boundary = measureIfConditionBoundary(json);
       break;
-    case ObiTypes.SwitchCondition:
+    case AdaptiveKinds.SwitchCondition:
       boundary = measureSwitchConditionBoundary(json);
       break;
-    case ObiTypes.Foreach:
-    case ObiTypes.ForeachPage:
+    case AdaptiveKinds.Foreach:
+    case AdaptiveKinds.ForeachPage:
       boundary = measureForeachBoundary(json);
       break;
-    case ObiTypes.AttachmentInput:
-    case ObiTypes.ChoiceInput:
-    case ObiTypes.ConfirmInput:
-    case ObiTypes.DateTimeInput:
-    case ObiTypes.NumberInput:
-    case ObiTypes.TextInput:
+    case AdaptiveKinds.AttachmentInput:
+    case AdaptiveKinds.ChoiceInput:
+    case AdaptiveKinds.ConfirmInput:
+    case AdaptiveKinds.DateTimeInput:
+    case AdaptiveKinds.NumberInput:
+    case AdaptiveKinds.TextInput:
       boundary = measureBaseInputBoundary(json);
       break;
-    case ObiTypes.ChoiceInputDetail:
+    case AdaptiveKinds.ChoiceInputDetail:
       boundary = measureChoiceInputDetailBoundary(json);
       break;
-    case ObiTypes.InvalidPromptBrick:
+    case AdaptiveKinds.InvalidPromptBrick:
       boundary = new Boundary(IconBrickSize.width, IconBrickSize.height);
       break;
-    case ObiTypes.SetProperties:
+    case AdaptiveKinds.SetProperties:
       boundary = measurePropertyAssignmentBoundary(json);
       break;
-    case ObiTypes.EndDialog:
-    case ObiTypes.EndTurn:
-    case ObiTypes.RepeatDialog:
-    case ObiTypes.CancelAllDialogs:
-    case ObiTypes.LogAction:
-    case ObiTypes.TraceActivity:
+    case AdaptiveKinds.EndDialog:
+    case AdaptiveKinds.EndTurn:
+    case AdaptiveKinds.RepeatDialog:
+    case AdaptiveKinds.CancelAllDialogs:
+    case AdaptiveKinds.LogAction:
+    case AdaptiveKinds.TraceActivity:
       boundary = new Boundary(StandardNodeWidth, HeaderHeight);
       break;
     default:

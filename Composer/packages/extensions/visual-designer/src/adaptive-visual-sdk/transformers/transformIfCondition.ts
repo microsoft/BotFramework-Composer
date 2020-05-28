@@ -1,34 +1,34 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiFieldNames } from '../constants/ObiFieldNames';
-import { ObiTypes } from '../constants/ObiTypes';
+import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
+import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 
-const IfBranchKey = ObiFieldNames.Actions;
-const ElseBranchKey = ObiFieldNames.ElseActions;
+const IfBranchKey = AdaptiveFieldNames.Actions;
+const ElseBranchKey = AdaptiveFieldNames.ElseActions;
 
 export function transformIfCondtion(
   input,
   jsonpath: string
 ): { condition: IndexedNode; choice: IndexedNode; ifGroup: IndexedNode; elseGroup: IndexedNode } | null {
-  if (!input || input.$kind !== ObiTypes.IfCondition) return null;
+  if (!input || input.$kind !== AdaptiveKinds.IfCondition) return null;
 
   const result = {
     condition: new IndexedNode(`${jsonpath}`, {
       ...input,
-      $kind: ObiTypes.ConditionNode,
+      $kind: AdaptiveKinds.ConditionNode,
     }),
     choice: new IndexedNode(`${jsonpath}`, {
-      $kind: ObiTypes.ChoiceDiamond,
+      $kind: AdaptiveKinds.ChoiceDiamond,
       text: input.condition,
     }),
     ifGroup: new IndexedNode(`${jsonpath}.${IfBranchKey}`, {
-      $kind: ObiTypes.StepGroup,
+      $kind: AdaptiveKinds.StepGroup,
       children: input[IfBranchKey] || [],
     }),
     elseGroup: new IndexedNode(`${jsonpath}.${ElseBranchKey}`, {
-      $kind: ObiTypes.StepGroup,
+      $kind: AdaptiveKinds.StepGroup,
       children: input[ElseBranchKey] || [],
     }),
   };

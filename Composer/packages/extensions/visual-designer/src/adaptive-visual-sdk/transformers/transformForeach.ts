@@ -1,33 +1,33 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiFieldNames } from '../constants/ObiFieldNames';
-import { ObiTypes } from '../constants/ObiTypes';
+import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
+import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 
-const StepsKey = ObiFieldNames.Actions;
+const StepsKey = AdaptiveFieldNames.Actions;
 
 export function transformForeach(
   input: any,
   jsonpath: string
 ): { foreachDetail: IndexedNode; stepGroup: IndexedNode; loopBegin: IndexedNode; loopEnd: IndexedNode } | null {
-  if (!input || (input.$kind !== ObiTypes.Foreach && input.$kind !== ObiTypes.ForeachPage)) return null;
+  if (!input || (input.$kind !== AdaptiveKinds.Foreach && input.$kind !== AdaptiveKinds.ForeachPage)) return null;
 
   const foreachDetailNode = new IndexedNode(jsonpath, {
     ...input,
-    $kind: input.$kind === ObiTypes.ForeachPage ? ObiTypes.ForeachPageDetail : ObiTypes.ForeachDetail,
+    $kind: input.$kind === AdaptiveKinds.ForeachPage ? AdaptiveKinds.ForeachPageDetail : AdaptiveKinds.ForeachDetail,
   });
 
   const steps = input[StepsKey] || [];
   const stepsNode = new IndexedNode(`${jsonpath}.${StepsKey}`, {
-    $kind: ObiTypes.StepGroup,
+    $kind: AdaptiveKinds.StepGroup,
     children: steps,
   });
 
   return {
     foreachDetail: foreachDetailNode,
     stepGroup: stepsNode,
-    loopBegin: new IndexedNode(jsonpath, { $kind: ObiTypes.LoopIndicator }),
-    loopEnd: new IndexedNode(jsonpath, { $kind: ObiTypes.LoopIndicator }),
+    loopBegin: new IndexedNode(jsonpath, { $kind: AdaptiveKinds.LoopIndicator }),
+    loopEnd: new IndexedNode(jsonpath, { $kind: AdaptiveKinds.LoopIndicator }),
   };
 }

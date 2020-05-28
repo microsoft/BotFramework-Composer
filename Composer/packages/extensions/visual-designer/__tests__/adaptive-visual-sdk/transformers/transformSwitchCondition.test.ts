@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { transformSwitchCondition } from '../../../src/adaptive-visual-sdk/transformers/transformSwitchCondition';
-import { ObiTypes } from '../../../src/adaptive-visual-sdk/constants/ObiTypes';
+import { AdaptiveKinds } from '../../../src/adaptive-visual-sdk/constants/AdaptiveKinds';
 
 test('should return NULL when input is not SwitchCondition', () => {
   expect(transformSwitchCondition(null, '')).toBeNull();
@@ -12,7 +12,7 @@ test('should return NULL when input is not SwitchCondition', () => {
 
 test('should return correct schema when input empty cases', () => {
   const json = {
-    $kind: ObiTypes.SwitchCondition,
+    $kind: AdaptiveKinds.SwitchCondition,
     condition: 'a==b',
     cases: [],
     default: [],
@@ -35,15 +35,15 @@ test('should return correct schema when input empty cases', () => {
 
 test('should return correct schema when input empty cases', () => {
   const json = {
-    $kind: ObiTypes.SwitchCondition,
+    $kind: AdaptiveKinds.SwitchCondition,
     condition: 'a==b',
     cases: [
       {
         value: '1',
-        actions: [{ $kind: ObiTypes.SendActivity }],
+        actions: [{ $kind: AdaptiveKinds.SendActivity }],
       },
     ],
-    default: [{ $kind: ObiTypes.SendActivity }],
+    default: [{ $kind: AdaptiveKinds.SendActivity }],
   };
 
   const result: any = transformSwitchCondition(json, 'actions[0]');

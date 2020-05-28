@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { transformStepGroup } from '../../../src/adaptive-visual-sdk/transformers/transformStepGroup';
-import { ObiTypes } from '../../../src/adaptive-visual-sdk/constants/ObiTypes';
+import { AdaptiveKinds } from '../../../src/adaptive-visual-sdk/constants/AdaptiveKinds';
 
 test('should return safely when input null value', () => {
   const result = transformStepGroup(null, '');
@@ -12,20 +12,20 @@ test('should return safely when input null value', () => {
 test('should transform string as BeginDialog', () => {
   const result = transformStepGroup(
     {
-      $kind: ObiTypes.StepGroup,
+      $kind: AdaptiveKinds.StepGroup,
       children: ['CalleeDialog'],
     },
     ''
   );
   expect(result[0].json).toEqual({
-    $kind: ObiTypes.BeginDialog,
+    $kind: AdaptiveKinds.BeginDialog,
     dialog: 'CalleeDialog',
   });
 });
 
 test('should parse child step correctly with parentPath', () => {
   const json = {
-    $kind: ObiTypes.StepGroup,
+    $kind: AdaptiveKinds.StepGroup,
     children: [{ $kind: 'any' }, { $kind: 'any' }],
   };
   const result = transformStepGroup(json, 'steps');

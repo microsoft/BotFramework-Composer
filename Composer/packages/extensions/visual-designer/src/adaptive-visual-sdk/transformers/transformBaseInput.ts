@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiTypes } from '../constants/ObiTypes';
+import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 
 export function transformBaseInput(
@@ -12,17 +12,17 @@ export function transformBaseInput(
     botAsks: new IndexedNode(jsonpath, {
       ...input,
       _type: input.$kind,
-      $kind: ObiTypes.BotAsks,
+      $kind: AdaptiveKinds.BotAsks,
     }),
     userAnswers: new IndexedNode(jsonpath, {
       ...input,
       _type: input.$kind,
-      $kind: input.$kind === ObiTypes.ChoiceInput ? ObiTypes.ChoiceInputDetail : ObiTypes.UserAnswers,
+      $kind: input.$kind === AdaptiveKinds.ChoiceInput ? AdaptiveKinds.ChoiceInputDetail : AdaptiveKinds.UserAnswers,
     }),
     invalidPrompt: new IndexedNode(jsonpath, {
       ...input,
       _type: input.$kind,
-      $kind: ObiTypes.InvalidPromptBrick,
+      $kind: AdaptiveKinds.InvalidPromptBrick,
     }),
   };
 }

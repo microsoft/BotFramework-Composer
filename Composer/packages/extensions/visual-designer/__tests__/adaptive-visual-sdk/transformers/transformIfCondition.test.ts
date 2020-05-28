@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { transformIfCondtion } from '../../../src/adaptive-visual-sdk/transformers/transformIfCondition';
-import { ObiTypes } from '../../../src/adaptive-visual-sdk/constants/ObiTypes';
+import { AdaptiveKinds } from '../../../src/adaptive-visual-sdk/constants/AdaptiveKinds';
 
 test('should return {} when input is not IfCondition', () => {
   const json = { $kind: '' };
@@ -11,44 +11,44 @@ test('should return {} when input is not IfCondition', () => {
 });
 
 test('should return correct schema when input choice and empty branches', () => {
-  const json = { $kind: ObiTypes.IfCondition, conditon: 'a==b', actions: [], elseActions: [] };
+  const json = { $kind: AdaptiveKinds.IfCondition, conditon: 'a==b', actions: [], elseActions: [] };
   const result = transformIfCondtion(json, '');
   if (!result) throw new Error('IfCondition got a wrong result');
 
   expect(result.choice).toBeTruthy();
   expect(result.ifGroup).toBeTruthy();
   expect(result.ifGroup.json).toEqual({
-    $kind: ObiTypes.StepGroup,
+    $kind: AdaptiveKinds.StepGroup,
     children: [],
   });
   expect(result.elseGroup.json).toBeTruthy();
   expect(result.elseGroup.json).toEqual({
-    $kind: ObiTypes.StepGroup,
+    $kind: AdaptiveKinds.StepGroup,
     children: [],
   });
 });
 
 test('should return correct schema when input choice only json', () => {
-  const json = { $kind: ObiTypes.IfCondition, conditon: 'a==b' };
+  const json = { $kind: AdaptiveKinds.IfCondition, conditon: 'a==b' };
   const result = transformIfCondtion(json, '');
   if (!result) throw new Error('IfCondition got a wrong result');
 
   expect(result.choice).toBeTruthy();
   expect(result.ifGroup).toBeTruthy();
   expect(result.ifGroup.json).toEqual({
-    $kind: ObiTypes.StepGroup,
+    $kind: AdaptiveKinds.StepGroup,
     children: [],
   });
   expect(result.elseGroup.json).toBeTruthy();
   expect(result.elseGroup.json).toEqual({
-    $kind: ObiTypes.StepGroup,
+    $kind: AdaptiveKinds.StepGroup,
     children: [],
   });
 });
 
 test('should return correct schema when input complete json', () => {
   const json = {
-    $kind: ObiTypes.IfCondition,
+    $kind: AdaptiveKinds.IfCondition,
     conditon: 'a==b',
     actions: [{ $kind: 'any' }],
     elseActions: [{ $kind: 'any' }, { $kind: 'any' }],
@@ -59,17 +59,17 @@ test('should return correct schema when input complete json', () => {
   expect(result.choice).toBeTruthy();
 
   expect(result.ifGroup).toBeTruthy();
-  expect(result.ifGroup.json.$kind).toEqual(ObiTypes.StepGroup);
+  expect(result.ifGroup.json.$kind).toEqual(AdaptiveKinds.StepGroup);
   expect(result.ifGroup.json.children.length).toEqual(1);
 
   expect(result.elseGroup).toBeTruthy();
-  expect(result.elseGroup.json.$kind).toEqual(ObiTypes.StepGroup);
+  expect(result.elseGroup.json.$kind).toEqual(AdaptiveKinds.StepGroup);
   expect(result.elseGroup.json.children.length).toEqual(2);
 });
 
 test('should jsonpath be passed down to children', () => {
   const json = {
-    $kind: ObiTypes.IfCondition,
+    $kind: AdaptiveKinds.IfCondition,
     conditon: 'a==b',
     actions: [{ $kind: 'any' }],
     elseActions: [{ $kind: 'any' }, { $kind: 'any' }],

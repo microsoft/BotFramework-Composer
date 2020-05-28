@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ObiFieldNames } from '../../constants/ObiFieldNames';
-import { ObiTypes } from '../../constants/ObiTypes';
+import { AdaptiveFieldNames } from '../../constants/AdaptiveFieldNames';
+import { AdaptiveKinds } from '../../constants/AdaptiveKinds';
 
-const DEFAULT_CHILDREN_KEYS = [ObiFieldNames.Actions];
+const DEFAULT_CHILDREN_KEYS = [AdaptiveFieldNames.Actions];
 const childrenMap = {
-  [ObiTypes.AdaptiveDialog]: [ObiFieldNames.Actions],
-  [ObiTypes.IfCondition]: [ObiFieldNames.Actions, ObiFieldNames.ElseActions],
-  [ObiTypes.SwitchCondition]: [ObiFieldNames.Cases, ObiFieldNames.DefaultCase],
+  [AdaptiveKinds.AdaptiveDialog]: [AdaptiveFieldNames.Actions],
+  [AdaptiveKinds.IfCondition]: [AdaptiveFieldNames.Actions, AdaptiveFieldNames.ElseActions],
+  [AdaptiveKinds.SwitchCondition]: [AdaptiveFieldNames.Cases, AdaptiveFieldNames.DefaultCase],
 };
 
 export function outlineObiJson(input: any) {

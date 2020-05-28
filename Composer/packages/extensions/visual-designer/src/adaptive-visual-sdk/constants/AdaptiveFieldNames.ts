@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export const ObiFieldNames = {
+export const AdaptiveFieldNames = {
   Events: 'triggers',
   Actions: 'actions',
   ElseActions: 'elseActions',
