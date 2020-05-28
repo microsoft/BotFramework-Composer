@@ -129,10 +129,10 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
           <PrimaryButton disabled={hasErrors} text={formatMessage('Next')} onClick={handleSubmit} />
 =======
           <PrimaryButton
+            data-testid="SubmitNewDialogBtn"
             disabled={isDisable()}
             text={formatMessage('Next')}
             onClick={handleSubmit}
-            data-testid="SubmitNewDialogBtn"
           />
 >>>>>>> add unit tests
         </DialogFooter>
