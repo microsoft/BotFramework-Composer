@@ -3,9 +3,9 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { FC, useContext } from 'react';
-import classnames from 'classnames';
+import { FC, useContext, useCallback } from 'react';
 import { generateSDKTitle, PromptTab } from '@bfc/shared';
+import { useShellApi } from '@bfc/extension';
 
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../contexts/NodeRendererContext';
@@ -51,9 +51,16 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
     };
   };
 
+  const {
+    shellApi: { addCoachMarkRef },
+  } = useShellApi();
+  const actionRef = useCallback((action) => {
+    addCoachMarkRef({ action });
+  }, []);
+
   return (
     <div
-      className={classnames('step-renderer-container', { 'step-renderer-container--focused': nodeFocused })}
+      ref={actionRef}
       css={css`
         position: relative;
         border-radius: 2px 2px 0 0;

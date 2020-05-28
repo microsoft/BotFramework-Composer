@@ -3,8 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useCallback, useContext } from 'react';
-import { useShellApi } from '@bfc/extension';
+import { useState, useContext } from 'react';
 
 import { OffsetContainer } from '../components/OffsetContainer';
 import { ElementInterval, TriggerSize, TerminatorSize } from '../constants/ElementSizes';
@@ -23,10 +22,6 @@ const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + Elem
 export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
   const { EdgeMenu } = useContext(RendererContext);
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
-  const { shellApi } = useShellApi();
-  const { addCoachMarkRef } = shellApi;
-
-  const addRef = useCallback((action: HTMLDivElement) => addCoachMarkRef({ action }), []);
 
   const hasNoSteps = !data || !Array.isArray(data.children) || data.children.length === 0;
   const content = hasNoSteps ? (
@@ -90,10 +85,6 @@ export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
         <div className="step-editor__head" css={{ ...HeadSize, position: 'relative' }}>
           <OffsetContainer offset={{ x: 0, y: 0 }}>{trigger}</OffsetContainer>
         </div>
-      </OffsetContainer>
-      <OffsetContainer offset={{ x: editorAxisX + ElementInterval.x, y: HeadSize.height + ElementInterval.y }}>
-        {/* Coarchmark bubble appears here */}
-        <div ref={addRef}></div>
       </OffsetContainer>
       <OffsetContainer offset={{ x: editorAxisX - contentBoundary.axisX, y: HeadSize.height }}>
         {content}
