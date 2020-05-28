@@ -13,49 +13,49 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: data => `${PropmtTabTitles[PromptTab.BOT_ASKS]} (${getInputType(data.$kind)})`,
+      title: (data) => `${PropmtTabTitles[PromptTab.BOT_ASKS]} (${getInputType(data.$kind)})`,
       icon: 'MessageBot',
       colors: {
         theme: Colors.BlueMagenta20,
-        icon: Colors.BlueMagenta30
-      }
+        icon: Colors.BlueMagenta30,
+      },
     },
     body: {
       widget: 'LgWidget',
       field: 'prompt',
-      defaultContent: '<prompt>'
-    }
+      defaultContent: '<prompt>',
+    },
   },
   userInput: {
     widget: 'ActionCard',
     header: {
       widget: 'ActionHeader',
-      title: data => `${PropmtTabTitles[PromptTab.USER_INPUT]} (${getInputType(data.$kind)})`,
+      title: (data) => `${PropmtTabTitles[PromptTab.USER_INPUT]} (${getInputType(data.$kind)})`,
       disableSDKTitle: true,
       icon: 'User',
       menu: 'none',
       colors: {
         theme: Colors.LightBlue,
-        icon: Colors.AzureBlue
-      }
+        icon: Colors.AzureBlue,
+      },
     },
     body: inputBody,
-    footer: inputFooter
-  }
+    footer: inputFooter,
+  },
 });
 
-const PropertyInfo = data =>
+const PropertyInfo = (data) =>
   data.property ? (
     <>
       {data.property} <FixedInfo>= Input({getInputType(data.$kind)})</FixedInfo>
     </>
   ) : null;
 
-const ChoiceInputBody = data =>
+const ChoiceInputBody = (data) =>
   Array.isArray(data.choices) && data.choices.length ? (
     <ListOverview
       items={data.choices}
-      renderItem={item => {
+      renderItem={(item) => {
         const value = typeof item === 'object' ? item.value : item;
         return (
           <BorderedDiv height={20} title={value}>
@@ -77,5 +77,5 @@ export default {
   [SDKKinds.DateTimeInput]: BaseInputSchema,
   [SDKKinds.NumberInput]: BaseInputSchema,
   [SDKKinds.TextInput]: BaseInputSchema,
-  [SDKKinds.ChoiceInput]: ChoiceInputSchema
+  [SDKKinds.ChoiceInput]: ChoiceInputSchema,
 };
