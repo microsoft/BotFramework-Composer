@@ -8,7 +8,7 @@ import React, { useRef, useMemo, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
-import { useShellApi, JSONSchema7, FlowSchema } from '@bfc/extension';
+import { useShellApi, JSONSchema7, FlowSchema, FlowWidget } from '@bfc/extension';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeRendererContext, NodeRendererContextValue } from './composer-flow-editor/contexts/NodeRendererContext';
@@ -92,11 +92,10 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
     const definitionKeys: string[] = Object.keys(s.definitions);
     definitionKeys.forEach(($kind) => {
-      // will fallback to default custom schema
       result[$kind] = {
         widget: 'ActionHeader',
         colors: { theme: '#69797E', color: 'white' },
-      };
+      } as FlowWidget;
     });
     return result;
   }, {} as FlowSchema);
