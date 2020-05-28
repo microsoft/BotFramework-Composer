@@ -17,7 +17,7 @@ import { SVGContainer } from '../components/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../utils/visual/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
-import { FlowRendererContext } from '../contexts/FlowRendererContext';
+import { RendererContext } from '../contexts/RendererContext';
 
 import { ActionGroup } from './ActionGroup';
 
@@ -73,7 +73,7 @@ export const SwitchConditionWidget: FunctionComponent<SwitchConditionWidgetProps
   onResize,
   judgement,
 }) => {
-  const { NodeWrapper } = useContext(FlowRendererContext);
+  const { NodeWrapper } = useContext(RendererContext);
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout<SwitchNodes | CaseNodeKey>(nodeMap, calculateLayout, onResize);
 

@@ -8,12 +8,12 @@ import get from 'lodash/get';
 import { FlowSchema as VisualSDKSchema, FlowEditorWidgetMap as NodeWidgetMap } from '@bfc/extension';
 
 import { EditorEventHandler } from '../constants/NodeEventTypes';
-import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../types/FlowRenderer.types';
-import { FlowRendererContext, DefaultFlowRenderers } from '../contexts/FlowRendererContext';
+import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../types/PluggableComponents.types';
+import { RendererContext, DefaultRenderers } from '../contexts/RendererContext';
 import builtinSchema from '../configs/builtinSchema';
 import builtinWidgets from '../configs/builtinWidgets';
-import { FlowSchemaContext } from '../contexts/FlowSchemaContext';
-import { FlowSchemaProvider } from '../utils/visual/flowSchemaProvider';
+import { SchemaContext } from '../contexts/SchemaContext';
+import { WidgetSchemaProvider } from '../utils/visual/WidgetSchemaProvider';
 
 import { RuleEditor } from './RuleEditor';
 
@@ -63,22 +63,22 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   ) : null;
 
   return (
-    <FlowSchemaContext.Provider
+    <SchemaContext.Provider
       value={{
         widgets: { ...widgets, ...builtinWidgets },
-        schemaProvider: new FlowSchemaProvider(schema, builtinSchema),
+        schemaProvider: new WidgetSchemaProvider(schema, builtinSchema),
       }}
     >
-      <FlowRendererContext.Provider
+      <RendererContext.Provider
         value={{
-          EdgeMenu: EdgeMenu || DefaultFlowRenderers.EdgeMenu,
-          NodeMenu: NodeMenu || DefaultFlowRenderers.NodeMenu,
-          NodeWrapper: NodeWrapper || DefaultFlowRenderers.NodeWrapper,
+          EdgeMenu: EdgeMenu || DefaultRenderers.EdgeMenu,
+          NodeMenu: NodeMenu || DefaultRenderers.NodeMenu,
+          NodeWrapper: NodeWrapper || DefaultRenderers.NodeWrapper,
         }}
       >
         {content}
-      </FlowRendererContext.Provider>
-    </FlowSchemaContext.Provider>
+      </RendererContext.Provider>
+    </SchemaContext.Provider>
   );
 };
 

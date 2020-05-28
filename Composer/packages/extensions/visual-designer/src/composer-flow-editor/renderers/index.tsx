@@ -7,7 +7,7 @@ import {
   NodeMenuComponent,
   EdgeMenuComponent,
   NodeWrapperComponent,
-} from '../../adaptive-visual-sdk/types/FlowRenderer.types';
+} from '../../adaptive-visual-sdk/types/PluggableComponents.types';
 import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
 
 import { NodeMenu } from './NodeMenu';

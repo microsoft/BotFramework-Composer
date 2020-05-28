@@ -10,7 +10,7 @@ import { TruncatedCSS, ColorlessFontCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../../constants/ElementSizes';
 import { DefaultColors } from '../../constants/ElementColors';
-import { FlowRendererContext } from '../../contexts/FlowRendererContext';
+import { RendererContext } from '../../contexts/RendererContext';
 
 import { Icon, BuiltinIcons } from './icon';
 
@@ -50,7 +50,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
     ${TruncatedCSS};
   `;
 
-  const { NodeMenu } = useContext(FlowRendererContext);
+  const { NodeMenu } = useContext(RendererContext);
   const menuNode =
     menu === 'none' ? null : menu || <NodeMenu colors={colors} nodeData={data} nodeId={id} onEvent={onEvent} />;
 

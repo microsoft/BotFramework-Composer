@@ -14,14 +14,14 @@ import { EdgeDirection } from '../models/EdgeData';
 import { SVGContainer } from '../components/SVGContainer';
 import { drawSVGEdge } from '../utils/visual/EdgeUtil';
 import { ObiColors } from '../constants/ElementColors';
-import { FlowRendererContext } from '../contexts/FlowRendererContext';
+import { RendererContext } from '../contexts/RendererContext';
 import { ActionGroup } from '../widgets';
 
 const HeadSize = new Boundary(TriggerSize.width, TriggerSize.height + ElementInterval.y / 2);
 const TailSize = new Boundary(TerminatorSize.width, TerminatorSize.height + ElementInterval.y / 2 + 5);
 
 export const StepEditor = ({ id, data, onEvent, trigger }): JSX.Element => {
-  const { EdgeMenu } = useContext(FlowRendererContext);
+  const { EdgeMenu } = useContext(RendererContext);
   const [stepGroupBoundary, setStepGroupBoundary] = useState<Boundary>(measureJsonBoundary(data));
   const { shellApi } = useShellApi();
   const { addCoachMarkRef } = shellApi;

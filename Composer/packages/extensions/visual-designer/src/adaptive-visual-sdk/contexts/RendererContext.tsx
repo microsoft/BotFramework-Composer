@@ -3,17 +3,17 @@
 
 import React from 'react';
 
-import { NodeMenuComponent, EdgeMenuComponent, NodeWrapperComponent } from '../types/FlowRenderer.types';
+import { NodeMenuComponent, EdgeMenuComponent, NodeWrapperComponent } from '../types/PluggableComponents.types';
 
-export interface FlowRendererContextData {
+export interface RendererContextData {
   EdgeMenu: EdgeMenuComponent;
   NodeMenu: NodeMenuComponent;
   NodeWrapper: NodeWrapperComponent;
 }
 
-export const DefaultFlowRenderers = {
+export const DefaultRenderers = {
   EdgeMenu: (() => <></>) as EdgeMenuComponent,
   NodeMenu: (() => <></>) as NodeMenuComponent,
   NodeWrapper: (({ children }) => <>{children}</>) as NodeWrapperComponent,
 };
-export const FlowRendererContext = React.createContext<FlowRendererContextData>(DefaultFlowRenderers);
+export const RendererContext = React.createContext<RendererContextData>(DefaultRenderers);

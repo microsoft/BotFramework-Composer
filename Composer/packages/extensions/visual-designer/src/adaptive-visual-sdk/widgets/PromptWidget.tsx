@@ -19,7 +19,7 @@ import { ElementMeasurer } from '../components/ElementMeasurer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../utils/visual/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
-import { FlowRendererContext } from '../contexts/FlowRendererContext';
+import { RendererContext } from '../contexts/RendererContext';
 
 enum PromptNodes {
   BotAsks = 'botAsksNode',
@@ -54,7 +54,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
   botAsks,
   userInput,
 }): JSX.Element => {
-  const { NodeWrapper } = useContext(FlowRendererContext);
+  const { NodeWrapper } = useContext(RendererContext);
   const nodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout<PromptNodes>(nodes, calculateLayout, onResize);
 

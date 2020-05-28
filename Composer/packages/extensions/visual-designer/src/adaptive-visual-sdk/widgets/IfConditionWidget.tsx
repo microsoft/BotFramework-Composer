@@ -17,7 +17,7 @@ import { SVGContainer } from '../components/SVGContainer';
 import { useSmartLayout, GraphNodeMap } from '../hooks/useSmartLayout';
 import { designerCache } from '../utils/visual/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
-import { FlowRendererContext } from '../contexts/FlowRendererContext';
+import { RendererContext } from '../contexts/RendererContext';
 
 import { ActionGroup } from './ActionGroup';
 
@@ -63,7 +63,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
   onResize,
   judgement,
 }) => {
-  const { NodeWrapper } = useContext(FlowRendererContext);
+  const { NodeWrapper } = useContext(RendererContext);
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(nodeMap, calculateIfElseLayout, onResize);
 

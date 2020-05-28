@@ -4,7 +4,7 @@
 import get from 'lodash/get';
 import { FlowWidget, FlowSchema } from '@bfc/extension';
 
-export class FlowSchemaProvider {
+export class WidgetSchemaProvider {
   schema: FlowSchema;
 
   constructor(...schemas: FlowSchema[]) {

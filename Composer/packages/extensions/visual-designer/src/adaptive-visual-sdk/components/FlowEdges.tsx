@@ -6,11 +6,11 @@ import React, { FC } from 'react';
 import { Edge } from '../models/EdgeData';
 import { renderEdge } from '../utils/visual/EdgeUtil';
 
-export interface FlowEdgesProps {
+export interface EdgesProps {
   edges: Edge[];
 }
 
-export const FlowEdges: FC<FlowEdgesProps> = ({ edges }) => {
+export const FlowEdges: FC<EdgesProps> = ({ edges }) => {
   if (!Array.isArray(edges)) return null;
   return <>{edges.map((edge) => renderEdge(edge))}</>;
 };

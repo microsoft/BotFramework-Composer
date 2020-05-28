@@ -16,7 +16,7 @@ import { SVGContainer } from '../components/SVGContainer';
 import { GraphNodeMap, useSmartLayout } from '../hooks/useSmartLayout';
 import { designerCache } from '../utils/visual/DesignerCache';
 import { FlowEdges } from '../components/FlowEdges';
-import { FlowRendererContext } from '../contexts/FlowRendererContext';
+import { RendererContext } from '../contexts/RendererContext';
 
 import { StepRenderer } from './AdaptiveAction';
 
@@ -44,7 +44,7 @@ const calculateLayout = (nodeMap: GraphNodeMap<StepNodeKey>): GraphLayout => {
 };
 
 export const ActionGroup: FunctionComponent<NodeProps> = ({ id, data, onEvent, onResize }: NodeProps): JSX.Element => {
-  const { EdgeMenu } = useContext(FlowRendererContext);
+  const { EdgeMenu } = useContext(RendererContext);
   const initialNodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(initialNodes, calculateLayout, onResize);
 
