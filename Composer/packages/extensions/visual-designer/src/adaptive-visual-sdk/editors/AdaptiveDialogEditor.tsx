@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { FC } from 'react';
 import get from 'lodash/get';
+import { FlowSchema as VisualSDKSchema, FlowEditorWidgetMap as NodeWidgetMap } from '@bfc/extension';
 
 import { EditorEventHandler } from '../constants/NodeEventTypes';
 import {
@@ -13,6 +14,10 @@ import {
   NodeWrapperComponent,
 } from '../../composer-flow-editor/types/FlowRenderer.types';
 import { FlowRendererContext, DefaultFlowRenderers } from '../contexts/FlowRendererContext';
+import builtinSchema from '../configs/builtinSchema';
+import builtinWidgets from '../configs/builtinWidgets';
+import { FlowSchemaContext } from '../contexts/FlowSchemaContext';
+import { FlowSchemaProvider } from '../../schema/flowSchemaProvider';
 
 import { RuleEditor } from './RuleEditor';
 
@@ -29,6 +34,12 @@ export interface AdaptiveDialogEditorProps {
   /** Editor event handler */
   onEvent: EditorEventHandler;
 
+  /** UI schema to define how to render a sdk $kind */
+  schema: VisualSDKSchema;
+
+  /** All available widgets to render a node */
+  widgets: NodeWidgetMap;
+
   /** Edge Menu renderer. Could be a fly-out '+' menu. */
   EdgeMenu?: EdgeMenuComponent;
 
@@ -44,6 +55,8 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   dialogData,
   activeTrigger,
   onEvent,
+  schema = builtinSchema,
+  widgets = builtinWidgets,
   EdgeMenu,
   NodeMenu,
   NodeWrapper,
@@ -54,15 +67,22 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   ) : null;
 
   return (
-    <FlowRendererContext.Provider
+    <FlowSchemaContext.Provider
       value={{
-        EdgeMenu: EdgeMenu || DefaultFlowRenderers.EdgeMenu,
-        NodeMenu: NodeMenu || DefaultFlowRenderers.NodeMenu,
-        NodeWrapper: NodeWrapper || DefaultFlowRenderers.NodeWrapper,
+        widgets: { ...widgets, ...builtinWidgets },
+        schemaProvider: new FlowSchemaProvider(schema, builtinSchema),
       }}
     >
-      {content}
-    </FlowRendererContext.Provider>
+      <FlowRendererContext.Provider
+        value={{
+          EdgeMenu: EdgeMenu || DefaultFlowRenderers.EdgeMenu,
+          NodeMenu: NodeMenu || DefaultFlowRenderers.NodeMenu,
+          NodeWrapper: NodeWrapper || DefaultFlowRenderers.NodeWrapper,
+        }}
+      >
+        {content}
+      </FlowRendererContext.Provider>
+    </FlowSchemaContext.Provider>
   );
 };
 

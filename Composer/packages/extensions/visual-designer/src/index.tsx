@@ -13,11 +13,8 @@ import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeRendererContext, NodeRendererContextValue } from './composer-flow-editor/contexts/NodeRendererContext';
 import { SelfHostContext } from './composer-flow-editor/contexts/SelfHostContext';
-import { FlowSchemaContext } from './adaptive-visual-sdk/contexts/FlowSchemaContext';
-import { FlowSchemaProvider } from './schema/flowSchemaProvider';
 import { mergePluginConfig } from './composer-flow-editor/utils/mergePluginConfig';
 import { getCustomSchema } from './composer-flow-editor/utils/getCustomSchema';
-import { defaultFlowSchema } from './adaptive-visual-sdk/configs/defaultFlowSchema';
 import { SelectionContext } from './composer-flow-editor/contexts/SelectionContext';
 import { KeyboardZone } from './composer-flow-editor/components/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './composer-flow-editor/utils/mapKeyboardCommandToEditorEvent.ts';
@@ -91,11 +88,15 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     customSchemas: customSchema ? [customSchema] : [],
   };
 
-  const visualEditorConfig = mergePluginConfig(...plugins);
+  const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = mergePluginConfig(...plugins);
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
     const definitionKeys: string[] = Object.keys(s.definitions);
     definitionKeys.forEach(($kind) => {
-      result[$kind] = defaultFlowSchema.custom;
+      // will fallback to default custom schema
+      result[$kind] = {
+        widget: 'ActionHeader',
+        colors: { theme: '#69797E', color: 'white' },
+      };
     });
     return result;
   }, {} as FlowSchema);
@@ -114,54 +115,49 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
-          <FlowSchemaContext.Provider
-            value={{
-              widgets: visualEditorConfig.widgets,
-              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema),
-            }}
-          >
-            <div css={styles} data-testid="visualdesigner-container">
-              <SelectionContext.Provider value={selectionContext}>
-                <KeyboardZone
-                  ref={divRef}
-                  onCommand={(command) => {
-                    const editorEvent = mapKeyboardCommandToEditorEvent(command);
-                    editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
-                  }}
-                >
-                  <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
-                    <div
-                      className="visual-editor-container"
-                      css={{
-                        width: '100%',
-                        height: '100%',
-                        padding: '48px 20px',
-                        boxSizing: 'border-box',
+          <div css={styles} data-testid="visualdesigner-container">
+            <SelectionContext.Provider value={selectionContext}>
+              <KeyboardZone
+                ref={divRef}
+                onCommand={(command) => {
+                  const editorEvent = mapKeyboardCommandToEditorEvent(command);
+                  editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
+                }}
+              >
+                <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
+                  <div
+                    className="visual-editor-container"
+                    css={{
+                      width: '100%',
+                      height: '100%',
+                      padding: '48px 20px',
+                      boxSizing: 'border-box',
+                    }}
+                    data-testid="visual-editor-container"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditorEvent(NodeEventTypes.Focus, { id: '' });
+                    }}
+                  >
+                    <AdaptiveDialogEditor
+                      activeTrigger={focusedEvent}
+                      dialogData={data}
+                      dialogId={dialogId}
+                      EdgeMenu={VisualEditorEdgeMenu}
+                      NodeMenu={VisualEditorNodeMenu}
+                      NodeWrapper={VisualEditorNodeWrapper}
+                      schema={{ ...schemaFromPlugins, ...customFlowSchema }}
+                      widgets={widgetsFromPlugins}
+                      onEvent={(eventName, eventData) => {
+                        divRef.current?.focus({ preventScroll: true });
+                        handleEditorEvent(eventName, eventData);
                       }}
-                      data-testid="visual-editor-container"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditorEvent(NodeEventTypes.Focus, { id: '' });
-                      }}
-                    >
-                      <AdaptiveDialogEditor
-                        activeTrigger={focusedEvent}
-                        dialogData={data}
-                        dialogId={dialogId}
-                        EdgeMenu={VisualEditorEdgeMenu}
-                        NodeMenu={VisualEditorNodeMenu}
-                        NodeWrapper={VisualEditorNodeWrapper}
-                        onEvent={(eventName, eventData) => {
-                          divRef.current?.focus({ preventScroll: true });
-                          handleEditorEvent(eventName, eventData);
-                        }}
-                      />
-                    </div>
-                  </MarqueeSelection>
-                </KeyboardZone>
-              </SelectionContext.Provider>
-            </div>
-          </FlowSchemaContext.Provider>
+                    />
+                  </div>
+                </MarqueeSelection>
+              </KeyboardZone>
+            </SelectionContext.Provider>
+          </div>
         </SelfHostContext.Provider>
       </NodeRendererContext.Provider>
     </CacheProvider>

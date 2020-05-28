@@ -15,7 +15,7 @@ const BaseInputSchema: FlowWidget = {
   body: (data) => data.prompt,
 };
 
-export const defaultFlowSchema: FlowSchema = {
+const builtinVisualSDKSchema: FlowSchema = {
   default: {
     widget: 'ActionHeader',
   },
@@ -219,3 +219,5 @@ export const defaultFlowSchema: FlowSchema = {
       ) : null,
   },
 };
+
+export default builtinVisualSDKSchema;

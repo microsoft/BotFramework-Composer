@@ -1,16 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FlowEditorConfig } from '@bfc/extension';
-
-import { defaultFlowSchema } from '../../adaptive-visual-sdk/configs/defaultFlowSchema';
-import { defaultFlowWidgets } from '../../adaptive-visual-sdk/configs/defaultFlowWidgets';
+import { PluginConfig, FlowEditorConfig, FlowEditorWidgetMap, FlowSchema } from '@bfc/extension';
 
 export const mergePluginConfig = (...plugins: PluginConfig[]): Required<FlowEditorConfig> => {
-  const externalWidgets = plugins.map((x) => x.visualSchema?.widgets).filter((x) => !!x);
-  const externalSchema = plugins.map((x) => x.visualSchema?.schema).filter((x) => !!x);
+  const externalWidgets = plugins.map((x) => x.visualSchema?.widgets).filter((x) => !!x) as FlowEditorWidgetMap[];
+  const externalSchema = plugins.map((x) => x.visualSchema?.schema).filter((x) => !!x) as FlowSchema[];
+
   return {
-    widgets: Object.assign({}, defaultFlowWidgets, ...externalWidgets),
-    schema: Object.assign({}, defaultFlowSchema, ...externalSchema),
+    widgets: Object.assign({}, ...externalWidgets),
+    schema: Object.assign({}, ...externalSchema),
   };
 };

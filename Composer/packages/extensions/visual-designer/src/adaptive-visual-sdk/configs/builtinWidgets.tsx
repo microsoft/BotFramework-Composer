@@ -13,7 +13,7 @@ import {
   ActionHeader,
 } from '../widgets';
 
-export const defaultFlowWidgets: FlowEditorWidgetMap = {
+const builtinActionWidgets: FlowEditorWidgetMap = {
   ActionCard,
   DialogRef,
   PromptWidget,
@@ -22,3 +22,5 @@ export const defaultFlowWidgets: FlowEditorWidgetMap = {
   ForeachWidget,
   ActionHeader,
 };
+
+export default builtinActionWidgets;

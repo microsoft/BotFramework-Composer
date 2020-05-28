@@ -5,8 +5,8 @@ import React from 'react';
 import { FlowEditorWidgetMap } from '@bfc/extension';
 
 import { FlowSchemaProvider } from '../../schema/flowSchemaProvider';
-import { defaultFlowSchema } from '../configs/defaultFlowSchema';
-import { defaultFlowWidgets } from '../configs/defaultFlowWidgets';
+import defaultFlowSchema from '../configs/builtinSchema';
+import builtinActionWidgets from '../configs/builtinWidgets';
 
 const defaultProvider = new FlowSchemaProvider(defaultFlowSchema);
 
@@ -16,6 +16,6 @@ export interface FlowSchemaContextValue {
 }
 
 export const FlowSchemaContext = React.createContext<FlowSchemaContextValue>({
-  widgets: defaultFlowWidgets,
+  widgets: builtinActionWidgets,
   schemaProvider: defaultProvider,
 });
