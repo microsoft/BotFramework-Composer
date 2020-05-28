@@ -53,3 +53,7 @@ export interface ElementWrapperProps {
 }
 
 export type ElementWrapperComponent = React.FC<ElementWrapperProps>;
+
+export enum ElementWrapperTag {
+  Link = 'link',
+}

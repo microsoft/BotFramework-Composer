@@ -6,8 +6,8 @@ import { css, jsx } from '@emotion/core';
 import { useRef, useContext, useEffect } from 'react';
 
 import { SelectionContext } from '../contexts/SelectionContext';
-import { AttrNames, LinkTag } from '../constants/ElementAttributes';
-import { ElementWrapperComponent } from '../../adaptive-visual-sdk/types/PluggableComponents.types';
+import { AttrNames } from '../constants/ElementAttributes';
+import { ElementWrapperComponent, ElementWrapperTag } from '../../adaptive-visual-sdk/types/PluggableComponents.types';
 
 export const ElementWrapper: ElementWrapperComponent = ({ nodeId, tagId, children }) => {
   const divRef = useRef<HTMLDivElement>(null);
@@ -24,7 +24,7 @@ export const ElementWrapper: ElementWrapperComponent = ({ nodeId, tagId, childre
     if (!selected || !divRef.current) return;
 
     const childRef = divRef.current.firstElementChild;
-    if (tagId === LinkTag) {
+    if (tagId === ElementWrapperTag.Link) {
       // try focus a link
       childRef &&
         typeof (childRef as HTMLButtonElement).focus === 'function' &&

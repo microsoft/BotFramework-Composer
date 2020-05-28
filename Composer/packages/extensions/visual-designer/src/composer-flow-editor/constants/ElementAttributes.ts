@@ -15,5 +15,3 @@ export enum AttrNames {
   FocusableElement = 'data-is-focusable',
   SelectionIndex = 'data-selection-index',
 }
-
-export const LinkTag = 'link';
