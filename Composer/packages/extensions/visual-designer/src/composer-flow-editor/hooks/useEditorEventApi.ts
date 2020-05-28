@@ -8,7 +8,7 @@ import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 import { designerCache } from '../../adaptive-visual-sdk/utils/visual/DesignerCache';
 import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
-import { scrollNodeIntoView } from '../utils/nodeOperation';
+import { scrollNodeIntoView } from '../utils/scrollNodeIntoView';
 import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';
 import { normalizeSelection } from '../utils/normalizeSelection';
 import { moveCursor } from '../utils/cursorTracker';
