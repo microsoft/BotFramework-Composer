@@ -8,11 +8,7 @@ import get from 'lodash/get';
 import { FlowSchema as VisualSDKSchema, FlowEditorWidgetMap as NodeWidgetMap } from '@bfc/extension';
 
 import { EditorEventHandler } from '../constants/NodeEventTypes';
-import {
-  EdgeMenuComponent,
-  NodeMenuComponent,
-  NodeWrapperComponent,
-} from '../../composer-flow-editor/types/FlowRenderer.types';
+import { EdgeMenuComponent, NodeMenuComponent, NodeWrapperComponent } from '../types/FlowRenderer.types';
 import { FlowRendererContext, DefaultFlowRenderers } from '../contexts/FlowRendererContext';
 import builtinSchema from '../configs/builtinSchema';
 import builtinWidgets from '../configs/builtinWidgets';
