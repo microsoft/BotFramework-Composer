@@ -106,7 +106,6 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       vertical
       aria-label="icon menu"
       overflowItems={menuItems}
-      styles={{ root: { position: 'absolute', top: 0 } }}
       onRenderItem={_onRenderItem}
       onRenderOverflowButton={_onRenderOverflowButton}
     />
