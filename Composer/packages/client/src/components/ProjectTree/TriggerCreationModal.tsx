@@ -376,7 +376,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         <PrimaryButton
           data-testid={'triggerFormSubmit'}
-          disabled={Object.keys(formData.errors).length > 0}
+          disabled={disable}
           text={formatMessage('Submit')}
           onClick={onClickSubmitButton}
         />
