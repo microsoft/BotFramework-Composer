@@ -69,22 +69,22 @@ jobs:
         run: dotnet test
         working-directory: runtime/dotnet/tests
 
-  docker-build:
-    name: Docker Build
-    timeout-minutes: 20
-    runs-on: ubuntu-latest
+  # docker-build:
+  #   name: Docker Build
+  #   timeout-minutes: 20
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: docker-compose build
-        run: docker-compose build
-      - name: Health check
-        run: |
-          docker-compose up -d
-          sleep 10
-          curl -Is http://localhost:3000 | grep -q "200 OK"
-        shell: bash
-      - name: Cleanup
-        if: always()
-        run: docker-compose down
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: docker-compose build
+  #       run: docker-compose build
+  #     - name: Health check
+  #       run: |
+  #         docker-compose up -d
+  #         sleep 10
+  #         curl -Is http://localhost:3000 | grep -q "200 OK"
+  #       shell: bash
+  #     - name: Cleanup
+  #       if: always()
+  #       run: docker-compose down
