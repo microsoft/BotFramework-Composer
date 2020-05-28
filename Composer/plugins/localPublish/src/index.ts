@@ -22,6 +22,7 @@ const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
 const rmDir = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
+const readFile = promisify(fs.readFile);
 
 interface RunningBot {
   process: ChildProcess;
@@ -198,10 +199,18 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     } else {
       // stop bot
       this.stopBot(botId);
-      // in order to change runtime type
-      await rmDir(this.getBotRuntimeDir(botId));
-      // copy runtime template in folder
-      await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
+      //get previous settings
+      const settings = JSON.parse(
+        await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
+          encoding: 'utf-8',
+        })
+      );
+      if (settings.runtime?.name !== runtimeType) {
+        // in order to change runtime type
+        await rmDir(this.getBotRuntimeDir(botId));
+        // copy runtime template in folder
+        await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
+      }
     }
   };
 
