@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useContext } from 'react';
-import classnames from 'classnames';
 import formatMessage from 'format-message';
 
 import { NodeEventTypes, EditorEventHandler } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
@@ -42,7 +41,6 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
 
   return (
     <div
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       css={{
         marginRight: '1px',
       }}
