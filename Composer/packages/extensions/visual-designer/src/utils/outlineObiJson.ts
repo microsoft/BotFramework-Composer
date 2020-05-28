@@ -25,7 +25,7 @@ export function outlineObiJson(input: any) {
   for (const childrenKey of childrenKeys) {
     const children = input[childrenKey];
     if (Array.isArray(children)) {
-      outline[childrenKey] = children.map(x => outlineObiJson(x));
+      outline[childrenKey] = children.map((x) => outlineObiJson(x));
     } else {
       outline[childrenKey] = [];
     }

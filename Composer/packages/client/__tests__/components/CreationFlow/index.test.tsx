@@ -11,7 +11,7 @@ import { CreationFlowStatus } from '../../../src/constants';
 
 jest.mock('../../../src/components/DialogWrapper', () => {
   return {
-    DialogWrapper: jest.fn(props => {
+    DialogWrapper: jest.fn((props) => {
       return props.children;
     }),
   };

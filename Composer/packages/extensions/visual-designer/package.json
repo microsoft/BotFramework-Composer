@@ -19,7 +19,7 @@
     "prepublishOnly": "npm run build",
     "start": "webpack-dev-server --config demo/webpack.config.demo.js --port 3002",
     "test": "jest --no-cache",
-    "lint": "eslint --quiet --ext .ts,.tsx ./src ./__tests__",
+    "lint": "eslint --quiet ./src ./__tests__",
     "lint:fix": "yarn lint --fix"
   },
   "dependencies": {
@@ -52,7 +52,7 @@
     "json-loader": "^0.5.7",
     "react": "16.13.0",
     "react-dom": "16.13.0",
-    "ts-loader": "^6.0.3",
+    "ts-loader": "7.0.4",
     "tsconfig-paths-webpack-plugin": "^3.2.0"
   },
   "author": "",

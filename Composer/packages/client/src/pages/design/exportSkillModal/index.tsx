@@ -41,7 +41,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const { buttons = [], content: Content, editJson, helpLink, subText, title, validate } = editorSteps[editorStep];
 
   const handleEditJson = () => {
-    const step = order.findIndex(step => step === ManifestEditorSteps.MANIFEST_REVIEW);
+    const step = order.findIndex((step) => step === ManifestEditorSteps.MANIFEST_REVIEW);
     if (~step) {
       setCurrentStep(step);
       setErrors({});
@@ -52,7 +52,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     const validated = typeof validate === 'function' ? validate(content, schema) : errors;
 
     if (!Object.keys(validated).length) {
-      setCurrentStep(current => (current + 1 < order.length ? current + 1 : current));
+      setCurrentStep((current) => (current + 1 < order.length ? current + 1 : current));
       setErrors({});
     } else {
       setErrors(validated);
@@ -63,23 +63,23 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
     updateSkillManifest(manifest || content);
   };
 
-  const handleSelectManifest = manifest => {
+  const handleSelectManifest = (manifest) => {
     setSelectedManifest(manifest);
   };
 
   return (
     <Dialog
-      hidden={false}
-      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.close,
         title: title(),
         styles: styles.dialog,
       }}
+      hidden={false}
       modalProps={{
         isBlocking: false,
         styles: styles.modal,
       }}
+      onDismiss={onDismiss}
     >
       <div css={styles.container}>
         <p>
@@ -87,7 +87,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
           {helpLink && (
             <React.Fragment>
               {!!subText && <React.Fragment>&nbsp;</React.Fragment>}
-              <Link href={helpLink} target="_blank" rel="noopener noreferrer">
+              <Link href={helpLink} rel="noopener noreferrer" target="_blank">
                 {formatMessage('Learn More')}
               </Link>
             </React.Fragment>
@@ -100,11 +100,11 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             errors={errors}
             schema={schema}
             setErrors={setErrors}
-            setSkillManifest={handleSelectManifest}
             setSchema={setSchema}
+            setSkillManifest={handleSelectManifest}
             skillManifests={skillManifests as SkillManifest[]}
             value={content}
-            onChange={manifestContent => updateSkillManifest({ ...skillManifest, content: manifestContent })}
+            onChange={(manifestContent) => updateSkillManifest({ ...skillManifest, content: manifestContent })}
           />
         </div>
         <DialogFooter>
@@ -132,7 +132,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                 );
               })}
             </div>
-            {editJson && <DefaultButton onClick={handleEditJson} text={formatMessage('Edit in JSON')} />}
+            {editJson && <DefaultButton text={formatMessage('Edit in JSON')} onClick={handleEditJson} />}
           </div>
         </DialogFooter>
       </div>

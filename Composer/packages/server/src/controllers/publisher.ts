@@ -19,8 +19,8 @@ export const PublishController = {
   getTypes: async (req, res) => {
     res.json(
       Object.values(pluginLoader.extensions.publish)
-        .filter(extension => extension.plugin.name !== defaultPublishConfig.type)
-        .map(extension => {
+        .filter((extension) => extension.plugin.name !== defaultPublishConfig.type)
+        .map((extension) => {
           const { plugin, methods, schema, instructions } = extension;
 
           return {
@@ -29,10 +29,10 @@ export const PublishController = {
             instructions: instructions,
             schema,
             features: {
-              history: methods.history ? true : false,
-              publish: methods.publish ? true : false,
-              status: methods.getStatus ? true : false,
-              rollback: methods.rollback ? true : false,
+              history: typeof methods.history === 'function',
+              publish: typeof methods.publish === 'function',
+              status: typeof methods.getStatus === 'function',
+              rollback: typeof methods.rollback === 'function',
             },
           };
         })
@@ -49,7 +49,7 @@ export const PublishController = {
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
-    const profiles = allTargets.filter(t => t.name === target);
+    const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
 
@@ -104,7 +104,7 @@ export const PublishController = {
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
-    const profiles = allTargets.filter(t => t.name === target);
+    const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
 
     const method = profile ? profile.type : undefined;
@@ -150,7 +150,7 @@ export const PublishController = {
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
-    const profiles = allTargets.filter(t => t.name === target);
+    const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
 
     const method = profile ? profile.type : undefined;
@@ -193,7 +193,7 @@ export const PublishController = {
     const publishTargets = currentProject.settings?.publishTargets || [];
     const allTargets = [defaultPublishConfig, ...publishTargets];
 
-    const profiles = allTargets.filter(t => t.name === target);
+    const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
 

@@ -25,7 +25,7 @@ export class ComposerReservoirSampler extends ReservoirSampler<number> {
 
       const set = new Set([...sampledIndexes]);
 
-      return Array.from(set).map(index => this._utterances[index]);
+      return Array.from(set).map((index) => this._utterances[index]);
     } else {
       return this._utterances;
     }

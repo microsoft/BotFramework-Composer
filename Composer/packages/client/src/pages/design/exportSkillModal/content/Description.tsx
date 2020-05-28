@@ -23,7 +23,7 @@ const styles = {
   `,
 };
 
-const InlineLabelField: React.FC<FieldProps> = props => {
+const InlineLabelField: React.FC<FieldProps> = (props) => {
   const { id, placeholder, rawErrors, value = '', onChange } = props;
 
   const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
@@ -51,6 +51,7 @@ const InlineLabelField: React.FC<FieldProps> = props => {
 export const Description: React.FC<ContentProps> = ({ errors, value, schema, onChange }) => {
   const { state } = useContext(StoreContext);
   const { botName } = state;
+  const { $schema, ...rest } = value;
 
   const { hidden, properties } = useMemo(
     () =>
@@ -64,8 +65,8 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
           const serializer =
             itemSchema && itemSchema?.type === 'string'
               ? {
-                  get: value => (Array.isArray(value) ? value.join(',') : value),
-                  set: value => (typeof value === 'string' ? value.split(/\s*,\s*/) : value),
+                  get: (value) => (Array.isArray(value) ? value.join(',') : value),
+                  set: (value) => (typeof value === 'string' ? value.split(/\s*,\s*/) : value),
                 }
               : null;
 
@@ -80,7 +81,9 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
   );
 
   useEffect(() => {
-    onChange({ $id: botName, name: botName, ...value });
+    if (!value.$id) {
+      onChange({ $schema, $id: botName, name: botName, ...rest });
+    }
   }, []);
 
   const required = schema?.required || [];
@@ -92,5 +95,5 @@ export const Description: React.FC<ContentProps> = ({ errors, value, schema, onC
     properties,
   };
 
-  return <AdaptiveForm formData={value} errors={errors} schema={schema} onChange={onChange} uiOptions={uiOptions} />;
+  return <AdaptiveForm errors={errors} formData={value} schema={schema} uiOptions={uiOptions} onChange={onChange} />;
 };

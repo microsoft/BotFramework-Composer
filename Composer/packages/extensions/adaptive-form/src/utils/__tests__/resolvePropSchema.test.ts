@@ -5,7 +5,7 @@ import { resolvePropSchema } from '../resolvePropSchema';
 import { resolveRef } from '../resolveRef';
 
 jest.mock('../resolveRef', () => ({
-  resolveRef: jest.fn().mockImplementation(obj => ({
+  resolveRef: jest.fn().mockImplementation((obj) => ({
     ...obj,
     resolved: true,
   })),

@@ -44,12 +44,12 @@ class LuFileStatusStorage {
   }
 
   public checkFileStatus(botName: string, fileIds: string[]) {
-    fileIds.forEach(id => this.updateFileStatus(botName, id, false));
+    fileIds.forEach((id) => this.updateFileStatus(botName, id, false));
   }
 
   public publishAll(botName: string) {
     if (!botName) return;
-    keys(this._all[botName]).forEach(key => {
+    keys(this._all[botName]).forEach((key) => {
       this._all[botName][key] = true;
     });
     this.storage.set(KEY, this._all);

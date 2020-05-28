@@ -31,7 +31,7 @@ export const useLuApi = (shellApi: ShellApi) => {
   };
 
   const deleteLuIntents = (luFileId: string, luIntents: string[]) => {
-    return Promise.all(luIntents.map(intent => removeLuIntent(luFileId, intent)));
+    return Promise.all(luIntents.map((intent) => removeLuIntent(luFileId, intent)));
   };
 
   return {
