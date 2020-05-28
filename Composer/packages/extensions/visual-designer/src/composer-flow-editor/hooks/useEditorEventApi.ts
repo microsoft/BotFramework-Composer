@@ -5,6 +5,7 @@ import { DialogUtils, SDKKinds, ShellApi } from '@bfc/shared';
 import get from 'lodash/get';
 import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 
+// TODO: leak of visual-sdk domain (designerCache)
 import { designerCache } from '../../adaptive-visual-sdk/utils/visual/DesignerCache';
 import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';

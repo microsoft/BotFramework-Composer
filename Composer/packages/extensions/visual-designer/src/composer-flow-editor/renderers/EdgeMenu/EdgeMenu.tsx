@@ -4,10 +4,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useContext, useState } from 'react';
-import classnames from 'classnames';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 
+// TODO: leak of visual-sdk domain (EdgeAddButtonSize)
 import { EdgeAddButtonSize } from '../../../adaptive-visual-sdk/constants/ElementSizes';
 import { NodeRendererContext } from '../../contexts/NodeRendererContext';
 import { SelectionContext } from '../../contexts/SelectionContext';
@@ -59,7 +59,6 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
   );
   return (
     <div
-      className={classnames({ 'step-renderer-container--selected': nodeSelected })}
       style={{
         width: EdgeAddButtonSize.width,
         height: EdgeAddButtonSize.height,
