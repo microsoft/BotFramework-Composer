@@ -76,7 +76,6 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
         iconName="Add"
         iconSize={7}
         iconStyles={{
-          background: 'white',
           color: '#005CE6',
           selectors: {
             ':focus': {

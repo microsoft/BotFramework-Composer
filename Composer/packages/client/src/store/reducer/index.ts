@@ -428,8 +428,7 @@ const dismissSkillManifestModal: ReducerFunc = (state) => {
   return state;
 };
 
-const syncEnvSetting: ReducerFunc = (state, { settings }) => {
-  const { botName } = state;
+const syncEnvSetting: ReducerFunc = (state, { settings, botName }) => {
   // set value in local storage
   for (const property of SensitiveProperties) {
     if (has(settings, property)) {
@@ -438,13 +437,6 @@ const syncEnvSetting: ReducerFunc = (state, { settings }) => {
     }
   }
   state.settings = settings;
-  return state;
-};
-
-const getEnvSetting: ReducerFunc = (state, { settings }) => {
-  state.settings = settings;
-  refreshLocalStorage(state.botName, state.settings);
-  mergeLocalStorage(state.botName, state.settings);
   return state;
 };
 
@@ -677,7 +669,6 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_SKILL_MANIFEST]: removeSkillManifest,
   [ActionTypes.UPDATE_SKILL_MANIFEST]: updateSkillManifest,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
-  [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,

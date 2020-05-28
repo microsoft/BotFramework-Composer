@@ -23,10 +23,6 @@ export const hostedControls = css`
   }
 `;
 
-export const slotChoice = css`
-  max-width: 40ch;
-`;
-
 export const settingsEditor = css`
   flex: 1;
   max-height: 70%;
