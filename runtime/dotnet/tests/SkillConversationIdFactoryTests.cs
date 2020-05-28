@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace Tests
 {
     [TestClass]
-    public class SkillSkillConversationIdFactoryTests
+    public class SkillConversationIdFactoryTests
     {
         private readonly SkillConversationIdFactory _idFactory = new SkillConversationIdFactory(new MemoryStorage());
         private string _botId = Guid.NewGuid().ToString("N");
