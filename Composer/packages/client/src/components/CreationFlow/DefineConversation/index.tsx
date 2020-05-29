@@ -14,7 +14,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
-import { DialogCreationCopy } from '../../../constants';
+import { DialogCreationCopy, nameRegex } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';

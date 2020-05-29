@@ -7,7 +7,7 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-import { DialogCreationCopy } from '../../constants';
+import { DialogCreationCopy, nameRegex } from '../../constants';
 import { DialogWrapper } from '../../components/DialogWrapper';
 import { DialogTypes } from '../../components/DialogWrapper/styles';
 import { StorageFolder } from '../../store/types';
@@ -60,27 +60,6 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
       if (hasErrors) {
         return;
       }
-<<<<<<< HEAD
-=======
-      if (dialogs.some((dialog) => dialog.id === name)) {
-        errors.name = formatMessage('Duplicate dialog name');
-      }
-    } else {
-      errors.name = formatMessage('Please input a name');
-    }
-    setFormDataErrors(errors);
-  };
-
-  const isDisable = () => {
-    return Object.keys(formDataErrors).length > 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isDisable()) {
-      return;
-    }
->>>>>>> add unit tests
 
       onSubmit({
         ...formData,
@@ -125,16 +104,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
         <DialogFooter>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-<<<<<<< HEAD
           <PrimaryButton disabled={hasErrors} text={formatMessage('Next')} onClick={handleSubmit} />
-=======
-          <PrimaryButton
-            data-testid="SubmitNewDialogBtn"
-            disabled={isDisable()}
-            text={formatMessage('Next')}
-            onClick={handleSubmit}
-          />
->>>>>>> add unit tests
         </DialogFooter>
       </form>
     </DialogWrapper>

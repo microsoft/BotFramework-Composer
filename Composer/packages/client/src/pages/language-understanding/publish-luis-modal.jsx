@@ -18,7 +18,7 @@ import keys from 'lodash/keys';
 
 import { StoreContext } from '../../store';
 
-import { Text, Tips, Links } from './../../constants';
+import { Text, Tips, Links, nameRegex } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 
 const STATE = {
@@ -38,7 +38,6 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
-const nameRegex = /^[a-zA-Z0-9-_]+$/;
 const validationProperties = ['name', 'authoringKey', 'environment'];
 const defaultFields = { authoringRegion: 'westus', defaultLanguage: 'en-us' };
 const validateForm = (data) => {
