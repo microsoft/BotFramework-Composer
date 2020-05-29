@@ -33,6 +33,14 @@ describe('<CreateOptions/>', () => {
   ];
   let storeContext;
 
+  const renderComponent = () => {
+    return renderWithStore(
+      <CreateOptions path="create" templates={templates} onDismiss={handleDismissMock} onNext={handleCreateNextMock} />,
+      storeContext.state,
+      storeContext.action
+    );
+  };
+
   beforeEach(() => {
     storeContext = {
       actions: {
@@ -45,20 +53,14 @@ describe('<CreateOptions/>', () => {
   });
 
   it('should save empty bot template id', async () => {
-    const component = renderWithStore(
-      <CreateOptions path="create" templates={templates} onDismiss={handleDismissMock} onNext={handleCreateNextMock} />,
-      storeContext
-    );
+    const component = renderComponent();
     const nextButton = await component.findByText('Next');
     fireEvent.click(nextButton);
     expect(handleCreateNextMock).toBeCalledWith('EmptyBot');
   });
 
   it('should save echo bot template id', async () => {
-    const component = renderWithStore(
-      <CreateOptions path="create" templates={templates} onDismiss={handleDismissMock} onNext={handleCreateNextMock} />,
-      storeContext
-    );
+    const component = renderComponent();
     const option = await component.findByTestId('Create from template');
     fireEvent.click(option);
     const echoBot = await component.findByText('Echo Bot');
