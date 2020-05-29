@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@bfc/test-utils';
 
-import { StoreContext } from '../../../../src/store';
+import { renderWithStore } from '../../../testUtils';
 import { CreateOptions } from '../../../../src/components/CreationFlow/CreateOptions';
 
 describe('<CreateOptions/>', () => {
@@ -31,20 +31,7 @@ describe('<CreateOptions/>', () => {
       tags: ['Basic'],
     },
   ];
-  let component, storeContext;
-
-  function renderComponent() {
-    return render(
-      <StoreContext.Provider value={storeContext}>
-        <CreateOptions
-          path="create"
-          templates={templates}
-          onDismiss={handleDismissMock}
-          onNext={handleCreateNextMock}
-        />
-      </StoreContext.Provider>
-    );
-  }
+  let storeContext;
 
   beforeEach(() => {
     storeContext = {
@@ -58,14 +45,20 @@ describe('<CreateOptions/>', () => {
   });
 
   it('should save empty bot template id', async () => {
-    component = renderComponent();
+    const component = renderWithStore(
+      <CreateOptions path="create" templates={templates} onDismiss={handleDismissMock} onNext={handleCreateNextMock} />,
+      storeContext
+    );
     const nextButton = await component.findByText('Next');
     fireEvent.click(nextButton);
     expect(handleCreateNextMock).toBeCalledWith('EmptyBot');
   });
 
   it('should save echo bot template id', async () => {
-    component = renderComponent();
+    const component = renderWithStore(
+      <CreateOptions path="create" templates={templates} onDismiss={handleDismissMock} onNext={handleCreateNextMock} />,
+      storeContext
+    );
     const option = await component.findByTestId('Create from template');
     fireEvent.click(option);
     const echoBot = await component.findByText('Echo Bot');
