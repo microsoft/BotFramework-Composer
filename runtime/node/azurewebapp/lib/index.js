@@ -9,38 +9,36 @@ const botbuilder_1 = require("botbuilder");
 const botbuilder_dialogs_1 = require("botbuilder-dialogs");
 const botbuilder_dialogs_adaptive_1 = require("botbuilder-dialogs-adaptive");
 const botbuilder_dialogs_declarative_1 = require("botbuilder-dialogs-declarative");
-const argv = require("minimist")(process.argv.slice(2));
-console.log(argv.port);
 // Create HTTP server.
 const server = restify.createServer();
-server.listen(argv.port || 3978, () => {
-    // console.log(`\n${ server.name } listening to ${ server.url }`);
+const argv = require('minimist')(process.argv.slice(2));
+server.listen(process.env.port || process.env.PORT || argv.port || 3978, () => {
     console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
     console.log(`\nTo talk to your bot, open echobot.bot file in the Emulator.`);
 });
 // Load project settings
 let projectSettings = {
-    bot: "../../",
-    root: "../../",
+    bot: '../../',
+    root: '../../'
 };
-if (process.env.NODE_ENV === "deployment") {
-    projectSettings = require("../appsettings.deployment.json");
+if (process.env.node_environment === 'production') {
+    projectSettings = require('../appsettings.deployment.json');
 }
 else {
-    projectSettings = require("../appsettings.development.json");
+    projectSettings = require('../appsettings.development.json');
 }
-const projectRoot = path.join(__dirname, "../", projectSettings.root);
+const projectRoot = path.join(__dirname, '../', projectSettings.root);
 // Find entry dialog file
-let mainDialog = "main.dialog";
+let mainDialog = 'main.dialog';
 const files = fs.readdirSync(projectRoot);
 for (let file of files) {
-    if (file.endsWith(".dialog")) {
+    if (file.endsWith('.dialog')) {
         mainDialog = file;
         break;
     }
 }
 // Create resource explorer.
-const resourceExplorer = new botbuilder_dialogs_declarative_1.ResourceExplorer().addFolders(projectRoot, ["runtime"], false);
+const resourceExplorer = new botbuilder_dialogs_declarative_1.ResourceExplorer().addFolders(projectRoot, ['runtime'], false);
 resourceExplorer.addComponent(new botbuilder_dialogs_adaptive_1.AdaptiveDialogComponentRegistration(resourceExplorer));
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about .bot file its use and bot configuration.
@@ -55,18 +53,18 @@ bot.conversationState = new botbuilder_1.ConversationState(new botbuilder_1.Memo
 bot.rootDialog = resourceExplorer.loadType(mainDialog);
 // Find settings json file
 let settings = {};
-// load appsettings.json
-const appsettingsPath = path.join(projectRoot, "settings/appsettings.json");
+// load appsettings.json 
+const appsettingsPath = path.join(projectRoot, 'settings/appsettings.json');
 if (fs.existsSync(appsettingsPath)) {
     const items = require(appsettingsPath);
     settings = Object.assign(settings, items); // merge settings
 }
 // load generated settings
-const generatedPath = path.join(projectRoot, "generated");
+const generatedPath = path.join(projectRoot, 'generated');
 if (fs.existsSync(generatedPath)) {
     const generatedFiles = fs.readdirSync(generatedPath);
     for (let file of generatedFiles) {
-        if (file.endsWith(".json")) {
+        if (file.endsWith('.json')) {
             const items = require(path.join(generatedPath, file));
             settings = Object.assign(settings, items); // merge settings
         }
@@ -76,8 +74,8 @@ if (fs.existsSync(generatedPath)) {
 settings = Object.assign(settings, projectSettings);
 // load settings from arguments
 for (let key in argv) {
-    if (key.indexOf(":") >= 0) {
-        const segments = key.split(":");
+    if (key.indexOf(':') >= 0) {
+        const segments = key.split(':');
         let base = settings;
         for (let i = 0; i < segments.length - 1; i++) {
             const segment = segments[i];
@@ -93,8 +91,8 @@ for (let key in argv) {
     }
 }
 console.log(settings);
-bot.initialTurnState.set("settings", settings);
-server.post("/api/messages", (req, res) => {
+bot.initialTurnState.set('settings', settings);
+server.post('/api/messages', (req, res) => {
     adapter.processActivity(req, res, async (context) => {
         // Route activity to bot.
         await bot.onTurn(context);
