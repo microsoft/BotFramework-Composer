@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { render, fireEvent } from '@bfc/test-utils/lib/react';
 
 import { ErrorInfo } from '../../../src/components/TestController/errorInfo';
 

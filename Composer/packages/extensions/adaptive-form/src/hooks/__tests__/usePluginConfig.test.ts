@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { hooks } from '@bfc/test-utils';
+import { renderHook } from '@bfc/test-utils/lib/hooks';
 
 import { usePluginConfig } from '../usePluginConfig';
 
 describe('usePluginConfig', () => {
   it('returns the plugin context', () => {
-    const { result } = hooks.renderHook(() => usePluginConfig());
+    const { result } = renderHook(() => usePluginConfig());
 
     expect(result.current).toMatchInlineSnapshot(`
       Object {

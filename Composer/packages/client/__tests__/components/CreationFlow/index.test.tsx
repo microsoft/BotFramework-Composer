@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { render, fireEvent } from '@bfc/test-utils/lib/react';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
 import { StoreContext } from '../../../src/store';

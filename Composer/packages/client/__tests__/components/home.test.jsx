@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent, render } from '@bfc/test-utils';
+import { fireEvent, render } from '@bfc/test-utils/lib/react';
 
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';

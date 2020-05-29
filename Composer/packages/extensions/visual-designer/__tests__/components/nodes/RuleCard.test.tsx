@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, RenderResult } from '@bfc/test-utils';
+import { render, fireEvent, RenderResult } from '@bfc/test-utils/lib/react';
 
 import { RuleCard } from '../../../src/components/nodes/templates/RuleCard';
 import { NodeEventTypes } from '../../../src/constants/NodeEventTypes';

@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
+import { fireEvent, getAllByRole, render } from '@bfc/test-utils/lib/react';
 import { Extension } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
