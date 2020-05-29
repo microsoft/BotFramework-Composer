@@ -16,7 +16,7 @@ import { WidgetSchemaProvider } from '../utils/visual/WidgetSchemaProvider';
 
 import { RuleEditor } from './RuleEditor';
 
-export interface AdaptiveDialogEditorProps {
+export interface AdaptiveDialogProps {
   /** Dialog ID */
   dialogId: string;
 
@@ -37,7 +37,7 @@ export interface AdaptiveDialogEditorProps {
   renderers?: Partial<RendererContextData>;
 }
 
-export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
+export const AdaptiveDialog: FC<AdaptiveDialogProps> = ({
   dialogId,
   dialogData,
   activeTrigger,
@@ -70,7 +70,7 @@ export const AdaptiveDialogEditor: FC<AdaptiveDialogEditorProps> = ({
   );
 };
 
-AdaptiveDialogEditor.defaultProps = {
+AdaptiveDialog.defaultProps = {
   dialogId: '',
   dialogData: {},
   onEvent: () => null,

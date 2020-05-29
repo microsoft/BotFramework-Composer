@@ -12,7 +12,7 @@ import { useShellApi, JSONSchema7, FlowSchema, FlowWidget } from '@bfc/extension
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { NodeEventTypes } from '../adaptive-visual-sdk/constants/NodeEventTypes';
-import { AdaptiveDialogEditor } from '../adaptive-visual-sdk/editors/AdaptiveDialogEditor';
+import { AdaptiveDialog } from '../adaptive-visual-sdk/editors/AdaptiveDialog';
 
 import { NodeRendererContext, NodeRendererContextValue } from './contexts/NodeRendererContext';
 import { SelfHostContext } from './contexts/SelfHostContext';
@@ -144,7 +144,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
                       handleEditorEvent(NodeEventTypes.Focus, { id: '' });
                     }}
                   >
-                    <AdaptiveDialogEditor
+                    <AdaptiveDialog
                       activeTrigger={focusedEvent}
                       dialogData={data}
                       dialogId={dialogId}
