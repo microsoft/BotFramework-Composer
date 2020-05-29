@@ -35,7 +35,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     projectId,
     schemas,
     userSettings,
-    skills,
+    skills
   } = state;
   const lgApi = useLgApi();
   const luApi = useLuApi();
@@ -63,7 +63,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       const payload = {
         id: dialogId,
         content: cleanedData,
-        projectId,
+        projectId
       };
       updateDialog(payload);
     }
@@ -116,7 +116,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       updateDialog({
         id: dialogId,
         content: newDialogData,
-        projectId,
+        projectId
       });
     },
     saveData: (newData, updatePath) => {
@@ -129,7 +129,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       const payload = {
         id: dialogId,
         content: updatedDialog,
-        projectId,
+        projectId
       };
       dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
@@ -173,7 +173,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
     updateUserSettings: actions.updateUserSettings,
     announce: actions.setMessage,
-    displayManifestModal: actions.displayManifestModal,
+    displayManifestModal: actions.displayManifestModal
   };
 
   const currentDialog = useMemo(() => dialogs.find(d => d.id === dialogId), [dialogs, dialogId]);
@@ -204,12 +204,12 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         focusedTab: promptTab,
         clipboardActions: state.clipboardActions,
         hosted: !!isAbsHosted(),
-        skills,
+        skills
       }
     : ({} as ShellData);
 
   return {
     api,
-    data,
+    data
   };
 }

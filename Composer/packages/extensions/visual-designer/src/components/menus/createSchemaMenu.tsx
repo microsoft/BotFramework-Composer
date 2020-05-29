@@ -5,7 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import {
   IContextualMenuItem,
-  ContextualMenuItemType,
+  ContextualMenuItemType
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
 import { ConceptLabels, DialogGroup, dialogGroups, SDKKinds, DefinitionSummary } from '@bfc/shared';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
@@ -33,7 +33,7 @@ const createBaseActionMenu = (
     DialogGroup.STEP,
     DialogGroup.MEMORY,
     DialogGroup.CODE,
-    DialogGroup.LOG,
+    DialogGroup.LOG
   ];
   const stepMenuItems = pickedGroups
     .map(key => dialogGroups[key])
@@ -44,7 +44,7 @@ const createBaseActionMenu = (
         .map($kind => ({
           key: $kind,
           name: resolveMenuTitle($kind),
-          onClick: (e, itemData) => onClick(itemData),
+          onClick: (e, itemData) => onClick(itemData)
         }));
 
       if (subMenuItems.length === 1) {
@@ -58,7 +58,7 @@ const createBaseActionMenu = (
 
 const createDivider = () => ({
   key: 'divider',
-  itemType: ContextualMenuItemType.Divider,
+  itemType: ContextualMenuItemType.Divider
 });
 
 const get$kindFrom$ref = ($ref: string): SDKKinds => {
@@ -81,7 +81,7 @@ const createCustomActionSubMenu = (
           ({
             key: get$kindFrom$ref($ref),
             name: title,
-            onClick: (e, itemData) => onClick(itemData),
+            onClick: (e, itemData) => onClick(itemData)
           } as IContextualMenuItem)
       );
     });
@@ -111,9 +111,6 @@ const createPasteButtonItem = (
     onRender: () => {
       return (
         <button
-          disabled={disabled}
-          role="menuitem"
-          name="Paste"
           aria-posinset={1}
           aria-setsize={menuItemCount + 1}
           css={css`
@@ -130,20 +127,23 @@ const createPasteButtonItem = (
               background: rgb(237, 235, 233);
             }
           `}
+          disabled={disabled}
+          name="Paste"
+          role="menuitem"
           onClick={() => onClick({ key: MenuEventTypes.Paste })}
         >
           <div>
             <FontIcon
-              iconName="Paste"
               css={css`
                 margin-right: 4px;
               `}
+              iconName="Paste"
             />
             <span>Paste</span>
           </div>
         </button>
       );
-    },
+    }
   };
 };
 
@@ -162,8 +162,8 @@ const createSubMenu = (
     text: label,
     subMenuProps: {
       items: subItems,
-      onItemClick: (e, itemData) => onClick(itemData),
-    },
+      onItemClick: (e, itemData) => onClick(itemData)
+    }
   };
 };
 

@@ -8,7 +8,7 @@ import {
   deleteActions as destructActions,
   FieldProcessorAsync,
   walkAdaptiveActionList,
-  ShellApi,
+  ShellApi
 } from '@bfc/shared';
 
 import { useLgApi } from './useLgApi';
@@ -92,6 +92,6 @@ export const useActionApi = (shellApi: ShellApi) => {
     copyActions,
     deleteAction,
     deleteActions,
-    actionsContainLuIntent,
+    actionsContainLuIntent
   };
 };

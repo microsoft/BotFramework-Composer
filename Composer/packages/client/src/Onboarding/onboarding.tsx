@@ -31,7 +31,7 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
   {
     id: 'setUpBot',
     steps: [{ id: 'setUpYourBot', targetId: 'project' }],
-    title: formatMessage('Set up your bot'),
+    title: formatMessage('Set up your bot')
   },
   {
     id: 'basics',
@@ -39,31 +39,31 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'mainDialog',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'mainDialog',
+        targetId: 'mainDialog'
       },
       {
         id: 'trigger',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'addNew',
+        targetId: 'addNew'
       },
       {
         id: 'userInput',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navUserInput',
+        targetId: 'navUserInput'
       },
       {
         id: 'actions',
         location: 'visualEditor',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'action',
+        targetId: 'action'
       },
       {
         id: 'botResponses',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navBotResponses',
-      },
+        targetId: 'navBotResponses'
+      }
     ],
-    title: formatMessage('Learn the basics'),
+    title: formatMessage('Learn the basics')
   },
   {
     id: 'welcomeMessage',
@@ -71,10 +71,10 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'welcomeMessage',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'addNew',
-      },
+        targetId: 'addNew'
+      }
     ],
-    title: formatMessage('Add welcome message'),
+    title: formatMessage('Add welcome message')
   },
   {
     id: 'intent trigger',
@@ -82,10 +82,10 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'intentTrigger',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'addNew',
-      },
+        targetId: 'addNew'
+      }
     ],
-    title: formatMessage('Add an intent trigger'),
+    title: formatMessage('Add an intent trigger')
   },
   {
     id: 'testBot',
@@ -93,11 +93,11 @@ export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] =>
       {
         id: 'startBot',
         navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'startBot',
-      },
+        targetId: 'startBot'
+      }
     ],
-    title: formatMessage('Test your bot'),
-  },
+    title: formatMessage('Test your bot')
+  }
 ];
 
 const Bold = ({ children }) => <b key={generateUniqueId()}>{children}</b>;
@@ -110,13 +110,13 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
         children: formatMessage(
           'We have created a sample bot to help you get started with Composer. Click here to open the bot.'
         ),
-        headline: formatMessage('Get started!'),
+        headline: formatMessage('Get started!')
       };
 
     case 'mainDialog':
       return {
         children: formatMessage('The main dialog is named after your bot. It is the root and entry point of a bot.'),
-        headline: formatMessage('Main dialog'),
+        headline: formatMessage('Main dialog')
       };
 
     case 'trigger':
@@ -124,10 +124,10 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
         children: formatMessage.rich(
           'Triggers connect intents with bot responses. Think of a trigger as one capability of your bot. So your bot is a collection of triggers. To add a new trigger, click the <b>Add</b> button in the toolbar, and then select the <b>Add a new trigger</b> option from the dropdown menu.',
           {
-            b: Bold,
+            b: Bold
           }
         ),
-        headline: formatMessage('Add a new trigger'),
+        headline: formatMessage('Add a new trigger')
       };
 
     case 'userInput':
@@ -135,18 +135,18 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
         children: formatMessage.rich(
           'You can define and manage <b>intents</b> here. Each intent describes a particular user intention through utterances (i.e. user says). <b>Intents are often triggers of your bot.</b>',
           {
-            b: Bold,
+            b: Bold
           }
         ),
-        headline: formatMessage('User input'),
+        headline: formatMessage('User input')
       };
 
     case 'actions':
       return {
         children: formatMessage.rich('Actions define <b>how the bot responds</b> to a certain trigger.', {
-          b: Bold,
+          b: Bold
         }),
-        headline: formatMessage('Actions'),
+        headline: formatMessage('Actions')
       };
 
     case 'botResponses':
@@ -154,7 +154,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
         children: formatMessage(
           'You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs.'
         ),
-        headline: formatMessage('Bot responses'),
+        headline: formatMessage('Bot responses')
       };
 
     case 'welcomeMessage':
@@ -164,7 +164,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
             {formatMessage.rich(
               'The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:',
               {
-                i: Italics,
+                i: Italics
               }
             )}
             <ol>
@@ -172,7 +172,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
                 {formatMessage.rich(
                   'Click the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b> from the dropdown menu.',
                   {
-                    b: Bold,
+                    b: Bold
                   }
                 )}
               </li>
@@ -191,7 +191,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
             </ol>
           </div>
         ),
-        headline: formatMessage('Add a welcome message'),
+        headline: formatMessage('Add a welcome message')
       };
 
     case 'intentTrigger':
@@ -200,7 +200,7 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
           'Click on the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b>. In the <b>Create a trigger</b> wizard, set the <b>Trigger Type</b> to <i>Intent recognized</i> and configure the <b>Trigger Name</b> and <b>Trigger Phrases</b>. Then add actions in the Visual Editor.',
           { b: Bold, i: Italics }
         ),
-        headline: formatMessage('Add an intent trigger'),
+        headline: formatMessage('Add an intent trigger')
       };
 
     case 'startBot':
@@ -211,15 +211,15 @@ export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubb
             a: ({ children }) => (
               <a
                 href="https://github.com/microsoft/BotFramework-Emulator/releases/latest"
-                target="_blank"
                 rel="noopener noreferrer"
+                target="_blank"
               >
                 {children}
               </a>
-            ),
+            )
           }
         ),
-        headline: formatMessage('Test your bot'),
+        headline: formatMessage('Test your bot')
       };
 
     default:

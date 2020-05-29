@@ -37,12 +37,12 @@ export class RuleGroup extends React.Component<NodeProps> {
         css={{
           width: RuleBlockWidth,
           height: RuleBlockHeight,
-          boxSizing: 'border-box',
+          boxSizing: 'border-box'
         }}
       >
         <EventRenderer
-          id={elementId}
           data={rule}
+          id={elementId}
           onEvent={onEvent}
           onResize={() => {
             this.propagateBoundary();
@@ -58,14 +58,14 @@ export class RuleGroup extends React.Component<NodeProps> {
 
     return (
       <div
-        css={{
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexWrap: 'wrap',
-        }}
         ref={el => {
           this.containerElement = el;
           this.propagateBoundary();
+        }}
+        css={{
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexWrap: 'wrap'
         }}
       >
         {rules.map((x, i) => this.renderRule(x, i))}

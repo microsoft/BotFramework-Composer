@@ -12,39 +12,39 @@ const toolbarItems = onClick => [
     text: 'New',
     buttonProps: {
       iconProps: {
-        iconName: 'Add',
+        iconName: 'Add'
       },
-      onClick: onClick,
+      onClick: onClick
     },
-    align: 'left',
+    align: 'left'
   },
   {
     type: 'action',
     text: 'Open',
     buttonProps: {
       iconProps: {
-        iconName: 'OpenFolderHorizontal',
+        iconName: 'OpenFolderHorizontal'
       },
-      onClick: onClick,
+      onClick: onClick
     },
-    align: 'left',
+    align: 'left'
   },
   {
     type: 'action',
     text: 'Save as',
     buttonProps: {
       iconProps: {
-        iconName: 'Save',
+        iconName: 'Save'
       },
-      onClick: onClick,
+      onClick: onClick
     },
-    align: 'left',
+    align: 'left'
   },
   {
     type: 'element',
     element: <div>Connect</div>,
-    align: 'right',
-  },
+    align: 'right'
+  }
 ];
 
 describe('<ToolBar />', () => {

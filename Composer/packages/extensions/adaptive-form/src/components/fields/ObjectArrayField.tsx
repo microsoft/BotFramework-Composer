@@ -105,7 +105,7 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
 
   return (
     <div className={className}>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <div>
         {orderedProperties.length > 1 && !stackArrayItems && (
           <div css={objectArrayField.objectItemLabel}>
@@ -117,9 +117,9 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                   return (
                     <div key={index} css={objectArrayField.objectItemValueLabel}>
                       <FieldLabel
+                        inline
                         description={propSchema.description}
                         id={`${id}.${key}`}
-                        inline
                         label={propSchema.title}
                       />
                     </div>
@@ -134,10 +134,10 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
           <ArrayFieldItem
             key={item.id}
             {...props}
+            transparentBorder
             id={`${id}.${idx}`}
             schema={itemSchema as JSONSchema7}
             stackArrayItems={stackArrayItems}
-            transparentBorder
             value={item.value}
             {...getArrayItemProps(arrayItems, idx, handleChange)}
           />
@@ -155,25 +155,25 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                     return (
                       <div key={index} css={objectArrayField.objectItemInputField}>
                         <TextField
+                          ariaLabel={lastField ? END_OF_ROW_LABEL : INSIDE_ROW_LABEL}
                           autoComplete="off"
+                          componentRef={index === 0 ? firstNewFieldRef : undefined}
                           iconProps={{
                             ...(lastField
                               ? {
                                   iconName: 'ReturnKey',
                                   style: {
                                     color: SharedColors.cyanBlue10,
-                                    opacity: 0.6,
-                                  },
+                                    opacity: 0.6
+                                  }
                                 }
-                              : {}),
+                              : {})
                           }}
                           placeholder={getNewPlaceholder(props, property)}
                           styles={{ field: { padding: '0 24px 0 8px' } }}
                           value={newObject[property] || ''}
                           onChange={handleNewObjectChange(property)}
                           onKeyDown={handleKeyDown}
-                          ariaLabel={lastField ? END_OF_ROW_LABEL : INSIDE_ROW_LABEL}
-                          componentRef={index === 0 ? firstNewFieldRef : undefined}
                         />
                       </div>
                     );
@@ -188,11 +188,11 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = props => {
                 menuIcon: {
                   backgroundColor: NeutralColors.white,
                   color: NeutralColors.gray130,
-                  fontSize: FontSizes.size16,
+                  fontSize: FontSizes.size16
                 },
                 rootDisabled: {
-                  backgroundColor: NeutralColors.white,
-                },
+                  backgroundColor: NeutralColors.white
+                }
               }}
             />
           </React.Fragment>

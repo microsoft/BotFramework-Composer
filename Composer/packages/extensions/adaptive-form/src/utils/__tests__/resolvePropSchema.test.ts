@@ -7,15 +7,15 @@ import { resolveRef } from '../resolveRef';
 jest.mock('../resolveRef', () => ({
   resolveRef: jest.fn().mockImplementation(obj => ({
     ...obj,
-    resolved: true,
-  })),
+    resolved: true
+  }))
 }));
 
 describe('resolvePropSchema', () => {
   const definitions = {
     foo: {
-      title: 'Foo Title',
-    },
+      title: 'Foo Title'
+    }
   };
 
   it('returns undefined if the schema does not have properties', () => {
@@ -30,11 +30,11 @@ describe('resolvePropSchema', () => {
           type: 'object',
           properties: {
             bar: {
-              type: 'string',
-            },
-          },
-        },
-      },
+              type: 'string'
+            }
+          }
+        }
+      }
     };
 
     // @ts-ignore
@@ -43,7 +43,7 @@ describe('resolvePropSchema', () => {
 
     expect(resolved).toMatchObject({
       ...schema.properties.foo,
-      resolved: true,
+      resolved: true
     });
   });
 });

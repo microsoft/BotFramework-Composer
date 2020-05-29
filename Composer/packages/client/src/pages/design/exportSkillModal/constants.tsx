@@ -11,7 +11,7 @@ export const VERSION_REGEX = /\d\.\d\.(\d+|preview-\d+)/i;
 
 export const SCHEMA_URIS = [
   'https://schemas.botframework.com/schemas/skills/skill-manifest-2.1.preview-1.json',
-  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
+  'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json'
 ];
 
 export interface SkillManifest {
@@ -55,25 +55,25 @@ export enum ManifestEditorSteps {
   FETCH_MANIFEST_SCHEMA = 'FETCH_MANIFEST_SCHEMA',
   MANIFEST_DESCRIPTION = 'MANIFEST_DESCRIPTION',
   MANIFEST_REVIEW = 'MANIFEST_REVIEW',
-  SELECT_MANIFEST = 'SELECT_MANIFEST',
+  SELECT_MANIFEST = 'SELECT_MANIFEST'
 }
 
 export const order: ManifestEditorSteps[] = [
   ManifestEditorSteps.SELECT_MANIFEST,
   ManifestEditorSteps.FETCH_MANIFEST_SCHEMA,
   ManifestEditorSteps.MANIFEST_DESCRIPTION,
-  ManifestEditorSteps.MANIFEST_REVIEW,
+  ManifestEditorSteps.MANIFEST_REVIEW
 ];
 
 const cancelButton: Button = {
   text: () => formatMessage('Cancel'),
-  onClick: ({ onDismiss }) => onDismiss,
+  onClick: ({ onDismiss }) => onDismiss
 };
 
 const nextButton: Button = {
   primary: true,
   text: () => formatMessage('Next'),
-  onClick: ({ onNext }) => onNext,
+  onClick: ({ onNext }) => onNext
 };
 
 export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
@@ -84,18 +84,18 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
         disabled: ({ manifest }) => !manifest,
         primary: true,
         text: () => formatMessage('Edit'),
-        onClick: ({ onNext }) => onNext,
-      },
+        onClick: ({ onNext }) => onNext
+      }
     ],
     content: SelectManifest,
     editJson: false,
     subText: () => formatMessage('Create a new skill manifest or select which one you want to edit'),
-    title: () => formatMessage('Create or edit skill manifest'),
+    title: () => formatMessage('Create or edit skill manifest')
   },
   [ManifestEditorSteps.FETCH_MANIFEST_SCHEMA]: {
     content: FetchManifestSchema,
     editJson: false,
-    title: () => formatMessage('Select manifest version'),
+    title: () => formatMessage('Select manifest version')
   },
   [ManifestEditorSteps.MANIFEST_DESCRIPTION]: {
     buttons: [cancelButton, nextButton],
@@ -117,7 +117,7 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
           }
           return acc;
         }, {});
-    },
+    }
   },
   [ManifestEditorSteps.MANIFEST_REVIEW]: {
     buttons: [
@@ -125,11 +125,11 @@ export const editorSteps: { [key in ManifestEditorSteps]: EditorStep } = {
       {
         primary: true,
         text: () => formatMessage('Done'),
-        onClick: ({ onDismiss }) => onDismiss,
-      },
+        onClick: ({ onDismiss }) => onDismiss
+      }
     ],
     content: ReviewManifest,
     subText: () => formatMessage('The manifest can be edited and refined manually if and where needed.'),
-    title: () => formatMessage('Review and generate'),
-  },
+    title: () => formatMessage('Review and generate')
+  }
 };

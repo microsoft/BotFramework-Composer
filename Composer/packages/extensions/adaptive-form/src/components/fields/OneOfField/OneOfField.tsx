@@ -27,9 +27,9 @@ const OneOfField: React.FC<FieldProps> = props => {
   const [
     {
       key: selectedKey,
-      data: { schema: selectedSchema },
+      data: { schema: selectedSchema }
     },
-    setSelectedOption,
+    setSelectedOption
   ] = useState<IDropdownOption>(initialSelectedOption);
 
   const handleTypeChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
@@ -50,26 +50,26 @@ const OneOfField: React.FC<FieldProps> = props => {
     <div css={oneOfField.container}>
       <div css={oneOfField.label}>
         <FieldLabel
-          id={id}
-          label={label}
           description={description}
           helpLink={uiOptions?.helpLink}
+          id={id}
+          label={label}
           required={required}
         />
         {options && options.length > 1 && (
           <Dropdown
+            ariaLabel={formatMessage('select property type')}
             id={`${props.id}-oneOf`}
             options={options}
             responsiveMode={ResponsiveMode.large}
             selectedKey={selectedKey}
-            onChange={handleTypeChange}
-            onRenderTitle={renderTypeTitle}
             styles={{
               caretDownWrapper: { height: '24px', lineHeight: '24px' },
               root: { flexBasis: 'auto', padding: '5px 0', minWidth: '110px' },
-              title: { height: '24px', lineHeight: '20px' },
+              title: { height: '24px', lineHeight: '20px' }
             }}
-            ariaLabel={formatMessage('select property type')}
+            onChange={handleTypeChange}
+            onRenderTitle={renderTypeTitle}
           />
         )}
       </div>

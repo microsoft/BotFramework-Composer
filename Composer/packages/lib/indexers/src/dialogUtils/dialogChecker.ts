@@ -99,5 +99,5 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
 };
 
 export const checkerFuncs: { [type: string]: CheckerFunc[] } = {
-  '.': [IsExpression], //this will check all types
+  '.': [IsExpression] //this will check all types
 };

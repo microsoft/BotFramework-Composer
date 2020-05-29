@@ -13,8 +13,10 @@ import {
   itemContainerContent,
   itemContainerTitle,
   disabledItem,
-  childrenContainer,
+  childrenContainer
 } from './styles';
+
+const { openExternal: openExternalLink } = window as Window;
 
 interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
   onClick?: () => void | Promise<void>;
@@ -27,7 +29,8 @@ interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 
     content?: SerializedStyles;
   };
   disabled?: boolean;
-  forwardedRef?: any;
+  forwardedRef?: (project: any) => void | Promise<void>;
+  openExternal?: boolean;
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
@@ -38,11 +41,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   styles = {},
   disabled,
   forwardedRef,
+  openExternal,
   ...rest
 }) => {
   const onRenderChildren = () => {
     return (
-      <div css={childrenContainer} ref={forwardedRef}>
+      <div ref={forwardedRef} css={childrenContainer}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
           <div css={itemContainerTitle}>
             <Text block variant="large">
@@ -52,11 +56,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         </div>
         <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
           <div css={itemContainerContent}>
-            <Text variant={subContent ? 'medium' : 'large'} nowrap>
+            <Text nowrap variant={subContent ? 'medium' : 'large'}>
               {content}
             </Text>
             {subContent && (
-              <Text variant="medium" nowrap>
+              <Text nowrap variant="medium">
                 {subContent}
               </Text>
             )}
@@ -70,14 +74,19 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     <Button
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async e => {
-        if (onClick) {
+        // todo: clean this up
+        const { href } = rest as Partial<{ href: string }>;
+        if (openExternal) {
+          e.preventDefault();
+          return openExternalLink(href, { activate: true });
+        } else if (onClick && !href) {
           e.preventDefault();
           await onClick();
         }
       }}
       {...rest}
-      onRenderChildren={onRenderChildren}
       disabled={disabled}
+      onRenderChildren={onRenderChildren}
     />
   );
 };

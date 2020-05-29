@@ -15,8 +15,8 @@ const dynamicStyle = props =>
     color: ${props.color || Colors.Black};
   `;
 
-export const LinkBtn = styled(Link)(props => ({
-  color: props.color || Colors.AzureBlue,
+export const LinkBtn = styled<any>(Link)(props => ({
+  color: props.color || Colors.AzureBlue
 }));
 
 export const Span = styled.span`
@@ -34,7 +34,7 @@ export const BorderedDiv = styled.div<DivProps>(
   props => ({
     color: props.color || Colors.Black,
     width: props.width,
-    height: props.height,
+    height: props.height
   })
 );
 

@@ -21,18 +21,25 @@ interface ITreeItemProps {
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
   return (
-    <div role="cell" css={itemText(item.depth)} tabIndex={0} onFocus={item.onFocus} onBlur={item.onBlur}>
+    <div
+      data-is-focusable
+      css={itemText(item.depth)}
+      role="cell"
+      tabIndex={0}
+      onBlur={item.onBlur}
+      onFocus={item.onFocus}
+    >
       <div css={content} tabIndex={-1}>
         {item.depth !== 0 && (
           <Icon
-            tabIndex={-1}
             iconName="Flow"
             styles={{
               root: {
                 marginRight: '8px',
-                outline: 'none',
-              },
+                outline: 'none'
+              }
             }}
+            tabIndex={-1}
           />
         )}
         {item.displayName}
@@ -46,12 +53,18 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
   return overflowItems => {
     return showIcon ? (
       <IconButton
-        role="cell"
         className="dialog-more-btn"
+        data-is-focusable={isActive}
         data-testid="dialogMoreButton"
-        styles={moreButton(isActive)}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems, styles: menuStyle }}
+        role="cell"
+        styles={moreButton(isActive)}
+        onKeyDown={e => {
+          if (e.key === 'Enter') {
+            e.stopPropagation();
+          }
+        }}
       />
     ) : null;
   };
@@ -62,8 +75,8 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
 
   return (
     <div
-      role="presentation"
       css={navItem(isActive, !!isSubItemActive)}
+      role="presentation"
       onClick={() => {
         onSelect(link.id);
       }}
@@ -74,24 +87,27 @@ export const TreeItem: React.FC<ITreeItemProps> = props => {
       }}
     >
       <OverflowSet
-        role="row"
+        //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
+        //remove this at that time
+        doNotContainWithinFocusZone
+        css={overflowSet}
+        data-testid={`DialogTreeItem${link.id}`}
         items={[
           {
             key: link.id,
             depth,
-            ...link,
-          },
+            ...link
+          }
         ]}
         overflowItems={[
           {
             key: 'delete',
             name: 'Delete',
-            onClick: () => onDelete(link.id),
-          },
+            onClick: () => onDelete(link.id)
+          }
         ]}
-        css={overflowSet}
+        role="row"
         styles={{ item: { flex: 1 } }}
-        data-testid={`DialogTreeItem${link.id}`}
         onRenderItem={onRenderItem}
         onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
       />

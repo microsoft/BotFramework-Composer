@@ -10,57 +10,57 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       iconName: 'Home',
       labelName: formatMessage('Home'),
       exact: true,
-      disabled: false,
+      disabled: false
     },
     {
       to: `/bot/${projectId}/dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
-      labelName: formatMessage('Design Flow'),
+      labelName: formatMessage('Design'),
       exact: false,
-      disabled: !botLoaded,
+      disabled: !botLoaded
     },
     {
       to: `/bot/${projectId}/language-generation`,
       iconName: 'Robot',
       labelName: formatMessage('Bot Responses'),
       exact: false,
-      disabled: !botLoaded,
+      disabled: !botLoaded
     },
     {
       to: `/bot/${projectId}/language-understanding`,
       iconName: 'People',
       labelName: formatMessage('User Input'),
       exact: false,
-      disabled: !botLoaded,
+      disabled: !botLoaded
     },
     {
       to: `/bot/${projectId}/notifications`,
       iconName: 'Warning',
       labelName: formatMessage('Notifications'),
       exact: true,
-      disabled: !botLoaded,
+      disabled: !botLoaded
     },
     {
       to: `/bot/${projectId}/publish`,
       iconName: 'CloudUpload',
       labelName: formatMessage('Publish'),
       exact: true,
-      disabled: !botLoaded,
+      disabled: !botLoaded
     },
     {
       to: `/bot/${projectId}/skills`,
       iconName: 'PlugDisconnected',
       labelName: formatMessage('Skills'),
       exact: true,
-      disabled: !botLoaded,
+      disabled: !botLoaded
     },
     {
       to: `/bot/${projectId}/settings/`,
       iconName: 'Settings',
       labelName: formatMessage('Settings'),
       exact: false,
-      disabled: !botLoaded,
-    },
+      disabled: !botLoaded
+    }
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
@@ -76,6 +76,6 @@ export const bottomLinks = [
     iconName: 'info',
     labelName: formatMessage('About'),
     exact: true,
-    disabled: false,
-  },
+    disabled: false
+  }
 ];

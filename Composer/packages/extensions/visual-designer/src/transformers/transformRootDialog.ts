@@ -16,16 +16,16 @@ function transformSimpleDialog(input): { ruleGroup: IndexedNode; stepGroup: Inde
 
   const ruleGroup = new IndexedNode(Events, {
     $kind: ObiTypes.RuleGroup,
-    children: [...rules],
+    children: [...rules]
   });
 
   const stepGroup = new IndexedNode(Actions, {
     $kind: ObiTypes.StepGroup,
-    children: steps.map(x => normalizeObiStep(x)),
+    children: steps.map(x => normalizeObiStep(x))
   });
   return {
     ruleGroup,
-    stepGroup,
+    stepGroup
   };
 }
 

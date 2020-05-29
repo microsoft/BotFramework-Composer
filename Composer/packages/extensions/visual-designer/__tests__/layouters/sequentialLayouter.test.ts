@@ -13,7 +13,7 @@ describe('sequentialLayouter', () => {
     nodes = [
       new GraphNode('1', {}, new Boundary(280, 80)),
       new GraphNode('2', {}, new Boundary(280, 80)),
-      new GraphNode('3', {}, new Boundary(280, 80)),
+      new GraphNode('3', {}, new Boundary(280, 80))
     ];
   });
 

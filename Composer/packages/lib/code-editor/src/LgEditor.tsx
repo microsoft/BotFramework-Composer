@@ -35,7 +35,7 @@ export interface LGLSPEditorProps extends BaseEditorProps {
 }
 
 const defaultLGServer = {
-  path: '/lg-language-server',
+  path: '/lg-language-server'
 };
 declare global {
   interface Window {
@@ -56,7 +56,7 @@ export function LgEditor(props: LGLSPEditorProps) {
   const options = {
     quickSuggestions: true,
     wordBasedSuggestions: false,
-    ...props.options,
+    ...props.options
   };
 
   const { lgOption, languageServer, onInit: onInitProp, ...restProps } = props;
@@ -95,7 +95,7 @@ export function LgEditor(props: LGLSPEditorProps) {
           initializeDocuments(lgOption, uri);
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
-        },
+        }
       });
     } else {
       const uri = get(editor.getModel(), 'uri._formatted', '');
@@ -109,15 +109,15 @@ export function LgEditor(props: LGLSPEditorProps) {
 
   return (
     <BaseEditor
-      placeholder={placeholder}
       helpURL={LG_HELP}
       id={editorId}
+      placeholder={placeholder}
       {...restProps}
-      onInit={onInit}
-      theme="lgtheme"
+      editorDidMount={editorDidMount}
       language="botbuilderlg"
       options={options}
-      editorDidMount={editorDidMount}
+      theme="lgtheme"
+      onInit={onInit}
     />
   );
 }

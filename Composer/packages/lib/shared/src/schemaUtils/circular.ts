@@ -8,7 +8,7 @@ export const CIRCULAR_REFS = [
   'Microsoft.IRecognizer',
   'Microsoft.ILanguageGenerator',
   'Microsoft.ITriggerSelector',
-  'Microsoft.AdaptiveDialog',
+  'Microsoft.AdaptiveDialog'
 ];
 
 export const isCircular = memoize((def: string) => CIRCULAR_REFS.some(kind => def.includes(kind)));

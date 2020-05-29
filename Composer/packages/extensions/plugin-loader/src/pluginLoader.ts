@@ -29,11 +29,11 @@ export class PluginLoader {
       storage: {},
       publish: {},
       authentication: {
-        allowedUrls: [this.loginUri],
+        allowedUrls: [this.loginUri]
       },
       runtimeTemplates: [],
       botTemplates: [],
-      baseTemplates: [],
+      baseTemplates: []
     };
     this._passport = passport;
   }

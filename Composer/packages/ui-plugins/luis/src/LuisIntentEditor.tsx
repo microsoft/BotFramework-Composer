@@ -24,7 +24,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
     (luFile && luFile.intents.find(intent => intent.Name === intentName)) ||
     ({
       Name: intentName,
-      Body: '',
+      Body: ''
     } as LuIntentSection);
 
   if (!luFile || !intentName) {
@@ -49,14 +49,14 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = props => {
 
   return (
     <LuEditor
-      height={225}
-      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
-      value={luIntent.Body}
-      onChange={commitChanges}
       diagnostics={diagnostics}
       editorSettings={userSettings.codeEditor}
-      onChangeSettings={handleSettingsChange}
+      height={225}
+      luOption={{ fileId: luFile.id, sectionId: luIntent.Name, projectId }}
       placeholder={placeholder || inlineModePlaceholder}
+      value={luIntent.Body}
+      onChange={commitChanges}
+      onChangeSettings={handleSettingsChange}
     />
   );
 };

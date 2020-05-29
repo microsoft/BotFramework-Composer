@@ -15,7 +15,7 @@ import {
   CompletionItemKind,
   Range,
   DiagnosticSeverity,
-  TextEdit,
+  TextEdit
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import { updateIntent, isValid, checkSection, PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
@@ -70,13 +70,13 @@ export class LUServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['@', ' ', '{', ':', '[', '('],
+            triggerCharacters: ['@', ' ', '{', ':', '[', '(']
           },
           foldingRangeProvider: false,
           documentOnTypeFormattingProvider: {
-            firstTriggerCharacter: '\n',
-          },
-        },
+            firstTriggerCharacter: '\n'
+          }
+        }
       };
     });
     this.connection.onCompletion(params => this.completion(params));
@@ -130,7 +130,7 @@ export class LUServer {
     const internalImportResolver = () => {
       return {
         id: document.uri,
-        content: editorContent,
+        content: editorContent
       };
     };
     const { fileId, sectionId, projectId } = this.getLUDocument(document) || {};
@@ -141,7 +141,7 @@ export class LUServer {
         const luFile = resolver(source, id, projectId);
         if (!luFile) {
           this.sendDiagnostics(document, [
-            generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
+            generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document)
           ]);
         }
         let { content } = luFile;
@@ -186,7 +186,7 @@ export class LUServer {
       projectId,
       fileId,
       sectionId,
-      index,
+      index
     };
     this.LUDocuments.push(luDocument);
   }
@@ -416,7 +416,7 @@ export class LUServer {
           label: entity,
           kind: CompletionItemKind.Keyword,
           insertText: `${extraWhiteSpace}${entity}`,
-          documentation: `Enitity type: ${entity}`,
+          documentation: `Enitity type: ${entity}`
         };
 
         completionList.push(item);
@@ -432,7 +432,7 @@ export class LUServer {
           label: entity,
           kind: CompletionItemKind.Keyword,
           insertText: `${extraWhiteSpace}${entity}`,
-          documentation: `Prebuilt enitity: ${entity}`,
+          documentation: `Prebuilt enitity: ${entity}`
         };
 
         completionList.push(item);
@@ -444,7 +444,7 @@ export class LUServer {
         label: 'RegExp Entity',
         kind: CompletionItemKind.Keyword,
         insertText: `//`,
-        documentation: `regex enitity`,
+        documentation: `regex enitity`
       };
 
       completionList.push(item);
@@ -455,7 +455,7 @@ export class LUServer {
         label: 'hasRoles?',
         kind: CompletionItemKind.Keyword,
         insertText: `hasRoles`,
-        documentation: `Entity name hasRole?`,
+        documentation: `Entity name hasRole?`
       };
 
       completionList.push(item);
@@ -463,7 +463,7 @@ export class LUServer {
         label: 'usesFeature?',
         kind: CompletionItemKind.Keyword,
         insertText: `usesFeature`,
-        documentation: `Entity name usesFeature?`,
+        documentation: `Entity name usesFeature?`
       };
 
       completionList.push(item2);
@@ -474,7 +474,7 @@ export class LUServer {
         label: 'interchangeable synonyms?',
         kind: CompletionItemKind.Keyword,
         insertText: `interchangeable`,
-        documentation: `interchangeable synonyms as part of the entity definition`,
+        documentation: `interchangeable synonyms as part of the entity definition`
       };
 
       completionList.push(item);
@@ -504,7 +504,7 @@ export class LUServer {
           label: 'RegExp Entity',
           kind: CompletionItemKind.Keyword,
           insertText: `//`,
-          documentation: `regex enitity`,
+          documentation: `regex enitity`
         };
 
         completionList.push(item);
@@ -518,7 +518,7 @@ export class LUServer {
           label: `Entity: ${name}`,
           kind: CompletionItemKind.Property,
           insertText: `${name}`,
-          documentation: `pattern suggestion for entity: ${name}`,
+          documentation: `pattern suggestion for entity: ${name}`
         };
 
         completionList.push(item);
@@ -532,7 +532,7 @@ export class LUServer {
           label: entity,
           kind: CompletionItemKind.Property,
           insertText: `${entity}`,
-          documentation: `Enitity type: ${entity}`,
+          documentation: `Enitity type: ${entity}`
         };
 
         completionList.push(item);
@@ -545,7 +545,7 @@ export class LUServer {
           label: entity,
           kind: CompletionItemKind.Property,
           insertText: `${entity}`,
-          documentation: `Enitity type: ${entity}`,
+          documentation: `Enitity type: ${entity}`
         };
 
         completionList.push(item);
@@ -560,7 +560,7 @@ export class LUServer {
           label: `Role: ${name}`,
           kind: CompletionItemKind.Property,
           insertText: `${name}`,
-          documentation: `roles suggestion for entity name: ${name}`,
+          documentation: `roles suggestion for entity name: ${name}`
         };
 
         completionList.push(item);
@@ -573,7 +573,7 @@ export class LUServer {
           label: `Entity: ${name}`,
           kind: CompletionItemKind.Property,
           insertText: ` ${name}`,
-          documentation: `pattern suggestion for entity: ${name}`,
+          documentation: `pattern suggestion for entity: ${name}`
         };
         completionList.push(item);
       });
@@ -588,7 +588,7 @@ export class LUServer {
             label: `Entity: ${name}`,
             kind: CompletionItemKind.Method,
             insertText: `${name}`,
-            documentation: `Feature suggestion for current entity: ${name}`,
+            documentation: `Feature suggestion for current entity: ${name}`
           };
 
           completionList.push(item);
@@ -601,7 +601,7 @@ export class LUServer {
         label: 'usesFeature?',
         kind: CompletionItemKind.Keyword,
         insertText: `usesFeature`,
-        documentation: `Does this intent usesFeature?`,
+        documentation: `Does this intent usesFeature?`
       };
 
       completionList.push(item);
@@ -614,7 +614,7 @@ export class LUServer {
           label: `Entity: ${name}`,
           kind: CompletionItemKind.Method,
           insertText: `${name}`,
-          documentation: `Feature suggestion for current entity: ${name}`,
+          documentation: `Feature suggestion for current entity: ${name}`
         };
 
         completionList.push(item);
@@ -665,7 +665,7 @@ export class LUServer {
       const sectionDiags = checkSection(
         {
           Name: sectionId,
-          Body: text,
+          Body: text
         },
         true
       );
@@ -687,7 +687,7 @@ export class LUServer {
   protected sendDiagnostics(document: TextDocument, diagnostics: Diagnostic[]): void {
     this.connection.sendDiagnostics({
       uri: document.uri,
-      diagnostics,
+      diagnostics
     });
   }
 }

@@ -8,7 +8,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   IColumn,
-  CheckboxVisibility,
+  CheckboxVisibility
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -40,8 +40,8 @@ const columns: IColumn[] = [
     maxWidth: 30,
     onRender: (item: INotification) => {
       const icon = icons[item.severity];
-      return <FontIcon iconName={icon.iconName} css={typeIcon(icon)} />;
-    },
+      return <FontIcon css={typeIcon(icon)} iconName={icon.iconName} />;
+    }
   },
   {
     key: 'NotificationType',
@@ -55,18 +55,18 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div data-is-focusable={true} css={tableCell}>
+        <div data-is-focusable css={tableCell}>
           <div
             aria-label={formatMessage(`This is a {severity} notification`, { severity: item.severity })}
-            tabIndex={-1}
             css={content}
+            tabIndex={-1}
           >
             {item.severity}
           </div>
         </div>
       );
     },
-    isPadded: true,
+    isPadded: true
   },
   {
     key: 'NotificationLocation',
@@ -79,18 +79,18 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div data-is-focusable={true} css={tableCell}>
+        <div data-is-focusable css={tableCell}>
           <div
             aria-label={formatMessage(`Location is {location}`, { location: item.location })}
-            tabIndex={-1}
             css={content}
+            tabIndex={-1}
           >
             {item.location}
           </div>
         </div>
       );
     },
-    isPadded: true,
+    isPadded: true
   },
   {
     key: 'NotificationDetail',
@@ -105,27 +105,27 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: INotification) => {
       return (
-        <div data-is-focusable={true} css={tableCell}>
+        <div data-is-focusable css={tableCell}>
           <div
             aria-label={formatMessage(`Notification Message {msg}`, { msg: item.message })}
-            tabIndex={-1}
             css={content}
+            tabIndex={-1}
           >
             {item.message}
           </div>
         </div>
       );
     },
-    isPadded: true,
-  },
+    isPadded: true
+  }
 ];
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
-    <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+    <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
       {defaultRender({
         ...props,
-        onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+        onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
       })}
     </Sticky>
   );
@@ -142,19 +142,19 @@ export const NotificationList: React.FC<INotificationListProps> = props => {
   const showItems = items.slice((pageIndex - 1) * itemCount, pageIndex * itemCount);
 
   return (
-    <div role="main" css={listRoot} data-testid="notifications-table-view">
+    <div css={listRoot} data-testid="notifications-table-view" role="main">
       <div css={tableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
+            isHeaderVisible
+            checkboxVisibility={CheckboxVisibility.hidden}
+            columns={columns}
             css={detailList}
             items={showItems}
-            columns={columns}
-            onItemInvoked={onItemClick}
+            layoutMode={DetailsListLayoutMode.justified}
             selectionMode={SelectionMode.single}
             setKey="none"
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            checkboxVisibility={CheckboxVisibility.hidden}
+            onItemInvoked={onItemClick}
             onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </ScrollablePane>

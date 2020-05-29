@@ -40,7 +40,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   disableSDKTitle,
   icon,
   menu,
-  colors = DefaultColors,
+  colors = DefaultColors
 }) => {
   const headerContent = disableSDKTitle ? title : generateSDKTitle(data, title);
 
@@ -67,27 +67,27 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
       >
         {icon && icon !== ElementIcon.None && (
           <div
+            aria-hidden
             css={{
               width: 16,
               height: 16,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginRight: '5px',
+              marginRight: '5px'
             }}
-            aria-hidden={true}
           >
-            <Icon icon={icon} color={colors.icon} size={16} />
+            <Icon color={colors.icon} icon={icon} size={16} />
           </div>
         )}
         <div
+          aria-label={headerContent}
           css={css`
             ${headerText};
             line-height: 16px;
             transform: translateY(-1px);
             color: ${colors.color || 'black'};
           `}
-          aria-label={headerContent}
         >
           {headerContent}
         </div>

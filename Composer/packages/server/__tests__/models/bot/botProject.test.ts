@@ -18,7 +18,7 @@ const botDir = '../../mocks/samplebots/bot1';
 
 const mockLocationRef: LocationRef = {
   storageId: 'default',
-  path: Path.join(__dirname, `${botDir}`),
+  path: Path.join(__dirname, `${botDir}`)
 };
 const luFileLength = files => files.filter(file => file.name.endsWith('.lu')).length;
 const lgFileLength = files => files.filter(file => file.name.endsWith('.lg')).length;
@@ -75,7 +75,7 @@ const copyDir = Path.join(__dirname, botDir, '../copy');
 describe('copyTo', () => {
   const locationRef: LocationRef = {
     storageId: 'default',
-    path: copyDir,
+    path: copyDir
   };
 
   afterEach(() => {
@@ -275,5 +275,21 @@ describe('dialog operations', () => {
 
     expect(proj.files.length).toEqual(filesCount - 1);
     expect(dialogFileLength(proj.files)).toEqual(dialogsFilesCount - 1);
+  });
+});
+
+describe('deleteAllFiles', () => {
+  const locationRef: LocationRef = {
+    storageId: 'default',
+    path: copyDir
+  };
+
+  it('should copy and then delete successfully', async () => {
+    const newBotProject = await proj.copyTo(locationRef);
+    await newBotProject.init();
+    const project: { [key: string]: any } = newBotProject.getProject();
+    expect(project.files.length).toBe(10);
+    await newBotProject.deleteAllFiles();
+    expect(fs.existsSync(copyDir)).toBe(false);
   });
 });

@@ -9,9 +9,10 @@ import {
   IGroup,
   IGroupHeaderProps,
   IGroupRenderProps,
-  IGroupedList,
+  IGroupedList
 } from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
@@ -33,7 +34,7 @@ function createGroupItem(dialog: DialogInfo, currentId: string, position: number
     count: dialog.triggers.length,
     hasMoreData: true,
     isCollapsed: dialog.id !== currentId,
-    data: dialog,
+    data: dialog
   };
 }
 
@@ -41,7 +42,7 @@ function createItem(trigger: ITrigger, index: number) {
   return {
     ...trigger,
     index,
-    displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
+    displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type })
   };
 }
 
@@ -91,8 +92,8 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   const {
     actions: { onboardingAddCoachMarkRef, updateUserSettings },
     state: {
-      userSettings: { dialogNavWidth: currentWidth },
-    },
+      userSettings: { dialogNavWidth: currentWidth }
+    }
   } = useContext(StoreContext);
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
@@ -111,14 +112,14 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
       onSelect(props.group!.key);
     };
     return (
-      <span role="grid" ref={props.group && props.group.data.isRoot && addMainDialogRef}>
+      <span ref={props.group && props.group.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
-          link={props.group!.data}
           depth={0}
           isActive={!props.group!.isCollapsed}
           isSubItemActive={!!selected}
-          onSelect={toggleCollapse}
+          link={props.group!.data}
           onDelete={onDeleteDialog}
+          onSelect={toggleCollapse}
         />
       </span>
     );
@@ -127,11 +128,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
   function onRenderCell(nestingDepth?: number, item?: any): React.ReactNode {
     return (
       <TreeItem
-        link={item}
         depth={nestingDepth}
         isActive={createSelectedPath(item.index) === selected}
-        onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
+        link={item}
         onDelete={() => onDeleteTrigger(dialogId, item.index)}
+        onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
       />
     );
   }
@@ -154,27 +155,27 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
 
   return (
     <Resizable
-      size={{ width: currentWidth, height: 'auto' }}
-      minWidth={180}
-      maxWidth={500}
       enable={{
-        right: true,
+        right: true
       }}
+      maxWidth={500}
+      minWidth={180}
+      size={{ width: currentWidth, height: 'auto' }}
       onResizeStop={handleResize}
     >
       <div className="ProjectTree" css={root} data-testid="ProjectTree">
-        <SearchBox
-          ariaLabel={formatMessage('Type dialog name')}
-          placeholder={formatMessage('Filter Dialog')}
-          styles={searchBox}
-          onChange={onFilter}
-          iconProps={{ iconName: 'Filter' }}
-          underlined
-        />
-        <div
-          aria-live={'polite'}
-          aria-label={formatMessage(
-            `{
+        <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
+          <SearchBox
+            underlined
+            ariaLabel={formatMessage('Type dialog name')}
+            iconProps={{ iconName: 'Filter' }}
+            placeholder={formatMessage('Filter Dialog')}
+            styles={searchBox}
+            onChange={onFilter}
+          />
+          <div
+            aria-label={formatMessage(
+              `{
             dialogNum, plural,
                 =0 {No dialogs}
                 =1 {One dialog}
@@ -185,24 +186,26 @@ export const ProjectTree: React.FC<IProjectTreeProps> = props => {
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-            { dialogNum: res.groups.length }
-          )}
-        />
-        <GroupedList
-          {...res}
-          onRenderCell={onRenderCell}
-          componentRef={groupRef}
-          groupProps={
-            {
-              onRenderHeader: onRenderHeader,
-              onRenderShowAll: onRenderShowAll,
-              showEmptyGroups: true,
-              showAllProps: false,
-              isAllGroupsCollapsed: true,
-            } as Partial<IGroupRenderProps>
-          }
-          styles={groupListStyle}
-        />
+              { dialogNum: res.groups.length }
+            )}
+            aria-live={'polite'}
+          />
+          <GroupedList
+            {...res}
+            componentRef={groupRef}
+            groupProps={
+              {
+                onRenderHeader: onRenderHeader,
+                onRenderShowAll: onRenderShowAll,
+                showEmptyGroups: true,
+                showAllProps: false,
+                isAllGroupsCollapsed: true
+              } as Partial<IGroupRenderProps>
+            }
+            styles={groupListStyle}
+            onRenderCell={onRenderCell}
+          />
+        </FocusZone>
       </div>
     </Resizable>
   );

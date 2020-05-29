@@ -13,7 +13,7 @@ import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 import { INotification, NotificationType } from './types';
 import { navigateTo } from './../../utils';
-import { convertPathToUrl, toUrlUtil } from './../../utils/navigation';
+import { convertPathToUrl } from './../../utils/navigation';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');
@@ -24,7 +24,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       let uri = `/bot/${projectId}/language-generation/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
       //the format of item.id is lgFile#inlineTemplateId
       if (dialogPath) {
-        uri = toUrlUtil(projectId, dialogPath);
+        uri = convertPathToUrl(projectId, resourceId, dialogPath);
       }
       navigateTo(uri);
     },
@@ -42,7 +42,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       const { projectId, id, dialogPath } = item;
       const uri = convertPathToUrl(projectId, id, dialogPath);
       navigateTo(uri);
-    },
+    }
   };
   const handleItemClick = (item: INotification) => {
     navigations[item.type](item);

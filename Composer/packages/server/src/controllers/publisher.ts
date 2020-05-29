@@ -12,7 +12,7 @@ import { runtimeFolder } from '../settings/env';
 const defaultPublishConfig = {
   name: 'default',
   type: 'localpublish',
-  configuration: JSON.stringify({}),
+  configuration: JSON.stringify({})
 };
 const DEFAULT_RUNTIME = 'dotnet';
 export const PublishController = {
@@ -29,11 +29,11 @@ export const PublishController = {
             instructions: instructions,
             schema,
             features: {
-              history: methods.history ? true : false,
-              publish: methods.publish ? true : false,
-              status: methods.getStatus ? true : false,
-              rollback: methods.rollback ? true : false,
-            },
+              history: typeof methods.history === 'function',
+              publish: typeof methods.publish === 'function',
+              status: typeof methods.getStatus === 'function',
+              rollback: typeof methods.rollback === 'function'
+            }
           };
         })
     );
@@ -58,7 +58,7 @@ export const PublishController = {
       profileName: profile.name,
       fullSettings: merge({}, currentProject.settings, sensitiveSettings),
       templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
-      ...JSON.parse(profile.configuration),
+      ...JSON.parse(profile.configuration)
     };
 
     if (
@@ -77,7 +77,7 @@ export const PublishController = {
         // copy status into payload for ease of access in client
         const response = {
           ...results.result,
-          status: results.status,
+          status: results.status
         };
 
         // set status and return value as json
@@ -85,13 +85,13 @@ export const PublishController = {
       } catch (err) {
         res.status(400).json({
           statusCode: '400',
-          message: err.message,
+          message: err.message
         });
       }
     } else {
       res.status(400).json({
         statusCode: '400',
-        message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+        message: `${method} is not a valid publishing target type. There may be a missing plugin.`
       });
     }
   },
@@ -120,7 +120,7 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         const configuration = {
           profileName: profile.name,
-          ...JSON.parse(profile.configuration),
+          ...JSON.parse(profile.configuration)
         };
 
         // call the method
@@ -128,7 +128,7 @@ export const PublishController = {
         // copy status into payload for ease of access in client
         const response = {
           ...results.result,
-          status: results.status,
+          status: results.status
         };
 
         // set status and return value as json
@@ -138,7 +138,7 @@ export const PublishController = {
 
     res.status(400).json({
       statusCode: '400',
-      message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+      message: `${method} is not a valid publishing target type. There may be a missing plugin.`
     });
   },
   history: async (req, res) => {
@@ -166,7 +166,7 @@ export const PublishController = {
       if (typeof pluginMethod === 'function') {
         const configuration = {
           profileName: profile.name,
-          ...JSON.parse(profile.configuration),
+          ...JSON.parse(profile.configuration)
         };
 
         // call the method
@@ -179,7 +179,7 @@ export const PublishController = {
 
     res.status(400).json({
       statusCode: '400',
-      message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+      message: `${method} is not a valid publishing target type. There may be a missing plugin.`
     });
   },
   rollback: async (req, res) => {
@@ -202,7 +202,7 @@ export const PublishController = {
       profileName: profile.name,
       fullSettings: merge({}, currentProject.settings, sensitiveSettings),
       templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
-      ...JSON.parse(profile.configuration),
+      ...JSON.parse(profile.configuration)
     };
 
     if (
@@ -221,7 +221,7 @@ export const PublishController = {
           // copy status into payload for ease of access in client
           const response = {
             ...results.result,
-            status: results.status,
+            status: results.status
           };
 
           // set status and return value as json
@@ -229,7 +229,7 @@ export const PublishController = {
         } catch (err) {
           return res.status(400).json({
             statusCode: '400',
-            message: err.message,
+            message: err.message
           });
         }
       }
@@ -237,7 +237,53 @@ export const PublishController = {
 
     res.status(400).json({
       statusCode: '400',
-      message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+      message: `${method} is not a valid publishing target type. There may be a missing plugin.`
     });
   },
+  removeLocalRuntimeData: async (req, res) => {
+    const projectId = req.params.projectId;
+    const profile = defaultPublishConfig;
+    const method = profile.type;
+    if (
+      profile &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.stopBot
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+      if (typeof pluginMethod === 'function') {
+        try {
+          await pluginMethod.call(null, projectId);
+        } catch (err) {
+          return res.status(400).json({
+            statusCode: '400',
+            message: err.message
+          });
+        }
+      }
+    }
+    if (
+      profile &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.removeRuntimeData
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
+      if (typeof pluginMethod === 'function') {
+        try {
+          const result = await pluginMethod.call(null, projectId);
+          return res.status(200).json({ message: result.msg });
+        } catch (err) {
+          return res.status(400).json({
+            statusCode: '400',
+            message: err.message
+          });
+        }
+      }
+    }
+    res.status(400).json({
+      statusCode: '400',
+      message: `${method} is not a valid publishing target type. There may be a missing plugin.`
+    });
+  }
 };

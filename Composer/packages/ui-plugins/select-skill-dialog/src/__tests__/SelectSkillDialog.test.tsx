@@ -19,9 +19,9 @@ const skills = [
         protocol: 'BotFrameworkV3',
         description: 'Production endpoint for the Email Skill',
         endpointUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/api/messages',
-        msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
-      },
-    ],
+        msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d'
+      }
+    ]
   },
   {
     manifestUrl: 'https://ericv3skillssimplesandwichbot.azurewebsites.net/wwwroot/sandwich-bot-manifest.json',
@@ -32,10 +32,10 @@ const skills = [
         protocol: 'BotFrameworkV3',
         description: 'Default endpoint for the skill',
         endpointUrl: 'https://ericv3skillssimplesandwichbot.azurewebsites.net/api/messages',
-        msAppId: '94e29d0f-3f0d-46f0-aa78-00aed83698cf',
-      },
-    ],
-  },
+        msAppId: '94e29d0f-3f0d-46f0-aa78-00aed83698cf'
+      }
+    ]
+  }
 ];
 
 const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
@@ -43,15 +43,15 @@ const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
     description: 'Name of the skill to call.',
     id: 'select.skillDialog',
     label: 'Skill Dialog Name',
-    onChange,
+    onChange
   };
 
   const shell = {
-    addSkillDialog,
+    addSkillDialog
   };
 
   const shellData = {
-    skills,
+    skills
   };
 
   return render(
@@ -67,7 +67,7 @@ describe('Select Skill Dialog', () => {
       return {
         then: cb => {
           cb({ manifestUrl: 'https://' });
-        },
+        }
       };
     });
     const onChange = jest.fn();
@@ -97,7 +97,7 @@ describe('Select Skill Dialog', () => {
       index: 0,
       isSelected: false,
       key: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
-      text: 'Email Skill',
+      text: 'Email Skill'
     });
   });
 

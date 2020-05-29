@@ -13,10 +13,10 @@ export const TargetList = props => {
   const onRenderOverflowButton = (overflowItems: any[] | undefined) => {
     return (
       <IconButton
-        role="menuitem"
-        title="More options"
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems! }}
+        role="menuitem"
+        title="More options"
       />
     );
   };
@@ -35,20 +35,20 @@ export const TargetList = props => {
               items={[
                 {
                   name: target.name,
-                  key: target.name,
-                },
+                  key: target.name
+                }
               ]}
               overflowItems={[
                 {
                   key: 'delete',
                   name: 'Delete',
-                  onClick: () => props.onDelete(index, target),
+                  onClick: () => props.onDelete(index, target)
                 },
                 {
                   key: 'edit',
                   name: 'Edit',
-                  onClick: () => props.onEdit(index, target),
-                },
+                  onClick: () => props.onEdit(index, target)
+                }
               ]}
               onRenderItem={onRenderItem}
               onRenderOverflowButton={onRenderOverflowButton}

@@ -82,7 +82,7 @@ describe('lu lsp server', () => {
       },
       response => {
         expect(response.id).toEqual(0);
-      },
+      }
     ]);
     // client initialized
     await send(`{"jsonrpc":"2.0","method":"initialized","params":{}}`, []);

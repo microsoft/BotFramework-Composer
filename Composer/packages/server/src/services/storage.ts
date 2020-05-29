@@ -80,9 +80,9 @@ class StorageService {
             name: d,
             type: 'folder',
             path: d,
-            writable: false,
+            writable: false
           };
-        }),
+        })
       };
     }
     const storageClient = this.getStorageClient(storageId, user);
@@ -104,7 +104,7 @@ class StorageService {
         name: Path.basename(filePath),
         parent: Path.dirname(filePath),
         children: await this.getChildren(storageClient, filePath),
-        writable: writable,
+        writable: writable
       };
     }
   };
@@ -157,7 +157,7 @@ class StorageService {
           type: childStat.isDir ? ((await this.isBotFolder(storage, childAbsPath)) ? 'bot' : 'folder') : 'file',
           path: childAbsPath,
           lastModified: childStat.lastModified, // just keep the previous interface
-          size: childStat.size, // just keep the previous interface
+          size: childStat.size // just keep the previous interface
         };
       } catch (error) {
         return;

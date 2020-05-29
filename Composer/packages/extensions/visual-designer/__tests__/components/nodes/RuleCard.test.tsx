@@ -13,7 +13,7 @@ describe('<RuleCard />', () => {
 
   beforeEach(() => {
     clickResults = {
-      onEvent: [],
+      onEvent: []
     };
     label = 'ruleCard';
 
@@ -31,7 +31,7 @@ describe('<RuleCard />', () => {
       beforeEach(() => {
         data = {};
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
@@ -54,12 +54,12 @@ describe('<RuleCard />', () => {
           actions: [
             {
               $kind: 'Microsoft.BeginDialog',
-              dialog: 'CalleeDialog',
-            },
-          ],
+              dialog: 'CalleeDialog'
+            }
+          ]
         };
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
@@ -83,7 +83,7 @@ describe('<RuleCard />', () => {
 
         expect(clickResults.onEvent).toEqual([
           [NodeEventTypes.Expand, id],
-          [NodeEventTypes.OpenDialog, { caller: id, callee: 'CalleeDialog' }],
+          [NodeEventTypes.OpenDialog, { caller: id, callee: 'CalleeDialog' }]
         ]);
       });
     });
@@ -99,7 +99,7 @@ describe('<RuleCard />', () => {
       beforeEach(() => {
         data = {};
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 
@@ -129,12 +129,12 @@ describe('<RuleCard />', () => {
           actions: [
             {
               $kind: 'Microsoft.BeginDialog',
-              dialog: 'CalleeDialog',
-            },
-          ],
+              dialog: 'CalleeDialog'
+            }
+          ]
         };
         renderResult = render(
-          <RuleCard data={data} id={id} focused={focusedId === id} label={label} onEvent={onEvent} />
+          <RuleCard data={data} focused={focusedId === id} id={id} label={label} onEvent={onEvent} />
         );
       });
 

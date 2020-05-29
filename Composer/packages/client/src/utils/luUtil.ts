@@ -57,7 +57,7 @@ function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
           }
         });
         return result;
-      }, {}),
+      }, {})
     };
   }, {});
   return config;
@@ -133,7 +133,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     rootIds: [],
     triggerRules: {},
     intentName: '_Interruption',
-    verbose: true,
+    verbose: true
   };
   crossTrainConfig.rootIds = keys(countMap).filter(key => (countMap[key] === 0 || key === rootId) && triggerRules[key]);
   crossTrainConfig.triggerRules = triggerRules;

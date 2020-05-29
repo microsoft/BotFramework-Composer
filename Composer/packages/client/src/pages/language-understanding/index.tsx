@@ -37,7 +37,7 @@ const LUPage: React.FC<LUPageProps> = props => {
         id: dialog.id,
         url: `/bot/${projectId}/language-understanding/${dialog.id}`,
         name: dialog.displayName,
-        ariaLabel: formatMessage('language understanding file'),
+        ariaLabel: formatMessage('language understanding file')
       };
     });
     const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
@@ -50,7 +50,7 @@ const LUPage: React.FC<LUPageProps> = props => {
       id: 'all',
       name: formatMessage('All'),
       ariaLabel: formatMessage('all language understanding files'),
-      url: `/bot/${projectId}/language-understanding/all`,
+      url: `/bot/${projectId}/language-understanding/all`
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -75,21 +75,21 @@ const LUPage: React.FC<LUPageProps> = props => {
     {
       type: 'element',
       element: <TestController />,
-      align: 'right',
-    },
+      align: 'right'
+    }
   ];
 
   const onRenderHeaderContent = () => {
     if (!isRoot || edit) {
       return (
         <Toggle
+          checked={!!edit}
           className={'toggleEditMode'}
           css={actionButton}
-          onText={formatMessage('Edit mode')}
-          offText={formatMessage('Edit mode')}
           defaultChecked={false}
-          checked={!!edit}
+          offText={formatMessage('Edit mode')}
           onChange={onToggleEditMode}
+          onText={formatMessage('Edit mode')}
         />
       );
     }
@@ -99,16 +99,16 @@ const LUPage: React.FC<LUPageProps> = props => {
 
   return (
     <Page
+      data-testid="LUPage"
+      navLinks={navLinks}
       title={formatMessage('User Input')}
       toolbarItems={toolbarItems}
-      navLinks={navLinks}
       onRenderHeaderContent={onRenderHeaderContent}
-      data-testid="LUPage"
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <Router primary={false} component={Fragment}>
-          <CodeEditor path="/edit" dialogId={dialogId} />
-          <TableView path="/" dialogId={dialogId} />
+        <Router component={Fragment} primary={false}>
+          <CodeEditor dialogId={dialogId} path="/edit" />
+          <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>
     </Page>

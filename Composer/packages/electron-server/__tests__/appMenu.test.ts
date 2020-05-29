@@ -5,7 +5,7 @@ import { initAppMenu } from '../src/appMenu';
 
 const mockIsMac = jest.fn();
 jest.mock('../src/utility/platform', () => ({
-  isMac: () => mockIsMac(),
+  isMac: () => mockIsMac()
 }));
 
 const mockBuildFromTemplate = jest.fn();
@@ -15,9 +15,9 @@ jest.mock('electron', () => ({
   dialog: {},
   Menu: {
     buildFromTemplate: template => mockBuildFromTemplate(template),
-    setApplicationMenu: menu => mockSetApplicationMenu(menu),
+    setApplicationMenu: menu => mockSetApplicationMenu(menu)
   },
-  shell: {},
+  shell: {}
 }));
 
 describe('App menu', () => {

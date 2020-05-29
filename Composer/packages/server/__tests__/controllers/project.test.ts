@@ -14,12 +14,12 @@ jest.mock('@bfc/plugin-loader', () => {
     pluginLoader: {
       extensions: {
         botTemplates: [],
-        baseTemplates: [],
-      },
+        baseTemplates: []
+      }
     },
     PluginLoader: {
-      getUserFromRequest: jest.fn(),
-    },
+      getUserFromRequest: jest.fn()
+    }
   };
 });
 
@@ -34,19 +34,19 @@ const bot1 = Path.resolve(__dirname, '../mocks/samplebots/bot1');
 
 const location1 = {
   storageId: 'default',
-  path: bot1,
+  path: bot1
 };
 
 const location2 = {
   storageId: 'default',
-  path: useFortest,
+  path: useFortest
 };
 
 beforeEach(() => {
   mockRes = {
     status: jest.fn().mockReturnThis(),
     json: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis(),
+    send: jest.fn().mockReturnThis()
   } as any;
 });
 
@@ -55,7 +55,7 @@ beforeAll(async () => {
     id: 'SampleBot',
     name: 'Sample Bot',
     description: 'Sample Bot',
-    path: mockSampleBotPath,
+    path: mockSampleBotPath
   });
   const currentProjectId = await BotProjectService.openProject(location1);
   const currentProject = await BotProjectService.getProjectById(currentProjectId);
@@ -78,12 +78,12 @@ describe('getProject', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: {},
+      body: {}
     } as Request;
     await ProjectController.getProjectById(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(404);
     expect(mockRes.json).toHaveBeenCalledWith({
-      message: 'project not found in cache',
+      message: 'project not found in cache'
     });
   });
 
@@ -91,7 +91,7 @@ describe('getProject', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') },
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') }
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -103,12 +103,12 @@ describe('open bot operation', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: 'wrong/path' },
+      body: { storageId: 'default', path: 'wrong/path' }
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({
-      message: 'file not exist wrong/path',
+      message: 'file not exist wrong/path'
     });
   });
 
@@ -116,7 +116,7 @@ describe('open bot operation', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') },
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') }
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -130,7 +130,7 @@ describe('should save as bot', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { storageId: 'default', location: saveAsDir, description: '', name: 'saveAsBot' },
+      body: { storageId: 'default', location: saveAsDir, description: '', name: 'saveAsBot' }
     } as Request;
     await ProjectController.saveProjectAs(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -143,7 +143,7 @@ describe('should get recent projects', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: {},
+      body: {}
     } as Request;
     await ProjectController.getRecentProjects(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -157,7 +157,7 @@ describe('create a Empty Bot project', () => {
     const mockReq = {
       params: {},
       query: {},
-      body: { storageId: 'default', location: newBotDir, description: '', name: name, templateId: 'SampleBot' },
+      body: { storageId: 'default', location: newBotDir, description: '', name: name, templateId: 'SampleBot' }
     } as Request;
     await ProjectController.createProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -173,7 +173,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'bot1.dialog', content: '' },
+      body: { name: 'bot1.dialog', content: '' }
     } as Request;
     await ProjectController.updateFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -182,7 +182,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'test2.dialog', content: '' },
+      body: { name: 'test2.dialog', content: '' }
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -192,7 +192,7 @@ describe('dialog operation', () => {
     const mockReq = {
       params: { name: 'test2.dialog', projectId },
       query: {},
-      body: {},
+      body: {}
     } as Request;
     await ProjectController.removeFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -209,7 +209,7 @@ describe('lg operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'common.en-us.lg', content: '' },
+      body: { name: 'common.en-us.lg', content: '' }
     } as Request;
     await ProjectController.updateFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -219,7 +219,7 @@ describe('lg operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'test1.lg', content: '' },
+      body: { name: 'test1.lg', content: '' }
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -229,7 +229,7 @@ describe('lg operation', () => {
     const mockReq = {
       params: { name: 'test1.lg', projectId },
       query: {},
-      body: {},
+      body: {}
     } as Request;
     await ProjectController.removeFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -246,7 +246,7 @@ describe('lu operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'b.en-us.lu', content: '' },
+      body: { name: 'b.en-us.lu', content: '' }
     } as Request;
     await ProjectController.updateFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -256,7 +256,7 @@ describe('lu operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'c.lu', content: '' },
+      body: { name: 'c.lu', content: '' }
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -266,54 +266,9 @@ describe('lu operation', () => {
     const mockReq = {
       params: { name: 'c.lu', projectId },
       query: {},
-      body: {},
+      body: {}
     } as Request;
     await ProjectController.removeFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
-});
-
-describe('setting operation', () => {
-  const defaultSetting = {
-    MicrosoftAppId: '',
-    luis: {
-      name: 'test',
-      authoringRegion: 'westus',
-      defaultLanguage: 'en-us',
-      environment: 'composer',
-    },
-    qna: {
-      knowledgebaseid: '',
-      endpointkey: '',
-      hostname: '',
-    },
-    downsampling: {
-      maxImbalanceRatio: 10,
-      maxUtteranceAllowed: 15000,
-    },
-  };
-  let projectId = '';
-  beforeEach(async () => {
-    projectId = await BotProjectService.openProject(location2);
-  });
-  it('should update default setting', async () => {
-    const mockReq = {
-      params: { projectId },
-      query: {},
-      body: { settings: defaultSetting },
-    } as Request;
-
-    await ProjectController.updateDefaultSlotEnvSettings(mockReq, mockRes);
-    expect(mockRes.send).toHaveBeenCalledWith('ok');
-  });
-
-  it('should update default setting', async () => {
-    const mockReq = {
-      params: { projectId },
-      query: { obfuscate: false },
-    } as Request;
-
-    await ProjectController.getDefaultSlotEnvSettings(mockReq, mockRes);
-    expect(mockRes.send).toHaveBeenCalledWith(defaultSetting);
   });
 });

@@ -13,7 +13,7 @@ import {
   LuFile,
   Skill,
   UserSettings,
-  Diagnostic,
+  Diagnostic
 } from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension';
 
@@ -74,6 +74,7 @@ export interface PublishTarget {
   name: string;
   type: string;
   configuration: string;
+  lastPublished?: Date;
 }
 
 export interface RuntimeTemplate {
@@ -158,6 +159,7 @@ export interface State {
   announcement: string | undefined;
   appUpdate: AppUpdateState;
   displaySkillManifest?: string;
+  botOpening: boolean;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

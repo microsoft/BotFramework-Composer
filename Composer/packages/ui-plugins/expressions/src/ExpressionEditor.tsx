@@ -22,7 +22,7 @@ const ExpressionEditor: React.FC<FieldProps> = props => {
       readOnly={readonly}
       styles={{
         root: { width: '100%' },
-        errorMessage: { display: 'none' },
+        errorMessage: { display: 'none' }
       }}
       value={value}
       onChange={handleChange}

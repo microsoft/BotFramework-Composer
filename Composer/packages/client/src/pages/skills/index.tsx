@@ -28,19 +28,19 @@ const Skills: React.FC<RouteComponentProps> = () => {
       text: formatMessage('Connect to a new skill'),
       buttonProps: {
         iconProps: {
-          iconName: 'Add',
+          iconName: 'Add'
         },
         onClick: () => {
           setEditIndex(-1);
-        },
+        }
       },
-      align: 'left',
+      align: 'left'
     },
     {
       type: 'element',
       element: <TestController />,
-      align: 'right',
-    },
+      align: 'right'
+    }
   ];
 
   const onItemDelete = useCallback(
@@ -48,7 +48,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
       const payload = {
         projectId,
         targetId: index,
-        skillData: null,
+        skillData: null
       };
       actions.updateSkill(payload);
     },
@@ -60,7 +60,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
       const payload = {
         projectId,
         targetId: editIndex,
-        skillData: submitFormData,
+        skillData: submitFormData
       };
       actions.updateSkill(payload);
       setEditIndex(undefined);
@@ -73,29 +73,29 @@ const Skills: React.FC<RouteComponentProps> = () => {
   }, []);
 
   return (
-    <div data-testid="skills-page" css={ContainerStyle}>
+    <div css={ContainerStyle} data-testid="skills-page">
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>
       <div role="main">
         <SkillSettings
-          projectId={projectId}
-          botName={botName}
-          settings={settings}
-          setSettings={actions.setSettings}
           botId={settings.MicrosoftAppId}
+          botName={botName}
+          projectId={projectId}
+          setSettings={actions.setSettings}
+          settings={settings}
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />
       </div>
-      <SkillList skills={skills} projectId={projectId} onEdit={idx => setEditIndex(idx)} onDelete={onItemDelete} />
+      <SkillList projectId={projectId} skills={skills} onDelete={onItemDelete} onEdit={idx => setEditIndex(idx)} />
       <CreateSkillModal
-        isOpen={typeof editIndex === 'number'}
-        skills={skills}
-        projectId={projectId}
         editIndex={editIndex}
-        onSubmit={onSubmitForm}
+        isOpen={typeof editIndex === 'number'}
+        projectId={projectId}
+        skills={skills}
         onDismiss={onDismissForm}
+        onSubmit={onSubmitForm}
       />
     </div>
   );

@@ -10,13 +10,15 @@ export function resolveRef(
     const defName = schema.$ref.replace('#/definitions/', '');
     const defSchema = typeof definitions?.[defName] === 'object' ? (definitions?.[defName] as JSONSchema7) : {};
 
-    const resolvedSchema = {
-      ...defSchema,
-      ...schema,
-    } as JSONSchema7;
-    delete resolvedSchema.$ref;
+    if (typeof defSchema === 'object') {
+      const resolvedSchema = {
+        ...defSchema,
+        ...schema
+      } as JSONSchema7;
+      delete resolvedSchema.$ref;
 
-    return resolvedSchema;
+      return resolvedSchema;
+    }
   }
 
   return schema;

@@ -84,8 +84,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
           template: {
             name,
             parameters,
-            body,
-          },
+            body
+          }
         };
         actions.updateLgTemplate(payload);
       }, 500),
@@ -100,7 +100,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         const payload = {
           id,
           projectId,
-          content,
+          content
         };
         actions.updateLgFile(payload);
       }, 500),
@@ -120,7 +120,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
           const newContent = lgUtil.updateTemplate(content, name, {
             name,
             parameters,
-            body: value,
+            body: value
           });
           setDiagnostics(parse(newContent, id, lgImportresolver).diagnostics);
           updateLgTemplate(value);
@@ -143,22 +143,22 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const lgOption = {
     projectId,
     fileId: file?.id || dialogId,
-    templateId: template?.name,
+    templateId: template?.name
   };
 
   return (
     <LgEditor
-      hidePlaceholder={inlineMode}
-      editorDidMount={editorDidMount}
-      value={content}
-      errorMessage={errorMsg}
       diagnostics={currentDiagnostics}
-      lgOption={lgOption}
-      languageServer={{
-        path: lspServerPath,
-      }}
-      onChange={_onChange}
+      editorDidMount={editorDidMount}
       editorSettings={userSettings.codeEditor}
+      errorMessage={errorMsg}
+      hidePlaceholder={inlineMode}
+      languageServer={{
+        path: lspServerPath
+      }}
+      lgOption={lgOption}
+      value={content}
+      onChange={_onChange}
       onChangeSettings={handleSettingsChange}
     />
   );

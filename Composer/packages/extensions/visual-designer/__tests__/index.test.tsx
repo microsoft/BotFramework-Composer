@@ -13,7 +13,7 @@ window.matchMedia = jest.fn().mockImplementation(query => {
     media: query,
     onchange: null,
     addListener: jest.fn(),
-    removeListener: jest.fn(),
+    removeListener: jest.fn()
   };
 });
 
@@ -21,14 +21,14 @@ describe('<VisualDesigner />', () => {
   it('should render the visual designer', async () => {
     const { getByTestId } = render(
       <VisualDesigner
-        data={{ content: '{"json": "some data"}' }}
         currentDialog={{ id: 'Main', displayName: 'Main', isRoot: false }}
+        data={{ content: '{"json": "some data"}' }}
         dialogId="SomeDialog"
         focusedEvent="events[0]"
         focusedSteps={['events[0].steps[0]']}
         focusedTab=""
         shellApi={{
-          saveData: () => {},
+          saveData: () => {}
         }}
       />
     );

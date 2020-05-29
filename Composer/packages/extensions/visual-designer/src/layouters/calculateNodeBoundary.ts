@@ -9,7 +9,7 @@ import {
   LoopEdgeMarginLeft,
   DiamondSize,
   IconBrickSize,
-  BoxMargin,
+  BoxMargin
 } from '../constants/ElementSizes';
 
 import { calculateBranchNodesIntervalX } from './sharedLayouterUtils';

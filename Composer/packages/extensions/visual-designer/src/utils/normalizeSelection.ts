@@ -28,7 +28,7 @@ export const sortActionIds = (actionIds: string[]): string[] => {
     paths: id
       .split('.')
       .map(x => x.replace(/\w+\[(\d+)\]/, '$1'))
-      .map(x => parseInt(x) || 0),
+      .map(x => parseInt(x) || 0)
   }));
   const sorted = parsedActionIds.sort((a, b) => {
     const aPaths = a.paths;

@@ -21,14 +21,14 @@ interface ArrayItemState {
 const generateArrayItems = (value: any[]): ArrayItem[] => {
   return value.map(i => ({
     id: generateUniqueId(),
-    value: i,
+    value: i
   }));
 };
 
 const createArrayItem = (value: any): ArrayItem => {
   return {
     id: generateUniqueId(),
-    value,
+    value
   };
 };
 
@@ -65,7 +65,7 @@ export const getArrayItemProps = (items: ArrayItem[], index: number, onChange: A
     index,
     onChange: onItemChange,
     onReorder,
-    onRemove,
+    onRemove
   };
 };
 

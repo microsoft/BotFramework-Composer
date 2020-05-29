@@ -11,11 +11,11 @@ describe('<Home/>', () => {
   it('should dispatch onSelectionChanged event when clicked on a link on <RecentBotList>', () => {
     const recentProjects = [
       { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'a', path: 'path1', storageId: 'default' },
-      { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'b', path: 'path2', storageId: 'default' },
+      { dataModified: 'Thu Nov 28 2019 17:22:19 GMT+0800 (GMT+08:00)', name: 'b', path: 'path2', storageId: 'default' }
     ];
     const onItemChosen = jest.fn(item => item.path);
     const { container, queryByLabelText } = render(
-      <RecentBotList onItemChosen={onItemChosen} recentProjects={recentProjects} />
+      <RecentBotList recentProjects={recentProjects} onItemChosen={onItemChosen} />
     );
     expect(container).toHaveTextContent('a');
     expect(container).toHaveTextContent('b');
@@ -27,10 +27,10 @@ describe('<Home/>', () => {
   it('should dispatch onClick event when clicked on an ExampleList', () => {
     const templates = [
       { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot', order: 1 },
-      { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 },
+      { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 }
     ];
     const onClickTemplate = jest.fn(item => item);
-    const { container, getByText } = render(<ExampleList onClick={onClickTemplate} examples={templates} />);
+    const { container, getByText } = render(<ExampleList examples={templates} onClick={onClickTemplate} />);
     expect(container).toHaveTextContent('Echo Bot');
     const link = getByText('Echo Bot');
     fireEvent.click(link);
@@ -45,39 +45,39 @@ describe('<Home/>', () => {
         text: 'New',
         buttonProps: {
           iconProps: {
-            iconName: 'CirclePlus',
+            iconName: 'CirclePlus'
           },
-          onClick: () => setCreationFlowStatus('NEW'),
+          onClick: () => setCreationFlowStatus('NEW')
         },
         align: 'left',
         dataTestid: 'homePage-ToolBar-New',
-        disabled: false,
+        disabled: false
       },
       {
         type: 'action',
         text: 'Open',
         buttonProps: {
           iconProps: {
-            iconName: 'OpenFolderHorizontal',
+            iconName: 'OpenFolderHorizontal'
           },
-          onClick: () => setCreationFlowStatus('OPEN'),
+          onClick: () => setCreationFlowStatus('OPEN')
         },
         align: 'left',
         dataTestid: 'homePage-ToolBar-Open',
-        disabled: false,
+        disabled: false
       },
       {
         type: 'action',
         text: 'Save as',
         buttonProps: {
           iconProps: {
-            iconName: 'Save',
+            iconName: 'Save'
           },
-          onClick: () => setCreationFlowStatus('SAVE AS'),
+          onClick: () => setCreationFlowStatus('SAVE AS')
         },
         align: 'left',
-        disabled: false,
-      },
+        disabled: false
+      }
     ];
     const { container, getByText } = render(<ToolBar toolbarItems={items} />);
     expect(container).toHaveTextContent('New');

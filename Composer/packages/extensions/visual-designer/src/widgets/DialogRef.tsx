@@ -26,7 +26,7 @@ export const DialogRef: WidgetComponent<DialogRefCardProps> = ({ id, onEvent, di
     return {
       [AttrNames.SelectableElement]: true,
       [AttrNames.InlineLinkElement]: true,
-      [AttrNames.SelectedId]: `${id}${LinkTag}`,
+      [AttrNames.SelectedId]: `${id}${LinkTag}`
     };
   };
   useEffect(() => {

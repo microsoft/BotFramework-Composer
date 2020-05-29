@@ -23,7 +23,7 @@ const OTHER_FIELDS: InputDialogKeys[] = [
   'defaultValue',
   'allowInterruptions',
   'alwaysPrompt',
-  'recognizerOptions',
+  'recognizerOptions'
 ];
 
 const PromptField: React.FC<FieldProps> = props => {
@@ -55,15 +55,16 @@ const PromptField: React.FC<FieldProps> = props => {
     <div>
       <Pivot linkSize={PivotLinkSize.large} selectedKey={focusedTab} styles={tabs} onLinkClick={handleTabChange}>
         <PivotItem headerText={formatMessage('Bot Asks')} itemKey={PromptTab.BOT_ASKS}>
-          <BotAsks {...props} getSchema={getSchema} onChange={updateField} getError={getError} />
+          <BotAsks {...props} getError={getError} getSchema={getSchema} onChange={updateField} />
         </PivotItem>
         <PivotItem headerText={formatMessage('User Input')} itemKey={PromptTab.USER_INPUT}>
-          <UserInput {...props} getSchema={getSchema} onChange={updateField} getError={getError} />
+          <UserInput {...props} getError={getError} getSchema={getSchema} onChange={updateField} />
         </PivotItem>
         <PivotItem headerText={formatMessage('Other')} itemKey={PromptTab.OTHER}>
           {OTHER_FIELDS.filter(f => getSchema(f)).map(f => (
             <SchemaField
               key={f}
+              definitions={props.definitions}
               depth={props.depth}
               id={`${props.id}.${f}`}
               name={f}
@@ -72,7 +73,6 @@ const PromptField: React.FC<FieldProps> = props => {
               uiOptions={props.uiOptions.properties?.[f] || {}}
               value={props.value?.[f]}
               onChange={updateField(f)}
-              definitions={props.definitions}
             />
           ))}
         </PivotItem>

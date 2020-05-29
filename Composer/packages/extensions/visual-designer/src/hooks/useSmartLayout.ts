@@ -42,7 +42,7 @@ export function useSmartLayout<T extends string>(
       accumulatedPatches[nodeName] = boundary;
       setBoundaryMap({
         ...boundaryMap,
-        ...accumulatedPatches,
+        ...accumulatedPatches
       });
     }
   };
@@ -64,6 +64,6 @@ export function useSmartLayout<T extends string>(
 
   return {
     layout,
-    updateNodeBoundary: patchBoundary,
+    updateNodeBoundary: patchBoundary
   };
 }

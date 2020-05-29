@@ -29,8 +29,8 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     actions: { onboardingSetComplete, updateUserSettings },
     state: {
       onboarding: { complete },
-      userSettings,
-    },
+      userSettings
+    }
   } = useContext(StoreContext);
 
   const onOnboardingChange = useCallback(
@@ -53,11 +53,11 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       <section css={section}>
         <h2>{formatMessage('Onboarding')}</h2>
         <SettingToggle
-          id="onboardingToggle"
-          title={formatMessage('Onboarding')}
-          image={images.onboarding}
-          description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
           checked={!complete}
+          description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
+          id="onboardingToggle"
+          image={images.onboarding}
+          title={formatMessage('Onboarding')}
           onToggle={onOnboardingChange}
         />
         <TeachingBubble
@@ -65,17 +65,17 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
             hidden: !calloutIsShown,
             role: 'status',
             directionalHint: DirectionalHint.rightCenter,
-            isBeakVisible: false,
+            isBeakVisible: false
           }}
-          target="#onboardingToggle"
           styles={{
             bodyContent: {
-              padding: '0px',
+              padding: '0px'
             },
             body: {
-              margin: '0px',
-            },
+              margin: '0px'
+            }
           }}
+          target="#onboardingToggle"
         >
           <div
             css={css`
@@ -108,26 +108,26 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <h2>{formatMessage('Property editor preferences')}</h2>
         <SettingToggle
           checked={userSettings.codeEditor.minimap}
-          onToggle={onCodeEditorChange('minimap')}
-          title={formatMessage('Minimap')}
           description={formatMessage(
             'A minimap gives a overview of your source code for quick navigation and code understanding.'
           )}
           image={images.minimap}
+          title={formatMessage('Minimap')}
+          onToggle={onCodeEditorChange('minimap')}
         />
         <SettingToggle
           checked={userSettings.codeEditor.lineNumbers}
-          onToggle={onCodeEditorChange('lineNumbers')}
-          title={formatMessage('Line numbers')}
           description={formatMessage('Enable line numbers to refer to code lines by number.')}
           image={images.lineNumbers}
+          title={formatMessage('Line numbers')}
+          onToggle={onCodeEditorChange('lineNumbers')}
         />
         <SettingToggle
           checked={userSettings.codeEditor.wordWrap}
-          onToggle={onCodeEditorChange('wordWrap')}
-          title={formatMessage('Sentence wrap')}
           description={formatMessage('Display lines that extends beyond the width of the editor on the next line.')}
           image={images.wordWrap}
+          title={formatMessage('Sentence wrap')}
+          onToggle={onCodeEditorChange('wordWrap')}
         />
       </section>
 

@@ -58,7 +58,7 @@ export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: 
     if (range) {
       return {
         ...d,
-        range: offsetRange(range, offset),
+        range: offsetRange(range, offset)
       };
     }
     return d;

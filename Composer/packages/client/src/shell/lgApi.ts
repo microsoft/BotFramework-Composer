@@ -34,7 +34,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
       file,
       projectId,
       templateName,
-      template,
+      template
     });
   };
 
@@ -49,7 +49,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
       file,
       projectId,
       fromTemplateName,
-      toTemplateName,
+      toTemplateName
     });
   };
 
@@ -62,7 +62,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     return actions.removeLgTemplate({
       file,
       projectId,
-      templateName,
+      templateName
     });
   };
 
@@ -75,7 +75,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     return actions.removeLgTemplates({
       file,
       projectId,
-      templateNames,
+      templateNames
     });
   };
 
@@ -85,7 +85,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     updateLgTemplate: createThrottledFunc(updateLgTemplate),
     removeLgTemplate,
     removeLgTemplates,
-    copyLgTemplate,
+    copyLgTemplate
   };
 }
 

@@ -16,8 +16,8 @@ const createOptions = (): IDropdownOption[] => {
       text: formatMessage('All'),
       ariaLabel: formatMessage('Show All Notifications'),
       data: '',
-      isSelected: true,
-    },
+      isSelected: true
+    }
   ];
   DiagnosticSeverity.forEach(item => {
     return defaultOptions.push({ key: item, text: item, data: item, ariaLabel: `Show ${item} Notifications` });
@@ -36,13 +36,13 @@ export const NotificationHeader: React.FC<INotificationHeader> = props => {
     <div css={notificationHeader}>
       <h1 css={notificationHeaderText}>{formatMessage('Notifications')}</h1>
       <Dropdown
+        ariaLabel={formatMessage('Notification type')}
+        data-testid="notifications-dropdown"
+        options={createOptions()}
+        styles={dropdownStyles}
         onChange={(event, option) => {
           if (option) onChange(option.data);
         }}
-        options={createOptions()}
-        styles={dropdownStyles}
-        data-testid="notifications-dropdown"
-        ariaLabel={formatMessage('Notification type')}
       />
     </div>
   );

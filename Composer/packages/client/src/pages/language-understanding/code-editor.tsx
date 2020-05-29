@@ -78,8 +78,8 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
           intentName: Name,
           intent: {
             Name,
-            Body,
-          },
+            Body
+          }
         };
         actions.updateLuIntent(payload);
       }, 500),
@@ -94,7 +94,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
         const payload = {
           projectId,
           id,
-          content,
+          content
         };
         actions.updateLuFile(payload);
       }, 500),
@@ -117,7 +117,7 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
   const luOption = {
     projectId,
     fileId: file?.id || dialogId,
-    sectionId: intent?.Name,
+    sectionId: intent?.Name
   };
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
@@ -126,15 +126,15 @@ const CodeEditor: React.FC<CodeEditorProps> = props => {
 
   return (
     <LuEditor
-      editorDidMount={editorDidMount}
-      value={content}
       diagnostics={currentDiagnostics}
-      luOption={luOption}
-      languageServer={{
-        path: lspServerPath,
-      }}
-      onChange={_onChange}
+      editorDidMount={editorDidMount}
       editorSettings={userSettings.codeEditor}
+      languageServer={{
+        path: lspServerPath
+      }}
+      luOption={luOption}
+      value={content}
+      onChange={_onChange}
       onChangeSettings={handleSettingsChange}
     />
   );

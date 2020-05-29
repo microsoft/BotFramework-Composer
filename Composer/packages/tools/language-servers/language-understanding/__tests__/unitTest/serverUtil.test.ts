@@ -26,15 +26,15 @@ const luisObject = {
     {
       name: 'zipcode',
       regexPattern: '[0-9]{5}',
-      roles: [],
-    },
+      roles: []
+    }
   ],
   model_features: [],
   regex_features: [],
   utterances: [],
   patterns: [],
   patternAnyEntities: [],
-  prebuiltEntities: [],
+  prebuiltEntities: []
 };
 
 describe('LU LSP Server Function Unit Tests', function() {

@@ -42,7 +42,7 @@ export const Collapse = ({ title = '', children }) => {
 
 Collapse.propTypes = {
   title: PropTypes.string,
-  children: PropTypes.element,
+  children: PropTypes.element
 };
 
 const COLLAPSED = 'collapsed';
@@ -66,7 +66,7 @@ function CollapseContent({
   const [collapseState, setCollapseState] = useState(isOpen ? EXPANDED : COLLAPSED);
   const [collapseStyle, setCollapseStyle] = useState({
     height: isOpen ? null : getCollapseHeight(),
-    visibility: isOpen ? null : getCollapsedVisibility(),
+    visibility: isOpen ? null : getCollapsedVisibility()
   });
   const [hasReversed, setHasReversed] = useState(false);
   const firstUpdate = useRef(true);
@@ -106,7 +106,7 @@ function CollapseContent({
         collapseState,
         collapseStyle,
         hasReversed,
-        isMoving: isMoving(collapseState),
+        isMoving: isMoving(collapseState)
       });
     }
   }
@@ -124,7 +124,7 @@ function CollapseContent({
 
     setCollapseStyle({
       height: getCollapseHeight(),
-      visibility: getCollapsedVisibility(),
+      visibility: getCollapsedVisibility()
     });
     onCallback(onChange);
   }
@@ -136,13 +136,13 @@ function CollapseContent({
 
     setCollapseStyle({
       height,
-      visibility: '',
+      visibility: ''
     });
 
     nextFrame(() => {
       setCollapseStyle({
         height: getCollapseHeight(),
-        visibility: '',
+        visibility: ''
       });
       onCallback(onChange);
     });
@@ -155,7 +155,7 @@ function CollapseContent({
 
         setCollapseStyle({
           height,
-          visibility: '',
+          visibility: ''
         });
         onCallback(onChange);
       }
@@ -167,7 +167,7 @@ function CollapseContent({
 
     setCollapseStyle({
       height: '',
-      visibility: '',
+      visibility: ''
     });
     onCallback(onChange);
   }
@@ -205,15 +205,15 @@ function CollapseContent({
 
   const style = {
     transition,
-    ...collapseStyle,
+    ...collapseStyle
   };
 
   return (
     <div
       ref={contentRef}
-      style={style}
       className={className}
       css={cssTransition}
+      style={style}
       onTransitionEnd={onTransitionEnd}
       {...attrs}
     >

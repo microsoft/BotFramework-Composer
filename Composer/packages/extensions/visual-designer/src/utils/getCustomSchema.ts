@@ -24,13 +24,13 @@ export const getCustomSchema = (baseSchema?: OBISchema, ejectedSchema?: OBISchem
       schema.oneOf?.push({
         title: definition.title || $kind,
         description: definition.description || '',
-        $ref: `#/definitions/${$kind}`,
+        $ref: `#/definitions/${$kind}`
       });
       return schema;
     },
     {
       oneOf: [],
-      definitions: {},
+      definitions: {}
     } as OBISchema
   );
 

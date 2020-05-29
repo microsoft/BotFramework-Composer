@@ -24,7 +24,7 @@ export const EjectController = {
         await currentProject.init();
       } catch (err) {
         res.status(500).json({
-          message: err.message,
+          message: err.message
         });
         return;
       }
@@ -32,12 +32,12 @@ export const EjectController = {
       res.json({
         settings: {
           path: runtimePath,
-          startCommand: template.startCommand,
+          startCommand: template.startCommand
         },
-        message: 'success',
+        message: 'success'
       });
     } else {
       res.status(404).json({ message: 'template not found' });
     }
-  },
+  }
 };

@@ -30,7 +30,7 @@ const FormTitle: React.FC<FormTitleProps> = props => {
   const handleTitleChange = (newTitle?: string): void => {
     props.onChange({
       ...formData.$designer,
-      name: newTitle,
+      name: newTitle
     });
   };
 
@@ -72,6 +72,7 @@ const FormTitle: React.FC<FormTitleProps> = props => {
     <div css={styles.container} id={props.id}>
       <div>
         <EditableField
+          ariaLabel={formatMessage('form title')}
           depth={0}
           fontSize={FontSizes.size20}
           id="form-title"
@@ -79,12 +80,11 @@ const FormTitle: React.FC<FormTitleProps> = props => {
           schema={{}}
           styles={{
             field: { fontWeight: FontWeights.semibold },
-            root: { margin: '5px 0 7px -9px' },
+            root: { margin: '5px 0 7px -9px' }
           }}
           uiOptions={{}}
           value={initialValue}
           onChange={handleTitleChange}
-          ariaLabel={formatMessage('form title')}
         />
         <p css={styles.subtitle}>{getSubTitle()}</p>
         <p css={styles.description}>
@@ -94,10 +94,10 @@ const FormTitle: React.FC<FormTitleProps> = props => {
               <br />
               <br />
               <Link
-                href={uiOptions?.helpLink}
-                target="_blank"
-                rel="noopener noreferrer"
                 aria-label={formatMessage('Learn more about {title}', { title: getHelpLinkLabel() })}
+                href={uiOptions?.helpLink}
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 {formatMessage('Learn more')}
               </Link>

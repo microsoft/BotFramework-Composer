@@ -30,7 +30,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     quickSuggestions: true,
     folding: false,
     readOnly: false,
-    ...additionalOptions,
+    ...additionalOptions
   };
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     const disposable = monaco.editor.onDidCreateModel(model => {
       const diagnosticOptions: any = {
         validate: true,
-        enableSchemaRequest: true,
+        enableSchemaRequest: true
       };
 
       if (schema) {
@@ -60,8 +60,8 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
           {
             uri,
             schema,
-            fileMatch: [...(currentSchema?.fileMatch || []), model.uri.toString()],
-          },
+            fileMatch: [...(currentSchema?.fileMatch || []), model.uri.toString()]
+          }
         ];
       }
 
@@ -93,17 +93,17 @@ const JsonEditor: React.FC<JsonEditorProps> = props => {
     }
   };
 
-  const json = schema ? merge({}, schemaDefaults(schema), initialValue) : initialValue;
+  const json = schema?.type === 'object' ? merge({}, schemaDefaults(schema), initialValue) : initialValue;
 
   return (
     <BaseEditor
-      id={id}
+      errorMessage={parseError}
       helpURL="https://www.json.org"
+      id={id}
       language="json"
       options={options}
       value={JSON.stringify(json, null, 2)}
       onChange={handleChange}
-      errorMessage={parseError}
       onInit={onInit}
       {...rest}
     />

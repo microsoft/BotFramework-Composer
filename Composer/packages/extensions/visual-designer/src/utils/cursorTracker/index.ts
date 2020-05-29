@@ -31,7 +31,7 @@ export function moveCursor(
   return {
     selected: element.selectedId || id,
     focused: element.focusedId || undefined,
-    tab: element.tab || '',
+    tab: element.tab || ''
   };
 }
 

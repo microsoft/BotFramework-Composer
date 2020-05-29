@@ -11,6 +11,6 @@ export const mergePluginConfig = (...plugins: PluginConfig[]): Required<FlowEdit
   const externalSchema = plugins.map(x => x.visualSchema?.schema).filter(x => !!x);
   return {
     widgets: Object.assign({}, defaultFlowWidgets, ...externalWidgets),
-    schema: Object.assign({}, defaultFlowSchema, ...externalSchema),
+    schema: Object.assign({}, defaultFlowSchema, ...externalSchema)
   };
 };

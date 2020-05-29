@@ -29,22 +29,22 @@ const calculateArrowPoints = (endPoint: Coord2D, direction: EdgeDirection, arrow
     case EdgeDirection.Up:
       return [
         { x: endPoint.x - arrowSize, y: endPoint.y + arrowSize },
-        { x: endPoint.x + arrowSize, y: endPoint.y + arrowSize },
+        { x: endPoint.x + arrowSize, y: endPoint.y + arrowSize }
       ];
     case EdgeDirection.Down:
       return [
         { x: endPoint.x - arrowSize, y: endPoint.y - arrowSize },
-        { x: endPoint.x + arrowSize, y: endPoint.y - arrowSize },
+        { x: endPoint.x + arrowSize, y: endPoint.y - arrowSize }
       ];
     case EdgeDirection.Left:
       return [
         { x: endPoint.x + arrowSize, y: endPoint.y + arrowSize },
-        { x: endPoint.x + arrowSize, y: endPoint.y - arrowSize },
+        { x: endPoint.x + arrowSize, y: endPoint.y - arrowSize }
       ];
     case EdgeDirection.Right:
       return [
         { x: endPoint.x - arrowSize, y: endPoint.y + arrowSize },
-        { x: endPoint.x - arrowSize, y: endPoint.y - arrowSize },
+        { x: endPoint.x - arrowSize, y: endPoint.y - arrowSize }
       ];
   }
 };
@@ -54,15 +54,15 @@ const getDefaultEdgeOptions = (direction: EdgeDirection): EdgeOptions => {
     [EdgeDirection.Right]: { x: 8, y: -5 },
     [EdgeDirection.Left]: { x: -28, y: -5 },
     [EdgeDirection.Up]: { x: -22, y: -8 },
-    [EdgeDirection.Down]: { x: 8, y: 22 },
+    [EdgeDirection.Down]: { x: 8, y: 22 }
   };
 
   return {
     color: ObiColors.AzureGray2,
     labelOptions: {
       offset: defaultTextOffsets[direction],
-      fontSize: 14,
-    },
+      fontSize: 14
+    }
   };
 };
 
@@ -88,7 +88,7 @@ export const drawSVGEdge = (
   const strokeProps = {
     strokeDasharray: dashed ? '4' : 'none',
     strokeWidth: '1',
-    stroke: color,
+    stroke: color
   };
   const endPoint = calculateEdgeEndPoint(startPoint, direction, length);
 
@@ -99,8 +99,8 @@ export const drawSVGEdge = (
       <line
         key={`edge-${id}__line`}
         x1={startPoint.x}
-        y1={startPoint.y}
         x2={endPoint.x}
+        y1={startPoint.y}
         y2={endPoint.y}
         {...strokeProps}
       />
@@ -112,9 +112,9 @@ export const drawSVGEdge = (
     const text = (
       <text
         key={`edge-${id}__text`}
+        fontSize={labelOptions?.fontSize}
         x={startPoint.x + (labelOptions?.offset?.x || 0)}
         y={startPoint.y + (labelOptions?.offset?.y || 0)}
-        fontSize={labelOptions?.fontSize}
       >
         {label}
       </text>

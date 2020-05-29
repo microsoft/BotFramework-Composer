@@ -76,7 +76,7 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
       [AttrNames.SelectableElement]: true,
       [AttrNames.SelectedId]: selectedId,
       [AttrNames.SelectionIndex]: getNodeIndex(id),
-      [AttrNames.Tab]: tab,
+      [AttrNames.Tab]: tab
     };
   };
 
@@ -97,11 +97,11 @@ export const ElementWrapper: FC<ElementWrapperProps> = ({ id, tab, titleInHeader
         }
       `}
       {...declareElementAttributes(selectableId, id)}
+      aria-label={ariaLabel}
       onClick={e => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}
-      aria-label={ariaLabel}
     >
       {children}
     </div>

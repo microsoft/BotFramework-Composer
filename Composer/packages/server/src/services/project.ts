@@ -88,7 +88,7 @@ export class BotProjectService {
       'turn.interrupted',
       'turn.dialogEvent',
       'turn.repeatedIds',
-      'turn.activityProcessed',
+      'turn.activityProcessed'
     ];
     const projectVariables =
       BotProjectService.getIndexedProjectById(projectId)
@@ -141,6 +141,12 @@ export class BotProjectService {
     });
   };
 
+  public static deleteProject = async (projectId: string): Promise<string> => {
+    const path = BotProjectService.projectLocationMap[projectId];
+    BotProjectService.removeProjectIdFromCache(projectId);
+    return path;
+  };
+
   public static openProject = async (locationRef: LocationRef, user?: UserIdentity): Promise<string> => {
     BotProjectService.initialize();
 
@@ -191,6 +197,15 @@ export class BotProjectService {
     const indexedCurrentProject = BotProjectService.currentBotProjects.find(({ id }) => id === projectId);
     if (indexedCurrentProject) return indexedCurrentProject;
   }
+
+  public static getProjectIdByPath = async (path: string) => {
+    for (const key in BotProjectService.projectLocationMap) {
+      if (BotProjectService.projectLocationMap[key] === path) {
+        return key;
+      }
+    }
+    return null;
+  };
 
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
@@ -247,7 +262,7 @@ export class BotProjectService {
     Store.set('recentBotProjects', BotProjectService.recentBotProjects);
   };
 
-  private static deleteRecentProject = (path: string): void => {
+  public static deleteRecentProject = (path: string): void => {
     const recentBotProjects = BotProjectService.recentBotProjects.filter(
       ref => Path.resolve(path) !== Path.resolve(ref.path)
     );

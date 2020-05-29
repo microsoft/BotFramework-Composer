@@ -49,14 +49,14 @@ export const App: React.FC = () => {
   return (
     <Fragment>
       <div
-        role="alert"
         aria-live="assertive"
+        role="alert"
         style={{
           display: 'block',
           position: 'absolute',
           top: '-9999px',
           height: '1px',
-          width: '1px',
+          width: '1px'
         }}
       >
         {announcement}
@@ -66,27 +66,27 @@ export const App: React.FC = () => {
         <nav css={sideBar(sideBarExpand)}>
           <div>
             <IconButton
-              iconProps={{
-                iconName: 'GlobalNavButton',
-              }}
+              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
               css={globalNav}
+              data-testid={'LeftNavButton'}
+              iconProps={{
+                iconName: 'GlobalNavButton'
+              }}
               onClick={() => {
                 setSideBarExpand(!sideBarExpand);
               }}
-              data-testid={'LeftNavButton'}
-              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
             />
             <div css={dividerTop} />{' '}
-            <FocusZone allowFocusRoot={true}>
+            <FocusZone allowFocusRoot>
               {topLinks.map((link, index) => {
                 return (
                   <NavItem
                     key={'NavLeftBar' + index}
-                    to={mapNavItemTo(link.to)}
+                    disabled={link.disabled}
+                    exact={link.exact}
                     iconName={link.iconName}
                     labelName={link.labelName}
-                    exact={link.exact}
-                    disabled={link.disabled}
+                    to={mapNavItemTo(link.to)}
                   />
                 );
               })}
@@ -98,11 +98,11 @@ export const App: React.FC = () => {
               return (
                 <NavItem
                   key={'NavLeftBar' + index}
-                  to={mapNavItemTo(link.to)}
+                  disabled={link.disabled}
+                  exact={link.exact}
                   iconName={link.iconName}
                   labelName={link.labelName}
-                  exact={link.exact}
-                  disabled={link.disabled}
+                  to={mapNavItemTo(link.to)}
                 />
               );
             })}

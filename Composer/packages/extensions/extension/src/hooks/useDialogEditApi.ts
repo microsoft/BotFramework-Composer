@@ -77,6 +77,6 @@ export function useDialogEditApi(shellApi: ShellApi) {
     deleteSelectedActions,
     copySelectedActions,
     cutSelectedActions,
-    updateRecognizer,
+    updateRecognizer
   };
 }

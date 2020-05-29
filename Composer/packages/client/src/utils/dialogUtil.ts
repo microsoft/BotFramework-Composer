@@ -8,7 +8,7 @@ import {
   dialogGroups,
   DialogInfo,
   DialogFactory,
-  ITriggerCondition,
+  ITriggerCondition
 } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
@@ -64,7 +64,7 @@ function insert(content, path: string, position: number | undefined, data: any) 
 
 function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
   const optionalAttributes: { intent?: string; event?: string; $designer: { [key: string]: string } } = {
-    $designer: {},
+    $designer: {}
   };
 
   if (data.event) {
@@ -180,8 +180,8 @@ export function getTriggerTypes(): IDropdownOption[] {
     }),
     {
       key: customEventKey,
-      text: formatMessage('Custom events'),
-    },
+      text: formatMessage('Custom events')
+    }
   ];
   return triggerTypes;
 }
@@ -201,7 +201,7 @@ export function getEventTypes(): IComboBoxOption[] {
       }
 
       return { key: t, text: name || t };
-    }),
+    })
   ];
   return eventTypes;
 }
@@ -221,7 +221,7 @@ export function getActivityTypes(): IDropdownOption[] {
       }
 
       return { key: t, text: name || t };
-    }),
+    })
   ];
   return activityTypes;
 }

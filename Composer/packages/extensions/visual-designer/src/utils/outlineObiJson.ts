@@ -8,7 +8,7 @@ const DEFAULT_CHILDREN_KEYS = [ObiFieldNames.Actions];
 const childrenMap = {
   [ObiTypes.AdaptiveDialog]: [ObiFieldNames.Actions],
   [ObiTypes.IfCondition]: [ObiFieldNames.Actions, ObiFieldNames.ElseActions],
-  [ObiTypes.SwitchCondition]: [ObiFieldNames.Cases, ObiFieldNames.DefaultCase],
+  [ObiTypes.SwitchCondition]: [ObiFieldNames.Cases, ObiFieldNames.DefaultCase]
 };
 
 export function outlineObiJson(input: any) {

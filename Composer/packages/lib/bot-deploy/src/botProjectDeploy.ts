@@ -10,7 +10,7 @@ import {
   DeploymentsCreateOrUpdateResponse,
   DeploymentsValidateResponse,
   ResourceGroup,
-  ResourceGroupsCreateOrUpdateResponse,
+  ResourceGroupsCreateOrUpdateResponse
 } from '@azure/arm-resources/esm/models';
 import { GraphRbacManagementClient } from '@azure/graph';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
@@ -108,7 +108,7 @@ export class BotProjectDeploy {
 
   private pack(scope: any) {
     return {
-      value: scope,
+      value: scope
     };
   }
 
@@ -124,7 +124,7 @@ export class BotProjectDeploy {
     try {
       const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
       const options = {
-        headers: { Authorization: `Bearer ${this.accessToken}` },
+        headers: { Authorization: `Bearer ${this.accessToken}` }
       } as rp.RequestPromiseOptions;
       const response = await rp.get(tenantUrl, options);
       const jsonRes = JSON.parse(response);
@@ -175,7 +175,7 @@ export class BotProjectDeploy {
       shouldCreateLuisResource: this.pack(shouldCreateLuisResource),
       useAppInsights: this.pack(useAppInsights),
       useCosmosDb: this.pack(useCosmosDb),
-      useStorage: this.pack(useStorage),
+      useStorage: this.pack(useStorage)
     };
   }
 
@@ -204,10 +204,10 @@ export class BotProjectDeploy {
   ): Promise<ResourceGroupsCreateOrUpdateResponse> {
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Creating resource group ...`,
+      message: `> Creating resource group ...`
     });
     const param = {
-      location: location,
+      location: location
     } as ResourceGroup;
 
     return await client.resourceGroups.createOrUpdate(resourceGroupName, param);
@@ -226,15 +226,15 @@ export class BotProjectDeploy {
   ): Promise<DeploymentsValidateResponse> {
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: '> Validating Azure deployment ...',
+      message: '> Validating Azure deployment ...'
     });
     const templateFile = await this.readTemplateFile(templatePath);
     const deployParam = {
       properties: {
         template: JSON.parse(templateFile),
         parameters: templateParam,
-        mode: 'Incremental',
-      },
+        mode: 'Incremental'
+      }
     } as Deployment;
     return await client.deployments.validate(resourceGroupName, deployName, deployParam);
   }
@@ -252,15 +252,15 @@ export class BotProjectDeploy {
   ): Promise<DeploymentsCreateOrUpdateResponse> {
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Deploying Azure services (this could take a while)...`,
+      message: `> Deploying Azure services (this could take a while)...`
     });
     const templateFile = await this.readTemplateFile(templatePath);
     const deployParam = {
       properties: {
         template: JSON.parse(templateFile),
         parameters: templateParam,
-        mode: 'Incremental',
-      },
+        mode: 'Incremental'
+      }
     } as Deployment;
 
     return await client.deployments.createOrUpdate(resourceGroupName, deployName, deployParam);
@@ -273,11 +273,11 @@ export class BotProjectDeploy {
         {
           value: appPassword,
           startDate: new Date(),
-          endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 2)),
-        },
+          endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 2))
+        }
       ],
       availableToOtherTenants: true,
-      replyUrls: ['https://token.botframework.com/.auth/web/redirect'],
+      replyUrls: ['https://token.botframework.com/.auth/web/redirect']
     });
     return createRes;
   }
@@ -297,7 +297,7 @@ export class BotProjectDeploy {
       const outputResult = outputs.properties.outputs;
       const applicationResult = {
         MicrosoftAppId: appId,
-        MicrosoftAppPassword: appPwd,
+        MicrosoftAppPassword: appPwd
       };
       const outputObj = this.unpackObject(outputResult);
 
@@ -343,16 +343,16 @@ export class BotProjectDeploy {
     if (botPath) {
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `Publishing dialogs from external bot project: ${botPath}`,
+        message: `Publishing dialogs from external bot project: ${botPath}`
       });
       await fs.copy(botPath, remoteBotPath, {
         overwrite: true,
-        recursive: true,
+        recursive: true
       });
     } else {
       await fs.copy(localBotPath, remoteBotPath, {
         overwrite: true,
-        recursive: true,
+        recursive: true
       });
     }
   }
@@ -400,7 +400,7 @@ export class BotProjectDeploy {
       const builder = new luBuild.Builder(msg =>
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: msg,
+          message: msg
         })
       );
 
@@ -427,7 +427,7 @@ export class BotProjectDeploy {
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `lubuild succeed`,
+        message: `lubuild succeed`
       });
 
       const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter(filename =>
@@ -445,7 +445,7 @@ export class BotProjectDeploy {
         endpoint: luisEndpoint,
         endpointKey: luisEndpointKey,
         authoringRegion: luisAuthoringRegion,
-        authoringKey: luisAuthoringRegion,
+        authoringKey: luisAuthoringRegion
       };
 
       Object.assign(luisConfig, luisAppIds);
@@ -455,7 +455,7 @@ export class BotProjectDeploy {
       settings.luis = luisConfig;
 
       await fs.writeJson(this.deploymentSettingsPath, settings, {
-        spaces: 4,
+        spaces: 4
       });
 
       let jsonRes;
@@ -463,7 +463,7 @@ export class BotProjectDeploy {
         // Assign a LUIS key to the endpoint of each app
         const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
         const options = {
-          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey }
         } as rp.RequestPromiseOptions;
         const response = await rp.get(getAccountUri, options);
         jsonRes = JSON.parse(response);
@@ -484,24 +484,24 @@ export class BotProjectDeploy {
         const luisAppId = luisAppIds[k];
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Assigning to luis app id: ${luisAppIds}`,
+          message: `Assigning to luis app id: ${luisAppIds}`
         });
 
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
         const options = {
           body: account,
           json: true,
-          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey }
         } as rp.RequestPromiseOptions;
         const response = await rp.post(luisAssignEndpoint, options);
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: response,
+          message: response
         });
       }
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Luis Publish Success! ...',
+        message: 'Luis Publish Success! ...'
       });
     }
   }
@@ -561,24 +561,24 @@ export class BotProjectDeploy {
       // Build a zip file of the project
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Packing up the bot service ...',
+        message: 'Packing up the bot service ...'
       });
       await this.zipDirectory(this.publishFolder, this.zipPath);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Packing Service Success!',
+        message: 'Packing Service Success!'
       });
 
       // Deploy the zip file to the web app
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Publishing to Azure ...',
+        message: 'Publishing to Azure ...'
       });
 
       await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
-        message: 'Publish To Azure Success!',
+        message: 'Publish To Azure Success!'
       });
     } catch (error) {
       console.log(error);
@@ -598,7 +598,7 @@ export class BotProjectDeploy {
   private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Retrieve publishing details ...',
+      message: 'Retrieve publishing details ...'
     });
 
     const publishEndpoint = `https://${hostname ? hostname : name + '-' + env}.scm.azurewebsites.net/zipdeploy`;
@@ -609,14 +609,14 @@ export class BotProjectDeploy {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/zip',
-        'Content-Length': fileContent.length,
-      },
+        'Content-Length': fileContent.length
+      }
     } as rp.RequestPromiseOptions;
     try {
       const response = await rp.post(publishEndpoint, options);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: response,
+        message: response
       });
     } catch (err) {
       if (err.statusCode === 403) {
@@ -655,7 +655,7 @@ export class BotProjectDeploy {
       this.creds.tokenCache
     );
     const graphClient = new GraphRbacManagementClient(graphCreds, this.tenantId, {
-      baseUri: 'https://graph.windows.net',
+      baseUri: 'https://graph.windows.net'
     });
 
     let settings: any = {};
@@ -672,20 +672,20 @@ export class BotProjectDeploy {
       if (!appPassword) {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: `App password is required`,
+          message: `App password is required`
         });
         throw new Error(`App password is required`);
       }
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: '> Creating App Registration ...',
+        message: '> Creating App Registration ...'
       });
 
       // create the app registration
       const appCreated = await this.createApp(graphClient, name, appPassword);
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: appCreated,
+        message: appCreated
       });
 
       // use the newly created app
@@ -694,7 +694,7 @@ export class BotProjectDeploy {
 
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Create App Id Success! ID: ${appId}`,
+      message: `> Create App Id Success! ID: ${appId}`
     });
 
     const resourceGroupName = `${name}-${environment}`;
@@ -707,7 +707,7 @@ export class BotProjectDeploy {
     const rpres = await this.createResourceGroup(client, location, resourceGroupName);
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: rpres,
+      message: rpres
     });
 
     // Caste the parameters into the right format
@@ -724,7 +724,7 @@ export class BotProjectDeploy {
     );
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: deploymentTemplateParam,
+      message: deploymentTemplateParam
     });
 
     // Validate the deployment using the Azure API
@@ -738,26 +738,26 @@ export class BotProjectDeploy {
     );
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: validation,
+      message: validation
     });
 
     // Handle validation errors
     if (validation.error) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `! Template is not valid with provided parameters. Review the log for more information.`,
+        message: `! Template is not valid with provided parameters. Review the log for more information.`
       });
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `! Error: ${validation.error.message}`,
+        message: `! Error: ${validation.error.message}`
       });
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`
       });
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
-        message: validation.error.details,
+        message: validation.error.details
       });
 
       throw new Error(`! Error: ${validation.error.message}`);
@@ -775,22 +775,22 @@ export class BotProjectDeploy {
     );
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: deployment,
+      message: deployment
     });
 
     // Handle errors
     if (deployment._response.status != 200) {
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `! Template is not valid with provided parameters. Review the log for more information.`,
+        message: `! Template is not valid with provided parameters. Review the log for more information.`
       });
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `! Error: ${validation.error}`,
+        message: `! Error: ${validation.error}`
       });
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`
       });
 
       throw new Error(`! Error: ${validation.error}`);
@@ -801,7 +801,7 @@ export class BotProjectDeploy {
     const updateResult = await this.updateDeploymentJsonFile(client, resourceGroupName, timeStamp, appId, appPassword);
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: updateResult,
+      message: updateResult
     });
 
     // Handle errors
@@ -815,21 +815,21 @@ export class BotProjectDeploy {
               case 'MissingRegistrationForLocation':
                 this.logger({
                   status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                  message: `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}. This resource is not avaliable in the location provided.`,
+                  message: `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}. This resource is not avaliable in the location provided.`
                 });
                 break;
               default:
                 this.logger({
                   status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                  message: `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}.`,
+                  message: `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}.`
                 });
                 this.logger({
                   status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                  message: `! Code: ${operation?.properties?.statusMessage.error.code}.`,
+                  message: `! Code: ${operation?.properties?.statusMessage.error.code}.`
                 });
                 this.logger({
                   status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                  message: `! Message: ${operation?.properties?.statusMessage.error.message}.`,
+                  message: `! Message: ${operation?.properties?.statusMessage.error.message}.`
                 });
                 break;
             }
@@ -838,13 +838,13 @@ export class BotProjectDeploy {
       } else {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: `! Deployment failed. Please refer to the log file for more information.`,
+          message: `! Deployment failed. Please refer to the log file for more information.`
         });
       }
     }
     this.logger({
       status: BotProjectDeployLoggerType.PROVISION_SUCCESS,
-      message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
+      message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`
     });
     return updateResult;
   }

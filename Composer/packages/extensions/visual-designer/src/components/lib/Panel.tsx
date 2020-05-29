@@ -21,7 +21,7 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
       { condition: window.matchMedia('(min-width: 1051px)'), length: PanelSize.maxWidth },
       { condition: window.matchMedia('(max-width: 1050px) and (min-width: 852px)'), length: 824 },
       { condition: window.matchMedia('(max-width: 851px) and (min-width: 680px)'), length: 624 },
-      { condition: window.matchMedia('(max-width: 679px)'), length: PanelSize.minWidth },
+      { condition: window.matchMedia('(max-width: 679px)'), length: PanelSize.minWidth }
     ];
 
     PanelWidthList.forEach(panelWidth => {
@@ -56,7 +56,7 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
           width: width,
           margin: '0 auto',
           minWidth: PanelSize.minWidth,
-          maxWidth: PanelSize.maxWidth,
+          maxWidth: PanelSize.maxWidth
         }}
       >
         <div
@@ -65,23 +65,22 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
             color: '#656565',
             fontSize: '12px',
             lineHeight: '19px',
-            height: '22px',
+            height: '22px'
           }}
         >
           {title}
         </div>
         <IconButton
-          iconProps={{ iconName: 'PageRight' }}
           css={{
             transform: collapsed ? 'rotate(270deg)' : 'rotate(90deg)',
             marginRight: '-15px',
-            transition: 'transform 0.2s linear',
+            transition: 'transform 0.2s linear'
           }}
+          iconProps={{ iconName: 'PageRight' }}
           onClick={collapseFuc}
         />
       </div>
       <div
-        onClick={onClickContent}
         css={{
           border: '1px solid #656565',
           boxSizing: 'border-box',
@@ -90,8 +89,9 @@ export const Panel = ({ title, children, collapsedItems, addMenu, onClickContent
           minWidth: PanelSize.minWidth,
           overflow: 'auto',
           margin: '0 auto',
-          position: 'relative',
+          position: 'relative'
         }}
+        onClick={onClickContent}
       >
         {collapsed ? <div>{collapsedItems}</div> : <div>{children}</div>}
         <div>{addMenu}</div>

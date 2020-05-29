@@ -23,7 +23,7 @@ function renderTitle(data): string {
       }`,
       {
         event: data.events[0],
-        count: data.events.length - 1,
+        count: data.events.length - 1
       }
     );
   } else {
@@ -32,6 +32,6 @@ function renderTitle(data): string {
 }
 
 export const EventRule: FunctionComponent<NodeProps> = ({ id, data, focused, onEvent }) => {
-  return <RuleCard id={id} data={data} label={renderTitle(data)} focused={focused} onEvent={onEvent} />;
+  return <RuleCard data={data} focused={focused} id={id} label={renderTitle(data)} onEvent={onEvent} />;
 };
 EventRule.defaultProps = defaultNodeProps;

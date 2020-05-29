@@ -17,14 +17,14 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
       icon: 'MessageBot',
       colors: {
         theme: Colors.BlueMagenta20,
-        icon: Colors.BlueMagenta30,
-      },
+        icon: Colors.BlueMagenta30
+      }
     },
     body: {
       widget: 'LgWidget',
       field: 'prompt',
-      defaultContent: '<prompt>',
-    },
+      defaultContent: '<prompt>'
+    }
   },
   userInput: {
     widget: 'ActionCard',
@@ -36,12 +36,12 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
       menu: 'none',
       colors: {
         theme: Colors.LightBlue,
-        icon: Colors.AzureBlue,
-      },
+        icon: Colors.AzureBlue
+      }
     },
     body: inputBody,
-    footer: inputFooter,
-  },
+    footer: inputFooter
+  }
 });
 
 const PropertyInfo = data =>
@@ -77,5 +77,5 @@ export default {
   [SDKKinds.DateTimeInput]: BaseInputSchema,
   [SDKKinds.NumberInput]: BaseInputSchema,
   [SDKKinds.TextInput]: BaseInputSchema,
-  [SDKKinds.ChoiceInput]: ChoiceInputSchema,
+  [SDKKinds.ChoiceInput]: ChoiceInputSchema
 };

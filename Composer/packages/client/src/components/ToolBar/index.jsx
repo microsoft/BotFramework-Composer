@@ -40,6 +40,7 @@ export function ToolBar(props) {
     onCreateDialogComplete,
     onboardingAddCoachMarkRef,
     showSkillManifestModal,
+    openDeleteBotModal,
     ...rest
   } = props;
   let left = [];
@@ -62,28 +63,28 @@ export function ToolBar(props) {
         {window.location.href.indexOf('/dialogs/') !== -1 && (
           <div ref={addNewRef}>
             <CommandButton
-              data-testid="AddFlyout"
               css={actionButton}
+              data-testid="AddFlyout"
               iconProps={{ iconName: 'Add' }}
-              text={formatMessage('Add')}
               menuProps={{
                 items: [
                   {
                     'data-testid': 'FlyoutNewDialog',
                     key: 'adddialog',
                     text: formatMessage('Add new dialog'),
-                    onClick: () => actions.createDialogBegin([], onCreateDialogComplete),
+                    onClick: () => actions.createDialogBegin([], onCreateDialogComplete)
                   },
                   {
                     'data-testid': 'FlyoutNewTrigger',
                     key: 'addtrigger',
                     text: formatMessage(`Add new trigger on {displayName}`, {
-                      displayName: currentDialog ? currentDialog.displayName : '',
+                      displayName: currentDialog ? currentDialog.displayName : ''
                     }),
-                    onClick: () => openNewTriggerModal(),
-                  },
-                ],
+                    onClick: () => openNewTriggerModal()
+                  }
+                ]
               }}
+              text={formatMessage('Add')}
             />
           </div>
         )}
@@ -92,21 +93,21 @@ export function ToolBar(props) {
           <CommandButton
             css={actionButton}
             iconProps={{ iconName: 'OpenInNewWindow' }}
-            text={formatMessage('Export')}
             menuProps={{
               items: [
                 {
                   key: 'zipexport',
                   text: formatMessage('Export assets to .zip'),
-                  onClick: () => actions.exportToZip({ projectId }),
+                  onClick: () => actions.exportToZip({ projectId })
                 },
                 {
                   key: 'exportAsSkill',
                   text: formatMessage('Export as skill'),
-                  onClick: showSkillManifestModal,
-                },
-              ],
+                  onClick: showSkillManifestModal
+                }
+              ]
             }}
+            text={formatMessage('Export')}
           />
         )}
       </div>

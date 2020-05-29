@@ -70,7 +70,7 @@ export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX
         }`,
           {
             event: data.events[0],
-            count: data.events.length - 1,
+            count: data.events.length - 1
           }
         );
       } else {
@@ -103,20 +103,20 @@ export const RuleCard: React.FC<CardProps> = ({ id, data, label, onEvent }): JSX
 
   return (
     <IconCard
-      themeColor={EventColor.expanded}
-      iconColor={EventColor.iconColor}
+      childDialog={dialog}
       corner={
         <div css={{ display: 'flex' }}>
           <NodeMenu colors={colors} id={id} onEvent={onEvent} />
         </div>
       }
-      label={label}
-      trigger={trigger}
-      summary={summary}
-      childDialog={dialog}
       icon={ElementIcon.Play}
-      onClick={onCardBodyClick}
+      iconColor={EventColor.iconColor}
+      label={label}
+      summary={summary}
+      themeColor={EventColor.expanded}
+      trigger={trigger}
       onChildDialogClick={openChildDialog}
+      onClick={onCardBodyClick}
     />
   );
 };

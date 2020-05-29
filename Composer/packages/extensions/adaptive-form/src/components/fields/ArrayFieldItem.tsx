@@ -31,6 +31,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
     onReorder,
     onRemove,
     index,
+    label,
     depth,
     onBlur,
     stackArrayItems,
@@ -54,22 +55,22 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
       text: 'Move Up',
       iconProps: { iconName: 'CaretSolidUp' },
       disabled: !canMoveUp,
-      onClick: fabricMenuItemClickHandler(() => onReorder(index - 1)),
+      onClick: fabricMenuItemClickHandler(() => onReorder(index - 1))
     },
     {
       key: 'moveDown',
       text: 'Move Down',
       iconProps: { iconName: 'CaretSolidDown' },
       disabled: !canMoveDown,
-      onClick: fabricMenuItemClickHandler(() => onReorder(index + 1)),
+      onClick: fabricMenuItemClickHandler(() => onReorder(index + 1))
     },
     {
       key: 'remove',
       text: 'Remove',
       iconProps: { iconName: 'Cancel' },
       disabled: !canRemove,
-      onClick: fabricMenuItemClickHandler(onRemove),
-    },
+      onClick: fabricMenuItemClickHandler(onRemove)
+    }
   ];
 
   const handleBlur = () => {
@@ -87,10 +88,10 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
       <div css={arrayItem.field}>
         <SchemaField
           {...rest}
-          rawErrors={typeof rawErrors === 'object' ? rawErrors[index] : rawErrors}
           css={arrayItem.schemaFieldOverride(!!stackArrayItems)}
           depth={depth + 1}
-          label={!stackArrayItems ? false : undefined}
+          label={!stackArrayItems || label === false ? false : undefined}
+          rawErrors={typeof rawErrors === 'object' ? rawErrors[index] : rawErrors}
           transparentBorder={!stackArrayItems ? transparentBorder : undefined}
           uiOptions={uiOptions}
           value={value}
@@ -102,7 +103,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = props => {
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: contextItems }}
         styles={{
-          menuIcon: { color: NeutralColors.black, fontSize: FontSizes.medium },
+          menuIcon: { color: NeutralColors.black, fontSize: FontSizes.medium }
         }}
       />
     </div>

@@ -20,21 +20,21 @@ export const ErrorPopup = props => {
 
   return (
     <Dialog
-      hidden={hidden}
-      onDismiss={_closeDialog}
       dialogContentProps={{
         type: DialogType.normal,
         title: props.title,
-        styles: dialog,
+        styles: dialog
       }}
+      hidden={hidden}
       modalProps={{
         isBlocking: false,
-        styles: { main: { maxWidth: 450 } },
+        styles: { main: { maxWidth: 450 } }
       }}
+      onDismiss={_closeDialog}
     >
       <div css={consoleStyle}>{props.error}</div>
       <DialogFooter>
-        <PrimaryButton onClick={_closeDialog} text="Ok" />
+        <PrimaryButton text="Ok" onClick={_closeDialog} />
       </DialogFooter>
     </Dialog>
   );
@@ -43,5 +43,5 @@ export const ErrorPopup = props => {
 ErrorPopup.propTypes = {
   error: PropTypes.node,
   title: PropTypes.string,
-  onDismiss: PropTypes.func,
+  onDismiss: PropTypes.func
 };

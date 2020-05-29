@@ -26,9 +26,9 @@ const config: PluginConfig = {
         } else {
           alert(`NO LU FILE WITH NAME ${currentDialog.id}`);
         }
-      },
-    },
-  ],
+      }
+    }
+  ]
 };
 
 export default config;

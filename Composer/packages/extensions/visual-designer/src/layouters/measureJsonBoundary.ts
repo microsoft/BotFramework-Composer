@@ -15,7 +15,7 @@ import {
   IconBrickSize,
   AssignmentMarginTop,
   PropertyAssignmentSize,
-  AssignmentMarginBottom,
+  AssignmentMarginBottom
 } from '../constants/ElementSizes';
 import { transformIfCondtion } from '../transformers/transformIfCondition';
 import { transformSwitchCondition } from '../transformers/transformSwitchCondition';
@@ -28,7 +28,7 @@ import {
   calculateSequenceBoundary,
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
-  calculateBaseInputBoundary,
+  calculateBaseInputBoundary
 } from './calculateNodeBoundary';
 
 function measureStepGroupBoundary(stepGroup): Boundary {

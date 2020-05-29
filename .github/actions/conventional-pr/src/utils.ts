@@ -9,7 +9,9 @@ type ValidationResult = string[];
 
 const validTypes = [
   'feat',
+  'feature',
   'fix',
+  'doc',
   'docs',
   'style',
   'refactor',
@@ -43,7 +45,7 @@ export function validateTitle(title: string): ValidationResult {
   return errors;
 }
 
-const refMatch = /(refs?|close(d|s)?|fix(ed|es)?) \#\d+/i;
+const refMatch = /((refs?|close(d|s)?|fix(ed|es)?) \#\d+)|(#minor)/i;
 const helpLink =
   'https://help.github.com/en/github/managing-your-work-on-github/closing-issues-using-keywords';
 
@@ -52,7 +54,7 @@ export function validateBody(body: string): ValidationResult {
 
   if (!refMatch.test(body)) {
     errors.push(
-      `[Body] Must reference an issue (ex. 'fixes #1234').\nSee ${helpLink} for more details.`
+      `[Body] Must either reference an issue (ex. 'fixes #1234') or, if this is a minor change with no related issue, tag it as '#minor'.\nSee ${helpLink} for more details.`
     );
   }
 

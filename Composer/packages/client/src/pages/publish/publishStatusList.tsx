@@ -9,7 +9,7 @@ import {
   SelectionMode,
   IColumn,
   IGroup,
-  CheckboxVisibility,
+  CheckboxVisibility
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
@@ -38,10 +38,10 @@ export interface IStatus {
 
 function onRenderDetailsHeader(props, defaultRender) {
   return (
-    <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+    <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
       {defaultRender({
         ...props,
-        onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+        onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
       })}
     </Sticky>
   );
@@ -49,7 +49,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const PublishStatusList: React.FC<IStatusListProps> = props => {
   const { items, onItemClick, groups } = props;
-  const [selectIndex, setSelectedIndex] = useState();
+  const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({ key: 'PublishDate', descending: true });
   const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
     if (column.isSorted) {
@@ -75,7 +75,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
       onRender: (item: IStatus) => {
         return <span>{moment(item.time).format('h:mm a')}</span>;
       },
-      isPadded: true,
+      isPadded: true
     },
     {
       key: 'PublishDate',
@@ -91,7 +91,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
       onRender: (item: IStatus) => {
         return <span>{moment(item.time).format('MM-DD-YYYY')}</span>;
       },
-      isPadded: true,
+      isPadded: true
     },
     {
       key: 'PublishStatus',
@@ -115,7 +115,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
           return <Icon iconName="Cancel" style={{ color: 'red', fontWeight: 600 }} />;
         }
       },
-      isPadded: true,
+      isPadded: true
     },
     {
       key: 'PublishMessage',
@@ -131,7 +131,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
       onRender: (item: IStatus) => {
         return <span>{item.message}</span>;
       },
-      isPadded: true,
+      isPadded: true
     },
     {
       key: 'PublishComment',
@@ -147,8 +147,8 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
       onRender: (item: IStatus) => {
         return <span>{item.comment}</span>;
       },
-      isPadded: true,
-    },
+      isPadded: true
+    }
   ];
   const selection = useMemo(() => {
     return new Selection({
@@ -157,13 +157,13 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
         if (selectedIndexs.length > 0) {
           setSelectedIndex(selectedIndexs[0]);
         }
-      },
+      }
     });
   }, [items, groups]);
 
   useEffect(() => {
     // init the selected publish status after switch to another target
-    setSelectedIndex(null);
+    setSelectedIndex(undefined);
   }, [groups]);
 
   useEffect(() => {
@@ -178,17 +178,23 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
     <div css={listRoot}>
       <div css={tableView}>
         <DetailsList
-          css={detailList}
-          items={items}
+          isHeaderVisible
+          checkboxVisibility={CheckboxVisibility.hidden}
           columns={columns.map(col => ({
             ...col,
             isSorted: col.key === currentSort.key,
-            isSortedDescending: currentSort.descending,
+            isSortedDescending: currentSort.descending
           }))}
+          css={detailList}
+          getKey={item => item.id}
+          groupProps={{
+            showEmptyGroups: true
+          }}
           groups={groups}
+          items={items}
+          layoutMode={DetailsListLayoutMode.justified}
           selection={selection}
           selectionMode={SelectionMode.single}
-          getKey={item => item.id}
           setKey="none"
           onColumnHeaderClick={(_, clickedCol) => {
             if (!clickedCol) return;
@@ -199,13 +205,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = props => {
               clickedCol.isSorted = false;
             }
           }}
-          layoutMode={DetailsListLayoutMode.justified}
-          isHeaderVisible={true}
-          checkboxVisibility={CheckboxVisibility.hidden}
           onRenderDetailsHeader={onRenderDetailsHeader}
-          groupProps={{
-            showEmptyGroups: true,
-          }}
         />
       </div>
     </div>

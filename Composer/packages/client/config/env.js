@@ -22,7 +22,7 @@ const dotenvFiles = [
   // since normally you expect tests to produce the same
   // results for everyone
   NODE_ENV !== 'test' && `${paths.dotenv}.local`,
-  paths.dotenv,
+  paths.dotenv
 ].filter(Boolean);
 
 // Load environment variables from .env* files. Suppress warnings using silent
@@ -34,7 +34,7 @@ dotenvFiles.forEach(dotenvFile => {
   if (fs.existsSync(dotenvFile)) {
     require('dotenv-expand')(
       require('dotenv').config({
-        path: dotenvFile,
+        path: dotenvFile
       })
     );
   }
@@ -92,7 +92,7 @@ function getClientEnvironment(publicUrl) {
         SDK_PACKAGE_VERSION: '4.9.1', // TODO: change this when Composer supports custom schema/custom runtime
         COMPOSER_VERSION: '1.0.0',
         LOCAL_PUBLISH_PATH:
-          process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../plugins/localPublish/hostedBots'),
+          process.env.LOCAL_PUBLISH_PATH || path.resolve(process.cwd(), '../../plugins/localPublish/hostedBots')
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
@@ -100,7 +100,7 @@ function getClientEnvironment(publicUrl) {
     'process.env': Object.keys(raw).reduce((env, key) => {
       env[key] = JSON.stringify(raw[key]);
       return env;
-    }, {}),
+    }, {})
   };
 
   return { raw, stringified };

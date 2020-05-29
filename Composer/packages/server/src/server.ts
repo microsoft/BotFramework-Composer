@@ -61,7 +61,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
     "form-action 'none';",
     "frame-ancestors 'self';",
     "manifest-src 'self';",
-    'upgrade-insecure-requests;',
+    'upgrade-insecure-requests;'
   ];
 
   app.all('*', function(req: Request, res: Response, next: NextFunction) {
@@ -76,7 +76,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
         CS_POLICIES.concat([
           `script-src 'self' 'nonce-${req.__nonce__}';`,
           // TODO: use nonce strategy after addressing issues with monaco-editor pacakge
-          "style-src 'self' 'unsafe-inline'",
+          "style-src 'self' 'unsafe-inline'"
           // `style-src 'self' 'nonce-${req.__nonce__}';`,
         ]).join(' ')
       );
@@ -136,7 +136,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
 
   const wss: ws.Server = new ws.Server({
     noServer: true,
-    perMessageDeflate: false,
+    perMessageDeflate: false
   });
 
   const { lgImportResolver, luImportResolver, staticMemoryResolver } = BotProjectService;

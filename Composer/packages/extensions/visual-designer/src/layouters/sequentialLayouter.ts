@@ -38,7 +38,7 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
       x,
       y,
       length: StepInterval,
-      options: { directed: true },
+      options: { directed: true }
     });
   }
 
@@ -55,7 +55,7 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
       x: box.axisX,
       y: 0,
       length: ExtraEdgeLength,
-      options: { directed: true },
+      options: { directed: true }
     });
   }
 
@@ -65,7 +65,7 @@ export function sequentialLayouter(nodes: GraphNode[], withHeadEdge = true, with
       direction: EdgeDirection.Down,
       x: box.axisX,
       y: box.height - ExtraEdgeLength,
-      length: ExtraEdgeLength,
+      length: ExtraEdgeLength
     });
   }
 

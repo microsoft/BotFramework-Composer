@@ -72,7 +72,7 @@ const TableView: React.FC<TableViewProps> = props => {
           fileId: luFile.id,
           dialogId: luDialog?.id || '',
           used: !!luDialog && luDialog.referredLuIntents.some(lu => lu.name === name), // used by it's dialog or not
-          state,
+          state
         });
       });
       return result.concat(items);
@@ -94,8 +94,8 @@ const TableView: React.FC<TableViewProps> = props => {
         onClick: () => {
           const { name, dialogId } = intents[index];
           navigateTo(`/bot/${projectId}/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
-        },
-      },
+        }
+      }
     ];
     return buttons;
   };
@@ -116,13 +116,13 @@ const TableView: React.FC<TableViewProps> = props => {
             displayName = `##${childName}`;
           }
           return (
-            <div data-is-focusable={true} css={formCell}>
-              <div tabIndex={-1} css={content} aria-label={formatMessage(`Name is {name}`, { name: displayName })}>
+            <div data-is-focusable css={formCell}>
+              <div aria-label={formatMessage(`Name is {name}`, { name: displayName })} css={content} tabIndex={-1}>
                 {displayName}
               </div>
             </div>
           );
-        },
+        }
       },
       {
         key: 'phrases',
@@ -134,17 +134,17 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: item => {
           return (
-            <div data-is-focusable={true} css={luPhraseCell}>
+            <div data-is-focusable css={luPhraseCell}>
               <div
-                tabIndex={-1}
-                css={content}
                 aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: item.phrases })}
+                css={content}
+                tabIndex={-1}
               >
                 {item.phrases}
               </div>
             </div>
           );
-        },
+        }
       },
       {
         key: 'definedIn',
@@ -159,15 +159,15 @@ const TableView: React.FC<TableViewProps> = props => {
           const id = item.dialogId;
           return (
             <div
-              data-is-focusable={true}
               key={id}
-              onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
+              data-is-focusable
               aria-label={formatMessage(`link to where this luis intent defined`)}
+              onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
             >
               <Link>{id}</Link>
             </div>
           );
-        },
+        }
       },
       // {
       //   key: 'beenUsed',
@@ -197,16 +197,16 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: (item, index) => {
           return (
             <IconButton
+              ariaLabel={formatMessage('Open inline editor')}
               menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index),
+                items: getTemplatesMoreButtons(item, index)
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              ariaLabel={formatMessage('Open inline editor')}
             />
           );
-        },
+        }
       },
       {
         key: 'Activity',
@@ -219,14 +219,14 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: item => {
           return (
-            <div data-is-focusable={true} css={tableCell}>
-              <div tabIndex={-1} css={content} aria-label={formatMessage(`State is {state}`, { state: item.state })}>
+            <div data-is-focusable css={tableCell}>
+              <div aria-label={formatMessage(`State is {state}`, { state: item.state })} css={content} tabIndex={-1}>
                 {item.state}
               </div>
             </div>
           );
-        },
-      },
+        }
+      }
     ];
 
     // all view, hide defineIn column
@@ -240,10 +240,10 @@ const TableView: React.FC<TableViewProps> = props => {
   function onRenderDetailsHeader(props, defaultRender) {
     return (
       <div data-testid="tableHeader">
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
           })}
         </Sticky>
       </div>
@@ -254,25 +254,25 @@ const TableView: React.FC<TableViewProps> = props => {
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
+          className="table-view-list"
+          columns={getTableColums()}
           componentRef={listRef}
+          getKey={item => item.Name}
           items={intents}
+          layoutMode={DetailsListLayoutMode.justified}
+          selectionMode={SelectionMode.none}
           styles={{
             root: {
               overflowX: 'hidden',
               // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
               selectors: {
                 'div[role="row"]:hover': {
-                  background: 'none',
-                },
-              },
-            },
+                  background: 'none'
+                }
+              }
+            }
           }}
-          className="table-view-list"
-          columns={getTableColums()}
-          getKey={item => item.Name}
-          layoutMode={DetailsListLayoutMode.justified}
           onRenderDetailsHeader={onRenderDetailsHeader}
-          selectionMode={SelectionMode.none}
         />
       </ScrollablePane>
     </div>

@@ -69,7 +69,7 @@ function calculateElementVector(
     elementVectors.push({
       distance,
       assistDistance,
-      selectedId: element.selectedId as string,
+      selectedId: element.selectedId as string
     });
   });
   return elementVectors;

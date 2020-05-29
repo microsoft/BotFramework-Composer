@@ -48,7 +48,7 @@ export class LuPublisher {
     rootIds: [],
     triggerRules: {},
     intentName: '_Interruption',
-    verbose: true,
+    verbose: true
   };
 
   private builder = new luBuild.Builder(message => {
@@ -195,7 +195,7 @@ export class LuPublisher {
       region: this.config.authoringRegion || '',
       botName: this.config.name || '',
       suffix: this.config.environment || '',
-      fallbackLocal: this.config.defaultLanguage || 'en-us',
+      fallbackLocal: this.config.defaultLanguage || 'en-us'
     };
 
     luConfig.models = [];

@@ -39,7 +39,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
     const newData: DialogFormData = {
       ...formData,
-      [field]: newValue,
+      [field]: newValue
     };
     validateForm(newData);
     setFormData(newData);
@@ -70,7 +70,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
     }
 
     onSubmit({
-      ...formData,
+      ...formData
     });
   };
 
@@ -82,35 +82,35 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
       dialogType={DialogTypes.DesignFlow}
     >
       <form onSubmit={handleSubmit}>
-        <input type="submit" style={{ display: 'none' }} />
-        <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+        <input style={{ display: 'none' }} type="submit" />
+        <Stack styles={wizardStyles.stackinput} tokens={{ childrenGap: '2rem' }}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
-              label={formatMessage('Name')}
-              value={formData.name}
-              styles={name}
-              onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
-              data-testid="NewDialogName"
-              required
               autoFocus
+              required
+              data-testid="NewDialogName"
+              errorMessage={formDataErrors.name}
+              label={formatMessage('Name')}
+              styles={name}
+              value={formData.name}
+              onChange={updateForm('name')}
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
+              multiline
+              label={formatMessage('Description')}
+              resizable={false}
               styles={description}
               value={formData.description}
-              label={formatMessage('Description')}
-              multiline
-              resizable={false}
               onChange={updateForm('description')}
             />
           </StackItem>
         </Stack>
 
         <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <PrimaryButton text={formatMessage('Next')} onClick={handleSubmit} />
         </DialogFooter>
       </form>
     </DialogWrapper>

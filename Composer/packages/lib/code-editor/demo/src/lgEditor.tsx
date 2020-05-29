@@ -83,7 +83,7 @@ export default function App() {
   const props = {
     value,
     onChange,
-    languageServer: 'localhost:5000/lg-language-server',
+    languageServer: 'localhost:5000/lg-language-server'
   };
   return <LgEditor {...props} />;
 }

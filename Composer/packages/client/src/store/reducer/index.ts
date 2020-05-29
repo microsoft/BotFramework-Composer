@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import set from 'lodash/set';
+import has from 'lodash/has';
 import merge from 'lodash/merge';
 import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
@@ -13,7 +14,7 @@ import {
   DialogInfo,
   importResolverGenerator,
   UserSettings,
-  dereferenceDefinitions,
+  dereferenceDefinitions
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -26,6 +27,7 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
 import { isElectron } from '../../utils/electronUtil';
+import { initialState } from '..';
 
 import createReducer from './createReducer';
 
@@ -33,7 +35,7 @@ const projectFiles = ['bot', 'botproj'];
 
 const processSchema = memoize((projectId: string, schema: any) => ({
   ...schema,
-  definitions: dereferenceDefinitions(schema.definitions),
+  definitions: dereferenceDefinitions(schema.definitions)
 }));
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
@@ -98,13 +100,37 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.locale = locale;
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
+  state.botOpening = false;
   refreshLocalStorage(botName, state.settings);
   mergeLocalStorage(botName, state.settings);
   return state;
 };
 
+const resetProjectState: ReducerFunc = state => {
+  state.projectId = initialState.projectId;
+  state.dialogs = initialState.dialogs;
+  state.botEnvironment = initialState.botEnvironment;
+  state.botName = initialState.botName;
+  state.botStatus = initialState.botStatus;
+  state.location = initialState.location;
+  state.lgFiles = initialState.lgFiles;
+  state.skills = initialState.skills;
+  state.schemas = initialState.schemas;
+  state.luFiles = initialState.luFiles;
+  state.settings = initialState.settings;
+  state.locale = initialState.locale;
+  state.skillManifests = initialState.skillManifests;
+  return state;
+};
+
+const getProjectPending: ReducerFunc = state => {
+  state.botOpening = true;
+  return resetProjectState(state, undefined);
+};
+
 const getProjectFailure: ReducerFunc = (state, { error }) => {
   setError(state, error);
+  state.botOpening = false;
   return state;
 };
 
@@ -127,7 +153,7 @@ const createLgFile: ReducerFunc = (state, { id, content }) => {
   if (lgFiles.find(lg => lg.id === id)) {
     state.error = {
       message: `${id} ${formatMessage(`lg file already exist`)}`,
-      summary: formatMessage('Creation Rejected'),
+      summary: formatMessage('Creation Rejected')
     };
     return state;
   }
@@ -168,7 +194,7 @@ const createLuFile: ReducerFunc = (state, { id, content }) => {
   if (luFiles.find(lu => lu.id === id)) {
     state.error = {
       message: `${id} ${formatMessage(`lu file already exist`)}`,
-      summary: formatMessage('Creation Rejected'),
+      summary: formatMessage('Creation Rejected')
     };
     return state;
   }
@@ -236,7 +262,7 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   const dialog = {
     isRoot: false,
     displayName: id,
-    ...dialogIndexer.parse(id, fixedContent, state.schemas.sdk.content),
+    ...dialogIndexer.parse(id, fixedContent, state.schemas.sdk.content)
   };
   state.dialogs.push(dialog);
   state = createLgFile(state, { id, content: '' });
@@ -315,7 +341,7 @@ const setError: ReducerFunc = (state, payload) => {
       message: formatMessage(
         'This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed.'
       ),
-      summary: formatMessage('Modification Rejected'),
+      summary: formatMessage('Modification Rejected')
     };
   } else {
     if (payload && payload.response && payload.response.data && payload.response.data.message) {
@@ -402,15 +428,15 @@ const dismissSkillManifestModal: ReducerFunc = state => {
   return state;
 };
 
-const syncEnvSetting: ReducerFunc = (state, { settings }) => {
+const syncEnvSetting: ReducerFunc = (state, { settings, botName }) => {
+  // set value in local storage
+  for (const property of SensitiveProperties) {
+    if (has(settings, property)) {
+      const propertyValue = get(settings, property, '');
+      settingStorage.setField(botName, property, propertyValue);
+    }
+  }
   state.settings = settings;
-  return state;
-};
-
-const getEnvSetting: ReducerFunc = (state, { settings }) => {
-  state.settings = settings;
-  refreshLocalStorage(state.botName, state.settings);
-  mergeLocalStorage(state.botName, state.settings);
   return state;
 };
 
@@ -428,12 +454,12 @@ const setUserToken: ReducerFunc<UserTokenPayload> = (state, user = {}) => {
     state.currentUser = {
       ...user,
       token: user.token,
-      sessionExpired: false,
+      sessionExpired: false
     };
   } else {
     state.currentUser = {
       token: null,
-      sessionExpired: false,
+      sessionExpired: false
     };
   }
 
@@ -606,9 +632,11 @@ const noOp: ReducerFunc = state => {
 
 export const reducer = createReducer({
   [ActionTypes.GET_PROJECT_SUCCESS]: getProjectSuccess,
+  [ActionTypes.GET_PROJECT_PENDING]: getProjectPending,
   [ActionTypes.GET_PROJECT_FAILURE]: getProjectFailure,
   [ActionTypes.GET_RECENT_PROJECTS_SUCCESS]: getRecentProjectsSuccess,
   [ActionTypes.GET_RECENT_PROJECTS_FAILURE]: noOp,
+  [ActionTypes.REMOVE_PROJECT_SUCCESS]: resetProjectState,
   [ActionTypes.GET_TEMPLATE_PROJECTS_SUCCESS]: setTemplateProjects,
   [ActionTypes.GET_TEMPLATE_PROJECTS_FAILURE]: noOp,
   [ActionTypes.CREATE_DIALOG_BEGIN]: createDialogBegin,
@@ -641,7 +669,6 @@ export const reducer = createReducer({
   [ActionTypes.REMOVE_SKILL_MANIFEST]: removeSkillManifest,
   [ActionTypes.UPDATE_SKILL_MANIFEST]: updateSkillManifest,
   [ActionTypes.SYNC_ENV_SETTING]: syncEnvSetting,
-  [ActionTypes.GET_ENV_SETTING]: getEnvSetting,
   [ActionTypes.USER_LOGIN_SUCCESS]: setUserToken,
   [ActionTypes.USER_LOGIN_FAILURE]: setUserToken, // will be invoked with token = undefined
   [ActionTypes.USER_SESSION_EXPIRED]: setUserSessionExpired,
@@ -667,5 +694,5 @@ export const reducer = createReducer({
   [ActionTypes.SET_APP_UPDATE_SHOWING]: setAppUpdateShowing,
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
-  [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
+  [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal
 });
