@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 import get from 'lodash/get';
 import { FlowSchema as VisualSDKSchema, FlowEditorWidgetMap as NodeWidgetMap } from '@bfc/extension';
 
@@ -14,7 +14,7 @@ import builtinWidgets from '../configs/builtinWidgets';
 import { SchemaContext } from '../contexts/SchemaContext';
 import { WidgetSchemaProvider } from '../utils/visual/WidgetSchemaProvider';
 
-import { RuleEditor } from './RuleEditor';
+import { AdaptiveTrigger } from './AdaptiveTrigger';
 
 export interface AdaptiveDialogProps {
   /** Dialog ID */
@@ -47,9 +47,9 @@ export const AdaptiveDialog: FC<AdaptiveDialogProps> = ({
   renderers = {},
 }): JSX.Element => {
   const activeTriggerData = get(dialogData, activeTrigger, null);
-  const content = activeTriggerData ? (
-    <RuleEditor key={`${dialogId}/${activeTrigger}`} data={activeTriggerData} id={activeTrigger} onEvent={onEvent} />
-  ) : null;
+  if (!activeTriggerData) {
+    return <Fragment />;
+  }
 
   return (
     <SchemaContext.Provider
@@ -64,7 +64,12 @@ export const AdaptiveDialog: FC<AdaptiveDialogProps> = ({
           ...renderers,
         }}
       >
-        {content}
+        <AdaptiveTrigger
+          key={`${dialogId}/${activeTrigger}`}
+          triggerData={activeTriggerData}
+          triggerId={activeTrigger}
+          onEvent={onEvent}
+        />
       </RendererContext.Provider>
     </SchemaContext.Provider>
   );

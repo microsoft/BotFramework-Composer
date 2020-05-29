@@ -7,16 +7,15 @@ import { useMemo, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 
 import { TriggerSummary } from '../widgets/TriggerSummary';
-import { defaultNodeProps } from '../types/nodeProps';
-import { NodeEventTypes } from '../constants/NodeEventTypes';
+import { NodeEventTypes, EditorEventHandler } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
 import { transformObiRules } from '../transformers/transformObiRules';
 import { outlineObiJson } from '../utils/adaptive/outlineObiJson';
 
 import { StepEditor } from './StepEditor';
 
-const calculateNodeMap = (ruleId, data): { [id: string]: GraphNode } => {
-  const result = transformObiRules(data, ruleId);
+const calculateNodeMap = (triggerId, triggerData): { [id: string]: GraphNode } => {
+  const result = transformObiRules(triggerData, triggerId);
   if (!result) return {};
 
   const { stepGroup } = result;
@@ -25,22 +24,24 @@ const calculateNodeMap = (ruleId, data): { [id: string]: GraphNode } => {
   };
 };
 
-/**
- * `Rule` means a single element stored in the array `AdaptiveDialog.rules`.
- * Usually, a Rule may contain a series of steps.
- */
-export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
+export interface AdaptiveTriggerProps {
+  triggerId: string;
+  triggerData: any;
+  onEvent: EditorEventHandler;
+}
+
+export const AdaptiveTrigger: React.FC<AdaptiveTriggerProps> = ({ triggerId, triggerData, onEvent }): JSX.Element => {
   const outlineCache = useRef();
   const outlineVersion = useRef(0);
 
   const nodeMap = useMemo(() => {
-    const newOutline = outlineObiJson(data);
+    const newOutline = outlineObiJson(triggerData);
     if (!isEqual(newOutline, outlineCache.current)) {
       outlineCache.current = newOutline;
       outlineVersion.current += 1;
     }
-    return calculateNodeMap(id, data);
-  }, [id, data]);
+    return calculateNodeMap(triggerId, triggerData);
+  }, [triggerId, triggerData]);
 
   const { stepGroup } = nodeMap;
 
@@ -64,11 +65,15 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         key={stepGroup.id + '?version=' + outlineVersion.current}
         data={stepGroup.data}
         id={stepGroup.id}
-        trigger={<TriggerSummary data={data} />}
+        trigger={<TriggerSummary data={triggerData} />}
         onEvent={onEvent}
       />
     </div>
   );
 };
 
-RuleEditor.defaultProps = defaultNodeProps;
+AdaptiveTrigger.defaultProps = {
+  triggerId: '',
+  triggerData: {},
+  onEvent: () => null,
+};
