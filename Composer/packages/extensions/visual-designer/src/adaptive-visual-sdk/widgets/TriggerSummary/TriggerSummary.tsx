@@ -31,7 +31,7 @@ function getName(data: any): string {
   );
 }
 
-export const Trigger = ({ data, onClick = () => {} }): JSX.Element => {
+export const TriggerSummary = ({ data, onClick = () => {} }): JSX.Element => {
   const name = getName(data);
   const label = getLabel(data);
 
