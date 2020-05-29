@@ -7,6 +7,9 @@ import { FlowWidget, FlowSchema } from '@bfc/extension';
 export class WidgetSchemaProvider {
   schema: FlowSchema;
 
+  /**
+   * @param schemas Schemas to be merged together. Latter ones will override former ones.
+   */
   constructor(...schemas: FlowSchema[]) {
     this.schema = this.mergeSchemas(schemas);
   }
