@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
-import { GraphNode } from '../../../src/adaptive-visual-sdk/models/GraphNode';
-import { switchCaseLayouter } from '../../../src/adaptive-visual-sdk/layouters/switchCaseLayouter';
+import { Boundary } from '../../../src/adaptive-flow/models/Boundary';
+import { GraphNode } from '../../../src/adaptive-flow/models/GraphNode';
+import { switchCaseLayouter } from '../../../src/adaptive-flow/layouters/switchCaseLayouter';
 
 describe('switchCaseLayouter', () => {
   let branchNodes, conditionNode, choiceNode;

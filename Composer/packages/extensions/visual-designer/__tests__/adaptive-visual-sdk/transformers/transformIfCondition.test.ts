@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { transformIfCondtion } from '../../../src/adaptive-visual-sdk/transformers/transformIfCondition';
-import { AdaptiveKinds } from '../../../src/adaptive-visual-sdk/constants/AdaptiveKinds';
+import { transformIfCondtion } from '../../../src/adaptive-flow/transformers/transformIfCondition';
+import { AdaptiveKinds } from '../../../src/adaptive-flow/constants/AdaptiveKinds';
 
 test('should return {} when input is not IfCondition', () => {
   const json = { $kind: '' };

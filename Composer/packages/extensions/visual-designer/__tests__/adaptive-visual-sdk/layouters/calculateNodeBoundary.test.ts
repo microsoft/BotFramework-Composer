@@ -6,14 +6,14 @@ import {
   calculateIfElseBoundary,
   calculateSwitchCaseBoundary,
   calculateForeachBoundary,
-} from '../../../src/adaptive-visual-sdk/layouters/calculateNodeBoundary';
-import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
+} from '../../../src/adaptive-flow/layouters/calculateNodeBoundary';
+import { Boundary } from '../../../src/adaptive-flow/models/Boundary';
 import {
   ElementInterval,
   BranchIntervalX,
   BranchIntervalY,
   LoopEdgeMarginLeft,
-} from '../../../src/adaptive-visual-sdk/constants/ElementSizes';
+} from '../../../src/adaptive-flow/constants/ElementSizes';
 
 const boundary = new Boundary();
 describe('calculateSequenceBoundary', () => {

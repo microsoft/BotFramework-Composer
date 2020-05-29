@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AdaptiveKinds } from '../../../src/adaptive-visual-sdk/constants/AdaptiveKinds';
+import { AdaptiveKinds } from '../../../src/adaptive-flow/constants/AdaptiveKinds';
 
 test("ObiTypes shoudn't contain duplicate values", () => {
   const valueMap = {};

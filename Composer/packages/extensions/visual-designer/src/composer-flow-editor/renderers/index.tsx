@@ -8,8 +8,8 @@ import {
   EdgeMenuComponent,
   NodeWrapperComponent,
   ElementWrapperComponent,
-} from '../../adaptive-visual-sdk/types/PluggableComponents.types';
-import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
+} from '../../adaptive-flow/types/PluggableComponents.types';
+import { NodeEventTypes } from '../../adaptive-flow/constants/NodeEventTypes';
 
 import { NodeMenu } from './NodeMenu';
 import { EdgeMenu } from './EdgeMenu';

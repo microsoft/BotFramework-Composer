@@ -10,7 +10,7 @@ import { useShellApi } from '@bfc/extension';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContext } from '../contexts/NodeRendererContext';
 import { SelectionContext } from '../contexts/SelectionContext';
-import { NodeEventTypes } from '../../adaptive-visual-sdk/constants/NodeEventTypes';
+import { NodeEventTypes } from '../../adaptive-flow/constants/NodeEventTypes';
 
 const nodeBorderHoveredStyle = css`
   box-shadow: 0px 0px 0px 1px #323130;

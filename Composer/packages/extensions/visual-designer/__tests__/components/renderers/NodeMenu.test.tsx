@@ -5,7 +5,7 @@ import React from 'react';
 import { render, fireEvent, findAllByText } from '@bfc/test-utils';
 
 import { NodeMenu } from '../../../src/composer-flow-editor/renderers/NodeMenu';
-import { NodeEventTypes } from '../../../src/adaptive-visual-sdk/constants/NodeEventTypes';
+import { NodeEventTypes } from '../../../src/adaptive-flow/constants/NodeEventTypes';
 
 describe('<NodeMenu />', () => {
   let id, onEvent, renderResult, clickResults;

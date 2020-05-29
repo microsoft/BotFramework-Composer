@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { transformForeach } from '../../../src/adaptive-visual-sdk/transformers/transformForeach';
-import { AdaptiveKinds } from '../../../src/adaptive-visual-sdk/constants/AdaptiveKinds';
+import { transformForeach } from '../../../src/adaptive-flow/transformers/transformForeach';
+import { AdaptiveKinds } from '../../../src/adaptive-flow/constants/AdaptiveKinds';
 
 test('should return NULL when input is invalid', () => {
   expect(transformForeach(null, '')).toBeNull();

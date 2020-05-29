@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ifElseLayouter } from '../../../src/adaptive-visual-sdk/layouters/ifelseLayouter';
-import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
-import { GraphNode } from '../../../src/adaptive-visual-sdk/models/GraphNode';
+import { ifElseLayouter } from '../../../src/adaptive-flow/layouters/ifelseLayouter';
+import { Boundary } from '../../../src/adaptive-flow/models/Boundary';
+import { GraphNode } from '../../../src/adaptive-flow/models/GraphNode';
 
 describe('ifElseLayouter', () => {
   let ifNode, elseNode, conditionNode, choiceNode;

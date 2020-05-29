@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Boundary } from '../../../src/adaptive-visual-sdk/models/Boundary';
-import { measureJsonBoundary } from '../../../src/adaptive-visual-sdk/layouters/measureJsonBoundary';
-import { AdaptiveKinds } from '../../../src/adaptive-visual-sdk/constants/AdaptiveKinds';
+import { Boundary } from '../../../src/adaptive-flow/models/Boundary';
+import { measureJsonBoundary } from '../../../src/adaptive-flow/layouters/measureJsonBoundary';
+import { AdaptiveKinds } from '../../../src/adaptive-flow/constants/AdaptiveKinds';
 import {
   DiamondSize,
   InitNodeSize,
@@ -13,7 +13,7 @@ import {
   ChoiceInputMarginBottom,
   StandardNodeWidth,
   HeaderHeight,
-} from '../../../src/adaptive-visual-sdk/constants/ElementSizes';
+} from '../../../src/adaptive-flow/constants/ElementSizes';
 
 describe('measureJsonBoundary', () => {
   const boundary = new Boundary();
