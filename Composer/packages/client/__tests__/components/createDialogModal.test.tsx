@@ -2,20 +2,19 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@bfc/test-utils';
 
-import { StoreContext } from '../../src/store';
 import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
+import { renderWithStore } from '../testUtils';
 
 describe('<CreateDialogModal/>', () => {
-  let onSubmitMock;
-  let onDismissMock;
-  let component, storeContext;
+  const onSubmitMock = jest.fn();
+  const onDismissMock = jest.fn();
+  let storeContext;
   function renderComponent() {
-    return render(
-      <StoreContext.Provider value={storeContext}>
-        <CreateDialogModal isOpen onDismiss={onDismissMock} onSubmit={onSubmitMock} />
-      </StoreContext.Provider>
+    return renderWithStore(
+      <CreateDialogModal isOpen onDismiss={onDismissMock} onSubmit={onSubmitMock} />,
+      storeContext.state
     );
   }
 
@@ -26,17 +25,15 @@ describe('<CreateDialogModal/>', () => {
         dialogs: [],
       },
     };
-
-    onSubmitMock = jest.fn();
   });
 
   it('should render the component', () => {
-    component = renderComponent();
+    const component = renderComponent();
     expect(component.container).toBeDefined();
   });
 
-  it('disable submit button', async () => {
-    component = renderComponent();
+  it('does not allow submission when the name is invalid', async () => {
+    const component = renderComponent();
     const nameField = await component.getByTestId('NewDialogName');
     fireEvent.change(nameField, { target: { value: 'invalidName;' } });
     const node = await component.getByTestId('SubmitNewDialogBtn');
