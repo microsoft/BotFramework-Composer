@@ -316,8 +316,7 @@ export class BotProject {
 
   public async deleteAllFiles(): Promise<boolean> {
     try {
-      await this.deleteFilesFromBottomToUp(this.dir);
-      await this.fileStorage.rmDir(this.dir);
+      await this.fileStorage.rmrfDir(this.dir);
       const projectId = await BotProjectService.getProjectIdByPath(this.dir);
       if (projectId) {
         await this.removeLocalRuntimeData(projectId);
@@ -354,31 +353,16 @@ export class BotProject {
     }
   }
 
-  private async deleteFilesFromBottomToUp(path) {
-    const files = await this.fileStorage.readDir(path);
-
-    for (let i = 0; i < files.length; i++) {
-      const curPath = Path.join(path, files[i]);
-      const childStat = await this.fileStorage.stat(curPath);
-      if (childStat.isDir && curPath.startsWith(this.dir)) {
-        await this.deleteFilesFromBottomToUp(curPath);
-        await this.fileStorage.rmDir(curPath);
-      } else {
-        await this.fileStorage.removeFile(curPath);
-      }
-    }
-  }
-
   private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
-    await this._removeEmptyFolderFromBottomToUp(dirPath);
+    await this._removeEmptyFolderFromBottomToUp(dirPath, this.dataDir);
   };
 
-  private _removeEmptyFolderFromBottomToUp = async (folderPath: string) => {
+  private _removeEmptyFolderFromBottomToUp = async (folderPath: string, prefix: string) => {
     let currentFolder = folderPath;
     //make sure the folder to delete is in current project
-    while (currentFolder.startsWith(this.dataDir)) {
+    while (currentFolder.startsWith(prefix)) {
       await this._removeEmptyFolder(currentFolder);
       currentFolder = Path.dirname(currentFolder);
     }

@@ -247,6 +247,9 @@ class MongoStorage implements IFileStorage {
     });
   }
 
+  //To do
+  async rmrfDir(path: string): Promise<void> {}
+
   async glob(pattern: string, path: string): Promise<string[]> {
     path = cleanPath(path);
 
