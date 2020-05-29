@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useMemo, useRef } from 'react';
 import isEqual from 'lodash/isEqual';
 
-import { Trigger } from '../widgets/Trigger';
+import { TriggerSummary } from '../widgets/TriggerSummary';
 import { defaultNodeProps } from '../types/nodeProps';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { GraphNode } from '../models/GraphNode';
@@ -64,7 +64,7 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         key={stepGroup.id + '?version=' + outlineVersion.current}
         data={stepGroup.data}
         id={stepGroup.id}
-        trigger={<Trigger data={data} />}
+        trigger={<TriggerSummary data={data} />}
         onEvent={onEvent}
       />
     </div>
