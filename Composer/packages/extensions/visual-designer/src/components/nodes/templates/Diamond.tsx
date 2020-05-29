@@ -13,7 +13,7 @@ export const Diamond = ({ color = ObiColors.AzureGray2, onClick = () => {}, ...r
     css={{
       width: DiamondSize.width,
       height: DiamondSize.height,
-      cursor: 'pointer',
+      cursor: 'pointer'
     }}
     onClick={e => {
       e.stopPropagation();
@@ -21,11 +21,11 @@ export const Diamond = ({ color = ObiColors.AzureGray2, onClick = () => {}, ...r
     }}
   >
     <svg
-      width={DiamondSize.width}
-      height={DiamondSize.height}
-      viewBox="0 0 50 20"
-      style={{ display: 'block' }}
       fill="none"
+      height={DiamondSize.height}
+      style={{ display: 'block' }}
+      viewBox="0 0 50 20"
+      width={DiamondSize.width}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path d="M25 0L50 10L25 20L-2.7865e-06 10L25 0Z" fill={color} />

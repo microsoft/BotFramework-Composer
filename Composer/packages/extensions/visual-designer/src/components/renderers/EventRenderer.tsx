@@ -15,7 +15,7 @@ const rendererByObiType = {
   [ObiTypes.OnCondition]: EventRule,
   [ObiTypes.OnIntent]: IntentRule,
   [ObiTypes.OnUnknownIntent]: UnknownIntentRule,
-  [ObiTypes.OnConversationUpdateActivity]: ConversationUpdateActivityRule,
+  [ObiTypes.OnConversationUpdateActivity]: ConversationUpdateActivityRule
 };
 const DEFAULT_RENDERER = UnknownIntentRule;
 
@@ -44,9 +44,9 @@ export const EventRenderer: FC<NodeProps> = ({ id, data, onEvent, onResize }): J
       `}
     >
       <ChosenRenderer
-        id={id}
         data={data}
         focused={nodeFocused}
+        id={id}
         onEvent={onEvent}
         onResize={size => {
           onResize(size, 'node');

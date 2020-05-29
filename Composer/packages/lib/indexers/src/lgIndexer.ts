@@ -33,8 +33,8 @@ function parse(
       parameters: t.parameters,
       range: {
         startLineNumber: get(t, 'parseTree.start.line', 0),
-        endLineNumber: get(t, 'parseTree.stop.line', 0),
-      },
+        endLineNumber: get(t, 'parseTree.stop.line', 0)
+      }
     };
   });
   const diagnostics = lgFile.diagnostics.map((d: LGDiagnostic) => {
@@ -59,5 +59,5 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
 
 export const lgIndexer = {
   index,
-  parse,
+  parse
 };

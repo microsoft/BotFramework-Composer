@@ -5,7 +5,7 @@ context('Creating a new Dialog', () => {
   beforeEach(() => {
     cy.visit('/home');
     cy.createBot('TodoSample');
-    cy.findByTestId('LeftNav-CommandBarButtonDesign Flow').click();
+    cy.findByTestId('LeftNav-CommandBarButtonDesign').click();
   });
 
   it('can create a new dialog from project tree', () => {

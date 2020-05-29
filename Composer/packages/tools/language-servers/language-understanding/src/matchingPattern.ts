@@ -154,7 +154,7 @@ export const suggestionAllEntityTypes = [
   'preBuiltEntities',
   'closedLists',
   'phraseLists',
-  'composites',
+  'composites'
 ];
 
 export const suggestionNoPatternAnyEntityTypes = [
@@ -163,7 +163,7 @@ export const suggestionNoPatternAnyEntityTypes = [
   'preBuiltEntities',
   'closedLists',
   'phraseLists',
-  'composites',
+  'composites'
 ];
 
 export const suggestionNoCompositeEntityTypes = [
@@ -172,7 +172,7 @@ export const suggestionNoCompositeEntityTypes = [
   'patternAnyEntities',
   'preBuiltEntities',
   'closedLists',
-  'phraseLists',
+  'phraseLists'
 ];
 
 export function getSuggestionRoles(luisJson: any, suggestionEntityTypes: string[]): string[] {

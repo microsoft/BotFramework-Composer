@@ -14,7 +14,7 @@ import { buttonStyles, content } from './styles';
 
 const CollapsedWelcomeModal = () => {
   const {
-    actions: { exit, toggleMinimized },
+    actions: { exit, toggleMinimized }
   } = useContext(OnboardingContext);
 
   return (
@@ -23,15 +23,15 @@ const CollapsedWelcomeModal = () => {
       <div>
         <IconButton
           iconProps={{ iconName: 'FullScreen' }}
-          onClick={toggleMinimized}
           styles={buttonStyles}
           title="Expand"
+          onClick={toggleMinimized}
         />
         <IconButton
           iconProps={{ iconName: 'ChromeClose' }}
-          onClick={exit}
           styles={{ ...buttonStyles, icon: { color: palette.white, fontSize: '12px' } }}
           title="Close"
+          onClick={exit}
         />
       </div>
     </div>

@@ -88,7 +88,7 @@ export function prepareAxios(store: Store) {
 
           store.dispatch({
             type: ActionTypes.USER_SESSION_EXPIRED,
-            payload: { expired: true },
+            payload: { expired: true }
           });
         }
 

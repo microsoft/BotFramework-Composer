@@ -9,24 +9,24 @@ import { JsonEditor } from '../../src';
 const jsonContent = {
   'ComposerDialogs/AddToDo/AddToDo.lu': {
     lastUpdateTime: 1,
-    lastPublishTime: 0,
+    lastPublishTime: 0
   },
   'ComposerDialogs/ClearToDos/ClearToDos.lu': {
     lastUpdateTime: 1,
-    lastPublishTime: 0,
+    lastPublishTime: 0
   },
   'ComposerDialogs/DeleteToDo/DeleteToDo.lu': {
     lastUpdateTime: 1,
-    lastPublishTime: 0,
+    lastPublishTime: 0
   },
   'ComposerDialogs/Main/Main.lu': {
     lastUpdateTime: 1573624458300,
-    lastPublishTime: 0,
+    lastPublishTime: 0
   },
   'ComposerDialogs/ShowToDos/ShowToDos.lu': {
     lastUpdateTime: 1,
-    lastPublishTime: 0,
-  },
+    lastPublishTime: 0
+  }
 };
 
 const lgContent = `# Hello
@@ -106,14 +106,14 @@ export default function App() {
     onChange: value => {
       setValue1(value);
     },
-    languageServer: 'localhost:5000/lg-language-server',
+    languageServer: 'localhost:5000/lg-language-server'
   };
 
   const props2 = {
     value: value2,
     onChange: value => {
       setValue2(value);
-    },
+    }
   };
   return (
     <Fragment>

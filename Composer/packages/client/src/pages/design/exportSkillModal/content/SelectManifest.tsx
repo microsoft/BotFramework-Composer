@@ -14,7 +14,7 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
-  CheckboxVisibility,
+  CheckboxVisibility
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 
@@ -33,7 +33,7 @@ const styles = {
   `,
   create: css`
     display: flex;
-  `,
+  `
 };
 
 export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillManifests, setSkillManifest }) => {
@@ -53,7 +53,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
         return {
           text: formatMessage('Version {version}', { version }),
           key,
-          selected: !index,
+          selected: !index
         };
       }),
     []
@@ -96,7 +96,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       onRender: item => {
         return <span aria-label={item.name}>{item.id}</span>;
       },
-      isPadded: true,
+      isPadded: true
     },
     {
       key: 'column2',
@@ -109,16 +109,16 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       onRender: item => {
         return <span>{calculateTimeDiff(item.dateModified)}</span>;
       },
-      isPadded: true,
-    },
+      isPadded: true
+    }
   ];
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
-      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
           ...props,
-          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+          onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
         })}
       </Sticky>
     );
@@ -130,7 +130,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
         <Label
           required
           styles={{
-            root: { fontWeight: '400' },
+            root: { fontWeight: '400' }
           }}
         >
           {formatMessage('Manifest Version')}
@@ -142,16 +142,16 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
             responsiveMode={ResponsiveMode.large}
             styles={{
               root: {
-                width: '250px',
-              },
+                width: '250px'
+              }
             }}
             onChange={handleChange}
           />
           <PrimaryButton
             styles={{
               root: {
-                marginLeft: 8,
-              },
+                marginLeft: 8
+              }
             }}
             onClick={handleCreate}
           >
@@ -162,16 +162,16 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       <div css={styles.detailListContainer}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            items={skillManifests}
-            compact={false}
-            columns={tableColumns}
-            getKey={item => item.name}
-            layoutMode={DetailsListLayoutMode.justified}
-            onRenderDetailsHeader={onRenderDetailsHeader}
-            isHeaderVisible={true}
-            onActiveItemChanged={({ id }) => setSkillManifest(id)}
-            selectionMode={SelectionMode.single}
+            isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
+            columns={tableColumns}
+            compact={false}
+            getKey={item => item.name}
+            items={skillManifests}
+            layoutMode={DetailsListLayoutMode.justified}
+            selectionMode={SelectionMode.single}
+            onActiveItemChanged={({ id }) => setSkillManifest(id)}
+            onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </ScrollablePane>
       </div>

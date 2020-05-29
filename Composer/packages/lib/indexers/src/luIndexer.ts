@@ -12,7 +12,7 @@ import {
   Diagnostic,
   Position,
   Range,
-  DiagnosticSeverity,
+  DiagnosticSeverity
 } from '@bfc/shared';
 
 import { getBaseName } from './utils/help';
@@ -25,7 +25,7 @@ function convertLuDiagnostic(d: any, source: string): Diagnostic {
     ERROR: DiagnosticSeverity.Error,
     WARN: DiagnosticSeverity.Warning,
     INFORMATION: DiagnosticSeverity.Information,
-    HINT: DiagnosticSeverity.Hint,
+    HINT: DiagnosticSeverity.Hint
   };
   const result = new Diagnostic(d.Message, source, severityMap[d.Severity]);
 
@@ -43,7 +43,7 @@ function parse(content: string, id = ''): LuParsed {
     const { Name, Body, SectionType } = section;
     const range = {
       startLineNumber: get(section, 'ParseTree.start.line', 0),
-      endLineNumber: get(section, 'ParseTree.stop.line', 0),
+      endLineNumber: get(section, 'ParseTree.stop.line', 0)
     };
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
       const Entities = section.Entities.map(({ Name }) => Name);
@@ -51,34 +51,34 @@ function parse(content: string, id = ''): LuParsed {
         Name,
         Body,
         Entities,
-        range,
+        range
       });
     } else if (SectionType === LuSectionTypes.NESTEDINTENTSECTION) {
       const Children = section.SimpleIntentSections.map(subSection => {
         const { Name, Body } = subSection;
         const range = {
           startLineNumber: get(subSection, 'ParseTree.start.line', 0),
-          endLineNumber: get(subSection, 'ParseTree.stop.line', 0),
+          endLineNumber: get(subSection, 'ParseTree.stop.line', 0)
         };
         const Entities = subSection.Entities.map(({ Name }) => Name);
         return {
           Name,
           Body,
           Entities,
-          range,
+          range
         };
       });
       intents.push({
         Name,
         Body,
         Children,
-        range,
+        range
       });
       intents.push(
         ...Children.map(subSection => {
           return {
             ...subSection,
-            Name: `${section.Name}/${subSection.Name}`,
+            Name: `${section.Name}/${subSection.Name}`
           };
         })
       );
@@ -87,7 +87,7 @@ function parse(content: string, id = ''): LuParsed {
   const diagnostics = Errors.map(e => convertLuDiagnostic(e, id));
   return {
     intents,
-    diagnostics,
+    diagnostics
   };
 }
 
@@ -108,5 +108,5 @@ function index(files: FileInfo[]): LuFile[] {
 
 export const luIndexer = {
   index,
-  parse,
+  parse
 };

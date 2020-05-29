@@ -20,12 +20,12 @@ import { getCustomSchema } from './utils/getCustomSchema';
 import { defaultFlowSchema } from './schema/defaultFlowSchema';
 
 formatMessage.setup({
-  missingTranslation: 'ignore',
+  missingTranslation: 'ignore'
 });
 
 const emotionCache = createCache({
   // @ts-ignore
-  nonce: window.__nonce__,
+  nonce: window.__nonce__
 });
 
 const styles = css`
@@ -51,7 +51,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     clipboardActions,
     data: inputData,
     hosted,
-    schemas,
+    schemas
   } = shellData;
 
   const dataCache = useRef({});
@@ -82,7 +82,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLuIntent,
     undo,
     redo,
-    announce,
+    announce
   } = shellApi;
 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
@@ -90,7 +90,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   // Compute schema diff
   const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
     schemas?.sdk?.content,
-    schemas?.default,
+    schemas?.default
   ]);
 
   const nodeContext: NodeRendererContextValue = {
@@ -105,7 +105,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     removeLgTemplates,
     removeLuIntent,
     dialogFactory: new DialogFactory(schema),
-    customSchemas: customSchema ? [customSchema] : [],
+    customSchemas: customSchema ? [customSchema] : []
   };
 
   const visualEditorConfig = mergePluginConfig(...plugins);
@@ -124,25 +124,25 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
           <FlowSchemaContext.Provider
             value={{
               widgets: visualEditorConfig.widgets,
-              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema),
+              schemaProvider: new FlowSchemaProvider(visualEditorConfig.schema, customFlowSchema)
             }}
           >
-            <div data-testid="visualdesigner-container" css={styles}>
+            <div css={styles} data-testid="visualdesigner-container">
               <ObiEditor
                 key={dialogId}
-                path={dialogId}
+                announce={announce}
                 data={data}
                 focusedSteps={focusedActions}
-                onFocusSteps={onFocusSteps}
-                onFocusEvent={onFocusEvent}
+                path={dialogId}
+                redo={redo}
+                undo={undo}
+                onChange={x => saveData(x)}
                 onClipboardChange={onCopy}
                 onCreateDialog={createDialog}
+                onFocusEvent={onFocusEvent}
+                onFocusSteps={onFocusSteps}
                 onOpen={x => navTo(x)}
-                onChange={x => saveData(x)}
                 onSelect={onSelect}
-                undo={undo}
-                redo={redo}
-                announce={announce}
               />
             </div>
           </FlowSchemaContext.Provider>

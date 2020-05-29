@@ -11,7 +11,7 @@ import {
   FileInfo,
   LgTemplateJsonPath,
   Diagnostic,
-  ReferredLuIntents,
+  ReferredLuIntents
 } from '@bfc/shared';
 
 import { createPath } from './dialogUtils/dialogChecker';
@@ -90,7 +90,7 @@ function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
       const intentName = value.intent;
       intents.push({
         name: intentName,
-        path: createPath(path, value.$kind),
+        path: createPath(path, value.$kind)
       });
     }
     return false;
@@ -117,7 +117,7 @@ function ExtractTriggers(dialog): ITrigger[] {
             id: `triggers[${index}]`,
             displayName: '',
             type: rule.$kind,
-            isIntent: rule.$kind === SDKKinds.OnIntent,
+            isIntent: rule.$kind === SDKKinds.OnIntent
           };
           if (has(rule, '$designer.name')) {
             trigger.displayName = rule.$designer.name;
@@ -210,7 +210,7 @@ function parse(id: string, content: any, schema: any) {
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: ExtractTriggers(content),
-    intentTriggers: ExtractIntentTriggers(content),
+    intentTriggers: ExtractIntentTriggers(content)
   };
 }
 
@@ -226,7 +226,7 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
           const dialog = {
             isRoot,
             displayName: isRoot ? `${botName}` : id,
-            ...parse(id, dialogJson, schema),
+            ...parse(id, dialogJson, schema)
           };
           dialogs.push(dialog);
         }
@@ -240,5 +240,5 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
 
 export const dialogIndexer = {
   index,
-  parse,
+  parse
 };

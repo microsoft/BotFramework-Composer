@@ -12,20 +12,20 @@ const babelConfig = {
   presets: [
     require.resolve('@babel/preset-env'),
     require.resolve('@babel/preset-react'),
-    require.resolve('@babel/preset-typescript'),
+    [require.resolve('@babel/preset-typescript'), { allowNamespaces: true }]
   ],
   plugins: [
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-runtime'),
     require.resolve('@babel/plugin-proposal-optional-chaining'),
-    require.resolve('@babel/plugin-proposal-nullish-coalescing-operator'),
-  ],
+    require.resolve('@babel/plugin-proposal-nullish-coalescing-operator')
+  ]
 };
 
 module.exports = mergeConfig(baseConfig, {
   transform: {
     '^.+\\.jsx?$': [require.resolve('babel-jest'), babelConfig],
-    '^.+\\.tsx?$': [require.resolve('babel-jest'), babelConfig],
+    '^.+\\.tsx?$': [require.resolve('babel-jest'), babelConfig]
   },
 
   moduleNameMapper: {
@@ -38,8 +38,8 @@ module.exports = mergeConfig(baseConfig, {
 
     // use commonjs modules for test so they do not need to be compiled
     'office-ui-fabric-react/lib/(.*)$': 'office-ui-fabric-react/lib-commonjs/$1',
-    '@uifabric/fluent-theme/lib/(.*)$': '@uifabric/fluent-theme/lib-commonjs/$1',
+    '@uifabric/fluent-theme/lib/(.*)$': '@uifabric/fluent-theme/lib-commonjs/$1'
   },
 
-  setupFilesAfterEnv: [path.resolve(__dirname, 'setup.js')],
+  setupFilesAfterEnv: [path.resolve(__dirname, 'setup.js')]
 });

@@ -50,18 +50,18 @@ export const Pagination: React.FC<IPaginationProps> = props => {
 
   return (
     <div css={container}>
-      <DefaultButton text="< Previous" allowDisabledFocus onClick={hanglePreviousClick} disabled={index === 0} />
+      <DefaultButton allowDisabledFocus disabled={index === 0} text="< Previous" onClick={hanglePreviousClick} />
       <span css={text}>Page</span>
       <Dropdown
-        placeholder="Select options"
-        options={createDropdownOption(pageCount)}
-        styles={dropdownStyles}
-        selectedKey={`page${index + 1}`}
-        onChange={handlePageSelected}
         ariaLabel={formatMessage('Page number')}
+        options={createDropdownOption(pageCount)}
+        placeholder="Select options"
+        selectedKey={`page${index + 1}`}
+        styles={dropdownStyles}
+        onChange={handlePageSelected}
       />
       <span css={text}>of {pageCount}</span>
-      <DefaultButton text="Next >" allowDisabledFocus onClick={hangleNextClick} disabled={index === pageCount - 1} />
+      <DefaultButton allowDisabledFocus disabled={index === pageCount - 1} text="Next >" onClick={hangleNextClick} />
     </div>
   );
 };

@@ -17,7 +17,7 @@ export enum LGCursorState {
   STRUCTURELG = 'structure_lg',
   SINGLE = 'single',
   DOUBLE = 'double',
-  OPTION = 'option',
+  OPTION = 'option'
 }
 
 export interface LGOption {
@@ -70,7 +70,7 @@ const severityMap = {
   [LGDiagnosticSeverity.Error]: DiagnosticSeverity.Error,
   [LGDiagnosticSeverity.Hint]: DiagnosticSeverity.Hint,
   [LGDiagnosticSeverity.Information]: DiagnosticSeverity.Information,
-  [LGDiagnosticSeverity.Warning]: DiagnosticSeverity.Warning,
+  [LGDiagnosticSeverity.Warning]: DiagnosticSeverity.Warning
 };
 
 export function convertSeverity(severity: LGDiagnosticSeverity): DiagnosticSeverity {
@@ -82,7 +82,7 @@ export function generageDiagnostic(message: string, severity: DiagnosticSeverity
     severity,
     range: Range.create(Position.create(0, 0), Position.create(0, 0)),
     message,
-    source: document.uri,
+    source: document.uri
   };
 }
 
@@ -97,7 +97,7 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
       severity: convertSeverity(diag.severity),
       range,
       message: diag.message,
-      source: document.uri,
+      source: document.uri
     };
     diagnostics.push(diagnostic);
   });
@@ -151,7 +151,7 @@ export const cardTypes = [
   'AttachmentLayout',
   'CardAction',
   'AdaptiveCard',
-  'Activity',
+  'Activity'
 ];
 
 export const cardPropPossibleValueType = {
@@ -165,7 +165,7 @@ export const cardPropPossibleValueType = {
   buttons: 'Text | ${Some_CardAction}',
   contenttype: 'adaptivecard',
   content: '${json(fromFile("../../card.json"))}',
-  name: 'An Example Name',
+  name: 'An Example Name'
 };
 
 export const cardPropDict = {
@@ -173,7 +173,7 @@ export const cardPropDict = {
   Suggestions: ['SuggestionActions'],
   Cards: ['title', 'subtitle', 'text', 'image', 'buttons'],
   Attachment: ['contenttype', 'content'],
-  Others: ['type', 'name', 'value'],
+  Others: ['type', 'name', 'value']
 };
 
 export const lgOptionKeys = ['strict', 'replaceNull', 'lineBreakStyle', 'Namespace', 'Exports'];
@@ -183,5 +183,5 @@ export const lgOptionsValues = {
   replacenull: ['${path} is undefined'],
   linebreakstyle: ['markdown', 'default'],
   namespace: [],
-  exports: [],
+  exports: []
 };

@@ -41,7 +41,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   onClick,
   onClickHeader,
   onClickBody,
-  onClickFooter,
+  onClickFooter
 }) => {
   const renderHeader = (header: ReactNode) => (
     <div
@@ -93,7 +93,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
         overflow: visible;
       `}
     >
-      <ArrowLine width={StandardNodeWidth} arrowsize={8} color={ObiColors.AzureGray3} />
+      <ArrowLine arrowsize={8} color={ObiColors.AzureGray3} width={StandardNodeWidth} />
     </div>
   );
 

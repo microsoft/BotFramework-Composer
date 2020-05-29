@@ -52,10 +52,10 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const toggle = () => (
     <div css={runtimeToggle}>
       <Toggle
-        label={formatMessage('Use custom runtime')}
         inlineLabel
-        onChange={changeEnabled}
         checked={settings.runtime && settings.runtime.customRuntime === true}
+        label={formatMessage('Use custom runtime')}
+        onChange={changeEnabled}
       />
     </div>
   );
@@ -78,36 +78,36 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       {toggle()}
       <div css={controlGroup}>
         <TextField
-          label={formatMessage('Runtime code location')}
-          value={settings.runtime ? settings.runtime.path : ''}
-          styles={name}
           required
-          onChange={updateSetting('path')}
-          errorMessage={formDataErrors.path}
           data-testid="runtimeCodeLocation"
           disabled={!settings.runtime || !settings.runtime.customRuntime}
+          errorMessage={formDataErrors.path}
+          label={formatMessage('Runtime code location')}
+          styles={name}
+          value={settings.runtime ? settings.runtime.path : ''}
+          onChange={updateSetting('path')}
         />
         {formatMessage('Or: ')}
         <Link
-          onClick={showEjectModal}
-          disabled={!settings.runtime || !settings.runtime.customRuntime}
           css={breathingSpace}
+          disabled={!settings.runtime || !settings.runtime.customRuntime}
+          onClick={showEjectModal}
         >
           {formatMessage('Get a new copy of the runtime code')}
         </Link>
 
         <TextField
-          label={formatMessage('Start command')}
-          value={settings.runtime ? settings.runtime.command : ''}
-          styles={name}
           required
-          onChange={updateSetting('command')}
-          errorMessage={formDataErrors.command}
           data-testid="runtimeCommand"
           disabled={!settings.runtime || !settings.runtime.customRuntime}
+          errorMessage={formDataErrors.command}
+          label={formatMessage('Start command')}
+          styles={name}
+          value={settings.runtime ? settings.runtime.command : ''}
+          onChange={updateSetting('command')}
         />
       </div>
-      <EjectModal hidden={!ejectModalVisible} closeModal={closeEjectModal} ejectRuntime={ejectRuntime} />
+      <EjectModal closeModal={closeEjectModal} ejectRuntime={ejectRuntime} hidden={!ejectModalVisible} />
     </div>
   ) : (
     <LoadingSpinner />

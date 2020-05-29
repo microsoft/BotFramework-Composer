@@ -50,7 +50,7 @@ export function handleTabMove(currentElement: SelectorElement, selectableElement
         // Perform like presssing down arrow key.
         nextElement = locateNearestElement(currentElement, selectableElements, Direction.Down, [
           'isNode',
-          'isEdgeMenu',
+          'isEdgeMenu'
         ]);
       }
     }

@@ -21,7 +21,7 @@ const calculateNodeMap = (ruleId, data): { [id: string]: GraphNode } => {
 
   const { stepGroup } = result;
   return {
-    stepGroup: GraphNode.fromIndexedJson(stepGroup),
+    stepGroup: GraphNode.fromIndexedJson(stepGroup)
   };
 };
 
@@ -47,14 +47,14 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
   return (
     <div
       className="rule-editor"
-      data-testid="RuleEditor"
       css={{
         position: 'relative',
         display: 'flex',
         width: '100%',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
+      data-testid="RuleEditor"
       onClick={e => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id: '' });
@@ -62,10 +62,10 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
     >
       <StepEditor
         key={stepGroup.id + '?version=' + outlineVersion.current}
-        id={stepGroup.id}
         data={stepGroup.data}
-        onEvent={onEvent}
+        id={stepGroup.id}
         trigger={<Trigger data={data} />}
+        onEvent={onEvent}
       />
     </div>
   );

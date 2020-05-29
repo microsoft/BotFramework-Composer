@@ -44,7 +44,7 @@ export default function DragScroll(props) {
     if (isDragging.current) {
       const mouseMove = {
         x: e.pageX - dragStartPoint.current.x,
-        y: e.pageY - dragStartPoint.current.y,
+        y: e.pageY - dragStartPoint.current.y
       };
       const scrollParent = getScrollParent(e.currentTarget);
       if (scrollParent) {
@@ -62,9 +62,9 @@ export default function DragScroll(props) {
       className="dragscroll"
       css={{ width: '100%', height: '100%' }}
       onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
     >
       {props.children}
     </div>

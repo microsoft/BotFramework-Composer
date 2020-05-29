@@ -11,7 +11,7 @@ import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal';
 import { renderWithStore } from '../testUtils';
 
 jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl', () => ({
-  validateManifestUrl: () => {},
+  validateManifestUrl: () => {}
 }));
 
 const items: Skill[] = [
@@ -23,7 +23,7 @@ const items: Skill[] = [
     msAppId: '79432da8-0f7e-4a16-8c23-ddbba30ae85d',
     protocol: '',
     endpoints: [],
-    body: '',
+    body: ''
   },
   {
     manifestUrl: 'https://hualxielearn2-snskill.azurewebsites.net/manifest/manifest-1.0.json',
@@ -33,8 +33,8 @@ const items: Skill[] = [
     msAppId: 'e2852590-ea71-4a69-9e44-e74b5b6cbe89',
     protocol: '',
     endpoints: [],
-    body: '',
-  },
+    body: ''
+  }
 ];
 
 describe('Skill page', () => {
@@ -55,7 +55,7 @@ describe('Skill page', () => {
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
     const { container } = render(
-      <SkillList skills={items} projectId="test-project" onEdit={jest.fn()} onDelete={jest.fn()} />
+      <SkillList projectId="test-project" skills={items} onDelete={jest.fn()} onEdit={jest.fn()} />
     );
     expect(container).toHaveTextContent('Email Skill');
     expect(container).toHaveTextContent('Point Of Interest Skill');
@@ -64,7 +64,7 @@ describe('<SkillList />', () => {
   it('can edit the skill', () => {
     const onEdit = jest.fn();
     const { getAllByTestId } = render(
-      <SkillList skills={items} projectId="test-project" onEdit={onEdit} onDelete={jest.fn()} />
+      <SkillList projectId="test-project" skills={items} onDelete={jest.fn()} onEdit={onEdit} />
     );
 
     const editBtns = getAllByTestId('EditSkill');
@@ -84,12 +84,12 @@ describe('<SkillForm />', () => {
     const onDismiss = jest.fn(() => {});
     const { getByLabelText, getByText } = render(
       <CreateSkillModal
-        skills={items}
+        isOpen
         editIndex={0}
         projectId={'243245'}
-        onSubmit={onSubmit}
+        skills={items}
         onDismiss={onDismiss}
-        isOpen
+        onSubmit={onSubmit}
       />
     );
 

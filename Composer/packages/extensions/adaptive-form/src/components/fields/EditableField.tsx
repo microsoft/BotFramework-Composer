@@ -27,7 +27,7 @@ const EditableField: React.FC<EditableFieldProps> = props => {
     error,
     className,
     transparentBorder,
-    ariaLabel,
+    ariaLabel
   } = props;
   const [editing, setEditing] = useState<boolean>(false);
   const [hasFocus, setHasFocus] = useState<boolean>(false);
@@ -65,37 +65,39 @@ const EditableField: React.FC<EditableFieldProps> = props => {
       onMouseLeave={() => !hasFocus && setEditing(false)}
     >
       <TextField
+        ariaLabel={ariaLabel}
         autoComplete="off"
         errorMessage={error as string}
         placeholder={placeholder || value}
-        styles={mergeStyleSets(
-          {
-            root: { margin: '0', width: '100%' },
-            field: {
-              fontSize: fontSize,
-              selectors: {
-                '::placeholder': {
-                  fontSize: fontSize,
-                },
+        styles={
+          mergeStyleSets(
+            {
+              root: { margin: '0', width: '100%' },
+              field: {
+                fontSize: fontSize,
+                selectors: {
+                  '::placeholder': {
+                    fontSize: fontSize
+                  }
+                }
               },
+              fieldGroup: {
+                borderColor,
+                transition: 'border-color 0.1s linear',
+                selectors: {
+                  ':hover': {
+                    borderColor: hasFocus ? undefined : NeutralColors.gray30
+                  }
+                }
+              }
             },
-            fieldGroup: {
-              borderColor,
-              transition: 'border-color 0.1s linear',
-              selectors: {
-                ':hover': {
-                  borderColor: hasFocus ? undefined : NeutralColors.gray30,
-                },
-              },
-            },
-          },
-          styles
-        )}
+            styles
+          ) as Partial<ITextFieldStyles>
+        }
         value={localValue}
         onBlur={handleCommit}
         onChange={handleChange}
         onFocus={() => setHasFocus(true)}
-        ariaLabel={ariaLabel}
       />
     </div>
   );

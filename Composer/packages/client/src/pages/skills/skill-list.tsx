@@ -8,7 +8,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
-  IColumn,
+  IColumn
 } from 'office-ui-fabric-react/lib/DetailsList';
 import React, { useState, useCallback } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
@@ -42,7 +42,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: Skill) => {
       return <div css={TableCell}>{item.name}</div>;
-    },
+    }
   },
   {
     key: 'msAppId',
@@ -54,7 +54,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: Skill) => {
       return <div css={TableCell}>{item.msAppId}</div>;
-    },
+    }
   },
   {
     key: 'endpointUrl',
@@ -66,7 +66,7 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: Skill) => {
       return <div css={TableCell}>{item.endpointUrl}</div>;
-    },
+    }
   },
   {
     key: 'description',
@@ -78,8 +78,8 @@ const columns: IColumn[] = [
     data: 'string',
     onRender: (item: Skill) => {
       return <div css={TableCell}>{item.description}</div>;
-    },
-  },
+    }
+  }
 ];
 
 const SkillList: React.FC<ISkillListProps> = props => {
@@ -108,46 +108,46 @@ const SkillList: React.FC<ISkillListProps> = props => {
       onRender: (item, index) => {
         return (
           <div>
-            <Stack tokens={{ childrenGap: 8 }} horizontal>
+            <Stack horizontal tokens={{ childrenGap: 8 }}>
               <IconButton
-                iconProps={{
-                  iconName: 'Edit',
-                }}
-                onClick={() => onEdit(index)}
-                title="Edit"
                 ariaLabel="Edit"
                 data-testid="EditSkill"
+                iconProps={{
+                  iconName: 'Edit'
+                }}
+                title="Edit"
+                onClick={() => onEdit(index)}
               />
               <IconButton
-                iconProps={{
-                  iconName: 'Delete',
-                }}
-                onClick={() => onDelete(index)}
-                title="Delete"
                 ariaLabel="Delete"
                 data-testid="DeleteSkill"
+                iconProps={{
+                  iconName: 'Delete'
+                }}
+                title="Delete"
+                onClick={() => onDelete(index)}
               />
               <IconButton
-                iconProps={{ iconName: 'ContextMenu' }}
-                onClick={() => onViewManifest(item)}
-                title="View"
                 ariaLabel="View"
                 data-testid="ViewManifest"
+                iconProps={{ iconName: 'ContextMenu' }}
+                title="View"
+                onClick={() => onViewManifest(item)}
               />
             </Stack>
           </div>
         );
-      },
+      }
     });
   }, [projectId]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
       <div data-testid="tableHeader">
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
           })}
         </Sticky>
       </div>
@@ -159,14 +159,14 @@ const SkillList: React.FC<ISkillListProps> = props => {
       <div css={TableView}>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
-            items={skills}
-            styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}
-            columns={getColumns()}
-            selectionMode={SelectionMode.single}
-            layoutMode={DetailsListLayoutMode.justified}
-            isHeaderVisible={true}
-            onRenderDetailsHeader={onRenderDetailsHeader}
+            isHeaderVisible
             checkboxVisibility={CheckboxVisibility.hidden}
+            columns={getColumns()}
+            items={skills}
+            layoutMode={DetailsListLayoutMode.justified}
+            selectionMode={SelectionMode.single}
+            styles={{ contentWrapper: { fontSize: FontSizes.size16 } }}
+            onRenderDetailsHeader={onRenderDetailsHeader}
           />
         </ScrollablePane>
       </div>

@@ -33,11 +33,11 @@ export function switchCaseLayouter(
   /** Calulate nodes position */
   conditionNode.offset = {
     x: containerBoundary.axisX - conditionNode.boundary.axisX,
-    y: 0,
+    y: 0
   };
   choiceNode.offset = {
     x: containerBoundary.axisX - choiceNode.boundary.axisX,
-    y: conditionNode.offset.y + conditionNode.boundary.height + BranchIntervalY,
+    y: conditionNode.offset.y + conditionNode.boundary.height + BranchIntervalY
   };
 
   const BottomelinePositionY = containerBoundary.height;
@@ -46,7 +46,7 @@ export function switchCaseLayouter(
   branchNodes.reduce((accOffsetX, x, currentIndex) => {
     x.offset = {
       x: accOffsetX,
-      y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY,
+      y: choiceNode.offset.y + choiceNode.boundary.height + BranchIntervalY
     };
     return (
       accOffsetX + x.boundary.width + calculateBranchNodesIntervalX(x.boundary, branchNodes[currentIndex + 1]?.boundary)
@@ -60,7 +60,7 @@ export function switchCaseLayouter(
     direction: EdgeDirection.Down,
     x: containerBoundary.axisX,
     y: conditionNode.offset.y + conditionNode.boundary.height,
-    length: BranchIntervalY,
+    length: BranchIntervalY
   });
 
   const BaselinePositionY = choiceNode.offset.y + choiceNode.boundary.axisY;
@@ -72,14 +72,14 @@ export function switchCaseLayouter(
         x: x.offset.x + x.boundary.axisX,
         y: BaselinePositionY,
         length: x.offset.y - BaselinePositionY,
-        options: { label: x.data.label },
+        options: { label: x.data.label }
       },
       {
         id: `edge/${choiceNode.id}/case/${x.id}->bottom`,
         direction: EdgeDirection.Down,
         x: x.offset.x + x.boundary.axisX,
         y: x.offset.y + x.boundary.height,
-        length: BottomelinePositionY - x.offset.y - x.boundary.height,
+        length: BottomelinePositionY - x.offset.y - x.boundary.height
       }
     );
   });
@@ -94,14 +94,14 @@ export function switchCaseLayouter(
         direction: EdgeDirection.Right,
         x: containerBoundary.axisX,
         y: BaselinePositionY,
-        length: baseLineLength,
+        length: baseLineLength
       },
       {
         id: `edge/${conditionNode.id}/bottomline`,
         direction: EdgeDirection.Right,
         x: containerBoundary.axisX,
         y: BottomelinePositionY,
-        length: baseLineLength,
+        length: baseLineLength
       }
     );
   }
@@ -111,6 +111,6 @@ export function switchCaseLayouter(
     boundary: containerBoundary,
     nodeMap: { conditionNode, choiceNode, branchNodes: branchNodes as any },
     edges,
-    nodes: [],
+    nodes: []
   };
 }

@@ -7,7 +7,7 @@ describe('walkAdaptiveAction', () => {
   it('can walk single action', () => {
     const action = {
       $kind: 'Microsoft.SendActivity',
-      activity: 'hello',
+      activity: 'hello'
     };
     const spy = jest.fn();
     walkAdaptiveAction(action, x => spy(x));

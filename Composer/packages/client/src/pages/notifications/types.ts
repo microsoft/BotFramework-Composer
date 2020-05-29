@@ -12,7 +12,7 @@ export enum NotificationType {
   DIALOG,
   LG,
   LU,
-  GENERAL,
+  GENERAL
 }
 
 export interface INotification {

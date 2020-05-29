@@ -43,7 +43,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     );
   };
 
-  const buttonRef = useRef<IButton>();
+  const buttonRef = useRef<IButton | null>(null);
 
   useEffect((): void => {
     if (nodeSelected) {
@@ -58,7 +58,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     const { background, color, selectors } = iconStyles || {
       background: undefined,
       color: undefined,
-      selectors: undefined,
+      selectors: undefined
     };
 
     const buttonStyles: IButtonStyles = {
@@ -70,14 +70,14 @@ export const IconMenu: React.FC<IconMenuProps> = ({
         height: 'auto',
         color: '#323130',
         background: background || 'transparent',
-        selectors,
+        selectors
       },
       rootHovered: {
-        background: background || 'transparent',
+        background: background || 'transparent'
       },
       rootChecked: {
-        background: background || 'transparent',
-      },
+        background: background || 'transparent'
+      }
     };
 
     const onMenuClick = () => {
@@ -88,15 +88,14 @@ export const IconMenu: React.FC<IconMenuProps> = ({
     };
     return (
       <IconButton
-        // @ts-ignore
+        ariaLabel={label}
         componentRef={buttonRef}
         data-testid="iconMenu"
-        styles={buttonStyles}
         menuIconProps={{ iconName, style: { fontSize: iconSize, fontWeight: 'bold', color } }}
         menuProps={{ items: overflowItems, calloutProps: { calloutMaxWidth: menuWidth } }}
-        onMenuClick={onMenuClick}
+        styles={buttonStyles}
         onAfterMenuDismiss={onAfterMenuDismiss}
-        ariaLabel={label}
+        onMenuClick={onMenuClick}
         {...rest}
       />
     );
@@ -104,13 +103,11 @@ export const IconMenu: React.FC<IconMenuProps> = ({
 
   return (
     <OverflowSet
-      // @ts-ignore
-      styles={{ position: 'absolute', top: 0 }}
-      aria-label="icon menu"
       vertical
+      aria-label="icon menu"
       overflowItems={menuItems}
-      onRenderOverflowButton={_onRenderOverflowButton}
       onRenderItem={_onRenderItem}
+      onRenderOverflowButton={_onRenderOverflowButton}
     />
   );
 };
@@ -121,5 +118,5 @@ IconMenu.defaultProps = {
   iconStyles: {},
   menuItems: [],
   menuWidth: 0,
-  nodeSelected: false,
+  nodeSelected: false
 };

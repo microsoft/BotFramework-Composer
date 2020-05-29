@@ -13,7 +13,7 @@ Cypress.Commands.add('createBot', (botId: string, botName?: string) => {
     templateId: botId,
   };
 
-  cy.request('post', '/api/projects', params).then(res => {
+  cy.request('post', '/api/projects', params).then((res) => {
     const { id: projectId } = res.body;
     cy.visit(`/bot/${projectId}/dialogs/${name.toLowerCase()}`);
   });
@@ -23,21 +23,19 @@ Cypress.Commands.add('withinEditor', (editorName, cb) => {
   cy.findByTestId(editorName).within(cb);
 });
 
-Cypress.Commands.add('visitPage', page => {
+Cypress.Commands.add('visitPage', (page) => {
   cy.findByTestId(`LeftNav-CommandBarButton${page}`).click();
   cy.findByTestId('ActiveLeftNavItem').should('contain', page);
 });
 
 Cypress.Commands.add('enterTextAndSubmit', (textElement: string, text: string, submitBtn?: string) => {
-  cy.findByTestId(textElement)
-    .clear()
-    .type(text);
+  cy.findByTestId(textElement).clear().type(text);
   if (submitBtn) {
     cy.findByTestId(submitBtn).click();
   }
 });
 
-Cypress.on('uncaught:exception', err => {
+Cypress.on('uncaught:exception', (err) => {
   // eslint-disable-next-line no-console
   console.log('uncaught exception', err);
   return false;

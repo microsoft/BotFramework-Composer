@@ -36,7 +36,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   onSelect,
   undo,
   redo,
-  announce,
+  announce
 }): JSX.Element | null => {
   const { focusedId, focusedEvent, clipboardActions, dialogFactory } = useContext(NodeRendererContext);
   const { shellApi } = useShellApi();
@@ -48,7 +48,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     cutSelectedActions,
     deleteSelectedAction,
     deleteSelectedActions,
-    updateRecognizer,
+    updateRecognizer
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
   const { actionsContainLuIntent } = useActionApi(shellApi);
@@ -80,7 +80,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           const newFocusedIds = e.id ? [e.id] : [];
           setSelectionContext({
             ...selectionContext,
-            selectedIds: [...newFocusedIds],
+            selectedIds: [...newFocusedIds]
           });
           onFocusSteps([...newFocusedIds], e.tab);
           announce(ScreenReaderMessage.ActionFocused);
@@ -232,14 +232,14 @@ export const ObiEditor: FC<ObiEditorProps> = ({
     nodeIndexGenerator.current.reset();
     setSelectionContext({
       getNodeIndex: selectionContext.getNodeIndex,
-      selectedIds: [],
+      selectedIds: []
     });
   };
   const nodeIndexGenerator = useRef(new NodeIndexGenerator());
   const nodeItems = nodeIndexGenerator.current.getItemList();
   const [selectionContext, setSelectionContext] = useState<SelectionContextData>({
     getNodeIndex: (nodeId: string): number => nodeIndexGenerator.current.getNodeIndex(nodeId),
-    selectedIds: [],
+    selectedIds: []
   });
 
   useEffect((): void => {
@@ -274,9 +274,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
 
       setSelectionContext({
         ...selectionContext,
-        selectedIds,
+        selectedIds
       });
-    },
+    }
   });
 
   const [selectableElements, setSelectableElements] = useState<SelectorElement[]>(querySelectableElements());
@@ -324,7 +324,7 @@ export const ObiEditor: FC<ObiEditorProps> = ({
               dispatchEvent(NodeEventTypes.Insert, {
                 id: arrayPath,
                 position: arrayIndex,
-                $kind: MenuEventTypes.Paste,
+                $kind: MenuEventTypes.Paste
               });
             }
             break;
@@ -338,11 +338,11 @@ export const ObiEditor: FC<ObiEditorProps> = ({
           : {
               selected: `${focusedEvent}.actions[0]${MenuTypes.EdgeMenu}`,
               focused: undefined,
-              tab: '',
+              tab: ''
             };
         setSelectionContext({
           getNodeIndex: selectionContext.getNodeIndex,
-          selectedIds: [selected as string],
+          selectedIds: [selected as string]
         });
         focused && onFocusSteps([focused], tab);
         scrollNodeIntoView(`[${AttrNames.SelectedId}="${selected}"]`);
@@ -367,25 +367,25 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   if (!data) return renderFallbackContent();
   return (
     <SelectionContext.Provider value={selectionContext}>
-      <KeyboardZone onCommand={handleKeyboardCommand} ref={divRef}>
-        <MarqueeSelection selection={selection} css={{ width: '100%', height: '100%' }}>
+      <KeyboardZone ref={divRef} onCommand={handleKeyboardCommand}>
+        <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
           <div
             className="obi-editor-container"
-            data-testid="obi-editor-container"
             css={{
               width: '100%',
               height: '100%',
               padding: '48px 20px',
-              boxSizing: 'border-box',
+              boxSizing: 'border-box'
             }}
+            data-testid="obi-editor-container"
             onClick={e => {
               e.stopPropagation();
               dispatchEvent(NodeEventTypes.Focus, { id: '' });
             }}
           >
             <AdaptiveDialogEditor
-              id={path}
               data={data}
+              id={path}
               onEvent={(eventName, eventData) => {
                 divRef.current?.focus({ preventScroll: true });
                 dispatchEvent(eventName, eventData);
@@ -410,7 +410,7 @@ ObiEditor.defaultProps = {
   onSelect: () => {},
   undo: () => {},
   redo: () => {},
-  announce: (message: string) => {},
+  announce: (message: string) => {}
 };
 
 interface ObiEditorProps {

@@ -12,7 +12,7 @@ import {
   getUiDescription,
   schemaField,
   SelectField,
-  usePluginConfig,
+  usePluginConfig
 } from '@bfc/adaptive-form';
 
 export const SkillEndpointField: React.FC<FieldProps> = props => {
@@ -21,7 +21,7 @@ export const SkillEndpointField: React.FC<FieldProps> = props => {
 
   const uiOptions = {
     ...getUIOptions(schema, pluginConfig.formSchema),
-    ...baseUIOptions,
+    ...baseUIOptions
   };
 
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
@@ -40,10 +40,10 @@ export const SkillEndpointField: React.FC<FieldProps> = props => {
     <div css={schemaField.container(depth)}>
       <SelectField
         {...props}
-        value={deserializedValue}
         description={description}
         label={label}
         placeholder={placeholder}
+        value={deserializedValue}
         onChange={handleChange}
       />
     </div>

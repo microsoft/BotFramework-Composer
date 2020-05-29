@@ -33,7 +33,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   const [selectedManifest, setSelectedManifest] = useState<string>('');
   const skillManifest = useMemo(() => skillManifests.find(({ id }) => id === selectedManifest), [
     selectedManifest,
-    skillManifests,
+    skillManifests
   ]);
   const { content = {} } = skillManifest || {};
 
@@ -69,17 +69,17 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
   return (
     <Dialog
-      hidden={false}
-      onDismiss={onDismiss}
       dialogContentProps={{
         type: DialogType.close,
         title: title(),
-        styles: styles.dialog,
+        styles: styles.dialog
       }}
+      hidden={false}
       modalProps={{
         isBlocking: false,
-        styles: styles.modal,
+        styles: styles.modal
       }}
+      onDismiss={onDismiss}
     >
       <div css={styles.container}>
         <p>
@@ -87,7 +87,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
           {helpLink && (
             <React.Fragment>
               {!!subText && <React.Fragment>&nbsp;</React.Fragment>}
-              <Link href={helpLink} target="_blank" rel="noopener noreferrer">
+              <Link href={helpLink} rel="noopener noreferrer" target="_blank">
                 {formatMessage('Learn More')}
               </Link>
             </React.Fragment>
@@ -100,8 +100,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             errors={errors}
             schema={schema}
             setErrors={setErrors}
-            setSkillManifest={handleSelectManifest}
             setSchema={setSchema}
+            setSkillManifest={handleSelectManifest}
             skillManifests={skillManifests as SkillManifest[]}
             value={content}
             onChange={manifestContent => updateSkillManifest({ ...skillManifest, content: manifestContent })}
@@ -126,13 +126,13 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
                       onDismiss,
                       onNext: handleNext,
                       onSave: handleSave,
-                      onSubmit,
+                      onSubmit
                     })}
                   />
                 );
               })}
             </div>
-            {editJson && <DefaultButton onClick={handleEditJson} text={formatMessage('Edit in JSON')} />}
+            {editJson && <DefaultButton text={formatMessage('Edit in JSON')} onClick={handleEditJson} />}
           </div>
         </DialogFooter>
       </div>

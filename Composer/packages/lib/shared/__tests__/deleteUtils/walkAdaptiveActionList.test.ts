@@ -8,12 +8,12 @@ describe('walkAdaptiveAction', () => {
     const actions = [
       {
         $kind: 'Microsoft.SendActivity',
-        prompt: 'hello',
+        prompt: 'hello'
       },
       {
         $kind: 'Microsoft.ChoiceInput',
-        prompt: 'hello',
-      },
+        prompt: 'hello'
+      }
     ];
     const spy = jest.fn();
     walkAdaptiveActionList(actions, x => spy(x));

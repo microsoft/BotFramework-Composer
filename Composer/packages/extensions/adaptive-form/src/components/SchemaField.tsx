@@ -17,7 +17,7 @@ const schemaField = {
     margin: 10px ${depth === 0 ? 18 : 0}px;
 
     label: SchemaFieldContainer;
-  `,
+  `
 };
 
 const SchemaField: React.FC<FieldProps> = props => {
@@ -38,7 +38,7 @@ const SchemaField: React.FC<FieldProps> = props => {
   const schema = resolveRef(baseSchema, definitions);
   const uiOptions: UIOptions = {
     ...getUIOptions(schema, pluginConfig.formSchema, pluginConfig.roleSchema),
-    ...baseUIOptions,
+    ...baseUIOptions
   };
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const SchemaField: React.FC<FieldProps> = props => {
   }, []);
 
   const error = typeof rawErrors === 'string' && (
-    <ErrorMessage error={rawErrors} label={getUiLabel(props)} helpLink={uiOptions.helpLink} />
+    <ErrorMessage error={rawErrors} helpLink={uiOptions.helpLink} label={getUiLabel(props)} />
   );
 
   if (!schema || name.startsWith('$')) {
@@ -81,7 +81,7 @@ const SchemaField: React.FC<FieldProps> = props => {
     rawErrors: typeof rawErrors?.[name] === 'object' ? rawErrors?.[name] : rawErrors,
     schema,
     uiOptions,
-    value: deserializedValue,
+    value: deserializedValue
   };
 
   return (

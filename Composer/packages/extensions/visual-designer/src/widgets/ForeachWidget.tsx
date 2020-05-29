@@ -24,7 +24,7 @@ enum ForeachNodes {
   Foreach = 'foreachNode',
   LoopBegin = 'loopBeginNode',
   LoopEnd = 'loopEndNode',
-  LoopActions = 'loopActionsNode',
+  LoopActions = 'loopActionsNode'
 }
 
 const calculateNodeMap = (jsonpath, data): GraphNodeMap<ForeachNodes> => {
@@ -34,7 +34,7 @@ const calculateNodeMap = (jsonpath, data): GraphNodeMap<ForeachNodes> => {
       [ForeachNodes.Foreach]: new GraphNode(),
       [ForeachNodes.LoopActions]: new GraphNode(),
       [ForeachNodes.LoopBegin]: new GraphNode(),
-      [ForeachNodes.LoopEnd]: new GraphNode(),
+      [ForeachNodes.LoopEnd]: new GraphNode()
     };
 
   const { foreachDetail, stepGroup, loopBegin, loopEnd } = result;
@@ -42,7 +42,7 @@ const calculateNodeMap = (jsonpath, data): GraphNodeMap<ForeachNodes> => {
     [ForeachNodes.Foreach]: GraphNode.fromIndexedJson(foreachDetail),
     [ForeachNodes.LoopActions]: GraphNode.fromIndexedJson(stepGroup),
     [ForeachNodes.LoopBegin]: GraphNode.fromIndexedJson(loopBegin),
-    [ForeachNodes.LoopEnd]: GraphNode.fromIndexedJson(loopEnd),
+    [ForeachNodes.LoopEnd]: GraphNode.fromIndexedJson(loopEnd)
   };
 };
 
@@ -67,7 +67,7 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
   const { foreachNode, loopActionsNode, loopBeginNode, loopEndNode } = nodeMap;
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={foreachNode.offset}>
@@ -85,8 +85,8 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
       <OffsetContainer offset={loopActionsNode.offset}>
         <StepGroup
           key={loopActionsNode.id}
-          id={loopActionsNode.id}
           data={loopActionsNode.data}
+          id={loopActionsNode.id}
           onEvent={onEvent}
           onResize={size => {
             updateNodeBoundary(ForeachNodes.LoopActions, size);
@@ -105,5 +105,5 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
 };
 
 ForeachWidget.defaultProps = {
-  onResize: () => null,
+  onResize: () => null
 };

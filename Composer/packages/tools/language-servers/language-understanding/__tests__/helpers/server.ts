@@ -23,7 +23,7 @@ function createSocketHandler(webSocket: any): rpc.IWebSocket {
     onMessage: cb => webSocket.on('message', cb),
     onError: cb => webSocket.on('error', cb),
     onClose: cb => webSocket.on('close', cb),
-    dispose: () => webSocket.close(),
+    dispose: () => webSocket.close()
   };
   return socket;
 }
@@ -57,7 +57,7 @@ export function startServer() {
 
   const wss: ws.Server = new ws.Server({
     noServer: true,
-    perMessageDeflate: false,
+    perMessageDeflate: false
   });
   attachLSPServer(wss, server, '/lu-language-server', webSocket => {
     // const socketHandler = createSocketHandler(webSocket);

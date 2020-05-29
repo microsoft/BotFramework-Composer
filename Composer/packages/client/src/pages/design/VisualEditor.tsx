@@ -19,7 +19,7 @@ import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEdi
 
 const addIconProps = {
   iconName: 'CircleAddition',
-  styles: { root: { fontSize: '12px' } },
+  styles: { root: { fontSize: '12px' } }
 };
 
 function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
@@ -30,9 +30,9 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
           <React.Fragment>
             {formatMessage(`This dialog has no trigger yet.`)}
             <ActionButton
+              css={triggerButton}
               data-testid="MiddleAddNewTriggerButton"
               iconProps={addIconProps}
-              css={triggerButton}
               onClick={onClickAddTrigger}
             >
               {formatMessage('New Trigger ..')}
@@ -73,12 +73,12 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
   return (
     <React.Fragment>
       <div
-        css={visualEditor(triggerButtonVisible || !selected)}
-        aria-label={formatMessage('visual editor')}
         ref={addRef}
+        aria-label={formatMessage('visual editor')}
+        css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >
-        <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
+        <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
           <VisualDesigner schema={schemas.sdk?.content} />
         </Extension>
       </div>

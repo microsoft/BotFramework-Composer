@@ -38,6 +38,6 @@ export const useLuApi = (shellApi: ShellApi) => {
     createLuIntent,
     readLuIntent,
     deleteLuIntent: (luFileId: string, luIntent: string) => deleteLuIntents(luFileId, [luIntent]),
-    deleteLuIntents,
+    deleteLuIntents
   };
 };

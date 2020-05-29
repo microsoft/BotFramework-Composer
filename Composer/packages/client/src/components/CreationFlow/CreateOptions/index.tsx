@@ -17,7 +17,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
-  DetailsRow,
+  DetailsRow
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ProjectTemplate } from '@bfc/shared';
@@ -34,12 +34,12 @@ import {
   optionRoot,
   optionIcon,
   tableCell,
-  content,
+  content
 } from './styles';
 
 const optionKeys = {
   createFromScratch: 'createFromScratch',
-  createFromTemplate: 'createFromTemplate',
+  createFromTemplate: 'createFromTemplate'
 };
 
 export function CreateOptions(props) {
@@ -56,7 +56,7 @@ export function CreateOptions(props) {
         if (t) {
           setCurrentTemplate(t.id);
         }
-      },
+      }
     });
   }, []);
 
@@ -64,7 +64,7 @@ export function CreateOptions(props) {
     const { checked, text, key } = props;
     return (
       <div key={key} css={optionRoot}>
-        <Icon iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} css={optionIcon(checked)} />
+        <Icon css={optionIcon(checked)} iconName={checked ? 'CompletedSolid' : 'RadioBtnOff'} />
         <span>{text}</span>
       </div>
     );
@@ -98,12 +98,12 @@ export function CreateOptions(props) {
       data: 'string',
       styles: rowTitle(disabled),
       onRender: item => (
-        <div css={tableCell} data-is-focusable={true}>
+        <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
             {item.name}
           </div>
         </div>
-      ),
+      )
     },
     {
       key: 'description',
@@ -115,20 +115,20 @@ export function CreateOptions(props) {
       data: 'string',
       styles: rowTitle(disabled),
       onRender: item => (
-        <div css={tableCell} data-is-focusable={true}>
+        <div data-is-focusable css={tableCell}>
           <div css={content} tabIndex={-1}>
             {item.description}
           </div>
         </div>
-      ),
-    },
+      )
+    }
   ];
 
   const onRenderDetailsHeader = (props, defaultRender) => {
     return (
-      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+      <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
         {defaultRender({
-          ...props,
+          ...props
         })}
       </Sticky>
     );
@@ -136,7 +136,7 @@ export function CreateOptions(props) {
   const onRenderRow = props => {
     if (props) {
       return (
-        <DetailsRow {...props} styles={rowDetails(disabled)} data-testid={props.item.id} tabIndex={props.itemIndex} />
+        <DetailsRow {...props} data-testid={props.item.id} styles={rowDetails(disabled)} tabIndex={props.itemIndex} />
       );
     }
     return null;
@@ -158,56 +158,56 @@ export function CreateOptions(props) {
       key: optionKeys.createFromScratch,
       'data-testid': 'Create from scratch',
       text: formatMessage('Create from scratch'),
-      onRenderField: SelectOption,
+      onRenderField: SelectOption
     },
     {
       ariaLabel: 'Create from template' + (option === optionKeys.createFromTemplate ? ' selected' : ''),
       key: optionKeys.createFromTemplate,
       'data-testid': 'Create from template',
       text: formatMessage('Create from template'),
-      onRenderField: SelectOption,
-    },
+      onRenderField: SelectOption
+    }
   ];
 
   return (
     <Fragment>
       <DialogWrapper
-        isOpen={true}
+        isOpen
         {...DialogCreationCopy.CREATE_NEW_BOT}
-        onDismiss={onDismiss}
         dialogType={DialogTypes.CreateFlow}
+        onDismiss={onDismiss}
       >
         <ChoiceGroup
           label={formatMessage('Choose how to create your bot')}
-          selectedKey={option}
           options={choiceOptions}
+          selectedKey={option}
           onChange={handleChange}
         />
         <h3 css={listHeader}>{formatMessage('Examples')}</h3>
-        <div data-is-scrollable="true" css={detailListContainer}>
+        <div css={detailListContainer} data-is-scrollable="true">
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <DetailsList
-              items={templates}
-              compact={false}
-              columns={tableColums}
-              getKey={item => item.name}
-              layoutMode={DetailsListLayoutMode.justified}
-              isHeaderVisible={true}
-              selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
+              isHeaderVisible
               checkboxVisibility={CheckboxVisibility.hidden}
+              columns={tableColums}
+              compact={false}
+              getKey={item => item.name}
+              items={templates}
+              layoutMode={DetailsListLayoutMode.justified}
+              selection={selection}
+              selectionMode={disabled ? SelectionMode.none : SelectionMode.single}
               onRenderDetailsHeader={onRenderDetailsHeader}
               onRenderRow={onRenderRow}
-              selection={selection}
             />
           </ScrollablePane>
         </div>
         <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
-            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
-            onClick={handleJumpToNext}
-            text={formatMessage('Next')}
             data-testid="NextStepButton"
+            disabled={option === optionKeys.createFromTemplate && (templates.length <= 0 || currentTemplate === null)}
+            text={formatMessage('Next')}
+            onClick={handleJumpToNext}
           />
         </DialogFooter>
       </DialogWrapper>

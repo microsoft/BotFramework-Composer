@@ -61,7 +61,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
     })) || {
     name: lgName,
     parameters: [],
-    body: getInitialTemplate(name, value),
+    body: getInitialTemplate(name, value)
   };
 
   const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
@@ -69,7 +69,7 @@ const LgField: React.FC<FieldProps<string>> = props => {
   const lgOption = {
     projectId,
     fileId: lgFileId,
-    templateId: lgName,
+    templateId: lgName
   };
 
   const onChange = (body: string) => {
@@ -90,18 +90,18 @@ const LgField: React.FC<FieldProps<string>> = props => {
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <LgEditor
-        height={225}
-        value={template.body}
-        onChange={onChange}
-        diagnostics={diagnostics}
         hidePlaceholder
+        diagnostics={diagnostics}
+        editorSettings={userSettings.codeEditor}
+        height={225}
         languageServer={{
-          path: lspServerPath,
+          path: lspServerPath
         }}
         lgOption={lgOption}
-        editorSettings={userSettings.codeEditor}
+        value={template.body}
+        onChange={onChange}
         onChangeSettings={handleSettingsChange}
       />
     </React.Fragment>

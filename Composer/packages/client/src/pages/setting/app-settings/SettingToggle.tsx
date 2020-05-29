@@ -27,7 +27,7 @@ const SettingToggle: React.FC<ISettingToggleProps> = props => {
 
   return (
     <div css={styles.settingsContainer}>
-      <div css={styles.image} aria-hidden="true" role="presentation">
+      <div aria-hidden="true" css={styles.image} role="presentation">
         {image && <img src={image} />}
       </div>
       <div css={styles.settingsContent}>
@@ -38,10 +38,10 @@ const SettingToggle: React.FC<ISettingToggleProps> = props => {
       </div>
       <div>
         <Toggle
-          id={id || uniqueId}
           checked={!!checked}
-          onChange={(_e, checked) => onToggle(!!checked)}
+          id={id || uniqueId}
           offText={formatMessage('Off')}
+          onChange={(_e, checked) => onToggle(!!checked)}
           onText={formatMessage('On')}
         />
       </div>

@@ -50,9 +50,14 @@ class AzurePublisher {
     this.logMessages = [];
   }
 
-  private getRuntimeFolder = (key: string) => path.resolve(__dirname, `../publishBots/${key}`);
-  private getProjectFolder = (key: string, template: string) =>
-    path.resolve(__dirname, `../publishBots/${key}/${template}`);
+  private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `publishBots`);
+
+  private getRuntimeFolder = (key: string) => {
+    return path.resolve(this.baseRuntimeFolder, `${key}`);
+  };
+  private getProjectFolder = (key: string, template: string) => {
+    return path.resolve(this.baseRuntimeFolder, `${key}/${template}`);
+  };
   private getBotFolder = (key: string, template: string) =>
     path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
   private getSettingsPath = (key: string, template: string) =>
@@ -190,11 +195,18 @@ class AzurePublisher {
       }
     } catch (error) {
       console.log(error);
+      if (error instanceof Error) {
+        this.logMessages.push(error.message);
+      } else if (typeof error === 'object') {
+        this.logMessages.push(JSON.stringify(error));
+      } else {
+        this.logMessages.push(error);
+      }
       // update status and history
       const status = this.getLoadingStatus(botId, profileName, jobId);
       if (status) {
         status.status = 500;
-        status.result.message = error ? error.message : 'publish error';
+        status.result.message = this.logMessages[this.logMessages.length - 1];
         status.result.log = this.logMessages.join('\n');
         await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
         this.removeLoadingStatus(botId, profileName, jobId);
@@ -314,13 +326,19 @@ class AzurePublisher {
       return response;
     } catch (err) {
       console.log(err);
-      this.logMessages.push(err.message);
+      if (err instanceof Error) {
+        this.logMessages.push(err.message);
+      } else if (typeof err === 'object') {
+        this.logMessages.push(JSON.stringify(err));
+      } else {
+        this.logMessages.push(err);
+      }
       const response = {
         status: 500,
         result: {
           id: jobId,
           time: new Date(),
-          message: 'Publish Fail',
+          message: this.logMessages[this.logMessages.length - 1],
           log: this.logMessages.join('\n'),
           comment: metadata.comment,
         },

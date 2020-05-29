@@ -11,7 +11,7 @@ describe('BootstrapSampler', () => {
       { intent: '1', text: '4', entities: [] },
       { intent: '1', text: '5', entities: [] },
       { intent: '1', text: '6', entities: [] },
-      { intent: '1', text: '7', entities: [] },
+      { intent: '1', text: '7', entities: [] }
     ];
     const sampler = new ComposerBootstrapSampler(utterances, 2);
     const result = sampler.getSampledUtterances();

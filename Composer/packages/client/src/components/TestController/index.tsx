@@ -128,7 +128,7 @@ export const TestController: React.FC = () => {
 
   return (
     <Fragment>
-      <div css={bot} ref={botActionRef}>
+      <div ref={botActionRef} css={bot}>
         <EmulatorOpenButton
           botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
           botStatus={botStatus}
@@ -136,31 +136,31 @@ export const TestController: React.FC = () => {
           onClick={handleOpenEmulator}
         />
         <div
-          aria-live={'assertive'}
           aria-label={formatMessage(`{ botStatus}`, {
-            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
+            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : ''
           })}
+          aria-live={'assertive'}
         />
         <Loading botStatus={botStatus} />
         <div ref={addRef}>
-          <ErrorInfo hidden={!showError} onClick={handleErrorButtonClick} count={errorLength} />
+          <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
           <PrimaryButton
             css={botButton}
+            disabled={showError || publishing || reloading}
+            id={'publishAndConnect'}
             text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
             onClick={handleStart}
-            id={'publishAndConnect'}
-            disabled={showError || publishing || reloading}
           />
         </div>
       </div>
       <ErrorCallout
-        onDismiss={dismissCallout}
-        onTry={handleStart}
+        error={botLoadErrorMsg}
         target={botActionRef.current}
         visible={calloutVisible}
-        error={botLoadErrorMsg}
+        onDismiss={dismissCallout}
+        onTry={handleStart}
       />
-      <PublishLuisDialog isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} botName={botName} />
+      <PublishLuisDialog botName={botName} isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} />
     </Fragment>
   );
 };

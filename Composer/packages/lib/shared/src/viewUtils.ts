@@ -12,7 +12,7 @@ export const PROMPT_TYPES = [
   SDKKinds.ConfirmInput,
   SDKKinds.DateTimeInput,
   SDKKinds.NumberInput,
-  SDKKinds.TextInput,
+  SDKKinds.TextInput
 ];
 
 export enum DialogGroup {
@@ -29,7 +29,7 @@ export enum DialogGroup {
   DIALOG_EVENT_TYPES = 'DIALOG_EVENT_TYPES',
   RECOGNIZER = 'RECOGNIZER',
   SELECTOR = 'SELECTOR',
-  OTHER = 'OTHER',
+  OTHER = 'OTHER'
 }
 
 export interface DialogGroupItem {
@@ -41,7 +41,7 @@ export type DialogGroupsMap = { [key in DialogGroup]: DialogGroupItem };
 export const dialogGroups: DialogGroupsMap = {
   [DialogGroup.RESPONSE]: {
     label: 'Send Messages',
-    types: [SDKKinds.SendActivity],
+    types: [SDKKinds.SendActivity]
   },
   [DialogGroup.INPUT]: {
     label: 'Ask a question',
@@ -52,16 +52,16 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.ChoiceInput,
       SDKKinds.AttachmentInput,
       SDKKinds.DateTimeInput,
-      SDKKinds.OAuthInput,
-    ],
+      SDKKinds.OAuthInput
+    ]
   },
   [DialogGroup.BRANCHING]: {
     label: 'Create a condition',
-    types: [SDKKinds.IfCondition, SDKKinds.SwitchCondition],
+    types: [SDKKinds.IfCondition, SDKKinds.SwitchCondition]
   },
   [DialogGroup.LOOPING]: {
     label: 'Looping',
-    types: [SDKKinds.Foreach, SDKKinds.ForeachPage, SDKKinds.ContinueLoop, SDKKinds.BreakLoop],
+    types: [SDKKinds.Foreach, SDKKinds.ForeachPage, SDKKinds.ContinueLoop, SDKKinds.BreakLoop]
   },
   [DialogGroup.MEMORY]: {
     label: 'Manage properties',
@@ -70,8 +70,8 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.SetProperties,
       SDKKinds.DeleteProperty,
       SDKKinds.DeleteProperties,
-      SDKKinds.EditArray,
-    ],
+      SDKKinds.EditArray
+    ]
   },
   [DialogGroup.STEP]: {
     label: 'Dialog management',
@@ -81,8 +81,8 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.CancelAllDialogs,
       SDKKinds.EndTurn,
       SDKKinds.RepeatDialog,
-      SDKKinds.ReplaceDialog,
-    ],
+      SDKKinds.ReplaceDialog
+    ]
   },
   [DialogGroup.CODE]: {
     label: 'Access external resources',
@@ -91,21 +91,21 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.HttpRequest,
       SDKKinds.EmitEvent,
       SDKKinds.OAuthInput,
-      SDKKinds.QnAMakerDialog,
+      SDKKinds.QnAMakerDialog
       //  SDKKinds.CodeStep
-    ],
+    ]
   },
   [DialogGroup.LOG]: {
     label: 'Debugging options',
-    types: [/* SDKKinds.DebugBreak, */ SDKKinds.LogAction, SDKKinds.TraceActivity],
+    types: [/* SDKKinds.DebugBreak, */ SDKKinds.LogAction, SDKKinds.TraceActivity]
   },
   [DialogGroup.EVENTS]: {
     label: 'Events',
-    types: [SDKKinds.OnIntent, SDKKinds.OnUnknownIntent, SDKKinds.OnDialogEvent, SDKKinds.OnActivity],
+    types: [SDKKinds.OnIntent, SDKKinds.OnUnknownIntent, SDKKinds.OnDialogEvent, SDKKinds.OnActivity]
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {
     label: 'OnDialogEvents Types',
-    types: [SDKKinds.OnBeginDialog, SDKKinds.OnCancelDialog, SDKKinds.OnError, SDKKinds.OnRepromptDialog],
+    types: [SDKKinds.OnBeginDialog, SDKKinds.OnCancelDialog, SDKKinds.OnError, SDKKinds.OnRepromptDialog]
   },
   [DialogGroup.ADVANCED_EVENTS]: {
     label: 'Advanced Events',
@@ -120,12 +120,12 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.OnMessageActivity,
       SDKKinds.OnMessageDeleteActivity,
       SDKKinds.OnMessageReactionActivity,
-      SDKKinds.OnMessageUpdateActivity,
-    ],
+      SDKKinds.OnMessageUpdateActivity
+    ]
   },
   [DialogGroup.RECOGNIZER]: {
     label: 'Recognizers',
-    types: [SDKKinds.LuisRecognizer, /* SDKKinds.MultiLanguageRecognizers, */ SDKKinds.RegexRecognizer],
+    types: [SDKKinds.LuisRecognizer, /* SDKKinds.MultiLanguageRecognizers, */ SDKKinds.RegexRecognizer]
   },
   [DialogGroup.SELECTOR]: {
     label: 'Selectors',
@@ -134,13 +134,13 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.FirstSelector,
       SDKKinds.MostSpecificSelector,
       SDKKinds.RandomSelector,
-      SDKKinds.TrueSelector,
-    ],
+      SDKKinds.TrueSelector
+    ]
   },
   [DialogGroup.OTHER]: {
     label: 'Other',
-    types: [SDKKinds.AdaptiveDialog],
-  },
+    types: [SDKKinds.AdaptiveDialog]
+  }
 };
 
 export function getDialogGroupByType(type) {

@@ -28,7 +28,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
   value,
   onNameChange,
   onValueChange,
-  onDelete,
+  onDelete
 }) => {
   const initialName = useMemo(() => originalName, []);
   const initialValue = useMemo(() => value, []);
@@ -40,8 +40,8 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
       iconProps: { iconName: 'Cancel' },
       key: 'remove',
       onClick: onDelete,
-      text: 'Remove',
-    },
+      text: 'Remove'
+    }
   ];
 
   const handleBlur = useCallback(() => {
@@ -60,6 +60,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
       <div css={item}>
         <EditableField
           transparentBorder
+          ariaLabel={formatMessage('key')}
           depth={0}
           error={errorMessage}
           id={`${name}.key`}
@@ -68,30 +69,29 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           schema={{}}
           styles={{
             errorMessage: { display: 'block', paddingTop: 0 },
-            root: { margin: '7px 0' },
+            root: { margin: '7px 0' }
           }}
           uiOptions={{}}
           value={name}
           onBlur={handleBlur}
           onChange={newValue => setName(newValue || '')}
-          ariaLabel={formatMessage('key')}
         />
       </div>
       <div css={item}>
         <EditableField
           transparentBorder
+          ariaLabel={formatMessage('value')}
           depth={0}
           id={`${name}.value`}
           name="value"
           placeholder={initialValue || formatMessage('Add a new value')}
           schema={{}}
           styles={{
-            root: { margin: '7px 0' },
+            root: { margin: '7px 0' }
           }}
           uiOptions={{}}
           value={value}
           onChange={onValueChange}
-          ariaLabel={formatMessage('value')}
         />
       </div>
       <IconButton
@@ -100,7 +100,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
         menuProps={{ items: contextItems }}
         styles={{
           root: { margin: '7px 0 7px 0' },
-          menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 },
+          menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 }
         }}
       />
     </div>

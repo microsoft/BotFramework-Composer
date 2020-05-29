@@ -31,7 +31,7 @@ export interface LULSPEditorProps extends BaseEditorProps {
 }
 
 const defaultLUServer = {
-  path: '/lu-language-server',
+  path: '/lu-language-server'
 };
 declare global {
   interface Window {
@@ -54,10 +54,10 @@ function convertEdit(serverEdit: ServerEdit) {
       startLineNumber: serverEdit.range.start.line,
       startColumn: serverEdit.range.start.character,
       endLineNumber: serverEdit.range.end.line,
-      endColumn: serverEdit.range.end.character,
+      endColumn: serverEdit.range.end.character
     },
     text: serverEdit.newText,
-    forceMoveMarkers: true,
+    forceMoveMarkers: true
   };
 }
 
@@ -77,9 +77,9 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
     autoClosingBrackets: 'always' as const,
     autoIndent: 'full' as const,
     lightbulb: {
-      enabled: true,
+      enabled: true
     },
-    ...props.options,
+    ...props.options
   };
 
   const { luOption, languageServer, onInit: onInitProp, placeholder = defaultPlaceholder, ...restProps } = props;
@@ -135,7 +135,7 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
           );
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());
-        },
+        }
       });
     } else {
       const uri = get(editor.getModel(), 'uri._formatted', '');
@@ -149,15 +149,15 @@ const LuEditor: React.FC<LULSPEditorProps> = props => {
 
   return (
     <BaseEditor
-      placeholder={placeholder}
       helpURL={LU_HELP}
       id={editorId}
+      placeholder={placeholder}
       {...restProps}
-      onInit={onInit}
-      theme="lu"
+      editorDidMount={editorDidMount}
       language="lu"
       options={options}
-      editorDidMount={editorDidMount}
+      theme="lu"
+      onInit={onInit}
     />
   );
 };

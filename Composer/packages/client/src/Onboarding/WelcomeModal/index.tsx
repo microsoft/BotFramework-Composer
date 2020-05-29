@@ -13,15 +13,15 @@ import { collapsedStyles, expandedStyles } from './style';
 const WelcomeModal = () => {
   const {
     actions: { exit },
-    state: { complete, hideModal, minimized },
+    state: { complete, hideModal, minimized }
   } = useContext(OnboardingContext);
 
   return !(complete || hideModal) ? (
     <Modal
-      isOpen={true}
-      onDismiss={exit}
+      isOpen
       overlay={{ style: { background: 'transparent' } }}
       styles={minimized ? collapsedStyles : expandedStyles}
+      onDismiss={exit}
     >
       {minimized ? <CollapsedWelcomeModal /> : <ExpandedWelcomeModal />}
     </Modal>

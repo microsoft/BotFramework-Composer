@@ -34,10 +34,10 @@ export default class ElectronWindow {
       height: adjustedHeight,
       webPreferences: {
         nodeIntegration: false,
-        preload: join(__dirname, 'preload.js'),
+        preload: join(__dirname, 'preload.js')
       },
       show: false,
-      title: `Bot Framework Composer (v${app.getVersion()})`,
+      title: `Bot Framework Composer (v${app.getVersion()})`
     };
     if (isLinux() && !isDevelopment) {
       // workaround for broken .AppImage icons since electron-builder@21.0.1 removed .AppImage desktop integration

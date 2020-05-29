@@ -18,7 +18,7 @@ export const IconBrick = ({ onClick }): JSX.Element => {
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
       }}
       onClick={e => {
         e.stopPropagation();
@@ -33,7 +33,7 @@ export const IconBrick = ({ onClick }): JSX.Element => {
           background: '#FED9CC',
           width: 16,
           height: 16,
-          borderRadius: '8px',
+          borderRadius: '8px'
         }}
       >
         <Icon iconName="ErrorBadge" style={{ fontSize: 8 }} />

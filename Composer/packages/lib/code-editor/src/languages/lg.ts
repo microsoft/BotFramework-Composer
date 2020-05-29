@@ -14,32 +14,32 @@ function createKeywordsProposals(monaco: Monaco, range) {
       label: 'IF/ELSEIF/ELSE',
       kind: monaco.languages.CompletionItemKind.Keyword,
       insertText: ['IF: ${ expr }', '    -', '- ELSEIF: ${ expr }', '    -', '- ELSE:', '    -'].join('\r\n'),
-      range: range,
+      range: range
     },
     {
       label: 'IF/ELSE',
       kind: monaco.languages.CompletionItemKind.Keyword,
       insertText: ['IF: ${ expr }', '    -', '- ELSE:', '    -'].join('\r\n'),
-      range: range,
+      range: range
     },
     {
       label: 'ELSEIF',
       kind: monaco.languages.CompletionItemKind.Keyword,
       insertText: 'ELSEIF:${}',
-      range: range,
+      range: range
     },
     {
       label: 'ELSE',
       kind: monaco.languages.CompletionItemKind.Keyword,
       insertText: 'ELSE:\r\n',
-      range: range,
+      range: range
     },
     {
       label: 'SWITCH',
       kind: monaco.languages.CompletionItemKind.Keyword,
       insertText: ['SWITCH: ${ expr }', '- CASE: ${ expr }', '    -', '- DEFAULT:', '    -'].join('\r\n'),
-      range: range,
-    },
+      range: range
+    }
   ];
 }
 
@@ -52,7 +52,7 @@ export function registerLGLanguage(monaco: Monaco) {
     brackets: [
       { open: '{', close: '}', token: 'delimiter.curly' },
       { open: '[', close: ']', token: 'delimiter.bracket' },
-      { open: '(', close: ')', token: 'delimiter.parenthesis' },
+      { open: '(', close: ')', token: 'delimiter.parenthesis' }
     ],
     tokenizer: {
       root: [
@@ -63,12 +63,12 @@ export function registerLGLanguage(monaco: Monaco) {
         //comments
         [/^\s*>/, { token: 'comments', next: '@comments' }],
         //dealing with inline-lg
-        [/^\s*\[/, { token: 'structure-lg-identifier', goBack: 1, next: '@structure_lg' }],
+        [/^\s*\[/, { token: 'structure-lg-identifier', goBack: 1, next: '@structure_lg' }]
       ],
       comments: [
         [/^\s*#/, { token: 'template-name', next: '@template_name' }],
         [/^\s*-/, { token: 'template-body-identifier', next: '@template_body' }],
-        [/.*$/, 'comments', '@pop'],
+        [/.*$/, 'comments', '@pop']
       ],
       template_name: [
         //comments
@@ -82,7 +82,7 @@ export function registerLGLanguage(monaco: Monaco) {
         //parameter in template name
         [/([a-zA-Z0-9_][a-zA-Z0-9_-]*)(,|\))/, ['parameter', 'delimeter']],
         // other
-        [/[^\()]/, 'template-name'],
+        [/[^\()]/, 'template-name']
       ],
       template_body: [
         //comments
@@ -96,12 +96,12 @@ export function registerLGLanguage(monaco: Monaco) {
         //template_body
         [/^\s*-/, { token: 'template-body-identifier', next: '@template_body' }],
         //expression
-        [/\$\{/, { token: 'expression', next: '@expression' }],
+        [/\$\{/, { token: 'expression', next: '@expression' }]
       ],
       fence_block: [
         [/`{3}\s*/, { token: 'fence-block', next: '@pop' }],
         [/\$\{/, { token: 'expression', next: '@expression' }],
-        [/./, 'fence-block'],
+        [/./, 'fence-block']
       ],
       expression: [
         [/\}/, 'expression', '@pop'],
@@ -111,7 +111,7 @@ export function registerLGLanguage(monaco: Monaco) {
         [/(\s*'[^']*?'\s*)(,|\))/, ['string', 'delimeter']],
         [/(\s*"[^"]*?"\s*)(,|\))/, ['string', 'delimeter']],
         [/(\s*[^},'"(]*\s*)(,|\))/, ['other-expression', 'delimeter']],
-        [/[^$}]*$/, { token: 'expression.content', next: '@pop' }],
+        [/[^$}]*$/, { token: 'expression.content', next: '@pop' }]
       ],
       structure_lg: [
         [/^\s*\]\s*$/, 'structure-lg', '@pop'],
@@ -119,24 +119,24 @@ export function registerLGLanguage(monaco: Monaco) {
         [/(\s*\[\s*)([a-zA-Z0-9_-]+\s*$)/, ['stucture-lg-identifier', 'structure-name']],
         [/^\s*>[\s\S]*$/, 'comments'],
         [/\|/, { token: 'alternative' }],
-        [/\$\{/, { token: 'expression', next: '@expression' }],
-      ],
-    },
+        [/\$\{/, { token: 'expression', next: '@expression' }]
+      ]
+    }
   });
 
   monaco.languages.register({
     id: LANGUAGE_NAME,
     extensions: ['.lg'],
     aliases: ['LG', 'language-generation'],
-    mimetypes: ['application/lg'],
+    mimetypes: ['application/lg']
   });
 
   monaco.languages.setLanguageConfiguration(LANGUAGE_NAME, {
     autoClosingPairs: [
       { open: '{', close: '}' },
       { open: '[', close: ']' },
-      { open: '(', close: ')' },
-    ],
+      { open: '(', close: ')' }
+    ]
   });
 
   monaco.editor.defineTheme('lgtheme', {
@@ -151,8 +151,8 @@ export function registerLGLanguage(monaco: Monaco) {
       { token: 'parameter', foreground: '004E8C' },
       { token: 'fence-block', foreground: '038387' },
       { token: 'string', foreground: 'DF2C2C' },
-      { token: 'structure-name', foreground: '00B7C3' },
-    ],
+      { token: 'structure-name', foreground: '00B7C3' }
+    ]
   });
 
   monaco.languages.registerCompletionItemProvider(LANGUAGE_NAME, {
@@ -161,7 +161,7 @@ export function registerLGLanguage(monaco: Monaco) {
         startLineNumber: position.lineNumber,
         startColumn: 1,
         endLineNumber: position.lineNumber,
-        endColumn: position.column,
+        endColumn: position.column
       });
       // keywords only be allowed in line start.
       if (/\s*-\s*\w*$/.test(lineText) === false) {
@@ -173,12 +173,12 @@ export function registerLGLanguage(monaco: Monaco) {
         startLineNumber: position.lineNumber,
         endLineNumber: position.lineNumber,
         startColumn: word.startColumn,
-        endColumn: word.endColumn,
+        endColumn: word.endColumn
       };
 
       return {
-        suggestions: createKeywordsProposals(monaco, range),
+        suggestions: createKeywordsProposals(monaco, range)
       };
-    },
+    }
   });
 }

@@ -63,8 +63,8 @@ const TableView: React.FC<TableViewProps> = props => {
       projectId,
       template: {
         name: newName,
-        body: '-TemplateValue',
-      },
+        body: '-TemplateValue'
+      }
     };
     createLgTemplate(payload);
     setFocusedIndex(templates.length);
@@ -75,7 +75,7 @@ const TableView: React.FC<TableViewProps> = props => {
       const payload = {
         file,
         projectId,
-        templateName: templates[index].name,
+        templateName: templates[index].name
       };
 
       removeLgTemplate(payload);
@@ -91,7 +91,7 @@ const TableView: React.FC<TableViewProps> = props => {
         file,
         projectId,
         fromTemplateName: name,
-        toTemplateName: resolvedName,
+        toTemplateName: resolvedName
       };
       copyLgTemplate(payload);
       setFocusedIndex(templates.length);
@@ -107,7 +107,7 @@ const TableView: React.FC<TableViewProps> = props => {
           name: formatMessage('Edit'),
           onClick: () => {
             onClickEdit(templates[index]);
-          },
+          }
         },
         {
           key: 'delete',
@@ -115,7 +115,7 @@ const TableView: React.FC<TableViewProps> = props => {
           onClick: () => {
             actions.setMessage('item deleted');
             onRemoveTemplate(index);
-          },
+          }
         },
         {
           key: 'copy',
@@ -123,8 +123,8 @@ const TableView: React.FC<TableViewProps> = props => {
           onClick: () => {
             actions.setMessage('item copied');
             onCopyTemplate(index);
-          },
-        },
+          }
+        }
       ];
 
       return buttons;
@@ -144,13 +144,13 @@ const TableView: React.FC<TableViewProps> = props => {
         data: 'string',
         onRender: item => {
           return (
-            <div data-is-focusable={true} css={formCell}>
-              <div tabIndex={-1} css={content} aria-label={formatMessage(`Name is {name}`, { name: item.name })}>
+            <div data-is-focusable css={formCell}>
+              <div aria-label={formatMessage(`Name is {name}`, { name: item.name })} css={content} tabIndex={-1}>
                 #{item.name}
               </div>
             </div>
           );
-        },
+        }
       },
       {
         key: 'responses',
@@ -162,17 +162,17 @@ const TableView: React.FC<TableViewProps> = props => {
         isPadded: true,
         onRender: item => {
           return (
-            <div data-is-focusable={true} css={formCell}>
+            <div data-is-focusable css={formCell}>
               <div
-                tabIndex={-1}
-                css={content}
                 aria-label={formatMessage(`Response is {response}`, { response: item.body })}
+                css={content}
+                tabIndex={-1}
               >
                 {item.body}
               </div>
             </div>
           );
-        },
+        }
       },
       {
         key: 'buttons',
@@ -184,17 +184,17 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: (item, index) => {
           return (
             <IconButton
+              ariaLabel={formatMessage('actions')}
               menuIconProps={{ iconName: 'MoreVertical' }}
               menuProps={{
                 shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index),
+                items: getTemplatesMoreButtons(item, index)
               }}
               styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              ariaLabel={formatMessage('actions')}
             />
           );
-        },
-      },
+        }
+      }
     ];
 
     // all view, show used in column
@@ -211,19 +211,19 @@ const TableView: React.FC<TableViewProps> = props => {
         onRender: item => {
           return activeDialog?.lgTemplates.find(({ name }) => name === item.name) ? (
             <Icon
-              iconName={'Accept'}
               ariaLabel={formatMessage('Used') + ';'}
+              iconName={'Accept'}
               styles={{
                 root: {
                   fontSize: '16px',
-                  paddingTop: '8px',
-                },
+                  paddingTop: '8px'
+                }
               }}
             />
           ) : (
-            <div data-is-focusable={true} aria-label={formatMessage('Unused') + ';'} />
+            <div data-is-focusable aria-label={formatMessage('Unused') + ';'} />
           );
-        },
+        }
       };
       tableColums.splice(2, 0, beenUsedColumn);
     }
@@ -234,10 +234,10 @@ const TableView: React.FC<TableViewProps> = props => {
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (
       <div data-testid="tableHeader">
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced={true}>
+        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
           {defaultRender({
             ...props,
-            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />,
+            onRenderColumnHeaderTooltip: tooltipHostProps => <TooltipHost {...tooltipHostProps} />
           })}
         </Sticky>
       </div>
@@ -270,28 +270,28 @@ const TableView: React.FC<TableViewProps> = props => {
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
+          className="table-view-list"
+          columns={getTableColums()}
           componentRef={listRef}
-          items={templates}
+          getKey={getKeyCallback}
           initialFocusedIndex={focusedIndex}
+          items={templates}
+          // getKey={item => item.name}
+          layoutMode={DetailsListLayoutMode.justified}
+          selectionMode={SelectionMode.none}
           styles={{
             root: {
               overflowX: 'hidden',
               // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
               selectors: {
                 'div[role="row"]:hover': {
-                  background: 'none',
-                },
-              },
-            },
+                  background: 'none'
+                }
+              }
+            }
           }}
-          className="table-view-list"
-          columns={getTableColums()}
-          // getKey={item => item.name}
-          getKey={getKeyCallback}
-          layoutMode={DetailsListLayoutMode.justified}
-          onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderDetailsFooter={onRenderDetailsFooter}
-          selectionMode={SelectionMode.none}
+          onRenderDetailsHeader={onRenderDetailsHeader}
         />
       </ScrollablePane>
     </div>

@@ -24,7 +24,7 @@ enum IfElseNodes {
   Condition = 'conditionNode',
   Choice = 'choiceNode',
   IfBranch = 'ifBranchNode',
-  ElseBranch = 'elseBranchNode',
+  ElseBranch = 'elseBranchNode'
 }
 
 const calculateNodeMap = (path: string, data): GraphNodeMap<IfElseNodes> => {
@@ -34,7 +34,7 @@ const calculateNodeMap = (path: string, data): GraphNodeMap<IfElseNodes> => {
       [IfElseNodes.Condition]: new GraphNode(),
       [IfElseNodes.Choice]: new GraphNode(),
       [IfElseNodes.IfBranch]: new GraphNode(),
-      [IfElseNodes.ElseBranch]: new GraphNode(),
+      [IfElseNodes.ElseBranch]: new GraphNode()
     };
 
   const { condition, choice, ifGroup, elseGroup } = result;
@@ -42,7 +42,7 @@ const calculateNodeMap = (path: string, data): GraphNodeMap<IfElseNodes> => {
     [IfElseNodes.Condition]: GraphNode.fromIndexedJson(condition),
     [IfElseNodes.Choice]: GraphNode.fromIndexedJson(choice),
     [IfElseNodes.IfBranch]: GraphNode.fromIndexedJson(ifGroup),
-    [IfElseNodes.ElseBranch]: GraphNode.fromIndexedJson(elseGroup),
+    [IfElseNodes.ElseBranch]: GraphNode.fromIndexedJson(elseGroup)
   };
 };
 
@@ -60,7 +60,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
   data,
   onEvent,
   onResize,
-  judgement,
+  judgement
 }) => {
   const nodeMap = useMemo(() => calculateNodeMap(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout(nodeMap, calculateIfElseLayout, onResize);
@@ -70,7 +70,7 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
 
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={conditionNode.offset}>
@@ -98,8 +98,8 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
           <OffsetContainer key={`${node.id}/offset`} offset={node.offset}>
             <StepGroup
               key={node.id}
-              id={node.id}
               data={node.data}
+              id={node.id}
               onEvent={onEvent}
               onResize={size => {
                 updateNodeBoundary(nodeName, size);
@@ -113,5 +113,5 @@ export const IfConditionWidget: FunctionComponent<IfConditionWidgetProps> = ({
 };
 
 IfConditionWidget.defaultProps = {
-  onResize: () => null,
+  onResize: () => null
 };

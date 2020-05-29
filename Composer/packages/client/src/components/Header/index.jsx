@@ -16,7 +16,7 @@ import { updateAvailableIcon, headerContainer, title, botName, divider, headerTe
 export const Header = props => {
   const {
     actions: { setAppUpdateShowing },
-    state: { appUpdate },
+    state: { appUpdate }
   } = useContext(StoreContext);
   const { showing, status } = appUpdate;
 
@@ -27,12 +27,12 @@ export const Header = props => {
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
 
   return (
-    <div role="banner" css={headerContainer}>
+    <div css={headerContainer} role="banner">
       <img
-        style={{ marginLeft: '9px' }}
         alt={formatMessage('Composer Logo')}
         aria-label={formatMessage('Composer Logo')}
         src={composerIcon}
+        style={{ marginLeft: '9px' }}
       />
       <div css={headerTextContainer}>
         <div css={title}>{formatMessage('Bot Framework Composer')}</div>
@@ -46,9 +46,9 @@ export const Header = props => {
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}
-          onClick={onUpdateAvailableClick}
           styles={updateAvailableIcon}
           title={formatMessage('Update available')}
+          onClick={onUpdateAvailableClick}
         />
       )}
     </div>

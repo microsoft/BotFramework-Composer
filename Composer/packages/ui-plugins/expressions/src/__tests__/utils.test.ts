@@ -12,20 +12,20 @@ describe('getOneOfOptions', () => {
         oneOf: [
           {
             items: {
-              type: 'string' as const,
-            },
+              type: 'string' as const
+            }
           },
           {
             items: {
-              type: 'object' as const,
-            },
-          },
-        ],
+              type: 'object' as const
+            }
+          }
+        ]
       },
       {
-        type: 'string' as const,
-      },
-    ],
+        type: 'string' as const
+      }
+    ]
   };
 
   it('returns options of each one of entry', () => {
@@ -39,7 +39,7 @@ describe('getOptions', () => {
     describe('when there are more than 2 types', () => {
       const schema = {
         title: 'test schema',
-        type: ['string' as const, 'boolean' as const, 'number' as const],
+        type: ['string' as const, 'boolean' as const, 'number' as const]
       };
 
       it('returns the types and expression', () => {
@@ -51,7 +51,7 @@ describe('getOptions', () => {
     describe('when there is only 2 options', () => {
       const schema = {
         title: 'test schema',
-        type: ['boolean' as const, 'number' as const],
+        type: ['boolean' as const, 'number' as const]
       };
 
       it('returns the types without expression', () => {
@@ -67,32 +67,32 @@ describe('getOptions', () => {
       oneOf: [
         {
           type: 'string' as const,
-          title: 'My Awesome String',
+          title: 'My Awesome String'
         },
         {
-          type: 'boolean' as const,
+          type: 'boolean' as const
         },
         {
-          type: 'number' as const,
+          type: 'number' as const
         },
         {
           title: 'an enum',
-          enum: ['one', 'two'],
+          enum: ['one', 'two']
         },
         {
-          enum: ['four', 'five'],
+          enum: ['four', 'five']
         },
         {
-          $ref: '#/definitions/Microsoft.AnotherType',
-        },
-      ],
+          $ref: '#/definitions/Microsoft.AnotherType'
+        }
+      ]
     };
 
     const definitions = {
       'Microsoft.AnotherType': {
         title: 'Another Type',
-        type: 'object' as const,
-      },
+        type: 'object' as const
+      }
     };
 
     it('returns one of options', () => {
@@ -105,7 +105,7 @@ describe('getOptions', () => {
     const schema = {
       title: 'Test Schema',
       type: 'string' as const,
-      enum: ['one', 'two', 'three'],
+      enum: ['one', 'two', 'three']
     };
 
     it('returns dropdown and expression options', () => {
@@ -127,36 +127,36 @@ describe('getSelectedOption', () => {
       text: 'string',
       data: {
         schema: {
-          type: 'string' as const,
-        },
-      },
+          type: 'string' as const
+        }
+      }
     },
     {
       key: 'integer',
       text: 'integer',
       data: {
         schema: {
-          type: 'integer' as const,
-        },
-      },
+          type: 'integer' as const
+        }
+      }
     },
     {
       key: 'object',
       text: 'object',
       data: {
         schema: {
-          type: 'object' as const,
-        },
-      },
+          type: 'object' as const
+        }
+      }
     },
     {
       key: 'array1',
       text: 'array1',
       data: {
         schema: {
-          type: 'array' as const,
-        },
-      },
+          type: 'array' as const
+        }
+      }
     },
     {
       key: 'array2',
@@ -165,18 +165,18 @@ describe('getSelectedOption', () => {
         schema: {
           type: 'array' as const,
           items: {
-            type: 'integer' as const,
-          },
-        },
-      },
+            type: 'integer' as const
+          }
+        }
+      }
     },
     {
       key: 'expression',
       text: 'expression',
       data: {
-        schema: { type: 'string' as const },
-      },
-    },
+        schema: { type: 'string' as const }
+      }
+    }
   ];
 
   it('returns undefined if there are no options', () => {

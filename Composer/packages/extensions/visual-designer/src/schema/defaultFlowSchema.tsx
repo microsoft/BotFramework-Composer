@@ -12,40 +12,40 @@ import { ObiColors } from '../constants/ElementColors';
 
 const BaseInputSchema: FlowWidget = {
   widget: 'ActionCard',
-  body: data => data.prompt,
+  body: data => data.prompt
 };
 
 export const defaultFlowSchema: FlowSchema = {
   default: {
-    widget: 'ActionHeader',
+    widget: 'ActionHeader'
   },
   custom: {
     widget: 'ActionHeader',
-    colors: { theme: ObiColors.Gray20, color: ObiColors.White },
+    colors: { theme: ObiColors.Gray20, color: ObiColors.White }
   },
   [SDKKinds.IfCondition]: {
     widget: 'IfConditionWidget',
     nowrap: true,
     judgement: {
       widget: 'ActionCard',
-      body: data => data.condition,
-    },
+      body: data => data.condition
+    }
   },
   [SDKKinds.SwitchCondition]: {
     widget: 'SwitchConditionWidget',
     nowrap: true,
     judgement: {
       widget: 'ActionCard',
-      body: data => data.condition,
-    },
+      body: data => data.condition
+    }
   },
   [SDKKinds.Foreach]: {
     widget: 'ForeachWidget',
     nowrap: true,
     loop: {
       widget: 'ActionCard',
-      body: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`,
-    },
+      body: data => `${formatMessage('Each value in')} {${data.itemsProperty || '?'}}`
+    }
   },
   [SDKKinds.ForeachPage]: {
     widget: 'ForeachWidget',
@@ -56,12 +56,12 @@ export const defaultFlowSchema: FlowSchema = {
         const pageSizeString = get(data, 'pageSize', '?');
         const propString = get(data, 'itemsProperty', '?');
         return `${formatMessage('Each page of')} ${pageSizeString} ${formatMessage('in')} {${propString}}`;
-      },
-    },
+      }
+    }
   },
   [SDKKinds.SendActivity]: {
     widget: 'ActionCard',
-    body: data => data.activity,
+    body: data => data.activity
   },
   [SDKKinds.AttachmentInput]: BaseInputSchema,
   [SDKKinds.ConfirmInput]: BaseInputSchema,
@@ -78,14 +78,14 @@ export const defaultFlowSchema: FlowSchema = {
         <>
           {dialogRef || '?'} <FixedInfo>(Dialog)</FixedInfo>
         </>
-      ),
+      )
     },
     footer: data =>
       data.property ? (
         <>
           {data.property} <FixedInfo>= Return value</FixedInfo>
         </>
-      ) : null,
+      ) : null
   },
   [SDKKinds.BeginSkill]: {
     widget: 'ActionCard',
@@ -103,7 +103,7 @@ export const defaultFlowSchema: FlowSchema = {
           {data.resultProperty}
           <FixedInfo> = Result</FixedInfo>
         </>
-      ) : null,
+      ) : null
   },
   [SDKKinds.ReplaceDialog]: {
     widget: 'ActionCard',
@@ -114,8 +114,8 @@ export const defaultFlowSchema: FlowSchema = {
         <>
           {dialogRef || '?'} <FixedInfo>(Dialog)</FixedInfo>
         </>
-      ),
-    },
+      )
+    }
   },
   [SDKKinds.EditArray]: {
     widget: 'ActionCard',
@@ -130,39 +130,39 @@ export const defaultFlowSchema: FlowSchema = {
           {data.resultProperty}
           <FixedInfo> = Result</FixedInfo>
         </>
-      ) : null,
+      ) : null
   },
   [SDKKinds.SetProperty]: {
     widget: 'ActionCard',
-    body: data => <PropertyAssignment property={data.property} value={data.value} />,
+    body: data => <PropertyAssignment property={data.property} value={data.value} />
   },
   [SDKKinds.SetProperties]: {
     widget: 'ActionCard',
     body: data => (
       <ListOverview
-        items={data.assignments}
         itemPadding={8}
+        items={data.assignments}
         renderItem={({ property, value }) => <PropertyAssignment property={property} value={value} />}
       />
-    ),
+    )
   },
   [SDKKinds.DeleteProperty]: {
     widget: 'ActionCard',
-    body: data => data.property,
+    body: data => data.property
   },
   [SDKKinds.DeleteProperties]: {
     widget: 'ActionCard',
     body: data => (
       <ListOverview
-        items={data.properties}
         itemPadding={8}
+        items={data.properties}
         renderItem={item => (
           <SingleLineDiv height={16} title={item}>
             {item}
           </SingleLineDiv>
         )}
       />
-    ),
+    )
   },
   [SDKKinds.CancelAllDialogs]: {
     widget: 'ActionCard',
@@ -172,7 +172,7 @@ export const defaultFlowSchema: FlowSchema = {
           {data.eventName || '?'}
           <FixedInfo> (Event)</FixedInfo>
         </>
-      ) : null,
+      ) : null
   },
   [SDKKinds.EmitEvent]: {
     widget: 'ActionCard',
@@ -181,7 +181,7 @@ export const defaultFlowSchema: FlowSchema = {
         {data.eventName || '?'}
         <FixedInfo> (Event)</FixedInfo>
       </>
-    ),
+    )
   },
   [SDKKinds.HttpRequest]: {
     widget: 'ActionCard',
@@ -197,15 +197,15 @@ export const defaultFlowSchema: FlowSchema = {
           {data.resultProperty}
           <FixedInfo> = Result property</FixedInfo>
         </>
-      ) : null,
+      ) : null
   },
   [SDKKinds.EditActions]: {
     widget: 'ActionCard',
-    body: data => data.changeType,
+    body: data => data.changeType
   },
   [SDKKinds.QnAMakerDialog]: {
     widget: 'ActionCard',
-    body: data => data.hostname,
+    body: data => data.hostname
   },
   [SDKKinds.OAuthInput]: {
     widget: 'ActionCard',
@@ -216,6 +216,6 @@ export const defaultFlowSchema: FlowSchema = {
           {data.tokenProperty}
           <FixedInfo> = Token Property</FixedInfo>
         </>
-      ) : null,
-  },
+      ) : null
+  }
 };

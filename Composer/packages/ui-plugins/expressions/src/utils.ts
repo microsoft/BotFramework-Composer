@@ -60,7 +60,7 @@ export function getOneOfOptions(
       all.push({
         key: label,
         text: label,
-        data: { schema: resolved },
+        data: { schema: resolved }
       } as SchemaOption);
     }
 
@@ -74,14 +74,14 @@ export function getOptions(schema: JSONSchema7, definitions): SchemaOption[] {
   const expressionOption = {
     key: 'expression',
     text: 'expression',
-    data: { schema: { ...schema, type: 'string' as const } },
+    data: { schema: { ...schema, type: 'string' as const } }
   };
 
   if (type && Array.isArray(type)) {
     const options: SchemaOption[] = type.map(t => ({
       key: t,
       text: t,
-      data: { schema: { ...schema, type: t } },
+      data: { schema: { ...schema, type: t } }
     }));
 
     type.length > 2 && options.push(expressionOption);
@@ -101,9 +101,9 @@ export function getOptions(schema: JSONSchema7, definitions): SchemaOption[] {
       {
         key: 'dropdown',
         text: 'dropdown',
-        data: { schema: { ...schema, $role: undefined } },
+        data: { schema: { ...schema, $role: undefined } }
       },
-      expressionOption,
+      expressionOption
     ];
   }
 
@@ -128,7 +128,7 @@ export function getSelectedOption(value: any | undefined, options: SchemaOption[
     return (
       options.find(o => {
         const {
-          data: { schema },
+          data: { schema }
         } = o;
 
         const itemSchema = Array.isArray(schema.items) ? schema.items[0] : schema.items;

@@ -82,7 +82,7 @@ describe('lg lsp server', () => {
       },
       response => {
         expect(response.id).toEqual(0);
-      },
+      }
     ]);
     // client initialized
     await send(`{"jsonrpc":"2.0","method":"initialized","params":{}}`, []);
@@ -101,7 +101,7 @@ describe('lg lsp server', () => {
       response => {
         expect(response.method).toEqual('textDocument/publishDiagnostics');
         expect(response.params.diagnostics.length).toEqual(0);
-      },
+      }
     ]);
   });
 
@@ -113,7 +113,7 @@ describe('lg lsp server', () => {
         response => {
           expect(response.id).toEqual(2);
           expect(response.result.contents[0]).toContain('-Good evening');
-        },
+        }
       ]
     );
   });
@@ -126,7 +126,7 @@ describe('lg lsp server', () => {
       response => {
         expect(response.method).toEqual('textDocument/publishDiagnostics');
         expect(response.params.diagnostics.length).toEqual(1);
-      },
+      }
     ]);
   });
 
@@ -143,7 +143,7 @@ describe('lg lsp server', () => {
             .map(item => item.label)
             .join(',')
         ).toEqual(['Greeting1', 'Greeting2', 'Greeting3'].join(','));
-      },
+      }
     ]);
   });
 });

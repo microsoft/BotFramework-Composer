@@ -37,21 +37,21 @@ export const RequireAuth: React.FC = props => {
 
   const sessionExpiredDialog = currentUser.sessionExpired && (
     <Dialog
-      hidden={false}
-      onDismiss={() => false}
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Session expired'),
-        styles: dialog,
+        styles: dialog
       }}
+      hidden={false}
       modalProps={{
         isBlocking: false,
-        styles: { main: { maxWidth: 450 } },
+        styles: { main: { maxWidth: 450 } }
       }}
+      onDismiss={() => false}
     >
       <div css={consoleStyle}>{formatMessage('Please log in before continuing.')}</div>
       <DialogFooter>
-        <PrimaryButton onClick={() => actions.loginUser()} text={formatMessage('Login')} />
+        <PrimaryButton text={formatMessage('Login')} onClick={() => actions.loginUser()} />
       </DialogFooter>
     </Dialog>
   );

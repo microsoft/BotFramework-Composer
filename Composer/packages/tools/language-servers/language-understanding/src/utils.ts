@@ -37,7 +37,7 @@ const severityMap = {
   [BFDiagnosticSeverity.Error]: DiagnosticSeverity.Error,
   [BFDiagnosticSeverity.Hint]: DiagnosticSeverity.Hint,
   [BFDiagnosticSeverity.Information]: DiagnosticSeverity.Information,
-  [BFDiagnosticSeverity.Warning]: DiagnosticSeverity.Warning,
+  [BFDiagnosticSeverity.Warning]: DiagnosticSeverity.Warning
 };
 
 export function convertSeverity(severity: BFDiagnosticSeverity): DiagnosticSeverity {
@@ -49,7 +49,7 @@ export function generageDiagnostic(message: string, severity: DiagnosticSeverity
     severity,
     range: Range.create(Position.create(0, 0), Position.create(0, 0)),
     message,
-    source: document.uri,
+    source: document.uri
   };
 }
 
@@ -63,7 +63,7 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
       severity: convertSeverity(diag.severity),
       range,
       message: diag.message,
-      source: document.uri,
+      source: document.uri
     };
     diagnostics.push(diagnostic);
   });

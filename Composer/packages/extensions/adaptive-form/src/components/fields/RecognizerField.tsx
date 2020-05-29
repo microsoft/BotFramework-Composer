@@ -19,7 +19,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
   const options = useMemo(() => {
     return recognizers.map(r => ({
       key: r.id,
-      text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName,
+      text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName
     }));
   }, [recognizers]);
 
@@ -50,15 +50,15 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = props => {
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       {selectedType ? (
         <Dropdown
+          data-testid={'recognizerTypeDropdown'}
           label={formatMessage('Recognizer Type')}
           options={options}
           responsiveMode={ResponsiveMode.large}
           selectedKey={selectedType}
           onChange={handleChangeRecognizerType}
-          data-testid={'recognizerTypeDropdown'}
         />
       ) : (
         `Unable to determine recognizer type from data: ${value}`

@@ -23,7 +23,7 @@ const defaultOptions = {
   quickSuggestions: false,
   minimap: {
     enabled: false,
-    maxColumn: 0,
+    maxColumn: 0
   },
   lineDecorationsWidth: 10,
   lineNumbersMinChars: 3,
@@ -31,7 +31,7 @@ const defaultOptions = {
   folding: false,
   renderLineHighlight: 'none',
   formatOnType: true,
-  fixedOverflowWidgets: true,
+  fixedOverflowWidgets: true
 };
 
 const styles = {
@@ -79,7 +79,7 @@ const styles = {
     margin-bottom: 5px;
 
     label: BaseEditorSettings;
-  `,
+  `
 };
 
 const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSettings> = {}) => {
@@ -89,8 +89,8 @@ const mergeEditorSettings = (baseOptions: any, overrides: Partial<CodeEditorSett
     wordWrap: overrides.wordWrap ? 'on' : 'off',
     minimap: {
       enabled: overrides.minimap,
-      maxColumn: overrides.minimap ? 120 : 0,
-    },
+      maxColumn: overrides.minimap ? 120 : 0
+    }
   };
 };
 
@@ -198,7 +198,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
   const messageHelp = errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics;
 
   const syntaxLink = (
-    <Link key="a" href={helpURL} target="_blank" rel="noopener noreferrer">
+    <Link key="a" href={helpURL} rel="noopener noreferrer" target="_blank">
       {formatMessage('Refer to the syntax documentation here.')}
     </Link>
   );
@@ -217,18 +217,18 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
           focused,
           error: hasError,
           warning: hasWarning,
-          height,
+          height
         })}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <Editor {...rest} value={initialValue || ''} editorDidMount={onEditorMount} options={editorOptions} />
+        <Editor {...rest} key={id} editorDidMount={onEditorMount} options={editorOptions} value={initialValue || ''} />
       </div>
       {(hasError || hasWarning) && (
         <MessageBar
-          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
-          isMultiline={true}
+          isMultiline
           dismissButtonAriaLabel={formatMessage('Close')}
+          messageBarType={hasError ? MessageBarType.error : hasWarning ? MessageBarType.warning : MessageBarType.info}
         >
           {messageHelp}
           {syntaxLink}
@@ -240,7 +240,7 @@ const BaseEditor: React.FC<BaseEditorProps> = props => {
 
 BaseEditor.defaultProps = {
   language: 'markdown',
-  theme: 'vs',
+  theme: 'vs'
 };
 
 export { BaseEditor };

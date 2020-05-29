@@ -154,6 +154,7 @@ namespace Microsoft.BotFramework.Composer.Functions
                 adapter
                   .UseStorage(storage)
                   .UseBotState(userState, conversationState)
+                  .Use(new RegisterClassMiddleware<IConfiguration>(rootConfiguration))
                   .Use(telemetryInitializerMiddleware);
 
                 // Configure Middlewares
@@ -173,6 +174,8 @@ namespace Microsoft.BotFramework.Composer.Functions
 
             var defaultLocale = rootConfiguration.GetValue<string>("defaultLocale") ?? "en-us";
 
+            var removeRecipientMention = settings?.Feature?.RemoveRecipientMention ?? false;
+
             // Bot
             services.AddSingleton<IBot>(s =>
                 new ComposerBot(
@@ -183,7 +186,8 @@ namespace Microsoft.BotFramework.Composer.Functions
                     s.GetService<SkillConversationIdFactoryBase>(),
                     s.GetService<IBotTelemetryClient>(),
                     GetRootDialog(Path.Combine(rootDirectory, settings.Bot)),
-                    defaultLocale));
+                    defaultLocale,
+                    removeRecipientMention));
         }
 
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)

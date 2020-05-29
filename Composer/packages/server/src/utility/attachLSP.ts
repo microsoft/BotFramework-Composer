@@ -14,7 +14,7 @@ export function createSocketHandler(webSocket: any): rpc.IWebSocket {
     onMessage: cb => webSocket.on('message', cb),
     onError: cb => webSocket.on('error', cb),
     onClose: cb => webSocket.on('close', cb),
-    dispose: () => webSocket.close(),
+    dispose: () => webSocket.close()
   };
   return socket;
 }

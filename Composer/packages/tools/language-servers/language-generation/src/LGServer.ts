@@ -15,7 +15,7 @@ import {
   CompletionItem,
   Range,
   DiagnosticSeverity,
-  TextEdit,
+  TextEdit
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
@@ -37,7 +37,7 @@ import {
   cardPropDict,
   cardPropPossibleValueType,
   lgOptionKeys,
-  lgOptionsValues,
+  lgOptionsValues
 } from './utils';
 
 // define init methods call from client
@@ -84,14 +84,14 @@ export class LGServer {
           codeActionProvider: false,
           completionProvider: {
             resolveProvider: true,
-            triggerCharacters: ['.', '[', '[', '@', '=', '\n'],
+            triggerCharacters: ['.', '[', '[', '@', '=', '\n']
           },
           hoverProvider: true,
           foldingRangeProvider: false,
           documentOnTypeFormattingProvider: {
-            firstTriggerCharacter: '\n',
-          },
-        },
+            firstTriggerCharacter: '\n'
+          }
+        }
       };
     });
     this.connection.onCompletion(params => this.completion(params));
@@ -184,7 +184,7 @@ export class LGServer {
     const internalImportResolver = () => {
       return {
         id: document.uri,
-        content: editorContent,
+        content: editorContent
       };
     };
     const { fileId, templateId, projectId } = this.getLGDocument(document) || {};
@@ -195,7 +195,7 @@ export class LGServer {
         const lgFile = resolver(source, id, projectId);
         if (!lgFile) {
           this.sendDiagnostics(document, [
-            generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
+            generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document)
           ]);
         }
         let { content } = lgFile;
@@ -239,7 +239,7 @@ export class LGServer {
       projectId,
       fileId,
       templateId,
-      index,
+      index
     };
     this.LGDocuments.push(lgDocument);
   }
@@ -281,8 +281,8 @@ export class LGServer {
         contents: [
           `Parameters: ${get(functionEntity, 'Params', []).join(', ')}`,
           `Documentation: ${get(functionEntity, 'Introduction', '')}`,
-          `ReturnType: ${get(functionEntity, 'Returntype', '').valueOf()}`,
-        ],
+          `ReturnType: ${get(functionEntity, 'Returntype', '').valueOf()}`
+        ]
       };
       return Promise.resolve(hoveritem);
     }
@@ -495,7 +495,7 @@ export class LGServer {
             label: e.toString(),
             kind: CompletionItemKind.Property,
             insertText: e.toString(),
-            documentation: '',
+            documentation: ''
           };
           if (!completionList.includes(item)) {
             completionList.push(item);
@@ -521,7 +521,7 @@ export class LGServer {
         label: e.toString(),
         kind: CompletionItemKind.Property,
         insertText: e.toString(),
-        documentation: '',
+        documentation: ''
       };
     });
 
@@ -567,7 +567,7 @@ export class LGServer {
           template.parameters.length > 0
             ? template.name + '(' + template.parameters.join(', ') + ')'
             : template.name + '()',
-        documentation: template.body,
+        documentation: template.body
       };
     });
 
@@ -577,7 +577,7 @@ export class LGServer {
         label: key,
         kind: CompletionItemKind.Function,
         insertText: key + '(' + this.removeParamFormat(value.Params.toString()) + ')',
-        documentation: value.Introduction,
+        documentation: value.Introduction
       };
     });
 
@@ -591,13 +591,13 @@ export class LGServer {
           label: type,
           kind: CompletionItemKind.Keyword,
           insertText: type,
-          documentation: `Suggestion for Card or Activity: ${type}`,
+          documentation: `Suggestion for Card or Activity: ${type}`
         };
       });
 
       return Promise.resolve({
         isIncomplete: true,
-        items: cardTypesSuggestions,
+        items: cardTypesSuggestions
       });
     }
 
@@ -607,13 +607,13 @@ export class LGServer {
           label: type,
           kind: CompletionItemKind.Keyword,
           insertText: type,
-          documentation: `Suggestion for LG Options: ${type}`,
+          documentation: `Suggestion for LG Options: ${type}`
         };
       });
 
       return Promise.resolve({
         isIncomplete: true,
-        items: optionsSuggestions,
+        items: optionsSuggestions
       });
     }
 
@@ -629,7 +629,7 @@ export class LGServer {
           label: value,
           kind: CompletionItemKind.Keyword,
           insertText: value,
-          documentation: `Suggested value: ${value} for key in LG Options`,
+          documentation: `Suggested value: ${value} for key in LG Options`
         };
       });
 
@@ -637,7 +637,7 @@ export class LGServer {
 
       return Promise.resolve({
         isIncomplete: true,
-        items: optionValueSuggestions,
+        items: optionValueSuggestions
       });
     }
 
@@ -656,7 +656,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`
             };
             items.push(item);
           }
@@ -668,7 +668,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`
             };
             items.push(item);
           }
@@ -680,7 +680,7 @@ export class LGServer {
               label: `${u}: ${cardPropPossibleValueType[u]}`,
               kind: CompletionItemKind.Snippet,
               insertText: `${paddingIndent}${u} = ${cardPropPossibleValueType[u]}`,
-              documentation: `Suggested propertiy ${u} in ${cardType}`,
+              documentation: `Suggested propertiy ${u} in ${cardType}`
             };
             items.push(item);
           }
@@ -690,7 +690,7 @@ export class LGServer {
       if (items.length > 0) {
         return Promise.resolve({
           isIncomplete: true,
-          items: items,
+          items: items
         });
       }
     }
@@ -700,12 +700,12 @@ export class LGServer {
       if (endWithDot) {
         return Promise.resolve({
           isIncomplete: true,
-          items: completionPropertyResult,
+          items: completionPropertyResult
         });
       } else {
         return Promise.resolve({
           isIncomplete: true,
-          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult)),
+          items: completionTemplateList.concat(completionFunctionList.concat(completionPropertyResult))
         });
       }
     } else {
@@ -831,7 +831,7 @@ export class LGServer {
       const templateDiags = checkTemplate({
         name: templateId,
         parameters: [],
-        body: text,
+        body: text
       });
       // error in template.
       if (isValid(templateDiags) === false) {
@@ -860,7 +860,7 @@ export class LGServer {
   protected sendDiagnostics(document: TextDocument, diagnostics: Diagnostic[]): void {
     this.connection.sendDiagnostics({
       uri: document.uri,
-      diagnostics,
+      diagnostics
     });
   }
 }

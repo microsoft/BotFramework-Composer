@@ -13,7 +13,7 @@ import { CreateDialogModal } from './../../src/pages/design/createDialogModal';
 
 jest.mock('@bfc/code-editor', () => {
   return {
-    LuEditor: () => <div></div>,
+    LuEditor: () => <div></div>
   };
 });
 
@@ -28,14 +28,14 @@ describe('<ProjectTree/>', () => {
     const openNewTriggerModal = jest.fn(() => {});
     const { findByText } = renderWithStore(
       <ProjectTree
-        dialogs={dialogs}
         dialogId={dialogId}
+        dialogs={dialogs}
+        openNewTriggerModal={openNewTriggerModal}
         selected={selected}
-        onSelect={handleSelect}
         onAdd={handleAddDialog}
         onDeleteDialog={handleDeleteDialog}
         onDeleteTrigger={handleDeleteTrigger}
-        openNewTriggerModal={openNewTriggerModal}
+        onSelect={handleSelect}
       />
     );
     const node = await findByText('addtodo');

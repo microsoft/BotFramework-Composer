@@ -19,14 +19,14 @@ export const SelectSkillDialog: React.FC<FieldProps> = props => {
   const options: IComboBoxOption[] = skills.map(({ name, manifestUrl }) => ({
     key: manifestUrl,
     text: name,
-    isSelected: value === manifestUrl,
+    isSelected: value === manifestUrl
   }));
 
   options.push(
     {
       key: 'separator',
       itemType: SelectableOptionMenuItemType.Divider,
-      text: '',
+      text: ''
     },
     { key: ADD_DIALOG, text: formatMessage('Add a new Skill Dialog') }
   );

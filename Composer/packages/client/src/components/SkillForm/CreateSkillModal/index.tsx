@@ -31,7 +31,7 @@ export interface ICreateSkillModalProps {
 }
 
 const defaultFormData = {
-  manifestUrl: '',
+  manifestUrl: ''
 };
 
 const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
@@ -125,7 +125,7 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
   const updateForm = (field: string) => (e: FormEvent, newValue: string | undefined) => {
     const newData: ISkillFormData = {
       ...formData,
-      [field]: newValue,
+      [field]: newValue
     };
     setFormData(newData);
     const errors = validateForm(newData);
@@ -167,44 +167,44 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = props => {
 
   return (
     <DialogWrapper isOpen={isOpen} onDismiss={onDismiss} {...formTitles} dialogType={DialogTypes.CreateFlow}>
-      <form onSubmit={handleSubmit} css={FormModalBody}>
-        <input type="submit" style={{ display: 'none' }} />
+      <form css={FormModalBody} onSubmit={handleSubmit}>
+        <input style={{ display: 'none' }} type="submit" />
         <Stack tokens={{ childrenGap: '3rem' }}>
           <StackItem grow={0}>
             <TextField
+              autoFocus
+              required
               css={FormFieldManifestUrl}
+              data-testid="NewSkillManifestUrl"
+              errorMessage={formDataErrors.manifestUrl}
               label={formatMessage('Manifest url')}
               value={formData.manifestUrl}
               onChange={updateForm('manifestUrl')}
-              errorMessage={formDataErrors.manifestUrl}
-              data-testid="NewSkillManifestUrl"
-              required
-              autoFocus
             />
             {isValidating && (
-              <Spinner css={SpinnerLabel} size={SpinnerSize.medium} label="validating..." labelPosition="right" />
+              <Spinner css={SpinnerLabel} label="validating..." labelPosition="right" size={SpinnerSize.medium} />
             )}
             <TextField
               css={FormFieldEditName}
+              data-testid="NewSkillName"
+              errorMessage={formDataErrors.name}
               label={formatMessage('Custom name (optional)')}
               value={formData.name}
               onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
-              data-testid="NewSkillName"
             />
           </StackItem>
 
           <StackItem>
             <PrimaryButton
-              onClick={handleSubmit}
-              text={formatMessage('Confirm')}
               disabled={isDisabled || isValidating}
+              text={formatMessage('Confirm')}
+              onClick={handleSubmit}
             />
             <DefaultButton
               css={MarginLeftSmall}
-              onClick={onDismiss}
-              text={formatMessage('Cancel')}
               data-testid="SkillFormCancel"
+              text={formatMessage('Cancel')}
+              onClick={onDismiss}
             />
           </StackItem>
         </Stack>

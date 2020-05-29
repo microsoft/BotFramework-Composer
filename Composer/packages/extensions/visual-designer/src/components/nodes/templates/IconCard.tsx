@@ -24,7 +24,7 @@ export const IconCard = ({
   themeColor,
   iconColor,
   onClick,
-  onChildDialogClick,
+  onChildDialogClick
 }) => {
   const containerStyle = {
     width: boxWidth,
@@ -34,14 +34,14 @@ export const IconCard = ({
     overflow: 'hidden',
     backgroundColor: 'white',
     borderRadius: '2px',
-    boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)',
+    boxShadow: '0px 1.2px 3.6px rgba(0, 0, 0, 0.108), 0px 6.4px 14.4px rgba(0, 0, 0, 0.132)'
   };
 
   return (
     <div
       className="card"
-      data-testid="IconCard"
       css={containerStyle}
+      data-testid="IconCard"
       onClick={e => {
         e.stopPropagation();
         onClick();
@@ -57,7 +57,7 @@ export const IconCard = ({
           fontSize: '14px',
           lineHeight: '19px',
           color: 'black',
-          position: 'relative',
+          position: 'relative'
         }}
       >
         <div css={{ padding: '10px 10px', fontSize: '14px', fontFamily: 'Segoe UI', lineHeight: '19px' }}>{label}</div>
@@ -67,7 +67,7 @@ export const IconCard = ({
         className="card__content"
         css={{
           width: '100%',
-          height: contentHeight,
+          height: contentHeight
         }}
       >
         <div
@@ -77,11 +77,11 @@ export const IconCard = ({
             fontSize: '14px',
             lineHeight: '19px',
             display: 'flex',
-            alignItems: 'top',
+            alignItems: 'top'
           }}
         >
           <div css={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
-            <Icon icon={icon} color={iconColor} size={20} />
+            <Icon color={iconColor} icon={icon} size={20} />
           </div>
           <div
             css={{
@@ -92,7 +92,7 @@ export const IconCard = ({
               overflow: 'hidden',
               fontSize: '14px',
               lineHeight: '19px',
-              fontFamily: 'Segoe UI',
+              fontFamily: 'Segoe UI'
             }}
             title={typeof label === 'string' ? label : ''}
           >
@@ -107,11 +107,11 @@ export const IconCard = ({
             fontSize: '14px',
             lineHeight: '19px',
             display: 'flex',
-            alignItems: 'top',
+            alignItems: 'top'
           }}
         >
           <div css={{ width: 20, height: 20, marginRight: '10px', display: 'flex', alignItems: 'center' }}>
-            <Icon icon={ElementIcon.MessageBot} color="#656565" size={20} />
+            <Icon color="#656565" icon={ElementIcon.MessageBot} size={20} />
           </div>
           <div
             css={{
@@ -122,7 +122,7 @@ export const IconCard = ({
               overflow: 'hidden',
               fontSize: '14px',
               lineHeight: '19px',
-              fontFamily: 'Segoe UI',
+              fontFamily: 'Segoe UI'
             }}
             title={typeof label === 'string' ? label : ''}
           >
@@ -140,7 +140,7 @@ export const IconCard = ({
             lineHeight: '19px',
             fontFamily: 'Segoe UI',
             padding: '0px 10px',
-            paddingLeft: '40px',
+            paddingLeft: '40px'
           }}
           title={typeof label === 'string' ? label : ''}
         >
@@ -148,13 +148,13 @@ export const IconCard = ({
             <div
               style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'center'
               }}
             >
               <FabricIcon
-                style={{ lineHeight: '12px', fontSize: '12px', color: 'blue', paddingRight: '5px' }}
-                iconName="OpenSource"
                 data-testid="OpenIcon"
+                iconName="OpenSource"
+                style={{ lineHeight: '12px', fontSize: '12px', color: 'blue', paddingRight: '5px' }}
                 onClick={e => {
                   e.stopPropagation();
                   onChildDialogClick();
@@ -163,7 +163,7 @@ export const IconCard = ({
               <span
                 style={{
                   cursor: 'pointer',
-                  color: 'blue',
+                  color: 'blue'
                 }}
                 onClick={e => {
                   e.stopPropagation();
@@ -181,5 +181,5 @@ export const IconCard = ({
 };
 
 IconCard.defaultProps = {
-  onClick: () => {},
+  onClick: () => {}
 };

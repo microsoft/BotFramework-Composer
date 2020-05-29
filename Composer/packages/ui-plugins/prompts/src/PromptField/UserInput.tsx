@@ -45,78 +45,78 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = props => {
   return (
     <Fragment>
       <SchemaField
-        name="property"
         definitions={definitions}
         depth={depth}
         id={`${id}.property`}
+        name="property"
+        rawErrors={getError('property')}
         schema={getSchema('property')}
         uiOptions={uiOptions.properties?.property || {}}
         value={value?.property}
         onChange={onChange('property')}
-        rawErrors={getError('property')}
       />
       {getSchema('outputFormat') && (
         <SchemaField
-          name="outputFormat"
           definitions={definitions}
           depth={depth}
           id={`${id}.outputFormat`}
+          name="outputFormat"
+          rawErrors={getError('outputFormat')}
           schema={getSchema('outputFormat')}
           uiOptions={uiOptions.properties?.outputFormat || {}}
           value={value?.outputFormat}
           onChange={onChange('outputFormat')}
-          rawErrors={getError('outputFormat')}
         />
       )}
       <SchemaField
-        name="value"
         definitions={definitions}
         depth={depth}
         id={`${id}.value`}
+        name="value"
+        rawErrors={getError('value')}
         schema={getSchema('value')}
         uiOptions={uiOptions.properties?.value || {}}
         value={value?.value}
         onChange={onChange('value')}
-        rawErrors={getError('value')}
       />
       {Editor && $kind !== SDKKinds.AttachmentInput && (
         <React.Fragment>
           <FieldLabel id={`${id}.intent`} label={intentLabel} />
-          <Editor {...props} onChange={() => {}} placeholder={expectedResponsesPlaceholder()} />
+          <Editor {...props} placeholder={expectedResponsesPlaceholder()} onChange={() => {}} />
         </React.Fragment>
       )}
       {getSchema('defaultLocale') && (
         <SchemaField
-          name="defaultLocale"
           definitions={definitions}
           depth={depth}
           id={`${id}.defaultLocale`}
+          name="defaultLocale"
+          rawErrors={getError('defaultLocale')}
           schema={getSchema('defaultLocale')}
           uiOptions={uiOptions.properties?.defaultLocale || {}}
           value={((value as unknown) as ChoiceInput).defaultLocale}
           onChange={onChange('defaultLocale')}
-          rawErrors={getError('defaultLocale')}
         />
       )}
       {getSchema('style') && (
         <SchemaField
-          name="style"
           definitions={definitions}
           depth={depth}
           enumOptions={getOptions(getSchema('style'))}
           id={`${id}.style`}
+          name="style"
+          rawErrors={getError('style')}
           schema={getSchema('style')}
           uiOptions={uiOptions.properties?.style || {}}
           value={((value as unknown) as ChoiceInput).style}
           onChange={onChange('style')}
-          rawErrors={getError('style')}
         />
       )}
       {value?.$kind === SDKKinds.ChoiceInput && (
-        <ChoiceInputSettings {...props} value={(value as unknown) as ChoiceInput} choiceProperty="choices" />
+        <ChoiceInputSettings {...props} choiceProperty="choices" value={(value as unknown) as ChoiceInput} />
       )}
       {value?.$kind === SDKKinds.ConfirmInput && (
-        <ChoiceInputSettings {...props} value={(value as unknown) as ConfirmInput} choiceProperty="confirmChoices" />
+        <ChoiceInputSettings {...props} choiceProperty="confirmChoices" value={(value as unknown) as ConfirmInput} />
       )}
     </Fragment>
   );

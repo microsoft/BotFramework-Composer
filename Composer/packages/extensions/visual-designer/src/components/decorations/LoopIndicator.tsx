@@ -17,14 +17,14 @@ export const LoopIndicator = ({ onClick }) => {
         background: '#656565',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
       onClick={e => {
         e.stopPropagation();
         onClick();
       }}
     >
-      <Icon iconName="Sync" css={{ color: 'white', fontSize: LoopIconSize.width / 2 }} />
+      <Icon css={{ color: 'white', fontSize: LoopIconSize.width / 2 }} iconName="Sync" />
     </div>
   );
 };

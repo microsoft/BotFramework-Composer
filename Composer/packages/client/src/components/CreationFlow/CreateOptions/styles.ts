@@ -36,14 +36,14 @@ export const rowDetails = disabled => {
       selectors: {
         '&:hover': {
           background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
+          color: disabled ? NeutralColors.gray80 : NeutralColors.black
         },
         '&.ms-DetailsRow.is-selected': {
           background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
-        },
-      },
-    },
+          color: disabled ? NeutralColors.gray80 : NeutralColors.black
+        }
+      }
+    }
   };
 };
 
@@ -54,10 +54,10 @@ export const rowTitle = disabled => {
       selectors: {
         ':hover': {
           background: disabled ? NeutralColors.white : NeutralColors.gray30,
-          color: disabled ? NeutralColors.gray80 : NeutralColors.black,
-        },
-      },
-    },
+          color: disabled ? NeutralColors.gray80 : NeutralColors.black
+        }
+      }
+    }
   };
 };
 

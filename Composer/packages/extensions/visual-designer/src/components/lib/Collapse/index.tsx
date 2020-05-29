@@ -12,7 +12,7 @@ import {
   headerText,
   headerIcon,
   headerButton,
-  collapseContent,
+  collapseContent
 } from './CollapseStyles';
 
 export const Collapse = ({ text, children }) => {
@@ -29,7 +29,7 @@ export const Collapse = ({ text, children }) => {
           {text}
         </div>
         <div className="collapse__line" css={headerIcon} />
-        <IconButton onClick={collapseFuc} iconProps={{ iconName: 'PageRight' }} css={headerButton(collapsed)} />
+        <IconButton css={headerButton(collapsed)} iconProps={{ iconName: 'PageRight' }} onClick={collapseFuc} />
       </div>
       <div className="collapse__content" css={collapseContent(collapsed)}>
         {children}

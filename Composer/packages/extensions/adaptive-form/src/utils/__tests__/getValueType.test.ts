@@ -20,20 +20,20 @@ describe('getValueType', () => {
     const tests = [
       {
         value: 'string',
-        type: 'string',
+        type: 'string'
       },
       {
         value: {},
-        type: 'object',
+        type: 'object'
       },
       {
         value: true,
-        type: 'boolean',
+        type: 'boolean'
       },
       {
         value: undefined,
-        type: 'undefined',
-      },
+        type: 'undefined'
+      }
     ];
 
     tests.forEach(t => {

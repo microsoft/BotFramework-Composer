@@ -37,7 +37,7 @@ const LGPage: React.FC<LGPageProps> = props => {
         id: dialog.id,
         name: dialog.displayName,
         ariaLabel: formatMessage('language generation file'),
-        url: `/bot/${projectId}/language-generation/${dialog.id}`,
+        url: `/bot/${projectId}/language-generation/${dialog.id}`
       };
     });
     const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
@@ -50,7 +50,7 @@ const LGPage: React.FC<LGPageProps> = props => {
       id: 'common',
       name: 'All',
       ariaLabel: formatMessage('all language generation files'),
-      url: `/bot/${projectId}/language-generation/common`,
+      url: `/bot/${projectId}/language-generation/common`
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -75,36 +75,36 @@ const LGPage: React.FC<LGPageProps> = props => {
     {
       type: 'element',
       element: <TestController />,
-      align: 'right',
-    },
+      align: 'right'
+    }
   ];
 
   const onRenderHeaderContent = () => {
     return (
       <Toggle
+        checked={!!edit}
         className={'toggleEditMode'}
         css={actionButton}
-        onText={formatMessage('Edit mode')}
-        offText={formatMessage('Edit mode')}
         defaultChecked={false}
-        checked={!!edit}
+        offText={formatMessage('Edit mode')}
         onChange={onToggleEditMode}
+        onText={formatMessage('Edit mode')}
       />
     );
   };
 
   return (
     <Page
+      data-testid="LGPage"
+      navLinks={navLinks}
       title={formatMessage('Bot Responses')}
       toolbarItems={toolbarItems}
-      navLinks={navLinks}
       onRenderHeaderContent={onRenderHeaderContent}
-      data-testid="LGPage"
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <Router primary={false} component={Fragment}>
-          <CodeEditor path="/edit/*" dialogId={dialogId} />
-          <TableView path="/" dialogId={dialogId} />
+        <Router component={Fragment} primary={false}>
+          <CodeEditor dialogId={dialogId} path="/edit/*" />
+          <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>
     </Page>

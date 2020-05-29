@@ -13,9 +13,9 @@ export function transformObiRules(input, parentPath = ''): { stepGroup: IndexedN
   const steps = input[ObiFieldNames.Actions] || [];
   const stepGroup = new IndexedNode(`${prefix}${ObiFieldNames.Actions}`, {
     $kind: ObiTypes.StepGroup,
-    children: steps.map(x => normalizeObiStep(x)),
+    children: steps.map(x => normalizeObiStep(x))
   });
   return {
-    stepGroup,
+    stepGroup
   };
 }

@@ -34,7 +34,7 @@ export const EmulatorOpenButton: React.FC<IEmulatorOpenButtonProps> = props => {
     >
       <ActionButton
         iconProps={{
-          iconName: 'OpenInNewTab',
+          iconName: 'OpenInNewTab'
         }}
         onClick={onClick}
       >

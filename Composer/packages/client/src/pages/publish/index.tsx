@@ -21,7 +21,7 @@ import { ToolBar } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
-import { PublishStatusList } from './publishStatusList';
+import { PublishStatusList, IStatus } from './publishStatusList';
 
 interface PublishPageProps extends RouteComponentProps<{}> {
   targetName?: string;
@@ -29,7 +29,7 @@ interface PublishPageProps extends RouteComponentProps<{}> {
 
 const Publish: React.FC<PublishPageProps> = props => {
   const selectedTargetName = props.targetName;
-  const [selectedTarget, setSelectedTarget] = useState();
+  const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
   const { state, actions } = useContext(StoreContext);
   const { settings, botName, publishTypes, projectId, publishHistory } = state;
 
@@ -41,17 +41,17 @@ const Publish: React.FC<PublishPageProps> = props => {
 
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
-  const [groups, setGroups] = useState();
-  const [selectedVersion, setSelectedVersion] = useState();
+  const [groups, setGroups] = useState<any[]>([]);
+  const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
-    children: {},
+    children: {}
   });
   const [editDialogProps, setEditDialogProps] = useState({
     title: 'Title',
     type: DialogType.normal,
-    children: {},
+    children: {}
   });
   const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
 
@@ -74,53 +74,53 @@ const Publish: React.FC<PublishPageProps> = props => {
       text: formatMessage('Add new profile'),
       buttonProps: {
         iconProps: {
-          iconName: 'Add',
+          iconName: 'Add'
         },
-        onClick: () => setAddDialogHidden(false),
+        onClick: () => setAddDialogHidden(false)
       },
       align: 'left',
       dataTestid: 'publishPage-ToolBar-Add',
-      disabled: false,
+      disabled: false
     },
     {
       type: 'action',
       text: formatMessage('Publish to selected profile'),
       buttonProps: {
         iconProps: {
-          iconName: 'CloudUpload',
+          iconName: 'CloudUpload'
         },
-        onClick: () => setPublishDialogHidden(false),
+        onClick: () => setPublishDialogHidden(false)
       },
       align: 'left',
       dataTestid: 'publishPage-ToolBar-Publish',
-      disabled: selectedTargetName !== 'all' ? false : true,
+      disabled: selectedTargetName !== 'all' ? false : true
     },
     {
       type: 'action',
       text: formatMessage('See Log'),
       buttonProps: {
         iconProps: {
-          iconName: 'ClipboardList',
+          iconName: 'ClipboardList'
         },
-        onClick: () => setShowLog(true),
+        onClick: () => setShowLog(true)
       },
       align: 'left',
       disabled: selectedVersion ? false : true,
-      dataTestid: 'publishPage-ToolBar-Log',
+      dataTestid: 'publishPage-ToolBar-Log'
     },
     {
       type: 'action',
       text: formatMessage('Rollback'),
       buttonProps: {
         iconProps: {
-          iconName: 'ClipboardList',
+          iconName: 'ClipboardList'
         },
-        onClick: () => rollbackToVersion(selectedVersion),
+        onClick: () => rollbackToVersion(selectedVersion)
       },
       align: 'left',
       disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
-      dataTestid: 'publishPage-ToolBar-Log',
-    },
+      dataTestid: 'publishPage-ToolBar-Log'
+    }
   ];
 
   const onSelectTarget = useCallback(
@@ -145,7 +145,7 @@ const Publish: React.FC<PublishPageProps> = props => {
     if (projectId) {
       actions.getPublishTargetTypes();
       // init selected status
-      setSelectedVersion(undefined);
+      setSelectedVersion(null);
     }
   }, [projectId]);
 
@@ -178,7 +178,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             name: target.name,
             startIndex: startIndex,
             count: publishHistory[target.name].length,
-            level: 0,
+            level: 0
           });
           startIndex += publishHistory[target.name].length;
         }
@@ -193,8 +193,8 @@ const Publish: React.FC<PublishPageProps> = props => {
           name: selectedTargetName,
           startIndex: 0,
           count: publishHistory[selectedTargetName].length,
-          level: 0,
-        },
+          level: 0
+        }
       ]);
     }
   }, [publishHistory, selectedTargetName]);
@@ -217,15 +217,15 @@ const Publish: React.FC<PublishPageProps> = props => {
         {
           name,
           type,
-          configuration,
-        },
+          configuration
+        }
       ]);
       await actions.setSettings(
         projectId,
         botName,
         {
           ...settings,
-          publishTargets: _target,
+          publishTargets: _target
         },
         undefined
       );
@@ -245,7 +245,7 @@ const Publish: React.FC<PublishPageProps> = props => {
       _targets[editTarget.index] = {
         name,
         type,
-        configuration,
+        configuration
       };
 
       await actions.setSettings(
@@ -253,7 +253,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         botName,
         {
           ...settings,
-          publishTargets: _targets,
+          publishTargets: _targets
         },
         undefined
       );
@@ -269,13 +269,13 @@ const Publish: React.FC<PublishPageProps> = props => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          types={publishTypes}
-          targets={settings.publishTargets || []}
-          updateSettings={savePublishTarget}
-          current={null}
           closeDialog={() => setAddDialogHidden(true)}
+          current={null}
+          targets={settings.publishTargets || []}
+          types={publishTypes}
+          updateSettings={savePublishTarget}
         />
-      ),
+      )
     });
   }, [publishTypes, savePublishTarget, settings.publishTargets]);
 
@@ -285,13 +285,13 @@ const Publish: React.FC<PublishPageProps> = props => {
       type: DialogType.normal,
       children: (
         <CreatePublishTarget
-          types={publishTypes}
+          closeDialog={() => setEditDialogHidden(true)}
           current={editTarget ? editTarget.item : null}
           targets={(settings.publishTargets || []).filter(item => editTarget && item.name != editTarget.item.name)}
+          types={publishTypes}
           updateSettings={updatePublishTarget}
-          closeDialog={() => setEditDialogHidden(true)}
         />
-      ),
+      )
     });
   }, [editTarget, publishTypes, updatePublishTarget]);
 
@@ -315,7 +315,7 @@ const Publish: React.FC<PublishPageProps> = props => {
           if (profile.name === selectedTarget.name) {
             return {
               ...profile,
-              lastPublished: new Date(),
+              lastPublished: new Date()
             };
           } else {
             return profile;
@@ -327,7 +327,7 @@ const Publish: React.FC<PublishPageProps> = props => {
           botName,
           {
             ...settings,
-            publishTargets: updatedPublishTargets,
+            publishTargets: updatedPublishTargets
           },
           undefined
         );
@@ -349,7 +349,7 @@ const Publish: React.FC<PublishPageProps> = props => {
         null,
         {
           confirmBtnText: formatMessage('Yes'),
-          cancelBtnText: formatMessage('Cancel'),
+          cancelBtnText: formatMessage('Cancel')
         }
       );
 
@@ -361,7 +361,7 @@ const Publish: React.FC<PublishPageProps> = props => {
             botName,
             {
               ...settings,
-              publishTargets: _target,
+              publishTargets: _target
             },
             undefined
           );
@@ -377,43 +377,43 @@ const Publish: React.FC<PublishPageProps> = props => {
   return (
     <Fragment>
       <Dialog
-        hidden={addDialogHidden}
-        onDismiss={() => setAddDialogHidden(true)}
         dialogContentProps={dialogProps}
-        modalProps={{ isBlocking: true }}
+        hidden={addDialogHidden}
         minWidth={450}
+        modalProps={{ isBlocking: true }}
+        onDismiss={() => setAddDialogHidden(true)}
       >
         {dialogProps.children}
       </Dialog>
       <Dialog
-        hidden={editDialogHidden}
-        onDismiss={() => setEditDialogHidden(true)}
         dialogContentProps={editDialogProps}
-        modalProps={{ isBlocking: true }}
+        hidden={editDialogHidden}
         minWidth={450}
+        modalProps={{ isBlocking: true }}
+        onDismiss={() => setEditDialogHidden(true)}
       >
         {editDialogProps.children}
       </Dialog>
       {!publishDialogHidden && (
-        <PublishDialog onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} target={selectedTarget} />
+        <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
-      <div role="main" css={ContentStyle} data-testid="Publish">
+      <div css={ContentStyle} data-testid="Publish" role="main">
         <div css={projectContainer}>
           <div
             key={'_all'}
-            onClick={() => {
-              setSelectedTarget(undefined);
-              onSelectTarget('all');
-            }}
             css={selectedTargetName === 'all' ? targetSelected : overflowSet}
             style={{
               height: '36px',
-              cursor: 'pointer',
+              cursor: 'pointer'
+            }}
+            onClick={() => {
+              setSelectedTarget(undefined);
+              onSelectTarget('all');
             }}
           >
             {formatMessage('All profiles')}
@@ -421,23 +421,23 @@ const Publish: React.FC<PublishPageProps> = props => {
           {settings && settings.publishTargets && (
             <TargetList
               list={settings.publishTargets}
+              selectedTarget={selectedTargetName}
+              onDelete={async index => await onDelete(index)}
+              onEdit={async (item, target) => await onEdit(item, target)}
               onSelect={item => {
                 setSelectedTarget(item);
                 onSelectTarget(item.name);
               }}
-              onEdit={async (item, target) => await onEdit(item, target)}
-              onDelete={async index => await onDelete(index)}
-              selectedTarget={selectedTargetName}
             />
           )}
         </div>
         <div css={contentEditor}>
           <Fragment>
             <PublishStatusList
-              items={thisPublishHistory}
               groups={groups}
-              onItemClick={setSelectedVersion}
+              items={thisPublishHistory}
               updateItems={setThisPublishHistory}
+              onItemClick={setSelectedVersion}
             />
             {!thisPublishHistory || thisPublishHistory.length === 0 ? (
               <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
@@ -452,21 +452,21 @@ const Publish: React.FC<PublishPageProps> = props => {
 export default Publish;
 const LogDialog = props => {
   const logDialogProps = {
-    title: 'Publish Log',
+    title: 'Publish Log'
   };
   return (
     <Dialog
-      hidden={false}
-      onDismiss={props.onDismiss}
       dialogContentProps={logDialogProps}
-      modalProps={{ isBlocking: true }}
+      hidden={false}
       minWidth={450}
+      modalProps={{ isBlocking: true }}
+      onDismiss={props.onDismiss}
     >
       <TextField
-        value={props && props.version ? props.version.log : ''}
+        multiline
         placeholder="Log Output"
-        multiline={true}
         style={{ minHeight: 300 }}
+        value={props && props.version ? props.version.log : ''}
       />
     </Dialog>
   );

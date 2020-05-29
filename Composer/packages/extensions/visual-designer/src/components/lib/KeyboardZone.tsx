@@ -20,7 +20,7 @@ const KeyNameByModifierAttr = {
   ctrlKey: 'Control',
   metaKey: 'Meta',
   altKey: 'Alt',
-  shiftKey: 'Shift',
+  shiftKey: 'Shift'
 };
 
 const overriddenKeyCodes = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
@@ -57,7 +57,7 @@ export const KeyboardZone = React.forwardRef<HTMLDivElement, KeyboardZoneProps>(
   };
 
   return (
-    <div onKeyDown={handleKeyDown} tabIndex={0} data-test-id="keyboard-zone" css={styles} ref={ref}>
+    <div ref={ref} css={styles} data-test-id="keyboard-zone" tabIndex={0} onKeyDown={handleKeyDown}>
       {children}
     </div>
   );

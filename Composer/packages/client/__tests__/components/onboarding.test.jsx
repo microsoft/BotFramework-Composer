@@ -16,7 +16,7 @@ describe('<Onboarding />', () => {
 
   const stepSets = defaultStepSets().map(stepSet => ({
     ...stepSet,
-    steps: stepSet.steps.map(step => ({ ...step, targetId: 'test', location: 'VisualDesigner' })),
+    steps: stepSet.steps.map(step => ({ ...step, targetId: 'test', location: 'VisualDesigner' }))
   }));
 
   beforeEach(() => {
@@ -26,17 +26,17 @@ describe('<Onboarding />', () => {
           coachMarkRefs: {
             test: { x: 0, y: 0 },
             VisualDesigner: {
-              getBoundingClientRect: () => ({ top: 0, left: 0 }),
-            },
-          },
-        },
-      },
+              getBoundingClientRect: () => ({ top: 0, left: 0 })
+            }
+          }
+        }
+      }
     };
 
     onboardingValue = {
       actions: {
         nextStep: () => {},
-        previousStep: () => {},
+        previousStep: () => {}
       },
       state: {
         complete: false,
@@ -45,8 +45,8 @@ describe('<Onboarding />', () => {
         hideModal: false,
         minimized: false,
         stepSets,
-        teachingBubble: stepSets[0].steps[0],
-      },
+        teachingBubble: stepSets[0].steps[0]
+      }
     };
   });
 

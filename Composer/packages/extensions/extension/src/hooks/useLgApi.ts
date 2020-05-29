@@ -51,6 +51,6 @@ export const useLgApi = (shellApi: ShellApi) => {
     createLgTemplate,
     readLgTemplate,
     deleteLgTemplate: (lgFileId: string, lgTemplate: string) => deleteLgTemplates(lgFileId, [lgTemplate]),
-    deleteLgTemplates,
+    deleteLgTemplates
   };
 };

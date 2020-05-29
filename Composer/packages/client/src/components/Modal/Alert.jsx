@@ -18,25 +18,25 @@ const AlertDialog = props => {
 
   return (
     <Dialog
-      hidden={false}
-      minWidth={500}
-      onDismiss={onCancel}
       dialogContentProps={{
         type: DialogType.normal,
-        title: title,
+        title: title
         // subText: subTitle,
       }}
+      hidden={false}
+      minWidth={500}
       modalProps={{
         isBlocking: true,
         styles: {
-          main: { maxWidth: 450 },
-        },
+          main: { maxWidth: 450 }
+        }
       }}
+      onDismiss={onCancel}
     >
       {subTitle && <div style={BuiltInStyles[style]}>{subTitle}</div>}
 
       <DialogFooter>
-        <PrimaryButton onClick={onConfirm} text={confirmBtnText} />
+        <PrimaryButton text={confirmBtnText} onClick={onConfirm} />
       </DialogFooter>
     </Dialog>
   );
@@ -45,7 +45,7 @@ const AlertDialog = props => {
 AlertDialog.propTypes = {
   setting: PropTypes.object,
   onCancel: PropTypes.func,
-  onConfirm: PropTypes.func,
+  onConfirm: PropTypes.func
 };
 
 export const OpenAlertModal = (title, subTitle, setting = {}) => {
@@ -65,7 +65,7 @@ export const OpenAlertModal = (title, subTitle, setting = {}) => {
       resolve(false);
     };
 
-    const modal = <AlertDialog setting={{ title, subTitle, ...setting }} onConfirm={onConfirm} onCancel={onCancel} />;
+    const modal = <AlertDialog setting={{ title, subTitle, ...setting }} onCancel={onCancel} onConfirm={onConfirm} />;
     ReactDOM.render(modal, node);
   });
 };

@@ -12,7 +12,7 @@ const DefaultRecognizers: RecognizerSchema[] = [
     id: 'none',
     displayName: () => formatMessage('None'),
     isSelected: data => data === undefined,
-    handleRecognizerChange: props => props.onChange(undefined),
+    handleRecognizerChange: props => props.onChange(undefined)
   },
   {
     id: SDKKinds.RegexRecognizer,
@@ -23,8 +23,8 @@ const DefaultRecognizers: RecognizerSchema[] = [
     },
     handleRecognizerChange: props => {
       props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
-    },
-  },
+    }
+  }
 ];
 
 export default DefaultRecognizers;

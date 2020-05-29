@@ -16,7 +16,7 @@ import {
   exampleListCellIcon,
   exampleListCellContent,
   exampleListCellName,
-  exampleListCellDescription,
+  exampleListCellDescription
 } from './styles';
 
 interface ExampleListProps {
@@ -42,19 +42,19 @@ export const ExampleList: React.FC<ExampleListProps> = props => {
 
     return (
       <div
-        css={exampleListCell}
-        data-is-focusable={true}
         key={item.id}
+        data-is-focusable
+        aria-label={item.name + '; ' + item.description}
+        css={exampleListCell}
+        tabIndex={0}
         onClick={() => onClick(item.id)}
         onKeyDown={ev => {
           if (ev.key === 'Enter') {
             onClick(item.id);
           }
         }}
-        tabIndex={0}
-        aria-label={item.name + '; ' + item.description}
       >
-        <img role="presentation" src={resolveIcon(item.id)} css={exampleListCellIcon} />
+        <img css={exampleListCellIcon} role="presentation" src={resolveIcon(item.id)} />
         <div css={exampleListCellContent}>
           <div css={exampleListCellName}>{item.name}</div>
           <div css={exampleListCellDescription}>{item.description}</div>
@@ -64,7 +64,7 @@ export const ExampleList: React.FC<ExampleListProps> = props => {
   }
 
   return (
-    <div data-is-scrollable="true" css={exampleListContainer}>
+    <div css={exampleListContainer} data-is-scrollable="true">
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <List items={examples} onRenderCell={_onRenderCell} />
       </ScrollablePane>

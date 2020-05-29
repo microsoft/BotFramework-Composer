@@ -24,8 +24,8 @@ const Onboarding: React.FC = () => {
     state: {
       dialogs,
       onboarding: { complete },
-      projectId,
-    },
+      projectId
+    }
   } = useContext(StoreContext);
 
   const rootDialogId = dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
@@ -41,7 +41,7 @@ const Onboarding: React.FC = () => {
             return targetId !== 'action';
           }
           return true;
-        }),
+        })
       }))
       .filter(({ steps }) => steps.length);
   }, [projectId, rootDialogId]);
@@ -53,7 +53,7 @@ const Onboarding: React.FC = () => {
   const [teachingBubble, setTeachingBubble] = useState<any>({});
 
   const {
-    location: { pathname },
+    location: { pathname }
   } = useLocation();
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const Onboarding: React.FC = () => {
       onComplete,
       previousStep,
       setMinimized,
-      toggleMinimized,
+      toggleMinimized
     },
     state: {
       complete,
@@ -144,8 +144,8 @@ const Onboarding: React.FC = () => {
       hideModal,
       minimized,
       stepSets,
-      teachingBubble,
-    },
+      teachingBubble
+    }
   };
 
   return !complete ? (

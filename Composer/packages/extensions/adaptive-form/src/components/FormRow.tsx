@@ -36,7 +36,7 @@ const formRow = {
     flex: 1;
 
     label: FormRow;
-  `,
+  `
 };
 
 const FormRow: React.FC<FormRowProps> = props => {
@@ -54,7 +54,7 @@ const FormRow: React.FC<FormRowProps> = props => {
     rawErrors,
     onBlur,
     onFocus,
-    onChange,
+    onChange
   } = props;
 
   const { required = [] } = schema;
@@ -65,8 +65,8 @@ const FormRow: React.FC<FormRowProps> = props => {
         {row.map(property => (
           <SchemaField
             key={`${id}.${property}`}
-            css={formRow.property}
             className={className}
+            css={formRow.property}
             definitions={definitions}
             depth={depth}
             id={`${id}.${property}`}
@@ -92,8 +92,8 @@ const FormRow: React.FC<FormRowProps> = props => {
     return (
       <SchemaField
         key={`${id}.${row}`}
-        css={formRow.full}
         className={className}
+        css={formRow.full}
         definitions={definitions}
         depth={depth}
         id={`${id}.${row}`}

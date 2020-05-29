@@ -17,7 +17,7 @@ import { IconMenu } from './IconMenu';
 const declareElementAttributes = (id: string) => {
   return {
     [AttrNames.SelectableElement]: true,
-    [AttrNames.SelectedId]: `${id}${MenuTypes.NodeMenu}`,
+    [AttrNames.SelectedId]: `${id}${MenuTypes.NodeMenu}`
   };
 };
 export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
@@ -26,20 +26,20 @@ export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
       key: 'delete',
       name: 'Delete',
       iconProps: {
-        iconName: 'Delete',
+        iconName: 'Delete'
       },
-      onClick: () => onEvent(NodeEventTypes.Delete, { id }),
-    },
+      onClick: () => onEvent(NodeEventTypes.Delete, { id })
+    }
   ];
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.NodeMenu}`);
 
   return (
     <div
-      css={{
-        marginRight: '1px',
-      }}
       className={classnames({ 'step-renderer-container--selected': nodeSelected })}
+      css={{
+        marginRight: '1px'
+      }}
       {...declareElementAttributes(id)}
     >
       <IconMenu
@@ -52,16 +52,16 @@ export const NodeMenu = ({ colors = { color: 'black' }, id, onEvent }) => {
               outline: 'none',
               selectors: {
                 '::after': {
-                  outline: '1px solid #0078d4 !important',
-                },
-              },
-            },
-          },
+                  outline: '1px solid #0078d4 !important'
+                }
+              }
+            }
+          }
         }}
+        label={formatMessage('node menu')}
         menuItems={menuItems}
         menuWidth={100}
         nodeSelected={nodeSelected}
-        label={formatMessage('node menu')}
       />
     </div>
   );

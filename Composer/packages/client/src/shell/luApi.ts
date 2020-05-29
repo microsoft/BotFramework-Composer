@@ -61,7 +61,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
     getLuIntents,
     getLuIntent,
     updateLuIntent: createThrottledFunc(updateLuIntent),
-    removeLuIntent,
+    removeLuIntent
   };
 }
 

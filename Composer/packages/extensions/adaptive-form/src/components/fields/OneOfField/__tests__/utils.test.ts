@@ -7,7 +7,7 @@ function makeOption(schema, type) {
   return {
     key: type,
     text: type,
-    data: { schema: { ...schema, type } },
+    data: { schema: { ...schema, type } }
   };
 }
 
@@ -15,14 +15,14 @@ describe('getOptions', () => {
   describe('when there is an array of types', () => {
     const schema = {
       title: 'test schema',
-      type: ['string' as const, 'boolean' as const, 'number' as const],
+      type: ['string' as const, 'boolean' as const, 'number' as const]
     };
 
     it('returns all of the types, sorted', () => {
       expect(getOptions(schema, {})).toEqual([
         makeOption(schema, 'boolean'),
         makeOption(schema, 'number'),
-        makeOption(schema, 'string'),
+        makeOption(schema, 'string')
       ]);
     });
   });
@@ -33,32 +33,32 @@ describe('getOptions', () => {
       oneOf: [
         {
           type: 'string' as const,
-          title: 'My Awesome String',
+          title: 'My Awesome String'
         },
         {
-          type: 'boolean' as const,
+          type: 'boolean' as const
         },
         {
-          type: 'number' as const,
+          type: 'number' as const
         },
         {
           title: 'an enum',
-          enum: ['one', 'two'],
+          enum: ['one', 'two']
         },
         {
-          enum: ['four', 'five'],
+          enum: ['four', 'five']
         },
         {
-          $ref: '#/definitions/Microsoft.AnotherType',
-        },
-      ],
+          $ref: '#/definitions/Microsoft.AnotherType'
+        }
+      ]
     };
 
     const definitions = {
       'Microsoft.AnotherType': {
         title: 'Another Type',
-        type: 'object' as const,
-      },
+        type: 'object' as const
+      }
     };
 
     it('returns one of options', () => {
@@ -75,36 +75,36 @@ describe('getSelectedOption', () => {
       text: 'string',
       data: {
         schema: {
-          type: 'string',
-        },
-      },
+          type: 'string'
+        }
+      }
     },
     {
       key: 'integer',
       text: 'integer',
       data: {
         schema: {
-          type: 'integer',
-        },
-      },
+          type: 'integer'
+        }
+      }
     },
     {
       key: 'object',
       text: 'object',
       data: {
         schema: {
-          type: 'object',
-        },
-      },
+          type: 'object'
+        }
+      }
     },
     {
       key: 'array1',
       text: 'array1',
       data: {
         schema: {
-          type: 'array',
-        },
-      },
+          type: 'array'
+        }
+      }
     },
     {
       key: 'array2',
@@ -113,11 +113,11 @@ describe('getSelectedOption', () => {
         schema: {
           type: 'array',
           items: {
-            type: 'integer',
-          },
-        },
-      },
-    },
+            type: 'integer'
+          }
+        }
+      }
+    }
   ];
 
   it('returns undefined if there are no options', () => {

@@ -24,7 +24,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
     onBlur,
     error,
     uiOptions,
-    required,
+    required
   } = props;
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -47,8 +47,9 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <TextField
+        ariaLabel={label || formatMessage('string field')}
         disabled={disabled}
         errorMessage={error}
         id={id}
@@ -62,20 +63,19 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
                   transition: 'border-color 0.1s linear',
                   selectors: {
                     ':hover': {
-                      borderColor: error ? undefined : NeutralColors.gray30,
-                    },
-                  },
-                },
+                      borderColor: error ? undefined : NeutralColors.gray30
+                    }
+                  }
+                }
               }
             : {}),
           root: { width: '100%' },
-          errorMessage: { display: 'none' },
+          errorMessage: { display: 'none' }
         }}
         value={value}
         onBlur={handleBlur}
         onChange={handleChange}
         onFocus={handleFocus}
-        ariaLabel={label || formatMessage('string field')}
       />
     </>
   );

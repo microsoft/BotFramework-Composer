@@ -14,7 +14,7 @@ export const SelectDialog: React.FC<FieldProps> = props => {
   const {
     currentDialog: { id: currentDialogId },
     dialogs,
-    shellApi,
+    shellApi
   } = useShellApi();
   const { createDialog, navTo } = shellApi;
   const [comboboxTitle, setComboboxTitle] = useState<string | null>(null);
@@ -24,14 +24,14 @@ export const SelectDialog: React.FC<FieldProps> = props => {
     .map(({ displayName, id }) => ({
       key: id,
       text: displayName,
-      isSelected: value === displayName,
+      isSelected: value === displayName
     }));
 
   options.push(
     {
       key: 'separator',
       itemType: SelectableOptionMenuItemType.Divider,
-      text: '',
+      text: ''
     },
     { key: ADD_DIALOG, text: formatMessage('Create a new dialog') }
   );

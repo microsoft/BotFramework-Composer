@@ -56,17 +56,17 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = props
     <div css={fileSelectorContainer}>
       {Object.keys(focusedStorageFolder).length > 0 && storageFileLoadingStatus === 'success' && (
         <FileSelector
-          operationMode={operationMode}
           checkShowItem={checkShowItem}
           focusedStorageFolder={focusedStorageFolder}
+          isWindows={isWindows}
+          operationMode={operationMode}
           onCurrentPathUpdate={onCurrentPathUpdate}
           onFileChosen={onFileChosen}
-          isWindows={isWindows}
         />
       )}
       {storageFileLoadingStatus === 'pending' && (
         <div>
-          <Spinner size={SpinnerSize.medium} css={loading} />
+          <Spinner css={loading} size={SpinnerSize.medium} />
         </div>
       )}
       {storageFileLoadingStatus === 'failure' && (

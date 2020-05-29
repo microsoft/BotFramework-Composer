@@ -33,7 +33,7 @@ export function getOptions(
     const options: IDropdownOption[] = type.map(t => ({
       key: t,
       text: t,
-      data: { schema: { ...schema, type: t } },
+      data: { schema: { ...schema, type: t } }
     }));
 
     options.sort(({ text: t1 }, { text: t2 }) => (t1 > t2 ? 1 : -1));
@@ -52,7 +52,7 @@ export function getOptions(
           return {
             key: label,
             text: label,
-            data: { schema: merged },
+            data: { schema: merged }
           } as IDropdownOption;
         }
       })
@@ -87,7 +87,7 @@ export function getSelectedOption(value: any | undefined, options: IDropdownOpti
     return (
       options.find(o => {
         const {
-          data: { schema },
+          data: { schema }
         } = o;
 
         const itemSchema = Array.isArray(schema.items) ? schema.items[0] : schema.items;
@@ -112,6 +112,6 @@ export function getFieldProps(props: FieldProps, schema?: JSONSchema7): FieldPro
     label: schema?.type === 'object' ? undefined : false,
     depth: props.depth - 1,
     placeholder: getUiPlaceholder({ ...props, placeholder: undefined }),
-    description: getUiDescription({ ...props, description: undefined }),
+    description: getUiDescription({ ...props, description: undefined })
   };
 }

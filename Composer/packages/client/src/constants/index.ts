@@ -36,7 +36,9 @@ export const UNDO_LIMIT = 10;
 
 export enum ActionTypes {
   GET_PROJECT_SUCCESS = 'GET_PROJECT_SUCCESS',
+  GET_PROJECT_PENDING = 'GET_PROJECT_PENDING',
   GET_PROJECT_FAILURE = 'GET_PROJECT_FAILURE',
+  REMOVE_PROJECT_SUCCESS = 'REMOVE_PROJECT_SUCCESS',
   GET_RECENT_PROJECTS_SUCCESS = 'GET_RECENT_PROJECTS_SUCCESS',
   GET_RECENT_PROJECTS_FAILURE = 'GET_RECENT_PROJECTS_FAILURE',
   GET_TEMPLATE_PROJECTS_SUCCESS = 'GET_TEMPLATE_PROJECTS_SUCCESS',
@@ -64,7 +66,6 @@ export enum ActionTypes {
   RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
   UPDATE_SKILL_SUCCESS = 'UPDATE_SKILL_SUCCESS',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
-  GET_ENV_SETTING = 'GET_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
@@ -100,7 +101,7 @@ export enum ActionTypes {
   UPDATE_SKILL_MANIFEST = 'UPDATE_SKILL_MANIFEST',
   REMOVE_SKILL_MANIFEST = 'REMOVE_SKILL_MANIFEST',
   DISPLAY_SKILL_MANIFEST_MODAL = 'DISPLAY_SKILL_MANIFEST_MODAL',
-  DISMISS_SKILL_MANIFEST_MODAL = 'DISMISS_SKILL_MANIFEST_MODAL',
+  DISMISS_SKILL_MANIFEST_MODAL = 'DISMISS_SKILL_MANIFEST_MODAL'
 }
 
 export const Tips = {
@@ -112,11 +113,11 @@ export const Tips = {
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
   DEFAULT_LANGUAGE: formatMessage(
     `Configures default language model to use if there is no culture code in the file name (Default:en-us)`
-  ),
+  )
 };
 
 export const Links = {
-  LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
+  LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2'
 };
 
 export const Text = {
@@ -126,7 +127,7 @@ export const Text = {
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
-  DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK'),
+  DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK')
 };
 
 export enum LuisConfig {
@@ -135,21 +136,21 @@ export enum LuisConfig {
   ENVIRONMENT = 'environment',
   PROJECT_NAME = 'name',
   REGION = 'authoringRegion',
-  LANGUAGE = 'defaultLanguage',
+  LANGUAGE = 'defaultLanguage'
 }
 
 export const FileTypes = {
   FOLDER: 'folder',
   FILE: 'file',
   BOT: 'bot',
-  UNKNOWN: 'unknown',
+  UNKNOWN: 'unknown'
 };
 
 export const OpenStatus = {
   NEW: 'New',
   SAVEAS: 'Save as',
   OPEN: 'Open',
-  CLOSE: '',
+  CLOSE: ''
 };
 
 export enum BotStatus {
@@ -159,7 +160,7 @@ export enum BotStatus {
   published = 'published',
   reloading = 'loading',
   pending = 'pending',
-  failed = 'failed',
+  failed = 'failed'
 }
 
 export enum CreationFlowStatus {
@@ -168,35 +169,35 @@ export enum CreationFlowStatus {
   NEW_FROM_TEMPLATE = 'Template',
   SAVEAS = 'Save as',
   OPEN = 'Open',
-  CLOSE = 'Close',
+  CLOSE = 'Close'
 }
 
 export const Steps = {
   CREATE: 'CREATE',
   DEFINE: 'DEFINE',
   LOCATION: 'LOCATION',
-  NONE: 'NONE',
+  NONE: 'NONE'
 };
 
 export const DialogCreationCopy = {
   CREATE_NEW_BOT: {
     title: formatMessage('Create bot from template or scratch?'),
-    subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.'),
+    subText: formatMessage('You can create a new bot from scratch with Composer, or start with a template.')
   },
   DEFINE_CONVERSATION_OBJECTIVE: {
     title: formatMessage('Define conversation objective'),
     subText: formatMessage(
       `What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc.`
-    ),
+    )
   },
   SELECT_LOCATION: {
     title: formatMessage('Select a Bot'),
-    subText: formatMessage('Which bot do you want to open?'),
+    subText: formatMessage('Which bot do you want to open?')
   },
   SELECT_DESTINATION: {
     title: formatMessage('Set destination folder'),
-    subText: formatMessage('Choose a location for your new bot project.'),
-  },
+    subText: formatMessage('Choose a location for your new bot project.')
+  }
 };
 
 export const DialogDeleting = {
@@ -205,18 +206,18 @@ export const DialogDeleting = {
   CONTENT: formatMessage(
     `The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action.`
   ),
-  CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
+  CONFIRM_CONTENT: formatMessage('Do you wish to continue?')
 };
 
 export const addSkillDialog = {
   SKILL_MANIFEST_FORM: {
     title: formatMessage('Add a skill'),
-    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
+    subText: formatMessage('Enter a manifest url to add a new skill to your bot.')
   },
   SKILL_MANIFEST_FORM_EDIT: {
     title: formatMessage('Edit a skill'),
-    subText: formatMessage('Enter a manifest url to add a new skill to your bot.'),
-  },
+    subText: formatMessage('Enter a manifest url to add a new skill to your bot.')
+  }
 };
 
 export const SupportedFileTypes = [
@@ -234,7 +235,7 @@ export const SupportedFileTypes = [
   'vsdx',
   'xls',
   'xlsx',
-  'xsn',
+  'xsn'
 ];
 
 export const USER_TOKEN_STORAGE_KEY = 'composer.userToken';
@@ -245,12 +246,12 @@ export enum AppUpdaterStatus {
   UPDATE_UNAVAILABLE,
   UPDATE_IN_PROGRESS,
   UPDATE_FAILED,
-  UPDATE_SUCCEEDED,
+  UPDATE_SUCCEEDED
 }
 
 export const DefaultPublishConfig = {
   name: 'default',
-  type: 'localpublish',
+  type: 'localpublish'
 };
 
 export const EmptyBotTemplateId = 'EmptyBot';

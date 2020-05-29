@@ -24,7 +24,7 @@ import { FlowEdges } from '../components/lib/FlowEdges';
 enum PromptNodes {
   BotAsks = 'botAsksNode',
   UserAnswers = 'userAnswersNode',
-  InvalidPrompt = 'invalidPromptyNode',
+  InvalidPrompt = 'invalidPromptyNode'
 }
 
 const calculateNodes = (jsonpath: string, data) => {
@@ -32,7 +32,7 @@ const calculateNodes = (jsonpath: string, data) => {
   return {
     [PromptNodes.BotAsks]: GraphNode.fromIndexedJson(botAsks),
     [PromptNodes.UserAnswers]: GraphNode.fromIndexedJson(userAnswers),
-    [PromptNodes.InvalidPrompt]: GraphNode.fromIndexedJson(invalidPrompt),
+    [PromptNodes.InvalidPrompt]: GraphNode.fromIndexedJson(invalidPrompt)
   };
 };
 
@@ -52,7 +52,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
   onEvent,
   onResize,
   botAsks,
-  userInput,
+  userInput
 }): JSX.Element => {
   const nodes = useMemo(() => calculateNodes(id, data), [id, data]);
   const { layout, updateNodeBoundary } = useSmartLayout<PromptNodes>(nodes, calculateLayout, onResize);
@@ -62,7 +62,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
 
   return (
     <div className="Action-BaseInput" css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
-      <SVGContainer width={boundary.width} height={boundary.height}>
+      <SVGContainer height={boundary.height} width={boundary.width}>
         <FlowEdges edges={edges} />
       </SVGContainer>
       <OffsetContainer offset={botAsksNode.offset}>
@@ -78,7 +78,7 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
         </ElementWrapper>
       </OffsetContainer>
       <OffsetContainer offset={userAnswersNode.offset}>
-        <ElementWrapper id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent} titleInHeader={true}>
+        <ElementWrapper titleInHeader id={userAnswersNode.id} tab={PromptTab.USER_INPUT} onEvent={onEvent}>
           <ElementMeasurer
             onResize={boundary => {
               designerCache.cacheBoundary(userAnswersNode.data, boundary);

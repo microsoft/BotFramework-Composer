@@ -15,5 +15,5 @@ export const Tree = props => (
 
 Tree.propTypes = {
   variant: PropTypes.string,
-  children: PropTypes.element,
+  children: PropTypes.element
 };

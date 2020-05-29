@@ -30,7 +30,7 @@ export function dereference<S extends JSONSchema7 | JSONSchema7[] | JSONSchema7D
         if (def && typeof def === 'object') {
           newSchema = {
             ...def,
-            ...newSchema,
+            ...newSchema
           };
         } else {
           newSchema[key] = value;
