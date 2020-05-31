@@ -235,6 +235,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
         <StackItem grow={0} styles={halfstack}>
           <Dropdown
+            data-testid={'FileSelectorDropDown'}
             errorMessage={
               operationMode.write && !focusedStorageFolder.writable
                 ? formatMessage('You do not have permission to save bots here')
