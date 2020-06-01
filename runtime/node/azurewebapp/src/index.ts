@@ -8,27 +8,24 @@ import { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } from
 import { DialogManager } from 'botbuilder-dialogs';
 import { AdaptiveDialog, AdaptiveDialogComponentRegistration, LanguageGeneratorMiddleWare } from 'botbuilder-dialogs-adaptive';
 import { ResourceExplorer } from 'botbuilder-dialogs-declarative';
-const argv = require('minimist')(process.argv.slice(2));
-console.log(argv.port);
 
 // Create HTTP server.
 const server = restify.createServer();
+const argv = require('minimist')(process.argv.slice(2));
 server.listen(process.env.port || process.env.PORT || argv.port || 3978, (): void => {
-    // console.log(`\n${ server.name } listening to ${ server.url }`);
     console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
     console.log(`\nTo talk to your bot, open echobot.bot file in the Emulator.`);
 });
-
 
 // Load project settings
 let projectSettings = {
     bot: '../../',
     root: '../../'
 };
-if (process.env.NODE_ENV === 'development') {
-    projectSettings = require('../appsettings.development.json');
-} else if (process.env.NODE_ENV === 'production') {
+if (process.env.node_environment === 'production') {
     projectSettings = require('../appsettings.deployment.json');
+} else {
+    projectSettings = require('../appsettings.development.json');
 }
 
 const projectRoot = path.join(__dirname, '../', projectSettings.root);
