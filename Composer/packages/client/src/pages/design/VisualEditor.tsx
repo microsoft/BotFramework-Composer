@@ -74,7 +74,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
     <React.Fragment>
       <div
         ref={addRef}
-        aria-label={formatMessage('visual editor')}
+        aria-label={formatMessage('Visual editor')}
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >

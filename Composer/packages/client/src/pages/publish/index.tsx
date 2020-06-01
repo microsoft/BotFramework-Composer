@@ -40,7 +40,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
 
   // items to show in the list
-  const [thisPublishHistory, setThisPublishHistory] = useState<any[]>([]);
+  const [thisPublishHistory, setThisPublishHistory] = useState<IStatus[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
@@ -403,7 +403,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <div css={projectContainer}>
+        <div aria-label={formatMessage('Navigation panel')} css={projectContainer} role="region">
           <div
             key={'_all'}
             css={selectedTargetName === 'all' ? targetSelected : overflowSet}
@@ -431,7 +431,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
             />
           )}
         </div>
-        <div css={contentEditor}>
+        <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <Fragment>
             <PublishStatusList
               groups={groups}
