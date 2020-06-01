@@ -229,7 +229,6 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const updateLocation = (e, item?: IDropdownOption) => {
     onCurrentPathUpdate(item ? (item.key as string) : '');
   };
-
   return (
     <Fragment>
       <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>

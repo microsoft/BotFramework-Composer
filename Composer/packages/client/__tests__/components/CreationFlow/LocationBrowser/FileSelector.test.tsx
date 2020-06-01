@@ -4,9 +4,8 @@
 import * as React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 
-import { StoreContext } from '../../src/store';
-import { StorageFolder } from '../../src/store/types';
-import { FileSelector } from '../../src/components/CreationFlow/LocationBrowser/FileSelector';
+import { StorageFolder } from '../../../../src/store/types';
+import { FileSelector } from '../../../../src/components/CreationFlow/LocationBrowser/FileSelector';
 
 describe('<FileSelector/>', () => {
   const onFileChosen = jest.fn();
@@ -14,7 +13,6 @@ describe('<FileSelector/>', () => {
   const onCurrentPathUpdate = jest.fn();
   const operationMode = { write: true, read: true };
 
-  let storeContext;
   const focusedStorageFolder: StorageFolder = {
     name: 'Desktop',
     parent: 'C:/test-folder',
@@ -33,16 +31,14 @@ describe('<FileSelector/>', () => {
   };
   function renderComponent() {
     return render(
-      <StoreContext.Provider value={storeContext}>
-        <FileSelector
-          isWindows
-          checkShowItem={checkShowItem}
-          focusedStorageFolder={focusedStorageFolder}
-          operationMode={operationMode}
-          onCurrentPathUpdate={onCurrentPathUpdate}
-          onFileChosen={onFileChosen}
-        />
-      </StoreContext.Provider>
+      <FileSelector
+        isWindows
+        checkShowItem={checkShowItem}
+        focusedStorageFolder={focusedStorageFolder}
+        operationMode={operationMode}
+        onCurrentPathUpdate={onCurrentPathUpdate}
+        onFileChosen={onFileChosen}
+      />
     );
   }
 
