@@ -133,7 +133,6 @@ export function generateNewDialog(
   if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
   const factory = new DialogFactory(schema);
   let updatedDialog = createTrigger(dialog, data, factory);
-
   //add regex expression
   if (data.regEx) {
     updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regEx);
