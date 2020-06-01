@@ -56,7 +56,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
   }, [name, formData]);
 
   return (
-    <div css={container}>
+    <div css={container} data-testid="ObjectItem">
       <div css={item}>
         <EditableField
           transparentBorder
