@@ -100,7 +100,9 @@ const LUPage: React.FC<LUPageProps> = (props) => {
   return (
     <Page
       data-testid="LUPage"
+      mainRegionName={formatMessage('LU editor')}
       navLinks={navLinks}
+      navRegionName={formatMessage('LU Navigation Pane')}
       title={formatMessage('User Input')}
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}
