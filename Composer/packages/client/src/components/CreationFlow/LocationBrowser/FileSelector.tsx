@@ -19,8 +19,8 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 import { Fragment } from 'react';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
+import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import moment from 'moment';
 
 import { FileTypes } from '../../../constants/index';
@@ -69,9 +69,9 @@ const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) =
           file.name === '..'
             ? formatMessage('previous folder')
             : formatMessage('{icon} name is {file}', {
-                icon: iconName,
-                file: file.name,
-              })
+              icon: iconName,
+              file: file.name,
+            })
         }
         onClick={() => onFileChosen(file)}
       >
@@ -201,7 +201,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
 
   const separator = path.sep;
   const pathItems = currentPath.split(separator).filter((p) => p !== '');
-  const breadcrumbItems = pathItems.map((item, index) => {
+  const breadcrumbItems: IComboBoxOption[] = pathItems.map((item, index) => {
     let itemPath = getNavItemPath(pathItems, separator, index);
     // put a leading / back on the path if it started as a unix style path
     itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
@@ -222,15 +222,27 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     });
   }
   breadcrumbItems.reverse();
-  const updateLocation = (e, item?: IDropdownOption) => {
-    onCurrentPathUpdate(item ? (item.key as string) : '');
+  const updateLocation = (
+    event: React.FormEvent<IComboBox>,
+    option?: IComboBoxOption,
+    index?: number,
+    value?: string
+  ) => {
+    event.preventDefault();
+    if (option) {
+      onCurrentPathUpdate(option.key as string);
+    } else {
+      onCurrentPathUpdate(value);
+    }
   };
   return (
     <Fragment>
       <Stack horizontal styles={stackinput} tokens={{ childrenGap: '2rem' }}>
         <StackItem grow={0} styles={halfstack}>
-          <Dropdown
-            data-testid={'FileSelectorDropDown'}
+          <ComboBox
+            allowFreeform
+            autoComplete={'on'}
+            data-testid={'FileSelectorComboBox'}
             errorMessage={
               operationMode.write && !focusedStorageFolder.writable
                 ? formatMessage('You do not have permission to save bots here')

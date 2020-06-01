@@ -110,10 +110,15 @@ class StorageService {
   };
 
   public updateCurrentPath = (path: string, storageId: string) => {
-    const storage = this.storageConnections.find((s) => s.id === storageId);
-    if (storage) {
-      storage.path = path;
-      Store.set(this.STORE_KEY, this.storageConnections);
+    if (path && path.endsWith(':')) {
+      path = path + '/';
+    }
+    if (fs.existsSync(path)) {
+      const storage = this.storageConnections.find((s) => s.id === storageId);
+      if (storage) {
+        storage.path = path;
+        Store.set(this.STORE_KEY, this.storageConnections);
+      }
     }
     return this.storageConnections;
   };
