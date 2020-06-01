@@ -189,7 +189,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         execSync('dotnet build', { cwd: runtimeDir, stdio: 'inherit' });
       } catch (error) {
         // delete the folder to make sure build again.
-        removeDirAndFiles(botDir);
+        await removeDirAndFiles(botDir);
         throw new Error(error.toString());
       }
     }
@@ -439,11 +439,14 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
         const schemaDstPath = path.join(project.dir, 'schemas');
         const schemaSrcPath = path.join(sourcePath, 'azurewebapp/schemas');
         const customSchemaExists = fs.existsSync(schemaDstPath);
-        const excludeItems = [];
+        const pathsToExclude: Set<string> = new Set();
         if (customSchemaExists) {
-          excludeItems.push('sdk.schema');
+          const sdkExcludePath = await localDisk.glob('sdk.schema', schemaSrcPath);
+          if (sdkExcludePath.length > 0) {
+            pathsToExclude.add(path.join(schemaSrcPath, sdkExcludePath[0]));
+          }
         }
-        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, excludeItems);
+        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
         const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
         return destPath;

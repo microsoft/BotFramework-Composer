@@ -3,19 +3,12 @@
 
 import { IFileStorage } from './interface';
 
-/**
- * Copy a dir from one storage to another storage
- * @param srcDir path of the src dir
- * @param srcStorage src storage
- * @param dstDir path of the dst dir
- * @param dstStorage dst storage
- */
 export async function copyDir(
   srcDir: string,
   srcStorage: IFileStorage,
   dstDir: string,
   dstStorage: IFileStorage,
-  excludeFilesList: string[] = []
+  pathsToExclude?: Set<string>
 ) {
   if (!(await srcStorage.exists(srcDir)) || !(await srcStorage.stat(srcDir)).isDir) {
     throw new Error(`No such dir ${srcDir}}`);
@@ -28,10 +21,10 @@ export async function copyDir(
   const paths = await srcStorage.readDir(srcDir);
 
   for (const path of paths) {
-    if (excludeFilesList.includes(path)) {
+    const srcPath = `${srcDir}/${path}`;
+    if (pathsToExclude && pathsToExclude.has(srcPath)) {
       continue;
     }
-    const srcPath = `${srcDir}/${path}`;
     const dstPath = `${dstDir}/${path}`;
 
     if ((await srcStorage.stat(srcPath)).isFile) {
@@ -40,7 +33,7 @@ export async function copyDir(
       await dstStorage.writeFile(dstPath, content);
     } else {
       // recursively copy dirs
-      await copyDir(srcPath, srcStorage, dstPath, dstStorage, excludeFilesList);
+      await copyDir(srcPath, srcStorage, dstPath, dstStorage, pathsToExclude);
     }
   }
 }

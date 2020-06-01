@@ -52,7 +52,6 @@ const Routes = (props) => {
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
           </ProjectRouter>
-          <Redirect noThrow from="/bot/:projectId" to="/bot/:projectId/dialogs/Main" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
           <About path="about" />
