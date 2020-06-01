@@ -9,12 +9,10 @@ const botbuilder_1 = require("botbuilder");
 const botbuilder_dialogs_1 = require("botbuilder-dialogs");
 const botbuilder_dialogs_adaptive_1 = require("botbuilder-dialogs-adaptive");
 const botbuilder_dialogs_declarative_1 = require("botbuilder-dialogs-declarative");
-const argv = require('minimist')(process.argv.slice(2));
-console.log(argv.port);
 // Create HTTP server.
 const server = restify.createServer();
+const argv = require('minimist')(process.argv.slice(2));
 server.listen(process.env.port || process.env.PORT || argv.port || 3978, () => {
-    // console.log(`\n${ server.name } listening to ${ server.url }`);
     console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
     console.log(`\nTo talk to your bot, open echobot.bot file in the Emulator.`);
 });
@@ -23,11 +21,11 @@ let projectSettings = {
     bot: '../../',
     root: '../../'
 };
-if (process.env.NODE_ENV === 'development') {
-    projectSettings = require('../appsettings.development.json');
-}
-else if (process.env.NODE_ENV === 'production') {
+if (process.env.node_environment === 'production') {
     projectSettings = require('../appsettings.deployment.json');
+}
+else {
+    projectSettings = require('../appsettings.development.json');
 }
 const projectRoot = path.join(__dirname, '../', projectSettings.root);
 // Find entry dialog file

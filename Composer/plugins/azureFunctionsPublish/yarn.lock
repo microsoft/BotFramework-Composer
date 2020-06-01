@@ -162,7 +162,7 @@
     "@azure/ms-rest-js" "^2.0.4"
     adal-node "^0.1.28"
 
-"@bfc/libs/bot-deploy@../../packages/lib/bot-deploy":
+"@bfc/bot-deploy@../../packages/lib/bot-deploy":
   version "1.0.0"
   dependencies:
     "@azure/arm-appservice-profile-2019-03-01-hybrid" "^1.0.0"
