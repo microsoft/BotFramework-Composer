@@ -222,7 +222,7 @@ export class LuPublisher {
 
     //add the lu file that are not in interuption folder.
     files.forEach((file) => {
-      if (!~paths.indexOf(file.name)) {
+      if (!paths.includes(file.name)) {
         luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
       }
     });
