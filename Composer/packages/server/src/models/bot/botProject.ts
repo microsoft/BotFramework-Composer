@@ -381,7 +381,7 @@ export class BotProject {
 
   private getLocale(id: string): string {
     const index = id.lastIndexOf('.');
-    if (~index) return '';
+    if (index >= 0) return '';
     return id.substring(index + 1);
   }
 

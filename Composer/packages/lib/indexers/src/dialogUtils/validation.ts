@@ -29,8 +29,8 @@ const isExpression = (value: string | boolean | number, types: string[]): boolea
 //TODO: returnType is number, schem type is string, need map or unify
 const checkReturnType = (returnType: ReturnType, types: string[]): string => {
   return returnType === ReturnType.Object ||
-    ~types.indexOf(ExpressionTypeMapString[returnType]) ||
-    (returnType === ReturnType.Number && ~types.indexOf(ExpressionType.integer))
+    types.includes(ExpressionTypeMapString[returnType]) ||
+    (returnType === ReturnType.Number && types.includes(ExpressionType.integer))
     ? ''
     : formatMessage('the expression type is not match');
 };
