@@ -184,16 +184,19 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // copy runtime template in folder
       await this.copyDir(this.templatePath, runtimeDir);
 
-      if (runtimeType === 'C#') {
-        try {
+      try {
+        if (runtimeType === 'C#') {
           // TODO ccastro: discuss with benbrown. Consider init command as template metadata. Remove azurewebapp from here.
           execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir, stdio: 'inherit' });
           execSync('dotnet build', { cwd: runtimeDir, stdio: 'inherit' });
-        } catch (error) {
-          // delete the folder to make sure build again.
-          rmDir(botDir);
-          throw new Error(error.toString());
+        } else if (runtimeType === 'JS') {
+          execSync('yarn install', { cwd: path.join(runtimeDir, 'azurewebapp'), stdio: 'inherit' });
+          execSync('yarn build', { cwd: path.join(runtimeDir, 'azurewebapp'), stdio: 'inherit' });
         }
+      } catch (error) {
+        // delete the folder to make sure build again.
+        rmDir(botDir);
+        throw new Error(error.toString());
       }
     } else {
       // stop bot
