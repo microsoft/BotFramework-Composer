@@ -87,7 +87,7 @@ export class BotProject {
 
   public init = async () => {
     this.diagnostics = [];
-    this.settings = await this.getEnvSettings('', false);
+    this.settings = await this.getEnvSettings(false);
     const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || []);
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
@@ -108,12 +108,11 @@ export class BotProject {
   };
 
   public getDefaultSlotEnvSettings = async (obfuscate: boolean) => {
-    const defaultSlot = '';
-    return await this.settingManager.get(defaultSlot, obfuscate);
+    return await this.settingManager.get(obfuscate);
   };
 
-  public getEnvSettings = async (slot: string, obfuscate: boolean) => {
-    const settings = await this.settingManager.get(slot, obfuscate);
+  public getEnvSettings = async (obfuscate: boolean) => {
+    const settings = await this.settingManager.get(obfuscate);
     if (settings && oauthInput().MicrosoftAppId && oauthInput().MicrosoftAppId !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppId = oauthInput().MicrosoftAppId;
     }
@@ -124,25 +123,24 @@ export class BotProject {
   };
 
   public updateDefaultSlotEnvSettings = async (config: DialogSetting) => {
-    const defaultSlot = '';
-    await this.updateEnvSettings(defaultSlot, config);
+    await this.updateEnvSettings(config);
   };
 
   // create or update dialog settings
-  public updateEnvSettings = async (slot: string, config: DialogSetting) => {
-    await this.settingManager.set(slot, config);
+  public updateEnvSettings = async (config: DialogSetting) => {
+    await this.settingManager.set(config);
     this.settings = config;
   };
 
   // update skill in settings
   public updateSkill = async (config: Skill[]) => {
-    const settings = await this.getEnvSettings('', false);
+    const settings = await this.getEnvSettings(false);
     const { skillsParsed } = await extractSkillManifestUrl(config);
 
     settings.skill = skillsParsed.map(({ manifestUrl, name }) => {
       return { manifestUrl, name };
     });
-    await this.settingManager.set('', settings);
+    await this.settingManager.set(settings);
 
     this.skills = skillsParsed;
     return skillsParsed;
@@ -318,8 +316,7 @@ export class BotProject {
 
   public async deleteAllFiles(): Promise<boolean> {
     try {
-      await this.deleteFilesFromBottomToUp(this.dir);
-      await this.fileStorage.rmDir(this.dir);
+      await this.fileStorage.rmrfDir(this.dir);
       const projectId = await BotProjectService.getProjectIdByPath(this.dir);
       if (projectId) {
         await this.removeLocalRuntimeData(projectId);
@@ -356,31 +353,16 @@ export class BotProject {
     }
   }
 
-  private async deleteFilesFromBottomToUp(path) {
-    const files = await this.fileStorage.readDir(path);
-
-    for (let i = 0; i < files.length; i++) {
-      const curPath = Path.join(path, files[i]);
-      const childStat = await this.fileStorage.stat(curPath);
-      if (childStat.isDir && curPath.startsWith(this.dir)) {
-        await this.deleteFilesFromBottomToUp(curPath);
-        await this.fileStorage.rmDir(curPath);
-      } else {
-        await this.fileStorage.removeFile(curPath);
-      }
-    }
-  }
-
   private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
-    await this._removeEmptyFolderFromBottomToUp(dirPath);
+    await this._removeEmptyFolderFromBottomToUp(dirPath, this.dataDir);
   };
 
-  private _removeEmptyFolderFromBottomToUp = async (folderPath: string) => {
+  private _removeEmptyFolderFromBottomToUp = async (folderPath: string, prefix: string) => {
     let currentFolder = folderPath;
     //make sure the folder to delete is in current project
-    while (currentFolder.startsWith(this.dataDir)) {
+    while (currentFolder.startsWith(prefix)) {
       await this._removeEmptyFolder(currentFolder);
       currentFolder = Path.dirname(currentFolder);
     }

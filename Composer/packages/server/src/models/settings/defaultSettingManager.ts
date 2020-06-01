@@ -22,6 +22,7 @@ export class DefaultSettingManager extends FileSettingManager {
       feature: {
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
+        RemoveRecipientMention: false,
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
@@ -56,8 +57,8 @@ export class DefaultSettingManager extends FileSettingManager {
     };
   };
 
-  public async get(slot = '', obfuscate = false): Promise<any> {
-    const result = await super.get(slot, obfuscate);
+  public async get(obfuscate = false): Promise<any> {
+    const result = await super.get(obfuscate);
     //add downsampling property for old bot
     if (!result.downsampling) {
       result.downsampling = this.createDefaultSettings().downsampling;
@@ -74,10 +75,8 @@ export class DefaultSettingManager extends FileSettingManager {
     }
   };
 
-  public set = async (slot: string, settings: any): Promise<void> => {
-    this.validateSlot(slot);
-
-    const path = this.getPath(slot);
+  public set = async (settings: any): Promise<void> => {
+    const path = this.getPath();
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
       debug('Storage path does not exist. Creating directory now: %s', dir);
