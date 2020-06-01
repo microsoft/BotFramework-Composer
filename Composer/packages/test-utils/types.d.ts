@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { Config } from '@jest/types';
+import * as hooksLib from '@testing-library/react-hooks';
 
 declare enum ConfigType {
   node = 'node',
@@ -15,3 +16,5 @@ export function createConfig(
 ): Partial<Config.ProjectConfig>;
 
 export * from '@testing-library/react';
+
+export const hooks = hooksLib;

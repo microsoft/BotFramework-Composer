@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
-import { Button, IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import {
@@ -71,7 +71,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   };
 
   return (
-    <Button
+    <DefaultButton
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async (e) => {
         // todo: clean this up

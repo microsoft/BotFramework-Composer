@@ -1,45 +1,78 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.Collections.Concurrent;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Skills;
-using Microsoft.Bot.Schema;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.BotFramework.Composer.Core
 {
     /// <summary>
-    /// A <see cref="SkillConversationIdFactory"/> that uses an in memory <see cref="ConcurrentDictionary{TKey,TValue}"/>
-    /// to store and retrieve <see cref="ConversationReference"/> instances.
+    /// A <see cref="SkillConversationIdFactory"/> that uses <see cref="IStorage"/> to store
+    /// and retrieve <see cref="SkillConversationReference"/> instances.
     /// </summary>
     public class SkillConversationIdFactory : SkillConversationIdFactoryBase
     {
-        private readonly ConcurrentDictionary<string, string> _conversationRefs = new ConcurrentDictionary<string, string>();
+        private readonly IStorage _storage;
 
-        public override Task<string> CreateSkillConversationIdAsync(SkillConversationIdFactoryOptions options, CancellationToken cancellationToken)
+        public SkillConversationIdFactory(IStorage storage)
         {
+            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+        }
+
+        public override async Task<string> CreateSkillConversationIdAsync(SkillConversationIdFactoryOptions options, CancellationToken cancellationToken)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            // Create the storage key based on the SkillConversationIdFactoryOptions.
+            var conversationReference = options.Activity.GetConversationReference();
+            var skillConversationId = $"{options.FromBotId}-{options.BotFrameworkSkill.AppId}-{conversationReference.Conversation.Id}-{conversationReference.ChannelId}-skillconvo";
+
+            // Create the SkillConversationReference instance.
             var skillConversationReference = new SkillConversationReference
             {
-                ConversationReference = options.Activity.GetConversationReference(),
+                ConversationReference = conversationReference,
                 OAuthScope = options.FromBotOAuthScope
             };
-            var key = $"{options.FromBotId}-{options.BotFrameworkSkill.AppId}-{skillConversationReference.ConversationReference.Conversation.Id}-{skillConversationReference.ConversationReference.ChannelId}-skillconvo";
-            _conversationRefs.GetOrAdd(key, JsonConvert.SerializeObject(skillConversationReference));
-            return Task.FromResult(key);
+
+            // Store the SkillConversationReference using the skillConversationId as a key.
+            var skillConversationInfo = new Dictionary<string, object> { { skillConversationId, JObject.FromObject(skillConversationReference) } };
+            await _storage.WriteAsync(skillConversationInfo, cancellationToken).ConfigureAwait(false);
+
+            // Return the generated skillConversationId (that will be also used as the conversation ID to call the skill).
+            return skillConversationId;
         }
 
-        public override Task<SkillConversationReference> GetSkillConversationReferenceAsync(string skillConversationId, CancellationToken cancellationToken)
+        public override async Task<SkillConversationReference> GetSkillConversationReferenceAsync(string skillConversationId, CancellationToken cancellationToken)
         {
-            var conversationReference = JsonConvert.DeserializeObject<SkillConversationReference>(_conversationRefs[skillConversationId]);
-            return Task.FromResult(conversationReference);
+            if (string.IsNullOrWhiteSpace(skillConversationId))
+            {
+                throw new ArgumentNullException(nameof(skillConversationId));
+            }
+
+            // Get the SkillConversationReference from storage for the given skillConversationId.
+            var skillConversationInfo = await _storage.ReadAsync(new[] { skillConversationId }, cancellationToken).ConfigureAwait(false);
+            if (skillConversationInfo.Any())
+            {
+                var conversationInfo = ((JObject)skillConversationInfo[skillConversationId]).ToObject<SkillConversationReference>();
+                return conversationInfo;
+            }
+
+            return null;
         }
 
-        public override Task DeleteConversationReferenceAsync(string skillConversationId, CancellationToken cancellationToken)
+        public override async Task DeleteConversationReferenceAsync(string skillConversationId, CancellationToken cancellationToken)
         {
-            _conversationRefs.TryRemove(skillConversationId, out _);
-            return Task.CompletedTask;
+            // Delete the SkillConversationReference from storage.
+            await _storage.DeleteAsync(new[] { skillConversationId }, cancellationToken).ConfigureAwait(false);
         }
     }
 }
