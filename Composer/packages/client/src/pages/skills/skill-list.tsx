@@ -156,7 +156,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
 
   return (
     <React.Fragment>
-      <div css={TableView}>
+      <div aria-label={formatMessage('List view')} css={TableView} role="region">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             isHeaderVisible
