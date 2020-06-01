@@ -163,7 +163,13 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       size={{ width: currentWidth, height: 'auto' }}
       onResizeStop={handleResize}
     >
-      <div className="ProjectTree" css={root} data-testid="ProjectTree">
+      <div
+        aria-label={formatMessage('Navigation pane')}
+        className="ProjectTree"
+        css={root}
+        data-testid="ProjectTree"
+        role="region"
+      >
         <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
           <SearchBox
             underlined
