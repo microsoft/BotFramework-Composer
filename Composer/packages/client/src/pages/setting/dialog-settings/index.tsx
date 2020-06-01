@@ -50,10 +50,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
       <p>
         {hostControlLabels.botSettingDescription}
         &nbsp;
-        <Link
-          href={'https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/deploy-bot.md'}
-          target="_blank"
-        >
+        <Link href={'https://aka.ms/bf-composer-docs-publish-bot'} target="_blank">
           {hostControlLabels.learnMore}
         </Link>
       </p>
