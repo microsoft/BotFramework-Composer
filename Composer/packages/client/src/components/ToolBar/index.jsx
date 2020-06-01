@@ -58,7 +58,7 @@ export function ToolBar(props) {
   }, []);
 
   return (
-    <div css={headerSub} {...rest}>
+    <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
       <div css={leftActions}>
         {window.location.href.indexOf('/dialogs/') !== -1 && (
           <div ref={addNewRef}>
