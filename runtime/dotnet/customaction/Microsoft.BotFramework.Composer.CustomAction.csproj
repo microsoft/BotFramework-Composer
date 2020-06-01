@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <Folder Include="Action\" />
-    <Folder Include="Schema\" />
+    <Folder Include="Schemas\" />
   </ItemGroup>
 
   <ItemGroup>
