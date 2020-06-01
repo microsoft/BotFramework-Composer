@@ -15,8 +15,8 @@ import { container, item } from './styles';
 
 interface ObjectItemProps {
   name: string;
-  formData: any;
-  value: any;
+  formData: object;
+  value: unknown;
   onNameChange: (name: string) => void;
   onValueChange: (value?: string) => void;
   onDelete: () => void;
@@ -31,7 +31,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
   onDelete,
 }) => {
   const initialName = useMemo(() => originalName, []);
-  const initialValue = useMemo(() => value, []);
+  const initialValue = useMemo(() => value as string, []);
   const [name, setName] = useState<string>(originalName);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -96,6 +96,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
       </div>
       <IconButton
         ariaLabel={formatMessage('Edit Property')}
+        data-testid="ObjectItemActions"
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: contextItems }}
         styles={{
