@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
-import { FlowWidget, FlowSchema } from '@bfc/extension';
+
+import { FlowWidget, FlowSchema } from '../../types/flowRenderer.types';
 
 export class WidgetSchemaProvider {
   schema: FlowSchema;

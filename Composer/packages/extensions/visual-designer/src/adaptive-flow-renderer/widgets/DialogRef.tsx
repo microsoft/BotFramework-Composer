@@ -4,10 +4,10 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import get from 'lodash/get';
-import { WidgetContainerProps, WidgetComponent } from '@bfc/extension';
 import { LinkBtn } from '@bfc/ui-shared';
 import { useContext } from 'react';
 
+import { WidgetContainerProps, WidgetComponent } from '../types/flowRenderer.types';
 import { NodeEventTypes } from '../constants/NodeEventTypes';
 import { RendererContext } from '../contexts/RendererContext';
 import { ElementWrapperTag } from '../types/PluggableComponents.types';

@@ -5,9 +5,9 @@ import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import React from 'react';
 import get from 'lodash/get';
-import { FlowSchema, FlowWidget } from '@bfc/extension';
 import { FixedInfo, SingleLineDiv, ListOverview, PropertyAssignment } from '@bfc/ui-shared';
 
+import { FlowSchema, FlowWidget } from '../types/flowRenderer.types';
 import { ObiColors } from '../constants/ElementColors';
 
 const BaseInputSchema: FlowWidget = {

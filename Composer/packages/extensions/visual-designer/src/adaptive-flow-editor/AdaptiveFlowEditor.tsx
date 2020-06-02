@@ -8,9 +8,10 @@ import React, { useRef, useMemo, useEffect } from 'react';
 import isEqual from 'lodash/isEqual';
 import formatMessage from 'format-message';
 import { DialogFactory } from '@bfc/shared';
-import { useShellApi, JSONSchema7, FlowSchema, FlowWidget } from '@bfc/extension';
+import { useShellApi, JSONSchema7 } from '@bfc/extension';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
+import { FlowSchema, FlowWidget } from '../adaptive-flow-renderer/types/flowRenderer.types';
 import { NodeEventTypes } from '../adaptive-flow-renderer/constants/NodeEventTypes';
 import { AdaptiveDialog } from '../adaptive-flow-renderer/editors/AdaptiveDialog';
 

@@ -3,8 +3,9 @@
 
 import React from 'react';
 import { BaseSchema } from '@bfc/shared';
-import { FlowWidget, FlowEditorWidgetMap, FlowWidgetProp, WidgetEventHandler } from '@bfc/extension';
+import { FlowEditorWidgetMap } from '@bfc/extension';
 
+import { FlowWidget, FlowWidgetProp, WidgetEventHandler } from '../../types/flowRenderer.types';
 import { Boundary } from '../../models/Boundary';
 
 export interface UIWidgetContext {

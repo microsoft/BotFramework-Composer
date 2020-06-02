@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FlowEditorConfig, FlowEditorWidgetMap, FlowSchema } from '@bfc/extension';
+import { PluginConfig, FlowEditorConfig, FlowEditorWidgetMap } from '@bfc/extension';
+
+import { FlowSchema } from '../../adaptive-flow-renderer/types/flowRenderer.types';
 
 export const mergePluginConfig = (...plugins: PluginConfig[]): Required<FlowEditorConfig> => {
   const externalWidgets = plugins.map((x) => x.visualSchema?.widgets).filter((x) => !!x) as FlowEditorWidgetMap[];
