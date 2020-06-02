@@ -64,8 +64,13 @@ function convertEdit(serverEdit: ServerEdit) {
 async function initializeDocuments(luOption: LUOption | undefined, uri: string) {
   const languageClient = window.monacoLUEditorInstance;
   if (languageClient) {
-    await languageClient.onReady();
-    languageClient.sendRequest('initializeDocuments', { uri, luOption });
+    try {
+      await languageClient.onReady();
+      languageClient.sendRequest('initializeDocuments', { uri, luOption });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('LSP WebSocket connection lost', error);
+    }
   }
 }
 

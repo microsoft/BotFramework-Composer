@@ -47,8 +47,13 @@ declare global {
 async function initializeDocuments(lgOption: LGOption | undefined, uri: string) {
   const languageClient = window.monacoLGEditorInstance;
   if (languageClient) {
-    await languageClient.onReady();
-    languageClient.sendRequest('initializeDocuments', { uri, lgOption });
+    try {
+      await languageClient.onReady();
+      languageClient.sendRequest('initializeDocuments', { uri, lgOption });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('LSP WebSocket connection lost', error);
+    }
   }
 }
 
