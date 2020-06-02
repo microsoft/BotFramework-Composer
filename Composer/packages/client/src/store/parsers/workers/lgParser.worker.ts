@@ -12,9 +12,7 @@ ctx.onmessage = function (msg) {
   try {
     const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
 
-    const { templates, diagnostics } = parse(content, targetId, lgImportresolver);
-
-    ctx.postMessage({ id, payload: { id: targetId, content, templates, diagnostics } });
+    ctx.postMessage({ id, payload: { id: targetId, content, ...parse(content, targetId, lgImportresolver) } });
   } catch (error) {
     ctx.postMessage({ id, error });
   }

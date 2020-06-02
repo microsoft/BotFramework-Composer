@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { createPath } from './../../src/dialogUtils/dialogChecker';
+import { createPath } from '../../src/validations/expressionValidation/utils';
 
 describe('create right diagnostic path', () => {
   it('should check if the diagnostics have errors', () => {

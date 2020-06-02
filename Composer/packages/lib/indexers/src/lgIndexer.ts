@@ -3,7 +3,7 @@
 
 import { Templates, TemplatesParser, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import get from 'lodash/get';
-import { LgTemplate, LgFile, FileInfo, Diagnostic, Position, Range } from '@bfc/shared';
+import { LgFile, FileInfo, Diagnostic, Position, Range } from '@bfc/shared';
 
 import { getBaseName } from './utils/help';
 
@@ -20,11 +20,7 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   return result;
 }
 
-function parse(
-  content: string,
-  id = '',
-  importResolver: ImportResolverDelegate = defaultFileResolver
-): { templates: LgTemplate[]; diagnostics: Diagnostic[] } {
+function parse(content: string, id = '', importResolver: ImportResolverDelegate = defaultFileResolver) {
   const lgFile = Templates.parseText(content, id, importResolver);
   const templates = lgFile.toArray().map((t) => {
     return {
@@ -40,7 +36,7 @@ function parse(
   const diagnostics = lgFile.diagnostics.map((d: LGDiagnostic) => {
     return convertLGDiagnostic(d, id);
   });
-  return { templates, diagnostics };
+  return { templates, diagnostics, options: lgFile.options };
 }
 
 function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFile[] {
@@ -50,8 +46,7 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
     const { name, content } = file;
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
-      const { templates, diagnostics } = parse(content, id, importResolver);
-      lgFiles.push({ id, content, templates, diagnostics });
+      lgFiles.push({ id, content, ...parse(content, id, importResolver) });
     }
   }
   return lgFiles;

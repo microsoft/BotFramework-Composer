@@ -10,15 +10,14 @@ import {
   DialogInfo,
   FileInfo,
   LgTemplateJsonPath,
-  Diagnostic,
   ReferredLuIntents,
+  Diagnostic,
 } from '@bfc/shared';
 
-import { createPath } from './dialogUtils/dialogChecker';
-import { checkerFuncs } from './dialogUtils/dialogChecker';
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
 import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
+import { createPath } from './validations/expressionValidation/utils';
 // find out all lg templates given dialog
 function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
@@ -155,55 +154,14 @@ function ExtractReferredDialogs(dialog): string[] {
   return uniq(dialogs);
 }
 
-// check all fields
-function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
-  const diagnostics: Diagnostic[] = [];
-  /**
-   *
-   * @param path , jsonPath string
-   * @param value , current node value    *
-   * @return boolean, true to stop walk
-   * */
-  const visitor: VisitorFunc = (path: string, value: any): boolean => {
-    if (has(value, '$kind')) {
-      const allChecks = [...checkerFuncs['.']];
-      const checkerFunc = checkerFuncs[value.$kind];
-      if (checkerFunc) {
-        allChecks.splice(0, 0, ...checkerFunc);
-      }
-
-      allChecks.forEach((func) => {
-        const result = func(path, value, value.$kind, schema.definitions[value.$kind]);
-        if (result) {
-          diagnostics.splice(0, 0, ...result);
-        }
-      });
-    }
-    return false;
-  };
-  JsonWalk(id, dialog, visitor);
-  return diagnostics.map((e) => {
-    e.source = id;
-    return e;
-  });
-}
-
-function validate(id: string, content, schema: any): Diagnostic[] {
-  try {
-    return CheckFields(content, id, schema);
-  } catch (error) {
-    return [new Diagnostic(error.message, id)];
-  }
-}
-
-function parse(id: string, content: any, schema: any) {
+function parse(id: string, content: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
-
+  const diagnostics: Diagnostic[] = [];
   return {
     id,
     content,
-    diagnostics: validate(id, content, schema),
+    diagnostics,
     referredDialogs: ExtractReferredDialogs(content),
     lgTemplates: ExtractLgTemplates(id, content),
     referredLuIntents: ExtractLuIntents(content, id),
@@ -214,7 +172,7 @@ function parse(id: string, content: any, schema: any) {
   };
 }
 
-function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
+function index(files: FileInfo[], botName: string): DialogInfo[] {
   const dialogs: DialogInfo[] = [];
   if (files.length !== 0) {
     for (const file of files) {
@@ -226,7 +184,7 @@ function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
           const dialog = {
             isRoot,
             displayName: isRoot ? `${botName}` : id,
-            ...parse(id, dialogJson, schema),
+            ...parse(id, dialogJson),
           };
           dialogs.push(dialog);
         }
