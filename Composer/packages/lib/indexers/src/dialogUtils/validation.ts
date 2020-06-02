@@ -32,7 +32,7 @@ const checkReturnType = (returnType: ReturnType, types: string[]): string => {
     types.includes(ExpressionTypeMapString[returnType]) ||
     (returnType === ReturnType.Number && types.includes(ExpressionType.integer))
     ? ''
-    : formatMessage('the expression type is not match');
+    : formatMessage('the return type does not match');
 };
 
 export const checkExpression = (exp: string | boolean | number, required: boolean, types: string[]): string => {
