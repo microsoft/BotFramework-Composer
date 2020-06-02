@@ -6,7 +6,15 @@ import path from 'path';
 import { JestOverrides } from '../types';
 
 const base: Partial<JestOverrides> = {
-  testPathIgnorePatterns: ['/node_modules/', '/mocks/', '__mocks__', '/testUtils/', 'setupTests.ts', '.*\\.d\\.ts'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/mocks/',
+    '__mocks__',
+    '/testUtils/',
+    'setupTests.ts',
+    '.*\\.d\\.ts',
+    'testUtils.ts',
+  ],
 
   transformIgnorePatterns: ['/node_modules/'],
 
