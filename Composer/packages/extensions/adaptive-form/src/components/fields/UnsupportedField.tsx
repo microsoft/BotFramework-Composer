@@ -20,7 +20,7 @@ export const UnsupportedField: React.FC<FieldProps> = function UnsupportedField(
           Toggle Details
         </Link>
       </div>
-      <pre css={unsupportedField.details(!showDetails)}>
+      <pre css={unsupportedField.details(!showDetails)} data-testid="UnsupportedFieldDetails">
         props: {JSON.stringify(omit(props, ['definitions']), null, 2)}
       </pre>
     </React.Fragment>
