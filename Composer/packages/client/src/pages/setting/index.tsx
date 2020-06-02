@@ -138,7 +138,13 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   }, [location.pathname]);
 
   return (
-    <Page navLinks={links} title={title} toolbarItems={toolbarItems}>
+    <Page
+      mainRegionName={formatMessage('Settings editor')}
+      navLinks={links}
+      navRegionName={formatMessage('Settings menu')}
+      title={title}
+      toolbarItems={toolbarItems}
+    >
       <Routes />
     </Page>
   );

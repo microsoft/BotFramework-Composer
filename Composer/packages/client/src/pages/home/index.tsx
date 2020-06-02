@@ -33,7 +33,7 @@ const linksButtom = [
   },
 ];
 
-const turtorials = [
+const tutorials = [
   {
     title: formatMessage('5 Minute Intro'),
     content: formatMessage('Chris Whitten'),
@@ -145,7 +145,7 @@ const Home: React.FC<RouteComponentProps> = () => {
       <div css={home.page}>
         <div css={home.leftPage} role="main">
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
-          <div css={home.introduction}>
+          <div aria-label={formatMessage('Composer introduction')} css={home.introduction} role="region">
             {formatMessage(
               'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
             )}
@@ -153,6 +153,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.newBotContainer}>
             <div data-testid={'homePage-body-New'}>
               <ItemContainer
+                ariaLabel={formatMessage('Create new empty bot')}
                 content={formatMessage('New')}
                 styles={home.newBotItem}
                 title={addButton}
@@ -164,6 +165,7 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
             {recentProjects.length > 0 ? (
               <ItemContainer
+                ariaLabel={recentProjects[0].name}
                 content={recentProjects[0].name}
                 forwardedRef={addRef}
                 styles={home.latestBotItem}
@@ -174,6 +176,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               />
             ) : (
               <ItemContainer
+                ariaLabel={'ToDo bot with LUIS'}
                 content={'ToDoBotWithLuis'}
                 forwardedRef={addRef}
                 styles={home.latestBotItem}
@@ -198,9 +201,10 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.leftContainer}>
             <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
             <div css={home.newBotContainer}>
-              {turtorials.map((item, index) => (
+              {tutorials.map((item, index) => (
                 <ItemContainer
                   key={index}
+                  ariaLabel={item.title}
                   content={item.content}
                   href={item.href}
                   openExternal={isElectron()}
@@ -235,7 +239,7 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        <div css={home.rightPage}>
+        <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
           <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
           <p css={home.examplesDescription}>
             {formatMessage(

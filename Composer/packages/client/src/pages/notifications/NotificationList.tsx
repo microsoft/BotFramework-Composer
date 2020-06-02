@@ -143,7 +143,7 @@ export const NotificationList: React.FC<INotificationListProps> = (props) => {
 
   return (
     <div css={listRoot} data-testid="notifications-table-view" role="main">
-      <div css={tableView}>
+      <div aria-label={formatMessage('Notification list')} css={tableView} role="region">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             isHeaderVisible
