@@ -37,8 +37,6 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-
         if (!nameRegex.test(value)) {
           return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }

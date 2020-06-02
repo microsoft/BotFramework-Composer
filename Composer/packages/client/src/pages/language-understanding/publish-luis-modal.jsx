@@ -48,7 +48,7 @@ const validateForm = (data) => {
     const value = data[key];
     if (validationProperties.includes(key) && (!value || !nameRegex.test(value))) {
       result.errors[key] = formatMessage(
-        'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
+        'Spaces and special characters are not allowed. Use letters, numbers, -, or _.'
       );
     } else if (key in defaultFields && value === '') {
       result[key] = defaultFields[key];
