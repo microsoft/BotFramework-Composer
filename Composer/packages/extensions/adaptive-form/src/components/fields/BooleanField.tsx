@@ -29,6 +29,7 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
   ];
 
   const handleChange = (e, option?: IDropdownOption) => {
+    /* istanbul ignore next */
     if (option) {
       const optionValue = option.key === 'none' ? undefined : option.key === 'true';
       onChange(optionValue);
