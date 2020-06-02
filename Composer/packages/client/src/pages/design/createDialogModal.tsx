@@ -102,7 +102,12 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
         <DialogFooter>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-          <PrimaryButton disabled={hasErrors} text={formatMessage('Next')} onClick={handleSubmit} />
+          <PrimaryButton
+            data-testid="SubmitNewDialogBtn"
+            disabled={hasErrors}
+            text={formatMessage('Next')}
+            onClick={handleSubmit}
+          />
         </DialogFooter>
       </form>
     </DialogWrapper>
