@@ -35,7 +35,7 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 To build and run the Composer project locally as a web application, clone the source code from Github and build the application using the instructions below.
 
 ```
-$ git clone git@github.com:microsoft/BotFramework-Composer.git
+$ git clone https://github.com/microsoft/BotFramework-Composer.git
 $ cd BotFramework-Composer
 $ cd Composer // switch to Composer folder
 $ yarn install // install dependencies
