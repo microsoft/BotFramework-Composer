@@ -3,17 +3,15 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
-import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 
 import { StoreContext } from '../../../store';
-import { isAbsHosted } from '../../../utils/envUtil';
 
-import { hostedSettings, hostedControls, slotChoice, settingsEditor } from './style';
+import { hostedSettings, hostedControls, settingsEditor } from './style';
 
 const hostControlLabels = {
   showKeys: formatMessage('Show keys'),
@@ -28,27 +26,12 @@ const hostControlLabels = {
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, settings: origSettings, botEnvironment, projectId } = state;
-  const absHosted = isAbsHosted();
-  const { luis, MicrosoftAppPassword, MicrosoftAppId, ...settings } = origSettings;
-  const managedSettings = { luis, MicrosoftAppPassword, MicrosoftAppId };
-  const visibleSettings = absHosted ? settings : origSettings;
-  const [slot, setSlot] = useState(botEnvironment === 'editing' ? 'integration' : botEnvironment);
+  const { botName, settings, projectId } = state;
 
-  const slots = [
-    { key: 'production', text: hostControlLabels.productionSlot, checked: slot === 'production' },
-    { key: 'integration', text: hostControlLabels.integrationSlot, checked: slot === 'integration' },
-  ];
-
-  const changeSlot = (_, option) => {
-    setSlot(option.key);
-    actions.setDialogSettingsSlot(projectId, option.key);
-  };
-
-  const saveChangeResult = result => {
+  const saveChangeResult = (result) => {
     try {
-      const mergedResult = absHosted ? { ...managedSettings, ...result } : result;
-      actions.setSettings(projectId, botName, mergedResult, absHosted ? slot : undefined);
+      const mergedResult = result;
+      actions.setSettings(projectId, botName, mergedResult);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err.message);
@@ -56,7 +39,10 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   };
 
   const handleChange = (result: any) => {
-    saveChangeResult(result);
+    // prevent result was undefined, it will cause error
+    if (result && typeof result === 'object') {
+      saveChangeResult(result);
+    }
   };
 
   const hostedControl = () => (
@@ -64,18 +50,10 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
       <p>
         {hostControlLabels.botSettingDescription}
         &nbsp;
-        <Link
-          href={
-            absHosted
-              ? 'https://aka.ms/absh/docs/settings'
-              : 'https://github.com/microsoft/BotFramework-Composer/blob/stable/docs/deploy-bot.md'
-          }
-          target="_blank"
-        >
+        <Link href={'https://aka.ms/bf-composer-docs-publish-bot'} target="_blank">
           {hostControlLabels.learnMore}
         </Link>
       </p>
-      {absHosted ? <ChoiceGroup options={slots} onChange={changeSlot} css={slotChoice} selectedKey={slot} /> : null}
     </div>
   );
 
@@ -83,7 +61,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor onChange={x => handleChange(x)} value={visibleSettings} />
+        <JsonEditor value={settings} onChange={handleChange} />
       </div>
     </div>
   ) : (

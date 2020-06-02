@@ -10,7 +10,7 @@ import { ComboBoxField } from './ComboBoxField';
 
 const ADD_DIALOG = 'ADD_DIALOG';
 
-export const SelectSkillDialog: React.FC<FieldProps> = props => {
+export const SelectSkillDialog: React.FC<FieldProps> = (props) => {
   const { value, onChange } = props;
   const { shellApi, skills = [] } = useShellApi();
   const { addSkillDialog } = shellApi;
@@ -39,7 +39,7 @@ export const SelectSkillDialog: React.FC<FieldProps> = props => {
     if (option) {
       if (option.key === ADD_DIALOG) {
         setComboboxTitle(formatMessage('Add a new Skill Dialog'));
-        addSkillDialog().then(newSkill => {
+        addSkillDialog().then((newSkill) => {
           if (newSkill && newSkill?.manifestUrl) {
             onChange({ key: newSkill.manifestUrl });
           }

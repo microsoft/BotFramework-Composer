@@ -56,7 +56,7 @@ export default async (composer: any): Promise<void> => {
 
 ### Authentication and identity
 
-To provide auth and identity services, Composer has in large part adopted [PassportJS](https://passportjs.org) instead of implementing a custom solution.
+To provide auth and identity services, Composer has in large part adopted [PassportJS](http://www.passportjs.org) instead of implementing a custom solution.
 Plugins can use one of the [many existing Passport strategies](http://www.passportjs.org/packages/), or provide a custom strategy.
 
 #### `composer.usePassportStrategy(strategy)`

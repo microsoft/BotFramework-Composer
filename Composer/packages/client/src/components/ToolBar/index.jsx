@@ -46,27 +46,26 @@ export function ToolBar(props) {
   let left = [];
   let right = [];
   if (toolbarItems && toolbarItems.length > 0) {
-    left = toolbarItems.filter(item => {
+    left = toolbarItems.filter((item) => {
       return item.align === 'left';
     });
-    right = toolbarItems.filter(item => {
+    right = toolbarItems.filter((item) => {
       return item.align === 'right';
     });
   }
-  const addNewRef = useCallback(addNew => {
+  const addNewRef = useCallback((addNew) => {
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
   return (
-    <div css={headerSub} {...rest}>
+    <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
       <div css={leftActions}>
         {window.location.href.indexOf('/dialogs/') !== -1 && (
           <div ref={addNewRef}>
             <CommandButton
-              data-testid="AddFlyout"
               css={actionButton}
+              data-testid="AddFlyout"
               iconProps={{ iconName: 'Add' }}
-              text={formatMessage('Add')}
               menuProps={{
                 items: [
                   {
@@ -85,6 +84,7 @@ export function ToolBar(props) {
                   },
                 ],
               }}
+              text={formatMessage('Add')}
             />
           </div>
         )}
@@ -93,7 +93,6 @@ export function ToolBar(props) {
           <CommandButton
             css={actionButton}
             iconProps={{ iconName: 'OpenInNewWindow' }}
-            text={formatMessage('Export')}
             menuProps={{
               items: [
                 {
@@ -108,6 +107,7 @@ export function ToolBar(props) {
                 },
               ],
             }}
+            text={formatMessage('Export')}
           />
         )}
       </div>

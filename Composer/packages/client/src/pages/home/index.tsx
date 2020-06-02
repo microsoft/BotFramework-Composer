@@ -27,13 +27,13 @@ const linksButtom = [
     css: home.linkInfo,
   },
   {
-    to: 'https://aka.ms/BF-Composer-Build-First-Bot',
+    to: 'https://aka.ms/bf-composer-docs-create-first-bot',
     text: formatMessage('Build your first bot'),
     css: home.linkInfo,
   },
 ];
 
-const turtorials = [
+const tutorials = [
   {
     title: formatMessage('5 Minute Intro'),
     content: formatMessage('Chris Whitten'),
@@ -65,11 +65,11 @@ const Home: React.FC<RouteComponentProps> = () => {
     onboardingAddCoachMarkRef,
   } = actions;
 
-  const onClickRecentBotProject = async path => {
+  const onClickRecentBotProject = async (path) => {
     await openBotProject(path);
   };
 
-  const onItemChosen = async item => {
+  const onItemChosen = async (item) => {
     if (item && item.path) {
       await onClickRecentBotProject(item.path);
     }
@@ -81,9 +81,9 @@ const Home: React.FC<RouteComponentProps> = () => {
     navigate(`projects/create/${id}`);
   };
 
-  const addButton = <Icon styles={home.button} iconName="Add" />;
+  const addButton = <Icon iconName="Add" styles={home.button} />;
 
-  const addRef = useCallback(project => onboardingAddCoachMarkRef({ project }), []);
+  const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
   const toolbarItems = [
     {
@@ -141,11 +141,11 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar toolbarItems={toolbarItems} onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} />
+      <ToolBar onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} toolbarItems={toolbarItems} />
       <div css={home.page}>
-        <div role="main" css={home.leftPage}>
+        <div css={home.leftPage} role="main">
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
-          <div css={home.introduction}>
+          <div aria-label={formatMessage('Composer introduction')} css={home.introduction} role="region">
             {formatMessage(
               'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
             )}
@@ -153,9 +153,10 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.newBotContainer}>
             <div data-testid={'homePage-body-New'}>
               <ItemContainer
-                title={addButton}
+                ariaLabel={formatMessage('Create new empty bot')}
                 content={formatMessage('New')}
                 styles={home.newBotItem}
+                title={addButton}
                 onClick={() => {
                   setCreationFlowStatus(CreationFlowStatus.NEW);
                   navigate('projects/create');
@@ -164,23 +165,25 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
             {recentProjects.length > 0 ? (
               <ItemContainer
-                title={''}
+                ariaLabel={recentProjects[0].name}
                 content={recentProjects[0].name}
+                forwardedRef={addRef}
                 styles={home.latestBotItem}
+                title={''}
                 onClick={async () => {
                   await onClickRecentBotProject(recentProjects[0].path);
                 }}
-                forwardedRef={addRef}
               />
             ) : (
               <ItemContainer
-                title={''}
+                ariaLabel={'ToDo bot with LUIS'}
                 content={'ToDoBotWithLuis'}
+                forwardedRef={addRef}
                 styles={home.latestBotItem}
+                title={''}
                 onClick={() => {
                   onClickTemplate('ToDoBotWithLuisSample');
                 }}
-                forwardedRef={addRef}
               />
             )}
           </div>
@@ -189,7 +192,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <h2 css={home.subtitle}>{formatMessage(`Recent Bots`)}</h2>
               <RecentBotList
                 recentProjects={recentProjects}
-                onItemChosen={async item => {
+                onItemChosen={async (item) => {
                   await onItemChosen(item);
                 }}
               />
@@ -198,17 +201,18 @@ const Home: React.FC<RouteComponentProps> = () => {
           <div css={home.leftContainer}>
             <h2 css={home.subtitle}>{formatMessage('Video tutorials:')}&nbsp;</h2>
             <div css={home.newBotContainer}>
-              {turtorials.map((item, index) => (
+              {tutorials.map((item, index) => (
                 <ItemContainer
-                  styles={home.tutorialTile}
                   key={index}
-                  title={item.title}
+                  ariaLabel={item.title}
                   content={item.content}
-                  subContent={item.subContent}
                   href={item.href}
-                  target="_blank"
-                  rel="noopener nofollow"
                   openExternal={isElectron()}
+                  rel="noopener nofollow"
+                  styles={home.tutorialTile}
+                  subContent={item.subContent}
+                  target="_blank"
+                  title={item.title}
                 />
               ))}
               <div css={home.linkContainer}>
@@ -217,15 +221,15 @@ const Home: React.FC<RouteComponentProps> = () => {
                     'Bot Framework provides the most comprehensive experience for building conversation applications.'
                   )}
                 </div>
-                {linksButtom.map(link => {
+                {linksButtom.map((link) => {
                   return (
                     <Link
-                      style={{ width: '150px' }}
-                      href={link.to}
-                      tabIndex={0}
                       key={'homePageLeftLinks-' + link.text}
-                      target="_blank"
+                      href={link.to}
                       rel="noopener noreferrer"
+                      style={{ width: '150px' }}
+                      tabIndex={0}
+                      target="_blank"
                     >
                       <div css={link.css}>{link.text}</div>
                     </Link>
@@ -235,7 +239,7 @@ const Home: React.FC<RouteComponentProps> = () => {
             </div>
           </div>
         </div>
-        <div css={home.rightPage}>
+        <div aria-label={formatMessage('Example bot list')} css={home.rightPage} role="region">
           <h3 css={home.bluetitle}>{formatMessage(`Examples`)}</h3>
           <p css={home.examplesDescription}>
             {formatMessage(

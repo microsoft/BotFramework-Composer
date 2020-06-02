@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useState, useContext, FormEvent } from 'react';
+import React, { useContext, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
+import { DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
@@ -13,6 +13,7 @@ import { DialogWrapper } from '../../components/DialogWrapper';
 import { DialogTypes } from '../../components/DialogWrapper/styles';
 import { StorageFolder } from '../../store/types';
 import { StoreContext } from '../../store';
+import { FieldConfig, useForm } from '../../hooks';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -34,60 +35,57 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;
-  const initialFormData: DialogFormData = { name: '', description: '', dialogType: 'sandwich' };
-  const [formData, setFormData] = useState(initialFormData);
-  const [formDataErrors, setFormDataErrors] = useState<{ name?: string }>({});
   const dialogTypeOptions: IDropdownOption[] = [
     {
       key: 'none',
-      text: 'None',
+      text: 'None'
     },
     {
       key: 'formDialog',
-      text: 'FormDialog',
+      text: 'FormDialog'
     },
     {
       key: 'swaggerDialog',
-      text: 'SwaggerDialog',
-    },
+      text: 'SwaggerDialog'
+    }
   ];
-  const updateForm = (field: string) => (e: FormEvent, newValue: string | IDropdownOption | undefined) => {
-    const newData: DialogFormData = {
-      ...formData,
-      [field]: typeof newValue === 'string' ? newValue : newValue?.key,
-    };
-    validateForm(newData);
-    setFormData(newData);
-  };
+  const formConfig: FieldConfig<DialogFormData> = {
+    name: {
+      required: true,
+      validate: value => {
+        const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 
-  const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-  const validateForm = (newData: DialogFormData) => {
-    const errors: { name?: string } = {};
-    const { name } = newData;
-
-    if (name) {
-      if (!nameRegex.test(name)) {
-        errors.name = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+        if (!nameRegex.test(value)) {
+          return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+        }
+        if (dialogs.some(dialog => dialog.id === value)) {
+          return formatMessage('Duplicate dialog name');
+        }
       }
-      if (dialogs.some(dialog => dialog.id === name)) {
-        errors.name = formatMessage('Duplicate dialog name');
+    },
+    description: {
+      required: false
+    },
+    dialogType: {
+      required: false
+    }
+  };
+
+  const { formData, formErrors, hasErrors, updateField } = useForm(formConfig);
+
+  const handleSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      if (hasErrors) {
+        return;
       }
-    } else {
-      errors.name = formatMessage('Please input a name');
-    }
-    setFormDataErrors(errors);
-  };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    if (Object.keys(formDataErrors).length > 0) {
-      return;
-    }
-
-    onSubmit({
-      ...formData,
-    });
-  };
+      onSubmit({
+        ...formData
+      });
+    },
+    [hasErrors, formData]
+  );
 
   return (
     <DialogWrapper
@@ -97,44 +95,44 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
       dialogType={DialogTypes.DesignFlow}
     >
       <form onSubmit={handleSubmit}>
-        <input type="submit" style={{ display: 'none' }} />
-        <Stack tokens={{ childrenGap: '2rem' }} styles={wizardStyles.stackinput}>
+        <input style={{ display: 'none' }} type="submit" />
+        <Stack styles={wizardStyles.stackinput} tokens={{ childrenGap: '2rem' }}>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
-              label={formatMessage('Name')}
-              value={formData.name}
-              styles={name}
-              onChange={updateForm('name')}
-              errorMessage={formDataErrors.name}
-              data-testid="NewDialogName"
-              required
               autoFocus
+              required
+              data-testid="NewDialogName"
+              errorMessage={formErrors.name}
+              label={formatMessage('Name')}
+              styles={name}
+              value={formData.name}
+              onChange={(_e, val) => updateField('name', val)}
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <Dropdown
-              label={formatMessage('choose dialog type?')}
-              options={dialogTypeOptions}
-              onChange={updateForm('dialogType')}
               data-testid={'dialogTypeDropdown'}
               defaultSelectedKey={formData.dialogType}
+              label={formatMessage('choose dialog type?')}
+              options={dialogTypeOptions}
+              onChange={(_e, val) => updateField('dialogType', val?.key as string)}
             />
           </StackItem>
           <StackItem grow={0} styles={wizardStyles.halfstack}>
             <TextField
+              multiline
+              label={formatMessage('Description')}
+              resizable={false}
               styles={description}
               value={formData.description}
-              label={formatMessage('Description')}
-              multiline
-              resizable={false}
-              onChange={updateForm('description')}
+              onChange={(_e, val) => updateField('description', val)}
             />
           </StackItem>
         </Stack>
 
         <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
-          <PrimaryButton onClick={handleSubmit} text={formatMessage('Next')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
+          <PrimaryButton disabled={hasErrors} text={formatMessage('Next')} onClick={handleSubmit} />
         </DialogFooter>
       </form>
     </DialogWrapper>

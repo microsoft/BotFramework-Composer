@@ -24,7 +24,7 @@ export function recognizerType({ content }: DialogInfo): string | null {
   return null;
 }
 
-const IntentField: React.FC<FieldProps> = props => {
+const IntentField: React.FC<FieldProps> = (props) => {
   const { id, description, uiOptions, value, required, onChange } = props;
   const { currentDialog } = useShellApi();
   const { recognizers } = usePluginConfig();
@@ -34,12 +34,12 @@ const IntentField: React.FC<FieldProps> = props => {
     onChange(value);
   };
 
-  const Editor = recognizers.find(r => r.id === type)?.editor;
+  const Editor = recognizers.find((r) => r.id === type)?.editor;
   const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
 
   return (
     <React.Fragment>
-      <FieldLabel id={id} label={label} description={description} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       {Editor ? <Editor {...props} onChange={handleChange} /> : `No Editor for ${type}`}
     </React.Fragment>
   );

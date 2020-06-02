@@ -23,7 +23,7 @@ interface LGPageProps extends RouteComponentProps<{}> {
   dialogId?: string;
 }
 
-const LGPage: React.FC<LGPageProps> = props => {
+const LGPage: React.FC<LGPageProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, projectId } = state;
 
@@ -32,7 +32,7 @@ const LGPage: React.FC<LGPageProps> = props => {
   const edit = /\/edit(\/)?$/.test(path);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map(dialog => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
       return {
         id: dialog.id,
         name: dialog.displayName,
@@ -40,7 +40,7 @@ const LGPage: React.FC<LGPageProps> = props => {
         url: `/bot/${projectId}/language-generation/${dialog.id}`,
       };
     });
-    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
@@ -82,29 +82,31 @@ const LGPage: React.FC<LGPageProps> = props => {
   const onRenderHeaderContent = () => {
     return (
       <Toggle
+        checked={!!edit}
         className={'toggleEditMode'}
         css={actionButton}
-        onText={formatMessage('Edit mode')}
-        offText={formatMessage('Edit mode')}
         defaultChecked={false}
-        checked={!!edit}
+        offText={formatMessage('Edit mode')}
         onChange={onToggleEditMode}
+        onText={formatMessage('Edit mode')}
       />
     );
   };
 
   return (
     <Page
+      data-testid="LGPage"
+      mainRegionName={formatMessage('LG editor')}
+      navLinks={navLinks}
+      navRegionName={formatMessage('LG Navigation Pane')}
       title={formatMessage('Bot Responses')}
       toolbarItems={toolbarItems}
-      navLinks={navLinks}
       onRenderHeaderContent={onRenderHeaderContent}
-      data-testid="LGPage"
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <Router primary={false} component={Fragment}>
-          <CodeEditor path="/edit/*" dialogId={dialogId} />
-          <TableView path="/" dialogId={dialogId} />
+        <Router component={Fragment} primary={false}>
+          <CodeEditor dialogId={dialogId} path="/edit/*" />
+          <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>
     </Page>

@@ -13,7 +13,7 @@ export function parsePathToFocused(path: string): string {
 
   const list = path.split('.');
 
-  const matchActions = list.filter(x => {
+  const matchActions = list.filter((x) => {
     if (/\[|\]/.test(x)) {
       const reg = /\[.*\]/;
       x = x.replace(reg, '');

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useRef, useContext, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useContext, useEffect, useCallback, Fragment } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
@@ -36,7 +36,7 @@ export const TestController: React.FC = () => {
     publishLuis,
     getPublishStatus,
     setBotStatus,
-    buildFormDialog,
+    buildFormDialog
   } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
@@ -138,47 +138,54 @@ export const TestController: React.FC = () => {
   }
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', padding: '5px' }}>
-      <PrimaryButton
-        css={botButton}
-        text={formatMessage('Build form dialog')}
-        onClick={handleBuild}
-        id={'publishAndConnect'}
-        disabled={showError || publishing || reloading}
-      />
-      <div css={bot} ref={botActionRef}>
-        <EmulatorOpenButton
-          botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
-          botStatus={botStatus}
-          hidden={showError}
-          onClick={handleOpenEmulator}
+    <Fragment>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '5px' }}>
+        <PrimaryButton
+          css={botButton}
+          disabled={showError || publishing || reloading}
+          id={'publishAndConnect'}
+          text={formatMessage('Build form dialog')}
+          onClick={handleBuild}
         />
-        <div
-          aria-live={'assertive'}
-          aria-label={formatMessage(`{ botStatus}`, {
-            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
-          })}
-        />
-        <Loading botStatus={botStatus} />
-        <div ref={addRef}>
-          <ErrorInfo hidden={!showError} onClick={handleErrorButtonClick} count={errorLength} />
-          <PrimaryButton
-            css={botButton}
-            text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
-            onClick={handleStart}
-            id={'publishAndConnect'}
-            disabled={showError || publishing || reloading}
+        <div ref={botActionRef} css={bot}>
+          <EmulatorOpenButton
+            botEndpoint={botEndpoints[projectId] || 'http://localhost:3979/api/messages'}
+            botStatus={botStatus}
+            hidden={showError}
+            onClick={handleOpenEmulator}
           />
+          <div
+            aria-label={formatMessage(`{ botStatus}`, {
+              botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : ''
+            })}
+            aria-live={'assertive'}
+          />
+          <Loading botStatus={botStatus} />
+          <div ref={addRef}>
+            <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
+            <PrimaryButton
+              css={botButton}
+              disabled={showError || publishing || reloading}
+              id={'publishAndConnect'}
+              text={connected ? formatMessage('Restart Bot') : formatMessage('Start Bot')}
+              onClick={handleStart}
+            />
+          </div>
         </div>
+        <ErrorCallout
+          error={botLoadErrorMsg}
+          target={botActionRef.current}
+          visible={calloutVisible}
+          onDismiss={dismissCallout}
+          onTry={handleStart}
+        />
+        <PublishLuisDialog
+          botName={botName}
+          isOpen={modalOpen}
+          onDismiss={dismissDialog}
+          onPublish={handlePublishLuis}
+        />
       </div>
-      <ErrorCallout
-        onDismiss={dismissCallout}
-        onTry={handleStart}
-        target={botActionRef.current}
-        visible={calloutVisible}
-        error={botLoadErrorMsg}
-      />
-      <PublishLuisDialog isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} botName={botName} />
-    </div>
+    </Fragment>
   );
 };

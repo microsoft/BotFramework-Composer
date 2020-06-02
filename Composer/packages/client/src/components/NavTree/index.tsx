@@ -21,10 +21,11 @@ export interface INavTreeItem {
 
 interface INavTreeProps {
   navLinks: INavTreeItem[];
+  regionName: string;
 }
 
-const NavTree: React.FC<INavTreeProps> = props => {
-  const { navLinks } = props;
+const NavTree: React.FC<INavTreeProps> = (props) => {
+  const { navLinks, regionName } = props;
   const {
     actions: { updateUserSettings },
     state: {
@@ -38,25 +39,25 @@ const NavTree: React.FC<INavTreeProps> = props => {
 
   return (
     <Resizable
-      size={{ width: currentWidth, height: 'auto' }}
-      minWidth={180}
-      maxWidth={500}
       enable={{
         right: true,
       }}
+      maxWidth={500}
+      minWidth={180}
+      size={{ width: currentWidth, height: 'auto' }}
       onResizeStop={handleResize}
     >
-      <div className="ProjectTree" css={root} data-testid="ProjectTree">
-        {navLinks.map(item => {
+      <div aria-label={regionName} className="ProjectTree" css={root} data-testid="ProjectTree" role="region">
+        {navLinks.map((item) => {
           const isSelected = location.pathname.includes(item.url);
 
           return (
             <DefaultButton
               key={item.id}
-              text={item.name}
-              styles={isSelected ? itemSelected : itemNotSelected}
               href={item.url}
-              onClick={e => {
+              styles={isSelected ? itemSelected : itemNotSelected}
+              text={item.name}
+              onClick={(e) => {
                 e.preventDefault();
                 navigateTo(item.url);
               }}

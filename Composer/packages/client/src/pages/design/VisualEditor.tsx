@@ -30,9 +30,9 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
           <React.Fragment>
             {formatMessage(`This dialog has no trigger yet.`)}
             <ActionButton
+              css={triggerButton}
               data-testid="MiddleAddNewTriggerButton"
               iconProps={addIconProps}
-              css={triggerButton}
               onClick={onClickAddTrigger}
             >
               {formatMessage('New Trigger ..')}
@@ -53,7 +53,7 @@ interface VisualEditorProps {
   openNewTriggerModal: () => void;
 }
 
-const VisualEditor: React.FC<VisualEditorProps> = props => {
+const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { api: shellApi, data: shellData } = useShell('VisualEditor');
   const { openNewTriggerModal } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
@@ -62,10 +62,10 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
   const { dialogs, schemas, designPageLocation } = state;
   const { dialogId, selected } = designPageLocation;
 
-  const addRef = useCallback(visualEditor => onboardingAddCoachMarkRef({ visualEditor }), []);
+  const addRef = useCallback((visualEditor) => onboardingAddCoachMarkRef({ visualEditor }), []);
 
   useEffect(() => {
-    const dialog = dialogs.find(d => d.id === dialogId);
+    const dialog = dialogs.find((d) => d.id === dialogId);
     const visible = get(dialog, 'triggers', []).length === 0;
     setTriggerButtonVisibility(visible);
   }, [dialogs, dialogId]);
@@ -73,12 +73,12 @@ const VisualEditor: React.FC<VisualEditorProps> = props => {
   return (
     <React.Fragment>
       <div
-        css={visualEditor(triggerButtonVisible || !selected)}
-        aria-label={formatMessage('visual editor')}
         ref={addRef}
+        aria-label={formatMessage('Visual editor')}
+        css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >
-        <Extension shell={shellApi} shellData={shellData} plugins={plugins}>
+        <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
           <VisualDesigner schema={schemas.sdk?.content} />
         </Extension>
       </div>

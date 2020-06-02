@@ -23,17 +23,17 @@ export interface IErrorCalloutProps {
   };
 }
 
-export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
+export const ErrorCallout: React.FC<IErrorCalloutProps> = (props) => {
   const { onDismiss, onTry, target, visible, error } = props;
   return (
     <Callout
+      setInitialFocus
+      ariaLabel={formatMessage(`{title}. {msg}`, { title: error.title, msg: error.message })}
+      data-testid={'errorCallout'}
       gapSpace={0}
+      hidden={!visible}
       target={target}
       onDismiss={onDismiss}
-      setInitialFocus={true}
-      hidden={!visible}
-      data-testid={'errorCallout'}
-      ariaLabel={formatMessage(`{title}. {msg}`, { title: error.title, msg: error.message })}
     >
       <div css={calloutContainer}>
         <p css={calloutLabel} id="callout-label-id">
@@ -60,8 +60,8 @@ export const ErrorCallout: React.FC<IErrorCalloutProps> = props => {
             childrenGap: 'm',
           }}
         >
-          <PrimaryButton onClick={onTry} text={formatMessage('Try again')} />
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+          <PrimaryButton text={formatMessage('Try again')} onClick={onTry} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </Stack>
       </div>
     </Callout>
