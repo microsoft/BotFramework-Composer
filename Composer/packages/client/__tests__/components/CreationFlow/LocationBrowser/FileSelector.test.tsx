@@ -71,6 +71,6 @@ describe('<FileSelector/>', () => {
 
   it('should show errors when current folder is not writable', async () => {
     const component = renderComponent();
-    expect(component.findByText('You do not have permission to save bots here')).toBeDefined();
+    expect(await component.findByText('You do not have permission to save bots here')).toBeInTheDocument();
   });
 });

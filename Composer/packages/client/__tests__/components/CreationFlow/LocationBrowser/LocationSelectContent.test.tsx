@@ -78,7 +78,7 @@ describe('<LocationSelectContent/>', () => {
   it('fail to render FileSelector', async () => {
     storeContext.state.storageFileLoadingStatus = 'failure';
     const component = renderComponent();
-    expect(await component.findByText('Can not connect the storage.')).toBeDefined();
+    expect(await component.findByText('Can not connect the storage.')).toBeInTheDocument();
   });
 
   it('should open folder', async () => {
