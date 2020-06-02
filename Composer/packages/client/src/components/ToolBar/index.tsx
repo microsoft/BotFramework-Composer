@@ -3,11 +3,37 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useCallback, Fragment } from 'react';
+import { useCallback, Fragment, useContext } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogInfo } from '@bfc/shared';
+
+import { StoreContext } from '../../store';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
+
+export type IToolBarItem = {
+  align: string;
+  type: string;
+  text?: string;
+  element?: any;
+  buttonProps?: {
+    iconProps?: {
+      iconName: string;
+    };
+    onClick: () => void;
+  };
+  disabled?: boolean;
+};
+
+export type IToolBarProps = {
+  toolbarItems?: IToolBarItem[];
+  currentDialog?: DialogInfo;
+  projectId?: string;
+  openNewTriggerModal?: () => void;
+  onCreateDialogComplete?: (newDialog: string) => void;
+  showSkillManifestModal?: () => void;
+};
 
 function itemList(action, index) {
   if (action.type === 'element') {
@@ -30,29 +56,22 @@ function itemList(action, index) {
 // support ActionButton or React Elements, the display order is array index.
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
-export function ToolBar(props) {
+export function ToolBar(props: IToolBarProps) {
+  const { actions } = useContext(StoreContext);
+  const { onboardingAddCoachMarkRef } = actions;
+
   const {
     toolbarItems,
-    actions,
     projectId,
     currentDialog,
     openNewTriggerModal,
     onCreateDialogComplete,
-    onboardingAddCoachMarkRef,
     showSkillManifestModal,
-    openDeleteBotModal,
     ...rest
   } = props;
-  let left = [];
-  let right = [];
-  if (toolbarItems && toolbarItems.length > 0) {
-    left = toolbarItems.filter((item) => {
-      return item.align === 'left';
-    });
-    right = toolbarItems.filter((item) => {
-      return item.align === 'right';
-    });
-  }
+  const left = toolbarItems?.filter((item) => item.align === 'left') ?? [];
+  const right = toolbarItems?.filter((item) => item.align === 'right') ?? [];
+
   const addNewRef = useCallback((addNew) => {
     onboardingAddCoachMarkRef({ addNew });
   }, []);
@@ -78,9 +97,9 @@ export function ToolBar(props) {
                     'data-testid': 'FlyoutNewTrigger',
                     key: 'addtrigger',
                     text: formatMessage(`Add new trigger on {displayName}`, {
-                      displayName: currentDialog ? currentDialog.displayName : '',
+                      displayName: currentDialog?.displayName ?? '',
                     }),
-                    onClick: () => openNewTriggerModal(),
+                    onClick: () => openNewTriggerModal?.(),
                   },
                 ],
               }}
@@ -89,7 +108,7 @@ export function ToolBar(props) {
           </div>
         )}
         {left.map(itemList)}{' '}
-        {window.location.href.indexOf('/dialogs/') !== -1 && (
+        {window.location.href.includes('/dialogs/') && (
           <CommandButton
             css={actionButton}
             iconProps={{ iconName: 'OpenInNewWindow' }}

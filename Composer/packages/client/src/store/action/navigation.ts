@@ -17,7 +17,7 @@ export const setDesignPageLocation: ActionCreator = (
   });
 };
 
-export const navTo: ActionCreator = ({ getState }, dialogId, breadcrumb = []) => {
+export const navTo: ActionCreator = ({ getState }, dialogId: string, breadcrumb = []) => {
   const state = getState();
   const currentUri = `/bot/${state.projectId}/dialogs/${dialogId}`;
 

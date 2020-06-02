@@ -106,18 +106,26 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   }, [dialogs]);
 
   const onRenderHeader = (props: IGroupHeaderProps) => {
+    if (props.group == null) {
+      return null;
+    }
+
     const toggleCollapse = (): void => {
+      if (props.group == null) {
+        return;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       groupRef.current!.toggleCollapseAll(true);
-      props.onToggleCollapse!(props.group!);
-      onSelect(props.group!.key);
+      props.onToggleCollapse?.(props.group);
+      onSelect(props.group.key);
     };
     return (
-      <span ref={props.group && props.group.data.isRoot && addMainDialogRef} role="grid">
+      <span ref={props.group.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
           depth={0}
-          isActive={!props.group!.isCollapsed}
+          isActive={!props.group.isCollapsed}
           isSubItemActive={!!selected}
-          link={props.group!.data}
+          link={props.group.data}
           onDelete={onDeleteDialog}
           onSelect={toggleCollapse}
         />

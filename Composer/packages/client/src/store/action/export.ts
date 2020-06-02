@@ -6,7 +6,7 @@ import { ActionCreator } from '../types';
 import httpClient from './../../utils/httpUtil';
 import { setError } from './error';
 
-export const exportToZip: ActionCreator = async (store, { projectId }) => {
+export const exportToZip: ActionCreator = async (store, { projectId }: { projectId: string }) => {
   const state = store.getState();
   try {
     const response = await httpClient.get(`/projects/${projectId}/export/`, { responseType: 'blob' });
