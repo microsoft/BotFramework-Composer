@@ -96,7 +96,9 @@ const LGPage: React.FC<LGPageProps> = (props) => {
   return (
     <Page
       data-testid="LGPage"
+      mainRegionName={formatMessage('LG editor')}
       navLinks={navLinks}
+      navRegionName={formatMessage('LG Navigation Pane')}
       title={formatMessage('Bot Responses')}
       toolbarItems={toolbarItems}
       onRenderHeaderContent={onRenderHeaderContent}

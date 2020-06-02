@@ -29,6 +29,7 @@ export class DefaultSettingManager extends FileSettingManager {
       luis: {
         name: '',
         authoringKey: '',
+        endpoint: '',
         endpointKey: '',
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
@@ -61,6 +62,10 @@ export class DefaultSettingManager extends FileSettingManager {
     //add downsampling property for old bot
     if (!result.downsampling) {
       result.downsampling = this.createDefaultSettings().downsampling;
+    }
+    //add luis endpoint for old bot
+    if (!result.luis.endpoint && result.luis.endpoint !== '') {
+      result.luis.endpoint = this.createDefaultSettings().luis.endpoint;
     }
     return result;
   }
