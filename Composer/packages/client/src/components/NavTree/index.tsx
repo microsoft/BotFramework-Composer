@@ -21,10 +21,11 @@ export interface INavTreeItem {
 
 interface INavTreeProps {
   navLinks: INavTreeItem[];
+  regionName: string;
 }
 
 const NavTree: React.FC<INavTreeProps> = (props) => {
-  const { navLinks } = props;
+  const { navLinks, regionName } = props;
   const {
     actions: { updateUserSettings },
     state: {
@@ -46,7 +47,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
       size={{ width: currentWidth, height: 'auto' }}
       onResizeStop={handleResize}
     >
-      <div className="ProjectTree" css={root} data-testid="ProjectTree">
+      <div aria-label={regionName} className="ProjectTree" css={root} data-testid="ProjectTree" role="region">
         {navLinks.map((item) => {
           const isSelected = location.pathname.includes(item.url);
 
