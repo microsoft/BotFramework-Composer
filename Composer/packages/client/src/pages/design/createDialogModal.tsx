@@ -3,7 +3,7 @@
 import React, { useContext, useCallback } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
