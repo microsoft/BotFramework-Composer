@@ -64,19 +64,13 @@ describe('<FileSelector/>', () => {
     const component = renderComponent();
     const list = await component.findByTestId('FileSelectorDropDown');
     fireEvent.click(list);
-    let text = await component.findByText('C:\\test-folder');
-    expect(text).toBeDefined();
-    text = await component.findByText('C:\\');
-    expect(text).toBeDefined();
-    text = await component.findByText('/');
-    expect(text).toBeDefined();
-    text = await component.findByText('You do not have permission to save bots here');
-    expect(text).toBeDefined();
+    expect(await component.findByText('C:\\test-folder')).toBeInTheDocument();
+    expect(await component.findByText('C:\\')).toBeInTheDocument();
+    expect(await component.findByText('/')).toBeInTheDocument();
   });
 
   it('should show errors when current folder is not writable', async () => {
     const component = renderComponent();
-    const text = await component.findByText('You do not have permission to save bots here');
-    expect(text).toBeDefined();
+    expect(component.findByText('You do not have permission to save bots here')).toBeDefined();
   });
 });

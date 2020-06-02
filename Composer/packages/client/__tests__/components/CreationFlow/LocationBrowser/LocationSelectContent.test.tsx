@@ -68,18 +68,17 @@ describe('<LocationSelectContent/>', () => {
     };
   });
 
-  it('should render spinner', () => {
+  it('should render spinner', async () => {
     storeContext.state.storageFileLoadingStatus = 'pending';
     const component = renderComponent();
-    const spinner = component.findByTestId('locationSelectContentSpinner');
+    const spinner = await component.findByTestId('locationSelectContentSpinner');
     expect(spinner).toBeDefined();
   });
 
-  it('fail to render FileSelector', () => {
+  it('fail to render FileSelector', async () => {
     storeContext.state.storageFileLoadingStatus = 'failure';
     const component = renderComponent();
-    const failureText = component.findByText('Can not connect the storage.');
-    expect(failureText).toBeDefined();
+    expect(await component.findByText('Can not connect the storage.')).toBeDefined();
   });
 
   it('should open folder', async () => {
