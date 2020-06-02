@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { KeyboardPrimaryTypes, KeyboardCommandTypes } from '../constants/KeyboardCommandTypes';
-import { NodeEventTypes } from '../../adaptive-flow/constants/NodeEventTypes';
+import { NodeEventTypes } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 
 export const mapKeyboardCommandToEditorEvent = ({
   area,

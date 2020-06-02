@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import ComposerFlowEditor from './composer-flow-editor/ComposerFlowEditor';
+import AdaptiveFlowEditor from './adaptive-flow-editor/AdaptiveFlowEditor';
 
-export default ComposerFlowEditor;
+export default AdaptiveFlowEditor;

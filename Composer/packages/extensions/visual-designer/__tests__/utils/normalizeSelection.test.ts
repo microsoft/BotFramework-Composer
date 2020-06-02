@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { normalizeSelection, sortActionIds } from '../../src/composer-flow-editor/utils/normalizeSelection';
+import { normalizeSelection, sortActionIds } from '../../src/adaptive-flow-editor/utils/normalizeSelection';
 
 describe('normalizeSelection', () => {
   it('should filter out child ids', () => {

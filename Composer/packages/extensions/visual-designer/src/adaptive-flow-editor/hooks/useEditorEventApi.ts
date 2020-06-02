@@ -6,8 +6,8 @@ import get from 'lodash/get';
 import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 
 // TODO: leak of visual-sdk domain (designerCache)
-import { designerCache } from '../../adaptive-flow/utils/visual/DesignerCache';
-import { NodeEventTypes } from '../../adaptive-flow/constants/NodeEventTypes';
+import { designerCache } from '../../adaptive-flow-renderer/utils/visual/DesignerCache';
+import { NodeEventTypes } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 import { ScreenReaderMessage } from '../constants/ScreenReaderMessage';
 import { scrollNodeIntoView } from '../utils/scrollNodeIntoView';
 import { MenuEventTypes, MenuTypes } from '../constants/MenuTypes';

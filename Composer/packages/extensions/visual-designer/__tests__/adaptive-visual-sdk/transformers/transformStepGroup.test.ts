@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { transformStepGroup } from '../../../src/adaptive-flow/transformers/transformStepGroup';
-import { AdaptiveKinds } from '../../../src/adaptive-flow/constants/AdaptiveKinds';
+import { transformStepGroup } from '../../../src/adaptive-flow-renderer/transformers/transformStepGroup';
+import { AdaptiveKinds } from '../../../src/adaptive-flow-renderer/constants/AdaptiveKinds';
 
 test('should return safely when input null value', () => {
   const result = transformStepGroup(null, '');

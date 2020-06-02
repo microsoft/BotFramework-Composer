@@ -7,7 +7,10 @@ import { useRef, useContext, useEffect } from 'react';
 
 import { SelectionContext } from '../contexts/SelectionContext';
 import { AttrNames } from '../constants/ElementAttributes';
-import { ElementWrapperComponent, ElementWrapperTag } from '../../adaptive-flow/types/PluggableComponents.types';
+import {
+  ElementWrapperComponent,
+  ElementWrapperTag,
+} from '../../adaptive-flow-renderer/types/PluggableComponents.types';
 
 export const ElementWrapper: ElementWrapperComponent = ({ nodeId, tagId, children }) => {
   const divRef = useRef<HTMLDivElement>(null);

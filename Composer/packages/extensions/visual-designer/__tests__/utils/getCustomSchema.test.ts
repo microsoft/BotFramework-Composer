@@ -3,7 +3,7 @@
 
 import { OBISchema } from '@bfc/shared';
 
-import { getCustomSchema } from '../../src/composer-flow-editor/utils/getCustomSchema';
+import { getCustomSchema } from '../../src/adaptive-flow-editor/utils/getCustomSchema';
 
 describe('getCustomSchema', () => {
   it('can handle invalid input', () => {

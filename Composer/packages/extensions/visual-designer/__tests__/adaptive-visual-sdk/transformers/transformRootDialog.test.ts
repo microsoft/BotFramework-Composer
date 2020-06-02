@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { transformRootDialog } from '../../../src/adaptive-flow/transformers/transformRootDialog';
+import { transformRootDialog } from '../../../src/adaptive-flow-renderer/transformers/transformRootDialog';
 
 import * as TodoBotMain from './todoBot.main.json';
 

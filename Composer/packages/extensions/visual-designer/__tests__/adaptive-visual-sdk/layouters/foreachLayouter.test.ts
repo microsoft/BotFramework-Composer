@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Boundary } from '../../../src/adaptive-flow/models/Boundary';
-import { GraphNode } from '../../../src/adaptive-flow/models/GraphNode';
-import { foreachLayouter } from '../../../src/adaptive-flow/layouters/foreachLayouter';
+import { Boundary } from '../../../src/adaptive-flow-renderer/models/Boundary';
+import { GraphNode } from '../../../src/adaptive-flow-renderer/models/GraphNode';
+import { foreachLayouter } from '../../../src/adaptive-flow-renderer/layouters/foreachLayouter';
 
 describe('foreachLayouter', () => {
   let foreachNode, stepsNode, loopBeginNode, loopEndNode;

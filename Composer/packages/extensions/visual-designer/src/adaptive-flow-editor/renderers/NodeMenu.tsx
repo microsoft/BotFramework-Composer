@@ -6,11 +6,11 @@ import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import formatMessage from 'format-message';
 
-import { NodeEventTypes, EditorEventHandler } from '../../adaptive-flow/constants/NodeEventTypes';
+import { NodeEventTypes, EditorEventHandler } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 import { MenuTypes } from '../constants/MenuTypes';
 import { AttrNames } from '../constants/ElementAttributes';
 import { SelectionContext } from '../contexts/SelectionContext';
-import { ElementColor } from '../../adaptive-flow/constants/ElementColors';
+import { ElementColor } from '../../adaptive-flow-renderer/constants/ElementColors';
 import { IconMenu } from '../components/IconMenu';
 
 const declareElementAttributes = (id: string) => {

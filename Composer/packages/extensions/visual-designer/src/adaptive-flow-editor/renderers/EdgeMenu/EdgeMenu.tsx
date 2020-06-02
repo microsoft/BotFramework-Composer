@@ -8,13 +8,13 @@ import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
-import { EdgeAddButtonSize } from '../../../adaptive-flow/constants/ElementSizes';
+import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';
 import { NodeRendererContext } from '../../contexts/NodeRendererContext';
 import { SelectionContext } from '../../contexts/SelectionContext';
 import { SelfHostContext } from '../../contexts/SelfHostContext';
 import { AttrNames } from '../../constants/ElementAttributes';
 import { MenuTypes } from '../../constants/MenuTypes';
-import { ObiColors } from '../../../adaptive-flow/constants/ElementColors';
+import { ObiColors } from '../../../adaptive-flow-renderer/constants/ElementColors';
 import { IconMenu } from '../../components/IconMenu';
 
 import { createActionMenu } from './createSchemaMenu';

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { transformSwitchCondition } from '../../../src/adaptive-flow/transformers/transformSwitchCondition';
-import { AdaptiveKinds } from '../../../src/adaptive-flow/constants/AdaptiveKinds';
+import { transformSwitchCondition } from '../../../src/adaptive-flow-renderer/transformers/transformSwitchCondition';
+import { AdaptiveKinds } from '../../../src/adaptive-flow-renderer/constants/AdaptiveKinds';
 
 test('should return NULL when input is not SwitchCondition', () => {
   expect(transformSwitchCondition(null, '')).toBeNull();

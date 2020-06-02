@@ -11,8 +11,8 @@ import { DialogFactory } from '@bfc/shared';
 import { useShellApi, JSONSchema7, FlowSchema, FlowWidget } from '@bfc/extension';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
-import { NodeEventTypes } from '../adaptive-flow/constants/NodeEventTypes';
-import { AdaptiveDialog } from '../adaptive-flow/editors/AdaptiveDialog';
+import { NodeEventTypes } from '../adaptive-flow-renderer/constants/NodeEventTypes';
+import { AdaptiveDialog } from '../adaptive-flow-renderer/editors/AdaptiveDialog';
 
 import { NodeRendererContext, NodeRendererContextValue } from './contexts/NodeRendererContext';
 import { SelfHostContext } from './contexts/SelfHostContext';

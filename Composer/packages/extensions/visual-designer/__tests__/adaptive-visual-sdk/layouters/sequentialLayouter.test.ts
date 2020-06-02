@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { sequentialLayouter } from '../../../src/adaptive-flow/layouters/sequentialLayouter';
-import { Boundary } from '../../../src/adaptive-flow/models/Boundary';
-import { GraphNode } from '../../../src/adaptive-flow/models/GraphNode';
-import { calculateSequenceBoundary } from '../../../src/adaptive-flow/layouters/calculateNodeBoundary';
+import { sequentialLayouter } from '../../../src/adaptive-flow-renderer/layouters/sequentialLayouter';
+import { Boundary } from '../../../src/adaptive-flow-renderer/models/Boundary';
+import { GraphNode } from '../../../src/adaptive-flow-renderer/models/GraphNode';
+import { calculateSequenceBoundary } from '../../../src/adaptive-flow-renderer/layouters/calculateNodeBoundary';
 
 describe('sequentialLayouter', () => {
   let nodes;
