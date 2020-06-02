@@ -19,6 +19,7 @@ import { DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 
+import { nameRegex } from '../../constants';
 import {
   generateNewDialog,
   getTriggerTypes,
@@ -37,7 +38,6 @@ import { StoreContext } from '../../store';
 
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
-const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validateForm = (
   selectedType: string,
   data: TriggerFormData,
@@ -64,9 +64,7 @@ const validateForm = (
   }
 
   if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
-    errors.intent = formatMessage(
-      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-    );
+    errors.intent = formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
 
   if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
