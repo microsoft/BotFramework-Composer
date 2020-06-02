@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils/lib/react';
+import { render, fireEvent } from '@bfc/test-utils';
 
 import { renderWithStore } from '../testUtils';
 import { dialogs } from '../constants.json';

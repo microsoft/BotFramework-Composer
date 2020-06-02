@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, waitFor, fireEvent } from '@bfc/test-utils/lib/react';
+import { render, waitFor, fireEvent } from '@bfc/test-utils';
 import { FieldProps } from '@bfc/extension';
 import assign from 'lodash/assign';
 

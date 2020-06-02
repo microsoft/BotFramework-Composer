@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, waitFor } from '@bfc/test-utils/lib/react';
+import { render, waitFor } from '@bfc/test-utils';
 
 import { ErrorMessage } from '../ErrorMessage';
 

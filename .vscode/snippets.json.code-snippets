@@ -9,7 +9,7 @@
 		"prefix": "rct",
 		"body": [
 			"import React from 'react';",
-      "import { render } from '@bfc/test-utils/lib/react';",
+      "import { render } from '@bfc/test-utils';",
       "import assign from 'lodash/assign';\n",
       "import { $1 } from '$2';\n",
       "const defaultProps = {\n  $3\n};\n",

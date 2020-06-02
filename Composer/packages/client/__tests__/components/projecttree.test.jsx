@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils/lib/react';
+import { fireEvent } from '@bfc/test-utils';
 
 import { dialogs } from '../constants.json';
 import { ProjectTree } from '../../src/components/ProjectTree/index.tsx';

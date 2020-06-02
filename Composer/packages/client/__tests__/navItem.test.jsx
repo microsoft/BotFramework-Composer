@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render } from '@bfc/test-utils/lib/react';
+import { render } from '@bfc/test-utils';
 
 import { NavItem } from '../src/components/NavItem';
 import { StoreProvider } from '../src/store';

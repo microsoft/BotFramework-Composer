@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from '@bfc/test-utils/lib/react';
+import { render } from '@bfc/test-utils';
 
 import { DialogWrapper } from '../../../src/components/DialogWrapper';
 import { DialogTypes } from '../../../src/components/DialogWrapper/styles';

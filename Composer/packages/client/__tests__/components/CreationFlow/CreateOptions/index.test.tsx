@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils/lib/react';
+import { fireEvent } from '@bfc/test-utils';
 
 import { renderWithStore } from '../../../testUtils';
 import { CreateOptions } from '../../../../src/components/CreationFlow/CreateOptions';

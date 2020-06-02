@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, getByText, waitFor } from '@bfc/test-utils/lib/react';
+import { render, fireEvent, getByText, waitFor } from '@bfc/test-utils';
 import assign from 'lodash/assign';
 
 import { ObjectItem } from '../ObjectItem';

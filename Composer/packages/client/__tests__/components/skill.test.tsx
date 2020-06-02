@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils/lib/react';
+import { render, fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils';
 import { Skill } from '@bfc/shared';
 
 import Skills from '../../src/pages/skills';
