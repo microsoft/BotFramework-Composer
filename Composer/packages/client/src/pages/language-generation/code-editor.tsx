@@ -7,15 +7,12 @@ import { LgEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { lgIndexer, filterTemplateDiagnostics } from '@bfc/indexers';
+import { filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
-import * as lgUtil from '../../utils/lgUtil';
-
-const { parse } = lgIndexer;
 
 const lspServerPath = '/lg-language-server';
 
@@ -24,12 +21,11 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { actions, state, resolvers } = useContext(StoreContext);
+  const { actions, state } = useContext(StoreContext);
   const { lgFiles, locale, projectId, userSettings } = state;
-  const { lgImportresolver } = resolvers;
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const [diagnostics, setDiagnostics] = useState(get(file, 'diagnostics', []));
+  const diagnostics = get(file, 'diagnostics', []);
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<any>(null);
 
@@ -111,25 +107,14 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     (value) => {
       setContent(value);
       if (!file) return;
-      const { id } = file;
       if (inlineMode) {
         if (!template) return;
-        const { name, parameters } = template;
-        const { content } = file;
         try {
-          const newContent = lgUtil.updateTemplate(content, name, {
-            name,
-            parameters,
-            body: value,
-          });
-          setDiagnostics(parse(newContent, id, lgImportresolver).diagnostics);
           updateLgTemplate(value);
         } catch (error) {
           setErrorMsg(error.message);
         }
       } else {
-        const diags = parse(value, id, lgImportresolver).diagnostics;
-        setDiagnostics(diags);
         updateLgFile(value);
       }
     },

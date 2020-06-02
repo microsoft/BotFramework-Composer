@@ -31,6 +31,7 @@ interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 
   disabled?: boolean;
   forwardedRef?: (project: any) => void | Promise<void>;
   openExternal?: boolean;
+  ariaLabel: string;
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
@@ -42,11 +43,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   disabled,
   forwardedRef,
   openExternal,
+  ariaLabel,
   ...rest
 }) => {
   const onRenderChildren = () => {
     return (
-      <div ref={forwardedRef} css={childrenContainer}>
+      <div ref={forwardedRef} aria-label={ariaLabel} css={childrenContainer}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
           <div css={itemContainerTitle}>
             <Text block variant="large">

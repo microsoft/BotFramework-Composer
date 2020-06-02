@@ -123,7 +123,7 @@ namespace Tests
             .Send(CreateConversationUpdateActivity())
                .AssertReply(String.Format("Welcome to Input Sample Bot.{0}I can show you examples on how to use actions, You can enter number 01-07{0}01 - TextInput{0}02 - NumberInput{0}03 - ConfirmInput{0}04 - ChoiceInput{0}05 - AttachmentInput{0}06 - DateTimeInput{0}07 - OAuthInput{0}", Environment.NewLine)).Send("06")
                 .AssertReply("Please enter a date.")
-            .Send("June 1st")
+            .Send("June 1st 2019")
                 .AssertReply("You entered: 2019-06-01")
             .StartTestAsync();
         }
