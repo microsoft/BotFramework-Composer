@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
-import { Button, IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import {
@@ -31,6 +31,7 @@ interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 
   disabled?: boolean;
   forwardedRef?: (project: any) => void | Promise<void>;
   openExternal?: boolean;
+  ariaLabel: string;
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
@@ -42,11 +43,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   disabled,
   forwardedRef,
   openExternal,
+  ariaLabel,
   ...rest
 }) => {
   const onRenderChildren = () => {
     return (
-      <div ref={forwardedRef} css={childrenContainer}>
+      <div ref={forwardedRef} aria-label={ariaLabel} css={childrenContainer}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
           <div css={itemContainerTitle}>
             <Text block variant="large">
@@ -71,7 +73,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   };
 
   return (
-    <Button
+    <DefaultButton
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async (e) => {
         // todo: clean this up

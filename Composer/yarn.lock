@@ -2082,19 +2082,19 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.5.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.6":
+  version "7.9.6"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.6.tgz#a9102eb5cadedf3f31d08a9ecf294af7827ea29f"
+  integrity sha512-64AF1xY3OAkFHqOb9s4jpgk1Mm5vDZ4L3acHvAml+53nO1XbXLuDodsVpO4OIUsmemlUHMxNdYMNJmsvOwLrvQ==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.5.5":
   version "7.6.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.2.tgz#c3d6e41b304ef10dcf13777a33e7694ec4a9a6dd"
   integrity sha512-EXxN64agfUqqIGeEjI5dL5z0Sw0ZwWo1mLTi4mQowCZ42O59b7DRpZAnTC6OqdF28wMBMFKNb/4uFGrVaigSpg==
   dependencies:
     regenerator-runtime "^0.13.2"
-
-"@babel/runtime@^7.8.7", "@babel/runtime@^7.9.6":
-  version "7.9.6"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.6.tgz#a9102eb5cadedf3f31d08a9ecf294af7827ea29f"
-  integrity sha512-64AF1xY3OAkFHqOb9s4jpgk1Mm5vDZ4L3acHvAml+53nO1XbXLuDodsVpO4OIUsmemlUHMxNdYMNJmsvOwLrvQ==
-  dependencies:
-    regenerator-runtime "^0.13.4"
 
 "@babel/runtime@^7.9.2":
   version "7.9.2"
@@ -2834,10 +2834,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@microsoft/bf-cli-command@4.9.0":
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.9.0.tgz#35a3f9e049b766eb92f6fc84c2a322345648eccd"
-  integrity sha512-rUoiNEGGHN0NvvkH6pV2BXH6y5EcTJ70vb4ZiG+edYh3FsV3bT0/FvBJgEkzwm0DzPKjjK+UfgHHgzwQIlNOlQ==
+"@microsoft/bf-cli-command@4.9.1":
+  version "4.9.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.9.1.tgz#708976bb9e882a40a2d64c6dff3df5eb9a1264a8"
+  integrity sha512-zylOEeybbOrNGLUit0U9eak4IxTCzsBEp3ovvYpRiJ6uL7ADGi6rELwSEaEmbaAezYU0qnaUkcqPXWjwYvCTpw==
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -2849,20 +2849,20 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-dispatcher@4.9.0":
-  version "4.9.0"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.9.0#59bf1ac937a08d9fa43c07d862d9efd046d4306d"
+"@microsoft/bf-dispatcher@4.9.1":
+  version "4.9.1"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.9.1#45766580e1bc34bfb60aeefdc96142e9415fe817"
   dependencies:
-    "@microsoft/bf-lu" "4.9.0"
+    "@microsoft/bf-lu" "4.9.1"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     argparse "~1.0.10"
     tslib "^1.10.0"
 
-"@microsoft/bf-lu@4.9.0":
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.9.0.tgz#abd8711aa8daf9af15b6c54116505021d616a0e8"
-  integrity sha512-Yojf0xw6rJANP9Jrv8Pr8oRUpMGQVzAiU0zGIcUXlzwDZIyLXjxp+U0WsVo3OQkOVF5hqaqGHDcAnjC5JxHDMg==
+"@microsoft/bf-lu@4.9.1":
+  version "4.9.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.9.1.tgz#06e85e85cbd3fad508473d24e07b8f9d05fa2b11"
+  integrity sha512-ge39GhTNRQB4LSuT71txRO+R7VKMAHHF2vDNi8Mkcr+8boDXLGagWl3gUB57SjcQTPCXCe1iVEAirYAgMXNFUA==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -2883,16 +2883,16 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-luis-cli@4.9.0":
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-luis-cli/-/bf-luis-cli-4.9.0.tgz#53c93ff6e81ef737cfa7b0b8890d6d35e1c0a343"
-  integrity sha512-4HtelnZhxoQyblvahcTHnH2tNS3Qt7iORZ/ygY3dGbb0Ue8i9tJLWN6MhQ6Qxll/GwtX35LuajPJt2goVIhK0w==
+"@microsoft/bf-luis-cli@4.9.1":
+  version "4.9.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/bf-luis-cli/-/bf-luis-cli-4.9.1.tgz#8c6ab2c089ef03aad83d0ec8b04dfe0cc30aaf99"
+  integrity sha512-yahftpxlly40k5Td2i5mfHpAOuA1+kOsvX4/J3B4pDTcV/cCHaW18W14tKLOZCWSG9EOlMkCclYqeWjmJCvnXQ==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/cognitiveservices-luis-runtime" "5.0.0"
     "@azure/ms-rest-azure-js" "2.0.1"
-    "@microsoft/bf-cli-command" "4.9.0"
-    "@microsoft/bf-lu" "4.9.0"
+    "@microsoft/bf-cli-command" "4.9.1"
+    "@microsoft/bf-lu" "4.9.1"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"
@@ -2910,7 +2910,7 @@
   resolved "https://registry.yarnpkg.com/@microsoft/load-themed-styles/-/load-themed-styles-1.10.39.tgz#23024bfa264a01ab2f05a9fda9c97c1f90ef80d8"
   integrity sha512-KKeQSM0FMTR7VtvkVF+D488zUmO3YoImxJ3O2xyLDEu9GqxqthF3Zvv1GddC2Jyoj2vuAJ0RGGgrI/T+MxLLDg==
 
-"@microsoft/recognizers-text-data-types-timex-expression@^1.1.4":
+"@microsoft/recognizers-text-data-types-timex-expression@1.1.4":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@microsoft/recognizers-text-data-types-timex-expression/-/recognizers-text-data-types-timex-expression-1.1.4.tgz#623453ae65e8df212d8156f6a314675c30696c1d"
   integrity sha512-2vICaEJfV9EpaDKs5P1PLAEs+WpNqrtpkl7CLsmc5gKmxgpQtsojG4tk6km5JRKg1mYuLV5ZzJ/65oOEeyTMvQ==
@@ -3241,6 +3241,14 @@
     lodash "^4.17.15"
     redent "^3.0.0"
 
+"@testing-library/react-hooks@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-3.2.1.tgz#19b6caa048ef15faa69d439c469033873ea01294"
+  integrity sha512-1OB6Ksvlk6BCJA1xpj8/WWz0XVd1qRcgqdaFAq+xeC6l61Ucj0P6QpA5u+Db/x9gU4DCX8ziR5b66Mlfg0M2RA==
+  dependencies:
+    "@babel/runtime" "^7.5.4"
+    "@types/testing-library__react-hooks" "^3.0.0"
+
 "@testing-library/react@^10.0.2":
   version "10.0.2"
   resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-10.0.2.tgz#8eca7aa52d810cf7150048a2829fdc487162006d"
@@ -3277,6 +3285,11 @@
   integrity sha512-nTvHwgWONL+iXG+9CX+gnQ/tTOV+qucAjwpXqeUn4OCRMxP42T29FFP/7XaOo0EqqO3TlENhObeZEe7RUJAriw==
   dependencies:
     "@types/glob" "*"
+
+"@types/atob-lite@^2.0.0":
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@types/atob-lite/-/@types/atob-lite-2.0.0.tgz#bd44ca72e65a58477e81309a66e401524f187053"
+  integrity sha1-vUTKcuZaWEd+gTCaZuQBUk8YcFM=
 
 "@types/babel__core@^7.1.7":
   version "7.1.7"
@@ -3747,6 +3760,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-test-renderer@*":
+  version "16.9.2"
+  resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.9.2.tgz#e1c408831e8183e5ad748fdece02214a7c2ab6c5"
+  integrity sha512-4eJr1JFLIAlWhzDkBCkhrOIWOvOxcCAfQh+jiKg7l/nNZcCIL2MHl2dZhogIFKyHzedVWHaVP1Yydq/Ruu4agw==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@16.9.23":
   version "16.9.23"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.23.tgz#1a66c6d468ba11a8943ad958a8cb3e737568271c"
@@ -3874,6 +3894,14 @@
   integrity sha512-NdbKc6yseg6uq4UJFwimPws0iwsGugVbPoOTP2EH+PJMJKiZsoSg5F2H3XYweOyytftCOuIMuXifBUrF9CSvaQ==
   dependencies:
     "@types/jest" "*"
+
+"@types/testing-library__react-hooks@^3.0.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@types/testing-library__react-hooks/-/testing-library__react-hooks-3.2.0.tgz#52f3a109bef06080e3b1e3ae7ea1c014ce859897"
+  integrity sha512-dE8iMTuR5lzB+MqnxlzORlXzXyCL0EKfzH0w/lau20OpkHD37EaWjZDz0iNG8b71iEtxT4XKGmSKAGVEqk46mw==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-test-renderer" "*"
 
 "@types/testing-library__react@^10.0.0", "@types/testing-library__react@^10.0.1":
   version "10.0.1"
@@ -4532,37 +4560,24 @@ adal-node@^0.1.28:
     xmldom ">= 0.1.x"
     xpath.js "~1.1.0"
 
-adaptive-expressions@4.9.0-preview-119754:
-  version "4.9.0-preview-119754"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.9.0-preview-119754.tgz#d27e04ecc1b1a9a1ce751b11bfe6267592a66e79"
-  integrity sha1-0n4E7MGxqaHOdRsRv+YmdZKmbnk=
+adaptive-expressions@4.10.0-preview-133287, adaptive-expressions@^4.10.0-preview-133287:
+  version "4.10.0-preview-133287"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-133287.tgz#1a763d0b48bc639cf130f55e32e4c87cd6bfb255"
+  integrity sha1-GnY9C0i8Y5zxMPVeMuTIfNa/slU=
   dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
     "@types/lru-cache" "^5.1.0"
     "@types/moment-timezone" "^0.5.12"
     "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.1"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
     jspath "^0.4.0"
     lodash "^4.17.15"
     lru-cache "^5.1.1"
-    moment "2.24.0"
-    moment-timezone "^0.5.25"
-
-adaptive-expressions@^4.8.0-preview-110700:
-  version "4.8.0-rc2-preview"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.8.0-rc2-preview.tgz#a533cdb1a5b2415f6b5b906f7eaa80133ca8981f"
-  integrity sha1-pTPNsaWyQV9rW5BvfqqAEzyomB8=
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "^1.1.4"
-    "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.12"
-    "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.1"
-    jspath "^0.4.0"
-    lodash "^4.17.15"
-    lru-cache "^5.1.1"
-    moment "2.24.0"
-    moment-timezone "^0.5.25"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
 
 address@1.0.3, address@^1.0.1:
   version "1.0.3"
@@ -4721,10 +4736,10 @@ antlr4@^4.7.2:
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/antlr4/-/antlr4-4.7.2.tgz#9d0b5987bb63660de658055ee9149141b4d9b462"
   integrity sha1-nQtZh7tjZg3mWAVe6RSRQbTZtGI=
 
-antlr4ts@0.5.0-alpha.1:
-  version "0.5.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/antlr4ts/-/antlr4ts-0.5.0-alpha.1.tgz#c421d8269523356c42c5533603aec0410b423806"
-  integrity sha512-LU5FLWq2fUwg2cTL/DeIL16ucUm5jv6SNVFoMjbYLviXAp6p5g1ZzkTAnWiOKX/muEEy0PY78perPj6WUBSQCw==
+antlr4ts@0.5.0-alpha.3:
+  version "0.5.0-alpha.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/antlr4ts/-/antlr4ts-0.5.0-alpha.3.tgz#fa6d39d88d6b96341a8afef45867af9abcb38766"
+  integrity sha1-+m052I1rljQaiv70WGevmryzh2Y=
 
 any-observable@^0.3.0:
   version "0.3.0"
@@ -5104,6 +5119,11 @@ at-least-node@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
+
+atob-lite@^2.0.0:
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/atob-lite/-/atob-lite-2.0.0.tgz#0fef5ad46f1bd7a8502c65727f0367d5ee43d696"
+  integrity sha1-D+9a1G8b16hQLGVyfwNn1e5D1pY=
 
 atob@^2.1.1:
   version "2.1.2"
@@ -5492,6 +5512,11 @@ bfj@6.1.1:
     hoopy "^0.1.2"
     tryer "^1.0.0"
 
+big-integer@^1.6.48:
+  version "1.6.48"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/big-integer/-/big-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"
+  integrity sha1-j9iL0WMsukocjD49cVnwi7lbS54=
+
 big.js@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.2.0.tgz#a5fc298b81b9e0dca2e458824784b65c52ba588e"
@@ -5615,13 +5640,13 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@^4.9.0-preview-119754:
-  version "4.9.0-preview-119754"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.9.0-preview-119754.tgz#3eade42bb61beb766b1c5354428dd25be98bd455"
-  integrity sha1-Pq3kK7Yb63ZrHFNUQo3SW+mL1FU=
+botbuilder-lg@^4.10.0-preview-133287:
+  version "4.10.0-preview-133287"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-133287.tgz#0f07eaf6e202146bb177c980a1ca8fce23751473"
+  integrity sha1-Dwfq9uICFGuxd8mAocqPziN1FHM=
   dependencies:
-    adaptive-expressions "4.9.0-preview-119754"
-    antlr4ts "0.5.0-alpha.1"
+    adaptive-expressions "4.10.0-preview-133287"
+    antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.11"
     path "^0.12.7"
     uuid "^3.3.3"
@@ -13254,8 +13279,8 @@ mixin-object@^2.0.1:
 
 mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@^0.5.2, mkdirp@^0.5.3, mkdirp@^0.5.4, mkdirp@~0.5.1:
   version "0.5.5"
-  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
-  integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
+  integrity sha1-2Rzv1i0UNsoPQWIOJRKI1CAJne8=
   dependencies:
     minimist "^1.2.5"
 
@@ -13281,10 +13306,10 @@ mock-fs@^4.10.1:
   resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.10.1.tgz#50a07a20114a6cdb119f35762f61f46266a1e323"
   integrity sha512-w22rOL5ZYu6HbUehB5deurghGM0hS/xBVyHMGKOuQctkk93J9z9VEOhDsiWrXOprVNQpP9uzGKdl8v9mFspKuw==
 
-moment-timezone@^0.5.25:
-  version "0.5.26"
-  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/moment-timezone/-/moment-timezone-0.5.26.tgz#c0267ca09ae84631aa3dc33f65bedbe6e8e0d772"
-  integrity sha1-wCZ8oJroRjGqPcM/Zb7b5ujg13I=
+moment-timezone@^0.5.28:
+  version "0.5.31"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/moment-timezone/-/moment-timezone-0.5.31.tgz#9c40d8c5026f0c7ab46eda3d63e49c155148de05"
+  integrity sha1-nEDYxQJvDHq0bto9Y+ScFVFI3gU=
   dependencies:
     moment ">= 2.9.0"
 
@@ -13292,6 +13317,11 @@ moment@2.24.0, "moment@>= 2.9.0", moment@>=2.14.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+
+moment@^2.25.1:
+  version "2.26.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/moment/-/moment-2.26.0.tgz#5e1f82c6bafca6e83e808b30c8705eed0dcbd39a"
+  integrity sha1-Xh+Cxrr8pug+gIswyHBe7Q3L05o=
 
 monaco-editor@^0.19.0:
   version "0.19.3"
@@ -15644,7 +15674,7 @@ react-frame-component@^4.0.2:
   resolved "https://registry.yarnpkg.com/react-frame-component/-/react-frame-component-4.1.0.tgz#bef04039c6af687314f27b20ef9893d85eefe3e6"
   integrity sha512-2HkO0iccSjd+xRA+aOxq7Mm50WUmCjdmhbQhOiG6gQTChaW//Y3mdkGeUfVA3YkXvDVbigRDvJd/VTUlqaZWSw==
 
-react-is@^16.12.0:
+react-is@^16.12.0, react-is@^16.8.6:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
@@ -15673,6 +15703,16 @@ react-measure@^2.3.0:
     get-node-dimensions "^1.2.1"
     prop-types "^15.6.2"
     resize-observer-polyfill "^1.5.0"
+
+react-test-renderer@^16.13.1:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.13.1.tgz#de25ea358d9012606de51e012d9742e7f0deabc1"
+  integrity sha512-Sn2VRyOK2YJJldOqoh8Tn/lWQ+ZiKhyZTPtaO0Q6yNj+QDbmRkVFap6pZPy3YQk8DScRDfyqm/KxKYP9gCMRiQ==
+  dependencies:
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    react-is "^16.8.6"
+    scheduler "^0.19.1"
 
 react-timeago@^4.4.0:
   version "4.4.0"
@@ -16463,7 +16503,7 @@ saxes@^5.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@^0.19.0:
+scheduler@^0.19.0, scheduler@^0.19.1:
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.19.1.tgz#4f3e2ed2c1a7d65681f4c854fa8c5a1ccb40f196"
   integrity sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==

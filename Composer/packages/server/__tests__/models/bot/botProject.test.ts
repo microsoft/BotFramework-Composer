@@ -277,3 +277,19 @@ describe('dialog operations', () => {
     expect(dialogFileLength(proj.files)).toEqual(dialogsFilesCount - 1);
   });
 });
+
+describe('deleteAllFiles', () => {
+  const locationRef: LocationRef = {
+    storageId: 'default',
+    path: copyDir,
+  };
+
+  it('should copy and then delete successfully', async () => {
+    const newBotProject = await proj.copyTo(locationRef);
+    await newBotProject.init();
+    const project: { [key: string]: any } = newBotProject.getProject();
+    expect(project.files.length).toBe(10);
+    await newBotProject.deleteAllFiles();
+    expect(fs.existsSync(copyDir)).toBe(false);
+  });
+});

@@ -13,6 +13,7 @@ using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
+using Microsoft.Bot.Schema;
 
 namespace Microsoft.BotFramework.Composer.Core
 {
@@ -26,8 +27,9 @@ namespace Microsoft.BotFramework.Composer.Core
         private readonly string rootDialogFile;
         private readonly IBotTelemetryClient telemetryClient;
         private readonly string defaultLocale;
+        private readonly bool removeRecipientMention;
 
-        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, IBotTelemetryClient telemetryClient, string rootDialog, string defaultLocale)
+        public ComposerBot(ConversationState conversationState, UserState userState, ResourceExplorer resourceExplorer, BotFrameworkClient skillClient, SkillConversationIdFactoryBase conversationIdFactory, IBotTelemetryClient telemetryClient, string rootDialog, string defaultLocale, bool removeRecipientMention = false)
         {
             this.conversationState = conversationState;
             this.userState = userState;
@@ -36,6 +38,7 @@ namespace Microsoft.BotFramework.Composer.Core
             this.rootDialogFile = rootDialog;
             this.defaultLocale = defaultLocale;
             this.telemetryClient = telemetryClient;
+            this.removeRecipientMention = removeRecipientMention;
 
             LoadRootDialogAsync();
             this.dialogManager.InitialTurnState.Set(skillClient);
@@ -52,6 +55,11 @@ namespace Microsoft.BotFramework.Composer.Core
             else
             {
                 rootDialog.AutoEndDialog = false;
+            }
+
+            if (this.removeRecipientMention && turnContext?.Activity?.Type == "message")
+            {
+                turnContext.Activity.RemoveRecipientMention();
             }
 
             await this.dialogManager.OnTurnAsync(turnContext, cancellationToken: cancellationToken);
