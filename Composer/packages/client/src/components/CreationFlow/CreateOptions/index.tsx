@@ -80,11 +80,16 @@ export function CreateOptions(props) {
   };
 
   const handleJumpToNext = () => {
+    let routeToTemplate = emptyBotKey;
     if (option === optionKeys.createFromTemplate) {
-      onNext(currentTemplate);
-    } else {
-      onNext(emptyBotKey);
+      routeToTemplate = currentTemplate;
     }
+
+    if (props.location && props.location.search) {
+      routeToTemplate += props.location.search;
+    }
+
+    onNext(routeToTemplate);
   };
 
   const tableColums = [
