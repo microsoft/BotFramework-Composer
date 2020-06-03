@@ -65,6 +65,9 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
   }
 
   const { foreachNode, loopActionsNode, loopBeginNode, loopEndNode } = nodeMap;
+
+  const onClickNode = () => onEvent(NodeEventTypes.Focus, { id });
+
   return (
     <div css={{ width: boundary.width, height: boundary.height, position: 'relative' }}>
       <SVGContainer height={boundary.height} width={boundary.width}>
@@ -93,13 +96,16 @@ export const ForeachWidget: FunctionComponent<ForeachWidgetProps> = ({ id, data,
           }}
         />
       </OffsetContainer>
-      {[loopBeginNode, loopEndNode]
-        .filter((x) => !!x)
-        .map((x, index) => (
-          <OffsetContainer key={`${id}/loopicon-${index}/offset`} offset={x.offset}>
-            <LoopIndicator onClick={() => onEvent(NodeEventTypes.Focus, { id })} />
-          </OffsetContainer>
-        ))}
+      {loopBeginNode != null && (
+        <OffsetContainer key={`${id}/loopicon-0/offset`} offset={loopBeginNode.offset}>
+          <LoopIndicator onClick={onClickNode} />
+        </OffsetContainer>
+      )}
+      {loopEndNode != null && (
+        <OffsetContainer key={`${id}/loopicon-1/offset`} offset={loopEndNode.offset}>
+          <LoopIndicator onClick={onClickNode} />
+        </OffsetContainer>
+      )}
     </div>
   );
 };

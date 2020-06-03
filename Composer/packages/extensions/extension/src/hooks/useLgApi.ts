@@ -11,11 +11,8 @@ export const useLgApi = (shellApi: ShellApi) => {
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
-      .map((x) => {
-        const lgTemplateRef = LgTemplateRef.parse(x);
-        return lgTemplateRef ? lgTemplateRef.name : '';
-      })
-      .filter((x) => !!x);
+      .map((x) => LgTemplateRef.parse(x)?.name)
+      .filter((x) => x != null) as string[];
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
 

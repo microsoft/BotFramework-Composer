@@ -39,9 +39,9 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
   const hash = props.location?.hash ?? '';
   const hashLine = querystring.parse(hash).L;
-  const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
+  const line = Array.isArray(hashLine) ? parseInt(hashLine[0]) : typeof hashLine === 'string' ? parseInt(hashLine) : 0;
 
-  const inlineMode = !!intent;
+  const inlineMode = intent != null;
   const [content, setContent] = useState(intent?.Body || file?.content);
 
   useEffect(() => {

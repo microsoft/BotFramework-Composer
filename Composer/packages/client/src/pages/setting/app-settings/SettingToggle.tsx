@@ -13,7 +13,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import * as styles from './styles';
 
 interface ISettingToggleProps {
-  checked?: boolean;
+  checked: boolean;
   description: React.ReactChild;
   id?: string;
   image: string;
@@ -38,10 +38,10 @@ const SettingToggle: React.FC<ISettingToggleProps> = (props) => {
       </div>
       <div>
         <Toggle
-          checked={!!checked}
+          checked={checked}
           id={id || uniqueId}
           offText={formatMessage('Off')}
-          onChange={(_e, checked) => onToggle(!!checked)}
+          onChange={(_e, checked) => onToggle(checked ?? false)}
           onText={formatMessage('On')}
         />
       </div>

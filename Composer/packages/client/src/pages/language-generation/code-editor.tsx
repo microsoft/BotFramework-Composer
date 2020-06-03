@@ -42,7 +42,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const hashLine = querystring.parse(hash).L;
   const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
 
-  const inlineMode = !!template;
+  const inlineMode = template != null;
   const [content, setContent] = useState(template?.body || file?.content);
 
   useEffect(() => {

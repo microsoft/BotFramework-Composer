@@ -75,7 +75,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
 
   return (
     <div
-      css={navItem(isActive, !!isSubItemActive)}
+      css={navItem(isActive, isSubItemActive ?? false)}
       role="presentation"
       onClick={() => {
         onSelect(link.id);

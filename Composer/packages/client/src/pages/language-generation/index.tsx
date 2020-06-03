@@ -82,7 +82,7 @@ const LGPage: React.FC<LGPageProps> = (props) => {
   const onRenderHeaderContent = () => {
     return (
       <Toggle
-        checked={!!edit}
+        checked={edit}
         className={'toggleEditMode'}
         css={actionButton}
         defaultChecked={false}

@@ -71,7 +71,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           phrases,
           fileId: luFile.id,
           dialogId: luDialog?.id || '',
-          used: !!luDialog && luDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+          used: luDialog?.referredLuIntents.some((lu) => lu.name === name) ?? false, // used by it's dialog or not
           state,
         });
       });

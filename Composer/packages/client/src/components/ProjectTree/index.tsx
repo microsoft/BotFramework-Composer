@@ -82,7 +82,7 @@ function createGroup(dialogs: DialogInfo[], dialogId: string, filter: string): {
 interface IProjectTreeProps {
   dialogs: DialogInfo[];
   dialogId: string;
-  selected: string;
+  selected: string | null;
   onSelect: (id: string, selected?: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
@@ -107,17 +107,18 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
 
   const onRenderHeader = (props: IGroupHeaderProps) => {
     const toggleCollapse = (): void => {
-      groupRef.current!.toggleCollapseAll(true);
-      props.onToggleCollapse!(props.group!);
-      onSelect(props.group!.key);
+      if (props.group == null) return;
+      groupRef.current?.toggleCollapseAll(true);
+      props.onToggleCollapse?.(props.group);
+      onSelect(props.group.key);
     };
     return (
-      <span ref={props.group && props.group.data.isRoot && addMainDialogRef} role="grid">
+      <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
           depth={0}
-          isActive={!props.group!.isCollapsed}
-          isSubItemActive={!!selected}
-          link={props.group!.data}
+          isActive={!props.group?.isCollapsed}
+          isSubItemActive={selected != null}
+          link={props.group?.data}
           onDelete={onDeleteDialog}
           onSelect={toggleCollapse}
         />
