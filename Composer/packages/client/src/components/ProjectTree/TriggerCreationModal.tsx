@@ -19,6 +19,7 @@ import { DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 
+import { nameRegex } from '../../constants';
 import {
   generateNewDialog,
   getTriggerTypes,
@@ -37,7 +38,6 @@ import { StoreContext } from '../../store';
 
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
-const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const initialFormDataErrors = {
   $kind: '',
   intent: '',
