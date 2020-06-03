@@ -210,7 +210,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       );
       if (settings.runtime?.name !== runtimeType) {
         // in order to change runtime type
-        await rmDir(this.getBotRuntimeDir(botId));
+        await removeDirAndFiles(this.getBotRuntimeDir(botId));
         // copy runtime template in folder
         await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
       }

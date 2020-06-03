@@ -373,6 +373,7 @@ export class BotProjectDeploy {
       archive
         .glob('**/*', {
           cwd: source,
+          dot: true,
           ignore: ['code.zip'],
         })
         .on('error', (err) => reject(err))
@@ -431,7 +432,7 @@ export class BotProjectDeploy {
         loadResult.luContents,
         loadResult.recognizers,
         luisAuthoringKey,
-        luisAuthoringRegion,
+        luisEndpoint,
         name,
         environment,
         language,
