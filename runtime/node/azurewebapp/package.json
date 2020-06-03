@@ -11,10 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "botbuilder": "^4.9.1",
-    "botbuilder-dialogs": "^4.9.1",
-    "botbuilder-dialogs-adaptive": "^4.9.0-preview",
-    "botbuilder-dialogs-declarative": "^4.9.0-preview",
+    "botbuilder": "^4.9.2",
+    "botbuilder-dialogs": "^4.9.2",
+    "botbuilder-dialogs-adaptive": "^4.9.2-preview",
+    "botbuilder-dialogs-declarative": "^4.9.2-preview",
     "restify": "^7.7.0",
     "minimist": "^1.2.5"
   },
