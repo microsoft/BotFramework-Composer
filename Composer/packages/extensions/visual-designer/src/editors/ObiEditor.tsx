@@ -290,10 +290,9 @@ export const ObiEditor: FC<ObiEditorProps> = ({
   };
 
   // HACK: use global handler before we solve iframe state sync problem
-  (window as any).hasElementFocused = () => !!focusedId && focusedId !== focusedEvent;
+  (window as any).hasElementFocused = () => focusedId != null && focusedId !== focusedEvent;
   (window as any).hasElementSelected = () =>
-    !!(selectionContext && selectionContext.selectedIds && selectionContext.selectedIds.length) ||
-    (window as any).hasElementFocused();
+    selectionContext?.selectedIds.length > 0 || (window as any).hasElementFocused();
 
   (window as any).copySelection = () =>
     dispatchEvent(NodeEventTypes.CopySelection, { actionIds: getClipboardTargetsFromContext() });

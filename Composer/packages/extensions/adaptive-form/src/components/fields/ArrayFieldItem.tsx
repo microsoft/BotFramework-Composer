@@ -34,7 +34,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
     label,
     depth,
     onBlur,
-    stackArrayItems,
+    stackArrayItems = false,
     transparentBorder,
     uiOptions,
     value,
@@ -88,7 +88,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
       <div css={arrayItem.field}>
         <SchemaField
           {...rest}
-          css={arrayItem.schemaFieldOverride(!!stackArrayItems)}
+          css={arrayItem.schemaFieldOverride(stackArrayItems)}
           depth={depth + 1}
           label={!stackArrayItems || label === false ? false : undefined}
           rawErrors={typeof rawErrors === 'object' ? rawErrors[index] : rawErrors}

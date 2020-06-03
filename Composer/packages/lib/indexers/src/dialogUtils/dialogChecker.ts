@@ -27,19 +27,19 @@ export const createPath = (path: string, type: string): string => {
   return `${list[0]}${focused}#${type}#${list[1]}`;
 };
 
-function findAllRequiredProperties(schema: any): { [key: string]: boolean } {
-  if (!schema) return {};
+function findAllRequiredProperties(schema: any): Set<string> {
+  if (schema == null) return new Set<string>();
   const types = schema.anyOf?.filter((x) => x.title === 'Type');
-  const required = {};
+  const required = new Set<string>();
   if (types && types.length) {
     types[0].required.forEach((element: string) => {
-      required[element] = true;
+      required.add(element);
     });
   }
 
   if (schema.required) {
     schema.required.forEach((element: string) => {
-      required[element] = true;
+      required.add(element);
     });
   }
   return required;
@@ -55,13 +55,13 @@ function findAllTypes(schema: any): string[] {
       types.push(schema.type);
     }
   } else {
-    types = schema.oneOf?.filter((item) => !!ExpressionType[item.type]).map((item) => item.type);
+    types = schema.oneOf?.filter((item) => ExpressionType[item.type] != null).map((item) => item.type);
   }
 
   return Array.from(new Set<string>(types));
 }
 
-export const IsExpression: CheckerFunc = (path, value, type, schema) => {
+export const isExpression: CheckerFunc = (path, value, type, schema) => {
   if (!schema) return [];
   const diagnostics: Diagnostic[] = [];
   const requiredProperties = findAllRequiredProperties(schema);
@@ -73,7 +73,7 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
         property.forEach((child, index) => {
           const diagnostic = validate(
             child,
-            !!requiredProperties[key],
+            requiredProperties.has(key),
             createPath(`${path}.${key}[${index}]`, type),
             findAllTypes(itemsSchema)
           );
@@ -81,14 +81,14 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
         });
       } else if (itemsSchema?.type === 'object') {
         property.forEach((child, index) => {
-          const result = IsExpression(`${path}.${key}[${index}]`, child, type, itemsSchema);
+          const result = isExpression(`${path}.${key}[${index}]`, child, type, itemsSchema);
           if (result) diagnostics.splice(0, 0, ...result);
         });
       }
     } else if (get(schema.properties[key], '$role') === 'expression') {
       const diagnostic = validate(
         property,
-        !!requiredProperties[key],
+        requiredProperties.has(key),
         createPath(`${path}.${key}`, type),
         findAllTypes(schema.properties[key])
       );
@@ -99,5 +99,5 @@ export const IsExpression: CheckerFunc = (path, value, type, schema) => {
 };
 
 export const checkerFuncs: { [type: string]: CheckerFunc[] } = {
-  '.': [IsExpression], //this will check all types
+  '.': [isExpression], //this will check all types
 };

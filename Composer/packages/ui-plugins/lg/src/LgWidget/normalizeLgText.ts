@@ -10,5 +10,5 @@ export function normalizeLgText(text: string): string {
 
 export function isActivityString(text: string): boolean {
   const templateTexts = text.split('\n');
-  return !!templateTexts[0] && templateTexts[0].trim() === '[Activity';
+  return templateTexts[0]?.trim() === '[Activity';
 }
