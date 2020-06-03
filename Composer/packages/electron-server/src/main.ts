@@ -99,7 +99,6 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     });
     app.once('quit', () => {
       if (appUpdater.downloadedUpdate) {
-        console.log('App quit detected and update was downloaded. Installing update.');
         appUpdater.quitAndInstall();
       }
     });
