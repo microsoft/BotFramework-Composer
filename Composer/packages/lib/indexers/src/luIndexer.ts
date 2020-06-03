@@ -86,6 +86,7 @@ function parse(content: string, id = ''): LuParsed {
   });
   const diagnostics = Errors.map((e) => convertLuDiagnostic(e, id));
   return {
+    empty: !Sections.length,
     intents,
     diagnostics,
   };
@@ -99,8 +100,7 @@ function index(files: FileInfo[]): LuFile[] {
   const luFiles = filtered.map((file) => {
     const { name, content } = file;
     const id = getBaseName(name);
-    const { intents, diagnostics } = parse(content, id);
-    return { id, content, intents, diagnostics };
+    return { id, content, ...parse(content, id) };
   });
 
   return luFiles;
