@@ -163,9 +163,9 @@ class StorageService {
         return;
       }
     });
-    // filter no access permission folder, witch value is null in children array
+    // filter out folders with no access permission; value is null in children array
     const result = await Promise.all(children);
-    return result.filter((item) => !!item);
+    return result.filter((item) => item != null);
   };
 
   private createFolderRecurively = (path: string) => {

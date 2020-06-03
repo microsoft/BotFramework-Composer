@@ -53,7 +53,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, forwardedRef, onClick, .
     },
     {
       isSelfHosted: selfHosted,
-      enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
+      enablePaste: Array.isArray(clipboardActions) && clipboardActions.length > 0,
     },
     // Custom Action 'oneOf' arrays from schema file
     customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]

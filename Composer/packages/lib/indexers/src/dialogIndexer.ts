@@ -156,7 +156,7 @@ function ExtractReferredDialogs(dialog): string[] {
 }
 
 // check all fields
-function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
+function checkFields(dialog, id: string, schema: any): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
   /**
    *
@@ -190,7 +190,7 @@ function CheckFields(dialog, id: string, schema: any): Diagnostic[] {
 
 function validate(id: string, content, schema: any): Diagnostic[] {
   try {
-    return CheckFields(content, id, schema);
+    return checkFields(content, id, schema);
   } catch (error) {
     return [new Diagnostic(error.message, id)];
   }

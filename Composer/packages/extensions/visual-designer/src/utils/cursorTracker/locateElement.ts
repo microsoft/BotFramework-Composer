@@ -8,8 +8,7 @@ import { filterPromptElementsBySchema, filterElementBySchema } from './calculate
  *
  * @param currentElement current element
  * @param elements all elements have AttrNames.SelectableElements attribute
- * @param boundRectKey key to calculate shortest distance
- * @param assistAxle assist axle for calculating.
+ * @param direction direction in which to look for the nearest element
  * @param filterAttrs filtering elements
  */
 export function locateNearestElement(
@@ -19,14 +18,12 @@ export function locateNearestElement(
   filterAttrs?: string[]
 ): SelectorElement {
   // Get elements that meet the filter criteria
-  let elementArr = elements.filter(
-    (element) => !filterAttrs || (filterAttrs && filterAttrs.find((key) => !!element[key]))
-  );
+  let elementArr = elements.filter((element) => filterAttrs == null || filterAttrs.some((key) => element[key] != null));
 
   elementArr = filterPromptElementsBySchema(currentElement, elementArr, direction);
   elementArr = filterElementsByVector(currentElement, elementArr, direction);
   elementArr = sortElementsByVector(currentElement, elementArr, direction);
   elementArr = filterElementBySchema(currentElement, elementArr, direction);
 
-  return elementArr.length > 0 ? elementArr[0] : currentElement;
+  return elementArr?.[0] ?? currentElement;
 }

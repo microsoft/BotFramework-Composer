@@ -95,7 +95,7 @@ export class LuPublisher {
   }
 
   private _needCrossTrain() {
-    return !!this.crossTrainConfig.rootIds.length;
+    return this.crossTrainConfig.rootIds.length > 0;
   }
 
   private async _crossTrain(files: FileInfo[]) {

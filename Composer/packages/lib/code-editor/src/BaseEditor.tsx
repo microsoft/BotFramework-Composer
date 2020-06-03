@@ -137,7 +137,7 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   // initialValue is designed to imporve local performance
   // it should be force updated if id change, or previous value is empty.
-  const initialValue = useMemo(() => value || (hidePlaceholder ? '' : placeholder), [id, !!value]);
+  const initialValue = useMemo(() => value ?? (hidePlaceholder ? '' : placeholder), [id, value != null]);
 
   const onEditorMount: EditorDidMount = (getValue, editor) => {
     setEditor(editor);
@@ -184,16 +184,16 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
 
   const errorMsgFromDiagnostics = useMemo(() => {
     const errors = findErrors(diagnostics);
-    return errors.length ? combineSimpleMessage(errors) : '';
+    return errors.length ? combineSimpleMessage(errors) : null;
   }, [diagnostics]);
 
   const warningMsgFromDiagnostics = useMemo(() => {
     const warnings = findWarnings(diagnostics);
-    return warnings.length ? combineSimpleMessage(warnings) : '';
+    return warnings.length ? combineSimpleMessage(warnings) : null;
   }, [diagnostics]);
 
-  const hasError = !!errorMessage || !!errorMsgFromDiagnostics;
-  const hasWarning = !!warningMessage || !!warningMsgFromDiagnostics;
+  const hasError = errorMessage != null || errorMsgFromDiagnostics != null;
+  const hasWarning = warningMessage != null || warningMsgFromDiagnostics != null;
 
   const messageHelp = errorMessage || errorMsgFromDiagnostics || warningMessage || warningMsgFromDiagnostics;
 

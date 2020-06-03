@@ -9,7 +9,7 @@ import { walkAdaptiveActionList } from '../walkerUtils/walkAdaptiveActionList';
 // TODO: (ze) considering refactoring it with the `walkLgResources` util
 const collectLgTemplates = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$kind) return;
+  if (action?.$kind == null) return;
 
   switch (action.$kind) {
     case SDKKinds.SendActivity:
@@ -30,7 +30,7 @@ const collectLgTemplates = (action: any, outputTemplates: string[]) => {
 // TODO: (ze) considering refactoring it by implementing a new `walkLuResources` util
 const collectLuIntents = (action: any, outputTemplates: string[]) => {
   if (typeof action === 'string') return;
-  if (!action || !action.$kind) return;
+  if (action?.$kind == null) return;
 
   switch (action.$kind) {
     case SDKKinds.AttachmentInput:
@@ -58,7 +58,7 @@ export const deleteAdaptiveAction = (
   walkAdaptiveAction(data, (action) => collectLgTemplates(action, lgTemplates));
   walkAdaptiveAction(data, (action) => collectLuIntents(action, luIntents));
 
-  deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
+  deleteLgTemplates(lgTemplates.filter((activity) => activity != null));
   deleteLuIntents(luIntents);
 };
 
@@ -73,6 +73,6 @@ export const deleteAdaptiveActionList = (
   walkAdaptiveActionList(data, (action) => collectLgTemplates(action, lgTemplates));
   walkAdaptiveActionList(data, (action) => collectLuIntents(action, luIntents));
 
-  deleteLgTemplates(lgTemplates.filter((activity) => !!activity));
+  deleteLgTemplates(lgTemplates.filter((activity) => activity != null));
   deleteLuIntents(luIntents);
 };
