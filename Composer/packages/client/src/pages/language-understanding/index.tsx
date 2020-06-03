@@ -83,7 +83,7 @@ const LUPage: React.FC<LUPageProps> = (props) => {
     if (!isRoot || edit) {
       return (
         <Toggle
-          checked={!!edit}
+          checked={edit}
           className={'toggleEditMode'}
           css={actionButton}
           defaultChecked={false}

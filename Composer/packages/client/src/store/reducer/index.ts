@@ -466,8 +466,8 @@ const setUserToken: ReducerFunc<UserTokenPayload> = (state, user = {}) => {
   return state;
 };
 
-const setUserSessionExpired: ReducerFunc = (state, { expired } = {}) => {
-  state.currentUser.sessionExpired = !!expired;
+const setUserSessionExpired: ReducerFunc = (state, { expired }: { expired: boolean }) => {
+  state.currentUser.sessionExpired = expired;
 
   return state;
 };

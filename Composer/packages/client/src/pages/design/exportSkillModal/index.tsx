@@ -86,7 +86,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
           {typeof subText === 'function' && subText()}
           {helpLink && (
             <React.Fragment>
-              {!!subText && <React.Fragment>&nbsp;</React.Fragment>}
+              {subText != null && <React.Fragment>&nbsp;</React.Fragment>}
               <Link href={helpLink} rel="noopener noreferrer" target="_blank">
                 {formatMessage('Learn More')}
               </Link>
@@ -113,7 +113,8 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
               {buttons.map(({ disabled, primary, text, onClick }, index) => {
                 const Button = primary ? PrimaryButton : DefaultButton;
                 const buttonText = text();
-                const isDisabled = typeof disabled === 'function' ? disabled({ manifest: skillManifest }) : !!disabled;
+                const isDisabled =
+                  typeof disabled === 'function' ? disabled({ manifest: skillManifest }) : disabled ?? false;
 
                 return (
                   <Button

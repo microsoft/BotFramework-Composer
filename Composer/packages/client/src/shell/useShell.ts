@@ -203,7 +203,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         focusedSteps: focused ? [focused] : selected ? [selected] : [],
         focusedTab: promptTab,
         clipboardActions: state.clipboardActions,
-        hosted: !!isAbsHosted(),
+        hosted: isAbsHosted(),
         skills,
       }
     : ({} as ShellData);

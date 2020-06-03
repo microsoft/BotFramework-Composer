@@ -6,18 +6,15 @@ import moment from 'moment';
 import { FileTypes, SupportedFileTypes } from '../constants';
 import { File } from '../store/types';
 
-export function getExtension(filename?: string): string | any {
-  if (typeof filename !== 'string') return filename;
+export function getExtension(filename: string): string {
   return filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
 }
 
-export function getBaseName(filename?: string): string | any {
-  if (typeof filename !== 'string') return filename;
+export function getBaseName(filename: string): string {
   return filename.substring(0, filename.lastIndexOf('.')) || filename;
 }
 
-export function upperCaseName(filename?: string): string | any {
-  if (typeof filename !== 'string') return filename;
+export function upperCaseName(filename: string): string {
   return filename.charAt(0).toUpperCase() + filename.slice(1);
 }
 
@@ -58,7 +55,7 @@ export function getFileEditDate(file: File) {
 }
 
 export function formatBytes(bytes?: number, decimals?: number) {
-  if (bytes === 0 || !bytes) return '0 Bytes';
+  if (bytes === 0 || bytes == null) return '0 Bytes';
   const k = 1024,
     dm = !decimals || decimals <= 0 ? 0 : decimals || 2,
     sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],

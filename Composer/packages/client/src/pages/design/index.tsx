@@ -108,7 +108,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
-  const selected = params.get('selected') || '';
+  const selected = params.get('selected');
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
@@ -377,9 +377,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
     if (content) {
       await updateDialog({ id, projectId, content });
+      if (selected == null) return;
       const match = /\[(\d+)\]/g.exec(selected);
-      const current = match && match[1];
-      if (!current) return;
+      const current = match?.[1];
+      if (current == null) return;
       const currentIdx = parseInt(current);
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {

@@ -54,7 +54,7 @@ export default class ElectronWindow {
   }
 
   public static get isBrowserWindowCreated() {
-    return !!ElectronWindow.instance;
+    return ElectronWindow.instance != null;
   }
 
   public static getInstance(): ElectronWindow {

@@ -26,7 +26,7 @@ const StepStatus = ({ isComplete, steps = 0, title }) => (
   <div css={statusStyle}>
     <Icon className={isComplete && 'completed'} iconName={isComplete ? 'SkypeCircleCheck' : 'NavigateForward'} />
     {title}
-    {!!steps && (
+    {steps > 0 && (
       <span>
         &nbsp;({steps} {steps > 1 ? formatMessage('tips') : formatMessage('tip')})
       </span>

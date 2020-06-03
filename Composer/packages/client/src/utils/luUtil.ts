@@ -17,7 +17,7 @@ export * from '@bfc/indexers/lib/utils/luUtil';
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
-    return !!~dialogs.findIndex((dialog) => dialog.luFile === idWithOutLocale);
+    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale);
   });
 }
 
@@ -96,12 +96,7 @@ interface ICrossTrainConfig {
   */
 export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[]): ICrossTrainConfig {
   const triggerRules = {};
-  const countMap = {};
-
-  //map all referred lu files
-  luFiles.forEach((file) => {
-    countMap[getBaseName(file.id)] = 1;
-  });
+  const luFileSet = new Set<string>(luFiles.map((luFile) => getBaseName(luFile.id)));
 
   let rootId = '';
   dialogs.forEach((dialog) => {
@@ -112,7 +107,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     //find the trigger's dialog that use a recognizer
     intentTriggers.forEach((item) => {
       //find all dialogs in trigger that has a luis recognizer
-      const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
+      const used = item.dialogs.filter((dialog) => luFileSet.has(dialog));
 
       const deduped = Array.from(new Set<string>(used));
 
@@ -135,8 +130,8 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     intentName: '_Interruption',
     verbose: true,
   };
-  crossTrainConfig.rootIds = keys(countMap).filter(
-    (key) => (countMap[key] === 0 || key === rootId) && triggerRules[key]
+  crossTrainConfig.rootIds = Array.from(luFileSet).filter(
+    (key) => (!luFileSet.has(key) || key === rootId) && triggerRules[key]
   );
   crossTrainConfig.triggerRules = triggerRules;
   return addLocaleToConfig(crossTrainConfig, luFiles);
