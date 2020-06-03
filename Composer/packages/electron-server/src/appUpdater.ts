@@ -15,6 +15,7 @@ let appUpdater: AppUpdater | undefined;
 export class AppUpdater extends EventEmitter {
   private checkingForUpdate = false;
   private downloadingUpdate = false;
+  private _downloadedUpdate = false;
   private explicitCheck = false;
   private settings: AppUpdaterSettings = { autoDownload: false, useNightly: false };
 
@@ -23,6 +24,7 @@ export class AppUpdater extends EventEmitter {
 
     autoUpdater.allowDowngrade = false;
     autoUpdater.allowPrerelease = true;
+    autoUpdater.autoInstallOnAppQuit = false; // we will explicitly call the install logic
 
     autoUpdater.on('error', this.onError.bind(this));
     autoUpdater.on('checking-for-update', this.onCheckingForUpdate.bind(this));
@@ -71,6 +73,10 @@ export class AppUpdater extends EventEmitter {
     this.settings = settings;
   }
 
+  public get downloadedUpdate(): boolean {
+    return this._downloadedUpdate;
+  }
+
   private onError(err: Error) {
     logger('Got error while checking for updates: ', err);
     this.resetToIdle();
@@ -109,6 +115,7 @@ export class AppUpdater extends EventEmitter {
 
   private onUpdateDownloaded(updateInfo: UpdateInfo) {
     log('Update downloaded: %O', updateInfo);
+    this._downloadedUpdate = true;
     this.resetToIdle();
     if (!this.settings.autoDownload) {
       this.emit('update-downloaded', updateInfo);
