@@ -55,9 +55,7 @@ const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
 
 const validateIntentName = (selectedType: string, intent: string): string => {
   if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
-    return formatMessage(
-      'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-    );
+    return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
   return '';
 };
