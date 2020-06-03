@@ -102,7 +102,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         if (m) {
           editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, function () {
             const position = editor.getPosition();
-            languageClient.sendRequest('labelingExperienceRequest', { uri, position });
+            SendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
           });
         }
 
