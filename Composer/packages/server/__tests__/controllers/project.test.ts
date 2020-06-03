@@ -73,7 +73,7 @@ afterAll(() => {
   }
 });
 
-describe('getProject', () => {
+describe('get bot project', () => {
   it('should get no project', async () => {
     const mockReq = {
       params: {},
@@ -94,6 +94,18 @@ describe('getProject', () => {
       body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') },
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('get all projects', () => {
+  it('should get all project', async () => {
+    const mockReq = {
+      params: {},
+      query: {},
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots') },
+    } as Request;
+    await ProjectController.getAllProjects(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
@@ -270,5 +282,75 @@ describe('lu operation', () => {
     } as Request;
     await ProjectController.removeFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('skill operation', () => {
+  let projectId = '';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should check skill url', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {
+        url: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+      },
+    } as Request;
+    await ProjectController.getSkill(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should update skill', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {
+        skills: [
+          {
+            manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+          },
+        ],
+      },
+    } as Request;
+    await ProjectController.updateSkill(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should update skill', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {
+        skills: [],
+      },
+    } as Request;
+    await ProjectController.updateSkill(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('export project', () => {
+  let projectId = '';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should export to zip', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {},
+    } as Request;
+    const mockRes = {
+      on: jest.fn(),
+      once: jest.fn(),
+      emit: jest.fn(),
+      attachment: jest.fn().mockReturnThis(),
+    } as any;
+    await ProjectController.exportProject(mockReq, mockRes);
+    expect(mockRes.attachment).toBeCalledWith('tmp-archive.zip');
   });
 });
