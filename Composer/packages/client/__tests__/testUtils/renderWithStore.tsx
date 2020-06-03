@@ -9,7 +9,7 @@ import { State } from '../../src/store/types';
 import * as initialActions from '../../src/store/action';
 import { initialState, StoreContext, StoreContextValue } from '../../src/store';
 
-export function renderWithStore(subject, state: Partial<State> = {}, actions = {}) {
+export const StoreContextProvider = ({ children, state, actions, resolvers = {} }) => {
   const store: StoreContextValue = {
     actions: {
       ...mapValues(initialActions, () => jest.fn()),
@@ -24,8 +24,17 @@ export function renderWithStore(subject, state: Partial<State> = {}, actions = {
       lgImportresolver: jest.fn(),
       lgFileResolver: jest.fn(),
       luFileResolver: jest.fn(),
+      ...resolvers,
     },
   };
 
-  return render(<StoreContext.Provider value={store}>{subject}</StoreContext.Provider>);
+  return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
+};
+
+export function renderWithStore(subject, state: Partial<State> = {}, actions = {}) {
+  return render(
+    <StoreContextProvider actions={actions} state={state}>
+      {subject}
+    </StoreContextProvider>
+  );
 }
