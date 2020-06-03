@@ -393,6 +393,7 @@ export class BotProjectDeploy {
     name: string,
     environment: string,
     language: string,
+    luisEndpoint: string,
     luisEndpointKey: string,
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
@@ -421,6 +422,10 @@ export class BotProjectDeploy {
         environment || '',
         luisAuthoringRegion || ''
       );
+
+      if (!luisEndpoint) {
+        luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
+      }
 
       const buildResult = await builder.build(
         loadResult.luContents,
@@ -451,7 +456,6 @@ export class BotProjectDeploy {
         Object.assign(luisAppIds, luisSettings.luis);
       }
 
-      const luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
       const luisConfig: any = {
         endpoint: luisEndpoint,
         endpointKey: luisEndpointKey,
@@ -549,12 +553,14 @@ export class BotProjectDeploy {
       const luisSettings = settings.luis;
 
       let luisEndpointKey = '';
+      let luisEndpoint = '';
 
       if (luisSettings) {
         // if luisAuthoringKey is not set, use the one from the luis settings
         luisAuthoringKey = luisAuthoringKey || luisSettings.authoringKey;
         luisAuthoringRegion = luisAuthoringRegion || luisSettings.region;
         luisEndpointKey = luisSettings.endpointKey;
+        luisEndpoint = luisSettings.endpoint;
       }
 
       if (!language) {
@@ -565,6 +571,7 @@ export class BotProjectDeploy {
         name,
         environment,
         language,
+        luisEndpoint,
         luisEndpointKey,
         luisAuthoringKey,
         luisAuthoringRegion,
