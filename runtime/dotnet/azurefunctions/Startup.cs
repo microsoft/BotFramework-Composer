@@ -21,6 +21,8 @@ using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.BotFramework.Composer.Core;
 using Microsoft.BotFramework.Composer.Core.Settings;
+
+//using Microsoft.BotFramework.Composer.CustomAction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -95,6 +97,9 @@ namespace Microsoft.BotFramework.Composer.Functions
             ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
+
+            // This is for custom action component registration.
+            //ComponentRegistration.Add(new CustomActionComponentRegistration());
 
             // Register the skills client and skills request handler.
             services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();

@@ -420,7 +420,7 @@ export class BotProjectDeploy {
         loadResult.luContents,
         loadResult.recognizers,
         luisAuthoringKey,
-        luisAuthoringRegion,
+        luisEndpoint,
         name,
         environment,
         language,
