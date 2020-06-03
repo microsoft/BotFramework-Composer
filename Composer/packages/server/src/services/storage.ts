@@ -80,9 +80,10 @@ class StorageService {
             name: d,
             type: 'folder',
             path: d,
-            writable: false,
+            writable: true,
           };
         }),
+        writable: false,
       };
     }
     const storageClient = this.getStorageClient(storageId, user);
@@ -110,10 +111,14 @@ class StorageService {
   };
 
   public updateCurrentPath = (path: string, storageId: string) => {
+    //A path in windows should never start with \, but the fs.existsSync() return true
+    if (path && path.startsWith('\\') && settings.platform === 'win32') {
+      return this.storageConnections;
+    }
     if (path && path.endsWith(':')) {
       path = path + '/';
     }
-    if (fs.existsSync(path)) {
+    if (Path.isAbsolute(path) && fs.existsSync(path)) {
       const storage = this.storageConnections.find((s) => s.id === storageId);
       if (storage) {
         storage.path = path;

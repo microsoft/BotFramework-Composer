@@ -45,6 +45,7 @@ interface DefineConversationProps
 const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { onSubmit, onDismiss, onCurrentPathUpdate, saveTemplateId, templateId, focusedStorageFolder } = props;
   const files = focusedStorageFolder?.children ?? [];
+  const writable = focusedStorageFolder.writable;
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -182,7 +183,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
-              disabled={hasErrors}
+              disabled={hasErrors || !writable}
               text={formatMessage('Next')}
               onClick={handleSubmit}
             />

@@ -62,8 +62,11 @@ describe('<FileSelector/>', () => {
 
   it('should show parent of the current folder path in the dropdown list', async () => {
     const component = renderComponent();
-    const list = await component.findByTestId('FileSelectorDropDown');
-    fireEvent.click(list);
+    const list = await component.findByTestId('FileSelectorComboBox');
+    const dropdown = list.querySelector('.ms-ComboBox-CaretDown-button');
+    if (dropdown) {
+      fireEvent.click(dropdown);
+    }
     expect(await component.findByText('C:\\test-folder')).toBeInTheDocument();
     expect(await component.findByText('C:\\')).toBeInTheDocument();
     expect(await component.findByText('/')).toBeInTheDocument();
