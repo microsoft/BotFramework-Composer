@@ -69,9 +69,9 @@ const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) =
           file.name === '..'
             ? formatMessage('previous folder')
             : formatMessage('{icon} name is {file}', {
-              icon: iconName,
-              file: file.name,
-            })
+                icon: iconName,
+                file: file.name,
+              })
         }
         onClick={() => onFileChosen(file)}
       >
