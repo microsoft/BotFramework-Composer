@@ -13,7 +13,7 @@ import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 
 import { FlowSchema, FlowWidget } from '../adaptive-flow-renderer/types/flowRenderer.types';
 import { NodeEventTypes } from '../adaptive-flow-renderer/constants/NodeEventTypes';
-import { AdaptiveDialog } from '../adaptive-flow-renderer/editors/AdaptiveDialog';
+import { AdaptiveDialog } from '../adaptive-flow-renderer/adaptive/AdaptiveDialog';
 
 import { NodeRendererContext, NodeRendererContextValue } from './contexts/NodeRendererContext';
 import { SelfHostContext } from './contexts/SelfHostContext';
