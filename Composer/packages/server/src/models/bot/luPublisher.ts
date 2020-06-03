@@ -43,6 +43,7 @@ export class LuPublisher {
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
   public downSamplingConfig: IDownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
+  private _locale: string;
 
   public crossTrainConfig: ICrossTrainConfig = {
     rootIds: [],
@@ -55,12 +56,13 @@ export class LuPublisher {
     log(message);
   });
 
-  constructor(path: string, storage: IFileStorage) {
+  constructor(path: string, storage: IFileStorage, locale: string) {
     this.botDir = path;
     this.dialogsDir = this.botDir;
     this.generatedFolderPath = Path.join(this.dialogsDir, GENERATEDFOLDER);
     this.interuptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
     this.storage = storage;
+    this._locale = locale;
   }
 
   public publish = async (files: FileInfo[]) => {
@@ -86,6 +88,14 @@ export class LuPublisher {
     this.config = luisConfig;
     this.crossTrainConfig = crossTrainConfig;
     this.downSamplingConfig = downSamplingConfig;
+  }
+
+  public get locale(): string {
+    return this._locale;
+  }
+
+  public set locale(v: string) {
+    this._locale = v;
   }
 
   private async _createGeneratedDir() {
@@ -222,7 +232,7 @@ export class LuPublisher {
   private _loadLuConatents = async (paths: string[]) => {
     return await this.builder.loadContents(
       paths,
-      'en-us',
+      this._locale,
       this.config?.environment || '',
       this.config?.authoringRegion || ''
     );
