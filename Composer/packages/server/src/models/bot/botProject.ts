@@ -82,7 +82,7 @@ export class BotProject {
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
-    this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
+    this.luPublisher = new LuPublisher(this.dir, this.fileStorage, this.locale);
   }
 
   public init = async () => {
