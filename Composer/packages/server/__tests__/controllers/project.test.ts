@@ -345,12 +345,45 @@ describe('export project', () => {
       body: {},
     } as Request;
     const mockRes = {
-      on: jest.fn(),
-      once: jest.fn(),
-      emit: jest.fn(),
+      on: jest.fn().mockReturnThis(),
+      once: jest.fn().mockReturnThis(),
+      emit: jest.fn().mockReturnThis(),
       attachment: jest.fn().mockReturnThis(),
     } as any;
     await ProjectController.exportProject(mockReq, mockRes);
     expect(mockRes.attachment).toBeCalledWith('tmp-archive.zip');
   });
 });
+
+// describe('publish luis files', () => {
+//   let projectId = '';
+//   beforeEach(async () => {
+//     projectId = await BotProjectService.openProject(location2);
+//   });
+
+//   it('should publish all luis files', async () => {
+//     const mockReq = {
+//       params: { projectId },
+//       query: {},
+//       body: {
+//         authoringKey: '0d4991873f334685a9686d1b48e0ff48',
+//         projectId: '66019.65731222292',
+//         crossTrainConfig: {
+//           rootIds: ['echobot-3.en-us.lu'],
+//           triggerRules: { 'h2.en-us.lu': { hh2: '' }, 'echobot-3.en-us.lu': { '': '', hi: '' } },
+//           intentName: '_Interruption',
+//           verbose: true
+//         },
+//         luFiles: ['h2.en-us', 'echobot-3.en-us']
+//       }
+//     } as Request;
+//     const mockRes = {
+//       write: jest.fn().mockReturnThis(),
+//       status: jest.fn().mockReturnThis(),
+//       send: jest.fn().mockReturnThis(),
+//       json: jest.fn().mockReturnThis()
+//     } as any;
+//     await ProjectController.publishLuis(mockReq, mockRes);
+//     expect(mockRes.status).toHaveBeenCalledWith(200);
+//   });
+// });
