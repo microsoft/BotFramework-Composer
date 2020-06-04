@@ -74,7 +74,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     <DefaultButton
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async (e) => {
-        if (onClick) {
+        if (onClick != null) {
           e.preventDefault();
           await onClick();
         }
