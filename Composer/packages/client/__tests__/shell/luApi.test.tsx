@@ -42,7 +42,7 @@ const actions = {
 });
 
 describe('use luApi hooks', () => {
-  test('should call add lu intent action', () => {
+  it('should call add lu intent action', () => {
     const { result } = renderHook(() => useLuApi());
 
     result.current.addLuIntent('test.en-us', 'test', { Body: '- test add', Name: 'add' }).then(() => {
@@ -52,7 +52,7 @@ describe('use luApi hooks', () => {
     });
   });
 
-  test('should call update lu intent action', () => {
+  it('should call update lu intent action', () => {
     const { result } = renderHook(() => useLuApi());
 
     result.current.updateLuIntent('test.en-us', 'test', { Body: '- test update', Name: 'update' }).then(() => {
@@ -62,7 +62,7 @@ describe('use luApi hooks', () => {
     });
   });
 
-  test('should call remove lu intent action', () => {
+  it('should call remove lu intent action', () => {
     const { result } = renderHook(() => useLuApi());
 
     result.current.removeLuIntent('test.en-us', 'remove').then(() => {
@@ -72,7 +72,7 @@ describe('use luApi hooks', () => {
     });
   });
 
-  test('should get lu intents', () => {
+  it('should get lu intents', () => {
     const { result } = renderHook(() => useLuApi());
 
     const intents = result.current.getLuIntents('test.en-us');
@@ -80,7 +80,7 @@ describe('use luApi hooks', () => {
     expect(intents[0].Name).toBe('test');
   });
 
-  test('should get lu intent', () => {
+  it('should get lu intent', () => {
     const { result } = renderHook(() => useLuApi());
 
     const intent = result.current.getLuIntent('test.en-us', 'test');
