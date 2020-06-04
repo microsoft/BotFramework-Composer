@@ -20,6 +20,7 @@ export const IconBrick = ({ onClick }): JSX.Element => {
         alignItems: 'center',
         justifyContent: 'center',
       }}
+      data-testid="IconBrick"
       onClick={(e) => {
         e.stopPropagation();
         onClick(e);

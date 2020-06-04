@@ -19,6 +19,7 @@ export const LoopIndicator = ({ onClick }) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}
+      data-testid="LoopIndicator"
       onClick={(e) => {
         e.stopPropagation();
         onClick();
