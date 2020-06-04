@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { StoreContext } from '../../store';
+import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { Notification, DialogNotification, LuNotification, LgNotification, ServerNotification } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
-  const { state } = useContext(StoreContext);
+  const { state } = useStoreContext();
   const { dialogs, luFiles, lgFiles, projectId, diagnostics } = state;
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];
