@@ -65,7 +65,7 @@
 - [Language generation](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation)
 - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language)
 - [.lu file format](https://aka.ms/lu-file-format)
-- [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
+- [.lg file format](https://aka.ms/lg-file-format)
 
 ## Related projects
 
