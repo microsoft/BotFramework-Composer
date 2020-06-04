@@ -1,6 +1,6 @@
 # Linting and validation
 
-As an integrated development tool, Bot Framework Composer supports validation of data when you author an [.lg](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) template, an [.lu](https://aka.ms/lu-file-format) template, and [expressions](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) to fill in property fields. Error indicators will show in both inline editors and corresponding all-up views (**Bot Responses** and **User Input**). The **Notifications** page (click **Notifications** icon on the left navigation pane) displays an aggregation of all errors and warnings. With the help of linting and validation, your bot-authoring experience will be improved and you can easily build a functional bot that can "run".
+As an integrated development tool, Bot Framework Composer supports validation of data when you author an [.lg](https://aka.ms/lg-file-format) template, an [.lu](https://aka.ms/lu-file-format) template, and [expressions](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) to fill in property fields. Error indicators will show in both inline editors and corresponding all-up views (**Bot Responses** and **User Input**). The **Notifications** page (click **Notifications** icon on the left navigation pane) displays an aggregation of all errors and warnings. With the help of linting and validation, your bot-authoring experience will be improved and you can easily build a functional bot that can "run".
 
 > [!NOTE]
 > We are still working to improve the implementation of linting and validation in Composer. More user scenarios will be updated.
@@ -17,7 +17,7 @@ Click any of the errors on the **Notifications** page will navigate you to the m
 
 ## .lg files
 
-When you author an [.lg template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) that has syntax errors, an indicator will show in the inline editor with a red wiggling line.
+When you author an [.lg template](https://aka.ms/lg-file-format) that has syntax errors, an indicator will show in the inline editor with a red wiggling line.
 
 ![inline-error-lg](./media/validation/inline-error-lg.png)
 
