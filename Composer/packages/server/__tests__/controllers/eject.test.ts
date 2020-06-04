@@ -92,7 +92,21 @@ describe('get bot project templates', () => {
 
   it('should eject runtime', async () => {
     const mockReq = {
-      params: { projectId },
+      params: { projectId, template: 'azurewebapp' },
+      query: {},
+      body: {},
+    } as Request;
+    await EjectController.eject(mockReq, mockRes);
+    expect(mockRes.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'success',
+      })
+    );
+  });
+
+  it('should not eject runtime if template not exist', async () => {
+    const mockReq = {
+      params: { projectId, template: 'fooapp' },
       query: {},
       body: {},
     } as Request;

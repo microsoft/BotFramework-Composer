@@ -1,27 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import path from 'path';
+
 import { Request, Response } from 'express';
 import rimraf from 'rimraf';
+import { pluginLoader } from '@bfc/plugin-loader';
 
 import { BotProjectService } from '../../src/services/project';
 import { Path } from '../../src/utility/path';
 import { PublishController } from '../../src/controllers/publisher';
 
-jest.mock('@bfc/plugin-loader', () => {
-  return {
-    pluginLoader: {
-      extensions: {
-        botTemplates: [],
-        baseTemplates: [],
-        publish: [],
-      },
-    },
-    PluginLoader: {
-      getUserFromRequest: jest.fn(),
-    },
-  };
-});
+const pluginDir = path.resolve(__dirname, '../../../../plugins');
 
 let mockRes: Response;
 
@@ -50,6 +40,7 @@ beforeAll(async () => {
   const currentProjectId = await BotProjectService.openProject(location1);
   const currentProject = await BotProjectService.getProjectById(currentProjectId);
   await BotProjectService.saveProjectAs(currentProject, location2);
+  await pluginLoader.loadPluginsFromFolder(pluginDir);
 });
 
 afterAll(() => {
@@ -62,35 +53,117 @@ afterAll(() => {
 });
 
 describe('get types', () => {
-  let projectId = '';
-  beforeEach(async () => {
-    projectId = await BotProjectService.openProject(location2);
-  });
-
   it('should get types', async () => {
     const mockReq = {
-      params: { projectId },
+      params: {},
       query: {},
       body: {},
     } as Request;
     await PublishController.getTypes(mockReq, mockRes);
-    expect(mockRes.json).toHaveBeenCalledWith([]);
+    expect(mockRes.json).toHaveBeenCalled();
   });
 });
 
 describe('publish', () => {
   let projectId = '';
+  const target = 'default';
+
   beforeEach(async () => {
     projectId = await BotProjectService.openProject(location2);
   });
 
+  //TODO: verify publish success.
   it('should publish luis files', async () => {
     const mockReq = {
-      params: { projectId },
+      params: { projectId, target },
       query: {},
-      body: {},
+      body: {
+        authoringKey: '0d4991873f334685a9686d1b48e0ff48',
+        projectId: projectId,
+        crossTrainConfig: {
+          rootIds: ['bot1.en-us.lu'],
+          triggerRules: { 'bot1.en-us.lu': { Greeting: '-hi' } },
+          intentName: '_Interruption',
+          verbose: true,
+        },
+        luFiles: ['bot1.en-us'],
+      },
     } as Request;
     await PublishController.publish(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(400);
+  });
+});
+
+describe('status', () => {
+  let projectId = '';
+  const target = 'default';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should get status', async () => {
+    const mockReq = {
+      params: { projectId, target },
+      query: {},
+      body: {},
+    } as Request;
+    await PublishController.status(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+//TODO: verify history not empty;
+describe('history', () => {
+  let projectId = '';
+  const target = 'default';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should get history', async () => {
+    const mockReq = {
+      params: { projectId, target },
+      query: {},
+      body: {},
+    } as Request;
+    await PublishController.history(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+  });
+});
+
+//TODO: verify history not empty;
+describe('rollback', () => {
+  let projectId = '';
+  const target = 'default';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should get status', async () => {
+    const mockReq = {
+      params: { projectId, target },
+      query: {},
+      body: {},
+    } as Request;
+    await PublishController.rollback(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+  });
+});
+
+describe('removeLocalRuntimeData', () => {
+  let projectId = '';
+  const target = 'default';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should removeLocalRuntimeData', async () => {
+    const mockReq = {
+      params: { projectId, target },
+      query: {},
+      body: {},
+    } as Request;
+    await PublishController.removeLocalRuntimeData(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
