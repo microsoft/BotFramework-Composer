@@ -86,7 +86,7 @@ When you are using the _Send an Activity_ action, the Language Generation syntax
 
 ![LG format error](./Assets/testing-debugging-lgformaterror.png)
 
-Refer to the [LG syntax](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) for troubleshooting.
+Refer to the [LG syntax](https://aka.ms/lg-file-format) for troubleshooting.
 
 ##### Error publishing to LUIS
 
