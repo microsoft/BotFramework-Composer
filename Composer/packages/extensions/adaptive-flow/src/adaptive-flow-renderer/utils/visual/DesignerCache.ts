@@ -6,11 +6,14 @@ import get from 'lodash/get';
 
 import { Boundary } from '../../models/Boundary';
 
-const MAX_CACHE_SIZE = 99999;
-
 export class DesignerCache {
+  private MAX_CACHE_SIZE: number;
   private boundaryCache = {};
   private cacheSize = 0;
+
+  constructor(MAX_CACHE_SIZE = 99999) {
+    this.MAX_CACHE_SIZE = MAX_CACHE_SIZE;
+  }
 
   private getActionDataHash(actionData: BaseSchema): string | null {
     const designerId = get(actionData, '$designer.id', '');
@@ -26,7 +29,7 @@ export class DesignerCache {
       return false;
     }
 
-    if (this.cacheSize > MAX_CACHE_SIZE) {
+    if (this.cacheSize >= this.MAX_CACHE_SIZE) {
       delete this.boundaryCache;
       this.boundaryCache = {};
       this.cacheSize = 0;
