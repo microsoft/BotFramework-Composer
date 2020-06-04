@@ -116,7 +116,7 @@ describe('generateNewDialog', () => {
       errors: { triggerPhrases: '' },
       event: '',
       intent: 'aaa',
-      regexEx: '',
+      regEx: '',
       triggerPhrases: '- a',
     };
     const schema = {};
@@ -130,8 +130,8 @@ describe('generateNewDialog', () => {
       $kind: 'Microsoft.OnIntent',
       errors: { triggerPhrases: '' },
       event: '',
-      intent: 'aaa',
-      regexEx: 'aaa',
+      intent: 'aaaa',
+      regEx: 'aaaa',
       triggerPhrases: '',
     };
     const schema = {};
