@@ -74,13 +74,11 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, value)
             : '';
         if (
-          name &&
-          files &&
-          files.find((bot) => {
+          files.some((bot) => {
             return bot.path.toLowerCase() === newBotPath.toLowerCase();
           })
         ) {
-          return formatMessage('Duplication of names');
+          return formatMessage('Duplicate name');
         }
       },
     },
@@ -94,15 +92,15 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
 
   useEffect(() => {
-    if (saveTemplateId && templateId) {
-      saveTemplateId(templateId);
+    if (templateId) {
+      saveTemplateId?.(templateId);
     }
   });
 
   useEffect(() => {
     const formData: DefineConversationFormData = { name: getDefaultName(), description: '', schemaUrl: '' };
     updateForm(formData);
-    if (props.location && props.location.search) {
+    if (props.location?.search) {
       const updatedFormData = {
         ...formData,
       };
