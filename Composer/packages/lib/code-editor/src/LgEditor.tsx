@@ -10,11 +10,8 @@ import { EditorDidMount } from '@monaco-editor/react';
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient, SendRequestWithRetry } from './utils/lspUtil';
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
-<<<<<<< HEAD
 import { LGOption } from './utils';
-=======
 import { LG_HELP } from './constants';
->>>>>>> update lg format link
 
 const placeholder = `> To learn more about the LG file format, read the documentation at
 > ${LG_HELP}`;
