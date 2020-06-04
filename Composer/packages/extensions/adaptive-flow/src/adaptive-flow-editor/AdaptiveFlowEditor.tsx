@@ -132,14 +132,14 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
               >
                 <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
                   <div
-                    className="visual-editor-container"
+                    className="flow-editor-container"
                     css={{
                       width: '100%',
                       height: '100%',
                       padding: '48px 20px',
                       boxSizing: 'border-box',
                     }}
-                    data-testid="visual-editor-container"
+                    data-testid="flow-editor-container"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleEditorEvent(NodeEventTypes.Focus, { id: '' });

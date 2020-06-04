@@ -10,7 +10,7 @@ const sampleFileNames = Object.keys(ObiExamples);
 const defaultFile = sampleFileNames[1];
 
 // Simulate the condition that json is always mutated.
-const copyJson = json => JSON.parse(JSON.stringify(json));
+const copyJson = (json) => JSON.parse(JSON.stringify(json));
 
 EditorConfig.features.showEvents = true;
 
@@ -55,12 +55,12 @@ export class VisualEditorDemo extends Component {
             <select
               style={{ width: 200, height: 30, fontSize: 20 }}
               value={this.state.selectedFile}
-              onChange={e => {
+              onChange={(e) => {
                 const val = e.target.value;
                 this.onFileSelected(val);
               }}
             >
-              {sampleFileNames.map(x => (
+              {sampleFileNames.map((x) => (
                 <option key={x} value={x}>
                   {x}
                 </option>
@@ -87,10 +87,10 @@ export class VisualEditorDemo extends Component {
               focusedTab={focusedTab}
               clipboardActions={clipboardActions}
               shellApi={{
-                navTo: e => {
+                navTo: (e) => {
                   console.log('navTo', e);
                 },
-                onFocusEvent: id => {
+                onFocusEvent: (id) => {
                   console.log('onFocusEvent', id);
                   this.setState({
                     focusedEvent: id,
@@ -104,13 +104,13 @@ export class VisualEditorDemo extends Component {
                     focusedTab: tabName,
                   });
                 },
-                onCopy: actions => {
+                onCopy: (actions) => {
                   console.log('onCopy', actions);
                   this.setState({
                     clipboardActions: actions,
                   });
                 },
-                saveData: json => {
+                saveData: (json) => {
                   this.setState({
                     obiJson: json,
                   });

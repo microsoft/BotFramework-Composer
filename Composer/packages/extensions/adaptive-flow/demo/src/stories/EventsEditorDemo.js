@@ -12,7 +12,7 @@ import './StepEditorDemo.css';
 const sampleFileNames = Object.keys(ObiExamples);
 const defaultFile = sampleFileNames[1];
 
-const getEventData = obiJson => transformRootDialog(obiJson).ruleGroup;
+const getEventData = (obiJson) => transformRootDialog(obiJson).ruleGroup;
 
 export class EventsEditorDemo extends Component {
   state = {
@@ -60,12 +60,12 @@ export class EventsEditorDemo extends Component {
             <select
               style={{ width: 200, height: 30, fontSize: 20 }}
               value={this.state.selectedFile}
-              onChange={e => {
+              onChange={(e) => {
                 const val = e.target.value;
                 this.onFileSelected(val);
               }}
             >
-              {sampleFileNames.map(x => (
+              {sampleFileNames.map((x) => (
                 <option key={x} value={x}>
                   {x}
                 </option>

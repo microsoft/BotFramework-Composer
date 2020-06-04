@@ -28,7 +28,7 @@ export class VisualSDKDemo extends Component {
       ...dialogGroups[DialogGroup.CODE].types,
       ...dialogGroups[DialogGroup.LOG].types,
     ];
-    const initalActions = initialTypes.map(t => actionFactory.create(t));
+    const initalActions = initialTypes.map((t) => actionFactory.create(t));
     return initalActions;
   }
 
@@ -53,7 +53,7 @@ export class VisualSDKDemo extends Component {
               fontSize: '8px',
             }}
             defaultValue={action}
-            onSubmit={newAction => {
+            onSubmit={(newAction) => {
               const newActions = [...this.state.actions];
               newActions[index] = newAction;
               this.setState({
@@ -77,7 +77,7 @@ export class VisualSDKDemo extends Component {
     return (
       <div style={{ width: '100%', height: 100, margin: 20 }}>
         <h3>Create action by $kind</h3>
-        <EdgeMenu id="visual-sdk-demo" onClick={$kind => this.insertActionPreview($kind)} />
+        <EdgeMenu id="visual-sdk-demo" onClick={($kind) => this.insertActionPreview($kind)} />
       </div>
     );
   }

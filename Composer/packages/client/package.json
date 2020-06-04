@@ -29,7 +29,7 @@
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/ui-plugin-select-skill-dialog": "*",
-    "@bfc/visual-designer": "*",
+    "@bfc/adaptive-flow": "*",
     "@emotion/core": "^10.0.7",
     "@microsoft/bf-lu": "4.9.1",
     "@reach/router": "^1.2.1",

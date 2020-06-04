@@ -1,7 +1,7 @@
 {
-  "name": "@bfc/visual-designer",
+  "name": "@bfc/adaptive-flow",
   "version": "1.0.0",
-  "description": "visual-designer React component",
+  "description": "BotFramework Adaptive Form",
   "main": "lib/index.js",
   "engines": {
     "node": ">=12"
