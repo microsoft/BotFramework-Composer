@@ -97,6 +97,11 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
     ipcMain.on('update-user-settings', (_ev, settings: UserSettings) => {
       appUpdater.setSettings(settings.appUpdater);
     });
+    app.once('quit', () => {
+      if (appUpdater.downloadedUpdate) {
+        appUpdater.quitAndInstall();
+      }
+    });
     appUpdater.checkForUpdates();
   } else {
     throw new Error('Main application window undefined during app updater initialization.');
