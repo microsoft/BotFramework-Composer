@@ -77,17 +77,7 @@ describe('publish', () => {
     const mockReq = {
       params: { projectId, target },
       query: {},
-      body: {
-        authoringKey: '0d4991873f334685a9686d1b48e0ff48',
-        projectId: projectId,
-        crossTrainConfig: {
-          rootIds: ['bot1.en-us.lu'],
-          triggerRules: { 'bot1.en-us.lu': { Greeting: '-hi' } },
-          intentName: '_Interruption',
-          verbose: true,
-        },
-        luFiles: ['bot1.en-us'],
-      },
+      body: {},
     } as Request;
     await PublishController.publish(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(400);
