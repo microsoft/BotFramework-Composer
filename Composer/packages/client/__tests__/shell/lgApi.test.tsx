@@ -1,53 +1,53 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { renderHook } from '@testing-library/react-hooks';
-import React from 'react';
+import { hooks } from '@bfc/test-utils';
 
 import { useLgApi } from '../../src/shell/lgApi';
-import { StoreContextProvider } from '../testUtils';
+import { useStoreContext } from '../../src/hooks/useStoreContext';
 
-describe('use lgApi hooks', () => {
-  const updateLgTemplate = jest.fn((value) => value.template.body);
-  const copyLgTemplate = jest.fn((value) => value.toTemplateName);
-  const removeLgTemplate = jest.fn((value) => value.templateName);
-  const removeLgTemplates = jest.fn((value) => value.templateNames);
+jest.mock('../../src/hooks/useStoreContext', () => ({
+  useStoreContext: jest.fn(),
+}));
 
-  let state;
-  let wrapper: React.FunctionComponent = () => null;
-  beforeEach(() => {
-    state = {
-      lgFiles: [
+const { renderHook } = hooks;
+
+const state = {
+  lgFiles: [
+    {
+      content: 'test',
+      id: 'test.en-us',
+      templates: [
         {
-          content: 'test',
-          id: 'test.en-us',
-          templates: [
-            {
-              body: '- ${add(1,2)}',
-              name: 'bar',
-              parameters: [],
-              range: { endLineNumber: 0, startLineNumber: 0 },
-            },
-          ],
+          body: '- ${add(1,2)}',
+          name: 'bar',
         },
       ],
-      focusPath: '',
-      locale: 'en-us',
-    };
+    },
+  ],
+  focusPath: '',
+  locale: 'en-us',
+  projectId: 'test',
+};
 
-    wrapper = ({ children }) => (
-      <StoreContextProvider
-        actions={{ updateLgTemplate, removeLgTemplate, copyLgTemplate, removeLgTemplates }}
-        resolvers={{ lgFileResolver: jest.fn((id) => state.lgFiles.find((file) => file.id === id)) }}
-        state={state}
-      >
-        {children}
-      </StoreContextProvider>
-    );
-  });
+const resolvers = { lgFileResolver: jest.fn((id) => state.lgFiles.find((file) => file.id === id)) };
 
-  test('should get lg template by id', () => {
-    const { result } = renderHook(() => useLgApi(), { wrapper });
+const actions = {
+  updateLgTemplate: jest.fn(),
+  copyLgTemplate: jest.fn(),
+  removeLgTemplate: jest.fn(),
+  removeLgTemplates: jest.fn(),
+};
+
+(useStoreContext as jest.Mock).mockReturnValue({
+  state,
+  resolvers,
+  actions,
+});
+
+describe('use lgApi hooks', () => {
+  it('should get lg template by id', () => {
+    const { result } = renderHook(() => useLgApi());
 
     const templates = result.current.getLgTemplates('test.en-us');
     expect(templates[0].name).toBe('bar');
@@ -58,39 +58,82 @@ describe('use lgApi hooks', () => {
     expect(testWrongId).toThrow();
   });
 
-  test('should call update lg template action', () => {
-    const { result } = renderHook(() => useLgApi(), { wrapper });
+  it('should call update lg template action', () => {
+    const { result } = renderHook(() => useLgApi());
 
     result.current.updateLgTemplate('test.en-us', 'bar', 'update');
 
-    expect(updateLgTemplate).toBeCalledTimes(1);
-    expect(updateLgTemplate).toHaveReturnedWith('update');
+    expect(actions.updateLgTemplate).toBeCalledTimes(1);
+    const arg = {
+      file: {
+        content: 'test',
+        id: 'test.en-us',
+        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
+      },
+      projectId: 'test',
+      template: {
+        body: 'update',
+        name: 'bar',
+        parameters: [],
+      },
+      templateName: 'bar',
+    };
+    expect(actions.updateLgTemplate).toBeCalledWith(arg);
   });
 
-  test('should call copy lg template action', () => {
-    const { result } = renderHook(() => useLgApi(), { wrapper });
+  it('should call copy lg template action', () => {
+    const { result } = renderHook(() => useLgApi());
 
     result.current.copyLgTemplate('test.en-us', 'from', 'to');
 
-    expect(copyLgTemplate).toBeCalledTimes(1);
-    expect(copyLgTemplate).toHaveReturnedWith('to');
+    expect(actions.copyLgTemplate).toBeCalledTimes(1);
+    const arg = {
+      file: {
+        content: 'test',
+        id: 'test.en-us',
+        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
+      },
+      fromTemplateName: 'from',
+      projectId: 'test',
+      toTemplateName: 'to',
+    };
+    expect(actions.copyLgTemplate).toBeCalledWith(arg);
   });
 
-  test('should call remove lg template action', () => {
-    const { result } = renderHook(() => useLgApi(), { wrapper });
+  it('should call remove lg template action', () => {
+    const { result } = renderHook(() => useLgApi());
 
     result.current.removeLgTemplate('test.en-us', 'bar');
 
-    expect(removeLgTemplate).toBeCalledTimes(1);
-    expect(removeLgTemplate).toHaveReturnedWith('bar');
+    expect(actions.removeLgTemplate).toBeCalledTimes(1);
+
+    const arg = {
+      file: {
+        content: 'test',
+        id: 'test.en-us',
+        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
+      },
+      projectId: 'test',
+      templateName: 'bar',
+    };
+    expect(actions.removeLgTemplate).toBeCalledWith(arg);
   });
 
-  test('should call remove lg templates action', () => {
-    const { result } = renderHook(() => useLgApi(), { wrapper });
+  it('should call remove lg templates action', () => {
+    const { result } = renderHook(() => useLgApi());
 
     result.current.removeLgTemplates('test.en-us', ['bar']);
 
-    expect(removeLgTemplates).toBeCalledTimes(1);
-    expect(removeLgTemplates).toHaveReturnedWith(['bar']);
+    expect(actions.removeLgTemplates).toBeCalledTimes(1);
+    const arg = {
+      file: {
+        content: 'test',
+        id: 'test.en-us',
+        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
+      },
+      projectId: 'test',
+      templateNames: ['bar'],
+    };
+    expect(actions.removeLgTemplates).toBeCalledWith(arg);
   });
 });
