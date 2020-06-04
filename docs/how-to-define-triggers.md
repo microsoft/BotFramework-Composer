@@ -148,7 +148,7 @@ The following steps demonstrate hot to create a **Greeting (ConversationUpdate a
 
 3) Select the **+** sign under the _ConversationUpdate Activity_ node and then select **Send a response**.
 
-4) Author your response in the **Language Generation** editor in the **properties panel** on the right side of the Composer window, by entering a message following [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) as demonstrated in the image below.
+4) Author your response in the **Language Generation** editor in the **properties panel** on the right side of the Composer window, by entering a message following [.lg file format](https://aka.ms/lg-file-format) as demonstrated in the image below.
 
    ![Welcome](./media/events-triggers/welcome.gif)
 

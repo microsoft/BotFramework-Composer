@@ -9,7 +9,7 @@ You can use Language Generation to:
 - Construct cards, suggested actions and attachments using a [structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md).
 
 Language Generation is achieved through:
-- A markdown based [.lg file](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) that contains the templates and their composition.
+- A markdown based [.lg file](https://aka.ms/lg-file-format) that contains the templates and their composition.
 - Full access to the current [bot's memory](concept-memory.md) so you can data bind language to the state of memory.
 - Parser and runtime libraries that help achieve runtime resolution. 
 
@@ -19,7 +19,7 @@ You can read more about Language Generation [here](https://github.com/microsoft/
 
 Templates are functions which return one of the variations of the text and fully resolve any other references to template for composition. You can define one or more text responses in a template. When multiple responses are defined in the template, a single response will be selected by random. 
 
-You can also define one or more expressions using the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language), so when it is a conditional template, those expressions control which particular collection of variations get picked. Templates can be parameterized meaning that different callers to the template can pass in different values for use in expansion resolution. For additional information see [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). 
+You can also define one or more expressions using the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language), so when it is a conditional template, those expressions control which particular collection of variations get picked. Templates can be parameterized meaning that different callers to the template can pass in different values for use in expansion resolution. For additional information see [.lg file format](https://aka.ms/lg-file-format). 
 
 Composer currently supports three types of templates: [simple response template](#simple-response-template), [conditional response template](#conditional-response-template), and [structured response template](#structured-response-template). You can read [this section](#define-lg-templates) and learn how to define each of them.
 
@@ -50,7 +50,7 @@ When you want to determine how your bots should respond to user input, you can d
 
 To define LG templates in Composer, you will need to know 
   - Supported concepts of LG mentioned above.
-  - [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
+  - [.lg file format](https://aka.ms/lg-file-format)
   - [Common Expression Language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
 You can define LG templates in two places: The inline LG editor and **Bot Responses** that lists all templates. Below is a screenshot of LG inline editor.
@@ -87,7 +87,7 @@ Here is an example of a multi-line response. It includes multiple lines of text 
      ```
 
 ### Conditional response template
-For all conditional templates, all conditions are expressed in the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and condition expressions are enclosed in curly brackets. Here are two [conditional template examples](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md#conditional-response-template) examples of a conditional response.
+For all conditional templates, all conditions are expressed in the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme) and condition expressions are enclosed in curly brackets. Here are two [conditional template examples](https://aka.ms/lg-file-format#conditional-response-template) examples of a conditional response.
 
 IF...ELSE
 
@@ -154,7 +154,7 @@ For more examples of structured response templates, see [StructuredTemplate.lg](
 
 ## References
 - [Language generation preview](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) 
-- [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
+- [.lg file format](https://aka.ms/lg-file-format)
 - [.lg API reference](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/api-reference.md)
 - [Common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 - [Structured response template](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/structured-response-template.md)

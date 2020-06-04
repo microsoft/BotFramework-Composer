@@ -185,8 +185,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
       try {
         // TODO ccastro: discuss with benbrown. Consider init command as template metadata. Remove azurewebapp from here.
-        execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir, stdio: 'inherit' });
-        execSync('dotnet build', { cwd: runtimeDir, stdio: 'inherit' });
+        execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir, stdio: 'pipe' });
+        execSync('dotnet build', { cwd: runtimeDir, stdio: 'pipe' });
       } catch (error) {
         // delete the folder to make sure build again.
         await removeDirAndFiles(botDir);
