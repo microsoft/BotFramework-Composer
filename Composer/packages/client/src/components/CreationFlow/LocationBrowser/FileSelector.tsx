@@ -195,18 +195,14 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     );
   }
 
-  function getNavItemPath(array, separator, start, end) {
-    if (end === 0) return array[0];
-    if (!start) start = 0;
-    if (!end) end = array.length - 1;
-    end++;
-    return array.slice(start, end).join(separator);
+  function getNavItemPath(array: string[], separator: string, end: number) {
+    return array.slice(0, end + 1).join(separator);
   }
 
   const separator = path.sep;
   const pathItems = currentPath.split(separator).filter((p) => p !== '');
   const breadcrumbItems = pathItems.map((item, index) => {
-    let itemPath = getNavItemPath(pathItems, separator, 0, index);
+    let itemPath = getNavItemPath(pathItems, separator, index);
     // put a leading / back on the path if it started as a unix style path
     itemPath = currentPath.startsWith('/') ? `/${itemPath}` : itemPath;
     // add a trailing / if the last path is something like c:
