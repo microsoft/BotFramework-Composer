@@ -26,6 +26,7 @@ export class OffsetContainer extends React.Component<OffsetContainerProps, objec
             transitionProperty: 'left, right, top, bottom',
           },
         ]}
+        data-testid="OffsetContainer"
         {...otherProps}
       >
         {children}
