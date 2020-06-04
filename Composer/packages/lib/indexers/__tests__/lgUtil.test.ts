@@ -3,7 +3,7 @@
 
 import { Templates } from 'botbuilder-lg';
 
-import { updateTemplate, addTemplate, removeTemplate } from '../src/utils/lgUtil';
+import { updateTemplate, addTemplate, removeTemplate, extractOptionByKey } from '../src/utils/lgUtil';
 
 describe('update lg template', () => {
   it('should update lg template', () => {
@@ -67,5 +67,17 @@ describe('add lg template', () => {
     const templates = Templates.parseText(newContent).toArray();
     expect(templates.length).toEqual(1);
     expect(templates[0].name).toEqual('Exit');
+  });
+});
+
+describe('extract option by key', () => {
+  it('should extract optin', () => {
+    const options = ['@strict = false', '@Namespace = foo', '@Exports = bar, cool'];
+    const namespace = extractOptionByKey('@namespace', options);
+    expect(namespace).toBe('foo');
+    const namespace2 = extractOptionByKey('@wrong', options);
+    expect(namespace2).toBe('');
+    const strict = extractOptionByKey('@strict', options);
+    expect(strict).toBe('false');
   });
 });
