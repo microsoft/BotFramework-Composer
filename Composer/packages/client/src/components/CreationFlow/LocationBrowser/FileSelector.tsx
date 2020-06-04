@@ -91,7 +91,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     isWindows = false,
   } = props;
   // for detail file list in open panel
-  const currentPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
+  const [currentPath, setCurrentPath] = useState(path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
 
   const tableColumns = [
     {
@@ -231,8 +231,10 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     event.preventDefault();
     if (option) {
       onCurrentPathUpdate(option.key as string);
+      setCurrentPath(option.key as string);
     } else {
       onCurrentPathUpdate(value);
+      setCurrentPath(value as string);
     }
   };
   return (
