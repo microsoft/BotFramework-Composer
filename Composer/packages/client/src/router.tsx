@@ -51,6 +51,7 @@ const Routes = (props) => {
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
+            <DesignPage path="*" />
           </ProjectRouter>
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />

@@ -14,7 +14,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
-import { DialogCreationCopy } from '../../../constants';
+import { DialogCreationCopy, nameRegex } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
@@ -67,11 +67,8 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        const nameRegex = /^[a-zA-Z0-9-_.]+$/;
         if (!value || !nameRegex.test(value)) {
-          return formatMessage(
-            'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
-          );
+          return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
 
         const newBotPath =
