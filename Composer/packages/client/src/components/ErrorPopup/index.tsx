@@ -4,13 +4,18 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { useState } from 'react';
-import { PropTypes } from 'prop-types';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import { consoleStyle, dialog } from './styles';
 
-export const ErrorPopup = (props) => {
+type ErrorPopupProps = {
+  title: string;
+  error: Node;
+  onDismiss: () => void;
+};
+
+export const ErrorPopup = (props: ErrorPopupProps) => {
   const [hidden, setHidden] = useState(props.error ? false : true);
 
   const _closeDialog = () => {
@@ -38,10 +43,4 @@ export const ErrorPopup = (props) => {
       </DialogFooter>
     </Dialog>
   );
-};
-
-ErrorPopup.propTypes = {
-  error: PropTypes.node,
-  title: PropTypes.string,
-  onDismiss: PropTypes.func,
 };
