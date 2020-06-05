@@ -16,8 +16,6 @@ import {
   childrenContainer,
 } from './styles';
 
-const { openExternal: openExternalLink } = window as Window;
-
 interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
   onClick?: () => void | Promise<void>;
   title: string | JSX.Element;
@@ -76,12 +74,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     <DefaultButton
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async (e) => {
-        // todo: clean this up
-        const { href } = rest as Partial<{ href: string }>;
-        if (openExternal) {
-          e.preventDefault();
-          return openExternalLink(href, { activate: true });
-        } else if (onClick && !href) {
+        if (onClick != null) {
           e.preventDefault();
           await onClick();
         }

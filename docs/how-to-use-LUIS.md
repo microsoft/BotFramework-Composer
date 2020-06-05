@@ -51,7 +51,7 @@ After you define your trigger and configure it to specific intent, you can add a
 
 ![send_response_message](./media/add_luis/send_response_message.png)
 
-4. Define the response message in the language generation editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). The screenshot below shows how to author a response message "This is a Greeting intent!" in the Language Generation editor.
+4. Define the response message in the language generation editor and follow the [.lg file format](https://aka.ms/lg-file-format). The screenshot below shows how to author a response message "This is a Greeting intent!" in the Language Generation editor.
 
 ![greeting_message](./media/add_luis/greeting_message.png)
 
