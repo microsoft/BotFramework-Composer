@@ -13,7 +13,7 @@ Below is a screenshot of the **Send a response** action in Composer. How to get 
 
 
 ## What to know
-In Composer, all messages that are sent back to the user are composed in the Language Generation (LG) editor and follow the [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). If you are not familiar with language generation in Composer, please read the [language generation](./concept-language-generation.md) article. 
+In Composer, all messages that are sent back to the user are composed in the Language Generation (LG) editor and follow the [.lg file format](https://aka.ms/lg-file-format). If you are not familiar with language generation in Composer, please read the [language generation](./concept-language-generation.md) article. 
 
 The table below lists the different types of text messages provided in Composer and their respective descriptions. 
 
@@ -29,7 +29,7 @@ The table below lists the different types of text messages provided in Composer 
 | [Switch](how-to-send-messages.md#switch-condition)             | A Switch conditional template defined to generate text responses based on user's input.                                                                                                                                     |
 
 ## Define different text messages
-To send a message, you need to specify **Send a response** action and then in the the Language Generation editor author your response message in [.lg format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). You can also define an lg template in **Bot Responses** (the lg all-up view) and reference the template in lg inline editor using the syntax `@{templateName()}`. 
+To send a message, you need to specify **Send a response** action and then in the the Language Generation editor author your response message in [.lg format](https://aka.ms/lg-file-format). You can also define an lg template in **Bot Responses** (the lg all-up view) and reference the template in lg inline editor using the syntax `@{templateName()}`. 
 
 ### Simple text
 To define a simple text message, use a "-" before the text that you want your bot to respond to users. 
@@ -129,7 +129,7 @@ In this Switch conditional template, bot will respond in text message `Happy Sun
 ## References 
 - [Send and receive text message](https://docs.microsoft.com/azure/bot-service/bot-builder-howto-send-messages)
 - [Language generation](./concept-language-generation.md)
-- [.lg file format](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md)
+- [.lg file format](https://aka.ms/lg-file-format)
 - [Common language expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#readme)
 
 ## Next
