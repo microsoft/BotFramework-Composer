@@ -3,13 +3,11 @@
 
 import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
-import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 
 import * as lgUtil from '../utils/lgUtil';
 import { State, BoundActionHandlers } from '../store/types';
 import { useStoreContext } from '../hooks/useStoreContext';
-
-const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
 function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver: (id: string) => LgFile | undefined) {
   const getLgTemplates = (id) => {
@@ -20,7 +18,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     return file.templates;
   };
 
-  const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
+  const updateLgTemplate = (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
@@ -28,9 +26,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
 
     const projectId = state.projectId;
 
-    lgUtil.checkSingleLgTemplate(template);
-
-    await actions.updateLgTemplate({
+    return actions.updateLgTemplate({
       file,
       projectId,
       templateName,
@@ -38,7 +34,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     });
   };
 
-  const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
+  const copyLgTemplate = (id, fromTemplateName, toTemplateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
@@ -53,7 +49,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     });
   };
 
-  const removeLgTemplate = async (id, templateName) => {
+  const removeLgTemplate = (id, templateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
@@ -66,7 +62,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     });
   };
 
-  const removeLgTemplates = async (id, templateNames) => {
+  const removeLgTemplates = (id, templateNames) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateNames) throw new Error(`templateName is missing or empty`);
@@ -82,7 +78,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
   return {
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
-    updateLgTemplate: createThrottledFunc(updateLgTemplate),
+    updateLgTemplate: debounce(updateLgTemplate, 250),
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,

@@ -58,53 +58,49 @@ ctx.onmessage = function (event) {
   const msg = event.data as LgMessageEvent;
   const id = msg.id;
 
-  switch (msg.type) {
-    case LgActionType.Parse: {
-      const { targetId, content, lgFiles } = msg.payload;
-      const { parse } = lgIndexer;
+  let payload: any = null;
+  try {
+    switch (msg.type) {
+      case LgActionType.Parse: {
+        const { targetId, content, lgFiles } = msg.payload;
+        const { parse } = lgIndexer;
 
-      try {
         const lgImportResolver = importResolverGenerator(lgFiles, '.lg');
 
         const { templates, diagnostics } = parse(content, targetId, lgImportResolver);
-
-        ctx.postMessage({ id, payload: { id: targetId, content, templates, diagnostics } });
-      } catch (error) {
-        ctx.postMessage({ id, error });
+        payload = { id: targetId, content, templates, diagnostics };
+        break;
       }
-      break;
+      case LgActionType.AddTemplate: {
+        const { content, template } = msg.payload;
+        payload = lgUtil.addTemplate(content, template);
+        break;
+      }
+      case LgActionType.UpdateTemplate: {
+        const { content, templateName, template } = msg.payload;
+        lgUtil.checkSingleLgTemplate(template);
+        payload = lgUtil.updateTemplate(content, templateName, template);
+        break;
+      }
+      case LgActionType.RemoveTemplate: {
+        const { content, templateName } = msg.payload;
+        payload = lgUtil.removeTemplate(content, templateName);
+        break;
+      }
+      case LgActionType.RemoveAllTemplates: {
+        const { content, templateNames } = msg.payload;
+        payload = lgUtil.removeTemplates(content, templateNames);
+        break;
+      }
+      case LgActionType.CopyTemplate: {
+        const { content, toTemplateName, fromTemplateName } = msg.payload;
+        payload = lgUtil.copyTemplate(content, fromTemplateName, toTemplateName);
+        break;
+      }
     }
-    case LgActionType.AddTemplate: {
-      const { content, template } = msg.payload;
-      const payload = lgUtil.addTemplate(content, template);
 
-      ctx.postMessage({ id, payload });
-      break;
-    }
-    case LgActionType.UpdateTemplate: {
-      const { content, templateName, template } = msg.payload;
-      const payload = lgUtil.updateTemplate(content, templateName, template);
-
-      ctx.postMessage({ id, payload });
-      break;
-    }
-    case LgActionType.RemoveTemplate: {
-      const { content, templateName } = msg.payload;
-      const payload = lgUtil.removeTemplate(content, templateName);
-      ctx.postMessage({ id: payload });
-      break;
-    }
-    case LgActionType.RemoveAllTemplates: {
-      const { content, templateNames } = msg.payload;
-      const payload = lgUtil.removeTemplates(content, templateNames);
-      ctx.postMessage({ id, payload });
-      break;
-    }
-    case LgActionType.CopyTemplate: {
-      const { content, toTemplateName, fromTemplateName } = msg.payload;
-      const payload = lgUtil.copyTemplate(content, fromTemplateName, toTemplateName);
-      ctx.postMessage({ id, payload });
-      break;
-    }
+    ctx.postMessage({ id, payload });
+  } catch (error) {
+    ctx.postMessage({ id, error });
   }
 };
