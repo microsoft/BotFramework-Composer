@@ -4,7 +4,8 @@
   "private": true,
   "resolutions": {
     "@types/react": "16.9.23",
-    "mkdirp": "^0.5.2"
+    "mkdirp": "^0.5.2",
+    "serialize-javascript": "^3.1.0"
   },
   "engines": {
     "node": ">=12"
