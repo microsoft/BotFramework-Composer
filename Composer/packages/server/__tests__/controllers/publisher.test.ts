@@ -64,26 +64,6 @@ describe('get types', () => {
   });
 });
 
-describe('publish', () => {
-  let projectId = '';
-  const target = 'default';
-
-  beforeEach(async () => {
-    projectId = await BotProjectService.openProject(location2);
-  });
-
-  //TODO: verify publish success.
-  it('should publish luis files', async () => {
-    const mockReq = {
-      params: { projectId, target },
-      query: {},
-      body: {},
-    } as Request;
-    await PublishController.publish(mockReq, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(400);
-  }, 10000);
-});
-
 describe('status', () => {
   let projectId = '';
   const target = 'default';
@@ -137,23 +117,5 @@ describe('rollback', () => {
     } as Request;
     await PublishController.rollback(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(400);
-  });
-});
-
-describe('removeLocalRuntimeData', () => {
-  let projectId = '';
-  const target = 'default';
-  beforeEach(async () => {
-    projectId = await BotProjectService.openProject(location2);
-  });
-
-  it('should removeLocalRuntimeData', async () => {
-    const mockReq = {
-      params: { projectId, target },
-      query: {},
-      body: {},
-    } as Request;
-    await PublishController.removeLocalRuntimeData(mockReq, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
