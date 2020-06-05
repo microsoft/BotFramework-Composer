@@ -63,18 +63,15 @@ ctx.onmessage = function (event) {
       const { targetId, content, lgFiles } = msg.payload;
       const { parse } = lgIndexer;
 
-      return new Promise((resolve) => {
-        try {
-          const lgImportResolver = importResolverGenerator(lgFiles, '.lg');
+      try {
+        const lgImportResolver = importResolverGenerator(lgFiles, '.lg');
 
-          const { templates, diagnostics } = parse(content, targetId, lgImportResolver);
+        const { templates, diagnostics } = parse(content, targetId, lgImportResolver);
 
-          ctx.postMessage({ id, payload: { id: targetId, content, templates, diagnostics } });
-        } catch (error) {
-          ctx.postMessage({ id, error });
-        }
-        resolve();
-      });
+        ctx.postMessage({ id, payload: { id: targetId, content, templates, diagnostics } });
+      } catch (error) {
+        ctx.postMessage({ id, error });
+      }
       break;
     }
     case LgActionType.AddTemplate: {
