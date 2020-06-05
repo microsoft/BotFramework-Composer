@@ -81,7 +81,7 @@ describe('publish', () => {
     } as Request;
     await PublishController.publish(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(400);
-  });
+  }, 10000);
 });
 
 describe('status', () => {
