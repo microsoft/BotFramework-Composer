@@ -378,26 +378,3 @@ describe('remove project', () => {
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
-
-describe('export project', () => {
-  let projectId = '';
-  beforeEach(async () => {
-    projectId = await BotProjectService.openProject(location1);
-  });
-
-  it('should export to zip', async () => {
-    const mockReq = {
-      params: { projectId },
-      query: {},
-      body: {},
-    } as Request;
-    const mockRes = {
-      on: jest.fn().mockReturnThis(),
-      once: jest.fn().mockReturnThis(),
-      emit: jest.fn().mockReturnThis(),
-      attachment: jest.fn().mockReturnThis(),
-    } as any;
-    await ProjectController.exportProject(mockReq, mockRes);
-    expect(mockRes.attachment).toBeCalledWith('tmp-archive.zip');
-  });
-});
