@@ -139,10 +139,11 @@ describe('should save as bot', () => {
   const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/');
   it('saveProjectAs', async () => {
     const projectId = await BotProjectService.openProject(location1);
+    const schemaUrl = 'http://json-schema.org/draft-07/schema#';
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { storageId: 'default', location: saveAsDir, description: '', name: 'saveAsBot' },
+      body: { storageId: 'default', location: saveAsDir, description: '', name: 'saveAsBot', schemaUrl },
     } as Request;
     await ProjectController.saveProjectAs(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -332,6 +333,34 @@ describe('skill operation', () => {
   });
 });
 
+// TODO: add a success publish test.
+describe('publish luis files', () => {
+  let projectId = '';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location1);
+  });
+
+  it('should publish all luis files', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {
+        authoringKey: '0d4991873f334685a9686d1b48e0ff48',
+        projectId: projectId,
+        crossTrainConfig: {
+          rootIds: ['bot1.en-us.lu'],
+          triggerRules: { 'bot1.en-us.lu': {} },
+          intentName: '_Interruption',
+          verbose: true,
+        },
+        luFiles: [],
+      },
+    } as Request;
+    await ProjectController.publishLuis(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
 describe('export project', () => {
   let projectId = '';
   beforeEach(async () => {
@@ -354,36 +383,3 @@ describe('export project', () => {
     expect(mockRes.attachment).toBeCalledWith('tmp-archive.zip');
   });
 });
-
-// describe('publish luis files', () => {
-//   let projectId = '';
-//   beforeEach(async () => {
-//     projectId = await BotProjectService.openProject(location2);
-//   });
-
-//   it('should publish all luis files', async () => {
-//     const mockReq = {
-//       params: { projectId },
-//       query: {},
-//       body: {
-//         authoringKey: '0d4991873f334685a9686d1b48e0ff48',
-//         projectId: '66019.65731222292',
-//         crossTrainConfig: {
-//           rootIds: ['echobot-3.en-us.lu'],
-//           triggerRules: { 'h2.en-us.lu': { hh2: '' }, 'echobot-3.en-us.lu': { '': '', hi: '' } },
-//           intentName: '_Interruption',
-//           verbose: true
-//         },
-//         luFiles: ['h2.en-us', 'echobot-3.en-us']
-//       }
-//     } as Request;
-//     const mockRes = {
-//       write: jest.fn().mockReturnThis(),
-//       status: jest.fn().mockReturnThis(),
-//       send: jest.fn().mockReturnThis(),
-//       json: jest.fn().mockReturnThis()
-//     } as any;
-//     await ProjectController.publishLuis(mockReq, mockRes);
-//     expect(mockRes.status).toHaveBeenCalledWith(200);
-//   });
-// });
