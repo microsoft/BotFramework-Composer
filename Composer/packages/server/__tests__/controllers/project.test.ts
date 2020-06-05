@@ -15,6 +15,7 @@ jest.mock('@bfc/plugin-loader', () => {
       extensions: {
         botTemplates: [],
         baseTemplates: [],
+        publish: [],
       },
     },
     PluginLoader: {
@@ -361,10 +362,27 @@ describe('publish luis files', () => {
   });
 });
 
-describe('export project', () => {
+describe('remove project', () => {
   let projectId = '';
   beforeEach(async () => {
     projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should remove current project', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {},
+    } as Request;
+    await ProjectController.removeProject(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('export project', () => {
+  let projectId = '';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location1);
   });
 
   it('should export to zip', async () => {
