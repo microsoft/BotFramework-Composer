@@ -5,7 +5,9 @@
   "resolutions": {
     "@types/react": "16.9.23",
     "mkdirp": "^0.5.2",
-    "serialize-javascript": "^3.1.0"
+    "serialize-javascript": "^3.1.0",
+    "lodash": "^4.17.12",
+    "set-value": "^3.0.2"
   },
   "engines": {
     "node": ">=12"
