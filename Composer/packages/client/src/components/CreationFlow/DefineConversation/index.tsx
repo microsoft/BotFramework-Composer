@@ -44,7 +44,7 @@ interface DefineConversationProps
 
 const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { onSubmit, onDismiss, onCurrentPathUpdate, saveTemplateId, templateId, focusedStorageFolder } = props;
-  const files = focusedStorageFolder.children ?? [];
+  const files = focusedStorageFolder?.children ?? [];
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -70,7 +70,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         }
 
         const newBotPath =
-          focusedStorageFolder != null && Object.keys(focusedStorageFolder as Record<string, any>).length
+          focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
             ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, value)
             : '';
         if (
