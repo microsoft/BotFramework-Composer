@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+import fs from 'fs';
+import path from 'path';
 import * as http from 'http';
 import * as url from 'url';
 import * as net from 'net';
@@ -11,6 +12,16 @@ import { IConnection, createConnection } from 'vscode-languageserver';
 import express from 'express';
 
 import { LUServer } from '../../src';
+
+// eslint-disable-next-line security/detect-non-literal-fs-filename
+const luFile = fs.readFileSync(path.join(__dirname, '../mocks/greeting.lu'), 'utf-8');
+
+const luImportResolver = (_source, id) => {
+  return {
+    id,
+    content: luFile,
+  };
+};
 
 function createSocketHandler(webSocket: any): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {
@@ -44,7 +55,7 @@ function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  return new LUServer(connection);
+  return new LUServer(connection, luImportResolver);
 }
 
 export function startServer() {
