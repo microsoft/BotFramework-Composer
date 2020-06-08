@@ -347,21 +347,13 @@ export class BotProject {
 
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
-    if (
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.stopBot
-    ) {
+    if (pluginLoader.extensions.publish[method]?.methods?.stopBot) {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
       if (typeof pluginMethod === 'function') {
         await pluginMethod.call(null, projectId);
       }
     }
-    if (
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.removeRuntimeData
-    ) {
+    if (pluginLoader.extensions.publish[method]?.methods?.removeRuntimeData) {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
       if (typeof pluginMethod === 'function') {
         await pluginMethod.call(null, projectId);

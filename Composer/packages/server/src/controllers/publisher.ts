@@ -53,20 +53,15 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
 
-    // append config from client(like sensitive settings)
-    const configuration = {
-      profileName: profile.name,
-      fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-      templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
-      ...JSON.parse(profile.configuration),
-    };
+    if (profile && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
+      // append config from client(like sensitive settings)
+      const configuration = {
+        profileName: profile.name,
+        fullSettings: merge({}, currentProject.settings, sensitiveSettings),
+        templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
+        ...JSON.parse(profile.configuration),
+      };
 
-    if (
-      profile &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.publish
-    ) {
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].methods.publish;
 
