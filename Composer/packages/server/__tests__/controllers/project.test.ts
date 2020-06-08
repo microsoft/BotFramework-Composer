@@ -15,6 +15,7 @@ jest.mock('@bfc/plugin-loader', () => {
       extensions: {
         botTemplates: [],
         baseTemplates: [],
+        publish: [],
       },
     },
     PluginLoader: {
@@ -73,7 +74,7 @@ afterAll(() => {
   }
 });
 
-describe('getProject', () => {
+describe('get bot project', () => {
   it('should get no project', async () => {
     const mockReq = {
       params: {},
@@ -94,6 +95,18 @@ describe('getProject', () => {
       body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots/bot1') },
     } as Request;
     await ProjectController.openProject(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('get all projects', () => {
+  it('should get all project', async () => {
+    const mockReq = {
+      params: {},
+      query: {},
+      body: { storageId: 'default', path: Path.resolve(__dirname, '../mocks/samplebots') },
+    } as Request;
+    await ProjectController.getAllProjects(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
@@ -127,10 +140,11 @@ describe('should save as bot', () => {
   const saveAsDir = Path.resolve(__dirname, '../mocks/samplebots/');
   it('saveProjectAs', async () => {
     const projectId = await BotProjectService.openProject(location1);
+    const schemaUrl = 'http://json-schema.org/draft-07/schema#';
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { storageId: 'default', location: saveAsDir, description: '', name: 'saveAsBot' },
+      body: { storageId: 'default', location: saveAsDir, description: '', name: 'saveAsBot', schemaUrl },
     } as Request;
     await ProjectController.saveProjectAs(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -269,6 +283,98 @@ describe('lu operation', () => {
       body: {},
     } as Request;
     await ProjectController.removeFile(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('skill operation', () => {
+  let projectId = '';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should check skill url', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {
+        url: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+      },
+    } as Request;
+    await ProjectController.getSkill(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should update skill', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {
+        skills: [
+          {
+            manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+          },
+        ],
+      },
+    } as Request;
+    await ProjectController.updateSkill(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should update skill', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {
+        skills: [],
+      },
+    } as Request;
+    await ProjectController.updateSkill(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+// TODO: add a success publish test.
+describe('publish luis files', () => {
+  let projectId = '';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location1);
+  });
+
+  it('should publish all luis files', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {
+        authoringKey: '0d4991873f334685a9686d1b48e0ff48',
+        projectId: projectId,
+        crossTrainConfig: {
+          rootIds: ['bot1.en-us.lu'],
+          triggerRules: { 'bot1.en-us.lu': {} },
+          intentName: '_Interruption',
+          verbose: true,
+        },
+        luFiles: [],
+      },
+    } as Request;
+    await ProjectController.publishLuis(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('remove project', () => {
+  let projectId = '';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should remove current project', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: {},
+    } as Request;
+    await ProjectController.removeProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
