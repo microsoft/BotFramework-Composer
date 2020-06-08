@@ -56,7 +56,7 @@ function jsonEscape(str) {
 
 const content = jsonEscape(lgFile);
 
-describe('lg lsp server', () => {
+describe('LG LSP server test', () => {
   const server = startServer();
   beforeAll(async () => {
     await new Promise((resolve) => {
@@ -89,7 +89,7 @@ describe('lg lsp server', () => {
     );
   });
 
-  it('initialize documents', async () => {
+  it('should initialize documents', async () => {
     // initialize, check diagnostics
     await send(`{"jsonrpc":"2.0","id":1,"method":"initializeDocuments","params":{"uri":"inmemory://model/1"}}`, [
       (response) => {
@@ -102,7 +102,7 @@ describe('lg lsp server', () => {
     ]);
   });
 
-  it('hover', async () => {
+  it('hover on template name should return template body text', async () => {
     // didChange
     await send(
       `{"jsonrpc":"2.0","id":2,"method":"textDocument/hover","params":{"textDocument":{"uri":"inmemory://model/1"},"position":{"line":6,"character":6}}}`,
@@ -115,7 +115,7 @@ describe('lg lsp server', () => {
     );
   });
 
-  it('didChange', async () => {
+  it('diagnostics, if typing content is invalid should return error', async () => {
     // didChange
     const newContent = `${content}-\${G\\r\\n`;
     const payload = `{"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"inmemory://model/1","version":3},"contentChanges":[{"text": "${newContent}"}]}}`;
@@ -127,7 +127,7 @@ describe('lg lsp server', () => {
     ]);
   });
 
-  it('completion', async () => {
+  it('completion, typing in an expression block should suggest existed templates', async () => {
     // completion,
     // input G, should suggest Greeting*
     const payload = `{"jsonrpc":"2.0","id":3,"method":"textDocument/completion","params":{"textDocument":{"uri":"inmemory://model/1"},"position":{"line":8,"character":4},"context":{"triggerKind":1}}}`;
@@ -140,6 +140,16 @@ describe('lg lsp server', () => {
             .map((item) => item.label)
             .join(',')
         ).toEqual(['Greeting1', 'Greeting2', 'Greeting3'].join(','));
+      },
+    ]);
+  });
+
+  it('close documents should clean all diagnostics', async () => {
+    const payload = `{"jsonrpc":"2.0","method":"textDocument/didClose","params":{"textDocument":{"uri":"inmemory://model/1"}}}`;
+    await send(payload, [
+      (response) => {
+        expect(response.method).toEqual('textDocument/publishDiagnostics');
+        expect(response.params.diagnostics.length).toEqual(0);
       },
     ]);
   });
