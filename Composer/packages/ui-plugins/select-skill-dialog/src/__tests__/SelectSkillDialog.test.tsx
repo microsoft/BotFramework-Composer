@@ -65,7 +65,7 @@ describe('Select Skill Dialog', () => {
   it('should add a new skill', async () => {
     const addSkillDialog = jest.fn().mockImplementation(() => {
       return {
-        then: cb => {
+        then: (cb) => {
           cb({ manifestUrl: 'https://' });
         },
       };

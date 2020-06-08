@@ -21,28 +21,28 @@ interface OpenProjectProps extends RouteComponentProps<{}> {
   onDismiss: () => void;
 }
 
-export const OpenProject: React.FC<OpenProjectProps> = props => {
+export const OpenProject: React.FC<OpenProjectProps> = (props) => {
   const { onOpen, onDismiss, onCurrentPathUpdate, focusedStorageFolder } = props;
 
   return (
     <DialogWrapper
       {...DialogCreationCopy.SELECT_LOCATION}
-      onDismiss={onDismiss}
-      isOpen={true}
+      isOpen
       dialogType={DialogTypes.CreateFlow}
+      onDismiss={onDismiss}
     >
       <div data-testid="SelectLocation">
         <LocationSelectContent
+          focusedStorageFolder={focusedStorageFolder}
           operationMode={{
             read: true,
             write: false,
           }}
-          onOpen={onOpen}
           onCurrentPathUpdate={onCurrentPathUpdate}
-          focusedStorageFolder={focusedStorageFolder}
+          onOpen={onOpen}
         />
         <DialogFooter>
-          <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} />
+          <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         </DialogFooter>
       </div>
     </DialogWrapper>

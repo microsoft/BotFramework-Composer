@@ -43,6 +43,7 @@ export class LuPublisher {
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
   public downSamplingConfig: IDownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
+  private _locale: string;
 
   public crossTrainConfig: ICrossTrainConfig = {
     rootIds: [],
@@ -51,16 +52,17 @@ export class LuPublisher {
     verbose: true,
   };
 
-  private builder = new luBuild.Builder(message => {
+  private builder = new luBuild.Builder((message) => {
     log(message);
   });
 
-  constructor(path: string, storage: IFileStorage) {
+  constructor(path: string, storage: IFileStorage, locale: string) {
     this.botDir = path;
     this.dialogsDir = this.botDir;
     this.generatedFolderPath = Path.join(this.dialogsDir, GENERATEDFOLDER);
     this.interuptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
     this.storage = storage;
+    this._locale = locale;
   }
 
   public publish = async (files: FileInfo[]) => {
@@ -88,6 +90,14 @@ export class LuPublisher {
     this.downSamplingConfig = downSamplingConfig;
   }
 
+  public get locale(): string {
+    return this._locale;
+  }
+
+  public set locale(v: string) {
+    this._locale = v;
+  }
+
   private async _createGeneratedDir() {
     // clear previous folder
     await this._deleteDir(this.generatedFolderPath);
@@ -100,7 +110,7 @@ export class LuPublisher {
 
   private async _crossTrain(files: FileInfo[]) {
     if (!this._needCrossTrain()) return;
-    const luContents = files.map(file => {
+    const luContents = files.map((file) => {
       return { content: file.content, id: file.name };
     });
 
@@ -127,7 +137,7 @@ export class LuPublisher {
 
   private async _downSizeUtterances(luContents: any) {
     return await Promise.all(
-      luContents.map(async luContent => {
+      luContents.map(async (luContent) => {
         const result = await LuisBuilder.fromLUAsync(luContent.content);
         const sampledResult = this._doDownSampling(result);
         const content = luisToLuContent(sampledResult);
@@ -154,11 +164,15 @@ export class LuPublisher {
     }
     const loadResult = await this._loadLuConatents(config.models);
     loadResult.luContents = await this._downSizeUtterances(loadResult.luContents);
+    let endpoint = config.endpoint;
+    if (!endpoint) {
+      endpoint = `https://${config.region}.api.cognitive.microsoft.com`;
+    }
     const buildResult = await this.builder.build(
       loadResult.luContents,
       loadResult.recognizers,
       config.authoringKey,
-      config.region,
+      endpoint,
       config.botName,
       config.suffix,
       config.fallbackLocal,
@@ -203,11 +217,11 @@ export class LuPublisher {
     let paths: string[] = [];
     if (this._needCrossTrain()) {
       paths = await this.storage.glob('**/*.lu', this.interuptionFolderPath);
-      luConfig.models = paths.map(filePath => Path.join(this.interuptionFolderPath, filePath));
+      luConfig.models = paths.map((filePath) => Path.join(this.interuptionFolderPath, filePath));
     }
 
     //add the lu file that are not in interuption folder.
-    files.forEach(file => {
+    files.forEach((file) => {
       if (!~paths.indexOf(file.name)) {
         luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
       }
@@ -218,7 +232,7 @@ export class LuPublisher {
   private _loadLuConatents = async (paths: string[]) => {
     return await this.builder.loadContents(
       paths,
-      this.config?.defaultLanguage || '',
+      this._locale,
       this.config?.environment || '',
       this.config?.authoringRegion || ''
     );

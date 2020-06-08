@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import omit from 'lodash/omit';
+import set from 'lodash/set';
 import { SensitiveProperties } from '@bfc/shared';
 import { UserIdentity } from '@bfc/plugin-loader';
 
@@ -22,12 +22,14 @@ export class DefaultSettingManager extends FileSettingManager {
       feature: {
         UseShowTypingMiddleware: false,
         UseInspectionMiddleware: false,
+        RemoveRecipientMention: false,
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
       luis: {
         name: '',
         authoringKey: '',
+        endpoint: '',
         endpointKey: '',
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
@@ -55,25 +57,30 @@ export class DefaultSettingManager extends FileSettingManager {
     };
   };
 
-  public async get(slot = '', obfuscate = false): Promise<any> {
-    const result = await super.get(slot, obfuscate);
+  public async get(obfuscate = false): Promise<any> {
+    const result = await super.get(obfuscate);
     //add downsampling property for old bot
     if (!result.downsampling) {
       result.downsampling = this.createDefaultSettings().downsampling;
+    }
+    //add luis endpoint for old bot
+    if (!result.luis.endpoint && result.luis.endpoint !== '') {
+      result.luis.endpoint = this.createDefaultSettings().luis.endpoint;
     }
     return result;
   }
 
   private filterOutSensitiveValue = (obj: any) => {
     if (obj && typeof obj === 'object') {
-      return omit(obj, SensitiveProperties);
+      SensitiveProperties.map((key) => {
+        set(obj, key, '');
+      });
+      return obj;
     }
   };
 
-  public set = async (slot: string, settings: any): Promise<void> => {
-    this.validateSlot(slot);
-
-    const path = this.getPath(slot);
+  public set = async (settings: any): Promise<void> => {
+    const path = this.getPath();
     const dir = Path.dirname(path);
     if (!(await this.storage.exists(dir))) {
       debug('Storage path does not exist. Creating directory now: %s', dir);

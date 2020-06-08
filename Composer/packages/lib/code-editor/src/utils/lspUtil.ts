@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as normalizeUrl from 'normalize-url';
+import normalizeUrl from 'normalize-url';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { MessageConnection } from 'vscode-ws-jsonrpc';
 import {
@@ -14,12 +14,12 @@ import {
 
 export function createUrl(server: { [key: string]: string } | string): string {
   if (typeof server === 'string') {
-    return normalizeUrl.default(server).replace(/^http/, 'ws');
+    return normalizeUrl(server).replace(/^http/, 'ws');
   }
   const { host, hostname = location.hostname, port = location.port, path = '/' } = server;
   const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
   const endHost = host || `${hostname}:${port}`;
-  return normalizeUrl.default(`${protocol}://${endHost}/${path}`);
+  return normalizeUrl(`${protocol}://${endHost}/${path}`);
 }
 
 export function createWebSocket(url: string): WebSocket {
@@ -58,4 +58,28 @@ export function createLanguageClient(
       },
     },
   });
+}
+
+export async function SendRequestWithRetry(
+  languageClient: MonacoLanguageClient,
+  method: string,
+  data: any,
+  interval = 1000
+) {
+  let sendTimer;
+
+  const send = (data) => {
+    try {
+      languageClient.sendRequest(method, data);
+      if (sendTimer) clearInterval(sendTimer);
+    } catch (error) {
+      sendTimer = setTimeout(() => {
+        send(data);
+      }, interval);
+    }
+  };
+  if (languageClient) {
+    await languageClient.onReady();
+    send(data);
+  }
 }

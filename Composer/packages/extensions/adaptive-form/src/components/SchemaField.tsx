@@ -20,7 +20,7 @@ const schemaField = {
   `,
 };
 
-const SchemaField: React.FC<FieldProps> = props => {
+const SchemaField: React.FC<FieldProps> = (props) => {
   const {
     className,
     definitions,
@@ -52,7 +52,7 @@ const SchemaField: React.FC<FieldProps> = props => {
   }, []);
 
   const error = typeof rawErrors === 'string' && (
-    <ErrorMessage error={rawErrors} label={getUiLabel(props)} helpLink={uiOptions.helpLink} />
+    <ErrorMessage error={rawErrors} helpLink={uiOptions.helpLink} label={getUiLabel(props)} />
   );
 
   if (!schema || name.startsWith('$')) {

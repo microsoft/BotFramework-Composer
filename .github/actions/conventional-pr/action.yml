@@ -6,3 +6,7 @@ runs:
 branding:
   icon: "briefcase"
   color: "purple"
+inputs:
+  repo-token:
+    description: "Token used to interact with the Github API."
+    required: true

@@ -1,15 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import throttle from 'lodash/throttle';
 
 import { State, BoundActionHandlers } from '../store/types';
-import { StoreContext } from '../store';
 import luWorker from '../store/parsers/luWorker';
+import { useStoreContext } from '../hooks/useStoreContext';
 
-const createThrottledFunc = fn => throttle(fn, 1000, { leading: true, trailing: true });
+const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
 function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver: (id: string) => LuFile | undefined) {
   const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
@@ -66,7 +66,7 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
 }
 
 export function useLuApi() {
-  const { state, actions, resolvers } = useContext(StoreContext);
+  const { state, actions, resolvers } = useStoreContext();
   const { projectId, focusPath } = state;
   const { luFileResolver } = resolvers;
   const [api, setApi] = useState(createLuApi(state, actions, luFileResolver));
@@ -76,7 +76,7 @@ export function useLuApi() {
     setApi(newApi);
 
     return () => {
-      Object.keys(newApi).forEach(apiName => {
+      Object.keys(newApi).forEach((apiName) => {
         if (typeof newApi[apiName].flush === 'function') {
           newApi[apiName].flush();
         }

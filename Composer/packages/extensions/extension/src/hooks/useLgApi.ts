@@ -11,11 +11,11 @@ export const useLgApi = (shellApi: ShellApi) => {
 
   const deleteLgTemplates = (lgFileId: string, lgTemplates: string[]) => {
     const normalizedLgTemplates = lgTemplates
-      .map(x => {
+      .map((x) => {
         const lgTemplateRef = LgTemplateRef.parse(x);
         return lgTemplateRef ? lgTemplateRef.name : '';
       })
-      .filter(x => !!x);
+      .filter((x) => !!x);
     return removeLgTemplates(lgFileId, normalizedLgTemplates);
   };
 
@@ -28,7 +28,7 @@ export const useLgApi = (shellApi: ShellApi) => {
     const lgTemplates = getLgTemplates(inputLgRef.name);
     if (!Array.isArray(lgTemplates) || !lgTemplates.length) return lgText;
 
-    const targetTemplate = lgTemplates.find(x => x.name === inputLgRef.name);
+    const targetTemplate = lgTemplates.find((x) => x.name === inputLgRef.name);
     return targetTemplate ? targetTemplate.body : lgText;
   };
 

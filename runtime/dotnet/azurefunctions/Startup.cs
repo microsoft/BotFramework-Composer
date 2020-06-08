@@ -21,6 +21,8 @@ using Microsoft.Bot.Builder.Skills;
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.BotFramework.Composer.Core;
 using Microsoft.BotFramework.Composer.Core.Settings;
+
+//using Microsoft.BotFramework.Composer.CustomAction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -96,6 +98,9 @@ namespace Microsoft.BotFramework.Composer.Functions
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
 
+            // This is for custom action component registration.
+            //ComponentRegistration.Add(new CustomActionComponentRegistration());
+
             // Register the skills client and skills request handler.
             services.AddSingleton<SkillConversationIdFactoryBase, SkillConversationIdFactory>();
             services.AddHttpClient<BotFrameworkClient, SkillHttpClient>();
@@ -154,6 +159,7 @@ namespace Microsoft.BotFramework.Composer.Functions
                 adapter
                   .UseStorage(storage)
                   .UseBotState(userState, conversationState)
+                  .Use(new RegisterClassMiddleware<IConfiguration>(rootConfiguration))
                   .Use(telemetryInitializerMiddleware);
 
                 // Configure Middlewares
@@ -173,6 +179,8 @@ namespace Microsoft.BotFramework.Composer.Functions
 
             var defaultLocale = rootConfiguration.GetValue<string>("defaultLocale") ?? "en-us";
 
+            var removeRecipientMention = settings?.Feature?.RemoveRecipientMention ?? false;
+
             // Bot
             services.AddSingleton<IBot>(s =>
                 new ComposerBot(
@@ -183,7 +191,8 @@ namespace Microsoft.BotFramework.Composer.Functions
                     s.GetService<SkillConversationIdFactoryBase>(),
                     s.GetService<IBotTelemetryClient>(),
                     GetRootDialog(Path.Combine(rootDirectory, settings.Bot)),
-                    defaultLocale));
+                    defaultLocale,
+                    removeRecipientMention));
         }
 
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)

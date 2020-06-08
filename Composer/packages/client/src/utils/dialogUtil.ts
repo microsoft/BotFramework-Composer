@@ -31,7 +31,7 @@ export interface TriggerFormData {
   event: string;
   intent: string;
   triggerPhrases: string;
-  regexEx: string;
+  regEx: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -39,12 +39,12 @@ export interface TriggerFormDataErrors {
   intent?: string;
   event?: string;
   triggerPhrases?: string;
-  regexEx?: string;
+  regEx?: string;
   activity?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
-  const dialog = dialogs.find(item => item.id === dialogId);
+  const dialog = dialogs.find((item) => item.id === dialogId);
   return cloneDeep(dialog);
 }
 
@@ -101,7 +101,7 @@ function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string):
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   let dialogCopy = cloneDeep(dialog);
   const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
-  const targetIntent = regexIntents.find(ri => ri.intent === intent);
+  const targetIntent = regexIntents.find((ri) => ri.intent === intent);
   if (!targetIntent) {
     dialogCopy = createRegExIntent(dialog, intent, pattern);
   } else {
@@ -115,7 +115,7 @@ export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: s
 function deleteRegExIntent(dialog: DialogInfo, intent: string): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
   const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
-  const index = regexIntents.findIndex(ri => ri.intent === intent);
+  const index = regexIntents.findIndex((ri) => ri.intent === intent);
   if (index > -1) {
     regexIntents.splice(index, 1);
   }
@@ -129,14 +129,13 @@ export function generateNewDialog(
   schema: any
 ): DialogInfo {
   //add new trigger
-  const dialog = dialogs.find(dialog => dialog.id === dialogId);
+  const dialog = dialogs.find((dialog) => dialog.id === dialogId);
   if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
   const factory = new DialogFactory(schema);
   let updatedDialog = createTrigger(dialog, data, factory);
-
   //add regex expression
-  if (data.regexEx) {
-    updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regexEx);
+  if (data.regEx) {
+    updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regEx);
   }
   return updatedDialog;
 }
@@ -168,7 +167,7 @@ export function deleteTrigger(
 
 export function getTriggerTypes(): IDropdownOption[] {
   const triggerTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.EVENTS].types.map(t => {
+    ...dialogGroups[DialogGroup.EVENTS].types.map((t) => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
 
@@ -188,7 +187,7 @@ export function getTriggerTypes(): IDropdownOption[] {
 
 export function getEventTypes(): IComboBoxOption[] {
   const eventTypes: IComboBoxOption[] = [
-    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map(t => {
+    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
 
@@ -208,7 +207,7 @@ export function getEventTypes(): IComboBoxOption[] {
 
 export function getActivityTypes(): IDropdownOption[] {
   const activityTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map(t => {
+    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map((t) => {
       let name = t as string;
       const labelOverrides = ConceptLabels[t];
 
@@ -259,7 +258,7 @@ export function getbreadcrumbLabel(dialogs: DialogInfo[], dialogId: string, sele
   let label = '';
   const dataPath = getFocusPath(selected, focused);
   if (!dataPath) {
-    const dialog = dialogs.find(d => d.id === dialogId);
+    const dialog = dialogs.find((d) => d.id === dialogId);
     label = (dialog && dialog.displayName) || '';
   } else {
     const dialogsMap = getDialogsMap(dialogs);
@@ -357,7 +356,7 @@ export function getSelected(focused: string): string {
 export function replaceDialogDiagnosticLabel(path?: string): string {
   if (!path) return '';
   let list = path.split('#');
-  list = list.map(item => {
+  list = list.map((item) => {
     return ConceptLabels[item]?.title || item;
   });
   return list.join(': ');

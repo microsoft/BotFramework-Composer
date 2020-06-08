@@ -20,7 +20,7 @@ const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
-const rmDir = promisify(rimraf);
+const removeDirAndFiles = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
 
 interface RunningBot {
@@ -124,7 +124,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       return { msg: `runtime path ${targetDir} does not exist` };
     }
     try {
-      await rmDir(targetDir);
+      await removeDirAndFiles(targetDir);
       return { msg: `successfully removed runtime data in ${targetDir}` };
     } catch (e) {
       throw new Error(`Failed to remove ${targetDir}`);
@@ -185,11 +185,11 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
       try {
         // TODO ccastro: discuss with benbrown. Consider init command as template metadata. Remove azurewebapp from here.
-        execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir, stdio: 'inherit' });
-        execSync('dotnet build', { cwd: runtimeDir, stdio: 'inherit' });
+        execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir, stdio: 'pipe' });
+        execSync('dotnet build', { cwd: runtimeDir, stdio: 'pipe' });
       } catch (error) {
         // delete the folder to make sure build again.
-        rmDir(botDir);
+        await removeDirAndFiles(botDir);
         throw new Error(error.toString());
       }
     }
@@ -206,7 +206,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     const manifestDstDir = this.getManifestDstDir(dstPath);
 
     if (await this.dirExist(manifestDstDir)) {
-      await rmDir(manifestDstDir);
+      await removeDirAndFiles(manifestDstDir);
     }
 
     if (await this.dirExist(manifestSrcDir)) {
@@ -289,14 +289,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push(config.MicrosoftAppPassword);
     }
     if (config.luis) {
-      if (config.luis.authoringKey) {
-        configList.push('--luis:endpointKey');
-        configList.push(config.luis.authoringKey);
-      }
-      if (config.luis.authoringRegion) {
-        configList.push('--luis:endpoint');
-        configList.push(`https://${config.luis.authoringRegion}.api.cognitive.microsoft.com`);
-      }
+      configList.push('--luis:endpointKey');
+      configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
     return configList;
   };
@@ -320,18 +314,18 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         erroutput += err.toString();
       });
 
-    child.on('exit', code => {
+    child.on('exit', (code) => {
       if (code !== 0) {
         reject(erroutput);
       }
     });
 
-    child.on('error', err => {
+    child.on('error', (err) => {
       logger('error: %s', err.message);
       reject(`Could not launch bot runtime process: ${err.message}`);
     });
 
-    child.on('message', msg => {
+    child.on('message', (msg) => {
       logger('%s', msg);
     });
   };
@@ -347,7 +341,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     if (fs.existsSync(dstPath)) {
       await removeFile(dstPath);
     }
-    const files = await glob('**/*', { cwd: srcDir, dot: true });
+    const files = await glob('**/*', { cwd: srcDir, dot: true, ignore: ['runtime'] });
     return new Promise((resolve, reject) => {
       const archive = archiver('zip');
       const output = fs.createWriteStream(dstPath);
@@ -358,7 +352,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       }
       archive.finalize();
       output.on('close', () => resolve(dstPath));
-      output.on('error', err => {
+      output.on('error', (err) => {
         reject(err);
       });
     });
@@ -436,25 +430,34 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
-    eject: async (project: any, localDisk: IFileStorage) => {
+    eject: async (project, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
-      const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
-      const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
-        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
+        const schemaDstPath = path.join(project.dir, 'schemas');
+        const schemaSrcPath = path.join(sourcePath, 'azurewebapp/schemas');
+        const customSchemaExists = fs.existsSync(schemaDstPath);
+        const pathsToExclude: Set<string> = new Set();
+        if (customSchemaExists) {
+          const sdkExcludePath = await localDisk.glob('sdk.schema', schemaSrcPath);
+          if (sdkExcludePath.length > 0) {
+            pathsToExclude.add(path.join(schemaSrcPath, sdkExcludePath[0]));
+          }
+        }
+        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
+        const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/schemas');
+        await removeDirAndFiles(schemaFolderInRuntime);
         return destPath;
-      } else {
-        throw new Error(`Runtime already exists at ${destPath}`);
       }
+      throw new Error(`Runtime already exists at ${destPath}`);
     },
   });
 };
 
 // stop all the runningBot when process exit
-const cleanup = (signal: NodeJS.Signals) => {
+const cleanup = () => {
   LocalPublisher.stopAll();
   process.exit(0);
 };

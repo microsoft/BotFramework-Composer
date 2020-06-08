@@ -44,7 +44,7 @@ export class BotProjectDeploy {
   private logger: (string) => any;
 
   // Will be assigned by create or deploy
-  private tenantId: string = '';
+  private tenantId = '';
 
   constructor(config: BotProjectDeployConfig) {
     this.subId = config.subId;
@@ -91,7 +91,7 @@ export class BotProjectDeploy {
         if (err.body.error.details) {
           const details = err.body.error.details;
           let errMsg = '';
-          for (let detail of details) {
+          for (const detail of details) {
             errMsg += detail.message;
           }
           return errMsg;
@@ -312,7 +312,7 @@ export class BotProjectDeploy {
   private async getFiles(dir: string): Promise<string[]> {
     const dirents = await readdir(dir, { withFileTypes: true });
     const files = await Promise.all(
-      dirents.map(dirent => {
+      dirents.map((dirent) => {
         const res = path.resolve(dir, dirent.name);
         return dirent.isDirectory() ? this.getFiles(res) : res;
       })
@@ -323,7 +323,7 @@ export class BotProjectDeploy {
   private async botPrepareDeploy(pathToDeploymentFile: string) {
     return new Promise((resolve, reject) => {
       const data = `[config]\nproject = Microsoft.BotFramework.Composer.WebApp.csproj`;
-      fs.writeFile(pathToDeploymentFile, data, err => {
+      fs.writeFile(pathToDeploymentFile, data, (err) => {
         if (err) {
           reject(err);
         }
@@ -364,7 +364,7 @@ export class BotProjectDeploy {
     return new Promise((resolve, reject) => {
       archive
         .directory(source, false)
-        .on('error', err => reject(err))
+        .on('error', (err) => reject(err))
         .pipe(stream);
 
       stream.on('close', () => resolve());
@@ -382,6 +382,7 @@ export class BotProjectDeploy {
     name: string,
     environment: string,
     language: string,
+    luisEndpoint: string,
     luisEndpointKey: string,
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
@@ -390,14 +391,14 @@ export class BotProjectDeploy {
     if (luisAuthoringKey && luisAuthoringRegion) {
       // publishing luis
       const botFiles = await this.getFiles(this.remoteBotPath);
-      const modelFiles = botFiles.filter(name => {
+      const modelFiles = botFiles.filter((name) => {
         return name.endsWith('.lu') && this.notEmptyLuisModel(name);
       });
 
       if (!(await fs.pathExists(this.generatedFolder))) {
         await fs.mkdir(this.generatedFolder);
       }
-      const builder = new luBuild.Builder(msg =>
+      const builder = new luBuild.Builder((msg) =>
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
           message: msg,
@@ -411,11 +412,15 @@ export class BotProjectDeploy {
         luisAuthoringRegion || ''
       );
 
+      if (!luisEndpoint) {
+        luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
+      }
+
       const buildResult = await builder.build(
         loadResult.luContents,
         loadResult.recognizers,
         luisAuthoringKey,
-        luisAuthoringRegion,
+        luisEndpoint,
         name,
         environment,
         language,
@@ -430,7 +435,7 @@ export class BotProjectDeploy {
         message: `lubuild succeed`,
       });
 
-      const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter(filename =>
+      const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter((filename) =>
         filename.includes('luis.settings')
       );
       const luisAppIds: any = {};
@@ -440,7 +445,6 @@ export class BotProjectDeploy {
         Object.assign(luisAppIds, luisSettings.luis);
       }
 
-      const luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
       const luisConfig: any = {
         endpoint: luisEndpoint,
         endpointKey: luisEndpointKey,
@@ -536,12 +540,14 @@ export class BotProjectDeploy {
       const luisSettings = settings.luis;
 
       let luisEndpointKey = '';
+      let luisEndpoint = '';
 
       if (luisSettings) {
         // if luisAuthoringKey is not set, use the one from the luis settings
         luisAuthoringKey = luisAuthoringKey || luisSettings.authoringKey;
         luisAuthoringRegion = luisAuthoringRegion || luisSettings.region;
         luisEndpointKey = luisSettings.endpointKey;
+        luisEndpoint = luisSettings.endpoint;
       }
 
       if (!language) {
@@ -552,6 +558,7 @@ export class BotProjectDeploy {
         name,
         environment,
         language,
+        luisEndpoint,
         luisEndpointKey,
         luisAuthoringKey,
         luisAuthoringRegion,
@@ -808,9 +815,9 @@ export class BotProjectDeploy {
     if (!updateResult) {
       const operations = await client.deploymentOperations.list(resourceGroupName, timeStamp);
       if (operations) {
-        const failedOperations = operations.filter(value => value?.properties?.statusMessage.error !== null);
+        const failedOperations = operations.filter((value) => value?.properties?.statusMessage.error !== null);
         if (failedOperations) {
-          failedOperations.forEach(operation => {
+          failedOperations.forEach((operation) => {
             switch (operation?.properties?.statusMessage.error.code) {
               case 'MissingRegistrationForLocation':
                 this.logger({

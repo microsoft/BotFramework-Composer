@@ -19,12 +19,12 @@ export const LoopIndicator = ({ onClick }) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      onClick={e => {
+      onClick={(e) => {
         e.stopPropagation();
         onClick();
       }}
     >
-      <Icon iconName="Sync" css={{ color: 'white', fontSize: LoopIconSize.width / 2 }} />
+      <Icon css={{ color: 'white', fontSize: LoopIconSize.width / 2 }} iconName="Sync" />
     </div>
   );
 };

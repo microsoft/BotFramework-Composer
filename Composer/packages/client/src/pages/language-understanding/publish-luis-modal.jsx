@@ -18,7 +18,7 @@ import keys from 'lodash/keys';
 
 import { StoreContext } from '../../store';
 
-import { Text, Tips, Links } from './../../constants';
+import { Text, Tips, Links, nameRegex } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 
 const STATE = {
@@ -29,27 +29,26 @@ const STATE = {
 };
 
 // eslint-disable-next-line react/display-name
-const onRenderLabel = info => props => (
+const onRenderLabel = (info) => (props) => (
   <Stack horizontal verticalAlign="center">
     <span css={textFieldLabel}>{props.label}</span>
-    <TooltipHost content={info} calloutProps={{ gapSpace: 0 }}>
+    <TooltipHost calloutProps={{ gapSpace: 0 }} content={info}>
       <IconButton iconProps={{ iconName: 'Info' }} styles={{ root: { marginBottom: -3 } }} />
     </TooltipHost>
   </Stack>
 );
 
-const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validationProperties = ['name', 'authoringKey', 'environment'];
 const defaultFields = { authoringRegion: 'westus', defaultLanguage: 'en-us' };
-const validateForm = data => {
+const validateForm = (data) => {
   const result = { errors: {} };
   const dataKeys = keys(data);
 
-  dataKeys.forEach(key => {
+  dataKeys.forEach((key) => {
     const value = data[key];
     if (validationProperties.includes(key) && (!value || !nameRegex.test(value))) {
       result.errors[key] = formatMessage(
-        'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
+        'Spaces and special characters are not allowed. Use letters, numbers, -, or _.'
       );
     } else if (key in defaultFields && value === '') {
       result[key] = defaultFields[key];
@@ -59,13 +58,13 @@ const validateForm = data => {
   return result;
 };
 
-const DeploySuccess = props => {
+const DeploySuccess = (props) => {
   const status = props.status;
   const appNames = keys(status);
   return (
     <Fragment>
       <div css={consoleStyle}>
-        {appNames.map(item => {
+        {appNames.map((item) => {
           return <div key={item}>{`${item}:${status[item].version}`}</div>;
         })}
       </div>
@@ -78,26 +77,26 @@ const DeploySuccess = props => {
         <span>{formatMessage(' or return to your previous task')}</span>
       </div>
       <DialogFooter>
-        <PrimaryButton onClick={props.onDismiss} text={formatMessage('Return')} />
+        <PrimaryButton text={formatMessage('Return')} onClick={props.onDismiss} />
       </DialogFooter>
     </Fragment>
   );
 };
 
-const DeployFailure = props => {
+const DeployFailure = (props) => {
   return (
     <Fragment>
       <div css={consoleStyle}>{props.error}</div>
       <div css={dialogSubTitle}>{Text.LUISDEPLOYFAILURE}</div>
       <DialogFooter>
-        <PrimaryButton onClick={props.tryAgain} text={formatMessage('Try again')} />
-        <DefaultButton onClick={props.onDismiss} text={formatMessage('Cancel')} />
+        <PrimaryButton text={formatMessage('Try again')} onClick={props.tryAgain} />
+        <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
       </DialogFooter>
     </Fragment>
   );
 };
 
-export const PublishLuis = props => {
+export const PublishLuis = (props) => {
   const { state, actions } = useContext(StoreContext);
   const { setSettings } = actions;
   const { botName, settings } = state;
@@ -115,11 +114,11 @@ export const PublishLuis = props => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-  const updateForm = field => (e, newValue) => {
+  const updateForm = (field) => (e, newValue) => {
     setFormData({ ...formData, errors: {}, [field]: newValue });
   };
 
-  const handlePublish = async e => {
+  const handlePublish = async (e) => {
     e.preventDefault();
 
     const result = validateForm(formData);
@@ -142,51 +141,51 @@ export const PublishLuis = props => {
           {formatMessage('Learn more.')}
         </Link>
       </div>
-      <form onSubmit={handlePublish} css={dialogContent}>
+      <form css={dialogContent} onSubmit={handlePublish}>
         <Stack gap={20}>
           <TextField
+            data-testid="ProjectNameInput"
+            defaultValue={formData.name}
+            errorMessage={formData.errors.name || ''}
             label={formatMessage('What is the name of your bot?')}
             onChange={updateForm('name')}
-            defaultValue={formData.name}
             onRenderLabel={onRenderLabel(Tips.PROJECT_NAME)}
-            errorMessage={formData.errors.name || ''}
-            data-testid="ProjectNameInput"
           />
           <TextField
+            data-testid="EnvironmentInput"
+            defaultValue={formData.environment}
+            errorMessage={formData.errors.environment || ''}
             label={formatMessage('Environment')}
             onChange={updateForm('environment')}
-            defaultValue={formData.environment}
             onRenderLabel={onRenderLabel(Tips.ENVIRONMENT)}
-            errorMessage={formData.errors.environment || ''}
-            data-testid="EnvironmentInput"
           />
           <TextField
+            data-testid="AuthoringKeyInput"
+            defaultValue={formData.authoringKey}
+            errorMessage={formData.errors.authoringKey || ''}
             label={formatMessage('LUIS Primary key:')}
             onChange={updateForm('authoringKey')}
-            defaultValue={formData.authoringKey}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
-            errorMessage={formData.errors.authoringKey || ''}
-            data-testid="AuthoringKeyInput"
           />
           <TextField
-            label={formatMessage('Authoring Region')}
+            disabled
             defaultValue={formData.authoringRegion || defaultFields.authoringRegion}
+            label={formatMessage('Authoring Region')}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
-            disabled
           />
           <TextField
-            label={formatMessage('Default Language')}
-            defaultValue={formData.defaultLanguage || defaultFields.defaultLanguage}
-            onRenderLabel={onRenderLabel(Tips.DEFAULT_LANGUAGE)}
             disabled
+            defaultValue={formData.defaultLanguage || defaultFields.defaultLanguage}
+            label={formatMessage('Default Language')}
+            onRenderLabel={onRenderLabel(Tips.DEFAULT_LANGUAGE)}
           />
         </Stack>
       </form>
       <DialogFooter>
-        <PrimaryButton onClick={handlePublish} text={formatMessage('OK')} disabled={workState === STATE.PUBLISHPENDING}>
+        <PrimaryButton disabled={workState === STATE.PUBLISHPENDING} text={formatMessage('OK')} onClick={handlePublish}>
           {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
         </PrimaryButton>
-        <DefaultButton onClick={onDismiss} text={formatMessage('Cancel')} data-testid={'publish-LUIS-models-cancel'} />
+        <DefaultButton data-testid={'publish-LUIS-models-cancel'} text={formatMessage('Cancel')} onClick={onDismiss} />
       </DialogFooter>
     </Fragment>
   );
@@ -201,7 +200,7 @@ export function PublishLuisModal(props) {
     onDismiss();
   };
 
-  const handlePublish = async formData => {
+  const handlePublish = async (formData) => {
     setWorkState(STATE.PUBLISHPENDING);
     const response = await onPublish({ ...formData });
     setResponse(response);
@@ -214,24 +213,24 @@ export function PublishLuisModal(props) {
 
   return (
     <Dialog
-      hidden={!isOpen}
-      onDismiss={handleDismiss}
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Publish LUIS models'),
         styles: dialog,
       }}
+      hidden={!isOpen}
       modalProps={{
         isBlocking: false,
         styles: dialogModal,
       }}
+      onDismiss={handleDismiss}
     >
-      {workState === STATE.PUBLISHSUCCESS && <DeploySuccess onDismiss={handleDismiss} status={response.status} />}
+      {workState === STATE.PUBLISHSUCCESS && <DeploySuccess status={response.status} onDismiss={handleDismiss} />}
       {workState === STATE.PUBLISHFAILURE && (
-        <DeployFailure onDismiss={handleDismiss} tryAgain={() => setWorkState(STATE.INPUT)} error={response.error} />
+        <DeployFailure error={response.error} tryAgain={() => setWorkState(STATE.INPUT)} onDismiss={handleDismiss} />
       )}
       {(workState === STATE.INPUT || workState === STATE.PUBLISHPENDING) && (
-        <PublishLuis onPublish={handlePublish} onDismiss={handleDismiss} workState={workState} botName={botName} />
+        <PublishLuis botName={botName} workState={workState} onDismiss={handleDismiss} onPublish={handlePublish} />
       )}
     </Dialog>
   );

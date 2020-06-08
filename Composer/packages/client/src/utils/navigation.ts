@@ -107,23 +107,6 @@ export function convertPathToUrl(projectId: string, dialogId: string, path?: str
   return uri;
 }
 
-export function toUrlUtil(projectId: string, path: string): string {
-  const tokens = path.split('#');
-  const firstDotIndex = tokens[0].indexOf('.');
-  const dialogId = tokens[0].substring(0, firstDotIndex);
-  const focusedPath = parsePathToFocused(tokens[0]);
-  const selectedPath = parsePathToSelected(tokens[0]);
-  const type = tokens[1];
-  const property = tokens[2];
-  const fragment = parseTypeToFragment(type, property);
-  if (!focusedPath || !selectedPath) {
-    return '';
-  }
-  return `/bot/${projectId}/dialogs/${dialogId}?selected=${selectedPath}&focused=${focusedPath}${
-    fragment ? '#' + fragment : ''
-  }`;
-}
-
 export function navigateTo(to: string, navigateOpts: NavigateOptions<NavigationState> = {}) {
   const mapNavPath = resolveToBasePath(BASEPATH, to);
   navigate(mapNavPath, navigateOpts);

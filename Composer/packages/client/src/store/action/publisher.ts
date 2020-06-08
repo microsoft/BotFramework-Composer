@@ -40,7 +40,11 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
     });
   } catch (err) {
     // special case to handle dotnet issues
-    if (/dotnet/.test(err.response?.data?.message as string)) {
+    if (
+      /(Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(
+        err.response?.data?.message as string
+      )
+    ) {
       dispatch({
         type: ActionTypes.PUBLISH_FAILED_DOTNET,
         payload: {

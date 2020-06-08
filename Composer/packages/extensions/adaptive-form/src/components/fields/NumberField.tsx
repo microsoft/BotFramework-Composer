@@ -17,7 +17,7 @@ const getFloat = (value: string, step: number) => {
   return parseFloat(fixed);
 };
 
-const NumberField: React.FC<FieldProps> = props => {
+const NumberField: React.FC<FieldProps> = (props) => {
   const { description, disabled, id, label, onChange, readonly, schema, value, required, uiOptions } = props;
 
   const { type } = schema;
@@ -41,10 +41,13 @@ const NumberField: React.FC<FieldProps> = props => {
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <SpinButton
-        id={id}
+        decrementButtonAriaLabel={formatMessage('decrement by { step }', { step })}
         disabled={Boolean(schema.const) || readonly || disabled}
+        id={id}
+        incrementButtonAriaLabel={formatMessage('increment by { step }', { step })}
+        label={label || formatMessage('numeric field')}
         step={step}
         styles={{
           labelWrapper: { display: 'none' },
@@ -53,9 +56,6 @@ const NumberField: React.FC<FieldProps> = props => {
         onDecrement={updateValue(-step)}
         onIncrement={updateValue(step)}
         onValidate={updateValue(0)}
-        label={label || formatMessage('numeric field')}
-        incrementButtonAriaLabel={formatMessage('increment by { step }', { step })}
-        decrementButtonAriaLabel={formatMessage('decrement by { step }', { step })}
       />
     </>
   );

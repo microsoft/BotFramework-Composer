@@ -47,7 +47,6 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
   return (
     <div
       className="rule-editor"
-      data-testid="RuleEditor"
       css={{
         position: 'relative',
         display: 'flex',
@@ -55,17 +54,18 @@ export const RuleEditor = ({ id, data, onEvent }): JSX.Element => {
         flexDirection: 'column',
         alignItems: 'center',
       }}
-      onClick={e => {
+      data-testid="RuleEditor"
+      onClick={(e) => {
         e.stopPropagation();
         onEvent(NodeEventTypes.Focus, { id: '' });
       }}
     >
       <StepEditor
         key={stepGroup.id + '?version=' + outlineVersion.current}
-        id={stepGroup.id}
         data={stepGroup.data}
-        onEvent={onEvent}
+        id={stepGroup.id}
         trigger={<Trigger data={data} />}
+        onEvent={onEvent}
       />
     </div>
   );

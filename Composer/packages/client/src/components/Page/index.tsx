@@ -15,12 +15,14 @@ interface IPageProps {
   toolbarItems: any;
   navLinks: INavTreeItem[];
   title: string;
+  navRegionName: string;
+  mainRegionName: string;
   onRenderHeaderContent?: () => string | JSX.Element | null;
   'data-testid'?: string;
 }
 
-const Page: React.FC<IPageProps> = props => {
-  const { title, navLinks, toolbarItems, onRenderHeaderContent, children } = props;
+const Page: React.FC<IPageProps> = (props) => {
+  const { title, navLinks, toolbarItems, onRenderHeaderContent, children, navRegionName, mainRegionName } = props;
 
   return (
     <div css={styles.root} data-testid={props['data-testid']}>
@@ -30,9 +32,9 @@ const Page: React.FC<IPageProps> = props => {
           <h1 css={styles.headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={styles.headerContent}>{onRenderHeaderContent()}</div>}
         </div>
-        <div role="main" css={styles.main}>
-          <NavTree navLinks={navLinks} />
-          <div css={styles.content} data-testid="PageContent">
+        <div css={styles.main} role="main">
+          <NavTree navLinks={navLinks} regionName={navRegionName} />
+          <div aria-label={mainRegionName} css={styles.content} data-testid="PageContent" role="region">
             {children}
           </div>
         </div>

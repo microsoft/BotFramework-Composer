@@ -24,7 +24,7 @@ interface FormTitleProps {
   uiOptions?: UIOptions;
 }
 
-const FormTitle: React.FC<FormTitleProps> = props => {
+const FormTitle: React.FC<FormTitleProps> = (props) => {
   const { description, schema, formData, uiOptions = {} } = props;
 
   const handleTitleChange = (newTitle?: string): void => {
@@ -72,6 +72,7 @@ const FormTitle: React.FC<FormTitleProps> = props => {
     <div css={styles.container} id={props.id}>
       <div>
         <EditableField
+          ariaLabel={formatMessage('form title')}
           depth={0}
           fontSize={FontSizes.size20}
           id="form-title"
@@ -84,7 +85,6 @@ const FormTitle: React.FC<FormTitleProps> = props => {
           uiOptions={{}}
           value={initialValue}
           onChange={handleTitleChange}
-          ariaLabel={formatMessage('form title')}
         />
         <p css={styles.subtitle}>{getSubTitle()}</p>
         <p css={styles.description}>
@@ -94,10 +94,10 @@ const FormTitle: React.FC<FormTitleProps> = props => {
               <br />
               <br />
               <Link
-                href={uiOptions?.helpLink}
-                target="_blank"
-                rel="noopener noreferrer"
                 aria-label={formatMessage('Learn more about {title}', { title: getHelpLinkLabel() })}
+                href={uiOptions?.helpLink}
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 {formatMessage('Learn more')}
               </Link>

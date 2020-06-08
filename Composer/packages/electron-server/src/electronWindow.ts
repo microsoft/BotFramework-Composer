@@ -4,7 +4,7 @@
 
 import { join } from 'path';
 
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, shell } from 'electron';
 
 import { isLinux } from './utility/platform';
 import { isDevelopment } from './utility/env';
@@ -45,7 +45,8 @@ export default class ElectronWindow {
       browserWindowOptions.icon = join(getUnpackedAsarPath(), 'resources/composerIcon_1024x1024.png');
     }
     this._currentBrowserWindow = new BrowserWindow(browserWindowOptions);
-    this._currentBrowserWindow.on('page-title-updated', ev => ev.preventDefault()); // preserve explicit window title
+    this._currentBrowserWindow.on('page-title-updated', (ev) => ev.preventDefault()); // preserve explicit window title
+    this._currentBrowserWindow.webContents.on('new-window', this.onOpenNewWindow.bind(this));
     log('Rendered Electron window dimensions: ', this._currentBrowserWindow.getSize());
   }
 
@@ -62,5 +63,20 @@ export default class ElectronWindow {
       ElectronWindow.instance = new ElectronWindow();
     }
     return ElectronWindow.instance;
+  }
+
+  /** Returns true if the url starts with http or https */
+  private isExternalLink(url: string): boolean {
+    return /^http(s)?:\/\//.test(url);
+  }
+
+  /** Intercepts any requests to open a new browser window (window.open or <a target="_blank">) */
+  private onOpenNewWindow(event: Event, url: string) {
+    if (this.isExternalLink(url)) {
+      // do not open a new Electron browser window, and instead open in the user's default browser
+      event.preventDefault();
+      shell.openExternal(url, { activate: true });
+    }
+    // fall through to normal behavior
   }
 }

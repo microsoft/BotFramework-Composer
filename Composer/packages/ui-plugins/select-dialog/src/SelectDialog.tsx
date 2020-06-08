@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 
 import ComboBoxField, { ADD_DIALOG } from './ComboBoxField';
 
-export const SelectDialog: React.FC<FieldProps> = props => {
+export const SelectDialog: React.FC<FieldProps> = (props) => {
   const { value = '', onChange } = props;
 
   const {
@@ -44,7 +44,7 @@ export const SelectDialog: React.FC<FieldProps> = props => {
     if (option) {
       if (option.key === ADD_DIALOG) {
         setComboboxTitle(formatMessage('Create a new dialog'));
-        createDialog([]).then(newDialog => {
+        createDialog([]).then((newDialog) => {
           if (newDialog) {
             onChange(newDialog);
             setTimeout(() => navTo(newDialog), 500);

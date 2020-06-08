@@ -170,7 +170,7 @@ One of the most powerful features of the Bot Framework system is Language Genera
 
 You can refer to properties in the text of any message, including prompts.
 
-You can also refer to properties in [LG templates](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md). See the Language Generation [readme](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) to learn more the Language Generation system.
+You can also refer to properties in [LG templates](https://aka.ms/lg-file-format). See the Language Generation [readme](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) to learn more the Language Generation system.
 
 To use the value of a property from memory inside a message, wrap the property reference in curly brackets: `{user.profile.name}`
 

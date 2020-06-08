@@ -47,8 +47,9 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
 
   return (
     <>
-      <FieldLabel description={description} id={id} label={label} helpLink={uiOptions?.helpLink} required={required} />
+      <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <TextField
+        ariaLabel={label || formatMessage('string field')}
         disabled={disabled}
         errorMessage={error}
         id={id}
@@ -75,7 +76,6 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         onBlur={handleBlur}
         onChange={handleChange}
         onFocus={handleFocus}
-        ariaLabel={label || formatMessage('string field')}
       />
     </>
   );

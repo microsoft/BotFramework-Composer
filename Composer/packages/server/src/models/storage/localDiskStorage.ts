@@ -7,6 +7,7 @@ import path from 'path';
 
 import glob from 'globby';
 import archiver from 'archiver';
+import rimraf from 'rimraf';
 
 import { IFileStorage, Stat, MakeDirectoryOptions } from './interface';
 
@@ -17,6 +18,7 @@ const writeFile = promisify(fs.writeFile);
 const removeFile = promisify(fs.unlink);
 const mkDir = promisify(fs.mkdir);
 const rmDir = promisify(fs.rmdir);
+const rmrfDir = promisify(rimraf);
 const copyFile = promisify(fs.copyFile);
 const rename = promisify(fs.rename);
 
@@ -65,6 +67,10 @@ export class LocalDiskStorage implements IFileStorage {
     await rmDir(path);
   }
 
+  async rmrfDir(path: string): Promise<void> {
+    await rmrfDir(path);
+  }
+
   async glob(pattern: string | string[], path: string): Promise<string[]> {
     return await glob(pattern, { cwd: path, dot: true });
   }
@@ -89,12 +95,13 @@ export class LocalDiskStorage implements IFileStorage {
       path.format({ dir: `${source}/language-understanding/` }),
       path.format({ dir: `${source}/language-generation/` }),
       path.format({ dir: `${source}/settings/` }),
-    ].forEach(directory => {
+      path.format({ dir: `${source}/generated/` }),
+    ].forEach((directory) => {
       archive.directory(directory, directory.split(source)[1]);
     });
 
     const files = await glob('*.dialog', { cwd: source, dot: true });
-    files.forEach(file => {
+    files.forEach((file) => {
       archive.file(path.format({ dir: `${source}/`, base: `${file}` }), { name: path.basename(file) });
     });
 

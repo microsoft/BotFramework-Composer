@@ -1,18 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
 import throttle from 'lodash/throttle';
 
 import * as lgUtil from '../utils/lgUtil';
 import { State, BoundActionHandlers } from '../store/types';
-import { StoreContext } from '../store';
+import { useStoreContext } from '../hooks/useStoreContext';
 
-const createThrottledFunc = fn => throttle(fn, 1000, { leading: true, trailing: true });
+const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
 function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver: (id: string) => LgFile | undefined) {
-  const getLgTemplates = id => {
+  const getLgTemplates = (id) => {
     if (id === undefined) throw new Error('must have a file id');
     const focusedDialogId = state.focusPath.split('#').shift() || id;
     const file = lgFileResolver(focusedDialogId);
@@ -90,7 +90,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
 }
 
 export function useLgApi() {
-  const { state, actions, resolvers } = useContext(StoreContext);
+  const { state, actions, resolvers } = useStoreContext();
   const { projectId, focusPath } = state;
   const { lgFileResolver } = resolvers;
   const [api, setApi] = useState(createLgApi(state, actions, lgFileResolver));
@@ -100,7 +100,7 @@ export function useLgApi() {
     setApi(newApi);
 
     return () => {
-      Object.keys(newApi).forEach(apiName => {
+      Object.keys(newApi).forEach((apiName) => {
         if (typeof newApi[apiName].flush === 'function') {
           newApi[apiName].flush();
         }

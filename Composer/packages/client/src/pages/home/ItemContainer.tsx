@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, SerializedStyles } from '@emotion/core';
 import React from 'react';
-import { Button, IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { DefaultButton, IButtonProps } from 'office-ui-fabric-react/lib/Button';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import {
@@ -15,8 +15,6 @@ import {
   disabledItem,
   childrenContainer,
 } from './styles';
-
-const { openExternal: openExternalLink } = window as Window;
 
 interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
   onClick?: () => void | Promise<void>;
@@ -31,6 +29,7 @@ interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 
   disabled?: boolean;
   forwardedRef?: (project: any) => void | Promise<void>;
   openExternal?: boolean;
+  ariaLabel: string;
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
@@ -42,11 +41,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   disabled,
   forwardedRef,
   openExternal,
+  ariaLabel,
   ...rest
 }) => {
   const onRenderChildren = () => {
     return (
-      <div css={childrenContainer} ref={forwardedRef}>
+      <div ref={forwardedRef} aria-label={ariaLabel} css={childrenContainer}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
           <div css={itemContainerTitle}>
             <Text block variant="large">
@@ -56,11 +56,11 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
         </div>
         <div css={[itemContainer, styles.content, disabled ? disabledItem.content : undefined]}>
           <div css={itemContainerContent}>
-            <Text variant={subContent ? 'medium' : 'large'} nowrap>
+            <Text nowrap variant={subContent ? 'medium' : 'large'}>
               {content}
             </Text>
             {subContent && (
-              <Text variant="medium" nowrap>
+              <Text nowrap variant="medium">
                 {subContent}
               </Text>
             )}
@@ -71,22 +71,17 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   };
 
   return (
-    <Button
+    <DefaultButton
       css={[itemContainerWrapper(disabled), styles.container]}
-      onClick={async e => {
-        // todo: clean this up
-        const { href } = rest as Partial<{ href: string }>;
-        if (openExternal) {
-          e.preventDefault();
-          return openExternalLink(href, { activate: true });
-        } else if (onClick && !href) {
+      onClick={async (e) => {
+        if (onClick != null) {
           e.preventDefault();
           await onClick();
         }
       }}
       {...rest}
-      onRenderChildren={onRenderChildren}
       disabled={disabled}
+      onRenderChildren={onRenderChildren}
     />
   );
 };

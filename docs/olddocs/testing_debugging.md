@@ -14,11 +14,11 @@ To get started, load up a bot from the list of bots via the open dialog in the h
 
 ![Home page](./Assets/testing-debugging-openbot.png)
 
-Open success, the application will navigate to the Design Flow page with your bot's entry dialog rendered visually for you to inspect and edit.
+Open success, the application will navigate to the Design page with your bot's entry dialog rendered visually for you to inspect and edit.
 
 You can immediate start the sample bot by clicking the Start Bot button in the top-right of the application window. Give it a try:
 
-![Design flow](./Assets/testing-debugging-designflow.png)
+![Design](./Assets/testing-debugging-designflow.png)
 
 After a brief loading period, you'll see a new icon "Test in Emulator", clicking it will launch a browser dialog to start your local installation of the Bot Framework Emulator and connect to the bot that you just started in the previous step.
 
@@ -86,7 +86,7 @@ When you are using the _Send an Activity_ action, the Language Generation syntax
 
 ![LG format error](./Assets/testing-debugging-lgformaterror.png)
 
-Refer to the [LG syntax](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md) for troubleshooting.
+Refer to the [LG syntax](https://aka.ms/lg-file-format) for troubleshooting.
 
 ##### Error publishing to LUIS
 

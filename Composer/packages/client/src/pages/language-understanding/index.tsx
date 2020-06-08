@@ -23,7 +23,7 @@ interface LUPageProps extends RouteComponentProps<{}> {
   path: string;
 }
 
-const LUPage: React.FC<LUPageProps> = props => {
+const LUPage: React.FC<LUPageProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, projectId } = state;
   const path = props.location?.pathname ?? '';
@@ -32,7 +32,7 @@ const LUPage: React.FC<LUPageProps> = props => {
   const isRoot = dialogId === 'all';
 
   const navLinks: INavTreeItem[] = useMemo(() => {
-    const newDialogLinks: INavTreeItem[] = dialogs.map(dialog => {
+    const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
       return {
         id: dialog.id,
         url: `/bot/${projectId}/language-understanding/${dialog.id}`,
@@ -40,7 +40,7 @@ const LUPage: React.FC<LUPageProps> = props => {
         ariaLabel: formatMessage('language understanding file'),
       };
     });
-    const mainDialogIndex = newDialogLinks.findIndex(link => link.id === 'Main');
+    const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
 
     if (mainDialogIndex > -1) {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
@@ -83,13 +83,13 @@ const LUPage: React.FC<LUPageProps> = props => {
     if (!isRoot || edit) {
       return (
         <Toggle
+          checked={!!edit}
           className={'toggleEditMode'}
           css={actionButton}
-          onText={formatMessage('Edit mode')}
-          offText={formatMessage('Edit mode')}
           defaultChecked={false}
-          checked={!!edit}
+          offText={formatMessage('Edit mode')}
           onChange={onToggleEditMode}
+          onText={formatMessage('Edit mode')}
         />
       );
     }
@@ -99,16 +99,18 @@ const LUPage: React.FC<LUPageProps> = props => {
 
   return (
     <Page
+      data-testid="LUPage"
+      mainRegionName={formatMessage('LU editor')}
+      navLinks={navLinks}
+      navRegionName={formatMessage('LU Navigation Pane')}
       title={formatMessage('User Input')}
       toolbarItems={toolbarItems}
-      navLinks={navLinks}
       onRenderHeaderContent={onRenderHeaderContent}
-      data-testid="LUPage"
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <Router primary={false} component={Fragment}>
-          <CodeEditor path="/edit" dialogId={dialogId} />
-          <TableView path="/" dialogId={dialogId} />
+        <Router component={Fragment} primary={false}>
+          <CodeEditor dialogId={dialogId} path="/edit" />
+          <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>
     </Page>

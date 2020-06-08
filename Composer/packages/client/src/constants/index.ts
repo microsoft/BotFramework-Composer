@@ -66,7 +66,6 @@ export enum ActionTypes {
   RELOAD_BOT_FAILURE = 'RELOAD_BOT_FAILURE',
   UPDATE_SKILL_SUCCESS = 'UPDATE_SKILL_SUCCESS',
   SYNC_ENV_SETTING = 'SYNC_ENV_SETTING',
-  GET_ENV_SETTING = 'GET_ENV_SETTING',
   SET_ERROR = 'SET_ERROR',
   REMOVE_RECENT_PROJECT = 'REMOVE_RECENT_PROJECT',
   EDITOR_RESET_VISUAL = 'EDITOR_RESET_VISUAL',
@@ -256,3 +255,5 @@ export const DefaultPublishConfig = {
 };
 
 export const EmptyBotTemplateId = 'EmptyBot';
+
+export const nameRegex = /^[a-zA-Z0-9-_]+$/;

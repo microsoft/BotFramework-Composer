@@ -7,12 +7,10 @@ import { LuActionType } from './../types';
 const ctx: Worker = self as any;
 
 const parse = (id: string, content: string) => {
-  const { intents, diagnostics } = luIndexer.parse(content, id);
-
-  return { id, content, intents, diagnostics };
+  return { id, content, ...luIndexer.parse(content, id) };
 };
 
-ctx.onmessage = function(msg) {
+ctx.onmessage = function (msg) {
   const msgId = msg.data.id;
   const { type, content, id, intentName, intent } = msg.data.payload;
   let result: any = null;
