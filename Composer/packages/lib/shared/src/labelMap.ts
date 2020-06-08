@@ -24,7 +24,7 @@ type ConceptLabelKey = SDKKinds | 'Activity';
 export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   Activity: {
     description: formatMessage(
-      'What your Bot says to the user. Visit <a target="_blank" href="https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation"> the documentation</a> a reference of capabilities.'
+      'What your Bot says to the user. Visit <a target="_blank" href="https://aka.ms/bf-composer-docs-lg"> the documentation</a> a reference of capabilities.'
     ),
     title: formatMessage('Language Generation'),
   },
