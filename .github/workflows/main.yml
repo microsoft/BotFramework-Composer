@@ -2,7 +2,7 @@ name: Composer CI
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [review_requested, ready_for_review, synchronize]
   push:
     branches:
       - master
