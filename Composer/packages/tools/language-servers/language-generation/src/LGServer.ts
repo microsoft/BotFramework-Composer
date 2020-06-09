@@ -1,9 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-import { readFile } from 'fs';
-
-import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
 import { IConnection, TextDocuments } from 'vscode-languageserver';
 import {
@@ -285,24 +281,6 @@ export class LGServer {
       return Promise.resolve(hoveritem);
     }
     return Promise.resolve(null);
-  }
-
-  protected async resolveSchema(url: string): Promise<string> {
-    const uri = URI.parse(url);
-    if (uri.scheme === 'file') {
-      return new Promise<string>((resolve, reject) => {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        readFile(uri.fsPath, 'UTF-8', (err, result) => {
-          err ? reject('') : resolve(result.toString());
-        });
-      });
-    }
-    try {
-      const response = await xhr({ url, followRedirects: 5 });
-      return response.responseText;
-    } catch (error) {
-      return Promise.reject(error.responseText || getErrorStatusDescription(error.status) || error.toString());
-    }
   }
 
   private removeParamFormat(params: string): string {

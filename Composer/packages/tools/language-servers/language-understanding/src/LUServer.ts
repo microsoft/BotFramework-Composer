@@ -1,9 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as fs from 'fs';
-
-import { xhr, getErrorStatusDescription } from 'request-light';
 import URI from 'vscode-uri';
 import { IConnection, TextDocuments } from 'vscode-languageserver';
 import {
@@ -354,23 +351,6 @@ export class LUServer {
     return state;
   }
 
-  protected async resovleSchema(url: string): Promise<string> {
-    const uri = URI.parse(url);
-    if (uri.scheme === 'file') {
-      return new Promise<string>((resolve, reject) => {
-        // eslint-disable-next-line security/detect-non-literal-fs-filename
-        fs.readFile(uri.fsPath, 'UTF-8', (err, result) => {
-          err ? reject('') : resolve(result.toString());
-        });
-      });
-    }
-    try {
-      const response = await xhr({ url, followRedirects: 5 });
-      return response.responseText;
-    } catch (error) {
-      return Promise.reject(error.responseText || getErrorStatusDescription(error.status) || error.toString());
-    }
-  }
   private async extractLUISContent(text: string): Promise<any> {
     let parsedContent: any;
     const log = false;
