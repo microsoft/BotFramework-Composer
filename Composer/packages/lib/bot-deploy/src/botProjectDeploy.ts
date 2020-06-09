@@ -121,21 +121,20 @@ export class BotProjectDeploy {
         'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
       );
     }
+    if (!this.subId) {
+      throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
+    }
     try {
-      const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
+      const tenantUrl = `https://management.azure.com/subscriptions/${this.subId}?api-version=2020-01-01`;
       const options = {
         headers: { Authorization: `Bearer ${this.accessToken}` },
       } as rp.RequestPromiseOptions;
       const response = await rp.get(tenantUrl, options);
       const jsonRes = JSON.parse(response);
-      if (
-        jsonRes.value === undefined ||
-        (jsonRes.value && jsonRes.value.length === 0) ||
-        (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)
-      ) {
+      if (jsonRes.tenantId === undefined) {
         throw new Error(`No tenants found in the account.`);
       }
-      return jsonRes.value[0].tenantId;
+      return jsonRes.tenantId;
     } catch (err) {
       throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
     }
