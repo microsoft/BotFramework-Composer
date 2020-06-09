@@ -7,7 +7,7 @@ import React, { useContext, useCallback, useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
-import VisualDesigner from '@bfc/visual-designer';
+import VisualDesigner from '@bfc/adaptive-flow';
 import Extension from '@bfc/extension';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';

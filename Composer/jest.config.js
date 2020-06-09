@@ -40,8 +40,8 @@ module.exports = {
   projects: [
     '<rootDir>/packages/client',
     '<rootDir>/packages/extensions/adaptive-form',
+    '<rootDir>/packages/extensions/adaptive-flow',
     '<rootDir>/packages/extensions/extension',
-    '<rootDir>/packages/extensions/visual-designer',
     '<rootDir>/packages/lib/code-editor',
     '<rootDir>/packages/lib/shared',
     '<rootDir>/packages/server',
