@@ -107,3 +107,57 @@ export const updateCurrentPath: ActionCreator = async ({ dispatch }, path, stora
     dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
   }
 };
+
+export const createFolder: ActionCreator = async ({ dispatch }, path, name) => {
+  const storageId = 'default';
+  try {
+    dispatch({
+      type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
+      payload: {
+        status: 'pending',
+      },
+    });
+    const response = await httpClient.post(`/storages/folder`, { path, name, storageId });
+    dispatch({
+      type: ActionTypes.GET_STORAGEFILE_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
+      payload: {
+        status: 'failure',
+      },
+      error: err,
+    });
+  }
+};
+
+export const updateFolder: ActionCreator = async ({ dispatch }, path, oldName, newName) => {
+  const storageId = 'default';
+  try {
+    dispatch({
+      type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
+      payload: {
+        status: 'pending',
+      },
+    });
+    const response = await httpClient.put(`/storages/folder`, { path, oldName, newName, storageId });
+    dispatch({
+      type: ActionTypes.GET_STORAGEFILE_SUCCESS,
+      payload: {
+        response,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.SET_STORAGEFILE_FETCHING_STATUS,
+      payload: {
+        status: 'failure',
+      },
+      error: err,
+    });
+  }
+};

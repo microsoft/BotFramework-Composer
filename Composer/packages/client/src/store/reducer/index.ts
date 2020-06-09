@@ -305,6 +305,7 @@ const getStorageFileSuccess: ReducerFunc = (state, { response }) => {
     return files;
   }, []);
   state.storageFileLoadingStatus = 'success';
+  console.log(focusedStorageFolder);
   state.focusedStorageFolder = focusedStorageFolder;
   return state;
 };

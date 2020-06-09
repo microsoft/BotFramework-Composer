@@ -128,6 +128,30 @@ class StorageService {
     return this.storageConnections;
   };
 
+  public createFolder = (path: string) => {
+    try {
+      if (!fs.existsSync(path)) {
+        fs.mkdirSync(path);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  };
+
+  public updateFolder = (path: string, oldName: string, newName: string) => {
+    const currentPath = Path.join(path, oldName);
+    const newPath = Path.join(path, newName);
+    try {
+      if (fs.existsSync(currentPath)) {
+        fs.renameSync(currentPath, newPath);
+      } else {
+        throw new Error(`The folder ${currentPath} does not exist`);
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  };
+
   private ensureDefaultBotFoldersExist = () => {
     this.storageConnections.forEach((s) => {
       this.createFolderRecurively(s.defaultPath);
