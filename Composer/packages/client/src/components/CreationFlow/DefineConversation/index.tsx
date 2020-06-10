@@ -4,7 +4,6 @@
 //TODO: Remove Path module
 import Path from 'path';
 
-import get from 'lodash/get';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -45,7 +44,7 @@ interface DefineConversationProps
 
 const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { onSubmit, onDismiss, onCurrentPathUpdate, saveTemplateId, templateId, focusedStorageFolder } = props;
-  const files = get(focusedStorageFolder, 'children', []);
+  const files = focusedStorageFolder?.children ?? [];
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -54,8 +53,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       i++;
       defaultName = `${bot}-${i}`;
     } while (
-      files &&
-      files.find((file) => {
+      files.some((file) => {
         return file.name.toLowerCase() === defaultName.toLowerCase();
       }) &&
       i < MAXTRYTIMES
@@ -72,17 +70,15 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         }
 
         const newBotPath =
-          focusedStorageFolder && Object.keys(focusedStorageFolder as Record<string, any>).length
+          focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
             ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name, value)
             : '';
         if (
-          name &&
-          files &&
-          files.find((bot) => {
+          files.some((bot) => {
             return bot.path.toLowerCase() === newBotPath.toLowerCase();
           })
         ) {
-          return formatMessage('Duplication of names');
+          return formatMessage('Duplicate name');
         }
       },
     },
@@ -96,15 +92,15 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
 
   useEffect(() => {
-    if (saveTemplateId && templateId) {
-      saveTemplateId(templateId);
+    if (templateId) {
+      saveTemplateId?.(templateId);
     }
   });
 
   useEffect(() => {
     const formData: DefineConversationFormData = { name: getDefaultName(), description: '', schemaUrl: '' };
     updateForm(formData);
-    if (props.location && props.location.search) {
+    if (props.location?.search) {
       const updatedFormData = {
         ...formData,
       };
