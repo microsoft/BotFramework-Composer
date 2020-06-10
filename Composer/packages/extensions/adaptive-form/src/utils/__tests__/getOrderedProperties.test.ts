@@ -13,6 +13,7 @@ const schema = {
     four: { type: 'object' },
     five: { type: 'object' },
     six: { type: 'object' },
+    seven: { type: 'boolean' },
     $kind: { type: 'string' },
   },
 } as JSONSchema7;
@@ -20,31 +21,35 @@ const data = 'form data';
 
 describe('getOrderedProperties', () => {
   it('excludes fields according to hidden option', () => {
-    const expectedResult = ['one', 'three', 'four', ['five', 'six']];
-
-    expect(getOrderedProperties(schema, { hidden: ['two'], order: ['two', '*', ['five', 'six']] }, data)).toEqual(
-      expectedResult
-    );
-
-    expect(getOrderedProperties(schema, { hidden: () => ['two'], order: ['two', '*', ['five', 'six']] }, data)).toEqual(
-      expectedResult
-    );
+    expect(getOrderedProperties(schema, { hidden: ['two'] }, data)).not.toContain('two');
+    expect(getOrderedProperties(schema, { hidden: () => ['two'] }, data)).not.toContain('two');
   });
 
   it('sorts according to order option', () => {
-    const expectedResult = ['three', 'one', 'four', 'five', 'six', 'two'];
+    const expectedResult = ['three', 'one', 'four', ['five', 'six'], 'seven', 'two'];
+    const order = ['three', '*', ['five', 'six'], ['seven'], 'two'];
 
-    expect(getOrderedProperties(schema, { order: ['three', '*', 'two'] }, data)).toEqual(expectedResult);
-
-    expect(getOrderedProperties(schema, { order: () => ['three', '*', 'two'] }, data)).toEqual(expectedResult);
+    // @ts-expect-error
+    expect(getOrderedProperties(schema, { order }, data)).toEqual(expectedResult);
+    // @ts-expect-error
+    expect(getOrderedProperties(schema, { order: () => order }, data)).toEqual(expectedResult);
   });
 
   it("excludes fields that don't exist in the schema", () => {
-    const expectedResult = ['three', 'one', 'four', 'five', 'six', 'two'];
+    expect(getOrderedProperties(schema, { order: ['three', '*', 'two', 'eight'] }, data)).not.toContain('eight');
+    expect(getOrderedProperties(schema, { order: () => ['three', '*', 'two', 'eight'] }, data)).not.toContain('eight');
+  });
 
-    expect(getOrderedProperties(schema, { order: ['three', '*', 'two', 'seven'] }, data)).toEqual(expectedResult);
+  it('does not throw an exception for no wildcard if all fields are ordered', () => {
+    const order = ['three', 'one', 'four', ['five', 'six'], ['seven'], 'two'];
+    // @ts-expect-error
+    expect(() => getOrderedProperties(schema, { order }, data)).not.toThrow();
+  });
 
-    expect(getOrderedProperties(schema, { order: () => ['three', '*', 'two', 'seven'] }, data)).toEqual(expectedResult);
+  it('does not include wildcard in ordered fields if all fields are present', () => {
+    const order = ['three', 'one', 'four', '*', ['five', 'six'], ['seven'], 'two'];
+    // @ts-expect-error
+    expect(getOrderedProperties(schema, { order }, data)).not.toContain('*');
   });
 
   it('throws an exception if there is no wildcard in order option', () => {
