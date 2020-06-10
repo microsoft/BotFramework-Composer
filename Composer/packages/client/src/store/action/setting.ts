@@ -10,7 +10,6 @@ export const setSettings: ActionCreator = async ({ dispatch }, projectId: string
     type: ActionTypes.SYNC_ENV_SETTING,
     payload: {
       projectId,
-      botName,
       settings,
     },
   });
