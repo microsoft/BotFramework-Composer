@@ -31,6 +31,7 @@ export class DefaultSettingManager extends FileSettingManager {
         authoringKey: '',
         endpoint: '',
         endpointKey: '',
+        authoringEndpoint: '',
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
@@ -66,6 +67,10 @@ export class DefaultSettingManager extends FileSettingManager {
     //add luis endpoint for old bot
     if (!result.luis.endpoint && result.luis.endpoint !== '') {
       result.luis.endpoint = this.createDefaultSettings().luis.endpoint;
+    }
+    //add luis authoring endpoint for old bot
+    if (!result.luis.authoringEndpoint && result.luis.authoringEndpoint !== '') {
+      result.luis.authoringEndpoint = this.createDefaultSettings().luis.authoringEndpoint;
     }
     return result;
   }
