@@ -159,14 +159,14 @@ export function CreateOptions(props) {
 
   const choiceOptions = [
     {
-      ariaLabel: 'Create from scratch' + (option === optionKeys.createFromScratch ? ' selected' : ''),
+      ariaLabel: formatMessage('Create from scratch') + (option === optionKeys.createFromScratch ? ' selected' : ''),
       key: optionKeys.createFromScratch,
       'data-testid': 'Create from scratch',
       text: formatMessage('Create from scratch'),
       onRenderField: SelectOption,
     },
     {
-      ariaLabel: 'Create from template' + (option === optionKeys.createFromTemplate ? ' selected' : ''),
+      ariaLabel: formatMessage('Create from template') + (option === optionKeys.createFromTemplate ? ' selected' : ''),
       key: optionKeys.createFromTemplate,
       'data-testid': 'Create from template',
       text: formatMessage('Create from template'),
