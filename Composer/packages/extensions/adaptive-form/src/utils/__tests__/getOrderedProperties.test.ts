@@ -46,6 +46,12 @@ describe('getOrderedProperties', () => {
     expect(() => getOrderedProperties(schema, { order }, data)).not.toThrow();
   });
 
+  it('does not include wildcard in ordered fields if all fields are present', () => {
+    const order = ['three', 'one', 'four', '*', ['five', 'six'], ['seven'], 'two'];
+    // @ts-expect-error
+    expect(getOrderedProperties(schema, { order }, data)).not.toContain('*');
+  });
+
   it('throws an exception if there is no wildcard in order option', () => {
     expect(() => getOrderedProperties(schema, { order: ['three', 'two'] }, data)).toThrow('no wildcard');
   });

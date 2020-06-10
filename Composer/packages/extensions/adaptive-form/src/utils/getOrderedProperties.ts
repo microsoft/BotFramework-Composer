@@ -13,7 +13,7 @@ export function getOrderedProperties(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ): OrderConfig {
-  const { hidden: hidden, order: order = ['*'] } = cloneDeep(uiOptions);
+  const { hidden, order = ['*'] } = cloneDeep(uiOptions);
 
   const hiddenFieldSet = new Set(typeof hidden === 'function' ? hidden(data) : hidden || []);
   globalHiddenProperties.forEach((f) => hiddenFieldSet.add(f));
@@ -74,6 +74,9 @@ export function getOrderedProperties(
     });
 
     orderedFields.splice(restIdx, 1, ...restFields);
+  } else if (restIdx > -1) {
+    // remove the wildcard
+    orderedFields.splice(restIdx, 1);
   }
 
   return orderedFields;
