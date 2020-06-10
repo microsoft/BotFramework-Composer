@@ -20,7 +20,7 @@ import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
-import { DialogStyle } from '../../components/Modal/styles';
+import { dialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
 import { ProjectTree } from '../../components/ProjectTree';
 import { StoreContext } from '../../store';
@@ -360,7 +360,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
       setting = {
         onRenderContent,
-        style: DialogStyle.Console,
+        style: dialogStyle.console,
       };
     } else {
       title = DialogDeleting.NO_LINKED_TITLE;
