@@ -38,7 +38,7 @@ export class LgParser {
     const { id, error, payload } = msg;
     if (error) {
       const reject = this.rejects[id];
-      reject(error);
+      if (reject) reject(error);
     } else {
       const resolve = this.resolves[id];
       if (resolve) resolve(payload);
