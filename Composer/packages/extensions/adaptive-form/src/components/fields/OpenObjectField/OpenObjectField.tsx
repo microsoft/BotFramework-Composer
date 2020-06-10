@@ -15,7 +15,7 @@ import * as styles from './styles';
 import { ObjectItem } from './ObjectItem';
 
 const OpenObjectField: React.FC<FieldProps<{
-  [key: string]: any;
+  [key: string]: unknown;
 }>> = (props) => {
   const {
     value = {},
@@ -79,13 +79,13 @@ const OpenObjectField: React.FC<FieldProps<{
         </div>
         <div css={styles.filler} />
       </div>
-      {Object.entries(value).map(([name, value], index) => {
+      {Object.entries(value).map(([name, itemValue], index) => {
         return (
           <ObjectItem
             key={index}
             formData={value}
             name={name}
-            value={value}
+            value={itemValue}
             onDelete={handleDropPropertyClick(name)}
             onNameChange={handleNameChange(name)}
             onValueChange={handleValueChange(name)}

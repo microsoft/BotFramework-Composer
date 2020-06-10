@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-module.exports = require('babel-jest').createTransformer({
+import { createTransformer } from 'babel-jest';
+
+module.exports = createTransformer({
   presets: [
     [
       require.resolve('@babel/preset-env'),

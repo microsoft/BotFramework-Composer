@@ -43,11 +43,11 @@ const NumberField: React.FC<FieldProps> = (props) => {
     <>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <SpinButton
+        ariaLabel={label || formatMessage('numeric field')}
         decrementButtonAriaLabel={formatMessage('decrement by { step }', { step })}
         disabled={Boolean(schema.const) || readonly || disabled}
         id={id}
         incrementButtonAriaLabel={formatMessage('increment by { step }', { step })}
-        label={label || formatMessage('numeric field')}
         step={step}
         styles={{
           labelWrapper: { display: 'none' },
