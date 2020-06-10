@@ -2,13 +2,12 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { MicrosoftIRecognizer } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
-import PluginContext from '../../PluginContext';
 import { FieldLabel } from '../FieldLabel';
 import { usePluginConfig } from '../../hooks';
 
