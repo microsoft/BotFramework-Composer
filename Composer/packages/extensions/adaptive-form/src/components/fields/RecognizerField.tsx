@@ -10,11 +10,12 @@ import formatMessage from 'format-message';
 
 import PluginContext from '../../PluginContext';
 import { FieldLabel } from '../FieldLabel';
+import { usePluginConfig } from '../../hooks';
 
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required } = props;
   const { shellApi, ...shellData } = useShellApi();
-  const { recognizers } = useContext(PluginContext);
+  const { recognizers } = usePluginConfig();
 
   const options = useMemo(() => {
     return recognizers.map((r) => ({
@@ -27,11 +28,14 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
     const selected = recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
 
     if (selected.length !== 1) {
-      console.error(
-        `Unable to determine selected recognizer.\n
+      /* istanbul ignore next */
+      if (process.env.NODE_ENV === 'development') {
+        console.error(
+          `Unable to determine selected recognizer.\n
          Value: ${JSON.stringify(value)}.\n
          Selected Recognizers: [${selected.join(', ')}]`
-      );
+        );
+      }
       return;
     }
 
@@ -53,7 +57,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       {selectedType ? (
         <Dropdown
-          data-testid={'recognizerTypeDropdown'}
+          data-testid="recognizerTypeDropdown"
           label={formatMessage('Recognizer Type')}
           options={options}
           responsiveMode={ResponsiveMode.large}
@@ -61,7 +65,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
           onChange={handleChangeRecognizerType}
         />
       ) : (
-        `Unable to determine recognizer type from data: ${value}`
+        formatMessage('Unable to determine recognizer type from data: {value}', { value })
       )}
     </React.Fragment>
   );
