@@ -3,11 +3,15 @@
 
 import { setIconOptions } from 'office-ui-fabric-react/lib/Styling';
 import '@testing-library/jest-dom';
-import { cleanup } from '@testing-library/react';
+import { cleanup as reactCleanup } from '@testing-library/react';
+import { cleanup as hooksCleanup } from '@testing-library/react-hooks';
 
-// Suppress icon warnings.
+// Suppress icon warnings.j
 setIconOptions({
   disableWarnings: true,
 });
 
-afterEach(cleanup);
+afterEach(() => {
+  reactCleanup();
+  hooksCleanup();
+});

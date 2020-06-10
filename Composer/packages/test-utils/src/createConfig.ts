@@ -2,16 +2,22 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const mergeConfig = require('./mergeConfig');
-const nodeConfig = require('./node/jest.config');
-const reactConfig = require('./react/jest.config');
+import mergeConfig from './mergeConfig';
+import nodeConfig from './node/jest.config';
+import reactConfig from './react/jest.config';
+import { JestOverrides } from './types';
 
 const TYPES = {
   node: nodeConfig,
   react: reactConfig,
 };
 
-function createConfig(name, type, jestOverrides = {}) {
+enum ConfigType {
+  node = 'node',
+  react = 'react',
+}
+
+export function createConfig(name: string, type: ConfigType, jestOverrides: Partial<JestOverrides> = {}) {
   const config = TYPES[type];
 
   if (!config) {
@@ -26,5 +32,3 @@ function createConfig(name, type, jestOverrides = {}) {
     }
   );
 }
-
-module.exports = createConfig;
