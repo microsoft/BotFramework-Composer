@@ -53,7 +53,7 @@ const DescriptionCallout: React.FC<DescriptionCalloutProps> = function Descripti
         ),
       }}
     >
-      <div css={focusBorder} tabIndex={0}>
+      <div css={focusBorder} data-testid="FieldLabelDescriptionIcon" tabIndex={0}>
         <Icon
           aria-label={title + '; ' + description}
           iconName={'Unknown'}

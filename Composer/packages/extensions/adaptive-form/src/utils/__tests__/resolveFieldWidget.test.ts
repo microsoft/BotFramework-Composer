@@ -36,6 +36,7 @@ describe('resolveFieldWidget', () => {
         },
         formSchema: {},
         recognizers: [],
+        visualSchema: {},
       };
 
       expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.StringField);
@@ -57,6 +58,7 @@ describe('resolveFieldWidget', () => {
           },
         },
         recognizers: [],
+        visualSchema: {},
       };
 
       expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.RecognizerField);
@@ -80,13 +82,22 @@ describe('resolveFieldWidget', () => {
     });
   });
 
+  describe('type: undefined', () => {
+    it('defaults to StringField', () => {
+      const schema = {
+        title: 'undefined',
+      };
+
+      expect(resolveFieldWidget(schema)).toEqual(DefaultFields.StringField);
+    });
+  });
+
   describe('type: any[]', () => {
     it('returns OneOfField', () => {
       const schema = {
-        type: ['string', 'number', 'boolean'],
+        type: ['string' as const, 'number' as const, 'boolean' as const],
       };
 
-      // @ts-ignore
       expect(resolveFieldWidget(schema)).toEqual(DefaultFields.OneOfField);
     });
   });
@@ -202,6 +213,12 @@ describe('resolveFieldWidget', () => {
       };
 
       expect(resolveFieldWidget(schema)).toEqual(DefaultFields.OpenObjectField);
+    });
+  });
+
+  describe('unknown schema', () => {
+    it('returns UnsupportedField', () => {
+      expect(resolveFieldWidget()).toEqual(DefaultFields.UnsupportedField);
     });
   });
 });

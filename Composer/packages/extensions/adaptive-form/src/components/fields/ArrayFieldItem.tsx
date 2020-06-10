@@ -84,7 +84,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
   };
 
   return (
-    <div className={className} css={arrayItem.container}>
+    <div className={className} css={arrayItem.container} data-testid="ArrayFieldItem">
       <div css={arrayItem.field}>
         <SchemaField
           {...rest}

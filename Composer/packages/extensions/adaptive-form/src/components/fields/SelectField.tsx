@@ -13,9 +13,9 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
     enumOptions,
     id,
     label,
-    onBlur,
+    onBlur = () => {},
     onChange,
-    onFocus,
+    onFocus = () => {},
     value = '',
     error,
     uiOptions,
@@ -37,6 +37,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
   }, [enumOptions]);
 
   const handleChange = (_e: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
+    /* istanbul ignore else */
     if (option) {
       onChange(option.key);
     } else {
@@ -49,6 +50,7 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       <Dropdown
         ariaLabel={label || formatMessage('selection field')}
+        data-testid="SelectFieldDropdown"
         errorMessage={error as string}
         id={id}
         options={options}
@@ -57,9 +59,9 @@ export const SelectField: React.FC<FieldProps<string | number>> = function Selec
         styles={{
           errorMessage: { display: 'none' },
         }}
-        onBlur={() => onBlur && onBlur(id, value)}
+        onBlur={() => onBlur(id, value)}
         onChange={handleChange}
-        onFocus={() => onFocus && onFocus(id, value)}
+        onFocus={() => onFocus(id, value)}
       />
     </>
   );

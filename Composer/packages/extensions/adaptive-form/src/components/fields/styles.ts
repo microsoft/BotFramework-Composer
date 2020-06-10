@@ -71,8 +71,8 @@ export const unsupportedField = {
     },
   },
   details: (hidden: boolean) => css`
-    display: block;
-    height: ${hidden ? '0px' : 'auto'};
+    display: ${hidden ? 'none' : 'block'};
+    height: auto;
     white-space: pre;
     background: ${NeutralColors.gray30};
     overflow-x: scroll;
