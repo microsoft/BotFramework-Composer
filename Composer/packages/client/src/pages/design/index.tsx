@@ -104,7 +104,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
-    onboardingAddCoachMarkRef,
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
@@ -412,7 +411,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onSelect={handleSelect}
         />
         <div css={contentWrapper} role="main">
-          <ToolBar currentDialog={currentDialog} toolbarItems={toolbarItems} />
+          <ToolBar
+            currentDialog={currentDialog}
+            toolbarItems={toolbarItems}
+            onCreateDialogComplete={onCreateDialogComplete}
+          />
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
               <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">

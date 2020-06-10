@@ -30,6 +30,7 @@ export type IToolBarItem = {
 type ToolbarProps = {
   toolbarItems: Array<IToolBarItem>;
   currentDialog?: DialogInfo;
+  onCreateDialogComplete?: (...args: any[]) => void;
 };
 
 function itemList(action: IToolBarItem, index: number) {
@@ -54,16 +55,9 @@ function itemList(action: IToolBarItem, index: number) {
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
 export function ToolBar(props: ToolbarProps) {
-  const { toolbarItems, currentDialog, ...rest } = props;
+  const { toolbarItems, currentDialog, onCreateDialogComplete, ...rest } = props;
   const {
-    actions: {
-      openNewTriggerModal,
-      onCreateDialogComplete,
-      onboardingAddCoachMarkRef,
-      showSkillManifestModal,
-      createDialogBegin,
-      exportToZip,
-    },
+    actions: { openNewTriggerModal, onboardingAddCoachMarkRef, showSkillManifestModal, createDialogBegin, exportToZip },
     state: { projectId },
   } = useContext(StoreContext);
   const left: IToolBarItem[] = [];
