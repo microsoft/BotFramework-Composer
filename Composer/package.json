@@ -7,7 +7,8 @@
     "mkdirp": "^0.5.2",
     "serialize-javascript": "^3.1.0",
     "lodash": "^4.17.12",
-    "set-value": "^3.0.2"
+    "set-value": "^3.0.2",
+    "kind-of": "^6.0.3"
   },
   "engines": {
     "node": ">=12"
@@ -33,7 +34,7 @@
     "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
     "build:lib": "yarn workspace @bfc/libs build:all",
     "build:electron": "yarn workspace @bfc/electron-server build",
-    "build:extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/extension @bfc/adaptive-form @bfc/visual-designer @bfc/ui-plugin-* -c build",
+    "build:extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/extension @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
