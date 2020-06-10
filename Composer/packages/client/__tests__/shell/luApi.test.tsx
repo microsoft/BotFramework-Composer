@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { hooks } from '@bfc/test-utils';
+import { renderHook } from '@bfc/test-utils/lib/hooks';
 
 import { useLuApi } from '../../src/shell/luApi';
 import { useStoreContext } from '../../src/hooks/useStoreContext';
-
-const { renderHook } = hooks;
 
 jest.mock('../../src/hooks/useStoreContext', () => ({
   useStoreContext: jest.fn(),

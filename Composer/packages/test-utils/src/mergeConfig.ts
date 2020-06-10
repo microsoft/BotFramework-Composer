@@ -2,10 +2,14 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const mergeWith = require('lodash/mergeWith');
-const isArray = require('lodash/isArray');
+import mergeWith from 'lodash/mergeWith';
+import isArray from 'lodash/isArray';
 
-function mergeConfig(base, overrides = {}) {
+function mergeConfig<T extends object>(base: T, overrides?: T) {
+  if (!overrides) {
+    return base;
+  }
+
   return mergeWith(base, overrides, (objValue, srcValue) => {
     if (isArray(objValue)) {
       return objValue.concat(srcValue);
@@ -13,4 +17,4 @@ function mergeConfig(base, overrides = {}) {
   });
 }
 
-module.exports = mergeConfig;
+export default mergeConfig;

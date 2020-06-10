@@ -1,11 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-/* eslint-disable @typescript-eslint/no-var-requires */
 
-const path = require('path');
+import path from 'path';
 
-const mergeConfig = require('../mergeConfig');
-const baseConfig = require('../base/jest.config');
+import mergeConfig from '../mergeConfig';
+import baseConfig from '../base/jest.config';
 
 const babelConfig = {
   configFile: false,
@@ -22,7 +21,7 @@ const babelConfig = {
   ],
 };
 
-module.exports = mergeConfig(baseConfig, {
+export default mergeConfig(baseConfig, {
   transform: {
     '^.+\\.jsx?$': [require.resolve('babel-jest'), babelConfig],
     '^.+\\.tsx?$': [require.resolve('babel-jest'), babelConfig],
