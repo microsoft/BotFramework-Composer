@@ -33,6 +33,7 @@ export default class ElectronWindow {
       width: adjustedWidth,
       height: adjustedHeight,
       webPreferences: {
+        nodeIntegrationInWorker: true,
         nodeIntegration: false,
         preload: join(__dirname, 'preload.js'),
       },

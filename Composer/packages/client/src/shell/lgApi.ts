@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 
-import * as lgUtil from '../utils/lgUtil';
 import { State, BoundActionHandlers } from '../store/types';
 import { useStoreContext } from '../hooks/useStoreContext';
 
@@ -18,7 +17,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     return file.templates;
   };
 
-  const updateLgTemplate = (id: string, templateName: string, templateBody: string) => {
+  const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
@@ -34,7 +33,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     });
   };
 
-  const copyLgTemplate = (id, fromTemplateName, toTemplateName) => {
+  const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
@@ -49,7 +48,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     });
   };
 
-  const removeLgTemplate = (id, templateName) => {
+  const removeLgTemplate = async (id, templateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
@@ -62,7 +61,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
     });
   };
 
-  const removeLgTemplates = (id, templateNames) => {
+  const removeLgTemplates = async (id, templateNames) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateNames) throw new Error(`templateName is missing or empty`);
