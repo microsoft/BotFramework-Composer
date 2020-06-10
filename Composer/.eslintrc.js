@@ -91,6 +91,7 @@ module.exports = {
       },
       rules: {
         '@typescript-eslint/ban-ts-ignore': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/no-object-literal-type-assertion': 'off',
         '@typescript-eslint/unbound-method': 'off',
 
