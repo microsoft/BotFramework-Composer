@@ -50,7 +50,7 @@ class AzurePublisher {
     this.logMessages = [];
   }
 
-  private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `publishBots`);
+  private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../publishBots`);
 
   private getRuntimeFolder = (key: string) => {
     return path.resolve(this.baseRuntimeFolder, `${key}`);
