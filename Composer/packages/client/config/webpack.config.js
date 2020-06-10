@@ -276,7 +276,7 @@ module.exports = function (webpackEnv) {
           test: /\.worker\.ts$/,
           use: {
             loader: 'worker-loader',
-            options: { name: isEnvProduction ? '[name]-[hash].worker.js' : '[name].worker.js' },
+            options: { name: isEnvProduction ? '[hash].worker.js' : '[name].js' },
           },
         },
         {
