@@ -5,7 +5,6 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import has from 'lodash/has';
 import merge from 'lodash/merge';
-import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import {
   SensitiveProperties,
@@ -33,10 +32,10 @@ import createReducer from './createReducer';
 
 const projectFiles = ['bot', 'botproj'];
 
-const processSchema = memoize((projectId: string, schema: any) => ({
+const processSchema = (projectId: string, schema: any) => ({
   ...schema,
   definitions: dereferenceDefinitions(schema.definitions),
-}));
+});
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
