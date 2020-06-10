@@ -122,6 +122,8 @@ export interface LgFile {
   templates: LgTemplate[];
 }
 
+// export interface QnAFile {}
+
 export interface Skill {
   manifestUrl: string;
   name: string;
