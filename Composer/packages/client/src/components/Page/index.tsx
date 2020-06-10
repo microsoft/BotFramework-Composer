@@ -5,14 +5,14 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 
-import { ToolBar } from '../ToolBar';
+import { ToolBar, IToolbarItem } from '../ToolBar';
 import { NavTree, INavTreeItem } from '../NavTree';
 
 import * as styles from './styles';
 
 interface IPageProps {
   // TODO: add type
-  toolbarItems: any;
+  toolbarItems: IToolbarItem[];
   navLinks: INavTreeItem[];
   title: string;
   navRegionName: string;
