@@ -28,7 +28,7 @@ export type IToolBarItem = {
 };
 
 type ToolbarProps = {
-  toolbarItems: Array<IToolBarItem>;
+  toolbarItems?: Array<IToolBarItem>;
   currentDialog?: DialogInfo;
   onCreateDialogComplete?: (...args: any[]) => void;
 };
@@ -55,7 +55,7 @@ function itemList(action: IToolBarItem, index: number) {
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
 export function ToolBar(props: ToolbarProps) {
-  const { toolbarItems, currentDialog, onCreateDialogComplete, ...rest } = props;
+  const { toolbarItems = [], currentDialog, onCreateDialogComplete, ...rest } = props;
   const {
     actions: { openNewTriggerModal, onboardingAddCoachMarkRef, showSkillManifestModal, createDialogBegin, exportToZip },
     state: { projectId },

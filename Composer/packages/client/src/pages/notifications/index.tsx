@@ -49,7 +49,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   };
   return (
     <div css={root} data-testid="notifications-page">
-      <ToolBar toolbarItems={[]} />
+      <ToolBar />
       <NotificationHeader onChange={setFilter} />
       <NotificationList items={notifications} onItemClick={handleItemClick} />
     </div>
