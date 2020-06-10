@@ -179,39 +179,28 @@ const unpackObject = output => {
  */
 const getTenantId = async (accessToken) => {
   if (!accessToken) {
-    throw new Error('Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token');
+    throw new Error(
+      'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
+    );
+  }
+  if (!subId) {
+    throw new Error(
+      `Error: Missing subscription Id. Please provide a valid Azure subscription id.`
+    );
   }
   try {
-    const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
+    const tenantUrl = `https://management.azure.com/subscriptions/${subId}?api-version=2020-01-01`;
     const options = {
       headers: { Authorization: `Bearer ${accessToken}` },
     };
     const response = await rp.get(tenantUrl, options);
     const jsonRes = JSON.parse(response);
-    if (jsonRes.value === undefined || (jsonRes.value && jsonRes.value.length === 0) || (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)) {
+    if (
+      jsonRes.tenantId === undefined
+    ) {
       throw new Error(`No tenants found in the account.`);
     }
-    const selectedTenant = jsonRes.value.shift();
-    logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Using Tenant ${selectedTenant.displayName} - ID: ${selectedTenant.tenantId}`,
-    });
-    // if alternatives exist, list htem
-    if (jsonRes.value.length > 0) {
-      logger({
-        status: BotProjectDeployLoggerType.PROVISION_INFO,
-        message: chalk.yellow(`  Note: You have access to multiple tenants. To specify an alternative, specify --tenantId=<desired tenant ID>`),
-      });
-      // list all available tenants
-      jsonRes.value.forEach((tenant) => {
-        logger({
-          status: BotProjectDeployLoggerType.PROVISION_INFO,
-          message: chalk.yellow(`  * ${tenant.displayName} - ID: ${tenant.tenantId}`),
-        });
-      });
-    }
-
-    return selectedTenant.tenantId;
+    return jsonRes.tenantId;
   } catch (err) {
     throw new Error(`Get Tenant Id Failed, details: ${getErrorMesssage(err)}`);
   }
@@ -364,7 +353,6 @@ const create = async (
     const accessToken = token.accessToken;
     // the returned access token will almost surely have a tenantId. 
     // use this as the default if one isn't specified.
-    // otherwise, fetch a list and use the first, but print available options.
     if (token.tenantId) {
       tenantId = token.tenantId;
       logger({

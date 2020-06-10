@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+import fs from 'fs';
+import path from 'path';
 import * as http from 'http';
 import * as url from 'url';
 import * as net from 'net';
@@ -11,6 +12,20 @@ import { IConnection, createConnection } from 'vscode-languageserver';
 import express from 'express';
 
 import { LGServer } from '../../src';
+
+// eslint-disable-next-line security/detect-non-literal-fs-filename
+const lgFile = fs.readFileSync(path.join(__dirname, '../mocks/greeting.lg'), 'utf-8');
+
+const lgImportResolver = (_source, id) => {
+  return {
+    id,
+    content: lgFile,
+  };
+};
+
+const memoryResolver = () => {
+  return ['this.value', 'this.turnCount'];
+};
 
 function createSocketHandler(webSocket: any): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {
@@ -44,7 +59,7 @@ function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  return new LGServer(connection);
+  return new LGServer(connection, lgImportResolver, memoryResolver);
 }
 
 export function startServer() {
