@@ -23,7 +23,7 @@ const DefaultRecognizers: RecognizerSchema[] = [
     id: 'Custom',
     displayName: () => formatMessage('Custom'),
     isSelected: (data) => typeof data === 'string',
-    handleRecognizerChange: (props) => props.onChange(''),
+    handleRecognizerChange: (props) => props.onChange('// custom recognizer'),
   },
 ];
 

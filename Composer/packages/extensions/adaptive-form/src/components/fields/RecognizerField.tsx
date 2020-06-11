@@ -6,6 +6,7 @@ import React, { useContext, useMemo, useEffect } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 
 import PluginContext from '../../PluginContext';
@@ -28,7 +29,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
         });
       }
     }
-  });
+  }, [value]);
   const options = useMemo(() => {
     return recognizers.map((r) => ({
       key: r.id,
@@ -76,6 +77,16 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
         />
       ) : (
         `Unable to determine recognizer type from data: ${value}`
+      )}
+      {selectedType === 'Custom' && (
+        <TextField
+          multiline
+          resizable={false}
+          rows={10}
+          styles={{ root: { marginTop: '10px' } }}
+          value={value as string}
+          onChange={(_, newValue) => onChange(newValue)}
+        />
       )}
     </React.Fragment>
   );
