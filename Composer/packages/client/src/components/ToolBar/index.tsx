@@ -3,12 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useCallback, Fragment, useContext } from 'react';
+import { useCallback, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogInfo } from '@bfc/shared';
 
-import { StoreContext } from '../../store';
+import { useStoreContext } from '../../hooks';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
@@ -31,6 +31,8 @@ type ToolbarProps = {
   toolbarItems?: Array<IToolBarItem>;
   currentDialog?: DialogInfo;
   onCreateDialogComplete?: (...args: any[]) => void;
+  openNewTriggerModal?: () => void;
+  showSkillManifestModal?: () => void;
 };
 
 function itemList(action: IToolBarItem, index: number) {
@@ -55,11 +57,18 @@ function itemList(action: IToolBarItem, index: number) {
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
 export function ToolBar(props: ToolbarProps) {
-  const { toolbarItems = [], currentDialog, onCreateDialogComplete, ...rest } = props;
   const {
-    actions: { openNewTriggerModal, onboardingAddCoachMarkRef, showSkillManifestModal, createDialogBegin, exportToZip },
+    toolbarItems = [],
+    currentDialog,
+    onCreateDialogComplete,
+    openNewTriggerModal,
+    showSkillManifestModal,
+    ...rest
+  } = props;
+  const {
+    actions: { onboardingAddCoachMarkRef, createDialogBegin, exportToZip },
     state: { projectId },
-  } = useContext(StoreContext);
+  } = useStoreContext();
   const left: IToolBarItem[] = [];
   const right: IToolBarItem[] = [];
 
@@ -80,7 +89,7 @@ export function ToolBar(props: ToolbarProps) {
   return (
     <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
       <div css={leftActions}>
-        {window.location.href.indexOf('/dialogs/') !== -1 && (
+        {window.location.href.includes('/dialogs/') && (
           <div ref={addNewRef}>
             <CommandButton
               css={actionButton}
@@ -102,7 +111,9 @@ export function ToolBar(props: ToolbarProps) {
                     text: formatMessage(`Add new trigger on {displayName}`, {
                       displayName: currentDialog?.displayName ?? '',
                     }),
-                    onClick: () => openNewTriggerModal(),
+                    onClick: () => {
+                      openNewTriggerModal?.();
+                    },
                   },
                 ],
               }}
@@ -111,7 +122,7 @@ export function ToolBar(props: ToolbarProps) {
           </div>
         )}
         {left.map(itemList)}{' '}
-        {window.location.href.indexOf('/dialogs/') !== -1 && (
+        {window.location.href.includes('/dialogs/') && (
           <CommandButton
             css={actionButton}
             iconProps={{ iconName: 'OpenInNewWindow' }}
@@ -127,7 +138,9 @@ export function ToolBar(props: ToolbarProps) {
                 {
                   key: 'exportAsSkill',
                   text: formatMessage('Export as skill'),
-                  onClick: () => showSkillManifestModal(),
+                  onClick: () => {
+                    showSkillManifestModal?.();
+                  },
                 },
               ],
             }}

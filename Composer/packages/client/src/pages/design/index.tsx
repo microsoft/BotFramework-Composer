@@ -413,6 +413,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <div css={contentWrapper} role="main">
           <ToolBar
             currentDialog={currentDialog}
+            openNewTriggerModal={openNewTriggerModal}
+            showSkillManifestModal={() => setExportSkillModalVisible(true)}
             toolbarItems={toolbarItems}
             onCreateDialogComplete={onCreateDialogComplete}
           />
