@@ -1,6 +1,6 @@
 {
   "productName": "Bot Framework Composer",
-  "asar": true,
+  "asar": false,
   "appId": "com.microsoft.botframework.composer",
   "copyright": "Copyright © 2020 Microsoft Corporation",
   "electronDownload": {
