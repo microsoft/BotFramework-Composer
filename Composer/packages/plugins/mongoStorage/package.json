@@ -1,5 +1,5 @@
 {
-  "name": "@bfc/plugin-mongoStorage",
+  "name": "@bfc/plugin-mongostorage",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
