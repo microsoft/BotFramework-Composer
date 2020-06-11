@@ -164,15 +164,15 @@ export class LuPublisher {
     }
     const loadResult = await this._loadLuConatents(config.models);
     loadResult.luContents = await this._downSizeUtterances(loadResult.luContents);
-    let endpoint = config.endpoint;
-    if (!endpoint) {
-      endpoint = `https://${config.region}.api.cognitive.microsoft.com`;
+    let authoringEndpoint = config.authoringEndpoint;
+    if (!authoringEndpoint) {
+      authoringEndpoint = `https://${config.region}.api.cognitive.microsoft.com`;
     }
     const buildResult = await this.builder.build(
       loadResult.luContents,
       loadResult.recognizers,
       config.authoringKey,
-      endpoint,
+      authoringEndpoint,
       config.botName,
       config.suffix,
       config.fallbackLocal,
