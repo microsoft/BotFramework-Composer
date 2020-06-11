@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { useContext, useCallback, Fragment } from 'react';
 
 import composerIcon from '../../images/composerIcon.svg';
@@ -13,7 +13,12 @@ import { StoreContext } from '../../store';
 
 import { updateAvailableIcon, headerContainer, title, botName, divider, headerTextContainer } from './styles';
 
-export const Header = (props) => {
+type Props = {
+  botName: string;
+  locale: string;
+};
+
+export const Header = (props: Props) => {
   const {
     actions: { setAppUpdateShowing },
     state: { appUpdate },
@@ -46,7 +51,7 @@ export const Header = (props) => {
       {showUpdateAvailableIcon && (
         <IconButton
           iconProps={{ iconName: 'History' }}
-          styles={updateAvailableIcon}
+          styles={updateAvailableIcon as IButtonStyles}
           title={formatMessage('Update available')}
           onClick={onUpdateAvailableClick}
         />

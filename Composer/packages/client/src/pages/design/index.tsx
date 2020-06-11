@@ -20,11 +20,11 @@ import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
-import { DialogStyle } from '../../components/Modal/styles';
+import { dialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
 import { ProjectTree } from '../../components/ProjectTree';
 import { StoreContext } from '../../store';
-import { ToolBar } from '../../components/ToolBar/index';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
@@ -104,7 +104,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
-    onboardingAddCoachMarkRef,
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
@@ -201,7 +200,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
 
-  const toolbarItems = [
+  const toolbarItems: IToolBarItem[] = [
     {
       type: 'action',
       text: formatMessage('Undo'),
@@ -360,7 +359,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       subTitle = `${refs.reduce((result, item) => `${result} ${item} \n`, '')}`;
       setting = {
         onRenderContent,
-        style: DialogStyle.Console,
+        style: dialogStyle.console,
       };
     } else {
       title = DialogDeleting.NO_LINKED_TITLE;
@@ -413,11 +412,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         />
         <div css={contentWrapper} role="main">
           <ToolBar
-            actions={actions}
             currentDialog={currentDialog}
-            onboardingAddCoachMarkRef={onboardingAddCoachMarkRef}
             openNewTriggerModal={openNewTriggerModal}
-            projectId={projectId}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
             toolbarItems={toolbarItems}
             onCreateDialogComplete={onCreateDialogComplete}
