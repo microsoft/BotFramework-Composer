@@ -75,6 +75,12 @@ const schema: JSONSchema7 = {
         luis: {
           type: 'object',
           properties: {
+            endpoint: {
+              type: 'string',
+            },
+            authoringEndpoint: {
+              type: 'string',
+            },
             endpointKey: {
               type: 'string',
             },
