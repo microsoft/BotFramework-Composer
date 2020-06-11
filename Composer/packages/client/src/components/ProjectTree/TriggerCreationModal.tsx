@@ -28,10 +28,12 @@ import {
   eventTypeKey,
   customEventKey,
   intentTypeKey,
+  qnaTypeKey,
   activityTypeKey,
   getEventTypes,
   getActivityTypes,
   regexRecognizerKey,
+  crossTrainedRecognizerSetKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';
@@ -153,8 +155,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = get(dialogFile, 'content.recognizer.$kind', '') === regexRecognizerKey;
+  const isQnA = get(dialogFile, 'content.recognizer.$kind', '') === crossTrainedRecognizerSetKey;
   const regexIntents = get(dialogFile, 'content.recognizer.intents', []);
   const isNone = !get(dialogFile, 'content.recognizer');
+
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
     $kind: isNone ? '' : intentTypeKey,
@@ -178,6 +182,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   if (isNone) {
     triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
+  }
+  if (!isQnA) {
+    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== qnaTypeKey);
   }
 
   const shouldDisable = (errors: TriggerFormDataErrors) => {
