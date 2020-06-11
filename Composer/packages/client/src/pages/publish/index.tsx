@@ -17,7 +17,7 @@ import { PublishTarget } from '../../store/types';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
-import { ToolBar } from './../../components/ToolBar/index';
+import { ToolBar, IToolBarItem } from './../../components/ToolBar/index';
 import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
@@ -68,7 +68,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     [projectId, publishTypes]
   );
 
-  const toolbarItems = [
+  const toolbarItems: IToolBarItem[] = [
     {
       type: 'action',
       text: formatMessage('Add new profile'),
