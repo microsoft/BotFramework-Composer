@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@bfc/test-utils": "*",
-    "@testing-library/react": "^10.0.2",
     "@types/lodash": "^4.14.146",
     "@types/react": "16.9.23",
     "format-message": "^6.2.3",
