@@ -102,7 +102,13 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.EVENTS]: {
     label: 'Events',
-    types: [SDKKinds.OnIntent, SDKKinds.OnUnknownIntent, SDKKinds.OnDialogEvent, SDKKinds.OnActivity],
+    types: [
+      SDKKinds.OnIntent,
+      SDKKinds.OnQnAMatch,
+      SDKKinds.OnUnknownIntent,
+      SDKKinds.OnDialogEvent,
+      SDKKinds.OnActivity,
+    ],
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {
     label: 'OnDialogEvents Types',

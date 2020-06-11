@@ -50,8 +50,10 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
 
 export const eventTypeKey: string = SDKKinds.OnDialogEvent;
 export const intentTypeKey: string = SDKKinds.OnIntent;
+export const qnaTypeKey: string = SDKKinds.OnQnAMatch;
 export const activityTypeKey: string = SDKKinds.OnActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
+export const crossTrainedRecognizerSetKey: string = SDKKinds.CrossTrainedRecognizerSet;
 export const customEventKey = 'OnCustomEvent';
 
 function insert(content, path: string, position: number | undefined, data: any) {
