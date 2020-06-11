@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, DialogUtils, ShellApi } from '@bfc/shared';
+import { BaseSchema, DialogUtils, ShellApi, walkAdaptiveActionList } from '@bfc/shared';
 
 import { useActionApi } from './useActionApi';
 
@@ -69,6 +69,22 @@ export function useDialogEditApi(shellApi: ShellApi) {
     return dialogData;
   }
 
+  function disableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+    // Disable selected actions and their children recursively.
+    const selectedActions = queryNodes(dialogData, actionIds);
+    walkAdaptiveActionList(selectedActions, (action: any) => {
+      action.disabled = true;
+    });
+  }
+
+  function enableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+    // Enable selected actions and children recursively.
+    const selectedActions = queryNodes(dialogData, actionIds);
+    walkAdaptiveActionList(selectedActions, (action: any) => {
+      delete action.disabled;
+    });
+  }
+
   return {
     insertAction,
     insertActions,
@@ -78,5 +94,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
     copySelectedActions,
     cutSelectedActions,
     updateRecognizer,
+    disableSelectedActions,
+    enableSelectedActions,
   };
 }
