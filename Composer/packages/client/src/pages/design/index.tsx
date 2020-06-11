@@ -275,6 +275,30 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       disabled: !nodeOperationAvailable,
     },
     {
+      type: 'action',
+      text: formatMessage('Disable'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Delete',
+        },
+        onClick: () => VisualEditorAPI.disableSelection(),
+      },
+      align: 'left',
+      disabled: !nodeOperationAvailable,
+    },
+    {
+      type: 'action',
+      text: formatMessage('Enable'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'Delete',
+        },
+        onClick: () => VisualEditorAPI.enableSelection(),
+      },
+      align: 'left',
+      disabled: !nodeOperationAvailable,
+    },
+    {
       type: 'element',
       element: <TestController />,
       align: 'right',

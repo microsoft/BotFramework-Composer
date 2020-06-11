@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { BaseSchema, DialogUtils, ShellApi, walkAdaptiveActionList } from '@bfc/shared';
+import { BaseSchema, DialogUtils, ShellApi } from '@bfc/shared';
+import { disableNodes, enableNodes } from '@bfc/shared/lib/dialogUtils';
 
 import { useActionApi } from './useActionApi';
 
@@ -53,6 +54,13 @@ export function useDialogEditApi(shellApi: ShellApi) {
     });
   }
 
+  function disableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+    return disableNodes(dialogData, actionIds);
+  }
+
+  function enableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+    return enableNodes(dialogData, actionIds);
+  }
   async function copySelectedActions(dialogId, dialogData, actionIds: string[]) {
     const actions = queryNodes(dialogData, actionIds);
     return copyActions(dialogId, actions);
@@ -67,22 +75,6 @@ export function useDialogEditApi(shellApi: ShellApi) {
   function updateRecognizer(dialogId, dialogData, recognizer) {
     dialogData.recognizer = recognizer;
     return dialogData;
-  }
-
-  function disableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
-    // Disable selected actions and their children recursively.
-    const selectedActions = queryNodes(dialogData, actionIds);
-    walkAdaptiveActionList(selectedActions, (action: any) => {
-      action.disabled = true;
-    });
-  }
-
-  function enableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
-    // Enable selected actions and children recursively.
-    const selectedActions = queryNodes(dialogData, actionIds);
-    walkAdaptiveActionList(selectedActions, (action: any) => {
-      delete action.disabled;
-    });
   }
 
   return {

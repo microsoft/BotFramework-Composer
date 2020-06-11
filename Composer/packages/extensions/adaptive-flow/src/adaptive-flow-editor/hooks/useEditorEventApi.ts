@@ -29,6 +29,8 @@ export const useEditorEventApi = (
     cutSelectedActions,
     deleteSelectedAction,
     deleteSelectedActions,
+    disableSelectedActions,
+    enableSelectedActions,
     updateRecognizer,
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
@@ -225,6 +227,20 @@ export const useEditorEventApi = (
           announce(ScreenReaderMessage.ActionsDeleted);
         };
         break;
+      case NodeEventTypes.DisableSelection:
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          onChange(disableSelectedActions(path, data, actionIds));
+          announce(ScreenReaderMessage.ActionsDisabled);
+        };
+        break;
+      case NodeEventTypes.EnableSelection:
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          onChange(enableSelectedActions(path, data, actionIds));
+          announce(ScreenReaderMessage.ActionsEnabled);
+        };
+        break;
       case NodeEventTypes.AppendSelection:
         handler = (e) => {
           trackActionListChange(e.target);
@@ -258,6 +274,8 @@ export const useEditorEventApi = (
   (window as any).cutSelection = () => handleEditorEvent(NodeEventTypes.CutSelection);
   (window as any).moveSelection = () => handleEditorEvent(NodeEventTypes.MoveSelection);
   (window as any).deleteSelection = () => handleEditorEvent(NodeEventTypes.DeleteSelection);
+  (window as any).disableSelection = () => handleEditorEvent(NodeEventTypes.DisableSelection);
+  (window as any).enableSelection = () => handleEditorEvent(NodeEventTypes.EnableSelection);
 
   return {
     handleEditorEvent,

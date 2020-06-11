@@ -25,5 +25,7 @@ export const VisualEditorAPI = (() => {
     cutSelection: () => visualEditorFrameAPI.invoke('cutSelection'),
     moveSelection: () => visualEditorFrameAPI.invoke('moveSelection'),
     deleteSelection: () => visualEditorFrameAPI.invoke('deleteSelection'),
+    disableSelection: () => visualEditorFrameAPI.invoke('disableSelection'),
+    enableSelection: () => visualEditorFrameAPI.invoke('enableSelection'),
   };
 })();
