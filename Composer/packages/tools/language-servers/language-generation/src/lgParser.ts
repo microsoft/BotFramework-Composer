@@ -19,7 +19,7 @@ export class LgParser {
   private rejects = {};
 
   constructor() {
-    this.worker = new Worker(path.join(__dirname, 'lgWorker.js'));
+    this.worker = new Worker(path.join(__dirname, '../lib/lgWorker.js'));
     this.worker.on('message', this.handleMsg.bind(this));
   }
 
