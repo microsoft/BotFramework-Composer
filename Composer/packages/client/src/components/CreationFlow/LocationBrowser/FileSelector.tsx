@@ -32,7 +32,6 @@ import { StorageFolder, File } from '../../../store/types';
 import { getFileIconName, calculateTimeDiff } from '../../../utils';
 
 import {
-  dropdown,
   detailListContainer,
   detailListClass,
   tableCell,
@@ -49,11 +48,11 @@ interface FileSelectorProps {
     write: boolean;
   };
   focusedStorageFolder: StorageFolder;
+  storages: any[];
   isWindows: boolean;
-  createFolder: (path: string, name) => void;
-  updateFolder: (path: string, oldName: string, newName: string) => void;
-  updateLocation?: (location: string) => void;
-  onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
+  createFolder?: (path: string, name) => void;
+  updateFolder?: (path: string, oldName: string, newName: string) => void;
+  onCurrentPathUpdate: (newPath: string, storageId?: string) => void;
   onFileChosen: (file: any) => void;
   checkShowItem: (file: File) => boolean;
 }
@@ -92,36 +91,38 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     operationMode,
     createFolder,
     updateFolder,
-    updateLocation,
     isWindows = false,
+    storages,
   } = props;
   // for detail file list in open panel
   const [currentPath, setCurrentPath] = useState(path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
   const initialPath = useRef(path.join(focusedStorageFolder.parent, focusedStorageFolder.name)).current;
+  const currentStorageIndex = useRef(0);
+  const storage = storages[currentStorageIndex.current];
+  const storageId = storage.id;
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [folderName, setFolderName] = useState('');
   const [editMode, setEditMode] = useState(EditMode.NONE);
   const [nameError, setNameError] = useState('');
-  const createOrUpdateFolder = (index: number) => {
+
+  const createOrUpdateFolder = async (index: number) => {
     const isValid = nameRegex.test(folderName);
-    const isDup = storageFiles.some((file) => file.name === folderName);
+    const isDup = storageFiles.some((file) => file.name === folderName) && storageFiles[index].name !== folderName;
     if (isValid && !isDup) {
       if (editMode === EditMode.Creating) {
-        createFolder(initialPath, folderName);
-        updateLocation && updateLocation(path.join(initialPath, folderName));
+        createFolder && (await createFolder(initialPath, folderName));
+        await onCurrentPathUpdate(path.join(initialPath, folderName), storageId);
       }
       if (editMode === EditMode.Updating) {
-        updateFolder(initialPath, storageFiles[index].name, folderName);
+        updateFolder && (await updateFolder(initialPath, storageFiles[index].name, folderName));
+        await onCurrentPathUpdate(initialPath, storageId);
       }
       setEditMode(EditMode.NONE);
-      storageFiles[index].name = folderName;
-      storageFiles[index].path = path.join(currentPath, folderName);
+      setNameError('');
     } else if (!folderName) {
-      // an empty name means cancel the operation
-      if (editMode === EditMode.Creating) {
-        storageFiles.splice(1, 1);
-      }
+      // an empty name means to cancel the operation
       setEditMode(EditMode.NONE);
+      setNameError('');
       setCurrentPath(initialPath);
     } else if (isDup) {
       const nameError = formatMessage('folder {folderName} already exists', { folderName });
@@ -279,13 +280,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   ];
 
   function onCreateNewFolder() {
-    const newFolder: File = {
-      name: '',
-      type: FileTypes.FOLDER,
-      path: currentPath,
-    };
     setFolderName('');
-    storageFiles.splice(1, 0, newFolder);
     setSelectedIndex(1);
     setEditMode(EditMode.Creating);
   }
@@ -336,8 +331,17 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       type: 'folder',
       path: diskRootPattern.test(currentPath) || currentPath === '/' ? '/' : focusedStorageFolder.parent,
     });
+
+    if (editMode === EditMode.Creating) {
+      const newFolder: File = {
+        name: '',
+        type: FileTypes.FOLDER,
+        path: '',
+      };
+      files.splice(1, 0, newFolder);
+    }
     return files;
-  }, [focusedStorageFolder, currentSort.key, currentSort.descending]);
+  }, [focusedStorageFolder, currentSort.key, currentSort.descending, editMode]);
 
   function onRenderDetailsHeader(props, defaultRender) {
     return (
@@ -380,13 +384,11 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const updatePath = (event: React.FormEvent<IComboBox>, option?: IComboBoxOption, index?: number, value?: string) => {
     event.preventDefault();
     if (option) {
-      onCurrentPathUpdate(option.key as string);
+      onCurrentPathUpdate(option.key as string, storageId);
       setCurrentPath(option.key as string);
-      updateLocation && updateLocation(option.key as string);
     } else {
-      onCurrentPathUpdate(value);
+      onCurrentPathUpdate(value as string, storageId);
       setCurrentPath(value as string);
-      updateLocation && updateLocation(value as string);
     }
   };
   return (
@@ -409,11 +411,13 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
             onChange={updatePath}
           />
         </StackItem>
-        <StackItem align={'end'} styles={{ root: { marginBottom: 5 } }}>
-          <Link disabled={editMode !== EditMode.NONE} onClick={onCreateNewFolder}>
-            {formatMessage('create new folder')}
-          </Link>
-        </StackItem>
+        {operationMode.write && (
+          <StackItem align={'end'} styles={{ root: { marginBottom: 5 } }}>
+            <Link disabled={editMode !== EditMode.NONE} onClick={onCreateNewFolder}>
+              {formatMessage('create new folder')}
+            </Link>
+          </StackItem>
+        )}
       </Stack>
       <div css={detailListContainer} data-is-scrollable="true">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

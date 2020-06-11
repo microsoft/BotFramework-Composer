@@ -167,6 +167,11 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     updateForm(updatedFormData);
   };
 
+  const onCurrentPathUpdateWrap = (newPath: string, storageId?: string) => {
+    onCurrentPathUpdate(newPath, storageId);
+    updateLocation(newPath);
+  };
+
   return (
     <Fragment>
       <DialogWrapper
@@ -206,8 +211,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             focusedStorageFolder={focusedStorageFolder}
             operationMode={{ read: true, write: true }}
             updateFolder={updateFolder}
-            updateLocation={updateLocation}
-            onCurrentPathUpdate={onCurrentPathUpdate}
+            onCurrentPathUpdate={onCurrentPathUpdateWrap}
           />
 
           <DialogFooter>
