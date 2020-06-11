@@ -35,9 +35,9 @@ const Onboarding: React.FC = () => {
       .map((stepSet) => ({
         ...stepSet,
         steps: stepSet.steps.filter(({ targetId }) => {
-          if (!dialogs.length) {
+          if (dialogs.length > 0) {
             return !(targetId === 'mainDialog' || targetId === 'newTrigger' || targetId === 'action');
-          } else if (!dialogs[0].triggers.length) {
+          } else if (dialogs[0].triggers.length > 0) {
             return targetId !== 'action';
           }
           return true;
@@ -148,12 +148,12 @@ const Onboarding: React.FC = () => {
     },
   };
 
-  return !complete ? (
+  return complete ? null : (
     <OnboardingContext.Provider value={value}>
       <WelcomeModal />
       <TeachingBubbles />
     </OnboardingContext.Provider>
-  ) : null;
+  );
 };
 
 export default Onboarding;
