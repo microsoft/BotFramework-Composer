@@ -29,9 +29,9 @@ export class DefaultSettingManager extends FileSettingManager {
       luis: {
         name: '',
         authoringKey: '',
-        endpoint: '',
-        endpointKey: '',
         authoringEndpoint: '',
+        endpointKey: '',
+        endpoint: '',
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
