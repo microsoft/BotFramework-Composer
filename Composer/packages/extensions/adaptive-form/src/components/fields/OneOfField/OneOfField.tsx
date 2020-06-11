@@ -39,11 +39,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
     }
   };
 
-  const renderTypeTitle = (options?: IDropdownOption[]) => {
-    const option = options && options[0];
-    return option ? <React.Fragment>{option.text}</React.Fragment> : null;
-  };
-
   const Field = resolveFieldWidget(selectedSchema || {}, props.uiOptions, pluginConfig);
 
   return (
@@ -59,6 +54,7 @@ const OneOfField: React.FC<FieldProps> = (props) => {
         {options && options.length > 1 && (
           <Dropdown
             ariaLabel={formatMessage('select property type')}
+            data-testid="OneOfFieldType"
             id={`${props.id}-oneOf`}
             options={options}
             responsiveMode={ResponsiveMode.large}
@@ -69,7 +65,6 @@ const OneOfField: React.FC<FieldProps> = (props) => {
               title: { height: '24px', lineHeight: '20px' },
             }}
             onChange={handleTypeChange}
-            onRenderTitle={renderTypeTitle}
           />
         )}
       </div>

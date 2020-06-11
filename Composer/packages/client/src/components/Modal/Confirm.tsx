@@ -9,7 +9,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import ReactDOM from 'react-dom';
 
-import { DialogStyle, BuiltInStyles, dialog, dialogModal, confirmationContainer } from './styles';
+import { dialogStyle, builtInStyles, dialog, dialogModal, confirmationContainer } from './styles';
 
 interface ConfirmDialogProps {
   onCancel: () => void;
@@ -23,9 +23,9 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     title,
     subTitle = '',
     onRenderContent = defaultContentRender,
-    confirmBtnText = 'Yes',
-    cancelBtnText = 'Cancel',
-    style = DialogStyle.Normal,
+    confirmText = 'Yes',
+    cancelText = 'Cancel',
+    style = dialogStyle.normal,
     checkboxLabel,
     styles = { content: {}, main: {}, modal: {} },
   } = setting;
@@ -37,11 +37,11 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   };
 
   if (!title) {
-    throw new Error('confirm modal must give a title');
+    throw new Error('Confirmation modal must have a title');
   }
 
   function defaultContentRender() {
-    return <div css={BuiltInStyles[style]}> {subTitle} </div>;
+    return <div css={builtInStyles[style]}> {subTitle} </div>;
   }
 
   return (
@@ -59,12 +59,12 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
       onDismiss={onCancel}
     >
       <div css={[confirmationContainer, styles.content]}>
-        {onRenderContent(subTitle, BuiltInStyles[style])}
+        {onRenderContent(subTitle, builtInStyles[style])}
         {checkboxLabel && <Checkbox checked={!disabled} label={checkboxLabel} onChange={handleCheckbox} />}
       </div>
       <DialogFooter>
-        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} text={confirmBtnText} onClick={onConfirm} />
-        <DefaultButton data-testid="cancelPrompt" text={cancelBtnText} onClick={onCancel} />
+        <PrimaryButton data-testid="confirmPrompt" disabled={disabled} text={confirmText} onClick={onConfirm} />
+        <DefaultButton data-testid="cancelPrompt" text={cancelText} onClick={onCancel} />
       </DialogFooter>
     </Dialog>
   );

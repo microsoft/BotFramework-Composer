@@ -13,7 +13,7 @@ export function getOrderedProperties(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ): OrderConfig {
-  const { hidden: hidden, order: order = ['*'] } = cloneDeep(uiOptions);
+  const { hidden, order = ['*'] } = cloneDeep(uiOptions);
 
   const hiddenFieldSet = new Set(typeof hidden === 'function' ? hidden(data) : hidden || []);
   globalHiddenProperties.forEach((f) => hiddenFieldSet.add(f));
@@ -23,6 +23,7 @@ export function getOrderedProperties(
   const orderedFields = uiOrder.reduce((allFields, field) => {
     if (field === '*') {
       allFields.push(field);
+      orderedFieldSet.add(field);
       return allFields;
     }
 
@@ -50,23 +51,33 @@ export function getOrderedProperties(
     return allFields;
   }, [] as OrderConfig);
 
+  const allProperties = Object.keys(schema.properties ?? {}).filter(
+    (p) => !p.startsWith('$') && !hiddenFieldSet.has(p)
+  );
+
   const restIdx = orderedFields.indexOf('*');
+  // only validate wildcard if not all properties are ordered already
+  if (allProperties.some((p) => !orderedFieldSet.has(p))) {
+    let errorMsg = '';
+    if (restIdx === -1) {
+      errorMsg = 'no wildcard';
+    } else if (restIdx !== orderedFields.lastIndexOf('*')) {
+      errorMsg = 'multiple wildcards';
+    }
 
-  let errorMsg = '';
-  if (restIdx === -1) {
-    errorMsg = 'no wildcard';
-  } else if (restIdx !== orderedFields.lastIndexOf('*')) {
-    errorMsg = 'multiple wildcards';
+    if (errorMsg) {
+      throw new Error(`Error in ui schema for ${schema.title}: ${errorMsg}\n${JSON.stringify(uiOptions, null, 2)}`);
+    }
+
+    const restFields = Object.keys(schema.properties || {}).filter((p) => {
+      return !orderedFieldSet.has(p) && !hiddenFieldSet.has(p) && !p.startsWith('$');
+    });
+
+    orderedFields.splice(restIdx, 1, ...restFields);
+  } else if (restIdx > -1) {
+    // remove the wildcard
+    orderedFields.splice(restIdx, 1);
   }
 
-  if (errorMsg) {
-    throw new Error(`Error in ui schema for ${schema.title}: ${errorMsg}\n${JSON.stringify(uiOptions, null, 2)}`);
-  }
-
-  const restFields = Object.keys(schema.properties || {}).filter((p) => {
-    return !orderedFieldSet.has(p) && !hiddenFieldSet.has(p) && !p.startsWith('$');
-  });
-
-  orderedFields.splice(restIdx, 1, ...restFields);
   return orderedFields;
 }

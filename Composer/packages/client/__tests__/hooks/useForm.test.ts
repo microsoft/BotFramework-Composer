@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { hooks } from '@bfc/test-utils';
+import { renderHook, act } from '@bfc/test-utils/lib/hooks';
 
 import { useForm, FieldConfig } from '../../src/hooks/useForm';
 
@@ -10,8 +10,6 @@ interface TestFormData {
   customValidationField: string;
   asyncValidationField: string;
 }
-
-afterEach(hooks.cleanup);
 
 describe('useForm', () => {
   const custValidate = jest.fn();
@@ -34,7 +32,7 @@ describe('useForm', () => {
 
   describe('formData', () => {
     it('applies default values', () => {
-      const { result } = hooks.renderHook(() => useForm(fields));
+      const { result } = renderHook(() => useForm(fields));
 
       expect(result.current.formData).toEqual({
         requiredField: 'foo',
@@ -44,9 +42,9 @@ describe('useForm', () => {
     });
 
     it('can update single fields', async () => {
-      const { result, waitForNextUpdate } = hooks.renderHook(() => useForm(fields));
+      const { result, waitForNextUpdate } = renderHook(() => useForm(fields));
 
-      await hooks.act(async () => {
+      await act(async () => {
         result.current.updateField('requiredField', 'new value');
         await waitForNextUpdate();
       });
@@ -55,9 +53,9 @@ describe('useForm', () => {
     });
 
     it('can update the whole object', async () => {
-      const { result, waitForNextUpdate } = hooks.renderHook(() => useForm(fields));
+      const { result, waitForNextUpdate } = renderHook(() => useForm(fields));
 
-      await hooks.act(async () => {
+      await act(async () => {
         result.current.updateForm({
           requiredField: 'new',
           customValidationField: 'form',
@@ -78,7 +76,7 @@ describe('useForm', () => {
     it('can validate when mounting', async () => {
       custValidate.mockReturnValue('custom');
       asyncValidate.mockResolvedValue('async');
-      const { result, waitForNextUpdate } = hooks.renderHook(() => useForm(fields, { validateOnMount: true }));
+      const { result, waitForNextUpdate } = renderHook(() => useForm(fields, { validateOnMount: true }));
       await waitForNextUpdate();
 
       expect(result.current.formErrors).toMatchObject({
@@ -88,9 +86,9 @@ describe('useForm', () => {
     });
 
     it('validates required fields', async () => {
-      const { result, waitForNextUpdate } = hooks.renderHook(() => useForm(fields));
+      const { result, waitForNextUpdate } = renderHook(() => useForm(fields));
 
-      await hooks.act(async () => {
+      await act(async () => {
         result.current.updateField('requiredField', '');
         await waitForNextUpdate();
       });
@@ -100,9 +98,9 @@ describe('useForm', () => {
 
     it('validates using a custom validator', async () => {
       custValidate.mockReturnValue('my custom validation');
-      const { result, waitForNextUpdate } = hooks.renderHook(() => useForm(fields));
+      const { result, waitForNextUpdate } = renderHook(() => useForm(fields));
 
-      await hooks.act(async () => {
+      await act(async () => {
         result.current.updateField('customValidationField', 'foo');
         await waitForNextUpdate();
       });
@@ -112,9 +110,9 @@ describe('useForm', () => {
 
     it('validates using an asyn validator', async () => {
       asyncValidate.mockResolvedValue('my async validation');
-      const { result, waitForNextUpdate } = hooks.renderHook(() => useForm(fields));
+      const { result, waitForNextUpdate } = renderHook(() => useForm(fields));
 
-      await hooks.act(async () => {
+      await act(async () => {
         result.current.updateField('asyncValidationField', 'foo');
         await waitForNextUpdate();
       });
@@ -125,11 +123,11 @@ describe('useForm', () => {
 
   describe('hasErrors', () => {
     it('returns true when there are errors', async () => {
-      const { result, waitForNextUpdate } = hooks.renderHook(() => useForm(fields));
+      const { result, waitForNextUpdate } = renderHook(() => useForm(fields));
 
       expect(result.current.hasErrors).toBe(false);
 
-      await hooks.act(async () => {
+      await act(async () => {
         result.current.updateField('requiredField', '');
         await waitForNextUpdate();
       });

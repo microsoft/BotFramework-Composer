@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData, LuType } from '@bfc/shared';
-import { FieldLabel, recognizerType, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
+import { FieldLabel, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
 import { JSONSchema7, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
 
@@ -38,8 +38,8 @@ const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
   const { const: $kind } = (schema?.properties?.$kind as { const: string }) || {};
   const intentName = new LuMetaData(new LuType($kind).toString(), designerId).toString();
 
-  const type = recognizerType(currentDialog);
-  const Editor = type === SDKKinds.LuisRecognizer && recognizers.find((r) => r.id === type)?.editor;
+  const recognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
+  const Editor = recognizer?.id === SDKKinds.LuisRecognizer && recognizer?.editor;
   const intentLabel = formatMessage('Expected responses (intent: #{intentName})', { intentName });
 
   return (

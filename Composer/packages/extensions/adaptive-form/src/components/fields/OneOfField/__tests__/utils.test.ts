@@ -51,6 +51,10 @@ describe('getOptions', () => {
         {
           $ref: '#/definitions/Microsoft.AnotherType',
         },
+        {
+          type: ['string' as const, 'number' as const],
+        },
+        {},
       ],
     };
 
@@ -63,7 +67,16 @@ describe('getOptions', () => {
 
     it('returns one of options', () => {
       const options = getOptions(schema, definitions).map((o) => o.key);
-      expect(options).toEqual(['my awesome string', 'boolean', 'number', 'an enum', 'dropdown', 'another type']);
+      expect(options).toEqual([
+        'my awesome string',
+        'boolean',
+        'number',
+        'an enum',
+        'dropdown',
+        'another type',
+        'string',
+        'unknown',
+      ]);
     });
   });
 });
@@ -118,6 +131,20 @@ describe('getSelectedOption', () => {
         },
       },
     },
+    {
+      key: 'array3',
+      text: 'array3',
+      data: {
+        schema: {
+          type: 'array',
+          items: [
+            {
+              type: 'boolean',
+            },
+          ],
+        },
+      },
+    },
   ];
 
   it('returns undefined if there are no options', () => {
@@ -146,6 +173,10 @@ describe('getSelectedOption', () => {
 
     it('returns the option that matches the first item type', () => {
       expect(getSelectedOption([123], options)).toEqual(options[4]);
+    });
+
+    it('can handle when items is an array', () => {
+      expect(getSelectedOption([true], options)).toEqual(options[5]);
     });
 
     it('returns the first option if no type match found', () => {
