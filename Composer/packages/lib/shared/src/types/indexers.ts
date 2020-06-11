@@ -85,6 +85,19 @@ export interface LuFile {
   empty: boolean;
   [key: string]: any;
 }
+
+export interface QnaSection {
+  Question: string;
+  Answer: string;
+}
+
+export interface QnaFile {
+  id: string;
+  content: string;
+  qnaSection?: QnaSection[];
+  [key: string]: any;
+}
+
 export interface CodeRange {
   startLineNumber: number;
   endLineNumber: number;

@@ -9,12 +9,6 @@ import { RegexIntentField } from './components/fields/RegexIntentField';
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
-    id: 'none',
-    displayName: () => formatMessage('None'),
-    isSelected: (data) => data === undefined,
-    handleRecognizerChange: (props) => props.onChange(undefined),
-  },
-  {
     id: SDKKinds.RegexRecognizer,
     displayName: () => formatMessage('Regular Expression'),
     editor: RegexIntentField,
@@ -24,6 +18,12 @@ const DefaultRecognizers: RecognizerSchema[] = [
     handleRecognizerChange: (props) => {
       props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
     },
+  },
+  {
+    id: 'Custom',
+    displayName: () => formatMessage('Custom'),
+    isSelected: (data) => typeof data === 'string',
+    handleRecognizerChange: (props) => props.onChange(''),
   },
 ];
 

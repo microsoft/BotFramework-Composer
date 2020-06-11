@@ -15,6 +15,7 @@ import { isAbsHosted } from '../utils/envUtil';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
+import { useQnaApi } from './qnaApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
@@ -32,6 +33,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     lgFiles,
     locale,
     luFiles,
+    qnaFiles,
     projectId,
     schemas,
     userSettings,
@@ -39,6 +41,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   } = state;
   const lgApi = useLgApi();
   const luApi = useLuApi();
+  const qnaApi = useQnaApi();
   const updateDialog = actions.updateDialog;
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
@@ -148,6 +151,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     },
     ...lgApi,
     ...luApi,
+    ...qnaApi,
     updateRegExIntent: updateRegExIntentHandler,
     navTo,
     onFocusEvent: focusEvent,
@@ -195,6 +199,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         schemas,
         lgFiles,
         luFiles,
+        qnaFiles,
         currentDialog,
         userSettings,
         designerId: get(editorData, '$designer.id'),
