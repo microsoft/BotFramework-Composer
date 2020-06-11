@@ -124,9 +124,9 @@ const schema: JSONSchema7 = {
         container: '<container>',
       },
       luis: {
-        endpointKey: '<endpoint key>',
-        endpoint: '<luis prediction endpoint>',
         authoringKey: '<authoring key>',
+        endpoint: '<luis prediction endpoint>',
+        endpointKey: '<endpoint key>',
         authoringEndpoint: '<luis authoring endpoint>',
         region: 'westus',
       },
