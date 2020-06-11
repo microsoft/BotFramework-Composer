@@ -21,26 +21,22 @@ function updateCurrentPath(req: Request, res: Response) {
 }
 
 async function createFolder(req: Request, res: Response) {
-  //const storageId = req.body.storageId;
   const path = req.body.path;
   const folderName = req.body.name;
   try {
     StorageService.createFolder(Path.join(path, folderName));
     res.status(200).json({ message: 'success' });
-    //res.status(200).json(await StorageService.getBlob(storageId, Path.join(path, folderName)));
   } catch (e) {
     res.status(400).json({ message: e.message });
   }
 }
 
 async function updateFolder(req: Request, res: Response) {
-  //const storageId = req.body.storageId;
   const path = req.body.path;
   const oldFolderName = req.body.oldName;
   const newFolderName = req.body.newName;
   try {
     StorageService.updateFolder(path, oldFolderName, newFolderName);
-    //res.status(200).json(await StorageService.getBlob(storageId, path));
     res.status(200).json({ message: 'success' });
   } catch (e) {
     res.status(400).json({ message: e.message });
