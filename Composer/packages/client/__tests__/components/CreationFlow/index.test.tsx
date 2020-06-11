@@ -66,7 +66,7 @@ describe('<CreationFlow/>', () => {
     storeContext.state.templateId = 'EchoBot';
     storeContext.actions.createProject = async (templateId, name, description, location) => {
       expect(templateId).toBe(expectedTemplateId);
-      expect(location === '\\test-folder\\Desktop' || location === '/test-folder/Desktop').toBeTruthy();
+      expect(location === '').toBeTruthy();
     };
     storeContext.state.focusedStorageFolder = {
       name: 'Desktop',

@@ -11,8 +11,10 @@ describe('<FileSelector/>', () => {
   const onFileChosen = jest.fn();
   const checkShowItem = () => true;
   const onCurrentPathUpdate = jest.fn();
+  const createFolder = jest.fn();
+  const updateFolder = jest.fn();
   const operationMode = { write: true, read: true };
-
+  const storages = [{ id: 'default' }];
   const focusedStorageFolder: StorageFolder = {
     name: 'Desktop',
     parent: 'C:/test-folder',
@@ -34,8 +36,11 @@ describe('<FileSelector/>', () => {
       <FileSelector
         isWindows
         checkShowItem={checkShowItem}
+        createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
         operationMode={operationMode}
+        storages={storages}
+        updateFolder={updateFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
         onFileChosen={onFileChosen}
       />
