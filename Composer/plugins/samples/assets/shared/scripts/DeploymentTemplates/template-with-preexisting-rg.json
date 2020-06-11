@@ -381,7 +381,9 @@
       "value": {
         "endpointKey": "[if(parameters('shouldCreateLuisResource'), listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName')),'2017-04-18').key1, '')]",
         "authoringKey": "[if(parameters('shouldCreateAuthoringResource'), listKeys(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName')),'2017-04-18').key1, parameters('luisAuthoringKey'))]",
-        "region": "[parameters('luisServiceLocation')]"
+        "region": "[parameters('luisServiceLocation')]",
+        "endpoint": "[if(parameters('shouldCreateLuisResource'), reference(resourceId('Microsoft.CognitiveServices/accounts', parameters('luisServiceName'))).endpoint, '')]",
+        "authoringEndpoint": "[if(parameters('shouldCreateAuthoringResource'), reference(resourceId('Microsoft.CognitiveServices/accounts', variables('LuisAuthoringAccountName'))).endpoint, '')]"
       }
     }
   }
