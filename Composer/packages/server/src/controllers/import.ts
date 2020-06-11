@@ -4,6 +4,8 @@
 import path from 'path';
 import fs from 'fs';
 
+import * as unzipper from 'unzip-stream';
+import axios from 'axios';
 import { PluginLoader } from '@bfc/plugin-loader';
 import downloadNpmPackage from 'download-npm-package';
 
@@ -25,46 +27,9 @@ export const ImportController = {
 
     if (packageName) {
       try {
-        const files = await fetchAndExtract(packageName, version);
-
-        if (files.length) {
-          console.log('**************************************************************************');
-          // copy declarative files into this project's imported dialogs folder
-          if (!currentProject.fileStorage.exists(path.join(currentProject.dataDir, 'importedDialogs', packageName))) {
-            await currentProject.fileStorage.mkDir(path.join(currentProject.dataDir, 'importedDialogs', packageName), {
-              recursive: true,
-            });
-          }
-
-          for (let f = 0; f < files.length; f++) {
-            const file = files[f];
-            await currentProject.fileStorage.mkDir(
-              path.join(currentProject.dataDir, 'importedDialogs', packageName, file.path),
-              {
-                recursive: true,
-              }
-            );
-
-            // process some files
-            // * rename common.lg to something else
-            // * rename dialogs into namespace?
-            // * update references to renamed dialogs, lu and LG files
-            // * if schema included, rebuild schema
-            // * add an import statement for new common.lg into main common.lg?
-            // ^^ for an LG library, this would be helpful - but not necessary for all LG files
-
-            console.log('WRITE FILE', file.filename);
-            await currentProject.fileStorage.writeFile(
-              path.join(currentProject.dataDir, 'importedDialogs', packageName, file.filename),
-              file.content
-            );
-          }
-        }
-
-        console.log('**************************************************************************');
-
-        res.json(files);
-      } catch (err) {
+        const files = await importRemoteAsset(currentProject, packageName, version);
+        return res.json(files);
+      } catch {
         return res.status(500).json(err);
       }
     } else {
@@ -73,17 +38,82 @@ export const ImportController = {
   },
 };
 
-const fetchAndExtract = async (uri, version) => {
-  // process package as an npm module.
-  if (!version) {
-    version = 'latest';
+const importRemoteAsset = async (currentProject, packageName, version) => {
+  const files = await fetchAndExtract(packageName, version);
+
+  if (files.length) {
+    // copy declarative files into this project's imported dialogs folder
+    if (!currentProject.fileStorage.exists(path.join(currentProject.dataDir, 'importedDialogs', packageName))) {
+      await currentProject.fileStorage.mkDir(path.join(currentProject.dataDir, 'importedDialogs', packageName), {
+        recursive: true,
+      });
+    }
+
+    for (let f = 0; f < files.length; f++) {
+      const file = files[f];
+      await currentProject.fileStorage.mkDir(
+        path.join(currentProject.dataDir, 'importedDialogs', packageName, file.path),
+        {
+          recursive: true,
+        }
+      );
+
+      // process some files??
+      // * rename common.lg to something else
+      // * rename dialogs into namespace?
+      // * update references to renamed dialogs, lu and LG files
+      // * if schema included, rebuild schema
+      // * add an import statement for new common.lg into main common.lg?
+      // ^^ for an LG library, this would be helpful - but not necessary for all LG files
+
+      await currentProject.fileStorage.writeFile(
+        path.join(currentProject.dataDir, 'importedDialogs', packageName, file.filename),
+        file.content
+      );
+    }
   }
 
-  // download and extract the files from Npm
-  await downloadNpmPackage({
-    arg: `${uri}@${version}`,
-    dir: TMP_DIR,
-  });
+  return files;
+};
+
+const fetchAndExtract = async (uri, version) => {
+  // process package as an npm module.
+
+  let type = 'npm';
+
+  // github packages are in the form of user/repo and potentially #version
+  if (uri.match(/\//)) {
+    type = 'github';
+  }
+
+  if (!version) {
+    switch (type) {
+      case 'npm':
+        version = 'latest';
+        break;
+      case 'github':
+        version = 'master';
+        break;
+    }
+  }
+
+  switch (type) {
+    case 'npm':
+      // download and extract the files from Npm
+      await downloadNpmPackage({
+        arg: `${uri}@${version}`,
+        dir: TMP_DIR,
+      });
+      break;
+    case 'github':
+      const stream = await axios({
+        method: 'get',
+        url: `https://github.com/${uri}/archive/${version}.zip`,
+        responseType: 'stream',
+      });
+      stream.data.pipe(unzipper.Extract(TMP_DIR));
+      break;
+  }
 
   const patterns: string[] = [
     '**/*.dialog',
