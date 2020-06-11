@@ -220,15 +220,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           configuration,
         },
       ]);
-      await actions.setSettings(
-        projectId,
-        botName,
-        {
-          ...settings,
-          publishTargets: _target,
-        },
-        undefined
-      );
+      await actions.setSettings(projectId, { ...settings, publishTargets: _target });
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
@@ -248,15 +240,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         configuration,
       };
 
-      await actions.setSettings(
-        projectId,
-        botName,
-        {
-          ...settings,
-          publishTargets: _targets,
-        },
-        undefined
-      );
+      await actions.setSettings(projectId, { ...settings, publishTargets: _targets });
 
       onSelectTarget(name);
     },
@@ -297,7 +281,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   const rollbackToVersion = useMemo(
     () => async (version) => {
-      const sensitiveSettings = settingsStorage.get(botName);
+      const sensitiveSettings = settingsStorage.get(projectId);
       await actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
     },
     [projectId, selectedTarget]
@@ -307,7 +291,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     () => async (comment) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
-        const sensitiveSettings = settingsStorage.get(botName);
+        const sensitiveSettings = settingsStorage.get(projectId);
         await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
         // update the target with a lastPublished date
@@ -322,15 +306,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           }
         });
 
-        await actions.setSettings(
-          projectId,
-          botName,
-          {
-            ...settings,
-            publishTargets: updatedPublishTargets,
-          },
-          undefined
-        );
+        await actions.setSettings(projectId, { ...settings, publishTargets: updatedPublishTargets });
       }
     },
     [projectId, selectedTarget, settings.publishTargets]
@@ -356,15 +332,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
           const _target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await actions.setSettings(
-            projectId,
-            botName,
-            {
-              ...settings,
-              publishTargets: _target,
-            },
-            undefined
-          );
+          await actions.setSettings(projectId, { ...settings, publishTargets: _target });
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');
