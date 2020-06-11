@@ -115,6 +115,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const shell = useShell('ProjectTree');
   const triggerApi = useTriggerApi(shell.api);
+  const shellData = shell.data;
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
@@ -339,6 +340,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
+      recognizer: {
+        $kind: SDKKinds.CrossTrainedRecognizerSet,
+        recognizers: [`${data.name}.${shellData.locale}.lu`, `${data.name}.${shellData.locale}.qna`],
+      },
     });
     if (seededContent.triggers && seededContent.triggers[0]) {
       seededContent.triggers[0].actions = state.actionsSeed;

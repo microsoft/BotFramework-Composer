@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useEffect } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
-import { MicrosoftIRecognizer } from '@bfc/shared';
+import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
@@ -12,10 +12,23 @@ import PluginContext from '../../PluginContext';
 import { FieldLabel } from '../FieldLabel';
 
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
-  const { value, id, label, description, uiOptions, required } = props;
+  const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
   const { recognizers } = useContext(PluginContext);
 
+  useEffect(() => {
+    if (value === undefined) {
+      const { qnaFiles, luFiles, currentDialog, locale } = shellData;
+      const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
+      const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
+      if (qnaFile && luFile) {
+        onChange({
+          $kind: SDKKinds.CrossTrainedRecognizerSet,
+          recognizers: [`${luFile.id.split('.')[0]}.lu`, `${qnaFile.id.split('.')[0]}.qna`],
+        });
+      }
+    }
+  });
   const options = useMemo(() => {
     return recognizers.map((r) => ({
       key: r.id,
@@ -24,7 +37,8 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   }, [recognizers]);
 
   const selectedType = useMemo(() => {
-    const selected = recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
+    const selected =
+      value === undefined ? [recognizers[0].id] : recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
 
     if (selected.length !== 1) {
       console.error(

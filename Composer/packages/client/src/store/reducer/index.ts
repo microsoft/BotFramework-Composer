@@ -85,7 +85,12 @@ const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogIn
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
   schemas.sdk.content = processSchema(id, schemas.sdk.content);
-  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
+  const { dialogs, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(
+    files,
+    botName,
+    schemas.sdk.content,
+    locale
+  );
   state.projectId = id;
   state.dialogs = dialogs;
   state.botEnvironment = botEnvironment || state.botEnvironment;
@@ -96,6 +101,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.skills = response.data.skills;
   state.schemas = schemas;
   state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
+  state.qnaFiles = qnaFiles;
   state.settings = settings;
   state.locale = locale;
   state.diagnostics = diagnostics;
@@ -226,6 +232,38 @@ const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
   return state;
 };
 
+const createQnaFile: ReducerFunc = (state, { id, content }) => {
+  const { qnaFiles, locale } = state;
+  id = `${id}.${locale}`;
+  if (qnaFiles.find((qna) => qna.id === id)) {
+    state.error = {
+      message: `${id} ${formatMessage(`qna file already exist`)}`,
+      summary: formatMessage('Creation Rejected'),
+    };
+    return state;
+  }
+
+  const qnaFile = { id, content };
+  state.qnaFiles.push(qnaFile);
+  return state;
+};
+
+const removeQnaFile: ReducerFunc = (state, { id }) => {
+  state.qnaFiles = state.qnaFiles.filter((file) => getBaseName(file.id) !== id && file.id !== id);
+  return state;
+};
+
+const updateQnaTemplate: ReducerFunc = (state, { id, content }) => {
+  state.qnaFiles = state.qnaFiles.map((qnaFile) => {
+    if (qnaFile.id === id) {
+      return { ...qnaFile, content };
+    }
+    return qnaFile;
+  });
+
+  return state;
+};
+
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map((dialog) => {
     if (dialog.id === id) {
@@ -267,6 +305,7 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs.push(dialog);
   state = createLgFile(state, { id, content: '' });
   state = createLuFile(state, { id, content: '' });
+  state = createQnaFile(state, { id, content: '' });
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
   delete state.onCreateDialogComplete;
@@ -656,6 +695,9 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_LU]: updateLuTemplate,
   [ActionTypes.CREATE_LU]: createLuFile,
   [ActionTypes.REMOVE_LU]: removeLuFile,
+  [ActionTypes.UPDATE_QNA]: updateQnaTemplate,
+  [ActionTypes.CREATE_QNA]: createQnaFile,
+  [ActionTypes.REMOVE_QNA]: removeQnaFile,
   [ActionTypes.PUBLISH_LU_SUCCCESS]: publishLuisSuccess,
   [ActionTypes.PUBLISH_LU_FAILED]: publishLuisFailure,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,

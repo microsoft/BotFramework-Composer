@@ -21,6 +21,9 @@ const actionType2ChangeType = {
   [ActionTypes.UPDATE_LU]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Lu },
   [ActionTypes.CREATE_LU]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Lu },
   [ActionTypes.REMOVE_LU]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Lu },
+  [ActionTypes.UPDATE_QNA]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Qna },
+  [ActionTypes.CREATE_QNA]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Qna },
+  [ActionTypes.REMOVE_QNA]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Qna },
   [ActionTypes.CREATE_SKILL_MANIFEST]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
@@ -166,13 +169,14 @@ class FilePersistence {
   private _getDialogFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
     const projectId = currentState.projectId;
     const fileChanges: IFileChange[] = [];
-    let { dialogs, luFiles, lgFiles } = currentState;
+    let { dialogs, luFiles, lgFiles, qnaFiles } = currentState;
 
     //if delete dialog the change need to get changes from previousState
     if (changeType === ChangeType.DELETE) {
       dialogs = previousState.dialogs;
       luFiles = previousState.luFiles;
       lgFiles = previousState.lgFiles;
+      qnaFiles = previousState.qnaFiles;
     }
 
     //create and delete need to delete/create lu and lg files
@@ -186,6 +190,11 @@ class FilePersistence {
         .filter((lg) => getBaseName(lg.id) === id)
         .forEach((lg) => {
           fileChanges.push(this._createChange(lg, FileExtensions.Lg, changeType, projectId));
+        });
+      qnaFiles
+        .filter((qna) => getBaseName(qna.id) === id)
+        .forEach((qna) => {
+          fileChanges.push(this._createChange(qna, FileExtensions.Qna, changeType, projectId));
         });
     }
     const dialog = dialogs.find((dialog) => dialog.id === id);
@@ -205,6 +214,21 @@ class FilePersistence {
 
     const lu = luFiles.find((lu) => lu.id === id);
     fileChanges.push(this._createChange(lu, FileExtensions.Lu, changeType, projectId));
+    return fileChanges;
+  }
+
+  private _getQnaFileChanges(
+    id: string,
+    previousState: State,
+    currentState: State,
+    changeType: ChangeType,
+    projectId: string
+  ) {
+    const fileChanges: IFileChange[] = [];
+    const { qnaFiles } = currentState;
+
+    const qna = qnaFiles.find((qna) => qna.id === id);
+    fileChanges.push(this._createChange(qna, FileExtensions.Qna, changeType, projectId));
     return fileChanges;
   }
 
@@ -263,6 +287,16 @@ class FilePersistence {
       }
       case FileExtensions.Lu: {
         fileChanges = this._getLuFileChanges(
+          targetId,
+          previousState,
+          currentState,
+          changeType,
+          action.payload.projectId
+        );
+        break;
+      }
+      case FileExtensions.Qna: {
+        fileChanges = this._getQnaFileChanges(
           targetId,
           previousState,
           currentState,

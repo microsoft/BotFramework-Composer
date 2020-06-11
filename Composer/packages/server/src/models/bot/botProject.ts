@@ -46,6 +46,7 @@ const BotStructureTemplate = {
     entry: '${DIALOGNAME}.dialog',
     lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+    qna: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.qna',
   },
   skillManifests: 'manifests/${MANIFESTNAME}.json',
 };
@@ -237,6 +238,7 @@ export class BotProject {
       templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
       templateInterpolate(BotStructureTemplate.dialogs.lg, { LOCALE: '*', DIALOGNAME: '*' }),
       templateInterpolate(BotStructureTemplate.dialogs.lu, { LOCALE: '*', DIALOGNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogs.qna, { LOCALE: '*', DIALOGNAME: '*' }),
     ];
     for (const pattern of entryPatterns) {
       const root = this.dataDir;
@@ -423,6 +425,11 @@ export class BotProject {
           MANIFESTNAME: id,
         }
       );
+    } else if (fileType === '.qna') {
+      dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.qna)), {
+        DIALOGNAME,
+        LOCALE,
+      });
     }
     return dir;
   };
@@ -505,7 +512,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.qna', 'manifests/*.json'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
