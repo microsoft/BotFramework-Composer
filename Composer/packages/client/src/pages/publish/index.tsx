@@ -281,7 +281,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   const rollbackToVersion = useMemo(
     () => async (version) => {
-      const sensitiveSettings = settingsStorage.get(botName);
+      const sensitiveSettings = settingsStorage.get(projectId);
       await actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
     },
     [projectId, selectedTarget]
@@ -291,7 +291,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     () => async (comment) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
-        const sensitiveSettings = settingsStorage.get(botName);
+        const sensitiveSettings = settingsStorage.get(projectId);
         await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
         // update the target with a lastPublished date
