@@ -84,7 +84,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   closeErrorPopup() {
     // if this is an error resulting in an http 409 rejection, reload the project data automatically.
-    if (this.context.state.error && this.context.state.error.status && this.context.state.error.status === 409) {
+    if (this.context.state.error?.status === 409) {
       this.context.actions.fetchProject();
     }
     // reset the error state which will close the popup.
