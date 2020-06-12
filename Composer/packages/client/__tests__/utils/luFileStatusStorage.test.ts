@@ -4,27 +4,27 @@
 import luFileStatusStorage from '../../src/utils/luFileStatusStorage';
 
 const fileIds = ['1', '2', '3', '4'];
-const botName = 'test_status';
+const projectId = '11111.11111111';
 
-afterAll(() => luFileStatusStorage.removeAllStatuses(botName));
+afterAll(() => luFileStatusStorage.removeAllStatuses(projectId));
 
 describe('luFileStatusStorage', () => {
   it('check file status', () => {
-    luFileStatusStorage.checkFileStatus(botName, fileIds);
-    expect(Object.keys(luFileStatusStorage.get(botName)).length).toEqual(4);
+    luFileStatusStorage.checkFileStatus(projectId, fileIds);
+    expect(Object.keys(luFileStatusStorage.get(projectId)).length).toEqual(4);
   });
 
   it('the statuses after publishing', () => {
-    luFileStatusStorage.publishAll(botName);
-    const result = luFileStatusStorage.get(botName);
+    luFileStatusStorage.publishAll(projectId);
+    const result = luFileStatusStorage.get(projectId);
     Object.keys(result).forEach((id) => {
       expect(result[id]).toBeTruthy();
     });
   });
 
   it('update one luis file', () => {
-    luFileStatusStorage.updateFileStatus(botName, fileIds[0]);
-    const result = luFileStatusStorage.get(botName);
+    luFileStatusStorage.updateFileStatus(projectId, fileIds[0]);
+    const result = luFileStatusStorage.get(projectId);
     expect(result[fileIds[0]]).toBeFalsy();
     expect(result[fileIds[1]]).toBeTruthy();
     expect(result[fileIds[2]]).toBeTruthy();
@@ -32,8 +32,8 @@ describe('luFileStatusStorage', () => {
   });
 
   it('remove one luis file', () => {
-    luFileStatusStorage.removeFileStatus(botName, fileIds[0]);
-    const result = luFileStatusStorage.get(botName);
+    luFileStatusStorage.removeFileStatus(projectId, fileIds[0]);
+    const result = luFileStatusStorage.get(projectId);
     expect(result[fileIds[0]]).toBeUndefined;
     expect(result[fileIds[1]]).toBeTruthy();
     expect(result[fileIds[2]]).toBeTruthy();
@@ -41,8 +41,8 @@ describe('luFileStatusStorage', () => {
   });
 
   it('remove all statuses', () => {
-    luFileStatusStorage.removeAllStatuses(botName);
-    const result = luFileStatusStorage.get(botName);
+    luFileStatusStorage.removeAllStatuses(projectId);
+    const result = luFileStatusStorage.get(projectId);
     expect(result).toBeUndefined;
   });
 });
