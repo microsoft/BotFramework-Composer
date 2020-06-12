@@ -100,11 +100,12 @@ export function prepareAxios(store: Store) {
 
 const MAX_WAIT = 1000 * 60 * 2; // 2 minutes
 
-export async function loginPopup(): Promise<string | null> {
+export async function loginPopup(url = '', callbackUrl = ''): Promise<string | null> {
   const windowLoc = window.location;
 
   return new Promise((resolve) => {
-    const loginUrl = BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
+    const loginUrl =
+      url || BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
 
     /**
      * window.innerWidth displays browser window"s height and width excluding toolbars
@@ -139,8 +140,10 @@ export async function loginPopup(): Promise<string | null> {
       try {
         if (popup) {
           if (popup.location.href.includes(windowLoc.hostname)) {
+            console.log(popup.location);
             const { access_token, error } = querystring.parse(popup.location.hash);
-
+            const { query } = querystring.parseUrl(popup.location.href);
+            console.log(query);
             if (access_token) {
               popup.close();
               clearInterval(popupTimer);
@@ -149,7 +152,11 @@ export async function loginPopup(): Promise<string | null> {
               resolve(token);
             } else if (error) {
               resolve(null);
+            } else if (query) {
+              console.log(query);
             }
+          } else if (popup.location.href !== 'about:blank') {
+            console.log(popup.location.href);
           }
         } else {
           // clear the interval if there is no popup to inspect.
@@ -166,7 +173,7 @@ export async function loginPopup(): Promise<string | null> {
         clearInterval(popupTimer);
         resolve(null);
       }
-    }, 1);
+    }, 100);
   });
 }
 
@@ -214,3 +221,11 @@ export async function refreshToken(): Promise<string> {
     }, 1);
   });
 }
+
+export const getAccessTokenInCache = () => {
+  return window.localStorage.getItem('access_token');
+};
+
+export const setAccessToken = (value: any) => {
+  window.localStorage.setItem('access_token', value);
+};

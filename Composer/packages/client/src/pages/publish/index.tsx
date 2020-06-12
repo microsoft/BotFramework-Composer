@@ -22,6 +22,7 @@ import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';
+import { ProvisionDialog } from './provisionDialog';
 
 interface PublishPageProps extends RouteComponentProps<{}> {
   targetName?: string;
@@ -38,6 +39,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   const [showLog, setShowLog] = useState(false);
   const [publishDialogHidden, setPublishDialogHidden] = useState(true);
+  const [provisionDialogHidden, setProvisionDialogHidden] = useState(true);
 
   // items to show in the list
   const [thisPublishHistory, setThisPublishHistory] = useState<IStatus[]>([]);
@@ -119,6 +121,22 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       },
       align: 'left',
       disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
+      dataTestid: 'publishPage-ToolBar-Log',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Provision'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'ClipboardList',
+        },
+        onClick: async () => {
+          // get all subscriptions for select
+          await actions.getSubscriptions();
+          setProvisionDialogHidden(false);
+        },
+      },
+      align: 'left',
       dataTestid: 'publishPage-ToolBar-Log',
     },
   ];
@@ -342,6 +360,14 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     [settings.publishTargets, projectId, botName]
   );
 
+  // const provision = useMemo(
+  //   () => async (value) => {
+  //     // popup dialog
+  //     await actions.provision({ accessToken: window.localStorage.getItem('adal.idtoken'), ...value });
+  //   },
+  //   [projectId]
+  // );
+
   return (
     <Fragment>
       <Dialog
@@ -364,6 +390,14 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       </Dialog>
       {!publishDialogHidden && (
         <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
+      )}
+      {!provisionDialogHidden && (
+        <ProvisionDialog
+          onDismiss={() => setProvisionDialogHidden(true)}
+          onSubmit={(value) => {
+            console.log(value);
+          }}
+        />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
       <ToolBar toolbarItems={toolbarItems} />

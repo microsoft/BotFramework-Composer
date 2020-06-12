@@ -1,0 +1,13 @@
+{
+  "name": "@bfc/plugin-azurelogin",
+  "version": "1.0.0",
+  "description": "Login to Azure AD",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "extendsComposer": true,
+  "dependencies": {
+  }
+}
