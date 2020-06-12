@@ -119,6 +119,9 @@ export const ImportController = {
       if (uri.match(/\//)) {
         type = 'github';
       }
+      if (uri.match(/\./)) {
+        type = 'nuget';
+      }
 
       if (!version) {
         switch (type) {
@@ -127,6 +130,9 @@ export const ImportController = {
             break;
           case 'github':
             version = 'master';
+            break;
+          case 'nuget':
+            version = null;
             break;
         }
       }
@@ -148,6 +154,19 @@ export const ImportController = {
           stream = await axios({
             method: 'get',
             url: `https://github.com/${uri}/archive/${version}.zip`,
+            responseType: 'stream',
+          });
+          stream.data.pipe(
+            unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
+              resolve(await filterFiles());
+            })
+          );
+          break;
+        case 'nuget':
+          console.log(`Fetching from Nuget`);
+          stream = await axios({
+            method: 'get',
+            url: `https://www.nuget.org/api/v2/package/${uri}${version ? `/${version}` : ''}`,
             responseType: 'stream',
           });
           stream.data.pipe(
