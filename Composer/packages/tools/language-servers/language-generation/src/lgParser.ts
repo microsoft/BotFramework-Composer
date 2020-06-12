@@ -6,6 +6,8 @@ import path from 'path';
 import { ResolverResource } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
 
+const asarPathFolder = 'app.asar';
+const asarUnpackFolder = 'app.asar.unpacked';
 export interface WorkerMsg {
   id: string;
   error?: any;
@@ -19,7 +21,8 @@ export class LgParser {
   private rejects = {};
 
   constructor() {
-    this.worker = new Worker(path.join(__dirname, '../lib/lgWorker.js'));
+    const realPath = path.join(__dirname, '../lib/lgWorker.js');
+    this.worker = new Worker(realPath.replace(asarPathFolder, asarUnpackFolder));
     this.worker.on('message', this.handleMsg.bind(this));
   }
 

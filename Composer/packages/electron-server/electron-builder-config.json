@@ -1,6 +1,6 @@
 {
   "productName": "Bot Framework Composer",
-  "asar": false,
+  "asar": true,
   "appId": "com.microsoft.botframework.composer",
   "copyright": "Copyright © 2020 Microsoft Corporation",
   "electronDownload": {
@@ -13,7 +13,8 @@
   "asarUnpack": [
     "build/assets",
     "build/templates",
-    "resources/composerIcon_1024x1024.png"
+    "resources/composerIcon_1024x1024.png",
+    "**/node_modules/**/*"
   ],
   "files": [
     "build",
