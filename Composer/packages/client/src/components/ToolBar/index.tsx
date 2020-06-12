@@ -6,10 +6,36 @@ import { jsx } from '@emotion/core';
 import { useCallback, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { DialogInfo } from '@bfc/shared';
+
+import { useStoreContext } from '../../hooks';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
-function itemList(action, index) {
+export type IToolBarItem = {
+  type: string;
+  element?: any;
+  text?: string;
+  buttonProps?: {
+    iconProps: {
+      iconName: string;
+    };
+    onClick: () => void;
+  };
+  align?: string;
+  dataTestid?: string;
+  disabled?: boolean;
+};
+
+type ToolbarProps = {
+  toolbarItems?: Array<IToolBarItem>;
+  currentDialog?: DialogInfo;
+  onCreateDialogComplete?: (...args: any[]) => void;
+  openNewTriggerModal?: () => void;
+  showSkillManifestModal?: () => void;
+};
+
+function itemList(action: IToolBarItem, index: number) {
   if (action.type === 'element') {
     return <Fragment key={index}>{action.element}</Fragment>;
   } else {
@@ -30,29 +56,32 @@ function itemList(action, index) {
 // support ActionButton or React Elements, the display order is array index.
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
-export function ToolBar(props) {
+export function ToolBar(props: ToolbarProps) {
   const {
-    toolbarItems,
-    actions,
-    projectId,
+    toolbarItems = [],
     currentDialog,
-    openNewTriggerModal,
     onCreateDialogComplete,
-    onboardingAddCoachMarkRef,
+    openNewTriggerModal,
     showSkillManifestModal,
-    openDeleteBotModal,
     ...rest
   } = props;
-  let left = [];
-  let right = [];
-  if (toolbarItems && toolbarItems.length > 0) {
-    left = toolbarItems.filter((item) => {
-      return item.align === 'left';
-    });
-    right = toolbarItems.filter((item) => {
-      return item.align === 'right';
-    });
+  const {
+    actions: { onboardingAddCoachMarkRef, createDialogBegin, exportToZip },
+    state: { projectId },
+  } = useStoreContext();
+  const left: IToolBarItem[] = [];
+  const right: IToolBarItem[] = [];
+
+  for (const item of toolbarItems) {
+    switch (item.align) {
+      case 'left':
+        left.push(item);
+        break;
+      case 'right':
+        right.push(item);
+    }
   }
+
   const addNewRef = useCallback((addNew) => {
     onboardingAddCoachMarkRef({ addNew });
   }, []);
@@ -60,7 +89,7 @@ export function ToolBar(props) {
   return (
     <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
       <div css={leftActions}>
-        {window.location.href.indexOf('/dialogs/') !== -1 && (
+        {window.location.href.includes('/dialogs/') && (
           <div ref={addNewRef}>
             <CommandButton
               css={actionButton}
@@ -72,15 +101,19 @@ export function ToolBar(props) {
                     'data-testid': 'FlyoutNewDialog',
                     key: 'adddialog',
                     text: formatMessage('Add new dialog'),
-                    onClick: () => actions.createDialogBegin([], onCreateDialogComplete),
+                    onClick: () => {
+                      createDialogBegin([], onCreateDialogComplete);
+                    },
                   },
                   {
                     'data-testid': 'FlyoutNewTrigger',
                     key: 'addtrigger',
                     text: formatMessage(`Add new trigger on {displayName}`, {
-                      displayName: currentDialog ? currentDialog.displayName : '',
+                      displayName: currentDialog?.displayName ?? '',
                     }),
-                    onClick: () => openNewTriggerModal(),
+                    onClick: () => {
+                      openNewTriggerModal?.();
+                    },
                   },
                 ],
               }}
@@ -89,7 +122,7 @@ export function ToolBar(props) {
           </div>
         )}
         {left.map(itemList)}{' '}
-        {window.location.href.indexOf('/dialogs/') !== -1 && (
+        {window.location.href.includes('/dialogs/') && (
           <CommandButton
             css={actionButton}
             iconProps={{ iconName: 'OpenInNewWindow' }}
@@ -98,12 +131,16 @@ export function ToolBar(props) {
                 {
                   key: 'zipexport',
                   text: formatMessage('Export assets to .zip'),
-                  onClick: () => actions.exportToZip({ projectId }),
+                  onClick: () => {
+                    exportToZip({ projectId });
+                  },
                 },
                 {
                   key: 'exportAsSkill',
                   text: formatMessage('Export as skill'),
-                  onClick: showSkillManifestModal,
+                  onClick: () => {
+                    showSkillManifestModal?.();
+                  },
                 },
               ],
             }}
