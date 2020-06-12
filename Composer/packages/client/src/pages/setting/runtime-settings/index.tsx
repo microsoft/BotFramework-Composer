@@ -23,7 +23,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
   const changeEnabled = (_, on) => {
-    actions.setSettings(projectId, botName, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
+    actions.setSettings(projectId, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
   };
 
   const updateSetting = (field) => (e, newValue) => {
@@ -34,7 +34,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       error = 'This is a required field.';
     }
 
-    actions.setSettings(projectId, botName, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
+    actions.setSettings(projectId, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
 
     if (valid) {
       setFormDataErrors({ ...formDataErrors, [field]: '' });
