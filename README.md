@@ -28,6 +28,7 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 - To learn about the Bot Framework Composer, read the [documentation][5].
 - To get yourself familiar with the Composer, read [Introduction to Bot Framework Composer][1].
 - [Create your first bot][3]!
+- To find the most recent release and learn what has changed in Bot Framework Composer, see the [latest release][204].
 
 
 ## Build Composer Locally
@@ -114,3 +115,4 @@ the [Security TechCenter][103].
 [201]: https://aka.ms/bf-composer-download-win
 [202]: https://aka.ms/bf-composer-download-linux
 [203]: https://aka.ms/bf-composer-download-mac
+[204]: https://github.com/microsoft/BotFramework-Composer/releases/latest
