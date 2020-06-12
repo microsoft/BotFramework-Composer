@@ -29,7 +29,7 @@ export const ImportController = {
       try {
         const files = await importRemoteAsset(currentProject, packageName, version);
         return res.json(files);
-      } catch {
+      } catch (err) {
         return res.status(500).json(err);
       }
     } else {
@@ -76,62 +76,77 @@ const importRemoteAsset = async (currentProject, packageName, version) => {
   return files;
 };
 
-const fetchAndExtract = async (uri, version) => {
+const fetchAndExtract = async (
+  uri,
+  version
+): Promise<{ filename: string; fullpath: string; path: string; content: string }[]> => {
   // process package as an npm module.
 
-  let type = 'npm';
+  const filterFiles = async () => {
+    const patterns: string[] = [
+      '**/*.dialog',
+      '**/*.lg',
+      '**/*.lu',
+      'manifests/*.json',
+      '!(generated/**)',
+      '!(runtime/**)',
+    ];
+    const ldfs = new LocalDiskStorage();
+    const files = await ldfs.glob(patterns, path.join(TMP_DIR, uri));
 
-  // github packages are in the form of user/repo and potentially #version
-  if (uri.match(/\//)) {
-    type = 'github';
-  }
+    return files.map((f) => {
+      return {
+        filename: f,
+        fullpath: path.join(TMP_DIR, uri, f),
+        path: path.dirname(path.join(f)),
+        content: fs.readFileSync(path.join(TMP_DIR, uri, f), 'utf8'),
+      };
+    });
+  };
 
-  if (!version) {
+  return new Promise(async (resolve, reject) => {
+    let type = 'npm';
+
+    // github packages are in the form of user/repo and potentially #version
+    if (uri.match(/\//)) {
+      type = 'github';
+    }
+
+    if (!version) {
+      switch (type) {
+        case 'npm':
+          version = 'latest';
+          break;
+        case 'github':
+          version = 'master';
+          break;
+      }
+    }
+
+    let stream;
+
     switch (type) {
       case 'npm':
-        version = 'latest';
+        // download and extract the files from Npm
+        await downloadNpmPackage({
+          arg: `${uri}@${version}`,
+          dir: TMP_DIR,
+        });
+        resolve(await filterFiles());
         break;
       case 'github':
-        version = 'master';
+        stream = await axios({
+          method: 'get',
+          url: `https://github.com/${uri}/archive/${version}.zip`,
+          responseType: 'stream',
+        });
+        stream.data.pipe(
+          unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
+            console.log('EXTRACTED GITHUB ZIP FILE!!');
+            resolve(await filterFiles());
+          })
+        );
         break;
     }
-  }
-
-  switch (type) {
-    case 'npm':
-      // download and extract the files from Npm
-      await downloadNpmPackage({
-        arg: `${uri}@${version}`,
-        dir: TMP_DIR,
-      });
-      break;
-    case 'github':
-      const stream = await axios({
-        method: 'get',
-        url: `https://github.com/${uri}/archive/${version}.zip`,
-        responseType: 'stream',
-      });
-      stream.data.pipe(unzipper.Extract(TMP_DIR));
-      break;
-  }
-
-  const patterns: string[] = [
-    '**/*.dialog',
-    '**/*.lg',
-    '**/*.lu',
-    'manifests/*.json',
-    '!(generated/**)',
-    '!(runtime/**)',
-  ];
-  const ldfs = new LocalDiskStorage();
-  const files = await ldfs.glob(patterns, path.join(TMP_DIR, uri));
-
-  return files.map((f) => {
-    return {
-      filename: f,
-      fullpath: path.join(TMP_DIR, uri, f),
-      path: path.dirname(path.join(f)),
-      content: fs.readFileSync(path.join(TMP_DIR, uri, f), 'utf8'),
-    };
   });
 };
