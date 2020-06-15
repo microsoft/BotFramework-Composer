@@ -183,7 +183,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
               disabled={hasErrors}
-              text={formatMessage('Next')}
+              text={formatMessage('OK')}
               onClick={handleSubmit}
             />
           </DialogFooter>
