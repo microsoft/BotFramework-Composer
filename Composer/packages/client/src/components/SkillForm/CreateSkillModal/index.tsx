@@ -181,7 +181,12 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
               onChange={updateForm('manifestUrl')}
             />
             {isValidating && (
-              <Spinner css={SpinnerLabel} label="Validating..." labelPosition="right" size={SpinnerSize.medium} />
+              <Spinner
+                css={SpinnerLabel}
+                label={formatMessage('Validating...')}
+                labelPosition="right"
+                size={SpinnerSize.medium}
+              />
             )}
             <TextField
               css={FormFieldEditName}

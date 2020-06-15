@@ -24,7 +24,7 @@ const createDropdownOption = (pageCount: number) => {
 };
 
 export const Pagination: React.FC<IPaginationProps> = (props) => {
-  const [index, setIndex] = useState<number>(0);
+  const [index, setIndex] = useState(0);
   const { pageCount, onChange } = props;
 
   useEffect(() => {

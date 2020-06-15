@@ -37,7 +37,7 @@ const Onboarding: React.FC = () => {
         steps: stepSet.steps.filter(({ targetId }) => {
           if (dialogs.length > 0) {
             return !(targetId === 'mainDialog' || targetId === 'newTrigger' || targetId === 'action');
-          } else if (dialogs[0]?.triggers.length > 0) {
+          } else if (dialogs[0]?.triggers.length === 0) {
             return targetId !== 'action';
           }
           return true;
