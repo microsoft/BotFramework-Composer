@@ -278,7 +278,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       text: formatMessage('Disable'),
       buttonProps: {
         iconProps: {
-          iconName: 'Delete',
+          iconName: 'Hide3',
         },
         onClick: () => VisualEditorAPI.disableSelection(),
       },
@@ -290,7 +290,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       text: formatMessage('Enable'),
       buttonProps: {
         iconProps: {
-          iconName: 'Delete',
+          iconName: 'Lightbulb',
         },
         onClick: () => VisualEditorAPI.enableSelection(),
       },
