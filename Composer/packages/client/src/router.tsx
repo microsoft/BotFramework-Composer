@@ -13,6 +13,7 @@ import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
 import { LoadingSpinner } from './components/LoadingSpinner';
+import { LoginPage } from './pages/login';
 
 const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
@@ -56,6 +57,7 @@ const Routes = (props) => {
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
           <About path="about" />
+          <LoginPage path="azure/login" />
           <NotFound default />
         </Router>
       </Suspense>

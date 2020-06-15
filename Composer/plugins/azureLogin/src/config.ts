@@ -10,13 +10,13 @@ const replyUrl = 'https://dev.botframework.com/cb';
 const authorizationEndpoint = 'https://login.microsoftonline.com/common/oauth2/authorize';
 
 export const DEFAULT_AZURE_LOGIN_CONFIG = [
-  `${authorizationEndpoint}?response_type=code`,
+  `${authorizationEndpoint}?response_type=token`,
   `client_id=${clientId}`,
   `redirect_uri=${replyUrl}`,
   `state=${state}`,
   `client-request-id=${requestId}`,
   `nonce=${nonce}`,
-  'response_mode=query',
+  'response_mode=fragment',
   'resource=https://management.core.windows.net/',
 ];
 

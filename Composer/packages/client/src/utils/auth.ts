@@ -5,6 +5,7 @@
 import querystring from 'query-string';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { AuthManager } from '@azure/ms-rest-browserauth';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL, ActionTypes } from '../constants';
 import { Store } from '../store/types';
@@ -104,8 +105,7 @@ export async function loginPopup(url = '', callbackUrl = ''): Promise<string | n
   const windowLoc = window.location;
 
   return new Promise((resolve) => {
-    const loginUrl =
-      url || BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
+    const loginUrl = BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
 
     /**
      * window.innerWidth displays browser window"s height and width excluding toolbars
@@ -117,7 +117,11 @@ export async function loginPopup(url = '', callbackUrl = ''): Promise<string | n
 
     // loginUrl is not user-generated
     // eslint-disable-next-line security/detect-non-literal-fs-filename
-    const popup = window.open(loginUrl, 'Login to Composer', `width=483, height=600, top=${top}, left=${left}`);
+    const popup = window.open(
+      'http://localhost:3000/azure/login',
+      'Login to Composer',
+      `width=483, height=600, top=${top}, left=${left}`
+    );
 
     // if popups are blocked, use a redirect flow
     if (!popup || popup.closed || typeof popup.closed === 'undefined') {
@@ -140,10 +144,7 @@ export async function loginPopup(url = '', callbackUrl = ''): Promise<string | n
       try {
         if (popup) {
           if (popup.location.href.includes(windowLoc.hostname)) {
-            console.log(popup.location);
             const { access_token, error } = querystring.parse(popup.location.hash);
-            const { query } = querystring.parseUrl(popup.location.href);
-            console.log(query);
             if (access_token) {
               popup.close();
               clearInterval(popupTimer);
@@ -152,11 +153,7 @@ export async function loginPopup(url = '', callbackUrl = ''): Promise<string | n
               resolve(token);
             } else if (error) {
               resolve(null);
-            } else if (query) {
-              console.log(query);
             }
-          } else if (popup.location.href !== 'about:blank') {
-            console.log(popup.location.href);
           }
         } else {
           // clear the interval if there is no popup to inspect.

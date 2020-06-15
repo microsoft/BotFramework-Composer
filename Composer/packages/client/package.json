@@ -18,6 +18,8 @@
   },
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "@azure/ms-rest-browserauth": "^1.0.0",
+    "@bfc/adaptive-flow": "*",
     "@bfc/adaptive-form": "*",
     "@bfc/code-editor": "*",
     "@bfc/extension": "*",
@@ -29,7 +31,6 @@
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/ui-plugin-select-skill-dialog": "*",
-    "@bfc/adaptive-flow": "*",
     "@emotion/core": "^10.0.7",
     "@microsoft/bf-lu": "4.9.1",
     "@reach/router": "^1.2.1",
