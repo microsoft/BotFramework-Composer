@@ -17,8 +17,7 @@ import { arrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
+const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
   const {
     value = [],
     onChange,

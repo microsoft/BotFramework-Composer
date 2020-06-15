@@ -80,7 +80,7 @@ export const App: React.FC = () => {
                   iconName: 'GlobalNavButton',
                 }}
                 onClick={() => {
-                  setSideBarExpand(!sideBarExpand);
+                  setSideBarExpand((current) => !current);
                 }}
               />
             </TooltipHost>
