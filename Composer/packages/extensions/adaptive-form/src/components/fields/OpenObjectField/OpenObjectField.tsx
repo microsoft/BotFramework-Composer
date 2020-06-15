@@ -7,7 +7,6 @@ import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
 
