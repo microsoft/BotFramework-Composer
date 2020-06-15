@@ -31,8 +31,8 @@ export const ejectRuntime: ActionCreator = async (store, projectId, name) => {
       payload: response.data,
     });
     if (response.data.settings && response.data.settings.path) {
-      const { settings: oldsettings, botName } = getState();
-      setSettings(store, projectId, botName, {
+      const { settings: oldsettings } = getState();
+      setSettings(store, projectId, {
         ...oldsettings,
         runtime: {
           ...oldsettings.runtime,
