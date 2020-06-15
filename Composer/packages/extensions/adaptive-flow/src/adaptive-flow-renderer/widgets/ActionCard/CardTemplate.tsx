@@ -10,7 +10,14 @@ import { StandardNodeWidth } from '../../constants/ElementSizes';
 import { ObiColors } from '../../constants/ElementColors';
 import { ArrowLine } from '../../components/ArrowLine';
 
-import { HeaderCSS, BodyCSS, FooterCSS, SeparateLineCSS, CardContainerCSS } from './CardTemplate.style';
+import {
+  HeaderCSS,
+  BodyCSS,
+  FooterCSS,
+  SeparateLineCSS,
+  CardContainerCSS,
+  DisabledCardContainerCSS,
+} from './CardTemplate.style';
 
 export interface CardTemplateProps {
   header: ReactNode;
@@ -33,20 +40,25 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   onClickBody,
   onClickFooter,
 }) => {
+  const headerCSS = HeaderCSS;
+  const bodyCSS = BodyCSS;
+  const footerCSS = FooterCSS;
+  const containerCSS = disabled ? DisabledCardContainerCSS : CardContainerCSS;
+
   const renderHeader = (header: ReactNode) => (
-    <div className="CardNode__Header" css={HeaderCSS} onClick={onClickHeader}>
+    <div className="CardNode__Header" css={headerCSS} onClick={onClickHeader}>
       {header}
     </div>
   );
 
   const renderBody = (body: ReactNode) => (
-    <div className="CardNode__Body" css={BodyCSS} onClick={onClickBody}>
+    <div className="CardNode__Body" css={bodyCSS} onClick={onClickBody}>
       <TextDiv css={{ width: '100%' }}>{body}</TextDiv>
     </div>
   );
 
   const renderFooter = (footer: ReactNode) => (
-    <div className="CardNode__Footer" css={FooterCSS} onClick={onClickFooter}>
+    <div className="CardNode__Footer" css={footerCSS} onClick={onClickFooter}>
       <TextDiv css={{ width: '100%' }}>{footer}</TextDiv>
     </div>
   );
@@ -63,7 +75,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   return (
     <div
       className="CardNode"
-      css={CardContainerCSS}
+      css={containerCSS}
       onClick={
         onClick
           ? (e) => {

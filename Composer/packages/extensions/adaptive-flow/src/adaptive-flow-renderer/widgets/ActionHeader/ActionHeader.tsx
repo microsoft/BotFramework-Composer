@@ -9,9 +9,16 @@ import { generateSDKTitle } from '@bfc/shared';
 import { WidgetComponent, WidgetContainerProps } from '../../types/flowRenderer.types';
 import { DefaultColors } from '../../constants/ElementColors';
 import { RendererContext } from '../../contexts/RendererContext';
+import { DisabledIconColor } from '../styles/Disabled.style';
 
 import { Icon, BuiltinIcons } from './icon';
-import { HeaderContainerCSS, HeaderBodyCSS, HeaderTextCSS } from './ActionHeader.style';
+import {
+  HeaderContainerCSS,
+  HeaderBodyCSS,
+  HeaderTextCSS,
+  DisabledHeaderContainerCSS,
+  DisabledHeaderTextCSS,
+} from './ActionHeader.style';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title?: string;
@@ -36,6 +43,11 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   colors = DefaultColors,
 }) => {
   const { disabled } = data;
+  const containerCSS = disabled ? DisabledHeaderContainerCSS : HeaderContainerCSS(colors.theme);
+  const bodyCSS = HeaderBodyCSS;
+  const textCSS = disabled ? DisabledHeaderTextCSS : HeaderTextCSS(colors.color);
+  const iconColor = disabled ? DisabledIconColor : colors.icon;
+
   const headerContent = disableSDKTitle ? title : generateSDKTitle(data, title);
 
   const { NodeMenu } = useContext(RendererContext);
@@ -43,8 +55,8 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
     menu === 'none' ? null : menu || <NodeMenu colors={colors} nodeData={data} nodeId={id} onEvent={onEvent} />;
 
   return (
-    <div css={HeaderContainerCSS(colors.theme)}>
-      <div css={HeaderBodyCSS}>
+    <div css={containerCSS}>
+      <div css={bodyCSS}>
         {icon && icon !== BuiltinIcons.None && (
           <div
             aria-hidden
@@ -57,10 +69,10 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
               marginRight: '5px',
             }}
           >
-            <Icon color={colors.icon} icon={icon} size={16} />
+            <Icon color={iconColor} icon={icon} size={16} />
           </div>
         )}
-        <div aria-label={headerContent} css={HeaderTextCSS(colors.color)}>
+        <div aria-label={headerContent} css={textCSS}>
           {headerContent}
         </div>
       </div>

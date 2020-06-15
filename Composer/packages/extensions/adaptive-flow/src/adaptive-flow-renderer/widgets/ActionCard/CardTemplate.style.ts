@@ -4,15 +4,7 @@
 import { css } from '@emotion/core';
 
 import { HeaderHeight, StandardSectionHeight, StandardNodeWidth } from '../../constants/ElementSizes';
-
-const containerCSS = css`
-  font-size: 12px;
-  cursor: pointer;
-  overflow: hidden;
-  background-color: white;
-  border-radius: 2px 2px 0 0;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-`;
+import { DisabledContainer } from '../styles/Disabled.style';
 
 const fullWidthSection = css`
   width: 100%;
@@ -42,8 +34,22 @@ export const SeparateLineCSS = css`
   overflow: visible;
 `;
 
-export const CardContainerCSS = css`
-  ${containerCSS};
+const containerCSS = css`
+  font-size: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 2px 2px 0 0;
   width: ${StandardNodeWidth}px;
   min-height: ${HeaderHeight}px;
+`;
+
+export const CardContainerCSS = css`
+  ${containerCSS};
+  background-color: white;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+export const DisabledCardContainerCSS = css`
+  ${CardContainerCSS};
+  ${DisabledContainer};
 `;

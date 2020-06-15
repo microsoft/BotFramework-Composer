@@ -5,19 +5,26 @@ import { css } from '@emotion/core';
 import { ColorlessFontCSS, TruncatedCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../../constants/ElementSizes';
+import { DisabledContainer, DisabledText } from '../styles/Disabled.style';
 
 const container = css`
   cursor: pointer;
   position: relative;
   display: flex;
   align-items: center;
+  width: ${StandardNodeWidth}px;
+  height: ${HeaderHeight}px;
 `;
 
 export const HeaderContainerCSS = (backgroundColor = 'transparent') => css`
   ${container};
-  width: ${StandardNodeWidth}px;
-  height: ${HeaderHeight}px;
   background-color: ${backgroundColor};
+`;
+
+export const DisabledHeaderContainerCSS = css`
+  ${container};
+  ${DisabledContainer};
+  ${DisabledText}
 `;
 
 export const HeaderBodyCSS = css`
@@ -29,11 +36,16 @@ export const HeaderBodyCSS = css`
 const headerText = css`
   ${ColorlessFontCSS};
   ${TruncatedCSS};
+  line-height: 16px;
+  transform: translateY(-1px);
 `;
 
 export const HeaderTextCSS = (textColor = 'black') => css`
   ${headerText};
-  line-height: 16px;
-  transform: translateY(-1px);
   color: ${textColor};
+`;
+
+export const DisabledHeaderTextCSS = css`
+  ${headerText};
+  ${DisabledText};
 `;
