@@ -3,16 +3,15 @@
 
 /** @jsx jsx */
 import { useContext } from 'react';
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { generateSDKTitle } from '@bfc/shared';
-import { TruncatedCSS, ColorlessFontCSS } from '@bfc/ui-shared';
 
 import { WidgetComponent, WidgetContainerProps } from '../../types/flowRenderer.types';
-import { StandardNodeWidth, HeaderHeight } from '../../constants/ElementSizes';
 import { DefaultColors } from '../../constants/ElementColors';
 import { RendererContext } from '../../contexts/RendererContext';
 
 import { Icon, BuiltinIcons } from './icon';
+import { HeaderContainerCSS, HeaderBodyCSS, HeaderTextCSS } from './ActionHeader.style';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title?: string;
@@ -26,13 +25,6 @@ export interface ActionHeaderProps extends WidgetContainerProps {
   };
 }
 
-const container = css`
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
-
 export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   id,
   data,
@@ -45,31 +37,13 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
 }) => {
   const headerContent = disableSDKTitle ? title : generateSDKTitle(data, title);
 
-  const headerText = css`
-    ${ColorlessFontCSS};
-    ${TruncatedCSS};
-  `;
-
   const { NodeMenu } = useContext(RendererContext);
   const menuNode =
     menu === 'none' ? null : menu || <NodeMenu colors={colors} nodeData={data} nodeId={id} onEvent={onEvent} />;
 
   return (
-    <div
-      css={css`
-        ${container};
-        width: ${StandardNodeWidth}px;
-        height: ${HeaderHeight}px;
-        background-color: ${colors.theme};
-      `}
-    >
-      <div
-        css={css`
-          width: calc(100% - 40px);
-          padding: 4px 8px;
-          display: flex;
-        `}
-      >
+    <div css={HeaderContainerCSS(colors.theme)}>
+      <div css={HeaderBodyCSS}>
         {icon && icon !== BuiltinIcons.None && (
           <div
             aria-hidden
@@ -85,15 +59,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
             <Icon color={colors.icon} icon={icon} size={16} />
           </div>
         )}
-        <div
-          aria-label={headerContent}
-          css={css`
-            ${headerText};
-            line-height: 16px;
-            transform: translateY(-1px);
-            color: ${colors.color || 'black'};
-          `}
-        >
+        <div aria-label={headerContent} css={HeaderTextCSS(colors.color)}>
           {headerContent}
         </div>
       </div>
