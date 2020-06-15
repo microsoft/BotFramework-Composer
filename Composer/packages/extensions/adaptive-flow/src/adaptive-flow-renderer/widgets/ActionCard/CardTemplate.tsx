@@ -16,6 +16,7 @@ export interface CardTemplateProps {
   header: ReactNode;
   body?: ReactNode;
   footer?: ReactNode;
+  disabled?: boolean;
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onClickHeader?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onClickBody?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -26,6 +27,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   header,
   body,
   footer,
+  disabled,
   onClick,
   onClickHeader,
   onClickBody,

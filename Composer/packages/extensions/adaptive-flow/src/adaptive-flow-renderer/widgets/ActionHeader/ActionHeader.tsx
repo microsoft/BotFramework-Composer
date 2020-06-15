@@ -35,6 +35,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   menu,
   colors = DefaultColors,
 }) => {
+  const { disabled } = data;
   const headerContent = disableSDKTitle ? title : generateSDKTitle(data, title);
 
   const { NodeMenu } = useContext(RendererContext);
