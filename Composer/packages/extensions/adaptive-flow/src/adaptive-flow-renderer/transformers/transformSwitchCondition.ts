@@ -5,7 +5,7 @@ import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
 import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 
-import { inheritParentProperties } from './inheritDisabledProperty';
+import { inheritParentProperties } from './inheritParentProperty';
 
 const ConditionKey = AdaptiveFieldNames.Condition;
 const CasesKey = AdaptiveFieldNames.Cases;

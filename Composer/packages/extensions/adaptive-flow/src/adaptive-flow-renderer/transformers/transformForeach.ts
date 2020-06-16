@@ -5,7 +5,7 @@ import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
 import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 
-import { inheritParentProperties } from './inheritDisabledProperty';
+import { inheritParentProperties } from './inheritParentProperty';
 
 const StepsKey = AdaptiveFieldNames.Actions;
 

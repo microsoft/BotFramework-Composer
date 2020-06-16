@@ -5,7 +5,7 @@ import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 import { normalizeObiStep } from '../utils/adaptive/stepBuilder';
 
-import { inheritParentProperties } from './inheritDisabledProperty';
+import { inheritParentProperties } from './inheritParentProperty';
 
 export function transformStepGroup(input, groupId): IndexedNode[] {
   if (!input || input.$kind !== AdaptiveKinds.StepGroup) return [];
