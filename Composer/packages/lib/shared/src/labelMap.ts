@@ -74,7 +74,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('End this dialog'),
   },
   [SDKKinds.EndTurn]: {
-    title: formatMessage('End dialog turn'),
+    title: formatMessage('End turn'),
   },
   [SDKKinds.FirstSelector]: {
     title: formatMessage('FirstSelector'),

@@ -29,18 +29,18 @@ export const displayManifest: { content: any; dialog: Partial<IDialogContentStyl
   },
 };
 
-export const DialogStyle = {
-  Normal: 'NORMAL',
-  Console: 'CONSOLE',
+export const dialogStyle = {
+  normal: 'NORMAL',
+  console: 'CONSOLE',
 };
 
-export const BuiltInStyles = {
-  [DialogStyle.Normal]: css`
+export const builtInStyles = {
+  [dialogStyle.normal]: css`
     padding: 15px;
     margin-bottom: 20px;
     white-space: pre-line;
   `,
-  [DialogStyle.Console]: css`
+  [dialogStyle.console]: css`
     background: #000;
     max-height: 90px;
     overflow-y: auto;

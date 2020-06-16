@@ -5,7 +5,6 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import has from 'lodash/has';
 import merge from 'lodash/merge';
-import memoize from 'lodash/memoize';
 import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
 import {
   SensitiveProperties,
@@ -33,24 +32,24 @@ import createReducer from './createReducer';
 
 const projectFiles = ['bot', 'botproj'];
 
-const processSchema = memoize((projectId: string, schema: any) => ({
+const processSchema = (projectId: string, schema: any) => ({
   ...schema,
   definitions: dereferenceDefinitions(schema.definitions),
-}));
+});
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
-const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
+const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {
   for (const property of SensitiveProperties) {
     const value = get(settings, property);
     if (value) {
-      settingStorage.setField(botName, property, value);
+      settingStorage.setField(projectId, property, value);
     }
   }
 };
 
 // merge sensitive values in localStorage
-const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
-  const localSetting = settingStorage.get(botName);
+const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
+  const localSetting = settingStorage.get(projectId);
   if (localSetting) {
     for (const property of SensitiveProperties) {
       const value = get(localSetting, property);
@@ -63,8 +62,8 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
   }
 };
 
-const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
-  const status = luFileStatusStorage.get(botName);
+const updateLuFilesStatus = (projectId: string, luFiles: LuFile[]) => {
+  const status = luFileStatusStorage.get(projectId);
   return luFiles.map((luFile) => {
     if (typeof status[luFile.id] === 'boolean') {
       return { ...luFile, published: status[luFile.id] };
@@ -74,12 +73,12 @@ const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
   });
 };
 
-const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
+const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
   luFileStatusStorage.checkFileStatus(
-    botName,
+    projectId,
     getReferredFiles(luFiles, dialogs).map((file) => file.id)
   );
-  return updateLuFilesStatus(botName, luFiles);
+  return updateLuFilesStatus(projectId, luFiles);
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
@@ -107,8 +106,8 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
   state.botOpening = false;
-  refreshLocalStorage(botName, state.settings);
-  mergeLocalStorage(botName, state.settings);
+  refreshLocalStorage(id, state.settings);
+  mergeLocalStorage(id, state.settings);
   return state;
 };
 
@@ -208,14 +207,14 @@ const createLuFile: ReducerFunc = (state, { id, content }) => {
   const { parse } = luIndexer;
   const luFile = { id, content, ...parse(content, id) };
   state.luFiles.push(luFile);
-  luFileStatusStorage.updateFileStatus(state.botName, id);
+  luFileStatusStorage.updateFileStatus(state.projectId, id);
   return state;
 };
 
 const removeLuFile: ReducerFunc = (state, { id }) => {
   state.luFiles = state.luFiles.reduce((result: LuFile[], file) => {
     if (getBaseName(file.id) === id || file.id === id) {
-      luFileStatusStorage.removeFileStatus(state.botName, id);
+      luFileStatusStorage.removeFileStatus(state.projectId, id);
     } else {
       result.push(file);
     }
@@ -228,7 +227,7 @@ const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
   const index = state.luFiles.findIndex((file) => file.id === luFile.id);
   state.luFiles[index] = luFile;
 
-  luFileStatusStorage.updateFileStatus(state.botName, luFile.id);
+  luFileStatusStorage.updateFileStatus(state.projectId, luFile.id);
   return state;
 };
 
@@ -467,12 +466,12 @@ const dismissSkillManifestModal: ReducerFunc = (state) => {
   return state;
 };
 
-const syncEnvSetting: ReducerFunc = (state, { settings, botName }) => {
+const syncEnvSetting: ReducerFunc = (state, { settings, projectId }) => {
   // set value in local storage
   for (const property of SensitiveProperties) {
     if (has(settings, property)) {
       const propertyValue = get(settings, property, '');
-      settingStorage.setField(botName, property, propertyValue);
+      settingStorage.setField(projectId, property, propertyValue);
     }
   }
   state.settings = settings;
