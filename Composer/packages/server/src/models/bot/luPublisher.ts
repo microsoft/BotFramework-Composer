@@ -162,15 +162,10 @@ export class LuPublisher {
     if (config.models.length === 0) {
       throw new Error('No LUIS files exist');
     }
-    const loadResult = await this._loadLuConatents(config.models);
-    loadResult.luContents = await this._downSizeUtterances(loadResult.luContents);
-    let authoringEndpoint = config.authoringEndpoint;
-    if (!authoringEndpoint) {
-      authoringEndpoint = `https://${config.region}.api.cognitive.microsoft.com`;
-    }
+
     const loadResult = await this._loadLuContents(config.models);
     loadResult.luContents = await this._downsizeUtterances(loadResult.luContents);
-    const endpoint = config?.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
+    const authoringEndpoint = config.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
 
     const buildResult = await this.builder.build(
       loadResult.luContents,
