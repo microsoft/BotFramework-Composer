@@ -89,24 +89,26 @@ export interface RuntimeTemplate {
 }
 
 export interface BotState {
-  // string containing a bot's specific project ID
+  // Unique identifier of a bot
   projectId: string;
+  // User-given name
   botName: string;
 
   // are these two ever read?
   location: string;
   botEnvironment: string;
 
+  // locale of the LG/LU files being worked on in the current bot
   locale: string;
 
+  // components of the current bot
   dialogs: DialogInfo[];
   diagnostics: Diagnostic[];
   lgFiles: LgFile[];
   luFiles: LuFile[];
   skills: Skill[];
 
-  botEndpoints: { [key: string]: string };
-  remoteEndpoints: { [key: string]: string };
+  remoteEndpoints: { [key: string]: string }; // possibly unused?
 
   botStatus: BotStatus;
   botLoadErrorMsg: {
@@ -116,28 +118,18 @@ export interface BotState {
     link?: { url: string; text: string };
   };
 
-  storageFileLoadingStatus: string;
   schemas: BotSchemas;
   skillManifests: any[];
   designPageLocation: DesignPageLocation;
-  error: StateError | null;
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
   showAddSkillDialogModal: boolean;
-  isEnvSettingUpdated: boolean;
-  settings: DialogSetting;
-  actionsSeed: any;
-  onCreateDialogComplete?: (dialogId: string | null) => void;
-  onAddSkillDialogComplete?: (dialogId: string | null) => void;
-  currentUser: {
-    token: string | null;
-    email?: string;
-    name?: string;
-    expiration?: number;
-    sessionExpired: boolean;
-  };
 
-  // publishing
+  isEnvSettingUpdated: boolean; // seems to be unused
+  settings: DialogSetting; // used for LUIS publishing
+
+  actionsSeed: any;
+
   publishVersions: any;
   publishStatus: any;
   lastPublishChange: any;
@@ -147,6 +139,7 @@ export interface BotState {
     [key: string]: any[];
   };
 
+  // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
 }
 
@@ -161,6 +154,9 @@ export type AppState = {
   announcement: string | undefined;
   appUpdate: AppUpdateState;
 
+  // URL of running bots, used to link with Emulator. Key is the project ID of a bot, value is the URL
+  botEndpoints: { [key: string]: string };
+
   visualEditorSelection: string[];
   onboarding: {
     coachMarkRefs: { [key: string]: any };
@@ -169,8 +165,12 @@ export type AppState = {
   clipboardActions: any[];
 
   creationFlowStatus: CreationFlowStatus;
+  storageFileLoadingStatus: string;
 
   templateId: string;
+
+  onCreateDialogComplete?: (dialogId: string | null) => void; // callback triggered when the current dialog finishes
+  onAddSkillDialogComplete?: (dialogId: string | null) => void;
 
   runtimeTemplates: RuntimeTemplate[];
 
@@ -182,6 +182,17 @@ export type AppState = {
     startCommand: string;
   };
   displaySkillManifest?: string;
+
+  // currently displayed error
+  error: StateError | null;
+
+  currentUser: {
+    token: string | null;
+    email?: string;
+    name?: string;
+    expiration?: number;
+    sessionExpired: boolean;
+  };
 };
 
 export type State = BotState & AppState;
