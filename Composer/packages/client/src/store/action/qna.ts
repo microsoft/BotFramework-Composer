@@ -7,10 +7,10 @@ import { ActionCreator, State, Store } from '../types';
 
 import { ActionTypes } from './../../constants/index';
 
-export const updateQnaFile: ActionCreator = async (store, { id, content }) => {
+export const updateQnaFile: ActionCreator = async (store, { id, projectId, content }) => {
   store.dispatch({
     type: ActionTypes.UPDATE_QNA,
-    payload: { id, content },
+    payload: { id, projectId, content },
   });
 };
 
