@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import React, { useContext, useRef, useEffect, useState, useCallback } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+//import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';

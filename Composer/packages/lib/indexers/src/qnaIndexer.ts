@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import {
   FileInfo,
@@ -22,6 +21,7 @@ const { luParser } = sectionHandler;
 
 function parse(content: string, id = '') {
   //To do handle Errors in paresd file
+  console.log(luParser.parse(content));
   const { Sections } = luParser.parse(content);
   const qnaPairs: any[] = [];
   Sections.forEach((section) => {
