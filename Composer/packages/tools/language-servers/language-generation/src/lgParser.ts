@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { Worker } from 'worker_threads';
+
+import { fork, ChildProcess } from 'child_process';
 import path from 'path';
 
 import { ResolverResource } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
 
-const asarPathFolder = 'app.asar';
-const asarUnpackFolder = 'app.asar.unpacked';
 export interface WorkerMsg {
   id: string;
   error?: any;
@@ -16,13 +15,13 @@ export interface WorkerMsg {
 
 // Wrapper class
 export class LgParser {
-  private worker: Worker;
+  private worker: ChildProcess;
   private resolves = {};
   private rejects = {};
 
   constructor() {
-    const realPath = path.join(__dirname, '../lib/lgWorker.js');
-    this.worker = new Worker(realPath.replace(asarPathFolder, asarUnpackFolder));
+    const workerScriptPath = path.join(__dirname, 'lgWorker.js');
+    this.worker = fork(workerScriptPath);
     this.worker.on('message', this.handleMsg.bind(this));
   }
 
@@ -32,7 +31,7 @@ export class LgParser {
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;
-      this.worker.postMessage(msg);
+      this.worker.send(msg);
     });
   }
 

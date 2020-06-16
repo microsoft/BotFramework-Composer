@@ -13,8 +13,7 @@
   "asarUnpack": [
     "build/assets",
     "build/templates",
-    "resources/composerIcon_1024x1024.png",
-    "**/node_modules/**/*"
+    "resources/composerIcon_1024x1024.png"
   ],
   "files": [
     "build",

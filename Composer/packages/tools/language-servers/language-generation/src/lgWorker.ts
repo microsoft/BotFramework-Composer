@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { parentPort } from 'worker_threads';
 
 import { Templates, Diagnostic } from 'botbuilder-lg';
 import { importResolverGenerator } from '@bfc/shared';
@@ -22,11 +21,12 @@ function createDiagnostic(diagnostic: Diagnostic) {
   };
 }
 
-if (!parentPort) {
-  process.exit();
-}
+// TODO: remove? not sure what this was for
+// if (!parentPort) {
+//   process.exit();
+// }
 
-parentPort.on('message', (message: WorkerMsg) => {
+process.on('message', (message: WorkerMsg) => {
   const { content, id, resources } = message.payload;
   let templates: any[] = [];
   let diagnostics: any[] = [];
@@ -35,8 +35,8 @@ parentPort.on('message', (message: WorkerMsg) => {
     const { allTemplates, allDiagnostics } = Templates.parseText(content, id, resolver);
     templates = allTemplates.map((item) => ({ name: item.name, parameters: item.parameters, body: item.body }));
     diagnostics = allDiagnostics.map((item) => createDiagnostic(item));
-    parentPort?.postMessage({ id: message.id, payload: { templates, diagnostics } });
+    process.send?.({ id: message.id, payload: { templates, diagnostics } });
   } catch (error) {
-    parentPort?.postMessage({ id: message.id, error });
+    process.send?.({ id: message.id, error });
   }
 });
