@@ -57,14 +57,14 @@ const WelcomeModal = () => {
         {stepSets.map(({ steps: { length }, title }, index) => (
           <StepStatus
             key={index}
-            isComplete={index < currentSet || (index === currentSet && !~currentStep)}
+            isComplete={index < currentSet || (index === currentSet && currentStep === -1)}
             steps={length}
             title={title}
           />
         ))}
       </div>
       <div css={footerStyle}>
-        {!~currentStep && (
+        {currentStep === -1 && (
           <div>
             {currentSet + 1 < stepSets.length && (
               <PrimaryButton data-testid="onboardingNextSet" text={stepSets[currentSet + 1].title} onClick={nextSet} />
