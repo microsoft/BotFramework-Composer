@@ -105,7 +105,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
           <PrimaryButton
             data-testid="SubmitNewDialogBtn"
             disabled={hasErrors}
-            text={formatMessage('Next')}
+            text={formatMessage('OK')}
             onClick={handleSubmit}
           />
         </DialogFooter>
