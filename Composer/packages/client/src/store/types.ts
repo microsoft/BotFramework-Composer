@@ -88,22 +88,26 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
-export interface State {
-  dialogs: DialogInfo[];
+export interface BotState {
+  // string containing a bot's specific project ID
   projectId: string;
   botName: string;
+
+  // are these two ever read?
   location: string;
   botEnvironment: string;
+
   locale: string;
+
+  dialogs: DialogInfo[];
   diagnostics: Diagnostic[];
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  skills: Skill[];
+
   botEndpoints: { [key: string]: string };
   remoteEndpoints: { [key: string]: string };
-  /** the data path for PropertyEditor */
-  focusPath: string;
-  templateProjects: ProjectTemplate[];
-  recentProjects: any[];
-  storages: any[];
-  focusedStorageFolder: StorageFolder;
+
   botStatus: BotStatus;
   botLoadErrorMsg: {
     title: string;
@@ -111,13 +115,9 @@ export interface State {
     linkAfterMessage?: { url: string; text: string };
     link?: { url: string; text: string };
   };
-  creationFlowStatus: CreationFlowStatus;
-  templateId: string;
+
   storageFileLoadingStatus: string;
   schemas: BotSchemas;
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-  skills: Skill[];
   skillManifests: any[];
   designPageLocation: DesignPageLocation;
   error: StateError | null;
@@ -136,31 +136,55 @@ export interface State {
     expiration?: number;
     sessionExpired: boolean;
   };
+
+  // publishing
   publishVersions: any;
   publishStatus: any;
   lastPublishChange: any;
+  publishTargets: any[];
+  publishTypes: PublishType[];
+  publishHistory: {
+    [key: string]: any[];
+  };
+
+  botOpening: boolean;
+}
+
+export type AppState = {
+  /** the data path for PropertyEditor */
+  focusPath: string;
+  templateProjects: ProjectTemplate[];
+  recentProjects: any[];
+  storages: any[];
+  focusedStorageFolder: StorageFolder;
+
+  announcement: string | undefined;
+  appUpdate: AppUpdateState;
+
   visualEditorSelection: string[];
   onboarding: {
     coachMarkRefs: { [key: string]: any };
     complete: boolean;
   };
   clipboardActions: any[];
-  publishTargets: any[];
+
+  creationFlowStatus: CreationFlowStatus;
+
+  templateId: string;
+
   runtimeTemplates: RuntimeTemplate[];
-  publishTypes: PublishType[];
-  publishHistory: {
-    [key: string]: any[];
-  };
-  userSettings: UserSettings;
+
+  userSettings: UserSettings; // preferences for the editors
+
   runtimeSettings: {
+    // custom runtime settings, used in ejection
     path: string;
     startCommand: string;
   };
-  announcement: string | undefined;
-  appUpdate: AppUpdateState;
   displaySkillManifest?: string;
-  botOpening: boolean;
-}
+};
+
+export type State = BotState & AppState;
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
 export interface MiddlewareApi {
