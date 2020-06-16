@@ -164,10 +164,10 @@ export type AppState = {
   };
   clipboardActions: any[];
 
-  creationFlowStatus: CreationFlowStatus;
+  creationFlowStatus: CreationFlowStatus; // TODO: can be removed with minor refactoring
   storageFileLoadingStatus: string;
 
-  templateId: string;
+  templateId: string; // TODO: can be removed with minor refactoring
 
   onCreateDialogComplete?: (dialogId: string | null) => void; // callback triggered when the current dialog finishes
   onAddSkillDialogComplete?: (dialogId: string | null) => void;
