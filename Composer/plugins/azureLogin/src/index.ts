@@ -16,6 +16,7 @@ const verification = async (req, res, next) => {
   const { accessToken } = req.body;
   if (!accessToken) {
     console.log('need authentication');
+    // res.redirect(getLoginUrl());
     res.status(400).json({
       statusCode: '400',
       message: 'need authentication',

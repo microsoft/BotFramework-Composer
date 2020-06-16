@@ -105,7 +105,8 @@ export async function loginPopup(url = '', callbackUrl = ''): Promise<string | n
   const windowLoc = window.location;
 
   return new Promise((resolve) => {
-    const loginUrl = BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
+    const loginUrl =
+      url || BASEURL + `/login?${querystring.stringify({ resource: windowLoc.pathname + windowLoc.search })}`;
 
     /**
      * window.innerWidth displays browser window"s height and width excluding toolbars
@@ -117,11 +118,7 @@ export async function loginPopup(url = '', callbackUrl = ''): Promise<string | n
 
     // loginUrl is not user-generated
     // eslint-disable-next-line security/detect-non-literal-fs-filename
-    const popup = window.open(
-      'http://localhost:3000/azure/login',
-      'Login to Composer',
-      `width=483, height=600, top=${top}, left=${left}`
-    );
+    const popup = window.open(loginUrl, 'Login to Composer', `width=483, height=600, top=${top}, left=${left}`);
 
     // if popups are blocked, use a redirect flow
     if (!popup || popup.closed || typeof popup.closed === 'undefined') {
@@ -162,6 +159,9 @@ export async function loginPopup(url = '', callbackUrl = ''): Promise<string | n
         }
       } catch (e) {
         // Ignore the cross-domain errors thrown by trying to access a window not on our domain
+        // face CORS when use dev.botframework.com as redirecturl.
+        // clearInterval(popupTimer);
+        // throw e;
       }
 
       // wait for MAX_WAIT and then clean up -- maybe user stalled?
