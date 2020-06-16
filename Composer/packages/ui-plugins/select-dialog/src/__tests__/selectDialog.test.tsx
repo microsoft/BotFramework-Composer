@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import React from 'react';
-import { cleanup, fireEvent, getAllByRole, render } from '@bfc/test-utils';
+import { fireEvent, getAllByRole, render } from '@bfc/test-utils';
 import { Extension } from '@bfc/extension';
 
 import { SelectDialog } from '../SelectDialog';
@@ -40,8 +40,6 @@ const renderSelectDialog = ({ createDialog, navTo, onChange } = {}) => {
 };
 
 describe('Select Dialog', () => {
-  afterEach(cleanup);
-
   beforeEach(() => {
     jest.useFakeTimers();
   });

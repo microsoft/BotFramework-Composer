@@ -2,20 +2,20 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 
-import PluginContext from '../../PluginContext';
 import { FieldLabel } from '../FieldLabel';
+import { usePluginConfig } from '../../hooks';
 
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
-  const { recognizers } = useContext(PluginContext);
+  const { recognizers } = usePluginConfig();
 
   useEffect(() => {
     if (value === undefined) {
@@ -42,11 +42,14 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       value === undefined ? [recognizers[0].id] : recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
 
     if (selected.length !== 1) {
-      console.error(
-        `Unable to determine selected recognizer.\n
+      /* istanbul ignore next */
+      if (process.env.NODE_ENV === 'development') {
+        console.error(
+          `Unable to determine selected recognizer.\n
          Value: ${JSON.stringify(value)}.\n
          Selected Recognizers: [${selected.join(', ')}]`
-      );
+        );
+      }
       return;
     }
 
@@ -68,7 +71,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
       {selectedType ? (
         <Dropdown
-          data-testid={'recognizerTypeDropdown'}
+          data-testid="recognizerTypeDropdown"
           label={formatMessage('Recognizer Type')}
           options={options}
           responsiveMode={ResponsiveMode.large}
@@ -76,7 +79,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
           onChange={handleChangeRecognizerType}
         />
       ) : (
-        `Unable to determine recognizer type from data: ${value}`
+        formatMessage('Unable to determine recognizer type from data: {value}', { value })
       )}
       {selectedType === 'Custom' && (
         <TextField

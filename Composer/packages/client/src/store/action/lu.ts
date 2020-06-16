@@ -78,7 +78,7 @@ export const publishLuis: ActionCreator = async ({ dispatch, getState }, authori
       crossTrainConfig,
       luFiles: referred.map((file) => file.id),
     });
-    luFileStatusStorage.publishAll(getState().botName);
+    luFileStatusStorage.publishAll(getState().projectId);
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },

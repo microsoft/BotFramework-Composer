@@ -97,8 +97,8 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
 export const deleteBotProject: ActionCreator = async (store, projectId) => {
   try {
     await httpClient.delete(`/projects/${projectId}`);
-    luFileStatusStorage.removeAllStatuses(store.getState().botName);
-    settingStorage.remove(store.getState().botName);
+    luFileStatusStorage.removeAllStatuses(projectId);
+    settingStorage.remove(projectId);
     store.dispatch({
       type: ActionTypes.REMOVE_PROJECT_SUCCESS,
     });
@@ -208,7 +208,8 @@ export const createProject: ActionCreator = async (
     await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects`, data);
     const files = response.data.files;
-    settingStorage.remove(name);
+    const projectId = response.data.id;
+    settingStorage.remove(projectId);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {

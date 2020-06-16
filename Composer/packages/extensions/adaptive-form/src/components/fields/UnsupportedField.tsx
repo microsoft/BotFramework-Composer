@@ -14,13 +14,13 @@ export const UnsupportedField: React.FC<FieldProps> = function UnsupportedField(
 
   return (
     <React.Fragment>
-      <div css={unsupportedField.container}>
+      <div css={unsupportedField.container} data-testid="UnsupportedField">
         {props.label} (Unsupported Field)
         <Link styles={unsupportedField.link} onClick={() => setShowDetails((prev) => !prev)}>
           Toggle Details
         </Link>
       </div>
-      <pre css={unsupportedField.details(!showDetails)}>
+      <pre css={unsupportedField.details(!showDetails)} data-testid="UnsupportedFieldDetails">
         props: {JSON.stringify(omit(props, ['definitions']), null, 2)}
       </pre>
     </React.Fragment>

@@ -33,7 +33,7 @@ const downloadOptions = {
   installAndUpdate: 'installAndUpdate',
 };
 
-export const AppUpdater: React.FC<{}> = (_props) => {
+export const AppUpdater: React.FC<{}> = () => {
   const {
     actions: { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus },
     state: { appUpdate },
@@ -164,12 +164,15 @@ export const AppUpdater: React.FC<{}> = (_props) => {
         if (downloadSizeInBytes === undefined) {
           trimmedTotalInMB = 'Calculating...';
         } else {
-          trimmedTotalInMB = `${((downloadSizeInBytes || 0) / 1000000).toFixed(2)}MB`;
+          trimmedTotalInMB = `${(downloadSizeInBytes / 1000000).toFixed(2)}MB`;
         }
-        const progressInHundredths = (progressPercent || 0) / 100;
+        const progressInHundredths = (progressPercent ?? 0) / 100;
         return (
           <ProgressIndicator
-            description={`${progressPercent}% ${formatMessage('of')} ${trimmedTotalInMB}`}
+            description={formatMessage('{progress}% of {total}', {
+              progress: progressPercent,
+              total: trimmedTotalInMB,
+            })}
             label={formatMessage('Downloading...')}
             percentComplete={progressInHundredths}
           />
