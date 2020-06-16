@@ -25,7 +25,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogs, qnaFiles, projectId, locale } = state;
   const { dialogId } = props;
   const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const allQnAPairs = qnaFiles.reduce((result, qnaFile) => {
+  const allQnAPairs = qnaFiles.reduce((result: any[], qnaFile) => {
     result = [...result, ...qnaFile.qnaPairs];
     return result;
   }, []);

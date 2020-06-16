@@ -44,9 +44,10 @@ function index(files: FileInfo[]): QnaFile[] {
   const qnaFiles: QnaFile[] = [];
   for (const file of files) {
     const { name, content } = file;
-    if (name.endsWith('.qna')) {
-      const id = getBaseName(name, '.qna');
-      qnaFiles.push({ id, content });
+    if (name.endsWith(FileExtensions.Qna)) {
+      const id = getBaseName(name, FileExtensions.Qna);
+      const data = parse(content, id);
+      qnaFiles.push({ id, content, ...data });
     }
   }
   return qnaFiles;
