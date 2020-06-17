@@ -7,6 +7,9 @@ import path from 'path';
 import { ResolverResource } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
 
+const devEnvs = ['test', 'development'];
+const isDev = process.env.NODE_ENV && devEnvs.indexOf(process.env.NODE_ENV) > -1;
+
 export interface WorkerMsg {
   id: string;
   error?: any;
@@ -20,8 +23,10 @@ export class LgParser {
   private rejects = {};
 
   constructor() {
-    const workerScriptPath = path.join(__dirname, 'lgWorker.js');
-    this.worker = fork(workerScriptPath);
+    const fileName = isDev ? 'lgWorker.ts' : 'lgWorker.js';
+    const execArgv = isDev ? ['-r', 'ts-node/register'] : [];
+    const workerScriptPath = path.join(__dirname, fileName);
+    this.worker = fork(workerScriptPath, [], { execArgv });
     this.worker.on('message', this.handleMsg.bind(this));
   }
 
