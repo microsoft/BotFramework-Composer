@@ -59,7 +59,7 @@ context('Notification Page', () => {
       cy.findByTestId('FieldErrorMessage').should('exist');
     });
 
-    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
+    cy.findByTestId('LeftNav-CommandBarButtonNotifications').parentsUntil('a').click();
 
     cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('__testtodobotwithluissample.dialog').should('exist').first().dblclick();
