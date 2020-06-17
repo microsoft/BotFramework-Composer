@@ -3,7 +3,7 @@
 /** @jsx jsx */
 
 import { jsx } from '@emotion/core';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
 import { AuthManager } from '@azure/ms-rest-browserauth';
 
 export const LoginPage = (props) => {

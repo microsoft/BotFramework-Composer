@@ -5,7 +5,6 @@
 import querystring from 'query-string';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import { AuthManager } from '@azure/ms-rest-browserauth';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL, ActionTypes } from '../constants';
 import { Store } from '../store/types';
