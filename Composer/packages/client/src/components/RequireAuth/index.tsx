@@ -32,7 +32,7 @@ export const RequireAuth: React.FC = (props) => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(!currentUser.token);
+    setIsLoading(currentUser.token === null);
   }, [currentUser.token]);
 
   const sessionExpiredDialog = currentUser.sessionExpired && (
@@ -47,7 +47,6 @@ export const RequireAuth: React.FC = (props) => {
         isBlocking: false,
         styles: { main: { maxWidth: 450 } },
       }}
-      onDismiss={() => false}
     >
       <div css={consoleStyle}>{formatMessage('Please log in before continuing.')}</div>
       <DialogFooter>

@@ -3,17 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { PropTypes } from 'prop-types';
 
 import { container } from './styles';
 
-export const Tree = (props) => (
+interface ITreeProps {
+  variant: string;
+  children: Element;
+}
+
+const Tree: React.FC<ITreeProps> = (props: ITreeProps) => (
   <div css={container(props.variant)} data-testid="ProjectTree" {...props}>
     {props.children}
   </div>
 );
 
-Tree.propTypes = {
-  variant: PropTypes.string,
-  children: PropTypes.element,
-};
+export { Tree };
