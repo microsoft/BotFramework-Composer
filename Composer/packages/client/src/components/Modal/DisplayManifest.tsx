@@ -16,8 +16,8 @@ import { StoreContext } from '../../store';
 import { displayManifest as styles } from './styles';
 
 const dragOptions: IDragOptions = {
-  moveMenuItemText: 'Move',
-  closeMenuItemText: 'Close',
+  moveMenuItemText: formatMessage('Move'),
+  closeMenuItemText: formatMessage('Close'),
   menu: ContextualMenu,
 };
 
@@ -66,7 +66,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
           height={'100%'}
           id={'modaljsonview'}
           options={{ readOnly: true }}
-          value={JSON.parse(selectedSkill.body || '')}
+          value={JSON.parse(selectedSkill.body ?? '')}
           onChange={() => {}}
         />
       </div>

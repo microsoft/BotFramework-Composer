@@ -26,11 +26,25 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
+      cosmosDb: {
+        authKey: '',
+        collectionId: 'botstate-collection',
+        cosmosDBEndpoint: '',
+        databaseId: 'botstate-db',
+      },
+      applicationInsights: {
+        InstrumentationKey: '',
+      },
+      blobStorage: {
+        connectionString: '',
+        container: 'transcripts',
+      },
       luis: {
         name: '',
         authoringKey: '',
-        endpoint: '',
+        authoringEndpoint: '',
         endpointKey: '',
+        endpoint: '',
         authoringRegion: 'westus',
         defaultLanguage: 'en-us',
         environment: 'composer',
@@ -66,6 +80,10 @@ export class DefaultSettingManager extends FileSettingManager {
     //add luis endpoint for old bot
     if (!result.luis.endpoint && result.luis.endpoint !== '') {
       result.luis.endpoint = this.createDefaultSettings().luis.endpoint;
+    }
+    //add luis authoring endpoint for old bot
+    if (!result.luis.authoringEndpoint && result.luis.authoringEndpoint !== '') {
+      result.luis.authoringEndpoint = this.createDefaultSettings().luis.authoringEndpoint;
     }
     return result;
   }

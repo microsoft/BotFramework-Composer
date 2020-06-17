@@ -100,7 +100,7 @@ const DefaultUISchema: UISchema = {
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
   },
   [SDKKinds.EndTurn]: {
-    label: () => formatMessage('End dialog turn'),
+    label: () => formatMessage('End turn'),
     subtitle: () => formatMessage('End Turn'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
   },

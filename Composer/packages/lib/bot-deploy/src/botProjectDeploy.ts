@@ -382,6 +382,7 @@ export class BotProjectDeploy {
     environment: string,
     language: string,
     luisEndpoint: string,
+    luisAuthoringEndpoint: string,
     luisEndpointKey: string,
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
@@ -415,11 +416,15 @@ export class BotProjectDeploy {
         luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
       }
 
+      if (!luisAuthoringEndpoint) {
+        luisAuthoringEndpoint = luisEndpoint;
+      }
+
       const buildResult = await builder.build(
         loadResult.luContents,
         loadResult.recognizers,
         luisAuthoringKey,
-        luisEndpoint,
+        luisAuthoringEndpoint,
         name,
         environment,
         language,
@@ -487,7 +492,7 @@ export class BotProjectDeploy {
         const luisAppId = luisAppIds[k];
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Assigning to luis app id: ${luisAppIds}`,
+          message: `Assigning to luis app id: ${luisAppId}`,
         });
 
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
@@ -540,6 +545,7 @@ export class BotProjectDeploy {
 
       let luisEndpointKey = '';
       let luisEndpoint = '';
+      let luisAuthoringEndpoint = '';
 
       if (luisSettings) {
         // if luisAuthoringKey is not set, use the one from the luis settings
@@ -547,6 +553,7 @@ export class BotProjectDeploy {
         luisAuthoringRegion = luisAuthoringRegion || luisSettings.region;
         luisEndpointKey = luisSettings.endpointKey;
         luisEndpoint = luisSettings.endpoint;
+        luisAuthoringEndpoint = luisSettings.authoringEndpoint;
       }
 
       if (!language) {
@@ -558,6 +565,7 @@ export class BotProjectDeploy {
         environment,
         language,
         luisEndpoint,
+        luisAuthoringEndpoint,
         luisEndpointKey,
         luisAuthoringKey,
         luisAuthoringRegion,
@@ -587,7 +595,10 @@ export class BotProjectDeploy {
         message: 'Publish To Azure Success!',
       });
     } catch (error) {
-      console.log(error);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+      });
       throw error;
     }
   }

@@ -34,5 +34,8 @@ export const getCustomSchema = (baseSchema?: OBISchema, ejectedSchema?: OBISchem
     } as OBISchema
   );
 
+  // Sort `oneOf` list by $kind to keep custom menu ordered
+  diffSchema.oneOf?.sort((a, b) => (a.$ref < b.$ref ? -1 : 1));
+
   return diffSchema;
 };
