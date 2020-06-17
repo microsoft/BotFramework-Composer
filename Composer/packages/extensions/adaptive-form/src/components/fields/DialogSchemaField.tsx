@@ -28,7 +28,7 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
   } = props;
   const { currentDialog, shellApi, formDialogFiles } = useShellApi();
   const { dialogType } = currentDialog.content;
-  const formDialogFile = formDialogFiles.find(file => file.id === currentDialog.id);
+  const formDialogFile = formDialogFiles.find((file) => file.id === currentDialog.id);
   const [formDialogContent, setFormDialogContent] = useState<string | undefined>(
     formDialogFile && formDialogFile.content
   );
@@ -77,14 +77,14 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
       text: 'DELETE',
     },
   ];
-  const getFileText = result => {
+  const getFileText = (result) => {
     const jsonData = JSON.parse(result);
     if (!jsonData || !jsonData.paths) {
       setApiList([]);
       return;
     }
     const apiListItems: IDropdownOption[] = [];
-    Object.keys(jsonData.paths).forEach(key => {
+    Object.keys(jsonData.paths).forEach((key) => {
       apiListItems.push({
         key: key,
         text: key,
@@ -92,7 +92,7 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
     });
     setApiList(apiListItems);
   };
-  const handleFileSelect = e => {
+  const handleFileSelect = (e) => {
     const files = e.target.files;
     if (!files.length) {
       return;
@@ -101,7 +101,7 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
     const file = files[0];
     setGitScriptProperty({ fileName: file.name });
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = (e) => {
       getFileText(e.target?.result);
       shellApi.copyFile(`${currentDialog.id}.json`, (e.target?.result as string) || '');
     };
@@ -113,7 +113,7 @@ export const DialogSchemaField: React.FC<FieldProps<string>> = function SchemaFi
       [field]: typeof newValue === 'string' ? newValue : newValue?.key,
     };
     setGitScriptProperty(newData);
-    const content = `C:/Users/julong/Documents/code/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate:swagger ${currentDialog.id}.json -o . -r ${newData.apiName} -m ${newData.method} -p dialog.response -n  ${currentDialog.id}.schema  --verbose `;
+    const content = `C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate:swagger ${currentDialog.id}.json -o . -r ${newData.apiName} -m ${newData.method} -p dialog.response -n  ${currentDialog.id}.schema  --verbose `;
     formDialogFile && shellApi.updateFormDialogContent(formDialogFile.id, content, dialogType);
   };
 

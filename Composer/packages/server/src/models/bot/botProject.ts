@@ -274,15 +274,15 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
-  public buildFormDialogs = async dialogs => {
+  public buildFormDialogs = async (dialogs) => {
     Array.isArray(dialogs) &&
-      dialogs.forEach(async dialog => {
+      dialogs.forEach(async (dialog) => {
         const dialogType = dialog.content.dialogType;
         if (dialogType === 'formDialog') {
           try {
             await this._createFile(
               `dialogs/${dialog.id}/generated.cmd`,
-              `C:/Users/julong/Documents/code/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate ${dialog.id}.schema -o . --singleton --force --verbose `
+              `C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate ${dialog.id}.schema -o . --singleton --force --verbose `
             );
             const absolutePath = Path.resolve(this.dir, `/dialogs/${dialog.id}`);
             await childProcess.execSync(`generated.cmd`, { cwd: absolutePath });
@@ -293,7 +293,7 @@ export class BotProject {
           try {
             await this._createFile(
               `dialogs/${dialog.id}/generated.cmd`,
-              `C:/Users/julong/Documents/code/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate ${dialog.id}.schema -o . --singleton --force --verbose `
+              `C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate ${dialog.id}.schema -o . --templates C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/templates/swagger  --templates C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/templates/standard --singleton --force --verbose `
             );
             const absolutePath = Path.resolve(this.dir, `/dialogs/${dialog.id}`);
             await childProcess.execSync(`${dialog.id}.cmd`, { cwd: absolutePath });
