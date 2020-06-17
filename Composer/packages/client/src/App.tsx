@@ -50,7 +50,7 @@ export const App: React.FC = () => {
   const renderAppUpdater = isElectron();
 
   const globalNavButtonText = sideBarExpand ? formatMessage('Collapse Navigation') : formatMessage('Expand Navigation');
-  const showTooltips = (link) => !(sideBarExpand || link.disabled);
+  const showTooltips = (link) => !sideBarExpand && !link.disabled;
 
   return (
     <Fragment>
