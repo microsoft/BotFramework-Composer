@@ -60,7 +60,7 @@ describe('use lgApi hooks', () => {
     const { result } = renderHook(() => useLgApi());
 
     result.current.updateLgTemplate('test.en-us', 'bar', 'update');
-
+    result.current.updateLgTemplate.flush();
     expect(actions.updateLgTemplate).toBeCalledTimes(1);
     const arg = {
       file: {
