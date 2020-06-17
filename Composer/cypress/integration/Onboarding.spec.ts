@@ -18,6 +18,8 @@ context('Onboarding', () => {
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();
     cy.findByTestId('onboardingNext').click();
+    cy.findByTestId('onboardingNext').click();
+    cy.findByTestId('onboardingNext').click();
 
     cy.findByTestId('onboardingNextSet').click();
     cy.findByTestId('onboardingNext').click();
