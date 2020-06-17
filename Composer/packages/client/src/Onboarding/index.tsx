@@ -72,7 +72,7 @@ const Onboarding: React.FC = () => {
     !complete && projectId && navigateTo && navigate(navigateTo);
     setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
 
-    setMinimized(!!~currentStep);
+    setMinimized(currentStep >= 0);
 
     if (currentSet > -1 && currentSet < stepSets.length) {
       onboardingState.setCurrentSet(stepSets[currentSet].id);
