@@ -16,9 +16,9 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid } from '@bfc/indexers';
-import { MemoryResolver } from '@bfc/shared';
-import { ImportResolverDelegate, Templates } from 'botbuilder-lg';
+import { MemoryResolver, ResolverResource, LgTemplate } from '@bfc/shared';
 
+import { LgParser } from './lgParser';
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
@@ -28,7 +28,6 @@ import {
   generageDiagnostic,
   LGOption,
   LGCursorState,
-  updateTemplate,
   cardTypes,
   cardPropDict,
   cardPropPossibleValueType,
@@ -45,17 +44,11 @@ export class LGServer {
   protected readonly pendingValidationRequests = new Map<string, number>();
   protected LGDocuments: LGDocument[] = [];
   private memoryVariables: Record<string, any> = {};
+  private _lgParser = new LgParser();
 
   constructor(
     protected readonly connection: IConnection,
-    protected readonly importResolver?: (
-      source: string,
-      resourceId: string,
-      projectId: string
-    ) => {
-      content: string;
-      id: string;
-    },
+    protected readonly getLgResources: (projectId?: string) => ResolverResource[],
     protected readonly memoryResolver?: MemoryResolver
   ) {
     this.documents.listen(this.connection);
@@ -88,8 +81,8 @@ export class LGServer {
         },
       };
     });
-    this.connection.onCompletion((params) => this.completion(params));
-    this.connection.onHover((params) => this.hover(params));
+    this.connection.onCompletion(async (params) => await this.completion(params));
+    this.connection.onHover(async (params) => await this.hover(params));
     this.connection.onDocumentOnTypeFormatting((docTypingParams) => this.docTypeFormat(docTypingParams));
 
     this.connection.onRequest((method, params) => {
@@ -148,16 +141,16 @@ export class LGServer {
     });
   }
 
-  protected validateLgOption(document: TextDocument, lgOption?: LGOption) {
+  protected async validateLgOption(document: TextDocument, lgOption?: LGOption) {
     if (!lgOption) return;
 
     const diagnostics: string[] = [];
 
-    if (!this.importResolver) {
-      diagnostics.push('[Error lgOption] importResolver is required but not exist.');
+    if (!this.getLgResources) {
+      diagnostics.push('[Error lgOption] getLgResources is required but not exist.');
     } else {
       const { fileId, templateId } = lgOption;
-      const lgFile = this.getLGDocument(document)?.index();
+      const lgFile = await this.getLGDocument(document)?.index();
       if (!lgFile) {
         diagnostics.push(`[Error lgOption] File ${fileId}.lg do not exist`);
       } else if (templateId) {
@@ -173,60 +166,33 @@ export class LGServer {
     );
   }
 
-  protected getImportResolver(document: TextDocument) {
-    const editorContent = document.getText();
-    const internalImportResolver = () => {
-      return {
-        id: document.uri,
-        content: editorContent,
-      };
-    };
-    const { fileId, templateId, projectId } = this.getLGDocument(document) || {};
-
-    if (this.importResolver && fileId && projectId) {
-      const resolver = this.importResolver;
-      return (source: string, id: string) => {
-        const lgFile = resolver(source, id, projectId);
-        if (!lgFile) {
-          this.sendDiagnostics(document, [
-            generageDiagnostic(`lg file: ${fileId}.lg not exist on server`, DiagnosticSeverity.Error, document),
-          ]);
-        }
-        let { content } = lgFile;
-        /**
-         * source is . means use as file resolver, not import resolver
-         * if inline editor, server file write may have delay than webSocket updated LSP server
-         * so here build the full content from server file content and editor content
-         */
-        if (source === '.' && templateId) {
-          content = updateTemplate(lgFile.content, templateId, editorContent);
-        }
-        return { id, content };
-      };
-    }
-
-    return internalImportResolver;
-  }
-
   protected addLGDocument(document: TextDocument, lgOption?: LGOption) {
     const { uri } = document;
     const { fileId, templateId, projectId } = lgOption || {};
-    const index = () => {
-      const importResolver: ImportResolverDelegate = this.getImportResolver(document);
+    const index = async () => {
       let content: string = document.getText();
       // if inline mode, composite local with server resolved file.
-      if (this.importResolver && fileId && templateId) {
+      if (this.getLgResources && fileId && templateId) {
         try {
-          content = importResolver('.', `${fileId}.lg`).content;
+          const resources = this.getLgResources(projectId);
+          content = resources.find((item) => item.id === fileId)?.content || content;
         } catch (error) {
           // ignore if file not exist
         }
       }
 
       const id = fileId || uri;
-      const { allTemplates, diagnostics } = Templates.parseText(content, id, importResolver);
+      let templates: LgTemplate[] = [];
+      let diagnostics: any[] = [];
+      try {
+        const payload = await this._lgParser.parseText(content, id, this.getLgResources(projectId));
+        templates = payload.templates;
+        diagnostics = payload.diagnostics;
+      } catch (error) {
+        diagnostics.push(generageDiagnostic(error.message, DiagnosticSeverity.Error, document));
+      }
 
-      return { templates: allTemplates, diagnostics };
+      return { templates, diagnostics };
     };
     const lgDocument: LGDocument = {
       uri,
@@ -242,12 +208,12 @@ export class LGServer {
     return this.LGDocuments.find(({ uri }) => uri === document.uri);
   }
 
-  protected hover(params: TextDocumentPositionParams): Thenable<Hover | null> {
+  protected async hover(params: TextDocumentPositionParams): Promise<Thenable<Hover | null>> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
     }
-    const lgFile = this.getLGDocument(document)?.index();
+    const lgFile = await this.getLGDocument(document)?.index();
     if (!lgFile) {
       return Promise.resolve(null);
     }
@@ -511,7 +477,7 @@ export class LGServer {
     return completionList;
   }
 
-  protected completion(params: TextDocumentPositionParams): Thenable<CompletionList | null> {
+  protected async completion(params: TextDocumentPositionParams): Promise<Thenable<CompletionList | null>> {
     const document = this.documents.get(params.textDocument.uri);
     if (!document) {
       return Promise.resolve(null);
@@ -521,7 +487,7 @@ export class LGServer {
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
     const lgDoc = this.getLGDocument(document);
-    const lgFile = lgDoc?.index();
+    const lgFile = await lgDoc?.index();
     const templateId = lgDoc?.templateId;
     const lines = document.getText(range).split('\n');
     if (!lgFile) {
@@ -722,9 +688,9 @@ export class LGServer {
     this.cleanPendingValidation(document);
     this.pendingValidationRequests.set(
       document.uri,
-      setTimeout(() => {
+      setTimeout(async () => {
         this.pendingValidationRequests.delete(document.uri);
-        this.doValidate(document);
+        await this.doValidate(document);
       })
     );
   }
@@ -737,14 +703,14 @@ export class LGServer {
     }
   }
 
-  protected doValidate(document: TextDocument): void {
+  protected async doValidate(document: TextDocument): Promise<void> {
     const text = document.getText();
     const lgDoc = this.getLGDocument(document);
     if (!lgDoc) {
       return;
     }
-    const { fileId, templateId, uri } = lgDoc;
-    const lgFile = lgDoc.index();
+    const { fileId, templateId, uri, projectId } = lgDoc;
+    const lgFile = await lgDoc.index();
     if (!lgFile) {
       return;
     }
@@ -778,7 +744,13 @@ export class LGServer {
       this.sendDiagnostics(document, lspDiagnostics);
       return;
     }
-    const lgDiagnostics = Templates.parseText(text, fileId || uri, this.getImportResolver(document)).diagnostics;
+    let lgDiagnostics: any[] = [];
+    try {
+      const payload = await this._lgParser.parseText(text, fileId || uri, this.getLgResources(projectId));
+      lgDiagnostics = payload.diagnostics;
+    } catch (error) {
+      lgDiagnostics.push(generageDiagnostic(error.message, DiagnosticSeverity.Error, document));
+    }
     const lspDiagnostics = convertDiagnostics(lgDiagnostics, document);
     this.sendDiagnostics(document, lspDiagnostics);
   }
