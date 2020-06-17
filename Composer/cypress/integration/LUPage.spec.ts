@@ -15,7 +15,7 @@ context('LU Page', () => {
 
     cy.get('.toggleEditMode button').should('not.exist');
 
-    // by default is table view
+    // by default it goes to table view
     cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
 
     // nav to ToDoBotWithLuisSample.main dialog
