@@ -21,11 +21,6 @@ function createDiagnostic(diagnostic: Diagnostic) {
   };
 }
 
-// TODO: remove? not sure what this was for
-// if (!parentPort) {
-//   process.exit();
-// }
-
 process.on('message', (message: WorkerMsg) => {
   const { content, id, resources } = message.payload;
   let templates: any[] = [];
