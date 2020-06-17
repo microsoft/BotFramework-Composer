@@ -10,7 +10,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@azure/arm-appinsights": "^2.1.0",
     "@azure/arm-appservice-profile-2019-03-01-hybrid": "^1.0.0",
+    "@azure/arm-botservice": "^1.0.0",
     "@azure/arm-deploymentmanager": "^3.0.0",
     "@azure/arm-resources": "^2.1.0",
     "@azure/arm-subscriptions": "^2.0.0",
