@@ -12,5 +12,5 @@ export interface ISkillFormDataErrors {
   name?: string;
 }
 
-export const SkillUrlRegex = /^http[s]?:\/\/\w+/;
-export const SkillNameRegex = /^\w[-\w]*$/;
+export const skillUrlRegex = /^http[s]?:\/\/\w+/;
+export const skillNameRegex = /^\w[-\w]*$/;
