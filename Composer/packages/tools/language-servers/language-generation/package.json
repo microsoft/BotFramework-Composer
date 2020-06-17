@@ -8,7 +8,7 @@
     "build:demo": "cd demo && tsc --build tsconfig.json",
     "prepublishOnly": "npm run build",
     "clean": "rimraf lib demo/dist",
-    "start": "cd demo && set NODE_ENV=development&& ts-node ./src/server.ts",
+    "start": "cd demo && set NODE_ENV=test&& ts-node ./src/server.ts",
     "test": "jest",
     "lint": "eslint --quiet ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
