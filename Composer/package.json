@@ -39,7 +39,7 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
-    "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:azureFunctionsPublish && build:plugins:azureLogin",
+    "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:azureFunctionsPublish && yarn build:plugins:azureLogin",
     "build:plugins:localpublish": "cd plugins/localPublish && yarn install && yarn build",
     "build:plugins:samples": "cd plugins/samples && yarn install && yarn build",
     "build:plugins:azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
