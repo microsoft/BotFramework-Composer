@@ -9,6 +9,8 @@ const clientId = 'f3723d34-6ff5-4ceb-a148-d99dcd2511fc';
 const replyUrl = 'https://dev.botframework.com/cb';
 const authorizationEndpoint = 'https://login.microsoftonline.com/common/oauth2/authorize';
 
+export const AUTH_JWKS_URL = 'https://login.microsoftonline.com/common/discovery/keys';
+
 export const DEFAULT_AZURE_LOGIN_CONFIG = [
   `${authorizationEndpoint}?response_type=token`,
   `client_id=${clientId}`,

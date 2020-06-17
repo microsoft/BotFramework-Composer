@@ -8,6 +8,7 @@ import { getAccessTokenInCache, loginPopup } from '../../utils/auth';
 
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
+
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/publish/types`);
@@ -140,11 +141,16 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, 
 export const getSubscriptions: ActionCreator = async ({ dispatch }) => {
   try {
     const token = getAccessTokenInCache();
-    const result = await httpClient.post('/publish/subscriptions', { accessToken: token });
+    const result = await httpClient.get('/publish/subscriptions', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     console.log(result);
   } catch (error) {
     console.log(error.response.data);
     // popup window to login
-    await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+    if (error.response.data.redirectUri) {
+      await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+    }
+    // save token in localStorage
   }
 };

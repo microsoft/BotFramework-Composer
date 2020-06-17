@@ -1,39 +1,82 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { RequestHandler } from 'express';
+import jwt, { GetPublicKeyOrSecret, TokenExpiredError } from 'jsonwebtoken';
+import JWKSClient, { CertSigningKey, RsaSigningKey } from 'jwks-rsa';
 
-// import { interactiveLogin } from '@azure/ms-rest-nodeauth';
-// import axios from 'axios';
-
-import { getLoginUrl } from './config';
+import { getLoginUrl, AUTH_JWKS_URL } from './config';
 console.log('azure login plugin');
 
-// set authentication
-const setAuthentication = async (req, res, next) => {
-  console.log(req.body);
-  res.status(200);
+const BEARER_PREFIX = 'Bearer ';
+
+const getKey: GetPublicKeyOrSecret = (header, callback) => {
+  const { kid } = header;
+  const jwksClient = JWKSClient({ jwksUri: AUTH_JWKS_URL });
+
+  if (!kid || kid.length === 0) {
+    callback('kid missing');
+    return;
+  }
+
+  jwksClient.getSigningKey(kid, (err, key) => {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    if (!key) {
+      callback('no key');
+      return;
+    }
+
+    callback(null, (key as CertSigningKey).publicKey || (key as RsaSigningKey).rsaPublicKey);
+  });
 };
-const verification = async (req, res, next) => {
-  const { accessToken } = req.body;
-  if (!accessToken) {
-    console.log('need authentication');
+
+const authorize: RequestHandler = async (req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    next();
+    return;
+  }
+
+  // validate bearer token exists
+  const authString = req.header('Authorization'); // get bearer token
+  const bearer = authString && authString.startsWith(BEARER_PREFIX) && authString.substr(BEARER_PREFIX.length);
+  if (!bearer || bearer.length === 0) {
+    res.status(401).json({ message: 'Unauthorized', redirectUri: getLoginUrl() });
     // res.redirect(getLoginUrl());
-    res.status(400).json({
-      statusCode: '400',
-      message: 'need authentication',
-      redirectUri: getLoginUrl(),
+    return;
+  }
+
+  // check token expired or not
+  try {
+    jwt.verify(bearer, getKey, (err, token) => {
+      if (err) {
+        console.error(err);
+        // used by the client to display correct message
+        if (err instanceof TokenExpiredError) {
+          res.status(401).json({ message: 'Token expired', redirectUri: getLoginUrl() });
+          // redirect renew url
+          // res.redirect(getLoginUrl(true));
+        } else {
+          res.status(401).json({ message: 'Unauthorized', redirectUri: getLoginUrl() });
+          // res.redirect(getLoginUrl());
+        }
+        return;
+      }
+
+      req.body = {
+        ...req.body,
+        decodedToken: token,
+        accessToken: bearer,
+      };
+      next();
     });
-  } else {
-    // authentication
-    console.log(accessToken);
-    // next();
-    res.status(200);
+  } catch (err) {
+    next(err);
   }
 };
 
 export default async (composer: any): Promise<void> => {
-  composer.addWebRoute('post', '/api/publish/subscriptions', verification);
-  composer.addWebRoute('get', '/api/azure/auth/callback', setAuthentication);
-  composer.addWebRoute('post', '/api/azure/auth/callback', setAuthentication);
-  composer.addWebRoute('get', '/azure/login', setAuthentication);
-  composer.addWebRoute('post', '/azure/login', setAuthentication);
+  composer.addWebRoute('get', '/api/publish/subscriptions', authorize);
 };
