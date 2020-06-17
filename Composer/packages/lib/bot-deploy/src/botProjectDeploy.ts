@@ -492,7 +492,7 @@ export class BotProjectDeploy {
         const luisAppId = luisAppIds[k];
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Assigning to luis app id: ${luisAppIds}`,
+          message: `Assigning to luis app id: ${luisAppId}`,
         });
 
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
@@ -595,7 +595,10 @@ export class BotProjectDeploy {
         message: 'Publish To Azure Success!',
       });
     } catch (error) {
-      console.log(error);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+      });
       throw error;
     }
   }

@@ -174,6 +174,8 @@ export interface ILuisConfig {
   name: string;
   authoringKey: string;
   endpointKey: string;
+  endpoint: string;
+  authoringEndpoint: string;
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
