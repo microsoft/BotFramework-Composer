@@ -1,0 +1,1 @@
+{"version":3,"file":"SelectionContext.d.ts","sourceRoot":"","sources":["../../src/store/SelectionContext.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,MAAM,OAAO,CAAC;AAE1B,MAAM,WAAW,oBAAoB;IACnC,YAAY,EAAE,CAAC,EAAE,EAAE,MAAM,KAAK,MAAM,CAAC;IACrC,WAAW,EAAE,MAAM,EAAE,CAAC;CACvB;AAED,eAAO,MAAM,gBAAgB,qCAG3B,CAAC"}

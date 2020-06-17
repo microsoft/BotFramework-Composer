@@ -83,7 +83,7 @@ export class BotProject {
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
-    this.luPublisher = new LuPublisher(this.dir, this.fileStorage);
+    this.luPublisher = new LuPublisher(this.dir, this.fileStorage, this.locale);
   }
 
   public init = async () => {
@@ -151,7 +151,7 @@ export class BotProject {
     try {
       this.fileStorage.zip(this.dataDir, cb);
     } catch (e) {
-      console.log('error zipping assets', e);
+      debug('error zipping assets', e);
     }
   };
 
@@ -188,10 +188,26 @@ export class BotProject {
         url: schemaUrl,
         responseType: 'stream',
       });
-      const pathToSchema = `${pathToSave}/Schemas`;
-      await mkDirAsync(pathToSchema);
-      response.data.pipe(fs.createWriteStream(`${pathToSchema}/sdk.schema`));
+      const dirToSchema = `${pathToSave}/schemas`;
+      await mkDirAsync(dirToSchema);
+      const writer = fs.createWriteStream(`${dirToSchema}/sdk.schema`);
+
+      await new Promise((resolve, reject) => {
+        response.data.pipe(writer);
+        let error;
+        writer.on('error', (err) => {
+          error = err;
+          writer.close();
+          reject(err);
+        });
+        writer.on('close', () => {
+          if (!error) {
+            resolve();
+          }
+        });
+      });
     } catch (ex) {
+      debug(`Custom Schema download error: ${ex}`);
       throw new Error('Schema file could not be downloaded. Please check the url to the schema.');
     }
   }
@@ -362,21 +378,13 @@ export class BotProject {
 
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
-    if (
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.stopBot
-    ) {
+    if (pluginLoader.extensions.publish[method]?.methods?.stopBot) {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
       if (typeof pluginMethod === 'function') {
         await pluginMethod.call(null, projectId);
       }
     }
-    if (
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.removeRuntimeData
-    ) {
+    if (pluginLoader.extensions.publish[method]?.methods?.removeRuntimeData) {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
       if (typeof pluginMethod === 'function') {
         await pluginMethod.call(null, projectId);
@@ -412,7 +420,7 @@ export class BotProject {
 
   private getLocale(id: string): string {
     const index = id.lastIndexOf('.');
-    if (~index) return '';
+    if (index >= 0) return '';
     return id.substring(index + 1);
   }
 

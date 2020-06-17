@@ -1,0 +1,1 @@
+{"version":3,"file":"IfConditionWidget.d.ts","sourceRoot":"","sources":["../../src/widgets/IfConditionWidget.tsx"],"names":[],"mappings":"AAKA,OAAO,EAAE,iBAAiB,EAAW,MAAM,OAAO,CAAC;AACnD,OAAO,EAAE,oBAAoB,EAAE,MAAM,gBAAgB,CAAC;AA+CtD,MAAM,WAAW,sBAAuB,SAAQ,oBAAoB;IAClE,SAAS,EAAE,GAAG,CAAC,OAAO,CAAC;CACxB;AAED,eAAO,MAAM,iBAAiB,EAAE,iBAAiB,CAAC,sBAAsB,CAuDvE,CAAC"}

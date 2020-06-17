@@ -62,6 +62,7 @@ export interface LuIntentSection {
 }
 
 export interface LuParsed {
+  empty: boolean;
   intents: LuIntentSection[];
   diagnostics: Diagnostic[];
 }
@@ -81,6 +82,7 @@ export interface LuFile {
   content: string;
   diagnostics: Diagnostic[];
   intents: LuIntentSection[];
+  empty: boolean;
   [key: string]: any;
 }
 export interface FormDialogFile {

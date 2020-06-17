@@ -1,0 +1,1 @@
+{"version":3,"file":"PromptWidget.d.ts","sourceRoot":"","sources":["../../src/widgets/PromptWidget.tsx"],"names":[],"mappings":"AAKA,OAAO,EAAE,EAAE,EAAW,MAAM,OAAO,CAAC;AAEpC,OAAO,EAAE,oBAAoB,EAAE,MAAM,gBAAgB,CAAC;AAoCtD,MAAM,WAAW,iBAAkB,SAAQ,oBAAoB;IAC7D,OAAO,EAAE,GAAG,CAAC,OAAO,CAAC;IACrB,SAAS,EAAE,GAAG,CAAC,OAAO,CAAC;CACxB;AAED,eAAO,MAAM,YAAY,EAAE,EAAE,CAAC,iBAAiB,CAkD9C,CAAC"}

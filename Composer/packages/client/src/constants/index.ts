@@ -261,3 +261,5 @@ export const DefaultPublishConfig = {
 };
 
 export const EmptyBotTemplateId = 'EmptyBot';
+
+export const nameRegex = /^[a-zA-Z0-9-_]+$/;

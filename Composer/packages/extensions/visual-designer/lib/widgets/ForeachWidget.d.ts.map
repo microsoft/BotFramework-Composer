@@ -1,0 +1,1 @@
+{"version":3,"file":"ForeachWidget.d.ts","sourceRoot":"","sources":["../../src/widgets/ForeachWidget.tsx"],"names":[],"mappings":"AAKA,OAAO,EAAW,iBAAiB,EAAE,MAAM,OAAO,CAAC;AACnD,OAAO,EAAE,oBAAoB,EAAE,MAAM,gBAAgB,CAAC;AA+CtD,MAAM,WAAW,kBAAmB,SAAQ,oBAAoB;IAC9D,IAAI,EAAE,GAAG,CAAC,OAAO,CAAC;CACnB;AAED,eAAO,MAAM,aAAa,EAAE,iBAAiB,CAAC,kBAAkB,CA+C/D,CAAC"}

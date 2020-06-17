@@ -1,0 +1,1 @@
+{"version":3,"file":"flowSchemaProvider.d.ts","sourceRoot":"","sources":["../../src/schema/flowSchemaProvider.ts"],"names":[],"mappings":"AAIA,OAAO,EAAE,UAAU,EAAE,UAAU,EAAE,MAAM,gBAAgB,CAAC;AAExD,qBAAa,kBAAkB;IAC7B,MAAM,EAAE,UAAU,CAAC;gBAEP,GAAG,OAAO,EAAE,UAAU,EAAE;IAIpC,OAAO,CAAC,YAAY;IAKpB,GAAG,UAAW,MAAM,KAAG,UAAU,CAE/B;CACH"}

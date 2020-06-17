@@ -36,13 +36,13 @@ export const TestController: React.FC = () => {
     publishLuis,
     getPublishStatus,
     setBotStatus,
-    buildFormDialog
+    buildFormDialog,
   } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
-  const addRef = useCallback(startBot => onboardingAddCoachMarkRef({ startBot }), []);
-  const errorLength = notifications.filter(n => n.severity === 'Error').length;
+  const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
+  const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
 
   useEffect(() => {
@@ -82,13 +82,13 @@ export const TestController: React.FC = () => {
   async function handlePublishLuis() {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
+    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis : null;
     await publishLuis(luisConfig.authoringKey, state.projectId);
   }
 
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
-    const sensitiveSettings = settingsStorage.get(botName);
+    const sensitiveSettings = settingsStorage.get(projectId);
     await publishToTarget(state.projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
@@ -156,7 +156,7 @@ export const TestController: React.FC = () => {
           />
           <div
             aria-label={formatMessage(`{ botStatus}`, {
-              botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : ''
+              botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
             })}
             aria-live={'assertive'}
           />

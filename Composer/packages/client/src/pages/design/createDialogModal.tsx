@@ -8,7 +8,7 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IDropdownOption, Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { DialogCreationCopy } from '../../constants';
+import { DialogCreationCopy, nameRegex } from '../../constants';
 import { DialogWrapper } from '../../components/DialogWrapper';
 import { DialogTypes } from '../../components/DialogWrapper/styles';
 import { StorageFolder } from '../../store/types';
@@ -31,57 +31,55 @@ interface CreateDialogModalProps {
   isOpen: boolean;
 }
 
-export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
+export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs } = state;
   const { onSubmit, onDismiss, isOpen } = props;
   const dialogTypeOptions: IDropdownOption[] = [
     {
       key: 'none',
-      text: 'None'
+      text: 'None',
     },
     {
       key: 'formDialog',
-      text: 'FormDialog'
+      text: 'FormDialog',
     },
     {
       key: 'swaggerDialog',
-      text: 'SwaggerDialog'
-    }
+      text: 'SwaggerDialog',
+    },
   ];
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
       required: true,
-      validate: value => {
-        const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-
+      validate: (value) => {
         if (!nameRegex.test(value)) {
           return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
-        if (dialogs.some(dialog => dialog.id === value)) {
+        if (dialogs.some((dialog) => dialog.id === value)) {
           return formatMessage('Duplicate dialog name');
         }
-      }
+      },
     },
     description: {
-      required: false
+      required: false,
     },
     dialogType: {
-      required: false
-    }
+      required: false,
+    },
   };
 
   const { formData, formErrors, hasErrors, updateField } = useForm(formConfig);
 
   const handleSubmit = useCallback(
-    e => {
+    (e) => {
       e.preventDefault();
       if (hasErrors) {
         return;
       }
 
       onSubmit({
-        ...formData
+        ...formData,
       });
     },
     [hasErrors, formData]
@@ -132,7 +130,12 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = props => {
 
         <DialogFooter>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-          <PrimaryButton disabled={hasErrors} text={formatMessage('Next')} onClick={handleSubmit} />
+          <PrimaryButton
+            data-testid="SubmitNewDialogBtn"
+            disabled={hasErrors}
+            text={formatMessage('OK')}
+            onClick={handleSubmit}
+          />
         </DialogFooter>
       </form>
     </DialogWrapper>

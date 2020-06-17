@@ -4,12 +4,11 @@
 import { useEffect, useContext, useMemo, useRef } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
-import get from 'lodash/get';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { StoreContext } from '../store';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils';
-import { OpenAlertModal, DialogStyle } from '../components/Modal';
+import { openAlertModal, dialogStyle } from '../components/Modal';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 
@@ -111,11 +110,11 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
 
   // ANDY: should this be somewhere else?
   useEffect(() => {
-    const schemaError = get(schemas, 'diagnostics', []);
+    const schemaError = schemas?.diagnostics ?? [];
     if (schemaError.length !== 0) {
-      const title = `StaticValidationError`;
+      const title = `Static Validation Error`;
       const subTitle = schemaError.join('\n');
-      OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
+      openAlertModal(title, subTitle, { style: dialogStyle.console });
     }
   }, [schemas, projectId]);
 
@@ -214,7 +213,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         formDialogFiles,
         currentDialog,
         userSettings,
-        designerId: get(editorData, '$designer.id'),
+        designerId: editorData?.$designer?.id,
         focusedEvent: selected,
         focusedActions: focused ? [focused] : [],
         focusedSteps: focused ? [focused] : selected ? [selected] : [],

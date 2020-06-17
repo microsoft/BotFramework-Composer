@@ -44,7 +44,7 @@ export class BotProjectDeploy {
   private logger: (string) => any;
 
   // Will be assigned by create or deploy
-  private tenantId: string = '';
+  private tenantId = '';
 
   constructor(config: BotProjectDeployConfig) {
     this.subId = config.subId;
@@ -91,7 +91,7 @@ export class BotProjectDeploy {
         if (err.body.error.details) {
           const details = err.body.error.details;
           let errMsg = '';
-          for (let detail of details) {
+          for (const detail of details) {
             errMsg += detail.message;
           }
           return errMsg;
@@ -121,21 +121,20 @@ export class BotProjectDeploy {
         'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
       );
     }
+    if (!this.subId) {
+      throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
+    }
     try {
-      const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
+      const tenantUrl = `https://management.azure.com/subscriptions/${this.subId}?api-version=2020-01-01`;
       const options = {
         headers: { Authorization: `Bearer ${this.accessToken}` },
       } as rp.RequestPromiseOptions;
       const response = await rp.get(tenantUrl, options);
       const jsonRes = JSON.parse(response);
-      if (
-        jsonRes.value === undefined ||
-        (jsonRes.value && jsonRes.value.length === 0) ||
-        (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)
-      ) {
+      if (jsonRes.tenantId === undefined) {
         throw new Error(`No tenants found in the account.`);
       }
-      return jsonRes.value[0].tenantId;
+      return jsonRes.tenantId;
     } catch (err) {
       throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
     }
@@ -382,6 +381,8 @@ export class BotProjectDeploy {
     name: string,
     environment: string,
     language: string,
+    luisEndpoint: string,
+    luisAuthoringEndpoint: string,
     luisEndpointKey: string,
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
@@ -411,11 +412,19 @@ export class BotProjectDeploy {
         luisAuthoringRegion || ''
       );
 
+      if (!luisEndpoint) {
+        luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
+      }
+
+      if (!luisAuthoringEndpoint) {
+        luisAuthoringEndpoint = luisEndpoint;
+      }
+
       const buildResult = await builder.build(
         loadResult.luContents,
         loadResult.recognizers,
         luisAuthoringKey,
-        luisAuthoringRegion,
+        luisAuthoringEndpoint,
         name,
         environment,
         language,
@@ -440,7 +449,6 @@ export class BotProjectDeploy {
         Object.assign(luisAppIds, luisSettings.luis);
       }
 
-      const luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
       const luisConfig: any = {
         endpoint: luisEndpoint,
         endpointKey: luisEndpointKey,
@@ -484,7 +492,7 @@ export class BotProjectDeploy {
         const luisAppId = luisAppIds[k];
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Assigning to luis app id: ${luisAppIds}`,
+          message: `Assigning to luis app id: ${luisAppId}`,
         });
 
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
@@ -536,12 +544,16 @@ export class BotProjectDeploy {
       const luisSettings = settings.luis;
 
       let luisEndpointKey = '';
+      let luisEndpoint = '';
+      let luisAuthoringEndpoint = '';
 
       if (luisSettings) {
         // if luisAuthoringKey is not set, use the one from the luis settings
         luisAuthoringKey = luisAuthoringKey || luisSettings.authoringKey;
         luisAuthoringRegion = luisAuthoringRegion || luisSettings.region;
         luisEndpointKey = luisSettings.endpointKey;
+        luisEndpoint = luisSettings.endpoint;
+        luisAuthoringEndpoint = luisSettings.authoringEndpoint;
       }
 
       if (!language) {
@@ -552,6 +564,8 @@ export class BotProjectDeploy {
         name,
         environment,
         language,
+        luisEndpoint,
+        luisAuthoringEndpoint,
         luisEndpointKey,
         luisAuthoringKey,
         luisAuthoringRegion,
@@ -581,7 +595,10 @@ export class BotProjectDeploy {
         message: 'Publish To Azure Success!',
       });
     } catch (error) {
-      console.log(error);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+      });
       throw error;
     }
   }

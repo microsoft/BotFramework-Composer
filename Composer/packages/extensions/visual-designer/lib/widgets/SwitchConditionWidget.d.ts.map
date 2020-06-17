@@ -1,0 +1,1 @@
+{"version":3,"file":"SwitchConditionWidget.d.ts","sourceRoot":"","sources":["../../src/widgets/SwitchConditionWidget.tsx"],"names":[],"mappings":"AAKA,OAAO,EAAE,iBAAiB,EAAW,MAAM,OAAO,CAAC;AACnD,OAAO,EAAE,oBAAoB,EAAE,MAAM,gBAAgB,CAAC;AAyDtD,MAAM,WAAW,0BAA2B,SAAQ,oBAAoB;IACtE,SAAS,EAAE,GAAG,CAAC,OAAO,CAAC;CACxB;AAED,eAAO,MAAM,qBAAqB,EAAE,iBAAiB,CAAC,0BAA0B,CAsD/E,CAAC"}

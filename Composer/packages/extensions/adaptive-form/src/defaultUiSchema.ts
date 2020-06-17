@@ -15,7 +15,7 @@ const DefaultUISchema: UISchema = {
   [SDKKinds.AdaptiveDialog]: {
     label: 'Adaptive dialog',
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
-    helpLink: 'https://aka.ms/botframework',
+    helpLink: 'https://aka.ms/bf-composer-docs-dialog',
     order: ['recognizer', '*'],
     hidden: ['triggers', 'autoEndDialog', 'generator', 'selector'],
     properties: {
@@ -100,7 +100,7 @@ const DefaultUISchema: UISchema = {
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
   },
   [SDKKinds.EndTurn]: {
-    label: () => formatMessage('End dialog turn'),
+    label: () => formatMessage('End turn'),
     subtitle: () => formatMessage('End Turn'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
   },
@@ -183,8 +183,7 @@ const DefaultUISchema: UISchema = {
     label: () => formatMessage('Greeting'),
     subtitle: () => formatMessage('ConversationUpdate activity'),
     description: () => formatMessage('Handle the events fired when a user begins a new conversation with the bot.'),
-    helpLink:
-      'https://docs.microsoft.com/en-us/azure/bot-service/bot-builder-conversations?view=azure-bot-service-4.0#conversation-lifetime',
+    helpLink: 'https://aka.ms/bf-composer-docs-conversation-update-activity',
   },
   [SDKKinds.OnDialogEvent]: {
     ...triggerUiSchema,
@@ -302,7 +301,7 @@ const DefaultUISchema: UISchema = {
   [SDKKinds.BeginSkill]: {
     label: () => formatMessage('Connect to a skill'),
     subtitle: () => formatMessage('Skill Dialog'),
-    helpLink: 'https://aka.ms/bfc-call-skill',
+    helpLink: 'https://aka.ms/bf-composer-docs-connect-skill',
   },
   [SDKKinds.SwitchCondition]: {
     label: () => formatMessage('Branch: Switch (multiple options)'),

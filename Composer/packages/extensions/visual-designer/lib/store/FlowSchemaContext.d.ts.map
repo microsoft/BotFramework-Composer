@@ -1,0 +1,1 @@
+{"version":3,"file":"FlowSchemaContext.d.ts","sourceRoot":"","sources":["../../src/store/FlowSchemaContext.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,MAAM,OAAO,CAAC;AAC1B,OAAO,EAAE,mBAAmB,EAAE,MAAM,gBAAgB,CAAC;AAErD,OAAO,EAAE,kBAAkB,EAAE,MAAM,8BAA8B,CAAC;AAMlE,MAAM,WAAW,sBAAsB;IACrC,OAAO,EAAE,mBAAmB,CAAC;IAC7B,cAAc,EAAE,kBAAkB,CAAC;CACpC;AAED,eAAO,MAAM,iBAAiB,uCAG5B,CAAC"}

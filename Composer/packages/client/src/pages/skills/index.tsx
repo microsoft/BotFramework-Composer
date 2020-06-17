@@ -7,7 +7,7 @@ import { RouteComponentProps } from '@reach/router';
 import React, { useContext, useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 
-import { ToolBar } from '../../components/ToolBar/index';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
 import { StoreContext } from '../../store';
 import { ISkillFormData } from '../../components/SkillForm/types';
@@ -22,7 +22,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
   const [editIndex, setEditIndex] = useState<number | undefined>();
 
   const { skills, projectId, settings, botName } = state;
-  const toolbarItems = [
+  const toolbarItems: IToolBarItem[] = [
     {
       type: 'action',
       text: formatMessage('Connect to a new skill'),

@@ -18,7 +18,7 @@ import keys from 'lodash/keys';
 
 import { StoreContext } from '../../store';
 
-import { Text, Tips, Links } from './../../constants';
+import { Text, Tips, Links, nameRegex } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 
 const STATE = {
@@ -38,7 +38,6 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
-const nameRegex = /^[a-zA-Z0-9-_.]+$/;
 const validationProperties = ['name', 'authoringKey', 'environment'];
 const defaultFields = { authoringRegion: 'westus', defaultLanguage: 'en-us' };
 const validateForm = (data) => {
@@ -49,7 +48,7 @@ const validateForm = (data) => {
     const value = data[key];
     if (validationProperties.includes(key) && (!value || !nameRegex.test(value))) {
       result.errors[key] = formatMessage(
-        'Spaces and special characters are not allowed. Use letters, numbers, -, or _., numbers, -, and _'
+        'Spaces and special characters are not allowed. Use letters, numbers, -, or _.'
       );
     } else if (key in defaultFields && value === '') {
       result[key] = defaultFields[key];
@@ -110,6 +109,8 @@ export const PublishLuis = (props) => {
     authoringRegion: settings.luis.authoringRegion,
     defaultLanguage: settings.luis.defaultLanguage,
     environment: settings.luis.environment,
+    endpoint: settings.luis.endpoint,
+    authoringEndpoint: settings.luis.authoringEndpoint,
     errors: {},
   };
 
@@ -130,7 +131,7 @@ export const PublishLuis = (props) => {
     // save the settings change to store and persist to server
     const newValue = { ...formData, ...result };
     delete newValue.errors;
-    await setSettings(state.projectId, botName, { ...settings, luis: newValue });
+    await setSettings(state.projectId, { ...settings, luis: newValue });
     await onPublish();
   };
 
