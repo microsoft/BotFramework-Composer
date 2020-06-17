@@ -41,7 +41,7 @@ context('Notification Page', () => {
     cy.findAllByText('__TestToDoBotWithLuisSample').should('exist');
   });
 
-  it.only('can show dialog expression error ', () => {
+  it('can show dialog expression error ', () => {
     cy.visitPage('Design');
 
     cy.findByTestId('ProjectTree').within(() => {
