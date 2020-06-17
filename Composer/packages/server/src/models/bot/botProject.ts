@@ -309,7 +309,7 @@ export class BotProject {
           try {
             await this._createFile(
               `dialogs/${dialog.id}/generated.cmd`,
-              `C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate ${dialog.id}.schema -o . --templates C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/templates/swagger  --templates C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/templates/standard --singleton --force --verbose `
+              `C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate ${dialog.id}.schema -o . --templates C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/templates/swagger  --templates C:/Users/zoma/src/sample/swagger/BotBuilder-Samples/experimental/generation/generator/templates/standard -j properties.json --singleton --force --verbose `
             );
             const absolutePath = Path.resolve(this.dir, `/dialogs/${dialog.id}`);
             await childProcess.execSync(`${dialog.id}.cmd`, { cwd: absolutePath });
