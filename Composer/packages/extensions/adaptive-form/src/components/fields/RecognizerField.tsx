@@ -6,8 +6,8 @@ import React, { useMemo, useEffect } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
+import { JsonEditor } from '@bfc/code-editor';
 
 import { FieldLabel } from '../FieldLabel';
 import { usePluginConfig } from '../../hooks';
@@ -38,8 +38,16 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   }, [recognizers]);
 
   const selectedType = useMemo(() => {
-    const selected =
+    let selected =
       value === undefined ? [recognizers[0].id] : recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
+
+    const involvedCustomItem = selected.find((item) => item !== 'Custom');
+    if (involvedCustomItem) {
+      selected = selected.filter((item) => item !== 'Custom');
+      if (selected.length === 0) {
+        return involvedCustomItem;
+      }
+    }
 
     if (selected.length !== 1) {
       /* istanbul ignore next */
@@ -82,13 +90,12 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
         formatMessage('Unable to determine recognizer type from data: {value}', { value })
       )}
       {selectedType === 'Custom' && (
-        <TextField
-          multiline
-          resizable={false}
-          rows={10}
-          styles={{ root: { marginTop: '10px' } }}
-          value={value as string}
-          onChange={(_, newValue) => onChange(newValue)}
+        <JsonEditor
+          key={'customRecognizer'}
+          height={200}
+          id={'customRecog'}
+          value={value as object}
+          onChange={onChange}
         />
       )}
     </React.Fragment>
