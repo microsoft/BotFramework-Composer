@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
 import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';
@@ -38,8 +39,12 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
   };
 
   const [menuSelected, setMenuSelected] = useState<boolean>(false);
-  let boxShaow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
-  boxShaow += menuSelected ? `,0 0 0 2px ${ObiColors.AzureBlue}` : nodeSelected ? `, 0 0 0 2px ${ObiColors.Black}` : '';
+  let boxShadow = '0px 2px 8px rgba(0, 0, 0, 0.1)';
+  boxShadow += menuSelected
+    ? `,0 0 0 2px ${ObiColors.AzureBlue}`
+    : nodeSelected
+    ? `, 0 0 0 2px ${ObiColors.Black}`
+    : '';
 
   const handleMenuShow = (menuSelected) => {
     setMenuSelected(menuSelected);
@@ -57,6 +62,9 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     // Custom Action 'oneOf' arrays from schema file
     customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
   );
+
+  const moreLabel = formatMessage('Add');
+
   return (
     <div
       style={{
@@ -64,33 +72,35 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
         height: EdgeAddButtonSize.height,
         borderRadius: '8px',
         backdropFilter: 'white',
-        boxShadow: boxShaow,
+        boxShadow: boxShadow,
         overflow: 'hidden',
         background: 'white',
       }}
       {...declareElementAttributes(id)}
     >
-      <IconMenu
-        handleMenuShow={handleMenuShow}
-        iconName="Add"
-        iconSize={7}
-        iconStyles={{
-          color: '#005CE6',
-          selectors: {
-            ':focus': {
-              outline: 'none',
-              selectors: {
-                '::after': {
-                  outline: 'none !important',
+      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
+        <IconMenu
+          handleMenuShow={handleMenuShow}
+          iconName="Add"
+          iconSize={7}
+          iconStyles={{
+            color: '#005CE6',
+            selectors: {
+              ':focus': {
+                outline: 'none',
+                selectors: {
+                  '::after': {
+                    outline: 'none !important',
+                  },
                 },
               },
             },
-          },
-        }}
-        label={formatMessage('Add')}
-        menuItems={menuItems}
-        nodeSelected={nodeSelected}
-      />
+          }}
+          label={moreLabel}
+          menuItems={menuItems}
+          nodeSelected={nodeSelected}
+        />
+      </TooltipHost>
     </div>
   );
 };
