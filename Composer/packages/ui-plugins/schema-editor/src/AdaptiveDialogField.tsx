@@ -9,7 +9,7 @@ import { FieldLabel, schemaField, ObjectField } from '@bfc/adaptive-form';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import formatMessage from 'format-message';
 
-const DEFAULT_DIALOG_SCHEMA = (title: string, description = '') => ({
+const getDefaultDialogSchema = (title: string, description = '') => ({
   $schema: 'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
   $role: 'implements(Microsoft.IDialog)',
   title,
@@ -40,7 +40,7 @@ export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
           value={
             typeof dialogSchema?.content === 'object'
               ? dialogSchema.content
-              : DEFAULT_DIALOG_SCHEMA(displayName || dialogId, description)
+              : getDefaultDialogSchema(displayName || dialogId, description)
           }
           onChange={handleChange}
         />
