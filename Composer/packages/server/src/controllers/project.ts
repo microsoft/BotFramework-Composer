@@ -9,7 +9,7 @@ import { PluginLoader } from '@bfc/plugin-loader';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
-import AssectService from '../services/asset';
+import AssetService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import { getSkillByUrl } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
@@ -46,12 +46,12 @@ async function createProject(req: Request, res: Response) {
 
   try {
     await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef, user);
+    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
 
     // inject shared content into every new project.  this comes from assets/shared
-    await AssectService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
 
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);

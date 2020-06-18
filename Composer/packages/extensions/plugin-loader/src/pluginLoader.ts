@@ -16,15 +16,11 @@ import log from './logger';
 export class PluginLoader {
   private _passport: passport.PassportStatic;
   private _webserver: Express | undefined;
-  public loginUri: string;
+  public loginUri = '/login';
 
   public extensions: ExtensionCollection;
 
   constructor() {
-    // load any plugins present in the default folder
-    // noop for now
-    this.loginUri = '/login';
-
     this.extensions = {
       storage: {},
       publish: {},
