@@ -18,10 +18,12 @@ context('LU Page', () => {
     // by default it goes to table view
     cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
 
+    // move away from the User Input button (clicking the logo should do nothing)
+    cy.findByAltText('Composer Logo').click();
+
     // nav to ToDoBotWithLuisSample.main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      // click a short distance over to the right, to prevent interference from the nav bar's tooltips
-      cy.findByText('__TestToDoBotWithLuisSample').click(64, 0);
+      cy.findByText('__TestToDoBotWithLuisSample').click('left');
     });
     cy.get('.toggleEditMode button').as('switchButton');
     // goto edit-mode
