@@ -7,6 +7,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 
 import { EditableField } from '../EditableField';
@@ -43,6 +44,8 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
       text: 'Remove',
     },
   ];
+
+  const moreLabel = formatMessage('Edit Property');
 
   const handleBlur = useCallback(() => {
     if (!name || name === '') {
@@ -94,16 +97,18 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           onChange={onValueChange}
         />
       </div>
-      <IconButton
-        ariaLabel={formatMessage('Edit Property')}
-        data-testid="ObjectItemActions"
-        menuIconProps={{ iconName: 'MoreVertical' }}
-        menuProps={{ items: contextItems }}
-        styles={{
-          root: { margin: '7px 0 7px 0' },
-          menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 },
-        }}
-      />
+      <TooltipHost content={moreLabel}>
+        <IconButton
+          ariaLabel={moreLabel}
+          data-testid="ObjectItemActions"
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          menuProps={{ items: contextItems }}
+          styles={{
+            root: { margin: '7px 0 7px 0' },
+            menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 },
+          }}
+        />
+      </TooltipHost>
     </div>
   );
 };

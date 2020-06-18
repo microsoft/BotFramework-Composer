@@ -4429,10 +4429,9 @@ adal-node@^0.2.1:
     xmldom ">= 0.1.x"
     xpath.js "~1.1.0"
 
-adaptive-expressions@4.10.0-preview-133287, adaptive-expressions@^4.10.0-preview-133287:
-  version "4.10.0-preview-133287"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-133287.tgz#1a763d0b48bc639cf130f55e32e4c87cd6bfb255"
-  integrity sha1-GnY9C0i8Y5zxMPVeMuTIfNa/slU=
+adaptive-expressions@4.10.0-preview-135858:
+  version "4.10.0-preview-135858"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-135858.tgz#b48f2849825cdb0b0876b7b8be001fbd7a171d14"
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"
@@ -5532,12 +5531,11 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@^4.10.0-preview-133287:
-  version "4.10.0-preview-133287"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-133287.tgz#0f07eaf6e202146bb177c980a1ca8fce23751473"
-  integrity sha1-Dwfq9uICFGuxd8mAocqPziN1FHM=
+botbuilder-lg@4.10.0-preview-135858:
+  version "4.10.0-preview-135858"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-135858.tgz#b0a96755d854ec17830b52a8f89beca31dd73b3f"
   dependencies:
-    adaptive-expressions "4.10.0-preview-133287"
+    adaptive-expressions "4.10.0-preview-135858"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.11"
     path "^0.12.7"

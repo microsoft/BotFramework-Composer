@@ -88,7 +88,7 @@ export const TestController: React.FC = () => {
   function isLuisConfigComplete(config) {
     let complete = true;
     for (const key in LuisConfig) {
-      if (config && config[LuisConfig[key]] === '') {
+      if (config?.[LuisConfig[key]] === '') {
         complete = false;
         break;
       }
@@ -136,9 +136,7 @@ export const TestController: React.FC = () => {
           onClick={handleOpenEmulator}
         />
         <div
-          aria-label={formatMessage(`{ botStatus}`, {
-            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
-          })}
+          aria-label={publishing ? formatMessage('Publishing') : reloading ? formatMessage('Reloading') : ''}
           aria-live={'assertive'}
         />
         <Loading botStatus={botStatus} />

@@ -139,13 +139,13 @@ export async function start(pluginDir?: string): Promise<number | string> {
     perMessageDeflate: false,
   });
 
-  const { lgImportResolver, luImportResolver, staticMemoryResolver } = BotProjectService;
+  const { getLgResources, luImportResolver, staticMemoryResolver } = BotProjectService;
 
   function launchLanguageServer(socket: rpc.IWebSocket) {
     const reader = new rpc.WebSocketMessageReader(socket);
     const writer = new rpc.WebSocketMessageWriter(socket);
     const connection: IConnection = createConnection(reader, writer);
-    const server = new LGServer(connection, lgImportResolver, staticMemoryResolver);
+    const server = new LGServer(connection, getLgResources, staticMemoryResolver);
     server.start();
   }
 
