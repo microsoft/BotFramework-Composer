@@ -4399,6 +4399,21 @@ adal-angular@^1.0.17:
   resolved "https://registry.yarnpkg.com/adal-angular/-/adal-angular-1.0.17.tgz#6e936e0e41f91d3b2a88e7ffca9c2f6f6f562cc4"
   integrity sha1-bpNuDkH5HTsqiOf/ypwvb29WLMQ=
 
+adal-node@^0.1.28:
+  version "0.1.28"
+  resolved "https://registry.npmjs.org/adal-node/-/adal-node-0.1.28.tgz#468c4bb3ebbd96b1270669f4b9cba4e0065ea485"
+  integrity sha1-RoxLs+u9lrEnBmn0ucuk4AZepIU=
+  dependencies:
+    "@types/node" "^8.0.47"
+    async ">=0.6.0"
+    date-utils "*"
+    jws "3.x.x"
+    request ">= 2.52.0"
+    underscore ">= 1.3.1"
+    uuid "^3.1.0"
+    xmldom ">= 0.1.x"
+    xpath.js "~1.1.0"
+
 adal-node@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npmjs.org/adal-node/-/adal-node-0.2.1.tgz#19e401bd579977448c1a77ce0e5b4c9accdc334e"
