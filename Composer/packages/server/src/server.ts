@@ -16,7 +16,7 @@ import { IConnection, createConnection } from 'vscode-languageserver';
 import { IntellisenseServer } from '@bfc/intellisense-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
-import { pluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader, PluginManager } from '@bfc/plugin-loader';
 import chalk from 'chalk';
 
 import { BotProjectService } from './services/project';
@@ -25,11 +25,16 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
+import { setEnvDefault } from './utility/setEnvDefault';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
-export async function start(pluginDir?: string): Promise<number | string> {
+export async function start(): Promise<number | string> {
+  // TODO: make sure that these are configured correctly in the Electron prod env
+  setEnvDefault('COMPOSER_EXTENSION_DATA', path.resolve(__dirname, '../extension-manifest.json'));
+  setEnvDefault('COMPOSER_BUILTIN_PLUGINS_DIR', path.resolve(__dirname, '../../../plugins'));
+  setEnvDefault('COMPOSER_REMOTE_PLUGINS_DIR', path.resolve(__dirname, '../../..'));
   const clientDirectory = path.resolve(require.resolve('@bfc/client'), '..');
   const app: Express = express();
   app.set('view engine', 'ejs');
@@ -46,8 +51,10 @@ export async function start(pluginDir?: string): Promise<number | string> {
   pluginLoader.useExpress(app);
 
   // load all the plugins that exist in the folder
-  pluginDir = pluginDir || path.resolve(__dirname, '../../../plugins');
-  await pluginLoader.loadPluginsFromFolder(pluginDir);
+  // pluginDir = pluginDir || path.resolve(__dirname, '../../plugins');
+  // await pluginLoader.loadPluginsFromFolder(pluginDir);
+  await PluginManager.getInstance().loadBuiltinPlugins();
+  //await PluginManager.loadRemotePlugins();
 
   const { login, authorize } = getAuthProvider();
 
@@ -111,7 +118,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
     }
   });
 
-  app.get('*', (req, res) => {
+  app.get('*', function (req, res) {
     res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
   });
 

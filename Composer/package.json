@@ -21,7 +21,6 @@
     "packages/extensions/*",
     "packages/lib",
     "packages/lib/*",
-    "packages/plugin-loader",
     "packages/server",
     "packages/test-utils",
     "packages/tools",

@@ -18,6 +18,7 @@ import { AppUpdater } from './appUpdater';
 import { parseDeepLinkUrl } from './utility/url';
 import { composerProtocol } from './constants';
 import { initAppMenu } from './appMenu';
+import { getAccessToken, loginAndGetIdToken, OAuthLoginOptions } from './utility/oauthImplicitFlowHelper';
 
 const error = log.extend('error');
 let deeplinkUrl = '';
@@ -109,13 +110,32 @@ function initializeAppUpdater(settings: AppUpdaterSettings) {
   log('App updater initialized.');
 }
 
+function initAuthListeners(window: Electron.BrowserWindow) {
+  ipcMain.on('oauth-start-login', async (_ev, options: OAuthLoginOptions, id: number) => {
+    try {
+      const idToken = await loginAndGetIdToken(options);
+      window.webContents.send('oauth-login-complete', idToken, id);
+    } catch (e) {
+      window.webContents.send('oauth-login-error', e, id);
+    }
+  });
+  ipcMain.on('oauth-get-access-token', async (_ev, options: OAuthLoginOptions, idToken: string, id: number) => {
+    try {
+      const accessToken = await getAccessToken({ ...options, idToken });
+      window.webContents.send('oauth-get-access-token-complete', accessToken, id);
+    } catch (e) {
+      window.webContents.send('oauth-get-access-token-error', e, id);
+    }
+  });
+}
+
 async function loadServer() {
-  let pluginsDir = ''; // let this be assigned by start() if in development
   if (!isDevelopment) {
     // only change paths if packaged electron app
     const unpackedDir = getUnpackedAsarPath();
     process.env.COMPOSER_RUNTIME_FOLDER = join(unpackedDir, 'runtime');
-    pluginsDir = join(unpackedDir, 'build', 'plugins');
+    process.env.COMPOSER_BUILTIN_PLUGINS_DIR = join(unpackedDir, 'build', 'plugins');
+    process.env.COMPOSER_REMOTE_PLUGINS_DIR = ''; // TODO: assign this
   }
 
   // only create a new data directory if packaged electron app
@@ -125,7 +145,7 @@ async function loadServer() {
 
   log('Starting server...');
   const { start } = await import('@bfc/server');
-  serverPort = await start(pluginsDir);
+  serverPort = await start();
   log(`Server started at port: ${serverPort}`);
 }
 
@@ -137,6 +157,7 @@ async function main() {
     if (process.env.COMPOSER_DEV_TOOLS) {
       mainWindow.webContents.openDevTools();
     }
+    initAuthListeners(mainWindow);
 
     if (isWindows()) {
       deeplinkUrl = processArgsForWindows(process.argv);

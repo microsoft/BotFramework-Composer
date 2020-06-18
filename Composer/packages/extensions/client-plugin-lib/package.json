@@ -1,0 +1,21 @@
+{
+  "name": "@bfc/client-plugin-lib",
+  "version": "1.0.0",
+  "description": "Composer plugin library to be consumed by the client bundle of a Composer plugin.",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "yarn clean && yarn build:ts",
+    "build:ts": "tsc",
+    "clean": "rimraf lib"
+  },
+  "devDependencies": {
+    "@types/react": "16.9.23",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "debug": "^4.1.1"
+  }
+}

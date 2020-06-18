@@ -5,8 +5,8 @@ import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
 
 import { PluginLoader } from './pluginLoader';
-import log from './logger';
-import { PublishPlugin, RuntimeTemplate, BotTemplate } from './types';
+import log from '../logger';
+import { PublishPlugin, RuntimeTemplate, BotTemplate } from '../types/types';
 
 export class ComposerPluginRegistration {
   public loader: PluginLoader;
@@ -62,6 +62,7 @@ export class ComposerPluginRegistration {
         name: plugin.customName || this.name,
         description: plugin.customDescription || this.description,
         instructions: plugin.instructions,
+        hasView: plugin.hasView,
         schema: plugin.schema,
       },
       methods: plugin,
