@@ -234,7 +234,7 @@ class FilePersistence {
   private _getDialogSchemaFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
     const fileChanges: IFileChange[] = [];
 
-    const { dialogs, projectId } = changeType !== ChangeType.DELETE ? currentState : previousState;
+    const { dialogs, projectId } = changeType === ChangeType.DELETE ? previousState : currentState;
     const dialog = dialogs.find((dialog) => id === dialog.id);
 
     if (!dialog) {

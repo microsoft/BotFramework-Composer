@@ -78,9 +78,9 @@ export const updateDialogSchemaBase: ActionCreator = async ({ dispatch, getState
   const { dialogSchema } = dialogs.find((dialog) => dialog.id === id) || {};
 
   dispatch({
-    type: !dialogSchema ? ActionTypes.CREATE_DIALOG_SCHEMA : ActionTypes.UPDATE_DIALOG_SCHEMA,
+    type: dialogSchema ? ActionTypes.UPDATE_DIALOG_SCHEMA : ActionTypes.CREATE_DIALOG_SCHEMA,
     payload: {
-      content: content ? content : {},
+      content: content ?? content,
       id,
     },
   });
