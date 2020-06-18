@@ -272,6 +272,16 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
+const createOrUpdateDialogSchema: ReducerFunc = (state, { content, id }) => {
+  state.dialogs = state.dialogs.map((dialog) => (dialog.id === id ? { ...dialog, dialogSchema: { content } } : dialog));
+  return state;
+};
+
+const removeDialogSchema: ReducerFunc = (state, id) => {
+  state.dialogs = state.dialogs.map(({ dialogSchema, ...rest }) => (rest.id === id ? rest : { dialogSchema, ...rest }));
+  return state;
+};
+
 const publishLuisSuccess: ReducerFunc = (state) => {
   state.botStatus = BotStatus.published;
   return state;
@@ -694,4 +704,7 @@ export const reducer = createReducer({
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
+  [ActionTypes.CREATE_DIALOG_SCHEMA]: createOrUpdateDialogSchema,
+  [ActionTypes.UPDATE_DIALOG_SCHEMA]: createOrUpdateDialogSchema,
+  [ActionTypes.REMOVE_DIALOG_SCHEMA]: removeDialogSchema,
 });

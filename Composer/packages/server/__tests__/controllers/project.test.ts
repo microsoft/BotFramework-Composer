@@ -213,6 +213,44 @@ describe('dialog operation', () => {
   });
 });
 
+//current opened bot is the newBot
+describe('dialog schema operation', () => {
+  let projectId = '';
+  beforeEach(async () => {
+    projectId = await BotProjectService.openProject(location2);
+  });
+
+  it('should create dialog schema', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: { name: 'test2.dialog.schema', content: '' },
+    } as Request;
+    await ProjectController.createFile(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should update dialog schema', async () => {
+    const mockReq = {
+      params: { projectId },
+      query: {},
+      body: { name: 'test2.dialog.schema', content: '' },
+    } as Request;
+    await ProjectController.updateFile(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+
+  it('should remove dialog schema', async () => {
+    const mockReq = {
+      params: { name: 'test2.dialog.schema', projectId },
+      query: {},
+      body: {},
+    } as Request;
+    await ProjectController.removeFile(mockReq, mockRes);
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+  });
+});
+
 describe('lg operation', () => {
   let projectId = '';
   beforeEach(async () => {

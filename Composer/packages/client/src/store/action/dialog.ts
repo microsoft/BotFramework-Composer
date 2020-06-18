@@ -65,3 +65,39 @@ export const createDialogCancel: ActionCreator = (store) => {
     type: ActionTypes.CREATE_DIALOG_CANCEL,
   });
 };
+
+export const removeDialogSchema: ActionCreator = (store, id) => {
+  store.dispatch({
+    type: ActionTypes.REMOVE_DIALOG_SCHEMA,
+    payload: { id },
+  });
+};
+
+export const updateDialogSchemaBase: ActionCreator = async ({ dispatch, getState }, { id, content }) => {
+  const { dialogs } = getState();
+  const { dialogSchema } = dialogs.find((dialog) => dialog.id === id) || {};
+
+  dispatch({
+    type: !dialogSchema ? ActionTypes.CREATE_DIALOG_SCHEMA : ActionTypes.UPDATE_DIALOG_SCHEMA,
+    payload: {
+      content: content ? content : {},
+      id,
+    },
+  });
+};
+
+export const updateDialogSchema: ActionCreator = undoable(
+  updateDialogSchemaBase,
+  (state: State, args: any[], isEmpty) => {
+    if (isEmpty) {
+      const id = state.designPageLocation.dialogId;
+      const dialog = state.dialogs.find((dialog) => dialog.id === id) || {};
+      const { dialogSchema } = dialog as any;
+      return [{ id, content: dialogSchema ? dialogSchema.content : {} }];
+    } else {
+      return args;
+    }
+  },
+  (store: Store, from, to) => updateDialogSchemaBase(store, ...to),
+  (store: Store, from, to) => updateDialogSchemaBase(store, ...to)
+);

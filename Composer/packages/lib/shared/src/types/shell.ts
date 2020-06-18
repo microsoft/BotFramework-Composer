@@ -80,4 +80,5 @@ export interface ShellApi {
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
+  updateDialogSchema: (_: { content: { [key: string]: any }; id: string }) => void;
 }

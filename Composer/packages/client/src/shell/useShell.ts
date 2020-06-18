@@ -139,7 +139,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         /**
          * It's improper to fallback to `dialogId` directly:
          *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exisits at `selected` path, fallback to dialog Id;
+         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         actions.navTo(dialogId);
@@ -173,6 +173,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     updateUserSettings: actions.updateUserSettings,
     announce: actions.setMessage,
     displayManifestModal: actions.displayManifestModal,
+    updateDialogSchema: actions.updateDialogSchema,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);

@@ -36,6 +36,7 @@ const oauthInput = () => ({
 const BotStructureTemplate = {
   folder: '',
   entry: '${BOTNAME}.dialog',
+  dialogSchema: '${BOTNAME}.dialog.schema',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
   common: {
@@ -44,6 +45,7 @@ const BotStructureTemplate = {
   dialogs: {
     folder: 'dialogs/${DIALOGNAME}',
     entry: '${DIALOGNAME}.dialog',
+    dialogSchema: '${DIALOGNAME}.dialog.schema',
     lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
   },
@@ -232,9 +234,10 @@ export class BotProject {
     content.$designer = newDesigner;
     const updatedContent = autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
     await this._updateFile(relativePath, updatedContent);
-    // when create/saveAs bot, serialize entry dialog/lg/lu
+    // when create/saveAs bot, serialize entry dialog/dialog schema/lg/lu
     const entryPatterns = [
       templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
+      templateInterpolate(BotStructureTemplate.dialogSchema, { BOTNAME: '*' }),
       templateInterpolate(BotStructureTemplate.dialogs.lg, { LOCALE: '*', DIALOGNAME: '*' }),
       templateInterpolate(BotStructureTemplate.dialogs.lu, { LOCALE: '*', DIALOGNAME: '*' }),
     ];
@@ -396,9 +399,9 @@ export class BotProject {
   private defaultDir = (name: string) => {
     const fileType = Path.extname(name);
     const id = Path.basename(name, fileType);
-    const idWithoutLocale = Path.basename(id, `.${this.locale}`);
-    const DIALOGNAME = idWithoutLocale;
+    const DIALOGNAME = id.includes('.dialog') ? Path.basename(id, '.dialog') : Path.basename(id, `.${this.locale}`);
     const LOCALE = this.getLocale(id) || this.locale;
+    const isRoot = DIALOGNAME === this.name.toLowerCase();
     const folder = BotStructureTemplate.dialogs.folder;
     let dir = BotStructureTemplate.folder;
     if (fileType === '.dialog') {
@@ -421,6 +424,13 @@ export class BotProject {
         Path.dirname(Path.join(BotStructureTemplate.folder, BotStructureTemplate.skillManifests)),
         {
           MANIFESTNAME: id,
+        }
+      );
+    } else if (fileType === '.schema') {
+      dir = templateInterpolate(
+        Path.dirname(Path.join(isRoot ? dir : folder, BotStructureTemplate.dialogs.dialogSchema)),
+        {
+          DIALOGNAME,
         }
       );
     }
@@ -505,7 +515,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json'];
+    const patterns = ['**/*.dialog', '**/*.dialog.schema', '**/*.lg', '**/*.lu', 'manifests/*.json'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

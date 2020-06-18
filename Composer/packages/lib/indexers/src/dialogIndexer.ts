@@ -214,19 +214,23 @@ function parse(id: string, content: any, schema: any) {
   };
 }
 
-function index(files: FileInfo[], botName: string, schema: any): DialogInfo[] {
+function index(dialogFiles: FileInfo[], dialogSchemaFiles: FileInfo[], botName: string, schema: any): DialogInfo[] {
   const dialogs: DialogInfo[] = [];
-  if (files.length !== 0) {
-    for (const file of files) {
+  if (dialogFiles.length !== 0) {
+    for (const file of dialogFiles) {
       try {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
           const id = getBaseName(file.name, '.dialog');
           const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
+          const dialogSchemaFile = dialogSchemaFiles.find((file) => getBaseName(file.name, '.dialog.schema') === id);
+          const dialogSchemaContent = dialogSchemaFile ? JSON.parse(dialogSchemaFile.content) : null;
+
           const dialog = {
             isRoot,
             displayName: isRoot ? `${botName}` : id,
             ...parse(id, dialogJson, schema),
+            ...(dialogSchemaContent ? { dialogSchema: { content: dialogSchemaContent } } : {}),
           };
           dialogs.push(dialog);
         }

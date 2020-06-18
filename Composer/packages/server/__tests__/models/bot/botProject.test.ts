@@ -23,6 +23,8 @@ const mockLocationRef: LocationRef = {
 const luFileLength = (files) => files.filter((file) => file.name.endsWith('.lu')).length;
 const lgFileLength = (files) => files.filter((file) => file.name.endsWith('.lg')).length;
 const dialogFileLength = (files) => files.filter((file) => file.name.endsWith('.dialog')).length;
+const dialogSchemaFileLength = (files) => files.filter((file) => file.name.endsWith('.dialog.schema')).length;
+
 let proj: BotProject;
 
 beforeEach(async () => {
@@ -275,6 +277,32 @@ describe('dialog operations', () => {
 
     expect(proj.files.length).toEqual(filesCount - 1);
     expect(dialogFileLength(proj.files)).toEqual(dialogsFilesCount - 1);
+  });
+});
+
+describe('dialog schema operations', () => {
+  it('should create dialog schema', async () => {
+    const filesCount = proj.files.length;
+    const dialogsSchemaFilesCount = dialogSchemaFileLength(proj.files);
+
+    const id = 'bot1.dialog.schema';
+    const content = '{}';
+    const { relativePath } = await proj.createFile(id, content);
+
+    expect(relativePath).toEqual(id);
+    expect(proj.files.length).toEqual(filesCount + 1);
+    expect(dialogSchemaFileLength(proj.files)).toEqual(dialogsSchemaFilesCount + 1);
+  });
+
+  it('should delete dialog schema', async () => {
+    const id = 'bot1.dialog.schema';
+    const filesCount = proj.files.length;
+    const dialogsSchemaFilesCount = dialogSchemaFileLength(proj.files);
+
+    await proj.deleteFile(id);
+
+    expect(proj.files.length).toEqual(filesCount - 1);
+    expect(dialogSchemaFileLength(proj.files)).toEqual(dialogsSchemaFilesCount - 1);
   });
 });
 

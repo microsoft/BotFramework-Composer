@@ -19,7 +19,13 @@ class Indexer {
         }
         return result;
       },
-      { [FileExtensions.lg]: [], [FileExtensions.Lu]: [], [FileExtensions.Dialog]: [], [FileExtensions.Manifest]: [] }
+      {
+        [FileExtensions.lg]: [],
+        [FileExtensions.Lu]: [],
+        [FileExtensions.Dialog]: [],
+        [FileExtensions.DialogSchema]: [],
+        [FileExtensions.Manifest]: [],
+      }
     );
   }
 
@@ -37,7 +43,7 @@ class Indexer {
   public index(files: FileInfo[], botName: string, schema: any, locale: string) {
     const result = this.classifyFile(files);
     return {
-      dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName, schema),
+      dialogs: dialogIndexer.index(result[FileExtensions.Dialog], result[FileExtensions.DialogSchema], botName, schema),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),

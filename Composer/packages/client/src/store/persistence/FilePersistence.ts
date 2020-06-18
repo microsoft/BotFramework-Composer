@@ -25,6 +25,9 @@ const actionType2ChangeType = {
   [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.SYNC_ENV_SETTING]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.CREATE_DIALOG_SCHEMA]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.DialogSchema },
+  [ActionTypes.REMOVE_DIALOG_SCHEMA]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.DialogSchema },
+  [ActionTypes.UPDATE_DIALOG_SCHEMA]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.DialogSchema },
 };
 
 class FilePersistence {
@@ -156,7 +159,12 @@ class FilePersistence {
     projectId: string
   ): IFileChange {
     let content = file.content;
-    const isJson = [FileExtensions.Dialog, FileExtensions.Manifest, FileExtensions.Setting].includes(fileExtension);
+    const isJson = [
+      FileExtensions.Dialog,
+      FileExtensions.DialogSchema,
+      FileExtensions.Manifest,
+      FileExtensions.Setting,
+    ].includes(fileExtension);
     if (isJson) {
       content = JSON.stringify(content, null, 2) + '\n';
     }
@@ -220,6 +228,26 @@ class FilePersistence {
 
     const lg = lgFiles.find((lg) => lg.id === id);
     fileChanges.push(this._createChange(lg, FileExtensions.Lg, changeType, projectId));
+    return fileChanges;
+  }
+
+  private _getDialogSchemaFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+    const fileChanges: IFileChange[] = [];
+
+    const { dialogs, projectId } = changeType !== ChangeType.DELETE ? currentState : previousState;
+    const dialog = dialogs.find((dialog) => id === dialog.id);
+
+    if (!dialog) {
+      return fileChanges;
+    }
+
+    const { dialogSchema } = dialog;
+
+    if (!dialogSchema) {
+      return fileChanges;
+    }
+
+    fileChanges.push(this._createChange({ id, ...dialogSchema }, FileExtensions.DialogSchema, changeType, projectId));
     return fileChanges;
   }
 
@@ -287,6 +315,11 @@ class FilePersistence {
       }
       case FileExtensions.Setting: {
         fileChanges = this._getSettingsChanges(previousState, currentState, action.payload.projectId);
+        break;
+      }
+      case FileExtensions.DialogSchema: {
+        fileChanges = this._getDialogSchemaFileChanges(action.payload.id, previousState, currentState, changeType);
+        break;
       }
     }
     return fileChanges;
