@@ -6,6 +6,7 @@ import { jsx, css } from '@emotion/core';
 import { useCallback, useContext } from 'react';
 import { Link } from '@reach/router';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { StoreContext } from '../../store';
 import { useLocation, useRouterCache } from '../../utils/hooks';
@@ -25,6 +26,7 @@ export interface INavItemProps {
   iconName: string;
   labelName: string;
   disabled: boolean;
+  showTooltip: boolean;
 }
 
 export const NavItem: React.FC<INavItemProps> = (props) => {
@@ -32,7 +34,7 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
     actions: { onboardingAddCoachMarkRef },
   } = useContext(StoreContext);
 
-  const { to, iconName, labelName, disabled } = props;
+  const { to, iconName, labelName, disabled, showTooltip } = props;
   const {
     location: { pathname },
   } = useLocation();
@@ -43,6 +45,8 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
 
   const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
 
+  const iconElement = <Icon iconName={iconName} styles={icon(active, disabled)} />;
+
   const activeArea = (
     <div
       aria-disabled={disabled}
@@ -51,7 +55,13 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
       data-testid={active ? 'ActiveLeftNavItem' : undefined}
       tabIndex={-1}
     >
-      <Icon iconName={iconName} styles={icon(active, disabled)} />
+      {showTooltip ? (
+        <TooltipHost content={labelName} directionalHint={DirectionalHint.rightCenter}>
+          {iconElement}
+        </TooltipHost>
+      ) : (
+        iconElement
+      )}
       {labelName}
     </div>
   );
