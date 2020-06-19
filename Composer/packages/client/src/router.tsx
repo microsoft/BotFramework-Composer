@@ -42,6 +42,7 @@ const Routes = (props) => {
             from="/bot/:projectId/language-understanding"
             to="/bot/:projectId/language-understanding/all"
           />
+          <Redirect noThrow from="/bot/:projectId/qna" to="/bot/:projectId/qna/all" />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">

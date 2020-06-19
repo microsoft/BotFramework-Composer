@@ -1,35 +1,39 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
+import { QnAFile } from '@bfc/shared';
+import { qnaIndexer } from '@bfc/indexers';
 
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 
 import { ActionTypes } from './../../constants/index';
 
-export const updateQnaFile: ActionCreator = async (store, { id, projectId, content }) => {
+export const updateQnAFile: ActionCreator = async (store, { id, projectId, content }) => {
+  const data = qnaIndexer.parse(content);
+  const qnaFile: QnAFile = { id, content, ...data };
   store.dispatch({
     type: ActionTypes.UPDATE_QNA,
-    payload: { id, projectId, content },
+    payload: { id, projectId, content, qnaFile },
   });
 };
 
-export const removeQnaFile: ActionCreator = async (store, id) => {
+export const removeQnAFile: ActionCreator = async (store, id) => {
   store.dispatch({
     type: ActionTypes.REMOVE_QNA,
     payload: { id },
   });
 };
 
-export const createQnaFile: ActionCreator = async (store, { id, content }) => {
+export const createQnAFile: ActionCreator = async (store, { id, content }) => {
   store.dispatch({
     type: ActionTypes.CREATE_QNA,
     payload: { id, content },
   });
 };
 
-export const undoableUpdateQnaFile = undoable(
-  updateQnaFile,
+export const undoableUpdateQnAFile = undoable(
+  updateQnAFile,
   (state: State, args: any[], isEmpty) => {
     if (isEmpty) {
       const id = args[0].id;
@@ -40,10 +44,10 @@ export const undoableUpdateQnaFile = undoable(
       return args;
     }
   },
-  async (store: Store, from, to) => updateQnaFile(store, ...to),
-  async (store: Store, from, to) => updateQnaFile(store, ...to)
+  async (store: Store, from, to) => updateQnAFile(store, ...to),
+  async (store: Store, from, to) => updateQnAFile(store, ...to)
 );
 
-export const updateQnaContent: ActionCreator = async (store, { projectId, file, content }) => {
-  return await undoableUpdateQnaFile(store, { id: file.id, projectId, content });
+export const updateQnAContent: ActionCreator = async (store, { projectId, file, content }) => {
+  return await undoableUpdateQnAFile(store, { id: file.id, projectId, content });
 };

@@ -41,7 +41,7 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/qna/all`,
+      to: `/bot/${projectId}/qna`,
       iconName: 'SkypeMessage',
       labelName: formatMessage('QnA'),
       exact: true,

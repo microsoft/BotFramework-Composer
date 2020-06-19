@@ -11,7 +11,7 @@ import {
   DialogInfo,
   LgFile,
   LuFile,
-  QnaFile,
+  QnAFile,
   Skill,
   UserSettings,
   Diagnostic,
@@ -119,7 +119,7 @@ export interface BotState {
   schemas: BotSchemas;
   lgFiles: LgFile[];
   luFiles: LuFile[];
-  qnaFiles: QnaFile[];
+  qnaFiles: QnAFile[];
   skills: Skill[];
   skillManifests: any[];
   designPageLocation: DesignPageLocation;

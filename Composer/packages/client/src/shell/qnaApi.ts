@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useEffect, useState } from 'react';
-import { QnaFile } from '@bfc/shared';
+import { QnAFile } from '@bfc/shared';
 
 import { State, BoundActionHandlers } from '../store/types';
 import { useStoreContext } from '../hooks/useStoreContext';
@@ -10,7 +10,7 @@ import { useStoreContext } from '../hooks/useStoreContext';
 function createQnaApi(
   state: State,
   actions: BoundActionHandlers,
-  qnaFileResolver: (id: string) => QnaFile | undefined
+  qnaFileResolver: (id: string) => QnAFile | undefined
 ) {
   const updateQnaContentHandler = async (id, content) => {
     const file = qnaFileResolver(id);

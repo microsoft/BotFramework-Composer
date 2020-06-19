@@ -4,18 +4,20 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useContext, useRef, useEffect, useState, useCallback } from 'react';
-import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-//import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import get from 'lodash/get';
 
 import { StoreContext } from '../../store';
 import { formCell, content } from '../language-understanding/styles';
-
+import { navigateTo } from '../../utils';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
@@ -25,22 +27,50 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const { dialogs, qnaFiles, projectId, locale } = state;
   const { dialogId } = props;
   const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
+  const generateQnAPairs = (file) => {
+    if (!file) return [];
+    return file.qnaPairs.map((qnaPair, index) => {
+      const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
+      return {
+        fileId: file.fileId,
+        dialogId: qnaDialog?.id || '',
+        used: !!qnaDialog && qnaDialog,
+        indexId: index,
+        ...qnaPair,
+      };
+    });
+  };
   const allQnAPairs = qnaFiles.reduce((result: any[], qnaFile) => {
-    result = [...result, ...qnaFile.qnaPairs];
-    return result;
+    const res = generateQnAPairs(qnaFile);
+    return result.concat(res);
   }, []);
-  const [qnaPairs, setQnaPairs] = useState(file?.qnaPairs || allQnAPairs);
+
+  const singleFileQnAPairs = generateQnAPairs(file);
+  const [qnaPairs, setQnaPairs] = useState(singleFileQnAPairs || allQnAPairs);
   const listRef = useRef(null);
 
-  const activeDialog = dialogs.find(({ id }) => id === dialogId);
-
-  //const [focusedIndex, setFocusedIndex] = useState(0);
-
   useEffect(() => {
-    if (!file || isEmpty(file)) return;
+    if (dialogId === 'all') {
+      setQnaPairs(allQnAPairs);
+    } else {
+      setQnaPairs(singleFileQnAPairs);
+    }
+  }, [dialogId, projectId]);
 
-    setQnaPairs(file.qnaPairs);
-  }, [file, activeDialog, projectId]);
+  const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
+    const buttons = [
+      {
+        key: 'edit',
+        name: 'Edit',
+        onClick: () => {
+          const { dialogId, indexId } = qnaPairs[index];
+          navigateTo(`/bot/${projectId}/qna/${dialogId}/edit?t=${indexId}`);
+        },
+      },
+    ];
+    return buttons;
+  };
 
   const getTableColums = useCallback(() => {
     const tableColums = [
@@ -56,11 +86,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell}>
               <div
-                aria-label={formatMessage(`Question is {question}`, { question: item.Questions.join('.\n') })}
+                aria-label={formatMessage(`Question is {question}`, { question: get(item, 'Questions[0]', '') })}
                 css={content}
                 tabIndex={-1}
               >
-                {item.Questions.join('.\n')}
+                {get(item, 'Questions[0]', '')}
               </div>
             </div>
           );
@@ -79,11 +109,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell}>
               <div
-                aria-label={formatMessage(`Alternatives are {alternatives}`, { alternatives: item.alternatives })}
+                aria-label={formatMessage(`Alternatives are {alternatives}`, {
+                  alternatives: get(item, 'Questions', []).slice(1).join('\n'),
+                })}
                 css={content}
                 tabIndex={-1}
               >
-                {item.alternatives}
+                {get(item, 'Questions', []).slice(1).join('\n')}
               </div>
             </div>
           );
@@ -112,10 +144,32 @@ const TableView: React.FC<TableViewProps> = (props) => {
           );
         },
       },
+      {
+        key: 'buttons',
+        name: '',
+        minWidth: 50,
+        maxWidth: 50,
+        isResizable: false,
+        fieldName: 'buttons',
+        data: 'string',
+        onRender: (item, index) => {
+          return (
+            <IconButton
+              ariaLabel={formatMessage('Open inline editor')}
+              menuIconProps={{ iconName: 'MoreVertical' }}
+              menuProps={{
+                shouldFocusOnMount: true,
+                items: getTemplatesMoreButtons(item, index),
+              }}
+              styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+            />
+          );
+        },
+      },
     ];
 
     // all view, show used in column
-    if (!activeDialog) {
+    if (!dialogId) {
       const beenUsedColumn = {
         key: 'usedIn',
         name: formatMessage('Used In'),
@@ -139,7 +193,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
 
     return tableColums;
-  }, [activeDialog, qnaPairs, projectId]);
+  }, [dialogId, qnaPairs, projectId]);
 
   const onRenderDetailsHeader = useCallback((props, defaultRender) => {
     return (

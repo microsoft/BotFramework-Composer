@@ -1,28 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
-import {
-  FileInfo,
-  QnaFile,
-  // LuParsed,
-  // LuSectionTypes,
-  // LuIntentSection,
-  // Diagnostic,
-  // Position,
-  // Range,
-  // DiagnosticSeverity,
-} from '@bfc/shared';
+import LUParser from '@microsoft/bf-lu/lib/parser/lufile/luParser';
+import { FileInfo, QnAFile } from '@bfc/shared';
 import get from 'lodash/get';
+import { Diagnostic, Position, Range, DiagnosticSeverity } from '@bfc/shared';
 
 import { getBaseName } from './utils/help';
 import { FileExtensions } from './utils/fileExtensions';
 
-const { luParser } = sectionHandler;
+function convertQnADiagnostic(d: any, source: string): Diagnostic {
+  const severityMap = {
+    ERROR: DiagnosticSeverity.Error,
+    WARN: DiagnosticSeverity.Warning,
+    INFORMATION: DiagnosticSeverity.Information,
+    HINT: DiagnosticSeverity.Hint,
+  };
+  const result = new Diagnostic(d.Message, source, severityMap[d.Severity]);
+
+  const start: Position = d.Range ? new Position(d.Range.Start.Line, d.Range.Start.Character) : new Position(0, 0);
+  const end: Position = d.Range ? new Position(d.Range.End.Line, d.Range.End.Character) : new Position(0, 0);
+  result.range = new Range(start, end);
+
+  return result;
+}
 
 function parse(content: string, id = '') {
-  //To do handle Errors in paresd file
-  console.log(luParser.parse(content));
-  const { Sections } = luParser.parse(content);
+  const { Sections, Errors } = LUParser.parse(content);
   const qnaPairs: any[] = [];
   Sections.forEach((section) => {
     const range = {
@@ -31,17 +34,18 @@ function parse(content: string, id = '') {
     };
     qnaPairs.push({ ...section, range });
   });
+  const diagnostics = Errors.map((e) => convertQnADiagnostic(e, id));
   return {
     empty: !Sections.length,
     qnaPairs,
     fileId: id,
-    //diagnostics,
+    diagnostics,
   };
 }
 
-function index(files: FileInfo[]): QnaFile[] {
+function index(files: FileInfo[]): QnAFile[] {
   if (files.length === 0) return [];
-  const qnaFiles: QnaFile[] = [];
+  const qnaFiles: QnAFile[] = [];
   for (const file of files) {
     const { name, content } = file;
     if (name.endsWith(FileExtensions.Qna)) {

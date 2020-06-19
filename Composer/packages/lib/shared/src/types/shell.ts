@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, QnaFile, LuIntentSection, LgTemplate } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -45,7 +45,7 @@ export interface ShellData {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
-  qnaFiles: QnaFile[];
+  qnaFiles: QnAFile[];
   userSettings: UserSettings;
   skills: any[];
   // TODO: remove
