@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import * as http from 'http';
 import * as url from 'url';
 import * as net from 'net';
@@ -11,6 +10,10 @@ import { IConnection, createConnection } from 'vscode-languageserver';
 import express from 'express';
 
 import { LGServer } from '../../src';
+
+const memoryResolver = () => {
+  return ['this.value', 'this.turnCount'];
+};
 
 function createSocketHandler(webSocket: any): rpc.IWebSocket {
   const socket: rpc.IWebSocket = {
@@ -44,7 +47,7 @@ function launchLanguageServer(socket: rpc.IWebSocket) {
   const reader = new rpc.WebSocketMessageReader(socket);
   const writer = new rpc.WebSocketMessageWriter(socket);
   const connection: IConnection = createConnection(reader, writer);
-  return new LGServer(connection);
+  return new LGServer(connection, (projectId?: string) => [], memoryResolver);
 }
 
 export function startServer() {

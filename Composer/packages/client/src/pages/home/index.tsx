@@ -12,8 +12,7 @@ import { navigate } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
-import { ToolBar } from '../../components/ToolBar/index';
-import { isElectron } from '../../utils/electronUtil';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -85,7 +84,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
-  const toolbarItems = [
+  const toolbarItems: IToolBarItem[] = [
     {
       type: 'action',
       text: formatMessage('New'),
@@ -141,7 +140,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar onboardingAddCoachMarkRef={onboardingAddCoachMarkRef} toolbarItems={toolbarItems} />
+      <ToolBar toolbarItems={toolbarItems} />
       <div css={home.page}>
         <div css={home.leftPage} role="main">
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
@@ -207,7 +206,6 @@ const Home: React.FC<RouteComponentProps> = () => {
                   ariaLabel={item.title}
                   content={item.content}
                   href={item.href}
-                  openExternal={isElectron()}
                   rel="noopener nofollow"
                   styles={home.tutorialTile}
                   subContent={item.subContent}

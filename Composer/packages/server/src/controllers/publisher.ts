@@ -11,7 +11,7 @@ import { runtimeFolder } from '../settings/env';
 
 const defaultPublishConfig = {
   name: 'default',
-  type: 'localpublish',
+  type: '@bfc/plugin-localpublish',
   configuration: JSON.stringify({}),
 };
 const DEFAULT_RUNTIME = 'dotnet';
@@ -58,22 +58,15 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
 
-    // get runtime type
-    const runtimeType = currentProject.settings?.runtime?.name === 'C#' ? DEFAULT_RUNTIME : RUNTIME.NODE;
-    // append config from client(like sensitive settings)
-    const configuration = {
-      profileName: profile.name,
-      fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-      templatePath: path.resolve(runtimeFolder, runtimeType),
-      ...JSON.parse(profile.configuration),
-    };
+    if (profile && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
+      // append config from client(like sensitive settings)
+      const configuration = {
+        profileName: profile.name,
+        fullSettings: merge({}, currentProject.settings, sensitiveSettings),
+        templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
+        ...JSON.parse(profile.configuration),
+      };
 
-    if (
-      profile &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.publish
-    ) {
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].methods.publish;
 

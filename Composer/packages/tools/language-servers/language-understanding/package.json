@@ -24,7 +24,6 @@
     "monaco-languageclient": "^0.10.0",
     "normalize-url": "^2.0.1",
     "reconnecting-websocket": "^3.2.2",
-    "request-light": "^0.2.2",
     "vscode": "^1.1.34",
     "vscode-json-languageservice": "^3.3.1",
     "vscode-languageserver": "^5.3.0-next",
@@ -45,7 +44,7 @@
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
+    "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
   }
 }

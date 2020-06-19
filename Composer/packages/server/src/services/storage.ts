@@ -127,7 +127,7 @@ class StorageService {
   private isBotFolder = async (storage: IFileStorage, path: string) => {
     // locate new structure bot:
     const children = await storage.readDir(path);
-    const dialogFile = /.+(.)dialog/;
+    const dialogFile = /.+(\.)dialog$/;
     const isNewBot = children.some((name) => dialogFile.test(name));
     // locate old structire bot: Main.dialog
     const mainPath = Path.join(path, 'Main', 'Main.dialog');

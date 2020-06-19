@@ -7,6 +7,7 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { useState, useEffect } from 'react';
 import formatMessage from 'format-message';
+import range from 'lodash/range';
 
 import { container, dropdownStyles, text } from './style';
 
@@ -16,11 +17,10 @@ export interface IPaginationProps {
 }
 
 const createDropdownOption = (pageCount: number) => {
-  const options: IDropdownOption[] = [];
-  for (let i = 1; i <= pageCount; i++) {
-    options.push({ key: 'page' + i, text: '' + i });
-  }
-  return options;
+  return range(pageCount).map((_, i) => ({
+    key: `page ${i}`,
+    text: `${i}`,
+  }));
 };
 
 export const Pagination: React.FC<IPaginationProps> = (props) => {
@@ -31,37 +31,38 @@ export const Pagination: React.FC<IPaginationProps> = (props) => {
     setIndex(0);
   }, [pageCount]);
 
+  const changePage = (page: number) => {
+    setIndex(page);
+    onChange(page + 1);
+  };
+
   const handlePageSelected = (event: React.FormEvent<HTMLDivElement>, item?: IDropdownOption, index?: number) => {
-    setIndex(index || 0);
-    onChange(index ? index + 1 : 1);
+    if (index == null) return;
+    changePage(index);
   };
 
-  const hanglePreviousClick = () => {
-    const current = index - 1;
-    setIndex(current);
-    onChange(current + 1);
+  const handlePreviousClick = () => {
+    changePage(index - 1);
   };
 
-  const hangleNextClick = () => {
-    const current = index + 1;
-    setIndex(current);
-    onChange(current + 1);
+  const handleNextClick = () => {
+    changePage(index + 1);
   };
 
   return (
     <div aria-label={formatMessage('navigation control')} css={container} role="region">
-      <DefaultButton allowDisabledFocus disabled={index === 0} text="< Previous" onClick={hanglePreviousClick} />
+      <DefaultButton allowDisabledFocus disabled={index === 0} text="< Previous" onClick={handlePreviousClick} />
       <span css={text}>Page</span>
       <Dropdown
         ariaLabel={formatMessage('Page number')}
         options={createDropdownOption(pageCount)}
-        placeholder="Select options"
+        placeholder={formatMessage('Select options')}
         selectedKey={`page${index + 1}`}
         styles={dropdownStyles}
         onChange={handlePageSelected}
       />
       <span css={text}>of {pageCount}</span>
-      <DefaultButton allowDisabledFocus disabled={index === pageCount - 1} text="Next >" onClick={hangleNextClick} />
+      <DefaultButton allowDisabledFocus disabled={index === pageCount - 1} text="Next >" onClick={handleNextClick} />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { SharedColors, NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
@@ -16,8 +17,7 @@ import { arrayField } from './styles';
 import { ArrayFieldItem } from './ArrayFieldItem';
 import { UnsupportedField } from './UnsupportedField';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
+const ArrayField: React.FC<FieldProps<unknown[]>> = (props) => {
   const {
     value = [],
     onChange,
@@ -33,6 +33,8 @@ const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
   } = props;
   const [newValue, setNewValue] = useState<string>();
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
+
+  const moreLabel = formatMessage('Item Actions');
 
   const handleNewChange = (_e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) =>
     setNewValue(newValue || '');
@@ -89,21 +91,23 @@ const ArrayField: React.FC<FieldProps<any[]>> = (props) => {
             onChange={handleNewChange}
             onKeyDown={handleKeyDown}
           />
-          <IconButton
-            disabled
-            ariaLabel={formatMessage('Item Actions')}
-            menuIconProps={{ iconName: 'MoreVertical' }}
-            styles={{
-              menuIcon: {
-                backgroundColor: NeutralColors.white,
-                color: NeutralColors.gray130,
-                fontSize: FontSizes.size16,
-              },
-              rootDisabled: {
-                backgroundColor: NeutralColors.white,
-              },
-            }}
-          />
+          <TooltipHost content={moreLabel}>
+            <IconButton
+              disabled
+              ariaLabel={moreLabel}
+              menuIconProps={{ iconName: 'MoreVertical' }}
+              styles={{
+                menuIcon: {
+                  backgroundColor: NeutralColors.white,
+                  color: NeutralColors.gray130,
+                  fontSize: FontSizes.size16,
+                },
+                rootDisabled: {
+                  backgroundColor: NeutralColors.white,
+                },
+              }}
+            />
+          </TooltipHost>
         </div>
       </div>
     </div>

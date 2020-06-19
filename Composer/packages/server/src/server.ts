@@ -45,7 +45,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
   pluginLoader.useExpress(app);
 
   // load all the plugins that exist in the folder
-  pluginDir = pluginDir || path.resolve(__dirname, '../../../plugins');
+  pluginDir = pluginDir || path.resolve(__dirname, '../../plugins');
   await pluginLoader.loadPluginsFromFolder(pluginDir);
 
   const { login, authorize } = getAuthProvider();
@@ -139,13 +139,13 @@ export async function start(pluginDir?: string): Promise<number | string> {
     perMessageDeflate: false,
   });
 
-  const { lgImportResolver, luImportResolver, staticMemoryResolver } = BotProjectService;
+  const { getLgResources, luImportResolver, staticMemoryResolver } = BotProjectService;
 
   function launchLanguageServer(socket: rpc.IWebSocket) {
     const reader = new rpc.WebSocketMessageReader(socket);
     const writer = new rpc.WebSocketMessageWriter(socket);
     const connection: IConnection = createConnection(reader, writer);
-    const server = new LGServer(connection, lgImportResolver, staticMemoryResolver);
+    const server = new LGServer(connection, getLgResources, staticMemoryResolver);
     server.start();
   }
 
