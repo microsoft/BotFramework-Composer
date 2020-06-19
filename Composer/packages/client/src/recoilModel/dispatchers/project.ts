@@ -17,19 +17,23 @@ import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { DialogSetting } from '../../store/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 
-import { skillManifestsState } from './../atoms/botState';
-import { BotDiagnosticsState } from './../atoms/botState';
-import { settingsState, localeState } from './../atoms/botState';
-import { luFilesState } from './../atoms/botState';
-import { skillsState, schemasState } from './../atoms/botState';
-import { lgFilesState } from './../atoms/botState';
-import { locationState } from './../atoms/botState';
-import { botStatusState } from './../atoms/botState';
-import { botNameState } from './../atoms/botState';
-import { botEnvironmentState } from './../atoms/botState';
-import { dialogsState } from './../atoms/botState';
-import { projectIdState } from './../atoms/botState';
-import { botOpeningState } from './../atoms/botState';
+import {
+  skillManifestsState,
+  BotDiagnosticsState,
+  settingsState,
+  localeState,
+  luFilesState,
+  skillsState,
+  schemasState,
+  lgFilesState,
+  locationState,
+  botStatusState,
+  botNameState,
+  botEnvironmentState,
+  dialogsState,
+  projectIdState,
+  botOpeningState,
+} from './../atoms/botState';
 
 const checkProjectUpdates = async () => {
   const workers = [filePersistence, lgWorker, luWorker];
