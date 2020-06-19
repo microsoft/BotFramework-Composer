@@ -5,36 +5,39 @@ import { generateUniqueId } from '@bfc/shared';
 import { ChangeHandler } from '@bfc/extension';
 import { useState } from 'react';
 
-type ArrayChangeHandler = (items: ArrayItem[]) => void;
+type ArrayChangeHandler<ItemType> = (items: ArrayItem<ItemType>[]) => void;
 
-export interface ArrayItem {
+export interface ArrayItem<ItemType = unknown> {
   id: string;
-  value: any;
+  value: ItemType;
 }
 
-interface ArrayItemState {
-  arrayItems: ArrayItem[];
-  handleChange: ArrayChangeHandler;
-  addItem: (newItem: any) => void;
+interface ArrayItemState<ItemType> {
+  arrayItems: ArrayItem<ItemType>[];
+  handleChange: ArrayChangeHandler<ItemType>;
+  addItem: (newItem: ItemType) => void;
 }
 
-const generateArrayItems = (value: any[]): ArrayItem[] => {
+const generateArrayItems = <ItemType = unknown>(value: ItemType[]): ArrayItem<ItemType>[] => {
   return value.map((i) => ({
     id: generateUniqueId(),
     value: i,
   }));
 };
 
-const createArrayItem = (value: any): ArrayItem => {
+const createArrayItem = <ItemType = unknown>(value: ItemType): ArrayItem<ItemType> => {
   return {
     id: generateUniqueId(),
     value,
   };
 };
 
-export const getArrayItemProps = (items: ArrayItem[], index: number, onChange: ArrayChangeHandler) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onItemChange = (newValue: any) => {
+export const getArrayItemProps = <ItemType = unknown>(
+  items: ArrayItem<ItemType>[],
+  index: number,
+  onChange: ArrayChangeHandler<ItemType>
+) => {
+  const onItemChange = (newValue: ItemType) => {
     const updated = items.map((item, i) => {
       if (index === i) {
         return { ...item, value: newValue };
@@ -69,15 +72,18 @@ export const getArrayItemProps = (items: ArrayItem[], index: number, onChange: A
   };
 };
 
-export function useArrayItems(items: any[], onChange: ChangeHandler<any[]>): ArrayItemState {
-  const [cache, setCache] = useState<ArrayItem[]>(generateArrayItems(items));
+export function useArrayItems<ItemType = unknown>(
+  items: ItemType[],
+  onChange: ChangeHandler<ItemType[]>
+): ArrayItemState<ItemType> {
+  const [cache, setCache] = useState(generateArrayItems(items));
 
-  const handleChange = (newItems: ArrayItem[]) => {
+  const handleChange = (newItems: ArrayItem<ItemType>[]) => {
     setCache(newItems);
     onChange(newItems.map(({ value }) => value));
   };
 
-  const addItem = (newItem: any) => {
+  const addItem = (newItem: ItemType) => {
     handleChange(cache.concat(createArrayItem(newItem)));
   };
 

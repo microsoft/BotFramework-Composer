@@ -26,6 +26,7 @@ export interface ILuisConfig {
   endpoint: string;
   authoringKey: string;
   endpointKey: string;
+  authoringEndpoint: string;
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';

@@ -129,21 +129,20 @@ export class BotProjectDeploy {
         'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
       );
     }
+    if (!this.subId) {
+      throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
+    }
     try {
-      const tenantUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
+      const tenantUrl = `https://management.azure.com/subscriptions/${this.subId}?api-version=2020-01-01`;
       const options = {
         headers: { Authorization: `Bearer ${this.accessToken}` },
       } as rp.RequestPromiseOptions;
       const response = await rp.get(tenantUrl, options);
       const jsonRes = JSON.parse(response);
-      if (
-        jsonRes.value === undefined ||
-        (jsonRes.value && jsonRes.value.length === 0) ||
-        (jsonRes.value && jsonRes.value.length > 0 && jsonRes.value[0].tenantId === undefined)
-      ) {
+      if (jsonRes.tenantId === undefined) {
         throw new Error(`No tenants found in the account.`);
       }
-      return jsonRes.value[0].tenantId;
+      return jsonRes.tenantId;
     } catch (err) {
       throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
     }
@@ -395,6 +394,7 @@ export class BotProjectDeploy {
     environment: string,
     language: string,
     luisEndpoint: string,
+    luisAuthoringEndpoint: string,
     luisEndpointKey: string,
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
@@ -428,11 +428,15 @@ export class BotProjectDeploy {
         luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
       }
 
+      if (!luisAuthoringEndpoint) {
+        luisAuthoringEndpoint = luisEndpoint;
+      }
+
       const buildResult = await builder.build(
         loadResult.luContents,
         loadResult.recognizers,
         luisAuthoringKey,
-        luisEndpoint,
+        luisAuthoringEndpoint,
         name,
         environment,
         language,
@@ -500,7 +504,7 @@ export class BotProjectDeploy {
         const luisAppId = luisAppIds[k];
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Assigning to luis app id: ${luisAppIds}`,
+          message: `Assigning to luis app id: ${luisAppId}`,
         });
 
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
@@ -555,6 +559,7 @@ export class BotProjectDeploy {
 
       let luisEndpointKey = '';
       let luisEndpoint = '';
+      let luisAuthoringEndpoint = '';
 
       if (luisSettings) {
         // if luisAuthoringKey is not set, use the one from the luis settings
@@ -562,6 +567,7 @@ export class BotProjectDeploy {
         luisAuthoringRegion = luisAuthoringRegion || luisSettings.region;
         luisEndpointKey = luisSettings.endpointKey;
         luisEndpoint = luisSettings.endpoint;
+        luisAuthoringEndpoint = luisSettings.authoringEndpoint;
       }
 
       if (!language) {
@@ -573,6 +579,7 @@ export class BotProjectDeploy {
         environment,
         language,
         luisEndpoint,
+        luisAuthoringEndpoint,
         luisEndpointKey,
         luisAuthoringKey,
         luisAuthoringRegion,
@@ -602,7 +609,10 @@ export class BotProjectDeploy {
         message: 'Publish To Azure Success!',
       });
     } catch (error) {
-      console.log(error);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+      });
       throw error;
     }
   }

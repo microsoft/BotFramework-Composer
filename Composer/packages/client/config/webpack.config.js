@@ -274,7 +274,10 @@ module.exports = function (webpackEnv) {
         },
         {
           test: /\.worker\.ts$/,
-          use: { loader: 'worker-loader' },
+          use: {
+            loader: 'worker-loader',
+            options: { name: isEnvProduction ? '[hash].worker.js' : '[name].js' },
+          },
         },
         {
           // "oneOf" will traverse all following loaders until one will

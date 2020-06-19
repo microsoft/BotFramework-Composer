@@ -69,7 +69,7 @@ describe('<DefineConversation/>', () => {
         'schemaUrl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2Fbotframework-sdk%2Fmaster%2Fschemas%2Fcomponent%2Fcomponent.schema%26name%3DEchoBot-11299%26description%3DTest%20Echo',
     };
     const component = renderComponent();
-    const node = await component.findByText('Next');
+    const node = await component.findByText('OK');
     fireEvent.click(node);
     expect(onSubmitMock).toHaveBeenCalledWith({
       description: 'Test Echo',

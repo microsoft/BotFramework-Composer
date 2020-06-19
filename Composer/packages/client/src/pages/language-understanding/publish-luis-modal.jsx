@@ -109,6 +109,8 @@ export const PublishLuis = (props) => {
     authoringRegion: settings.luis.authoringRegion,
     defaultLanguage: settings.luis.defaultLanguage,
     environment: settings.luis.environment,
+    endpoint: settings.luis.endpoint,
+    authoringEndpoint: settings.luis.authoringEndpoint,
     errors: {},
   };
 
@@ -129,7 +131,7 @@ export const PublishLuis = (props) => {
     // save the settings change to store and persist to server
     const newValue = { ...formData, ...result };
     delete newValue.errors;
-    await setSettings(state.projectId, botName, { ...settings, luis: newValue });
+    await setSettings(state.projectId, { ...settings, luis: newValue });
     await onPublish();
   };
 

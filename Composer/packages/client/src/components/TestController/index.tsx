@@ -75,20 +75,20 @@ export const TestController: React.FC = () => {
   async function handlePublishLuis() {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    const luisConfig = settingsStorage.get(botName) ? settingsStorage.get(botName).luis : null;
+    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis : null;
     await publishLuis(luisConfig.authoringKey, state.projectId);
   }
 
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
-    const sensitiveSettings = settingsStorage.get(botName);
+    const sensitiveSettings = settingsStorage.get(projectId);
     await publishToTarget(state.projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   function isLuisConfigComplete(config) {
     let complete = true;
     for (const key in LuisConfig) {
-      if (config && config[LuisConfig[key]] === '') {
+      if (config?.[LuisConfig[key]] === '') {
         complete = false;
         break;
       }
@@ -136,9 +136,7 @@ export const TestController: React.FC = () => {
           onClick={handleOpenEmulator}
         />
         <div
-          aria-label={formatMessage(`{ botStatus}`, {
-            botStatus: publishing ? 'Publishing' : reloading ? 'Reloading' : '',
-          })}
+          aria-label={publishing ? formatMessage('Publishing') : reloading ? formatMessage('Reloading') : ''}
           aria-live={'assertive'}
         />
         <Loading botStatus={botStatus} />

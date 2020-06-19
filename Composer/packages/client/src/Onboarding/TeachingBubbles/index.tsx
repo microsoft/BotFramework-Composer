@@ -66,7 +66,10 @@ const TeachingBubbles = () => {
   }
 
   if (setLength > 1) {
-    teachingBubbleProps.footerContent = `${currentStep + 1} ${formatMessage('of')} ${setLength}`;
+    teachingBubbleProps.footerContent = `${formatMessage('{step} of {setLength}', {
+      step: currentStep + 1,
+      setLength,
+    })}`;
   }
 
   if (currentSet === 0) {

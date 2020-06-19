@@ -59,7 +59,11 @@ function sortDialog(dialogs: DialogInfo[]) {
   });
 }
 
-function createGroup(dialogs: DialogInfo[], dialogId: string, filter: string): { items: any[]; groups: IGroup[] } {
+function createItemsAndGroups(
+  dialogs: DialogInfo[],
+  dialogId: string,
+  filter: string
+): { items: any[]; groups: IGroup[] } {
   let position = 0;
   const result = dialogs
     .filter((dialog) => {
@@ -107,12 +111,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
 
   const onRenderHeader = (props: IGroupHeaderProps) => {
     const toggleCollapse = (): void => {
-      groupRef.current!.toggleCollapseAll(true);
-      props.onToggleCollapse!(props.group!);
+      groupRef.current?.toggleCollapseAll(true);
+      props.onToggleCollapse?.(props.group!);
       onSelect(props.group!.key);
     };
     return (
-      <span ref={props.group && props.group.data.isRoot && addMainDialogRef} role="grid">
+      <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
           depth={0}
           isActive={!props.group!.isCollapsed}
@@ -151,7 +155,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
 
-  const res: { items: any[]; groups: IGroup[] } = createGroup(sortedDialogs, dialogId, filter);
+  const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, dialogId, filter);
 
   return (
     <Resizable
@@ -192,12 +196,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-              { dialogNum: res.groups.length }
+              { dialogNum: itemsAndGroups.groups.length }
             )}
             aria-live={'polite'}
           />
           <GroupedList
-            {...res}
+            {...itemsAndGroups}
             componentRef={groupRef}
             groupProps={
               {

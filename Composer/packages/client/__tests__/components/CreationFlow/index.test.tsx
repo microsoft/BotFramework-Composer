@@ -92,7 +92,7 @@ describe('<CreationFlow/>', () => {
 
     const component = renderComponent();
     await navigate('create/Emptybot');
-    const node = await component.findByText('Next');
+    const node = await component.findByText('OK');
     fireEvent.click(node);
   });
 });

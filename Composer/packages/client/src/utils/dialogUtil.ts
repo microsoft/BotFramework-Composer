@@ -13,7 +13,6 @@ import {
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { Expression } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import formatMessage from 'format-message';
@@ -31,7 +30,7 @@ export interface TriggerFormData {
   event: string;
   intent: string;
   triggerPhrases: string;
-  regexEx: string;
+  regEx: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -39,7 +38,7 @@ export interface TriggerFormDataErrors {
   intent?: string;
   event?: string;
   triggerPhrases?: string;
-  regexEx?: string;
+  regEx?: string;
   activity?: string;
 }
 
@@ -133,10 +132,9 @@ export function generateNewDialog(
   if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
   const factory = new DialogFactory(schema);
   let updatedDialog = createTrigger(dialog, data, factory);
-
   //add regex expression
-  if (data.regexEx) {
-    updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regexEx);
+  if (data.regEx) {
+    updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regEx);
   }
   return updatedDialog;
 }
@@ -337,16 +335,6 @@ export function sanitizeDialogData(dialogData: any) {
   }
 
   return dialogData;
-}
-
-export function isExpression(str: string): boolean {
-  try {
-    Expression.parse(str);
-  } catch (error) {
-    return false;
-  }
-
-  return true;
 }
 
 export function getSelected(focused: string): string {

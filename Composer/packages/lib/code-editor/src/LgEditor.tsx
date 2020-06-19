@@ -11,9 +11,8 @@ import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient, SendRequestWithRetry } from './utils/lspUtil';
 import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 import { LGOption } from './utils';
+import { LG_HELP } from './constants';
 
-const LG_HELP =
-  'https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/language-generation/docs/lg-file-format.md';
 const placeholder = `> To learn more about the LG file format, read the documentation at
 > ${LG_HELP}`;
 
