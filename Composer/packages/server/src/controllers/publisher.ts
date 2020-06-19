@@ -15,10 +15,6 @@ const defaultPublishConfig = {
   configuration: JSON.stringify({}),
 };
 const DEFAULT_RUNTIME = 'dotnet';
-const RUNTIME = {
-  DOTNET: 'dotnet',
-  NODE: 'node',
-};
 
 export const PublishController = {
   getTypes: async (req, res) => {
