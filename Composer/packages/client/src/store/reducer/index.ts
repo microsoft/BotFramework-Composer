@@ -133,11 +133,13 @@ const getProjectFailure: ReducerFunc = (state, { error }) => {
   return state;
 };
 
+// DONE
 const getRecentProjectsSuccess: ReducerFunc = (state, { response }) => {
   state.recentProjects = response.data;
   return state;
 };
 
+//DONE
 const removeRecentProject: ReducerFunc = (state, { path }) => {
   const recentProjects = state.recentProjects;
   const index = recentProjects.findIndex((p) => p.path == path);

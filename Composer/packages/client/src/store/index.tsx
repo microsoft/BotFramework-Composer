@@ -92,11 +92,12 @@ export const initialBotState: BotState = {
   publishTargets: [],
   publishHistory: {},
   botOpening: false,
+  // the data path for PropertyEditor
+  focusPath: '',
 };
 
 const initialAppState: AppState = {
   botEndpoints: {},
-  focusPath: '', // the data path for PropertyEditor
   recentProjects: [],
   templateProjects: [],
   storages: [],

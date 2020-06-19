@@ -4,8 +4,9 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
 import { indexer } from '@bfc/indexers';
-import get from 'lodash/get';
-import set from 'lodash/set';
+import lodashGet from 'lodash/get';
+import lodashSet from 'lodash/get';
+import isArray from 'lodash/isArray';
 
 import filePersistence from '../../store/persistence/FilePersistence';
 import lgWorker from '../../store/parsers/lgWorker';
@@ -34,6 +35,8 @@ import {
   projectIdState,
   botOpeningState,
 } from './../atoms/botState';
+import { recentProjects, botProjects, BotProject, templateProjects } from './../atoms/appState';
+import { logMessage } from './../dispatchers/shared';
 
 const checkProjectUpdates = async () => {
   const workers = [filePersistence, lgWorker, luWorker];
@@ -49,7 +52,7 @@ const processSchema = (projectId: string, schema: any) => ({
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {
   for (const property of SensitiveProperties) {
-    const value = get(settings, property);
+    const value = lodashGet(settings, property);
     if (value) {
       settingStorage.setField(projectId, property, value);
     }
@@ -61,11 +64,11 @@ const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
   const localSetting = settingStorage.get(projectId);
   if (localSetting) {
     for (const property of SensitiveProperties) {
-      const value = get(localSetting, property);
+      const value = lodashGet(localSetting, property);
       if (value) {
-        set(settings, property, value);
+        lodashSet(settings, property, value);
       } else {
-        set(settings, property, ''); // set those key back, because that were omit after persisited
+        lodashSet(settings, property, ''); // set those key back, because that were omit after persisited
       }
     }
   }
@@ -171,9 +174,80 @@ export const projectDispatcher = () => {
     }
   );
 
+  const fetchRecentProjects = useRecoilCallback<[], void>((callbackHelpers: CallbackInterface) => async () => {
+    const { set } = callbackHelpers;
+    try {
+      const response = await httpClient.get(`/projects/recent`);
+      set(recentProjects, response.data);
+    } catch (ex) {
+      // TODO: Handle exceptions
+      set(recentProjects, []);
+      logMessage(`Error in fetching recent projects: ${ex}`);
+    }
+  });
+
+  const removeRecentProject = useRecoilCallback<[string], void>(
+    (callbackHelpers: CallbackInterface) => async (path: string) => {
+      const {
+        set,
+        snapshot: { getPromise },
+      } = callbackHelpers;
+      try {
+        const currentRecentProjects = await getPromise(recentProjects);
+        const index = currentRecentProjects.findIndex((p) => p.path == path);
+        currentRecentProjects.splice(index, 1);
+        set(recentProjects, {
+          ...currentRecentProjects,
+        });
+      } catch (ex) {
+        // TODO: Handle exceptions
+        logMessage(`Error removing recent project: ${ex}`);
+      }
+    }
+  );
+
+  const updateBotEndpointForProject = useRecoilCallback<[string, string], Promise<void>>(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, endpoint: string) => {
+      const {
+        snapshot: { getPromise },
+        set,
+      } = callbackHelpers;
+      try {
+        const currentBotProjects = await getPromise(botProjects);
+        const index = currentBotProjects.findIndex((currentProject: BotProject) => currentProject.id === projectId);
+        if (index !== -1) {
+          currentBotProjects[index].endpoints.push(endpoint);
+        }
+        set(botProjects, { ...currentBotProjects });
+      } catch (ex) {
+        // TODO: Handle exceptions
+        logMessage(`Error updating bot endpoint: ${ex}`);
+      }
+    }
+  );
+
+  const setTemplateProjects = useRecoilCallback<[string, string], Promise<void>>(
+    (callbackHelpers: CallbackInterface) => async () => {
+      const { set } = callbackHelpers;
+      try {
+        const response = await httpClient.get(`/assets/projectTemplates`);
+        if (isArray(response.data)) {
+          set(templateProjects, [...response.data]);
+        }
+      } catch (ex) {
+        // TODO: Handle exceptions
+        logMessage(`Error setting template projects: ${ex}`);
+      }
+    }
+  );
+
   return {
     openBotProject,
     createProject,
     fetchProjectById,
+    fetchRecentProjects,
+    removeRecentProject,
+    updateBotEndpoint: updateBotEndpointForProject,
+    setTemplateProjects,
   };
 };
