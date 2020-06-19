@@ -448,8 +448,9 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'csharp-azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
+    buildCommand: 'dotnet build',
     eject: async (project, localDisk: IFileStorage) => {
-      const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
+      const sourcePath = path.resolve(__dirname, '../../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
@@ -477,8 +478,9 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'javescript-azurewebapp',
     name: 'JS',
     startCommand: 'node azurewebapp/lib/index.js',
+    buildCommand: 'yarn install',
     eject: async (project: any, localDisk: IFileStorage) => {
-      const sourcePath = path.resolve(__dirname, '../../../../runtime/node');
+      const sourcePath = path.resolve(__dirname, '../../../../../runtime/node');
       const destPath = path.join(project.dir, 'runtime');
       // const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
       // const schemaDstPath = path.join(project.dir, 'schemas');
