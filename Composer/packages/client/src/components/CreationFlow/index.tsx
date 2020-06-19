@@ -6,10 +6,13 @@ import Path from 'path';
 
 import React, { useEffect, useContext, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
 import { StoreContext } from '../../store';
 import Home from '../../pages/home';
+import { dispatcherState } from '../../recoilModel/dispatchers/DispatcherWraper';
+import { navigateTo } from '../../utils';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -19,11 +22,10 @@ type CreationFlowProps = RouteComponentProps<{}>;
 
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const { state, actions } = useContext(StoreContext);
+  const { openBotProject } = useRecoilValue(dispatcherState);
   const { creationFlowStatus } = state;
   const {
     fetchTemplates,
-    openBotProject,
-    createProject,
     saveProjectAs,
     saveTemplateId,
     fetchStorages,
@@ -31,6 +33,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     setCreationFlowStatus,
   } = actions;
   const { templateId, templateProjects, storages, focusedStorageFolder } = state;
+  const { createProject } = useRecoilValue(dispatcherState);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
@@ -65,18 +68,22 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const openBot = async (botFolder) => {
-    await openBotProject(botFolder);
+    const projectId = await openBotProject(botFolder);
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
+    const mainUrl = `/bot/${projectId}/dialogs/Main`;
+    navigateTo(mainUrl);
   };
 
   const handleCreateNew = async (formData) => {
-    await createProject(
+    const projectId = await createProject(
       templateId || '',
       formData.name,
       formData.description,
       Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || ''),
       formData.schemaUrl
     );
+    const mainUrl = `/bot/${projectId}/dialogs/Main`;
+    navigateTo(mainUrl);
   };
 
   const handleSaveAs = async (formData) => {

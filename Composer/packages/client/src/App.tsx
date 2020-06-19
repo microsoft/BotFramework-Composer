@@ -9,6 +9,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
 import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
@@ -22,6 +23,7 @@ import { RequireAuth } from './components/RequireAuth';
 import onboardingState from './utils/onboardingStorage';
 import { isElectron } from './utils/electronUtil';
 import { useLinks } from './utils/hooks';
+import { botNameState, localeState } from './recoilModel/atoms/botState';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -35,10 +37,12 @@ const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {.
 
 export const App: React.FC = () => {
   const { actions, state } = useContext(StoreContext);
+  const botName = useRecoilValue(botNameState);
+  const locale = useRecoilValue(localeState);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
   const { onboardingSetComplete } = actions;
-  const { botName, locale, announcement } = state;
+  const { announcement } = state;
   const { topLinks, bottomLinks } = useLinks();
 
   useEffect(() => {

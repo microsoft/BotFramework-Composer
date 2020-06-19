@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -17,6 +17,7 @@ import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import { useRecoilValue } from 'recoil';
 
 import { nameRegex } from '../../constants';
 import {
@@ -33,7 +34,13 @@ import {
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
-import { StoreContext } from '../../store';
+import {
+  dialogsState,
+  luFilesState,
+  localeState,
+  projectIdState,
+  schemasState,
+} from '../../recoilModel/atoms/botState';
 
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
@@ -152,8 +159,11 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, locale, projectId, schemas } = state;
+  const dialogs = useRecoilValue(dialogsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const locale = useRecoilValue(localeState);
+  const projectId = useRecoilValue(projectIdState);
+  const schemas = useRecoilValue(schemasState);
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;

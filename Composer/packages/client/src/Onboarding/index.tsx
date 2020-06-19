@@ -4,11 +4,13 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
 import onboardingState from '../utils/onboardingStorage';
 import { OpenConfirmModal } from '../components/Modal';
 import { StoreContext } from '../store';
 import { useLocation } from '../utils/hooks';
+import { dialogsState, projectIdState } from '../recoilModel/atoms/botState';
 
 import OnboardingContext from './context';
 import TeachingBubbles from './TeachingBubbles';
@@ -22,12 +24,12 @@ const Onboarding: React.FC = () => {
   const {
     actions: { onboardingSetComplete },
     state: {
-      dialogs,
       onboarding: { complete },
-      projectId,
     },
   } = useContext(StoreContext);
 
+  const dialogs = useRecoilValue(dialogsState);
+  const projectId = useRecoilValue(projectIdState);
   const rootDialogId = dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
 
   const stepSets = useMemo<IStepSet[]>(() => {

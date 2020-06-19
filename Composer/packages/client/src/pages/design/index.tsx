@@ -13,6 +13,7 @@ import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
+import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController';
@@ -29,6 +30,8 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 import { useShell } from '../../shell';
+import { dialogsState, projectIdState, schemasState } from '../../recoilModel/atoms/botState';
+import { dispatcherState } from '../../recoilModel/dispatchers/DispatcherWraper';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
@@ -85,26 +88,12 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const { state, actions } = useContext(StoreContext);
-  const {
-    dialogs,
-    displaySkillManifest,
-    breadcrumb,
-    visualEditorSelection,
-    projectId,
-    schemas,
-    focusPath,
-    designPageLocation,
-  } = state;
-  const {
-    dismissManifestModal,
-    removeDialog,
-    setDesignPageLocation,
-    navTo,
-    selectTo,
-    setectAndfocus,
-    updateDialog,
-    clearUndoHistory,
-  } = actions;
+  const dialogs = useRecoilValue(dialogsState);
+  const projectId = useRecoilValue(projectIdState);
+  const schemas = useRecoilValue(schemasState);
+  const { removeDialog, updateDialog } = useRecoilValue(dispatcherState);
+  const { displaySkillManifest, breadcrumb, visualEditorSelection, focusPath, designPageLocation } = state;
+  const { dismissManifestModal, setDesignPageLocation, navTo, selectTo, setectAndfocus, clearUndoHistory } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
@@ -181,7 +170,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
     const index = get(dialog, 'content.triggers', []).length - 1;
     actions.selectTo(`triggers[${index}]`);
-    actions.updateDialog(dialogPayload);
+    updateDialog(dialogPayload);
   };
 
   function handleSelect(id, selected = '') {
@@ -429,7 +418,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     schema={schemas.sdk.content}
                     value={currentDialog.content || undefined}
                     onChange={(data) => {
-                      actions.updateDialog({ id: currentDialog.id, projectId, content: data });
+                      updateDialog({ id: currentDialog.id, projectId, content: data });
                     }}
                   />
                 ) : (

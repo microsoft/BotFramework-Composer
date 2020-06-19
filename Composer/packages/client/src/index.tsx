@@ -6,10 +6,12 @@ import ReactDOM from 'react-dom';
 import formatMessage from 'format-message';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import './index.css';
+import { RecoilRoot } from 'recoil';
 
+import './index.css';
 import { App } from './App';
 import { StoreProvider } from './store';
+import { DispatcherWraper } from './recoilModel/dispatchers/DispatcherWraper';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -21,10 +23,13 @@ const emotionCache = createCache({
 });
 
 ReactDOM.render(
-  <CacheProvider value={emotionCache}>
-    <StoreProvider>
-      <App />
-    </StoreProvider>
-  </CacheProvider>,
+  <RecoilRoot>
+    <DispatcherWraper />
+    <CacheProvider value={emotionCache}>
+      <StoreProvider>
+        <App />
+      </StoreProvider>
+    </CacheProvider>
+  </RecoilRoot>,
   document.getElementById('root')
 );

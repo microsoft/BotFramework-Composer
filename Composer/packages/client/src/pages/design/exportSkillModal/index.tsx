@@ -9,8 +9,10 @@ import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dia
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from '@bfc/extension';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
+import { useRecoilValue } from 'recoil';
 
 import { StoreContext } from '../../../store';
+import { skillManifestsState } from '../../../recoilModel/atoms/botState';
 
 import { editorSteps, ManifestEditorSteps, order, SkillManifest } from './constants';
 import { styles } from './styles';
@@ -22,8 +24,8 @@ interface ExportSkillModalProps {
 }
 
 const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss }) => {
-  const { actions, state } = useContext(StoreContext);
-  const { skillManifests } = state;
+  const { actions } = useContext(StoreContext);
+  const skillManifests = useRecoilValue(skillManifestsState);
   const { updateSkillManifest } = actions;
 
   const [currentStep, setCurrentStep] = useState(0);

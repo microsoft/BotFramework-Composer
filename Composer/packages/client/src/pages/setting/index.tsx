@@ -3,11 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useMemo, useEffect } from 'react';
+import { useContext, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { useRecoilValue } from 'recoil';
 
 import { StoreContext } from '../../store';
 import { TestController } from '../../components/TestController';
@@ -15,45 +16,27 @@ import { OpenConfirmModal } from '../../components/Modal/Confirm';
 import { navigateTo } from '../../utils';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
-import { useLocation } from '../../utils/hooks';
+import { projectIdState } from '../../recoilModel/atoms/botState';
 
-import { SettingsRoutes } from './router';
-
-const getProjectLink = (path: string, id?: string) => {
-  return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
-};
+import Routes from './router';
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { projectId } = state;
-
-  const { navigate } = useLocation();
-
-  // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
-  // Redirect them to the default settings route that is not bot-scoped
-  useEffect(() => {
-    if (!projectId && location.pathname.indexOf('/settings/bot/') !== -1) {
-      navigate('/settings/application');
-    }
-  }, [projectId]);
+  const { actions } = useContext(StoreContext);
+  const projectId = useRecoilValue(projectIdState);
+  const makeProjectLink = (id: string, path: string) => {
+    return `/bot/${id}/settings/${path}`;
+  };
 
   const settingLabels = {
     botSettings: formatMessage('Bot Settings'),
-    appSettings: formatMessage('Application Settings'),
+    appSettings: formatMessage('App Settings'),
     runtime: formatMessage('Runtime Config'),
-    about: formatMessage('About'),
   };
 
   const links: INavTreeItem[] = [
-    {
-      id: 'dialog-settings',
-      name: settingLabels.botSettings,
-      url: getProjectLink('dialog-settings', projectId),
-      disabled: !projectId,
-    },
-    { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
-    { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
-    { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
+    { id: 'dialog-settings', name: settingLabels.botSettings, url: makeProjectLink(projectId, 'dialog-settings') },
+    { id: 'preferences', name: settingLabels.appSettings, url: makeProjectLink(projectId, 'preferences') },
+    { id: 'runtime', name: settingLabels.runtime, url: makeProjectLink(projectId, 'runtime') },
 
     // { key: '/settings/publish', name: settingLabels.publish, url: '' },
 
@@ -153,7 +136,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
       return page.name;
     }
 
-    return settingLabels.appSettings;
+    return settingLabels.botSettings;
   }, [location.pathname]);
 
   return (
@@ -164,7 +147,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
       title={title}
       toolbarItems={toolbarItems}
     >
-      <SettingsRoutes projectId={projectId} />
+      <Routes />
     </Page>
   );
 };

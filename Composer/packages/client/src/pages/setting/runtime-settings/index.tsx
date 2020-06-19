@@ -9,16 +9,21 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { StoreContext } from '../../../store';
+import { botNameState, settingsState, projectIdState } from '../../../recoilModel/atoms/botState';
 
 import { EjectModal } from './ejectModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { botName, settings, projectId } = state;
+  const { actions } = useContext(StoreContext);
+  const botName = useRecoilValue(botNameState);
+  const settings = useRecoilValue(settingsState);
+  const projectId = useRecoilValue(projectIdState);
+
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 

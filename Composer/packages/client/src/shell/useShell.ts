@@ -4,6 +4,7 @@
 import { useEffect, useContext, useMemo, useRef } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
+import { useRecoilValue } from 'recoil';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { StoreContext } from '../store';
@@ -11,6 +12,16 @@ import { getDialogData, setDialogData, sanitizeDialogData } from '../utils';
 import { openAlertModal, dialogStyle } from '../components/Modal';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
+import {
+  botNameState,
+  schemasState,
+  skillsState,
+  lgFilesState,
+  dialogsState,
+  projectIdState,
+  localeState,
+} from '../recoilModel/atoms/botState';
+import { dispatcherState } from '../recoilModel/dispatchers/DispatcherWraper';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -22,23 +33,19 @@ type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const { state, actions } = useContext(StoreContext);
   const dialogMapRef = useRef({});
-  const {
-    botName,
-    breadcrumb,
-    designPageLocation,
-    dialogs,
-    focusPath,
-    lgFiles,
-    locale,
-    luFiles,
-    projectId,
-    schemas,
-    userSettings,
-    skills,
-  } = state;
+  const { breadcrumb, designPageLocation, focusPath, userSettings } = state;
+  const botName = useRecoilValue(botNameState);
+  const dialogs = useRecoilValue(dialogsState);
+  const luFiles = useRecoilValue(lgFilesState);
+  const projectId = useRecoilValue(projectIdState);
+  const locale = useRecoilValue(localeState);
+  const lgFiles = useRecoilValue(lgFilesState);
+  const skills = useRecoilValue(skillsState);
+  const schemas = useRecoilValue(schemasState);
+
   const lgApi = useLgApi();
   const luApi = useLuApi();
-  const updateDialog = actions.updateDialog;
+  const { updateDialog } = useRecoilValue(dispatcherState);
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 

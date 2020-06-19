@@ -9,10 +9,14 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
+import { dispatcherState } from '../../recoilModel/dispatchers/DispatcherWraper';
+import { navigateTo } from '../../utils';
+import { botNameState } from '../../recoilModel/atoms/botState';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -55,17 +59,15 @@ const tutorials = [
 
 const Home: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { botName, recentProjects, templateProjects } = state;
-  const {
-    openBotProject,
-    setCreationFlowStatus,
-    saveTemplateId,
-    fetchRecentProjects,
-    onboardingAddCoachMarkRef,
-  } = actions;
+  const { recentProjects, templateProjects } = state;
+  const botName = useRecoilValue(botNameState);
+  const { openBotProject } = useRecoilValue(dispatcherState);
+  const { setCreationFlowStatus, saveTemplateId, fetchRecentProjects, onboardingAddCoachMarkRef } = actions;
 
   const onClickRecentBotProject = async (path) => {
-    await openBotProject(path);
+    const projectId = await openBotProject(path);
+    const mainUrl = `/bot/${projectId}/dialogs/Main`;
+    navigateTo(mainUrl);
   };
 
   const onItemChosen = async (item) => {

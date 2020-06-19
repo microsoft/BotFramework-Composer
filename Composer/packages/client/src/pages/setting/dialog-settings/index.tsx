@@ -8,8 +8,10 @@ import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { StoreContext } from '../../../store';
+import { botNameState, settingsState, projectIdState } from '../../../recoilModel/atoms/botState';
 
 import { hostedSettings, hostedControls, settingsEditor } from './style';
 
@@ -25,8 +27,10 @@ const hostControlLabels = {
 };
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { botName, settings, projectId } = state;
+  const { actions } = useContext(StoreContext);
+  const botName = useRecoilValue(botNameState);
+  const settings = useRecoilValue(settingsState);
+  const projectId = useRecoilValue(projectIdState);
 
   const saveChangeResult = (result) => {
     try {
