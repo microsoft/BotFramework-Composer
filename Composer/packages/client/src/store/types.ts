@@ -88,6 +88,13 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
+export interface BotLoadError {
+  title: string;
+  message: string;
+  linkAfterMessage?: { url: string; text: string };
+  link?: { url: string; text: string };
+}
+
 export interface BotState {
   // Unique identifier of a bot
   projectId: string;

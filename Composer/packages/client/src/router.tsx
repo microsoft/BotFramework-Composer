@@ -3,15 +3,17 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useContext, useEffect, Suspense } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { StoreContext } from './store';
 import { LoadingSpinner } from './components/LoadingSpinner';
+import { botOpeningState, projectIdState } from './recoilModel/atoms/botState';
+import { dispatcherState } from './recoilModel/dispatchers/DispatcherWraper';
 
 const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
@@ -23,8 +25,7 @@ const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow'));
 
 const Routes = (props) => {
-  const { state } = useContext(StoreContext);
-  const { botOpening } = state;
+  const botOpening = useRecoilValue(botOpeningState);
 
   return (
     <div css={data}>
@@ -79,15 +80,17 @@ const projectStyle = css`
 `;
 
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const { actions, state } = useContext(StoreContext);
+  const botOpening = useRecoilValue(botOpeningState);
+  const projectId = useRecoilValue(projectIdState);
+  const { fetchProjectById } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
-    if (state.projectId !== props.projectId && props.projectId) {
-      actions.fetchProjectById(props.projectId);
+    if (projectId !== props.projectId && props.projectId) {
+      fetchProjectById(props.projectId);
     }
   }, [props.projectId]);
 
-  if (state.botOpening || props.projectId !== state.projectId) {
+  if (botOpening || props.projectId !== projectId) {
     return <LoadingSpinner />;
   }
 

@@ -1,18 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useContext, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { DialogWrapper } from '../../components/DialogWrapper';
 import { DialogTypes } from '../../components/DialogWrapper/styles';
 import { StorageFolder } from '../../store/types';
-import { StoreContext } from '../../store';
 import { FieldConfig, useForm } from '../../hooks';
+import { dialogsState } from '../../recoilModel/atoms/botState';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -30,8 +31,7 @@ interface CreateDialogModalProps {
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { dialogs } = state;
+  const dialogs = useRecoilValue(dialogsState);
   const { onSubmit, onDismiss, isOpen } = props;
   const formConfig: FieldConfig<DialogFormData> = {
     name: {

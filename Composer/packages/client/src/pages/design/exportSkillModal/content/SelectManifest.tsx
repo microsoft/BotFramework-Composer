@@ -17,10 +17,12 @@ import {
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
 import { calculateTimeDiff } from '../../../../utils';
 import { StoreContext } from '../../../../store';
 import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
+import { botNameState } from '../../../../recoilModel/atoms/botState';
 
 const styles = {
   detailListContainer: css`
@@ -37,8 +39,8 @@ const styles = {
 };
 
 export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillManifests, setSkillManifest }) => {
-  const { actions, state } = useContext(StoreContext);
-  const { botName } = state;
+  const { actions } = useContext(StoreContext);
+  const botName = useRecoilValue(botNameState);
   const [manifestVersion, setManifestVersion] = useState<string>(SCHEMA_URIS[0]);
   const [errors, setErrors] = useState<{ version?: string }>({});
 

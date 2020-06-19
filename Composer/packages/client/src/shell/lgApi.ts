@@ -4,9 +4,11 @@
 import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
 import debounce from 'lodash/debounce';
+import { useRecoilValue } from 'recoil';
 
 import { State, BoundActionHandlers } from '../store/types';
 import { useStoreContext } from '../hooks/useStoreContext';
+import { projectIdState } from '../recoilModel/atoms/botState';
 
 function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver: (id: string) => LgFile | undefined) {
   const getLgTemplates = (id) => {
@@ -86,7 +88,8 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
 
 export function useLgApi() {
   const { state, actions, resolvers } = useStoreContext();
-  const { projectId, focusPath } = state;
+  const { focusPath } = state;
+  const projectId = useRecoilValue(projectIdState);
   const { lgFileResolver } = resolvers;
   const [api, setApi] = useState(createLgApi(state, actions, lgFileResolver));
 

@@ -4,10 +4,12 @@
 import { useEffect, useState } from 'react';
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import throttle from 'lodash/throttle';
+import { useRecoilValue } from 'recoil';
 
 import { State, BoundActionHandlers } from '../store/types';
 import luWorker from '../store/parsers/luWorker';
 import { useStoreContext } from '../hooks/useStoreContext';
+import { projectIdState } from '../recoilModel/atoms/botState';
 
 const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
@@ -67,7 +69,8 @@ function createLuApi(state: State, actions: BoundActionHandlers, luFileResolver:
 
 export function useLuApi() {
   const { state, actions, resolvers } = useStoreContext();
-  const { projectId, focusPath } = state;
+  const { focusPath } = state;
+  const projectId = useRecoilValue(projectIdState);
   const { luFileResolver } = resolvers;
   const [api, setApi] = useState(createLuApi(state, actions, luFileResolver));
 

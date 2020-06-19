@@ -11,8 +11,10 @@ import { filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
 import { StoreContext } from '../../store';
+import { localeState, lgFilesState, projectIdState } from '../../recoilModel/atoms/botState';
 
 const lspServerPath = '/lg-language-server';
 
@@ -22,7 +24,10 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const { actions, state } = useContext(StoreContext);
-  const { lgFiles, locale, projectId, userSettings } = state;
+  const { userSettings } = state;
+  const projectId = useRecoilValue(projectIdState);
+  const locale = useRecoilValue(localeState);
+  const lgFiles = useRecoilValue(lgFilesState);
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const diagnostics = get(file, 'diagnostics', []);

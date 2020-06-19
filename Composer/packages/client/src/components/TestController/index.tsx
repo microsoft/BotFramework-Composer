@@ -6,8 +6,18 @@ import { jsx } from '@emotion/core';
 import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
 import { DefaultPublishConfig } from '../../constants';
+import {
+  botNameState,
+  botStatusState,
+  dialogsState,
+  luFilesState,
+  settingsState,
+  projectIdState,
+  botLoadErrorState,
+} from '../../recoilModel/atoms/botState';
 
 import settingsStorage from './../../utils/dialogSettingStorage';
 import { StoreContext } from './../../store';
@@ -29,7 +39,14 @@ export const TestController: React.FC = () => {
   const [calloutVisible, setCalloutVisible] = useState(false);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const { botEndpoints, botName, botStatus, dialogs, luFiles, settings, projectId, botLoadErrorMsg } = state;
+  const { botEndpoints } = state;
+  const botName = useRecoilValue(botNameState);
+  const botStatus = useRecoilValue(botStatusState);
+  const dialogs = useRecoilValue(dialogsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const settings = useRecoilValue(settingsState);
+  const projectId = useRecoilValue(projectIdState);
+  const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
   const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, getPublishStatus, setBotStatus } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;

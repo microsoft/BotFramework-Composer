@@ -9,11 +9,13 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
 import VisualDesigner from '@bfc/adaptive-flow';
 import Extension from '@bfc/extension';
+import { useRecoilValue } from 'recoil';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { StoreContext } from '../../store';
 import { useShell } from '../../shell';
 import plugins from '../../plugins';
+import { schemasState, dialogsState } from '../../recoilModel/atoms/botState';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
 
@@ -59,7 +61,9 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const { state, actions } = useContext(StoreContext);
   const { onboardingAddCoachMarkRef } = actions;
-  const { dialogs, schemas, designPageLocation } = state;
+  const { designPageLocation } = state;
+  const dialogs = useRecoilValue(dialogsState);
+  const schemas = useRecoilValue(schemasState);
   const { dialogId, selected } = designPageLocation;
 
   const addRef = useCallback((visualEditor) => onboardingAddCoachMarkRef({ visualEditor }), []);

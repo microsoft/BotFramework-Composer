@@ -3,15 +3,16 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/components/Dialog';
 import { IDragOptions } from 'office-ui-fabric-react/lib/Modal';
 import { JsonEditor } from '@bfc/code-editor';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
+import { skillsState } from '../../recoilModel/atoms/botState';
 
 import { displayManifest as styles } from './styles';
 
@@ -34,9 +35,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   manifestId,
   onDismiss,
 }) => {
-  const { state } = useContext(StoreContext);
-  const { skills } = state;
-
+  const skills = useRecoilValue(skillsState);
   useEffect(() => onDismiss, []);
 
   const selectedSkill = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === manifestId), [manifestId]);

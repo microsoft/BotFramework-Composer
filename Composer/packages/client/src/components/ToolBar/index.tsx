@@ -7,8 +7,10 @@ import { useCallback, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogInfo } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
 import { useStoreContext } from '../../hooks';
+import { projectIdState } from '../../recoilModel/atoms/botState';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
@@ -67,8 +69,8 @@ export function ToolBar(props: ToolbarProps) {
   } = props;
   const {
     actions: { onboardingAddCoachMarkRef, createDialogBegin, exportToZip },
-    state: { projectId },
   } = useStoreContext();
+  const projectId = useRecoilValue(projectIdState);
   const left: IToolBarItem[] = [];
   const right: IToolBarItem[] = [];
 
