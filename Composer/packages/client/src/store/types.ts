@@ -31,7 +31,7 @@ export type ActionHandlers = { [action: string]: ActionCreator };
 export type BoundAction = (...args: any[]) => void | Promise<void>;
 export type BoundActionHandlers = { [action: string]: BoundAction };
 
-interface StateError {
+export interface StateError {
   status?: number;
   summary: string;
   message: string;
@@ -148,11 +148,11 @@ export interface BotState {
 
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
+  focusPath: string;
 }
 
 export type AppState = {
   /** the data path for PropertyEditor */
-  focusPath: string;
   templateProjects: ProjectTemplate[];
   recentProjects: any[];
   storages: any[];
