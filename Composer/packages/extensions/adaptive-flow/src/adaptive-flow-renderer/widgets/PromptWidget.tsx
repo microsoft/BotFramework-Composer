@@ -92,7 +92,10 @@ export const PromptWidget: FC<PromptWdigetProps> = ({
       </OffsetContainer>
       <OffsetContainer offset={brickNode.offset}>
         <NodeWrapper nodeData={data} nodeId={brickNode.id} nodeTab={PromptTab.OTHER} onEvent={onEvent}>
-          <IconBrick onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })} />
+          <IconBrick
+            disabled={data.disabled === true}
+            onClick={() => onEvent(NodeEventTypes.Focus, { id, tab: PromptTab.OTHER })}
+          />
         </NodeWrapper>
       </OffsetContainer>
     </div>
