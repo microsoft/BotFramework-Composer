@@ -42,7 +42,7 @@ export const ActionHeader: WidgetComponent<ActionHeaderProps> = ({
   menu,
   colors = DefaultColors,
 }) => {
-  const { disabled } = data;
+  const disabled = data.disabled === true;
   const containerCSS = disabled ? DisabledHeaderContainerCSS : HeaderContainerCSS(colors.theme);
   const bodyCSS = HeaderBodyCSS;
   const textCSS = disabled ? DisabledHeaderTextCSS : HeaderTextCSS(colors.color);

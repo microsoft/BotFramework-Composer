@@ -15,7 +15,7 @@ export interface ActionCardProps extends WidgetContainerProps {
 }
 
 export const ActionCard: WidgetComponent<ActionCardProps> = ({ header, body, footer, ...widgetContext }) => {
-  const { disabled } = widgetContext.data;
+  const disabled = widgetContext.data.disabled === true;
   return (
     <CardTemplate
       body={body}
