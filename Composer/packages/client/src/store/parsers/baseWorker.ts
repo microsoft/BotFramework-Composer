@@ -12,7 +12,7 @@ interface WorkerMsg {
 }
 
 // Wrapper class
-export class BaseWorker {
+export class BaseWorker<ActionType> {
   private worker: Worker;
   private resolves = {};
   private rejects = {};
@@ -22,9 +22,9 @@ export class BaseWorker {
     this.worker.onmessage = this.handleMsg.bind(this);
   }
 
-  public sendMsg<Payload>(payload: Payload) {
+  public sendMsg<Payload>(type: ActionType, payload: Payload) {
     const msgId = uniqueId();
-    const msg = { id: msgId, payload };
+    const msg = { id: msgId, type, payload };
     return new Promise((resolve, reject) => {
       // save callbacks for later
       this.resolves[msgId] = resolve;

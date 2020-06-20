@@ -13,7 +13,6 @@ import {
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { Expression } from 'adaptive-expressions';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import formatMessage from 'format-message';
@@ -336,16 +335,6 @@ export function sanitizeDialogData(dialogData: any) {
   }
 
   return dialogData;
-}
-
-export function isExpression(str: string): boolean {
-  try {
-    Expression.parse(str);
-  } catch (error) {
-    return false;
-  }
-
-  return true;
 }
 
 export function getSelected(focused: string): string {

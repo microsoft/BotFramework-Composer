@@ -40,6 +40,7 @@ module.exports = {
     'no-console': 'warn',
     'dot-notation': 'error',
     yoda: 'error',
+    'no-bitwise': 'error',
     // eqeqeq: 'error',
 
     // plugin: import

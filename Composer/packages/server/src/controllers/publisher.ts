@@ -11,7 +11,7 @@ import { runtimeFolder } from '../settings/env';
 
 const defaultPublishConfig = {
   name: 'default',
-  type: 'localpublish',
+  type: '@bfc/plugin-localpublish',
   configuration: JSON.stringify({}),
 };
 const DEFAULT_RUNTIME = 'dotnet';
