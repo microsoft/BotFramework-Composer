@@ -4,7 +4,7 @@
 import { css } from '@emotion/core';
 
 import { HeaderHeight, StandardSectionHeight, StandardNodeWidth } from '../../constants/ElementSizes';
-import { DisabledContainer } from '../styles/Disabled.style';
+import { DisabledContainer } from '../styles/DisabledStyle';
 
 const fullWidthSection = css`
   width: 100%;

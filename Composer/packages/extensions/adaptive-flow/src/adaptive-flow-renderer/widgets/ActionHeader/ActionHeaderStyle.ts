@@ -5,7 +5,7 @@ import { css } from '@emotion/core';
 import { ColorlessFontCSS, TruncatedCSS } from '@bfc/ui-shared';
 
 import { StandardNodeWidth, HeaderHeight } from '../../constants/ElementSizes';
-import { DisabledContainer, DisabledText } from '../styles/Disabled.style';
+import { DisabledContainer, DisabledText } from '../styles/DisabledStyle';
 
 const container = css`
   cursor: pointer;

@@ -9,7 +9,7 @@ import { generateSDKTitle } from '@bfc/shared';
 import { WidgetComponent, WidgetContainerProps } from '../../types/flowRenderer.types';
 import { DefaultColors } from '../../constants/ElementColors';
 import { RendererContext } from '../../contexts/RendererContext';
-import { DisabledIconColor } from '../styles/Disabled.style';
+import { DisabledIconColor } from '../styles/DisabledStyle';
 
 import { Icon, BuiltinIcons } from './icon';
 import {
@@ -18,7 +18,7 @@ import {
   HeaderTextCSS,
   DisabledHeaderContainerCSS,
   DisabledHeaderTextCSS,
-} from './ActionHeader.style';
+} from './ActionHeaderStyle';
 
 export interface ActionHeaderProps extends WidgetContainerProps {
   title?: string;

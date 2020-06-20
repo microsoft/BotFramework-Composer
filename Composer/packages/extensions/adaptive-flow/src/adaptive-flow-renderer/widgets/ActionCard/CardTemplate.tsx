@@ -17,7 +17,7 @@ import {
   SeparateLineCSS,
   CardContainerCSS,
   DisabledCardContainerCSS,
-} from './CardTemplate.style';
+} from './CardTemplateStyle';
 
 export interface CardTemplateProps {
   header: ReactNode;
