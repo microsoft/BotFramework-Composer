@@ -7,6 +7,7 @@ import { ActionCreator } from '../types';
 import filePersistence from '../persistence/FilePersistence';
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
+import qnaWorker from '../parsers/qnaWorker';
 
 import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
@@ -16,7 +17,7 @@ import luFileStatusStorage from './../../utils/luFileStatusStorage';
 import httpClient from './../../utils/httpUtil';
 
 const checkProjectUpdates = async () => {
-  const workers = [filePersistence, lgWorker, luWorker];
+  const workers = [filePersistence, lgWorker, luWorker, qnaWorker];
 
   return Promise.all(workers.map((w) => w.flush()));
 };

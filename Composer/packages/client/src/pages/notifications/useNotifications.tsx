@@ -47,7 +47,7 @@ export default function useNotifications(filter?: string) {
       });
     });
     return notifications;
-  }, [dialogs, luFiles, lgFiles, projectId, diagnostics]);
+  }, [dialogs, luFiles, lgFiles, qnaFiles, projectId, diagnostics]);
 
   const notifications: Notification[] = filter ? memoized.filter((x) => x.severity === filter) : memoized;
   return notifications;

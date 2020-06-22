@@ -7,8 +7,10 @@
  */
 
 import isEmpty from 'lodash/isEmpty';
-import { QnASection, QnAFile } from '@bfc/shared';
+import { QnASection } from '@bfc/shared';
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
+
+import { qnaIndexer } from '../qnaIndexer';
 
 const { luParser, sectionOperator } = sectionHandler;
 
@@ -98,9 +100,14 @@ export function checkIsSingleSection(content: string) {
   return Sections.length === 1;
 }
 
-export function updateSection(indexId: number, qnaFile: QnAFile | undefined, newContent: string) {
-  if (indexId < 0 || !qnaFile) return;
-  const content = qnaFile.content;
+export function addSection(content: string, newContent: string) {
+  const resource = luParser.parse(content);
+  const res = new sectionOperator(resource).addSection(newContent);
+  return res.Content;
+}
+
+export function updateSection(indexId: number, content: string, newContent: string) {
+  if (indexId < 0) return content;
   const resource = luParser.parse(content);
   const { Sections } = resource;
   const sectionId = Sections[indexId].Id;
@@ -108,18 +115,23 @@ export function updateSection(indexId: number, qnaFile: QnAFile | undefined, new
   return res.Content;
 }
 
-export function removeSection(indexId: number, qnaFile: QnAFile | undefined) {
-  if (indexId < 0 || !qnaFile) return;
-  const content = qnaFile.content;
+export function removeSection(indexId: number, content: string) {
+  if (indexId < 0) return content;
   const resource = luParser.parse(content);
   const res = new sectionOperator(resource).deleteSection(indexId);
   return res.Content;
 }
 
-export function insertSection(indexId: number, qnaFile: QnAFile | undefined, newContent: string) {
-  if (indexId < 0 || !qnaFile) return;
-  if (!checkIsSingleSection(newContent)) return;
-  const content = qnaFile.content;
+export function insertSection(indexId: number, content: string, newContent: string) {
+  if (indexId < 0) return content;
   const resource = luParser.parse(content);
+  if (resource.Sections.length === 0) {
+    return new sectionOperator(resource).addSection(newContent).Content;
+  }
   return new sectionOperator(resource).insertSection(indexId, newContent).Content;
+}
+
+export function getParsedDiagnostics(newContent: string) {
+  const { diagnostics } = qnaIndexer.parse(newContent);
+  return diagnostics;
 }

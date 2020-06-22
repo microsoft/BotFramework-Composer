@@ -17,7 +17,7 @@ import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 
 import TableView from './table-view';
-const CodeEditor = React.lazy(() => import('./code-editor'));
+const CodeEditorWrapper = React.lazy(() => import('./codeEditorWrapper'));
 
 interface LGPageProps extends RouteComponentProps<{}> {
   dialogId?: string;
@@ -109,7 +109,7 @@ const LGPage: React.FC<LGPageProps> = (props) => {
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit/*" />
+          <CodeEditorWrapper dialogId={dialogId} path="/edit" />
           <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>

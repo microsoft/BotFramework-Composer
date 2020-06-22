@@ -2,16 +2,15 @@
 // Licensed under the MIT License.
 import clonedeep from 'lodash/cloneDeep';
 import { QnAFile } from '@bfc/shared';
-import { qnaIndexer } from '@bfc/indexers';
 
+import qnaWorker from '../parsers/qnaWorker';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 
 import { ActionTypes } from './../../constants/index';
 
 export const updateQnAFile: ActionCreator = async (store, { id, projectId, content }) => {
-  const data = qnaIndexer.parse(content);
-  const qnaFile: QnAFile = { id, content, ...data };
+  const qnaFile = (await qnaWorker.parse(content, id)) as QnAFile;
   store.dispatch({
     type: ActionTypes.UPDATE_QNA,
     payload: { id, projectId, content, qnaFile },

@@ -28,11 +28,39 @@ function parse(content: string, id = '') {
   const { Sections, Errors } = LUParser.parse(content);
   const qnaPairs: any[] = [];
   Sections.forEach((section) => {
+    const {
+      Answer,
+      Body,
+      FilterPairs,
+      Id,
+      QAPairId,
+      Questions,
+      SectionType,
+      StartLine,
+      StopLine,
+      prompts,
+      promptsText,
+      source,
+    } = section;
     const range = {
       startLineNumber: get(section, 'ParseTree.start.line', 0),
       endLineNumber: get(section, 'ParseTree.stop.line', 0),
     };
-    qnaPairs.push({ ...section, range });
+    qnaPairs.push({
+      Answer,
+      Body,
+      FilterPairs,
+      Id,
+      QAPairId,
+      Questions,
+      SectionType,
+      StartLine,
+      StopLine,
+      prompts,
+      promptsText,
+      source,
+      range,
+    });
   });
   const diagnostics = Errors.map((e) => convertQnADiagnostic(e, id));
   return {
