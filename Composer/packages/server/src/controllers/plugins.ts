@@ -25,6 +25,10 @@ interface RemovePluginRequest extends Request {
   };
 }
 
+export async function listPlugins(req: Request, res: Response) {
+  res.json(PluginManager.getAll());
+}
+
 export async function addPlugin(req: AddPluginRequest, res: Response) {
   const { name, version } = req.body;
 
