@@ -22,7 +22,7 @@ const IntentField: React.FC<FieldProps> = (props) => {
   const Editor =
     recognizer && recognizer.id === SDKKinds.CrossTrainedRecognizerSet
       ? recognizers.find((r) => r.id === SDKKinds.LuisRecognizer)?.editor
-      : null;
+      : recognizer?.editor;
   const label = formatMessage('Trigger phrases (intent: #{intentName})', { intentName: value });
 
   return (
