@@ -1,0 +1,15 @@
+
+[sandwichNew-SaucesEntity.en-us.lg](sandwichNew-SaucesEntity.en-us.lg)
+[sandwichNew-library.en-us.lg](sandwichNew-library.en-us.lg)
+[sandwichNew-library-Missing.en-us.lg](sandwichNew-library-Missing.en-us.lg)
+
+# AskSauces
+- ${askEnumArray('Sauces')}
+
+# SaucesName
+- sauces
+
+# Sauces(values)
+- ${enumArrayValue('Sauces', values)}
+
+> Generator: 093b48b17ef5b91af49a2dca2b6c1533

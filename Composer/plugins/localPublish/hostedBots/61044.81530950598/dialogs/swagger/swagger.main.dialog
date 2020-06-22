@@ -1,0 +1,341 @@
+{
+	"$schema": "https://raw.githubusercontent.com/microsoft/botbuilder-samples/master/experimental/generation/runbot/runbot.schema",
+	"$kind": "Microsoft.AdaptiveDialog",
+	"recognizer": "swagger.lu",
+	"generator": "swagger.lg",
+	"schema": "swagger.json",
+	"triggers": [
+		{
+			"$kind": "Microsoft.OnEndOfActions",
+			"condition": "!$Accept || $PropertyToChange == 'Accept'",
+			"priority": "=indexOf(dialog.requiredProperties, 'Accept')",
+			"actions": [
+				{
+					"$kind": "Microsoft.Ask",
+					"activity": "${AskAccept()}",
+					"expectedProperties": [
+						"Accept"
+					]
+				}
+			],
+			"id": "swagger-Accept-missing",
+			"$Generator": "52047121fdf012a67f5e60814a564108"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "ClearProperty",
+			"entity": "PROPERTYName",
+			"condition": "@PROPERTYName == 'Accept'",
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${clearPropertyMessage('Accept')}"
+				},
+				{
+					"$kind": "Microsoft.DeleteProperty",
+					"property": "$Accept"
+				}
+			],
+			"id": "swagger-Accept-clear",
+			"$Generator": "46e13b25c7a0ac81509d27a4990100a3"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "ShowProperty",
+			"entity": "PROPERTYName",
+			"condition": "@PROPERTYName == 'Accept'",
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${showPropertyMessage(@PROPERTYName)}"
+				}
+			],
+			"id": "swagger-Accept-show",
+			"$Generator": "6434c5df9a294b509b87de104e02012a"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "AddToProperty",
+			"property": "Accept",
+			"entity": "utterance",
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${setPropertyMessage('Accept', @utterance)}"
+				},
+				{
+					"$kind": "Microsoft.SetProperty",
+					"property": "$Accept",
+					"value": "=@utterance"
+				},
+				{
+					"$kind": "Microsoft.IfCondition",
+					"condition": "$PropertyToChange == 'Accept'",
+					"actions": [
+						{
+							"$kind": "Microsoft.DeleteProperty",
+							"property": "$PropertyToChange"
+						}
+					]
+				}
+			],
+			"id": "swagger-Accept-add-utterance",
+			"$Generator": "09178ba7aaa931bbf9f8a2334a4c4ef9"
+		},
+		{
+			"$kind": "Microsoft.OnIntent",
+			"intent": "Cancel",
+			"condition": "turn.recognized.score > 0.5",
+			"actions": [
+				{
+					"$kind": "Microsoft.Ask",
+					"activity": "${cancel()}",
+					"expectedProperties": [
+						"CancelConfirmation"
+					]
+				}
+			],
+			"id": "swagger-library-CancelIntent",
+			"$Generator": "f3ad60eb56c702f2bba61362086ea99a"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "AddToProperty",
+			"property": "CancelConfirmation",
+			"entity": "boolean",
+			"actions": [
+				{
+					"$kind": "Microsoft.SetProperty",
+					"property": "$CancelConfirmation",
+					"value": "=@boolean"
+				},
+				{
+					"$kind": "Microsoft.IfCondition",
+					"condition": "$CancelConfirmation == 'true'",
+					"actions": [
+						{
+							"$kind": "Microsoft.EndDialog"
+						}
+					]
+				}
+			],
+			"id": "swagger-CancelConfirmation-add-boolean",
+			"$Generator": "7722f1bc5d3618aaa906d3c73e7b2a0c"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "AddToProperty",
+			"property": "ChangePropertyConfirmation",
+			"entity": "boolean",
+			"actions": [
+				{
+					"$kind": "Microsoft.SetProperty",
+					"property": "$ChangePropertyConfirmation",
+					"value": "=@boolean"
+				},
+				{
+					"$kind": "Microsoft.IfCondition",
+					"condition": "$ChangePropertyConfirmation == 'true'",
+					"actions": [
+						{
+							"$kind": "Microsoft.Ask",
+							"activity": "${template(concat('Ask',$PropertyToRemember))}",
+							"expectedProperties": "createArray($PropertyToRemember)"
+						}
+					]
+				}
+			],
+			"id": "swagger-ChangePropertyConfirmation-add-boolean",
+			"$Generator": "4f98fca77f4f475ba047cd3d1e49542f"
+		},
+		{
+			"$kind": "Microsoft.OnEndOfActions",
+			"condition": "empty(where(dialog.requiredProperties, property, !dialog[property]))",
+			"priority": 1000,
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${showForm('swagger', publicProperties())}"
+				},
+				{
+					"$kind": "Microsoft.Ask",
+					"activity": "${confirmChange()}",
+					"expectedProperties": [
+						"CompleteConfirmation"
+					]
+				}
+			],
+			"id": "swagger-library-CompleteConfirmation",
+			"$Generator": "f1ff9adbd88fe534fc275580f5699944"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "AddToProperty",
+			"property": "CompleteConfirmation",
+			"entity": "boolean",
+			"actions": [
+				{
+					"$kind": "Microsoft.SetProperty",
+					"property": "$CompleteConfirmation",
+					"value": "=@boolean"
+				},
+				{
+					"$kind": "Microsoft.IfCondition",
+					"condition": "$CompleteConfirmation == 'false'",
+					"actions": [
+						{
+							"$kind": "Microsoft.HttpRequest",
+							"method": "null",
+							"url": "null",
+							"responseType": "Json",
+							"resultProperty": "null",
+							"body": null,
+							"headers": null
+						},
+						{
+							"$kind": "Microsoft.SendActivity",
+							"activity": "${showResponse(null)}"
+						},
+						{
+							"$kind": "Microsoft.EndDialog"
+						}
+					],
+					"elseActions": [
+						{
+							"$kind": "Microsoft.Ask",
+							"activity": "${chooseProperty()}",
+							"expectedProperties": [
+								"PropertyToChange"
+							]
+						}
+					]
+				}
+			],
+			"id": "swagger-CompleteConfirmation-MakeHttpRequest-add-boolean",
+			"$Generator": "bbf327e03653344c05a7e1b20ac24e33"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "AddToProperty",
+			"property": "CompleteConfirmation",
+			"entity": "PROPERTYName",
+			"actions": [
+				{
+					"$kind": "Microsoft.SetProperty",
+					"property": "$PropertyToChange",
+					"value": "=@PropertyName"
+				}
+			],
+			"id": "swagger-CompleteConfirmation-add-PROPERTYName",
+			"$Generator": "f6c5f41947f513c8e25d95ccc0d5c935"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "AddToProperty",
+			"property": "PropertyToChange",
+			"entity": "PROPERTYName",
+			"actions": [
+				{
+					"$kind": "Microsoft.DeleteProperty",
+					"property": "dialog[@PROPERTYName]"
+				}
+			],
+			"id": "swagger-PropertyToChange-add-PROPERTYName",
+			"$Generator": "d29fd47abf1d89f938047e76d83a966e"
+		},
+		{
+			"$kind": "Microsoft.OnAssignEntity",
+			"operation": "AddToProperty",
+			"property": "PropertyToRemember",
+			"entity": "PROPERTYName",
+			"actions": [
+				{
+					"$kind": "Microsoft.SetProperty",
+					"property": "$PropertyToRemember",
+					"value": "=@PROPERTYName"
+				}
+			],
+			"id": "swagger-PropertyToRemember-add-PROPERTYName",
+			"$Generator": "2bdc74314db42544634a206c5e8f8a5d"
+		},
+		{
+			"$kind": "Microsoft.OnBeginDialog",
+			"$comment": "TODO: This is a hack to work around the lack of a way to remit activity or not when invoked.",
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${welcome()}"
+				}
+			],
+			"id": "swagger-library-BeginDialog",
+			"$Generator": "0fc8f7a47d8de350a2c2ed68245c1573"
+		},
+		{
+			"$kind": "Microsoft.OnChooseProperty",
+			"actions": [
+				{
+					"$kind": "Microsoft.Ask",
+					"activity": "${chooseProperties()}",
+					"expectedProperties": [
+						"PropertyToChange"
+					]
+				}
+			],
+			"id": "swagger-library-ChooseProperty",
+			"$Generator": "fdf9717a05cd6390aa921cdbd40469a6"
+		},
+		{
+			"$kind": "Microsoft.OnIntent",
+			"intent": "Help",
+			"condition": "turn.recognized.score > 0.5",
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${help(@PropertyName)}"
+				}
+			],
+			"id": "swagger-library-HelpIntent",
+			"$Generator": "2741ae2fab2b1b25f2afc7c13a2fe375"
+		},
+		{
+			"$kind": "Microsoft.OnIntent",
+			"intent": "None",
+			"condition": "count(turn.recognizedentities) == 0",
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${notUnderstood()}"
+				}
+			],
+			"id": "swagger-library-NotUnderstood",
+			"$Generator": "2d1c98847e9f7e51ddcebe8289765906"
+		},
+		{
+			"$kind": "Microsoft.OnIntent",
+			"intent": "swagger",
+			"condition": "count(turn.recognizedentities) == 0",
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${notUnderstood()}"
+				}
+			],
+			"id": "swagger-trigger",
+			"$Generator": "1c3215211e69b980c9ce13462641b6de"
+		},
+		{
+			"$kind": "Microsoft.OnIntent",
+			"intent": "ShowForm",
+			"condition": "turn.recognized.score > 0.5",
+			"actions": [
+				{
+					"$kind": "Microsoft.SendActivity",
+					"activity": "${showForm('swagger', dialogClass.schema.$public)}"
+				}
+			],
+			"id": "swagger-library-ShowFormIntent",
+			"$Generator": "3a6ac1c9e7fda31fe4c0bd5bed1cc10f"
+		}
+	],
+	"$Generator": "4ad742aabf417ba5b505e885e8c741b6"
+}

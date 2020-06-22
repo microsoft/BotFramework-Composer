@@ -7,25 +7,25 @@ import { BaseWorker } from './baseWorker';
 import { LuPayload, LuActionType } from './types';
 
 // Wrapper class
-class LuWorker extends BaseWorker {
+class LuWorker extends BaseWorker<LuActionType> {
   parse(id: string, content: string) {
-    const payload = { type: LuActionType.Parse, id, content };
-    return this.sendMsg<LuPayload>(payload);
+    const payload = { id, content };
+    return this.sendMsg<LuPayload>(LuActionType.Parse, payload);
   }
 
   addIntent(content: string, intent: LuIntentSection) {
-    const payload = { type: LuActionType.AddIntent, content, intent };
-    return this.sendMsg<LuPayload>(payload);
+    const payload = { content, intent };
+    return this.sendMsg<LuPayload>(LuActionType.AddIntent, payload);
   }
 
   updateIntent(content: string, intentName: string, intent?: LuIntentSection) {
-    const payload = { type: LuActionType.UpdateIntent, content, intentName, intent };
-    return this.sendMsg<LuPayload>(payload);
+    const payload = { content, intentName, intent };
+    return this.sendMsg<LuPayload>(LuActionType.UpdateIntent, payload);
   }
 
   removeIntent(content: string, intentName: string) {
-    const payload = { type: LuActionType.RemoveIntent, content, intentName };
-    return this.sendMsg<LuPayload>(payload);
+    const payload = { content, intentName };
+    return this.sendMsg<LuPayload>(LuActionType.RemoveIntent, payload);
   }
 }
 

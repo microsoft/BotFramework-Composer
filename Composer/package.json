@@ -26,7 +26,9 @@
     "packages/tools",
     "packages/tools/language-servers",
     "packages/tools/language-servers/*",
-    "packages/ui-plugins/*"
+    "packages/ui-plugins/*",
+    "packages/plugins",
+    "packages/plugins/*"
   ],
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn build:plugins",
@@ -39,11 +41,7 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
-    "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:azureFunctionsPublish",
-    "build:plugins:localpublish": "cd plugins/localPublish && yarn install && yarn build",
-    "build:plugins:samples": "cd plugins/samples && yarn install && yarn build",
-    "build:plugins:azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
-    "build:plugins:azureFunctionsPublish": "cd plugins/azureFunctionsPublish && yarn install && yarn build",
+    "build:plugins": "wsrun -lt -p @bfc/plugin-samples @bfc/plugin-azure-publish @bfc/plugin-azure-functions-publish @bfc/plugin-localpublish -c build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
@@ -53,7 +51,7 @@
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
-    "test:coverage": "yarn test --coverage --no-cache --reporters=default",
+    "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default",
     "test:integration": "cypress run --browser edge",
     "test:integration:start-server": "node scripts/e2e.js",
     "test:integration:open": "cypress open",

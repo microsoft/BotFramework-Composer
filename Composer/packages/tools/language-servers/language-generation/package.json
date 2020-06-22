@@ -8,7 +8,7 @@
     "build:demo": "cd demo && tsc --build tsconfig.json",
     "prepublishOnly": "npm run build",
     "clean": "rimraf lib demo/dist",
-    "start": "cd demo && ts-node ./src/server.ts",
+    "start": "cd demo && cross-env NODE_ENV=test ts-node ./src/server.ts",
     "test": "jest",
     "lint": "eslint --quiet ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
@@ -16,12 +16,13 @@
   },
   "dependencies": {
     "@bfc/indexers": "*",
-    "botbuilder-lg": "^4.10.0-preview-133287",
+    "botbuilder-lg": "4.10.0-preview-135858",
     "vscode-languageserver": "^5.3.0-next"
   },
   "devDependencies": {
     "@bfc/test-utils": "*",
     "@types/node": "^12.0.4",
+    "cross-env": "^6.0.3",
     "express": "^4.17.1",
     "rimraf": "^2.6.3",
     "ts-node": "^8.4.1",

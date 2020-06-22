@@ -1,0 +1,17 @@
+
+[sandwichTest-MeatEntity.en-us.lg](sandwichTest-MeatEntity.en-us.lg)
+[sandwichTest-library.en-us.lg](sandwichTest-library.en-us.lg)
+[sandwichTest-library-Missing.en-us.lg](sandwichTest-library-Missing.en-us.lg)
+
+# AskMeat
+- ${askEnum('Meat')}
+
+
+# MeatName
+- meat
+
+# Meat(val)
+- ${MeatEntity(val)}
+
+
+> Generator: 968371975104ce8465a10de687a7d6bc

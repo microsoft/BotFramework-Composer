@@ -1,0 +1,14 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "S2svYS",
+    "name": "aaa",
+    "description": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "schema": "",
+  "isFormDialog": 1,
+  "generator": "aaa.lg",
+  "formDialogType": "sandwich"
+}

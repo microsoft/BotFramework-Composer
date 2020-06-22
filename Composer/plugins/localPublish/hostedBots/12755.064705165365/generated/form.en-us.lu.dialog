@@ -1,0 +1,6 @@
+{
+    "$kind": "Microsoft.LuisRecognizer",
+    "applicationId": "=settings.luis.form_en_us_lu",
+    "endpoint": "=settings.luis.endpoint",
+    "endpointKey": "=settings.luis.endpointKey"
+}

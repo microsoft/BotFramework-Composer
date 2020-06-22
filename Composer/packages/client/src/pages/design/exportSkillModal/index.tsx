@@ -42,7 +42,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
 
   const handleEditJson = () => {
     const step = order.findIndex((step) => step === ManifestEditorSteps.MANIFEST_REVIEW);
-    if (~step) {
+    if (step >= 0) {
       setCurrentStep(step);
       setErrors({});
     }

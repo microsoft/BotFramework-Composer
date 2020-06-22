@@ -1,0 +1,13 @@
+
+# PROPERTYName(value) 
+- SWITCH: ${value}
+
+ - CASE: ${'Task'} 
+  - task,
+ - CASE: ${'ToDoType'} 
+  - to do type
+
+ - DEFAULT: 
+  - I don't understand ${value}
+
+> Generator: 798e4f15fa87e4de3b82bd3b26bfc9c9

@@ -109,6 +109,8 @@ export const PublishLuis = (props) => {
     authoringRegion: settings.luis.authoringRegion,
     defaultLanguage: settings.luis.defaultLanguage,
     environment: settings.luis.environment,
+    endpoint: settings.luis.endpoint,
+    authoringEndpoint: settings.luis.authoringEndpoint,
     errors: {},
   };
 

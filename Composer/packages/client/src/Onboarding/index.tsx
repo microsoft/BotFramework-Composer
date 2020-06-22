@@ -35,9 +35,9 @@ const Onboarding: React.FC = () => {
       .map((stepSet) => ({
         ...stepSet,
         steps: stepSet.steps.filter(({ targetId }) => {
-          if (!dialogs.length) {
+          if (dialogs.length === 0) {
             return !(targetId === 'mainDialog' || targetId === 'newTrigger' || targetId === 'action');
-          } else if (!dialogs[0].triggers.length) {
+          } else if (dialogs[0]?.triggers.length === 0) {
             return targetId !== 'action';
           }
           return true;
@@ -72,7 +72,7 @@ const Onboarding: React.FC = () => {
     !complete && projectId && navigateTo && navigate(navigateTo);
     setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
 
-    setMinimized(!!~currentStep);
+    setMinimized(currentStep >= 0);
 
     if (currentSet > -1 && currentSet < stepSets.length) {
       onboardingState.setCurrentSet(stepSets[currentSet].id);
@@ -148,12 +148,12 @@ const Onboarding: React.FC = () => {
     },
   };
 
-  return !complete ? (
+  return complete ? null : (
     <OnboardingContext.Provider value={value}>
       <WelcomeModal />
       <TeachingBubbles />
     </OnboardingContext.Provider>
-  ) : null;
+  );
 };
 
 export default Onboarding;

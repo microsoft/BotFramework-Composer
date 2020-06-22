@@ -1,0 +1,17 @@
+
+[toDO-ToDoTypeEntity.en-us.lg](toDO-ToDoTypeEntity.en-us.lg)
+[toDO-library.en-us.lg](toDO-library.en-us.lg)
+[toDO-library-Missing.en-us.lg](toDO-library-Missing.en-us.lg)
+
+# AskToDoType
+- ${askEnum('ToDoType')}
+
+
+# ToDoTypeName
+- to do type
+
+# ToDoType(val)
+- ${ToDoTypeEntity(val)}
+
+
+> Generator: e6467b2af2fc2ab231e3ade4df9fae78

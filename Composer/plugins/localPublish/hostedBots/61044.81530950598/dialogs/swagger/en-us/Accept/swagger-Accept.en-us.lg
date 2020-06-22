@@ -1,0 +1,20 @@
+
+[swagger-AcceptEntity.en-us.lg](swagger-AcceptEntity.en-us.lg)
+[swagger-library.en-us.lg](swagger-library.en-us.lg)
+[swagger-library-Missing.en-us.lg](swagger-library-Missing.en-us.lg)
+
+# AskAccept
+- ${askString('Accept')}
+
+
+# AcceptName
+- accept
+
+# Accept(val)
+ - IF: ${val}
+ - ${val}
+ - ELSE:
+ - no value
+
+
+> Generator: 9151254ba7648036af690684f1d62447

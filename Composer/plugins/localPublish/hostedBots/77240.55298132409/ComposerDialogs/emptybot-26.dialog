@@ -1,0 +1,64 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "$designer": {
+      "name": "EmptyBot-26",
+      "description": "",
+      "id": "394653"
+    }
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "recognizer": {
+    "$type": "Microsoft.RecognizerSet",
+    "recognizers": [
+      {
+        "$type": "Microsoft.MultiLanguageRecognizer",
+        "recognizers": {
+          "en-us": "emptybot-26.lu"
+        }
+      },
+      {
+        "$type": "Microsoft.ValueRecognizer",
+        "id": "value"
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.Foreach",
+          "$designer": {
+            "id": "518944",
+            "name": "Loop: for each item"
+          },
+          "itemsProperty": "turn.Activity.membersAdded",
+          "actions": [
+            {
+              "$type": "Microsoft.IfCondition",
+              "$designer": {
+                "id": "641773",
+                "name": "Branch: if/else"
+              },
+              "condition": "string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "501561"
+      },
+      "intent": "test"
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "emptybot-26.lg"
+}

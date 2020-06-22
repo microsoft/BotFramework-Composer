@@ -1,0 +1,15 @@
+
+[sandwichNew-ToppingsEntity.en-us.lg](sandwichNew-ToppingsEntity.en-us.lg)
+[sandwichNew-library.en-us.lg](sandwichNew-library.en-us.lg)
+[sandwichNew-library-Missing.en-us.lg](sandwichNew-library-Missing.en-us.lg)
+
+# AskToppings
+- ${askEnumArray('Toppings')}
+
+# ToppingsName
+- toppings
+
+# Toppings(values)
+- ${enumArrayValue('Toppings', values)}
+
+> Generator: 340de73fc8c56f4611029be0e8e7081c
