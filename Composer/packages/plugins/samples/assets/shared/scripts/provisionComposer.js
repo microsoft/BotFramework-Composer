@@ -8,6 +8,8 @@ const path = require('path');
 const rp = require('request-promise');
 const { promisify } = require('util');
 const { GraphRbacManagementClient } = require('@azure/graph');
+const { ApplicationInsightsManagementClient } = require('@azure/arm-appinsights');
+const { AzureBotService } = require('@azure/arm-botservice');
 const { ResourceManagementClient } = require('@azure/arm-resources');
 const readFile = promisify(fs.readFile);
 const ora = require('ora');
@@ -89,7 +91,7 @@ const createLuisResource = argv.createLuisResource == 'false' ? false : true;
 const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'false' ? false : true;
 const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
 const createStorage = argv.createStorage == 'false' ? false : true;
-const createAppInsignts = argv.createAppInsignts == 'false' ? false : true;
+const createAppInsights = argv.createAppInsights == 'false' ? false : true;
 var tenantId = argv.tenantId ? argv.tenantId : '';
 
 const templatePath =
@@ -275,7 +277,7 @@ const updateDeploymentJsonFile = async (client, resourceGroupName, deployName, a
     };
     const outputObj = unpackObject(outputResult);
 
-    if (!createAppInsignts) {
+    if (!createAppInsights) {
       delete outputObj.applicationInsights;
     }
     if (!createCosmosDb) {
@@ -338,7 +340,7 @@ const create = async (
   createLuisAuthoringResource = true,
   createCosmosDb = true,
   createStorage = true,
-  createAppInsignts = true
+  createAppInsights = true
 ) => {
   // If tenantId is empty string, get tenanId from API
   if (!tenantId) {
@@ -416,7 +418,7 @@ const create = async (
     name,
     createLuisAuthoringResource,
     createLuisResource,
-    createAppInsignts,
+    createAppInsights,
     createCosmosDb,
     createStorage
   );
@@ -476,6 +478,78 @@ const create = async (
       message: getErrorMesssage(err),
     });
     return provisionFailed();
+  }
+
+  // If application insights created, update the application insights settings in azure bot service
+  if (createAppInsights) {
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> Linking Application Insights settings to Bot Service ...`,
+    });
+
+    const appinsightsClient = new ApplicationInsightsManagementClient(creds, subId);
+    const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
+    const appinsightsId = appComponents.appId;
+    const appinsightsInstrumentationKey = appComponents.instrumentationKey;
+    const apiKeyOptions = {
+      name: `${resourceGroupName}-provision-${timeStamp}`,
+      linkedReadProperties: [
+        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/api`,
+        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/agentconfig`,
+      ],
+      linkedWriteProperties: [
+        `/subscriptions/${subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/annotations`,
+      ],
+    };
+    const appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
+      resourceGroupName,
+      resourceGroupName,
+      apiKeyOptions
+    );
+    const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
+
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> AppInsights AppId: ${appinsightsId} ...`,
+    });
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
+    });
+    logger({
+      status: BotProjectDeployLoggerType.PROVISION_INFO,
+      message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
+    });
+
+    if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
+      const botServiceClient = new AzureBotService(creds, subId);
+      const botCreated = await botServiceClient.bots.get(resourceGroupName, name);
+      if (botCreated.properties) {
+        botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
+        botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
+        botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
+        const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, name, botCreated);
+
+        if (botUpdateResult._response.status != 200) {
+          logger({
+            status: BotProjectDeployLoggerType.PROVISION_ERROR,
+            message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
+              botUpdateResult
+            )}`,
+          });
+          throw new Error(`Linking Application Insights Failed.`);
+        }
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_INFO,
+          message: `> Linking Application Insights settings to Bot Service Success!`,
+        });
+      } else {
+        logger({
+          status: BotProjectDeployLoggerType.PROVISION_WARNING,
+          message: `! The Bot doesn't have a keys properties to update.`,
+        });
+      }
+    }
   }
 
   spinner.succeed('Success!');
@@ -548,7 +622,7 @@ msRestNodeAuth
       createLuisAuthoringResource,
       createCosmosDb,
       createStorage,
-      createAppInsignts
+      createAppInsights
     );
 
     if (createResult) {
