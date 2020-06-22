@@ -65,4 +65,3 @@ const NumberField: React.FC<FieldProps> = (props) => {
 };
 
 export { NumberField };
-export { NumberField };
