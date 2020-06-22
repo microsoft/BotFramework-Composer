@@ -5,8 +5,10 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import formatMessage from 'format-message';
 
 import { moreButton, overflowSet, menuStyle, navItem, itemText, content } from './styles';
 
@@ -49,23 +51,27 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
 };
 
 const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
+  const moreLabel = formatMessage('Actions');
   const showIcon = !isRoot;
   return (overflowItems) => {
     return showIcon ? (
-      <IconButton
-        className="dialog-more-btn"
-        data-is-focusable={isActive}
-        data-testid="dialogMoreButton"
-        menuIconProps={{ iconName: 'MoreVertical' }}
-        menuProps={{ items: overflowItems, styles: menuStyle }}
-        role="cell"
-        styles={moreButton(isActive)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.stopPropagation();
-          }
-        }}
-      />
+      <TooltipHost content={moreLabel} directionalHint={DirectionalHint.rightCenter}>
+        <IconButton
+          ariaLabel={moreLabel}
+          className="dialog-more-btn"
+          data-is-focusable={isActive}
+          data-testid="dialogMoreButton"
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          menuProps={{ items: overflowItems, styles: menuStyle }}
+          role="cell"
+          styles={moreButton(isActive)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.stopPropagation();
+            }
+          }}
+        />
+      </TooltipHost>
     ) : null;
   };
 };
