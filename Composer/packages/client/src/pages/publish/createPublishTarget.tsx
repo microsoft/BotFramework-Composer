@@ -11,7 +11,6 @@ import { Fragment, useState, useMemo } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 
-import filePersistence from '../../store/persistence/FilePersistence';
 import { PublishTarget, PublishType } from '../../store/types';
 
 import { label } from './styles';
@@ -84,7 +83,6 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     if (targetType) {
       await props.updateSettings(name, targetType, JSON.stringify(config) || '{}');
       props.closeDialog();
-      await filePersistence.flush();
     }
   };
 
