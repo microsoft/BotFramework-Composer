@@ -5,6 +5,7 @@ import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
 import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
 import React from 'react';
+
 import { FieldLabel } from '../FieldLabel';
 
 const floatNumberOfDecimals = 2;
@@ -63,4 +64,5 @@ const NumberField: React.FC<FieldProps> = (props) => {
   );
 };
 
+export { NumberField };
 export { NumberField };
