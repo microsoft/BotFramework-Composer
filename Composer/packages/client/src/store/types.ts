@@ -95,8 +95,8 @@ export interface BotState {
   botName: string;
 
   // are these two ever read?
-  location: string;
-  botEnvironment: string;
+  location?: string;
+  botEnvironment?: string;
 
   // locale of the LG/LU files being worked on in the current bot
   locale: string;
