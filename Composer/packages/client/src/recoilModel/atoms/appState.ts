@@ -101,7 +101,7 @@ export const announcement = atom<string>({
 });
 
 export const appUpdate = atom<AppUpdateState>({
-  key: getFullyQualifiedKey('announcement'),
+  key: getFullyQualifiedKey('appUpdate'),
   default: {} as AppUpdateState,
 });
 

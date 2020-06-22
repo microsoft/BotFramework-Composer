@@ -20,8 +20,9 @@ import {
   dialogsState,
   projectIdState,
   localeState,
+  luFilesState,
 } from '../recoilModel/atoms/botState';
-import { dispatcherState } from '../recoilModel/dispatchers/DispatcherWraper';
+import { dispatcherState } from '../recoilModel/DispatcherWraper';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -36,7 +37,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const { breadcrumb, designPageLocation, focusPath, userSettings } = state;
   const botName = useRecoilValue(botNameState);
   const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(lgFilesState);
+  const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
   const lgFiles = useRecoilValue(lgFilesState);
@@ -45,7 +46,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
 
   const lgApi = useLgApi();
   const luApi = useLuApi();
-  const { updateDialog } = useRecoilValue(dispatcherState);
+  const { updateDialog, createDialogBegin } = useRecoilValue(dispatcherState);
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
@@ -162,7 +163,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     onCopy: actions.setVisualEditorClipboard,
     createDialog: (actionsSeed) => {
       return new Promise((resolve) => {
-        actions.createDialogBegin(actionsSeed, (newDialog: string | null) => {
+        createDialogBegin(actionsSeed, (newDialog: string | null) => {
           resolve(newDialog);
         });
       });

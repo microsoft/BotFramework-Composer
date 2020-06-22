@@ -14,7 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
-import { dispatcherState } from '../../recoilModel/dispatchers/DispatcherWraper';
+import { dispatcherState } from '../../recoilModel/DispatcherWraper';
 import { navigateTo } from '../../utils';
 import { botNameState } from '../../recoilModel/atoms/botState';
 

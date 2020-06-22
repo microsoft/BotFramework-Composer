@@ -13,7 +13,7 @@ import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { botOpeningState, projectIdState } from './recoilModel/atoms/botState';
-import { dispatcherState } from './recoilModel/dispatchers/DispatcherWraper';
+import { dispatcherState } from './recoilModel/DispatcherWraper';
 
 const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
