@@ -31,10 +31,12 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
     }
   }, [value]);
   const options = useMemo(() => {
-    return recognizers.map((r) => ({
-      key: r.id,
-      text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName,
-    }));
+    return recognizers
+      .filter((r) => r.id !== SDKKinds.LuisRecognizer)
+      .map((r) => ({
+        key: r.id,
+        text: typeof r.displayName === 'function' ? r.displayName(value) : r.displayName,
+      }));
   }, [recognizers]);
 
   const selectedType = useMemo(() => {
@@ -61,6 +63,9 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       return;
     }
 
+    if (selected[0] === 'Luis') {
+      selected[0] = 'Luis + QnA';
+    }
     return selected[0];
   }, [value]);
 

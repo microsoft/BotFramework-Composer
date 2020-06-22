@@ -105,9 +105,6 @@ export interface BotState {
   // components of the current bot
   dialogs: DialogInfo[];
   diagnostics: Diagnostic[];
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-  skills: Skill[];
 
   remoteEndpoints: { [key: string]: string }; // possibly unused?
 

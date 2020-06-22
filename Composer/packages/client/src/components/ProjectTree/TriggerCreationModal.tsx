@@ -162,7 +162,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
   const isNone = !dialogFile?.content?.recognizer;
-  const isQnA = get(dialogFile, 'content.recognizer.$kind', '') === crossTrainedRecognizerSetKey;
 
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
@@ -187,9 +186,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   if (isNone) {
     triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
-  }
-  if (!isQnA) {
-    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== qnaTypeKey);
   }
 
   const shouldDisable = (errors: TriggerFormDataErrors) => {

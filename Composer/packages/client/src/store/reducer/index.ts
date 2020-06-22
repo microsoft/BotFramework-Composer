@@ -106,6 +106,11 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
   state.botOpening = false;
+  if (!qnaFiles || qnaFiles.length === 0) {
+    dialogs.forEach((dialog) => {
+      state = createQnaFile(state, { id: dialog.id, content: '' });
+    });
+  }
   refreshLocalStorage(id, state.settings);
   mergeLocalStorage(id, state.settings);
   return state;
