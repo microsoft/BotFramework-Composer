@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { CreationFlowStatus } from '../../constants';
 import { StoreContext } from '../../store';
 import Home from '../../pages/home';
-import { dispatcherState } from '../../recoilModel/dispatchers/DispatcherWraper';
+import { dispatcherState } from '../../recoilModel/DispatcherWraper';
 import { navigateTo } from '../../utils';
 
 import { CreateOptions } from './CreateOptions';

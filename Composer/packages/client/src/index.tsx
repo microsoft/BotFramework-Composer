@@ -11,7 +11,7 @@ import { RecoilRoot } from 'recoil';
 import './index.css';
 import { App } from './App';
 import { StoreProvider } from './store';
-import { DispatcherWraper } from './recoilModel/dispatchers/DispatcherWraper';
+import { DispatcherWraper } from './recoilModel/DispatcherWraper';
 
 formatMessage.setup({
   missingTranslation: 'ignore',

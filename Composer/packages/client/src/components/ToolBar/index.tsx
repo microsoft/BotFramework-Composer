@@ -11,6 +11,7 @@ import { useRecoilValue } from 'recoil';
 
 import { useStoreContext } from '../../hooks';
 import { projectIdState } from '../../recoilModel/atoms/botState';
+import { dispatcherState } from '../../recoilModel/DispatcherWraper';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
@@ -68,9 +69,10 @@ export function ToolBar(props: ToolbarProps) {
     ...rest
   } = props;
   const {
-    actions: { onboardingAddCoachMarkRef, createDialogBegin, exportToZip },
+    actions: { onboardingAddCoachMarkRef, exportToZip },
   } = useStoreContext();
   const projectId = useRecoilValue(projectIdState);
+  const { createDialogBegin } = useRecoilValue(dispatcherState);
   const left: IToolBarItem[] = [];
   const right: IToolBarItem[] = [];
 

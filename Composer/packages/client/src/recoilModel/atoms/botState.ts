@@ -148,3 +148,8 @@ export const publishHistoryState = atom<any>({
   key: 'publishHistory',
   default: {},
 });
+
+export const onCreateDialogCompleteState = atom<any>({
+  key: 'onCreateDialogComplete',
+  default: undefined,
+});

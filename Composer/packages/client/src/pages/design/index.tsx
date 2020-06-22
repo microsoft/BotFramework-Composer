@@ -30,8 +30,13 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 import { useShell } from '../../shell';
-import { dialogsState, projectIdState, schemasState } from '../../recoilModel/atoms/botState';
-import { dispatcherState } from '../../recoilModel/dispatchers/DispatcherWraper';
+import {
+  dialogsState,
+  projectIdState,
+  schemasState,
+  showCreateDialogModalState,
+} from '../../recoilModel/atoms/botState';
+import { dispatcherState } from '../../recoilModel/DispatcherWraper';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
@@ -91,7 +96,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const dialogs = useRecoilValue(dialogsState);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
-  const { removeDialog, updateDialog } = useRecoilValue(dispatcherState);
+  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
+  const { removeDialog, updateDialog, createDialogCancel, createDialog } = useRecoilValue(dispatcherState);
   const { displaySkillManifest, breadcrumb, visualEditorSelection, focusPath, designPageLocation } = state;
   const { dismissManifestModal, setDesignPageLocation, navTo, selectTo, setectAndfocus, clearUndoHistory } = actions;
   const { location, dialogId } = props;
@@ -332,7 +338,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       seededContent.triggers[0].actions = state.actionsSeed;
     }
 
-    await actions.createDialog({ id: data.name, content: seededContent });
+    await createDialog({ id: data.name, content: seededContent });
   }
 
   async function handleDeleteDialog(id) {
@@ -431,10 +437,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         </div>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
-        {state.showCreateDialogModal && (
+        {showCreateDialogModal && (
           <CreateDialogModal
-            isOpen={state.showCreateDialogModal}
-            onDismiss={() => actions.createDialogCancel()}
+            isOpen={showCreateDialogModal}
+            onDismiss={createDialogCancel}
             onSubmit={handleCreateDialogSubmit}
           />
         )}
