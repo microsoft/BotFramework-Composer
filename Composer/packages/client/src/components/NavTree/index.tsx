@@ -17,6 +17,7 @@ export interface INavTreeItem {
   name: string;
   ariaLabel?: string;
   url: string;
+  disabled?: boolean;
 }
 
 interface INavTreeProps {
@@ -57,6 +58,7 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
               href={item.url}
               styles={isSelected ? itemSelected : itemNotSelected}
               text={item.name}
+              disabled={item.disabled}
               onClick={(e) => {
                 e.preventDefault();
                 navigateTo(item.url);
