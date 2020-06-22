@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc"
   },
-  "extendsComposer": true,
+  "extendsComposer": false,
   "dependencies": {
     "@azure/arm-resources": "^2.1.0",
     "@azure/ms-rest-nodeauth": "^3.0.3",
