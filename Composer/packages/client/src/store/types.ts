@@ -193,6 +193,8 @@ export type AppState = {
     expiration?: number;
     sessionExpired: boolean;
   };
+
+  plugins: Plugin[];
 };
 
 export type State = BotState & AppState;
@@ -243,4 +245,12 @@ export interface AppUpdateState {
   showing: boolean;
   status: AppUpdaterStatus;
   version?: string;
+}
+
+export interface Plugin {
+  id: string;
+  name: string;
+  enabled: boolean;
+  configuration: object;
+  version: string;
 }

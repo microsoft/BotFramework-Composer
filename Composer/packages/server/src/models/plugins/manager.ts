@@ -38,6 +38,12 @@ export class PluginManager {
     return Store.get<PluginConfig[]>('plugins', []);
   }
 
+  public find(id: string) {
+    const all = this.getAll();
+
+    return all.find((p) => p.id === id);
+  }
+
   public async install(name: string, version?: string) {
     const packageNameAndVersion = version ? `${name}@${version}` : name;
     const cmd = `npm install --no-audit --prefix ${this.dir} ${packageNameAndVersion}`;

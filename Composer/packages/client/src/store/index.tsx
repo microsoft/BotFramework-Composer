@@ -127,6 +127,7 @@ const initialAppState: AppState = {
     showing: false,
     status: AppUpdaterStatus.IDLE,
   },
+  plugins: [],
 };
 
 export const initialState: State = { ...initialBotState, ...initialAppState };

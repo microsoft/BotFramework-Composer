@@ -46,7 +46,12 @@ export async function togglePlugin(req: TogglePluginRequest, res: Response) {
   const { id, enabled } = req.body;
 
   if (!id) {
-    res.status(400).send({ error: '`id` is missing from body' });
+    res.status(400).json({ error: '`id` is missing from body' });
+    return;
+  }
+
+  if (!PluginManager.find(id)) {
+    res.status(404).json({ error: `plugin \`${id}\` not found` });
     return;
   }
 
@@ -56,7 +61,7 @@ export async function togglePlugin(req: TogglePluginRequest, res: Response) {
     await PluginManager.disable(id);
   }
 
-  res.status(200).end();
+  res.json(PluginManager.find(id));
 }
 
 export async function removePlugin(req: RemovePluginRequest, res: Response) {
