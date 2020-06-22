@@ -114,8 +114,10 @@ export const useEditorEventApi = (
             return handleEditorEvent(NodeEventTypes.CtrlClick, e);
           }
 
+          // Maintained by NodeIndexGenerator, `selectableIds` is in pre-order natively.
+          const selectableIds = selectionContext.getSelectableIds();
           // Range selection from 'focusedId' to Shift-Clicked id.
-          const newSelectedIds = calculateRangeSelection(focusedId, e.id, data);
+          const newSelectedIds = calculateRangeSelection(focusedId, e.id, selectableIds);
           setSelectedIds(newSelectedIds);
           announce(ScreenReaderMessage.RangeSelection);
         };
