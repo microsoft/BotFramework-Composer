@@ -1,0 +1,445 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/botbuilder-samples/master/experimental/generation/runbot/runbot.schema",
+  "$kind": "Microsoft.AdaptiveDialog",
+  "recognizer": "toDO.lu",
+  "generator": "toDO.lg",
+  "schema": "toDO.json",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnEndOfActions",
+      "condition": "!$Task || $PropertyToChange == 'Task'",
+      "priority": "=indexOf(dialog.requiredProperties, 'Task')",
+      "actions": [
+        {
+          "$kind": "Microsoft.Ask",
+          "activity": "${AskTask()}",
+          "expectedProperties": [
+            "Task"
+          ]
+        }
+      ],
+      "id": "toDO-Task-missing",
+      "$Generator": "be0e6ba7caa16a18c86a3d383e2f0ae9"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "ClearProperty",
+      "entity": "PROPERTYName",
+      "condition": "@PROPERTYName == 'Task'",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${clearPropertyMessage('Task')}"
+        },
+        {
+          "$kind": "Microsoft.DeleteProperty",
+          "property": "$Task"
+        }
+      ],
+      "id": "toDO-Task-clear",
+      "$Generator": "10a47507cb66b5e0a92cbefc0a8fa8fc"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "ShowProperty",
+      "entity": "PROPERTYName",
+      "condition": "@PROPERTYName == 'Task'",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${showPropertyMessage(@PROPERTYName)}"
+        }
+      ],
+      "id": "toDO-Task-show",
+      "$Generator": "b5dcb93a9645c1c89662d6eb6d78187a"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "AddToProperty",
+      "property": "Task",
+      "entity": "utterance",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${setPropertyMessage('Task', @utterance)}"
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "property": "$Task",
+          "value": "=@utterance"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "condition": "$PropertyToChange == 'Task'",
+          "actions": [
+            {
+              "$kind": "Microsoft.DeleteProperty",
+              "property": "$PropertyToChange"
+            }
+          ]
+        }
+      ],
+      "id": "toDO-Task-add-utterance",
+      "$Generator": "9936815fb507c13adfc644c10d1a14dd"
+    },
+    {
+      "$kind": "Microsoft.OnEndOfActions",
+      "condition": "!$ToDoType || $PropertyToChange == 'ToDoType'",
+      "priority": "=indexOf(dialog.requiredProperties, 'ToDoType')",
+      "actions": [
+        {
+          "$kind": "Microsoft.Ask",
+          "activity": "${AskToDoType()}",
+          "expectedProperties": [
+            "ToDoType"
+          ]
+        }
+      ],
+      "id": "toDO-ToDoType-missing",
+      "$Generator": "4ce311dc0b2a638aa31a04b7942f54c9"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "ClearProperty",
+      "entity": "PROPERTYName",
+      "condition": "@PROPERTYName == 'ToDoType'",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${clearPropertyMessage('ToDoType')}"
+        },
+        {
+          "$kind": "Microsoft.DeleteProperty",
+          "property": "$ToDoType"
+        }
+      ],
+      "id": "toDO-ToDoType-clear",
+      "$Generator": "ac4630134d430f49a7df80f064a4dfe0"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "ShowProperty",
+      "entity": "PROPERTYName",
+      "condition": "@PROPERTYName == 'ToDoType'",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${showPropertyMessage(@PROPERTYName)}"
+        }
+      ],
+      "id": "toDO-ToDoType-show",
+      "$Generator": "0794df474a0326ce7a1bb1d81fab80ec"
+    },
+    {
+      "$kind": "Microsoft.OnChooseEntity",
+      "entity": "ToDoTypeEntity",
+      "actions": [
+        {
+          "$kind": "Microsoft.Ask",
+          "activity": "${chooseToDoTypeEntity()}",
+          "expectedProperties": [
+            "ToDoType"
+          ]
+        }
+      ],
+      "id": "toDO-ToDoTypeEntity-choose",
+      "$Generator": "60a674b4d506382f62567d805a7fd997"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "AddToProperty",
+      "property": "ToDoType",
+      "entity": "ToDoTypeEntity",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${setPropertyMessage('ToDoType', @ToDoTypeEntity)}"
+        },
+        {
+          "$kind": "Microsoft.SetProperty",
+          "property": "$ToDoType",
+          "value": "=@ToDoTypeEntity"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "condition": "$PropertyToChange == 'ToDoType'",
+          "actions": [
+            {
+              "$kind": "Microsoft.DeleteProperty",
+              "property": "$PropertyToChange"
+            }
+          ]
+        }
+      ],
+      "id": "toDO-ToDoType-add-ToDoTypeEntity",
+      "$Generator": "1fd51900b6e89a162159833b8c2f8f6a"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "RemoveFromProperty",
+      "property": "ToDoType",
+      "entity": "ToDoTypeEntity",
+      "actions": [
+        {
+          "$kind": "Microsoft.IfCondition",
+          "condition": "$ToDoType == @ToDoTypeEntity",
+          "actions": [
+            {
+              "$kind": "Microsoft.SendActivity",
+              "activity": "${removePropertyMessage('ToDoType', @ToDoTypeEntity)}"
+            },
+            {
+              "$kind": "Microsoft.DeleteProperty",
+              "property": "ToDoType"
+            }
+          ]
+        }
+      ],
+      "id": "toDO-ToDoType-remove-ToDoTypeEntity",
+      "$Generator": "f2080551b4e33d534faad90121d1cd8d"
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "Cancel",
+      "condition": "turn.recognized.score > 0.5",
+      "actions": [
+        {
+          "$kind": "Microsoft.Ask",
+          "activity": "${cancel()}",
+          "expectedProperties": [
+            "CancelConfirmation"
+          ]
+        }
+      ],
+      "id": "toDO-library-CancelIntent",
+      "$Generator": "d7c2c33932b3176d7cd78c78f6d4ad87"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "AddToProperty",
+      "property": "CancelConfirmation",
+      "entity": "boolean",
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperty",
+          "property": "$CancelConfirmation",
+          "value": "=@boolean"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "condition": "$CancelConfirmation == 'true'",
+          "actions": [
+            {
+              "$kind": "Microsoft.EndDialog"
+            }
+          ]
+        }
+      ],
+      "id": "toDO-CancelConfirmation-add-boolean",
+      "$Generator": "b29867133534ae09b52247cda9fdc743"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "AddToProperty",
+      "property": "ChangePropertyConfirmation",
+      "entity": "boolean",
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperty",
+          "property": "$ChangePropertyConfirmation",
+          "value": "=@boolean"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "condition": "$ChangePropertyConfirmation == 'true'",
+          "actions": [
+            {
+              "$kind": "Microsoft.Ask",
+              "activity": "${template(concat('Ask',$PropertyToRemember))}",
+              "expectedProperties": "createArray($PropertyToRemember)"
+            }
+          ]
+        }
+      ],
+      "id": "toDO-ChangePropertyConfirmation-add-boolean",
+      "$Generator": "be6c03fae1eae587f54d40027dd7f89f"
+    },
+    {
+      "$kind": "Microsoft.OnEndOfActions",
+      "condition": "empty(where(dialog.requiredProperties, property, !dialog[property]))",
+      "priority": 1000,
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${showForm('toDO', publicProperties())}"
+        },
+        {
+          "$kind": "Microsoft.Ask",
+          "activity": "${confirmChange()}",
+          "expectedProperties": [
+            "CompleteConfirmation"
+          ]
+        }
+      ],
+      "id": "toDO-library-CompleteConfirmation",
+      "$Generator": "2c115ca8189cbb6ae68034ea523b183e"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "AddToProperty",
+      "property": "CompleteConfirmation",
+      "entity": "boolean",
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperty",
+          "property": "$CompleteConfirmation",
+          "value": "=@boolean"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "condition": "$CompleteConfirmation == 'false'",
+          "actions": [
+            {
+              "$kind": "Microsoft.EndDialog"
+            }
+          ],
+          "elseActions": [
+            {
+              "$kind": "Microsoft.Ask",
+              "activity": "${chooseProperty()}",
+              "expectedProperties": [
+                "PropertyToChange"
+              ]
+            }
+          ]
+        }
+      ],
+      "id": "toDO-CompleteConfirmation-add-boolean",
+      "$Generator": "553c87127a86e0b5d201231cf53c1daa"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "AddToProperty",
+      "property": "CompleteConfirmation",
+      "entity": "PROPERTYName",
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperty",
+          "property": "$PropertyToChange",
+          "value": "=@PropertyName"
+        }
+      ],
+      "id": "toDO-CompleteConfirmation-add-PROPERTYName",
+      "$Generator": "4ffb853893e05d5fe6738c7fca67fec9"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "AddToProperty",
+      "property": "PropertyToChange",
+      "entity": "PROPERTYName",
+      "actions": [
+        {
+          "$kind": "Microsoft.DeleteProperty",
+          "property": "dialog[@PROPERTYName]"
+        }
+      ],
+      "id": "toDO-PropertyToChange-add-PROPERTYName",
+      "$Generator": "14e5538ef81ab33159d68cf0224161b3"
+    },
+    {
+      "$kind": "Microsoft.OnAssignEntity",
+      "operation": "AddToProperty",
+      "property": "PropertyToRemember",
+      "entity": "PROPERTYName",
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperty",
+          "property": "$PropertyToRemember",
+          "value": "=@PROPERTYName"
+        }
+      ],
+      "id": "toDO-PropertyToRemember-add-PROPERTYName",
+      "$Generator": "3b6cb28bbfab00a3fa01afbe4f3323ea"
+    },
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$comment": "TODO: This is a hack to work around the lack of a way to remit activity or not when invoked.",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${welcome()}"
+        }
+      ],
+      "id": "toDO-library-BeginDialog",
+      "$Generator": "fd2a2a82102c7d11c547e1fbfd620304"
+    },
+    {
+      "$kind": "Microsoft.OnChooseProperty",
+      "actions": [
+        {
+          "$kind": "Microsoft.Ask",
+          "activity": "${chooseProperties()}",
+          "expectedProperties": [
+            "PropertyToChange"
+          ]
+        }
+      ],
+      "id": "toDO-library-ChooseProperty",
+      "$Generator": "d21160b8f57513fbe7167c20357ea000"
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "Help",
+      "condition": "turn.recognized.score > 0.5",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${help(@PropertyName)}"
+        }
+      ],
+      "id": "toDO-library-HelpIntent",
+      "$Generator": "d27e89d10f69988d6023405627c4a37a"
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "None",
+      "condition": "count(turn.recognizedentities) == 0",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${notUnderstood()}"
+        }
+      ],
+      "id": "toDO-library-NotUnderstood",
+      "$Generator": "e2507e45c5f4c5464a7edbb01403c8ec"
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "toDO",
+      "condition": "count(turn.recognizedentities) == 0",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${notUnderstood()}"
+        }
+      ],
+      "id": "toDO-trigger",
+      "$Generator": "5225e2de9b3b4260aa4262626c17078d"
+    },
+    {
+      "$kind": "Microsoft.OnIntent",
+      "intent": "ShowForm",
+      "condition": "turn.recognized.score > 0.5",
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "activity": "${showForm('toDO', dialogClass.schema.$public)}"
+        }
+      ],
+      "id": "toDO-library-ShowFormIntent",
+      "$Generator": "68f8ca9065114094bd921231a924fc14"
+    }
+  ],
+  "$Generator": "6ae71550cfe2408e812ab90b08d71fa1",
+  "defaultResultProperty": "dialog.result"
+}

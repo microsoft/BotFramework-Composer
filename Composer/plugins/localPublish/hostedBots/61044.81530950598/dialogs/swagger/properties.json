@@ -1,0 +1,11 @@
+{
+    "swaggerApi": "https://api.github.com/emojis",
+    "swaggerMethod": "get",
+    "swaggerResponse": "dialog.response",
+    "swaggerBody": {
+        "Accept": "${$Accept}"
+    },
+    "swaggerHeaders": {
+        "User-Agent": "PostmanRuntime/7.22.0"
+    }
+}

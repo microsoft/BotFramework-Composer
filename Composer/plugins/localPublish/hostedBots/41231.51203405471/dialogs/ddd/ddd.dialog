@@ -1,0 +1,13 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "gL09MB",
+    "name": "ddd",
+    "description": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "schema": "",
+  "dialogType": "swaggerDialog",
+  "generator": "ddd.lg"
+}

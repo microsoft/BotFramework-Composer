@@ -1,0 +1,1 @@
+C:/Users/julong/Documents/code/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate:swagger swagger.json -o . -r /emojis -m get -p dialog.response -n  swagger.schema  --verbose 

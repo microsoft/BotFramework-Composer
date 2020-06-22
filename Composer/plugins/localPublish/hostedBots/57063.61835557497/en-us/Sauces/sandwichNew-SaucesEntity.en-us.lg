@@ -1,0 +1,31 @@
+
+[sandwichNew-library.en-us.lg](sandwichNew-library.en-us.lg)
+[sandwichNew-library-Choose.en-us.lg](sandwichNew-library-Choose.en-us.lg)
+
+# SaucesEntity(value) 
+- SWITCH: ${value}
+
+  - CASE: ${'pepper'} 
+    - pepper
+  - CASE: ${'salt'} 
+    - salt
+  - CASE: ${'yellowMustard'} 
+    - yellow mustard
+  - CASE: ${'dijonMustard'} 
+    - dijon mustard
+  - CASE: ${'mayo'} 
+    - mayo
+  - CASE: ${'vinegar'} 
+    - vinegar
+
+  - DEFAULT: 
+    - no value
+
+
+
+# chooseSaucesEntity
+- ${chooseEnumArrayEntity('Sauces')}
+
+
+
+> Generator: 04ee4e1248fdacf9146993985045ee8e

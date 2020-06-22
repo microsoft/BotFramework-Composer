@@ -1,0 +1,21 @@
+
+[formdilaog-library.en-us.lg](formdilaog-library.en-us.lg)
+[formdilaog-library-Choose.en-us.lg](formdilaog-library-Choose.en-us.lg)
+
+# ToDoTypeEntity(value) 
+- SWITCH: ${value}
+  - CASE: ${'grocery'} 
+    - grocery
+  - CASE: ${'shopping'} 
+    - shopping
+  - CASE: ${'sports'} 
+    - sports
+  - DEFAULT: 
+    - no value
+
+
+# chooseToDoTypeEntity
+- ${chooseEnumEntity('ToDoType')}
+
+
+> Generator: 61944835d0c47bb699d7d7d0664735a3

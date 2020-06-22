@@ -1,0 +1,86 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "$designer": {
+      "name": "EmptyBot-4",
+      "id": "590735"
+    }
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "recognizer": {
+    "$type": "Microsoft.RecognizerSet",
+    "recognizers": [
+      {
+        "$type": "Microsoft.MultiLanguageRecognizer",
+        "recognizers": {
+          "en-us": {
+            "$type": "Microsoft.CrossTrainedRecognizerSet",
+            "recognizers": [
+              "emptybot-4.lu",
+              {
+                "$type": "Microsoft.RegexRecognizer",
+                "id": "regex",
+                "intents": [
+                  {
+                    "intent": "test",
+                    "pattern": "regex"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "$type": "Microsoft.ValueRecognizer",
+        "id": "value"
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      },
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "462947",
+            "name": "Send a response"
+          },
+          "activity": "${bfdactivity-462947()}"
+        },
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "179724",
+            "name": "Send a response"
+          },
+          "activity": "${bfdactivity-179724()}"
+        }
+      ]
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "543956"
+      },
+      "intent": "test",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "375614",
+            "name": "Send a response"
+          },
+          "activity": "${bfdactivity-375614()}"
+        }
+      ]
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "emptybot-4.lg"
+}

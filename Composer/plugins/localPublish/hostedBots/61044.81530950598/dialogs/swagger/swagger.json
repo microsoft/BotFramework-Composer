@@ -1,0 +1,80 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"type": "object",
+	"properties": {
+		"Accept": {
+			"type": "string",
+			"$entities": [
+				"utterance"
+			]
+		},
+		"CancelConfirmation": {
+			"type": "boolean",
+			"$entities": [
+				"boolean"
+			]
+		},
+		"ChangePropertyConfirmation": {
+			"type": "boolean",
+			"$entities": [
+				"boolean"
+			]
+		},
+		"CompleteConfirmation": {
+			"type": "string",
+			"$entities": [
+				"boolean",
+				"PROPERTYName"
+			]
+		},
+		"PropertyToChange": {
+			"type": "string",
+			"enum": [
+				"Accept"
+			],
+			"$entities": [
+				"PROPERTYName"
+			]
+		},
+		"PropertyToRemember": {
+			"type": "string",
+			"enum": [
+				"Accept"
+			],
+			"$entities": [
+				"PROPERTYName"
+			]
+		}
+	},
+	"required": [
+		"Accept"
+	],
+	"$expectedOnly": [
+		"boolean",
+		"PROPERTYName",
+		"utterance",
+		"keyPhrase",
+		"personName"
+	],
+	"$operations": [
+		"AddToProperty",
+		"RemoveFromProperty",
+		"ClearProperty",
+		"ShowProperty"
+	],
+	"$public": [
+		"Accept"
+	],
+	"definitions": {
+		"PROPERTYName": {
+			"type": "string",
+			"enum": [
+				"Accept"
+			],
+			"$entities": [
+				"PROPERTYName"
+			]
+		}
+	},
+	"$defaultOperation": "AddToProperty"
+}

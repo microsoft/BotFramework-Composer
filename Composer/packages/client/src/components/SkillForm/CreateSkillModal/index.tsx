@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import has from 'lodash/has';
 import { jsx } from '@emotion/core';
 import React, { useState, FormEvent, useEffect, useCallback, useRef } from 'react';
 import formatMessage from 'format-message';
@@ -16,7 +15,7 @@ import debounce from 'lodash/debounce';
 import { DialogWrapper } from '../../DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { addSkillDialog } from '../../../constants';
-import { ISkillFormData, ISkillFormDataErrors, SkillUrlRegex, SkillNameRegex } from '../types';
+import { ISkillFormData, ISkillFormDataErrors, skillUrlRegex, skillNameRegex } from '../types';
 
 import { FormFieldManifestUrl, FormFieldEditName, MarginLeftSmall, FormModalBody, SpinnerLabel } from './styles';
 import { validateManifestUrl } from './validateManifestUrl';
@@ -62,12 +61,12 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
   const validateForm = (newData: ISkillFormData): ISkillFormDataErrors => {
     const errors: ISkillFormDataErrors = { ...formDataErrors };
 
-    if (has(newData, 'manifestUrl')) {
+    if (newData.manifestUrl != null) {
       const { manifestUrl } = newData;
 
       let currentError = '';
       if (manifestUrl) {
-        if (!SkillUrlRegex.test(manifestUrl)) {
+        if (!skillUrlRegex.test(manifestUrl)) {
           currentError = formatMessage('Url should start with http[s]://');
         }
 
@@ -86,11 +85,11 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
       }
     }
 
-    if (has(newData, 'name')) {
+    if (newData.name != null) {
       const { name } = newData;
       let currentError = '';
       if (name) {
-        if (!SkillNameRegex.test(name)) {
+        if (!skillNameRegex.test(name)) {
           currentError = formatMessage('Name contains invalid charactors');
         }
 
@@ -182,7 +181,12 @@ const CreateSkillModal: React.FC<ICreateSkillModalProps> = (props) => {
               onChange={updateForm('manifestUrl')}
             />
             {isValidating && (
-              <Spinner css={SpinnerLabel} label="validating..." labelPosition="right" size={SpinnerSize.medium} />
+              <Spinner
+                css={SpinnerLabel}
+                label={formatMessage('Validating...')}
+                labelPosition="right"
+                size={SpinnerSize.medium}
+              />
             )}
             <TextField
               css={FormFieldEditName}

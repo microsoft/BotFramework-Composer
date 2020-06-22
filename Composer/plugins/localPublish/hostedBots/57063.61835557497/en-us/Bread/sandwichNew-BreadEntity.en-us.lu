@@ -1,0 +1,178 @@
+
+@ list BreadEntity =
+	- multiGrainWheat:
+		- multi
+		- grain
+		- wheat
+		- multi grain
+		- grain wheat
+		- multi grain wheat
+	- rye:
+		- rye
+	- white:
+		- white
+	- wholeWheat:
+		- whole
+		- wheat
+		- whole wheat
+
+@ list PROPERTYName
+    - Bread:
+
+
+@composite AddToProperty = [BreadEntity]
+@composite RemoveFromProperty = [BreadEntity]
+@composite ClearProperty = [PROPERTYName]
+@composite ShowProperty = [PROPERTYName]
+# sandwichNew
+> Add only
+- add {@AddToProperty=grain}
+- add {@AddToProperty=rye}
+- add {@AddToProperty=multi}
+- with {@AddToProperty=rye}
+- with {@AddToProperty=white}
+- with {@AddToProperty=multi}
+- add {@AddToProperty=rye and rye}
+- add {@AddToProperty=white and rye}
+- add {@AddToProperty=rye and wheat}
+- with {@AddToProperty=whole wheat and wheat}
+- with {@AddToProperty=white and rye}
+- with {@AddToProperty=whole wheat and rye}
+- add {@AddToProperty=multi, white and multi grain}
+- add {@AddToProperty=multi grain, whole and multi grain}
+- add {@AddToProperty=grain, wheat and multi}
+- with {@AddToProperty=wheat, wheat and multi}
+- with {@AddToProperty=rye, wheat and whole}
+- with {@AddToProperty=rye, wheat and white}
+> Remove only
+- remove {@RemoveFromProperty=grain wheat}
+- remove {@RemoveFromProperty=grain wheat}
+- remove {@RemoveFromProperty=white}
+- remove {@RemoveFromProperty=wheat and rye}
+- remove {@RemoveFromProperty=rye and rye}
+- remove {@RemoveFromProperty=multi and grain}
+- remove {@RemoveFromProperty=multi, grain and multi grain}
+- remove {@RemoveFromProperty=multi, whole and grain wheat}
+- remove {@RemoveFromProperty=wheat, multi grain and white}
+- delete {@RemoveFromProperty=multi}
+- delete {@RemoveFromProperty=wheat}
+- delete {@RemoveFromProperty=multi grain wheat}
+- delete {@RemoveFromProperty=white and whole}
+- delete {@RemoveFromProperty=wheat and white}
+- delete {@RemoveFromProperty=whole and grain wheat}
+- delete {@RemoveFromProperty=white, whole wheat and white}
+- delete {@RemoveFromProperty=whole wheat, wheat and whole}
+- delete {@RemoveFromProperty=grain, grain wheat and wheat}
+- without {@RemoveFromProperty=grain}
+- without {@RemoveFromProperty=whole wheat}
+- without {@RemoveFromProperty=multi grain}
+- without {@RemoveFromProperty=multi and multi grain wheat}
+- without {@RemoveFromProperty=whole wheat and grain wheat}
+- without {@RemoveFromProperty=wheat and rye}
+- without {@RemoveFromProperty=multi, whole wheat and wheat}
+- without {@RemoveFromProperty=whole wheat, multi and wheat}
+- without {@RemoveFromProperty=wheat, whole wheat and wheat}
+- with no {@RemoveFromProperty=wheat}
+- with no {@RemoveFromProperty=wheat}
+- with no {@RemoveFromProperty=whole wheat}
+- with no {@RemoveFromProperty=whole and wheat}
+- with no {@RemoveFromProperty=multi grain and grain}
+- with no {@RemoveFromProperty=whole and multi grain}
+- with no {@RemoveFromProperty=wheat, wheat and multi grain}
+- with no {@RemoveFromProperty=whole wheat, white and multi grain}
+- with no {@RemoveFromProperty=white, whole and grain wheat}
+> Clear only
+- clear {@ClearProperty=Bread}
+- clear {@ClearProperty=Bread}
+- clear {@ClearProperty=Bread}
+- remove {@ClearProperty=Bread}
+- remove {@ClearProperty=Bread}
+- remove {@ClearProperty=Bread}
+- empty {@ClearProperty=Bread}
+- empty {@ClearProperty=Bread}
+- empty {@ClearProperty=Bread}
+> Show only
+- value of {@ShowProperty=Bread}
+- value of {@ShowProperty=Bread}
+- value of {@ShowProperty=Bread}
+- value for {@ShowProperty=Bread}
+- value for {@ShowProperty=Bread}
+- value for {@ShowProperty=Bread}
+- selection of {@ShowProperty=Bread}
+- selection of {@ShowProperty=Bread}
+- selection of {@ShowProperty=Bread}
+- selection for {@ShowProperty=Bread}
+- selection for {@ShowProperty=Bread}
+- selection for {@ShowProperty=Bread}
+- display {@ShowProperty=Bread}
+- display {@ShowProperty=Bread}
+- display {@ShowProperty=Bread}
+- show {@ShowProperty=Bread}
+- show {@ShowProperty=Bread}
+- show {@ShowProperty=Bread}
+- value of {@ShowProperty=Bread}
+- value of {@ShowProperty=Bread}
+- value of {@ShowProperty=Bread}
+- value for {@ShowProperty=Bread}
+- value for {@ShowProperty=Bread}
+- value for {@ShowProperty=Bread}
+- {@ShowProperty=Bread} value
+- {@ShowProperty=Bread} value
+- {@ShowProperty=Bread} value
+- {@ShowProperty=Bread} values
+- {@ShowProperty=Bread} values
+- {@ShowProperty=Bread} values
+- {@ShowProperty=Bread} selection
+- {@ShowProperty=Bread} selection
+- {@ShowProperty=Bread} selection
+> Combinations
+- add {@AddToProperty=multi} and remove {@RemoveFromProperty=white}
+- add {@AddToProperty=whole wheat} and remove {@RemoveFromProperty=multi grain}
+- add {@AddToProperty=grain} and remove {@RemoveFromProperty=multi grain wheat}
+- add {@AddToProperty=whole wheat} remove {@RemoveFromProperty=grain wheat}
+- add {@AddToProperty=whole wheat} remove {@RemoveFromProperty=wheat}
+- add {@AddToProperty=grain wheat} remove {@RemoveFromProperty=multi grain wheat}
+- add {@AddToProperty=whole wheat}, remove {@RemoveFromProperty=whole}
+- add {@AddToProperty=whole}, remove {@RemoveFromProperty=multi}
+- add {@AddToProperty=wheat}, remove {@RemoveFromProperty=multi grain}
+- add {@AddToProperty=multi grain wheat and wheat} and remove {@RemoveFromProperty=grain}
+- add {@AddToProperty=wheat and multi grain wheat} and remove {@RemoveFromProperty=whole}
+- add {@AddToProperty=multi and whole wheat} and remove {@RemoveFromProperty=wheat}
+- add {@AddToProperty=wheat, multi and white} and remove {@RemoveFromProperty=white and grain wheat}
+- add {@AddToProperty=multi, multi grain and wheat} and remove {@RemoveFromProperty=multi and wheat}
+- add {@AddToProperty=rye, wheat and whole wheat} and remove {@RemoveFromProperty=wheat and wheat}
+- add {@AddToProperty=wheat, rye and rye} remove {@RemoveFromProperty=multi and multi}
+- add {@AddToProperty=grain, whole and whole wheat} remove {@RemoveFromProperty=whole and whole wheat}
+- add {@AddToProperty=rye, white and grain wheat} remove {@RemoveFromProperty=wheat and wheat}
+- add {@AddToProperty=white}, remove {@RemoveFromProperty=grain wheat} and show {@ShowProperty=Bread}
+- add {@AddToProperty=grain}, remove {@RemoveFromProperty=multi grain} and show {@ShowProperty=Bread}
+- add {@AddToProperty=white}, remove {@RemoveFromProperty=grain wheat} and show {@ShowProperty=Bread}
+- remove {@RemoveFromProperty=multi} and add {@AddToProperty=wheat}
+- remove {@RemoveFromProperty=multi grain wheat} and add {@AddToProperty=white}
+- remove {@RemoveFromProperty=white} and add {@AddToProperty=grain}
+- remove {@RemoveFromProperty=whole and white} and add {@AddToProperty=multi grain wheat}
+- remove {@RemoveFromProperty=grain wheat and grain} and add {@AddToProperty=multi grain}
+- remove {@RemoveFromProperty=rye and wheat} and add {@AddToProperty=multi}
+- remove {@RemoveFromProperty=white, white and wheat} and add {@AddToProperty=multi and wheat}
+- remove {@RemoveFromProperty=multi grain wheat, whole and wheat} and add {@AddToProperty=multi grain and white}
+- remove {@RemoveFromProperty=rye, multi grain and white} and add {@AddToProperty=wheat and white}
+- remove {@RemoveFromProperty=multi grain wheat}, add {@AddToProperty=multi} and show {@ShowProperty=Bread}
+- remove {@RemoveFromProperty=whole wheat}, add {@AddToProperty=whole wheat} and show {@ShowProperty=Bread}
+- remove {@RemoveFromProperty=white}, add {@AddToProperty=white} and show {@ShowProperty=Bread}
+- display {@ShowProperty=Bread} remove {@RemoveFromProperty=wheat} and add {@AddToProperty=white}
+- display {@ShowProperty=Bread} remove {@RemoveFromProperty=rye} and add {@AddToProperty=rye}
+- display {@ShowProperty=Bread} remove {@RemoveFromProperty=wheat} and add {@AddToProperty=whole}
+- show {@ShowProperty=Bread} remove {@RemoveFromProperty=grain wheat and grain} and add {@AddToProperty=rye}
+- show {@ShowProperty=Bread} remove {@RemoveFromProperty=whole and grain wheat} and add {@AddToProperty=multi grain}
+- show {@ShowProperty=Bread} remove {@RemoveFromProperty=grain and wheat} and add {@AddToProperty=multi grain wheat}
+- show {@ShowProperty=Bread} remove {@RemoveFromProperty=white, multi grain and multi grain wheat} and add {@AddToProperty=multi grain wheat and multi grain wheat}
+- show {@ShowProperty=Bread} remove {@RemoveFromProperty=whole, whole and whole} and add {@AddToProperty=whole wheat and grain wheat}
+- show {@ShowProperty=Bread} remove {@RemoveFromProperty=wheat, multi grain and wheat} and add {@AddToProperty=grain wheat and grain wheat}
+- display {@ShowProperty=Bread} remove {@RemoveFromProperty=white}, add {@AddToProperty=wheat} 
+- display {@ShowProperty=Bread} remove {@RemoveFromProperty=whole wheat}, add {@AddToProperty=grain} 
+- display {@ShowProperty=Bread} remove {@RemoveFromProperty=white}, add {@AddToProperty=multi} 
+
+- Bread
+
+
+> Generator: 01a3740d0e892e96c9b420139026737c

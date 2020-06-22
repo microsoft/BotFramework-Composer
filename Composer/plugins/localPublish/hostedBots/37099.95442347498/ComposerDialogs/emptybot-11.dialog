@@ -1,0 +1,62 @@
+{
+  "$type": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "$designer": {
+      "name": "EmptyBot-11",
+      "id": "701171"
+    }
+  },
+  "autoEndDialog": "true",
+  "defaultResultProperty": "dialog.result",
+  "recognizer": {
+    "$type": "Microsoft.RecognizerSet",
+    "recognizers": [
+      {
+        "$type": "Microsoft.MultiLanguageRecognizer",
+        "recognizers": {
+          "en-us": {
+            "$type": "Microsoft.CrossTrainedRecognizerSet",
+            "recognizers": [
+              {
+                "$type": "Microsoft.ValueRecognizer",
+                "id": "value"
+              },
+              "emptybot-11.lu"
+            ]
+          }
+        }
+      },
+      {
+        "$type": "Microsoft.ValueRecognizer",
+        "id": "value"
+      }
+    ]
+  },
+  "triggers": [
+    {
+      "$type": "Microsoft.OnConversationUpdateActivity",
+      "$designer": {
+        "id": "376720"
+      }
+    },
+    {
+      "$type": "Microsoft.OnIntent",
+      "$designer": {
+        "id": "124336"
+      },
+      "intent": "test",
+      "actions": [
+        {
+          "$type": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "652733",
+            "name": "Send a response"
+          },
+          "activity": "${bfdactivity-652733()}"
+        }
+      ]
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
+  "generator": "emptybot-11.lg"
+}

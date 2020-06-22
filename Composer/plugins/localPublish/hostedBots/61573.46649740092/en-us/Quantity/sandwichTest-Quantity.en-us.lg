@@ -1,0 +1,20 @@
+
+[sandwichTest-QuantityEntity.en-us.lg](sandwichTest-QuantityEntity.en-us.lg)
+[sandwichTest-library.en-us.lg](sandwichTest-library.en-us.lg)
+[sandwichTest-library-Missing.en-us.lg](sandwichTest-library-Missing.en-us.lg)
+
+# AskQuantity
+- ${askNumber('Quantity')}
+
+
+# QuantityName
+- quantity
+
+# Quantity(val)
+ - IF: ${val}
+ - ${val}
+ - ELSE:
+ - no value
+
+
+> Generator: 85ed8c1e6711aec1fdab51a94dfbec69

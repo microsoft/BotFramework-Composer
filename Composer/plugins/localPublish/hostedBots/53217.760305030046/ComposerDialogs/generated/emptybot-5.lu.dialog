@@ -1,0 +1,7 @@
+{
+    "$type": "Microsoft.MultiLanguageRecognizer",
+    "recognizers": {
+        "en-us": "emptybot-5.en-us.lu",
+        "": "emptybot-5.en-us.lu"
+    }
+}

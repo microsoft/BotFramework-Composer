@@ -1,0 +1,13 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "yiUJFH",
+    "name": "form",
+    "description": ""
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "schema": "",
+  "dialogType": "formDialog",
+  "generator": "form.lg"
+}

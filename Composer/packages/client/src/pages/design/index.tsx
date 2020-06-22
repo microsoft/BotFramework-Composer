@@ -344,7 +344,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         recognizers: [`${data.name}.${shellData.locale}.lu`, `${data.name}.${shellData.locale}.qna`],
       },
     });
-    if (seededContent.triggers && seededContent.triggers[0]) {
+    if (seededContent.triggers?.[0]) {
       seededContent.triggers[0].actions = state.actionsSeed;
     }
 

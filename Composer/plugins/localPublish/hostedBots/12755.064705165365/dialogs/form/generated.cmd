@@ -1,0 +1,1 @@
+C:/Users/julong/Documents/code/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate form.schema -o . --singleton --force --verbose 

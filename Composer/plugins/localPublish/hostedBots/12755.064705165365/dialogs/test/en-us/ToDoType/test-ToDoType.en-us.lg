@@ -1,0 +1,17 @@
+
+[test-ToDoTypeEntity.en-us.lg](test-ToDoTypeEntity.en-us.lg)
+[test-library.en-us.lg](test-library.en-us.lg)
+[test-library-Missing.en-us.lg](test-library-Missing.en-us.lg)
+
+# AskToDoType
+- ${askEnum('ToDoType')}
+
+
+# ToDoTypeName
+- to do type
+
+# ToDoType(val)
+- ${ToDoTypeEntity(val)}
+
+
+> Generator: 87f8c7a35f6afd754391004af889eea6
