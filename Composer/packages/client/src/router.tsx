@@ -8,6 +8,7 @@ import { Router, Redirect, RouteComponentProps } from '@reach/router';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { About } from './pages/about';
+import { Dashboard } from './pages/dashboard';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
@@ -56,6 +57,7 @@ const Routes = (props) => {
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
           <About path="about" />
+          <Dashboard path="dashboard" />
           <NotFound default />
         </Router>
       </Suspense>

@@ -13,6 +13,13 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: false,
     },
     {
+      to: '/dashboard',
+      iconName: 'StackIndicator',
+      labelName: formatMessage('Bots Dashboard'),
+      exact: true,
+      disabled: false,
+    },
+    {
       to: `/bot/${projectId}/dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
       labelName: formatMessage('Design'),
