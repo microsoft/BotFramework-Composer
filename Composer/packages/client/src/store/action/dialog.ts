@@ -80,7 +80,7 @@ export const updateDialogSchemaBase: ActionCreator = async ({ dispatch, getState
   dispatch({
     type: dialogSchema ? ActionTypes.UPDATE_DIALOG_SCHEMA : ActionTypes.CREATE_DIALOG_SCHEMA,
     payload: {
-      content: content ?? content,
+      content: content ?? {},
       id,
     },
   });
