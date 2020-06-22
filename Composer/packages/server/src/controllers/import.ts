@@ -66,7 +66,7 @@ export const ImportController = {
 
         // process some files??
         // * rename common.lg to something else
-        // * rename dialogs into namespace?
+        // * rename dialogs into namespace? use the root dialog as basename?
         // * update references to renamed dialogs, lu and LG files
         // * if schema included, rebuild schema
         // * add an import statement for new common.lg into main common.lg?
