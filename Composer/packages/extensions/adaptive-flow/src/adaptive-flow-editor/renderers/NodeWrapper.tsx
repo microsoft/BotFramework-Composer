@@ -75,6 +75,9 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
       aria-label={generateSDKTitle(data, '', tab)}
       onClick={(e) => {
         e.stopPropagation();
+        if (e.ctrlKey) {
+          return onEvent(NodeEventTypes.CtrlClick, { id, tab });
+        }
         onEvent(NodeEventTypes.Focus, { id, tab });
       }}
     >

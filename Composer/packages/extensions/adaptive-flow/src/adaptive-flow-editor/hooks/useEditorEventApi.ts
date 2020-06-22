@@ -80,6 +80,21 @@ export const useEditorEventApi = (
           announce(ScreenReaderMessage.ActionFocused);
         };
         break;
+      case NodeEventTypes.CtrlClick:
+        handler = (e: { id: string }) => {
+          // Toggle the selection state of clicked id
+          const alreadySelected = selectedIds.some((x) => x === e.id);
+          if (alreadySelected) {
+            const shrinkedSelection = selectedIds.filter((x) => x !== e.id);
+            setSelectedIds(shrinkedSelection);
+            announce(ScreenReaderMessage.ActionUnfocused);
+          } else {
+            const expandedSelection = [...selectedIds, e.id];
+            setSelectedIds(expandedSelection);
+            announce(ScreenReaderMessage.ActionFocused);
+          }
+        };
+        break;
       case NodeEventTypes.FocusEvent:
         handler = (eventData) => {
           onFocusEvent(eventData);
