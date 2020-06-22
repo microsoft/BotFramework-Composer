@@ -48,6 +48,15 @@ export interface RuntimeTemplate {
   /** method used to eject the runtime into a project. returns resulting path of runtime! */
   eject: (project: any, localDisk?: any) => Promise<string>;
 
+  /** build method  */
+  build: (runtimePath: string, project: any) => Promise<void>;
+
+  /** run  */
+  run: (project: any, localDisk?: any) => Promise<void>;
+
+  /** build for deploy method  */
+  buildDeploy: (runtimePath: string, project: any) => Promise<string>;
+
   /** internal use key */
   key: string;
 

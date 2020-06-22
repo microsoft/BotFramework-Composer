@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
-import * as util from 'util';
 
 import { ResourceManagementClient } from '@azure/arm-resources';
 import {
@@ -16,13 +15,12 @@ import { GraphRbacManagementClient } from '@azure/graph';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
+import { pluginLoader, RuntimeTemplate } from '@bfc/plugin-loader';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import { BotProjectRuntimeType } from './botProjectRuntimeType';
 import archiver = require('archiver');
 
-const exec = util.promisify(require('child_process').exec);
 const { promisify } = require('util');
 
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
@@ -33,16 +31,9 @@ export class BotProjectDeploy {
   private accessToken: string;
   private creds: any; // credential from interactive login
   private projPath: string;
-  private deploymentSettingsPath: string;
-  private deployFilePath: string;
   private zipPath: string;
-  private publishFolder: string;
   private settingsPath: string;
   private templatePath: string;
-  private dotnetProjectPath: string;
-  private generatedFolder: string;
-  private remoteBotPath: string;
-  private runtimeType: BotProjectRuntimeType;
   private logger: (string) => any;
 
   // Will be assigned by create or deploy
@@ -55,42 +46,16 @@ export class BotProjectDeploy {
     this.creds = config.creds;
     this.projPath = config.projPath;
 
-    // set path to .deployment file which points at the BotProject.csproj
-    this.deployFilePath = config.deployFilePath ?? path.join(this.projPath, '.deployment');
-
     // path to the zipped assets
     this.zipPath = config.zipPath ?? path.join(this.projPath, 'code.zip');
 
-    // path to the built, ready to deploy code assets
-    this.publishFolder =
-      config.publishFolder ?? config.runtimeType === BotProjectRuntimeType.CSHARP
-        ? path.join(this.projPath, 'bin', 'Release', 'netcoreapp3.1')
-        : this.projPath;
-
     // path to the source appsettings.deployment.json file
     this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
-
-    // path to the deployed settings file that contains additional luis information
-    this.deploymentSettingsPath =
-      config.deploymentSettingsPath ?? path.join(this.publishFolder, 'appsettings.deployment.json');
 
     // path to the ARM template
     // this is currently expected to live in the code project
     this.templatePath =
       config.templatePath ?? path.join(this.projPath, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
-
-    // path to the dotnet project file
-    this.dotnetProjectPath =
-      config.dotnetProjectPath ?? path.join(this.projPath, 'Microsoft.BotFramework.Composer.WebApp.csproj');
-
-    // path to the built, ready to deploy declarative assets
-    this.remoteBotPath = config.remoteBotPath ?? path.join(this.publishFolder, 'ComposerDialogs');
-
-    // path to the ready to deploy generated folder
-    this.generatedFolder = config.generatedFolder ?? path.join(this.remoteBotPath, 'generated');
-
-    // Set the default value to CSHARP
-    this.runtimeType = config.runtimeType ?? BotProjectRuntimeType.CSHARP;
   }
 
   private getErrorMesssage(err) {
@@ -327,43 +292,6 @@ export class BotProjectDeploy {
     return Array.prototype.concat(...files);
   }
 
-  private async botPrepareDeploy(pathToDeploymentFile: string) {
-    return new Promise((resolve, reject) => {
-      const data = `[config]\nproject = Microsoft.BotFramework.Composer.WebApp.csproj`;
-      fs.writeFile(pathToDeploymentFile, data, (err) => {
-        if (err) {
-          reject(err);
-        }
-        resolve();
-      });
-    });
-  }
-
-  private async dotnetPublish(publishFolder: string, projFolder: string, botPath?: string) {
-    // perform the dotnet publish command
-    // this builds the app and prepares it to be deployed
-    // results in a built copy in publishFolder/
-    await exec(`dotnet publish "${this.dotnetProjectPath}" -c release -o "${publishFolder}" -v q`);
-    const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
-    const localBotPath = path.join(projFolder, 'ComposerDialogs');
-    // Then, copy the declarative assets into the build folder.
-    if (botPath) {
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `Publishing dialogs from external bot project: ${botPath}`,
-      });
-      await fs.copy(botPath, remoteBotPath, {
-        overwrite: true,
-        recursive: true,
-      });
-    } else {
-      await fs.copy(localBotPath, remoteBotPath, {
-        overwrite: true,
-        recursive: true,
-      });
-    }
-  }
-
   private async zipDirectory(source: string, out: string) {
     const archive = archiver('zip', { zlib: { level: 9 } });
     const stream = fs.createWriteStream(out);
@@ -390,6 +318,7 @@ export class BotProjectDeploy {
   // Run through the lubuild process
   // This happens in the build folder, NOT in the original source folder
   private async publishLuis(
+    workingFolder: string,
     name: string,
     environment: string,
     language: string,
@@ -402,13 +331,16 @@ export class BotProjectDeploy {
   ) {
     if (luisAuthoringKey && luisAuthoringRegion) {
       // publishing luis
-      const botFiles = await this.getFiles(this.remoteBotPath);
+      const botFiles = await this.getFiles(workingFolder);
       const modelFiles = botFiles.filter((name) => {
         return name.endsWith('.lu') && this.notEmptyLuisModel(name);
       });
 
-      if (!(await fs.pathExists(this.generatedFolder))) {
-        await fs.mkdir(this.generatedFolder);
+      const generatedFolder = path.join(workingFolder, 'generated');
+      const deploymentSettingsPath = path.join(workingFolder, 'appsettings.deployment.json');
+
+      if (!(await fs.pathExists(generatedFolder))) {
+        await fs.mkdir(generatedFolder);
       }
       const builder = new luBuild.Builder((msg) =>
         this.logger({
@@ -444,14 +376,14 @@ export class BotProjectDeploy {
         loadResult.multiRecognizers,
         loadResult.settings
       );
-      await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
+      await builder.writeDialogAssets(buildResult, true, generatedFolder);
 
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: `lubuild succeed`,
       });
 
-      const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter((filename) =>
+      const luisConfigFiles = (await this.getFiles(workingFolder)).filter((filename) =>
         filename.includes('luis.settings')
       );
       const luisAppIds: any = {};
@@ -471,10 +403,10 @@ export class BotProjectDeploy {
       Object.assign(luisConfig, luisAppIds);
 
       // Update deploymentSettings with the luis config
-      const settings: any = await fs.readJson(this.deploymentSettingsPath);
+      const settings: any = await fs.readJson(deploymentSettingsPath);
       settings.luis = luisConfig;
 
-      await fs.writeJson(this.deploymentSettingsPath, settings, {
+      await fs.writeJson(deploymentSettingsPath, settings, {
         spaces: 4,
       });
 
@@ -529,6 +461,7 @@ export class BotProjectDeploy {
    * Deploy a bot to a location
    */
   public async deploy(
+    project: any,
     name: string,
     environment: string,
     luisAuthoringKey?: string,
@@ -539,20 +472,17 @@ export class BotProjectDeploy {
     luisResource?: string
   ) {
     try {
-      // For Node Runtime, don't need to publish the assets, For Csharp runtime, need to compile and publish the assets to a folder
-      if (this.runtimeType === BotProjectRuntimeType.CSHARP) {
-        // Check for existing deployment files
-        if (!fs.pathExistsSync(this.deployFilePath)) {
-          await this.botPrepareDeploy(this.deployFilePath);
-        }
-
-        if (await fs.pathExists(this.zipPath)) {
-          await fs.remove(this.zipPath);
-        }
-
-        // dotnet publish
-        await this.dotnetPublish(this.publishFolder, this.projPath, botPath);
+      // cleanup any previous build
+      if (await fs.pathExists(this.zipPath)) {
+        await fs.remove(this.zipPath);
       }
+
+      // get the appropriate runtime
+      const runtime: RuntimeTemplate = pluginLoader.getRuntimeByProject(project);
+
+      // run any platform specific build steps
+      const pathToArtifacts = await runtime.buildDeploy(this.projPath, project);
+
       // LUIS build
       const settings = await fs.readJSON(this.settingsPath);
       const luisSettings = settings.luis;
@@ -575,6 +505,7 @@ export class BotProjectDeploy {
       }
 
       await this.publishLuis(
+        pathToArtifacts,
         name,
         environment,
         language,
@@ -591,7 +522,7 @@ export class BotProjectDeploy {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Packing up the bot service ...',
       });
-      await this.zipDirectory(this.publishFolder, this.zipPath);
+      await this.zipDirectory(pathToArtifacts, this.zipPath);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Packing Service Success!',
@@ -882,15 +813,15 @@ export class BotProjectDeploy {
    * createAndDeploy
    * provision the Azure resources AND deploy a bot to those resources
    */
-  public async createAndDeploy(
-    name: string,
-    location: string,
-    environment: string,
-    appPassword: string,
-    luisAuthoringKey?: string,
-    luisAuthoringRegion?: string
-  ) {
-    await this.create(name, location, environment, appPassword);
-    await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
-  }
+  // public async createAndDeploy(
+  //   name: string,
+  //   location: string,
+  //   environment: string,
+  //   appPassword: string,
+  //   luisAuthoringKey?: string,
+  //   luisAuthoringRegion?: string
+  // ) {
+  //   await this.create(name, location, environment, appPassword);
+  //   // await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
+  // }
 }
