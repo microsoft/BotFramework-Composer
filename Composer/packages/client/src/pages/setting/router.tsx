@@ -5,11 +5,11 @@ import * as React from 'react';
 import { Router, Redirect } from '@reach/router';
 
 import { ErrorBoundary } from '../../components/ErrorBoundary';
+import { About } from '../about';
 
 import { DialogSettings } from './dialog-settings';
 import { AppSettings } from './app-settings';
 import { RuntimeSettings } from './runtime-settings';
-import { About } from '../about';
 
 export const SettingsRoutes = () => (
   <ErrorBoundary>

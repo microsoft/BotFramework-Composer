@@ -5,6 +5,7 @@
 import { jsx, css } from '@emotion/core';
 import React, { useContext, useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
+
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';

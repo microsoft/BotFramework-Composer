@@ -15,9 +15,9 @@ import { OpenConfirmModal } from '../../components/Modal/Confirm';
 import { navigateTo } from '../../utils';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
+import { useLocation } from '../../utils/hooks';
 
 import { SettingsRoutes } from './router';
-import { useLocation } from '../../utils/hooks';
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   const { state, actions } = useContext(StoreContext);

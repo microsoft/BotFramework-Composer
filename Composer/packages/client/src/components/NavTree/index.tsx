@@ -55,10 +55,10 @@ const NavTree: React.FC<INavTreeProps> = (props) => {
           return (
             <DefaultButton
               key={item.id}
+              disabled={item.disabled}
               href={item.url}
               styles={isSelected ? itemSelected : itemNotSelected}
               text={item.name}
-              disabled={item.disabled}
               onClick={(e) => {
                 e.preventDefault();
                 navigateTo(item.url);
