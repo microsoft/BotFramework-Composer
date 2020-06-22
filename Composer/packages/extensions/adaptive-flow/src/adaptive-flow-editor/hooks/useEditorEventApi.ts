@@ -16,6 +16,7 @@ import { moveCursor } from '../utils/cursorTracker';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContextValue } from '../contexts/NodeRendererContext';
 import { SelectionContextData } from '../contexts/SelectionContext';
+import { calculateRangeSelection } from '../utils/calculateRangeSelection';
 
 export const useEditorEventApi = (
   state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },
@@ -101,6 +102,22 @@ export const useEditorEventApi = (
             onFocusSteps([e.id], e.tab);
             announce(ScreenReaderMessage.ActionFocused);
           }
+        };
+        break;
+      case NodeEventTypes.ShiftClick:
+        handler = (e: { id: string; tab?: string }) => {
+          if (!focusedId && !selectedIds.length) {
+            return handleEditorEvent(NodeEventTypes.Focus, e);
+          }
+
+          if (!focusedId) {
+            return handleEditorEvent(NodeEventTypes.CtrlClick, e);
+          }
+
+          // Range selection from 'focusedId' to Shift-Clicked id.
+          const newSelectedIds = calculateRangeSelection(focusedId, e.id, data);
+          setSelectedIds(newSelectedIds);
+          announce(ScreenReaderMessage.RangeSelection);
         };
         break;
       case NodeEventTypes.FocusEvent:

@@ -58,10 +58,13 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
     addCoachMarkRef({ action });
   }, []);
 
+  // Set 'use-select' to none to disable browser's default
+  // text selection effect when pressing Shift + Click.
   return (
     <div
       ref={actionRef}
       css={css`
+        user-select: none;
         position: relative;
         border-radius: 2px 2px 0 0;
         ${nodeSelected && nodeBorderSelectedStyle};
@@ -75,10 +78,16 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
       aria-label={generateSDKTitle(data, '', tab)}
       onClick={(e) => {
         e.stopPropagation();
+        e.preventDefault();
+
+        const payload = { id, tab };
         if (e.ctrlKey) {
-          return onEvent(NodeEventTypes.CtrlClick, { id, tab });
+          return onEvent(NodeEventTypes.CtrlClick, payload);
         }
-        onEvent(NodeEventTypes.Focus, { id, tab });
+        if (e.shiftKey) {
+          return onEvent(NodeEventTypes.ShiftClick, payload);
+        }
+        onEvent(NodeEventTypes.Focus, payload);
       }}
     >
       {children}
