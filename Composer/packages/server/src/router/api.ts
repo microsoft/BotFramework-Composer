@@ -52,6 +52,8 @@ router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
 // plugins
 router.post('/plugins', PluginsController.addPlugin);
+router.delete('/plugins', PluginsController.removePlugin);
+router.patch('/plugins/toggle', PluginsController.togglePlugin);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
