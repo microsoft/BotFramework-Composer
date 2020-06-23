@@ -631,14 +631,18 @@ const setPlugins: ReducerFunc<{ plugins: Plugin[] }> = (state, { plugins }) => {
   return state;
 };
 
-const updatePlugin: ReducerFunc<{ plugin: Plugin }> = (state, { plugin }) => {
-  state.plugins = state.plugins.map((p) => {
-    if (p.id === plugin.id) {
-      return plugin;
-    }
+const addOrUpdatePlugin: ReducerFunc<{ plugin: Plugin }> = (state, { plugin }) => {
+  if (state.plugins.find((p) => p.id === plugin.id)) {
+    state.plugins = state.plugins.map((p) => {
+      if (p.id === plugin.id) {
+        return plugin;
+      }
 
-    return p;
-  });
+      return p;
+    });
+  } else {
+    state.plugins.push(plugin);
+  }
 
   return state;
 };
@@ -713,5 +717,6 @@ export const reducer = createReducer({
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
   [ActionTypes.PLUGINS_FETCH_SUCCESS]: setPlugins,
-  [ActionTypes.PLUGINS_TOGGLE_SUCCESS]: updatePlugin,
+  [ActionTypes.PLUGINS_TOGGLE_SUCCESS]: addOrUpdatePlugin,
+  [ActionTypes.PLUGINS_ADD_SUCCESS]: addOrUpdatePlugin,
 });

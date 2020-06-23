@@ -39,7 +39,7 @@ export async function addPlugin(req: AddPluginRequest, res: Response) {
 
   await PluginManager.install(name, version);
   await PluginManager.load(name);
-  res.status(202).end();
+  res.json(PluginManager.find(name));
 }
 
 export async function togglePlugin(req: TogglePluginRequest, res: Response) {
@@ -69,6 +69,11 @@ export async function removePlugin(req: RemovePluginRequest, res: Response) {
 
   if (!id) {
     res.status(400).send({ error: '`id` is missing from body' });
+    return;
+  }
+
+  if (!PluginManager.find(id)) {
+    res.status(404).json({ error: `plugin \`${id}\` not found` });
     return;
   }
 

@@ -16,7 +16,20 @@ export const fetchPlugins: ActionCreator = async ({ dispatch }) => {
       },
     });
   } catch (err) {
-    // do nothing
+    console.error(err);
+  }
+};
+
+export const addPlugin: ActionCreator<[string, string]> = async ({ dispatch }, pluginName, version) => {
+  try {
+    const res = await httpClient.post('/plugins', { name: pluginName, version });
+    dispatch({
+      type: ActionTypes.PLUGINS_ADD_SUCCESS,
+      payload: {
+        plugin: res.data,
+      },
+    });
+  } catch (err) {
     console.error(err);
   }
 };
