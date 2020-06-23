@@ -15,7 +15,7 @@ import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
 import { getReferredFiles } from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { DialogSetting } from '../../store/types';
+import { DialogSetting, RuntimeTemplate } from '../../store/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 
 import {
@@ -35,7 +35,13 @@ import {
   projectIdState,
   botOpeningState,
 } from './../atoms/botState';
-import { recentProjects, botProjects, BotProject, templateProjects } from './../atoms/appState';
+import {
+  recentProjectsState,
+  botProjectsState,
+  BotProject,
+  templateProjectsState,
+  runtimeTemplatesState,
+} from './../atoms/appState';
 import { logMessage } from './../dispatchers/shared';
 
 const checkProjectUpdates = async () => {
@@ -178,10 +184,10 @@ export const projectDispatcher = () => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get(`/projects/recent`);
-      set(recentProjects, response.data);
+      set(recentProjectsState, response.data);
     } catch (ex) {
       // TODO: Handle exceptions
-      set(recentProjects, []);
+      set(recentProjectsState, []);
       logMessage(`Error in fetching recent projects: ${ex}`);
     }
   });
@@ -193,10 +199,10 @@ export const projectDispatcher = () => {
         snapshot: { getPromise },
       } = callbackHelpers;
       try {
-        const currentRecentProjects = await getPromise(recentProjects);
+        const currentRecentProjects = await getPromise(recentProjectsState);
         const index = currentRecentProjects.findIndex((p) => p.path == path);
         currentRecentProjects.splice(index, 1);
-        set(recentProjects, {
+        set(recentProjectsState, {
           ...currentRecentProjects,
         });
       } catch (ex) {
@@ -213,12 +219,12 @@ export const projectDispatcher = () => {
         set,
       } = callbackHelpers;
       try {
-        const currentBotProjects = await getPromise(botProjects);
+        const currentBotProjects = await getPromise(botProjectsState);
         const index = currentBotProjects.findIndex((currentProject: BotProject) => currentProject.id === projectId);
         if (index !== -1) {
           currentBotProjects[index].endpoints.push(endpoint);
         }
-        set(botProjects, { ...currentBotProjects });
+        set(botProjectsState, { ...currentBotProjects });
       } catch (ex) {
         // TODO: Handle exceptions
         logMessage(`Error updating bot endpoint: ${ex}`);
@@ -232,11 +238,26 @@ export const projectDispatcher = () => {
       try {
         const response = await httpClient.get(`/assets/projectTemplates`);
         if (isArray(response.data)) {
-          set(templateProjects, [...response.data]);
+          set(templateProjectsState, [...response.data]);
         }
       } catch (ex) {
         // TODO: Handle exceptions
         logMessage(`Error setting template projects: ${ex}`);
+      }
+    }
+  );
+
+  const setRuntimeTemplates = useRecoilCallback<[RuntimeTemplate[]], Promise<void>>(
+    (callbackHelpers: CallbackInterface) => async () => {
+      const { set } = callbackHelpers;
+      try {
+        const response = await httpClient.get(`/runtime/templates`);
+        if (isArray(response.data)) {
+          set(runtimeTemplatesState, [...response.data]);
+        }
+      } catch (ex) {
+        // TODO: Handle exceptions
+        logMessage(`Error fetching runtime templates: ${ex}`);
       }
     }
   );
@@ -249,5 +270,6 @@ export const projectDispatcher = () => {
     removeRecentProject,
     updateBotEndpoint: updateBotEndpointForProject,
     setTemplateProjects,
+    setRuntimeTemplates,
   };
 };

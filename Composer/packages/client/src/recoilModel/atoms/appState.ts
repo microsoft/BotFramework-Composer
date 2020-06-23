@@ -5,6 +5,7 @@ import { atom } from 'recoil';
 import { ProjectTemplate, UserSettings } from '@bfc/shared';
 
 import { StorageFolder, StateError, RuntimeTemplate, AppUpdateState } from '../../store/types';
+import { getUserSettings } from '../utils';
 
 export type BotProject = {
   readonly id: string;
@@ -23,28 +24,28 @@ const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
 };
 
-export const botProjects = atom<BotProject[]>({
+export const botProjectsState = atom<BotProject[]>({
   key: getFullyQualifiedKey('botProjects'),
   default: [],
 });
 
 // TODO: Add type for recent projects
-export const recentProjects = atom<any[]>({
+export const recentProjectsState = atom<any[]>({
   key: getFullyQualifiedKey('recentProjects'),
   default: [],
 });
 
-export const templateProjects = atom<ProjectTemplate[]>({
+export const templateProjectsState = atom<ProjectTemplate[]>({
   key: getFullyQualifiedKey('templateProjects'),
   default: [],
 });
 
-export const storages = atom<any[]>({
+export const storagesState = atom<any[]>({
   key: getFullyQualifiedKey('storages'),
   default: [],
 });
 
-export const focusedStorageFolder = atom<StorageFolder>({
+export const focusedStorageFolderState = atom<StorageFolder>({
   key: getFullyQualifiedKey('focusedStorageFolder'),
   default: {} as StorageFolder,
 });
@@ -54,22 +55,22 @@ export const storageFileLoadingStatus = atom<string>({
   default: '',
 });
 
-export const applicationError = atom<StateError>({
+export const applicationErrorState = atom<StateError>({
   key: getFullyQualifiedKey('error'),
   default: {} as StateError,
 });
 
-export const currentUser = atom<CurrentUser>({
+export const currentUserState = atom<CurrentUser>({
   key: getFullyQualifiedKey('currentUser'),
   default: {} as CurrentUser,
 });
 
-export const visualEditorSelection = atom<string[]>({
+export const visualEditorSelectionState = atom<string[]>({
   key: getFullyQualifiedKey('visualEditorSelection'),
   default: [],
 });
 
-export const onboarding = atom<{
+export const onboardingState = atom<{
   coachMarkRefs: { [key: string]: any };
   complete: boolean;
 }>({
@@ -80,32 +81,32 @@ export const onboarding = atom<{
   },
 });
 
-export const clipboardActions = atom<any[]>({
+export const clipboardActionsState = atom<any[]>({
   key: getFullyQualifiedKey('clipboardActions'),
   default: [],
 });
 
-export const runtimeTemplates = atom<RuntimeTemplate[]>({
+export const runtimeTemplatesState = atom<RuntimeTemplate[]>({
   key: getFullyQualifiedKey('runtimeTemplates'),
   default: [],
 });
 
-export const userSettings = atom<UserSettings>({
+export const userSettingsState = atom<UserSettings>({
   key: getFullyQualifiedKey('userSettings'),
-  default: {} as UserSettings,
+  default: getUserSettings(),
 });
 
-export const announcement = atom<string>({
+export const announcementState = atom<string>({
   key: getFullyQualifiedKey('announcement'),
   default: '',
 });
 
-export const appUpdate = atom<AppUpdateState>({
+export const appUpdateState = atom<AppUpdateState>({
   key: getFullyQualifiedKey('appUpdate'),
   default: {} as AppUpdateState,
 });
 
-export const logEntryList = atom<string[]>({
+export const logEntryListState = atom<string[]>({
   key: getFullyQualifiedKey('logEntryList'),
   default: [],
 });

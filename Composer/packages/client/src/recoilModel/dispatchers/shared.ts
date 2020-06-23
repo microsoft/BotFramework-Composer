@@ -4,7 +4,7 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import { logEntryList, applicationError } from '../atoms/appState';
+import { logEntryListState, applicationErrorState } from '../atoms/appState';
 import { StateError } from '../../store/types';
 
 export const logMessage = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (message: string) => {
@@ -13,11 +13,11 @@ export const logMessage = useRecoilCallback<[string], void>(({ set }: CallbackIn
   //latest value each time you call set!
   // eslint-disable-next-line no-console
   console.log(message);
-  set(logEntryList, (logEntries) => [...logEntries, message]);
+  set(logEntryListState, (logEntries) => [...logEntries, message]);
 });
 
 export const setApplicationLevelError = useRecoilCallback<[StateError], void>(
   ({ set }: CallbackInterface) => (errorObj: StateError) => {
-    set(applicationError, errorObj);
+    set(applicationErrorState, errorObj);
   }
 );
