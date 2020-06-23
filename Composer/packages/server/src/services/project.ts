@@ -35,19 +35,18 @@ export class BotProjectService {
     }
   }
 
-  public static lgImportResolver(source: string, id: string, projectId: string): ResolverResource {
+  public static getLgResources(projectId?: string): ResolverResource[] {
     BotProjectService.initialize();
     const project = BotProjectService.getIndexedProjectById(projectId);
     if (!project) throw new Error('project not found');
-    const resource = project.files.reduce((result: ResolverResource[], file) => {
+    const resources = project.files.reduce((result: ResolverResource[], file) => {
       const { name, content } = file;
       if (name.endsWith('.lg')) {
         result.push({ id: Path.basename(name, '.lg'), content });
       }
       return result;
     }, []);
-    const resolver = importResolverGenerator(resource, '.lg');
-    return resolver(source, id);
+    return resources;
   }
 
   public static luImportResolver(source: string, id: string, projectId: string): ResolverResource {
