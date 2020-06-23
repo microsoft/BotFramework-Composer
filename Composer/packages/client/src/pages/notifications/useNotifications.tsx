@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { useMemo } from 'react';
+import get from 'lodash/get';
 
 import { useStoreContext } from '../../hooks/useStoreContext';
 
@@ -14,6 +15,7 @@ import {
   ServerNotification,
 } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
+
 export default function useNotifications(filter?: string) {
   const { state } = useStoreContext();
   const { dialogs, luFiles, lgFiles, qnaFiles, projectId, diagnostics } = state;
@@ -41,7 +43,7 @@ export default function useNotifications(filter?: string) {
       });
     });
     qnaFiles.forEach((qnaFile) => {
-      qnaFile.diagnostics.map((diagnostic) => {
+      get(qnaFile, 'diagnostics', []).map((diagnostic) => {
         const location = `${qnaFile.id}.qna`;
         notifications.push(new QnANotification(projectId, qnaFile.id, location, diagnostic));
       });

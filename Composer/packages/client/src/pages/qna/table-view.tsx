@@ -29,8 +29,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
 
   const generateQnAPairs = (file) => {
-    if (!file) return [];
-    return file.qnaPairs.map((qnaPair, index) => {
+    return get(file, 'qnaPairs', []).map((qnaPair, index) => {
       const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
       return {
         fileId: file.fileId,
