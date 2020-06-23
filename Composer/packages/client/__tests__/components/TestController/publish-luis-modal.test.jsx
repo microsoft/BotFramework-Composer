@@ -3,11 +3,11 @@
 import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { PublishLuis } from '../../../src/pages/language-understanding/publish-luis-modal';
+import { PublishComponent } from '../../../src/pages/language-understanding/publish-luis-modal';
 import { renderWithStore } from '../../testUtils';
 
-describe('<PublishLuis />', () => {
-  it('should render the <PublishLuis />', () => {
+describe('<PublishComponent />', () => {
+  it('should render the <PublishComponent />', () => {
     const onDismiss = jest.fn(() => {});
     const onPublish = jest.fn(() => {});
     const state = {
@@ -17,6 +17,7 @@ describe('<PublishLuis />', () => {
         luis: {
           name: '',
           authoringKey: '12345',
+          subscriptKey: '12345',
           authoringEndpoint: 'testAuthoringEndpoint',
           endpointKey: '12345',
           endpoint: 'testEndpoint',
@@ -32,7 +33,7 @@ describe('<PublishLuis />', () => {
       }),
     };
     const { getByText } = renderWithStore(
-      <PublishLuis workState={0} onDismiss={onDismiss} onPublish={onPublish} />,
+      <PublishComponent workState={0} onDismiss={onDismiss} onPublish={onPublish} />,
       state,
       actions
     );

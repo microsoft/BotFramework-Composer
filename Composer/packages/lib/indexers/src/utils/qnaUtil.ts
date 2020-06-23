@@ -7,10 +7,12 @@
  */
 
 import isEmpty from 'lodash/isEmpty';
-import { QnASection } from '@bfc/shared';
+import { QnASection, DialogInfo, QnAFile } from '@bfc/shared';
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 
 import { qnaIndexer } from '../qnaIndexer';
+
+import { getBaseName } from './help';
 
 const { luParser, sectionOperator } = sectionHandler;
 
@@ -131,4 +133,21 @@ export function insertSection(indexId: number, content: string, newContent: stri
 export function getParsedDiagnostics(newContent: string) {
   const { diagnostics } = qnaIndexer.parse(newContent);
   return diagnostics;
+}
+
+export function getReferredQnaFiles(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
+  return qnaFiles.filter((file) => {
+    const idWithOutLocale = getBaseName(file.id);
+    return dialogs.some((dialog) => dialog.qnaFile === idWithOutLocale);
+  });
+}
+
+export function checkQnaPublish(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
+  const referred = getReferredQnaFiles(qnaFiles, dialogs);
+  const emptyLuFiles = referred.filter((file) => file.empty);
+  if (emptyLuFiles.length !== 0) {
+    const msg = emptyLuFiles.map((file) => file.id).join(' ');
+    throw new Error(`You have the following empty QnaFile(s): ` + msg);
+  }
+  return referred;
 }

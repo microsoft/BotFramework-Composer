@@ -14,7 +14,7 @@ import {
   QnANotification,
   ServerNotification,
 } from './types';
-import { getReferredFiles } from './../../utils/luUtil';
+import { getReferredLuFiles } from './../../utils/luUtil';
 
 export default function useNotifications(filter?: string) {
   const { state } = useStoreContext();
@@ -30,7 +30,7 @@ export default function useNotifications(filter?: string) {
         notifications.push(new DialogNotification(projectId, dialog.id, location, diagnostic));
       });
     });
-    getReferredFiles(luFiles, dialogs).forEach((lufile) => {
+    getReferredLuFiles(luFiles, dialogs).forEach((lufile) => {
       lufile.diagnostics.map((diagnostic) => {
         const location = `${lufile.id}.lu`;
         notifications.push(new LuNotification(projectId, lufile.id, location, diagnostic, lufile, dialogs));

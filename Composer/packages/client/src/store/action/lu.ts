@@ -6,7 +6,7 @@ import { LuFile } from '@bfc/shared';
 import * as luUtil from '../../utils/luUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
-import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import luFileStatusStorage from '../../utils/fileStatusStorage';
 import { Text } from '../../constants';
 import LuWorker from '../parsers/luWorker';
 

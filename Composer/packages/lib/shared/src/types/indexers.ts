@@ -33,6 +33,7 @@ export interface DialogInfo {
   lgFile: string;
   lgTemplates: LgTemplateJsonPath[];
   luFile: string;
+  qnaFile: string;
   referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
   triggers: ITrigger[];

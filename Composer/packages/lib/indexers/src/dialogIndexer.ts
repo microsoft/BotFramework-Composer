@@ -199,6 +199,7 @@ function validate(id: string, content, schema: any): Diagnostic[] {
 function parse(id: string, content: any, schema: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
+  const qnaFile = typeof content.generator === 'string' ? content.generator : '';
 
   return {
     id,
@@ -209,6 +210,7 @@ function parse(id: string, content: any, schema: any) {
     referredLuIntents: ExtractLuIntents(content, id),
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
+    qnaFile: getBaseName(qnaFile, '.qna'),
     triggers: ExtractTriggers(content),
     intentTriggers: ExtractIntentTriggers(content),
   };

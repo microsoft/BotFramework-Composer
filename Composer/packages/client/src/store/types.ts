@@ -217,10 +217,16 @@ export interface ILuisConfig {
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
 }
+
+export interface IQnaConfig {
+  subscriptKey: string;
+  endpoint: string;
+}
 export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
+  qna?: IQnaConfig;
   publishTargets?: PublishTarget[];
   runtime?: {
     customRuntime: boolean;
