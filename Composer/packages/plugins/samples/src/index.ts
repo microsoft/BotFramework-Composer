@@ -20,7 +20,7 @@ const samplesRegitry = {
   },
   EmptyBot: {
     name: 'Empty Bot',
-    description: 'Basic bot template that is ready for your creativity',
+    description: 'A basic bot template that is ready for your creativity',
     index: 2,
   },
   TodoSample: {
