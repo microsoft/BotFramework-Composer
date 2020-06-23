@@ -25,6 +25,12 @@ interface RemovePluginRequest extends Request {
   };
 }
 
+interface SearchPluginsRequest extends Request {
+  query: {
+    q?: string;
+  };
+}
+
 export async function listPlugins(req: Request, res: Response) {
   res.json(PluginManager.getAll());
 }
@@ -78,5 +84,12 @@ export async function removePlugin(req: RemovePluginRequest, res: Response) {
   }
 
   await PluginManager.remove(id);
-  res.status(200).end();
+  res.json(PluginManager.getAll());
+}
+
+export async function searchPlugins(req: SearchPluginsRequest, res: Response) {
+  const { q } = req.query;
+
+  const results = await PluginManager.search(q ?? '');
+  res.json(results);
 }

@@ -55,6 +55,7 @@ router.get('/plugins', PluginsController.listPlugins);
 router.post('/plugins', PluginsController.addPlugin);
 router.delete('/plugins', PluginsController.removePlugin);
 router.patch('/plugins/toggle', PluginsController.togglePlugin);
+router.get('/plugins/search', PluginsController.searchPlugins);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

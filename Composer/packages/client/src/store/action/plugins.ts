@@ -34,6 +34,20 @@ export const addPlugin: ActionCreator<[string, string]> = async ({ dispatch }, p
   }
 };
 
+export const removePlugin: ActionCreator<[string]> = async ({ dispatch }, pluginName) => {
+  try {
+    const res = await httpClient.delete('/plugins', { data: { id: pluginName } });
+    dispatch({
+      type: ActionTypes.PLUGINS_FETCH_SUCCESS,
+      payload: {
+        plugins: res.data,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export const togglePlugin: ActionCreator<[string, boolean]> = async ({ dispatch }, pluginId, enabled) => {
   try {
     const res = await httpClient.patch('/plugins/toggle', {

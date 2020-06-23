@@ -25,8 +25,17 @@ interface PluginConfig {
   configuration: object;
 }
 
+interface PluginInfo {
+  id: string;
+  keywords: string[];
+  version: string;
+  description: string;
+  url: string;
+}
+
 export class PluginManager {
   private dir = PLUGINS_DIR;
+  private cache = new Map<string, PluginInfo>();
 
   constructor(pluginsDirectory?: string) {
     if (pluginsDirectory) {
@@ -116,6 +125,36 @@ export class PluginManager {
       'plugins',
       allPlugins.filter((p) => p.id !== id)
     );
+  }
+
+  public async search(query: string) {
+    const cmd = `npm search --json "keywords:botframework-composer ${query}"`;
+    log(cmd);
+
+    const { stdout } = await exec(cmd);
+
+    try {
+      const result = JSON.parse(stdout);
+      if (Array.isArray(result)) {
+        result.forEach((searchResult) => {
+          const { name, keywords = [], version, description, links } = searchResult;
+          if (!this.cache.has(name) && keywords.includes('botframework-composer')) {
+            const url = links?.npm ?? '';
+            this.cache.set(name, {
+              id: name,
+              version,
+              description,
+              keywords,
+              url,
+            });
+          }
+        });
+      }
+    } catch (err) {
+      log('%O', err);
+    }
+
+    return Array.from(this.cache.values());
   }
 
   private async updateStore(pluginId: string, newSettings: Partial<PluginConfig>) {
