@@ -7,10 +7,28 @@
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/7zip-bin/-/7zip-bin-5.0.3.tgz#bc5b5532ecafd923a61f2fb097e3b108c0106a3f"
   integrity sha1-vFtVMuyv2SOmHy+wl+OxCMAQaj8=
 
+"@azure/arm-appinsights@^2.1.0":
+  version "2.1.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/arm-appinsights/-/@azure/arm-appinsights-2.1.0.tgz#a14238e5fa1e0ae949d6f65d49020459116f16fd"
+  integrity sha1-oUI45foeCulJ1vZdSQIEWRFvFv0=
+  dependencies:
+    "@azure/ms-rest-azure-js" "^1.1.0"
+    "@azure/ms-rest-js" "^1.1.0"
+    tslib "^1.9.3"
+
 "@azure/arm-appservice-profile-2019-03-01-hybrid@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@azure/arm-appservice-profile-2019-03-01-hybrid/-/arm-appservice-profile-2019-03-01-hybrid-1.0.0.tgz#36b41dd5ce2d7d07ac8828efb4bc0badf9820c3e"
   integrity sha512-5hW65PAO3Uhx5V5cIyjvOU+akErhJFm3AtBCA/fAMb/Bj73c5c5HFYJus+CzNoJQyKEE0RubDh7Q3YDjjmXG9g==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^1.3.2"
+    "@azure/ms-rest-js" "^1.8.1"
+    tslib "^1.9.3"
+
+"@azure/arm-botservice@^1.0.0":
+  version "1.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/arm-botservice/-/@azure/arm-botservice-1.0.0.tgz#439140b234831895dd3c9fdec524fef5fc94c5e3"
+  integrity sha1-Q5FAsjSDGJXdPJ/exST+9fyUxeM=
   dependencies:
     "@azure/ms-rest-azure-js" "^1.3.2"
     "@azure/ms-rest-js" "^1.8.1"
@@ -86,7 +104,7 @@
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
 
-"@azure/ms-rest-azure-js@^1.3.2":
+"@azure/ms-rest-azure-js@^1.1.0", "@azure/ms-rest-azure-js@^1.3.2":
   version "1.3.8"
   resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-js/-/ms-rest-azure-js-1.3.8.tgz#96b518223d3baa2496b2981bc07288b3d887486e"
   integrity sha512-AHLfDTCyIH6wBK6+CpImI6sc9mLZ17ZgUrTx3Rhwv+3Mb3Z73BxormkarfR6Stb6scrBYitxJ27FXyndXlGAYg==
@@ -111,6 +129,20 @@
   dependencies:
     "@types/tunnel" "0.0.0"
     axios "^0.18.0"
+    form-data "^2.3.2"
+    tough-cookie "^2.4.3"
+    tslib "^1.9.2"
+    tunnel "0.0.6"
+    uuid "^3.2.1"
+    xml2js "^0.4.19"
+
+"@azure/ms-rest-js@^1.1.0":
+  version "1.8.15"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/ms-rest-js/-/@azure/ms-rest-js-1.8.15.tgz#4267b6b8c00d85301791fe0cf347e0455a807338"
+  integrity sha1-Qme2uMANhTAXkf4M80fgRVqAczg=
+  dependencies:
+    "@types/tunnel" "0.0.0"
+    axios "^0.19.0"
     form-data "^2.3.2"
     tough-cookie "^2.4.3"
     tslib "^1.9.2"
