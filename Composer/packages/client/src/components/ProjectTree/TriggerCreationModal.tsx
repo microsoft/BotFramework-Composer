@@ -17,7 +17,6 @@ import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import get from 'lodash/get';
 
 import { nameRegex } from '../../constants';
 import {
@@ -28,12 +27,10 @@ import {
   eventTypeKey,
   customEventKey,
   intentTypeKey,
-  qnaTypeKey,
   activityTypeKey,
   getEventTypes,
   getActivityTypes,
   regexRecognizerKey,
-  crossTrainedRecognizerSetKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
 import { StoreContext } from '../../store';

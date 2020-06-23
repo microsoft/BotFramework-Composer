@@ -10,7 +10,7 @@ import { ActionCreator, State, Store } from '../types';
 import { ActionTypes } from './../../constants/index';
 
 export const updateQnAFile: ActionCreator = async (store, { id, projectId, content }) => {
-  const qnaFile = (await qnaWorker.parse(content, id)) as QnAFile;
+  const qnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
   store.dispatch({
     type: ActionTypes.UPDATE_QNA,
     payload: { id, projectId, content, qnaFile },
