@@ -81,7 +81,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
         e.preventDefault();
 
         const payload = { id, tab };
-        if (e.ctrlKey) {
+        if (e.ctrlKey || e.metaKey) {
           return onEvent(NodeEventTypes.CtrlClick, payload);
         }
         if (e.shiftKey) {
