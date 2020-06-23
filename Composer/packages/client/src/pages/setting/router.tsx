@@ -11,14 +11,18 @@ import { DialogSettings } from './dialog-settings';
 import { AppSettings } from './app-settings';
 import { RuntimeSettings } from './runtime-settings';
 
-export const SettingsRoutes = () => (
+export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => (
   <ErrorBoundary>
     <Router>
-      <Redirect noThrow from="/" to="/settings/application" />
+      <Redirect
+        noThrow
+        from="/"
+        to={projectId ? `/settings/bot/${projectId}/dialog-settings` : '/settings/application'}
+      />
       <AppSettings default path="application" />
       <About path="about" />
       <DialogSettings path="/bot/:projectId/dialog-settings" />
       <RuntimeSettings path="/bot/:projectId/runtime" />
     </Router>
   </ErrorBoundary>
-);
+));

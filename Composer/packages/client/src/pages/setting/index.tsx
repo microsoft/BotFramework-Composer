@@ -19,6 +19,10 @@ import { useLocation } from '../../utils/hooks';
 
 import { SettingsRoutes } from './router';
 
+const getProjectLink = (path: string, id?: string) => {
+  return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
+};
+
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   const { state, actions } = useContext(StoreContext);
   const { projectId } = state;
@@ -33,13 +37,9 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     }
   }, [projectId]);
 
-  const makeProjectLink = (path: string, id?: string) => {
-    return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
-  };
-
   const settingLabels = {
     botSettings: formatMessage('Bot Settings'),
-    appSettings: formatMessage('App Settings'),
+    appSettings: formatMessage('Application Settings'),
     runtime: formatMessage('Runtime Config'),
     about: formatMessage('About'),
   };
@@ -48,12 +48,12 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     {
       id: 'dialog-settings',
       name: settingLabels.botSettings,
-      url: makeProjectLink('dialog-settings', projectId),
+      url: getProjectLink('dialog-settings', projectId),
       disabled: !projectId,
     },
-    { id: 'application', name: settingLabels.appSettings, url: makeProjectLink('application') },
-    { id: 'runtime', name: settingLabels.runtime, url: makeProjectLink('runtime', projectId), disabled: !projectId },
-    { id: 'about', name: settingLabels.about, url: makeProjectLink('about') },
+    { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
+    { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
+    { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
 
     // { key: '/settings/publish', name: settingLabels.publish, url: '' },
 
@@ -164,7 +164,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
       title={title}
       toolbarItems={toolbarItems}
     >
-      <SettingsRoutes />
+      <SettingsRoutes projectId={projectId} />
     </Page>
   );
 };
