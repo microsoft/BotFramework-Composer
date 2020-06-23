@@ -448,7 +448,6 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'csharp-azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
-    buildCommand: 'dotnet build',
     eject: async (project, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
@@ -478,7 +477,6 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'javescript-azurewebapp',
     name: 'JS',
     startCommand: 'node azurewebapp/lib/index.js',
-    buildCommand: 'yarn install',
     eject: async (project: any, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../../runtime/node');
       const destPath = path.join(project.dir, 'runtime');
