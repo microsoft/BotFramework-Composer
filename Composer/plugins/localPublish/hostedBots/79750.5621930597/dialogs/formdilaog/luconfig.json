@@ -1,8 +1,0 @@
-
-{
-    "botName": "formdilaog",
-    "deleteOldVersion": true, 
-    "out": ".",
-    "dialog": "multiLanguage",
-    "models": ["en-us/formdilaog.en-us.lu"]
-}

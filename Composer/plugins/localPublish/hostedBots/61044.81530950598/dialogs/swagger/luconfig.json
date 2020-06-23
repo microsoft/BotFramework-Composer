@@ -1,8 +1,0 @@
-
-{
-    "botName": "swagger",
-    "deleteOldVersion": true, 
-    "out": ".",
-    "dialog": "multiLanguage",
-    "models": ["en-us/swagger.en-us.lu"]
-}

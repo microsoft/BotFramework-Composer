@@ -1,8 +1,0 @@
-
-# AcceptEntity(val)
- - IF: ${val}
- - ${val}
- - ELSE:
- - no value
-
-> Generator: 9a4f8d7a5a064a625ec312f1af72d9ab
