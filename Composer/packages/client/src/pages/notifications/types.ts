@@ -12,6 +12,7 @@ export enum NotificationType {
   DIALOG,
   LG,
   LU,
+  QNA,
   GENERAL,
 }
 
@@ -120,5 +121,14 @@ export class LuNotification extends Notification {
     return dialogs
       .find((dialog) => dialog.id === this.resourceId)
       ?.referredLuIntents.find((lu) => lu.name === intentName)?.path;
+  }
+}
+
+export class QnANotification extends Notification {
+  type = NotificationType.QNA;
+  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, id, location, diagnostic);
+    this.dialogPath = '';
+    this.message = createSingleMessage(diagnostic);
   }
 }

@@ -86,15 +86,15 @@ export interface LuFile {
   [key: string]: any;
 }
 
-export interface QnaSection {
+export interface QnASection {
   Question: string;
   Answer: string;
 }
 
-export interface QnaFile {
+export interface QnAFile {
   id: string;
   content: string;
-  qnaSection?: QnaSection[];
+  qnaSection?: QnASection[];
   [key: string]: any;
 }
 
@@ -121,6 +121,8 @@ export interface LgFile {
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
 }
+
+// export interface QnAFile {}
 
 export interface Skill {
   manifestUrl: string;

@@ -4,7 +4,7 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
-import { LgFile, LuFile, QnaFile, importResolverGenerator, UserSettings } from '@bfc/shared';
+import { LgFile, LuFile, QnAFile, importResolverGenerator, UserSettings } from '@bfc/shared';
 import merge from 'lodash/merge';
 
 import { prepareAxios } from '../utils/auth';
@@ -140,7 +140,7 @@ export interface StoreContextValue {
     lgImportresolver: ImportResolverDelegate;
     lgFileResolver: (id: string) => LgFile | undefined;
     luFileResolver: (id: string) => LuFile | undefined;
-    qnaFileResolver: (id: string) => QnaFile | undefined;
+    qnaFileResolver: (id: string) => QnAFile | undefined;
   };
 }
 

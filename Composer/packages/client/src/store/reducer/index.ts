@@ -257,12 +257,12 @@ const removeQnaFile: ReducerFunc = (state, { id }) => {
   return state;
 };
 
-const updateQnaTemplate: ReducerFunc = (state, { id, content }) => {
-  state.qnaFiles = state.qnaFiles.map((qnaFile) => {
-    if (qnaFile.id === id) {
-      return { ...qnaFile, content };
+const updateQnaTemplate: ReducerFunc = (state, { qnaFile }) => {
+  state.qnaFiles = state.qnaFiles.map((q) => {
+    if (q.id === qnaFile.id) {
+      return qnaFile;
     }
-    return qnaFile;
+    return q;
   });
 
   return state;

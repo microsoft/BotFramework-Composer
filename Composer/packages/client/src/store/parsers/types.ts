@@ -1,12 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { LuIntentSection, LgFile, FileInfo, LgTemplate } from '@bfc/shared';
+import { LuIntentSection, QnASection, LgFile, FileInfo, LgTemplate } from '@bfc/shared';
 
 export type LuPayload = {
   content: string;
   id?: string;
   intentName?: string;
   intent?: LuIntentSection;
+};
+
+export type QnAPayload = {
+  type: QnAActionType;
+  content: string;
+  id?: string;
+  section?: QnASection;
 };
 
 export type LgParsePayload = {
@@ -67,4 +74,11 @@ export enum LgActionType {
 
 export enum IndexerActionType {
   Index = 'index',
+}
+
+export enum QnAActionType {
+  Parse = 'parse',
+  AddSection = 'add-section',
+  UpdateSection = 'update-section',
+  RemoveSection = 'remove-section',
 }
