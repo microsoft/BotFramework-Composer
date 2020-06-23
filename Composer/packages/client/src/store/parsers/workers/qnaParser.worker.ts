@@ -11,13 +11,13 @@ const parse = (content: string, id: string) => {
 };
 
 ctx.onmessage = function (msg) {
-  const msgId = msg.data.id;
-  const { type, content, id, file, indexId } = msg.data.payload;
+  const { id: msgId, type, payload } = msg.data;
+  const { content, id, file, indexId } = payload;
   let result: any = null;
   try {
     switch (type) {
       case QnAActionType.Parse: {
-        result = parse(id, content);
+        result = parse(content, id);
         break;
       }
       case QnAActionType.AddSection: {

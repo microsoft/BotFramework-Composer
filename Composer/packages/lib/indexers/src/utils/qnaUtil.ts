@@ -125,9 +125,6 @@ export function removeSection(indexId: number, content: string) {
 export function insertSection(indexId: number, content: string, newContent: string) {
   if (indexId < 0) return content;
   const resource = luParser.parse(content);
-  if (resource.Sections.length === 0) {
-    return new sectionOperator(resource).addSection(newContent).Content;
-  }
   return new sectionOperator(resource).insertSection(indexId, newContent).Content;
 }
 

@@ -10,7 +10,6 @@ export type LuPayload = {
 };
 
 export type QnAPayload = {
-  type: QnAActionType;
   content: string;
   id?: string;
   section?: QnASection;
