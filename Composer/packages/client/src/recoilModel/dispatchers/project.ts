@@ -42,7 +42,7 @@ import {
   templateProjectsState,
   runtimeTemplatesState,
 } from './../atoms/appState';
-import { logMessage } from './../dispatchers/shared';
+// import { logMessage } from './../dispatchers/shared';
 
 const checkProjectUpdates = async () => {
   const workers = [filePersistence, lgWorker, luWorker];
@@ -188,7 +188,7 @@ export const projectDispatcher = () => {
     } catch (ex) {
       // TODO: Handle exceptions
       set(recentProjectsState, []);
-      logMessage(`Error in fetching recent projects: ${ex}`);
+      // logMessage(`Error in fetching recent projects: ${ex}`);
     }
   });
 
@@ -207,7 +207,7 @@ export const projectDispatcher = () => {
         });
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(`Error removing recent project: ${ex}`);
+        // logMessage(`Error removing recent project: ${ex}`);
       }
     }
   );
@@ -227,7 +227,7 @@ export const projectDispatcher = () => {
         set(botProjectsState, { ...currentBotProjects });
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(`Error updating bot endpoint: ${ex}`);
+        // logMessage(`Error updating bot endpoint: ${ex}`);
       }
     }
   );
@@ -242,7 +242,7 @@ export const projectDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(`Error setting template projects: ${ex}`);
+        // logMessage(`Error setting template projects: ${ex}`);
       }
     }
   );
@@ -257,7 +257,7 @@ export const projectDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(`Error fetching runtime templates: ${ex}`);
+        // logMessage(`Error fetching runtime templates: ${ex}`);
       }
     }
   );

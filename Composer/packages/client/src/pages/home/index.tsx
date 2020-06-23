@@ -17,6 +17,7 @@ import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
 import { dispatcherState } from '../../recoilModel/DispatcherWraper';
 import { navigateTo } from '../../utils';
 import { botNameState } from '../../recoilModel/atoms/botState';
+import { recentProjectsState } from '../../recoilModel/atoms/appState';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -59,10 +60,12 @@ const tutorials = [
 
 const Home: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { recentProjects, templateProjects } = state;
+  const { templateProjects } = state;
   const botName = useRecoilValue(botNameState);
-  const { openBotProject } = useRecoilValue(dispatcherState);
-  const { setCreationFlowStatus, saveTemplateId, fetchRecentProjects, onboardingAddCoachMarkRef } = actions;
+  const recentProjects = useRecoilValue(recentProjectsState);
+  const { openBotProject, fetchRecentProjects, setCreationFlowStatus } = useRecoilValue(dispatcherState);
+
+  const { onboardingAddCoachMarkRef } = actions;
 
   const onClickRecentBotProject = async (path) => {
     const projectId = await openBotProject(path);
@@ -77,7 +80,6 @@ const Home: React.FC<RouteComponentProps> = () => {
   };
 
   const onClickTemplate = async (id: string) => {
-    await saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`projects/create/${id}`);
   };

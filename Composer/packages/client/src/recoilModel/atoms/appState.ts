@@ -6,6 +6,7 @@ import { ProjectTemplate, UserSettings } from '@bfc/shared';
 
 import { StorageFolder, StateError, RuntimeTemplate, AppUpdateState } from '../../store/types';
 import { getUserSettings } from '../utils';
+import { CreationFlowStatus } from '../../constants';
 
 export type BotProject = {
   readonly id: string;
@@ -104,6 +105,11 @@ export const announcementState = atom<string>({
 export const appUpdateState = atom<AppUpdateState>({
   key: getFullyQualifiedKey('appUpdate'),
   default: {} as AppUpdateState,
+});
+
+export const creationFlowStatusState = atom<CreationFlowStatus>({
+  key: getFullyQualifiedKey('creationFlowStatus'),
+  default: CreationFlowStatus.CLOSE,
 });
 
 export const logEntryListState = atom<string[]>({
