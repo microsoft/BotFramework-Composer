@@ -7,7 +7,7 @@ import { BotProjectDeploy, BotProjectRuntimeType } from '@bfc/bot-deploy';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
-import { RuntimeTemplate, pluginLoader } from '@bfc/plugin-loader';
+import { pluginLoader } from '@bfc/plugin-loader';
 
 import schema from './schema';
 
@@ -307,9 +307,8 @@ class AzurePublisher {
           this.logMessages.push(JSON.stringify(msg, null, 2));
         },
         accessToken: accessToken,
-        projPath: this.getProjectFolder(resourcekey, 'azurewebapp'),
-        runtimeType:
-          project?.settings?.runtime?.name === 'JS' ? BotProjectRuntimeType.NODE : BotProjectRuntimeType.CSHARP,
+        projPath: this.getProjectFolder(resourcekey, DEFAULT_RUNTIME),
+        runtime: pluginLoader.getRuntimeByProject(project),
       });
 
       this.logMessages = ['Publish starting...'];

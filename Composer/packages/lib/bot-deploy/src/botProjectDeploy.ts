@@ -4,6 +4,8 @@
 import * as path from 'path';
 
 import { ResourceManagementClient } from '@azure/arm-resources';
+import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
+import { AzureBotService } from '@azure/arm-botservice';
 import {
   Deployment,
   DeploymentsCreateOrUpdateResponse,
@@ -15,7 +17,7 @@ import { GraphRbacManagementClient } from '@azure/graph';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
-import { pluginLoader, RuntimeTemplate } from '@bfc/plugin-loader';
+import { RuntimeTemplate } from '@bfc/plugin-loader';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
@@ -35,6 +37,7 @@ export class BotProjectDeploy {
   private settingsPath: string;
   private templatePath: string;
   private logger: (string) => any;
+  private runtime: RuntimeTemplate;
 
   // Will be assigned by create or deploy
   private tenantId = '';
@@ -45,6 +48,8 @@ export class BotProjectDeploy {
     this.accessToken = config.accessToken;
     this.creds = config.creds;
     this.projPath = config.projPath;
+    // get the appropriate runtime
+    this.runtime = config.runtime;
 
     // path to the zipped assets
     this.zipPath = config.zipPath ?? path.join(this.projPath, 'code.zip');
@@ -476,12 +481,8 @@ export class BotProjectDeploy {
       if (await fs.pathExists(this.zipPath)) {
         await fs.remove(this.zipPath);
       }
-
-      // get the appropriate runtime
-      const runtime: RuntimeTemplate = pluginLoader.getRuntimeByProject(project);
-
       // run any platform specific build steps
-      const pathToArtifacts = await runtime.buildDeploy(this.projPath, project);
+      const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project);
 
       // LUIS build
       const settings = await fs.readJSON(this.settingsPath);
@@ -601,7 +602,7 @@ export class BotProjectDeploy {
     createLuisAuthoringResource = true,
     createCosmosDb = true,
     createStorage = true,
-    createAppInsignts = true
+    createAppInsights = true
   ) {
     if (!this.tenantId) {
       this.tenantId = await this.getTenantId();
@@ -678,7 +679,7 @@ export class BotProjectDeploy {
       name,
       createLuisAuthoringResource,
       createLuisResource,
-      createAppInsignts,
+      createAppInsights,
       createCosmosDb,
       createStorage
     );
@@ -754,6 +755,78 @@ export class BotProjectDeploy {
       });
 
       throw new Error(`! Error: ${validation.error}`);
+    }
+
+    // If application insights created, update the application insights settings in azure bot service
+    if (createAppInsights) {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> Linking Application Insights settings to Bot Service ...`,
+      });
+
+      const appinsightsClient = new ApplicationInsightsManagementClient(this.creds, this.subId);
+      const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
+      const appinsightsId = appComponents.appId;
+      const appinsightsInstrumentationKey = appComponents.instrumentationKey;
+      const apiKeyOptions = {
+        name: `${resourceGroupName}-provision-${timeStamp}`,
+        linkedReadProperties: [
+          `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/api`,
+          `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/agentconfig`,
+        ],
+        linkedWriteProperties: [
+          `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/annotations`,
+        ],
+      };
+      const appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
+        resourceGroupName,
+        resourceGroupName,
+        apiKeyOptions
+      );
+      const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
+
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights AppId: ${appinsightsId} ...`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
+      });
+
+      if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
+        const botServiceClient = new AzureBotService(this.creds, this.subId);
+        const botCreated = await botServiceClient.bots.get(resourceGroupName, name);
+        if (botCreated.properties) {
+          botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
+          botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
+          botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
+          const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, name, botCreated);
+
+          if (botUpdateResult._response.status != 200) {
+            this.logger({
+              status: BotProjectDeployLoggerType.PROVISION_ERROR,
+              message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
+                botUpdateResult
+              )}`,
+            });
+            throw new Error(`Linking Application Insights Failed.`);
+          }
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_INFO,
+            message: `> Linking Application Insights settings to Bot Service Success!`,
+          });
+        } else {
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_WARNING,
+            message: `! The Bot doesn't have a keys properties to update.`,
+          });
+        }
+      }
     }
 
     // Validate that everything was successfully created.

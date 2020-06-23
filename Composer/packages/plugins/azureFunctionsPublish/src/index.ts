@@ -7,6 +7,7 @@ import { BotProjectDeploy } from '@bfc/bot-deploy';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
+import { pluginLoader } from '@bfc/plugin-loader';
 
 import schema from './schema';
 
@@ -162,6 +163,7 @@ class AzurePublisher {
   };
 
   private createAndDeploy = async (
+    project: any,
     botId: string,
     profileName: string,
     jobId: string,
@@ -171,7 +173,7 @@ class AzurePublisher {
     const { name, environment, hostname, luisResource, language } = customizeConfiguration;
     try {
       // Perform the deploy
-      await this.azDeployer.deploy(name, environment, null, null, null, language, hostname, luisResource);
+      await this.azDeployer.deploy(project, name, environment, null, null, null, language, hostname, luisResource);
 
       // update status and history
       const status = this.getLoadingStatus(botId, profileName, jobId);
@@ -287,10 +289,7 @@ class AzurePublisher {
         },
         accessToken: accessToken,
         projPath: this.getProjectFolder(resourcekey, DEFAULT_RUNTIME),
-        dotnetProjectPath: path.join(
-          this.getProjectFolder(resourcekey, DEFAULT_RUNTIME),
-          'Microsoft.BotFramework.Composer.Functions.csproj'
-        ),
+        runtime: pluginLoader.getRuntime('csharp-azurefunctions'),
       });
 
       this.logMessages = ['Publish starting...'];
@@ -306,7 +305,7 @@ class AzurePublisher {
       };
       this.addLoadingStatus(botId, profileName, response);
 
-      this.createAndDeploy(botId, profileName, jobId, resourcekey, customizeConfiguration);
+      this.createAndDeploy(project, botId, profileName, jobId, resourcekey, customizeConfiguration);
 
       return response;
     } catch (err) {
