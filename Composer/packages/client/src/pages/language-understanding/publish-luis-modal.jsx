@@ -96,7 +96,7 @@ const DeployFailure = (props) => {
   );
 };
 
-export const PublishLuis = (props) => {
+export const PublishComponent = (props) => {
   const { state, actions } = useContext(StoreContext);
   const { setSettings } = actions;
   const { botName, settings } = state;
@@ -105,6 +105,7 @@ export const PublishLuis = (props) => {
   const initialFormData = {
     name: settings.luis.name || botName,
     authoringKey: settings.luis.authoringKey,
+    subscriptKey: settings.qna.subscriptKey,
     endpointKey: settings.luis.endpointKey,
     authoringRegion: settings.luis.authoringRegion,
     defaultLanguage: settings.luis.defaultLanguage,
@@ -130,8 +131,10 @@ export const PublishLuis = (props) => {
     }
     // save the settings change to store and persist to server
     const newValue = { ...formData, ...result };
+    const subscriptKey = newValue.subscriptKey;
     delete newValue.errors;
-    await setSettings(state.projectId, { ...settings, luis: newValue });
+    delete newValue.subscriptKey;
+    await setSettings(state.projectId, { ...settings, luis: newValue, qna: { subscriptKey } });
     await onPublish();
   };
 
@@ -170,6 +173,14 @@ export const PublishLuis = (props) => {
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
           />
           <TextField
+            data-testid="SubscriptKeyInput"
+            defaultValue={formData.subscriptKey}
+            errorMessage={formData.errors.subscriptKey || ''}
+            label={formatMessage('QnA subscript key:')}
+            onChange={updateForm('subscriptKey')}
+            onRenderLabel={onRenderLabel(Tips.SUBSCRIPT_KEY)}
+          />
+          <TextField
             disabled
             defaultValue={formData.authoringRegion || defaultFields.authoringRegion}
             label={formatMessage('Authoring Region')}
@@ -187,13 +198,13 @@ export const PublishLuis = (props) => {
         <PrimaryButton disabled={workState === STATE.PUBLISHPENDING} text={formatMessage('OK')} onClick={handlePublish}>
           {workState === STATE.PUBLISHPENDING ? <Spinner size={SpinnerSize.small} /> : null}
         </PrimaryButton>
-        <DefaultButton data-testid={'publish-LUIS-models-cancel'} text={formatMessage('Cancel')} onClick={onDismiss} />
+        <DefaultButton data-testid={'publish-models-cancel'} text={formatMessage('Cancel')} onClick={onDismiss} />
       </DialogFooter>
     </Fragment>
   );
 };
 
-export function PublishLuisModal(props) {
+export function PublishModal(props) {
   const { isOpen, onDismiss, onPublish, botName } = props;
   const [workState, setWorkState] = useState(STATE.INPUT);
   const [response, setResponse] = useState({});
@@ -217,7 +228,7 @@ export function PublishLuisModal(props) {
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage('Publish LUIS models'),
+        title: formatMessage('Publish models'),
         styles: dialog,
       }}
       hidden={!isOpen}
@@ -232,13 +243,13 @@ export function PublishLuisModal(props) {
         <DeployFailure error={response.error} tryAgain={() => setWorkState(STATE.INPUT)} onDismiss={handleDismiss} />
       )}
       {(workState === STATE.INPUT || workState === STATE.PUBLISHPENDING) && (
-        <PublishLuis botName={botName} workState={workState} onDismiss={handleDismiss} onPublish={handlePublish} />
+        <PublishComponent botName={botName} workState={workState} onDismiss={handleDismiss} onPublish={handlePublish} />
       )}
     </Dialog>
   );
 }
 
-PublishLuisModal.propTypes = {
+PublishModal.propTypes = {
   isOpen: PropTypes.bool,
   onDismiss: PropTypes.func,
   onPublish: PropTypes.func,

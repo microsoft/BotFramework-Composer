@@ -6,7 +6,7 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 
 import { dialog, dialogModal } from '../../pages/language-understanding/styles';
-import { PublishLuis } from '../../pages/language-understanding/publish-luis-modal';
+import { PublishComponent } from '../../pages/language-understanding/publish-luis-modal';
 
 interface IPublishLuisDialogProps {
   botName: string;
@@ -22,7 +22,7 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage('Publish LUIS models'),
+        title: formatMessage('Publish models'),
         styles: dialog,
       }}
       hidden={!isOpen}
@@ -33,7 +33,7 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
       }}
       onDismiss={onDismiss}
     >
-      <PublishLuis botName={botName} onDismiss={onDismiss} onPublish={onPublish} />
+      <PublishComponent botName={botName} onDismiss={onDismiss} onPublish={onPublish} />
     </Dialog>
   );
 };

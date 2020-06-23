@@ -59,6 +59,8 @@ export enum ActionTypes {
   REMOVE_QNA = 'REMOVE_QNA',
   PUBLISH_LU_SUCCCESS = 'PUBLISH_LU_SUCCCESS',
   PUBLISH_LU_FAILED = 'PUBLISH_LU_FAILED',
+  PUBLISH_QNA_SUCCCESS = 'PUBLISH_QNA_SUCCCESS',
+  PUBLISH_QNA_FAILED = 'PUBLISH_QNA_FAILED',
   SAVE_TEMPLATE_ID = 'SAVE_TEMPLATE_ID',
   GET_STORAGE_SUCCESS = 'GET_STORAGE_SUCCESS',
   GET_STORAGE_FAILURE = 'GET_STORAGE_FAILURE',
@@ -113,6 +115,7 @@ export const Tips = {
   ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
     models independently from each other tied to the source control.`),
   AUTHORING_KEY: formatMessage('A primary key is created automatically when you create a LUIS account.'),
+  SUBSCRIPT_KEY: formatMessage('A subscript key is created automatically when you create a QnA account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
   DEFAULT_LANGUAGE: formatMessage(
     `Configures default language model to use if there is no culture code in the file name (Default:en-us)`
@@ -125,10 +128,12 @@ export const Links = {
 
 export const Text = {
   LUISDEPLOY: formatMessage(
-    `Your bot is using LUIS for natural language understanding. If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
+    `Your bot is using LUIS and QnA for natural language understanding. If you already have a LUIS and QnA account, provide the information below. If you do not have an account yet, create a (free) account first.`
   ),
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
+  QNADEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
+  QNADEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
   CONNECTBOTFAILURE: formatMessage('Sorry, something went wrong with connecting bot runtime'),
   DOTNETFAILURE: formatMessage('Composer needs .NET Core SDK'),
 };
@@ -140,6 +145,10 @@ export enum LuisConfig {
   PROJECT_NAME = 'name',
   REGION = 'authoringRegion',
   LANGUAGE = 'defaultLanguage',
+}
+
+export enum QnaConfig {
+  SUBSCRIPT_KEY = 'subscriptKey',
 }
 
 export const FileTypes = {
