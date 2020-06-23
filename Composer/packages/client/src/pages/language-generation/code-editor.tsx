@@ -105,7 +105,6 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
   const _onChange = useCallback(
     (value) => {
-      setContent(value);
       if (!file) return;
       if (inlineMode) {
         if (!template) return;

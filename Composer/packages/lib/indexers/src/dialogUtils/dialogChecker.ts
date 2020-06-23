@@ -16,7 +16,7 @@ export const createPath = (path: string, type: string): string => {
     if (/\[|\]/.test(x)) {
       const reg = /\[.*\]/;
       x = x.replace(reg, '');
-      return ~values(FieldNames).indexOf(x);
+      return values(FieldNames).includes(x);
     }
   });
 

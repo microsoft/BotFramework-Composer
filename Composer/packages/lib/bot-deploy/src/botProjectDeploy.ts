@@ -5,6 +5,8 @@ import * as path from 'path';
 import * as util from 'util';
 
 import { ResourceManagementClient } from '@azure/arm-resources';
+import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
+import { AzureBotService } from '@azure/arm-botservice';
 import {
   Deployment,
   DeploymentsCreateOrUpdateResponse,
@@ -492,7 +494,7 @@ export class BotProjectDeploy {
         const luisAppId = luisAppIds[k];
         this.logger({
           status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Assigning to luis app id: ${luisAppIds}`,
+          message: `Assigning to luis app id: ${luisAppId}`,
         });
 
         const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
@@ -595,7 +597,10 @@ export class BotProjectDeploy {
         message: 'Publish To Azure Success!',
       });
     } catch (error) {
-      console.log(error);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
+        message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+      });
       throw error;
     }
   }
@@ -655,7 +660,7 @@ export class BotProjectDeploy {
     createLuisAuthoringResource = true,
     createCosmosDb = true,
     createStorage = true,
-    createAppInsignts = true
+    createAppInsights = true
   ) {
     if (!this.tenantId) {
       this.tenantId = await this.getTenantId();
@@ -732,7 +737,7 @@ export class BotProjectDeploy {
       name,
       createLuisAuthoringResource,
       createLuisResource,
-      createAppInsignts,
+      createAppInsights,
       createCosmosDb,
       createStorage
     );
@@ -808,6 +813,78 @@ export class BotProjectDeploy {
       });
 
       throw new Error(`! Error: ${validation.error}`);
+    }
+
+    // If application insights created, update the application insights settings in azure bot service
+    if (createAppInsights) {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> Linking Application Insights settings to Bot Service ...`,
+      });
+
+      const appinsightsClient = new ApplicationInsightsManagementClient(this.creds, this.subId);
+      const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
+      const appinsightsId = appComponents.appId;
+      const appinsightsInstrumentationKey = appComponents.instrumentationKey;
+      const apiKeyOptions = {
+        name: `${resourceGroupName}-provision-${timeStamp}`,
+        linkedReadProperties: [
+          `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/api`,
+          `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/agentconfig`,
+        ],
+        linkedWriteProperties: [
+          `/subscriptions/${this.subId}/resourceGroups/${resourceGroupName}/providers/microsoft.insights/components/${resourceGroupName}/annotations`,
+        ],
+      };
+      const appinsightsApiKeyResponse = await appinsightsClient.aPIKeys.create(
+        resourceGroupName,
+        resourceGroupName,
+        apiKeyOptions
+      );
+      const appinsightsApiKey = appinsightsApiKeyResponse.apiKey;
+
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights AppId: ${appinsightsId} ...`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights InstrumentationKey: ${appinsightsInstrumentationKey} ...`,
+      });
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: `> AppInsights ApiKey: ${appinsightsApiKey} ...`,
+      });
+
+      if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
+        const botServiceClient = new AzureBotService(this.creds, this.subId);
+        const botCreated = await botServiceClient.bots.get(resourceGroupName, name);
+        if (botCreated.properties) {
+          botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
+          botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
+          botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
+          const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, name, botCreated);
+
+          if (botUpdateResult._response.status != 200) {
+            this.logger({
+              status: BotProjectDeployLoggerType.PROVISION_ERROR,
+              message: `! Something went wrong while trying to link Application Insights settings to Bot Service Result: ${JSON.stringify(
+                botUpdateResult
+              )}`,
+            });
+            throw new Error(`Linking Application Insights Failed.`);
+          }
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_INFO,
+            message: `> Linking Application Insights settings to Bot Service Success!`,
+          });
+        } else {
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_WARNING,
+            message: `! The Bot doesn't have a keys properties to update.`,
+          });
+        }
+      }
     }
 
     // Validate that everything was successfully created.
