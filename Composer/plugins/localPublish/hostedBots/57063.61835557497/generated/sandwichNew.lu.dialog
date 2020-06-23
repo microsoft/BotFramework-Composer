@@ -1,7 +1,0 @@
-{
-    "$kind": "Microsoft.MultiLanguageRecognizer",
-    "recognizers": {
-        "en-us": "sandwichNew.en-us.lu",
-        "": "sandwichNew.en-us.lu"
-    }
-}

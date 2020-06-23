@@ -1,7 +1,0 @@
-{
-    "$kind": "Microsoft.MultiLanguageRecognizer",
-    "recognizers": {
-        "en-us": "swagger.en-us.lu",
-        "": "swagger.en-us.lu"
-    }
-}

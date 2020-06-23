@@ -1,7 +1,0 @@
-{
-    "$kind": "Microsoft.MultiLanguageRecognizer",
-    "recognizers": {
-        "en-us": "formdilaog.en-us.lu",
-        "": "formdilaog.en-us.lu"
-    }
-}

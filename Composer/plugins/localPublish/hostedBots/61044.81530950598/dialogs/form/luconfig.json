@@ -1,8 +1,0 @@
-
-{
-    "botName": "form",
-    "deleteOldVersion": true, 
-    "out": ".",
-    "dialog": "multiLanguage",
-    "models": ["en-us/form.en-us.lu"]
-}

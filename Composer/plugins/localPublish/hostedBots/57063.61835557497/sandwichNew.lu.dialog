@@ -1,7 +1,0 @@
-{
-    "$kind": "Microsoft.LuisRecognizer",
-    "id": "LUIS_sandwichNew",
-    "applicationId": "=settings.luis.sandwichNew_en_us_lu",
-    "endpoint": "=settings.luis.endpoint",
-    "endpointKey": "=settings.luis.endpointKey"
-}

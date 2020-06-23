@@ -1,1 +1,0 @@
-C:/Users/julong/Documents/code/BotBuilder-Samples/experimental/generation/generator/bin/run dialog:generate swagger.schema -o . --singleton --force --verbose 

@@ -1,8 +1,0 @@
-
-{
-    "botName": "toDO",
-    "deleteOldVersion": true, 
-    "out": ".",
-    "dialog": "multiLanguage",
-    "models": ["en-us/toDO.en-us.lu"]
-}

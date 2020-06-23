@@ -1,8 +1,0 @@
-
-{
-    "botName": "test",
-    "deleteOldVersion": true, 
-    "out": ".",
-    "dialog": "multiLanguage",
-    "models": ["en-us/test.en-us.lu"]
-}
