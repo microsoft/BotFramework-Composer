@@ -2,18 +2,23 @@
 // Licensed under the MIT License.
 
 /**
- * luUtil.ts is a single place handle lu file operation.
+ * qnaUtil.ts is a single place handle lu file operation.
  * it's designed have no state, input text file, output text file.
  */
 
 import isEmpty from 'lodash/isEmpty';
-import { QnaSection } from '@bfc/shared';
+import { QnASection } from '@bfc/shared';
+import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
+
+import { qnaIndexer } from '../qnaIndexer';
+
+const { luParser, sectionOperator } = sectionHandler;
 
 const NEWLINE = '\r\n';
 
-export function contentParse(content: string): QnaSection[] {
+export function contentParse(content: string): QnASection[] {
   const intentTexts = content.split('# ?').filter((intentText) => intentText.trim() !== '');
-  const intentSections: QnaSection[] = [];
+  const intentSections: QnASection[] = [];
   intentTexts.forEach((text) => {
     const [question, answer] = text
       .trim()
@@ -27,7 +32,7 @@ export function contentParse(content: string): QnaSection[] {
   return intentSections;
 }
 
-function generateContent(intentSections: QnaSection[]): string {
+function generateContent(intentSections: QnASection[]): string {
   const intentTexts: string[] = [];
   intentSections.forEach((section) => {
     const question = '# ? ' + section.Question.replace('-', '').trim();
@@ -41,7 +46,7 @@ function generateContent(intentSections: QnaSection[]): string {
  * @param intentName intent Name.
  * @param {Question, Answer} intent the updates. if intent is empty will do remove.
  */
-export function updateIntent(content: string, intentName: string, intent: QnaSection | null): string {
+export function updateIntent(content: string, intentName: string, intent: QnASection | null): string {
   let sections = contentParse(content);
   // if intent is null, do remove
   // and if remove target not exist return origin content;
@@ -76,7 +81,7 @@ export function updateIntent(content: string, intentName: string, intent: QnaSec
  * @param content origin qna file content
  * @param {Qunstion, Answer} intent the adds.
  */
-export function addIntent(content: string, { Question, Answer }: QnaSection): string {
+export function addIntent(content: string, { Question, Answer }: QnASection): string {
   const intentName = Question;
   return updateIntent(content, intentName, { Question, Answer });
 }
@@ -88,4 +93,45 @@ export function addIntent(content: string, { Question, Answer }: QnaSection): st
  */
 export function removeIntent(content: string, intentName: string): string {
   return updateIntent(content, intentName, null);
+}
+
+export function checkIsSingleSection(content: string) {
+  const { Sections } = luParser.parse(content);
+  return Sections.length === 1;
+}
+
+export function addSection(content: string, newContent: string) {
+  const resource = luParser.parse(content);
+  const res = new sectionOperator(resource).addSection(newContent);
+  return res.Content;
+}
+
+export function updateSection(indexId: number, content: string, newContent: string) {
+  if (indexId < 0) return content;
+  const resource = luParser.parse(content);
+  const { Sections } = resource;
+  const sectionId = Sections[indexId].Id;
+  const res = new sectionOperator(resource).updateSection(sectionId, newContent);
+  return res.Content;
+}
+
+export function removeSection(indexId: number, content: string) {
+  if (indexId < 0) return content;
+  const resource = luParser.parse(content);
+  const res = new sectionOperator(resource).deleteSection(indexId);
+  return res.Content;
+}
+
+export function insertSection(indexId: number, content: string, newContent: string) {
+  if (indexId < 0) return content;
+  const resource = luParser.parse(content);
+  if (resource.Sections.length === 0) {
+    return new sectionOperator(resource).addSection(newContent).Content;
+  }
+  return new sectionOperator(resource).insertSection(indexId, newContent).Content;
+}
+
+export function getParsedDiagnostics(newContent: string) {
+  const { diagnostics } = qnaIndexer.parse(newContent);
+  return diagnostics;
 }

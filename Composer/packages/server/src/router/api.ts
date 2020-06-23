@@ -10,7 +10,6 @@ import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
 
 const router: Router = express.Router({});
-
 router.post('/projects', ProjectController.createProject);
 router.get('/projects', ProjectController.getAllProjects);
 router.get('/projects/recent', ProjectController.getRecentProjects);
