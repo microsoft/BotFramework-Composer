@@ -39,25 +39,27 @@ const PluginsPage: React.FC<RouteComponentProps> = () => {
   }, []);
 
   useEffect(() => {
-    const source = axios.CancelToken.source();
+    if (pluginName !== null) {
+      const source = axios.CancelToken.source();
 
-    const timer = setTimeout(() => {
-      httpClient
-        .get(`/plugins/search?q=${pluginName}`, { cancelToken: source.token })
-        .then((res) => {
-          setMatchingPlugins(res.data);
-        })
-        .catch((err) => {
-          if (!axios.isCancel(err)) {
-            console.error(err);
-          }
-        });
-    }, 200);
+      const timer = setTimeout(() => {
+        httpClient
+          .get(`/plugins/search?q=${pluginName}`, { cancelToken: source.token })
+          .then((res) => {
+            setMatchingPlugins(res.data);
+          })
+          .catch((err) => {
+            if (!axios.isCancel(err)) {
+              console.error(err);
+            }
+          });
+      }, 200);
 
-    return () => {
-      source.cancel('User interruption');
-      clearTimeout(timer);
-    };
+      return () => {
+        source.cancel('User interruption');
+        clearTimeout(timer);
+      };
+    }
   }, [pluginName]);
 
   const installedColumns: IColumn[] = [
