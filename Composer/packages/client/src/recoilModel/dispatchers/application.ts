@@ -7,8 +7,16 @@ import debounce from 'lodash/debounce';
 import merge from 'lodash/merge';
 import { UserSettings } from '@bfc/shared';
 
-import { appUpdateState, announcementState, userSettingsState, onboardingState } from '../atoms/appState';
-import { AppUpdaterStatus } from '../../constants';
+import {
+  appUpdateState,
+  announcementState,
+  userSettingsState,
+  onboardingState,
+  currentUserState,
+  CurrentUser,
+  creationFlowStatusState,
+} from '../atoms/appState';
+import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import { isElectron } from '../../utils/electronUtil';
 import storage from '../../utils/storage';
 
@@ -103,6 +111,29 @@ export const applicationDispatcher = () => {
     }
   );
 
+  const setUserToken = useRecoilCallback<[Partial<CurrentUser>], void>(({ set }: CallbackInterface) => (user = {}) => {
+    set(currentUserState, () => ({
+      ...user,
+      token: user.token || null,
+      sessionExpired: false,
+    }));
+  });
+
+  const setUserSessionExpired = useRecoilCallback<[{ expired: boolean }], void>(
+    ({ set }: CallbackInterface) => ({ expired }) => {
+      set(currentUserState, (currentUser: CurrentUser) => ({
+        ...currentUser,
+        sessionExpired: !!expired,
+      }));
+    }
+  );
+
+  const setCreationFlowStatus = useRecoilCallback<[CreationFlowStatus], void>(
+    ({ set }: CallbackInterface) => (status: CreationFlowStatus) => {
+      set(creationFlowStatusState, status);
+    }
+  );
+
   return {
     setAppUpdateStatus,
     setAppUpdateShowing,
@@ -112,5 +143,8 @@ export const applicationDispatcher = () => {
     setUserSettings,
     onboardingSetComplete,
     onboardingAddCoachMarkRef,
+    setUserToken,
+    setUserSessionExpired,
+    setCreationFlowStatus,
   };
 };
