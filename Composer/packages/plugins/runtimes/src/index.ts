@@ -17,7 +17,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
   // register the bundled c# runtime used by the local publisher with the eject feature
   composer.addRuntimeTemplate({
     key: 'csharp-azurewebapp',
-    name: 'C#',
+    name: 'C# (Webapp)',
     startCommand: 'dotnet run --project azurewebapp',
     build: async (runtimePath: string, _project: any) => {
       // do stuff
@@ -86,7 +86,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
 
   composer.addRuntimeTemplate({
     key: 'csharp-azurefunctions',
-    name: 'C#',
+    name: 'C# (Azure Functions)',
     startCommand: 'dotnet run --project azurefunctions',
     build: async (runtimePath: string, _project: any) => {
       // do stuff
