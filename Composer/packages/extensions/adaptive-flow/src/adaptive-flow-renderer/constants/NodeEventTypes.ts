@@ -3,6 +3,8 @@
 
 export enum NodeEventTypes {
   Focus = 'event.view.focus',
+  CtrlClick = 'event.view.ctrl-click',
+  ShiftClick = 'event.view.shift-click',
   FocusEvent = 'event.view.focus-event',
   MoveCursor = 'event.view.move-cursor',
   OpenDialog = 'event.nav.opendialog',
