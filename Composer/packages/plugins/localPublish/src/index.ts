@@ -256,6 +256,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // ensure the specified runtime path exists
       if (!fs.existsSync(botDir)) {
         reject(`Runtime path ${botDir} does not exist.`);
+        return;
       }
 
       // take the 0th item off the array, leaving just the args
@@ -431,7 +432,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
     eject: async (project, localDisk: IFileStorage) => {
-      const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
+      const sourcePath = path.resolve(__dirname, '../../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
