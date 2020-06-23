@@ -5,6 +5,7 @@ import path from 'path';
 import childProcess from 'child_process';
 import { promisify } from 'util';
 
+import filter from 'lodash/filter';
 import assign from 'lodash/assign';
 import { pluginLoader } from '@bfc/plugin-loader';
 
@@ -43,8 +44,10 @@ export class PluginManager {
     }
   }
 
-  public getAll() {
-    return Store.get<PluginConfig[]>('plugins', []);
+  public getAll(opts: { enabled?: boolean } = {}) {
+    const all = Store.get<PluginConfig[]>('plugins', []);
+
+    return filter(all, opts) as PluginConfig[];
   }
 
   public find(id: string) {
@@ -76,6 +79,10 @@ export class PluginManager {
       // TODO: plugins can provide default configuration
       configuration: {},
     });
+  }
+
+  public async loadAll() {
+    await Promise.all(this.getAll({ enabled: true }).map((p) => this.load(p.id)));
   }
 
   public async load(id: string) {
@@ -138,7 +145,7 @@ export class PluginManager {
       if (Array.isArray(result)) {
         result.forEach((searchResult) => {
           const { name, keywords = [], version, description, links } = searchResult;
-          if (!this.cache.has(name) && keywords.includes('botframework-composer')) {
+          if (keywords.includes('botframework-composer')) {
             const url = links?.npm ?? '';
             this.cache.set(name, {
               id: name,

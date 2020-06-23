@@ -24,6 +24,7 @@ import { apiRouter } from './router/api';
 import { BASEURL } from './constants';
 import { attachLSPServer } from './utility/attachLSP';
 import log from './logger';
+import { PluginManager } from './models/plugins';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
@@ -45,8 +46,9 @@ export async function start(pluginDir?: string): Promise<number | string> {
   pluginLoader.useExpress(app);
 
   // load all the plugins that exist in the folder
-  pluginDir = pluginDir || path.resolve(__dirname, '../../plugins');
-  await pluginLoader.loadPluginsFromFolder(pluginDir);
+  // pluginDir = pluginDir || path.resolve(__dirname, '../../plugins');
+  // await pluginLoader.loadPluginsFromFolder(pluginDir);
+  await PluginManager.loadAll();
 
   const { login, authorize } = getAuthProvider();
 
