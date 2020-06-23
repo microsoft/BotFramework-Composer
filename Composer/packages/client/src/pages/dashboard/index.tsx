@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
-import React, { useContext, useEffect } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { List } from 'office-ui-fabric-react/lib/List';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -13,7 +12,6 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { BotStatus } from '../../constants';
 import { BotState } from '../../store/types';
-import { StoreContext } from '../../store';
 
 import { root, header, headerText, content, icon } from './styles';
 
@@ -54,11 +52,6 @@ function renderCell(item?: Partial<BotState>) {
 }
 
 export const Dashboard: React.FC<RouteComponentProps> = () => {
-  const { state } = useContext(StoreContext);
-  const { botEndpoints } = state;
-
-  console.log(botEndpoints);
-
   return (
     <div css={root}>
       <div css={header}>
