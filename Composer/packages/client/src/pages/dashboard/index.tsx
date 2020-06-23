@@ -4,6 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
+import React, { useContext, useEffect } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import { List } from 'office-ui-fabric-react/lib/List';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -12,51 +13,34 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { BotStatus } from '../../constants';
 import { BotState } from '../../store/types';
+import { StoreContext } from '../../store';
 
 import { root, header, headerText, content, icon } from './styles';
 
-type BotNode = Partial<BotState> & {
-  children: Array<BotNode>;
-};
-
-function addDepth(array: Array<{ depth?: number; children?: Array<{}> }>, depth = 0) {
-  for (const el of array) {
-    el.depth = depth;
-    if (el.children != null && el.children?.length > 0) {
-      addDepth(el.children, depth + 1);
-    }
-  }
-}
-
-const EXAMPLE_DATA: Array<BotNode> = [
+const EXAMPLE_DATA: Array<Partial<BotState>> = [
   {
     projectId: '12345.6789',
     botName: 'Sample Bot 1',
     botStatus: BotStatus.connected,
-    children: [],
   },
   {
     projectId: '9876.54321',
     botName: 'Sample Bot 2',
     botStatus: BotStatus.failed,
-    children: [
-      {
-        projectId: '11111.1111',
-        botName: 'Skill 2A',
-        botStatus: BotStatus.published,
-        children: [],
-      },
-      {
-        projectId: '22222.2222',
-        botName: 'Skill 2B',
-        botStatus: BotStatus.publishing,
-        children: [],
-      },
-    ],
+  },
+  {
+    projectId: '11111.1111',
+    botName: 'Skill 2A',
+    botStatus: BotStatus.published,
+  },
+  {
+    projectId: '22222.2222',
+    botName: 'Skill 2B',
+    botStatus: BotStatus.publishing,
   },
 ];
 
-function renderCell(item?: BotNode) {
+function renderCell(item?: Partial<BotState>) {
   if (item == null) return;
   return (
     <div style={{ display: 'flex', height: '36px', width: '100%' }}>
@@ -70,7 +54,10 @@ function renderCell(item?: BotNode) {
 }
 
 export const Dashboard: React.FC<RouteComponentProps> = () => {
-  addDepth(EXAMPLE_DATA);
+  const { state } = useContext(StoreContext);
+  const { botEndpoints } = state;
+
+  console.log(botEndpoints);
 
   return (
     <div css={root}>
