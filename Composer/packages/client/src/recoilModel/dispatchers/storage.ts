@@ -5,7 +5,7 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import isArray from 'lodash/isArray';
 
 import httpClient from '../../utils/httpUtil';
-import { storages, storageFileLoadingStatus, focusedStorageFolder } from '../atoms/appState';
+import { storagesState, storageFileLoadingStatus, focusedStorageFolderState } from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils';
 
@@ -26,7 +26,7 @@ export const storageDispatcher = () => {
       try {
         const response = await httpClient.put(`/storages`);
         if (isArray(response.data)) {
-          set(storages, [...response.data]);
+          set(storagesState, [...response.data]);
         }
       } catch (ex) {
         // TODO: Handle exceptions
@@ -41,7 +41,7 @@ export const storageDispatcher = () => {
       try {
         const response = await httpClient.put(`/storages/currentPath`, { path, storageId });
         if (isArray(response.data)) {
-          set(storages, [...response.data]);
+          set(storagesState, [...response.data]);
         }
       } catch (ex) {
         // TODO: Handle exceptions
@@ -56,7 +56,7 @@ export const storageDispatcher = () => {
       try {
         const response = await httpClient.post(`/storages`, storageData);
         if (isArray(response.data)) {
-          set(storages, [...response.data]);
+          set(storagesState, [...response.data]);
         }
       } catch (ex) {
         // TODO: Handle exceptions
@@ -71,7 +71,7 @@ export const storageDispatcher = () => {
       try {
         const response = await httpClient.get(`/storage/${fileName}`);
         if (isArray(response.data)) {
-          set(storages, [...response.data]);
+          set(storagesState, [...response.data]);
         }
       } catch (ex) {
         // TODO: Handle exceptions
@@ -100,7 +100,7 @@ export const storageDispatcher = () => {
           return files;
         }, []);
         setStorageFileLoadingStatus('success');
-        set(focusedStorageFolder, fetchedFocusStorage);
+        set(focusedStorageFolderState, fetchedFocusStorage);
       } catch (ex) {
         // TODO: Handle exceptions
         logMessage(`Error fetching focussed storage folder: ${ex}`);
