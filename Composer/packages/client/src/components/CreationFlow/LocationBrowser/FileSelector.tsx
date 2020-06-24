@@ -46,7 +46,7 @@ type SortState = {
   descending: boolean;
 };
 
-const renderIcon = (file: File) => {
+const _renderIcon = (file: File) => {
   const iconName = getFileIconName(file);
   if (iconName === FileTypes.FOLDER) {
     return <Icon iconName="OpenFolderHorizontal" style={{ fontSize: '16px' }} />;
@@ -60,7 +60,7 @@ const renderIcon = (file: File) => {
   return <img alt={`${iconName} file icon`} className={detailListClass.fileIconImg} src={url} />;
 };
 
-const renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) => {
+const _renderNameColumn = (onFileChosen: (file: File) => void) => (file: File) => {
   const iconName = getFileIconName(file);
   return (
     <div data-is-focusable css={tableCell}>
@@ -105,7 +105,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       fieldName: 'name',
       minWidth: 16,
       maxWidth: 16,
-      onRender: renderIcon,
+      onRender: _renderIcon,
     },
     {
       key: 'name',
@@ -118,7 +118,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: renderNameColumn(onFileChosen),
+      onRender: _renderNameColumn(onFileChosen),
       isPadded: true,
     },
     {

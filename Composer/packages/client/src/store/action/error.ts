@@ -14,7 +14,7 @@ export const setError: ActionCreator = ({ dispatch }, error) => {
   });
 };
 
-const setMessageHelper = debounce((dispatch, message: string) => {
+const _setMessage = debounce((dispatch, message: string) => {
   dispatch({
     type: ActionTypes.SET_MESSAGE,
     payload: message,
@@ -31,5 +31,5 @@ const setMessageHelper = debounce((dispatch, message: string) => {
 }, 500);
 
 export const setMessage: ActionCreator = ({ dispatch }, message) => {
-  setMessageHelper(dispatch, message);
+  _setMessage(dispatch, message);
 };
