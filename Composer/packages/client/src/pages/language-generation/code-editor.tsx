@@ -103,7 +103,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     [file, projectId]
   );
 
-  const onChange = useCallback(
+  const _onChange = useCallback(
     (value) => {
       if (!file) return;
       if (inlineMode) {
@@ -142,7 +142,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
       }}
       lgOption={lgOption}
       value={content}
-      onChange={onChange}
+      onChange={_onChange}
       onChangeSettings={handleSettingsChange}
     />
   );

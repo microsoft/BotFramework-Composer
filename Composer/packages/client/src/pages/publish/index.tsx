@@ -151,15 +151,15 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   useEffect(() => {
     if (settings.publishTargets && settings.publishTargets.length > 0) {
-      const selected = settings.publishTargets.find((item) => item.name === selectedTargetName);
-      setSelectedTarget(selected);
+      const _selected = settings.publishTargets.find((item) => item.name === selectedTargetName);
+      setSelectedTarget(_selected);
       // load publish histories
       if (selectedTargetName === 'all') {
         for (const target of settings.publishTargets) {
           actions.getPublishHistory(projectId, target);
         }
-      } else if (selected) {
-        actions.getPublishHistory(projectId, selected);
+      } else if (_selected) {
+        actions.getPublishHistory(projectId, _selected);
       }
     }
   }, [projectId, selectedTargetName]);
@@ -167,13 +167,13 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   // once history is loaded, display it
   useEffect(() => {
     if (settings.publishTargets && selectedTargetName === 'all') {
-      let histories: any[] = [];
-      const groups: any[] = [];
+      let _histories: any[] = [];
+      const _groups: any[] = [];
       let startIndex = 0;
       for (const target of settings.publishTargets) {
         if (publishHistory[target.name]) {
-          histories = histories.concat(publishHistory[target.name]);
-          groups.push({
+          _histories = _histories.concat(publishHistory[target.name]);
+          _groups.push({
             key: target.name,
             name: target.name,
             startIndex: startIndex,
@@ -183,8 +183,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           startIndex += publishHistory[target.name].length;
         }
       }
-      setGroups(groups);
-      setThisPublishHistory(histories);
+      setGroups(_groups);
+      setThisPublishHistory(_histories);
     } else if (selectedTargetName && publishHistory[selectedTargetName]) {
       setThisPublishHistory(publishHistory[selectedTargetName]);
       setGroups([
@@ -213,14 +213,14 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
-      const target = (settings.publishTargets || []).concat([
+      const _target = (settings.publishTargets || []).concat([
         {
           name,
           type,
           configuration,
         },
       ]);
-      await actions.setSettings(projectId, { ...settings, publishTargets: target });
+      await actions.setSettings(projectId, { ...settings, publishTargets: _target });
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
@@ -232,15 +232,15 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         return;
       }
 
-      const targets = settings.publishTargets ? [...settings.publishTargets] : [];
+      const _targets = settings.publishTargets ? [...settings.publishTargets] : [];
 
-      targets[editTarget.index] = {
+      _targets[editTarget.index] = {
         name,
         type,
         configuration,
       };
 
-      await actions.setSettings(projectId, { ...settings, publishTargets: targets });
+      await actions.setSettings(projectId, { ...settings, publishTargets: _targets });
 
       onSelectTarget(name);
     },
@@ -331,8 +331,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
-          const target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await actions.setSettings(projectId, { ...settings, publishTargets: target });
+          const _target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
+          await actions.setSettings(projectId, { ...settings, publishTargets: _target });
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');
