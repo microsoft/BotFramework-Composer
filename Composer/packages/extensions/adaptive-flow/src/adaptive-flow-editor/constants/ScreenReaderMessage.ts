@@ -4,6 +4,8 @@
 export enum ScreenReaderMessage {
   EventFocused = 'Event focused',
   ActionFocused = 'Action focused',
+  ActionUnfocused = 'Action unfocused',
+  RangeSelection = 'Range Selection',
   DialogOpened = 'Dialog opened',
   ActionDeleted = 'Action deleted',
   ActionsDeleted = 'Actions deleted',
