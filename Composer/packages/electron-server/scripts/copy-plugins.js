@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const { resolve } = require('path');
 const electronBuildConfig = require('../electron-builder-config.json');
 
-const source = resolve(__dirname, '../../plugins');
+const source = resolve(__dirname, '../../../plugins');
 console.log('[copy-plugins.js] Copying plugins from: ', source);
 
 let destination;
