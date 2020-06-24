@@ -41,7 +41,7 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
-    "build:plugins": "wsrun -lt -p @bfc/plugin-samples @bfc/plugin-azure-publish @bfc/plugin-azure-functions-publish @bfc/plugin-localpublish  @bfc/plugin-runtimes -c build",
+    "build:plugins": "wsrun -lt -p @bfc/plugin-samples @bfc/plugin-azure-publish @bfc/plugin-localpublish  @bfc/plugin-runtimes -c build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",

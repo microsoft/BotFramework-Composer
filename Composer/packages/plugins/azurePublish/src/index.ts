@@ -14,7 +14,6 @@ import schema from './schema';
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
 const PERSIST_HISTORY = false;
-const DEFAULT_RUNTIME = 'azurewebapp';
 
 const instructions = `To create a publish configuration, follow the instructions in the README file in your bot project folder.`;
 
@@ -42,7 +41,9 @@ export default async (composer: any): Promise<void> => {
     private historyFilePath: string;
     private histories: any;
     private logMessages: any[];
-    constructor() {
+    private mode: string;
+
+    constructor(mode?: string) {
       this.histories = {};
       this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
       if (PERSIST_HISTORY) {
@@ -50,6 +51,7 @@ export default async (composer: any): Promise<void> => {
       }
       this.publishingBots = {};
       this.logMessages = [];
+      this.mode = mode || 'azurewebapp';
     }
 
     private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../publishBots`);
@@ -120,10 +122,10 @@ export default async (composer: any): Promise<void> => {
      * @param resourcekey
      */
     private init = async (botFiles: any, settings: any, srcTemplate: string, resourcekey: string) => {
-      const botFolder = this.getBotFolder(resourcekey, DEFAULT_RUNTIME);
+      const botFolder = this.getBotFolder(resourcekey, this.mode);
       const runtimeFolder = this.getRuntimeFolder(resourcekey);
-      const settingsPath = this.getSettingsPath(resourcekey, DEFAULT_RUNTIME);
-      const manifestPath = this.getManifestDstDir(resourcekey, DEFAULT_RUNTIME);
+      const settingsPath = this.getSettingsPath(resourcekey, this.mode);
+      const manifestPath = this.getManifestDstDir(resourcekey, this.mode);
 
       // clean up from any previous deploys
       await this.cleanup(resourcekey);
@@ -215,12 +217,12 @@ export default async (composer: any): Promise<void> => {
             this.updateHistory(botId, profileName, { status: status.status, ...status.result });
           },
           accessToken: accessToken,
-          projPath: this.getProjectFolder(resourcekey, DEFAULT_RUNTIME),
+          projPath: this.getProjectFolder(resourcekey, this.mode),
           runtime: runtime,
         });
 
         // Perform the deploy
-        await azDeployer.deploy(project, name, environment, language, hostname, luisResource);
+        await azDeployer.deploy(project, profileName, name, environment, language, hostname, luisResource);
 
         // update status and history
         const status = this.getLoadingStatus(botId, profileName, jobId);
@@ -373,10 +375,7 @@ export default async (composer: any): Promise<void> => {
 
         // Append the settings found in the publishing profile to the appsettings.deployment.json file
         // TODO: this should be in the runtime plugin - write to appsettings.deployment.json
-        const resourcePath = path.resolve(
-          this.getProjectFolder(resourcekey, DEFAULT_RUNTIME),
-          'appsettings.deployment.json'
-        );
+        const resourcePath = path.resolve(this.getProjectFolder(resourcekey, this.mode), 'appsettings.deployment.json');
         const appSettings = await readJson(resourcePath);
         await writeJson(
           resourcePath,
@@ -446,6 +445,14 @@ export default async (composer: any): Promise<void> => {
   }
 
   const azurePublish = new AzurePublisher();
+  const azureFunctionsPublish = new AzurePublisher('azurefunctions');
 
   await composer.addPublishMethod(azurePublish, schema, instructions);
+  await composer.addPublishMethod(
+    azureFunctionsPublish,
+    schema,
+    instructions,
+    '@bfc/plugin-azure-functions-publish',
+    'Publish bot to Azure Functions (Preview)'
+  );
 };

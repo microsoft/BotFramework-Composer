@@ -42,6 +42,7 @@ export class BotProjectDeploy {
    */
   public async deploy(
     project: any,
+    profileName: string,
     name: string,
     environment: string,
     language?: string,
@@ -58,7 +59,7 @@ export class BotProjectDeploy {
       // STEP 2: BUILD
       // run any platform specific build steps.
       // this returns a pathToArtifacts where the deployable version lives.
-      const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project);
+      const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project, profileName);
 
       // STEP 3: UPDATE LUIS
       // Do the LUIS build if LUIS settings are present
