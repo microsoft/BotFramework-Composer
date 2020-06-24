@@ -51,7 +51,7 @@ export const applicationDispatcher = () => {
     }
   );
 
-  const setAppUpdateError = useRecoilCallback<[boolean], void>(({ set }: CallbackInterface) => (error: any) => {
+  const setAppUpdateError = useRecoilCallback<[any], void>(({ set }: CallbackInterface) => (error: any) => {
     set(appUpdateState, (updaterState) => {
       return {
         ...updaterState,

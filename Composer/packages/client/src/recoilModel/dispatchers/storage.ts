@@ -30,7 +30,7 @@ export const storageDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(`Error fetching storages: ${ex}`);
+        //logMessage(`Error fetching storages: ${ex}`);
       }
     }
   );

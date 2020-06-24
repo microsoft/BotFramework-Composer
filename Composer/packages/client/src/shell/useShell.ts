@@ -43,10 +43,10 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const lgFiles = useRecoilValue(lgFilesState);
   const skills = useRecoilValue(skillsState);
   const schemas = useRecoilValue(schemasState);
+  const { setMessage, updateDialog, createDialogBegin } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi();
   const luApi = useLuApi();
-  const { updateDialog, createDialogBegin } = useRecoilValue(dispatcherState);
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
@@ -179,7 +179,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     redo: actions.redo,
     addCoachMarkRef: actions.onboardingAddCoachMarkRef,
     updateUserSettings: actions.updateUserSettings,
-    announce: actions.setMessage,
+    announce: setMessage,
     displayManifestModal: actions.displayManifestModal,
   };
 

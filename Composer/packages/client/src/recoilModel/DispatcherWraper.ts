@@ -4,17 +4,16 @@
 import { useRef, useEffect } from 'react';
 import { useSetRecoilState, atom } from 'recoil';
 
-import dispatchers from './dispatchers';
+import createDispatchers, { Dispatcher } from './dispatchers';
 
-export const dispatcherState = atom<any | undefined>({
+export const dispatcherState = atom<Dispatcher>({
   key: 'dispatcherState',
-  default: undefined,
+  default: {} as Dispatcher,
 });
 
 export const DispatcherWraper = () => {
-  const combinedDispatchers = dispatchers.reduce((result, dispatcher) => ({ ...result, ...dispatcher() }), {});
   // Use a ref to ensure the dispatcher is only created once
-  const dispatcherRef = useRef(combinedDispatchers);
+  const dispatcherRef = useRef(createDispatchers());
 
   const setDispatcher = useSetRecoilState(dispatcherState);
 

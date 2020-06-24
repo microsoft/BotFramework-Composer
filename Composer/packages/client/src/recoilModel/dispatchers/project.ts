@@ -232,7 +232,7 @@ export const projectDispatcher = () => {
     }
   );
 
-  const setTemplateProjects = useRecoilCallback<[string, string], Promise<void>>(
+  const fetchTemplateProjects = useRecoilCallback<[string, string], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async () => {
       const { set } = callbackHelpers;
       try {
@@ -247,7 +247,7 @@ export const projectDispatcher = () => {
     }
   );
 
-  const setRuntimeTemplates = useRecoilCallback<[RuntimeTemplate[]], Promise<void>>(
+  const fetchRuntimeTemplates = useRecoilCallback<[], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async () => {
       const { set } = callbackHelpers;
       try {
@@ -268,8 +268,8 @@ export const projectDispatcher = () => {
     fetchProjectById,
     fetchRecentProjects,
     removeRecentProject,
-    updateBotEndpoint: updateBotEndpointForProject,
-    setTemplateProjects,
-    setRuntimeTemplates,
+    updateBotEndpointForProject,
+    fetchTemplateProjects,
+    fetchRuntimeTemplates,
   };
 };
