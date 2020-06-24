@@ -45,8 +45,20 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
       }
 
       // do the dotnet publish
-      await exec(`dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`);
-
+      try {
+        const {
+          stdout,
+          stderr,
+        } = await exec(`dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`, {
+          cwd: runtimePath,
+        });
+        console.log('OUTPUT FROM BUILD', stdout);
+        console.log('ERR FROM BUILD: ', stderr);
+      } catch (err) {
+        console.error('Error doing dotnet publish', err);
+        throw err;
+        return;
+      }
       // Then, copy the declarative assets into the build artifacts folder.
       const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
       const localBotPath = path.join(runtimePath, 'ComposerDialogs');

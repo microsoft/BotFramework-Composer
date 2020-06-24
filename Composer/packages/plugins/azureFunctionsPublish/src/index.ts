@@ -173,7 +173,7 @@ class AzurePublisher {
     const { name, environment, hostname, luisResource, language } = customizeConfiguration;
     try {
       // Perform the deploy
-      await this.azDeployer.deploy(project, name, environment, null, null, null, language, hostname, luisResource);
+      await this.azDeployer.deploy(project, name, environment, language, hostname, luisResource);
 
       // update status and history
       const status = this.getLoadingStatus(botId, profileName, jobId);

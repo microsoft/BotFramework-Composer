@@ -89,6 +89,16 @@ export class ComposerPluginRegistration {
     this.loader.extensions.runtimeTemplates.push(plugin);
   }
 
+  // return a reference to the plugin used by the app
+  public getRuntimeByProject(project): RuntimeTemplate {
+    return this.loader.getRuntimeByProject(project);
+  }
+
+  // return a reference to the plugin used by the app
+  public getRuntime(type: string | undefined): RuntimeTemplate {
+    return this.loader.getRuntime(type);
+  }
+
   /**************************************************************************************
    * Add Bot Template (aka, SampleBot)
    *************************************************************************************/
