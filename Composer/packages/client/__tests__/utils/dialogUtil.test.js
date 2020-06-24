@@ -218,7 +218,7 @@ describe('getActivityTypes', () => {
       { key: 'Microsoft.OnHandoffActivity', text: 'Handover to human (Handoff activity)' },
       { key: 'Microsoft.OnInvokeActivity', text: 'Conversation invoked (Invoke activity)' },
       { key: 'Microsoft.OnTypingActivity', text: 'User is typing (Typing activity)' },
-      { key: 'Microsoft.OnMessageActivity', text: 'Message received (Message recieved activity)' },
+      { key: 'Microsoft.OnMessageActivity', text: 'Message received (Message received activity)' },
       { key: 'Microsoft.OnMessageDeleteActivity', text: 'Message deleted (Message deleted activity)' },
       { key: 'Microsoft.OnMessageReactionActivity', text: 'Message reaction (Message reaction activity)' },
       { key: 'Microsoft.OnMessageUpdateActivity', text: 'Message updated (Message updated activity)' },

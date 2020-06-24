@@ -55,13 +55,6 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/settings/`,
-      iconName: 'Settings',
-      labelName: formatMessage('Settings'),
-      exact: false,
-      disabled: !botLoaded,
-    },
-    {
       to: `/plugins`,
       iconName: 'OEM',
       labelName: formatMessage('Plugins'),
@@ -79,10 +72,10 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
 
 export const bottomLinks = [
   {
-    to: '/about',
-    iconName: 'info',
-    labelName: formatMessage('About'),
-    exact: true,
+    to: `/settings`,
+    iconName: 'Settings',
+    labelName: formatMessage('Settings'),
+    exact: false,
     disabled: false,
   },
 ];
