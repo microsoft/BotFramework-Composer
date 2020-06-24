@@ -119,24 +119,43 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       }
       setEditMode(EditMode.NONE);
       setNameError('');
+      setFolderName('');
     } else if (!folderName) {
       // an empty name means to cancel the operation
-      setEditMode(EditMode.NONE);
-      setNameError('');
-      setCurrentPath(initialPath);
+      cancelEditOperation();
     } else if (isDup) {
       const nameError = formatMessage('folder {folderName} already exists', { folderName });
       setNameError(nameError);
+      setFolderName('');
     } else {
       const nameError = formatMessage('Spaces and special characters are not allowed.');
       setNameError(nameError);
+      setFolderName('');
     }
-    setFolderName('');
   };
 
   const onEditButtonClick = (file: File) => {
     setEditMode(EditMode.Updating);
     setFolderName(file.name);
+  };
+
+  const cancelEditOperation = () => {
+    setEditMode(EditMode.NONE);
+    setNameError('');
+    setCurrentPath(initialPath);
+    setFolderName('');
+  };
+
+  const handleKeydown = (e, index) => {
+    if (e.key === 'Enter' && index) {
+      createOrUpdateFolder(index);
+      e.preventDefault();
+    }
+    if (e.key === 'Escape' && index) {
+      cancelEditOperation();
+      e.stopPropagation();
+      e.preventDefault();
+    }
   };
 
   const _renderNameColumn = (file: File, index: number | undefined) => {
@@ -163,12 +182,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
                 setCurrentPath(path.join(initialPath, newFolderName));
               }
             }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && index) {
-                createOrUpdateFolder(index);
-                e.preventDefault();
-              }
-            }}
+            onKeyDown={(e) => handleKeydown(e, index)}
           />
         ) : (
           <Link
