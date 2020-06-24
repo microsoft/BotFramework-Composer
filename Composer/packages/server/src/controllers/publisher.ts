@@ -239,12 +239,7 @@ export const PublishController = {
     const projectId = req.params.projectId;
     const profile = defaultPublishConfig;
     const method = profile.type;
-    if (
-      profile &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.stopBot
-    ) {
+    if (profile && pluginLoader.extensions.publish[method]?.methods?.stopBot) {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
       if (typeof pluginMethod === 'function') {
         try {
@@ -257,12 +252,7 @@ export const PublishController = {
         }
       }
     }
-    if (
-      profile &&
-      pluginLoader.extensions.publish[method] &&
-      pluginLoader.extensions.publish[method].methods &&
-      pluginLoader.extensions.publish[method].methods.removeRuntimeData
-    ) {
+    if (profile && pluginLoader.extensions.publish[method]?.methods?.removeRuntimeData) {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.removeRuntimeData;
       if (typeof pluginMethod === 'function') {
         try {
