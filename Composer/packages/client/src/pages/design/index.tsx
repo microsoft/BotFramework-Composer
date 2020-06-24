@@ -198,7 +198,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
-  const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
+  const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
+    const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
+    const selectedActions = visualEditorSelection.map((id) => get(currentDialog.content, id));
+    const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
+    const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
+    return { actionSelected, showDisableBtn, showEnableBtn };
+  }, [visualEditorSelection]);
 
   const toolbarItems: IToolBarItem[] = [
     {
@@ -235,7 +241,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.cutSelection(),
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !actionSelected,
     },
     {
       type: 'action',
@@ -247,7 +253,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.copySelection(),
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !actionSelected,
     },
     {
       type: 'action',
@@ -259,7 +265,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.moveSelection(),
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !actionSelected,
     },
     {
       type: 'action',
@@ -271,7 +277,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.deleteSelection(),
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !actionSelected,
     },
     {
       type: 'action',
@@ -283,7 +289,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.disableSelection(),
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !showDisableBtn,
     },
     {
       type: 'action',
@@ -295,7 +301,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.enableSelection(),
       },
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !showEnableBtn,
     },
     {
       type: 'element',
