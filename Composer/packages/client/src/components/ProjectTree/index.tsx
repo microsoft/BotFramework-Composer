@@ -99,6 +99,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       userSettings: { dialogNavWidth: currentWidth },
     },
   } = useContext(StoreContext);
+
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');

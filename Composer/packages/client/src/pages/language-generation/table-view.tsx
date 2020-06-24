@@ -17,11 +17,13 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
 import { actionButton, formCell, content } from '../language-understanding/styles';
+import { dispatcherState } from '../../recoilModel/DispatcherWraper';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -36,6 +38,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
+  const { setMessage } = useRecoilValue(dispatcherState);
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -115,7 +118,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           key: 'delete',
           name: formatMessage('Delete'),
           onClick: () => {
-            actions.setMessage('item deleted');
+            setMessage('item deleted');
             onRemoveTemplate(index);
           },
         },
@@ -123,7 +126,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           key: 'copy',
           name: formatMessage('Make a copy'),
           onClick: () => {
-            actions.setMessage('item copied');
+            setMessage('item copied');
             onCopyTemplate(index);
           },
         },
@@ -259,7 +262,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => {
             onCreateNewTemplate();
-            actions.setMessage('item added');
+            ('item added');
           }}
         >
           {formatMessage('New template')}

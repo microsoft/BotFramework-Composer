@@ -7,6 +7,15 @@ import { applicationDispatcher } from './application';
 import { editorDispatcher } from './editor';
 import { storageDispatcher } from './storage';
 
-const dispatchers = [editorDispatcher, dialogsDispatcher, projectDispatcher, applicationDispatcher, storageDispatcher];
+const createDispatchers = () => {
+  return {
+    ...editorDispatcher(),
+    ...dialogsDispatcher(),
+    ...projectDispatcher(),
+    ...applicationDispatcher(),
+    ...storageDispatcher(),
+  };
+};
 
-export default dispatchers;
+export default createDispatchers;
+export type Dispatcher = ReturnType<typeof createDispatchers>;

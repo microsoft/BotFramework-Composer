@@ -8,8 +8,10 @@ import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { useRecoilValue } from 'recoil';
 
 import { StoreContext } from '../../../store';
+import { dispatcherState } from '../../../recoilModel/DispatcherWraper';
 
 import { modalControlGroup } from './style';
 
@@ -21,11 +23,13 @@ export interface EjectModalProps {
 
 export const EjectModal: React.FC<EjectModalProps> = (props) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>();
-  const { state, actions } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
+  const { fetchRuntimeTemplates } = useRecoilValue(dispatcherState);
+
   const { runtimeTemplates } = state;
 
   useEffect(() => {
-    actions.getRuntimeTemplates();
+    fetchRuntimeTemplates();
   }, []);
 
   const availableRuntimeTemplates = useMemo(() => {
