@@ -146,7 +146,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div aria-label={formatMessage('Composer introduction')} css={home.introduction} role="region">
             {formatMessage(
-              'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack'
+              'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack.'
             )}
           </div>
           <div css={home.newBotContainer}>
@@ -216,7 +216,7 @@ const Home: React.FC<RouteComponentProps> = () => {
               <div css={home.linkContainer}>
                 <div>
                   {formatMessage(
-                    'Bot Framework provides the most comprehensive experience for building conversation applications.'
+                    'Bot Framework provides the most comprehensive experience for building conversational applications.'
                   )}
                 </div>
                 {linksButtom.map((link) => {
