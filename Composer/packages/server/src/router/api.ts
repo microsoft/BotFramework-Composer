@@ -27,6 +27,10 @@ router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLui
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 
+// run state management
+router.get('/projects/processes/:projectId/restart', ProjectController.restartProject);
+router.get('/projects/processes/:projectId/stop', ProjectController.stopProject);
+
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
 router.get('/storages', StorageController.getStorageConnections);

@@ -217,7 +217,7 @@ export class BotProjectService {
       if (!(await StorageService.checkBlob('default', path, user))) {
         BotProjectService.deleteRecentProject(path);
         BotProjectService.removeProjectIdFromCache(projectId);
-        throw new Error(`file not exist ${path}`);
+        throw new Error(`file not found: ${path}`);
       }
       const project = new BotProject({ storageId: 'default', path: path }, user);
       await project.init();

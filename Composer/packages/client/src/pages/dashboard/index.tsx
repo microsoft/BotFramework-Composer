@@ -7,7 +7,7 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { List } from 'office-ui-fabric-react/lib/List';
 import { Link } from 'office-ui-fabric-react/lib/Link';
-import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 
 import { BotStatus } from '../../constants';
@@ -38,15 +38,37 @@ const EXAMPLE_DATA: Array<Partial<BotState>> = [
   },
 ];
 
+function canStart(status?: BotStatus) {
+  return status === BotStatus.failed || status === BotStatus.unConnected;
+}
+
+function canStop(status?: BotStatus) {
+  return status === BotStatus.connected || status === BotStatus.published;
+}
+
 function renderCell(item?: Partial<BotState>) {
   if (item == null) return;
   return (
-    <div style={{ display: 'flex', height: '36px', width: '100%' }}>
+    <div style={{ display: 'flex', height: '36px', width: '100%', alignItems: 'center' }}>
       <FontIcon css={icon} iconName={'ChatBot'} />
       <Link css={{ width: '300px' }} href={`../bot/${item.projectId}/dialogs`}>
         {item.botName}
       </Link>
-      <Toggle offText={formatMessage('Stopped')} onText={formatMessage('Running')} />
+      <div css={{ width: '100px' }}>
+        <ActionButton allowDisabledFocus disabled={!canStart(item?.botStatus)} iconProps={{ iconName: 'Play' }}>
+          {formatMessage('Start')}
+        </ActionButton>
+      </div>
+      <div css={{ width: '100px' }}>
+        <ActionButton allowDisabledFocus disabled={!canStop(item?.botStatus)} iconProps={{ iconName: 'Refresh' }}>
+          {formatMessage('Restart')}
+        </ActionButton>
+      </div>
+      <div css={{ width: '100px' }}>
+        <ActionButton allowDisabledFocus disabled={!canStop(item?.botStatus)} iconProps={{ iconName: 'Stop' }}>
+          {formatMessage('Stop')}
+        </ActionButton>
+      </div>
     </div>
   );
 }

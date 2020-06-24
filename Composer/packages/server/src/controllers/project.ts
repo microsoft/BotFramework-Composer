@@ -346,6 +346,10 @@ async function getAllProjects(req: Request, res: Response) {
   }
 }
 
+async function stopProject(req: Request, res: Response) {}
+
+async function restartProject(req: Request, res: Response) {}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -361,4 +365,6 @@ export const ProjectController = {
   createProject,
   getAllProjects,
   getRecentProjects,
+  stopProject,
+  restartProject,
 };
