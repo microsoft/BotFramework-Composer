@@ -21,7 +21,7 @@ namespace Tests
     {
         private static string getOsPath(string path) => Path.Combine(path.TrimEnd('\\').Split('\\'));
 
-        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\packages\plugins\samples\assets\projects");
+        private static readonly string samplesDirectory = getOsPath(@"..\..\..\..\..\..\Composer\plugins\samples\assets\projects");
 
         private static string getFolderPath(string path)
         {
@@ -226,7 +226,7 @@ namespace Tests
             resourceExplorer.AddFolder(folderPath);
             adapter
                 .UseStorage(storage)
-                .UseBotState(userState, convoState)
+                .UseBotState(userState, convoState)               
                 .Use(new TranscriptLoggerMiddleware(new FileTranscriptLogger()));
 
             var resource = resourceExplorer.GetResource("actionssample.dialog");
@@ -245,4 +245,4 @@ namespace Tests
         }
     }
 }
-
+  

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
@@ -15,26 +15,45 @@ import { OpenConfirmModal } from '../../components/Modal/Confirm';
 import { navigateTo } from '../../utils';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
+import { useLocation } from '../../utils/hooks';
 
-import Routes from './router';
+import { SettingsRoutes } from './router';
+
+const getProjectLink = (path: string, id?: string) => {
+  return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
+};
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   const { state, actions } = useContext(StoreContext);
   const { projectId } = state;
-  const makeProjectLink = (id: string, path: string) => {
-    return `/bot/${id}/settings/${path}`;
-  };
+
+  const { navigate } = useLocation();
+
+  // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
+  // Redirect them to the default settings route that is not bot-scoped
+  useEffect(() => {
+    if (!projectId && location.pathname.indexOf('/settings/bot/') !== -1) {
+      navigate('/settings/application');
+    }
+  }, [projectId]);
 
   const settingLabels = {
     botSettings: formatMessage('Bot Settings'),
-    appSettings: formatMessage('App Settings'),
+    appSettings: formatMessage('Application Settings'),
     runtime: formatMessage('Runtime Config'),
+    about: formatMessage('About'),
   };
 
   const links: INavTreeItem[] = [
-    { id: 'dialog-settings', name: settingLabels.botSettings, url: makeProjectLink(projectId, 'dialog-settings') },
-    { id: 'preferences', name: settingLabels.appSettings, url: makeProjectLink(projectId, 'preferences') },
-    { id: 'runtime', name: settingLabels.runtime, url: makeProjectLink(projectId, 'runtime') },
+    {
+      id: 'dialog-settings',
+      name: settingLabels.botSettings,
+      url: getProjectLink('dialog-settings', projectId),
+      disabled: !projectId,
+    },
+    { id: 'application', name: settingLabels.appSettings, url: getProjectLink('application') },
+    { id: 'runtime', name: settingLabels.runtime, url: getProjectLink('runtime', projectId), disabled: !projectId },
+    { id: 'about', name: settingLabels.about, url: getProjectLink('about') },
 
     // { key: '/settings/publish', name: settingLabels.publish, url: '' },
 
@@ -134,7 +153,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
       return page.name;
     }
 
-    return settingLabels.botSettings;
+    return settingLabels.appSettings;
   }, [location.pathname]);
 
   return (
@@ -145,7 +164,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
       title={title}
       toolbarItems={toolbarItems}
     >
-      <Routes />
+      <SettingsRoutes projectId={projectId} />
     </Page>
   );
 };

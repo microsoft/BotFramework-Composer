@@ -96,7 +96,7 @@ class FilePersistence {
       if (this._isFlushing) {
         return new Promise((resolve) => {
           const timer = setInterval(() => {
-            if (!this.isEmpty()) {
+            if (this.isEmpty()) {
               clearInterval(timer);
               resolve(true);
             }
