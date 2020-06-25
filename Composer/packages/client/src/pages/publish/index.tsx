@@ -142,6 +142,14 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   };
 
   useEffect(() => {
+    // if url was wrong, redirect to all profiles page
+    const activeDialog = settings.publishTargets?.find(({ name }) => name === selectedTargetName);
+    if (!activeDialog && selectedTargetName !== 'all') {
+      navigateTo(`/bot/${projectId}/publish/all`);
+    }
+  }, [selectedTargetName, projectId, settings.publishTargets]);
+
+  useEffect(() => {
     if (projectId) {
       actions.getPublishTargetTypes();
       // init selected status

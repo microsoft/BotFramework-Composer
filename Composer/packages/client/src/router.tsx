@@ -7,7 +7,6 @@ import React, { useContext, useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
 
 import { resolveToBasePath } from './utils/fileUtil';
-import { About } from './pages/about';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
@@ -45,7 +44,6 @@ const Routes = (props) => {
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
-            <SettingPage path="settings/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <Notifications path="notifications" />
@@ -53,9 +51,9 @@ const Routes = (props) => {
             <Skills path="skills/*" />
             <DesignPage path="*" />
           </ProjectRouter>
+          <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
-          <About path="about" />
           <NotFound default />
         </Router>
       </Suspense>
