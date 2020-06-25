@@ -146,12 +146,13 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     setFolderName('');
   };
 
+  //This function won't be triggered when index is 0 since the storageFiles[0] is the 'go to parent folder button'
   const handleKeydown = (e, index) => {
-    if (e.key === 'Enter' && index) {
+    if (e.key === 'Enter' && index > 0) {
       createOrUpdateFolder(index);
       e.preventDefault();
     }
-    if (e.key === 'Escape' && index) {
+    if (e.key === 'Escape' && index > 0) {
       cancelEditOperation();
       e.stopPropagation();
       e.preventDefault();
