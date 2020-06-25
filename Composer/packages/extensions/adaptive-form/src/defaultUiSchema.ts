@@ -17,7 +17,7 @@ const DefaultUISchema: UISchema = {
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
     helpLink: 'https://aka.ms/bf-composer-docs-dialog',
     order: ['recognizer', '*'],
-    hidden: ['triggers', 'autoEndDialog', 'generator', 'selector', 'schema'],
+    hidden: ['triggers', 'generator', 'selector', 'schema'],
     properties: {
       recognizer: {
         label: () => formatMessage('Language Understanding'),
