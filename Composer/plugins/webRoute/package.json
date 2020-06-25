@@ -1,0 +1,12 @@
+{
+  "name": "webroute",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "extendsComposer": false,
+  "author": "",
+  "license": "ISC"
+}

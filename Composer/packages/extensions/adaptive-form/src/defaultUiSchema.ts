@@ -224,8 +224,8 @@ const DefaultUISchema: UISchema = {
   },
   [SDKKinds.OnMessageActivity]: {
     ...triggerUiSchema,
-    label: () => formatMessage('Message recieved'),
-    subtitle: () => formatMessage('Message recieved activity'),
+    label: () => formatMessage('Message received'),
+    subtitle: () => formatMessage('Message received activity'),
   },
   [SDKKinds.OnMessageDeleteActivity]: {
     ...triggerUiSchema,
