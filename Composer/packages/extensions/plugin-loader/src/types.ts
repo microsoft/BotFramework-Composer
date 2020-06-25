@@ -55,6 +55,9 @@ export interface RuntimeTemplate {
   /** build for deploy method  */
   buildDeploy: (runtimePath: string, project: any, profileName: string) => Promise<string>;
 
+  /** path to code template */
+  path: string;
+
   /** internal use key */
   key: string;
 

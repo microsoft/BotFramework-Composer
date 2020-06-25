@@ -19,7 +19,10 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'csharp-azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
+    path: path.resolve(__dirname, '../../../../../runtime/dotnet'),
     build: async (runtimePath: string, _project: any) => {
+      // // copy source into temporary folder
+      // copyDir(path.resolve(__dirname, '../../../../../runtime/dotnet'), runtimePath);
       // do stuff
       console.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       // TODO: capture output of this and store it somewhere useful
@@ -109,8 +112,13 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'javescript-azurewebapp',
     name: 'JS',
     startCommand: 'node azurewebapp/lib/index.js',
+    path: path.resolve(__dirname, '../../../../../runtime/node'),
     build: async (runtimePath: string, _project: any) => {
       // do stuff
+      console.log('BUILD THIS JS PROJECT');
+      execSync('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
+      execSync('npm install', { cwd: path.join(runtimePath, '/azurewebapp'), stdio: 'pipe' });
+      console.log('BUILD COMPLETE');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       // do stuff

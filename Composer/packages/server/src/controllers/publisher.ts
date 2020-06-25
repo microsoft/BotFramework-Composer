@@ -54,12 +54,15 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
 
+    const runtime = pluginLoader.getRuntimeByProject(currentProject);
+    const pathToRuntime = runtime.path;
+
     if (profile && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
       // append config from client(like sensitive settings)
       const configuration = {
         profileName: profile.name,
         fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-        templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
+        templatePath: pathToRuntime,
         ...JSON.parse(profile.configuration),
       };
 

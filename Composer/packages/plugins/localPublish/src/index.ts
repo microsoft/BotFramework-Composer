@@ -273,9 +273,13 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         return;
       }
 
+      console.log('STARTING BOT COMAND');
       // take the 0th item off the array, leaving just the args
       this.composer.log('Starting bot on port %d. (%s)', port, commandAndArgs.join(' '));
       const startCommand = commandAndArgs.shift();
+      console.log(startCommand);
+      console.log(commandAndArgs);
+      console.log(botDir);
       let process;
       try {
         process = spawn(
@@ -289,8 +293,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         );
         this.composer.log('Started process %d', process.pid);
       } catch (err) {
+        console.error('ERROR STARTING BOT', err);
         return reject(err);
       }
+      console.log('BOT STARTED ON PORT', port);
       LocalPublisher.runningBots[botId] = { process: process, port: port };
       const processLog = this.composer.log.extend(process.pid);
       this.addListeners(process, processLog, resolve, reject);
@@ -321,15 +327,18 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     child.stdout &&
       child.stdout.on('data', (data: any) => {
         logger('%s', data);
+        console.log('%s', data);
         resolve(child.pid);
       });
 
     child.stderr &&
       child.stderr.on('data', (err: any) => {
+        console.error(err.toString());
         erroutput += err.toString();
       });
 
     child.on('exit', (code) => {
+      console.log('EXIT CODE', code);
       if (code !== 0) {
         reject(erroutput);
       }
@@ -337,10 +346,12 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     child.on('error', (err) => {
       logger('error: %s', err.message);
+      console.log('error: %s', err.message);
       reject(`Could not launch bot runtime process: ${err.message}`);
     });
 
     child.on('message', (msg) => {
+      console.log('%s', msg);
       logger('%s', msg);
     });
   };
