@@ -364,6 +364,6 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
     const azurePublish = new AzurePublisher();
     const azureFunctionsPublish = new AzurePublisher('azurefunctions');
     yield composer.addPublishMethod(azurePublish, schema_1.default, instructions);
-    yield composer.addPublishMethod(azureFunctionsPublish, schema_1.default, instructions, '@bfc/plugin-azure-functions-publish', 'Publish bot to Azure Functions (Preview)');
+    yield composer.addPublishMethod(azureFunctionsPublish, schema_1.default, instructions, 'plugin-azure-functions-publish', 'Publish bot to Azure Functions (Preview)');
 });
 //# sourceMappingURL=index.js.map

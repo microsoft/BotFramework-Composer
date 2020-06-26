@@ -191,18 +191,19 @@ class LocalPublisher {
     if (!isExist) {
       const botDir = this.getBotDir(botId);
       const runtimeDir = this.getBotRuntimeDir(botId);
-      // create bot dir
-      await mkDir(botDir, { recursive: true });
-      await mkDir(runtimeDir, { recursive: true });
-
-      // create ComposerDialogs and history folder
-      mkDir(this.getBotAssetsDir(botId), { recursive: true });
-      mkDir(this.getHistoryDir(botId), { recursive: true });
-
-      // copy runtime template in folder
-      await this.copyDir(this.templatePath, runtimeDir);
 
       try {
+        // create bot dir
+        await mkDir(botDir, { recursive: true });
+        await mkDir(runtimeDir, { recursive: true });
+
+        // create ComposerDialogs and history folder
+        mkDir(this.getBotAssetsDir(botId), { recursive: true });
+        mkDir(this.getHistoryDir(botId), { recursive: true });
+
+        // copy runtime template in folder
+        console.log('COPY FROM ', this.templatePath, ' to ', runtimeDir);
+        await this.copyDir(this.templatePath, runtimeDir);
         const runtime = this.composer.getRuntimeByProject(project);
         runtime.build(runtimeDir, project);
       } catch (error) {

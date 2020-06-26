@@ -6,7 +6,6 @@ import { execSync } from 'child_process';
 
 import rimraf from 'rimraf';
 import * as fs from 'fs-extra';
-import { ComposerPluginRegistration } from '@bfc/plugin-loader';
 
 import { copyDir } from './copyDir';
 import { IFileStorage } from './interface';
@@ -15,13 +14,15 @@ const exec = promisify(require('child_process').exec);
 
 const removeDirAndFiles = promisify(rimraf);
 
-export default async (composer: ComposerPluginRegistration): Promise<void> => {
+export default async (composer: any): Promise<void> => {
+  console.log('RUNTIME PLUGINS DIRNAME: ', __dirname);
+  console.log(path.resolve(__dirname, '../../../../runtime/dotnet'));
   // register the bundled c# runtime used by the local publisher with the eject feature
   composer.addRuntimeTemplate({
     key: 'csharp-azurewebapp',
     name: 'C#',
     startCommand: 'dotnet run --project azurewebapp',
-    path: path.resolve(__dirname, '../../../runtime/dotnet'),
+    path: path.resolve(__dirname, '../../../../runtime/dotnet'),
     build: async (runtimePath: string, _project: any) => {
       // // copy source into temporary folder
       // copyDir(path.resolve(__dirname, '../../../../../runtime/dotnet'), runtimePath);
@@ -86,7 +87,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
       return publishFolder;
     },
     eject: async (project, localDisk: IFileStorage) => {
-      const sourcePath = path.resolve(__dirname, '../../../runtime/dotnet');
+      const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
@@ -114,7 +115,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     key: 'javescript-azurewebapp',
     name: 'JS',
     startCommand: 'node azurewebapp/lib/index.js',
-    path: path.resolve(__dirname, '../../../../../runtime/node'),
+    path: path.resolve(__dirname, '../../../../runtime/node'),
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       console.log('BUILD THIS JS PROJECT');
@@ -134,7 +135,7 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
       return '';
     },
     eject: async (project: any, localDisk: IFileStorage) => {
-      const sourcePath = path.resolve(__dirname, '../../../../../runtime/node');
+      const sourcePath = path.resolve(__dirname, '../../../../runtime/node');
       const destPath = path.join(project.dir, 'runtime');
       // const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
       // const schemaDstPath = path.join(project.dir, 'schemas');
