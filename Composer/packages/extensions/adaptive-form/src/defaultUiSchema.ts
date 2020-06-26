@@ -17,7 +17,7 @@ const DefaultUISchema: UISchema = {
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
     helpLink: 'https://aka.ms/bf-composer-docs-dialog',
     order: ['recognizer', '*'],
-    hidden: ['triggers', 'autoEndDialog', 'generator', 'selector', 'schema'],
+    hidden: ['triggers', 'generator', 'selector', 'schema'],
     properties: {
       recognizer: {
         label: () => formatMessage('Language Understanding'),
@@ -224,8 +224,8 @@ const DefaultUISchema: UISchema = {
   },
   [SDKKinds.OnMessageActivity]: {
     ...triggerUiSchema,
-    label: () => formatMessage('Message recieved'),
-    subtitle: () => formatMessage('Message recieved activity'),
+    label: () => formatMessage('Message received'),
+    subtitle: () => formatMessage('Message received activity'),
   },
   [SDKKinds.OnMessageDeleteActivity]: {
     ...triggerUiSchema,

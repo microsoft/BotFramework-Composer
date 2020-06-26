@@ -54,13 +54,6 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       exact: true,
       disabled: !botLoaded,
     },
-    {
-      to: `/bot/${projectId}/settings/`,
-      iconName: 'Settings',
-      labelName: formatMessage('Settings'),
-      exact: false,
-      disabled: !botLoaded,
-    },
   ];
 
   if (process.env.COMPOSER_AUTH_PROVIDER === 'abs-h') {
@@ -72,10 +65,10 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
 
 export const bottomLinks = [
   {
-    to: '/about',
-    iconName: 'info',
-    labelName: formatMessage('About'),
-    exact: true,
+    to: `/settings`,
+    iconName: 'Settings',
+    labelName: formatMessage('Settings'),
+    exact: false,
     disabled: false,
   },
 ];

@@ -251,7 +251,7 @@ export enum AppUpdaterStatus {
 
 export const DefaultPublishConfig = {
   name: 'default',
-  type: '@bfc/plugin-localpublish',
+  type: 'localpublish',
 };
 
 export const EmptyBotTemplateId = 'EmptyBot';
