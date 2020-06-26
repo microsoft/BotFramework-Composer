@@ -72,7 +72,10 @@ export const TestController: React.FC = () => {
         break;
     }
     // return the stoppolling function so the component will clean up
-    return () => stopPollingRuntime();
+    return () => {
+      stopPollingRuntime();
+      return;
+    };
   }, [botStatus]);
 
   function dismissDialog() {

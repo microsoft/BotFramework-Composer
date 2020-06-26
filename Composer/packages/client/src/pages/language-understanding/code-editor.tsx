@@ -101,7 +101,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     [file, projectId]
   );
 
-  const _onChange = useCallback(
+  const onChange = useCallback(
     (value) => {
       setContent(value);
       if (!file) return;
@@ -134,7 +134,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
       }}
       luOption={luOption}
       value={content}
-      onChange={_onChange}
+      onChange={onChange}
       onChangeSettings={handleSettingsChange}
     />
   );
