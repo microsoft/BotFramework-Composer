@@ -23,6 +23,7 @@ import {
   luFilesState,
 } from '../recoilModel/atoms/botState';
 import { dispatcherState } from '../recoilModel/DispatcherWraper';
+import { clipboardActionsState } from '../recoilModel/atoms/appState';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -43,7 +44,15 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const lgFiles = useRecoilValue(lgFilesState);
   const skills = useRecoilValue(skillsState);
   const schemas = useRecoilValue(schemasState);
-  const { setMessage, updateDialog, createDialogBegin } = useRecoilValue(dispatcherState);
+  const clipboardActions = useRecoilValue(clipboardActionsState);
+  const {
+    setMessage,
+    updateDialog,
+    createDialogBegin,
+    setVisualEditorClipboard,
+    setVisualEditorSelection,
+    onboardingAddCoachMarkRef,
+  } = useRecoilValue(dispatcherState);
 
   const lgApi = useLgApi();
   const luApi = useLuApi();
@@ -61,7 +70,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return await updateDialog({ id, content: newDialog.content });
+    return await updateDialog(id, newDialog.content);
   }
 
   function cleanData() {
@@ -72,7 +81,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         content: cleanedData,
         projectId,
       };
-      updateDialog(payload);
+      updateDialog(payload.id, payload.content);
     }
   }
 
@@ -120,11 +129,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     },
     saveDialog: (dialogId: string, newDialogData: any) => {
       dialogMapRef.current[dialogId] = newDialogData;
-      updateDialog({
-        id: dialogId,
-        content: newDialogData,
-        projectId,
-      });
+      updateDialog(dialogId, newDialogData);
     },
     saveData: (newData, updatePath) => {
       let dataPath = '';
@@ -139,7 +144,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
-      updateDialog(payload);
+      updateDialog(payload.id, payload.content);
 
       //make sure focusPath always valid
       const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
@@ -159,8 +164,8 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     navTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
-    onSelect: actions.setVisualEditorSelection,
-    onCopy: actions.setVisualEditorClipboard,
+    onSelect: setVisualEditorSelection,
+    onCopy: setVisualEditorClipboard,
     createDialog: (actionsSeed) => {
       return new Promise((resolve) => {
         createDialogBegin(actionsSeed, (newDialog: string | null) => {
@@ -177,7 +182,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     },
     undo: actions.undo,
     redo: actions.redo,
-    addCoachMarkRef: actions.onboardingAddCoachMarkRef,
+    addCoachMarkRef: onboardingAddCoachMarkRef,
     updateUserSettings: actions.updateUserSettings,
     announce: setMessage,
     displayManifestModal: actions.displayManifestModal,
@@ -209,7 +214,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         focusedActions: focused ? [focused] : [],
         focusedSteps: focused ? [focused] : selected ? [selected] : [],
         focusedTab: promptTab,
-        clipboardActions: state.clipboardActions,
+        clipboardActions,
         hosted: !!isAbsHosted(),
         skills,
       }

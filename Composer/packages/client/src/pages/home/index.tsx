@@ -17,7 +17,7 @@ import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
 import { dispatcherState } from '../../recoilModel/DispatcherWraper';
 import { navigateTo } from '../../utils';
 import { botNameState } from '../../recoilModel/atoms/botState';
-import { recentProjectsState } from '../../recoilModel/atoms/appState';
+import { recentProjectsState, templateProjectsState } from '../../recoilModel/atoms/appState';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -60,7 +60,7 @@ const tutorials = [
 
 const Home: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { templateProjects } = state;
+  const templateProjects = useRecoilValue(templateProjectsState);
   const botName = useRecoilValue(botNameState);
   const recentProjects = useRecoilValue(recentProjectsState);
   const { openBotProject, fetchRecentProjects, setCreationFlowStatus } = useRecoilValue(dispatcherState);
