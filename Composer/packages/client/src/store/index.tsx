@@ -2,12 +2,10 @@
 // Licensed under the MIT License.
 
 import React, { useReducer, useRef } from 'react';
-import once from 'lodash/once';
 import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
 import { LgFile, LuFile, importResolverGenerator, UserSettings } from '@bfc/shared';
 import merge from 'lodash/merge';
 
-import { prepareAxios } from '../utils/auth';
 import storage from '../utils/storage';
 import { isElectron } from '../utils/electronUtil';
 
@@ -158,8 +156,6 @@ interface StoreProviderProps {
   children: React.ReactNode;
 }
 
-const prepareAxiosWithStore = once(prepareAxios);
-
 export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) => {
   let dispatch: React.Dispatch<ActionType> = () => {};
   const middlewareApi: MiddlewareApi = {
@@ -209,8 +205,6 @@ export const StoreProvider: React.FC<StoreProviderProps> = (props) => {
       },
     },
   };
-
-  prepareAxiosWithStore({ dispatch, getState });
   filePersistence.registerHandleError({ dispatch, getState });
   return <StoreContext.Provider value={value}>{props.children}</StoreContext.Provider>;
 };

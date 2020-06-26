@@ -3,15 +3,17 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import formatMessage from 'format-message';
 import once from 'lodash/once';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { BoundAction } from '../../store/types';
+import { dispatcherState } from '../../recoilModel/DispatcherWraper';
+import { currentUserState } from '../../recoilModel/atoms/appState';
 
 import { loading, dialog, consoleStyle } from './styles';
 
@@ -24,11 +26,11 @@ const loginOnce = once((login: BoundAction) => {
 
 export const RequireAuth: React.FC = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { state, actions } = useContext(StoreContext);
-  const { currentUser } = state;
+  const { loginUser } = useRecoilValue(dispatcherState);
+  const currentUser = useRecoilValue(currentUserState);
 
   useEffect(() => {
-    loginOnce(actions.loginUser);
+    loginOnce(loginUser);
   }, []);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export const RequireAuth: React.FC = (props) => {
     >
       <div css={consoleStyle}>{formatMessage('Please log in before continuing.')}</div>
       <DialogFooter>
-        <PrimaryButton text={formatMessage('Login')} onClick={() => actions.loginUser()} />
+        <PrimaryButton text={formatMessage('Login')} onClick={() => loginUser()} />
       </DialogFooter>
     </Dialog>
   );

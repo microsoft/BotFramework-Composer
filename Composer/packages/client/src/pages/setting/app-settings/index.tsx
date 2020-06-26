@@ -10,9 +10,12 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHint';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { StoreContext } from '../../../store';
 import { isElectron } from '../../../utils/electronUtil';
+import { dispatcherState } from '../../../recoilModel/DispatcherWraper';
+import { onboardingState, userSettingsState } from '../../../recoilModel/atoms/appState';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -25,13 +28,9 @@ const ElectronSettings = lazy(() =>
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
-  const {
-    actions: { onboardingSetComplete, updateUserSettings },
-    state: {
-      onboarding: { complete },
-      userSettings,
-    },
-  } = useContext(StoreContext);
+  const { onboardingSetComplete, updateUserSettings } = useRecoilValue(dispatcherState);
+  const userSettings = useRecoilValue(userSettingsState);
+  const { complete } = useRecoilValue(onboardingState);
 
   const onOnboardingChange = useCallback(
     (checked: boolean) => {

@@ -24,6 +24,7 @@ import onboardingState from './utils/onboardingStorage';
 import { isElectron } from './utils/electronUtil';
 import { useLinks } from './utils/hooks';
 import { botNameState, localeState } from './recoilModel/atoms/botState';
+import { dispatcherState } from './recoilModel/DispatcherWraper';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -36,12 +37,12 @@ const AppUpdater = React.lazy(() =>
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
 export const App: React.FC = () => {
-  const { actions, state } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const botName = useRecoilValue(botNameState);
   const locale = useRecoilValue(localeState);
+  const { onboardingSetComplete } = useRecoilValue(dispatcherState);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
-  const { onboardingSetComplete } = actions;
   const { announcement } = state;
   const { topLinks, bottomLinks } = useLinks();
 

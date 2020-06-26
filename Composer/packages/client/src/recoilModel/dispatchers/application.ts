@@ -4,21 +4,16 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
-import merge from 'lodash/merge';
-import { UserSettings } from '@bfc/shared';
 
 import {
   appUpdateState,
   announcementState,
-  userSettingsState,
   onboardingState,
-  currentUserState,
-  CurrentUser,
   creationFlowStatusState,
+  applicationErrorState,
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
-import { isElectron } from '../../utils/electronUtil';
-import storage from '../../utils/storage';
+import { StateError } from '../../store/types';
 
 export const applicationDispatcher = () => {
   const setAppUpdateStatus = useRecoilCallback<[AppUpdaterStatus, string], Promise<void>>(
@@ -76,20 +71,6 @@ export const applicationDispatcher = () => {
     set(announcementState, message);
   });
 
-  const setUserSettings = useRecoilCallback<[Partial<UserSettings>], void>(
-    ({ set }: CallbackInterface) => (settings: Partial<UserSettings>) => {
-      set(userSettingsState, (currentSettings) => {
-        const newSettings = merge(currentSettings, settings);
-        if (isElectron()) {
-          // push updated settings to electron main process
-          window.ipcRenderer.send('update-user-settings', newSettings);
-        }
-        storage.set('userSettings', newSettings);
-        return newSettings;
-      });
-    }
-  );
-
   const onboardingAddCoachMarkRef = useRecoilCallback<[{ [key: string]: any }], void>(
     ({ set }: CallbackInterface) => (coachMarkRef: { [key: string]: any }) => {
       set(onboardingState, (onboardingObj) => ({
@@ -111,26 +92,15 @@ export const applicationDispatcher = () => {
     }
   );
 
-  const setUserToken = useRecoilCallback<[Partial<CurrentUser>], void>(({ set }: CallbackInterface) => (user = {}) => {
-    set(currentUserState, () => ({
-      ...user,
-      token: user.token || null,
-      sessionExpired: false,
-    }));
-  });
-
-  const setUserSessionExpired = useRecoilCallback<[{ expired: boolean }], void>(
-    ({ set }: CallbackInterface) => ({ expired }) => {
-      set(currentUserState, (currentUser: CurrentUser) => ({
-        ...currentUser,
-        sessionExpired: !!expired,
-      }));
-    }
-  );
-
   const setCreationFlowStatus = useRecoilCallback<[CreationFlowStatus], void>(
     ({ set }: CallbackInterface) => (status: CreationFlowStatus) => {
       set(creationFlowStatusState, status);
+    }
+  );
+
+  const setApplicationLevelError = useRecoilCallback<[StateError], void>(
+    ({ set }: CallbackInterface) => (errorObj: StateError) => {
+      set(applicationErrorState, errorObj);
     }
   );
 
@@ -140,11 +110,9 @@ export const applicationDispatcher = () => {
     setAppUpdateError,
     setAppUpdateProgress,
     setMessage: debounce(setMessage, 500),
-    setUserSettings,
     onboardingSetComplete,
     onboardingAddCoachMarkRef,
-    setUserToken,
-    setUserSessionExpired,
     setCreationFlowStatus,
+    setApplicationLevelError,
   };
 };

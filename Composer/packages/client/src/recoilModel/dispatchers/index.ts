@@ -6,6 +6,7 @@ import { projectDispatcher } from './project';
 import { applicationDispatcher } from './application';
 import { editorDispatcher } from './editor';
 import { storageDispatcher } from './storage';
+import { userDispatcher } from './user';
 
 const createDispatchers = () => {
   return {
@@ -14,6 +15,7 @@ const createDispatchers = () => {
     ...projectDispatcher(),
     ...applicationDispatcher(),
     ...storageDispatcher(),
+    ...userDispatcher(),
   };
 };
 
