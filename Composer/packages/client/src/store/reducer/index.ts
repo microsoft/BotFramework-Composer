@@ -476,10 +476,19 @@ const setPublishTypes: ReducerFunc = (state, { typelist }) => {
   return state;
 };
 
+const runtimePollingUpdate: ReducerFunc = (state, payload) => {
+  state.botStatusInterval = payload;
+  return state;
+};
+
 const publishSuccess: ReducerFunc = (state, payload) => {
-  if (payload.target.name === 'default' && payload.endpointURL) {
-    state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
-    state.botStatus = BotStatus.connected;
+  if (payload.target.name === 'default') {
+    if (payload.status == 200 && payload.endpointURL) {
+      state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
+      state.botStatus = BotStatus.connected;
+    } else {
+      state.botStatus = BotStatus.reloading;
+    }
   }
 
   // prepend the latest publish results to the history
@@ -508,9 +517,16 @@ const publishFailure: (title: string) => ReducerFunc = (title) => (state, { erro
 const getPublishStatus: ReducerFunc = (state, payload) => {
   // the action below only applies to when a bot is being started using the "start bot" button
   // a check should be added to this that ensures this ONLY applies to the "default" profile.
-  if (payload.target.name === 'default' && payload.endpointURL) {
-    state.botStatus = BotStatus.connected;
-    state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
+  if (payload.target.name === 'default') {
+    if (payload.status == 200 && payload.endpointURL) {
+      state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
+      state.botStatus = BotStatus.connected;
+    } else if (payload.status == 202) {
+      state.botStatus = BotStatus.reloading;
+    } else if (payload.status == 500) {
+      state.botStatus = BotStatus.failed;
+      state.botLoadErrorMsg = { ...payload, title: 'Start bot failed' };
+    }
   }
 
   // if no history exists, create one with the latest status
@@ -694,4 +710,5 @@ export const reducer = createReducer({
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
+  [ActionTypes.RUNTIME_POLLING_UPDATE]: runtimePollingUpdate,
 });

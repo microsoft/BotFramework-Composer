@@ -30,7 +30,15 @@ export const TestController: React.FC = () => {
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const { botEndpoints, botName, botStatus, dialogs, luFiles, settings, projectId, botLoadErrorMsg } = state;
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, getPublishStatus, setBotStatus } = actions;
+  const {
+    publishToTarget,
+    onboardingAddCoachMarkRef,
+    publishLuis,
+    getPublishStatus,
+    setBotStatus,
+    startPollingRuntime,
+    stopPollingRuntime,
+  } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
@@ -48,12 +56,23 @@ export const TestController: React.FC = () => {
     switch (botStatus) {
       case BotStatus.failed:
         openCallout();
+        stopPollingRuntime();
         setBotStatus(BotStatus.pending);
         break;
       case BotStatus.published:
+        stopPollingRuntime();
         handleLoadBot();
         break;
+      case BotStatus.reloading:
+        startPollingRuntime();
+        break;
+      default:
+      case BotStatus.connected:
+        stopPollingRuntime();
+        break;
     }
+    // return the stoppolling function so the component will clean up
+    return () => stopPollingRuntime();
   }, [botStatus]);
 
   function dismissDialog() {

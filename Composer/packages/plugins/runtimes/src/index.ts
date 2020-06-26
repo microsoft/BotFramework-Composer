@@ -125,6 +125,10 @@ export default async (composer: ComposerPluginRegistration): Promise<void> => {
     },
     buildDeploy: async (runtimePath: string, project: any): Promise<string> => {
       // do stuff
+      console.log('BUILD THIS JS PROJECT');
+      execSync('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
+      execSync('npm install', { cwd: path.join(runtimePath, '/azurewebapp'), stdio: 'pipe' });
+      console.log('BUILD COMPLETE');
       return '';
     },
     eject: async (project: any, localDisk: IFileStorage) => {

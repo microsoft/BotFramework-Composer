@@ -22,8 +22,12 @@ const copyFile = promisify(fs.copyFile);
 const readFile = promisify(fs.readFile);
 
 interface RunningBot {
-  process: ChildProcess;
-  port: number;
+  process?: ChildProcess;
+  port?: number;
+  status: number;
+  result: {
+    message: string;
+  };
 }
 interface PublishConfig {
   botId: string;
@@ -53,11 +57,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     this.composer.log('Starting publish');
 
+    // set the running bot status
+    LocalPublisher.runningBots[botId] = { status: 202, result: { message: 'Reloading...' } };
+
     // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
     // and export the content into that folder as well.
     const runtimeType = project.settings.runtime?.name || 'C#';
     if (!project.settings.runtime || project.settings.runtime.customRuntime !== true) {
       this.composer.log('Using managed runtime');
+
       await this.initBot(project);
       await this.saveContent(botId, version, project.dataDir, user);
       await this.saveSkillManifests(this.getBotRuntimeDir(botId), project.dataDir, runtimeType);
@@ -75,18 +83,17 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     try {
       // start or restart the bot process
-      const url = await this.setBot(botId, version, fullSettings, project);
+      // do NOT await this, as it can take a long time
+      this.setBot(botId, version, fullSettings, project);
 
       return {
-        status: 200,
+        status: 202,
         result: {
           id: uuid(),
-          endpointURL: url,
           message: 'Local publish success.',
         },
       };
     } catch (error) {
-      console.error('Error in local publish', error);
       return {
         status: 500,
         result: {
@@ -98,15 +105,27 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
     if (LocalPublisher.runningBots[botId]) {
-      const port = LocalPublisher.runningBots[botId].port;
-      const url = `http://localhost:${port}`;
-      return {
-        status: 200,
-        result: {
-          message: 'Running',
-          endpointURL: url,
-        },
-      };
+      if (LocalPublisher.runningBots[botId].status === 200) {
+        const port = LocalPublisher.runningBots[botId].port;
+        const url = `http://localhost:${port}`;
+        return {
+          status: 200,
+          result: {
+            message: 'Running',
+            endpointURL: url,
+          },
+        };
+      } else {
+        const status = {
+          status: LocalPublisher.runningBots[botId].status,
+          result: LocalPublisher.runningBots[botId].result,
+        };
+        if (LocalPublisher.runningBots[botId].status === 500) {
+          // after we return the 500 status once, delete it out of the running bots list.
+          delete LocalPublisher.runningBots[botId];
+        }
+        return status;
+      }
     } else {
       return {
         status: 200,
@@ -252,8 +271,8 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     // start the bot process
     try {
       await this.startBot(botId, port, settings, project);
-      return `http://localhost:${port}`;
     } catch (error) {
+      console.error('Error in startbot: ', error);
       this.stopBot(botId);
       throw error;
     }
@@ -273,13 +292,9 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         return;
       }
 
-      console.log('STARTING BOT COMAND');
       // take the 0th item off the array, leaving just the args
       this.composer.log('Starting bot on port %d. (%s)', port, commandAndArgs.join(' '));
       const startCommand = commandAndArgs.shift();
-      console.log(startCommand);
-      console.log(commandAndArgs);
-      console.log(botDir);
       let process;
       try {
         process = spawn(
@@ -293,13 +308,17 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
         );
         this.composer.log('Started process %d', process.pid);
       } catch (err) {
-        console.error('ERROR STARTING BOT', err);
         return reject(err);
       }
-      console.log('BOT STARTED ON PORT', port);
-      LocalPublisher.runningBots[botId] = { process: process, port: port };
+      LocalPublisher.runningBots[botId] = {
+        process: process,
+        port: port,
+        status: 200,
+        result: { message: 'Runtime started' },
+      };
       const processLog = this.composer.log.extend(process.pid);
-      this.addListeners(process, processLog, resolve, reject);
+      this.addListeners(process, botId, processLog); //  resolve, reject);
+      resolve();
     });
   };
 
@@ -318,17 +337,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private addListeners = (
     child: ChildProcess,
+    botId: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    logger: (...args: any[]) => void,
-    resolve: Function,
-    reject: Function
+    logger: (...args: any[]) => void
   ) => {
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
         logger('%s', data);
         console.log('%s', data);
-        resolve(child.pid);
       });
 
     child.stderr &&
@@ -338,16 +355,16 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       });
 
     child.on('exit', (code) => {
-      console.log('EXIT CODE', code);
       if (code !== 0) {
-        reject(erroutput);
+        LocalPublisher.runningBots[botId] = { status: 500, result: { message: erroutput } };
       }
     });
 
     child.on('error', (err) => {
       logger('error: %s', err.message);
-      console.log('error: %s', err.message);
-      reject(`Could not launch bot runtime process: ${err.message}`);
+      console.error('error: %s', err.message);
+      LocalPublisher.runningBots[botId] = { status: 500, result: { message: err.message } };
+      // reject(`Could not launch bot runtime process: ${err.message}`);
     });
 
     child.on('message', (msg) => {
