@@ -18,7 +18,7 @@ type ErrorPopupProps = {
 export const ErrorPopup = (props: ErrorPopupProps) => {
   const [hidden, setHidden] = useState(props.error ? false : true);
 
-  const _closeDialog = () => {
+  const closeDialog = () => {
     setHidden(true);
     props.onDismiss();
   };
@@ -35,11 +35,11 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
         isBlocking: false,
         styles: { main: { maxWidth: 450 } },
       }}
-      onDismiss={_closeDialog}
+      onDismiss={closeDialog}
     >
       <div css={consoleStyle}>{props.error}</div>
       <DialogFooter>
-        <PrimaryButton text="Ok" onClick={_closeDialog} />
+        <PrimaryButton text="Ok" onClick={closeDialog} />
       </DialogFooter>
     </Dialog>
   );
