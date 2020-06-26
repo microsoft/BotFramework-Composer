@@ -331,10 +331,9 @@
     tslib "^1.9.3"
 
 "@oclif/errors@^1.0.0", "@oclif/errors@^1.2.1", "@oclif/errors@^1.2.2":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@oclif/errors/-/errors-1.3.0.tgz#76a58c44d884a144fb683d57583c092e24d7492e"
-  integrity sha512-mnet8Wzr5iUDiagkcjjmCfZ/+s6RlrfODZN0D/Kq4bPFevACIOxK2jbfG98nxRuAwGy2kwHdFOl6GvvsbsNOQQ==
-  dependencies:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@oclif/errors/-/errors-1.3.1.tgz#297b783ea1d18e46aa28999c7e1b8b827cd8572a"
+  integrity sha512-ma9SpBNnAjbJNc8kPl8G8n6oJX0WK0FtosuJ9Y5etHoJrqq/s9GOOIxo47fSXomLT1fmqYX5cW2yeQ2Q39XyAw==
     clean-stack "^3.0.0"
     fs-extra "^9.0.1"
     indent-string "^4.0.0"
