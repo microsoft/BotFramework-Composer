@@ -153,3 +153,23 @@ export const onCreateDialogCompleteState = atom<any>({
   key: 'onCreateDialogComplete',
   default: undefined,
 });
+
+export const focusPathState = atom<string>({
+  key: 'focusPath',
+  default: '',
+});
+
+export const onAddSkillDialogCompleteState = atom<any>({
+  key: 'onAddSkillDialogComplete',
+  default: undefined,
+});
+
+export const displaySkillManifestState = atom<any>({
+  key: 'displaySkillManifest',
+  default: undefined,
+});
+
+export const botEndpointsState = atom<any>({
+  key: 'botEndpoints',
+  default: {},
+});
