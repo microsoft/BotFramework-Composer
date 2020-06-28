@@ -116,3 +116,14 @@ export const logEntryListState = atom<string[]>({
   key: getFullyQualifiedKey('logEntryList'),
   default: [],
 });
+
+export const runtimeSettingsState = atom<{
+  path: string;
+  startCommand: string;
+}>({
+  key: getFullyQualifiedKey('runtimeSettings'),
+  default: {
+    path: '',
+    startCommand: '',
+  },
+});
