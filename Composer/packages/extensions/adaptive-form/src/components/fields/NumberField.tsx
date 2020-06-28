@@ -1,18 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React from 'react';
-import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
+
 import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
+import { SpinButton } from 'office-ui-fabric-react/lib/SpinButton';
+import React from 'react';
 
 import { FieldLabel } from '../FieldLabel';
+
+const floatNumberOfDecimals = 2;
 
 const getInt = (value: string, step: number) => {
   return parseInt(value, 10) + step;
 };
 
 const getFloat = (value: string, step: number) => {
-  const fixed = (parseFloat(value) + step).toFixed(step !== 0 ? `${step}`.split('.')[1].length : step);
+  const fixed = (parseFloat(value) + step).toFixed(floatNumberOfDecimals);
 
   return parseFloat(fixed);
 };
@@ -36,7 +39,7 @@ const NumberField: React.FC<FieldProps> = (props) => {
     onChange(newValue);
   };
 
-  const step = type === 'integer' ? 1 : 0.1;
+  const step = type === 'integer' ? 1 : Math.pow(10, -floatNumberOfDecimals);
   const displayValue = typeof value === 'number' ? value.toString() : '';
 
   return (

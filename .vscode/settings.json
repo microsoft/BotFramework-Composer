@@ -1,8 +1,15 @@
 {
+  "files.trimTrailingWhitespace": true,
   "files.associations": {
     "*.dialog": "json",
     "*.botproj": "json",
     "*.schema": "json"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/build": true
   },
   "eslint.enable": true,
   "eslint.packageManager": "yarn",
@@ -14,6 +21,7 @@
   ],
   "eslint.workingDirectories": ["./Composer"],
   "typescript.tsdk": "./Composer/node_modules/typescript/lib",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   }

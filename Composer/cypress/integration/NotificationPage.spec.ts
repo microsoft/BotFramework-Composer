@@ -44,6 +44,9 @@ context('Notification Page', () => {
   it('can show dialog expression error ', () => {
     cy.visitPage('Design');
 
+    // click the logo to clear any stray tooltips from page navigation
+    cy.findByAltText('Composer Logo').click();
+
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('WelcomeUser').click();
     });
