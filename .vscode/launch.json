@@ -82,5 +82,18 @@
       "port": 9228,
       "sourceMaps": true
     }
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Electron Main Process",
+      "runtimeExecutable": "${workspaceRoot}/Composer/node_modules/.bin/electron",
+      "args": [
+        "${workspaceRoot}/Composer/packages/electron-server",
+      ],
+      "env": {
+        "NODE_ENV": "development",
+      },
+      "outputCapture": "std"
+    }
   ]
 }
