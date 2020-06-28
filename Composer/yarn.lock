@@ -2873,7 +2873,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@microsoft/bf-cli-command@4.10.0-preview.141651":
+"@microsoft/bf-cli-command@4.10.0-preview.141651", "@microsoft/bf-cli-command@^4.10.0-preview.141651":
   version "4.10.0-preview.141651"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-4.10.0-preview.141651.tgz#680875f716285fb8658da8098a0ee524b07c5765"
   integrity sha1-aAh19xYoX7hljagJig7lJLB8V2U=
@@ -2888,26 +2888,12 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-cli-command@4.9.1":
-  version "4.9.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-cli-command/-/bf-cli-command-4.9.1.tgz#708976bb9e882a40a2d64c6dff3df5eb9a1264a8"
-  integrity sha512-zylOEeybbOrNGLUit0U9eak4IxTCzsBEp3ovvYpRiJ6uL7ADGi6rELwSEaEmbaAezYU0qnaUkcqPXWjwYvCTpw==
+"@microsoft/bf-dispatcher@^4.10.0-preview.141651":
+  version "4.10.0-preview.141651"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.10.0-preview.141651.tgz#d943197c42e15894a55eadf4c5e3d85d9bbccfd7"
+  integrity sha1-2UMZfELhWJSlXq30xePYXZu8z9c=
   dependencies:
-    "@oclif/command" "~1.5.19"
-    "@oclif/config" "~1.13.3"
-    "@oclif/errors" "~1.2.2"
-    applicationinsights "^1.0.8"
-    chalk "2.4.1"
-    cli-ux "~4.9.3"
-    debug "^4.1.1"
-    fs-extra "^7.0.1"
-    tslib "~1.10.0"
-
-"@microsoft/bf-dispatcher@4.9.1":
-  version "4.9.1"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-dispatcher/-/@microsoft/bf-dispatcher-4.9.1#45766580e1bc34bfb60aeefdc96142e9415fe817"
-  dependencies:
-    "@microsoft/bf-lu" "4.9.1"
+    "@microsoft/bf-lu" "4.10.0-preview.141651"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     argparse "~1.0.10"
@@ -2917,30 +2903,6 @@
   version "4.10.0-preview.141651"
   resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.10.0-preview.141651.tgz#29ed2af803d23ee760354913f5b814873bc1285c"
   integrity sha1-Ke0q+APSPudgNUkT9bgUhzvBKFw=
-  dependencies:
-    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/ms-rest-azure-js" "2.0.1"
-    "@oclif/command" "~1.5.19"
-    "@oclif/errors" "~1.2.2"
-    "@types/node-fetch" "~2.5.5"
-    antlr4 "^4.7.2"
-    chalk "2.4.1"
-    console-stream "^0.1.1"
-    deep-equal "^1.0.1"
-    delay "^4.3.0"
-    fs-extra "^8.1.0"
-    get-stdin "^6.0.0"
-    globby "^10.0.1"
-    intercept-stdout "^0.1.2"
-    lodash "^4.17.15"
-    node-fetch "~2.6.0"
-    semver "^5.5.1"
-    tslib "^1.10.0"
-
-"@microsoft/bf-lu@4.9.1":
-  version "4.9.1"
-  resolved "https://registry.yarnpkg.com/@microsoft/bf-lu/-/bf-lu-4.9.1.tgz#06e85e85cbd3fad508473d24e07b8f9d05fa2b11"
-  integrity sha512-ge39GhTNRQB4LSuT71txRO+R7VKMAHHF2vDNi8Mkcr+8boDXLGagWl3gUB57SjcQTPCXCe1iVEAirYAgMXNFUA==
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
