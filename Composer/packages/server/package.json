@@ -61,7 +61,7 @@
     "@bfc/plugin-loader": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "4.9.1",
-    "@microsoft/bf-lu": "^4.10.0-preview.140487",
+    "@microsoft/bf-lu": "^4.10.0-preview.141651",
     "archiver": "^3.0.0",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
