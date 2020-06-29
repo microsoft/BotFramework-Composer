@@ -247,7 +247,7 @@ class FilePersistence {
       return fileChanges;
     }
 
-    fileChanges.push(this._createChange({ id, ...dialogSchema }, FileExtensions.DialogSchema, changeType, projectId));
+    fileChanges.push(this.createChange({ id, ...dialogSchema }, FileExtensions.DialogSchema, changeType, projectId));
     return fileChanges;
   }
 

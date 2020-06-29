@@ -174,8 +174,8 @@ function parse(id: string, content: any) {
 
 function index(files: FileInfo[], dialogSchemaFiles: FileInfo[], botName: string): DialogInfo[] {
   const dialogs: DialogInfo[] = [];
-  if (dialogFiles.length !== 0) {
-    for (const file of dialogFiles) {
+  if (files.length !== 0) {
+    for (const file of files) {
       try {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
