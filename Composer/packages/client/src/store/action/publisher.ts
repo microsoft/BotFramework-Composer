@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { ActionCreator } from '../types';
 import { getAccessTokenInCache, loginPopup } from '../../utils/auth';
 
-import { ActionTypes } from './../../constants/index';
+import { ActionTypes, ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
@@ -145,6 +145,10 @@ export const getSubscriptions: ActionCreator = async ({ dispatch }) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log(result);
+    dispatch({
+      type: ActionTypes.GET_SUBSCRIPTION_SUCCESS,
+      payload: result,
+    });
   } catch (error) {
     console.log(error.response.data);
     // popup window to login

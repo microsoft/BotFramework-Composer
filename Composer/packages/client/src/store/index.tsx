@@ -122,6 +122,7 @@ export const initialState: State = {
     status: AppUpdaterStatus.IDLE,
   },
   botOpening: false,
+  subscriptions: [],
 };
 
 export interface StoreContextValue {

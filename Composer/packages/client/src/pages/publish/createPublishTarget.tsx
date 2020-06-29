@@ -9,7 +9,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Fragment, useState, useMemo } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-import { JsonEditor } from '@bfc/code-editor';
+// import { JsonEditor } from '@bfc/code-editor';
 
 import { PublishTarget, PublishType } from '../../store/types';
 
@@ -105,7 +105,8 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         />
         {instructions && <p>{instructions}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
-        <JsonEditor key={targetType} height={200} schema={schema} value={config} onChange={updateConfig} />
+        {/* <JsonEditor key={targetType} height={200} schema={schema} value={config} onChange={updateConfig} /> */}
+
         <button hidden disabled={isDisable()} type="submit" />
       </form>
       <DialogFooter>

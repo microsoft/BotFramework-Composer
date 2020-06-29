@@ -160,6 +160,13 @@ export interface State {
   appUpdate: AppUpdateState;
   displaySkillManifest?: string;
   botOpening: boolean;
+  subscriptions: Subscription[];
+}
+
+export interface Subscription {
+  subscriptionId: string;
+  tenantId: string;
+  displayName: string;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

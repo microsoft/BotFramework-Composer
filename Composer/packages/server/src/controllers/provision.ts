@@ -12,7 +12,6 @@ export const ProvisionController = {
     const result = await axios.get('https://management.azure.com/subscriptions?api-version=2020-01-01', {
       headers: { Authorization: `Bearer ${req.body.accessToken}` },
     });
-    console.log(result.data);
     res.status(200).json(result.data);
   },
 };
