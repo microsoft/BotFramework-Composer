@@ -10,6 +10,7 @@ import { About } from '../about';
 import { DialogSettings } from './dialog-settings';
 import { AppSettings } from './app-settings';
 import { RuntimeSettings } from './runtime-settings';
+import { Plugins } from './plugins';
 
 export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => (
   <ErrorBoundary>
@@ -23,6 +24,7 @@ export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) 
       <About path="about" />
       <DialogSettings path="/bot/:projectId/dialog-settings" />
       <RuntimeSettings path="/bot/:projectId/runtime" />
+      <Plugins path="plugins" />
     </Router>
   </ErrorBoundary>
 ));

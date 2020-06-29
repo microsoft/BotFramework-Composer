@@ -24,6 +24,8 @@ interface PluginConfig {
   enabled: boolean;
   version: string;
   configuration: object;
+  /** path where module is installed */
+  path: string;
 }
 
 interface PluginInfo {

@@ -18,12 +18,12 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import axios from 'axios';
 
-import { Plugin } from '../../store/types';
-import { useStoreContext } from '../../hooks';
-import { IToolBarItem, ToolBar } from '../../components/ToolBar';
-import httpClient from '../../utils/httpUtil';
+import { Plugin } from '../../../store/types';
+import { useStoreContext } from '../../../hooks';
+import { IToolBarItem, ToolBar } from '../../../components/ToolBar';
+import httpClient from '../../../utils/httpUtil';
 
-const PluginsPage: React.FC<RouteComponentProps> = () => {
+const Plugins: React.FC<RouteComponentProps> = () => {
   const {
     state: { plugins },
     actions: { fetchPlugins, togglePlugin, addPlugin, removePlugin },
@@ -218,4 +218,4 @@ const PluginsPage: React.FC<RouteComponentProps> = () => {
   );
 };
 
-export default PluginsPage;
+export { Plugins };
