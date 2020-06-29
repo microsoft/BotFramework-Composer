@@ -81,26 +81,17 @@ class LocalPublisher {
       };
     }
 
-    try {
-      // start or restart the bot process
-      // do NOT await this, as it can take a long time
-      this.setBot(botId, version, fullSettings, project);
+    // start or restart the bot process
+    // do NOT await this, as it can take a long time
+    this.setBot(botId, version, fullSettings, project);
 
-      return {
-        status: 202,
-        result: {
-          id: uuid(),
-          message: 'Local publish success.',
-        },
-      };
-    } catch (error) {
-      return {
-        status: 500,
-        result: {
-          message: error,
-        },
-      };
-    }
+    return {
+      status: 202,
+      result: {
+        id: uuid(),
+        message: 'Local publish success.',
+      },
+    };
   };
   getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
@@ -254,28 +245,33 @@ class LocalPublisher {
   // start bot in current version
   private setBot = async (botId: string, version: string, settings: any, project: any) => {
     // get port, and stop previous bot if exist
-    let port;
-    if (LocalPublisher.runningBots[botId]) {
-      this.composer.log('Bot already running. Stopping bot...');
-      port = LocalPublisher.runningBots[botId].port;
-      this.stopBot(botId);
-    } else {
-      port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
-    }
-
-    // if not using custom runtime, update assets in tmp older
-    if (!settings.runtime || settings.runtime.customRuntime !== true) {
-      this.composer.log('Updating bot assets');
-      await this.restoreBot(botId, version);
-    }
-
-    // start the bot process
     try {
+      let port;
+      if (LocalPublisher.runningBots[botId]) {
+        this.composer.log('Bot already running. Stopping bot...');
+        port = LocalPublisher.runningBots[botId].port;
+        this.stopBot(botId);
+      } else {
+        port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
+      }
+
+      // if not using custom runtime, update assets in tmp older
+      if (!settings.runtime || settings.runtime.customRuntime !== true) {
+        this.composer.log('Updating bot assets');
+        await this.restoreBot(botId, version);
+      }
+
+      // start the bot process
       await this.startBot(botId, port, settings, project);
     } catch (error) {
       console.error('Error in startbot: ', error);
       this.stopBot(botId);
-      throw error;
+      return {
+        status: 500,
+        result: {
+          message: error,
+        },
+      };
     }
   };
 
