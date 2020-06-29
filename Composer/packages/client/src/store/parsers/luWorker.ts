@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { LuIntentSection } from '@bfc/shared';
 
-import Worker from './workers/luParser.worker.ts';
+import Worker from './workers/luParserRemove.worker.ts';
 import { BaseWorker } from './baseWorker';
 import { LuPayload, LuActionType } from './types';
 

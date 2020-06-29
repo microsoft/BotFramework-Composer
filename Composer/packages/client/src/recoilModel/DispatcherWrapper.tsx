@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, Fragment, useState } from 'react';
 import { useSetRecoilState, atom } from 'recoil';
 
 import dispatchers from './dispatchers';
@@ -11,7 +10,8 @@ export const dispatcherState = atom<any | undefined>({
   default: undefined,
 });
 
-export const DispatcherWraper = () => {
+export const DispatcherWrapper = ({ children }) => {
+  const [init, setInit] = useState(false);
   const combinedDispatchers = dispatchers.reduce((result, dispatcher) => ({ ...result, ...dispatcher() }), {});
   // Use a ref to ensure the dispatcher is only created once
   const dispatcherRef = useRef(combinedDispatchers);
@@ -20,7 +20,8 @@ export const DispatcherWraper = () => {
 
   useEffect(() => {
     setDispatcher(dispatcherRef.current);
-  });
+    setInit(true);
+  }, []);
 
-  return null;
+  return <Fragment>{init ? children : null}</Fragment>;
 };

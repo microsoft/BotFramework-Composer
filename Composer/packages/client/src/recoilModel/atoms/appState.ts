@@ -51,7 +51,7 @@ export const focusedStorageFolderState = atom<StorageFolder>({
   default: {} as StorageFolder,
 });
 
-export const storageFileLoadingStatus = atom<string>({
+export const storageFileLoadingStatusState = atom<string>({
   key: getFullyQualifiedKey('storageFileLoadingStatus'),
   default: '',
 });
@@ -126,4 +126,9 @@ export const runtimeSettingsState = atom<{
     path: '',
     startCommand: '',
   },
+});
+
+export const templateIdState = atom<string>({
+  key: getFullyQualifiedKey('templateId'),
+  default: '',
 });

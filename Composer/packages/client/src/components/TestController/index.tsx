@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
+import React, { useState, useRef, Fragment, useEffect, useCallback } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
@@ -17,10 +17,11 @@ import {
   settingsState,
   projectIdState,
   botLoadErrorState,
-} from '../../recoilModel/atoms/botState';
+  botEndpointsState,
+  dispatcherState,
+} from '../../recoilModel';
 
 import settingsStorage from './../../utils/dialogSettingStorage';
-import { StoreContext } from './../../store';
 import { BotStatus, LuisConfig } from './../../constants';
 import { isAbsHosted } from './../../utils/envUtil';
 import { getReferredFiles } from './../../utils/luUtil';
@@ -34,12 +35,10 @@ import { Loading } from './loading';
 import { ErrorInfo } from './errorInfo';
 
 export const TestController: React.FC = () => {
-  const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const { botEndpoints } = state;
   const botName = useRecoilValue(botNameState);
   const botStatus = useRecoilValue(botStatusState);
   const dialogs = useRecoilValue(dialogsState);
@@ -47,7 +46,10 @@ export const TestController: React.FC = () => {
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
   const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, getPublishStatus, setBotStatus } = actions;
+  const botEndpoints = useRecoilValue(botEndpointsState);
+  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, getPublishStatus, setBotStatus } = useRecoilValue(
+    dispatcherState
+  );
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
@@ -93,13 +95,13 @@ export const TestController: React.FC = () => {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
     const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis : null;
-    await publishLuis(luisConfig.authoringKey, state.projectId);
+    await publishLuis(luisConfig.authoringKey, projectId);
   }
 
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
     const sensitiveSettings = settingsStorage.get(projectId);
-    await publishToTarget(state.projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
+    await publishToTarget(projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   function isLuisConfigComplete(config) {
@@ -129,7 +131,7 @@ export const TestController: React.FC = () => {
   }
 
   function handleErrorButtonClick() {
-    navigateTo(`/bot/${state.projectId}/notifications`);
+    navigateTo(`/bot/${projectId}/notifications`);
   }
 
   async function handleOpenEmulator() {

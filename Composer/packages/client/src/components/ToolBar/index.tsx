@@ -10,8 +10,7 @@ import { DialogInfo } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { useStoreContext } from '../../hooks';
-import { projectIdState } from '../../recoilModel/atoms/botState';
-import { dispatcherState } from '../../recoilModel/DispatcherWraper';
+import { projectIdState, dispatcherState } from '../../recoilModel';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 

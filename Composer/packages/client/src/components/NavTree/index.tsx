@@ -3,12 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
 import { Resizable, ResizeCallback } from 're-resizable';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
+import { dispatcherState, userSettingsState } from '../../recoilModel';
 
 import { root, itemNotSelected, itemSelected } from './styles';
 
@@ -27,13 +27,9 @@ interface INavTreeProps {
 
 const NavTree: React.FC<INavTreeProps> = (props) => {
   const { navLinks, regionName } = props;
-  const {
-    actions: { updateUserSettings },
-    state: {
-      userSettings: { dialogNavWidth: currentWidth },
-    },
-  } = useContext(StoreContext);
-
+  const { updateUserSettings } = useRecoilValue(dispatcherState);
+  const userSettings = useRecoilValue(userSettingsState);
+  const currentWidth = userSettings.dialogNavWidth;
   const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };

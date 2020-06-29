@@ -9,8 +9,8 @@ import lodashSet from 'lodash/get';
 import isArray from 'lodash/isArray';
 
 import filePersistence from '../../store/persistence/FilePersistence';
-import lgWorker from '../../store/parsers/lgWorker';
-import luWorker from '../../store/parsers/luWorker';
+import lgWorker from '../parsers/lgWorker';
+import luWorker from '../parsers/luWorker';
 import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -34,14 +34,14 @@ import {
   dialogsState,
   projectIdState,
   botOpeningState,
-} from './../atoms/botState';
-import {
   recentProjectsState,
   botProjectsState,
   BotProject,
   templateProjectsState,
   runtimeTemplatesState,
-} from './../atoms/appState';
+  templateIdState,
+} from './../atoms';
+
 // import { logMessage } from './../dispatchers/shared';
 
 const checkProjectUpdates = async () => {
@@ -180,6 +180,51 @@ export const projectDispatcher = () => {
     }
   );
 
+  const deleteBotProject = useRecoilCallback<[string], Promise<void>>(
+    ({ reset }: CallbackInterface) => async (projectId: string) => {
+      try {
+        await httpClient.delete(`/projects/${projectId}`);
+        luFileStatusStorage.removeAllStatuses(projectId);
+        settingStorage.remove(projectId);
+        reset(projectIdState);
+        reset(dialogsState);
+        reset(botEnvironmentState);
+        reset(botNameState);
+        reset(botStatusState);
+        reset(locationState);
+        reset(lgFilesState);
+        reset(skillsState);
+        reset(schemasState);
+        reset(luFilesState);
+        reset(settingsState);
+        reset(localeState);
+        reset(skillManifestsState);
+      } catch (e) {
+        //TODO: error handling
+        console.log(e);
+      }
+    }
+  );
+
+  const saveProjectAs = useRecoilCallback<[string, string, string, string], Promise<string>>(
+    (callbackHelpers: CallbackInterface) => async (projectId, name, description, location) => {
+      try {
+        await setOpenPendingStatusasync(callbackHelpers);
+        const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, {
+          storageId: 'default',
+          name,
+          description,
+          location,
+        });
+        await initBotState(callbackHelpers, response.data);
+        return response.data.id;
+      } catch (error) {
+        //TODO: error handling
+        callbackHelpers.set(botOpeningState, false);
+      }
+    }
+  );
+
   const fetchRecentProjects = useRecoilCallback<[], void>((callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
@@ -262,9 +307,34 @@ export const projectDispatcher = () => {
     }
   );
 
+  const saveTemplateId = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (templateId) => {
+    if (templateId) {
+      set(templateIdState, templateId);
+    }
+  });
+
+  const fetchTemplates = useRecoilCallback<[], Promise<void>>(({ set }: CallbackInterface) => async () => {
+    try {
+      const response = await httpClient.get(`/assets/projectTemplates`);
+
+      const data = response && response.data;
+
+      if (data && Array.isArray(data) && data.length > 0) {
+        set(templateProjectsState, data);
+      }
+    } catch (err) {
+      // TODO: Handle exceptions
+      // logMessage(`Error fetching runtime templates: ${ex}`);
+    }
+  });
+
   return {
     openBotProject,
     createProject,
+    deleteBotProject,
+    saveProjectAs,
+    saveTemplateId,
+    fetchTemplates,
     fetchProjectById,
     fetchRecentProjects,
     removeRecentProject,

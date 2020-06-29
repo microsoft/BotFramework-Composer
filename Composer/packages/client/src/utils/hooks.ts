@@ -1,16 +1,14 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { globalHistory } from '@reach/router';
 import replace from 'lodash/replace';
 import find from 'lodash/find';
 import { useRecoilValue } from 'recoil';
 
-import { dialogsState, projectIdState } from '../recoilModel/atoms/botState';
-
+import { dialogsState, projectIdState, designPageLocationState } from './../recoilModel';
 import { bottomLinks, topLinks } from './pageLinks';
-import { StoreContext } from './../store';
 import routerCache from './routerCache';
 
 export const useLocation = () => {
@@ -23,8 +21,7 @@ export const useLocation = () => {
 };
 
 export const useLinks = () => {
-  const { state } = useContext(StoreContext);
-  const { designPageLocation } = state;
+  const designPageLocation = useRecoilValue(designPageLocationState);
   const dialogs = useRecoilValue(dialogsState);
   const projectId = useRecoilValue(projectIdState);
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';

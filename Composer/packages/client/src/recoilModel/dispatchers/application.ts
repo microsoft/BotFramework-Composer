@@ -19,6 +19,7 @@ import {
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import { isElectron } from '../../utils/electronUtil';
 import storage from '../../utils/storage';
+import OnboardingState from '../../utils/onboardingStorage';
 
 export const applicationDispatcher = () => {
   const setAppUpdateStatus = useRecoilCallback<[AppUpdaterStatus, string], Promise<void>>(
@@ -106,8 +107,9 @@ export const applicationDispatcher = () => {
     ({ set }: CallbackInterface) => (isComplete: boolean) => {
       set(onboardingState, (onboardingObj) => ({
         ...onboardingObj,
-        isComplete,
+        complete: isComplete,
       }));
+      OnboardingState.setComplete(isComplete);
     }
   );
 

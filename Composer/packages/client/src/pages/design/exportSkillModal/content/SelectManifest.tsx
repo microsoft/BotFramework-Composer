@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -20,9 +20,8 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
 import { calculateTimeDiff } from '../../../../utils';
-import { StoreContext } from '../../../../store';
 import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
-import { botNameState } from '../../../../recoilModel/atoms/botState';
+import { botNameState, dispatcherState } from '../../../../recoilModel';
 
 const styles = {
   detailListContainer: css`
@@ -39,7 +38,7 @@ const styles = {
 };
 
 export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillManifests, setSkillManifest }) => {
-  const { actions } = useContext(StoreContext);
+  const actions = useRecoilValue(dispatcherState);
   const botName = useRecoilValue(botNameState);
   const [manifestVersion, setManifestVersion] = useState<string>(SCHEMA_URIS[0]);
   const [errors, setErrors] = useState<{ version?: string }>({});

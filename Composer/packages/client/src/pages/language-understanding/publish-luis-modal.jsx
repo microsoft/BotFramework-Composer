@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, Fragment } from 'react';
+import { useState, Fragment } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -15,8 +15,9 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
 import keys from 'lodash/keys';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
+import { dispatcherState, botNameState, settingsState, projectIdState } from '../../recoilModel';
 
 import { Text, Tips, Links, nameRegex } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
@@ -97,9 +98,10 @@ const DeployFailure = (props) => {
 };
 
 export const PublishLuis = (props) => {
-  const { state, actions } = useContext(StoreContext);
-  const { setSettings } = actions;
-  const { botName, settings } = state;
+  const { setSettings } = useRecoilValue(dispatcherState);
+  const botName = useRecoilValue(botNameState);
+  const settings = useRecoilValue(settingsState);
+  const projectId = useRecoilValue(projectIdState);
   const { onPublish, onDismiss, workState } = props;
 
   const initialFormData = {
@@ -131,7 +133,7 @@ export const PublishLuis = (props) => {
     // save the settings change to store and persist to server
     const newValue = { ...formData, ...result };
     delete newValue.errors;
-    await setSettings(state.projectId, { ...settings, luis: newValue });
+    await setSettings(projectId, { ...settings, luis: newValue });
     await onPublish();
   };
 

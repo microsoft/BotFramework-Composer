@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -17,19 +17,24 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils';
 import { actionButton, formCell, content } from '../language-understanding/styles';
+import { dispatcherState, dialogsState, lgFilesState, projectIdState, localeState } from '../../recoilModel';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { state, actions } = useContext(StoreContext);
-  const { dialogs, lgFiles, projectId, locale } = state;
+  const actions = useRecoilValue(dispatcherState);
+  const dialogs = useRecoilValue(dialogsState);
+  const lgFiles = useRecoilValue(lgFilesState);
+  const projectId = useRecoilValue(projectIdState);
+  const locale = useRecoilValue(localeState);
+
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;

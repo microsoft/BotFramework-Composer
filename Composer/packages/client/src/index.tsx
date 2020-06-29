@@ -11,7 +11,7 @@ import { RecoilRoot } from 'recoil';
 import './index.css';
 import { App } from './App';
 import { StoreProvider } from './store';
-import { DispatcherWraper } from './recoilModel/DispatcherWraper';
+import { DispatcherWrapper } from './recoilModel';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -24,10 +24,11 @@ const emotionCache = createCache({
 
 ReactDOM.render(
   <RecoilRoot>
-    <DispatcherWraper />
     <CacheProvider value={emotionCache}>
       <StoreProvider>
-        <App />
+        <DispatcherWrapper>
+          <App />
+        </DispatcherWrapper>
       </StoreProvider>
     </CacheProvider>
   </RecoilRoot>,

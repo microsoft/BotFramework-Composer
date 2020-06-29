@@ -5,7 +5,7 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import isArray from 'lodash/isArray';
 
 import httpClient from '../../utils/httpUtil';
-import { storagesState, storageFileLoadingStatus, focusedStorageFolderState } from '../atoms/appState';
+import { storagesState, storageFileLoadingStatusState, focusedStorageFolderState } from '../atoms/appState';
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils';
 
@@ -16,7 +16,7 @@ const projectFiles = ['bot', 'botproj'];
 export const storageDispatcher = () => {
   const setStorageFileLoadingStatus = useRecoilCallback<[string], void>(
     ({ set }: CallbackInterface) => (status: string) => {
-      set(storageFileLoadingStatus, status);
+      set(storageFileLoadingStatusState, status);
     }
   );
 
@@ -30,7 +30,7 @@ export const storageDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(`Error fetching storages: ${ex}`);
+        //logMessage(`Error fetching storages: ${ex}`);
       }
     }
   );
