@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { ActionCreator } from '../types';
-
 import { ActionTypes } from '../../constants';
+
 import httpClient from './../../utils/httpUtil';
 
 export const fetchStorages: ActionCreator = async ({ dispatch }) => {

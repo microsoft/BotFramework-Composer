@@ -14,11 +14,11 @@ import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
 import { PublishTarget } from '../../store/types';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
+import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
-import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';
