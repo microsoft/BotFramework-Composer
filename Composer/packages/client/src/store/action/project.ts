@@ -8,7 +8,7 @@ import filePersistence from '../persistence/FilePersistence';
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
 
-import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
+import { ActionTypes, BASEPATH, BotStatus } from '../../constants';
 import { navigateTo } from './../../utils/navigation';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';

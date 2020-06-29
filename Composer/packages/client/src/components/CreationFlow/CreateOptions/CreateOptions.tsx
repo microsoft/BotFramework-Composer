@@ -23,7 +23,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { ProjectTemplate } from '@bfc/shared';
 
 import { DialogCreationCopy, EmptyBotTemplateId } from '../../../constants';
-import { DialogWrapper } from '../../DialogWrapper';
+import { DialogWrapper } from '../../DialogWrapper/DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 
 import {

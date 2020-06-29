@@ -8,7 +8,7 @@ import { renderWithStore } from '../testUtils';
 import { dialogs } from '../constants.json';
 
 import { TriggerCreationModal } from './../../src/components/ProjectTree/TriggerCreationModal';
-import { ProjectTree } from './../../src/components/ProjectTree';
+import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { CreateDialogModal } from './../../src/pages/design/createDialogModal';
 
 jest.mock('@bfc/code-editor', () => {

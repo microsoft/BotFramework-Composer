@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 
 import { ActionCreator } from '../types';
 
-import { ActionTypes } from './../../constants';
+import { ActionTypes } from '../../constants';
 
 export const setError: ActionCreator = ({ dispatch }, error) => {
   dispatch({

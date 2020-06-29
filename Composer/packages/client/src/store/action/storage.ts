@@ -3,7 +3,7 @@
 
 import { ActionCreator } from '../types';
 
-import { ActionTypes } from './../../constants';
+import { ActionTypes } from '../../constants';
 import httpClient from './../../utils/httpUtil';
 
 export const fetchStorages: ActionCreator = async ({ dispatch }) => {

@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
-import OnboardingContext from '../../context';
+import OnboardingContext from '../../OnboardingContext';
 
 import {
   buttonStyle,

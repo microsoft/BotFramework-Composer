@@ -3,7 +3,7 @@
 
 import { ActionCreator, DialogSetting } from '../types';
 
-import { ActionTypes } from './../../constants/index';
+import { ActionTypes } from '../../constants';
 
 export const setSettings: ActionCreator = async ({ dispatch }, projectId: string, settings: DialogSetting) => {
   dispatch({

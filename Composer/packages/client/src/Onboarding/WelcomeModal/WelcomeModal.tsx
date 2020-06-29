@@ -4,10 +4,10 @@
 import React, { useContext } from 'react';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 
-import OnboardingContext from '../context';
+import OnboardingContext from '../OnboardingContext';
 
-import CollapsedWelcomeModal from './Collapsed';
-import ExpandedWelcomeModal from './Expanded';
+import CollapsedWelcomeModal from './Collapsed/CollapsedWelcomeModal';
+import ExpandedWelcomeModal from './Expanded/ExpandedWelcomeModal';
 import { collapsedStyles, expandedStyles } from './style';
 
 const WelcomeModal = () => {

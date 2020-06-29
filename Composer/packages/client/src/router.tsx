@@ -8,10 +8,10 @@ import { Router, Redirect, RouteComponentProps } from '@reach/router';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
-import { NotFound } from './components/NotFound';
+import { NotFound } from './components/NotFound/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
-import { LoadingSpinner } from './components/LoadingSpinner';
+import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
 
 const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
@@ -20,7 +20,7 @@ const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
 const Publish = React.lazy(() => import('./pages/publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
-const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow'));
+const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 
 const Routes = (props) => {
   const { state } = useContext(StoreContext);

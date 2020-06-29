@@ -10,7 +10,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { LoadingSpinner } from '../../../components/LoadingSpinner/LoadingSpinner';
 import { StoreContext } from '../../../store';
 
 import { EjectModal } from './ejectModal';

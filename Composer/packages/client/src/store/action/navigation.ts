@@ -4,7 +4,7 @@
 import { getSelected } from '../../utils';
 
 import { ActionCreator } from './../types';
-import { ActionTypes } from './../../constants';
+import { ActionTypes } from '../../constants';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
 
 export const setDesignPageLocation: ActionCreator = (

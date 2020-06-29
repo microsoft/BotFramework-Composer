@@ -6,7 +6,7 @@ import formatMessage from 'format-message';
 import { ActionCreator } from '../types';
 import filePersistence from '../persistence/FilePersistence';
 
-import { ActionTypes } from './../../constants/index';
+import { ActionTypes } from '../../constants';
 import httpClient from './../../utils/httpUtil';
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   try {
