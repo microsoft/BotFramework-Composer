@@ -17,6 +17,7 @@ export const useSelectionEffect = (state: { data: any; nodeContext: NodeRenderer
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectableElements, setSelectableElements] = useState<SelectorElement[]>(querySelectableElements());
   const nodeIndexGenerator = useRef(new NodeIndexGenerator());
+  const getSelectableIds = () => nodeIndexGenerator.current.getItemList().map((x) => x.key as string);
 
   useEffect((): void => {
     // Notify container at every selection change.
@@ -60,5 +61,6 @@ export const useSelectionEffect = (state: { data: any; nodeContext: NodeRenderer
     setSelectedIds,
     selectableElements,
     getNodeIndex,
+    getSelectableIds,
   };
 };

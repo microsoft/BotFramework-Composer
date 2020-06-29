@@ -4,7 +4,7 @@
 import React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { FormRow, FormRowProps, _getRowProps } from '../FormRow';
+import { FormRow, FormRowProps, getRowProps } from '../FormRow';
 
 jest.mock('../SchemaField', () => ({ SchemaField: () => <div data-testid="SchemaField" /> }));
 
@@ -47,38 +47,38 @@ describe('<FormRow />', () => {
   });
 });
 
-describe('_getRowProps', () => {
+describe('getRowProps', () => {
   it('computes a new id and name', () => {
-    expect(_getRowProps(field, 'single').id).toEqual('test.single');
-    expect(_getRowProps(field, 'single').name).toEqual('single');
+    expect(getRowProps(field, 'single').id).toEqual('test.single');
+    expect(getRowProps(field, 'single').name).toEqual('single');
   });
 
   it('resets label unless it is false', () => {
-    expect(_getRowProps({ ...field, label: false }, 'single').label).toBe(false);
-    expect(_getRowProps({ ...field, label: 'row label' }, 'single').label).toBe(undefined);
+    expect(getRowProps({ ...field, label: false }, 'single').label).toBe(false);
+    expect(getRowProps({ ...field, label: 'row label' }, 'single').label).toBe(undefined);
   });
 
   it('resolves prop schemas', () => {
-    expect(_getRowProps(field, 'single').schema).toEqual({ type: 'string' });
-    expect(_getRowProps(field, 'doesnotexist').schema).toEqual({});
+    expect(getRowProps(field, 'single').schema).toEqual({ type: 'string' });
+    expect(getRowProps(field, 'doesnotexist').schema).toEqual({});
   });
 
   it('gets the correct rawErrors', () => {
-    expect(_getRowProps({ ...field, rawErrors: { single: 'single errors' } }, 'single').rawErrors).toEqual(
+    expect(getRowProps({ ...field, rawErrors: { single: 'single errors' } }, 'single').rawErrors).toEqual(
       'single errors'
     );
   });
 
   it('determines if the field is required', () => {
-    expect(_getRowProps({ ...field, schema: { ...field.schema, required: ['single'] } }, 'single').required).toBe(true);
+    expect(getRowProps({ ...field, schema: { ...field.schema, required: ['single'] } }, 'single').required).toBe(true);
   });
 
   it('gets the correct value', () => {
-    expect(_getRowProps(field, 'single').value).toEqual('single value');
+    expect(getRowProps(field, 'single').value).toEqual('single value');
   });
 
   it('binds the onChange to the field', () => {
-    expect(_getRowProps(field, 'single').onChange).toEqual(fieldChangeMock);
+    expect(getRowProps(field, 'single').onChange).toEqual(fieldChangeMock);
     expect(field.onChange).toHaveBeenCalledWith('single');
   });
 });
