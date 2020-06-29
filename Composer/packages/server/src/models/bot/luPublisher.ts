@@ -165,7 +165,7 @@ export class LuPublisher {
 
     const loadResult = await this._loadLuContents(config.models);
     loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
-    const authoringEndpoint = config.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
+    const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
 
     const buildResult = await this.builder.build(
       loadResult.luContents,
@@ -210,6 +210,7 @@ export class LuPublisher {
       suffix: this.config.environment || '',
       fallbackLocal: this.config.defaultLanguage || 'en-us',
       endpoint: this.config.endpoint || null,
+      authoringEndpoint: this.config.authoringEndpoint || null,
       models: [] as string[],
     };
 
