@@ -15,7 +15,7 @@ export interface FormRowProps extends Omit<FieldProps, 'onChange'> {
   row: string | [string, string];
 }
 
-export const _getRowProps = (rowProps: FormRowProps, field: string) => {
+export const getRowProps = (rowProps: FormRowProps, field: string) => {
   const {
     id,
     depth,
@@ -85,12 +85,12 @@ const FormRow: React.FC<FormRowProps> = (props) => {
     return (
       <div css={formRow.row}>
         {row.map((property) => (
-          <SchemaField key={`${id}.${property}`} css={formRow.property} {..._getRowProps(props, property)} />
+          <SchemaField key={`${id}.${property}`} css={formRow.property} {...getRowProps(props, property)} />
         ))}
       </div>
     );
   }
-  return <SchemaField key={`${id}.${row}`} css={formRow.full} {..._getRowProps(props, row)} />;
+  return <SchemaField key={`${id}.${row}`} css={formRow.full} {...getRowProps(props, row)} />;
 };
 
 export { FormRow };

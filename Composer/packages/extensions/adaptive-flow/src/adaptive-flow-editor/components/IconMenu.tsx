@@ -35,7 +35,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
   handleMenuShow,
   ...rest
 }): JSX.Element => {
-  const _onRenderItem = (item): React.ReactNode => {
+  const onRenderItem = (item): React.ReactNode => {
     return (
       <Link styles={{ root: { marginRight: 10 } }} onClick={item.onClick}>
         {item.name}
@@ -50,7 +50,7 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       buttonRef.current && buttonRef.current.focus();
     }
   }, [nodeSelected]);
-  const _onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = (overflowItems) => {
+  const onRenderOverflowButton: IRenderFunction<IContextualMenuItem[]> = (overflowItems) => {
     if (!overflowItems) {
       return null;
     }
@@ -106,8 +106,8 @@ export const IconMenu: React.FC<IconMenuProps> = ({
       vertical
       aria-label="icon menu"
       overflowItems={menuItems}
-      onRenderItem={_onRenderItem}
-      onRenderOverflowButton={_onRenderOverflowButton}
+      onRenderItem={onRenderItem}
+      onRenderOverflowButton={onRenderOverflowButton}
     />
   );
 };
