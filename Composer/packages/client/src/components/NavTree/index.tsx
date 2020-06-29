@@ -28,8 +28,8 @@ interface INavTreeProps {
 const NavTree: React.FC<INavTreeProps> = (props) => {
   const { navLinks, regionName } = props;
   const { updateUserSettings } = useRecoilValue(dispatcherState);
-  const userSettings = useRecoilValue(userSettingsState);
-  const currentWidth = userSettings.dialogNavWidth;
+  const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
+
   const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };

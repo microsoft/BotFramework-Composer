@@ -35,23 +35,22 @@ const downloadOptions = {
 };
 
 export const AppUpdater: React.FC<{}> = () => {
-  const appUpdate = useRecoilValue(appUpdateState);
   const { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus } = useRecoilValue(
     dispatcherState
   );
-  const { downloadSizeInBytes, error, progressPercent, showing, status, version } = appUpdate;
+  const { downloadSizeInBytes, error, progressPercent, showing, status, version } = useRecoilValue(appUpdateState);
   const [downloadOption, setDownloadOption] = useState(downloadOptions.installAndUpdate);
 
   const handleDismiss = useCallback(() => {
     setAppUpdateShowing(false);
     if (status === AppUpdaterStatus.UPDATE_UNAVAILABLE || status === AppUpdaterStatus.UPDATE_FAILED) {
-      setAppUpdateStatus({ status: AppUpdaterStatus.IDLE, version: undefined });
+      setAppUpdateStatus(AppUpdaterStatus.IDLE, undefined);
     }
   }, [showing, status]);
 
   const handlePreDownloadOkay = useCallback(() => {
     // notify main to download the update
-    setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_IN_PROGRESS });
+    setAppUpdateStatus(AppUpdaterStatus.UPDATE_IN_PROGRESS, undefined);
     ipcRenderer.send('app-update', 'start-download');
   }, []);
 
@@ -71,13 +70,13 @@ export const AppUpdater: React.FC<{}> = () => {
     ipcRenderer.on('app-update', (_event, name, payload) => {
       switch (name) {
         case 'update-available':
-          setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_AVAILABLE, version: payload.version });
+          setAppUpdateStatus(AppUpdaterStatus.UPDATE_AVAILABLE, payload.version);
           setAppUpdateShowing(true);
           break;
 
         case 'progress': {
           const progress = (payload.percent as number).toFixed(2);
-          setAppUpdateProgress({ progressPercent: progress, downloadSizeInBytes: payload.total });
+          setAppUpdateProgress(progress, payload.total);
           break;
         }
 
@@ -86,19 +85,19 @@ export const AppUpdater: React.FC<{}> = () => {
           if (explicit) {
             // the user has explicitly checked for an update via the Help menu;
             // we should display some UI feedback if there are no updates available
-            setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_UNAVAILABLE });
+            setAppUpdateStatus(AppUpdaterStatus.UPDATE_UNAVAILABLE, undefined);
             setAppUpdateShowing(true);
           }
           break;
         }
 
         case 'update-downloaded':
-          setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_SUCCEEDED });
+          setAppUpdateStatus(AppUpdaterStatus.UPDATE_SUCCEEDED, undefined);
           setAppUpdateShowing(true);
           break;
 
         case 'error':
-          setAppUpdateStatus({ status: AppUpdaterStatus.UPDATE_FAILED });
+          setAppUpdateStatus(AppUpdaterStatus.UPDATE_FAILED, undefined);
           setAppUpdateError(payload);
           setAppUpdateShowing(true);
           break;

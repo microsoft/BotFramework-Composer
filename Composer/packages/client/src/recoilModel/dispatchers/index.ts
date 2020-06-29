@@ -14,21 +14,26 @@ import { publisherDispatcher } from './publisher';
 import { settingsDispatcher } from './setting';
 import { skillDispatcher } from './skill';
 import { ejectDispatcher } from './eject';
+import { userDispatcher } from './user';
 
-const dispatchers = [
-  editorDispatcher,
-  dialogsDispatcher,
-  projectDispatcher,
-  applicationDispatcher,
-  storageDispatcher,
-  exportDispatcher,
-  lgDispatcher,
-  luDispatcher,
-  navigationDispatcher,
-  publisherDispatcher,
-  settingsDispatcher,
-  skillDispatcher,
-  ejectDispatcher,
-];
+const createDispatchers = () => {
+  return {
+    ...editorDispatcher(),
+    ...dialogsDispatcher(),
+    ...projectDispatcher(),
+    ...applicationDispatcher(),
+    ...storageDispatcher(),
+    ...exportDispatcher(),
+    ...lgDispatcher(),
+    ...luDispatcher(),
+    ...navigationDispatcher(),
+    ...publisherDispatcher(),
+    ...settingsDispatcher(),
+    ...skillDispatcher(),
+    ...ejectDispatcher(),
+    ...userDispatcher(),
+  };
+};
 
-export default dispatchers;
+export default createDispatchers;
+export type Dispatcher = ReturnType<typeof createDispatchers>;

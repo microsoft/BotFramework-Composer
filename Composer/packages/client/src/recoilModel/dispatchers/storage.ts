@@ -20,20 +20,18 @@ export const storageDispatcher = () => {
     }
   );
 
-  const fetchStorages = useRecoilCallback<[string, string], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async () => {
-      const { set } = callbackHelpers;
-      try {
-        const response = await httpClient.put(`/storages`);
-        if (isArray(response.data)) {
-          set(storagesState, [...response.data]);
-        }
-      } catch (ex) {
-        // TODO: Handle exceptions
-        //logMessage(`Error fetching storages: ${ex}`);
+  const fetchStorages = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
+    const { set } = callbackHelpers;
+    try {
+      const response = await httpClient.put(`/storages`);
+      if (isArray(response.data)) {
+        set(storagesState, [...response.data]);
       }
+    } catch (ex) {
+      // TODO: Handle exceptions
+      //logMessage(`Error fetching storages: ${ex}`);
     }
-  );
+  });
 
   const updateCurrentPathForStorage = useRecoilCallback<[string, string], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId: string) => {

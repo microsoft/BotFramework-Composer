@@ -95,8 +95,7 @@ interface IProjectTreeProps {
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
-  const userSettings = useRecoilValue(userSettingsState);
-  const currentWidth = userSettings.dialogNavWidth;
+  const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
