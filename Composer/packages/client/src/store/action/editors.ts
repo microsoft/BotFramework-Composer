@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { ActionCreator } from '../types';
-
 import { ActionTypes } from '../../constants';
 
 export const resetVisualEditor: ActionCreator = ({ dispatch }, isReset) => {
