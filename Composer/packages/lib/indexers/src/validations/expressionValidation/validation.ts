@@ -3,14 +3,12 @@
 import { Expression, ReturnType } from 'adaptive-expressions';
 import formatMessage from 'format-message';
 import { Diagnostic } from '@bfc/shared';
+import startsWith from 'lodash/startsWith';
 
-export const ExpressionType = {
-  number: 'number',
-  integer: 'integer',
-  boolean: 'boolean',
-  string: 'string',
-  array: 'array',
-};
+import { ExpressionType, ExpressionProperty } from './types';
+
+const customFunctionErrorMessage = (func: string) =>
+  `Error: ${func} does not have an evaluator, it's not a built-in function or a custom function`;
 
 const ExpressionTypeMapString = {
   [ReturnType.Number]: 'number',
@@ -35,7 +33,12 @@ const checkReturnType = (returnType: ReturnType, types: string[]): string => {
     : formatMessage('the return type does not match');
 };
 
-export const checkExpression = (exp: string | boolean | number, required: boolean, types: string[]): string => {
+export const checkExpression = (
+  exp: string | boolean | number,
+  required: boolean,
+  types: string[],
+  customFunctions: string[]
+): string => {
   let message = '';
   let returnType: ReturnType = ReturnType.Object;
   switch (typeof exp) {
@@ -52,7 +55,14 @@ export const checkExpression = (exp: string | boolean | number, required: boolea
       try {
         returnType = Expression.parse(exp).returnType;
       } catch (error) {
-        message = `${formatMessage('must be an expression:')} ${error})`;
+        if (
+          customFunctions.length &&
+          customFunctions.some((item) => startsWith(error, customFunctionErrorMessage(item)))
+        ) {
+          message = '';
+        } else {
+          message = `${formatMessage('must be an expression:')} ${error})`;
+        }
       }
     }
   }
@@ -60,12 +70,9 @@ export const checkExpression = (exp: string | boolean | number, required: boolea
   return message;
 };
 
-export const validate = (
-  value: string | boolean | number,
-  required: boolean,
-  path: string,
-  types: string[]
-): Diagnostic | null => {
+export const validate = (expression: ExpressionProperty, customFunctions: string[]): Diagnostic | null => {
+  const { required, path, types } = expression;
+  let value = expression.value;
   //if there is no type do nothing
   //if the json type length more than 2, the type assumes string interpolation
   if (!types.length || types.length > 2 || !isExpression(value, types)) {
@@ -77,7 +84,7 @@ export const validate = (
     value = value.substring(1);
   }
 
-  const message = checkExpression(value, required, types);
+  const message = checkExpression(value, required, types, customFunctions);
   if (!message) return null;
 
   const diagnostic = new Diagnostic(message, '');
