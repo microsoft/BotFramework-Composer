@@ -4,11 +4,11 @@
 import React from 'react';
 import { render } from '@bfc/test-utils';
 
-import OnboardingContext from '../../src/Onboarding/context';
+import OnboardingContext from '../../src/Onboarding/OnboardingContext';
 import { StoreContext } from '../../src/store';
-import TeachingBubbles from '../../src/Onboarding/TeachingBubbles';
-import { stepSets as defaultStepSets } from '../../src/Onboarding/onboarding';
-import WelcomeModal from '../../src/Onboarding/WelcomeModal';
+import TeachingBubbles from '../../src/Onboarding/TeachingBubbles/TeachingBubbles';
+import { stepSets as defaultStepSets } from '../../src/Onboarding/onboardingUtils';
+import WelcomeModal from '../../src/Onboarding/WelcomeModal/WelcomeModal';
 
 describe('<Onboarding />', () => {
   let value;

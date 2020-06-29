@@ -7,7 +7,7 @@ import { Skill } from '@bfc/shared';
 
 import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
-import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal';
+import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal/CreateSkillModal';
 import { renderWithStore } from '../testUtils';
 
 jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl', () => ({

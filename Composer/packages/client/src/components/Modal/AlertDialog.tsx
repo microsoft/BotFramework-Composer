@@ -7,7 +7,8 @@ import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dia
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import ReactDOM from 'react-dom';
 
-import { dialogStyle, builtInStyles } from './styles';
+import { builtInStyles } from './styles';
+import { dialogStyle } from './dialogStyle';
 
 type Props = {
   setting: {

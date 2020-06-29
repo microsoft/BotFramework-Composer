@@ -7,7 +7,7 @@ import { navigate, NavigateOptions } from '@reach/router';
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';
 
 import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from './convertUtils';
-import { BASEPATH } from './../constants/index';
+import { BASEPATH } from '../constants';
 import { resolveToBasePath } from './fileUtil';
 export const BreadcrumbUpdateType = {
   Selected: 'selected',
