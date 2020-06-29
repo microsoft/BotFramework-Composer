@@ -148,8 +148,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onBreadcrumbItemClick: handleBreadcrumbItemClick,
         promptTab: getTabFromFragment(),
       });
+      /* eslint-disable no-underscore-dangle */
       // @ts-ignore
       globalHistory._onTransitionComplete();
+      /* eslint-enable */
     } else {
       //leave design page should clear the history
       clearUndoHistory();

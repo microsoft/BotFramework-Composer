@@ -4,10 +4,10 @@
 import formatMessage from 'format-message';
 
 import { ActionCreator } from '../types';
+import filePersistence from '../persistence/FilePersistence';
 
 import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
-
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/publish/types`);
@@ -121,6 +121,7 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
 
 export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, target) => {
   try {
+    await filePersistence.flush();
     const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
     dispatch({
       type: ActionTypes.GET_PUBLISH_HISTORY,
