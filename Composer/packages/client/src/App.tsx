@@ -25,7 +25,7 @@ import { useLinks } from './utils/hooks';
 
 initializeIcons(undefined, { disableWarnings: true });
 
-const Onboarding = React.lazy(() => import('./Onboarding/Onboarding'));
+const Onboarding = React.lazy(() => import('./Onboarding/OnboardingCase'));
 const AppUpdater = React.lazy(() =>
   import('./components/AppUpdater/AppUpdater').then((module) => ({ default: module.AppUpdater }))
 );
