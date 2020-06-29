@@ -13,3 +13,22 @@ export const setSettings: ActionCreator = async ({ dispatch }, projectId: string
     },
   });
 };
+
+export const setPublishTarget: ActionCreator = async ({ dispatch }, publishTarget) => {
+  dispatch({
+    type: ActionTypes.SET_PUBLISH_TARGETS,
+    payload: {
+      publishTarget,
+    },
+  });
+};
+
+export const setRuntimeSettings: ActionCreator = async ({ dispatch }, { path, commands }) => {
+  dispatch({
+    type: ActionTypes.SET_RUNTIME_SETTINGS,
+    payload: {
+      path,
+      commands,
+    },
+  });
+};
