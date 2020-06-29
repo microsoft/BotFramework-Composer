@@ -1,9 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import { css } from '@emotion/core';
 import React, { useMemo } from 'react';
 import { FormErrors, JSONSchema7, UIOptions, PluginConfig } from '@bfc/extension';
 import ErrorBoundary from 'react-error-boundary';
+import formatMessage from 'format-message';
 
 import PluginContext from '../PluginContext';
 import { mergePluginConfigs } from '../utils/mergePluginConfigs';
@@ -11,6 +15,13 @@ import { mergePluginConfigs } from '../utils/mergePluginConfigs';
 import { SchemaField } from './SchemaField';
 import FormTitle from './FormTitle';
 import ErrorInfo from './ErrorInfo';
+import { LoadingTimeout } from './LoadingTimeout';
+
+const styles = {
+  errorLoading: css`
+    padding: 18px;
+  `,
+};
 
 export interface AdaptiveFormProps {
   errors?: string | FormErrors | string[] | FormErrors[];
@@ -29,12 +40,16 @@ export const AdaptiveForm: React.FC<AdaptiveFormProps> = function AdaptiveForm(p
     return pluginConfig || mergePluginConfigs();
   }, [pluginConfig]);
 
-  if (!formData) {
-    return <>No Data</>;
-  }
-
-  if (!schema) {
-    return null;
+  if (!formData || !schema) {
+    return (
+      <LoadingTimeout timeout={2000}>
+        <div css={styles.errorLoading}>
+          {formatMessage('{type} could not be loaded', {
+            type: formData ? formatMessage('Schema') : formatMessage('Dialog data'),
+          })}
+        </div>
+      </LoadingTimeout>
+    );
   }
 
   return (
