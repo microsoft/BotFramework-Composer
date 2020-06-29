@@ -9,6 +9,12 @@ import { JsonField } from '../JsonField';
 
 import { fieldProps } from './testUtils';
 
+jest.mock('@bfc/extension', () => ({
+  useShellApi: () => ({
+    userSettings: {},
+  }),
+}));
+
 function renderSubject(overrides = {}) {
   const props = assign({}, fieldProps(), overrides);
   return render(<JsonField {...props} />);
