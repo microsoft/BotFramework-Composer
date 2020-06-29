@@ -3,7 +3,7 @@
 
 import { ActionCreator } from '../types';
 
-import { ActionTypes } from './../../constants/index';
+import { ActionTypes } from '../../constants';
 import httpClient from './../../utils/httpUtil';
 import { setSettings } from './setting';
 

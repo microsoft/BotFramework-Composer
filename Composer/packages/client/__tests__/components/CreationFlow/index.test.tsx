@@ -6,7 +6,7 @@ import { render, fireEvent } from '@bfc/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
 import { StoreContext } from '../../../src/store';
-import CreationFlow from '../../../src/components/CreationFlow/index';
+import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
 import { CreationFlowStatus } from '../../../src/constants';
 
 jest.mock('../../../src/components/DialogWrapper', () => {

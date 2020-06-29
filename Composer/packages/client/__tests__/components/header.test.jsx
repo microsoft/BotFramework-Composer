@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { Header } from '../../src/components/Header';
+import { Header } from '../../src/components/Header/Header';
 
 describe('<Header />', () => {
   it('should render the header', () => {

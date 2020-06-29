@@ -14,7 +14,7 @@ import { isElectron } from '../utils/electronUtil';
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
-import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from './../constants';
+import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from '../constants';
 import {
   BotState,
   AppState,

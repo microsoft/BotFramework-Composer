@@ -6,7 +6,7 @@ import { fireEvent } from '@bfc/test-utils';
 
 import { renderWithStore } from '../../../testUtils';
 import { StorageFolder } from '../../../../src/store/types';
-import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation';
+import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation/DefineConversation';
 
 describe('<DefineConversation/>', () => {
   const onCurrentPathUpdateMock = jest.fn();

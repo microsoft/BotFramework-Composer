@@ -1,228 +1,159 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
-import { ITeachingBubbleProps } from 'office-ui-fabric-react/lib/TeachingBubble';
-import { generateUniqueId } from '@bfc/shared';
 
-export interface IComposerTeachingBubble extends ITeachingBubbleProps {
-  children?: any;
-  primaryButtonProps?: any;
-  secondaryButtonProps?: any;
-}
+import onboardingState from '../utils/onboardingStorage';
+import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
+import { StoreContext } from '../store';
+import { useLocation } from '../utils/hooks';
 
-export interface IStep {
-  hidden?: boolean;
-  id: string;
-  location?: string;
-  navigateTo?: string;
-  selector?: string;
-  targetId?: string;
-}
+import OnboardingContext from './OnboardingContext';
+import TeachingBubbles from './TeachingBubbles/TeachingBubbles';
+import WelcomeModal from './WelcomeModal/WelcomeModal';
+import { IStepSet, stepSets as defaultStepSets } from './onboardingUtils';
 
-export interface IStepSet {
-  id: string;
-  steps: IStep[];
-  title?: string;
-}
+const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
 
-export const stepSets = (projectId: string, rootDialogId: string): IStepSet[] => [
-  {
-    id: 'setUpBot',
-    steps: [{ id: 'setUpYourBot', targetId: 'project' }],
-    title: formatMessage('Set up your bot'),
-  },
-  {
-    id: 'basics',
-    steps: [
-      {
-        id: 'mainDialog',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'mainDialog',
-      },
-      {
-        id: 'trigger',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'addNew',
-      },
-      {
-        id: 'userInput',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navUserInput',
-      },
-      {
-        id: 'actions',
-        location: 'visualEditor',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'action',
-      },
-      {
-        id: 'botResponses',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'navBotResponses',
-      },
-    ],
-    title: formatMessage('Learn the basics'),
-  },
-  {
-    id: 'welcomeMessage',
-    steps: [
-      {
-        id: 'welcomeMessage',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'addNew',
-      },
-    ],
-    title: formatMessage('Add welcome message'),
-  },
-  {
-    id: 'intent trigger',
-    steps: [
-      {
-        id: 'intentTrigger',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'addNew',
-      },
-    ],
-    title: formatMessage('Add an intent trigger'),
-  },
-  {
-    id: 'testBot',
-    steps: [
-      {
-        id: 'startBot',
-        navigateTo: `/bot/${projectId}/dialogs/${rootDialogId}?selected=triggers[0]`,
-        targetId: 'startBot',
-      },
-    ],
-    title: formatMessage('Test your bot'),
-  },
-];
+const Onboarding: React.FC = () => {
+  const didMount = useRef(false);
+  const {
+    actions: { onboardingSetComplete },
+    state: {
+      dialogs,
+      onboarding: { complete },
+      projectId,
+    },
+  } = useContext(StoreContext);
 
-const Bold = ({ children }) => <b key={generateUniqueId()}>{children}</b>;
-const Italics = ({ children }) => <i key={generateUniqueId()}>{children}</i>;
+  const rootDialogId = dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
 
-export const getTeachingBubble = (id: string | undefined): IComposerTeachingBubble => {
-  switch (id) {
-    case 'setUpYourBot':
-      return {
-        children: formatMessage(
-          'We have created a sample bot to help you get started with Composer. Click here to open the bot.'
-        ),
-        headline: formatMessage('Get started!'),
-      };
-
-    case 'mainDialog':
-      return {
-        children: formatMessage('The main dialog is named after your bot. It is the root and entry point of a bot.'),
-        headline: formatMessage('Main dialog'),
-      };
-
-    case 'trigger':
-      return {
-        children: formatMessage.rich(
-          'Triggers connect intents with bot responses. Think of a trigger as one capability of your bot. So your bot is a collection of triggers. To add a new trigger, click the <b>Add</b> button in the toolbar, and then select the <b>Add a new trigger</b> option from the dropdown menu.',
-          {
-            b: Bold,
+  const stepSets = useMemo<IStepSet[]>(() => {
+    return defaultStepSets(projectId, rootDialogId)
+      .map((stepSet) => ({
+        ...stepSet,
+        steps: stepSet.steps.filter(({ targetId }) => {
+          if (dialogs.length === 0) {
+            return !(targetId === 'mainDialog' || targetId === 'newTrigger' || targetId === 'action');
+          } else if (dialogs[0]?.triggers.length === 0) {
+            return targetId !== 'action';
           }
-        ),
-        headline: formatMessage('Add a new trigger'),
-      };
-
-    case 'userInput':
-      return {
-        children: formatMessage.rich(
-          'You can define and manage <b>intents</b> here. Each intent describes a particular user intention through utterances (i.e. user says). <b>Intents are often triggers of your bot.</b>',
-          {
-            b: Bold,
-          }
-        ),
-        headline: formatMessage('User input'),
-      };
-
-    case 'actions':
-      return {
-        children: formatMessage.rich('Actions define <b>how the bot responds</b> to a certain trigger.', {
-          b: Bold,
+          return true;
         }),
-        headline: formatMessage('Actions'),
-      };
+      }))
+      .filter(({ steps }) => steps.length);
+  }, [projectId, rootDialogId]);
 
-    case 'botResponses':
-      return {
-        children: formatMessage(
-          'You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs.'
-        ),
-        headline: formatMessage('Bot responses'),
-      };
+  const [currentSet, setCurrentSet] = useState<number>(getCurrentSet(stepSets));
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [hideModal, setHideModal] = useState(true);
+  const [minimized, setMinimized] = useState<boolean>(false);
+  const [teachingBubble, setTeachingBubble] = useState<any>({});
 
-    case 'welcomeMessage':
-      return {
-        children: (
-          <div>
-            {formatMessage.rich(
-              'The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:',
-              {
-                i: Italics,
-              }
-            )}
-            <ol>
-              <li>
-                {formatMessage.rich(
-                  'Click the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b> from the dropdown menu.',
-                  {
-                    b: Bold,
-                  }
-                )}
-              </li>
-              <li>
-                {formatMessage.rich(
-                  'In the <b>Create a trigger</b> wizard, set the trigger type to <i>Activities</i> in the dropdown. Then set the <b>Activity Type</b> to <i>Greeting (ConversationUpdate activity)</i>, and click the <b>Submit</b> button.',
-                  { b: Bold, i: Italics }
-                )}
-              </li>
-              <li>
-                {formatMessage.rich(
-                  "To customize the welcome message, select the <i>Send a response</i> action in the Visual Editor. Then in the Form Editor on the right, you can edit the bot's welcome message in the <b>Language Generation</b> field.",
-                  { b: Bold, i: Italics }
-                )}
-              </li>
-            </ol>
-          </div>
-        ),
-        headline: formatMessage('Add a welcome message'),
-      };
+  const {
+    location: { pathname },
+  } = useLocation();
 
-    case 'intentTrigger':
-      return {
-        children: formatMessage.rich(
-          'Click on the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b>. In the <b>Create a trigger</b> wizard, set the <b>Trigger Type</b> to <i>Intent recognized</i> and configure the <b>Trigger Name</b> and <b>Trigger Phrases</b>. Then add actions in the Visual Editor.',
-          { b: Bold, i: Italics }
-        ),
-        headline: formatMessage('Add an intent trigger'),
-      };
+  useEffect(() => {
+    if (didMount.current && complete) {
+      setCurrentSet(0);
+      setCurrentStep(0);
+      setHideModal(true);
+    }
+    didMount.current = true;
+  }, [complete]);
 
-    case 'startBot':
-      return {
-        children: formatMessage.rich(
-          "This will open your Emulator application. If you don't yet have the Bot Framework Emulator installed, you can download it <a>here</a>.",
-          {
-            a: ({ children }) => (
-              <a
-                href="https://github.com/microsoft/BotFramework-Emulator/releases/latest"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {children}
-              </a>
-            ),
-          }
-        ),
-        headline: formatMessage('Test your bot'),
-      };
+  useEffect(() => {
+    const { steps } = stepSets[currentSet] || { steps: [] };
+    const coachMark = steps[currentStep] || {};
+    const { id, location, navigateTo, targetId } = coachMark;
+    !complete && projectId && navigateTo && navigate(navigateTo);
+    setTeachingBubble({ currentStep, id, location, setLength: steps.length, targetId });
 
-    default:
-      return {};
-  }
+    setMinimized(currentStep >= 0);
+
+    if (currentSet > -1 && currentSet < stepSets.length) {
+      onboardingState.setCurrentSet(stepSets[currentSet].id);
+    }
+  }, [currentSet, currentStep, setTeachingBubble, projectId]);
+
+  useEffect(() => {
+    setHideModal(pathname !== `/bot/${projectId}/dialogs/${rootDialogId}`);
+    if (currentSet === 0) {
+      setCurrentStep(pathname === '/home' ? 0 : -1);
+    }
+  }, [pathname, rootDialogId]);
+
+  const nextSet = useCallback(() => {
+    setCurrentSet((current) => {
+      let nextSet = -1;
+
+      if (current + 1 < stepSets.length) {
+        nextSet = current + 1;
+        setCurrentStep(0);
+      }
+      return nextSet;
+    });
+  }, [setCurrentSet, stepSets]);
+
+  const nextStep = useCallback(() => {
+    const { steps } = stepSets[currentSet] || { steps: [] };
+    setCurrentStep((current) => (current + 1 < steps.length ? current + 1 : -1));
+  }, [currentSet, setCurrentStep, stepSets]);
+
+  const previousStep = useCallback(() => {
+    setCurrentStep((current) => (current > 0 ? current - 1 : current));
+  }, [setCurrentStep]);
+
+  const onComplete = useCallback(() => {
+    onboardingSetComplete(true);
+    onboardingState.set({ complete: true });
+  }, [onboardingSetComplete]);
+
+  const exit = useCallback(async () => {
+    const result = await OpenConfirmModal(
+      formatMessage('Leave Product Tour?'),
+      formatMessage(
+        'Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings.'
+      )
+    );
+
+    if (result) {
+      onComplete();
+    }
+  }, [onComplete]);
+
+  const toggleMinimized = useCallback(() => setMinimized((minimized) => !minimized), [setMinimized]);
+
+  const value = {
+    actions: {
+      exit,
+      nextSet,
+      nextStep,
+      onComplete,
+      previousStep,
+      setMinimized,
+      toggleMinimized,
+    },
+    state: {
+      complete,
+      currentSet,
+      currentStep,
+      hideModal,
+      minimized,
+      stepSets,
+      teachingBubble,
+    },
+  };
+
+  return complete ? null : (
+    <OnboardingContext.Provider value={value}>
+      <WelcomeModal />
+      <TeachingBubbles />
+    </OnboardingContext.Provider>
+  );
 };
+
+export default Onboarding;

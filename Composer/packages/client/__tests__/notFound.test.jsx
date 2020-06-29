@@ -4,8 +4,8 @@
 import * as React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { BASEPATH } from '../src/constants/index';
-import { NotFound } from '../src/components/NotFound';
+import { BASEPATH } from '../src/constants';
+import { NotFound } from '../src/components/NotFound/NotFound';
 
 describe('<NotFound />', () => {
   it('should render a not found page', async () => {

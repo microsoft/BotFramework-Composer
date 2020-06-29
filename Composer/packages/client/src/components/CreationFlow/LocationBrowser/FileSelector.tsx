@@ -23,7 +23,7 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import moment from 'moment';
 
-import { FileTypes } from '../../../constants/index';
+import { FileTypes } from '../../../constants';
 import { StorageFolder, File } from '../../../store/types';
 import { getFileIconName, calculateTimeDiff } from '../../../utils';
 
