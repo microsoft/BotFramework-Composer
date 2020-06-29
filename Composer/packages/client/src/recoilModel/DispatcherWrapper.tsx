@@ -1,25 +1,32 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React, { useRef, useEffect, Fragment, useState } from 'react';
-import { useSetRecoilState, atom } from 'recoil';
 
-import dispatchers from './dispatchers';
+import { useRef, useEffect, useState, Fragment } from 'react';
+import { atom, useRecoilState } from 'recoil';
+import once from 'lodash/once';
+import React from 'react';
 
-export const dispatcherState = atom<any | undefined>({
+import { prepareAxios } from '../utils/auth';
+
+import createDispatchers, { Dispatcher } from './dispatchers';
+
+export const dispatcherState = atom<Dispatcher>({
   key: 'dispatcherState',
-  default: undefined,
+  default: {} as Dispatcher,
 });
 
 export const DispatcherWrapper = ({ children }) => {
   const [init, setInit] = useState(false);
-  const combinedDispatchers = dispatchers.reduce((result, dispatcher) => ({ ...result, ...dispatcher() }), {});
-  // Use a ref to ensure the dispatcher is only created once
-  const dispatcherRef = useRef(combinedDispatchers);
+  const prepareAxiosWithRecoil = once(prepareAxios);
 
-  const setDispatcher = useSetRecoilState(dispatcherState);
+  // Use a ref to ensure the dispatcher is only created once
+  const dispatcherRef = useRef(createDispatchers());
+
+  const [currentDispatcherState, setDispatcher] = useRecoilState(dispatcherState);
 
   useEffect(() => {
     setDispatcher(dispatcherRef.current);
+    prepareAxiosWithRecoil(currentDispatcherState);
     setInit(true);
   }, []);
 

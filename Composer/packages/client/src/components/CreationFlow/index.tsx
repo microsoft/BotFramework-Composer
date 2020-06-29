@@ -30,13 +30,13 @@ type CreationFlowProps = RouteComponentProps<{}>;
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     openBotProject,
-    fetchTemplates,
+    fetchTemplateProjects,
     saveProjectAs,
     saveTemplateId,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
-    updateCurrentPath: updateCurrentPathDispatcher,
+    updateCurrentPathForStorage,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
@@ -60,7 +60,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   useEffect(() => {
     fetchStorages();
-    fetchTemplates();
+    fetchTemplateProjects();
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
@@ -69,7 +69,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
     if (newPath) {
       const formattedPath = Path.normalize(newPath);
-      await updateCurrentPathDispatcher(formattedPath, storageId);
+      await updateCurrentPathForStorage(formattedPath, storageId);
     }
   };
 

@@ -26,9 +26,9 @@ const ElectronSettings = lazy(() =>
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
-  const onboarding = useRecoilValue(onboardingState);
-  const userSettings = useRecoilValue(userSettingsState);
   const { onboardingSetComplete, updateUserSettings } = useRecoilValue(dispatcherState);
+  const userSettings = useRecoilValue(userSettingsState);
+  const { complete } = useRecoilValue(onboardingState);
 
   const onOnboardingChange = useCallback(
     (checked: boolean) => {
@@ -50,7 +50,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       <section css={section}>
         <h2>{formatMessage('Onboarding')}</h2>
         <SettingToggle
-          checked={!onboarding.complete}
+          checked={!complete}
           description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
           id="onboardingToggle"
           image={images.onboarding}

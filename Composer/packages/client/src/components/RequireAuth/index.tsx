@@ -25,8 +25,8 @@ const loginOnce = once((login: BoundAction) => {
 
 export const RequireAuth: React.FC = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const currentUser = useRecoilValue(currentUserState);
   const { loginUser } = useRecoilValue(dispatcherState);
+  const currentUser = useRecoilValue(currentUserState);
 
   useEffect(() => {
     loginOnce(loginUser);
