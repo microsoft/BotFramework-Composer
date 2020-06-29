@@ -9,6 +9,9 @@ context('Notification Page', () => {
   it('can show lg syntax error ', () => {
     cy.visitPage('Bot Responses');
 
+    // click the logo to clear any stray tooltips from page navigation
+    cy.findByAltText('Composer Logo').click();
+
     cy.get('.toggleEditMode button').as('switchButton');
     cy.get('@switchButton').click();
     cy.get('textarea').type('#', { delay: 200 });
@@ -24,6 +27,9 @@ context('Notification Page', () => {
 
   it('can show lu syntax error ', () => {
     cy.visitPage('User Input');
+
+    // click the logo to clear any stray tooltips from page navigation
+    cy.findByAltText('Composer Logo').click();
 
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestToDoBotWithLuisSample').click();
