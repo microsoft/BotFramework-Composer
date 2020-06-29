@@ -447,6 +447,20 @@ const syncEnvSetting: ReducerFunc = (state, { settings, projectId }) => {
   return state;
 };
 
+const setPublishTargets: ReducerFunc = (state, { publishTarget }) => {
+  state.publishTargets = publishTarget;
+  return state;
+};
+
+const setRuntimeSettings: ReducerFunc = (state, { path, command }) => {
+  state.settings.runtime = {
+    customRuntime: true,
+    path,
+    command,
+  };
+  return state;
+};
+
 const setTemplateProjects: ReducerFunc = (state, { response } = {}) => {
   const data = response && response.data;
 
@@ -702,4 +716,6 @@ export const reducer = createReducer({
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
+  [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
+  [ActionTypes.SET_RUNTIME_SETTINGS]: setRuntimeSettings,
 });

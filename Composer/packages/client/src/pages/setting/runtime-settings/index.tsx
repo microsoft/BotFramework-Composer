@@ -23,6 +23,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
   const changeEnabled = (_, on) => {
+    // TODO: CHANGE THIS
     actions.setSettings(projectId, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
   };
 

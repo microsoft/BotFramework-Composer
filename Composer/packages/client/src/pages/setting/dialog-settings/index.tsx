@@ -30,8 +30,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
 
   const saveChangeResult = (result) => {
     try {
-      const mergedResult = result;
-      actions.setSettings(projectId, mergedResult);
+      actions.setSettings(projectId, result);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err.message);
