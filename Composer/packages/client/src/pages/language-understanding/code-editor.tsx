@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LuEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
@@ -13,8 +13,8 @@ import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { luFilesState, projectIdState, localeState } from '../../recoilModel/atoms/botState';
+import { userSettingsState, dispatcherState } from '../../recoilModel';
 
 const lspServerPath = '/lu-language-server';
 
@@ -23,9 +23,12 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { actions, state } = useContext(StoreContext);
-  const { userSettings } = state;
-
+  const userSettings = useRecoilValue(userSettingsState);
+  const {
+    updateLuIntent: updateLuIntentDispatcher,
+    updateLuFile: updateLuFileDispatcher,
+    updateUserSettings,
+  } = useRecoilValue(dispatcherState);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
@@ -87,7 +90,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
             Body,
           },
         };
-        actions.updateLuIntent(payload);
+        updateLuIntentDispatcher(payload);
       }, 500),
     [file, intent, projectId]
   );
@@ -102,7 +105,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           id,
           content,
         };
-        actions.updateLuFile(payload);
+        updateLuFileDispatcher(payload);
       }, 500),
     [file, projectId]
   );
@@ -127,7 +130,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   };
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
-    actions.updateUserSettings({ codeEditor: settings });
+    updateUserSettings({ codeEditor: settings });
   };
 
   return (

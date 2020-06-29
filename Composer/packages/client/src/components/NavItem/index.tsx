@@ -3,13 +3,14 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { Link } from '@reach/router';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { useLocation, useRouterCache } from '../../utils/hooks';
+import { dispatcherState } from '../../recoilModel';
 
 import { link, icon } from './styles';
 
@@ -30,9 +31,7 @@ export interface INavItemProps {
 }
 
 export const NavItem: React.FC<INavItemProps> = (props) => {
-  const {
-    actions: { onboardingAddCoachMarkRef },
-  } = useContext(StoreContext);
+  const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
 
   const { to, iconName, labelName, disabled, showTooltip } = props;
   const {

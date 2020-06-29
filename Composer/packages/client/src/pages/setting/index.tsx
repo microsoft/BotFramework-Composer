@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
@@ -11,13 +11,13 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { useRecoilValue } from 'recoil';
 
 import { useLocation } from '../../utils/hooks';
-import { StoreContext } from '../../store';
 import { TestController } from '../../components/TestController';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
 import { navigateTo } from '../../utils';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
 import { projectIdState } from '../../recoilModel/atoms/botState';
+import { dispatcherState } from '../../recoilModel';
 
 import { SettingsRoutes } from './router';
 
@@ -26,7 +26,7 @@ const getProjectLink = (path: string, id?: string) => {
 };
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
-  const { actions } = useContext(StoreContext);
+  const { deleteBotProject } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(projectIdState);
   const { navigate } = useLocation();
 
@@ -124,7 +124,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     };
     const res = await OpenConfirmModal(title, null, settings);
     if (res) {
-      await actions.deleteBotProject(projectId);
+      await deleteBotProject(projectId);
       navigateTo('home');
     }
   };

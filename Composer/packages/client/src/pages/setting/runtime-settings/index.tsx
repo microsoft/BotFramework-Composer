@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -12,23 +12,22 @@ import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { StoreContext } from '../../../store';
-import { botNameState, settingsState, projectIdState } from '../../../recoilModel/atoms/botState';
+import { botNameState, settingsState, projectIdState, dispatcherState } from '../../../recoilModel';
 
 import { EjectModal } from './ejectModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
-  const { actions } = useContext(StoreContext);
   const botName = useRecoilValue(botNameState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
+  const { setSettings, ejectRuntime: ejectRuntimeDispatcher } = useRecoilValue(dispatcherState);
 
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
   const changeEnabled = (_, on) => {
-    actions.setSettings(projectId, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
+    setSettings(projectId, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
   };
 
   const updateSetting = (field) => (e, newValue) => {
@@ -39,7 +38,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       error = 'This is a required field.';
     }
 
-    actions.setSettings(projectId, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
+    setSettings(projectId, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
 
     if (valid) {
       setFormDataErrors({ ...formDataErrors, [field]: '' });
@@ -73,7 +72,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   };
 
   const ejectRuntime = async (templateKey: string) => {
-    await actions.ejectRuntime(projectId, templateKey);
+    await ejectRuntimeDispatcher(projectId, templateKey);
     closeEjectModal();
   };
 

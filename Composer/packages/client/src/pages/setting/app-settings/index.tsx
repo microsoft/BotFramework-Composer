@@ -3,16 +3,17 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { lazy, useCallback, useContext, useState, Suspense } from 'react';
+import { lazy, useCallback, useState, Suspense } from 'react';
 import formatMessage from 'format-message';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { DirectionalHint } from 'office-ui-fabric-react/lib/common/DirectionalHint';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../../store';
 import { isElectron } from '../../../utils/electronUtil';
+import { onboardingState, userSettingsState, dispatcherState } from '../../../recoilModel';
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
@@ -25,13 +26,9 @@ const ElectronSettings = lazy(() =>
 const AppSettings: React.FC<RouteComponentProps> = () => {
   const [calloutIsShown, showCallout] = useState(false);
 
-  const {
-    actions: { onboardingSetComplete, updateUserSettings },
-    state: {
-      onboarding: { complete },
-      userSettings,
-    },
-  } = useContext(StoreContext);
+  const onboarding = useRecoilValue(onboardingState);
+  const userSettings = useRecoilValue(userSettingsState);
+  const { onboardingSetComplete, updateUserSettings } = useRecoilValue(dispatcherState);
 
   const onOnboardingChange = useCallback(
     (checked: boolean) => {
@@ -53,7 +50,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
       <section css={section}>
         <h2>{formatMessage('Onboarding')}</h2>
         <SettingToggle
-          checked={!complete}
+          checked={!onboarding.complete}
           description={formatMessage('Introduction of key concepts and user experience elements for Composer.')}
           id="onboardingToggle"
           image={images.onboarding}

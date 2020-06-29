@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   GroupedList,
   IGroup,
@@ -18,9 +18,10 @@ import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { createSelectedPath, getFriendlyName } from '../../utils';
+import { dispatcherState, userSettingsState } from '../../recoilModel';
 
 import { groupListStyle, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';
@@ -93,12 +94,10 @@ interface IProjectTreeProps {
 }
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
-  const {
-    actions: { onboardingAddCoachMarkRef, updateUserSettings },
-    state: {
-      userSettings: { dialogNavWidth: currentWidth },
-    },
-  } = useContext(StoreContext);
+  const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
+  const userSettings = useRecoilValue(userSettingsState);
+  const currentWidth = userSettings.dialogNavWidth;
+
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');

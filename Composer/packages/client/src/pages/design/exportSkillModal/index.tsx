@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
@@ -11,8 +11,7 @@ import { JSONSchema7 } from '@bfc/extension';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../../store';
-import { skillManifestsState } from '../../../recoilModel/atoms/botState';
+import { skillManifestsState, dispatcherState } from '../../../recoilModel';
 
 import { editorSteps, ManifestEditorSteps, order, SkillManifest } from './constants';
 import { styles } from './styles';
@@ -24,9 +23,8 @@ interface ExportSkillModalProps {
 }
 
 const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss }) => {
-  const { actions } = useContext(StoreContext);
   const skillManifests = useRecoilValue(skillManifestsState);
-  const { updateSkillManifest } = actions;
+  const { updateSkillManifest } = useRecoilValue(dispatcherState);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});

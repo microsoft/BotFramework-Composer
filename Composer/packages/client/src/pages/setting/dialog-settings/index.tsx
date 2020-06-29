@@ -3,15 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../../store';
 import { botNameState, settingsState, projectIdState } from '../../../recoilModel/atoms/botState';
+import { dispatcherState } from '../../../recoilModel';
 
 import { hostedSettings, hostedControls, settingsEditor } from './style';
 
@@ -27,15 +26,15 @@ const hostControlLabels = {
 };
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
-  const { actions } = useContext(StoreContext);
   const botName = useRecoilValue(botNameState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
+  const { setSettings } = useRecoilValue(dispatcherState);
 
   const saveChangeResult = (result) => {
     try {
       const mergedResult = result;
-      actions.setSettings(projectId, mergedResult);
+      setSettings(projectId, mergedResult);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err.message);

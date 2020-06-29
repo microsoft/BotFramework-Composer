@@ -3,16 +3,17 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useEffect, useMemo, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
 import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { AppUpdaterStatus } from '../../constants';
+import { appUpdateState, dispatcherState } from '../../recoilModel';
 
 import { dialogContent, dialogCopy, dialogFooter, optionRoot, optionIcon, updateAvailableDismissBtn } from './styles';
 
@@ -34,10 +35,10 @@ const downloadOptions = {
 };
 
 export const AppUpdater: React.FC<{}> = () => {
-  const {
-    actions: { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus },
-    state: { appUpdate },
-  } = useContext(StoreContext);
+  const appUpdate = useRecoilValue(appUpdateState);
+  const { setAppUpdateError, setAppUpdateProgress, setAppUpdateShowing, setAppUpdateStatus } = useRecoilValue(
+    dispatcherState
+  );
   const { downloadSizeInBytes, error, progressPercent, showing, status, version } = appUpdate;
   const [downloadOption, setDownloadOption] = useState(downloadOptions.installAndUpdate);
 

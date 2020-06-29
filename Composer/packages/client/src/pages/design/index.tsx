@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Suspense, useContext, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
@@ -24,7 +24,6 @@ import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/styles';
 import { OpenConfirmModal } from '../../components/Modal/Confirm';
 import { ProjectTree } from '../../components/ProjectTree';
-import { StoreContext } from '../../store';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
@@ -35,8 +34,16 @@ import {
   projectIdState,
   schemasState,
   showCreateDialogModalState,
-} from '../../recoilModel/atoms/botState';
-import { dispatcherState } from '../../recoilModel/DispatcherWraper';
+  dispatcherState,
+  displaySkillManifestState,
+  breadcrumbState,
+  visualEditorSelectionState,
+  focusPathState,
+  designPageLocationState,
+  showAddSkillDialogModalState,
+  skillsState,
+  actionsSeedState,
+} from '../../recoilModel';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
@@ -92,14 +99,34 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const { state, actions } = useContext(StoreContext);
   const dialogs = useRecoilValue(dialogsState);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
+  const displaySkillManifest = useRecoilValue(displaySkillManifestState);
+  const breadcrumb = useRecoilValue(breadcrumbState);
+  const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
+  const focusPath = useRecoilValue(focusPathState);
+  const designPageLocation = useRecoilValue(designPageLocationState);
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-  const { removeDialog, updateDialog, createDialogCancel, createDialog } = useRecoilValue(dispatcherState);
-  const { displaySkillManifest, breadcrumb, visualEditorSelection, focusPath, designPageLocation } = state;
-  const { dismissManifestModal, setDesignPageLocation, navTo, selectTo, setectAndfocus, clearUndoHistory } = actions;
+  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
+  const skills = useRecoilValue(skillsState);
+  const actionsSeed = useRecoilValue(actionsSeedState);
+  const {
+    removeDialog,
+    updateDialog,
+    createDialogCancel,
+    createDialog,
+    dismissManifestModal,
+    setDesignPageLocation,
+    navTo,
+    selectTo,
+    setectAndfocus,
+    clearUndoHistory,
+    addSkillDialogCancel,
+    updateLuFile,
+    updateSkill,
+  } = useRecoilValue(dispatcherState);
+
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
@@ -171,11 +198,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         content: luFile.content,
         projectId,
       };
-      actions.updateLuFile(luFilePayload);
+      updateLuFile(luFilePayload);
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
-    actions.selectTo(`triggers[${index}]`);
+    selectTo(`triggers[${index}]`);
     updateDialog(dialogPayload);
   };
 
@@ -203,7 +230,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         iconProps: {
           iconName: 'Undo',
         },
-        onClick: () => actions.undo(),
+        onClick: () => {}, //TODO: undo
       },
       align: 'left',
       disabled: !undoHistory.canUndo(),
@@ -215,7 +242,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         iconProps: {
           iconName: 'Redo',
         },
-        onClick: () => actions.redo(),
+        onClick: () => {}, //TODO: redo
       },
       align: 'left',
       disabled: !undoHistory.canRedo(),
@@ -326,7 +353,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
   async function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
-    await actions.updateSkill({ projectId, targetId: -1, skillData });
+    await updateSkill({ projectId, targetId: -1, skillData });
   }
 
   async function handleCreateDialogSubmit(data: { name: string; description: string }) {
@@ -335,7 +362,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       generator: `${data.name}.lg`,
     });
     if (seededContent.triggers?.[0]) {
-      seededContent.triggers[0].actions = state.actionsSeed;
+      seededContent.triggers[0].actions = actionsSeed;
     }
 
     await createDialog({ id: data.name, content: seededContent });
@@ -444,13 +471,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             onSubmit={handleCreateDialogSubmit}
           />
         )}
-        {state.showAddSkillDialogModal && (
+        {showAddSkillDialogModal && (
           <CreateSkillModal
             editIndex={-1}
-            isOpen={state.showAddSkillDialogModal}
+            isOpen={showAddSkillDialogModal}
             projectId={projectId}
-            skills={state.skills}
-            onDismiss={() => actions.addSkillDialogCancel()}
+            skills={skills}
+            onDismiss={() => addSkillDialogCancel()}
             onSubmit={handleAddSkillDialogSubmit}
           />
         )}

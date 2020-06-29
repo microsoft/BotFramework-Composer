@@ -4,16 +4,15 @@
 /** @jsx jsx */
 import formatMessage from 'format-message';
 import { jsx } from '@emotion/core';
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../../constants';
 import { File } from '../../../store/types';
-import { StoreContext } from '../../../store';
 import { FileTypes } from '../../../constants';
 import { StorageFolder } from '../../../store/types';
-import { creationFlowStatusState } from '../../../recoilModel/atoms/appState';
+import { creationFlowStatusState, storagesState, storageFileLoadingStatusState } from '../../../recoilModel';
 
 import { FileSelector } from './FileSelector';
 import { loading, fileSelectorContainer } from './styles';
@@ -30,9 +29,9 @@ interface LocationSelectContentProps {
 
 export const LocationSelectContent: React.FC<LocationSelectContentProps> = (props) => {
   const { onOpen, onCurrentPathUpdate, operationMode, focusedStorageFolder } = props;
-  const { state } = useContext(StoreContext);
+  const storages = useRecoilValue(storagesState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
-  const { storages, storageFileLoadingStatus } = state;
+  const storageFileLoadingStatus = useRecoilValue(storageFileLoadingStatusState);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const isWindows = storage && storage.platform === 'win32';

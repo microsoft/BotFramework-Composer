@@ -5,11 +5,12 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { useContext, useCallback, Fragment } from 'react';
+import { useCallback, Fragment } from 'react';
+import { useRecoilValue } from 'recoil';
 
 import composerIcon from '../../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../../constants';
-import { StoreContext } from '../../store';
+import { dispatcherState, appUpdateState } from '../../recoilModel';
 
 import { updateAvailableIcon, headerContainer, title, botName, divider, headerTextContainer } from './styles';
 
@@ -19,10 +20,8 @@ type Props = {
 };
 
 export const Header = (props: Props) => {
-  const {
-    actions: { setAppUpdateShowing },
-    state: { appUpdate },
-  } = useContext(StoreContext);
+  const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
+  const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
 
   const onUpdateAvailableClick = useCallback(() => {

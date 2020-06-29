@@ -4,14 +4,21 @@
 // TODO: Remove path module
 import Path from 'path';
 
-import React, { useEffect, useContext, useRef, Fragment } from 'react';
+import React, { useEffect, useRef, Fragment } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
-import { StoreContext } from '../../store';
 import Home from '../../pages/home';
-import { dispatcherState } from '../../recoilModel/DispatcherWraper';
+import {
+  dispatcherState,
+  creationFlowStatusState,
+  projectIdState,
+  templateIdState,
+  templateProjectsState,
+  storagesState,
+  focusedStorageFolderState,
+} from '../../recoilModel';
 import { navigateTo } from '../../utils';
 
 import { CreateOptions } from './CreateOptions';
@@ -21,18 +28,22 @@ import DefineConversation from './DefineConversation';
 type CreationFlowProps = RouteComponentProps<{}>;
 
 const CreationFlow: React.FC<CreationFlowProps> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { openBotProject } = useRecoilValue(dispatcherState);
-  const { creationFlowStatus } = state;
   const {
+    openBotProject,
     fetchTemplates,
     saveProjectAs,
     saveTemplateId,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
-  } = actions;
-  const { templateId, templateProjects, storages, focusedStorageFolder } = state;
+    updateCurrentPath: updateCurrentPathDispatcher,
+  } = useRecoilValue(dispatcherState);
+  const creationFlowStatus = useRecoilValue(creationFlowStatusState);
+  const projectId = useRecoilValue(projectIdState);
+  const templateId = useRecoilValue(templateIdState);
+  const templateProjects = useRecoilValue(templateProjectsState);
+  const storages = useRecoilValue(storagesState);
+  const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
   const { createProject } = useRecoilValue(dispatcherState);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
@@ -58,7 +69,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
     if (newPath) {
       const formattedPath = Path.normalize(newPath);
-      await actions.updateCurrentPath(formattedPath, storageId);
+      await updateCurrentPathDispatcher(formattedPath, storageId);
     }
   };
 
@@ -88,7 +99,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const handleSaveAs = async (formData) => {
     await saveProjectAs(
-      state.projectId,
+      projectId,
       formData.name,
       formData.description,
       Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || '')

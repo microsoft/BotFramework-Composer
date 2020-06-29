@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LgEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
@@ -13,8 +13,8 @@ import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { localeState, lgFilesState, projectIdState } from '../../recoilModel/atoms/botState';
+import { userSettingsState, dispatcherState } from '../../recoilModel';
 
 const lspServerPath = '/lg-language-server';
 
@@ -23,11 +23,11 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { actions, state } = useContext(StoreContext);
-  const { userSettings } = state;
+  const userSettings = useRecoilValue(userSettingsState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
   const lgFiles = useRecoilValue(lgFilesState);
+  const actions = useRecoilValue(dispatcherState);
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const diagnostics = get(file, 'diagnostics', []);

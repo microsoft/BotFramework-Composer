@@ -12,9 +12,7 @@ import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { LoadingSpinner } from './components/LoadingSpinner';
-import { botOpeningState, projectIdState } from './recoilModel/atoms/botState';
-import { dispatcherState } from './recoilModel/DispatcherWraper';
-
+import { botOpeningState, projectIdState, dispatcherState } from './recoilModel';
 const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
 const LGPage = React.lazy(() => import('./pages/language-generation'));

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { forwardRef, useContext, useEffect, useState, Fragment, Suspense } from 'react';
+import React, { forwardRef, useEffect, useState, Fragment, Suspense } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
@@ -15,15 +15,14 @@ import { Header } from './components/Header';
 import { NavItem } from './components/NavItem';
 import { BASEPATH } from './constants';
 import Routes from './router';
-import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth';
-import onboardingState from './utils/onboardingStorage';
+import onboardingStorage from './utils/onboardingStorage';
 import { isElectron } from './utils/electronUtil';
 import { useLinks } from './utils/hooks';
-import { botNameState, localeState } from './recoilModel/atoms/botState';
+import { botNameState, localeState, dispatcherState, announcementState, onboardingState } from './recoilModel';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -36,17 +35,17 @@ const AppUpdater = React.lazy(() =>
 const Content = forwardRef<HTMLDivElement>((props, ref) => <div css={content} {...props} ref={ref} />);
 
 export const App: React.FC = () => {
-  const { actions, state } = useContext(StoreContext);
   const botName = useRecoilValue(botNameState);
   const locale = useRecoilValue(localeState);
+  const announcement = useRecoilValue(announcementState);
+  const onboarding = useRecoilValue(onboardingState);
+  const { onboardingSetComplete } = useRecoilValue(dispatcherState);
   const [sideBarExpand, setSideBarExpand] = useState(false);
 
-  const { onboardingSetComplete } = actions;
-  const { announcement } = state;
   const { topLinks, bottomLinks } = useLinks();
 
   useEffect(() => {
-    onboardingSetComplete(onboardingState.getComplete());
+    onboardingSetComplete(onboardingStorage.getComplete());
   }, []);
 
   const mapNavItemTo = (relPath: string) => resolveToBasePath(BASEPATH, relPath);
@@ -129,7 +128,7 @@ export const App: React.FC = () => {
             </RequireAuth>
           </ErrorBoundary>
         </div>
-        <Suspense fallback={<div />}>{!state.onboarding.complete && <Onboarding />}</Suspense>
+        <Suspense fallback={<div />}>{!onboarding.complete && <Onboarding />}</Suspense>
         <Suspense fallback={<div />}>{renderAppUpdater && <AppUpdater />}</Suspense>
       </div>
     </Fragment>

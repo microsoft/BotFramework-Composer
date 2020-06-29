@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useEffect, useContext, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
-import { StoreContext } from '../store';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils';
 import { openAlertModal, dialogStyle } from '../components/Modal';
 import { getFocusPath } from '../utils/navigation';
@@ -21,8 +20,13 @@ import {
   projectIdState,
   localeState,
   luFilesState,
-} from '../recoilModel/atoms/botState';
-import { dispatcherState } from '../recoilModel/DispatcherWraper';
+  dispatcherState,
+  breadcrumbState,
+  designPageLocationState,
+  focusPathState,
+  userSettingsState,
+  clipboardActionsState,
+} from '../recoilModel';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -32,9 +36,7 @@ const FORM_EDITOR = 'PropertyEditor';
 type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
-  const { state, actions } = useContext(StoreContext);
   const dialogMapRef = useRef({});
-  const { breadcrumb, designPageLocation, focusPath, userSettings } = state;
   const botName = useRecoilValue(botNameState);
   const dialogs = useRecoilValue(dialogsState);
   const luFiles = useRecoilValue(luFilesState);
@@ -43,10 +45,27 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const lgFiles = useRecoilValue(lgFilesState);
   const skills = useRecoilValue(skillsState);
   const schemas = useRecoilValue(schemasState);
-
+  const breadcrumb = useRecoilValue(breadcrumbState);
+  const designPageLocation = useRecoilValue(designPageLocationState);
+  const focusPath = useRecoilValue(focusPathState);
+  const userSettings = useRecoilValue(userSettingsState);
+  const clipboardActions = useRecoilValue(clipboardActionsState);
+  const {
+    updateDialog,
+    createDialogBegin,
+    navTo,
+    focusTo,
+    selectTo,
+    setVisualEditorSelection,
+    setVisualEditorClipboard,
+    addSkillDialogBegin,
+    onboardingAddCoachMarkRef,
+    updateUserSettings,
+    setMessage,
+    displayManifestModal,
+  } = useRecoilValue(dispatcherState);
   const lgApi = useLgApi();
   const luApi = useLuApi();
-  const { updateDialog, createDialogBegin } = useRecoilValue(dispatcherState);
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
@@ -76,14 +95,14 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     }
   }
 
-  function navTo(path) {
+  function navigationTo(path) {
     cleanData();
-    actions.navTo(path, breadcrumb);
+    navTo(path, breadcrumb);
   }
 
   function focusEvent(subPath) {
     cleanData();
-    actions.selectTo(subPath);
+    selectTo(subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
@@ -99,7 +118,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       }
     }
 
-    actions.focusTo(dataPath, fragment);
+    focusTo(dataPath, fragment);
   }
 
   // ANDY: should this be somewhere else?
@@ -150,17 +169,17 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
          *   - If 'trigger' not exisits at `selected` path, fallback to dialog Id;
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
-        actions.navTo(dialogId);
+        navTo(dialogId);
       }
     },
     ...lgApi,
     ...luApi,
     updateRegExIntent: updateRegExIntentHandler,
-    navTo,
+    navTo: navigationTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
-    onSelect: actions.setVisualEditorSelection,
-    onCopy: actions.setVisualEditorClipboard,
+    onSelect: setVisualEditorSelection,
+    onCopy: setVisualEditorClipboard,
     createDialog: (actionsSeed) => {
       return new Promise((resolve) => {
         createDialogBegin(actionsSeed, (newDialog: string | null) => {
@@ -170,17 +189,17 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     },
     addSkillDialog: () => {
       return new Promise((resolve) => {
-        actions.addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
+        addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
           resolve(newSkill);
         });
       });
     },
-    undo: actions.undo,
-    redo: actions.redo,
-    addCoachMarkRef: actions.onboardingAddCoachMarkRef,
-    updateUserSettings: actions.updateUserSettings,
-    announce: actions.setMessage,
-    displayManifestModal: actions.displayManifestModal,
+    undo: () => {}, //TODO
+    redo: () => {}, //TODO
+    addCoachMarkRef: onboardingAddCoachMarkRef,
+    updateUserSettings: updateUserSettings,
+    announce: setMessage,
+    displayManifestModal: displayManifestModal,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
@@ -209,7 +228,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         focusedActions: focused ? [focused] : [],
         focusedSteps: focused ? [focused] : selected ? [selected] : [],
         focusedTab: promptTab,
-        clipboardActions: state.clipboardActions,
+        clipboardActions: clipboardActions,
         hosted: !!isAbsHosted(),
         skills,
       }

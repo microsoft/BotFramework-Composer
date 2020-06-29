@@ -4,29 +4,29 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { RouteComponentProps } from '@reach/router';
-import React, { useContext, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
 import { TestController } from '../../components/TestController';
-import { StoreContext } from '../../store';
 import { ISkillFormData } from '../../components/SkillForm/types';
 import CreateSkillModal from '../../components/SkillForm/CreateSkillModal';
-import { skillsState, botNameState, settingsState, projectIdState } from '../../recoilModel/atoms/botState';
+import { skillsState, botNameState, settingsState, projectIdState, dispatcherState } from '../../recoilModel';
 
 import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';
 import SkillList from './skill-list';
 
 const Skills: React.FC<RouteComponentProps> = () => {
-  const { actions } = useContext(StoreContext);
   const [editIndex, setEditIndex] = useState<number | undefined>();
 
   const botName = useRecoilValue(botNameState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
   const skills = useRecoilValue(skillsState);
+  const { setSettings, updateSkill } = useRecoilValue(dispatcherState);
+
   const toolbarItems: IToolBarItem[] = [
     {
       type: 'action',
@@ -55,7 +55,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
         targetId: index,
         skillData: null,
       };
-      actions.updateSkill(payload);
+      updateSkill(payload);
     },
     [projectId]
   );
@@ -67,7 +67,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
         targetId: editIndex,
         skillData: submitFormData,
       };
-      actions.updateSkill(payload);
+      updateSkill(payload);
       setEditIndex(undefined);
     },
     [projectId]
@@ -88,7 +88,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
           botId={settings.MicrosoftAppId}
           botName={botName}
           projectId={projectId}
-          setSettings={actions.setSettings}
+          setSettings={setSettings}
           settings={settings}
           skillHostEndpoint={settings.skillHostEndpoint as string | undefined}
         />

@@ -1,32 +1,28 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
-import onboardingState from '../utils/onboardingStorage';
+import onboardingStorage from '../utils/onboardingStorage';
 import { OpenConfirmModal } from '../components/Modal';
-import { StoreContext } from '../store';
 import { useLocation } from '../utils/hooks';
-import { dialogsState, projectIdState } from '../recoilModel/atoms/botState';
+import { dialogsState, projectIdState, dispatcherState, onboardingState } from '../recoilModel';
 
 import OnboardingContext from './context';
 import TeachingBubbles from './TeachingBubbles';
 import WelcomeModal from './WelcomeModal';
 import { IStepSet, stepSets as defaultStepSets } from './onboarding';
 
-const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
+const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboardingStorage.getCurrentSet('setUpBot'));
 
 const Onboarding: React.FC = () => {
   const didMount = useRef(false);
-  const {
-    actions: { onboardingSetComplete },
-    state: {
-      onboarding: { complete },
-    },
-  } = useContext(StoreContext);
+  const { onboardingSetComplete } = useRecoilValue(dispatcherState);
+  const onboarding = useRecoilValue(onboardingState);
+  const complete = onboarding.complete;
 
   const dialogs = useRecoilValue(dialogsState);
   const projectId = useRecoilValue(projectIdState);
@@ -77,7 +73,7 @@ const Onboarding: React.FC = () => {
     setMinimized(currentStep >= 0);
 
     if (currentSet > -1 && currentSet < stepSets.length) {
-      onboardingState.setCurrentSet(stepSets[currentSet].id);
+      onboardingStorage.setCurrentSet(stepSets[currentSet].id);
     }
   }, [currentSet, currentStep, setTeachingBubble, projectId]);
 
@@ -111,7 +107,7 @@ const Onboarding: React.FC = () => {
 
   const onComplete = useCallback(() => {
     onboardingSetComplete(true);
-    onboardingState.set({ complete: true });
+    onboardingStorage.set({ complete: true });
   }, [onboardingSetComplete]);
 
   const exit = useCallback(async () => {

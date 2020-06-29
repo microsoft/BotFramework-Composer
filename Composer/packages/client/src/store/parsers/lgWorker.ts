@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { LgFile, LgTemplate } from '@bfc/shared';
 
-import Worker from './workers/lgParser.worker.ts';
+import Worker from './workers/lgParserRemove.worker.ts';
 import { BaseWorker } from './baseWorker';
 import {
   LgActionType,

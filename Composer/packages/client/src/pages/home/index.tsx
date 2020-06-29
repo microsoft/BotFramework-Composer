@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
@@ -11,13 +11,12 @@ import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
-import { dispatcherState } from '../../recoilModel/DispatcherWraper';
+import { dispatcherState } from '../../recoilModel';
 import { navigateTo } from '../../utils';
-import { botNameState } from '../../recoilModel/atoms/botState';
-import { recentProjectsState } from '../../recoilModel/atoms/appState';
+import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
+import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -59,13 +58,14 @@ const tutorials = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { templateProjects } = state;
+  const templateId = useRecoilValue(templateIdState);
+  const templateProjects = useRecoilValue(templateProjectsState);
   const botName = useRecoilValue(botNameState);
   const recentProjects = useRecoilValue(recentProjectsState);
-  const { openBotProject, fetchRecentProjects, setCreationFlowStatus } = useRecoilValue(dispatcherState);
-
-  const { onboardingAddCoachMarkRef } = actions;
+  const projectId = useRecoilValue(projectIdState);
+  const { openBotProject, fetchRecentProjects, setCreationFlowStatus, onboardingAddCoachMarkRef } = useRecoilValue(
+    dispatcherState
+  );
 
   const onClickRecentBotProject = async (path) => {
     const projectId = await openBotProject(path);
@@ -130,7 +130,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`projects/${state.projectId}/${state.templateId}/save`);
+          navigate(`projects/${projectId}/${templateId}/save`);
         },
       },
       align: 'left',

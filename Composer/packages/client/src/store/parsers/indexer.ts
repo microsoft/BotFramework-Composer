@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { FileInfo } from '@bfc/shared';
 
-import Worker from './workers/indexer.worker.ts';
+import Worker from './workers/indexerRemove.worker.ts';
 import { BaseWorker } from './baseWorker';
 import { IndexPayload, IndexerActionType } from './types';
 
