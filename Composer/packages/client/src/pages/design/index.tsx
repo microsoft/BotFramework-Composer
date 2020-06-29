@@ -8,8 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { PromptTab } from '@bfc/shared';
-import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
@@ -28,7 +27,7 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 import { useShell } from '../../shell';
-import { useStoreContext } from '../../hooks';
+import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
