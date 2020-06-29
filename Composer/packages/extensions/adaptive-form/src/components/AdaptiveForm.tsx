@@ -5,10 +5,10 @@ import React, { useMemo } from 'react';
 import { FormErrors, JSONSchema7, UIOptions, PluginConfig } from '@bfc/extension';
 import ErrorBoundary from 'react-error-boundary';
 
-import PluginContext from '../../PluginContext';
-import { SchemaField } from '../SchemaField';
-import { mergePluginConfigs } from '../../utils/mergePluginConfigs';
+import PluginContext from '../PluginContext';
+import { mergePluginConfigs } from '../utils/mergePluginConfigs';
 
+import { SchemaField } from './SchemaField';
 import FormTitle from './FormTitle';
 import ErrorInfo from './ErrorInfo';
 
