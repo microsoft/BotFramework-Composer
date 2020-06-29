@@ -1,41 +1,50 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import isEmpty from 'lodash/isEmpty';
+
 import { ActionTypes } from '../../../src/constants';
 import { ActionCreator } from '../../../src/store/types';
 
 type SimpleTest = {
   action: ActionCreator;
   type: ActionTypes;
-  fieldName?: string;
+  fields?: string[];
+  unwrap?: boolean;
 };
 
 // useful for testing actions that do no logic, just dispatch with a given payload
-export function testTrivial(action: ActionCreator, intendedType: ActionTypes, mockPayloadName: string | null = null) {
+export function testTrivial(action: ActionCreator, intendedType: ActionTypes, mockPayload: {} = {}, unwrap = false) {
   const mockDispatch = jest.fn();
-  const mockPayload = {
-    // note: when mockPayloadName is null, we don't care about this object anyway
-    [mockPayloadName ?? '']: {},
-  };
 
-  action({ dispatch: mockDispatch, getState: jest.fn() }, {});
+  action(
+    { dispatch: mockDispatch, getState: jest.fn() },
+    unwrap ? mockPayload?.[Object.keys(mockPayload)?.[0]] : mockPayload
+  );
 
-  if (mockPayloadName !== null) {
+  if (isEmpty(mockPayload)) {
     expect(mockDispatch).toHaveBeenCalledWith({
       type: intendedType,
-      payload: mockPayload,
     });
   } else {
     expect(mockDispatch).toHaveBeenCalledWith({
       type: intendedType,
+      payload: mockPayload,
     });
   }
 }
 
 export function runTrivialTests(tests: SimpleTest[]) {
-  for (const { action, type, fieldName } of tests) {
+  for (const { action, type, fields, unwrap } of tests) {
+    const payload = {};
+    if (fields != null) {
+      for (const field of fields) {
+        payload[field] = {};
+      }
+    }
+
     it(`performs the action ${type}`, () => {
-      testTrivial(action, type, fieldName);
+      testTrivial(action, type, payload, unwrap);
     });
   }
 }
