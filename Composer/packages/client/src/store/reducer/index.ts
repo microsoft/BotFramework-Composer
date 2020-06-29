@@ -5,7 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import has from 'lodash/has';
 import merge from 'lodash/merge';
-import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
+import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
 import {
   SensitiveProperties,
   LuFile,
@@ -84,9 +84,12 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
   schemas.sdk.content = processSchema(id, schemas.sdk.content);
-  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
+  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
   state.projectId = id;
-  state.dialogs = dialogs;
+  state.dialogs = dialogs.map((dialog) => {
+    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    return dialog;
+  });
   state.botEnvironment = botEnvironment || state.botEnvironment;
   state.botName = botName;
   state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
@@ -166,8 +169,7 @@ const createLgFile: ReducerFunc = (state, { id, content }) => {
 
   const { parse } = lgIndexer;
   const lgImportresolver = importResolverGenerator(state.lgFiles, '.lg');
-  const { templates, diagnostics } = parse(content, id, lgImportresolver);
-  const lgFile = { id, templates, diagnostics, content };
+  const lgFile = { id, content, ...parse(content, id, lgImportresolver) };
   state.lgFiles.push(lgFile);
   return state;
 };
@@ -228,7 +230,12 @@ const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map((dialog) => {
     if (dialog.id === id) {
-      return { ...dialog, ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content) };
+      dialog = {
+        ...dialog,
+        ...dialogIndexer.parse(dialog.id, content),
+      };
+      dialog.diagnostics = validateDialog(dialog, state.schemas.sdk.content, state.lgFiles, state.luFiles);
+      return dialog;
     }
     return dialog;
   });
@@ -261,8 +268,9 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   const dialog = {
     isRoot: false,
     displayName: id,
-    ...dialogIndexer.parse(id, fixedContent, state.schemas.sdk.content),
+    ...dialogIndexer.parse(id, fixedContent),
   };
+  dialog.diagnostics = validateDialog(dialog, state.schemas.sdk.content, state.lgFiles, state.luFiles);
   state.dialogs.push(dialog);
   state = createLgFile(state, { id, content: '' });
   state = createLuFile(state, { id, content: '' });
