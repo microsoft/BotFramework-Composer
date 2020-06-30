@@ -168,8 +168,3 @@ export const displaySkillManifestState = atom<any>({
   key: 'displaySkillManifest',
   default: undefined,
 });
-
-export const botEndpointsState = atom<any>({
-  key: 'botEndpoints',
-  default: {},
-});

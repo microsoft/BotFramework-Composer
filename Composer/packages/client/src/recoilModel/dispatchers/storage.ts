@@ -9,7 +9,7 @@ import { storagesState, storageFileLoadingStatusState, focusedStorageFolderState
 import { FileTypes } from '../../constants';
 import { getExtension } from '../../utils';
 
-// import { logMessage } from './shared';
+import { logMessage } from './shared';
 
 const projectFiles = ['bot', 'botproj'];
 
@@ -29,7 +29,7 @@ export const storageDispatcher = () => {
       }
     } catch (ex) {
       // TODO: Handle exceptions
-      //logMessage(`Error fetching storages: ${ex}`);
+      logMessage(callbackHelpers, `Error fetching storages: ${ex}`);
     }
   });
 
@@ -43,7 +43,7 @@ export const storageDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        // logMessage(`Error fetching storages: ${ex}`);
+        logMessage(callbackHelpers, `Error fetching storages: ${ex}`);
       }
     }
   );
@@ -58,7 +58,7 @@ export const storageDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        // logMessage(`Error fetching storages: ${ex}`);
+        logMessage(callbackHelpers, `Error fetching storages: ${ex}`);
       }
     }
   );
@@ -73,7 +73,7 @@ export const storageDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        // logMessage(`Error fetching storages: ${ex}`);
+        logMessage(callbackHelpers, `Error fetching storages: ${ex}`);
       }
     }
   );
@@ -101,7 +101,7 @@ export const storageDispatcher = () => {
         set(focusedStorageFolderState, fetchedFocusStorage);
       } catch (ex) {
         // TODO: Handle exceptions
-        // logMessage(`Error fetching focussed storage folder: ${ex}`);
+        logMessage(callbackHelpers, `Error fetching focussed storage folder: ${ex}`);
         setStorageFileLoadingStatus('failure');
       }
     }

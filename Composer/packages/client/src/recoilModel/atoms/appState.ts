@@ -25,11 +25,6 @@ const getFullyQualifiedKey = (value: string) => {
   return `App_${value}_State`;
 };
 
-export const botProjectsState = atom<BotProject[]>({
-  key: getFullyQualifiedKey('botProjects'),
-  default: [],
-});
-
 // TODO: Add type for recent projects
 export const recentProjectsState = atom<any[]>({
   key: getFullyQualifiedKey('recentProjects'),
@@ -131,4 +126,9 @@ export const runtimeSettingsState = atom<{
 export const templateIdState = atom<string>({
   key: getFullyQualifiedKey('templateId'),
   default: '',
+});
+
+export const botEndpointsState = atom<any>({
+  key: 'botEndpoints',
+  default: {},
 });

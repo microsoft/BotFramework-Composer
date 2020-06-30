@@ -14,7 +14,7 @@ import {
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
-import { StateError } from '../../store/types';
+import { StateError, AppUpdateState } from '../../store/types';
 
 export const applicationDispatcher = () => {
   const setAppUpdateStatus = useRecoilCallback<[AppUpdaterStatus, string | undefined], Promise<void>>(
@@ -59,9 +59,9 @@ export const applicationDispatcher = () => {
     });
   });
 
-  const setAppUpdateProgress = useRecoilCallback<[number, number], void>(
-    ({ set }: CallbackInterface) => (progressPercent: number, downloadSizeInBytes: number) => {
-      set(appUpdateState, (updaterState) => {
+  const setAppUpdateProgress = useRecoilCallback<[string, number], void>(
+    ({ set }: CallbackInterface) => (progressPercent: string, downloadSizeInBytes: number) => {
+      set(appUpdateState, (updaterState: AppUpdateState) => {
         return {
           ...updaterState,
           progressPercent,
