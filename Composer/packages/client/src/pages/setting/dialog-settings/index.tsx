@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 
-import { useStoreContext } from '../../../hooks';
+import { useStoreContext } from '../../../hooks/useStoreContext';
 
 import { hostedSettings, hostedControls, settingsEditor } from './style';
 

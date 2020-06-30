@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { ActionTypes } from '../../src/constants';
+
 import { applyMiddleware } from './../../src/store';
 import { Store, State } from './../../src/store/types';
-import { ActionTypes } from './../../src/constants';
 
 describe('applyMiddleware', () => {
   it('warns when dispatching during middleware setup', () => {

@@ -12,7 +12,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { JsonEditor } from '@bfc/code-editor';
 
 import { PublishTarget, PublishType } from '../../store/types';
-import { useStoreContext } from '../../hooks';
+import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { label } from './styles';
 
