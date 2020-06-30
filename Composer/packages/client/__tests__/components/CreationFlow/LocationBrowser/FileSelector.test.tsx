@@ -89,6 +89,7 @@ describe('<FileSelector/>', () => {
     const textField = await component.findByTestId('newFolderTextField');
     fireEvent.change(textField, { target: { value: 'newFolder' } });
     fireEvent.keyDown(textField, { key: 'Enter' });
-    expect(createFolder).toBeCalledWith('C:\\test-folder\\Desktop', 'newFolder');
+    //locally this should be 'C:\\test-folder\\Desktop', but it should be 'C:/test-folder/Desktop' online
+    expect(createFolder).toBeCalledWith('C:/test-folder/Desktop', 'newFolder');
   });
 });
