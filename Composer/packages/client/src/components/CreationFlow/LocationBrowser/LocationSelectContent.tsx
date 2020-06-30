@@ -67,7 +67,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
         />
       )}
       {storageFileLoadingStatus === 'pending' && (
-        <div data-testId={'locationSelectContentSpinner'}>
+        <div data-testid={'locationSelectContentSpinner'}>
           <Spinner css={loading} size={SpinnerSize.medium} />
         </div>
       )}
