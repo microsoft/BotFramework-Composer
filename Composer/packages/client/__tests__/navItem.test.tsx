@@ -2,18 +2,14 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render } from '@bfc/test-utils';
 
 import { NavItem } from '../src/components/NavItem/NavItem';
-import { StoreProvider } from '../src/store';
+
+import { renderWithRecoil } from './testUtils';
 
 describe('<Header />', () => {
   it('should render a nav item', async () => {
-    const { findByText } = render(
-      <StoreProvider>
-        <NavItem labelName={'some nav item'} to={'/'} />
-      </StoreProvider>
-    );
+    const { findByText } = renderWithRecoil(<NavItem labelName={'some nav item'} to={'/'} />);
 
     await findByText(/some nav item/);
   });

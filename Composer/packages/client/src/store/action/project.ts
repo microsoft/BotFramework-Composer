@@ -180,6 +180,12 @@ export const saveProjectAs: ActionCreator = async (store, projectId, name, descr
   }
 };
 
+export const fetchProject: ActionCreator = async (store) => {
+  const state = store.getState();
+  const projectId = state.projectId;
+  return fetchProjectById(store, projectId);
+};
+
 export const createProject: ActionCreator = async (
   store,
   templateId: string,

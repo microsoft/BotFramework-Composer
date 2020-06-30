@@ -8,12 +8,13 @@ import TeachingBubbles from '../../src/Onboarding/TeachingBubbles/TeachingBubble
 import WelcomeModal from '../../src/Onboarding/WelcomeModal/WelcomeModal';
 import { renderWithRecoil } from '../testUtils';
 import { onboardingState } from '../../src/recoilModel';
+import { stepSets as defaultStepSets } from '../../src/Onboarding/onboardingUtils';
 
 describe('<Onboarding />', () => {
   let onboardingDefaultState;
   let onboardingValue;
 
-  const stepSets = defaultStepSets().map((stepSet) => ({
+  const stepSets = defaultStepSets('echo-123', '123').map((stepSet) => ({
     ...stepSet,
     steps: stepSet.steps.map((step) => ({ ...step, targetId: 'test', location: 'VisualDesigner' })),
   }));
