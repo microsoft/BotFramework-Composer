@@ -20,10 +20,10 @@ import {
   botEndpointsState,
   dispatcherState,
 } from '../../recoilModel';
+import settingsStorage from '../../utils/dialogSettingStorage';
+import { BotStatus, LuisConfig } from '../../constants';
+import { isAbsHosted } from '../../utils/envUtil';
 
-import settingsStorage from './../../utils/dialogSettingStorage';
-import { BotStatus, LuisConfig } from './../../constants';
-import { isAbsHosted } from './../../utils/envUtil';
 import { getReferredFiles } from './../../utils/luUtil';
 import useNotifications from './../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from './../../utils';

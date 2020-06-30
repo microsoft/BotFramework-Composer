@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 
-import { Header } from '../../src/components/Header';
+import { Header } from '../../src/components/Header/Header';
 import { renderWithRecoil } from '../testUtils';
 
 describe('<Header />', () => {

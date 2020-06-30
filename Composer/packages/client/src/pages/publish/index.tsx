@@ -22,11 +22,11 @@ import {
   publishHistoryState,
   dispatcherState,
 } from '../../recoilModel';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
+import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { TargetList } from './targetList';
 import { PublishDialog } from './publishDialog';
-import { ToolBar, IToolBarItem } from './../../components/ToolBar/index';
-import { OpenConfirmModal } from './../../components/Modal/Confirm';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { CreatePublishTarget } from './createPublishTarget';
 import { PublishStatusList, IStatus } from './publishStatusList';

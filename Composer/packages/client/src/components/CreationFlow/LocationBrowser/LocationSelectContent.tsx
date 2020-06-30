@@ -22,9 +22,11 @@ interface LocationSelectContentProps {
     read: boolean;
     write: boolean;
   };
+  createFolder?: (path: string, name: string) => void;
+  updateFolder?: (path: string) => void;
   focusedStorageFolder: StorageFolder;
   onOpen?: (path: string, storage: string) => void;
-  onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
+  onCurrentPathUpdate: (newPath: string, storageId?: string) => void;
 }
 
 export const LocationSelectContent: React.FC<LocationSelectContentProps> = (props) => {
@@ -59,9 +61,12 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
       {Object.keys(focusedStorageFolder).length > 0 && storageFileLoadingStatus === 'success' && (
         <FileSelector
           checkShowItem={checkShowItem}
+          createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           isWindows={isWindows}
           operationMode={operationMode}
+          storages={storages}
+          updateFolder={updateFolder}
           onCurrentPathUpdate={onCurrentPathUpdate}
           onFileChosen={onFileChosen}
         />

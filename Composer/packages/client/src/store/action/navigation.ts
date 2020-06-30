@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { getSelected } from '../../utils';
+import { ActionTypes } from '../../constants';
 
 import { ActionCreator } from './../types';
-import { ActionTypes } from './../../constants';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
 
 export const setDesignPageLocation: ActionCreator = (

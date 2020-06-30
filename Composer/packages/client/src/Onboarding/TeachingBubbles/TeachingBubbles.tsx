@@ -7,9 +7,9 @@ import debounce from 'lodash/debounce';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
 import { useRecoilValue } from 'recoil';
 
-import OnboardingContext from '../context';
-import { getTeachingBubble } from '../onboarding';
 import { onboardingState } from '../../recoilModel';
+import OnboardingContext from '../OnboardingContext';
+import { getTeachingBubble } from '../onboardingUtils';
 
 import { teachingBubbleStyles, teachingBubbleTheme } from './styles';
 
