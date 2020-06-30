@@ -10,7 +10,7 @@ const config: PluginConfig = {
       id: SDKKinds.CrossTrainedRecognizerSet,
       displayName: 'Luis + QnA',
       isSelected: (data) => {
-        return typeof data === 'object' && data.$kind === SDKKinds.CrossTrainedRecognizerSet;
+        return typeof data === 'string';
       },
       handleRecognizerChange: (props, shellData, _) => {
         const { qnaFiles, luFiles, currentDialog, locale } = shellData;
@@ -20,10 +20,7 @@ const config: PluginConfig = {
         if (qnaFile && luFile) {
           // strip locale out of id so it doesn't get serialized
           // into the .dialog file
-          props.onChange({
-            $kind: SDKKinds.CrossTrainedRecognizerSet,
-            recognizers: [`${luFile.id.split('.')[0]}.lu`, `${qnaFile.id.split('.')[0]}.qna`],
-          });
+          props.onChange(`${currentDialog.id}.lu.qna`);
         } else {
           alert(`NO LU OR QNA FILE WITH NAME ${currentDialog.id}`);
         }

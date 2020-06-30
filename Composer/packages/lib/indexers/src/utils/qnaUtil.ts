@@ -142,12 +142,8 @@ export function getReferredQnaFiles(qnaFiles: QnAFile[], dialogs: DialogInfo[]) 
   });
 }
 
-export function checkQnaPublish(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
+export function checkQnaBuild(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
   const referred = getReferredQnaFiles(qnaFiles, dialogs);
-  const emptyLuFiles = referred.filter((file) => file.empty);
-  if (emptyLuFiles.length !== 0) {
-    const msg = emptyLuFiles.map((file) => file.id).join(' ');
-    throw new Error(`You have the following empty QnaFile(s): ` + msg);
-  }
+
   return referred;
 }

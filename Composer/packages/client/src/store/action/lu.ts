@@ -6,11 +6,8 @@ import { LuFile } from '@bfc/shared';
 import * as luUtil from '../../utils/luUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
-import luFileStatusStorage from '../../utils/fileStatusStorage';
-import { Text } from '../../constants';
 import LuWorker from '../parsers/luWorker';
 
-import httpClient from './../../utils/httpUtil';
 import { ActionTypes } from './../../constants/index';
 
 export const updateLuFile: ActionCreator = async (store, { id, projectId, content }) => {
@@ -64,29 +61,4 @@ export const createLuIntent: ActionCreator = async (store, { projectId, file, in
 export const removeLuIntent: ActionCreator = async (store, { projectId, file, intentName }) => {
   const newContent = luUtil.removeIntent(file.content, intentName);
   return await undoableUpdateLuFile(store, { id: file.id, projectId, content: newContent });
-};
-
-export const publishLuis: ActionCreator = async ({ dispatch, getState }, authoringKey, projectId) => {
-  try {
-    const { dialogs, luFiles } = getState();
-    const referred = luUtil.checkLuisPublish(luFiles, dialogs);
-    //TODO crosstrain should add locale
-    const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referred);
-    const response = await httpClient.post(`/projects/${projectId}/luFiles/publish`, {
-      authoringKey,
-      projectId,
-      crossTrainConfig,
-      luFiles: referred.map((file) => file.id),
-    });
-    luFileStatusStorage.publishAll(getState().projectId);
-    dispatch({
-      type: ActionTypes.PUBLISH_LU_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.PUBLISH_LU_FAILED,
-      payload: { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message },
-    });
-  }
 };

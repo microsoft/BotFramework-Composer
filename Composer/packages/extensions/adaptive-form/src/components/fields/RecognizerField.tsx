@@ -23,10 +23,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
       const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
       if (qnaFile && luFile) {
-        onChange({
-          $kind: SDKKinds.CrossTrainedRecognizerSet,
-          recognizers: [`${luFile.id.split('.')[0]}.lu`, `${qnaFile.id.split('.')[0]}.qna`],
-        });
+        onChange(`${currentDialog.id}.lu.qna`);
       }
     }
   }, [value]);

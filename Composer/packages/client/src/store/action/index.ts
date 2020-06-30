@@ -8,6 +8,7 @@ export * from './error';
 export * from './lg';
 export * from './lu';
 export * from './qna';
+export * from './builder';
 export * from './navigation';
 export * from './onboarding';
 export * from './project';

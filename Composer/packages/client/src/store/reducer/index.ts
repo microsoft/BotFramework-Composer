@@ -24,7 +24,7 @@ import { getExtension, getBaseName } from '../../utils';
 import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { getReferredFiles } from '../../utils/luUtil';
+import { getReferredLuFiles } from '../../utils/luUtil';
 import { isElectron } from '../../utils/electronUtil';
 import { initialState } from '..';
 
@@ -76,7 +76,7 @@ const updateLuFilesStatus = (projectId: string, luFiles: LuFile[]) => {
 const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
   luFileStatusStorage.checkFileStatus(
     projectId,
-    getReferredFiles(luFiles, dialogs).map((file) => file.id)
+    getReferredLuFiles(luFiles, dialogs).map((file) => file.id)
   );
   return updateLuFilesStatus(projectId, luFiles);
 };
@@ -316,12 +316,12 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const publishLuisSuccess: ReducerFunc = (state) => {
+const buildSuccess: ReducerFunc = (state) => {
   state.botStatus = BotStatus.published;
   return state;
 };
 
-const publishLuisFailure: ReducerFunc = (state, payload) => {
+const buildFailure: ReducerFunc = (state, payload) => {
   state.botStatus = BotStatus.failed;
   state.botLoadErrorMsg = payload;
   return state;
@@ -702,8 +702,8 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_QNA]: updateQnaTemplate,
   [ActionTypes.CREATE_QNA]: createQnaFile,
   [ActionTypes.REMOVE_QNA]: removeQnaFile,
-  [ActionTypes.PUBLISH_LU_SUCCCESS]: publishLuisSuccess,
-  [ActionTypes.PUBLISH_LU_FAILED]: publishLuisFailure,
+  [ActionTypes.BUILD_SUCCCESS]: buildSuccess,
+  [ActionTypes.BUILD_FAILED]: buildFailure,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,
   [ActionTypes.SET_ERROR]: setError,
   [ActionTypes.SET_DESIGN_PAGE_LOCATION]: setDesignPageLocation,

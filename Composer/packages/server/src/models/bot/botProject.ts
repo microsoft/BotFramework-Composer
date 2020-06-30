@@ -17,10 +17,10 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 
-import { ICrossTrainConfig } from './luPublisher';
+import { ICrossTrainConfig } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
-import { LuPublisher } from './luPublisher';
+import { Builder } from './builder';
 import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
 
@@ -64,7 +64,7 @@ export class BotProject {
   public dataDir: string;
   public files: FileInfo[] = [];
   public fileStorage: IFileStorage;
-  public luPublisher: LuPublisher;
+  public builder: Builder;
   public defaultSDKSchema: {
     [key: string]: string;
   };
@@ -83,7 +83,7 @@ export class BotProject {
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
-    this.luPublisher = new LuPublisher(this.dir, this.fileStorage, this.locale);
+    this.builder = new Builder(this.dir, this.fileStorage, this.locale);
   }
 
   public init = async () => {
@@ -291,19 +291,30 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
-  public publishLuis = async (authoringKey: string, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
-    if (fileIds.length && this.settings) {
-      const map = fileIds.reduce((result, id) => {
+  public buildFiles = async (
+    authoringKey: string,
+    subscriptKey: string,
+    luFileIds: string[] = [],
+    qnaFileIds: string[] = [],
+    crossTrainConfig: ICrossTrainConfig
+  ) => {
+    if ((luFileIds.length || qnaFileIds.length) && this.settings) {
+      const luMap = luFileIds.reduce((result, id) => {
         result[id] = true;
         return result;
       }, {});
-      const files = this.files.filter((file) => map[Path.basename(file.name, '.lu')]);
-      this.luPublisher.setPublishConfig(
-        { ...this.settings.luis, authoringKey },
+      const qnaMap = qnaFileIds.reduce((result, id) => {
+        result[id] = true;
+        return result;
+      }, {});
+      const luFiles = this.files.filter((file) => luMap[Path.basename(file.name, '.lu')]);
+      const qnaFiles = this.files.filter((file) => qnaMap[Path.basename(file.name, '.qna')]);
+      this.builder.setBuildConfig(
+        { ...this.settings.luis, authoringKey, subscriptKey },
         crossTrainConfig,
         this.settings.downsampling
       );
-      await this.luPublisher.publish(files);
+      await this.builder.build(luFiles, qnaFiles);
     }
   };
 

@@ -3,13 +3,9 @@
 import clonedeep from 'lodash/cloneDeep';
 import { QnAFile } from '@bfc/shared';
 
-import * as qnaUtil from '../../utils/qnaUtil';
 import qnaWorker from '../parsers/qnaWorker';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
-import { Text } from '../../constants';
-import httpClient from '../../utils/httpUtil';
-import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 
 import { ActionTypes } from './../../constants/index';
 
@@ -53,27 +49,4 @@ export const undoableUpdateQnAFile = undoable(
 
 export const updateQnAContent: ActionCreator = async (store, { projectId, file, content }) => {
   return await undoableUpdateQnAFile(store, { id: file.id, projectId, content });
-};
-
-export const publishQna: ActionCreator = async ({ dispatch, getState }, subscriptKey, projectId) => {
-  try {
-    const { dialogs, qnaFiles } = getState();
-    const referred = qnaUtil.checkLuisPublish(qnaFiles, dialogs);
-    //TODO crosstrain should add locale
-    const response = await httpClient.post(`/projects/${projectId}/qnaFiles/publish`, {
-      subscriptKey,
-      projectId,
-      qnaFiles: referred.map((file) => file.id),
-    });
-    qnaFileStatusStorage.publishAll(getState().projectId);
-    dispatch({
-      type: ActionTypes.PUBLISH_QNA_SUCCCESS,
-      payload: { response },
-    });
-  } catch (err) {
-    dispatch({
-      type: ActionTypes.PUBLISH_QNA_FAILED,
-      payload: { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message },
-    });
-  }
 };

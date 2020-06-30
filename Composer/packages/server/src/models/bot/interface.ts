@@ -21,10 +21,11 @@ export enum FileUpdateType {
   DELETE = 'delete',
 }
 
-export interface ILuisConfig {
+export interface IConfig {
   name: string;
   endpoint: string;
   authoringKey: string;
+  subscriptKey: string;
   endpointKey: string;
   authoringEndpoint: string;
   authoringRegion: string | 'westus';
@@ -47,7 +48,7 @@ export interface ILuisStatusOperation {
 export interface DialogSetting {
   MicrosoftAppId: string;
   MicrosoftAppPassword: string;
-  luis: ILuisConfig;
+  config: IConfig;
   skill: { manifestUrl: string; name: string }[];
   [key: string]: any;
 }
