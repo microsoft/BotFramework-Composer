@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, prettyDOM, waitFor } from '@bfc/test-utils';
+import { render, fireEvent } from '@bfc/test-utils';
 import assign from 'lodash/assign';
 
 import { NumberField } from '../NumberField';
@@ -16,28 +16,28 @@ function renderSubject(overrides = {}) {
 
 describe('<NumberField />', () => {
   describe('when type is number', () => {
-    it('changes the number by 0.1', async () => {
+    it('changes the number by 0.01', async () => {
       const onChange = jest.fn();
       const schema = {
         type: 'number',
       };
 
       const { getByLabelText } = renderSubject({ onChange, schema });
-      const upButton = getByLabelText('increment by 0.1');
-      const downButton = getByLabelText('decrement by 0.1');
+      const upButton = getByLabelText('increment by 0.01');
+      const downButton = getByLabelText('decrement by 0.01');
 
       fireEvent.mouseDown(upButton);
       fireEvent.mouseUp(upButton);
 
       expect(onChange).toHaveBeenCalledTimes(1);
-      expect(onChange).toHaveBeenCalledWith(0.1);
+      expect(onChange).toHaveBeenCalledWith(0.01);
       onChange.mockReset();
 
       fireEvent.mouseDown(downButton);
       fireEvent.mouseUp(downButton);
 
       expect(onChange).toHaveBeenCalledTimes(1);
-      expect(onChange).toHaveBeenCalledWith(-0.1);
+      expect(onChange).toHaveBeenCalledWith(-0.01);
     });
   });
 
