@@ -182,7 +182,9 @@ export class Builder {
       config.fallbackLocal,
       false,
       loadResult.multiRecognizers,
-      loadResult.settings
+      loadResult.settings,
+      loadResult.crossTrainedRecognizer,
+      'crosstrained'
     );
     await this.luBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
   }
@@ -205,11 +207,12 @@ export class Builder {
       config.botName,
       config.suffix,
       config.fallbackLocal,
-      false,
       loadResult.multiRecognizers,
-      loadResult.settings
+      loadResult.settings,
+      loadResult.crossTrainedRecognizer,
+      'crosstrained'
     );
-    await this.luBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
+    await this.qnaBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath, 'crosstrained', files);
   }
   //delete files in generated folder
   private async deleteDir(path: string) {

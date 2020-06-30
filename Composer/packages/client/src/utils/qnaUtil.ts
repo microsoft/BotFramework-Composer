@@ -21,8 +21,3 @@ export function getReferredQnaFiles(qnaFiles: QnAFile[], dialogs: DialogInfo[]) 
     return dialogs.some((dialog) => dialog.qnaFile === idWithOutLocale);
   });
 }
-
-export function checkQnaBuild(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
-  const refferred = qnaFiles.filter((file) => !file.empty);
-  return refferred;
-}
