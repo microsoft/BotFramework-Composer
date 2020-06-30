@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 import path from 'path';
 import { promisify } from 'util';
-import { execSync } from 'child_process';
 
 import rimraf from 'rimraf';
 import * as fs from 'fs-extra';
@@ -24,13 +23,24 @@ export default async (composer: any): Promise<void> => {
     startCommand: 'dotnet run --project azurewebapp',
     path: path.resolve(__dirname, '../../../../runtime/dotnet'),
     build: async (runtimePath: string, _project: any) => {
-      // // copy source into temporary folder
+      // TODO: copy source into temporary folder
       // copyDir(path.resolve(__dirname, '../../../../../runtime/dotnet'), runtimePath);
+
       // do stuff
       console.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
+      console.log('Run dotnet user-secrets init...');
       // TODO: capture output of this and store it somewhere useful
-      execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimePath, stdio: 'pipe' });
-      execSync('dotnet build', { cwd: runtimePath, stdio: 'pipe' });
+      const { initOut, initErr } = await exec('dotnet user-secrets init --project azurewebapp', {
+        cwd: runtimePath,
+      });
+      if (initErr) {
+        throw new Error(initErr);
+      }
+      console.log('Run dotnet build...');
+      const { buildOut, buildErr } = await exec('dotnet build', { cwd: runtimePath });
+      if (buildErr) {
+        throw new Error(buildErr);
+      }
       console.log('FINISHED BUILDING!');
     },
     run: async (project: any, localDisk: IFileStorage) => {
@@ -43,9 +53,9 @@ export default async (composer: any): Promise<void> => {
       let csproj = '';
       // find publishing profile in list
       const profile = project.settings.publishTargets.find((p) => p.name === profileName);
-      if (profile.type === '@bfc/plugin-azure-publish') {
+      if (profile.type === 'plugin-azure-publish') {
         csproj = 'Microsoft.BotFramework.Composer.WebApp.csproj';
-      } else if (profile.type === '@bfc/plugin-azure-functions-publish') {
+      } else if (profile.type === 'plugin-azure-functions-publish') {
         csproj = 'Microsoft.BotFramework.Composer.Functions.csproj';
       }
       const publishFolder = path.join(runtimePath, 'bin', 'Release', 'netcoreapp3.1');
@@ -68,7 +78,9 @@ export default async (composer: any): Promise<void> => {
           }
         );
         console.log('OUTPUT FROM BUILD', stdout);
-        console.log('ERR FROM BUILD: ', stderr);
+        if (stderr) {
+          console.error('ERR FROM BUILD: ', stderr);
+        }
       } catch (err) {
         console.error('Error doing dotnet publish', err);
         throw err;
@@ -84,12 +96,14 @@ export default async (composer: any): Promise<void> => {
 
       // write settings to disk in the appropriate location
       const settingsPath = path.join(publishFolder, 'ComposerDialogs', 'settings', 'appsettings.json');
+      // Set the bot and root fields to `ComposerDialogs` - this points the runtime to the appropriate deployed location
+      // todo: are both necessary?
+      Object.assign(settings, { bot: 'ComposerDialogs', root: 'ComposerDialogs' });
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
         fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
       }
       fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
 
-      console.log('BUILD FOR DELPOY COMPLETE!');
       // return the location of the build artifiacts
       return publishFolder;
     },
@@ -126,18 +140,35 @@ export default async (composer: any): Promise<void> => {
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       console.log('BUILD THIS JS PROJECT');
-      execSync('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
-      execSync('npm install', { cwd: path.join(runtimePath, '/azurewebapp'), stdio: 'pipe' });
+      const { installOut, installErr } = exec('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
+      const { install2Out, install2Err } = exec('npm install', {
+        cwd: path.join(runtimePath, '/azurewebapp'),
+        stdio: 'pipe',
+      });
       console.log('BUILD COMPLETE');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       // do stuff
     },
-    buildDeploy: async (runtimePath: string, project: any): Promise<string> => {
+    buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       // do stuff
       console.log('BUILD THIS JS PROJECT');
-      execSync('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
-      execSync('npm install', { cwd: path.join(runtimePath, '/azurewebapp'), stdio: 'pipe' });
+      const { installOut, installErr } = exec('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
+      const { install2Out, install2Err } = exec('npm install', {
+        cwd: path.join(runtimePath, '/azurewebapp'),
+        stdio: 'pipe',
+      });
+
+      // write settings to disk in the appropriate location
+      const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
+      // Set the bot and root fields to `ComposerDialogs` - this points the runtime to the appropriate deployed location
+      // todo: are both necessary?
+      Object.assign(settings, { bot: 'ComposerDialogs', root: 'ComposerDialogs' });
+      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
+        fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+      }
+      fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
+
       console.log('BUILD COMPLETE');
       return '';
     },

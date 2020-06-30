@@ -18,6 +18,7 @@ const path_1 = __importDefault(require("path"));
 const uuid_1 = require("uuid");
 const md5_1 = __importDefault(require("md5"));
 const fs_extra_1 = require("fs-extra");
+const mergeDeep_1 = require("./mergeDeep");
 const deploy_1 = require("./deploy");
 const schema_1 = __importDefault(require("./schema"));
 // This option controls whether the history is serialized to a file between sessions with Composer
@@ -43,8 +44,6 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
             };
             // path to the declarative assets
             this.getBotFolder = (key, template) => path_1.default.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
-            // path to the root settings file
-            this.getSettingsPath = (key, template) => path_1.default.resolve(this.getBotFolder(key, template), 'settings/appsettings.json');
             // path where manifest files will be written
             this.getManifestDstDir = (key, template) => path_1.default.resolve(this.getProjectFolder(key, template), 'wwwroot');
             this.getHistory = (botId, profileName) => __awaiter(this, void 0, void 0, function* () {
@@ -75,10 +74,9 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
              * @param srcTemplate
              * @param resourcekey
              */
-            this.init = (botFiles, settings, srcTemplate, resourcekey) => __awaiter(this, void 0, void 0, function* () {
+            this.init = (botFiles, srcTemplate, resourcekey) => __awaiter(this, void 0, void 0, function* () {
                 const botFolder = this.getBotFolder(resourcekey, this.mode);
                 const runtimeFolder = this.getRuntimeFolder(resourcekey);
-                const settingsPath = this.getSettingsPath(resourcekey, this.mode);
                 const manifestPath = this.getManifestDstDir(resourcekey, this.mode);
                 // clean up from any previous deploys
                 yield this.cleanup(resourcekey);
@@ -103,13 +101,6 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
                     }
                     fs_extra_1.writeFileSync(filePath, file.content);
                 }
-                // Saves the bot's *root settings* to the appsettings.json file
-                // These are the settings found in the bot's Settings tab in composer.
-                // TODO: this should be handled by plugin - WRITE TO appsettings.json
-                if (!(yield fs_extra_1.pathExists(path_1.default.dirname(settingsPath)))) {
-                    fs_extra_1.mkdirSync(path_1.default.dirname(settingsPath), { recursive: true });
-                }
-                yield fs_extra_1.writeJson(settingsPath, settings, { spaces: 4 });
                 // copy bot and runtime into projFolder
                 yield fs_extra_1.copy(srcTemplate, runtimeFolder);
             });
@@ -123,7 +114,7 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
              * @param resourcekey
              * @param customizeConfiguration
              */
-            this.performDeploymentAction = (project, runtime, botId, profileName, jobId, resourcekey, customizeConfiguration) => __awaiter(this, void 0, void 0, function* () {
+            this.performDeploymentAction = (project, settings, runtime, botId, profileName, jobId, resourcekey, customizeConfiguration) => __awaiter(this, void 0, void 0, function* () {
                 const { subscriptionID, accessToken, name, environment, hostname, luisResource, language, } = customizeConfiguration;
                 try {
                     // Create the BotProjectDeploy object, which is used to carry out the deploy action.
@@ -135,14 +126,14 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
                             // update the log messages provided to Composer via the status API.
                             const status = this.getLoadingStatus(botId, profileName, jobId);
                             status.result.log = this.logMessages.join('\n');
-                            this.updateHistory(botId, profileName, Object.assign({ status: status.status }, status.result));
+                            this.updateLoadingStatus(botId, profileName, jobId, status);
                         },
                         accessToken: accessToken,
                         projPath: this.getProjectFolder(resourcekey, this.mode),
                         runtime: runtime,
                     });
                     // Perform the deploy
-                    yield azDeployer.deploy(project, profileName, name, environment, language, hostname, luisResource);
+                    yield azDeployer.deploy(project, settings, profileName, name, environment, language, hostname, luisResource);
                     // update status and history
                     const status = this.getLoadingStatus(botId, profileName, jobId);
                     if (status) {
@@ -151,7 +142,7 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
                         status.result.log = this.logMessages.join('\n');
                         yield this.updateHistory(botId, profileName, Object.assign({ status: status.status }, status.result));
                         this.removeLoadingStatus(botId, profileName, jobId);
-                        // await this.cleanup(resourcekey);
+                        yield this.cleanup(resourcekey);
                     }
                 }
                 catch (error) {
@@ -173,7 +164,7 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
                         status.result.log = this.logMessages.join('\n');
                         yield this.updateHistory(botId, profileName, Object.assign({ status: status.status }, status.result));
                         this.removeLoadingStatus(botId, profileName, jobId);
-                        // await this.cleanup(resourcekey);
+                        yield this.cleanup(resourcekey);
                     }
                 }
             });
@@ -210,6 +201,21 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
                     return this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1];
                 }
                 return undefined;
+            };
+            this.updateLoadingStatus = (botId, profileName, jobId = '', newStatus) => {
+                if (this.publishingBots[botId] && this.publishingBots[botId][profileName].length > 0) {
+                    // get current status
+                    if (jobId) {
+                        for (let x = 0; x < this.publishingBots[botId][profileName].length; x++) {
+                            if (this.publishingBots[botId][profileName][x].result.id === jobId) {
+                                this.publishingBots[botId][profileName][x] = newStatus;
+                            }
+                        }
+                    }
+                    else {
+                        this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1] = newStatus;
+                    }
+                }
             };
             /**************************************************************************************************
              * plugin methods
@@ -264,16 +270,12 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
                         throw new Error('Required field `settings` is missing from publishing profile.');
                     }
                     // Prepare the temporary project
-                    yield this.init(botFiles, fullSettings, runtimeCodePath, resourcekey);
-                    // TODO: here is where we configure the template for the runtime, and should be parameterized when we
-                    // implement interchangeable runtimes
-                    // Append the settings found in the publishing profile to the appsettings.deployment.json file
-                    // TODO: this should be in the runtime plugin - write to appsettings.deployment.json
-                    const resourcePath = path_1.default.resolve(this.getProjectFolder(resourcekey, this.mode), 'appsettings.deployment.json');
-                    const appSettings = yield fs_extra_1.readJson(resourcePath);
-                    yield fs_extra_1.writeJson(resourcePath, Object.assign(Object.assign({}, appSettings), settings), {
-                        spaces: 4,
-                    });
+                    // this writes all the settings to the root settings/appsettings.json file
+                    yield this.init(botFiles, runtimeCodePath, resourcekey);
+                    // Merge all the settings
+                    // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
+                    // these will be written to the appropriate settings file inside the appropriate runtime plugin.
+                    const mergedSettings = mergeDeep_1.mergeDeep(fullSettings, settings);
                     // Prepare parameters and then perform the actual deployment action
                     const customizeConfiguration = {
                         accessToken,
@@ -284,7 +286,7 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
                         luisResource,
                         language,
                     };
-                    this.performDeploymentAction(project, runtime, botId, profileName, jobId, resourcekey, customizeConfiguration);
+                    this.performDeploymentAction(project, mergedSettings, runtime, botId, profileName, jobId, resourcekey, customizeConfiguration);
                 }
                 catch (err) {
                     console.log(err);
@@ -300,7 +302,7 @@ exports.default = (composer) => __awaiter(void 0, void 0, void 0, function* () {
                     response.status = 500;
                     response.result.message = this.logMessages[this.logMessages.length - 1];
                     this.updateHistory(botId, profileName, Object.assign({ status: response.status }, response.result));
-                    // this.cleanup(resourcekey);
+                    this.cleanup(resourcekey);
                 }
                 return response;
             });

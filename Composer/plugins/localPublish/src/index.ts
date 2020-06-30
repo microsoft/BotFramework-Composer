@@ -48,6 +48,14 @@ class LocalPublisher {
     this.composer = composer;
   }
 
+  private setBotStatus = (botId: string, status: RunningBot) => {
+    // preserve the pid if one is available
+    if (!status.process && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].process) {
+      status.process = LocalPublisher.runningBots[botId].process;
+    }
+    LocalPublisher.runningBots[botId] = status;
+  };
+
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, metadata, user): Promise<any> => {
     const { templatePath, fullSettings } = config;
@@ -58,7 +66,7 @@ class LocalPublisher {
     this.composer.log('Starting publish');
 
     // set the running bot status
-    LocalPublisher.runningBots[botId] = { status: 202, result: { message: 'Reloading...' } };
+    this.setBotStatus(botId, { status: 202, result: { message: 'Reloading...' } });
 
     // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
     // and export the content into that folder as well.
@@ -83,15 +91,23 @@ class LocalPublisher {
 
     // start or restart the bot process
     // do NOT await this, as it can take a long time
-    this.setBot(botId, version, fullSettings, project);
-
-    return {
-      status: 202,
-      result: {
-        id: uuid(),
-        message: 'Local publish success.',
-      },
-    };
+    try {
+      this.setBot(botId, version, fullSettings, project);
+      return {
+        status: 202,
+        result: {
+          id: uuid(),
+          message: 'Local publish success.',
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        result: {
+          message: error,
+        },
+      };
+    }
   };
   getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
@@ -196,7 +212,7 @@ class LocalPublisher {
         console.log('COPY FROM ', this.templatePath, ' to ', runtimeDir);
         await this.copyDir(this.templatePath, runtimeDir);
         const runtime = this.composer.getRuntimeByProject(project);
-        runtime.build(runtimeDir, project);
+        await runtime.build(runtimeDir, project);
       } catch (error) {
         // delete the folder to make sure build again.
         await removeDirAndFiles(botDir);
@@ -266,12 +282,12 @@ class LocalPublisher {
     } catch (error) {
       console.error('Error in startbot: ', error);
       this.stopBot(botId);
-      return {
+      this.setBotStatus(botId, {
         status: 500,
         result: {
           message: error,
         },
-      };
+      });
     }
   };
 
@@ -307,12 +323,12 @@ class LocalPublisher {
       } catch (err) {
         return reject(err);
       }
-      LocalPublisher.runningBots[botId] = {
+      this.setBotStatus(botId, {
         process: process,
         port: port,
         status: 200,
         result: { message: 'Runtime started' },
-      };
+      });
       const processLog = this.composer.log.extend(process.pid);
       this.addListeners(process, botId, processLog); //  resolve, reject);
       resolve();
@@ -353,14 +369,14 @@ class LocalPublisher {
 
     child.on('exit', (code) => {
       if (code !== 0) {
-        LocalPublisher.runningBots[botId] = { status: 500, result: { message: erroutput } };
+        this.setBotStatus(botId, { status: 500, result: { message: erroutput } });
       }
     });
 
     child.on('error', (err) => {
       logger('error: %s', err.message);
       console.error('error: %s', err.message);
-      LocalPublisher.runningBots[botId] = { status: 500, result: { message: err.message } };
+      this.setBotStatus(botId, { status: 500, result: { message: err.message } });
       // reject(`Could not launch bot runtime process: ${err.message}`);
     });
 

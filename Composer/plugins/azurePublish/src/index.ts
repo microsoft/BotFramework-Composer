@@ -223,7 +223,7 @@ export default async (composer: any): Promise<void> => {
           status.result.log = this.logMessages.join('\n');
           await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
           this.removeLoadingStatus(botId, profileName, jobId);
-          // await this.cleanup(resourcekey);
+          await this.cleanup(resourcekey);
         }
       } catch (error) {
         console.log(error);
@@ -242,7 +242,7 @@ export default async (composer: any): Promise<void> => {
           status.result.log = this.logMessages.join('\n');
           await this.updateHistory(botId, profileName, { status: status.status, ...status.result });
           this.removeLoadingStatus(botId, profileName, jobId);
-          // await this.cleanup(resourcekey);
+          await this.cleanup(resourcekey);
         }
       }
     };
@@ -379,7 +379,7 @@ export default async (composer: any): Promise<void> => {
         // Merge all the settings
         // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
         // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-        const mergedSettings = mergeDeep(fullSettings, settings, { bot: 'ComposerDialogs', root: 'ComposerDialogs' });
+        const mergedSettings = mergeDeep(fullSettings, settings);
 
         // Prepare parameters and then perform the actual deployment action
         const customizeConfiguration: CreateAndDeployResources = {
@@ -415,7 +415,7 @@ export default async (composer: any): Promise<void> => {
         response.result.message = this.logMessages[this.logMessages.length - 1];
 
         this.updateHistory(botId, profileName, { status: response.status, ...response.result });
-        // this.cleanup(resourcekey);
+        this.cleanup(resourcekey);
       }
 
       return response;
