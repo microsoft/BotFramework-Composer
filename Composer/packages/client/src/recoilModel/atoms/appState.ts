@@ -51,7 +51,7 @@ export const storageFileLoadingStatusState = atom<string>({
   default: '',
 });
 
-export const applicationErrorState = atom<StateError>({
+export const applicationErrorState = atom<StateError | undefined>({
   key: getFullyQualifiedKey('error'),
   default: {} as StateError,
 });

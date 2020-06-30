@@ -5,9 +5,9 @@ import React from 'react';
 import { render } from '@bfc/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
-import { StoreProvider } from '../src/store';
+import { App } from '../src/App';
 
-import { App } from './../src/App';
+import { wrapWithRecoil } from './testUtils';
 
 function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory(createMemorySource(route)) } = {}) {
   return {
@@ -16,18 +16,14 @@ function renderWithRouter(ui, { route = '/dialogs/home', history = createHistory
   };
 }
 
-const AppTest = () => (
-  <StoreProvider>
-    <App />
-  </StoreProvider>
-);
+const AppTest = () => <App />;
 
 describe('<Router/> router test', () => {
-  test('full app rendering/navigating', () => {
+  it('full app rendering/navigating', () => {
     const {
       container,
       history: { navigate },
-    } = renderWithRouter(<AppTest />);
+    } = renderWithRouter(wrapWithRecoil(<AppTest />));
 
     const appContainer = container;
     expect(appContainer.innerHTML).toMatch('Bot Framework Composer');
@@ -36,8 +32,8 @@ describe('<Router/> router test', () => {
     expect(appContainer.innerHTML).toMatch('Setting');
   });
 
-  test('landing on a not found', () => {
-    const { container } = renderWithRouter(<AppTest />, {
+  it('landing on a not found', () => {
+    const { container } = renderWithRouter(wrapWithRecoil(<AppTest />), {
       route: '/something-that-does-not-match',
     });
 

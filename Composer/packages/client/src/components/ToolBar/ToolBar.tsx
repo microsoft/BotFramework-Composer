@@ -67,11 +67,9 @@ export function ToolBar(props: ToolbarProps) {
     showSkillManifestModal,
     ...rest
   } = props;
-  const {
-    actions: { onboardingAddCoachMarkRef, exportToZip },
-  } = useStoreContext();
+
   const projectId = useRecoilValue(projectIdState);
-  const { createDialogBegin } = useRecoilValue(dispatcherState);
+  const { createDialogBegin, onboardingAddCoachMarkRef, exportToZip } = useRecoilValue(dispatcherState);
   const left: IToolBarItem[] = [];
   const right: IToolBarItem[] = [];
 

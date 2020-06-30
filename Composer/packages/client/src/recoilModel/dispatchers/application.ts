@@ -103,8 +103,8 @@ export const applicationDispatcher = () => {
     }
   );
 
-  const setApplicationLevelError = useRecoilCallback<[StateError], void>(
-    ({ set }: CallbackInterface) => (errorObj: StateError) => {
+  const setApplicationLevelError = useRecoilCallback<[StateError | undefined], void>(
+    ({ set }: CallbackInterface) => (errorObj: StateError | undefined) => {
       set(applicationErrorState, errorObj);
     }
   );
