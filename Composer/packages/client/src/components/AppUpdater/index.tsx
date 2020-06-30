@@ -75,7 +75,7 @@ export const AppUpdater: React.FC<{}> = () => {
           break;
 
         case 'progress': {
-          const progress = (payload.percent as number).toFixed(2);
+          const progress = +(payload.percent as number).toFixed(2);
           setAppUpdateProgress(progress, payload.total);
           break;
         }

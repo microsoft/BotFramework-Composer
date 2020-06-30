@@ -227,7 +227,7 @@ export interface DialogSetting {
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
   publishTargets?: PublishTarget[];
-  runtime?: {
+  runtime: {
     customRuntime: boolean;
     path: string;
     command: string;

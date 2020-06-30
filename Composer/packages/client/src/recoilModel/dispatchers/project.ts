@@ -38,7 +38,6 @@ import {
   templateProjectsState,
   runtimeTemplatesState,
   templateIdState,
-  setBotStatus,
 } from './../atoms';
 import { logMessage } from './../dispatchers/shared';
 

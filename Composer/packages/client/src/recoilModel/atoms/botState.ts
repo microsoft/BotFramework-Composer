@@ -111,7 +111,7 @@ export const showAddSkillDialogModalState = atom<boolean>({
 
 export const settingsState = atom<DialogSetting>({
   key: 'settings',
-  default: {},
+  default: {} as DialogSetting,
 });
 
 export const publishVersionsState = atom<any>({

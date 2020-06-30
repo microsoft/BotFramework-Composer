@@ -3,7 +3,6 @@
 // Licensed under the MIT License.
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { UserSettings } from '@bfc/shared';
 import jwtDecode from 'jwt-decode';
 import merge from 'lodash/merge';
 
@@ -11,6 +10,7 @@ import { userSettingsState, currentUserState, CurrentUser } from '../atoms/appSt
 import { isElectron } from '../../utils/electronUtil';
 import storage from '../../utils/storage';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
+import { UserSettingsPayload } from '../types';
 
 enum ClaimNames {
   upn = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn',
@@ -71,8 +71,8 @@ export const userDispatcher = () => {
     }
   });
 
-  const updateUserSettings = useRecoilCallback<[Partial<UserSettings>], void>(
-    ({ set }: CallbackInterface) => (settings: Partial<UserSettings>) => {
+  const updateUserSettings = useRecoilCallback<[Partial<UserSettingsPayload>], void>(
+    ({ set }: CallbackInterface) => (settings: Partial<UserSettingsPayload>) => {
       set(userSettingsState, (currentSettings) => {
         const newSettings = merge(currentSettings, settings);
         if (isElectron()) {

@@ -121,7 +121,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     navTo,
     selectTo,
     setectAndfocus,
-    clearUndoHistory,
     addSkillDialogCancel,
     updateLuFile,
     updateSkill,
@@ -164,17 +163,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       setDesignPageLocation({
         dialogId: dialogId,
         projectId: projectId,
-        selected: params.get('selected'),
-        focused: params.get('focused'),
+        selected: params.get('selected') ?? '',
+        focused: params.get('focused') ?? '',
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
-        onBreadcrumbItemClick: handleBreadcrumbItemClick,
         promptTab: getTabFromFragment(),
       });
       // @ts-ignore
       globalHistory._onTransitionComplete();
     } else {
       //leave design page should clear the history
-      clearUndoHistory();
+      // clearUndoHistory(); //TODO: undo/redo
     }
   }, [location]);
 
@@ -210,13 +208,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (selected) {
       selectTo(selected);
     } else {
-      navTo(id);
+      navTo(id, []);
     }
   }
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(newDialog);
+      navTo(newDialog, []);
     }
   };
 
@@ -389,7 +387,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id, projectId);
+      await removeDialog(id);
     }
   }
 
@@ -408,7 +406,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           selectTo(createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(id);
+          navTo(id, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;

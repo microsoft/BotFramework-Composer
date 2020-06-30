@@ -23,6 +23,7 @@ import {
   MiddlewareFunc,
   StorageFolder,
   Store,
+  DialogSetting,
 } from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
@@ -82,7 +83,7 @@ export const initialBotState: BotState = {
   showCreateDialogModal: false,
   showAddSkillDialogModal: false,
   isEnvSettingUpdated: false,
-  settings: {},
+  settings: {} as DialogSetting,
   publishVersions: {},
   publishStatus: 'inactive',
   lastPublishChange: null,
