@@ -49,10 +49,15 @@ class LocalPublisher {
   }
 
   private setBotStatus = (botId: string, status: RunningBot) => {
-    // preserve the pid if one is available
+    this.composer.log(`SETTING STATUS OF ${botId} to port ${status.port} and status ${status.status}`);
+    // preserve the pid and port if one is available
     if (!status.process && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].process) {
       status.process = LocalPublisher.runningBots[botId].process;
     }
+    if (!status.port && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].port) {
+      status.port = LocalPublisher.runningBots[botId].port;
+    }
+
     LocalPublisher.runningBots[botId] = status;
   };
 
@@ -209,7 +214,7 @@ class LocalPublisher {
         mkDir(this.getHistoryDir(botId), { recursive: true });
 
         // copy runtime template in folder
-        console.log('COPY FROM ', this.templatePath, ' to ', runtimeDir);
+        this.composer.log('COPY FROM ', this.templatePath, ' to ', runtimeDir);
         await this.copyDir(this.templatePath, runtimeDir);
         const runtime = this.composer.getRuntimeByProject(project);
         await runtime.build(runtimeDir, project);
@@ -265,9 +270,11 @@ class LocalPublisher {
       let port;
       if (LocalPublisher.runningBots[botId]) {
         this.composer.log('Bot already running. Stopping bot...');
+        // this may or may not be set based on the status of the bot
         port = LocalPublisher.runningBots[botId].port;
         this.stopBot(botId);
-      } else {
+      }
+      if (!port) {
         port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
       }
 
@@ -358,12 +365,10 @@ class LocalPublisher {
     child.stdout &&
       child.stdout.on('data', (data: any) => {
         logger('%s', data);
-        console.log('%s', data);
       });
 
     child.stderr &&
       child.stderr.on('data', (err: any) => {
-        console.error(err.toString());
         erroutput += err.toString();
       });
 
@@ -375,13 +380,11 @@ class LocalPublisher {
 
     child.on('error', (err) => {
       logger('error: %s', err.message);
-      console.error('error: %s', err.message);
       this.setBotStatus(botId, { status: 500, result: { message: err.message } });
       // reject(`Could not launch bot runtime process: ${err.message}`);
     });
 
     child.on('message', (msg) => {
-      console.log('%s', msg);
       logger('%s', msg);
     });
   };

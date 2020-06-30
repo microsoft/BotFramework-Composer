@@ -14,8 +14,6 @@ const exec = promisify(require('child_process').exec);
 const removeDirAndFiles = promisify(rimraf);
 
 export default async (composer: any): Promise<void> => {
-  console.log('RUNTIME PLUGINS DIRNAME: ', __dirname);
-  console.log(path.resolve(__dirname, '../../../../runtime/dotnet'));
   // register the bundled c# runtime used by the local publisher with the eject feature
   composer.addRuntimeTemplate({
     key: 'csharp-azurewebapp',
@@ -27,8 +25,8 @@ export default async (composer: any): Promise<void> => {
       // copyDir(path.resolve(__dirname, '../../../../../runtime/dotnet'), runtimePath);
 
       // do stuff
-      console.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
-      console.log('Run dotnet user-secrets init...');
+      composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
+      composer.log('Run dotnet user-secrets init...');
       // TODO: capture output of this and store it somewhere useful
       const { initOut, initErr } = await exec('dotnet user-secrets init --project azurewebapp', {
         cwd: runtimePath,
@@ -36,19 +34,19 @@ export default async (composer: any): Promise<void> => {
       if (initErr) {
         throw new Error(initErr);
       }
-      console.log('Run dotnet build...');
+      composer.log('Run dotnet build...');
       const { buildOut, buildErr } = await exec('dotnet build', { cwd: runtimePath });
       if (buildErr) {
         throw new Error(buildErr);
       }
-      console.log('FINISHED BUILDING!');
+      composer.log('FINISHED BUILDING!');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       // do stuff
-      console.log('RUN THIS C# PROJECT!');
+      composer.log('RUN THIS C# PROJECT!');
     },
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
-      console.log('BUILD FOR DEPLOY TO AZURE!');
+      composer.log('BUILD FOR DEPLOY TO AZURE!');
 
       let csproj = '';
       // find publishing profile in list
@@ -77,7 +75,7 @@ export default async (composer: any): Promise<void> => {
             cwd: runtimePath,
           }
         );
-        console.log('OUTPUT FROM BUILD', stdout);
+        composer.log('OUTPUT FROM BUILD', stdout);
         if (stderr) {
           console.error('ERR FROM BUILD: ', stderr);
         }
@@ -139,24 +137,22 @@ export default async (composer: any): Promise<void> => {
     path: path.resolve(__dirname, '../../../../runtime/node'),
     build: async (runtimePath: string, _project: any) => {
       // do stuff
-      console.log('BUILD THIS JS PROJECT');
+      composer.log('BUILD THIS JS PROJECT');
       const { installOut, installErr } = exec('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
       const { install2Out, install2Err } = exec('npm install', {
         cwd: path.join(runtimePath, '/azurewebapp'),
-        stdio: 'pipe',
       });
-      console.log('BUILD COMPLETE');
+      composer.log('BUILD COMPLETE');
     },
     run: async (project: any, localDisk: IFileStorage) => {
       // do stuff
     },
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       // do stuff
-      console.log('BUILD THIS JS PROJECT');
+      composer.log('BUILD THIS JS PROJECT');
       const { installOut, installErr } = exec('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
       const { install2Out, install2Err } = exec('npm install', {
         cwd: path.join(runtimePath, '/azurewebapp'),
-        stdio: 'pipe',
       });
 
       // write settings to disk in the appropriate location
@@ -169,7 +165,7 @@ export default async (composer: any): Promise<void> => {
       }
       fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
 
-      console.log('BUILD COMPLETE');
+      composer.log('BUILD COMPLETE');
       return '';
     },
     eject: async (project: any, localDisk: IFileStorage) => {
