@@ -178,15 +178,15 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   useEffect(() => {
     if (settings.publishTargets && settings.publishTargets.length > 0) {
-      const _selected = settings.publishTargets.find((item) => item.name === selectedTargetName);
-      setSelectedTarget(_selected);
+      const selected = settings.publishTargets.find((item) => item.name === selectedTargetName);
+      setSelectedTarget(selected);
       // load publish histories
       if (selectedTargetName === 'all') {
         for (const target of settings.publishTargets) {
           getPublishHistory(projectId, target);
         }
-      } else if (_selected) {
-        getPublishHistory(projectId, _selected);
+      } else if (selected) {
+        getPublishHistory(projectId, selected);
       }
     }
   }, [projectId, selectedTargetName]);
@@ -194,13 +194,13 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   // once history is loaded, display it
   useEffect(() => {
     if (settings.publishTargets && selectedTargetName === 'all') {
-      let _histories: any[] = [];
-      const _groups: any[] = [];
+      let histories: any[] = [];
+      const groups: any[] = [];
       let startIndex = 0;
       for (const target of settings.publishTargets) {
         if (publishHistory[target.name]) {
-          _histories = _histories.concat(publishHistory[target.name]);
-          _groups.push({
+          histories = histories.concat(publishHistory[target.name]);
+          groups.push({
             key: target.name,
             name: target.name,
             startIndex: startIndex,
@@ -210,8 +210,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           startIndex += publishHistory[target.name].length;
         }
       }
-      setGroups(_groups);
-      setThisPublishHistory(_histories);
+      setGroups(groups);
+      setThisPublishHistory(histories);
     } else if (selectedTargetName && publishHistory[selectedTargetName]) {
       setThisPublishHistory(publishHistory[selectedTargetName]);
       setGroups([
@@ -240,14 +240,14 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
-      const _target = (settings.publishTargets || []).concat([
+      const target = (settings.publishTargets || []).concat([
         {
           name,
           type,
           configuration,
         },
       ]);
-      await setSettings(projectId, { ...settings, publishTargets: _target });
+      await setSettings(projectId, { ...settings, publishTargets: target });
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
@@ -259,15 +259,15 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         return;
       }
 
-      const _targets = settings.publishTargets ? [...settings.publishTargets] : [];
+      const targets = settings.publishTargets ? [...settings.publishTargets] : [];
 
-      _targets[editTarget.index] = {
+      targets[editTarget.index] = {
         name,
         type,
         configuration,
       };
 
-      await setSettings(projectId, { ...settings, publishTargets: _targets });
+      await setSettings(projectId, { ...settings, publishTargets: targets });
 
       onSelectTarget(name);
     },
@@ -358,8 +358,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
-          const _target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await setSettings(projectId, { ...settings, publishTargets: _target });
+          const target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
+          await setSettings(projectId, { ...settings, publishTargets: target });
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');

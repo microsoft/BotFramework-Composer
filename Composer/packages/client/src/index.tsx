@@ -13,6 +13,8 @@ import { App } from './App';
 import { StoreProvider } from './store';
 import { DispatcherWrapper } from './recoilModel';
 
+const appHostElm = document.getElementById('root');
+
 formatMessage.setup({
   missingTranslation: 'ignore',
 });
@@ -22,15 +24,33 @@ const emotionCache = createCache({
   nonce: window.__nonce__,
 });
 
-ReactDOM.render(
-  <RecoilRoot>
-    <CacheProvider value={emotionCache}>
-      <StoreProvider>
-        <DispatcherWrapper>
-          <App />
-        </DispatcherWrapper>
-      </StoreProvider>
-    </CacheProvider>
-  </RecoilRoot>,
-  document.getElementById('root')
-);
+/**
+ * Renders the React App module.
+ */
+const renderApp = (AppComponent: typeof App) => {
+  ReactDOM.render(
+    <RecoilRoot>
+      <CacheProvider value={emotionCache}>
+        <StoreProvider>
+          <DispatcherWrapper>
+            <AppComponent />
+          </DispatcherWrapper>
+        </StoreProvider>
+      </CacheProvider>
+    </RecoilRoot>,
+    appHostElm
+  );
+};
+
+// Rendering the App for the first time.
+renderApp(App);
+
+/**
+ * Re-render updated App Module when hot module notifies a change.
+ */
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    const NextApp = require<{ App: typeof App }>('./App').App;
+    renderApp(NextApp);
+  });
+}
