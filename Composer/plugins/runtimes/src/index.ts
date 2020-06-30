@@ -37,7 +37,7 @@ export default async (composer: any): Promise<void> => {
       // do stuff
       console.log('RUN THIS C# PROJECT!');
     },
-    buildDeploy: async (runtimePath: string, project: any, profileName: string): Promise<string> => {
+    buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       console.log('BUILD FOR DEPLOY TO AZURE!');
 
       let csproj = '';
@@ -81,6 +81,13 @@ export default async (composer: any): Promise<void> => {
         overwrite: true,
         recursive: true,
       });
+
+      // write settings to disk in the appropriate location
+      const settingsPath = path.join(publishFolder, 'ComposerDialogs', 'settings', 'appsettings.json');
+      if (!(await fs.pathExists(path.dirname(settingsPath)))) {
+        fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+      }
+      fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
 
       console.log('BUILD FOR DELPOY COMPLETE!');
       // return the location of the build artifiacts

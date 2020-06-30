@@ -53,7 +53,7 @@ export interface RuntimeTemplate {
   run: (project: any, localDisk?: any) => Promise<void>;
 
   /** build for deploy method  */
-  buildDeploy: (runtimePath: string, project: any, profileName: string) => Promise<string>;
+  buildDeploy: (runtimePath: string, project: any, settings: any, profileName: string) => Promise<string>;
 
   /** path to code template */
   path: string;

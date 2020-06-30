@@ -15,7 +15,6 @@ export class BotProjectDeploy {
   private accessToken: string;
   private projPath: string;
   private zipPath: string;
-  private settingsPath: string;
   private logger: (string) => any;
   private runtime: any;
 
@@ -28,13 +27,10 @@ export class BotProjectDeploy {
 
     // path to the zipped assets
     this.zipPath = config.zipPath ?? path.join(this.projPath, 'code.zip');
-
-    // path to the source appsettings.deployment.json file
-    this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
   }
 
   /*******************************************************************************************************************************/
-  /* This section has to do with deploying to existing Azure resources 
+  /* This section has to do with deploying to existing Azure resources
   /*******************************************************************************************************************************/
 
   /**
@@ -42,6 +38,7 @@ export class BotProjectDeploy {
    */
   public async deploy(
     project: any,
+    settings: any,
     profileName: string,
     name: string,
     environment: string,
@@ -56,15 +53,8 @@ export class BotProjectDeploy {
         await fs.remove(this.zipPath);
       }
 
-      // STEP 2: BUILD
-      // run any platform specific build steps.
-      // this returns a pathToArtifacts where the deployable version lives.
-      const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project, profileName);
-
-      // STEP 3: UPDATE LUIS
+      // STEP 2: UPDATE LUIS
       // Do the LUIS build if LUIS settings are present
-      // TODO: why are we reading this from disk instead of from a parameter? -- READ FROM appsettings.deployment.json
-      const settings = await fs.readJSON(this.settingsPath);
       if (settings.luis) {
         const luisAuthoringKey = settings.luis.authoringKey;
         const luisAuthoringRegion = settings.luis.region;
@@ -78,8 +68,10 @@ export class BotProjectDeploy {
           }
           const luis = new LuisPublish({ logger: this.logger });
 
-          await luis.publishLuis(
-            pathToArtifacts,
+          // this function returns an object that contains the luis APP ids mapping
+          // each dialog to its matching app.
+          const luisAppIDs = await luis.publishLuis(
+            this.projPath,
             name,
             environment,
             this.accessToken,
@@ -91,8 +83,19 @@ export class BotProjectDeploy {
             luisAuthoringRegion,
             luisResource
           );
+
+          // amend luis settings with newly generated values
+          settings.luis = {
+            ...settings.luis,
+            ...luisAppIDs,
+          };
         }
       }
+
+      // STEP 3: BUILD
+      // run any platform specific build steps.
+      // this returns a pathToArtifacts where the deployable version lives.
+      const pathToArtifacts = await this.runtime.buildDeploy(this.projPath, project, settings, profileName);
 
       // STEP 4: ZIP THE ASSETS
       // Build a zip file of the project

@@ -160,24 +160,24 @@ export class LuisPublish {
       }
 
       // Create the base LUIS config object
-      const luisConfig: any = {
-        endpoint: luisEndpoint,
-        endpointKey: luisEndpointKey,
-        authoringRegion: luisAuthoringRegion,
-        authoringKey: luisAuthoringRegion,
-      };
+      // const luisConfig: any = {
+      //   endpoint: luisEndpoint,
+      //   endpointKey: luisEndpointKey,
+      //   authoringRegion: luisAuthoringRegion,
+      //   authoringKey: luisAuthoringRegion,
+      // };
 
-      // Copy the app IDs into the base config
-      Object.assign(luisConfig, luisAppIds);
+      // // Copy the app IDs into the base config
+      // Object.assign(luisConfig, luisAppIds);
 
-      // Update deploymentSettings with the luis config
-      // TODO: This should be handled by the runtime plugin - writing to appsettings.deployment.json
-      // But in this case the change here is being written into the build folder, not "original" version
-      const settings: any = await fs.readJson(deploymentSettingsPath);
-      settings.luis = luisConfig;
-      await fs.writeJson(deploymentSettingsPath, settings, {
-        spaces: 4,
-      });
+      // // Update deploymentSettings with the luis config
+      // // TODO: This should be handled by the runtime plugin - writing to appsettings.deployment.json
+      // // But in this case the change here is being written into the build folder, not "original" version
+      // const settings: any = await fs.readJson(deploymentSettingsPath);
+      // settings.luis = luisConfig;
+      // await fs.writeJson(deploymentSettingsPath, settings, {
+      //   spaces: 4,
+      // });
 
       // In order for the bot to use the LUIS models, we need to assign a LUIS key to the endpoint of each app
       // First step is to get a list of all the accounts available based on the given luisAuthoringKey.
@@ -239,6 +239,9 @@ export class LuisPublish {
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
         message: 'Luis Publish Success! ...',
       });
+
+      // return the new settings that need to be added to the main settings file.
+      return luisAppIds;
     }
   }
 }

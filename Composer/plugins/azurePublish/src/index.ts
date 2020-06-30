@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 
+import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
 import schema from './schema';
 
@@ -74,10 +75,6 @@ export default async (composer: any): Promise<void> => {
     private getBotFolder = (key: string, template: string) =>
       path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
 
-    // path to the root settings file
-    private getSettingsPath = (key: string, template: string) =>
-      path.resolve(this.getBotFolder(key, template), 'settings/appsettings.json');
-
     // path where manifest files will be written
     private getManifestDstDir = (key: string, template: string) =>
       path.resolve(this.getProjectFolder(key, template), 'wwwroot');
@@ -121,10 +118,9 @@ export default async (composer: any): Promise<void> => {
      * @param srcTemplate
      * @param resourcekey
      */
-    private init = async (botFiles: any, settings: any, srcTemplate: string, resourcekey: string) => {
+    private init = async (botFiles: any, srcTemplate: string, resourcekey: string) => {
       const botFolder = this.getBotFolder(resourcekey, this.mode);
       const runtimeFolder = this.getRuntimeFolder(resourcekey);
-      const settingsPath = this.getSettingsPath(resourcekey, this.mode);
       const manifestPath = this.getManifestDstDir(resourcekey, this.mode);
 
       // clean up from any previous deploys
@@ -153,14 +149,6 @@ export default async (composer: any): Promise<void> => {
         writeFileSync(filePath, file.content);
       }
 
-      // Saves the bot's *root settings* to the appsettings.json file
-      // These are the settings found in the bot's Settings tab in composer.
-      // TODO: this should be handled by plugin - WRITE TO appsettings.json
-      if (!(await pathExists(path.dirname(settingsPath)))) {
-        mkdirSync(path.dirname(settingsPath), { recursive: true });
-      }
-      await writeJson(settingsPath, settings, { spaces: 4 });
-
       // copy bot and runtime into projFolder
       await copy(srcTemplate, runtimeFolder);
     };
@@ -187,6 +175,7 @@ export default async (composer: any): Promise<void> => {
      */
     private performDeploymentAction = async (
       project: any,
+      settings: any,
       runtime: any,
       botId: string,
       profileName: string,
@@ -214,7 +203,8 @@ export default async (composer: any): Promise<void> => {
             // update the log messages provided to Composer via the status API.
             const status = this.getLoadingStatus(botId, profileName, jobId);
             status.result.log = this.logMessages.join('\n');
-            this.updateHistory(botId, profileName, { status: status.status, ...status.result });
+
+            this.updateLoadingStatus(botId, profileName, jobId, status);
           },
           accessToken: accessToken,
           projPath: this.getProjectFolder(resourcekey, this.mode),
@@ -222,7 +212,7 @@ export default async (composer: any): Promise<void> => {
         });
 
         // Perform the deploy
-        await azDeployer.deploy(project, profileName, name, environment, language, hostname, luisResource);
+        await azDeployer.deploy(project, settings, profileName, name, environment, language, hostname, luisResource);
 
         // update status and history
         const status = this.getLoadingStatus(botId, profileName, jobId);
@@ -293,6 +283,21 @@ export default async (composer: any): Promise<void> => {
         return this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1];
       }
       return undefined;
+    };
+
+    private updateLoadingStatus = (botId: string, profileName: string, jobId = '', newStatus) => {
+      if (this.publishingBots[botId] && this.publishingBots[botId][profileName].length > 0) {
+        // get current status
+        if (jobId) {
+          for (let x = 0; x < this.publishingBots[botId][profileName].length; x++) {
+            if (this.publishingBots[botId][profileName][x].result.id === jobId) {
+              this.publishingBots[botId][profileName][x] = newStatus;
+            }
+          }
+        } else {
+          this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1] = newStatus;
+        }
+      }
     };
 
     /**************************************************************************************************
@@ -368,22 +373,13 @@ export default async (composer: any): Promise<void> => {
         }
 
         // Prepare the temporary project
-        await this.init(botFiles, fullSettings, runtimeCodePath, resourcekey);
+        // this writes all the settings to the root settings/appsettings.json file
+        await this.init(botFiles, runtimeCodePath, resourcekey);
 
-        // TODO: here is where we configure the template for the runtime, and should be parameterized when we
-        // implement interchangeable runtimes
-
-        // Append the settings found in the publishing profile to the appsettings.deployment.json file
-        // TODO: this should be in the runtime plugin - write to appsettings.deployment.json
-        const resourcePath = path.resolve(this.getProjectFolder(resourcekey, this.mode), 'appsettings.deployment.json');
-        const appSettings = await readJson(resourcePath);
-        await writeJson(
-          resourcePath,
-          { ...appSettings, ...settings },
-          {
-            spaces: 4,
-          }
-        );
+        // Merge all the settings
+        // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
+        // these will be written to the appropriate settings file inside the appropriate runtime plugin.
+        const mergedSettings = mergeDeep(fullSettings, settings, { bot: 'ComposerDialogs', root: 'ComposerDialogs' });
 
         // Prepare parameters and then perform the actual deployment action
         const customizeConfiguration: CreateAndDeployResources = {
@@ -395,7 +391,16 @@ export default async (composer: any): Promise<void> => {
           luisResource,
           language,
         };
-        this.performDeploymentAction(project, runtime, botId, profileName, jobId, resourcekey, customizeConfiguration);
+        this.performDeploymentAction(
+          project,
+          mergedSettings,
+          runtime,
+          botId,
+          profileName,
+          jobId,
+          resourcekey,
+          customizeConfiguration
+        );
       } catch (err) {
         console.log(err);
         if (err instanceof Error) {
