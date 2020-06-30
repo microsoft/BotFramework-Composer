@@ -8,11 +8,11 @@ import React, { useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
-import { TestController } from '../../components/TestController';
-import { ISkillFormData } from '../../components/SkillForm/types';
-import CreateSkillModal from '../../components/SkillForm/CreateSkillModal';
 import { skillsState, botNameState, settingsState, projectIdState, dispatcherState } from '../../recoilModel';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
+import { TestController } from '../../components/TestController/TestController';
+import { ISkillFormData } from '../../components/SkillForm/types';
+import CreateSkillModal from '../../components/SkillForm/CreateSkillModal/CreateSkillModal';
 
 import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';

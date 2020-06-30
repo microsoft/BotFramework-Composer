@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ActionTypes, FileTypes } from '../../../src/constants/index';
+import { ActionTypes, FileTypes } from '../../../src/constants';
 import { reducer } from '../../../src/store/reducer/index';
 
 const mockResponse = {

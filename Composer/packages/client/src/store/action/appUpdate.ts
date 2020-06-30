@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { ActionCreator } from '../types';
-
-import { ActionTypes } from './../../constants';
+import { ActionTypes } from '../../constants';
 
 export const setAppUpdateError: ActionCreator = ({ dispatch }, error) => {
   dispatch({

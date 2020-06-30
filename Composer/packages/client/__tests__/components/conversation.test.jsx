@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { render } from '@bfc/test-utils';
 
-import '../../src/components/Conversation';
+import '../../src/components/Conversation/Conversation';
 
 describe('<Conversation/>', () => {
   it('should render the conversation', async () => {

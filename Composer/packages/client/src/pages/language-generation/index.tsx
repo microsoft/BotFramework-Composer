@@ -9,13 +9,13 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { dialogsState, projectIdState } from '../../recoilModel/atoms/botState';
+import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils';
-import { TestController } from '../../components/TestController';
-import { INavTreeItem } from '../../components/NavTree';
-import { Page } from '../../components/Page';
-import { dialogsState, projectIdState } from '../../recoilModel/atoms/botState';
+import { TestController } from '../../components/TestController/TestController';
+import { INavTreeItem } from '../../components/NavTree/NavTree';
+import { Page } from '../../components/Page/Page';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));

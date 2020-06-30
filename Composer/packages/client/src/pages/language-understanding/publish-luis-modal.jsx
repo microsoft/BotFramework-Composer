@@ -12,14 +12,14 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
+import formatMessage from 'format-message';
 import keys from 'lodash/keys';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState, botNameState, settingsState, projectIdState } from '../../recoilModel';
+import { Text, Tips, Links, nameRegex } from '../../constants';
 
-import { Text, Tips, Links, nameRegex } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 
 const STATE = {

@@ -12,11 +12,11 @@ import { navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
 import { dispatcherState } from '../../recoilModel';
 import { navigateTo } from '../../utils';
 import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
 import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';

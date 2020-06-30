@@ -1,9 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ActionCreator } from '../types';
+import formatMessage from 'format-message';
 
-import { ActionTypes } from './../../constants';
+import { ActionCreator } from '../types';
+import { ActionTypes } from '../../constants';
+
 import httpClient from './../../utils/httpUtil';
 
 export const fetchStorages: ActionCreator = async ({ dispatch }) => {
@@ -105,5 +107,35 @@ export const updateCurrentPath: ActionCreator = async ({ dispatch }, path, stora
     });
   } catch (err) {
     dispatch({ type: ActionTypes.GET_STORAGE_FAILURE, payload: null, error: err });
+  }
+};
+
+export const createFolder: ActionCreator = async ({ dispatch }, path, name) => {
+  const storageId = 'default';
+  try {
+    await httpClient.post(`/storages/folder`, { path, name, storageId });
+  } catch (e) {
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: {
+        message: e.message,
+        summary: formatMessage('Create Folder Error'),
+      },
+    });
+  }
+};
+
+export const updateFolder: ActionCreator = async ({ dispatch }, path, oldName, newName) => {
+  const storageId = 'default';
+  try {
+    await httpClient.put(`/storages/folder`, { path, oldName, newName, storageId });
+  } catch (e) {
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: {
+        message: e.message,
+        summary: formatMessage('Update Folder Name Error'),
+      },
+    });
   }
 };

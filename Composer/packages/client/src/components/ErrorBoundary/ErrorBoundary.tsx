@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 import formatMessage from 'format-message';
 
 import { StoreContext } from '../../store';
-import { ErrorPopup } from '../ErrorPopup';
+import { ErrorPopup } from '../ErrorPopup/ErrorPopup';
 
 const githubIssueUrl = `https://github.com/microsoft/BotFramework-Composer/issues`;
 const errorToShow = {

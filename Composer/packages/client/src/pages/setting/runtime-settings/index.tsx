@@ -11,8 +11,8 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { botNameState, settingsState, projectIdState, dispatcherState } from '../../../recoilModel';
+import { LoadingSpinner } from '../../../components/LoadingSpinner/LoadingSpinner';
 
 import { EjectModal } from './ejectModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
