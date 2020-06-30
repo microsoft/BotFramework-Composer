@@ -3,7 +3,7 @@
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
-import { indexer } from '@bfc/indexers';
+import { indexer, validateDialog } from '@bfc/indexers';
 import lodashGet from 'lodash/get';
 import lodashSet from 'lodash/get';
 import isArray from 'lodash/isArray';
@@ -101,14 +101,13 @@ export const projectDispatcher = () => {
     const { set, snapshot } = callbackHelpers;
     const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics, skills } = data;
     schemas.sdk.content = processSchema(id, schemas.sdk.content);
-    const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(
-      files,
-      botName,
-      schemas.sdk.content,
-      locale
-    );
+    const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+    const verifiedDialogs = dialogs.map((dialog) => {
+      dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+      return dialog;
+    });
     set(projectIdState, id);
-    set(dialogsState, dialogs);
+    set(dialogsState, verifiedDialogs);
     set(botEnvironmentState, botEnvironment);
     set(botNameState, botName);
     const curLocation = await snapshot.getPromise(locationState);
