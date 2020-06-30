@@ -122,6 +122,7 @@ export class Builder {
     const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig);
 
     await this.writeFiles(result.luResult);
+    await this.writeFiles(result.qnaResult);
   }
 
   private doDownSampling(luObject: any) {
@@ -168,7 +169,12 @@ export class Builder {
       throw new Error('No LUIS files exist');
     }
 
-    const loadResult = await this._loadContents(config.models, this.luBuilder);
+    const loadResult = await this.luBuilder.loadContents(
+      config.models,
+      config.fallbackLocal,
+      config.suffix,
+      config.region
+    );
     loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
     const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
 
@@ -195,7 +201,13 @@ export class Builder {
       throw new Error('No QnA files exist');
     }
 
-    const loadResult = await this._loadContents(config.models, this.qnaBuilder);
+    const loadResult = await this.qnaBuilder.loadContents(
+      config.models,
+      config.botName,
+      config.suffix,
+      config.region,
+      config.fallbackLocal
+    );
     const subscriptKeyEndpoint =
       config.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
 
@@ -212,7 +224,7 @@ export class Builder {
       loadResult.crossTrainedRecognizer,
       'crosstrained'
     );
-    await this.qnaBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath, 'crosstrained', files);
+    await this.qnaBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
   }
   //delete files in generated folder
   private async deleteDir(path: string) {
@@ -263,15 +275,6 @@ export class Builder {
       }
     });
     return config;
-  };
-
-  private _loadContents = async (paths: string[], builder: any) => {
-    return await builder.loadContents(
-      paths,
-      this._locale,
-      this.config?.environment || '',
-      this.config?.authoringRegion || ''
-    );
   };
 
   private async cleanCrossTrain() {
