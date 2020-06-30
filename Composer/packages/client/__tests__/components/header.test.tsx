@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render } from '@bfc/test-utils';
 
 import { Header } from '../../src/components/Header';
+import { renderWithRecoil } from '../testUtils';
 
 describe('<Header />', () => {
   it('should render the header', () => {
-    const { container } = render(<Header />);
+    const { container } = renderWithRecoil(<Header botName="Echo" locale="us" />);
 
     expect(container).toHaveTextContent('Bot Framework Composer');
   });

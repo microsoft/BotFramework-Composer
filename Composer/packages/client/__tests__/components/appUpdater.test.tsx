@@ -5,12 +5,11 @@ import React from 'react';
 
 import { AppUpdater } from '../../src/components/AppUpdater';
 import { AppUpdaterStatus } from '../../src/constants';
-import { renderWithRecoilAndContext } from '../testUtils';
+import { renderWithRecoil } from '../testUtils';
 import { appUpdateState } from '../../src/recoilModel';
 import { AppUpdateState } from '../../src/store/types';
 
 describe('<AppUpdater />', () => {
-  const state = {};
   const baseState: AppUpdateState = {
     progressPercent: 0,
     showing: true,
@@ -18,7 +17,7 @@ describe('<AppUpdater />', () => {
   };
 
   it('should not render anything when the modal is set to hidden', () => {
-    const { container } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+    const { container } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
       });
@@ -27,7 +26,7 @@ describe('<AppUpdater />', () => {
   });
 
   it('should not render anything when the modal is set to hidden (even when not idle)', () => {
-    const { container } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+    const { container } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
         showing: false,
@@ -38,7 +37,7 @@ describe('<AppUpdater />', () => {
   });
 
   it('should render the update available dialog', () => {
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+    const { getByText } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
         version: '1.0.0',
@@ -53,7 +52,7 @@ describe('<AppUpdater />', () => {
   });
 
   it('should render the update unavailable dialog', () => {
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+    const { getByText } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
         status: AppUpdaterStatus.UPDATE_UNAVAILABLE,
@@ -65,7 +64,7 @@ describe('<AppUpdater />', () => {
   });
 
   it('should render the update completed dialog', () => {
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+    const { getByText } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
         status: AppUpdaterStatus.UPDATE_SUCCEEDED,
@@ -76,7 +75,7 @@ describe('<AppUpdater />', () => {
   });
 
   it('should render the update in progress dialog (before total size in known)', () => {
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+    const { getByText } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
         status: AppUpdaterStatus.UPDATE_IN_PROGRESS,
@@ -88,7 +87,7 @@ describe('<AppUpdater />', () => {
   });
 
   it('should render the update in progress dialog', () => {
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+    const { getByText } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
         progressPercent: 23,
@@ -102,7 +101,7 @@ describe('<AppUpdater />', () => {
   });
 
   it('should render the error dialog', () => {
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+    const { getByText } = renderWithRecoil(<AppUpdater />, ({ set }) => {
       set(appUpdateState, {
         ...baseState,
         error: '408 Request timed out.',
