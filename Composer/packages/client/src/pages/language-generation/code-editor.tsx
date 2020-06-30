@@ -27,7 +27,11 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
   const lgFiles = useRecoilValue(lgFilesState);
-  const actions = useRecoilValue(dispatcherState);
+  const {
+    updateLgTemplate: updateLgTemplateDispatcher,
+    updateLgFile: updateLgFileDispatcher,
+    updateUserSettings,
+  } = useRecoilValue(dispatcherState);
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const diagnostics = get(file, 'diagnostics', []);
@@ -88,7 +92,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
             body,
           },
         };
-        actions.updateLgTemplate(payload);
+        updateLgTemplateDispatcher(payload);
       }, 500),
     [file, template, projectId]
   );
@@ -103,7 +107,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           projectId,
           content,
         };
-        actions.updateLgFile(payload);
+        updateLgFileDispatcher(payload);
       }, 500),
     [file, projectId]
   );
@@ -126,7 +130,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   );
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
-    actions.updateUserSettings({ codeEditor: settings });
+    updateUserSettings({ codeEditor: settings });
   };
 
   const lgOption = {

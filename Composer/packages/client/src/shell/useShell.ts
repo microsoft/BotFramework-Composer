@@ -80,7 +80,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return await updateDialog(id, newDialog.content);
+    return await updateDialog({ id, content: newDialog.content, projectId });
   }
 
   function cleanData() {
@@ -91,7 +91,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         content: cleanedData,
         projectId,
       };
-      updateDialog(payload.id, payload.content);
+      updateDialog(payload);
     }
   }
 
@@ -118,7 +118,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       }
     }
 
-    focusTo(dataPath, fragment);
+    focusTo(dataPath, fragment ?? '');
   }
 
   // ANDY: should this be somewhere else?
@@ -139,7 +139,11 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     },
     saveDialog: (dialogId: string, newDialogData: any) => {
       dialogMapRef.current[dialogId] = newDialogData;
-      updateDialog(dialogId, newDialogData);
+      updateDialog({
+        id: dialogId,
+        content: newDialogData,
+        projectId,
+      });
     },
     saveData: (newData, updatePath) => {
       let dataPath = '';
@@ -154,7 +158,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
-      updateDialog(payload.id, payload.content);
+      updateDialog(payload);
 
       //make sure focusPath always valid
       const data = getDialogData(dialogMapRef.current, dialogId, getFocusPath(selected, focused));
@@ -165,7 +169,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
          *   - If 'trigger' not exisits at `selected` path, fallback to dialog Id;
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
-        navTo(dialogId);
+        navTo(dialogId, []);
       }
     },
     ...lgApi,

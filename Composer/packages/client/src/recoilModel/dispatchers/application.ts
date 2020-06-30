@@ -59,8 +59,8 @@ export const applicationDispatcher = () => {
     });
   });
 
-  const setAppUpdateProgress = useRecoilCallback<[string, number], void>(
-    ({ set }: CallbackInterface) => (progressPercent: string, downloadSizeInBytes: number) => {
+  const setAppUpdateProgress = useRecoilCallback<[number, number], void>(
+    ({ set }: CallbackInterface) => (progressPercent: number, downloadSizeInBytes: number) => {
       set(appUpdateState, (updaterState: AppUpdateState) => {
         return {
           ...updaterState,
