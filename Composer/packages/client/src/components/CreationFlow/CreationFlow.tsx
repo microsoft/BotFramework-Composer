@@ -29,6 +29,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
+    createFolder,
+    updateFolder,
   } = actions;
   const { templateId, templateProjects, storages, focusedStorageFolder } = state;
   const currentStorageIndex = useRef(0);
@@ -70,22 +72,11 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData) => {
-    await createProject(
-      templateId || '',
-      formData.name,
-      formData.description,
-      Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || ''),
-      formData.schemaUrl
-    );
+    await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
   };
 
   const handleSaveAs = async (formData) => {
-    await saveProjectAs(
-      state.projectId,
-      formData.name,
-      formData.description,
-      Path.join(focusedStorageFolder.parent || '', focusedStorageFolder.name || '')
-    );
+    await saveProjectAs(state.projectId, formData.name, formData.description, formData.location);
   };
 
   const handleSubmit = async (formData) => {
@@ -114,17 +105,21 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
       <Home />
       <Router>
         <DefineConversation
+          createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="create/:templateId"
           saveTemplateId={saveTemplateId}
+          updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}
         />
         <CreateOptions path="create" templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
         <DefineConversation
+          createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path=":projectId/:templateId/save"
+          updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onSubmit={handleSubmit}

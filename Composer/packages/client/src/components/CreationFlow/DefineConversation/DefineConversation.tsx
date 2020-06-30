@@ -27,6 +27,7 @@ interface DefineConversationFormData {
   name: string;
   description: string;
   schemaUrl: string;
+  location: string;
 }
 
 interface DefineConversationProps
@@ -34,6 +35,8 @@ interface DefineConversationProps
     templateId: string;
     location: string;
   }> {
+  createFolder: (path: string, name: string) => void;
+  updateFolder: (path: string) => void;
   onSubmit: (formData: DefineConversationFormData) => void;
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
@@ -43,8 +46,18 @@ interface DefineConversationProps
 }
 
 const DefineConversation: React.FC<DefineConversationProps> = (props) => {
-  const { onSubmit, onDismiss, onCurrentPathUpdate, saveTemplateId, templateId, focusedStorageFolder } = props;
+  const {
+    onSubmit,
+    onDismiss,
+    onCurrentPathUpdate,
+    saveTemplateId,
+    templateId,
+    focusedStorageFolder,
+    createFolder,
+    updateFolder,
+  } = props;
   const files = focusedStorageFolder?.children ?? [];
+  const writable = focusedStorageFolder.writable;
   const getDefaultName = () => {
     let i = -1;
     const bot = templateId;
@@ -88,6 +101,9 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     schemaUrl: {
       required: false,
     },
+    location: {
+      required: true,
+    },
   };
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
 
@@ -98,7 +114,12 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   });
 
   useEffect(() => {
-    const formData: DefineConversationFormData = { name: getDefaultName(), description: '', schemaUrl: '' };
+    const formData: DefineConversationFormData = {
+      name: getDefaultName(),
+      description: '',
+      schemaUrl: '',
+      location: '',
+    };
     updateForm(formData);
     if (props.location?.search) {
       const updatedFormData = {
@@ -138,6 +159,19 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     [hasErrors, formData]
   );
 
+  const updateLocation = (location: string) => {
+    const updatedFormData = {
+      ...formData,
+      location,
+    };
+    updateForm(updatedFormData);
+  };
+
+  const onCurrentPathUpdateWrap = (newPath: string, storageId?: string) => {
+    onCurrentPathUpdate(newPath, storageId);
+    updateLocation(newPath);
+  };
+
   return (
     <Fragment>
       <DialogWrapper
@@ -173,16 +207,18 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             </StackItem>
           </Stack>
           <LocationSelectContent
+            createFolder={createFolder}
             focusedStorageFolder={focusedStorageFolder}
             operationMode={{ read: true, write: true }}
-            onCurrentPathUpdate={onCurrentPathUpdate}
+            updateFolder={updateFolder}
+            onCurrentPathUpdate={onCurrentPathUpdateWrap}
           />
 
           <DialogFooter>
             <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
             <PrimaryButton
               data-testid="SubmitNewBotBtn"
-              disabled={hasErrors}
+              disabled={hasErrors || !writable}
               text={formatMessage('OK')}
               onClick={handleSubmit}
             />
