@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { LuFile, importResolverGenerator } from '@bfc/shared';
-import { dialogIndexer, autofixReferInDialog, luIndexer, lgIndexer } from '@bfc/indexers';
+import { dialogIndexer, autofixReferInDialog, luIndexer, lgIndexer, validateDialog } from '@bfc/indexers';
 
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getBaseName } from '../../utils';
@@ -95,9 +95,19 @@ export const dialogsDispatcher = () => {
       const { set, snapshot } = callbackHelpers;
       let dialogs = await snapshot.getPromise(dialogsState);
       const schemas = await snapshot.getPromise(schemasState);
-      dialogs = dialogs.map((dialog) =>
-        dialog.id === id ? { ...dialog, ...dialogIndexer.parse(id, content, schemas.sdk.content) } : dialog
-      );
+      const lgFiles = await snapshot.getPromise(lgFilesState);
+      const luFiles = await snapshot.getPromise(luFilesState);
+      dialogs = dialogs.map((dialog) => {
+        if (dialog.id === id) {
+          dialog = {
+            ...dialog,
+            ...dialogIndexer.parse(dialog.id, content),
+          };
+          dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+          return dialog;
+        }
+        return dialog;
+      });
       set(dialogsState, dialogs);
     }
   );
@@ -124,11 +134,10 @@ export const dialogsDispatcher = () => {
       const fixedContent = autofixReferInDialog(id, content);
       let dialogs = await snapshot.getPromise(dialogsState);
       const schemas = await snapshot.getPromise(schemasState);
-      const dialog = {
-        isRoot: false,
-        displayName: id,
-        ...dialogIndexer.parse(id, fixedContent, schemas.sdk.content),
-      };
+      const lgFiles = await snapshot.getPromise(lgFilesState);
+      const luFiles = await snapshot.getPromise(luFilesState);
+      const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
+      dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
       dialogs = [...dialogs, dialog];
       await createLgFile(callbackHelpers, id, '');
       await createLuFile(callbackHelpers, id, '');
