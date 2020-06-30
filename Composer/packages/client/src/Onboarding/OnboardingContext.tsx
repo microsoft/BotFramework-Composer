@@ -3,7 +3,7 @@
 
 import { createContext } from 'react';
 
-import { IStep, IStepSet } from './onboarding';
+import { IStep, IStepSet } from './onboardingUtils';
 
 interface OnboardingContext {
   actions: {

@@ -12,7 +12,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { assignDefined, Skill } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 
-import { DialogWrapper } from '../../DialogWrapper';
+import { DialogWrapper } from '../../DialogWrapper/DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { addSkillDialog } from '../../../constants';
 import { ISkillFormData, ISkillFormDataErrors, skillUrlRegex, skillNameRegex } from '../types';

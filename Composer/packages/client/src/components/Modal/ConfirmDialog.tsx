@@ -9,7 +9,8 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import ReactDOM from 'react-dom';
 
-import { dialogStyle, builtInStyles, dialog, dialogModal, confirmationContainer } from './styles';
+import { builtInStyles, dialog, dialogModal, confirmationContainer } from './styles';
+import { dialogStyle } from './dialogStyle';
 
 interface ConfirmDialogProps {
   onCancel: () => void;

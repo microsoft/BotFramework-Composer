@@ -9,9 +9,9 @@ import { ActionCreator, State, Store } from '../types';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { Text } from '../../constants';
 import LuWorker from '../parsers/luWorker';
+import { ActionTypes } from '../../constants';
 
 import httpClient from './../../utils/httpUtil';
-import { ActionTypes } from './../../constants/index';
 
 export const updateLuFile: ActionCreator = async (store, { id, projectId, content }) => {
   const result = (await LuWorker.parse(id, content)) as LuFile;

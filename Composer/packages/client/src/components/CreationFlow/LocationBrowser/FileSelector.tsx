@@ -26,8 +26,7 @@ import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import moment from 'moment';
 
-import { nameRegex } from '../../../constants';
-import { FileTypes } from '../../../constants/index';
+import { FileTypes, nameRegex } from '../../../constants';
 import { StorageFolder, File } from '../../../store/types';
 import { getFileIconName, calculateTimeDiff } from '../../../utils';
 

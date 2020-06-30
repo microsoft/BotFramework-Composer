@@ -14,11 +14,11 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 
 import { DialogCreationCopy, nameRegex } from '../../../constants';
-import { DialogWrapper } from '../../DialogWrapper';
+import { DialogWrapper } from '../../DialogWrapper/DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { StorageFolder } from '../../../store/types';
-import { FieldConfig, useForm } from '../../../hooks';
+import { FieldConfig, useForm } from '../../../hooks/useForm';
 
 import { name, description, halfstack, stackinput } from './styles';
 const MAXTRYTIMES = 10000;
