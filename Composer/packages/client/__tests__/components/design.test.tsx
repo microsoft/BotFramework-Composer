@@ -4,12 +4,11 @@
 import * as React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 
-import { renderWithStore } from '../testUtils';
+import { renderWithStore, renderWithRecoil } from '../testUtils';
 import { dialogs } from '../constants.json';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
-
-import { TriggerCreationModal } from './../../src/components/ProjectTree/TriggerCreationModal';
-import { CreateDialogModal } from './../../src/pages/design/createDialogModal';
+import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
+import { CreateDialogModal } from '../../src/pages/design/createDialogModal';
 
 jest.mock('@bfc/code-editor', () => {
   return {
@@ -26,7 +25,7 @@ describe('<ProjectTree/>', () => {
     const handleDeleteDialog = jest.fn(() => {});
     const handleDeleteTrigger = jest.fn(() => {});
     const openNewTriggerModal = jest.fn(() => {});
-    const { findByText } = renderWithStore(
+    const { findByText } = renderWithRecoil(
       <ProjectTree
         dialogId={dialogId}
         dialogs={dialogs}
@@ -49,7 +48,7 @@ describe('<ProjectTree/>', () => {
       isOpen = false;
     });
     const handleSubmit = jest.fn(() => {});
-    const { getByText } = render(
+    const { getByText } = renderWithRecoil(
       <CreateDialogModal isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />
     );
     const cancelButton = getByText('Cancel');
@@ -63,7 +62,7 @@ describe('<ProjectTree/>', () => {
       isOpen = false;
     });
     const handleSubmit = jest.fn(() => {});
-    const { getByText } = render(
+    const { getByText } = renderWithRecoil(
       <TriggerCreationModal dialogId={'todobot'} isOpen={isOpen} onDismiss={handleDismiss} onSubmit={handleSubmit} />
     );
     const cancelButton = getByText('Cancel');
