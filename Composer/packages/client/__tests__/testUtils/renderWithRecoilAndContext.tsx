@@ -4,14 +4,20 @@
 import React from 'react';
 import { render } from '@bfc/test-utils';
 import mapValues from 'lodash/mapValues';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, MutableSnapshot } from 'recoil';
+import noop from 'lodash/noop';
 
 import { State } from '../../src/store/types';
 import * as initialActions from '../../src/store/action';
 import { initialState, StoreContext, StoreContextValue } from '../../src/store';
-import { DispatcherWraper } from '../../src/recoilModel/DispatcherWraper';
+import { DispatcherWrapper } from '../../src/recoilModel';
 
-export function renderWithRecoilAndContext(subject, state: Partial<State> = {}, actions = {}) {
+export function renderWithRecoilAndContext(
+  subject,
+  state: Partial<State> = {},
+  actions = {},
+  initRecoilState: (mutableSnapshot: MutableSnapshot) => void = noop
+) {
   const store: StoreContextValue = {
     actions: {
       ...mapValues(initialActions, () => jest.fn()),
@@ -30,9 +36,10 @@ export function renderWithRecoilAndContext(subject, state: Partial<State> = {}, 
   };
 
   return render(
-    <RecoilRoot>
-      <DispatcherWraper />
-      <StoreContext.Provider value={store}>{subject}</StoreContext.Provider>
+    <RecoilRoot initializeState={initRecoilState}>
+      <DispatcherWrapper>
+        <StoreContext.Provider value={store}>{subject}</StoreContext.Provider>
+      </DispatcherWrapper>
     </RecoilRoot>
   );
 }

@@ -35,11 +35,10 @@ import {
   projectIdState,
   botOpeningState,
   recentProjectsState,
-  botProjectsState,
-  BotProject,
   templateProjectsState,
   runtimeTemplatesState,
   templateIdState,
+  setBotStatus,
 } from './../atoms';
 import { logMessage } from './../dispatchers/shared';
 
@@ -258,26 +257,6 @@ export const projectDispatcher = () => {
     }
   });
 
-  const updateBotEndpointForProject = useRecoilCallback<[string, string], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (projectId: string, endpoint: string) => {
-      const {
-        snapshot: { getPromise },
-        set,
-      } = callbackHelpers;
-      try {
-        const currentBotProjects = await getPromise(botProjectsState);
-        const index = currentBotProjects.findIndex((currentProject: BotProject) => currentProject.id === projectId);
-        if (index !== -1) {
-          currentBotProjects[index].endpoints.push(endpoint);
-        }
-        set(botProjectsState, { ...currentBotProjects });
-      } catch (ex) {
-        // TODO: Handle exceptions
-        logMessage(callbackHelpers, `Error updating bot endpoint: ${ex}`);
-      }
-    }
-  );
-
   const fetchTemplateProjects = useRecoilCallback<[], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async () => {
       const { set } = callbackHelpers;
@@ -314,20 +293,26 @@ export const projectDispatcher = () => {
     }
   });
 
-  const fetchTemplates = useRecoilCallback<[], Promise<void>>(({ set }: CallbackInterface) => async () => {
+  const fetchTemplates = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
     try {
       const response = await httpClient.get(`/assets/projectTemplates`);
 
       const data = response && response.data;
 
       if (data && Array.isArray(data) && data.length > 0) {
-        set(templateProjectsState, data);
+        callbackHelpers.set(templateProjectsState, data);
       }
     } catch (err) {
       // TODO: Handle exceptions
-      // logMessage(`Error fetching runtime templates: ${ex}`);
+      logMessage(callbackHelpers, `Error fetching runtime templates: ${err}`);
     }
   });
+
+  const setBotStatus = useRecoilCallback<[BotStatus], Promise<void>>(
+    ({ set }: CallbackInterface) => async (status: BotStatus) => {
+      set(botStatusState, status);
+    }
+  );
 
   return {
     openBotProject,
@@ -338,8 +323,8 @@ export const projectDispatcher = () => {
     fetchTemplates,
     fetchProjectById,
     fetchRecentProjects,
-    updateBotEndpointForProject,
     fetchTemplateProjects,
     fetchRuntimeTemplates,
+    setBotStatus,
   };
 };

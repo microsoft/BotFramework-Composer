@@ -5,14 +5,9 @@
 import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 
-import {
-  publishTypesState,
-  botStatusState,
-  botEndpointsState,
-  publishHistoryState,
-  botLoadErrorState,
-} from '../atoms/botState';
+import { publishTypesState, botStatusState, publishHistoryState, botLoadErrorState } from '../atoms/botState';
 import filePersistence from '../../store/persistence/FilePersistence';
+import { botEndpointsState } from '../atoms';
 
 import { BotStatus, Text } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';

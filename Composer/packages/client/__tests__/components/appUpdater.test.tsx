@@ -6,36 +6,46 @@ import React from 'react';
 import { AppUpdater } from '../../src/components/AppUpdater';
 import { AppUpdaterStatus } from '../../src/constants';
 import { renderWithRecoilAndContext } from '../testUtils';
+import { appUpdateState } from '../../src/recoilModel';
+import { AppUpdateState } from '../../src/store/types';
 
 describe('<AppUpdater />', () => {
-  let state;
-  beforeEach(() => {
-    state = {
-      appUpdate: {
-        progressPercent: 0,
-        showing: true,
-        status: AppUpdaterStatus.IDLE,
-      },
-    };
-  });
+  const state = {};
+  const baseState: AppUpdateState = {
+    progressPercent: 0,
+    showing: true,
+    status: AppUpdaterStatus.IDLE,
+  };
 
   it('should not render anything when the modal is set to hidden', () => {
-    state.appUpdate.showing = false;
-    const { container } = renderWithRecoilAndContext(<AppUpdater />, state);
-    expect(container.firstChild).toBeFalsy();
+    const { container } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+      });
+    });
+    expect(container.children[1]).toBeFalsy();
   });
 
   it('should not render anything when the modal is set to hidden (even when not idle)', () => {
-    state.appUpdate.showing = false;
-    state.appUpdate.status = AppUpdaterStatus.UPDATE_UNAVAILABLE;
-    const { container } = renderWithRecoilAndContext(<AppUpdater />, state);
+    const { container } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+        showing: false,
+        status: AppUpdaterStatus.UPDATE_UNAVAILABLE,
+      });
+    });
     expect(container.firstChild).toBeFalsy();
   });
 
   it('should render the update available dialog', () => {
-    state.appUpdate.status = AppUpdaterStatus.UPDATE_AVAILABLE;
-    state.appUpdate.version = '1.0.0';
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state);
+    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+        version: '1.0.0',
+        status: AppUpdaterStatus.UPDATE_AVAILABLE,
+      });
+    });
+
     getByText('New update available');
     getByText('Bot Framework Composer v1.0.0');
     getByText('Install the update and restart Composer.');
@@ -43,41 +53,63 @@ describe('<AppUpdater />', () => {
   });
 
   it('should render the update unavailable dialog', () => {
-    state.appUpdate.status = AppUpdaterStatus.UPDATE_UNAVAILABLE;
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state);
+    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+        status: AppUpdaterStatus.UPDATE_UNAVAILABLE,
+      });
+    });
+
     getByText('No updates available');
     getByText('Composer is up to date.');
   });
 
   it('should render the update completed dialog', () => {
-    state.appUpdate.status = AppUpdaterStatus.UPDATE_SUCCEEDED;
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state);
+    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+        status: AppUpdaterStatus.UPDATE_SUCCEEDED,
+      });
+    });
     getByText('Update complete');
     getByText('Composer will restart.');
   });
 
   it('should render the update in progress dialog (before total size in known)', () => {
-    state.appUpdate.status = AppUpdaterStatus.UPDATE_IN_PROGRESS;
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state);
+    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+        status: AppUpdaterStatus.UPDATE_IN_PROGRESS,
+      });
+    });
     getByText('Update in progress');
     getByText('Downloading...');
     getByText('0% of Calculating...');
   });
 
   it('should render the update in progress dialog', () => {
-    state.appUpdate.status = AppUpdaterStatus.UPDATE_IN_PROGRESS;
-    state.appUpdate.progressPercent = 23;
-    state.appUpdate.downloadSizeInBytes = 14760000;
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state);
+    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+        progressPercent: 23,
+        downloadSizeInBytes: 14760000,
+        status: AppUpdaterStatus.UPDATE_IN_PROGRESS,
+      });
+    });
     getByText('Update in progress');
     getByText('Downloading...');
     getByText('23% of 14.76MB');
   });
 
   it('should render the error dialog', () => {
-    state.appUpdate.status = AppUpdaterStatus.UPDATE_FAILED;
-    state.appUpdate.error = '408 Request timed out.';
-    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state);
+    const { getByText } = renderWithRecoilAndContext(<AppUpdater />, state, {}, ({ set }) => {
+      set(appUpdateState, {
+        ...baseState,
+        error: '408 Request timed out.',
+        downloadSizeInBytes: 14760000,
+        status: AppUpdaterStatus.UPDATE_FAILED,
+      });
+    });
     getByText('Update failed');
     getByText(`Couldn't complete the update: 408 Request timed out.`);
   });
