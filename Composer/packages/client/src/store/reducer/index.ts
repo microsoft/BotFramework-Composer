@@ -461,6 +461,16 @@ const setRuntimeSettings: ReducerFunc = (state, { path, command }) => {
   return state;
 };
 
+const setRuntimeField: ReducerFunc = (state, { field, newValue }) => {
+  if (state.settings.runtime != null) state.settings.runtime[field] = newValue;
+  return state;
+};
+
+const setCustomRuntimeToggle: ReducerFunc = (state, { isOn }) => {
+  setRuntimeField(state, { field: 'customRuntime', newValue: isOn });
+  return state;
+};
+
 const setTemplateProjects: ReducerFunc = (state, { response } = {}) => {
   const data = response && response.data;
 
@@ -718,4 +728,6 @@ export const reducer = createReducer({
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
   [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
   [ActionTypes.SET_RUNTIME_SETTINGS]: setRuntimeSettings,
+  [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
+  [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
 });
