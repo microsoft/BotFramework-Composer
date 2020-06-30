@@ -41,10 +41,10 @@ class Indexer {
     return importResolverGenerator(lgFiles, '.lg', locale);
   };
 
-  public index(files: FileInfo[], botName: string, schema: any, locale: string) {
+  public index(files: FileInfo[], botName: string, locale: string) {
     const result = this.classifyFile(files);
     return {
-      dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName, schema),
+      dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
       qnaFiles: qnaIndexer.index(result[FileExtensions.Qna]),
@@ -59,5 +59,5 @@ export * from './dialogIndexer';
 export * from './lgIndexer';
 export * from './luIndexer';
 export * from './qnaIndexer';
-export * from './dialogUtils';
 export * from './utils';
+export * from './validations';

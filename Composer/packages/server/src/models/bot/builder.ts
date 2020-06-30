@@ -72,15 +72,15 @@ export class Builder {
 
   public build = async (luFiles: FileInfo[], qnaFiles: FileInfo[]) => {
     try {
-      await this._createGeneratedDir();
+      await this.createGeneratedDir();
 
       //do cross train before build
-      await this._crossTrain(luFiles, qnaFiles);
+      await this.crossTrain(luFiles, qnaFiles);
 
-      await this._runLuBuild(luFiles);
-      await this._runQnaBuild(qnaFiles);
+      await this.runLuBuild(luFiles);
+      await this.runQnaBuild(qnaFiles);
       //remove the cross train result
-      await this._cleanCrossTrain();
+      await this.cleanCrossTrain();
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error building to LUIS.');
     }
@@ -100,18 +100,18 @@ export class Builder {
     this._locale = v;
   }
 
-  private async _createGeneratedDir() {
+  private async createGeneratedDir() {
     // clear previous folder
-    await this._deleteDir(this.generatedFolderPath);
+    await this.deleteDir(this.generatedFolderPath);
     await this.storage.mkDir(this.generatedFolderPath);
   }
 
-  private _needCrossTrain() {
-    return !!this.crossTrainConfig.rootIds.length;
+  private needCrossTrain() {
+    return this.crossTrainConfig.rootIds.length > 0;
   }
 
-  private async _crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[]) {
-    if (!this._needCrossTrain()) return;
+  private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[]) {
+    if (!this.needCrossTrain()) return;
     const luContents = luFiles.map((file) => {
       return { content: file.content, id: file.name };
     });
@@ -121,10 +121,10 @@ export class Builder {
     });
     const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig);
 
-    await this._writeFiles(result.luResult);
+    await this.writeFiles(result.luResult);
   }
 
-  private _doDownSampling(luObject: any) {
+  private doDownSampling(luObject: any) {
     //do bootstramp sampling to make the utterances' number ratio to 1:10
     const bootstrapSampler = new ComposerBootstrapSampler(
       luObject.utterances,
@@ -140,18 +140,18 @@ export class Builder {
     return luObject;
   }
 
-  private async _downsizeUtterances(luContents: any) {
+  private async downsizeUtterances(luContents: any) {
     return await Promise.all(
       luContents.map(async (luContent) => {
         const result = await LuisBuilder.fromLUAsync(luContent.content);
-        const sampledResult = this._doDownSampling(result);
+        const sampledResult = this.doDownSampling(result);
         const content = luisToLuContent(sampledResult);
         return { ...luContent, content };
       })
     );
   }
 
-  private async _writeFiles(crossTrainResult) {
+  private async writeFiles(crossTrainResult) {
     if (!(await this.storage.exists(this.interruptionFolderPath))) {
       await this.storage.mkDir(this.interruptionFolderPath);
     }
@@ -162,15 +162,15 @@ export class Builder {
     }
   }
 
-  private async _runLuBuild(files: FileInfo[]) {
+  private async runLuBuild(files: FileInfo[]) {
     const config = await this._getConfig(files, 'lu');
     if (config.models.length === 0) {
       throw new Error('No LUIS files exist');
     }
 
     const loadResult = await this._loadContents(config.models, this.luBuilder);
-    loadResult.luContents = await this._downsizeUtterances(loadResult.luContents);
-    const authoringEndpoint = config.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
+    loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
+    const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
 
     const buildResult = await this.luBuilder.build(
       loadResult.luContents,
@@ -187,7 +187,7 @@ export class Builder {
     await this.luBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
   }
 
-  private async _runQnaBuild(files: FileInfo[]) {
+  private async runQnaBuild(files: FileInfo[]) {
     const config = await this._getConfig(files, 'qna');
     if (config.models.length === 0) {
       throw new Error('No QnA files exist');
@@ -212,13 +212,13 @@ export class Builder {
     await this.luBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
   }
   //delete files in generated folder
-  private async _deleteDir(path: string) {
+  private async deleteDir(path: string) {
     if (await this.storage.exists(path)) {
       const files = await this.storage.readDir(path);
       for (const file of files) {
         const curPath = Path.join(path, file);
         if ((await this.storage.stat(curPath)).isDir) {
-          await this._deleteDir(curPath);
+          await this.deleteDir(curPath);
         } else {
           await this.storage.removeFile(curPath);
         }
@@ -240,12 +240,13 @@ export class Builder {
       suffix: this.config.environment || '',
       fallbackLocal: this.config.defaultLanguage || 'en-us',
       endpoint: this.config.endpoint || null,
+      authoringEndpoint: this.config.authoringEndpoint || null,
       models: [] as string[],
     };
 
     //add all lu file after cross train
     let paths: string[] = [];
-    if (this._needCrossTrain()) {
+    if (this.needCrossTrain()) {
       paths = await this.storage.glob('**/*.' + fileSuffix, this.interruptionFolderPath);
       config.models = paths.map((filePath) => Path.join(this.interruptionFolderPath, filePath));
     }
@@ -270,8 +271,8 @@ export class Builder {
     );
   };
 
-  private async _cleanCrossTrain() {
-    if (!this._needCrossTrain()) return;
-    await this._deleteDir(this.interruptionFolderPath);
+  private async cleanCrossTrain() {
+    if (!this.needCrossTrain()) return;
+    await this.deleteDir(this.interruptionFolderPath);
   }
 }

@@ -6,6 +6,8 @@ import path from 'path';
 import { JestOverrides } from '../types';
 
 const base: Partial<JestOverrides> = {
+  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}'],
+
   testPathIgnorePatterns: [
     '/node_modules/',
     '/mocks/',
