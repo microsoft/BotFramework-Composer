@@ -2,16 +2,15 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render } from '@bfc/test-utils';
 
 import OnboardingContext from '../../src/Onboarding/OnboardingContext';
-import { StoreContext } from '../../src/store';
 import TeachingBubbles from '../../src/Onboarding/TeachingBubbles/TeachingBubbles';
-import { stepSets as defaultStepSets } from '../../src/Onboarding/onboardingUtils';
 import WelcomeModal from '../../src/Onboarding/WelcomeModal/WelcomeModal';
+import { renderWithRecoil } from '../testUtils';
+import { onboardingState } from '../../src/recoilModel';
 
 describe('<Onboarding />', () => {
-  let value;
+  let onboardingDefaultState;
   let onboardingValue;
 
   const stepSets = defaultStepSets().map((stepSet) => ({
@@ -20,17 +19,16 @@ describe('<Onboarding />', () => {
   }));
 
   beforeEach(() => {
-    value = {
-      state: {
-        onboarding: {
-          coachMarkRefs: {
-            test: { x: 0, y: 0 },
-            VisualDesigner: {
-              getBoundingClientRect: () => ({ top: 0, left: 0 }),
-            },
+    onboardingDefaultState = ({ set }) => {
+      set(onboardingState, {
+        coachMarkRefs: {
+          test: { x: 0, y: 0 },
+          VisualDesigner: {
+            getBoundingClientRect: () => ({ top: 0, left: 0 }),
           },
         },
-      },
+        complete: false,
+      });
     };
 
     onboardingValue = {
@@ -52,25 +50,23 @@ describe('<Onboarding />', () => {
 
   describe('<TeachingBubbles />', () => {
     it('renders Teaching Bubble', () => {
-      const { baseElement } = render(
-        <StoreContext.Provider value={value}>
-          <OnboardingContext.Provider value={onboardingValue}>
-            <TeachingBubbles />
-          </OnboardingContext.Provider>
-        </StoreContext.Provider>
+      const rendered = renderWithRecoil(
+        <OnboardingContext.Provider value={onboardingValue}>
+          <TeachingBubbles />
+        </OnboardingContext.Provider>,
+        onboardingDefaultState
       );
-      expect(baseElement).toHaveTextContent('Get started!');
+      expect(rendered.baseElement).toHaveTextContent('Get started!');
     });
   });
 
   describe('<WelcomeModal />', () => {
     it('renders expanded Welcome Modal', async () => {
-      const { findByText } = render(
-        <StoreContext.Provider value={value}>
-          <OnboardingContext.Provider value={onboardingValue}>
-            <WelcomeModal />
-          </OnboardingContext.Provider>
-        </StoreContext.Provider>
+      const { findByText } = renderWithRecoil(
+        <OnboardingContext.Provider value={onboardingValue}>
+          <WelcomeModal />
+        </OnboardingContext.Provider>,
+        onboardingDefaultState
       );
 
       for (const { title } of stepSets) {
@@ -80,12 +76,11 @@ describe('<Onboarding />', () => {
 
     it('renders the collapsed Welcome Modal', async () => {
       onboardingValue.state.minimized = true;
-      const { findByText } = render(
-        <StoreContext.Provider value={value}>
-          <OnboardingContext.Provider value={onboardingValue}>
-            <WelcomeModal />
-          </OnboardingContext.Provider>
-        </StoreContext.Provider>
+      const { findByText } = renderWithRecoil(
+        <OnboardingContext.Provider value={onboardingValue}>
+          <WelcomeModal />
+        </OnboardingContext.Provider>,
+        onboardingDefaultState
       );
       await findByText('Welcome');
     });

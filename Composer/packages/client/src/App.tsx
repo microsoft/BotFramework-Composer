@@ -22,7 +22,15 @@ import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
 import { RequireAuth } from './components/RequireAuth/RequireAuth';
 import { isElectron } from './utils/electronUtil';
 import { useLinks } from './utils/hooks';
-import { botNameState, localeState, dispatcherState, announcementState, onboardingState } from './recoilModel';
+import {
+  botNameState,
+  localeState,
+  dispatcherState,
+  announcementState,
+  onboardingState,
+  applicationErrorState,
+  projectIdState,
+} from './recoilModel';
 
 initializeIcons(undefined, { disableWarnings: true });
 
@@ -39,8 +47,10 @@ export const App: React.FC = () => {
   const locale = useRecoilValue(localeState);
   const announcement = useRecoilValue(announcementState);
   const onboarding = useRecoilValue(onboardingState);
-  const { onboardingSetComplete } = useRecoilValue(dispatcherState);
+  const { onboardingSetComplete, setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
   const [sideBarExpand, setSideBarExpand] = useState(false);
+  const applicationError = useRecoilValue(applicationErrorState);
+  const projectId = useRecoilValue(projectIdState);
 
   const { topLinks, bottomLinks } = useLinks();
 
@@ -122,7 +132,11 @@ export const App: React.FC = () => {
           </div>
         </nav>
         <div css={rightPanel}>
-          <ErrorBoundary>
+          <ErrorBoundary
+            currentApplicationError={applicationError}
+            fetchProject={() => fetchProjectById(projectId)}
+            setApplicationLevelError={setApplicationLevelError}
+          >
             <RequireAuth>
               <Routes component={Content} />
             </RequireAuth>

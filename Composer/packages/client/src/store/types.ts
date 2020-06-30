@@ -34,7 +34,7 @@ export type BoundActionHandlers = { [action: string]: BoundAction };
 export interface StateError {
   status?: number;
   summary: string;
-  message: string;
+  message: any;
 }
 
 export interface BreadcrumbItem {

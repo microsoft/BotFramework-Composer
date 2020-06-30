@@ -7,11 +7,12 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import httpClient from '../../utils/httpUtil';
 
 import { botNameState } from './../atoms/botState';
+import { logMessage } from './shared';
 
 export const exportDispatcher = () => {
   const exportToZip = useRecoilCallback<[{ projectId: string }], Promise<void>>(
-    ({ snapshot }: CallbackInterface) => async ({ projectId }) => {
-      const botName = await snapshot.getLoadable(botNameState);
+    (callbackHelpers: CallbackInterface) => async ({ projectId }) => {
+      const botName = callbackHelpers.snapshot.getLoadable(botNameState);
       try {
         const response = await httpClient.get(`/projects/${projectId}/export/`, { responseType: 'blob' });
         const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -23,7 +24,7 @@ export const exportDispatcher = () => {
         link.click();
       } catch (err) {
         //TODO: error
-        console.log(err);
+        logMessage(callbackHelpers, err);
       }
     }
   );

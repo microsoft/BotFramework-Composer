@@ -8,6 +8,7 @@ import { ProjectTemplate } from '@bfc/shared';
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
 import { ToolBar } from '../../src/components/ToolBar/ToolBar';
+import { renderWithRecoil } from '../testUtils';
 describe('<Home/>', () => {
   it('should dispatch onSelectionChanged event when clicked on a link on <RecentBotList>', () => {
     const recentProjects = [
@@ -82,7 +83,7 @@ describe('<Home/>', () => {
         disabled: false,
       },
     ];
-    const { container, getByText } = render(<ToolBar toolbarItems={items} />);
+    const { container, getByText } = renderWithRecoil(<ToolBar toolbarItems={items} />);
     expect(container).toHaveTextContent('New');
     const link = getByText('New');
     fireEvent.click(link);
