@@ -3,6 +3,7 @@
 
 import get from 'lodash/get';
 import { JSONSchema7Definition } from 'json-schema';
+import formatMessage from 'format-message';
 
 import { SchemaDefinitions, DefinitionCache } from './types';
 import { isCircular } from './circular';
@@ -18,7 +19,7 @@ export function getRef(ref: string, definitions: SchemaDefinitions, cache: Defin
   let def = get(definitions, defName.split('/')) as JSONSchema7Definition | undefined;
 
   if (!def) {
-    throw new Error(`Definition not found for ${defName}`);
+    throw new Error(formatMessage('Definition not found for {defName}', { defName }));
   }
 
   if (!isCircular(defName)) {
