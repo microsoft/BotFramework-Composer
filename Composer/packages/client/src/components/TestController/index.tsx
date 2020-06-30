@@ -106,7 +106,7 @@ export const TestController: React.FC = () => {
 
   async function handleStart() {
     dismissCallout();
-    const config = settings.luis;
+    const config = Object.assign({}, settings.luis, settings.qna);
 
     if (
       !isAbsHosted() &&

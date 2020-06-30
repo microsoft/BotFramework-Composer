@@ -7,12 +7,10 @@
  */
 
 import isEmpty from 'lodash/isEmpty';
-import { QnASection, DialogInfo, QnAFile } from '@bfc/shared';
+import { QnASection } from '@bfc/shared';
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 
 import { qnaIndexer } from '../qnaIndexer';
-
-import { getBaseName } from './help';
 
 const { luParser, sectionOperator } = sectionHandler;
 
@@ -133,17 +131,4 @@ export function insertSection(indexId: number, content: string, newContent: stri
 export function getParsedDiagnostics(newContent: string) {
   const { diagnostics } = qnaIndexer.parse(newContent);
   return diagnostics;
-}
-
-export function getReferredQnaFiles(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
-  return qnaFiles.filter((file) => {
-    const idWithOutLocale = getBaseName(file.id);
-    return dialogs.some((dialog) => dialog.qnaFile === idWithOutLocale);
-  });
-}
-
-export function checkQnaBuild(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
-  const referred = getReferredQnaFiles(qnaFiles, dialogs);
-
-  return referred;
 }
