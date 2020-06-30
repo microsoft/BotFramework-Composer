@@ -35,8 +35,8 @@ interface DefineConversationProps
     templateId: string;
     location: string;
   }> {
-  createFolder: (path: string, name: string) => void;
-  updateFolder: (path: string) => void;
+  createFolder?: (path: string, name: string) => void;
+  updateFolder?: (path: string, oldName: string, newName: string) => void;
   onSubmit: (formData: DefineConversationFormData) => void;
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;

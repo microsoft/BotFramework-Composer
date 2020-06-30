@@ -7,6 +7,7 @@ import { indexer, validateDialog } from '@bfc/indexers';
 import lodashGet from 'lodash/get';
 import lodashSet from 'lodash/get';
 import isArray from 'lodash/isArray';
+import formatMessage from 'format-message';
 
 import filePersistence from '../../store/persistence/FilePersistence';
 import lgWorker from '../parsers/lgWorker';
@@ -38,6 +39,7 @@ import {
   templateProjectsState,
   runtimeTemplatesState,
   templateIdState,
+  applicationErrorState,
 } from './../atoms';
 import { logMessage } from './../dispatchers/shared';
 
@@ -312,6 +314,34 @@ export const projectDispatcher = () => {
     }
   );
 
+  const createFolder = useRecoilCallback<[string, string], Promise<void>>(
+    ({ set }: CallbackInterface) => async (path, name) => {
+      const storageId = 'default';
+      try {
+        await httpClient.post(`/storages/folder`, { path, name, storageId });
+      } catch (err) {
+        set(applicationErrorState, {
+          message: err.message,
+          summary: formatMessage('Create Folder Error'),
+        });
+      }
+    }
+  );
+
+  const updateFolder = useRecoilCallback<[string, string, string], Promise<void>>(
+    ({ set }: CallbackInterface) => async (path, oldName, newName) => {
+      const storageId = 'default';
+      try {
+        await httpClient.put(`/storages/folder`, { path, oldName, newName, storageId });
+      } catch (err) {
+        set(applicationErrorState, {
+          message: err.message,
+          summary: formatMessage('Update Folder Name Error'),
+        });
+      }
+    }
+  );
+
   return {
     openBotProject,
     createProject,
@@ -324,5 +354,7 @@ export const projectDispatcher = () => {
     fetchTemplateProjects,
     fetchRuntimeTemplates,
     setBotStatus,
+    updateFolder,
+    createFolder,
   };
 };

@@ -3,6 +3,7 @@
 
 import * as React from 'react';
 import { fireEvent, render } from '@bfc/test-utils';
+import { ProjectTemplate } from '@bfc/shared';
 
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
@@ -20,15 +21,17 @@ describe('<Home/>', () => {
     expect(container).toHaveTextContent('a');
     expect(container).toHaveTextContent('b');
     const link = queryByLabelText('Bot name is a');
-    fireEvent.dblClick(link);
-    expect(onItemChosen.mock.results[0].value).toBe('path1');
+    if (link) {
+      fireEvent.dblClick(link);
+      expect(onItemChosen.mock.results[0].value).toBe('path1');
+    }
   });
 
   it('should dispatch onClick event when clicked on an ExampleList', () => {
     const templates = [
       { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot', order: 1 },
       { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 },
-    ];
+    ] as ProjectTemplate[];
     const onClickTemplate = jest.fn((item) => item);
     const { container, getByText } = render(<ExampleList examples={templates} onClick={onClickTemplate} />);
     expect(container).toHaveTextContent('Echo Bot');

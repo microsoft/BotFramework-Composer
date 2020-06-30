@@ -37,6 +37,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     fetchFolderItemsByPath,
     setCreationFlowStatus,
     updateCurrentPathForStorage,
+    updateFolder,
+    createFolder,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
@@ -90,7 +92,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleSaveAs = async (formData) => {
-    await saveProjectAs(state.projectId, formData.name, formData.description, formData.location);
+    await saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
   const handleSubmit = async (formData) => {

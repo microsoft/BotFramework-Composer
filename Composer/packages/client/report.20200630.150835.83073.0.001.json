@@ -1,0 +1,819 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20200630.150835.83073.0.001.json",
+    "dumpEventTime": "2020-06-30T15:08:35Z",
+    "dumpEventTimeStamp": "1593554915740",
+    "processId": 83073,
+    "cwd": "/Users/srravich/Projects/BotFramework-Composer/Composer/packages/client",
+    "commandLine": [
+      "/Users/srravich/.nvs/node/13.8.0/x64/bin/node",
+      "scripts/build.js"
+    ],
+    "nodejsVersion": "v13.8.0",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "darwin",
+    "componentVersions": {
+      "node": "13.8.0",
+      "v8": "7.9.317.25-node.28",
+      "uv": "1.34.1",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "79",
+      "nghttp2": "1.40.0",
+      "napi": "5",
+      "llhttp": "2.0.4",
+      "openssl": "1.1.1d",
+      "cldr": "36.0",
+      "icu": "65.1",
+      "tz": "2019c",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "headersUrl": "https://nodejs.org/download/release/v13.8.0/node-v13.8.0-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v13.8.0/node-v13.8.0.tar.gz"
+    },
+    "osName": "Darwin",
+    "osRelease": "19.4.0",
+    "osVersion": "Darwin Kernel Version 19.4.0: Wed Mar  4 22:28:40 PST 2020; root:xnu-6153.101.6~15/RELEASE_X86_64",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 52737080,
+        "nice": 0,
+        "sys": 32165670,
+        "idle": 211882310,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 1634110,
+        "nice": 0,
+        "sys": 1294740,
+        "idle": 293702720,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 41052130,
+        "nice": 0,
+        "sys": 23265690,
+        "idle": 232314570,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 1553090,
+        "nice": 0,
+        "sys": 1010610,
+        "idle": 294067830,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 33660900,
+        "nice": 0,
+        "sys": 19052810,
+        "idle": 243918650,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 1570120,
+        "nice": 0,
+        "sys": 838730,
+        "idle": 294222640,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 27791080,
+        "nice": 0,
+        "sys": 15479520,
+        "idle": 253361710,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 1602840,
+        "nice": 0,
+        "sys": 715160,
+        "idle": 294313440,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 24011270,
+        "nice": 0,
+        "sys": 13428540,
+        "idle": 259192470,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 1641120,
+        "nice": 0,
+        "sys": 635010,
+        "idle": 294355270,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 19066530,
+        "nice": 0,
+        "sys": 9999150,
+        "idle": 267566560,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 1670280,
+        "nice": 0,
+        "sys": 577070,
+        "idle": 294384000,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 16281150,
+        "nice": 0,
+        "sys": 7955560,
+        "idle": 272395480,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 1693170,
+        "nice": 0,
+        "sys": 539100,
+        "idle": 294399040,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 13684190,
+        "nice": 0,
+        "sys": 5412010,
+        "idle": 277535940,
+        "irq": 0
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz",
+        "speed": 2300,
+        "user": 1688270,
+        "nice": 0,
+        "sys": 502380,
+        "idle": 294440610,
+        "irq": 0
+      }
+    ],
+    "networkInterfaces": [
+      {
+        "name": "lo0",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "127.0.0.1",
+        "netmask": "255.0.0.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "lo0",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "::1",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "lo0",
+        "internal": true,
+        "mac": "00:00:00:00:00:00",
+        "address": "fe80::1",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 1
+      },
+      {
+        "name": "en5",
+        "internal": false,
+        "mac": "ac:de:48:00:11:22",
+        "address": "fe80::aede:48ff:fe00:1122",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 4
+      },
+      {
+        "name": "en0",
+        "internal": false,
+        "mac": "a4:83:e7:cd:35:c2",
+        "address": "fe80::1c43:7b07:25:7ae9",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 6
+      },
+      {
+        "name": "en0",
+        "internal": false,
+        "mac": "a4:83:e7:cd:35:c2",
+        "address": "192.168.1.5",
+        "netmask": "255.255.255.0",
+        "family": "IPv4"
+      },
+      {
+        "name": "awdl0",
+        "internal": false,
+        "mac": "1e:02:59:c2:57:17",
+        "address": "fe80::1c02:59ff:fec2:5717",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 8
+      },
+      {
+        "name": "llw0",
+        "internal": false,
+        "mac": "1e:02:59:c2:57:17",
+        "address": "fe80::1c02:59ff:fec2:5717",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 9
+      },
+      {
+        "name": "utun0",
+        "internal": false,
+        "mac": "00:00:00:00:00:00",
+        "address": "fe80::6a84:55b4:f853:ab46",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 15
+      },
+      {
+        "name": "utun1",
+        "internal": false,
+        "mac": "00:00:00:00:00:00",
+        "address": "fe80::e0e9:3412:ce9e:a5c",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 16
+      },
+      {
+        "name": "gpd0",
+        "internal": false,
+        "mac": "02:50:41:00:01:01",
+        "address": "fe80::50:41ff:fe00:101",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 17
+      },
+      {
+        "name": "gpd0",
+        "internal": false,
+        "mac": "02:50:41:00:01:01",
+        "address": "10.10.108.197",
+        "netmask": "255.255.255.255",
+        "family": "IPv4"
+      },
+      {
+        "name": "gpd0",
+        "internal": false,
+        "mac": "02:50:41:00:01:01",
+        "address": "2001:4898:6000:5:8000:0:8:e618",
+        "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "family": "IPv6",
+        "scopeid": 0
+      },
+      {
+        "name": "utun2",
+        "internal": false,
+        "mac": "00:00:00:00:00:00",
+        "address": "fe80::4dc3:891f:f186:515c",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 20
+      },
+      {
+        "name": "utun3",
+        "internal": false,
+        "mac": "00:00:00:00:00:00",
+        "address": "fe80::7:2ea7:14ec:2faa",
+        "netmask": "ffff:ffff:ffff:ffff::",
+        "family": "IPv6",
+        "scopeid": 21
+      }
+    ],
+    "host": "MININT-9H9J6NC.europe.corp.microsoft.com"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x000000010015a0e2",
+      "symbol": "report::TriggerNodeReport(v8::Isolate*, node::Environment*, char const*, char const*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, v8::Local<v8::String>) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x00000001000824c0",
+      "symbol": "node::OnFatalError(char const*, char const*) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000100182ba7",
+      "symbol": "v8::Utils::ReportOOMFailure(v8::internal::Isolate*, char const*, bool) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000100182b43",
+      "symbol": "v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, bool) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x000000010030afc5",
+      "symbol": "v8::internal::Heap::FatalProcessOutOfMemory(char const*) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x000000010030c6a4",
+      "symbol": "v8::internal::Heap::RecomputeLimits(v8::internal::GarbageCollector) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x000000010030943e",
+      "symbol": "v8::internal::Heap::PerformGarbageCollection(v8::internal::GarbageCollector, v8::GCCallbackFlags) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000100307426",
+      "symbol": "v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000100312daa",
+      "symbol": "v8::internal::Heap::AllocateRawWithLightRetrySlowPath(int, v8::internal::AllocationType, v8::internal::AllocationOrigin, v8::internal::AllocationAlignment) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000100312e31",
+      "symbol": "v8::internal::Heap::AllocateRawWithRetryOrFailSlowPath(int, v8::internal::AllocationType, v8::internal::AllocationOrigin, v8::internal::AllocationAlignment) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x00000001002e0176",
+      "symbol": "v8::internal::Factory::NewFillerObject(int, bool, v8::internal::AllocationType, v8::internal::AllocationOrigin) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x00000001006217a0",
+      "symbol": "v8::internal::Runtime_AllocateInOldGeneration(int, unsigned long*, v8::internal::Isolate*) [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    },
+    {
+      "pc": "0x0000000100954639",
+      "symbol": "Builtins_CEntry_Return1_DontSaveFPRegs_ArgvOnStack_NoBuiltinExit [/Users/srravich/.nvs/node/13.8.0/x64/bin/node]"
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 2187354112,
+    "totalCommittedMemory": 2162568144,
+    "usedMemory": 2145580624,
+    "availableMemory": 39974104,
+    "memoryLimit": 2197815296,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 262144,
+        "committedMemory": 33328,
+        "capacity": 33040,
+        "used": 33040,
+        "available": 0
+      },
+      "new_space": {
+        "memorySize": 29360128,
+        "committedMemory": 5174032,
+        "capacity": 14663936,
+        "used": 1095624,
+        "available": 13568312
+      },
+      "old_space": {
+        "memorySize": 1706696704,
+        "committedMemory": 1706421952,
+        "capacity": 1702416264,
+        "used": 1701135592,
+        "available": 1280672
+      },
+      "code_space": {
+        "memorySize": 4624384,
+        "committedMemory": 4528800,
+        "capacity": 4107648,
+        "used": 4107648,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 11014144,
+        "committedMemory": 11013424,
+        "capacity": 4489040,
+        "used": 4489040,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 434774016,
+        "committedMemory": 434774016,
+        "capacity": 434175136,
+        "used": 434175136,
+        "available": 0
+      },
+      "code_large_object_space": {
+        "memorySize": 622592,
+        "committedMemory": 622592,
+        "capacity": 544544,
+        "used": 544544,
+        "available": 0
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 14663936,
+        "used": 0,
+        "available": 14663936
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 162.16,
+    "kernelCpuSeconds": 11.6341,
+    "cpuConsumptionPercent": 163.957,
+    "maxRss": 2523318452224,
+    "pageFaults": {
+      "IORequired": 0,
+      "IONotRequired": 2502520
+    },
+    "fsActivity": {
+      "reads": 0,
+      "writes": 0
+    }
+  },
+  "libuv": [
+  ],
+  "environmentVariables": {
+    "GREP_COLOR": "1;33",
+    "AUTOJUMP_ERROR_PATH": "/Users/srravich/Library/autojump/errors.log",
+    "npm_package_devDependencies_lint_staged": "^8.1.0",
+    "npm_package_scripts_start_server_dev": "yarn workspace @bfc/server start:dev",
+    "npm_package_scripts_build_plugins_localpublish": "cd plugins/localPublish && yarn install && yarn build",
+    "npm_package_dependencies__uifabric_react_hooks": "^7.3.4",
+    "npm_package_devDependencies_prettier": "2.0.5",
+    "npm_config_bfcomposer_registry": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/",
+    "npm_package_devDependencies__types_webpack_env": "^1.15.2",
+    "npm_package_dependencies__bfc_indexers": "*",
+    "TERM_PROGRAM": "iTerm.app",
+    "npm_package_scripts_test_integration_clean": "node scripts/clean-e2e.js",
+    "npm_package_devDependencies_url_loader": "2.2.0",
+    "npm_package_proxy": "http://localhost:5000",
+    "NODE": "/Users/srravich/.nvs/node/13.8.0/x64/bin/node",
+    "npm_package_devDependencies_file_loader": "4.2.0",
+    "npm_package_dependencies_re_resizable": "^6.3.2",
+    "INIT_CWD": "/Users/srravich/Projects/BotFramework-Composer/Composer",
+    "AUTOJUMP_SOURCED": "1",
+    "npm_package_devDependencies_typescript": "3.9.2",
+    "npm_package_devDependencies__emotion_babel_preset_css_prop": "^10.0.14",
+    "npm_package_resolutions_serialize_javascript": "^3.1.0",
+    "npm_config_version_git_tag": "true",
+    "npm_package_devDependencies_terser_webpack_plugin": "2.3.7",
+    "npm_package_dependencies_axios": "^0.19.2",
+    "SHELL": "/bin/zsh",
+    "TERM": "xterm-256color",
+    "npm_package_dependencies__uifabric_styling": "^7.10.4",
+    "npm_package_devDependencies_rimraf": "2.6.3",
+    "npm_package_devDependencies_style_loader": "1.0.0",
+    "TMPDIR": "/var/folders/hp/5y77zp992vqccwk1t54y0mpw0000gn/T/",
+    "GIT_PERSONAL_TOKEN": "df6e9fd0c73af95f461e9a288e9ba61b73c9232c",
+    "npm_package_devDependencies__babel_preset_typescript": "^7.9.0",
+    "npm_package_scripts_lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
+    "npm_config_init_license": "MIT",
+    "TERM_PROGRAM_VERSION": "3.3.8",
+    "npm_package_devDependencies_concurrently": "^4.1.0",
+    "npm_config__bfcomposer_registry": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/",
+    "npm_package_devDependencies_fs_extra": "7.0.1",
+    "npm_package_devDependencies_babel_core": "7.0.0-bridge.0",
+    "npm_package_dependencies__bfc_ui_plugin_prompts": "*",
+    "npm_package_devDependencies_babel_plugin_named_asset_import": "^0.3.1",
+    "npm_package_devDependencies_pnp_webpack_plugin": "1.5.0",
+    "npm_package_dependencies_react_frame_component": "^4.0.2",
+    "TERM_SESSION_ID": "w0t1p0:E7BA11C6-66CA-41F9-8F75-CF0CBB0425D6",
+    "npm_package_devDependencies_cypress_plugin_tab": "^1.0.5",
+    "npm_package_dependencies__bfc_shared": "*",
+    "npm_package_private": "true",
+    "npm_config_registry": "https://registry.yarnpkg.com",
+    "ZSH": "/Users/srravich/.oh-my-zsh",
+    "npm_package_devDependencies__types_reach__router": "^1.2.4",
+    "npm_package_dependencies_react_dom": "16.13.0",
+    "npm_package_readmeFilename": "README.md",
+    "npm_package_devDependencies_eslint_plugin_jsx_a11y": "6.2.3",
+    "USER": "srravich",
+    "NVS_POSTSCRIPT": "/Users/srravich/.nvs/nvs_tmp_1525687559.sh",
+    "npm_package_description": "The web app that can edit bots in OBI format, and can use Bot Launcher to run bot.",
+    "npm_package_devDependencies__babel_plugin_transform_runtime": "^7.9.6",
+    "npm_package_scripts_build_test": "yarn workspace @bfc/test-utils build",
+    "npm_package_devDependencies_webpack": "4.43.0",
+    "npm_package_dependencies_jwt_decode": "^2.2.0",
+    "LS_COLORS": "di=34;40:ln=35;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:",
+    "npm_package_scripts_start_dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
+    "npm_package_scripts_build_dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
+    "npm_package_license": "MIT",
+    "npm_package_devDependencies_dotenv": "6.0.0",
+    "npm_package_devDependencies_babel_preset_react_app": "^7.0.1",
+    "npm_package_devDependencies__types_react": "16.9.23",
+    "npm_package_dependencies__bfc_ui_plugin_lg": "*",
+    "COMMAND_MODE": "unix2003",
+    "npm_package_scripts_startall": "yarn start",
+    "npm_package_scripts_build_extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/extension @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-* -c build",
+    "npm_package_devDependencies_postcss_preset_env": "6.5.0",
+    "npm_package_devDependencies_postcss_loader": "3.0.0",
+    "npm_package_devDependencies_eslint_loader": "4.0.0",
+    "npm_package_dependencies__microsoft_bf_lu": "^4.10.0-preview.141651",
+    "NVS_USE_XZ": "1",
+    "npm_package_dependencies__uifabric_fluent_theme": "^7.1.13",
+    "npm_package_devDependencies_wsrun": "^5.2.0",
+    "npm_package_devDependencies__babel_core": "7.3.4",
+    "npm_package_devDependencies_webpack_dev_server": "^3.11.0",
+    "SSH_AUTH_SOCK": "/private/tmp/com.apple.launchd.kFp17xGmAX/Listeners",
+    "npm_package_devDependencies_eslint_plugin_notice": "0.9.10",
+    "npm_package_scripts_runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
+    "npm_package_devDependencies_babel_loader": "8.0.5",
+    "npm_package_dependencies_lodash": "^4.17.15",
+    "__CF_USER_TEXT_ENCODING": "0x1F5:0x0:0x0",
+    "npm_package_devDependencies_eslint": "7.0.0",
+    "npm_package_scripts_build_plugins_samples": "cd plugins/samples && yarn install && yarn build",
+    "npm_package_dependencies_styled_components": "^4.1.3",
+    "npm_execpath": "/Users/srravich/.nvs/node/13.8.0/x64/lib/node_modules/yarn/bin/yarn.js",
+    "npm_package_devDependencies__typescript_eslint_eslint_plugin": "2.34.0",
+    "npm_package_husky_hooks_pre_commit": "lint-staged",
+    "npm_package_scripts_test_integration_open": "cypress open",
+    "PAGER": "less",
+    "npm_package_devDependencies__bfc_eslint_plugin_bfcomposer": "*",
+    "npm_package_scripts_build_lib": "yarn workspace @bfc/libs build:all",
+    "npm_package_devDependencies_postcss_flexbugs_fixes": "4.1.0",
+    "LSCOLORS": "exfxcxdxbxegedabagacad",
+    "NVS_HOME": "/Users/srravich/.nvs",
+    "npm_package_devDependencies_eslint_plugin_prettier": "3.1.3",
+    "npm_package_devDependencies_eslint_plugin_format_message": "6.2.3",
+    "npm_package_resolutions_elliptic": "^6.5.3",
+    "npm_package_devDependencies_mini_css_extract_plugin": "0.8.0",
+    "npm_package_devDependencies_browserslist": "^4.7.3",
+    "npm_package_devDependencies__types_react_dom": "16.9.5",
+    "npm_package_devDependencies__svgr_webpack": "4.1.0",
+    "npm_package_devDependencies__bfc_test_utils": "*",
+    "npm_package_devDependencies__typescript_eslint_parser": "2.34.0",
+    "npm_package_workspaces_11": "packages/tools/language-servers/*",
+    "npm_package_devDependencies__babel_runtime": "7.3.4",
+    "npm_package_dependencies_prop_types": "^15.7.2",
+    "PATH": "/var/folders/hp/5y77zp992vqccwk1t54y0mpw0000gn/T/yarn--1593554809615-0.5515416773989228:/Users/srravich/Projects/BotFramework-Composer/Composer/packages/client/node_modules/.bin:/Users/srravich/.config/yarn/link/node_modules/.bin:/Users/srravich/Projects/BotFramework-Composer/Composer/node_modules/.bin:/Users/srravich/.nvs/node/13.8.0/x64/libexec/lib/node_modules/npm/bin/node-gyp-bin:/Users/srravich/.nvs/node/13.8.0/x64/lib/node_modules/npm/bin/node-gyp-bin:/Users/srravich/.nvs/node/13.8.0/x64/bin/node_modules/npm/bin/node-gyp-bin:/var/folders/hp/5y77zp992vqccwk1t54y0mpw0000gn/T/yarn--1593554809091-0.468214756890474:/Users/srravich/Projects/BotFramework-Composer/Composer/node_modules/.bin:/Users/srravich/.config/yarn/link/node_modules/.bin:/Users/srravich/Projects/BotFramework-Composer/Composer/node_modules/.bin:/Users/srravich/.nvs/node/13.8.0/x64/libexec/lib/node_modules/npm/bin/node-gyp-bin:/Users/srravich/.nvs/node/13.8.0/x64/lib/node_modules/npm/bin/node-gyp-bin:/Users/srravich/.nvs/node/13.8.0/x64/bin/node_modules/npm/bin/node-gyp-bin:/var/folders/hp/5y77zp992vqccwk1t54y0mpw0000gn/T/yarn--1593554742981-0.0978056058868817:/Users/srravich/Projects/BotFramework-Composer/Composer/node_modules/.bin:/Users/srravich/.config/yarn/link/node_modules/.bin:/Users/srravich/Projects/BotFramework-Composer/Composer/node_modules/.bin:/Users/srravich/.nvs/node/13.8.0/x64/libexec/lib/node_modules/npm/bin/node-gyp-bin:/Users/srravich/.nvs/node/13.8.0/x64/lib/node_modules/npm/bin/node-gyp-bin:/Users/srravich/.nvs/node/13.8.0/x64/bin/node_modules/npm/bin/node-gyp-bin:/var/folders/hp/5y77zp992vqccwk1t54y0mpw0000gn/T/yarn--1593554742430-0.04906868829839994:/Users/srravich/Projects/BotFramework-Composer/Composer/node_modules/.bin:/Users/srravich/.config/yarn/link/node_modules/.bin:/Users/srravich/Projects/BotFramework-Composer/Composer/node_modules/.bin:/Users/srravich/.nvs/node/13.8.0/x64/libexec/lib/node_modules/npm/bin/node-gyp-bin:/Users/srravich/.nvs/node/13.8.0/x64/lib/node_modules/npm/bin/node-gyp-bin:/Users/srravich/.nvs/node/13.8.0/x64/bin/node_modules/npm/bin/node-gyp-bin:/usr/local/opt/sqlite/bin:/Users/srravich/.nvs/default/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands",
+    "npm_config_argv": "{\"remain\":[],\"cooked\":[\"run\",\"build\"],\"original\":[\"build\"]}",
+    "npm_package_scripts_lint_fix": "yarn lint --fix",
+    "npm_package_workspaces_10": "packages/tools/language-servers",
+    "npm_package_dependencies_immer": "^5.2.0",
+    "npm_package_lint_staged_packages_______ts_tsx_js_jsx__1": "git add",
+    "npm_package_scripts_typecheck": "tsc --noEmit",
+    "_": "/var/folders/hp/5y77zp992vqccwk1t54y0mpw0000gn/T/yarn--1593554809615-0.5515416773989228/node",
+    "LaunchInstanceID": "78BEC508-EA53-4F13-9394-CD29894F4E8E",
+    "npm_package_lint_staged_packages_______ts_tsx_js_jsx__0": "prettier --write",
+    "npm_package_workspaces_12": "packages/ui-plugins/*",
+    "NVS_OS": "darwin",
+    "npm_package_dependencies_react_app_polyfill": "^0.2.1",
+    "PWD": "/Users/srravich/Projects/BotFramework-Composer/Composer/packages/client",
+    "npm_package_devDependencies_eslint_plugin_lodash": "7.1.0",
+    "npm_package_devDependencies_cypress": "^4.5.0",
+    "npm_package_devDependencies_coveralls": "^3.1.0",
+    "npm_package_devDependencies__testing_library_cypress": "^6.0.0",
+    "npm_package_devDependencies_dotenv_expand": "4.2.0",
+    "npm_package_devDependencies_get_port": "^5.1.1",
+    "npm_package_devDependencies_eslint_plugin_react_hooks": "4.0.2",
+    "npm_package_scripts_test_watch": "jest --watch",
+    "npm_package_devDependencies__types_lodash": "^4.14.146",
+    "npm_lifecycle_event": "build",
+    "npm_package_dependencies_cross_env": "^6.0.3",
+    "npm_package_scripts_build_plugins_azureFunctionsPublish": "cd plugins/azureFunctionsPublish && yarn install && yarn build",
+    "npm_package_dependencies__bfc_code_editor": "*",
+    "npm_package_dependencies__bfc_adaptive_flow": "*",
+    "LANG": "en_US.UTF-8",
+    "npm_package_devDependencies_eslint_plugin_security": "1.4.0",
+    "npm_package_scripts_start_server": "yarn workspace @bfc/server start",
+    "npm_package_scripts_build_plugins_azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
+    "npm_package_scripts_build_server": "yarn workspace @bfc/server build",
+    "npm_package_name": "@bfc/client",
+    "npm_package_dependencies__bfc_ui_plugin_select_dialog": "*",
+    "ITERM_PROFILE": "Default",
+    "npm_package_devDependencies_eslint_plugin_import": "2.20.2",
+    "npm_package_devDependencies__babel_preset_react": "^7.9.4",
+    "npm_package_devDependencies__babel_preset_env": "7.9.6",
+    "npm_package_scripts_test_integration": "cypress run --browser edge",
+    "npm_package_resolutions_set_value": "^3.0.2",
+    "npm_package_devDependencies__types_jwt_decode": "^2.2.1",
+    "npm_package_dependencies_query_string": "^6.8.2",
+    "npm_package_devDependencies__babel_cli": "7.2.3",
+    "npm_package_scripts_start": "node scripts/start.js",
+    "npm_package_scripts_build": "node scripts/build.js",
+    "npm_package_resolutions_lodash": "^4.17.12",
+    "npm_package_resolutions_mkdirp": "^0.5.2",
+    "npm_config_version_commit_hooks": "true",
+    "XPC_FLAGS": "0x0",
+    "npm_package_devDependencies_ts_loader": "7.0.4",
+    "npm_package_scripts_build_electron": "yarn workspace @bfc/electron-server build",
+    "npm_package_resolutions__types_react": "16.9.23",
+    "npm_package_dependencies_recoil": "^0.0.10",
+    "npm_package_scripts_start_client": "yarn workspace @bfc/client start",
+    "npm_package_scripts_build_client": "yarn workspace @bfc/client build",
+    "npm_config_bin_links": "true",
+    "npm_package_devDependencies_eslint_config_react_app": "5.2.1",
+    "npm_package_engines_node": ">=12",
+    "npm_config_wrap_output": "",
+    "npm_package_devDependencies_eslint_config_prettier": "6.11.0",
+    "npm_package_scripts_test_integration_start_server": "node scripts/e2e.js",
+    "npm_package_scripts_build_prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
+    "npm_package_main": "build/public/index.ejs",
+    "XPC_SERVICE_NAME": "0",
+    "npm_package_version": "0.1.0",
+    "npm_package_dependencies__emotion_core": "^10.0.7",
+    "npm_package_devDependencies_worker_loader": "^2.0.0",
+    "npm_package_dependencies_react_dev_utils": "^7.0.3",
+    "COLORFGBG": "15;0",
+    "HOME": "/Users/srravich",
+    "SHLVL": "5",
+    "npm_package_scripts_test": "jest",
+    "npm_package_devDependencies_bfj": "6.1.1",
+    "npm_package_dependencies_office_ui_fabric_react": "^7.88.1",
+    "npm_package_dependencies__uifabric_icons": "^7.3.4",
+    "npm_package_dependencies__bfc_ui_plugin_select_skill_dialog": "*",
+    "LC_TERMINAL_VERSION": "3.3.8",
+    "npm_package_scripts_tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build",
+    "npm_config_save_prefix": "^",
+    "npm_config_strict_ssl": "true",
+    "npm_package_dependencies_botbuilder_lg": "4.10.0-preview-135858",
+    "npm_package_devDependencies_husky": "^1.3.1",
+    "npm_package_scripts_typecheck_client": "yarn workspace @bfc/client typecheck",
+    "npm_config_version_git_message": "v%s",
+    "npm_package_devDependencies_babel_eslint": "10.1.0",
+    "npm_package_browserslist_3": "not op_mini all",
+    "npm_package_browserslist_2": "not ie <= 11",
+    "npm_package_dependencies__bfc_extension": "*",
+    "npm_package_dependencies__bfc_adaptive_form": "*",
+    "ITERM_SESSION_ID": "w0t1p0:E7BA11C6-66CA-41F9-8F75-CF0CBB0425D6",
+    "npm_package_scripts_build_tools": "yarn workspace @bfc/tools build:all",
+    "npm_package_browserslist_1": "not dead",
+    "LOGNAME": "srravich",
+    "LESS": "-R",
+    "NVS_AUTO_DIRECTORY": "",
+    "YARN_WRAP_OUTPUT": "false",
+    "npm_package_scripts_test_coverage": "yarn test --coverage --no-cache --forceExit --reporters=default",
+    "npm_package_devDependencies_html_webpack_plugin": "4.0.0-beta.8",
+    "npm_package_browserslist_0": ">0.2%",
+    "npm_package_dependencies__reach_router": "^1.2.1",
+    "npm_lifecycle_script": "node scripts/build.js",
+    "npm_package_devDependencies_babel_plugin_emotion": "^10.0.7",
+    "npm_package_devDependencies__babel_plugin_proposal_class_properties": "7.8.3",
+    "npm_package_resolutions_kind_of": "^6.0.3",
+    "npm_package_workspaces_8": "packages/test-utils",
+    "npm_package_devDependencies_case_sensitive_paths_webpack_plugin": "2.2.0",
+    "npm_package_dependencies_react": "16.13.0",
+    "npm_package_workspaces_9": "packages/tools",
+    "npm_package_devDependencies_webpack_manifest_plugin": "2.1.0",
+    "npm_package_workspaces_6": "packages/plugin-loader",
+    "npm_config_version_git_sign": "",
+    "npm_config_ignore_scripts": "",
+    "npm_config_user_agent": "yarn/1.22.0 npm/? node/v13.8.0 darwin x64",
+    "npm_package_devDependencies_workbox_webpack_plugin": "4.3.1",
+    "npm_package_dependencies__bfc_ui_plugin_luis": "*",
+    "npm_package_devDependencies_chalk": "^4.0.0",
+    "npm_package_workspaces_7": "packages/server",
+    "npm_package_devDependencies_postcss_safe_parser": "4.0.1",
+    "npm_package_dependencies_react_timeago": "^4.4.0",
+    "LC_TERMINAL": "iTerm2",
+    "npm_package_workspaces_4": "packages/lib",
+    "npm_package_workspaces_5": "packages/lib/*",
+    "npm_package_scripts_typecheck_server": "yarn workspace @bfc/server typecheck",
+    "npm_package_workspaces_2": "packages/extensions",
+    "npm_config_init_version": "1.0.0",
+    "npm_config_ignore_optional": "",
+    "npm_package_dependencies_format_message": "^6.2.3",
+    "npm_package_dependencies__types_recoil": "^0.0.1",
+    "SECURITYSESSIONID": "186a6",
+    "npm_package_devDependencies_eslint_plugin_emotion": "10.0.27",
+    "npm_package_workspaces_3": "packages/extensions/*",
+    "npm_package_devDependencies_css_loader": "3.2.0",
+    "npm_package_scripts_clean": "rimraf build",
+    "NVS_ROOT": "/Users/srravich/.nvs",
+    "npm_package_workspaces_0": "packages/client",
+    "npm_package_dependencies__bfc_ui_plugin_expressions": "*",
+    "COLORTERM": "truecolor",
+    "npm_node_execpath": "/Users/srravich/.nvs/node/13.8.0/x64/bin/node",
+    "npm_package_devDependencies_eslint_plugin_react": "7.20.0",
+    "npm_package_devDependencies_eslint_plugin_cypress": "2.10.3",
+    "npm_package_scripts_build_plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:azureFunctionsPublish",
+    "npm_package_workspaces_1": "packages/electron-server",
+    "npm_config_version_tag_prefix": "v",
+    "npm_package_devDependencies_optimize_css_assets_webpack_plugin": "^5.0.3",
+    "BABEL_ENV": "production",
+    "NODE_ENV": "production",
+    "NODE_PATH": ""
+  },
+  "userLimits": {
+    "core_file_size_blocks": {
+      "soft": 0,
+      "hard": "unlimited"
+    },
+    "data_seg_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "file_size_blocks": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_locked_memory_bytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_memory_size_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "open_files": {
+      "soft": 24576,
+      "hard": "unlimited"
+    },
+    "stack_size_bytes": {
+      "soft": 8388608,
+      "hard": 67104768
+    },
+    "cpu_time_seconds": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    },
+    "max_user_processes": {
+      "soft": 2784,
+      "hard": 2784
+    },
+    "virtual_memory_kbytes": {
+      "soft": "unlimited",
+      "hard": "unlimited"
+    }
+  },
+  "sharedObjects": [
+    "/Users/srravich/.nvs/node/13.8.0/x64/bin/node",
+    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+    "/usr/lib/libSystem.B.dylib",
+    "/usr/lib/libc++.1.dylib",
+    "/usr/lib/libobjc.A.dylib",
+    "/usr/lib/libfakelink.dylib",
+    "/usr/lib/libDiagnosticMessagesClient.dylib",
+    "/usr/lib/libicucore.A.dylib",
+    "/usr/lib/libz.1.dylib",
+    "/usr/lib/libc++abi.dylib",
+    "/usr/lib/system/libcache.dylib",
+    "/usr/lib/system/libcommonCrypto.dylib",
+    "/usr/lib/system/libcompiler_rt.dylib",
+    "/usr/lib/system/libcopyfile.dylib",
+    "/usr/lib/system/libcorecrypto.dylib",
+    "/usr/lib/system/libdispatch.dylib",
+    "/usr/lib/system/libdyld.dylib",
+    "/usr/lib/system/libkeymgr.dylib",
+    "/usr/lib/system/liblaunch.dylib",
+    "/usr/lib/system/libmacho.dylib",
+    "/usr/lib/system/libquarantine.dylib",
+    "/usr/lib/system/libremovefile.dylib",
+    "/usr/lib/system/libsystem_asl.dylib",
+    "/usr/lib/system/libsystem_blocks.dylib",
+    "/usr/lib/system/libsystem_c.dylib",
+    "/usr/lib/system/libsystem_configuration.dylib",
+    "/usr/lib/system/libsystem_coreservices.dylib",
+    "/usr/lib/system/libsystem_darwin.dylib",
+    "/usr/lib/system/libsystem_dnssd.dylib",
+    "/usr/lib/system/libsystem_featureflags.dylib",
+    "/usr/lib/system/libsystem_info.dylib",
+    "/usr/lib/system/libsystem_m.dylib",
+    "/usr/lib/system/libsystem_malloc.dylib",
+    "/usr/lib/system/libsystem_networkextension.dylib",
+    "/usr/lib/system/libsystem_notify.dylib",
+    "/usr/lib/system/libsystem_sandbox.dylib",
+    "/usr/lib/system/libsystem_secinit.dylib",
+    "/usr/lib/system/libsystem_kernel.dylib",
+    "/usr/lib/system/libsystem_platform.dylib",
+    "/usr/lib/system/libsystem_pthread.dylib",
+    "/usr/lib/system/libsystem_symptoms.dylib",
+    "/usr/lib/system/libsystem_trace.dylib",
+    "/usr/lib/system/libunwind.dylib",
+    "/usr/lib/system/libxpc.dylib"
+  ]
+}
