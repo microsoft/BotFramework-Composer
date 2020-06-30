@@ -165,7 +165,7 @@ export const PublishLuis = (props) => {
             data-testid="AuthoringKeyInput"
             defaultValue={formData.authoringKey}
             errorMessage={formData.errors.authoringKey || ''}
-            label={formatMessage('LUIS Primary key:')}
+            label={formatMessage('LUIS Authoring key:')}
             onChange={updateForm('authoringKey')}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
           />

@@ -8,11 +8,34 @@ import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { UIOptions, JSONSchema7 } from '@bfc/extension';
+import { css } from '@emotion/core';
 
-import { EditableField } from '../fields/EditableField';
-import { Link } from '../Link';
+import { EditableField } from './fields/EditableField';
+import { Link } from './Link';
 
-import { title as styles } from './styles';
+export const styles = {
+  container: css`
+    border-bottom: 1px solid #c8c6c4;
+    padding: 0 18px;
+    margin-bottom: 0px;
+  `,
+
+  subtitle: css`
+    height: 15px;
+    line-height: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #4f4f4f;
+    margin: -7px 0 7px;
+  `,
+
+  description: css`
+    margin-top: 0;
+    margin-bottom: 10px;
+    white-space: pre-line;
+    font-size: ${FontSizes.size12};
+  `,
+};
 
 interface FormTitleProps {
   description?: string;

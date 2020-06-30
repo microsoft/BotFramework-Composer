@@ -68,7 +68,7 @@ enum EditMode {
   Updating,
 }
 
-const _renderIcon = (file: File) => {
+const renderIcon = (file: File) => {
   const iconName = getFileIconName(file);
   if (iconName === FileTypes.FOLDER) {
     return <Icon iconName="OpenFolderHorizontal" style={{ fontSize: '16px', marginTop: 3 }} />;
@@ -159,7 +159,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
     }
   };
 
-  const _renderNameColumn = (file: File, index: number | undefined) => {
+  const renderNameColumn = (file: File, index: number | undefined) => {
     const iconName = getFileIconName(file);
     return (
       <div data-is-focusable css={tableCell}>
@@ -217,7 +217,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       fieldName: 'name',
       minWidth: 16,
       maxWidth: 16,
-      onRender: _renderIcon,
+      onRender: renderIcon,
     },
     {
       key: 'name',
@@ -230,7 +230,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
       sortAscendingAriaLabel: formatMessage('Sorted A to Z'),
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
-      onRender: _renderNameColumn,
+      onRender: renderNameColumn,
       isPadded: true,
     },
     {
