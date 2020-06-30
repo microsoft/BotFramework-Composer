@@ -280,7 +280,10 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           current={editTarget ? editTarget.item : null}
           targets={settings.publishTargets || []}
           types={publishTypes}
-          onDismiss={() => setProvisionDialogHidden(true)}
+          onDismiss={() => {
+            setProvisionDialogHidden(true);
+            setEditTarget(null);
+          }}
           onSubmit={(value) => {
             console.log(value);
           }}
