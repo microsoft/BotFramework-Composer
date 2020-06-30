@@ -22,8 +22,7 @@ router.delete('/projects/:projectId/files/:name', ProjectController.removeFile);
 router.post('/projects/:projectId/files', ProjectController.createFile);
 router.post('/projects/:projectId/skills', ProjectController.updateSkill);
 router.post('/projects/:projectId/skill/check', ProjectController.getSkill);
-router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
-router.post('/projects/:projectId/qnaFiles/publish', ProjectController.publishQna);
+router.post('/projects/:projectId/build', ProjectController.build);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 

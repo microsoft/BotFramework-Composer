@@ -218,15 +218,13 @@ export interface ILuisConfig {
   environment: string | 'composer';
 }
 
-export interface IQnaConfig {
+export interface IConfig extends ILuisConfig {
   subscriptKey: string;
-  endpoint: string;
 }
 export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
-  luis?: ILuisConfig;
-  qna?: IQnaConfig;
+  config?: IConfig;
   publishTargets?: PublishTarget[];
   runtime?: {
     customRuntime: boolean;

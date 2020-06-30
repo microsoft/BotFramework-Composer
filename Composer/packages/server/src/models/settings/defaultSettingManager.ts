@@ -51,6 +51,7 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       publishTargets: [],
       qna: {
+        subscriptKey: '',
         knowledgebaseid: '',
         endpointkey: '',
         hostname: '',
