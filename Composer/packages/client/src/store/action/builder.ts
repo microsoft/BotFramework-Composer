@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import * as luUtil from '../../utils/luUtil';
-import * as qnaUtil from '../../utils/qnaUtil';
 import { Text } from '../../constants';
 import { ActionCreator } from '../types';
 import httpClient from '../../utils/httpUtil';
@@ -14,7 +13,6 @@ export const build: ActionCreator = async ({ dispatch, getState }, authoringKey,
   try {
     const { dialogs, luFiles, qnaFiles } = getState();
     const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
-    const referredQnaFiles = qnaUtil.checkQnaBuild(qnaFiles, dialogs);
     //TODO crosstrain should add locale
     const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referredLuFiles);
     const response = await httpClient.post(`/projects/${projectId}/build`, {
@@ -23,7 +21,7 @@ export const build: ActionCreator = async ({ dispatch, getState }, authoringKey,
       projectId,
       crossTrainConfig,
       luFiles: referredLuFiles.map((file) => file.id),
-      qnaFiles: referredQnaFiles.map((file) => file.id),
+      qnaFiles: qnaFiles.map((file) => file.id),
     });
     luFileStatusStorage.publishAll(getState().projectId);
     qnaFileStatusStorage.publishAll(getState().projectId);
