@@ -43,6 +43,7 @@ import {
   showAddSkillDialogModalState,
   skillsState,
   actionsSeedState,
+  userSettingsState,
 } from '../../recoilModel';
 
 import { VisualEditorAPI } from './FrameAPI';
@@ -111,6 +112,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
+  const userSettings = useRecoilValue(userSettingsState);
   const {
     removeDialog,
     updateDialog,
@@ -168,8 +170,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         breadcrumb: location.state ? location.state.breadcrumb || [] : [],
         promptTab: getTabFromFragment(),
       });
+      /* eslint-disable no-underscore-dangle */
       // @ts-ignore
       globalHistory._onTransitionComplete();
+      /* eslint-enable */
     } else {
       //leave design page should clear the history
       // clearUndoHistory(); //TODO: undo/redo
@@ -444,7 +448,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    key={'dialogjson'}
+                    key="dialogjson"
+                    editorSettings={userSettings.codeEditor}
                     id={currentDialog.id}
                     schema={schemas.sdk.content}
                     value={currentDialog.content || undefined}

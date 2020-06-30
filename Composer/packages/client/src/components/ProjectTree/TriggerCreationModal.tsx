@@ -41,6 +41,7 @@ import {
   projectIdState,
   schemasState,
 } from '../../recoilModel/atoms/botState';
+import { userSettingsState } from '../../recoilModel';
 
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
@@ -164,6 +165,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const locale = useRecoilValue(localeState);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
+  const userSettings = useRecoilValue(userSettingsState);
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
@@ -368,6 +370,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <React.Fragment>
               <Label>{formatMessage('Trigger phrases')}</Label>
               <LuEditor
+                editorSettings={userSettings.codeEditor}
                 errorMessage={formData.errors.triggerPhrases}
                 height={225}
                 luOption={{

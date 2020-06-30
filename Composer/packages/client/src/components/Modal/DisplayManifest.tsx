@@ -13,6 +13,7 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
 import { skillsState } from '../../recoilModel/atoms/botState';
+import { userSettingsState } from '../../recoilModel';
 
 import { displayManifest as styles } from './styles';
 
@@ -36,6 +37,8 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   onDismiss,
 }) => {
   const skills = useRecoilValue(skillsState);
+  const userSettings = useRecoilValue(userSettingsState);
+
   useEffect(() => onDismiss, []);
 
   const selectedSkill = useMemo(() => skills.find(({ manifestUrl }) => manifestUrl === manifestId), [manifestId]);
@@ -62,6 +65,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
     >
       <div css={styles.content}>
         <JsonEditor
+          editorSettings={userSettings.codeEditor}
           height={'100%'}
           id={'modaljsonview'}
           options={{ readOnly: true }}

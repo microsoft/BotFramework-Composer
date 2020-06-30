@@ -9,8 +9,7 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { botNameState, settingsState, projectIdState } from '../../../recoilModel/atoms/botState';
-import { dispatcherState } from '../../../recoilModel';
+import { botNameState, settingsState, projectIdState, dispatcherState, userSettingsState } from '../../../recoilModel';
 
 import { hostedSettings, hostedControls, settingsEditor } from './style';
 
@@ -29,6 +28,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botNameState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
+  const userSettings = useRecoilValue(userSettingsState);
   const { setSettings } = useRecoilValue(dispatcherState);
 
   const saveChangeResult = (result) => {
@@ -64,7 +64,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor value={settings} onChange={handleChange} />
+        <JsonEditor editorSettings={userSettings.codeEditor} value={settings} onChange={handleChange} />
       </div>
     </div>
   ) : (
