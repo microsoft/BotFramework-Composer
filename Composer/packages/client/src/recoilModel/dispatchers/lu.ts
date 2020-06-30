@@ -12,7 +12,7 @@ import { luFilesState } from '../atoms/botState';
 import { botStatusState } from './../atoms/botState';
 import { dialogsState } from './../atoms/botState';
 import httpClient from './../../utils/httpUtil';
-import { BotStatus } from './../../constants/index';
+import { BotStatus } from './../../constants';
 
 export const luDispatcher = () => {
   const updateLuFile = useRecoilCallback<[{ id: string; content: any; projectId: string }], Promise<void>>(

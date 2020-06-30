@@ -7,7 +7,7 @@ import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill } from '@bfc/
 import { BotLoadError, DesignPageLocation } from '../../store/types';
 
 import { PublishType, DialogSetting, BreadcrumbItem } from './../../store/types';
-import { BotStatus } from './../../constants/index';
+import { BotStatus } from './../../constants';
 
 export const dialogsState = atom<DialogInfo[]>({
   key: 'dialogs',

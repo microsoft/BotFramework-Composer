@@ -9,7 +9,7 @@ import { publishTypesState, botStatusState, publishHistoryState, botLoadErrorSta
 import filePersistence from '../../store/persistence/FilePersistence';
 import { botEndpointsState } from '../atoms';
 
-import { BotStatus, Text } from './../../constants/index';
+import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
 
 export const publisherDispatcher = () => {
