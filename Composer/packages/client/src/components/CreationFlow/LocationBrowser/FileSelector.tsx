@@ -166,6 +166,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
         {index == selectedIndex && editMode !== EditMode.NONE ? (
           <TextField
             autoFocus
+            data-testid={'newFolderTextField'}
             errorMessage={nameError}
             styles={nameField}
             value={folderName}

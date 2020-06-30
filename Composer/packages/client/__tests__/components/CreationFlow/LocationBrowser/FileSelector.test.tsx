@@ -81,4 +81,14 @@ describe('<FileSelector/>', () => {
     const component = renderComponent();
     expect(await component.findByText('You do not have permission to save bots here')).toBeInTheDocument();
   });
+
+  it('should update folder name', async () => {
+    const component = renderComponent();
+    const createFolderBtn = await component.findByText('create new folder');
+    fireEvent.click(createFolderBtn);
+    const textField = await component.findByTestId('newFolderTextField');
+    fireEvent.change(textField, { target: { value: 'newFolder' } });
+    fireEvent.keyDown(textField, { key: 'Enter' });
+    expect(createFolder).toBeCalledWith('C:\\test-folder\\Desktop', 'newFolder');
+  });
 });
