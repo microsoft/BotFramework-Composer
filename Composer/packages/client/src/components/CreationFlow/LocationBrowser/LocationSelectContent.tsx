@@ -21,13 +21,15 @@ interface LocationSelectContentProps {
     read: boolean;
     write: boolean;
   };
+  createFolder?: (path: string, name: string) => void;
+  updateFolder?: (path: string) => void;
   focusedStorageFolder: StorageFolder;
   onOpen?: (path: string, storage: string) => void;
-  onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
+  onCurrentPathUpdate: (newPath: string, storageId?: string) => void;
 }
 
 export const LocationSelectContent: React.FC<LocationSelectContentProps> = (props) => {
-  const { onOpen, onCurrentPathUpdate, operationMode, focusedStorageFolder } = props;
+  const { onOpen, onCurrentPathUpdate, operationMode, focusedStorageFolder, createFolder, updateFolder } = props;
   const { state } = useContext(StoreContext);
   const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
   const currentStorageIndex = useRef(0);
@@ -57,9 +59,12 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
       {Object.keys(focusedStorageFolder).length > 0 && storageFileLoadingStatus === 'success' && (
         <FileSelector
           checkShowItem={checkShowItem}
+          createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           isWindows={isWindows}
           operationMode={operationMode}
+          storages={storages}
+          updateFolder={updateFolder}
           onCurrentPathUpdate={onCurrentPathUpdate}
           onFileChosen={onFileChosen}
         />

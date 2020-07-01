@@ -10,7 +10,7 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 
 import { DialogCreationCopy } from '../../../constants';
-import { DialogWrapper } from '../../DialogWrapper';
+import { DialogWrapper } from '../../DialogWrapper/DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
 import { StorageFolder } from '../../../store/types';

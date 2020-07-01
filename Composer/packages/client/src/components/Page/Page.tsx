@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 
-import { ToolBar, IToolBarItem } from '../ToolBar';
-import { NavTree, INavTreeItem } from '../NavTree';
+import { ToolBar, IToolBarItem } from '../ToolBar/ToolBar';
+import { NavTree, INavTreeItem } from '../NavTree/NavTree';
 
 import * as styles from './styles';
 

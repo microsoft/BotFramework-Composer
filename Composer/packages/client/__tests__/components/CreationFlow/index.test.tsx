@@ -6,10 +6,10 @@ import { render, fireEvent } from '@bfc/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
 
 import { StoreContext } from '../../../src/store';
-import CreationFlow from '../../../src/components/CreationFlow/index';
+import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
 import { CreationFlowStatus } from '../../../src/constants';
 
-jest.mock('../../../src/components/DialogWrapper', () => {
+jest.mock('../../../src/components/DialogWrapper/DialogWrapper', () => {
   return {
     DialogWrapper: jest.fn((props) => {
       return props.children;
@@ -66,7 +66,7 @@ describe('<CreationFlow/>', () => {
     storeContext.state.templateId = 'EchoBot';
     storeContext.actions.createProject = async (templateId, name, description, location) => {
       expect(templateId).toBe(expectedTemplateId);
-      expect(location === '\\test-folder\\Desktop' || location === '/test-folder/Desktop').toBeTruthy();
+      expect(location === '').toBeTruthy();
     };
     storeContext.state.focusedStorageFolder = {
       name: 'Desktop',

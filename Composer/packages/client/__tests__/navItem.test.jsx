@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { NavItem } from '../src/components/NavItem';
+import { NavItem } from '../src/components/NavItem/NavItem';
 import { StoreProvider } from '../src/store';
 
 describe('<Header />', () => {

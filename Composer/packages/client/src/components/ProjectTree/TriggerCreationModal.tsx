@@ -33,7 +33,7 @@ import {
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
-import { useStoreContext } from '../../hooks';
+import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
