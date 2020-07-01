@@ -21,7 +21,7 @@ import * as rp from 'request-promise';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import archiver = require('archiver');
+import zipFolder = require('zip-folder');
 
 const exec = util.promisify(require('child_process').exec);
 const { promisify } = require('util');
@@ -359,17 +359,14 @@ export class BotProjectDeploy {
   }
 
   private async zipDirectory(source: string, out: string) {
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    const stream = fs.createWriteStream(out);
-
     return new Promise((resolve, reject) => {
-      archive
-        .directory(source, false)
-        .on('error', (err) => reject(err))
-        .pipe(stream);
-
-      stream.on('close', () => resolve());
-      archive.finalize();
+      zipFolder(source, out, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
     });
   }
 
