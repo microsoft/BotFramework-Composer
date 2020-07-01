@@ -31,10 +31,7 @@ export const ejectRuntime: ActionCreator = async (store, projectId, name) => {
       payload: response.data,
     });
     if (response.data.settings?.path) {
-      setRuntimeSettings(store, {
-        path: response.data.settings.path,
-        command: response.data.settings.startCommand,
-      });
+      setRuntimeSettings(store, projectId, response.data.settings.path, response.data.settings.startCommand);
     }
   } catch (err) {
     dispatch({
