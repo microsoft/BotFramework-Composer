@@ -12,7 +12,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 import { PublishTarget } from '../../store/types';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
