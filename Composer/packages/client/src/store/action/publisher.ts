@@ -4,8 +4,8 @@
 import formatMessage from 'format-message';
 
 import { ActionCreator } from '../types';
-import filePersistence from '../persistence/FilePersistence';
 import { ActionTypes } from '../../constants';
+import filePersistence from '../../recoilModel/persistence/FilePersistence';
 
 import httpClient from './../../utils/httpUtil';
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {

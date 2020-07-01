@@ -4,10 +4,10 @@
 import { navigate } from '@reach/router';
 
 import { ActionCreator } from '../types';
-import filePersistence from '../persistence/FilePersistence';
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
 import { ActionTypes, BASEPATH, BotStatus } from '../../constants';
+import filePersistence from '../../recoilModel/persistence/FilePersistence';
 
 import { navigateTo } from './../../utils/navigation';
 import { navTo } from './navigation';

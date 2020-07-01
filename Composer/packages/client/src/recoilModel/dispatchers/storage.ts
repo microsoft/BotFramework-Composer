@@ -23,7 +23,7 @@ export const storageDispatcher = () => {
   const fetchStorages = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
-      const response = await httpClient.put(`/storages`);
+      const response = await httpClient.get(`/storages`);
       if (isArray(response.data)) {
         set(storagesState, [...response.data]);
       }
