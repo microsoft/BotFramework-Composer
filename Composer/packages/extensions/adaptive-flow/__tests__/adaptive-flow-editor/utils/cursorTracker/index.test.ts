@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { moveCursor } from '../../../src/adaptive-flow-editor/utils/cursorTracker';
-import { KeyboardCommandTypes } from '../../../src/adaptive-flow-editor/constants/KeyboardCommandTypes';
+import { moveCursor } from '../../../../src/adaptive-flow-editor/utils/cursorTracker';
+import { KeyboardCommandTypes } from '../../../../src/adaptive-flow-editor/constants/KeyboardCommandTypes';
 
 describe('moveCursor', () => {
   it('returns undfined when no selectableElements.', () => {
