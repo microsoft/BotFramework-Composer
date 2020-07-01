@@ -37,3 +37,9 @@ export const ShellApiStub: ShellApi = {
   announce: fn,
   displayManifestModal: fn,
 };
+
+describe('ShellApiStub', () => {
+  it('be truthy.', () => {
+    expect(ShellApiStub).toBeTruthy();
+  });
+});
