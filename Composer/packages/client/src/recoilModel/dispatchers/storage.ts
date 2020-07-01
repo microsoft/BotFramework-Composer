@@ -43,7 +43,7 @@ export const storageDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(callbackHelpers, `Error fetching storages: ${ex}`);
+        logMessage(callbackHelpers, `Error updating current path for storage: ${ex}`);
       }
     }
   );
@@ -58,7 +58,7 @@ export const storageDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(callbackHelpers, `Error fetching storages: ${ex}`);
+        logMessage(callbackHelpers, `Error adding a new storages: ${ex}`);
       }
     }
   );
@@ -73,7 +73,7 @@ export const storageDispatcher = () => {
         }
       } catch (ex) {
         // TODO: Handle exceptions
-        logMessage(callbackHelpers, `Error fetching storages: ${ex}`);
+        logMessage(callbackHelpers, `Error getting storages by name: ${ex}`);
       }
     }
   );

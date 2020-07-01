@@ -105,14 +105,14 @@ export const PublishLuis = (props) => {
   const { onPublish, onDismiss, workState } = props;
 
   const initialFormData = {
-    name: settings.luis.name || botName,
-    authoringKey: settings.luis.authoringKey,
-    endpointKey: settings.luis.endpointKey,
-    authoringRegion: settings.luis.authoringRegion,
-    defaultLanguage: settings.luis.defaultLanguage,
-    environment: settings.luis.environment,
-    endpoint: settings.luis.endpoint,
-    authoringEndpoint: settings.luis.authoringEndpoint,
+    name: settings?.luis?.name || botName,
+    authoringKey: settings?.luis?.authoringKey,
+    endpointKey: settings?.luis?.endpointKey,
+    authoringRegion: settings?.luis?.authoringRegion,
+    defaultLanguage: settings.luis?.defaultLanguage,
+    environment: settings?.luis?.environment,
+    endpoint: settings?.luis?.endpoint,
+    authoringEndpoint: settings?.luis?.authoringEndpoint,
     errors: {},
   };
 
