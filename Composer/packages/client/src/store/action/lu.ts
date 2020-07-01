@@ -7,8 +7,7 @@ import * as luUtil from '../../utils/luUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import LuWorker from '../parsers/luWorker';
-
-import { ActionTypes } from './../../constants/index';
+import { ActionTypes } from '../../constants';
 
 export const updateLuFile: ActionCreator = async (store, { id, projectId, content }) => {
   const result = (await LuWorker.parse(id, content)) as LuFile;

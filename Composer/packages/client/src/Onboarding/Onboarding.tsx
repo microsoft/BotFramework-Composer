@@ -6,14 +6,14 @@ import { navigate } from '@reach/router';
 import formatMessage from 'format-message';
 
 import onboardingState from '../utils/onboardingStorage';
-import { OpenConfirmModal } from '../components/Modal';
+import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 import { StoreContext } from '../store';
 import { useLocation } from '../utils/hooks';
 
-import OnboardingContext from './context';
-import TeachingBubbles from './TeachingBubbles';
-import WelcomeModal from './WelcomeModal';
-import { IStepSet, stepSets as defaultStepSets } from './onboarding';
+import OnboardingContext from './OnboardingContext';
+import TeachingBubbles from './TeachingBubbles/TeachingBubbles';
+import WelcomeModal from './WelcomeModal/WelcomeModal';
+import { IStepSet, stepSets as defaultStepSets } from './onboardingUtils';
 
 const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboardingState.getCurrentSet('setUpBot'));
 

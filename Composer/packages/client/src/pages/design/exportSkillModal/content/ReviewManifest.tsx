@@ -5,7 +5,7 @@ import React from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 
 import { ContentProps } from '../constants';
-import { useStoreContext } from '../../../../hooks';
+import { useStoreContext } from '../../../../hooks/useStoreContext';
 
 export const ReviewManifest: React.FC<ContentProps> = ({ setErrors, value, onChange }) => {
   const {

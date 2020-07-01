@@ -7,11 +7,9 @@ import React, { useState, useRef, Fragment, useContext, useEffect, useCallback }
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
-import { DefaultPublishConfig, QnaConfig } from '../../constants';
-
 import settingsStorage from './../../utils/dialogSettingStorage';
 import { StoreContext } from './../../store';
-import { BotStatus, LuisConfig } from './../../constants';
+import { DefaultPublishConfig, QnaConfig, BotStatus, LuisConfig } from './../../constants';
 import { isAbsHosted } from './../../utils/envUtil';
 import { getReferredLuFiles } from './../../utils/luUtil';
 import { getReferredQnaFiles } from './../../utils/qnaUtil';

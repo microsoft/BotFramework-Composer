@@ -12,7 +12,7 @@ import { navigate } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
