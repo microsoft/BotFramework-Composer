@@ -9,10 +9,10 @@ import { RouteComponentProps, Router } from '@reach/router';
 
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../components/TestController';
-import { INavTreeItem } from '../../components/NavTree';
-import { Page } from '../../components/Page';
+import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
+import { TestController } from '../../components/TestController/TestController';
+import { INavTreeItem } from '../../components/NavTree/NavTree';
+import { Page } from '../../components/Page/Page';
 
 import TableView from './table-view';
 import { actionButton } from './styles';

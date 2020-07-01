@@ -346,7 +346,7 @@ export class BotProject {
   }
 
   private async removeLocalRuntimeData(projectId) {
-    // const method = '@bfc/plugin-localpublish';
+    // const method = 'localpublish';
     const method = 'abrown-sample-plugin';
     if (pluginLoader.extensions.publish[method]?.methods?.stopBot) {
       const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;

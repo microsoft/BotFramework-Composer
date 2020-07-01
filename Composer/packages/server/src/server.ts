@@ -46,9 +46,9 @@ export async function start(pluginDir?: string): Promise<number | string> {
   pluginLoader.useExpress(app);
 
   // load all the plugins that exist in the folder
-  // pluginDir = pluginDir || path.resolve(__dirname, '../../plugins');
-  // await pluginLoader.loadPluginsFromFolder(pluginDir);
   await PluginManager.loadAll();
+  // pluginDir = pluginDir || path.resolve(__dirname, '../../../plugins');
+  // await pluginLoader.loadPluginsFromFolder(pluginDir);
 
   const { login, authorize } = getAuthProvider();
 

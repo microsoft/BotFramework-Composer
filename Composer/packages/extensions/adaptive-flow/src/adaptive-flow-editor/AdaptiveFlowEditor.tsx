@@ -21,7 +21,7 @@ import { mergePluginConfig } from './utils/mergePluginConfig';
 import { getCustomSchema } from './utils/getCustomSchema';
 import { SelectionContext } from './contexts/SelectionContext';
 import { KeyboardZone } from './components/KeyboardZone';
-import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent.ts';
+import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent';
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
 import {

@@ -10,11 +10,11 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 
 import { StoreContext } from '../../store';
-import { TestController } from '../../components/TestController';
-import { OpenConfirmModal } from '../../components/Modal/Confirm';
+import { TestController } from '../../components/TestController/TestController';
+import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils';
-import { Page } from '../../components/Page';
-import { INavTreeItem } from '../../components/NavTree';
+import { Page } from '../../components/Page/Page';
+import { INavTreeItem } from '../../components/NavTree/NavTree';
 import { useLocation } from '../../utils/hooks';
 
 import { SettingsRoutes } from './router';

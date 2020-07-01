@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { fireEvent, render } from '@bfc/test-utils';
 
-import { ToolBar } from '../../src/components/ToolBar';
+import { ToolBar } from '../../src/components/ToolBar/ToolBar';
 
 const toolbarItems = (onClick) => [
   {

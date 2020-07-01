@@ -10,11 +10,11 @@ import merge from 'lodash/merge';
 import { prepareAxios } from '../utils/auth';
 import storage from '../utils/storage';
 import { isElectron } from '../utils/electronUtil';
+import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from '../constants';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
-import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from './../constants';
 import {
   BotState,
   AppState,

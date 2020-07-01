@@ -74,6 +74,7 @@ export const ActionNodeWrapper: FC<NodeWrapperProps> = ({ id, tab, data, onEvent
           ${!nodeFocused && nodeBorderHoveredStyle}
         }
       `}
+      data-testid="ActionNodeWrapper"
       {...declareElementAttributes(selectableId, id)}
       aria-label={generateSDKTitle(data, '', tab)}
       onClick={(e) => {

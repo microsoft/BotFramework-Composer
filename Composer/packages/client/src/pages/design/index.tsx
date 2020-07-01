@@ -3,32 +3,31 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Suspense, useContext, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { PromptTab } from '@bfc/shared';
-import { DialogFactory, SDKKinds, DialogInfo } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../components/TestController';
+import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
+import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
 import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
-import { Conversation } from '../../components/Conversation';
-import { dialogStyle } from '../../components/Modal/styles';
-import { OpenConfirmModal } from '../../components/Modal/Confirm';
-import { ProjectTree } from '../../components/ProjectTree';
-import { StoreContext } from '../../store';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
+import { Conversation } from '../../components/Conversation/Conversation';
+import { dialogStyle } from '../../components/Modal/dialogStyle';
+import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
+import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils';
 import { useShell } from '../../shell';
+import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
@@ -43,9 +42,9 @@ import {
 import { VisualEditor } from './VisualEditor';
 import { PropertyEditor } from './PropertyEditor';
 
-const CreateSkillModal = React.lazy(() => import('../../components/SkillForm/CreateSkillModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/SkillForm/CreateSkillModal/CreateSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
-const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifest'));
+const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
 const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
 
@@ -84,7 +83,7 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const { state, actions } = useContext(StoreContext);
+  const { state, actions } = useStoreContext();
   const {
     dialogs,
     displaySkillManifest,
@@ -94,6 +93,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     schemas,
     focusPath,
     designPageLocation,
+    userSettings,
   } = state;
   const {
     dismissManifestModal,
@@ -148,8 +148,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onBreadcrumbItemClick: handleBreadcrumbItemClick,
         promptTab: getTabFromFragment(),
       });
+      /* eslint-disable no-underscore-dangle */
       // @ts-ignore
       globalHistory._onTransitionComplete();
+      /* eslint-enable */
     } else {
       //leave design page should clear the history
       clearUndoHistory();
@@ -424,7 +426,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    key={'dialogjson'}
+                    key="dialogjson"
+                    editorSettings={userSettings.codeEditor}
                     id={currentDialog.id}
                     schema={schemas.sdk.content}
                     value={currentDialog.content || undefined}
