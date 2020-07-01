@@ -123,6 +123,7 @@ export const initialState: State = {
   },
   botOpening: false,
   subscriptions: [],
+  resourceGroups: [],
 };
 
 export interface StoreContextValue {

@@ -18,7 +18,7 @@ import {
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
-import { DialogSetting, ReducerFunc, Subscription } from '../types';
+import { DialogSetting, ReducerFunc, Subscription, ResourceGroups } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils';
 import storage from '../../utils/storage';
@@ -638,6 +638,12 @@ const setSubscriptions: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const setResourceGroups: ReducerFunc = (state, payload) => {
+  const { value } = payload;
+  state.resourceGroups = value as ResourceGroups[];
+  return state;
+};
+
 const noOp: ReducerFunc = (state) => {
   return state;
 };
@@ -708,4 +714,5 @@ export const reducer = createReducer({
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
   [ActionTypes.GET_SUBSCRIPTION_SUCCESS]: setSubscriptions,
+  [ActionTypes.GET_RESOURCE_GROUPS_SUCCESS]: setResourceGroups,
 });

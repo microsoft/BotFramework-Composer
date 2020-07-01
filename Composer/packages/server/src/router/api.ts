@@ -36,7 +36,7 @@ router.get('/storages/:storageId/blobs', StorageController.getBlob);
 
 // provision
 router.get('/publish/subscriptions', ProvisionController.getSubscriptions);
-
+router.get('/publish/resourceGroups/:subscriptionId', ProvisionController.getResourceGroups);
 // publishing
 router.get('/publish/types', PublishController.getTypes);
 router.get('/publish/:projectId/status/:target', PublishController.status);

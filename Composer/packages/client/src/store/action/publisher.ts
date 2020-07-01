@@ -2,11 +2,13 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
+import { result } from 'lodash';
 
 import { ActionCreator } from '../types';
 import { getAccessTokenInCache, loginPopup } from '../../utils/auth';
 
-import { ActionTypes, ActionTypes } from './../../constants/index';
+import { ActionTypes } from './../../constants/index';
+import httpClient from './../../utils/httpUtil';
 import httpClient from './../../utils/httpUtil';
 
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
@@ -141,13 +143,14 @@ export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, 
 export const getSubscriptions: ActionCreator = async ({ dispatch }) => {
   try {
     const token = getAccessTokenInCache();
+    console.log(token);
     const result = await httpClient.get('/publish/subscriptions', {
       headers: { Authorization: `Bearer ${token}` },
     });
-    console.log(result);
+    console.log(result.data);
     dispatch({
       type: ActionTypes.GET_SUBSCRIPTION_SUCCESS,
-      payload: result,
+      payload: result.data,
     });
   } catch (error) {
     console.log(error.response.data);
@@ -156,5 +159,23 @@ export const getSubscriptions: ActionCreator = async ({ dispatch }) => {
       await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
     }
     // save token in localStorage
+  }
+};
+
+export const getResourceGroups: ActionCreator = async ({ dispatch }, subscriptionId) => {
+  try {
+    const token = getAccessTokenInCache();
+    const result = await httpClient.get(`/publish/resourceGroups/${subscriptionId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(result.data);
+    dispatch({
+      type: ActionTypes.GET_RESOURCE_GROUPS_SUCCESS,
+      payload: result.data,
+    });
+  } catch (error) {
+    if (error.response.data.redirectUri) {
+      await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+    }
   }
 };

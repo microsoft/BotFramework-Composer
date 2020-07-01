@@ -161,12 +161,21 @@ export interface State {
   displaySkillManifest?: string;
   botOpening: boolean;
   subscriptions: Subscription[];
+  resourceGroups: ResourceGroups[];
 }
 
 export interface Subscription {
   subscriptionId: string;
   tenantId: string;
   displayName: string;
+}
+
+export interface ResourceGroups {
+  name: string;
+  type: string;
+  location: string;
+  id: string;
+  properties: any;
 }
 
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;

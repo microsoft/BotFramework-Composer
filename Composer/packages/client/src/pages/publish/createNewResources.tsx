@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, Fragment, useMemo, useContext } from 'react';
+import { useState, useMemo, useContext, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
@@ -28,13 +28,32 @@ export const CreateNewResource: React.FC = () => {
     [subscriptions]
   );
 
+  useEffect(() => {
+    if (currentSubscription) {
+      // get resource group under subscription
+      actions.getResourceGroups(currentSubscription.subscriptionId);
+    }
+  }, [currentSubscription]);
+
   return (
     <form>
       <Dropdown
-        label={formatMessage('Publish Destination Type')}
+        label={formatMessage('Subscription')}
         options={subscriptionOption}
-        placeholder={formatMessage('Choose One')}
+        placeholder={formatMessage('Select your subscription')}
         onChange={updateCurrentSubscription}
+      />
+      <Dropdown
+        label={formatMessage('Resource group')}
+        options={}
+        placeholder={formatMessage('Select your resource group')}
+        onChange={}
+      />
+      <Dropdown
+        label={formatMessage('Location')}
+        options={}
+        placeholder={formatMessage('Select your location')}
+        onChange={}
       />
     </form>
   );

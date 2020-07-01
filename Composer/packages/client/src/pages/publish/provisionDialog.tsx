@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
-import { useState, Fragment, useMemo } from 'react';
+import { useState, Fragment, useMemo, useContext } from 'react';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -14,7 +14,7 @@ import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/Choi
 import { PublishTarget, PublishType } from '../../store/types';
 import { DialogWrapper } from '../../components/DialogWrapper';
 import { DialogTypes } from '../../components/DialogWrapper/styles';
-import { Subscription } from '../../store/types';
+import { StoreContext } from '../../store';
 
 import { CreateNewResource } from './createNewResources';
 
@@ -33,6 +33,8 @@ const choiceOptions: IChoiceGroupOption[] = [
 ];
 
 export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
+  const { actions } = useContext(StoreContext);
+
   const [name, setName] = useState('');
   const [targetType, setTargetType] = useState<string | undefined>(props.current?.type);
   const [errorMessage, setErrorMsg] = useState('');
@@ -121,13 +123,14 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
           />
         </form>
       ),
-      next: () => {
+      next: async () => {
         // create new resource
         if (choice === choiceOptions[0].key) {
           setCurrentStep(1);
         } else if (choice === choiceOptions[1].key) {
           setCurrentStep(2);
         }
+        await actions.getSubscriptions();
       },
     },
     {
