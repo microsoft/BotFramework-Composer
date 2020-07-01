@@ -4,7 +4,7 @@
 import { textFromTemplate, checkTemplate, updateTemplate } from '../../src/utils';
 
 describe('LG LSP server util function test', () => {
-  it('text from template', function () {
+  it('text from template', () => {
     const template = {
       name: 'Greeting',
       body: '-hi',
@@ -13,7 +13,7 @@ describe('LG LSP server util function test', () => {
     expect(templateText).toContain('# Greeting');
   });
 
-  it('check a valid template', function () {
+  it('check a valid template', () => {
     const template = {
       name: 'Greeting',
       body: '-hi',
@@ -22,7 +22,7 @@ describe('LG LSP server util function test', () => {
     expect(diags).toHaveLength(0);
   });
 
-  it('check an invalid template', function () {
+  it('check an invalid template', () => {
     const template = {
       name: 'Greeting',
       body: 'hi ${ ',
@@ -31,7 +31,7 @@ describe('LG LSP server util function test', () => {
     expect(diags).toHaveLength(1);
   });
 
-  it('update template', function () {
+  it('update template', () => {
     const content = `
 # Greeting
 - hello
