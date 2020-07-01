@@ -82,14 +82,18 @@ describe('<FileSelector/>', () => {
     expect(await component.findByText('You do not have permission to save bots here')).toBeInTheDocument();
   });
 
-  it('should update folder name', async () => {
+  it('should create a new folder', async () => {
     const component = renderComponent();
     const createFolderBtn = await component.findByText('create new folder');
     fireEvent.click(createFolderBtn);
     const textField = await component.findByTestId('newFolderTextField');
     fireEvent.change(textField, { target: { value: 'newFolder' } });
     fireEvent.keyDown(textField, { key: 'Enter' });
-    //locally this should be 'C:\\test-folder\\Desktop', but it should be 'C:/test-folder/Desktop' online
-    expect(createFolder).toBeCalledWith('C:/test-folder/Desktop', 'newFolder');
+    //locally this should be 'C:\\test-folder\\Desktop', but online it should be 'C:/test-folder/Desktop'
+    expect(
+      createFolder.mock.calls[0][0] === 'C:/test-folder/Desktop' ||
+        createFolder.mock.calls[0][0] === 'C:\\test-folder\\Desktop'
+    ).toBeTruthy();
+    expect(createFolder.mock.calls[0][1]).toBe('newFolder');
   });
 });
