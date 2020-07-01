@@ -61,8 +61,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   }, [storages]);
 
   useEffect(() => {
+    console.log(fetchStorages);
     fetchStorages();
     fetchTemplateProjects();
+    console.log('ok');
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
