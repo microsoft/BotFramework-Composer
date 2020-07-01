@@ -13,10 +13,11 @@ export interface SelectionContextData {
   selectableElements: SelectorElement[];
 }
 
-export const SelectionContext = React.createContext<SelectionContextData>({
+export const defaultSelectionContextValue = {
   getNodeIndex: (_: string): number => 0,
   getSelectableIds: () => [],
   selectedIds: [] as string[],
   setSelectedIds: () => null,
   selectableElements: [],
-});
+};
+export const SelectionContext = React.createContext<SelectionContextData>(defaultSelectionContextValue);
