@@ -13,11 +13,12 @@ export interface NodeRendererContextValue {
   customSchemas: OBISchema[];
 }
 
-export const NodeRendererContext = React.createContext<NodeRendererContextValue>({
+export const defaultRendererContextValue = {
   focusedId: '',
   focusedEvent: '',
   focusedTab: '',
   clipboardActions: [],
-  dialogFactory: new DialogFactory(),
+  dialogFactory: new DialogFactory({}),
   customSchemas: [],
-});
+};
+export const NodeRendererContext = React.createContext<NodeRendererContextValue>(defaultRendererContextValue);
