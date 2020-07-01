@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -33,7 +33,7 @@ import {
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
-import { StoreContext } from '../../store';
+import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { styles, dropdownStyles, dialogWindow, intent } from './styles';
 
@@ -152,8 +152,8 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, locale, projectId, schemas } = state;
+  const { state } = useStoreContext();
+  const { dialogs, luFiles, locale, projectId, schemas, userSettings } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
@@ -358,6 +358,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <React.Fragment>
               <Label>{formatMessage('Trigger phrases')}</Label>
               <LuEditor
+                editorSettings={userSettings.codeEditor}
                 errorMessage={formData.errors.triggerPhrases}
                 height={225}
                 luOption={{
