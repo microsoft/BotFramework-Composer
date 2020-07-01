@@ -10,7 +10,7 @@ import { renderWithRecoil } from '../testUtils';
 
 describe('<ProjectTree/>', () => {
   it('should render the projecttree', async () => {
-    const { findByText } = renderWithRecoil(<ProjectTree dialogs={dialogs} />);
+    const { findByText } = renderWithRecoil(<ProjectTree dialogs={dialogs as any} />);
 
     await findByText('ToDoBot');
   });

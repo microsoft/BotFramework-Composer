@@ -14,12 +14,10 @@ import {
   dispatcherState,
   creationFlowStatusState,
   projectIdState,
-  templateIdState,
   templateProjectsState,
   storagesState,
   focusedStorageFolderState,
 } from '../../recoilModel';
-import { navigateTo } from '../../utils';
 
 import { CreateOptions } from './CreateOptions/CreateOptions';
 import { OpenProject } from './OpenProject/OpenProject';
@@ -29,24 +27,24 @@ type CreationFlowProps = RouteComponentProps<{}>;
 
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
+    fetchTemplates,
     openBotProject,
-    fetchTemplateProjects,
+    createProject,
     saveProjectAs,
     saveTemplateId,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
+    createFolder,
     updateCurrentPathForStorage,
     updateFolder,
-    createFolder,
+    navTo,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
-  const templateId = useRecoilValue(templateIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
-  const { createProject } = useRecoilValue(dispatcherState);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
@@ -61,10 +59,8 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   }, [storages]);
 
   useEffect(() => {
-    console.log(fetchStorages);
     fetchStorages();
-    fetchTemplateProjects();
-    console.log('ok');
+    fetchTemplates();
   }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
@@ -83,33 +79,32 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const openBot = async (botFolder) => {
-    const projectId = await openBotProject(botFolder);
+    await openBotProject(botFolder);
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    const mainUrl = `/bot/${projectId}/dialogs/Main`;
-    navigateTo(mainUrl);
   };
 
-  const handleCreateNew = async (formData) => {
+  const handleCreateNew = async (formData, templateId: string) => {
     await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
+    navTo('main');
   };
 
   const handleSaveAs = async (formData) => {
     await saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleSubmit = async (formData) => {
+  const handleSubmit = async (formData, templateId: string) => {
     handleDismiss();
     switch (creationFlowStatus) {
       case CreationFlowStatus.NEW_FROM_SCRATCH:
       case CreationFlowStatus.NEW_FROM_TEMPLATE:
-        await handleCreateNew(formData);
+        await handleCreateNew(formData, templateId);
         break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
         break;
 
       default:
-        await handleCreateNew(formData);
+        await handleCreateNew(formData, templateId);
     }
   };
 

@@ -12,13 +12,13 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { PropTypes } from 'prop-types';
 import formatMessage from 'format-message';
 import keys from 'lodash/keys';
 import { useRecoilValue } from 'recoil';
 
 import { dispatcherState, botNameState, settingsState, projectIdState } from '../../recoilModel';
 import { Text, Tips, Links, nameRegex } from '../../constants';
+import { ILuisConfig } from '../../store/types';
 
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 
@@ -113,7 +113,7 @@ export const PublishLuis = (props) => {
     environment: settings?.luis?.environment,
     endpoint: settings?.luis?.endpoint,
     authoringEndpoint: settings?.luis?.authoringEndpoint,
-    errors: {},
+    errors: {} as any,
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -133,7 +133,7 @@ export const PublishLuis = (props) => {
     // save the settings change to store and persist to server
     const newValue = { ...formData, ...result };
     delete newValue.errors;
-    await setSettings(projectId, { ...settings, luis: newValue });
+    await setSettings(projectId, { ...settings, luis: newValue as ILuisConfig });
     await onPublish();
   };
 
@@ -198,7 +198,10 @@ export const PublishLuis = (props) => {
 export function PublishLuisModal(props) {
   const { isOpen, onDismiss, onPublish, botName } = props;
   const [workState, setWorkState] = useState(STATE.INPUT);
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState({
+    status: '',
+    error: '',
+  });
 
   const handleDismiss = () => {
     onDismiss();
@@ -239,9 +242,3 @@ export function PublishLuisModal(props) {
     </Dialog>
   );
 }
-
-PublishLuisModal.propTypes = {
-  isOpen: PropTypes.bool,
-  onDismiss: PropTypes.func,
-  onPublish: PropTypes.func,
-};

@@ -3,26 +3,37 @@
 
 import * as React from 'react';
 import { Router, Redirect } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
 import { ErrorBoundary } from '../../components/ErrorBoundary/ErrorBoundary';
 import { About } from '../about';
+import { applicationErrorState, dispatcherState } from '../../recoilModel';
 
 import { DialogSettings } from './dialog-settings';
 import { AppSettings } from './app-settings';
 import { RuntimeSettings } from './runtime-settings';
 
-export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => (
-  <ErrorBoundary>
-    <Router>
-      <Redirect
-        noThrow
-        from="/"
-        to={projectId ? `/settings/bot/${projectId}/dialog-settings` : '/settings/application'}
-      />
-      <AppSettings default path="application" />
-      <About path="about" />
-      <DialogSettings path="/bot/:projectId/dialog-settings" />
-      <RuntimeSettings path="/bot/:projectId/runtime" />
-    </Router>
-  </ErrorBoundary>
-));
+export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => {
+  const applicationError = useRecoilValue(applicationErrorState);
+  const { setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
+
+  return (
+    <ErrorBoundary
+      currentApplicationError={applicationError}
+      fetchProject={() => fetchProjectById(projectId)}
+      setApplicationLevelError={setApplicationLevelError}
+    >
+      <Router>
+        <Redirect
+          noThrow
+          from="/"
+          to={projectId ? `/settings/bot/${projectId}/dialog-settings` : '/settings/application'}
+        />
+        <AppSettings default path="application" />
+        <About path="about" />
+        <DialogSettings path="/bot/:projectId/dialog-settings" />
+        <RuntimeSettings path="/bot/:projectId/runtime" />
+      </Router>
+    </ErrorBoundary>
+  );
+});

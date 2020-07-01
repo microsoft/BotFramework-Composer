@@ -43,8 +43,8 @@ export const navigationDispatcher = () => {
     }
   );
 
-  const navTo = useRecoilCallback<[string, BreadcrumbItem[]], Promise<void>>(
-    ({ snapshot }: CallbackInterface) => async (dialogId, breadcrumb?) => {
+  const navTo = useRecoilCallback<[string, BreadcrumbItem[]?], Promise<void>>(
+    ({ snapshot }: CallbackInterface) => async (dialogId, breadcrumb = []) => {
       const projectId = await snapshot.getPromise(projectIdState);
       const designPageLocation = await snapshot.getPromise(designPageLocationState);
       const currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
