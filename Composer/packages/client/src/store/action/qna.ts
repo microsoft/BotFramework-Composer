@@ -6,8 +6,7 @@ import { QnAFile } from '@bfc/shared';
 import qnaWorker from '../parsers/qnaWorker';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
-
-import { ActionTypes } from './../../constants/index';
+import { ActionTypes } from '../../constants';
 
 export const updateQnAFile: ActionCreator = async (store, { id, projectId, content }) => {
   const qnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
