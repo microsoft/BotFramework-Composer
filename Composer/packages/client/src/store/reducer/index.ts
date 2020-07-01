@@ -342,7 +342,7 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
 
 const setError: ReducerFunc = (state, payload) => {
   // if the error originated at the server and the server included message, use it...
-  if (payload?.status?.status === 409) {
+  if (payload?.status === 409) {
     state.error = {
       status: 409,
       message: formatMessage(
