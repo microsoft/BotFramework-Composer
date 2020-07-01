@@ -57,7 +57,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const onChangeContent = useMemo(
     () =>
       debounce((newContent: string) => {
-        actions.updateQnAFile({ id: `${dialogId}.${locale}`, projectId, content: newContent });
+        actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: newContent });
       }, 500),
     [projectId]
   );

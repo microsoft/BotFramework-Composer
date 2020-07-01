@@ -57,7 +57,7 @@ const InlineCodeEditor: React.FC<CodeEditorProps> = (props) => {
     updatedContent = insertSection(indexId, updatedContent, newContent); //update or insert
     const diagnostics = getParsedDiagnostics(newContent);
     setTemplateDiagnostics(diagnostics);
-    actions.updateQnAFile({ id: `${dialogId}.${locale}`, projectId, content: updatedContent });
+    actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedContent });
   };
 
   return (

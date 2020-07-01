@@ -8,7 +8,7 @@ import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import { ActionTypes } from '../../constants';
 
-export const updateQnAFile: ActionCreator = async (store, { id, projectId, content }) => {
+export const updateQnaFile: ActionCreator = async (store, { id, projectId, content }) => {
   const qnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
   store.dispatch({
     type: ActionTypes.UPDATE_QNA,
@@ -30,8 +30,8 @@ export const createQnAFile: ActionCreator = async (store, { id, content }) => {
   });
 };
 
-export const undoableUpdateQnAFile = undoable(
-  updateQnAFile,
+export const undoableUpdateQnaFile = undoable(
+  updateQnaFile,
   (state: State, args: any[], isEmpty) => {
     if (isEmpty) {
       const id = args[0].id;
@@ -42,10 +42,10 @@ export const undoableUpdateQnAFile = undoable(
       return args;
     }
   },
-  async (store: Store, from, to) => updateQnAFile(store, ...to),
-  async (store: Store, from, to) => updateQnAFile(store, ...to)
+  async (store: Store, from, to) => updateQnaFile(store, ...to),
+  async (store: Store, from, to) => updateQnaFile(store, ...to)
 );
 
 export const updateQnAContent: ActionCreator = async (store, { projectId, file, content }) => {
-  return await undoableUpdateQnAFile(store, { id: file.id, projectId, content });
+  return await undoableUpdateQnaFile(store, { id: file.id, projectId, content });
 };
