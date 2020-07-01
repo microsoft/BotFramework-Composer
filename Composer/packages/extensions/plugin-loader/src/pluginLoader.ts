@@ -113,8 +113,8 @@ export class PluginLoader {
 
   // return a reference to the plugin used by the app
   public getRuntimeByProject(project): RuntimeTemplate {
-    const type = project.settings.runtime?.name || DEFAULT_RUNTIME;
-    const templates = this.extensions.runtimeTemplates.filter((t) => t.name === type);
+    const type = project.settings.runtime?.key || DEFAULT_RUNTIME;
+    const templates = this.extensions.runtimeTemplates.filter((t) => t.key === type);
     if (templates.length) {
       return templates[0];
     } else {
