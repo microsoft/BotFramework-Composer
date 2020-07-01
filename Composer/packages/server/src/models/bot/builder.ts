@@ -189,7 +189,7 @@ export class Builder {
       false,
       loadResult.multiRecognizers,
       loadResult.settings,
-      loadResult.crossTrainedRecognizer,
+      loadResult.crosstrainedRecognizers,
       'crosstrained'
     );
     await this.luBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
@@ -221,7 +221,7 @@ export class Builder {
       config.fallbackLocal,
       loadResult.multiRecognizers,
       loadResult.settings,
-      loadResult.crossTrainedRecognizer,
+      loadResult.crosstrainedRecognizer,
       'crosstrained'
     );
     await this.qnaBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
