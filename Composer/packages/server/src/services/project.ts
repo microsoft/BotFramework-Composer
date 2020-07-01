@@ -208,6 +208,7 @@ export class BotProjectService {
 
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
+
     const path = BotProjectService.projectLocationMap[projectId];
 
     if (path == null) {

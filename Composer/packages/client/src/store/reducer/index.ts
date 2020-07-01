@@ -342,7 +342,7 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
 
 const setError: ReducerFunc = (state, payload) => {
   // if the error originated at the server and the server included message, use it...
-  if (payload && payload.status && payload.status === 409) {
+  if (payload?.status?.status === 409) {
     state.error = {
       status: 409,
       message: formatMessage(
@@ -351,7 +351,7 @@ const setError: ReducerFunc = (state, payload) => {
       summary: formatMessage('Modification Rejected'),
     };
   } else {
-    if (payload && payload.response && payload.response.data && payload.response.data.message) {
+    if (payload?.response?.data?.message) {
       state.error = payload.response.data;
     } else {
       state.error = payload;
