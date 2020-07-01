@@ -10,7 +10,6 @@ import { DialogInfo } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { projectIdState, dispatcherState } from '../../recoilModel';
-import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 

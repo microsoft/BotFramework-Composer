@@ -27,7 +27,6 @@ import {
 } from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
-import filePersistence from './persistence/FilePersistence';
 
 const { defaultFileResolver } = TemplatesParser;
 
@@ -170,7 +169,6 @@ export const applyMiddleware = (store: Store, ...middlewares: MiddlewareFunc[]) 
 
 export const wrappedReducer = (state: State, action: ActionType) => {
   const currentState = reducer(state, action);
-  filePersistence.notify(state, currentState, action);
   return currentState;
 };
 
@@ -206,6 +204,5 @@ export const StoreProvider: React.FC<StoreProviderProps> = (props) => {
       },
     },
   };
-  filePersistence.registerHandleError({ dispatch, getState });
   return <StoreContext.Provider value={value}>{props.children}</StoreContext.Provider>;
 };

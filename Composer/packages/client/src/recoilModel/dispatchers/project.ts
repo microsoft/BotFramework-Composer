@@ -9,7 +9,6 @@ import lodashSet from 'lodash/get';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 
-import filePersistence from '../../store/persistence/FilePersistence';
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
 import httpClient from '../../utils/httpUtil';
@@ -18,6 +17,7 @@ import { getReferredFiles } from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { DialogSetting } from '../../store/types';
 import settingStorage from '../../utils/dialogSettingStorage';
+import filePersistence from '../persistence/FilePersistence';
 
 import {
   skillManifestsState,
@@ -101,6 +101,7 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any) => {
     const { set, snapshot } = callbackHelpers;
+    const curLocation = await snapshot.getPromise(locationState);
     const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics, skills } = data;
     schemas.sdk.content = processSchema(id, schemas.sdk.content);
     const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
@@ -108,24 +109,23 @@ export const projectDispatcher = () => {
       dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
       return dialog;
     });
-    set(projectIdState, id);
+    set(skillManifestsState, skillManifestFiles);
+    set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
+    set(lgFilesState, lgFiles);
+    set(settingsState, settings);
     set(dialogsState, verifiedDialogs);
     set(botEnvironmentState, botEnvironment);
     set(botNameState, botName);
-    const curLocation = await snapshot.getPromise(locationState);
     if (location !== curLocation) {
       set(botStatusState, BotStatus.unConnected);
       set(locationState, location);
     }
-    set(lgFilesState, lgFiles);
     set(skillsState, skills);
     set(schemasState, schemas);
-    set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
-    set(settingsState, settings);
     set(localeState, locale);
     set(BotDiagnosticsState, diagnostics);
-    set(skillManifestsState, skillManifestFiles);
     set(botOpeningState, false);
+    set(projectIdState, id);
     refreshLocalStorage(id, settings);
     mergeLocalStorage(id, settings);
   };
@@ -287,11 +287,14 @@ export const projectDispatcher = () => {
     }
   );
 
-  const saveTemplateId = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (templateId) => {
-    if (templateId) {
-      set(templateIdState, templateId);
+  const saveTemplateId = useRecoilCallback<[string], Promise<void>>(
+    ({ set, snapshot }: CallbackInterface) => async (templateId) => {
+      const previousTemplateId = await snapshot.getPromise(templateIdState);
+      if (templateId !== previousTemplateId) {
+        set(templateIdState, templateId);
+      }
     }
-  });
+  );
 
   const fetchTemplates = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
     try {
