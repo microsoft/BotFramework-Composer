@@ -8,14 +8,14 @@ import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
 import { DefaultPublishConfig } from '../../constants';
+import settingsStorage from '../../utils/dialogSettingStorage';
+import { StoreContext } from '../../store';
+import { BotStatus, LuisConfig } from '../../constants';
+import { isAbsHosted } from '../../utils/envUtil';
+import { getReferredFiles } from '../../utils/luUtil';
+import useNotifications from '../../pages/notifications/useNotifications';
+import { navigateTo, openInEmulator } from '../../utils';
 
-import settingsStorage from './../../utils/dialogSettingStorage';
-import { StoreContext } from './../../store';
-import { BotStatus, LuisConfig } from './../../constants';
-import { isAbsHosted } from './../../utils/envUtil';
-import { getReferredFiles } from './../../utils/luUtil';
-import useNotifications from './../../pages/notifications/useNotifications';
-import { navigateTo, openInEmulator } from './../../utils';
 import { PublishLuisDialog } from './publishDialog';
 import { bot, botButton } from './styles';
 import { ErrorCallout } from './errorCallout';

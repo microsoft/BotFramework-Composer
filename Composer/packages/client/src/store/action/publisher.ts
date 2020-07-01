@@ -5,9 +5,8 @@ import formatMessage from 'format-message';
 
 import { ActionCreator } from '../types';
 import filePersistence from '../persistence/FilePersistence';
-import { DefaultPublishConfig } from '../../constants';
+import { ActionTypes, DefaultPublishConfig } from '../../constants';
 
-import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 
 // this is the interval at which the runtime manager will be polled

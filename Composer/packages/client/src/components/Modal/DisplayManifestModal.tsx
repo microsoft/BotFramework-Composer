@@ -35,7 +35,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   onDismiss,
 }) => {
   const { state } = useContext(StoreContext);
-  const { skills } = state;
+  const { skills, userSettings } = state;
 
   useEffect(() => onDismiss, []);
 
@@ -63,6 +63,7 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
     >
       <div css={styles.content}>
         <JsonEditor
+          editorSettings={userSettings.codeEditor}
           height={'100%'}
           id={'modaljsonview'}
           options={{ readOnly: true }}

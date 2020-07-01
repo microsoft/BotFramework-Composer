@@ -110,7 +110,7 @@ export const Tips = {
     (projectname-environment-LUfilename)`),
   ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
     models independently from each other tied to the source control.`),
-  AUTHORING_KEY: formatMessage('A primary key is created automatically when you create a LUIS account.'),
+  AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
   DEFAULT_LANGUAGE: formatMessage(
     `Configures default language model to use if there is no culture code in the file name (Default:en-us)`

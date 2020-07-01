@@ -8,7 +8,7 @@ import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogInfo } from '@bfc/shared';
 
-import { useStoreContext } from '../../hooks';
+import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { headerSub, leftActions, rightActions, actionButton } from './styles';
 
