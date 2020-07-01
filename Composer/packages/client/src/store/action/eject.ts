@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { ActionCreator } from '../types';
+import { ActionTypes } from '../../constants';
 
-import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
 import { setSettings } from './setting';
 

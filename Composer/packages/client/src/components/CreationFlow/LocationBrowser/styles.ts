@@ -94,6 +94,7 @@ export const tableCell = css`
 
 export const content = css`
   outline: none;
+  margin-top: 3px;
 `;
 
 export const halfstack = {
@@ -110,4 +111,19 @@ export const stackinput = {
       marginBottom: '1rem',
     },
   ],
+};
+
+export const editButton = {
+  root: {
+    height: 20,
+  },
+};
+
+export const nameField = {
+  fieldGroup: {
+    height: 22,
+  },
+  field: {
+    height: 22,
+  },
 };

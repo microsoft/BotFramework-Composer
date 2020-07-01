@@ -6,13 +6,15 @@ import { fireEvent } from '@bfc/test-utils';
 
 import { renderWithStore } from '../../../testUtils';
 import { StorageFolder } from '../../../../src/store/types';
-import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation';
+import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation/DefineConversation';
 
 describe('<DefineConversation/>', () => {
   const onCurrentPathUpdateMock = jest.fn();
   const saveTemplateMock = jest.fn();
   const onSubmitMock = jest.fn();
   const onDismissMock = jest.fn();
+  const createFolder = jest.fn();
+  const updateFolder = jest.fn();
   let storeContext, locationMock;
   const focusedStorageFolder: StorageFolder = {
     name: 'Desktop',
@@ -33,8 +35,10 @@ describe('<DefineConversation/>', () => {
   function renderComponent() {
     return renderWithStore(
       <DefineConversation
+        createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
         location={locationMock}
+        updateFolder={updateFolder}
         onCurrentPathUpdate={onCurrentPathUpdateMock}
         onDismiss={onDismissMock}
         onSubmit={onSubmitMock}
@@ -53,7 +57,7 @@ describe('<DefineConversation/>', () => {
       state: {
         templateId: 'EchoBot',
         focusedStorageFolder: '',
-        storages: [],
+        storages: [{ id: 'default' }],
       },
     };
   });
@@ -74,6 +78,7 @@ describe('<DefineConversation/>', () => {
     expect(onSubmitMock).toHaveBeenCalledWith({
       description: 'Test Echo',
       name: 'EchoBot-11299',
+      location: '',
       schemaUrl:
         'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
     });
