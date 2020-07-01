@@ -6,7 +6,7 @@ import { fireEvent, render } from '@bfc/test-utils';
 
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
-import { ToolBar } from '../../src/components/ToolBar/index';
+import { ToolBar } from '../../src/components/ToolBar/ToolBar';
 describe('<Home/>', () => {
   it('should dispatch onSelectionChanged event when clicked on a link on <RecentBotList>', () => {
     const recentProjects = [
