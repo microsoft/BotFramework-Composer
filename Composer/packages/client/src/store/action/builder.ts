@@ -2,10 +2,9 @@
 // Licensed under the MIT License.
 
 import * as luUtil from '../../utils/luUtil';
-import { Text } from '../../constants';
+import { Text, ActionTypes } from '../../constants';
 import { ActionCreator } from '../types';
 import httpClient from '../../utils/httpUtil';
-import { ActionTypes } from '../../constants/index';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 
