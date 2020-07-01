@@ -2,12 +2,19 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { render, fireEvent, act } from '@bfc/test-utils';
 import { createHistory, createMemorySource, LocationProvider } from '@reach/router';
+import { RecoilRoot } from 'recoil';
 
-import { StoreContext } from '../../../src/store';
 import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
+import {
+  focusedStorageFolderState,
+  creationFlowStatusState,
+  templateIdState,
+  dispatcherState,
+} from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
+import { Dispatcher } from '../../../src/recoilModel/dispatchers';
 
 jest.mock('../../../src/components/DialogWrapper/DialogWrapper', () => {
   return {
@@ -18,57 +25,20 @@ jest.mock('../../../src/components/DialogWrapper/DialogWrapper', () => {
 });
 
 describe('<CreationFlow/>', () => {
-  let storeContext, saveTemplateMock, locationMock, createProjectMock;
-
-  function renderComponent() {
-    return render(
-      <StoreContext.Provider value={storeContext}>
-        <CreationFlow location={locationMock} />
-      </StoreContext.Provider>
-    );
-  }
-
-  function renderWithRouter(ui, { route = '', history = createHistory(createMemorySource(route)) } = {}) {
-    return {
-      ...render(<LocationProvider history={history}>{ui}</LocationProvider>),
-      history,
-    };
-  }
-
-  beforeEach(() => {
-    saveTemplateMock = jest.fn();
-    locationMock = {};
-    storeContext = {
-      actions: {
-        saveTemplateId: saveTemplateMock,
-        fetchTemplates: jest.fn(),
-        openBotProject: jest.fn(),
+  let locationMock;
+  const createProjectMock = jest.fn();
+  const initRecoilState = ({ set }) => {
+    set(dispatcherState, (currentDispatcher: Dispatcher) => {
+      return {
+        ...currentDispatcher,
         createProject: createProjectMock,
-        saveProjectAs: jest.fn(),
         fetchStorages: jest.fn(),
-        fetchFolderItemsByPath: jest.fn(),
-        setCreationFlowStatus: jest.fn(),
-        onboardingAddCoachMarkRef: jest.fn(),
-        fetchRecentProjects: jest.fn(),
-      },
-      state: {
-        templateId: '',
-        templateProjects: [],
-        recentProjects: [],
-        storages: [],
-        creationFlowStatus: CreationFlowStatus.NEW_FROM_TEMPLATE,
-      },
-    };
-  });
-
-  it('should render the component', async () => {
-    const expectedTemplateId = 'EchoBot';
-    storeContext.state.templateId = 'EchoBot';
-    storeContext.actions.createProject = async (templateId, name, description, location) => {
-      expect(templateId).toBe(expectedTemplateId);
-      expect(location === '').toBeTruthy();
-    };
-    storeContext.state.focusedStorageFolder = {
+        fetchTemplateProjects: jest.fn(),
+      };
+    });
+    set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
+    set(templateIdState, 'EchoBot');
+    set(focusedStorageFolderState, {
       name: 'Desktop',
       parent: '/test-folder',
       writable: true,
@@ -81,18 +51,46 @@ describe('<CreationFlow/>', () => {
           size: 1,
         },
       ],
+    });
+  };
+
+  function renderComponent() {
+    return (
+      <RecoilRoot initializeState={initRecoilState}>
+        <CreationFlow location={locationMock} />
+      </RecoilRoot>
+    );
+  }
+
+  function renderWithRouter(ui, { route = '', history = createHistory(createMemorySource(route)) } = {}) {
+    return {
+      ...render(<LocationProvider history={history}>{ui}</LocationProvider>),
+      history,
     };
+  }
+
+  beforeEach(() => {
+    createProjectMock.mockReset();
+  });
+
+  it('should render the component', async () => {
+    const expectedTemplateId = 'EchoBot';
+
     const {
       history: { navigate },
     } = renderWithRouter(
-      <StoreContext.Provider value={storeContext}>
+      <RecoilRoot initializeState={initRecoilState}>
         <CreationFlow location={locationMock} />
-      </StoreContext.Provider>
+      </RecoilRoot>
     );
 
     const component = renderComponent();
-    await navigate('create/Emptybot');
+    navigate('create/Emptybot');
     const node = await component.findByText('OK');
-    fireEvent.click(node);
+
+    act(() => {
+      fireEvent.click(node);
+    });
+    expect(createProjectMock).toHaveBeenCalledWith(expectedTemplateId, '', '', '');
   });
 });

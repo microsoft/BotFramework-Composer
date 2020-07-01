@@ -111,7 +111,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     if (templateId) {
       saveTemplateId?.(templateId);
     }
-  });
+  }, []);
 
   useEffect(() => {
     const formData: DefineConversationFormData = {
