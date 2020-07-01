@@ -35,9 +35,9 @@ interface DefineConversationProps
     templateId: string;
     location: string;
   }> {
-  createFolder?: (path: string, name: string) => void;
-  updateFolder?: (path: string, oldName: string, newName: string) => void;
-  onSubmit: (formData: DefineConversationFormData) => void;
+  createFolder: (path: string, name: string) => void;
+  updateFolder: (path: string, oldName: string, newName: string) => void;
+  onSubmit: (formData: DefineConversationFormData, templateId: string) => void;
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
@@ -50,7 +50,6 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     onSubmit,
     onDismiss,
     onCurrentPathUpdate,
-    saveTemplateId,
     templateId,
     focusedStorageFolder,
     createFolder,
@@ -108,12 +107,6 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
 
   useEffect(() => {
-    if (templateId) {
-      saveTemplateId?.(templateId);
-    }
-  }, []);
-
-  useEffect(() => {
     const formData: DefineConversationFormData = {
       name: getDefaultName(),
       description: '',
@@ -152,9 +145,12 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
         return;
       }
 
-      onSubmit({
-        ...formData,
-      });
+      onSubmit(
+        {
+          ...formData,
+        },
+        templateId || ''
+      );
     },
     [hasErrors, formData]
   );

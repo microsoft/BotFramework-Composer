@@ -47,8 +47,8 @@ export const App: React.FC = () => {
   const locale = useRecoilValue(localeState);
   const announcement = useRecoilValue(announcementState);
   const onboarding = useRecoilValue(onboardingState);
-  const { onboardingSetComplete, setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
   const [sideBarExpand, setSideBarExpand] = useState(false);
+  const { onboardingSetComplete, setApplicationLevelError, fetchProjectById } = useRecoilValue(dispatcherState);
   const applicationError = useRecoilValue(applicationErrorState);
   const projectId = useRecoilValue(projectIdState);
 

@@ -287,14 +287,9 @@ export const projectDispatcher = () => {
     }
   );
 
-  const saveTemplateId = useRecoilCallback<[string], Promise<void>>(
-    ({ set, snapshot }: CallbackInterface) => async (templateId) => {
-      const previousTemplateId = await snapshot.getPromise(templateIdState);
-      if (templateId !== previousTemplateId) {
-        set(templateIdState, templateId);
-      }
-    }
-  );
+  const saveTemplateId = useRecoilCallback(({ set }) => async (templateId: string) => {
+    set(templateIdState, templateId);
+  });
 
   const fetchTemplates = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
     try {
