@@ -11,8 +11,10 @@ describe('<FileSelector/>', () => {
   const onFileChosen = jest.fn();
   const checkShowItem = () => true;
   const onCurrentPathUpdate = jest.fn();
+  const createFolder = jest.fn();
+  const updateFolder = jest.fn();
   const operationMode = { write: true, read: true };
-
+  const storages = [{ id: 'default' }];
   const focusedStorageFolder: StorageFolder = {
     name: 'Desktop',
     parent: 'C:/test-folder',
@@ -34,8 +36,11 @@ describe('<FileSelector/>', () => {
       <FileSelector
         isWindows
         checkShowItem={checkShowItem}
+        createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
         operationMode={operationMode}
+        storages={storages}
+        updateFolder={updateFolder}
         onCurrentPathUpdate={onCurrentPathUpdate}
         onFileChosen={onFileChosen}
       />
@@ -62,8 +67,11 @@ describe('<FileSelector/>', () => {
 
   it('should show parent of the current folder path in the dropdown list', async () => {
     const component = renderComponent();
-    const list = await component.findByTestId('FileSelectorDropDown');
-    fireEvent.click(list);
+    const comboBox = await component.findByTestId('FileSelectorComboBox');
+    const dropdown = comboBox.querySelector('.ms-ComboBox-CaretDown-button');
+    if (dropdown) {
+      fireEvent.click(dropdown);
+    }
     expect(await component.findByText('C:\\test-folder')).toBeInTheDocument();
     expect(await component.findByText('C:\\')).toBeInTheDocument();
     expect(await component.findByText('/')).toBeInTheDocument();
@@ -72,5 +80,20 @@ describe('<FileSelector/>', () => {
   it('should show errors when current folder is not writable', async () => {
     const component = renderComponent();
     expect(await component.findByText('You do not have permission to save bots here')).toBeInTheDocument();
+  });
+
+  it('should create a new folder', async () => {
+    const component = renderComponent();
+    const createFolderBtn = await component.findByText('create new folder');
+    fireEvent.click(createFolderBtn);
+    const textField = await component.findByTestId('newFolderTextField');
+    fireEvent.change(textField, { target: { value: 'newFolder' } });
+    fireEvent.keyDown(textField, { key: 'Enter' });
+    //locally this should be 'C:\\test-folder\\Desktop', but online it should be 'C:/test-folder/Desktop'
+    expect(
+      createFolder.mock.calls[0][0] === 'C:/test-folder/Desktop' ||
+        createFolder.mock.calls[0][0] === 'C:\\test-folder\\Desktop'
+    ).toBeTruthy();
+    expect(createFolder.mock.calls[0][1]).toBe('newFolder');
   });
 });
