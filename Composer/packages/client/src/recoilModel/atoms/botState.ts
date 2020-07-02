@@ -4,7 +4,7 @@
 import { atom } from 'recoil';
 import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill } from '@bfc/shared';
 
-import { BotLoadError, DesignPageLocation } from '../../store/types';
+import { BotLoadError, DesignPageLocation, PublishTarget } from '../../store/types';
 
 import { PublishType, DialogSetting, BreadcrumbItem } from './../../store/types';
 import { BotStatus } from './../../constants';
@@ -134,7 +134,7 @@ export const publishTypesState = atom<PublishType[]>({
   default: [],
 });
 
-export const publishTargetsState = atom<any[]>({
+export const publishTargetsState = atom<PublishTarget[]>({
   key: 'publishTargets',
   default: [],
 });

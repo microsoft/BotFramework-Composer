@@ -47,7 +47,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     getPublishStatus,
     getPublishTargetTypes,
     getPublishHistory,
-    setSettings,
+    setPublishTargets,
     publishToTarget,
     rollbackToVersion: rollbackToVersionDispatcher,
   } = useRecoilValue(dispatcherState);
@@ -240,14 +240,14 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
-      const target = (settings.publishTargets || []).concat([
+      const targets = (settings.publishTargets || []).concat([
         {
           name,
           type,
           configuration,
         },
       ]);
-      await setSettings(projectId, { ...settings, publishTargets: target });
+      await setPublishTargets(targets);
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
@@ -267,7 +267,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         configuration,
       };
 
-      await setSettings(projectId, { ...settings, publishTargets: targets });
+      await setPublishTargets(targets);
 
       onSelectTarget(name);
     },
@@ -333,7 +333,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           }
         });
 
-        await setSettings(projectId, { ...settings, publishTargets: updatedPublishTargets });
+        await setPublishTargets(updatedPublishTargets);
       }
     },
     [projectId, selectedTarget, settings.publishTargets]
@@ -358,8 +358,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
-          const target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await setSettings(projectId, { ...settings, publishTargets: target });
+          const targets = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
+          await setPublishTargets(targets);
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');
