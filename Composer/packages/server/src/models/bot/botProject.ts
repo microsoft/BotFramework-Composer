@@ -309,11 +309,15 @@ export class BotProject {
       }, {});
       const luFiles = this.files.filter((file) => luMap[Path.basename(file.name, '.lu')]);
       const qnaFiles = this.files.filter((file) => qnaMap[Path.basename(file.name, '.qna')]);
+
       this.builder.setBuildConfig(
         { ...this.settings.luis, authoringKey, subscriptKey },
         crossTrainConfig,
         this.settings.downsampling
       );
+      if (!this.settings.qna.endpointKey) {
+        await this.updateQnaEndpointKey(subscriptKey);
+      }
       await this.builder.build(luFiles, qnaFiles);
     }
   };
@@ -373,6 +377,15 @@ export class BotProject {
       }
     }
   }
+
+  // update qna endpointKey in settings
+  private updateQnaEndpointKey = async (subscriptKey: string) => {
+    const settings = await this.getEnvSettings(false);
+    const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptKey);
+
+    settings.qna.endpointKey = qnaEndpointKey;
+    await this.settingManager.set(settings);
+  };
 
   private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
