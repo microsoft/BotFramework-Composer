@@ -6,8 +6,8 @@ import { ActionTypes } from '../../constants';
 
 import { Store } from './../types';
 
-export const removeDialog: ActionCreator = (store, id) => {
-  store.dispatch({
+export const removeDialog: ActionCreator = ({ dispatch }, id) => {
+  dispatch({
     type: ActionTypes.REMOVE_DIALOG,
     payload: { id },
   });
@@ -24,8 +24,8 @@ export const createDialog: ActionCreator = async (store, { id, content }) => {
   });
 };
 
-export const updateDialogBase: ActionCreator = async (store, { id, content }) => {
-  store.dispatch({
+export const updateDialogBase: ActionCreator = async ({ dispatch }, { id, content }) => {
+  dispatch({
     type: ActionTypes.UPDATE_DIALOG,
     payload: { id, content },
   });

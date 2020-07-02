@@ -7,6 +7,7 @@ declare global {
   namespace jest {
     interface Matchers<R> {
       toBeDispatchedWith(type: ActionTypes, payload?: any, error?: any);
+      toDispatch(actionType: ActionTypes, payload: {}, output?: {});
     }
   }
 }
