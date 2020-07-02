@@ -32,6 +32,10 @@ import createReducer from './createReducer';
 
 const projectFiles = ['bot', 'botproj'];
 
+const PUBLISH_SUCCESS = 200;
+const PUBLISH_PENDING = 202;
+const PUBLISH_FAILED = 500;
+
 const processSchema = (projectId: string, schema: any) => ({
   ...schema,
   definitions: dereferenceDefinitions(schema.definitions),
@@ -515,7 +519,7 @@ const runtimePollingUpdate: ReducerFunc = (state, payload) => {
 
 const publishSuccess: ReducerFunc = (state, payload) => {
   if (payload.target.name === 'default') {
-    if (payload.status == 200 && payload.endpointURL) {
+    if (payload.status == PUBLISH_SUCCESS && payload.endpointURL) {
       state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
       state.botStatus = BotStatus.connected;
     } else {
@@ -550,12 +554,12 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
   // the action below only applies to when a bot is being started using the "start bot" button
   // a check should be added to this that ensures this ONLY applies to the "default" profile.
   if (payload.target.name === 'default') {
-    if (payload.status == 200 && payload.endpointURL) {
+    if (payload.status == PUBLISH_SUCCESS && payload.endpointURL) {
       state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
       state.botStatus = BotStatus.connected;
-    } else if (payload.status == 202) {
+    } else if (payload.status == PUBLISH_PENDING) {
       state.botStatus = BotStatus.reloading;
-    } else if (payload.status == 500) {
+    } else if (payload.status == PUBLISH_FAILED) {
       state.botStatus = BotStatus.failed;
       state.botLoadErrorMsg = { ...payload, title: 'Start bot failed' };
     }
