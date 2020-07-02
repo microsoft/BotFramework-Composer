@@ -15,7 +15,7 @@ const ExportsKey = '@exports';
 export const searchLgCustomFunction = (lgFiles: LgFile[]): string[] => {
   const customFunctions = lgFiles.reduce((result: string[], lgFile) => {
     const { options } = lgFile;
-    if (options?.length > 0) {
+    if (options?.length) {
       const exports = extractOptionByKey(ExportsKey, options);
       let namespace = extractOptionByKey(NamespaceKey, options);
       if (!namespace) namespace = lgFile.id; //if namespace doesn't exist, use file name
