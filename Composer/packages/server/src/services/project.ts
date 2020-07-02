@@ -152,7 +152,7 @@ export class BotProjectService {
     // TODO: this should be refactored or moved into the BotProject constructor so that it can use user auth amongst other things
     if (!(await StorageService.checkBlob(locationRef.storageId, locationRef.path, user))) {
       BotProjectService.deleteRecentProject(locationRef.path);
-      throw new Error(`file not exist ${locationRef.path}`);
+      throw new Error(`file ${locationRef.path} does not exist`);
     }
 
     for (const key in BotProjectService.projectLocationMap) {
@@ -209,15 +209,16 @@ export class BotProjectService {
   public static getProjectById = async (projectId: string, user?: UserIdentity): Promise<BotProject> => {
     BotProjectService.initialize();
 
-    if (!BotProjectService.projectLocationMap?.[projectId]) {
-      throw new Error('project not found in cache');
+    const path = BotProjectService.projectLocationMap[projectId];
+
+    if (path == null) {
+      throw new Error(`project ${projectId} not found in cache`);
     } else {
-      const path = BotProjectService.projectLocationMap[projectId];
       // check to make sure the project is still there!
       if (!(await StorageService.checkBlob('default', path, user))) {
         BotProjectService.deleteRecentProject(path);
         BotProjectService.removeProjectIdFromCache(projectId);
-        throw new Error(`file not exist ${path}`);
+        throw new Error(`file ${path} does not exist`);
       }
       const project = new BotProject({ storageId: 'default', path: path }, user);
       await project.init();
