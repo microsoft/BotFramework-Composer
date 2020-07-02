@@ -18,12 +18,13 @@ import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, c
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
+  const { setCustomRuntime, setRuntimeField } = actions;
   const { botName, settings, projectId } = state;
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
-  const changeEnabled = (_, on) => {
-    actions.setSettings(projectId, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
+  const handleChangeToggle = (_, isOn = false) => {
+    setCustomRuntime(projectId, isOn);
   };
 
   const updateSetting = (field) => (e, newValue) => {
@@ -34,7 +35,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       error = 'This is a required field.';
     }
 
-    actions.setSettings(projectId, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
+    setRuntimeField(projectId, field, newValue);
 
     if (valid) {
       setFormDataErrors({ ...formDataErrors, [field]: '' });
@@ -53,9 +54,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
     <div css={runtimeToggle}>
       <Toggle
         inlineLabel
-        checked={settings.runtime && settings.runtime.customRuntime === true}
+        checked={settings.runtime?.customRuntime}
         label={formatMessage('Use custom runtime')}
-        onChange={changeEnabled}
+        onChange={handleChangeToggle}
       />
     </div>
   );
