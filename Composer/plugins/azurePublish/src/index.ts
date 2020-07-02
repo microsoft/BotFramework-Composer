@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { BotProjectDeploy } from 'botframeworkdeploy';
+import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
