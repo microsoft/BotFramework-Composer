@@ -15,16 +15,17 @@ const ExportsKey = '@exports';
 export const searchLgCustomFunction = (lgFiles: LgFile[]): string[] => {
   const customFunctions = lgFiles.reduce((result: string[], lgFile) => {
     const { options } = lgFile;
-    const exports = extractOptionByKey(ExportsKey, options);
-    let namespace = extractOptionByKey(NamespaceKey, options);
-    if (!namespace) namespace = lgFile.id; //if namespace doesn't exist, use file name
-    const funcList = exports.split(',');
-    funcList.forEach((func) => {
-      if (func) {
-        result.push(`${namespace}.${func.trim()}`);
-      }
-    });
-
+    if (options?.length) {
+      const exports = extractOptionByKey(ExportsKey, options);
+      let namespace = extractOptionByKey(NamespaceKey, options);
+      if (!namespace) namespace = lgFile.id; //if namespace doesn't exist, use file name
+      const funcList = exports.split(',');
+      funcList.forEach((func) => {
+        if (func) {
+          result.push(`${namespace}.${func.trim()}`);
+        }
+      });
+    }
     return result;
   }, []);
   return customFunctions;

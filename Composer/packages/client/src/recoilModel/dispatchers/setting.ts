@@ -8,8 +8,8 @@ import get from 'lodash/get';
 import has from 'lodash/has';
 
 import settingStorage from '../../utils/dialogSettingStorage';
-import { settingsState } from '../atoms/botState';
-import { DialogSetting } from '../../store/types';
+import { settingsState, publishTargetsState } from '../atoms/botState';
+import { DialogSetting, PublishTarget } from '../../store/types';
 
 export const settingsDispatcher = () => {
   const setSettings = useRecoilCallback<[string, DialogSetting], Promise<void>>(
@@ -25,7 +25,46 @@ export const settingsDispatcher = () => {
     }
   );
 
+  const setPublishTargets = useRecoilCallback<[PublishTarget[]], Promise<void>>(
+    ({ set }: CallbackInterface) => async (publishTargets) => {
+      set(publishTargetsState, publishTargets);
+    }
+  );
+
+  const setRuntimeSettings = useRecoilCallback<[boolean, string, string], Promise<void>>(
+    ({ set }: CallbackInterface) => async (_, path, command) => {
+      set(settingsState, (currentSettingsState) => ({
+        ...currentSettingsState,
+        runtime: {
+          customRuntime: true,
+          path,
+          command,
+        },
+      }));
+    }
+  );
+
+  const setRuntimeField = useRecoilCallback<[string, string, boolean], void>(
+    ({ set }: CallbackInterface) => async (projectId, field, newValue) => {
+      set(settingsState, (currentValue) => ({
+        ...currentValue,
+        runtime: {
+          ...currentValue.runtime,
+          [field]: newValue,
+        },
+      }));
+    }
+  );
+
+  const setCustomRuntime = useRecoilCallback<[string, boolean], void>(() => async (_, isOn) => {
+    setRuntimeField('', 'customRuntime', isOn);
+  });
+
   return {
     setSettings,
+    setRuntimeSettings,
+    setPublishTargets,
+    setRuntimeField,
+    setCustomRuntime,
   };
 };

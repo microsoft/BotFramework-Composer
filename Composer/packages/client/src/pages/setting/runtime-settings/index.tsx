@@ -21,13 +21,13 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botNameState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
-  const { setSettings, ejectRuntime: ejectRuntimeDispatcher } = useRecoilValue(dispatcherState);
+  const { ejectRuntime: ejectRuntimeDispatcher, setCustomRuntime, setRuntimeField } = useRecoilValue(dispatcherState);
 
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
 
-  const changeEnabled = (_, on) => {
-    setSettings(projectId, { ...settings, runtime: { ...settings.runtime, customRuntime: on } });
+  const handleChangeToggle = (_, isOn = false) => {
+    setCustomRuntime(projectId, isOn);
   };
 
   const updateSetting = (field) => (e, newValue) => {
@@ -38,7 +38,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       error = 'This is a required field.';
     }
 
-    setSettings(projectId, { ...settings, runtime: { ...settings.runtime, [field]: newValue } });
+    setRuntimeField(projectId, field, newValue);
 
     if (valid) {
       setFormDataErrors({ ...formDataErrors, [field]: '' });
@@ -57,9 +57,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
     <div css={runtimeToggle}>
       <Toggle
         inlineLabel
-        checked={settings.runtime && settings.runtime.customRuntime === true}
+        checked={settings.runtime?.customRuntime}
         label={formatMessage('Use custom runtime')}
-        onChange={changeEnabled}
+        onChange={handleChangeToggle}
       />
     </div>
   );
