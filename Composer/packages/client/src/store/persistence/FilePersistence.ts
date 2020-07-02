@@ -238,13 +238,13 @@ class FilePersistence {
     return fileChanges;
   }
 
-  private getSettingsChanges(previousState: State, currentState: State, projectId: string) {
+  private getSettingsChanges(previousState: State, currentState: State) {
     return [
       {
         id: `${FileExtensions.Setting}`,
         change: JSON.stringify(currentState.settings, null, 2),
         type: ChangeType.UPDATE,
-        projectId,
+        projectId: this._projectId,
       },
     ];
   }
@@ -288,7 +288,7 @@ class FilePersistence {
         break;
       }
       case FileExtensions.Setting: {
-        fileChanges = this.getSettingsChanges(previousState, currentState, action.payload.projectId);
+        fileChanges = this.getSettingsChanges(previousState, currentState);
       }
     }
     return fileChanges;
