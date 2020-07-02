@@ -11,7 +11,6 @@
   "dependencies": {
     "@azure/arm-resources": "2.1.0",
     "@azure/ms-rest-nodeauth": "3.0.3",
-    "@bfc/libs/bot-deploy": "../../packages/lib/bot-deploy",
     "@bfc/plugin-loader": "../../packages/extensions/plugin-loader",
     "@types/archiver": "3.1.0",
     "@types/fs-extra": "8.1.0",
