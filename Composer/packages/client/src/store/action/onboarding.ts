@@ -3,8 +3,7 @@
 
 import { ActionCreator } from '../types';
 import OnboardingState from '../../utils/onboardingStorage';
-
-import { ActionTypes } from './../../constants';
+import { ActionTypes } from '../../constants';
 
 export const onboardingAddCoachMarkRef: ActionCreator = ({ dispatch }, ref) => {
   dispatch({

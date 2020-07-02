@@ -61,7 +61,10 @@ afterAll(() => {
 describe('test BotProjectService', () => {
   it('openProject', async () => {
     const projectId = await BotProjectService.openProject(location1);
-    await expect(BotProjectService.getProjectById('123')).rejects.toThrowError('project not found in cache');
+    const otherId = '12345.678';
+    await expect(BotProjectService.getProjectById(otherId)).rejects.toThrowError(
+      `project ${otherId} not found in cache`
+    );
     expect((await BotProjectService.getProjectById(projectId)).dir).toBe(projPath);
   });
 

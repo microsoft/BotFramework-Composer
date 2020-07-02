@@ -8,7 +8,7 @@ import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { Fragment } from 'react';
 
-import { BotStatus } from './../../constants';
+import { BotStatus } from '../../constants';
 
 interface IEmulatorOpenButtonProps {
   botEndpoint: string;

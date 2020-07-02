@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react';
 
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner/LoadingSpinner';
 import { ContentProps } from '../constants';
 
 export const FetchManifestSchema: React.FC<ContentProps> = ({ completeStep, editJson, value, setSchema }) => {

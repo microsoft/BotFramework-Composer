@@ -5,8 +5,7 @@ import producer from 'immer';
 
 import { State, ReducerFunc } from '../types';
 import { ActionType, GenericActionType } from '../action/types';
-
-import { ActionTypes } from './../../constants';
+import { ActionTypes } from '../../constants';
 
 type CreateReducerFunc = (
   handlers: {
