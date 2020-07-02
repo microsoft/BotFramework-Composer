@@ -219,7 +219,7 @@ export class Builder {
       config.botName,
       config.suffix,
       config.fallbackLocal,
-      loadResult.multiRecognizers,
+      loadResult.multiRecognizer,
       loadResult.settings,
       loadResult.crosstrainedRecognizer,
       'crosstrained'
