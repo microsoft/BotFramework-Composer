@@ -14,7 +14,7 @@ export const setSettings: ActionCreator = async ({ dispatch }, projectId: string
   });
 };
 
-export const setPublishTarget: ActionCreator = async ({ dispatch }, _, publishTarget) => {
+export const setPublishTargets: ActionCreator = async ({ dispatch }, publishTarget) => {
   dispatch({
     type: ActionTypes.SET_PUBLISH_TARGETS,
     payload: {
