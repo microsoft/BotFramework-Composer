@@ -162,13 +162,14 @@ export const publisherDispatcher = () => {
 
   const getPublishHistory = useRecoilCallback<[string, any], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async (projectId, target) => {
-      const { set, snapshot } = callbackHelpers;
+      const { set } = callbackHelpers;
       try {
         await filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
-        const publishHistory = await snapshot.getPromise(publishHistoryState);
-        publishHistory[target.name] = response.data;
-        set(publishHistoryState, publishHistory);
+        set(publishHistoryState, (publishHistory) => ({
+          ...publishHistory,
+          [target.name]: response.data,
+        }));
       } catch (err) {
         //TODO: error
         logMessage(callbackHelpers, err.message);
