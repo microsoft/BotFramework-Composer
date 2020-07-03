@@ -100,6 +100,9 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     schemaUrl: {
       required: false,
     },
+    location: {
+      required: true,
+    },
   };
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
 
@@ -108,6 +111,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       name: getDefaultName(),
       description: '',
       schemaUrl: '',
+      location: '',
     };
     updateForm(formData);
     if (props.location?.search) {
@@ -151,6 +155,19 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     [hasErrors, formData]
   );
 
+  const updateLocation = (location: string) => {
+    const updatedFormData = {
+      ...formData,
+      location,
+    };
+    updateForm(updatedFormData);
+  };
+
+  const onCurrentPathUpdateWrap = (newPath: string, storageId?: string) => {
+    onCurrentPathUpdate(newPath, storageId);
+    updateLocation(newPath);
+  };
+
   return (
     <Fragment>
       <DialogWrapper
@@ -190,7 +207,7 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
             focusedStorageFolder={focusedStorageFolder}
             operationMode={{ read: true, write: true }}
             updateFolder={updateFolder}
-            onCurrentPathUpdate={onCurrentPathUpdate}
+            onCurrentPathUpdate={onCurrentPathUpdateWrap}
           />
 
           <DialogFooter>
