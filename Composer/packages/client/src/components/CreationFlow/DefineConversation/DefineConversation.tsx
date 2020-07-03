@@ -103,7 +103,10 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     },
     location: {
       required: true,
-      defaultValue: Path.join(focusedStorageFolder.parent, focusedStorageFolder.name),
+      defaultValue:
+        focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
+          ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name)
+          : '',
     },
   };
   const { formData, formErrors, hasErrors, updateField, updateForm } = useForm(formConfig);
@@ -119,7 +122,10 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
       name: getDefaultName(),
       description: '',
       schemaUrl: '',
-      location: Path.join(focusedStorageFolder.parent, focusedStorageFolder.name),
+      location:
+        focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
+          ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name)
+          : '',
     };
     updateForm(formData);
     if (props.location?.search) {
