@@ -15,12 +15,15 @@ context('LU Page', () => {
 
     cy.get('.toggleEditMode button').should('not.exist');
 
-    // by default is table view
+    // by default it goes to table view
     cy.findByTestId('LUPage').findByTestId('table-view').should('exist');
+
+    // move away from the User Input button (clicking the logo should do nothing)
+    cy.findByAltText('Composer Logo').click();
 
     // nav to ToDoBotWithLuisSample.main dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestToDoBotWithLuisSample').click();
+      cy.findByText('__TestToDoBotWithLuisSample').click('left');
     });
     cy.get('.toggleEditMode button').as('switchButton');
     // goto edit-mode

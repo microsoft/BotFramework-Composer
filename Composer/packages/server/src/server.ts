@@ -64,7 +64,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
     'upgrade-insecure-requests;',
   ];
 
-  app.all('*', function (req: Request, res: Response, next: NextFunction) {
+  app.all('*', (req: Request, res: Response, next: NextFunction) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -103,14 +103,14 @@ export async function start(pluginDir?: string): Promise<number | string> {
 
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.use(function (err: Error, req: Request, res: Response, _next: NextFunction) {
+  app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
     if (err) {
       log(err);
       res.status(500).json({ message: err.message });
     }
   });
 
-  app.get('*', function (req, res) {
+  app.get('*', (req, res) => {
     res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
   });
 
@@ -139,13 +139,13 @@ export async function start(pluginDir?: string): Promise<number | string> {
     perMessageDeflate: false,
   });
 
-  const { lgImportResolver, luImportResolver, staticMemoryResolver } = BotProjectService;
+  const { getLgResources, luImportResolver, staticMemoryResolver } = BotProjectService;
 
   function launchLanguageServer(socket: rpc.IWebSocket) {
     const reader = new rpc.WebSocketMessageReader(socket);
     const writer = new rpc.WebSocketMessageWriter(socket);
     const connection: IConnection = createConnection(reader, writer);
-    const server = new LGServer(connection, lgImportResolver, staticMemoryResolver);
+    const server = new LGServer(connection, getLgResources, staticMemoryResolver);
     server.start();
   }
 

@@ -9,6 +9,21 @@ import formatMessage from 'format-message';
 
 import { FieldLabel } from '../FieldLabel';
 
+export const borderStyles = (transparentBorder: boolean, error: boolean) =>
+  transparentBorder
+    ? {
+        fieldGroup: {
+          borderColor: error ? undefined : 'transparent',
+          transition: 'border-color 0.1s linear',
+          selectors: {
+            ':hover': {
+              borderColor: error ? undefined : NeutralColors.gray30,
+            },
+          },
+        },
+      }
+    : {};
+
 export const StringField: React.FC<FieldProps<string>> = function StringField(props) {
   const {
     id,
@@ -56,19 +71,7 @@ export const StringField: React.FC<FieldProps<string>> = function StringField(pr
         placeholder={placeholder}
         readOnly={readonly}
         styles={{
-          ...(transparentBorder
-            ? {
-                fieldGroup: {
-                  borderColor: error ? undefined : 'transparent',
-                  transition: 'border-color 0.1s linear',
-                  selectors: {
-                    ':hover': {
-                      borderColor: error ? undefined : NeutralColors.gray30,
-                    },
-                  },
-                },
-              }
-            : {}),
+          ...borderStyles(Boolean(transparentBorder), Boolean(error)),
           root: { width: '100%' },
           errorMessage: { display: 'none' },
         }}

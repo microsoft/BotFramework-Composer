@@ -51,13 +51,13 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     }
   }, []);
 
+  if (name.startsWith('$')) {
+    return null;
+  }
+
   const error = typeof rawErrors === 'string' && (
     <ErrorMessage error={rawErrors} helpLink={uiOptions.helpLink} label={getUiLabel(props)} />
   );
-
-  if (!schema || name.startsWith('$')) {
-    return null;
-  }
 
   const handleChange = (newValue: any) => {
     const serializedValue =

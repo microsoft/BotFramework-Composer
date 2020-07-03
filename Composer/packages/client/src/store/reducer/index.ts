@@ -5,8 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import has from 'lodash/has';
 import merge from 'lodash/merge';
-import memoize from 'lodash/memoize';
-import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog } from '@bfc/indexers';
+import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
 import {
   SensitiveProperties,
   LuFile,
@@ -33,24 +32,24 @@ import createReducer from './createReducer';
 
 const projectFiles = ['bot', 'botproj'];
 
-const processSchema = memoize((projectId: string, schema: any) => ({
+const processSchema = (projectId: string, schema: any) => ({
   ...schema,
   definitions: dereferenceDefinitions(schema.definitions),
-}));
+});
 
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
-const refreshLocalStorage = (botName: string, settings: DialogSetting) => {
+const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {
   for (const property of SensitiveProperties) {
     const value = get(settings, property);
     if (value) {
-      settingStorage.setField(botName, property, value);
+      settingStorage.setField(projectId, property, value);
     }
   }
 };
 
 // merge sensitive values in localStorage
-const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
-  const localSetting = settingStorage.get(botName);
+const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
+  const localSetting = settingStorage.get(projectId);
   if (localSetting) {
     for (const property of SensitiveProperties) {
       const value = get(localSetting, property);
@@ -63,8 +62,8 @@ const mergeLocalStorage = (botName: string, settings: DialogSetting) => {
   }
 };
 
-const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
-  const status = luFileStatusStorage.get(botName);
+const updateLuFilesStatus = (projectId: string, luFiles: LuFile[]) => {
+  const status = luFileStatusStorage.get(projectId);
   return luFiles.map((luFile) => {
     if (typeof status[luFile.id] === 'boolean') {
       return { ...luFile, published: status[luFile.id] };
@@ -74,20 +73,23 @@ const updateLuFilesStatus = (botName: string, luFiles: LuFile[]) => {
   });
 };
 
-const initLuFilesStatus = (botName: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
+const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
   luFileStatusStorage.checkFileStatus(
-    botName,
+    projectId,
     getReferredFiles(luFiles, dialogs).map((file) => file.id)
   );
-  return updateLuFilesStatus(botName, luFiles);
+  return updateLuFilesStatus(projectId, luFiles);
 };
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
   schemas.sdk.content = processSchema(id, schemas.sdk.content);
-  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, schemas.sdk.content, locale);
+  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
   state.projectId = id;
-  state.dialogs = dialogs;
+  state.dialogs = dialogs.map((dialog) => {
+    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    return dialog;
+  });
   state.botEnvironment = botEnvironment || state.botEnvironment;
   state.botName = botName;
   state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
@@ -101,8 +103,8 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
   state.botOpening = false;
-  refreshLocalStorage(botName, state.settings);
-  mergeLocalStorage(botName, state.settings);
+  refreshLocalStorage(id, state.settings);
+  mergeLocalStorage(id, state.settings);
   return state;
 };
 
@@ -167,8 +169,7 @@ const createLgFile: ReducerFunc = (state, { id, content }) => {
 
   const { parse } = lgIndexer;
   const lgImportresolver = importResolverGenerator(state.lgFiles, '.lg');
-  const { templates, diagnostics } = parse(content, id, lgImportresolver);
-  const lgFile = { id, templates, diagnostics, content };
+  const lgFile = { id, content, ...parse(content, id, lgImportresolver) };
   state.lgFiles.push(lgFile);
   return state;
 };
@@ -202,14 +203,14 @@ const createLuFile: ReducerFunc = (state, { id, content }) => {
   const { parse } = luIndexer;
   const luFile = { id, content, ...parse(content, id) };
   state.luFiles.push(luFile);
-  luFileStatusStorage.updateFileStatus(state.botName, id);
+  luFileStatusStorage.updateFileStatus(state.projectId, id);
   return state;
 };
 
 const removeLuFile: ReducerFunc = (state, { id }) => {
   state.luFiles = state.luFiles.reduce((result: LuFile[], file) => {
     if (getBaseName(file.id) === id || file.id === id) {
-      luFileStatusStorage.removeFileStatus(state.botName, id);
+      luFileStatusStorage.removeFileStatus(state.projectId, id);
     } else {
       result.push(file);
     }
@@ -222,14 +223,19 @@ const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
   const index = state.luFiles.findIndex((file) => file.id === luFile.id);
   state.luFiles[index] = luFile;
 
-  luFileStatusStorage.updateFileStatus(state.botName, luFile.id);
+  luFileStatusStorage.updateFileStatus(state.projectId, luFile.id);
   return state;
 };
 
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map((dialog) => {
     if (dialog.id === id) {
-      return { ...dialog, ...dialogIndexer.parse(dialog.id, content, state.schemas.sdk.content) };
+      dialog = {
+        ...dialog,
+        ...dialogIndexer.parse(dialog.id, content),
+      };
+      dialog.diagnostics = validateDialog(dialog, state.schemas.sdk.content, state.lgFiles, state.luFiles);
+      return dialog;
     }
     return dialog;
   });
@@ -262,8 +268,9 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   const dialog = {
     isRoot: false,
     displayName: id,
-    ...dialogIndexer.parse(id, fixedContent, state.schemas.sdk.content),
+    ...dialogIndexer.parse(id, fixedContent),
   };
+  dialog.diagnostics = validateDialog(dialog, state.schemas.sdk.content, state.lgFiles, state.luFiles);
   state.dialogs.push(dialog);
   state = createLgFile(state, { id, content: '' });
   state = createLuFile(state, { id, content: '' });
@@ -335,7 +342,7 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
 
 const setError: ReducerFunc = (state, payload) => {
   // if the error originated at the server and the server included message, use it...
-  if (payload && payload.status && payload.status === 409) {
+  if (payload?.status === 409) {
     state.error = {
       status: 409,
       message: formatMessage(
@@ -344,7 +351,7 @@ const setError: ReducerFunc = (state, payload) => {
       summary: formatMessage('Modification Rejected'),
     };
   } else {
-    if (payload && payload.response && payload.response.data && payload.response.data.message) {
+    if (payload?.response?.data?.message) {
       state.error = payload.response.data;
     } else {
       state.error = payload;
@@ -428,15 +435,39 @@ const dismissSkillManifestModal: ReducerFunc = (state) => {
   return state;
 };
 
-const syncEnvSetting: ReducerFunc = (state, { settings, botName }) => {
+const syncEnvSetting: ReducerFunc = (state, { settings, projectId }) => {
   // set value in local storage
   for (const property of SensitiveProperties) {
     if (has(settings, property)) {
       const propertyValue = get(settings, property, '');
-      settingStorage.setField(botName, property, propertyValue);
+      settingStorage.setField(projectId, property, propertyValue);
     }
   }
   state.settings = settings;
+  return state;
+};
+
+const setPublishTargets: ReducerFunc = (state, { publishTarget }) => {
+  state.publishTargets = publishTarget;
+  return state;
+};
+
+const setRuntimeSettings: ReducerFunc = (state, { path, command }) => {
+  state.settings.runtime = {
+    customRuntime: true,
+    path,
+    command,
+  };
+  return state;
+};
+
+const setRuntimeField: ReducerFunc = (state, { field, newValue }) => {
+  if (state.settings.runtime != null) state.settings.runtime[field] = newValue;
+  return state;
+};
+
+const setCustomRuntimeToggle: ReducerFunc = (state, { isOn }) => {
+  setRuntimeField(state, { field: 'customRuntime', newValue: isOn });
   return state;
 };
 
@@ -695,4 +726,8 @@ export const reducer = createReducer({
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
+  [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
+  [ActionTypes.SET_RUNTIME_SETTINGS]: setRuntimeSettings,
+  [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
+  [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
 });

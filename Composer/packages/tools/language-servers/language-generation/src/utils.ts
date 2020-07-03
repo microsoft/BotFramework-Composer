@@ -36,7 +36,7 @@ export interface LGDocument {
   projectId?: string;
   fileId?: string;
   templateId?: string;
-  index: () => LgParsed;
+  index: () => Promise<LgParsed>;
 }
 
 export interface LGParsedResource {

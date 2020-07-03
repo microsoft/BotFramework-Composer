@@ -7,7 +7,9 @@
     "mkdirp": "^0.5.2",
     "serialize-javascript": "^3.1.0",
     "lodash": "^4.17.12",
-    "set-value": "^3.0.2"
+    "set-value": "^3.0.2",
+    "kind-of": "^6.0.3",
+    "elliptic": "^6.5.3"
   },
   "engines": {
     "node": ">=12"
@@ -30,10 +32,11 @@
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn build:plugins",
     "build:prod": "yarn build:dev && yarn build:server && yarn build:client && yarn build:electron",
-    "build:dev": "yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
+    "build:dev": "yarn build:test && yarn build:lib && yarn build:tools && yarn build:extensions && yarn build:plugins",
+    "build:test": "yarn workspace @bfc/test-utils build",
     "build:lib": "yarn workspace @bfc/libs build:all",
     "build:electron": "yarn workspace @bfc/electron-server build",
-    "build:extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/extension @bfc/adaptive-form @bfc/visual-designer @bfc/ui-plugin-* -c build",
+    "build:extensions": "wsrun -lt -p @bfc/plugin-loader @bfc/extension @bfc/adaptive-form @bfc/adaptive-flow @bfc/ui-plugin-* -c build",
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
@@ -51,7 +54,7 @@
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
-    "test:coverage": "yarn test --coverage --no-cache --reporters=default",
+    "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default",
     "test:integration": "cypress run --browser edge",
     "test:integration:start-server": "node scripts/e2e.js",
     "test:integration:open": "cypress open",

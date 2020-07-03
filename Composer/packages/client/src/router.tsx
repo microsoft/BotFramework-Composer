@@ -7,12 +7,11 @@ import React, { useContext, useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
 
 import { resolveToBasePath } from './utils/fileUtil';
-import { About } from './pages/about';
 import { data } from './styles';
-import { NotFound } from './components/NotFound';
+import { NotFound } from './components/NotFound/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
-import { LoadingSpinner } from './components/LoadingSpinner';
+import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
 
 const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
@@ -21,7 +20,7 @@ const SettingPage = React.lazy(() => import('./pages/setting'));
 const Notifications = React.lazy(() => import('./pages/notifications'));
 const Publish = React.lazy(() => import('./pages/publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
-const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow'));
+const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 
 const Routes = (props) => {
   const { state } = useContext(StoreContext);
@@ -45,7 +44,6 @@ const Routes = (props) => {
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
-            <SettingPage path="settings/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <Notifications path="notifications" />
@@ -53,9 +51,9 @@ const Routes = (props) => {
             <Skills path="skills/*" />
             <DesignPage path="*" />
           </ProjectRouter>
+          <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
-          <About path="about" />
           <NotFound default />
         </Router>
       </Suspense>

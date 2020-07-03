@@ -24,7 +24,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = (props) => {
     >
       {[label, error].filter(Boolean).join(' ')}
       {helpLink && (
-        <Link key="a" href={helpLink} rel="noopener noreferrer" target="_blank">
+        <Link key="a" data-testid="ErrorMessageHelpLink" href={helpLink} rel="noopener noreferrer" target="_blank">
           {formatMessage('Refer to the syntax documentation here.')}
         </Link>
       )}

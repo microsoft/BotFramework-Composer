@@ -3,7 +3,7 @@
 import { luIndexer } from '@bfc/indexers';
 import * as luUtil from '@bfc/indexers/lib/utils/luUtil';
 
-import { LuActionType } from './../types';
+import { LuActionType } from '../types';
 const ctx: Worker = self as any;
 
 const parse = (id: string, content: string) => {
@@ -11,8 +11,8 @@ const parse = (id: string, content: string) => {
 };
 
 ctx.onmessage = function (msg) {
-  const msgId = msg.data.id;
-  const { type, content, id, intentName, intent } = msg.data.payload;
+  const { id: msgId, type, payload } = msg.data;
+  const { content, id, intentName, intent } = payload;
   let result: any = null;
   try {
     switch (type) {

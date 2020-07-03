@@ -34,8 +34,13 @@ switch (process.platform) {
     process.exit(1);
 }
 
+const filterOutTS = (src) => {
+  // true keeps the file, false omits it
+  return !src.endsWith('.ts');
+};
+
 // copy plugins from /Composer/plugins/ to pre-packaged electron app
-fs.copy(source, destination, err => {
+fs.copy(source, destination, { filter: filterOutTS }, (err) => {
   if (err) {
     console.err('[copy-plugins.js] Error while copying plugins: ', err);
     return;

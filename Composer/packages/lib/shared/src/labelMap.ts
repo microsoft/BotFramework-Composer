@@ -24,7 +24,7 @@ type ConceptLabelKey = SDKKinds | 'Activity';
 export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   Activity: {
     description: formatMessage(
-      'What your Bot says to the user. Visit <a target="_blank" href="https://github.com/Microsoft/BotBuilder-Samples/tree/master/experimental/language-generation"> the documentation</a> a reference of capabilities.'
+      'What your Bot says to the user. Visit <a target="_blank" href="https://aka.ms/bf-composer-docs-lg"> the documentation</a> a reference of capabilities.'
     ),
     title: formatMessage('Language Generation'),
   },
@@ -74,7 +74,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('End this dialog'),
   },
   [SDKKinds.EndTurn]: {
-    title: formatMessage('End dialog turn'),
+    title: formatMessage('End turn'),
   },
   [SDKKinds.FirstSelector]: {
     title: formatMessage('FirstSelector'),
@@ -175,7 +175,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   },
   [SDKKinds.OnMessageActivity]: {
     title: formatMessage('Message received'),
-    subtitle: formatMessage('Message recieved activity'),
+    subtitle: formatMessage('Message received activity'),
   },
   [SDKKinds.OnMessageDeleteActivity]: {
     title: formatMessage('Message deleted'),

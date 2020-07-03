@@ -7,8 +7,8 @@ import { ActionCreator } from '../types';
 import filePersistence from '../persistence/FilePersistence';
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
+import { ActionTypes, BASEPATH, BotStatus } from '../../constants';
 
-import { ActionTypes, BASEPATH, BotStatus } from './../../constants/index';
 import { navigateTo } from './../../utils/navigation';
 import { navTo } from './navigation';
 import settingStorage from './../../utils/dialogSettingStorage';
@@ -97,8 +97,8 @@ export const fetchRecentProjects: ActionCreator = async ({ dispatch }) => {
 export const deleteBotProject: ActionCreator = async (store, projectId) => {
   try {
     await httpClient.delete(`/projects/${projectId}`);
-    luFileStatusStorage.removeAllStatuses(store.getState().botName);
-    settingStorage.remove(store.getState().botName);
+    luFileStatusStorage.removeAllStatuses(projectId);
+    settingStorage.remove(projectId);
     store.dispatch({
       type: ActionTypes.REMOVE_PROJECT_SUCCESS,
     });
@@ -208,7 +208,8 @@ export const createProject: ActionCreator = async (
     await setOpenPendingStatus(store);
     const response = await httpClient.post(`/projects`, data);
     const files = response.data.files;
-    settingStorage.remove(name);
+    const projectId = response.data.id;
+    settingStorage.remove(projectId);
     store.dispatch({
       type: ActionTypes.GET_PROJECT_SUCCESS,
       payload: {

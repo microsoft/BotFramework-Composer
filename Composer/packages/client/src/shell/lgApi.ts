@@ -3,13 +3,10 @@
 
 import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
-import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 
-import * as lgUtil from '../utils/lgUtil';
 import { State, BoundActionHandlers } from '../store/types';
 import { useStoreContext } from '../hooks/useStoreContext';
-
-const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
 function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver: (id: string) => LgFile | undefined) {
   const getLgTemplates = (id) => {
@@ -28,9 +25,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
 
     const projectId = state.projectId;
 
-    lgUtil.checkSingleLgTemplate(template);
-
-    await actions.updateLgTemplate({
+    return actions.updateLgTemplate({
       file,
       projectId,
       templateName,
@@ -82,7 +77,7 @@ function createLgApi(state: State, actions: BoundActionHandlers, lgFileResolver:
   return {
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
-    updateLgTemplate: createThrottledFunc(updateLgTemplate),
+    updateLgTemplate: debounce(updateLgTemplate, 250),
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,

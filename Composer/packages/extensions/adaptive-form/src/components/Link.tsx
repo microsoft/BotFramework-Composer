@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+/* istanbul ignore file */
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';

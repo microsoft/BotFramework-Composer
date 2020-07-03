@@ -4,7 +4,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import get from 'lodash/get';
-import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
+import { MonacoServices } from 'monaco-languageclient';
 import { EditorDidMount, Monaco } from '@monaco-editor/react';
 
 import { registerLULanguage } from './languages';
@@ -31,7 +31,6 @@ const defaultLUServer = {
 declare global {
   interface Window {
     monacoServiceInstance: MonacoServices;
-    monacoLUEditorInstance: MonacoLanguageClient;
   }
 }
 
@@ -94,13 +93,12 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
       webSocket,
       onConnection: (connection: MessageConnection) => {
         const languageClient = createLanguageClient('LU Language Client', ['lu'], connection);
-        if (!window.monacoLUEditorInstance) {
-          window.monacoLUEditorInstance = languageClient;
-        }
 
         const m = monacoRef.current;
         if (m) {
-          editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, function () {
+          // this is the correct way to combine keycodes in Monaco
+          // eslint-disable-next-line no-bitwise
+          editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, () => {
             const position = editor.getPosition();
             SendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
           });
@@ -120,7 +118,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         connection.onClose(() => disposable.dispose());
       },
     });
-  });
+  }, [editor]);
   const onInit: OnInit = (monaco) => {
     registerLULanguage(monaco);
     monacoRef.current = monaco;

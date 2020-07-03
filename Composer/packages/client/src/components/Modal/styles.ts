@@ -7,6 +7,8 @@ import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
 
+import { dialogStyle } from './dialogStyle';
+
 export const displayManifest: { content: any; dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles> } = {
   content: css`
     height: 675px;
@@ -29,18 +31,13 @@ export const displayManifest: { content: any; dialog: Partial<IDialogContentStyl
   },
 };
 
-export const DialogStyle = {
-  Normal: 'NORMAL',
-  Console: 'CONSOLE',
-};
-
-export const BuiltInStyles = {
-  [DialogStyle.Normal]: css`
+export const builtInStyles = {
+  [dialogStyle.normal]: css`
     padding: 15px;
     margin-bottom: 20px;
     white-space: pre-line;
   `,
-  [DialogStyle.Console]: css`
+  [dialogStyle.console]: css`
     background: #000;
     max-height: 90px;
     overflow-y: auto;

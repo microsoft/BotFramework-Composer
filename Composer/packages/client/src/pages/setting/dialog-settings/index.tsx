@@ -3,13 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
+import React from 'react';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 
-import { StoreContext } from '../../../store';
+import { useStoreContext } from '../../../hooks/useStoreContext';
 
 import { hostedSettings, hostedControls, settingsEditor } from './style';
 
@@ -25,13 +25,12 @@ const hostControlLabels = {
 };
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { botName, settings, projectId } = state;
+  const { state, actions } = useStoreContext();
+  const { botName, settings, projectId, userSettings } = state;
 
   const saveChangeResult = (result) => {
     try {
-      const mergedResult = result;
-      actions.setSettings(projectId, botName, mergedResult);
+      actions.setSettings(projectId, result);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err.message);
@@ -61,7 +60,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
     <div css={hostedSettings}>
       {hostedControl()}
       <div css={settingsEditor}>
-        <JsonEditor value={settings} onChange={handleChange} />
+        <JsonEditor editorSettings={userSettings.codeEditor} value={settings} onChange={handleChange} />
       </div>
     </div>
   ) : (

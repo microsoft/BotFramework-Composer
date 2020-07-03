@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { hooks } from '@bfc/test-utils';
+import { renderHook } from '@bfc/test-utils/lib/hooks';
 
 import { useLgApi } from '../../src/shell/lgApi';
 import { useStoreContext } from '../../src/hooks/useStoreContext';
@@ -9,8 +9,6 @@ import { useStoreContext } from '../../src/hooks/useStoreContext';
 jest.mock('../../src/hooks/useStoreContext', () => ({
   useStoreContext: jest.fn(),
 }));
-
-const { renderHook } = hooks;
 
 const state = {
   lgFiles: [
@@ -62,7 +60,7 @@ describe('use lgApi hooks', () => {
     const { result } = renderHook(() => useLgApi());
 
     result.current.updateLgTemplate('test.en-us', 'bar', 'update');
-
+    result.current.updateLgTemplate.flush();
     expect(actions.updateLgTemplate).toBeCalledTimes(1);
     const arg = {
       file: {
