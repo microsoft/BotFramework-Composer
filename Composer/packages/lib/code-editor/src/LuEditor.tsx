@@ -98,7 +98,7 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
         if (m) {
           // this is the correct way to combine keycodes in Monaco
           // eslint-disable-next-line no-bitwise
-          editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, function () {
+          editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, () => {
             const position = editor.getPosition();
             SendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
           });
