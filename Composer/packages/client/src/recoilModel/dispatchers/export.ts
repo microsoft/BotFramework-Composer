@@ -12,7 +12,7 @@ import { logMessage } from './shared';
 export const exportDispatcher = () => {
   const exportToZip = useRecoilCallback<[{ projectId: string }], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async ({ projectId }) => {
-      const botName = callbackHelpers.snapshot.getLoadable(botNameState);
+      const botName = await callbackHelpers.snapshot.getPromise(botNameState);
       try {
         const response = await httpClient.get(`/projects/${projectId}/export/`, { responseType: 'blob' });
         const url = window.URL.createObjectURL(new Blob([response.data]));

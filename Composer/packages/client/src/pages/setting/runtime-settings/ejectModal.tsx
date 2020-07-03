@@ -15,7 +15,7 @@ import { runtimeTemplatesState, dispatcherState } from '../../../recoilModel';
 import { modalControlGroup } from './style';
 
 export interface EjectModalProps {
-  ejectRuntime: (templateKey: string) => void;
+  ejectRuntime: (templateKey: string) => Promise<void>;
   hidden: boolean;
   closeModal: () => void;
 }
@@ -44,9 +44,9 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
     }
   };
 
-  const doEject = () => {
+  const doEject = async () => {
     if (selectedTemplate) {
-      props.ejectRuntime(selectedTemplate);
+      await props.ejectRuntime(selectedTemplate);
     }
   };
 
