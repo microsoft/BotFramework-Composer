@@ -6,8 +6,6 @@ import { JSONSchema7 } from 'json-schema';
 // TODO: this will be possible when ifilestorage is in a shared module
 // import { IFileStorage } from '../../../server/src/models/storage/interface';
 
-import { ComposerPluginRegistration } from './composerPluginRegistration';
-
 export interface PublishResult {
   message: string;
   comment?: string;
@@ -48,6 +46,18 @@ export interface RuntimeTemplate {
   /** method used to eject the runtime into a project. returns resulting path of runtime! */
   eject: (project: any, localDisk?: any) => Promise<string>;
 
+  /** build method  */
+  build: (runtimePath: string, project: any) => Promise<void>;
+
+  /** run  */
+  run: (project: any, localDisk?: any) => Promise<void>;
+
+  /** build for deploy method  */
+  buildDeploy: (runtimePath: string, project: any, settings: any, profileName: string) => Promise<string>;
+
+  /** path to code template */
+  path: string;
+
   /** internal use key */
   key: string;
 
@@ -69,7 +79,10 @@ export interface ExtensionCollection {
   };
   publish: {
     [key: string]: {
-      plugin: ComposerPluginRegistration;
+      plugin: {
+        name: string;
+        description: string;
+      };
       methods: PublishPlugin;
       /** (Optional instructions displayed in the UI) */
       instructions?: string;

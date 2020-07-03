@@ -5,9 +5,38 @@ import formatMessage from 'format-message';
 
 import { ActionCreator } from '../types';
 import filePersistence from '../persistence/FilePersistence';
-import { ActionTypes } from '../../constants';
+import { ActionTypes, DefaultPublishConfig } from '../../constants';
 
 import httpClient from './../../utils/httpUtil';
+
+// this is the interval at which the runtime manager will be polled
+const POLLING_INTERVAL = 2500;
+
+export const stopPollingRuntime: ActionCreator = ({ getState, dispatch }) => {
+  const botStatusInterval = getState().botStatusInterval;
+  if (botStatusInterval) {
+    clearInterval(botStatusInterval);
+  }
+  dispatch({
+    type: ActionTypes.RUNTIME_POLLING_UPDATE,
+    payload: null,
+  });
+};
+
+export const startPollingRuntime: ActionCreator = (store) => {
+  const botStatusInterval = store.getState().botStatusInterval;
+  const projectId = store.getState().projectId;
+  if (!botStatusInterval) {
+    const cancelInterval = setInterval(function () {
+      getPublishStatus(store, projectId, DefaultPublishConfig);
+    }, POLLING_INTERVAL);
+    store.dispatch({
+      type: ActionTypes.RUNTIME_POLLING_UPDATE,
+      payload: cancelInterval,
+    });
+  }
+};
+
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/publish/types`);
