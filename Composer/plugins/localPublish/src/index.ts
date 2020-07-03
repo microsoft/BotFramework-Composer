@@ -11,10 +11,7 @@ import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
-import { ComposerPluginRegistration, PublishResponse, PublishPlugin } from '@bfc/plugin-loader';
-
-import { copyDir } from './copyDir';
-import { IFileStorage } from './interface';
+// import { ComposerPluginRegistration, PublishResponse, PublishPlugin } from '@bfc/plugin-loader';
 
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
@@ -25,8 +22,12 @@ const copyFile = promisify(fs.copyFile);
 const readFile = promisify(fs.readFile);
 
 interface RunningBot {
-  process: ChildProcess;
-  port: number;
+  process?: ChildProcess;
+  port?: number;
+  status: number;
+  result: {
+    message: string;
+  };
 }
 interface PublishConfig {
   botId: string;
@@ -37,18 +38,31 @@ interface PublishConfig {
 
 const isWin = process.platform === 'win32';
 
-class LocalPublisher implements PublishPlugin<PublishConfig> {
+class LocalPublisher {
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');
   private templatePath;
-  private composer: ComposerPluginRegistration;
+  private composer: any;
 
-  constructor(composer: ComposerPluginRegistration) {
+  constructor(composer: any) {
     this.composer = composer;
   }
 
+  private setBotStatus = (botId: string, status: RunningBot) => {
+    this.composer.log(`SETTING STATUS OF ${botId} to port ${status.port} and status ${status.status}`);
+    // preserve the pid and port if one is available
+    if (!status.process && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].process) {
+      status.process = LocalPublisher.runningBots[botId].process;
+    }
+    if (!status.port && LocalPublisher.runningBots[botId] && LocalPublisher.runningBots[botId].port) {
+      status.port = LocalPublisher.runningBots[botId].port;
+    }
+
+    LocalPublisher.runningBots[botId] = status;
+  };
+
   // config include botId and version, project is content(ComposerDialogs)
-  publish = async (config: PublishConfig, project, metadata, user): Promise<PublishResponse> => {
+  publish = async (config: PublishConfig, project, metadata, user): Promise<any> => {
     const { templatePath, fullSettings } = config;
     this.templatePath = templatePath;
     const botId = project.id;
@@ -56,12 +70,16 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     this.composer.log('Starting publish');
 
+    // set the running bot status
+    this.setBotStatus(botId, { status: 202, result: { message: 'Reloading...' } });
+
     // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
     // and export the content into that folder as well.
     const runtimeType = project.settings.runtime?.name || 'C#';
     if (!project.settings.runtime || project.settings.runtime.customRuntime !== true) {
       this.composer.log('Using managed runtime');
-      await this.initBot(botId, runtimeType);
+
+      await this.initBot(project);
       await this.saveContent(botId, version, project.dataDir, user);
       await this.saveSkillManifests(this.getBotRuntimeDir(botId), project.dataDir, runtimeType);
     } else if (project.settings.runtime.path && project.settings.runtime.command) {
@@ -76,20 +94,18 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       };
     }
 
+    // start or restart the bot process
+    // do NOT await this, as it can take a long time
     try {
-      // start or restart the bot process
-      const url = await this.setBot(botId, version, fullSettings, project.dataDir, runtimeType);
-
+      this.setBot(botId, version, fullSettings, project);
       return {
-        status: 200,
+        status: 202,
         result: {
           id: uuid(),
-          endpointURL: url,
           message: 'Local publish success.',
         },
       };
     } catch (error) {
-      console.error('Error in local publish', error);
       return {
         status: 500,
         result: {
@@ -101,15 +117,27 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   getStatus = async (config: PublishConfig, project, user) => {
     const botId = project.id;
     if (LocalPublisher.runningBots[botId]) {
-      const port = LocalPublisher.runningBots[botId].port;
-      const url = `http://localhost:${port}`;
-      return {
-        status: 200,
-        result: {
-          message: 'Running',
-          endpointURL: url,
-        },
-      };
+      if (LocalPublisher.runningBots[botId].status === 200) {
+        const port = LocalPublisher.runningBots[botId].port;
+        const url = `http://localhost:${port}`;
+        return {
+          status: 200,
+          result: {
+            message: 'Running',
+            endpointURL: url,
+          },
+        };
+      } else {
+        const status = {
+          status: LocalPublisher.runningBots[botId].status,
+          result: LocalPublisher.runningBots[botId].result,
+        };
+        if (LocalPublisher.runningBots[botId].status === 500) {
+          // after we return the 500 status once, delete it out of the running bots list.
+          delete LocalPublisher.runningBots[botId];
+        }
+        return status;
+      }
     } else {
       return {
         status: 200,
@@ -168,27 +196,28 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
     }
   };
 
-  private initBot = async (botId: string, runtimeType: string) => {
+  private initBot = async (project) => {
     this.composer.log('Initializing bot');
+    const botId = project.id;
     const isExist = await this.botExist(botId);
     if (!isExist) {
       const botDir = this.getBotDir(botId);
       const runtimeDir = this.getBotRuntimeDir(botId);
-      // create bot dir
-      await mkDir(botDir, { recursive: true });
-      await mkDir(runtimeDir, { recursive: true });
-
-      // create ComposerDialogs and history folder
-      mkDir(this.getBotAssetsDir(botId), { recursive: true });
-      mkDir(this.getHistoryDir(botId), { recursive: true });
-
-      // copy runtime template in folder
-      await this.copyDir(this.templatePath, runtimeDir);
 
       try {
-        // TODO ccastro: discuss with benbrown. Consider init command as template metadata. Remove azurewebapp from here.
-        execSync('dotnet user-secrets init --project azurewebapp', { cwd: runtimeDir, stdio: 'pipe' });
-        execSync('dotnet build', { cwd: runtimeDir, stdio: 'pipe' });
+        // create bot dir
+        await mkDir(botDir, { recursive: true });
+        await mkDir(runtimeDir, { recursive: true });
+
+        // create ComposerDialogs and history folder
+        mkDir(this.getBotAssetsDir(botId), { recursive: true });
+        mkDir(this.getHistoryDir(botId), { recursive: true });
+
+        // copy runtime template in folder
+        this.composer.log('COPY FROM ', this.templatePath, ' to ', runtimeDir);
+        await this.copyDir(this.templatePath, runtimeDir);
+        const runtime = this.composer.getRuntimeByProject(project);
+        await runtime.build(runtimeDir, project);
       } catch (error) {
         // delete the folder to make sure build again.
         await removeDirAndFiles(botDir);
@@ -198,17 +227,18 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // stop bot
       this.stopBot(botId);
       //get previous settings
-      const settings = JSON.parse(
-        await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
-          encoding: 'utf-8',
-        })
-      );
-      if (settings.runtime?.name !== runtimeType) {
-        // in order to change runtime type
-        await removeDirAndFiles(this.getBotRuntimeDir(botId));
-        // copy runtime template in folder
-        await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
-      }
+      // TODO: Re-enable this for changing type of runtime
+      // const settings = JSON.parse(
+      //   await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
+      //     encoding: 'utf-8',
+      //   })
+      // );
+      // if (settings.runtime?.name !== runtimeType) {
+      //   // in order to change runtime type
+      //   await removeDirAndFiles(this.getBotRuntimeDir(botId));
+      //   // copy runtime template in folder
+      //   await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
+      // }
     }
   };
 
@@ -234,41 +264,46 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 
   // start bot in current version
-  private setBot = async (botId: string, version: string, settings: any, project: any = undefined, runtimeType) => {
+  private setBot = async (botId: string, version: string, settings: any, project: any) => {
     // get port, and stop previous bot if exist
-    let port;
-    if (LocalPublisher.runningBots[botId]) {
-      this.composer.log('Bot already running. Stopping bot...');
-      port = LocalPublisher.runningBots[botId].port;
-      this.stopBot(botId);
-    } else {
-      port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
-    }
-
-    // if not using custom runtime, update assets in tmp older
-    if (!settings.runtime || settings.runtime.customRuntime !== true) {
-      this.composer.log('Updating bot assets');
-      await this.restoreBot(botId, version);
-    }
-
-    // start the bot process
     try {
-      await this.startBot(botId, port, settings, runtimeType);
-      return `http://localhost:${port}`;
+      let port;
+      if (LocalPublisher.runningBots[botId]) {
+        this.composer.log('Bot already running. Stopping bot...');
+        // this may or may not be set based on the status of the bot
+        port = LocalPublisher.runningBots[botId].port;
+        this.stopBot(botId);
+      }
+      if (!port) {
+        port = await portfinder.getPortPromise({ port: 3979, stopPort: 5000 });
+      }
+
+      // if not using custom runtime, update assets in tmp older
+      if (!settings.runtime || settings.runtime.customRuntime !== true) {
+        this.composer.log('Updating bot assets');
+        await this.restoreBot(botId, version);
+      }
+
+      // start the bot process
+      await this.startBot(botId, port, settings, project);
     } catch (error) {
+      console.error('Error in startbot: ', error);
       this.stopBot(botId);
-      throw error;
+      this.setBotStatus(botId, {
+        status: 500,
+        result: {
+          message: error,
+        },
+      });
     }
   };
 
-  private startBot = async (botId: string, port: number, settings: any, runtimeType: string): Promise<string> => {
+  private startBot = async (botId: string, port: number, settings: any, project: any): Promise<string> => {
     const botDir = settings.runtime?.customRuntime === true ? settings.runtime.path : this.getBotRuntimeDir(botId);
     const commandAndArgs =
       settings.runtime?.customRuntime === true
         ? settings.runtime.command.split(/\s+/)
-        : runtimeType === 'C#'
-        ? ['dotnet', 'run', '--project', 'azurewebapp']
-        : ['node', 'azurewebapp/lib/index.js']; //TODO: ccastro should pick up the bot start command here. After, remove azurewebapp arg
+        : this.composer.getRuntimeByProject(project).startCommand.split(/\s+/);
 
     return new Promise((resolve, reject) => {
       // ensure the specified runtime path exists
@@ -295,9 +330,15 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       } catch (err) {
         return reject(err);
       }
-      LocalPublisher.runningBots[botId] = { process: process, port: port };
+      this.setBotStatus(botId, {
+        process: process,
+        port: port,
+        status: 200,
+        result: { message: 'Runtime started' },
+      });
       const processLog = this.composer.log.extend(process.pid);
-      this.addListeners(process, processLog, resolve, reject);
+      this.addListeners(process, botId, processLog); //  resolve, reject);
+      resolve();
     });
   };
 
@@ -316,16 +357,14 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
   private addListeners = (
     child: ChildProcess,
+    botId: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    logger: (...args: any[]) => void,
-    resolve: Function,
-    reject: Function
+    logger: (...args: any[]) => void
   ) => {
     let erroutput = '';
     child.stdout &&
       child.stdout.on('data', (data: any) => {
         logger('%s', data);
-        resolve(child.pid);
       });
 
     child.stderr &&
@@ -335,13 +374,14 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
 
     child.on('exit', (code) => {
       if (code !== 0) {
-        reject(erroutput);
+        this.setBotStatus(botId, { status: 500, result: { message: erroutput } });
       }
     });
 
     child.on('error', (err) => {
       logger('error: %s', err.message);
-      reject(`Could not launch bot runtime process: ${err.message}`);
+      this.setBotStatus(botId, { status: 500, result: { message: err.message } });
+      // reject(`Could not launch bot runtime process: ${err.message}`);
     });
 
     child.on('message', (msg) => {
@@ -439,60 +479,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
   };
 }
 
-export default async (composer: ComposerPluginRegistration): Promise<void> => {
+export default async (composer: any): Promise<void> => {
   const publisher = new LocalPublisher(composer);
   // register this publishing method with Composer
   await composer.addPublishMethod(publisher);
-
-  // register the bundled c# runtime used by the local publisher with the eject feature
-  composer.addRuntimeTemplate({
-    key: 'csharp-azurewebapp',
-    name: 'C#',
-    startCommand: 'dotnet run --project azurewebapp',
-    eject: async (project, localDisk: IFileStorage) => {
-      const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
-      const destPath = path.join(project.dir, 'runtime');
-      if (!(await project.fileStorage.exists(destPath))) {
-        // used to read bot project template from source (bundled in plugin)
-        await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
-        const schemaDstPath = path.join(project.dir, 'schemas');
-        const schemaSrcPath = path.join(sourcePath, 'azurewebapp/schemas');
-        const customSchemaExists = fs.existsSync(schemaDstPath);
-        const pathsToExclude: Set<string> = new Set();
-        if (customSchemaExists) {
-          const sdkExcludePath = await localDisk.glob('sdk.schema', schemaSrcPath);
-          if (sdkExcludePath.length > 0) {
-            pathsToExclude.add(path.join(schemaSrcPath, sdkExcludePath[0]));
-          }
-        }
-        await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
-        const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/schemas');
-        await removeDirAndFiles(schemaFolderInRuntime);
-        return destPath;
-      }
-      throw new Error(`Runtime already exists at ${destPath}`);
-    },
-  });
-
-  composer.addRuntimeTemplate({
-    key: 'javescript-azurewebapp',
-    name: 'JS',
-    startCommand: 'node azurewebapp/lib/index.js',
-    eject: async (project: any, localDisk: IFileStorage) => {
-      const sourcePath = path.resolve(__dirname, '../../../../../runtime/node');
-      const destPath = path.join(project.dir, 'runtime');
-      // const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
-      // const schemaDstPath = path.join(project.dir, 'schemas');
-      if (!(await project.fileStorage.exists(destPath))) {
-        // used to read bot project template from source (bundled in plugin)
-        await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
-        // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
-        return destPath;
-      } else {
-        throw new Error(`Runtime already exists at ${destPath}`);
-      }
-    },
-  });
 };
 
 // stop all the runningBot when process exit

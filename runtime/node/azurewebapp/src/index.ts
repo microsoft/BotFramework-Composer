@@ -20,14 +20,16 @@ import { ComposerBot } from "../../core/src/index";
 // Create HTTP server.
 const server = restify.createServer();
 const argv = require("minimist")(process.argv.slice(2));
+// prefer the argv port --port=XXXX over process.env because the parent Composer app uses that.
+const port = argv.port || process.env.port || process.env.PORT ||  3978;
 server.listen(
-  process.env.port || process.env.PORT || argv.port || 3978,
+  port,
   (): void => {
     console.log(
       `\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`
     );
     console.log(
-      `\nTo talk to your bot, open echobot.bot file in the Emulator.`
+      `\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`
     );
   }
 );

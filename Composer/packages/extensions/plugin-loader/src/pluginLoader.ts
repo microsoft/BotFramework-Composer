@@ -10,8 +10,10 @@ import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
 
 import { ComposerPluginRegistration } from './composerPluginRegistration';
-import { UserIdentity, ExtensionCollection } from './types';
+import { UserIdentity, ExtensionCollection, RuntimeTemplate } from './types';
 import log from './logger';
+
+const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
 export class PluginLoader {
   private _passport: passport.PassportStatic;
@@ -106,6 +108,30 @@ export class PluginLoader {
     const plugins = await glob('*/package.json', { cwd: dir, dot: true });
     for (const p in plugins) {
       await this.loadPluginFromFile(path.join(dir, plugins[p]));
+    }
+  }
+
+  // return a reference to the plugin used by the app
+  public getRuntimeByProject(project): RuntimeTemplate {
+    const type = project.settings.runtime?.key || DEFAULT_RUNTIME;
+    const templates = this.extensions.runtimeTemplates.filter((t) => t.key === type);
+    if (templates.length) {
+      return templates[0];
+    } else {
+      throw new Error(`Support for runtime with name ${type} not available`);
+    }
+  }
+
+  // return a reference to the plugin used by the app
+  public getRuntime(type: string | undefined): RuntimeTemplate {
+    if (!type) {
+      type = DEFAULT_RUNTIME;
+    }
+    const templates = this.extensions.runtimeTemplates.filter((t) => t.key === type);
+    if (templates.length) {
+      return templates[0];
+    } else {
+      throw new Error(`Support for runtime type ${type} not available`);
     }
   }
 

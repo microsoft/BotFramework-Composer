@@ -67,6 +67,7 @@ export const initialBotState: BotState = {
   diagnostics: [],
   remoteEndpoints: {},
   botStatus: BotStatus.unConnected,
+  botStatusInterval: undefined,
   botLoadErrorMsg: { title: '', message: '' },
   lgFiles: [],
   schemas: {},

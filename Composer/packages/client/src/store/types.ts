@@ -111,6 +111,7 @@ export interface BotState {
   remoteEndpoints: { [key: string]: string }; // possibly unused?
 
   botStatus: BotStatus;
+  botStatusInterval: NodeJS.Timeout | undefined;
   botLoadErrorMsg: {
     title: string;
     message: string;

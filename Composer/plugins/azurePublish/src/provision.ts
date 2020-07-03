@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
-import * as util from 'util';
 
 import { ResourceManagementClient } from '@azure/arm-resources';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
@@ -21,30 +20,14 @@ import * as rp from 'request-promise';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
-import { BotProjectRuntimeType } from './botProjectRuntimeType';
-import archiver = require('archiver');
 
-const exec = util.promisify(require('child_process').exec);
-const { promisify } = require('util');
-
-const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
-const readdir = promisify(fs.readdir);
-
-export class BotProjectDeploy {
+export class BotProjectProvision {
   private subId: string;
   private accessToken: string;
   private creds: any; // credential from interactive login
   private projPath: string;
-  private deploymentSettingsPath: string;
-  private deployFilePath: string;
-  private zipPath: string;
-  private publishFolder: string;
   private settingsPath: string;
   private templatePath: string;
-  private dotnetProjectPath: string;
-  private generatedFolder: string;
-  private remoteBotPath: string;
-  private runtimeType: BotProjectRuntimeType;
   private logger: (string) => any;
 
   // Will be assigned by create or deploy
@@ -57,42 +40,44 @@ export class BotProjectDeploy {
     this.creds = config.creds;
     this.projPath = config.projPath;
 
-    // set path to .deployment file which points at the BotProject.csproj
-    this.deployFilePath = config.deployFilePath ?? path.join(this.projPath, '.deployment');
-
-    // path to the zipped assets
-    this.zipPath = config.zipPath ?? path.join(this.projPath, 'code.zip');
-
-    // path to the built, ready to deploy code assets
-    this.publishFolder =
-      config.publishFolder ?? config.runtimeType === BotProjectRuntimeType.CSHARP
-        ? path.join(this.projPath, 'bin', 'Release', 'netcoreapp3.1')
-        : this.projPath;
-
     // path to the source appsettings.deployment.json file
     this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
-
-    // path to the deployed settings file that contains additional luis information
-    this.deploymentSettingsPath =
-      config.deploymentSettingsPath ?? path.join(this.publishFolder, 'appsettings.deployment.json');
 
     // path to the ARM template
     // this is currently expected to live in the code project
     this.templatePath =
       config.templatePath ?? path.join(this.projPath, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
+  }
 
-    // path to the dotnet project file
-    this.dotnetProjectPath =
-      config.dotnetProjectPath ?? path.join(this.projPath, 'Microsoft.BotFramework.Composer.WebApp.csproj');
+  /*******************************************************************************************************************************/
+  /* This section has to do with creating new Azure resources 
+  /*******************************************************************************************************************************/
 
-    // path to the built, ready to deploy declarative assets
-    this.remoteBotPath = config.remoteBotPath ?? path.join(this.publishFolder, 'ComposerDialogs');
+  /**
+   * Write updated settings back to the settings file
+   */
+  private async updateDeploymentJsonFile(
+    client: ResourceManagementClient,
+    resourceGroupName: string,
+    deployName: string,
+    appId: string,
+    appPwd: string
+  ): Promise<any> {
+    const outputs = await client.deployments.get(resourceGroupName, deployName);
+    if (outputs?.properties?.outputs) {
+      const outputResult = outputs.properties.outputs;
+      const applicationResult = {
+        MicrosoftAppId: appId,
+        MicrosoftAppPassword: appPwd,
+      };
+      const outputObj = this.unpackObject(outputResult);
 
-    // path to the ready to deploy generated folder
-    this.generatedFolder = config.generatedFolder ?? path.join(this.remoteBotPath, 'generated');
-
-    // Set the default value to CSHARP
-    this.runtimeType = config.runtimeType ?? BotProjectRuntimeType.CSHARP;
+      const result = {};
+      Object.assign(result, outputObj, applicationResult);
+      return result;
+    } else {
+      return null;
+    }
   }
 
   private getErrorMesssage(err) {
@@ -120,34 +105,6 @@ export class BotProjectDeploy {
     return {
       value: scope,
     };
-  }
-
-  /**
-   * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
-   */
-  private async getTenantId() {
-    if (!this.accessToken) {
-      throw new Error(
-        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
-      );
-    }
-    if (!this.subId) {
-      throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
-    }
-    try {
-      const tenantUrl = `https://management.azure.com/subscriptions/${this.subId}?api-version=2020-01-01`;
-      const options = {
-        headers: { Authorization: `Bearer ${this.accessToken}` },
-      } as rp.RequestPromiseOptions;
-      const response = await rp.get(tenantUrl, options);
-      const jsonRes = JSON.parse(response);
-      if (jsonRes.tenantId === undefined) {
-        throw new Error(`No tenants found in the account.`);
-      }
-      return jsonRes.tenantId;
-    } catch (err) {
-      throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
-    }
   }
 
   private unpackObject(output: any) {
@@ -292,371 +249,30 @@ export class BotProjectDeploy {
   }
 
   /**
-   * Write updated settings back to the settings file
+   * For more information about this api, please refer to this doc: https://docs.microsoft.com/en-us/rest/api/resources/Tenants/List
    */
-  private async updateDeploymentJsonFile(
-    client: ResourceManagementClient,
-    resourceGroupName: string,
-    deployName: string,
-    appId: string,
-    appPwd: string
-  ): Promise<any> {
-    const outputs = await client.deployments.get(resourceGroupName, deployName);
-    if (outputs?.properties?.outputs) {
-      const outputResult = outputs.properties.outputs;
-      const applicationResult = {
-        MicrosoftAppId: appId,
-        MicrosoftAppPassword: appPwd,
-      };
-      const outputObj = this.unpackObject(outputResult);
-
-      const result = {};
-      Object.assign(result, outputObj, applicationResult);
-      return result;
-    } else {
-      return null;
+  private async getTenantId() {
+    if (!this.accessToken) {
+      throw new Error(
+        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
+      );
     }
-  }
-
-  private async getFiles(dir: string): Promise<string[]> {
-    const dirents = await readdir(dir, { withFileTypes: true });
-    const files = await Promise.all(
-      dirents.map((dirent) => {
-        const res = path.resolve(dir, dirent.name);
-        return dirent.isDirectory() ? this.getFiles(res) : res;
-      })
-    );
-    return Array.prototype.concat(...files);
-  }
-
-  private async botPrepareDeploy(pathToDeploymentFile: string) {
-    return new Promise((resolve, reject) => {
-      const data = `[config]\nproject = Microsoft.BotFramework.Composer.WebApp.csproj`;
-      fs.writeFile(pathToDeploymentFile, data, (err) => {
-        if (err) {
-          reject(err);
-        }
-        resolve();
-      });
-    });
-  }
-
-  private async dotnetPublish(publishFolder: string, projFolder: string, botPath?: string) {
-    // perform the dotnet publish command
-    // this builds the app and prepares it to be deployed
-    // results in a built copy in publishFolder/
-    await exec(`dotnet publish "${this.dotnetProjectPath}" -c release -o "${publishFolder}" -v q`);
-    const remoteBotPath = path.join(publishFolder, 'ComposerDialogs');
-    const localBotPath = path.join(projFolder, 'ComposerDialogs');
-    // Then, copy the declarative assets into the build folder.
-    if (botPath) {
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `Publishing dialogs from external bot project: ${botPath}`,
-      });
-      await fs.copy(botPath, remoteBotPath, {
-        overwrite: true,
-        recursive: true,
-      });
-    } else {
-      await fs.copy(localBotPath, remoteBotPath, {
-        overwrite: true,
-        recursive: true,
-      });
+    if (!this.subId) {
+      throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
     }
-  }
-
-  private async zipDirectory(source: string, out: string) {
-    const archive = archiver('zip', { zlib: { level: 9 } });
-    const stream = fs.createWriteStream(out);
-
-    return new Promise((resolve, reject) => {
-      archive
-        .glob('**/*', {
-          cwd: source,
-          dot: true,
-          ignore: ['code.zip'],
-        })
-        .on('error', (err) => reject(err))
-        .pipe(stream);
-
-      stream.on('close', () => resolve());
-      archive.finalize();
-    });
-  }
-
-  private notEmptyLuisModel(file: string) {
-    return fs.readFileSync(file).length > 0;
-  }
-
-  // Run through the lubuild process
-  // This happens in the build folder, NOT in the original source folder
-  private async publishLuis(
-    name: string,
-    environment: string,
-    language: string,
-    luisEndpoint: string,
-    luisAuthoringEndpoint: string,
-    luisEndpointKey: string,
-    luisAuthoringKey?: string,
-    luisAuthoringRegion?: string,
-    luisResource?: string
-  ) {
-    if (luisAuthoringKey && luisAuthoringRegion) {
-      // publishing luis
-      const botFiles = await this.getFiles(this.remoteBotPath);
-      const modelFiles = botFiles.filter((name) => {
-        return name.endsWith('.lu') && this.notEmptyLuisModel(name);
-      });
-
-      if (!(await fs.pathExists(this.generatedFolder))) {
-        await fs.mkdir(this.generatedFolder);
-      }
-      const builder = new luBuild.Builder((msg) =>
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: msg,
-        })
-      );
-
-      const loadResult = await builder.loadContents(
-        modelFiles,
-        language || '',
-        environment || '',
-        luisAuthoringRegion || ''
-      );
-
-      if (!luisEndpoint) {
-        luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
-      }
-
-      if (!luisAuthoringEndpoint) {
-        luisAuthoringEndpoint = luisEndpoint;
-      }
-
-      const buildResult = await builder.build(
-        loadResult.luContents,
-        loadResult.recognizers,
-        luisAuthoringKey,
-        luisAuthoringEndpoint,
-        name,
-        environment,
-        language,
-        false,
-        loadResult.multiRecognizers,
-        loadResult.settings
-      );
-      await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
-
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `lubuild succeed`,
-      });
-
-      const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter((filename) =>
-        filename.includes('luis.settings')
-      );
-      const luisAppIds: any = {};
-
-      for (const luisConfigFile of luisConfigFiles) {
-        const luisSettings = await fs.readJson(luisConfigFile);
-        Object.assign(luisAppIds, luisSettings.luis);
-      }
-
-      const luisConfig: any = {
-        endpoint: luisEndpoint,
-        endpointKey: luisEndpointKey,
-        authoringRegion: luisAuthoringRegion,
-        authoringKey: luisAuthoringRegion,
-      };
-
-      Object.assign(luisConfig, luisAppIds);
-
-      // Update deploymentSettings with the luis config
-      const settings: any = await fs.readJson(this.deploymentSettingsPath);
-      settings.luis = luisConfig;
-
-      await fs.writeJson(this.deploymentSettingsPath, settings, {
-        spaces: 4,
-      });
-
-      let jsonRes;
-      try {
-        // Assign a LUIS key to the endpoint of each app
-        const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
-        const options = {
-          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-        } as rp.RequestPromiseOptions;
-        const response = await rp.get(getAccountUri, options);
-        jsonRes = JSON.parse(response);
-      } catch (err) {
-        // handle the token invalid
-        const error = JSON.parse(err.error);
-        if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
-          throw new Error(
-            `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
-          );
-        } else {
-          throw err;
-        }
-      }
-      const account = this.getAccount(jsonRes, luisResource ? luisResource : `${name}-${environment}-luis`);
-
-      for (const k in luisAppIds) {
-        const luisAppId = luisAppIds[k];
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Assigning to luis app id: ${luisAppId}`,
-        });
-
-        const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
-        const options = {
-          body: account,
-          json: true,
-          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-        } as rp.RequestPromiseOptions;
-        const response = await rp.post(luisAssignEndpoint, options);
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: response,
-        });
-      }
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Luis Publish Success! ...',
-      });
-    }
-  }
-  /**
-   * Deploy a bot to a location
-   */
-  public async deploy(
-    name: string,
-    environment: string,
-    luisAuthoringKey?: string,
-    luisAuthoringRegion?: string,
-    botPath?: string,
-    language?: string,
-    hostname?: string,
-    luisResource?: string
-  ) {
     try {
-      // For Node Runtime, don't need to publish the assets, For Csharp runtime, need to compile and publish the assets to a folder
-      if (this.runtimeType === BotProjectRuntimeType.CSHARP) {
-        // Check for existing deployment files
-        if (!fs.pathExistsSync(this.deployFilePath)) {
-          await this.botPrepareDeploy(this.deployFilePath);
-        }
-
-        if (await fs.pathExists(this.zipPath)) {
-          await fs.remove(this.zipPath);
-        }
-
-        // dotnet publish
-        await this.dotnetPublish(this.publishFolder, this.projPath, botPath);
+      const tenantUrl = `https://management.azure.com/subscriptions/${this.subId}?api-version=2020-01-01`;
+      const options = {
+        headers: { Authorization: `Bearer ${this.accessToken}` },
+      } as rp.RequestPromiseOptions;
+      const response = await rp.get(tenantUrl, options);
+      const jsonRes = JSON.parse(response);
+      if (jsonRes.tenantId === undefined) {
+        throw new Error(`No tenants found in the account.`);
       }
-      // LUIS build
-      const settings = await fs.readJSON(this.settingsPath);
-      const luisSettings = settings.luis;
-
-      let luisEndpointKey = '';
-      let luisEndpoint = '';
-      let luisAuthoringEndpoint = '';
-
-      if (luisSettings) {
-        // if luisAuthoringKey is not set, use the one from the luis settings
-        luisAuthoringKey = luisAuthoringKey || luisSettings.authoringKey;
-        luisAuthoringRegion = luisAuthoringRegion || luisSettings.region;
-        luisEndpointKey = luisSettings.endpointKey;
-        luisEndpoint = luisSettings.endpoint;
-        luisAuthoringEndpoint = luisSettings.authoringEndpoint;
-      }
-
-      if (!language) {
-        language = 'en-us';
-      }
-
-      await this.publishLuis(
-        name,
-        environment,
-        language,
-        luisEndpoint,
-        luisAuthoringEndpoint,
-        luisEndpointKey,
-        luisAuthoringKey,
-        luisAuthoringRegion,
-        luisResource
-      );
-
-      // Build a zip file of the project
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Packing up the bot service ...',
-      });
-      await this.zipDirectory(this.publishFolder, this.zipPath);
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Packing Service Success!',
-      });
-
-      // Deploy the zip file to the web app
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Publishing to Azure ...',
-      });
-
-      await this.deployZip(this.accessToken, this.zipPath, name, environment, hostname);
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
-        message: 'Publish To Azure Success!',
-      });
-    } catch (error) {
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_ERROR,
-        message: JSON.stringify(error, Object.getOwnPropertyNames(error)),
-      });
-      throw error;
-    }
-  }
-
-  private getAccount(accounts: any, filter: string) {
-    for (const account of accounts) {
-      if (account.AccountName === filter) {
-        return account;
-      }
-    }
-  }
-
-  // Upload the zip file to Azure
-  private async deployZip(token: string, zipPath: string, name: string, env: string, hostname?: string) {
-    this.logger({
-      status: BotProjectDeployLoggerType.DEPLOY_INFO,
-      message: 'Retrieve publishing details ...',
-    });
-
-    const publishEndpoint = `https://${
-      hostname ? hostname : name + '-' + env
-    }.scm.azurewebsites.net/zipdeploy/?isAsync=true`;
-    try {
-      const response = await rp.post({
-        uri: publishEndpoint,
-        auth: {
-          bearer: token,
-        },
-        body: fs.createReadStream(zipPath),
-      });
-      this.logger({
-        status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: response,
-      });
+      return jsonRes.tenantId;
     } catch (err) {
-      if (err.statusCode === 403) {
-        throw new Error(
-          `Token expired, please run az account get-access-token, then replace the accessToken in your configuration`
-        );
-      } else {
-        throw err;
-      }
+      throw new Error(`Get Tenant Id Failed, details: ${this.getErrorMesssage(err)}`);
     }
   }
 
@@ -950,21 +566,5 @@ export class BotProjectDeploy {
       message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
     });
     return updateResult;
-  }
-
-  /**
-   * createAndDeploy
-   * provision the Azure resources AND deploy a bot to those resources
-   */
-  public async createAndDeploy(
-    name: string,
-    location: string,
-    environment: string,
-    appPassword: string,
-    luisAuthoringKey?: string,
-    luisAuthoringRegion?: string
-  ) {
-    await this.create(name, location, environment, appPassword);
-    await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
   }
 }
