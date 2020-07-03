@@ -16,6 +16,7 @@ using Microsoft.Bot.Builder.Azure;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 using Microsoft.Bot.Builder.Dialogs.Declarative;
 using Microsoft.Bot.Builder.Dialogs.Declarative.Resources;
 using Microsoft.Bot.Builder.Integration.ApplicationInsights.Core;
@@ -174,6 +175,8 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
 
             services.AddSingleton(resourceExplorer);
+
+            resourceExplorer.RegisterType<OnQnAMatch>("Microsoft.OnQnAMatch");
 
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>((s) => GetBotAdapter(storage, settings, userState, conversationState, s, s.GetService<TelemetryInitializerMiddleware>()));
 
