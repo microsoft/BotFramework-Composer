@@ -18,25 +18,22 @@ import { logMessage } from './shared';
 
 export const skillDispatcher = () => {
   const createSkillManifest = useRecoilCallback<[{ id: string; content: any }], Promise<void>>(
-    ({ set, snapshot }: CallbackInterface) => async ({ id, content }) => {
-      const skillManifests = await snapshot.getPromise(skillManifestsState);
-      set(skillManifestsState, [...skillManifests, { content, id }]);
+    ({ set }: CallbackInterface) => async ({ id, content }) => {
+      set(skillManifestsState, (skillManifests) => [...skillManifests, { content, id }]);
     }
   );
 
   const removeSkillManifest = useRecoilCallback<[string], Promise<void>>(
-    ({ set, snapshot }: CallbackInterface) => async (id: string) => {
-      let skillManifests = await snapshot.getPromise(skillManifestsState);
-      skillManifests = skillManifests.filter((manifest) => manifest.name === id);
-      set(skillManifestsState, [...skillManifests]);
+    ({ set }: CallbackInterface) => async (id: string) => {
+      set(skillManifestsState, (skillManifests) => skillManifests.filter((manifest) => manifest.name === id));
     }
   );
 
   const updateSkillManifest = useRecoilCallback<[{ id: string; content: any }], Promise<void>>(
-    ({ set, snapshot }: CallbackInterface) => async ({ id, content }) => {
-      let skillManifests = await snapshot.getPromise(skillManifestsState);
-      skillManifests = skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest));
-      set(skillManifestsState, [...skillManifests]);
+    ({ set }: CallbackInterface) => async ({ id, content }) => {
+      set(skillManifestsState, (skillManifests) =>
+        skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
+      );
     }
   );
 
@@ -71,15 +68,16 @@ export const skillDispatcher = () => {
           onAddSkillDialogComplete(skill ? skill : null);
         }
 
-        const settings = await snapshot.getPromise(settingsState);
         const skills = response.data;
-        settings.skill = skills.map(({ manifestUrl, name }) => {
-          return { manifestUrl, name };
-        });
 
         set(showAddSkillDialogModalState, false);
         set(onAddSkillDialogCompleteState, undefined);
-        set(settingsState, settings);
+        set(settingsState, (settings) => ({
+          ...settings,
+          skill: skills.map(({ manifestUrl, name }) => {
+            return { manifestUrl, name };
+          }),
+        }));
         set(skillsState, skills);
       } catch (err) {
         //TODO: error
