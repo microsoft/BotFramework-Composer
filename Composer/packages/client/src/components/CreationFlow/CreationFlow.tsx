@@ -18,6 +18,7 @@ import {
   storagesState,
   focusedStorageFolderState,
 } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
 
 import { CreateOptions } from './CreateOptions/CreateOptions';
 import { OpenProject } from './OpenProject/OpenProject';
@@ -79,8 +80,10 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const openBot = async (botFolder) => {
-    await openBotProject(botFolder);
+    const projectId = await openBotProject(botFolder);
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
+    const mainUrl = `/bot/${projectId}/dialogs/Main`;
+    navigateTo(mainUrl);
   };
 
   const handleCreateNew = async (formData, templateId: string) => {

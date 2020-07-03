@@ -32,7 +32,7 @@ class FilePersistence {
   public get taskQueue() {
     return this._taskQueue;
   }
-  time = 1;
+
   public async notify(currentAssets: BotAssets, previousAssets: BotAssets) {
     if (!currentAssets.projectId) return;
     if (currentAssets.projectId !== previousAssets.projectId) {

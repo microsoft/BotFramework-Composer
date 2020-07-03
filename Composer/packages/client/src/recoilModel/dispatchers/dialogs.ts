@@ -132,17 +132,15 @@ export const dialogsDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async ({ id, content }) => {
       const { set, snapshot } = callbackHelpers;
       const fixedContent = autofixReferInDialog(id, content);
-      let dialogs = await snapshot.getPromise(dialogsState);
       const schemas = await snapshot.getPromise(schemasState);
       const lgFiles = await snapshot.getPromise(lgFilesState);
       const luFiles = await snapshot.getPromise(luFilesState);
       const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
       dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-      dialogs = [...dialogs, dialog];
       await createLgFile(callbackHelpers, id, '');
       await createLuFile(callbackHelpers, id, '');
 
-      set(dialogsState, dialogs);
+      set(dialogsState, (dialogs) => [...dialogs, dialog]);
       set(actionsSeedState, []);
       set(showCreateDialogModalState, false);
       set(onCreateDialogCompleteState, undefined);

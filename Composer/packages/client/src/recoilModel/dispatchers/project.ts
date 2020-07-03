@@ -162,6 +162,7 @@ export const projectDispatcher = () => {
         await initBotState(callbackHelpers, response.data);
         return response.data.id;
       } catch (ex) {
+        callbackHelpers.set(botOpeningState, false);
         removeRecentProject(callbackHelpers, path);
       }
     }
@@ -182,26 +183,32 @@ export const projectDispatcher = () => {
       location: string,
       schemaUrl?: string
     ) => {
-      await setOpenPendingStatusasync(callbackHelpers);
-      const response = await httpClient.post(`/projects`, {
-        storageId: 'default',
-        templateId,
-        name,
-        description,
-        location,
-        schemaUrl,
-      });
-      const projectId = response.data.id;
-      if (settingStorage.get(projectId)) {
-        settingStorage.remove(projectId);
+      try {
+        await setOpenPendingStatusasync(callbackHelpers);
+        const response = await httpClient.post(`/projects`, {
+          storageId: 'default',
+          templateId,
+          name,
+          description,
+          location,
+          schemaUrl,
+        });
+        const projectId = response.data.id;
+        if (settingStorage.get(projectId)) {
+          settingStorage.remove(projectId);
+        }
+        await initBotState(callbackHelpers, response.data);
+        return projectId;
+      } catch (error) {
+        callbackHelpers.set(botOpeningState, false);
+        logMessage(callbackHelpers, error.message);
       }
-      await initBotState(callbackHelpers, response.data);
-      return projectId;
     }
   );
 
   const deleteBotProject = useRecoilCallback<[string], Promise<void>>(
-    ({ reset }: CallbackInterface) => async (projectId: string) => {
+    (callbackHelpers: CallbackInterface) => async (projectId: string) => {
+      const { reset } = callbackHelpers;
       try {
         await httpClient.delete(`/projects/${projectId}`);
         luFileStatusStorage.removeAllStatuses(projectId);
@@ -220,8 +227,7 @@ export const projectDispatcher = () => {
         reset(localeState);
         reset(skillManifestsState);
       } catch (e) {
-        //TODO: error handling
-        console.log(e);
+        logMessage(callbackHelpers, e.message);
       }
     }
   );
@@ -241,6 +247,7 @@ export const projectDispatcher = () => {
       } catch (error) {
         //TODO: error handling
         callbackHelpers.set(botOpeningState, false);
+        logMessage(callbackHelpers, error.message);
       }
     }
   );
