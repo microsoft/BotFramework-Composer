@@ -166,18 +166,18 @@ const DefineConversation: React.FC<DefineConversationProps> = (props) => {
     [hasErrors, formData]
   );
 
-  const updateLocation = (location: string) => {
-    const updatedFormData = {
-      ...formData,
-      location,
-    };
-    updateForm(updatedFormData);
-  };
-
   const onCurrentPathUpdateWrap = (newPath: string, storageId?: string) => {
     onCurrentPathUpdate(newPath, storageId);
-    updateLocation(newPath);
+    updateField('location', newPath);
   };
+
+  useEffect(() => {
+    const location =
+      focusedStorageFolder !== null && Object.keys(focusedStorageFolder as Record<string, any>).length
+        ? Path.join(focusedStorageFolder.parent, focusedStorageFolder.name)
+        : '';
+    updateField('location', location);
+  }, [focusedStorageFolder]);
 
   return (
     <Fragment>
