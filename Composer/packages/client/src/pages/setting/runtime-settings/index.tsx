@@ -11,7 +11,13 @@ import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { botNameState, settingsState, projectIdState, dispatcherState } from '../../../recoilModel';
+import {
+  botNameState,
+  settingsState,
+  projectIdState,
+  dispatcherState,
+  ejectRuntimeSelector,
+} from '../../../recoilModel';
 import { LoadingSpinner } from '../../../components/LoadingSpinner/LoadingSpinner';
 
 import { EjectModal } from './ejectModal';
@@ -21,7 +27,8 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botNameState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);
-  const { ejectRuntime: ejectRuntimeDispatcher, setCustomRuntime, setRuntimeField } = useRecoilValue(dispatcherState);
+  const { setCustomRuntime, setRuntimeField } = useRecoilValue(dispatcherState);
+  const runtimeEjection = useRecoilValue(ejectRuntimeSelector);
 
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
@@ -72,7 +79,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   };
 
   const ejectRuntime = async (templateKey: string) => {
-    await ejectRuntimeDispatcher(projectId, templateKey);
+    await runtimeEjection?.onAction(projectId, templateKey);
     closeEjectModal();
   };
 

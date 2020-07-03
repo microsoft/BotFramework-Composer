@@ -31,7 +31,7 @@ export const settingsDispatcher = () => {
     }
   );
 
-  const setRuntimeSettings = useRecoilCallback<[boolean, string, string], Promise<void>>(
+  const setRuntimeSettings = useRecoilCallback<[string, string, string], Promise<void>>(
     ({ set }: CallbackInterface) => async (_, path, command) => {
       set(settingsState, (currentSettingsState) => ({
         ...currentSettingsState,
