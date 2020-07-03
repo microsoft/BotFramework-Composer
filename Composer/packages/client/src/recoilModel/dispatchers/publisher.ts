@@ -11,55 +11,60 @@ import { botEndpointsState } from '../atoms';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
+import { logMessage } from './shared';
 
 export const publisherDispatcher = () => {
-  const publishFailure = async ({ set, snapshot }: CallbackInterface, title: string, error, target) => {
+  const publishFailure = async ({ set }: CallbackInterface, title: string, error, target) => {
     if (target.name === 'default') {
       set(botStatusState, BotStatus.failed);
       set(botLoadErrorState, { ...error, title });
     }
-    const publishHistory = await snapshot.getPromise(publishHistoryState);
     // prepend the latest publish results to the history
-    if (!publishHistory[target.name]) {
-      publishHistory[target.name] = [];
-    }
-    publishHistory[target.name].unshift(error);
-    set(publishHistoryState, publishHistory);
+
+    set(publishHistoryState, (publishHistory) => {
+      const targetHistory = publishHistory[target.name] ?? [];
+      return {
+        ...publishHistory,
+        [target.name]: [error, ...targetHistory],
+      };
+    });
   };
 
-  const publishSuccess = async ({ set, snapshot }: CallbackInterface, projectId: string, data, target) => {
+  const publishSuccess = async ({ set }: CallbackInterface, projectId: string, data, target) => {
     const { endpointURL } = data;
     if (target.name === 'default' && endpointURL) {
-      const botEndpoints = await snapshot.getPromise(botEndpointsState);
-
-      botEndpoints[projectId] = `${endpointURL}/api/messages`;
       set(botStatusState, BotStatus.connected);
-      set(botEndpointsState, botEndpoints);
+      set(botEndpointsState, (botEndpoints) => ({ ...botEndpoints, [projectId]: `${endpointURL}/api/messages` }));
     }
 
-    const publishHistory = await snapshot.getPromise(publishHistoryState);
-    // prepend the latest publish results to the history
-    if (!publishHistory[target.name]) {
-      publishHistory[target.name] = [];
-    }
-    publishHistory[target.name].unshift({
-      ...data,
-      target: target,
+    set(publishHistoryState, (publishHistory) => {
+      const targetHistory = publishHistory[target.name] ?? [];
+      return {
+        ...publishHistory,
+        [target.name]: [
+          {
+            ...data,
+            target: target,
+          },
+          ...targetHistory,
+        ],
+      };
     });
-
-    set(publishHistoryState, publishHistory);
     set(publishTypesState, data);
   };
 
-  const getPublishTargetTypes = useRecoilCallback<[], Promise<void>>(({ set }: CallbackInterface) => async () => {
-    try {
-      const response = await httpClient.get(`/publish/types`);
-      set(publishTypesState, response.data);
-    } catch (err) {
-      //TODO: error
-      console.log(err);
+  const getPublishTargetTypes = useRecoilCallback<[], Promise<void>>(
+    (callbackHelpers: CallbackInterface) => async () => {
+      const { set } = callbackHelpers;
+      try {
+        const response = await httpClient.get(`/publish/types`);
+        set(publishTypesState, response.data);
+      } catch (err) {
+        //TODO: error
+        logMessage(callbackHelpers, err.message);
+      }
     }
-  });
+  );
 
   const publishToTarget = useRecoilCallback<[string, any, any, any], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async (projectId, target, metadata, sensitiveSettings) => {
@@ -90,7 +95,7 @@ export const publisherDispatcher = () => {
 
           await publishFailure(callbackHelpers, Text.DOTNETFAILURE, error, target);
         } else {
-          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response.data, target);
+          await publishFailure(callbackHelpers, Text.CONNECTBOTFAILURE, err.response?.data, target);
         }
       }
     }
@@ -120,38 +125,44 @@ export const publisherDispatcher = () => {
         // the action below only applies to when a bot is being started using the "start bot" button
         // a check should be added to this that ensures this ONLY applies to the "default" profile.
         if (target.name === 'default' && endpointURL) {
-          const botEndpoints = await snapshot.getPromise(botEndpointsState);
-
-          botEndpoints[projectId] = `${endpointURL}/api/messages`;
           set(botStatusState, BotStatus.connected);
-          set(botEndpointsState, botEndpoints);
+          set(botEndpointsState, (botEndpoints) => ({
+            ...botEndpoints,
+            [projectId]: `${endpointURL}/api/messages`,
+          }));
         }
 
         const publishHistory = await snapshot.getPromise(publishHistoryState);
         const history = { ...response.data, target: target };
+        const historys = publishHistory[target.name];
+        let tempHistorys = historys ? [...historys] : [];
         // if no history exists, create one with the latest status
         // otherwise, replace the latest publish history with this one
-        if (!publishHistory[target.name] && status !== 404) {
-          publishHistory[target.name] = [history];
+        if (!historys && status !== 404) {
+          tempHistorys = [history];
         } else if (status !== 404) {
           // make sure this status payload represents the same item as item 0 (most of the time)
           // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
-          if (publishHistory[target.name].length && publishHistory[target.name][0].id === id) {
-            publishHistory[target.name][0] = history;
+          if (tempHistorys.length && tempHistorys[0].id === id) {
+            tempHistorys.splice(0, 1, history);
           } else {
-            publishHistory[target.name].unshift(history);
+            tempHistorys.unshift(history);
           }
         }
-        set(publishHistoryState, publishHistory);
+        set(publishHistoryState, (publishHistory) => ({
+          ...publishHistory,
+          [target.name]: tempHistorys,
+        }));
       } catch (err) {
         //TODO: error
-        console.log(err);
+        logMessage(callbackHelpers, err.message);
       }
     }
   );
 
   const getPublishHistory = useRecoilCallback<[string, any], Promise<void>>(
-    ({ set, snapshot }: CallbackInterface) => async (projectId, target) => {
+    (callbackHelpers: CallbackInterface) => async (projectId, target) => {
+      const { set, snapshot } = callbackHelpers;
       try {
         await filePersistence.flush();
         const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
@@ -160,7 +171,7 @@ export const publisherDispatcher = () => {
         set(publishHistoryState, publishHistory);
       } catch (err) {
         //TODO: error
-        console.log(err);
+        logMessage(callbackHelpers, err.message);
       }
     }
   );

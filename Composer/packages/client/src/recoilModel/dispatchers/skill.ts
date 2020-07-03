@@ -14,6 +14,7 @@ import {
   showAddSkillDialogModalState,
   displaySkillManifestState,
 } from './../atoms/botState';
+import { logMessage } from './shared';
 
 export const skillDispatcher = () => {
   const createSkillManifest = useRecoilCallback<[{ id: string; content: any }], Promise<void>>(
@@ -40,7 +41,8 @@ export const skillDispatcher = () => {
   );
 
   const updateSkill = useRecoilCallback<[{ projectId: string; targetId: number; skillData: any }], Promise<void>>(
-    ({ set, snapshot }: CallbackInterface) => async ({ projectId, targetId, skillData }) => {
+    (callbackHelpers: CallbackInterface) => async ({ projectId, targetId, skillData }) => {
+      const { set, snapshot } = callbackHelpers;
       const onAddSkillDialogComplete = await snapshot.getPromise(onAddSkillDialogCompleteState);
       const originSkills = [...(await snapshot.getPromise(skillsState))];
 
@@ -81,7 +83,7 @@ export const skillDispatcher = () => {
         set(skillsState, skills);
       } catch (err) {
         //TODO: error
-        console.log(err);
+        logMessage(callbackHelpers, err.message);
       }
     }
   );
