@@ -1,0 +1,8 @@
+{
+  "tenantId": "",
+  "clientID": "",
+  "redirectUrl": "",
+  "vaultName" : "",
+  "clientSecretSecretName" : "",
+  "clientSecret" : ""
+}
