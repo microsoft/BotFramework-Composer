@@ -26,7 +26,7 @@ const actionType2ChangeType = {
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.SYNC_ENV_SETTING]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
   [ActionTypes.SET_PUBLISH_TARGETS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
-  [ActionTypes.SET_RUNTIME_SETTINGS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.EJECT_SUCCESS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
 };
 
 class FilePersistence {
