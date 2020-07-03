@@ -52,6 +52,7 @@ module.exports = {
         enforceInMethodNames: true,
       },
     ],
+    'prefer-arrow-callback': 'error',
 
     // plugin: import
     'import/first': 'error',
