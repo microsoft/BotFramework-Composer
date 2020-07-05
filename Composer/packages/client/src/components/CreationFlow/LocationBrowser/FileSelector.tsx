@@ -5,7 +5,7 @@
 import path from 'path';
 
 import { jsx } from '@emotion/core';
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
@@ -95,7 +95,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   } = props;
   // for detail file list in open panel
   const [currentPath, setCurrentPath] = useState(path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
-  const initialPath = useRef(path.join(focusedStorageFolder.parent, focusedStorageFolder.name)).current;
+  const initialPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const storageId = storage.id;
@@ -103,6 +103,10 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const [folderName, setFolderName] = useState('');
   const [editMode, setEditMode] = useState(EditMode.NONE);
   const [nameError, setNameError] = useState('');
+
+  useEffect(() => {
+    setCurrentPath(initialPath);
+  }, [focusedStorageFolder]);
 
   const createOrUpdateFolder = async (index: number) => {
     const isValid = nameRegex.test(folderName);
