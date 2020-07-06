@@ -81,7 +81,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return await updateDialog({ id, content: newDialog.content, projectId });
+    return await updateDialog({ id, content: newDialog.content });
   }
 
   function cleanData() {
@@ -90,7 +90,6 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       const payload = {
         id: dialogId,
         content: cleanedData,
-        projectId,
       };
       updateDialog(payload);
     }

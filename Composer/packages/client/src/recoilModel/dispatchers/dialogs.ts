@@ -19,8 +19,6 @@ import {
   localeState,
 } from '../atoms/botState';
 
-import { dialogPayload } from './../types';
-
 export const dialogsDispatcher = () => {
   const createLgFile = async (callbackHelpers: CallbackInterface, id: string, content: string) => {
     const { set, snapshot } = callbackHelpers;
