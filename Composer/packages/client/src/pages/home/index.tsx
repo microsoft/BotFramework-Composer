@@ -15,7 +15,7 @@ import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
 import { navigateTo } from '../../utils';
 import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
-import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
+import { recentProjectsState, templateProjectsState } from '../../recoilModel/atoms/appState';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 
 import * as home from './styles';
@@ -58,7 +58,6 @@ const tutorials = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const templateId = useRecoilValue(templateIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const botName = useRecoilValue(botNameState);
   const recentProjects = useRecoilValue(recentProjectsState);
@@ -69,8 +68,10 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const onClickRecentBotProject = async (path) => {
     const projectId = await openBotProject(path);
-    const mainUrl = `/bot/${projectId}/dialogs/Main`;
-    navigateTo(mainUrl);
+    if (projectId) {
+      const mainUrl = `/bot/${projectId}/dialogs/Main`;
+      navigateTo(mainUrl);
+    }
   };
 
   const onItemChosen = async (item) => {
@@ -130,7 +131,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`projects/${projectId}/${templateId}/save`);
+          navigate(`projects/${projectId}/save`);
         },
       },
       align: 'left',

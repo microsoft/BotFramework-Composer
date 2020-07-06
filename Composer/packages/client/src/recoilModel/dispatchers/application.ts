@@ -5,16 +5,12 @@
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import debounce from 'lodash/debounce';
 
-import {
-  appUpdateState,
-  announcementState,
-  onboardingState,
-  creationFlowStatusState,
-  applicationErrorState,
-} from '../atoms/appState';
+import { appUpdateState, announcementState, onboardingState, creationFlowStatusState } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
 import { StateError, AppUpdateState } from '../../recoilModel/types';
+
+import { setError } from './shared';
 
 export const applicationDispatcher = () => {
   const setAppUpdateStatus = useRecoilCallback<[AppUpdaterStatus, string | undefined], Promise<void>>(
@@ -104,8 +100,8 @@ export const applicationDispatcher = () => {
   );
 
   const setApplicationLevelError = useRecoilCallback<[StateError | undefined], void>(
-    ({ set }: CallbackInterface) => (errorObj: StateError | undefined) => {
-      set(applicationErrorState, errorObj);
+    (callbackHelpers: CallbackInterface) => (errorObj: StateError | undefined) => {
+      setError(callbackHelpers, errorObj);
     }
   );
 

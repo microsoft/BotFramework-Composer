@@ -41,7 +41,6 @@ interface DefineConversationProps
   onDismiss: () => void;
   onCurrentPathUpdate: (newPath?: string, storageId?: string) => void;
   onGetErrorMessage?: (text: string) => void;
-  saveTemplateId?: (templateId: string) => void;
   focusedStorageFolder: StorageFolder;
 }
 
