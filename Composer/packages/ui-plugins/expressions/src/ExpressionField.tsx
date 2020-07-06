@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useMemo, useState } from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, useShellApi } from '@bfc/extension';
 import { FieldLabel, resolveFieldWidget, usePluginConfig, getUiPlaceholder } from '@bfc/adaptive-form';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
@@ -35,6 +35,7 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
   const { id, value, label, description, schema, uiOptions, definitions, required, className } = props;
   const { $role, ...expressionSchema } = schema;
   const pluginConfig = usePluginConfig();
+  const { userSettings } = useShellApi();
 
   const options = useMemo(() => getOptions(expressionSchema, definitions), []);
   const initialSelectedOption = useMemo(
@@ -84,6 +85,7 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
       return (
         <JsonEditor
           key={selectedSchema.type}
+          editorSettings={userSettings.codeEditor}
           height={100}
           id={props.id}
           schema={selectedSchema}

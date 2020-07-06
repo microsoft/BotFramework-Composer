@@ -10,24 +10,24 @@ import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 
-import { Header } from './components/Header';
-import { NavItem } from './components/NavItem';
+import { Header } from './components/Header/Header';
+import { NavItem } from './components/NavItem/NavItem';
 import { BASEPATH } from './constants';
 import Routes from './router';
 import { StoreContext } from './store';
 import { main, sideBar, content, divider, globalNav, leftNavBottom, rightPanel, dividerTop } from './styles';
 import { resolveToBasePath } from './utils/fileUtil';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { RequireAuth } from './components/RequireAuth';
+import { ErrorBoundary } from './components/ErrorBoundary/ErrorBoundary';
+import { RequireAuth } from './components/RequireAuth/RequireAuth';
 import onboardingState from './utils/onboardingStorage';
 import { isElectron } from './utils/electronUtil';
 import { useLinks } from './utils/hooks';
 
 initializeIcons(undefined, { disableWarnings: true });
 
-const Onboarding = React.lazy(() => import('./Onboarding'));
+const Onboarding = React.lazy(() => import('./Onboarding/Onboarding'));
 const AppUpdater = React.lazy(() =>
-  import('./components/AppUpdater').then((module) => ({ default: module.AppUpdater }))
+  import('./components/AppUpdater/AppUpdater').then((module) => ({ default: module.AppUpdater }))
 );
 
 // eslint-disable-next-line react/display-name

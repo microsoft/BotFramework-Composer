@@ -45,7 +45,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
   pluginLoader.useExpress(app);
 
   // load all the plugins that exist in the folder
-  pluginDir = pluginDir || path.resolve(__dirname, '../../plugins');
+  pluginDir = pluginDir || path.resolve(__dirname, '../../../plugins');
   await pluginLoader.loadPluginsFromFolder(pluginDir);
 
   const { login, authorize } = getAuthProvider();
@@ -64,7 +64,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
     'upgrade-insecure-requests;',
   ];
 
-  app.all('*', function (req: Request, res: Response, next: NextFunction) {
+  app.all('*', (req: Request, res: Response, next: NextFunction) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -103,14 +103,14 @@ export async function start(pluginDir?: string): Promise<number | string> {
 
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.use(function (err: Error, req: Request, res: Response, _next: NextFunction) {
+  app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
     if (err) {
       log(err);
       res.status(500).json({ message: err.message });
     }
   });
 
-  app.get('*', function (req, res) {
+  app.get('*', (req, res) => {
     res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
   });
 

@@ -8,7 +8,8 @@
     "serialize-javascript": "^3.1.0",
     "lodash": "^4.17.12",
     "set-value": "^3.0.2",
-    "kind-of": "^6.0.3"
+    "kind-of": "^6.0.3",
+    "elliptic": "^6.5.3"
   },
   "engines": {
     "node": ">=12"
@@ -26,9 +27,7 @@
     "packages/tools",
     "packages/tools/language-servers",
     "packages/tools/language-servers/*",
-    "packages/ui-plugins/*",
-    "packages/plugins",
-    "packages/plugins/*"
+    "packages/ui-plugins/*"
   ],
   "scripts": {
     "build": "node scripts/begin.js && yarn build:prod && yarn build:plugins",
@@ -41,7 +40,11 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
-    "build:plugins": "wsrun -lt -p @bfc/plugin-samples @bfc/plugin-azure-publish @bfc/plugin-azure-functions-publish @bfc/plugin-localpublish -c build",
+    "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:azureFunctionsPublish",
+    "build:plugins:localpublish": "cd plugins/localPublish && yarn install && yarn build",
+    "build:plugins:samples": "cd plugins/samples && yarn install && yarn build",
+    "build:plugins:azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
+    "build:plugins:azureFunctionsPublish": "cd plugins/azureFunctionsPublish && yarn install && yarn build",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
