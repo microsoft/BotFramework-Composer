@@ -1,0 +1,30 @@
+{
+  "name": "@bfc/dialog-generation",
+  "version": "1.0.0",
+  "description": "Package from the bf-generate experimental sample",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "yarn build:clean && yarn build:ts",
+    "build:ts": "tsc",
+    "build:clean": "rimraf lib && rimraf build",
+    "lint": "eslint --quiet ./src"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@microsoft/bf-lu": "4.9.1",
+    "ajv": "^6.9.1",
+    "botbuilder-lg": "4.10.0-preview-135858",
+    "adaptive-expressions": "4.10.0-preview-135858",
+    "fs-extra": "^7.0.1",
+    "globby": "^11.0.1",
+    "json-schema-merge-allof": "^0.6.0",
+    "json-schema-ref-parser": "^7.1.0",
+    "seedrandom": "~3.0.5"
+  }
+}
