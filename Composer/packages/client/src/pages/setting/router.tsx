@@ -5,12 +5,12 @@ import * as React from 'react';
 import { Router, Redirect } from '@reach/router';
 
 import { ErrorBoundary } from '../../components/ErrorBoundary/ErrorBoundary';
-import { About } from '../about';
+import { About } from '../about/About';
 
-import { DialogSettings } from './dialog-settings';
-import { AppSettings } from './app-settings';
-import { RuntimeSettings } from './runtime-settings';
-import { Plugins } from './plugins';
+import { Plugins } from './plugins/Plugins';
+import { DialogSettings } from './dialog-settings/DialogSettings';
+import { AppSettings } from './app-settings/AppSettings';
+import { RuntimeSettings } from './runtime-settings/RuntimeSettings';
 
 export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => (
   <ErrorBoundary>

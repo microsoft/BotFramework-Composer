@@ -6,7 +6,7 @@ import { Store, State } from '../types';
 import { setError, fetchProject } from '../action';
 import { ActionTypes } from '../../constants';
 import { ActionType } from '../action/types';
-import { getBaseName } from '../../utils';
+import { getBaseName } from '../../utils/fileUtil';
 
 import * as client from './http';
 import { IFileChange, ChangeType, FileExtensions } from './types';
@@ -25,6 +25,8 @@ const actionType2ChangeType = {
   [ActionTypes.REMOVE_SKILL_MANIFEST]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.SYNC_ENV_SETTING]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.SET_PUBLISH_TARGETS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.SET_RUNTIME_SETTINGS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
 };
 
 class FilePersistence {
@@ -236,13 +238,13 @@ class FilePersistence {
     return fileChanges;
   }
 
-  private getSettingsChanges(previousState: State, currentState: State, projectId: string) {
+  private getSettingsChanges(previousState: State, currentState: State) {
     return [
       {
         id: `${FileExtensions.Setting}`,
         change: JSON.stringify(currentState.settings, null, 2),
         type: ChangeType.UPDATE,
-        projectId,
+        projectId: this._projectId,
       },
     ];
   }
@@ -286,7 +288,7 @@ class FilePersistence {
         break;
       }
       case FileExtensions.Setting: {
-        fileChanges = this.getSettingsChanges(previousState, currentState, action.payload.projectId);
+        fileChanges = this.getSettingsChanges(previousState, currentState);
       }
     }
     return fileChanges;

@@ -12,7 +12,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 import { PublishTarget } from '../../store/types';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -221,14 +221,14 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   const savePublishTarget = useCallback(
     async (name: string, type: string, configuration: string) => {
-      const target = (settings.publishTargets || []).concat([
+      const targets = (settings.publishTargets || []).concat([
         {
           name,
           type,
           configuration,
         },
       ]);
-      await actions.setSettings(projectId, { ...settings, publishTargets: target });
+      await actions.setPublishTargets(targets);
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
@@ -248,7 +248,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         configuration,
       };
 
-      await actions.setSettings(projectId, { ...settings, publishTargets: targets });
+      await actions.setPublishTargets(targets);
 
       onSelectTarget(name);
     },
@@ -314,7 +314,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           }
         });
 
-        await actions.setSettings(projectId, { ...settings, publishTargets: updatedPublishTargets });
+        await actions.setPublishTargets(updatedPublishTargets);
       }
     },
     [projectId, selectedTarget, settings.publishTargets]
@@ -339,8 +339,8 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
-          const target = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await actions.setSettings(projectId, { ...settings, publishTargets: target });
+          const targets = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
+          await actions.setPublishTargets(targets);
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');

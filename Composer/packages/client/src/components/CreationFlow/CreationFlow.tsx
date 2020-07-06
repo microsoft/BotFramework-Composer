@@ -9,7 +9,7 @@ import { RouteComponentProps, Router, navigate } from '@reach/router';
 
 import { CreationFlowStatus } from '../../constants';
 import { StoreContext } from '../../store';
-import Home from '../../pages/home';
+import Home from '../../pages/home/Home';
 
 import { CreateOptions } from './CreateOptions/CreateOptions';
 import { OpenProject } from './OpenProject/OpenProject';

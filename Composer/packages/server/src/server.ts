@@ -66,7 +66,7 @@ export async function start(pluginDir?: string): Promise<number | string> {
     'upgrade-insecure-requests;',
   ];
 
-  app.all('*', function (req: Request, res: Response, next: NextFunction) {
+  app.all('*', (req: Request, res: Response, next: NextFunction) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
@@ -105,18 +105,18 @@ export async function start(pluginDir?: string): Promise<number | string> {
 
   // next needs to be an arg in order for express to recognize this as the error handler
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  app.use(function (err: Error, req: Request, res: Response, _next: NextFunction) {
+  app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
     if (err) {
       log(err);
       res.status(500).json({ message: err.message });
     }
   });
 
-  app.get('/plugins.html', function (req, res) {
+  app.get('/plugins.html', (req, res) => {
     res.render(path.resolve(clientDirectory, 'plugins.ejs'), { __nonce__: req.__nonce__ });
   });
 
-  app.get('*', function (req, res) {
+  app.get('*', (req, res) => {
     res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
   });
 
