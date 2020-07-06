@@ -84,7 +84,7 @@ describe('get bot project', () => {
     await ProjectController.getProjectById(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(404);
     expect(mockRes.json).toHaveBeenCalledWith({
-      message: 'project not found in cache',
+      message: 'project undefined not found in cache',
     });
   });
 
@@ -121,7 +121,7 @@ describe('open bot operation', () => {
     await ProjectController.openProject(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({
-      message: 'file not exist wrong/path',
+      message: 'file wrong/path does not exist',
     });
   });
 

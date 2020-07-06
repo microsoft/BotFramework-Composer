@@ -352,7 +352,7 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
 
 const setError: ReducerFunc = (state, payload) => {
   // if the error originated at the server and the server included message, use it...
-  if (payload && payload.status && payload.status === 409) {
+  if (payload?.status === 409) {
     state.error = {
       status: 409,
       message: formatMessage(
@@ -361,7 +361,7 @@ const setError: ReducerFunc = (state, payload) => {
       summary: formatMessage('Modification Rejected'),
     };
   } else {
-    if (payload && payload.response && payload.response.data && payload.response.data.message) {
+    if (payload?.response?.data?.message) {
       state.error = payload.response.data;
     } else {
       state.error = payload;
@@ -454,6 +454,30 @@ const syncEnvSetting: ReducerFunc = (state, { settings, projectId }) => {
     }
   }
   state.settings = settings;
+  return state;
+};
+
+const setPublishTargets: ReducerFunc = (state, { publishTarget }) => {
+  state.publishTargets = publishTarget;
+  return state;
+};
+
+const setRuntimeSettings: ReducerFunc = (state, { path, command }) => {
+  state.settings.runtime = {
+    customRuntime: true,
+    path,
+    command,
+  };
+  return state;
+};
+
+const setRuntimeField: ReducerFunc = (state, { field, newValue }) => {
+  if (state.settings.runtime != null) state.settings.runtime[field] = newValue;
+  return state;
+};
+
+const setCustomRuntimeToggle: ReducerFunc = (state, { isOn }) => {
+  setRuntimeField(state, { field: 'customRuntime', newValue: isOn });
   return state;
 };
 
@@ -712,6 +736,10 @@ export const reducer = createReducer({
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
+  [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
+  [ActionTypes.SET_RUNTIME_SETTINGS]: setRuntimeSettings,
+  [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
+  [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
   [ActionTypes.CREATE_DIALOG_SCHEMA]: createOrUpdateDialogSchema,
   [ActionTypes.UPDATE_DIALOG_SCHEMA]: createOrUpdateDialogSchema,
   [ActionTypes.REMOVE_DIALOG_SCHEMA]: removeDialogSchema,

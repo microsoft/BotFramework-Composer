@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { Router, Redirect } from '@reach/router';
 
-import { ErrorBoundary } from '../../components/ErrorBoundary';
+import { ErrorBoundary } from '../../components/ErrorBoundary/ErrorBoundary';
 import { About } from '../about';
 
 import { DialogSettings } from './dialog-settings';

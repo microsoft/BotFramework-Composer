@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 import { ActionCreator, State } from '../types';
 import { undoable } from '../middlewares/undo';
+import { ActionTypes } from '../../constants';
 
-import { ActionTypes } from './../../constants/index';
 import { Store } from './../types';
 
 export const removeDialog: ActionCreator = (store, id) => {

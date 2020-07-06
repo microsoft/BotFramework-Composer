@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
 
-import { useStoreContext } from '../../../hooks';
+import { useStoreContext } from '../../../hooks/useStoreContext';
 
 import { hostedSettings, hostedControls, settingsEditor } from './style';
 
@@ -30,8 +30,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
 
   const saveChangeResult = (result) => {
     try {
-      const mergedResult = result;
-      actions.setSettings(projectId, mergedResult);
+      actions.setSettings(projectId, result);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err.message);
