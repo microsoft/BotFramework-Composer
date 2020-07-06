@@ -12,23 +12,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ComposerBot = void 0;
+const botbuilder_1 = require("botbuilder");
 const botbuilder_dialogs_1 = require("botbuilder-dialogs");
 class ComposerBot {
-    constructor(userState, conversationState, rootDialog, settings) {
+    constructor(
+    // userState: UserState,
+    // conversationState: ConversationState,
+    resourceExplorer, rootDialog, settings) {
         this.loadRootDialog = () => __awaiter(this, void 0, void 0, function* () {
             const rootDialog = this.resourceExplorer.loadType(this.rootDialogPath);
             this.dialogManager.rootDialog = rootDialog;
         });
         this.onTurn = (context) => __awaiter(this, void 0, void 0, function* () {
-            this.dialogManager.onTurn(context);
+            yield this.dialogManager.onTurn(context);
         });
         this.dialogManager = new botbuilder_dialogs_1.DialogManager();
-        // this.conversationState = conversationState;
-        // this.userState = userState;
-        this.dialogManager.conversationState = conversationState;
-        this.dialogManager.userState = userState;
+        this.dialogManager.conversationState = new botbuilder_1.ConversationState(new botbuilder_1.MemoryStorage());
+        this.dialogManager.userState = new botbuilder_1.UserState(new botbuilder_1.MemoryStorage());
+        this.resourceExplorer = resourceExplorer;
         this.rootDialogPath = rootDialog;
         this.loadRootDialog();
+        console.log(settings);
         this.dialogManager.initialTurnState.set("settings", settings);
     }
 }
