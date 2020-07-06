@@ -10,14 +10,32 @@ import { renderWithRecoil } from '../testUtils';
 
 describe('<ProjectTree/>', () => {
   it('should render the projecttree', async () => {
-    const { findByText } = renderWithRecoil(<ProjectTree dialogs={dialogs as any} />);
+    const { findByText } = renderWithRecoil(
+      <ProjectTree
+        dialogId="ToDoBot"
+        dialogs={dialogs as any}
+        selected=""
+        onDeleteDialog={() => {}}
+        onDeleteTrigger={() => {}}
+        onSelect={() => {}}
+      />
+    );
 
     await findByText('ToDoBot');
   });
 
   it('should handle project tree item click', async () => {
     const mockFileSelect = jest.fn(() => null);
-    const { findByText } = renderWithRecoil(<ProjectTree dialogs={dialogs} onSelect={mockFileSelect} />);
+    const { findByText } = renderWithRecoil(
+      <ProjectTree
+        dialogId="ToDoBot"
+        dialogs={dialogs as any}
+        selected=""
+        onDeleteDialog={() => {}}
+        onDeleteTrigger={() => {}}
+        onSelect={mockFileSelect}
+      />
+    );
 
     const node = await findByText('addtodo');
     fireEvent.click(node);

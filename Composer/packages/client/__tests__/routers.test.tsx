@@ -30,13 +30,8 @@ describe('<Router/> router test', () => {
 
     navigate('/language-understanding');
     expect(appContainer.innerHTML).toMatch('Setting');
-  });
 
-  it('landing on a not found', () => {
-    const { container } = renderWithRouter(wrapWithRecoil(<AppTest />), {
-      route: '/something-that-does-not-match',
-    });
-
-    expect(container.innerHTML).toMatch('404');
+    navigate('/something-that-does-not-match');
+    expect(appContainer.innerHTML).toMatch('404');
   });
 });

@@ -11,13 +11,12 @@ import formatMessage from 'format-message';
 import once from 'lodash/once';
 import { useRecoilValue } from 'recoil';
 
-import { BoundAction } from '../../recoilModel/types';
 import { currentUserState, dispatcherState } from '../../recoilModel';
 
 import { loading, dialog, consoleStyle } from './styles';
 
 // only attempt to login once
-const loginOnce = once((login: BoundAction) => {
+const loginOnce = once((login: () => Promise<void>) => {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     login();
   }
