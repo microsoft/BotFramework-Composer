@@ -20,7 +20,7 @@ import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
 
 import { StoreContext } from '../../store';
-import { createSelectedPath, getFriendlyName } from '../../utils';
+import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 
 import { groupListStyle, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';

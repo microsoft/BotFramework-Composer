@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { getSelected } from '../../utils';
+import { getSelected } from '../../utils/dialogUtil';
 import { ActionTypes } from '../../constants';
 
 import { ActionCreator } from './../types';
