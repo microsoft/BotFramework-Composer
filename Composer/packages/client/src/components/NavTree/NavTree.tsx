@@ -8,7 +8,7 @@ import { Resizable, ResizeCallback } from 're-resizable';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { StoreContext } from '../../store';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 
 import { root, itemNotSelected, itemSelected } from './styles';
 
