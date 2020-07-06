@@ -20,7 +20,7 @@ import { RouteComponentProps } from '@reach/router';
 import { LuFile } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 
 import { formCell, luPhraseCell, tableCell, content } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {

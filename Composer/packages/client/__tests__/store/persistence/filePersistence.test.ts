@@ -2,7 +2,8 @@
 // Licensed under the MIT License.
 import { DialogInfo, LgFile, LuFile } from '@bfc/shared';
 
-import { ActionTypes } from './../../../src/constants';
+import { ActionTypes } from '../../../src/constants';
+
 import filePersistence from './../../../src/store/persistence/FilePersistence';
 import { State } from './../../../src/store/types';
 

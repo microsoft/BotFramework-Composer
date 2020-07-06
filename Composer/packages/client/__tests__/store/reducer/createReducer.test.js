@@ -3,7 +3,7 @@
 
 import createReducer from '../../../src/store/reducer/createReducer';
 
-jest.mock('../../../src/constants/index', () => {
+jest.mock('../../../src/constants', () => {
   return {
     ActionTypes: {
       mockActionType: 'mockActionType',

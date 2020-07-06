@@ -5,7 +5,7 @@ import * as React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 
 import { EmulatorOpenButton } from '../../../src/components/TestController/emulatorOpenButton';
-import { BotStatus } from '../../../src/constants/index';
+import { BotStatus } from '../../../src/constants';
 
 describe('<EmulatorOpenButton />', () => {
   it('should show the button to open emulator', () => {

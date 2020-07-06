@@ -5,9 +5,11 @@ import cloneDeep from 'lodash/cloneDeep';
 import { navigate, NavigateOptions } from '@reach/router';
 
 import { BreadcrumbItem, DesignPageLocation } from '../store/types';
+import { BASEPATH } from '../constants';
 
-import { parsePathToFocused, parsePathToSelected, parseTypeToFragment } from './convertUtils';
-import { BASEPATH } from './../constants/index';
+import { parsePathToFocused } from './convertUtils/parsePathToFocused';
+import { parsePathToSelected } from './convertUtils/parsePathToSelected';
+import { parseTypeToFragment } from './convertUtils/parseTypeToFragment';
 import { resolveToBasePath } from './fileUtil';
 export const BreadcrumbUpdateType = {
   Selected: 'selected',
