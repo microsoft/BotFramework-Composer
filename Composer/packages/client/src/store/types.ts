@@ -217,6 +217,8 @@ export interface DialogSetting {
     customRuntime: boolean;
     path: string;
     command: string;
+    key: string;
+    name: string;
   };
   [key: string]: unknown;
 }

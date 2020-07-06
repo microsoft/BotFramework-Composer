@@ -138,13 +138,13 @@ export default async (composer: any): Promise<void> => {
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { installOut, installErr } = await exec('npm install', {
-        cwd: path.join(runtimePath, '/core'),
+      const { installOut, installErr } = await exec('yarn', {
+        cwd: runtimePath,
         stdio: 'pipe',
       });
-      const { install2Out, install2Err } = await exec('npm install', {
-        cwd: path.join(runtimePath, '/azurewebapp'),
-      });
+      // const { install2Out, install2Err } = await exec('npm install', {
+      //   cwd: path.join(runtimePath, '/azurewebapp'),
+      // });
       composer.log('BUILD COMPLETE');
     },
     run: async (project: any, localDisk: IFileStorage) => {
@@ -153,10 +153,10 @@ export default async (composer: any): Promise<void> => {
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { installOut, installErr } = exec('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
-      const { install2Out, install2Err } = exec('npm install', {
-        cwd: path.join(runtimePath, '/azurewebapp'),
-      });
+      const { installOut, installErr } = await exec('yarn', { cwd: runtimePath, stdio: 'pipe' });
+      // const { install2Out, install2Err } = exec('npm install', {
+      //   cwd: path.join(runtimePath, '/azurewebapp'),
+      // });
 
       // write settings to disk in the appropriate location
       const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
