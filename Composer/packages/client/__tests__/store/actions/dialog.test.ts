@@ -28,34 +28,65 @@ const ACTION_TESTS = [
 describe('simple actions', () => runMinorTests(ACTION_TESTS));
 
 describe('the createDialog actions', () => {
-  const mockStore = {
-    getState: jest.fn(),
-    dispatch: jest.fn(),
-  };
-  const dialogCompleteCallback = jest.fn();
+  describe('with a function in the dialogCompleteCallback', () => {
+    const mockStore = {
+      getState: jest.fn(),
+      dispatch: jest.fn(),
+    };
+    const dialogCompleteCallback = jest.fn();
 
-  mockStore.getState.mockReturnValue({ onCreateDialogComplete: dialogCompleteCallback });
+    mockStore.getState.mockReturnValue({ onCreateDialogComplete: dialogCompleteCallback });
 
-  it('dispatches createDialog', async () => {
-    const id = '1234';
-    const payload = { id, content: 'content' };
-    await createDialog(mockStore, payload);
+    it('dispatches createDialog', async () => {
+      const id = '1234';
+      const payload = { id, content: 'content' };
+      await createDialog(mockStore, payload);
 
-    expect(mockStore.dispatch).toHaveBeenCalledWith({
-      type: ActionTypes.CREATE_DIALOG,
-      payload,
+      expect(mockStore.dispatch).toHaveBeenCalledWith({
+        type: ActionTypes.CREATE_DIALOG,
+        payload,
+      });
+      jest.runAllTimers();
+      expect(dialogCompleteCallback).toHaveBeenCalledWith(id);
     });
-    jest.runAllTimers();
-    expect(dialogCompleteCallback).toHaveBeenCalledWith(id);
+
+    it('dispatches createDialogCancel', () => {
+      createDialogCancel(mockStore);
+
+      expect(mockStore.dispatch).toHaveBeenCalledWith({
+        type: ActionTypes.CREATE_DIALOG_CANCEL,
+      });
+      jest.runAllTimers();
+      expect(dialogCompleteCallback).toHaveBeenCalledWith(null);
+    });
   });
 
-  it('dispatches createDialogCancel', () => {
-    createDialogCancel(mockStore);
+  describe('with nothing in the dialogCompleteCallback', () => {
+    const mockStore = {
+      getState: jest.fn(),
+      dispatch: jest.fn(),
+    };
+    mockStore.getState.mockReturnValue({ onCreateDialogComplete: null });
 
-    expect(mockStore.dispatch).toHaveBeenCalledWith({
-      type: ActionTypes.CREATE_DIALOG_CANCEL,
+    it('dispatches createDialog', async () => {
+      const id = '1234';
+      const payload = { id, content: 'content' };
+      await createDialog(mockStore, payload);
+
+      expect(mockStore.dispatch).toHaveBeenCalledWith({
+        type: ActionTypes.CREATE_DIALOG,
+        payload,
+      });
+      jest.runAllTimers();
     });
-    jest.runAllTimers();
-    expect(dialogCompleteCallback).toHaveBeenCalledWith(null);
+
+    it('dispatches createDialogCancel', () => {
+      createDialogCancel(mockStore);
+
+      expect(mockStore.dispatch).toHaveBeenCalledWith({
+        type: ActionTypes.CREATE_DIALOG_CANCEL,
+      });
+      jest.runAllTimers();
+    });
   });
 });
