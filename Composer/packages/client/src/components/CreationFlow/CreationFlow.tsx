@@ -32,7 +32,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     openBotProject,
     createProject,
     saveProjectAs,
-    saveTemplateId,
     fetchStorages,
     fetchFolderItemsByPath,
     setCreationFlowStatus,
@@ -81,9 +80,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     const projectId = await openBotProject(botFolder);
-    setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    const mainUrl = `/bot/${projectId}/dialogs/Main`;
-    navigateTo(mainUrl);
+    if (projectId) {
+      setCreationFlowStatus(CreationFlowStatus.CLOSE);
+      const mainUrl = `/bot/${projectId}/dialogs/Main`;
+
+      navigateTo(mainUrl);
+    }
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
@@ -125,7 +127,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           createFolder={createFolder}
           focusedStorageFolder={focusedStorageFolder}
           path="create/:templateId"
-          saveTemplateId={saveTemplateId}
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}

@@ -123,11 +123,6 @@ export const runtimeSettingsState = atom<{
   },
 });
 
-export const templateIdState = atom<string>({
-  key: getFullyQualifiedKey('templateId'),
-  default: '',
-});
-
 export const botEndpointsState = atom<any>({
   key: 'botEndpoints',
   default: {},

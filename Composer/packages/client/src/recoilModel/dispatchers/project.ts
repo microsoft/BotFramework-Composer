@@ -18,6 +18,7 @@ import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { DialogSetting } from '../../recoilModel/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
+import { navigateTo } from '../../utils';
 
 import {
   skillManifestsState,
@@ -38,10 +39,14 @@ import {
   recentProjectsState,
   templateProjectsState,
   runtimeTemplatesState,
-  templateIdState,
   applicationErrorState,
 } from './../atoms';
-import { logMessage } from './../dispatchers/shared';
+import { logMessage, setError } from './../dispatchers/shared';
+
+const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
+  callbackHelpers.set(botOpeningState, false);
+  setError(callbackHelpers, ex);
+};
 
 const checkProjectUpdates = async () => {
   const workers = [filePersistence, lgWorker, luWorker];
@@ -143,12 +148,11 @@ export const projectDispatcher = () => {
         ...currentRecentProjects,
       });
     } catch (ex) {
-      // TODO: Handle exceptions
       logMessage(callbackHelpers, `Error removing recent project: ${ex}`);
     }
   };
 
-  const setOpenPendingStatusasync = async (callbackHelpers: CallbackInterface) => {
+  const setOpenPendingStatusAsync = async (callbackHelpers: CallbackInterface) => {
     const { set } = callbackHelpers;
     set(botOpeningState, true);
     await checkProjectUpdates();
@@ -157,21 +161,26 @@ export const projectDispatcher = () => {
   const openBotProject = useRecoilCallback<[string, string?], Promise<string>>(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
       try {
-        await setOpenPendingStatusasync(callbackHelpers);
+        await setOpenPendingStatusAsync(callbackHelpers);
         const response = await httpClient.put(`/projects/open`, { path, storageId });
         await initBotState(callbackHelpers, response.data);
         return response.data.id;
       } catch (ex) {
-        callbackHelpers.set(botOpeningState, false);
         removeRecentProject(callbackHelpers, path);
+        handleProjectFailure(callbackHelpers, ex);
       }
     }
   );
 
   const fetchProjectById = useRecoilCallback<[string], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async (projectId: string) => {
-      const response = await httpClient.get(`/projects/${projectId}`);
-      await initBotState(callbackHelpers, response.data);
+      try {
+        const response = await httpClient.get(`/projects/${projectId}`);
+        await initBotState(callbackHelpers, response.data);
+      } catch (ex) {
+        handleProjectFailure(callbackHelpers, ex);
+        navigateTo('/home');
+      }
     }
   );
 
@@ -184,7 +193,7 @@ export const projectDispatcher = () => {
       schemaUrl?: string
     ) => {
       try {
-        await setOpenPendingStatusasync(callbackHelpers);
+        await setOpenPendingStatusAsync(callbackHelpers);
         const response = await httpClient.post(`/projects`, {
           storageId: 'default',
           templateId,
@@ -199,9 +208,8 @@ export const projectDispatcher = () => {
         }
         await initBotState(callbackHelpers, response.data);
         return projectId;
-      } catch (error) {
-        callbackHelpers.set(botOpeningState, false);
-        logMessage(callbackHelpers, error.message);
+      } catch (ex) {
+        handleProjectFailure(callbackHelpers, ex);
       }
     }
   );
@@ -235,7 +243,7 @@ export const projectDispatcher = () => {
   const saveProjectAs = useRecoilCallback<[string, string, string, string], Promise<string>>(
     (callbackHelpers: CallbackInterface) => async (projectId, name, description, location) => {
       try {
-        await setOpenPendingStatusasync(callbackHelpers);
+        await setOpenPendingStatusAsync(callbackHelpers);
         const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, {
           storageId: 'default',
           name,
@@ -244,10 +252,9 @@ export const projectDispatcher = () => {
         });
         await initBotState(callbackHelpers, response.data);
         return response.data.id;
-      } catch (error) {
-        //TODO: error handling
-        callbackHelpers.set(botOpeningState, false);
-        logMessage(callbackHelpers, error.message);
+      } catch (ex) {
+        handleProjectFailure(callbackHelpers, ex);
+        logMessage(callbackHelpers, ex.message);
       }
     }
   );
@@ -258,7 +265,6 @@ export const projectDispatcher = () => {
       const response = await httpClient.get(`/projects/recent`);
       set(recentProjectsState, response.data);
     } catch (ex) {
-      // TODO: Handle exceptions
       set(recentProjectsState, []);
       logMessage(callbackHelpers, `Error in fetching recent projects: ${ex}`);
     }
@@ -293,10 +299,6 @@ export const projectDispatcher = () => {
       }
     }
   );
-
-  const saveTemplateId = useRecoilCallback(({ set }) => async (templateId: string) => {
-    set(templateIdState, templateId);
-  });
 
   const fetchTemplates = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
     try {
@@ -352,7 +354,6 @@ export const projectDispatcher = () => {
     createProject,
     deleteBotProject,
     saveProjectAs,
-    saveTemplateId,
     fetchTemplates,
     fetchProjectById,
     fetchRecentProjects,
