@@ -93,6 +93,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const handleSaveAs = async (formData) => {
     await saveProjectAs(projectId, formData.name, formData.description, formData.location);
+    navTo('main');
   };
 
   const handleSubmit = async (formData, templateId: string) => {

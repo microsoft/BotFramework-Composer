@@ -7,8 +7,9 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import * as luUtil from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import LuWorker from '../parsers/luWorker';
-import { luFilesState } from '../atoms/botState';
+import { luFilesState, botLoadErrorState } from '../atoms/botState';
 
+import { Text } from './../../constants';
 import { botStatusState } from './../atoms/botState';
 import { dialogsState } from './../atoms/botState';
 import httpClient from './../../utils/httpUtil';
@@ -56,9 +57,9 @@ export const luDispatcher = () => {
         });
         luFileStatusStorage.publishAll(projectId);
         set(botStatusState, BotStatus.published);
-      } catch (error) {
-        //TODO: error handling
-        console.log(error);
+      } catch (err) {
+        set(botStatusState, BotStatus.failed);
+        set(botLoadErrorState, { title: Text.LUISDEPLOYFAILURE, message: err.response?.data?.message || err.message });
       }
     }
   );
