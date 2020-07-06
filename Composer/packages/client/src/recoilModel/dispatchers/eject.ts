@@ -2,14 +2,14 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { CallbackInterface } from 'recoil';
 
 import { runtimeTemplatesState } from './../atoms/appState';
 import httpClient from './../../utils/httpUtil';
 import { logMessage } from './shared';
 
-export const ejectDispatcher = () => {
-  const getRuntimeTemplates = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
+export const ejectDispatcher = {
+  getRuntimeTemplates: (callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get(`/runtime/templates`);
@@ -18,9 +18,5 @@ export const ejectDispatcher = () => {
       //TODO: error
       logMessage(callbackHelpers, error.message);
     }
-  });
-
-  return {
-    getRuntimeTemplates,
-  };
+  },
 };

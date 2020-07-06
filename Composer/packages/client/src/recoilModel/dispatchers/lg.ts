@@ -17,27 +17,27 @@ export const lgDispatcher = () => {
     }
   );
 
-  const updateLgTemplate = async ({ file, projectId, templateName, template }) => {
+  const updateLgTemplate = async ({ file, templateName, template }) => {
     const newContent = await LgWorker.updateTemplate(file.content, templateName, template);
     await updateLgFile({ id: file.id, content: newContent });
   };
 
-  const createLgTemplate = async ({ file, projectId, template }) => {
+  const createLgTemplate = async ({ file, template }) => {
     const newContent = await LgWorker.addTemplate(file.content, template);
     await updateLgFile({ id: file.id, content: newContent });
   };
 
-  const removeLgTemplate = async ({ file, projectId, templateName }) => {
+  const removeLgTemplate = async ({ file, templateName }) => {
     const newContent = await LgWorker.removeTemplate(file.content, templateName);
     await updateLgFile({ id: file.id, content: newContent });
   };
 
-  const removeLgTemplates = async ({ file, projectId, templateNames }) => {
+  const removeLgTemplates = async ({ file, templateNames }) => {
     const newContent = await LgWorker.removeAllTemplates(file.content, templateNames);
     await updateLgFile({ id: file.id, content: newContent });
   };
 
-  const copyLgTemplate = async ({ file, fromTemplateName, toTemplateName, projectId }) => {
+  const copyLgTemplate = async ({ file, fromTemplateName, toTemplateName }) => {
     const newContent = await LgWorker.copyTemplate(file.content, fromTemplateName, toTemplateName);
     await updateLgFile({ id: file.id, content: newContent });
   };

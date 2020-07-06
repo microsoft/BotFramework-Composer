@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import mapValues from 'lodash/mapValues';
+
 import { dialogsDispatcher } from './dialogs';
 import { projectDispatcher } from './project';
 import { applicationDispatcher } from './application';
@@ -16,24 +18,22 @@ import { skillDispatcher } from './skill';
 import { ejectDispatcher } from './eject';
 import { userDispatcher } from './user';
 
-const createDispatchers = () => {
-  return {
-    ...editorDispatcher(),
-    ...dialogsDispatcher(),
-    ...projectDispatcher(),
-    ...applicationDispatcher(),
-    ...storageDispatcher(),
-    ...exportDispatcher(),
-    ...lgDispatcher(),
-    ...luDispatcher(),
-    ...navigationDispatcher(),
-    ...publisherDispatcher(),
-    ...settingsDispatcher(),
-    ...skillDispatcher(),
-    ...ejectDispatcher(),
-    ...userDispatcher(),
-  };
-};
+const createDispatchers = () => ({
+  ...editorDispatcher,
+  ...dialogsDispatcher,
+  ...projectDispatcher,
+  ...mapValues(applicationDispatcher),
+  ...storageDispatcher,
+  ...exportDispatcher,
+  ...lgDispatcher,
+  ...luDispatcher,
+  ...navigationDispatcher,
+  ...publisherDispatcher,
+  ...settingsDispatcher,
+  ...skillDispatcher,
+  ...ejectDispatcher,
+  ...userDispatcher,
+});
 
 export default createDispatchers;
 export type Dispatcher = ReturnType<typeof createDispatchers>;

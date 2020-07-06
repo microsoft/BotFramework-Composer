@@ -2,30 +2,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { CallbackInterface } from 'recoil';
 
 import { clipboardActionsState, visualEditorSelectionState } from '../atoms/appState';
 
-export const editorDispatcher = () => {
-  const setVisualEditorClipboard = useRecoilCallback<[any[]], void>(
-    ({ set }: CallbackInterface) => (clipboardActions: any[]) => {
-      set(clipboardActionsState, [...clipboardActions]);
-    }
-  );
+export const editorDispatcher = {
+  setVisualEditorClipboard: ({ set }: CallbackInterface) => (clipboardActions: any[]) => {
+    set(clipboardActionsState, [...clipboardActions]);
+  },
 
-  const setVisualEditorSelection = useRecoilCallback<[string[]], void>(
-    ({ set }: CallbackInterface) => (selection: string[]) => {
-      set(visualEditorSelectionState, [...selection]);
-    }
-  );
+  setVisualEditorSelection: ({ set }: CallbackInterface) => (selection: string[]) => {
+    set(visualEditorSelectionState, [...selection]);
+  },
 
-  const resetVisualEditor = useRecoilCallback<[], void>(({ reset }: CallbackInterface) => () => {
+  resetVisualEditor: ({ reset }: CallbackInterface) => () => {
     reset(visualEditorSelectionState);
-  });
-
-  return {
-    setVisualEditorClipboard,
-    resetVisualEditor,
-    setVisualEditorSelection,
-  };
+  },
 };

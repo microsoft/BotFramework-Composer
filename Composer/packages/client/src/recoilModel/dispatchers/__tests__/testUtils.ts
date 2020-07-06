@@ -21,7 +21,11 @@ export function testAtomUpdate<T>(atom: RecoilState<T>, before: T, after: T) {
   const setCall = mockSet.mock.calls[mockSet.mock.calls.length - 1];
   expect(setCall[0]).toBe(atom);
 
-  const updateFn = setCall[1];
+  const updateResult = setCall[1];
 
-  expect(updateFn(before)).toEqual(after);
+  if (typeof updateResult === 'function') {
+    expect(updateResult(before)).toEqual(after);
+  } else {
+    expect(updateResult).toEqual(after);
+  }
 }
