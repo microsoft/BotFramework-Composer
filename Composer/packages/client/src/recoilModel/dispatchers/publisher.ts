@@ -53,21 +53,19 @@ export const publisherDispatcher = () => {
     set(publishTypesState, data);
   };
 
-  const getPublishTargetTypes = useRecoilCallback<[], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async () => {
-      const { set } = callbackHelpers;
-      try {
-        const response = await httpClient.get(`/publish/types`);
-        set(publishTypesState, response.data);
-      } catch (err) {
-        //TODO: error
-        logMessage(callbackHelpers, err.message);
-      }
+  const getPublishTargetTypes = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    const { set } = callbackHelpers;
+    try {
+      const response = await httpClient.get(`/publish/types`);
+      set(publishTypesState, response.data);
+    } catch (err) {
+      //TODO: error
+      logMessage(callbackHelpers, err.message);
     }
-  );
+  });
 
-  const publishToTarget = useRecoilCallback<[string, any, any, any], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (projectId, target, metadata, sensitiveSettings) => {
+  const publishToTarget = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, metadata, sensitiveSettings) => {
       try {
         const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
           metadata,
@@ -101,8 +99,8 @@ export const publisherDispatcher = () => {
     }
   );
 
-  const rollbackToVersion = useRecoilCallback<[string, any, any, any], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (projectId, target, version, sensitiveSettings) => {
+  const rollbackToVersion = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any, version, sensitiveSettings) => {
       try {
         const response = await httpClient.post(`/publish/${projectId}/rollback/${target.name}`, {
           version,
@@ -116,8 +114,8 @@ export const publisherDispatcher = () => {
   );
 
   // get bot status from target publisher
-  const getPublishStatus = useRecoilCallback<[string, any], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (projectId, target) => {
+  const getPublishStatus = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
       try {
         const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
         const { set, snapshot } = callbackHelpers;
@@ -160,8 +158,8 @@ export const publisherDispatcher = () => {
     }
   );
 
-  const getPublishHistory = useRecoilCallback<[string, any], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (projectId, target) => {
+  const getPublishHistory = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
       const { set } = callbackHelpers;
       try {
         await filePersistence.flush();

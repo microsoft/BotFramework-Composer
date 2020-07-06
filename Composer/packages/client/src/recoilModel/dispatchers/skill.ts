@@ -17,27 +17,21 @@ import {
 import { logMessage } from './shared';
 
 export const skillDispatcher = () => {
-  const createSkillManifest = useRecoilCallback<[{ id: string; content: any }], Promise<void>>(
-    ({ set }: CallbackInterface) => async ({ id, content }) => {
-      set(skillManifestsState, (skillManifests) => [...skillManifests, { content, id }]);
-    }
-  );
+  const createSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async ({ id, content }) => {
+    set(skillManifestsState, (skillManifests) => [...skillManifests, { content, id }]);
+  });
 
-  const removeSkillManifest = useRecoilCallback<[string], Promise<void>>(
-    ({ set }: CallbackInterface) => async (id: string) => {
-      set(skillManifestsState, (skillManifests) => skillManifests.filter((manifest) => manifest.name === id));
-    }
-  );
+  const removeSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async (id: string) => {
+    set(skillManifestsState, (skillManifests) => skillManifests.filter((manifest) => manifest.name === id));
+  });
 
-  const updateSkillManifest = useRecoilCallback<[{ id: string; content: any }], Promise<void>>(
-    ({ set }: CallbackInterface) => async ({ id, content }) => {
-      set(skillManifestsState, (skillManifests) =>
-        skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
-      );
-    }
-  );
+  const updateSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async ({ id, content }) => {
+    set(skillManifestsState, (skillManifests) =>
+      skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
+    );
+  });
 
-  const updateSkill = useRecoilCallback<[{ projectId: string; targetId: number; skillData: any }], Promise<void>>(
+  const updateSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ projectId, targetId, skillData }) => {
       const { set, snapshot } = callbackHelpers;
       const onAddSkillDialogComplete = await snapshot.getPromise(onAddSkillDialogCompleteState);
@@ -86,33 +80,31 @@ export const skillDispatcher = () => {
     }
   );
 
-  const addSkillDialogBegin = useRecoilCallback<[any], void>(({ set }: CallbackInterface) => (onComplete) => {
+  const addSkillDialogBegin = useRecoilCallback(({ set }: CallbackInterface) => (onComplete) => {
     set(showAddSkillDialogModalState, true);
     set(onAddSkillDialogCompleteState, onComplete);
   });
 
-  const addSkillDialogCancel = useRecoilCallback<[], void>(({ set }: CallbackInterface) => () => {
+  const addSkillDialogCancel = useRecoilCallback(({ set }: CallbackInterface) => () => {
     set(showAddSkillDialogModalState, false);
     set(onAddSkillDialogCompleteState, undefined);
   });
 
-  const addSkillDialogSuccess = useRecoilCallback<[], Promise<void>>(
-    ({ set, snapshot }: CallbackInterface) => async () => {
-      const onAddSkillDialogComplete = await snapshot.getPromise(onAddSkillDialogCompleteState);
-      if (typeof onAddSkillDialogComplete === 'function') {
-        onAddSkillDialogComplete(null);
-      }
-
-      set(showAddSkillDialogModalState, false);
-      set(onAddSkillDialogCompleteState, undefined);
+  const addSkillDialogSuccess = useRecoilCallback(({ set, snapshot }: CallbackInterface) => async () => {
+    const onAddSkillDialogComplete = await snapshot.getPromise(onAddSkillDialogCompleteState);
+    if (typeof onAddSkillDialogComplete === 'function') {
+      onAddSkillDialogComplete(null);
     }
-  );
 
-  const displayManifestModal = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (id: string) => {
+    set(showAddSkillDialogModalState, false);
+    set(onAddSkillDialogCompleteState, undefined);
+  });
+
+  const displayManifestModal = useRecoilCallback(({ set }: CallbackInterface) => (id: string) => {
     set(displaySkillManifestState, id);
   });
 
-  const dismissManifestModal = useRecoilCallback<[], void>(({ set }: CallbackInterface) => () => {
+  const dismissManifestModal = useRecoilCallback(({ set }: CallbackInterface) => () => {
     set(displaySkillManifestState, undefined);
   });
 

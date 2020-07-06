@@ -21,7 +21,7 @@ enum ClaimNames {
 const REFRESH_WATERMARK = 1000 * 60 * 5; // 5 minutes
 
 export const userDispatcher = () => {
-  const loginUser = useRecoilCallback<[], Promise<void>>(({ set }: CallbackInterface) => async () => {
+  const loginUser = useRecoilCallback(({ set }: CallbackInterface) => async () => {
     if (!process.env.COMPOSER_REQUIRE_AUTH) {
       return;
     }
@@ -71,7 +71,7 @@ export const userDispatcher = () => {
     }
   });
 
-  const updateUserSettings = useRecoilCallback<[Partial<UserSettingsPayload>], void>(
+  const updateUserSettings = useRecoilCallback(
     ({ set }: CallbackInterface) => (settings: Partial<UserSettingsPayload>) => {
       set(userSettingsState, (currentSettings) => {
         const newSettings = merge(currentSettings, settings);
@@ -85,7 +85,7 @@ export const userDispatcher = () => {
     }
   );
 
-  const setUserToken = useRecoilCallback<[Partial<CurrentUser>], void>(({ set }: CallbackInterface) => (user = {}) => {
+  const setUserToken = useRecoilCallback(({ set }: CallbackInterface) => (user: Partial<CurrentUser> = {}) => {
     set(currentUserState, () => ({
       ...user,
       token: user.token || null,
@@ -93,7 +93,7 @@ export const userDispatcher = () => {
     }));
   });
 
-  const setUserSessionExpired = useRecoilCallback<[boolean], void>(({ set }: CallbackInterface) => (expired) => {
+  const setUserSessionExpired = useRecoilCallback(({ set }: CallbackInterface) => (expired: boolean) => {
     set(currentUserState, (currentUser: CurrentUser) => ({
       ...currentUser,
       sessionExpired: !!expired,

@@ -78,74 +78,66 @@ export const dialogsDispatcher = () => {
     set(luFilesState, luFiles);
   };
 
-  const removeDialog = useRecoilCallback<[string], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (id: string) => {
-      const { set, snapshot } = callbackHelpers;
-      let dialogs = await snapshot.getPromise(dialogsState);
-      dialogs = dialogs.filter((dialog) => dialog.id !== id);
-      set(dialogsState, dialogs);
-      //remove dialog should remove all locales lu and lg files
-      await removeLgFile(callbackHelpers, id);
-      await removeLuFile(callbackHelpers, id);
-    }
-  );
+  const removeDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async (id: string) => {
+    const { set, snapshot } = callbackHelpers;
+    let dialogs = await snapshot.getPromise(dialogsState);
+    dialogs = dialogs.filter((dialog) => dialog.id !== id);
+    set(dialogsState, dialogs);
+    //remove dialog should remove all locales lu and lg files
+    await removeLgFile(callbackHelpers, id);
+    await removeLuFile(callbackHelpers, id);
+  });
 
-  const updateDialog = useRecoilCallback<[dialogPayload], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async ({ id, content }) => {
-      const { set, snapshot } = callbackHelpers;
-      let dialogs = await snapshot.getPromise(dialogsState);
-      const schemas = await snapshot.getPromise(schemasState);
-      const lgFiles = await snapshot.getPromise(lgFilesState);
-      const luFiles = await snapshot.getPromise(luFilesState);
-      dialogs = dialogs.map((dialog) => {
-        if (dialog.id === id) {
-          dialog = {
-            ...dialog,
-            ...dialogIndexer.parse(dialog.id, content),
-          };
-          dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-          return dialog;
-        }
+  const updateDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id, content }) => {
+    const { set, snapshot } = callbackHelpers;
+    let dialogs = await snapshot.getPromise(dialogsState);
+    const schemas = await snapshot.getPromise(schemasState);
+    const lgFiles = await snapshot.getPromise(lgFilesState);
+    const luFiles = await snapshot.getPromise(luFilesState);
+    dialogs = dialogs.map((dialog) => {
+      if (dialog.id === id) {
+        dialog = {
+          ...dialog,
+          ...dialogIndexer.parse(dialog.id, content),
+        };
+        dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
         return dialog;
-      });
-      set(dialogsState, dialogs);
-    }
-  );
+      }
+      return dialog;
+    });
+    set(dialogsState, dialogs);
+  });
 
-  const createDialogBegin = useRecoilCallback<[any, any], void>(
-    (callbackHelpers: CallbackInterface) => (actions, onComplete) => {
-      const { set } = callbackHelpers;
-      set(actionsSeedState, actions);
-      set(onCreateDialogCompleteState, onComplete);
-      set(showCreateDialogModalState, true);
-    }
-  );
+  const createDialogBegin = useRecoilCallback((callbackHelpers: CallbackInterface) => (actions, onComplete) => {
+    const { set } = callbackHelpers;
+    set(actionsSeedState, actions);
+    set(onCreateDialogCompleteState, onComplete);
+    set(showCreateDialogModalState, true);
+  });
 
-  const createDialogCancel = useRecoilCallback<[], void>((callbackHelpers: CallbackInterface) => () => {
+  const createDialogCancel = useRecoilCallback((callbackHelpers: CallbackInterface) => () => {
     const { set } = callbackHelpers;
     set(actionsSeedState, []);
     set(onCreateDialogCompleteState, undefined);
     set(showCreateDialogModalState, false);
   });
 
-  const createDialog = useRecoilCallback<[{ id: string; content: any }], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async ({ id, content }) => {
-      const { set, snapshot } = callbackHelpers;
-      const fixedContent = autofixReferInDialog(id, content);
-      const schemas = await snapshot.getPromise(schemasState);
-      const lgFiles = await snapshot.getPromise(lgFilesState);
-      const luFiles = await snapshot.getPromise(luFilesState);
-      const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
-      dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-      await createLgFile(callbackHelpers, id, '');
-      await createLuFile(callbackHelpers, id, '');
+  const createDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id, content }) => {
+    const { set, snapshot } = callbackHelpers;
+    const fixedContent = autofixReferInDialog(id, content);
+    const schemas = await snapshot.getPromise(schemasState);
+    const lgFiles = await snapshot.getPromise(lgFilesState);
+    const luFiles = await snapshot.getPromise(luFilesState);
+    const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
+    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    await createLgFile(callbackHelpers, id, '');
+    await createLuFile(callbackHelpers, id, '');
 
-      set(dialogsState, (dialogs) => [...dialogs, dialog]);
-      set(actionsSeedState, []);
-      set(showCreateDialogModalState, false);
-      set(onCreateDialogCompleteState, undefined);
-    }
-  );
+    set(dialogsState, (dialogs) => [...dialogs, dialog]);
+    set(actionsSeedState, []);
+    set(showCreateDialogModalState, false);
+    set(onCreateDialogCompleteState, undefined);
+  });
   return {
     removeDialog,
     createDialog,

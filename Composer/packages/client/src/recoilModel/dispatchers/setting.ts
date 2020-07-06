@@ -25,14 +25,14 @@ export const settingsDispatcher = () => {
     }
   );
 
-  const setPublishTargets = useRecoilCallback<[PublishTarget[]], Promise<void>>(
-    ({ set }: CallbackInterface) => async (publishTargets) => {
+  const setPublishTargets = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (publishTargets: PublishTarget[]) => {
       set(publishTargetsState, publishTargets);
     }
   );
 
-  const setRuntimeSettings = useRecoilCallback<[string, string, string], Promise<void>>(
-    ({ set }: CallbackInterface) => async (_, path, command) => {
+  const setRuntimeSettings = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (_, path: string, command: string) => {
       set(settingsState, (currentSettingsState) => ({
         ...currentSettingsState,
         runtime: {
@@ -44,8 +44,8 @@ export const settingsDispatcher = () => {
     }
   );
 
-  const setRuntimeField = useRecoilCallback<[string, string, boolean], void>(
-    ({ set }: CallbackInterface) => async (projectId, field, newValue) => {
+  const setRuntimeField = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (_, field: string, newValue: boolean) => {
       set(settingsState, (currentValue) => ({
         ...currentValue,
         runtime: {
@@ -56,7 +56,7 @@ export const settingsDispatcher = () => {
     }
   );
 
-  const setCustomRuntime = useRecoilCallback<[string, boolean], void>(() => async (_, isOn) => {
+  const setCustomRuntime = useRecoilCallback(() => async (_, isOn: boolean) => {
     setRuntimeField('', 'customRuntime', isOn);
   });
 

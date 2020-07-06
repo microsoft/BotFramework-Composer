@@ -13,7 +13,7 @@ import { StateError, AppUpdateState } from '../../recoilModel/types';
 import { setError } from './shared';
 
 export const applicationDispatcher = () => {
-  const setAppUpdateStatus = useRecoilCallback<[AppUpdaterStatus, string | undefined], Promise<void>>(
+  const setAppUpdateStatus = useRecoilCallback(
     ({ set, snapshot: { getPromise } }: CallbackInterface) => async (
       status: AppUpdaterStatus,
       version: string | undefined
@@ -35,18 +35,16 @@ export const applicationDispatcher = () => {
     }
   );
 
-  const setAppUpdateShowing = useRecoilCallback<[boolean], void>(
-    ({ set }: CallbackInterface) => (isShowing: boolean) => {
-      set(appUpdateState, (updaterState) => {
-        return {
-          ...updaterState,
-          showing: isShowing,
-        };
-      });
-    }
-  );
+  const setAppUpdateShowing = useRecoilCallback(({ set }: CallbackInterface) => (isShowing: boolean) => {
+    set(appUpdateState, (updaterState) => {
+      return {
+        ...updaterState,
+        showing: isShowing,
+      };
+    });
+  });
 
-  const setAppUpdateError = useRecoilCallback<[any], void>(({ set }: CallbackInterface) => (error: any) => {
+  const setAppUpdateError = useRecoilCallback(({ set }: CallbackInterface) => (error: any) => {
     set(appUpdateState, (updaterState) => {
       return {
         ...updaterState,
@@ -55,7 +53,7 @@ export const applicationDispatcher = () => {
     });
   });
 
-  const setAppUpdateProgress = useRecoilCallback<[number, number], void>(
+  const setAppUpdateProgress = useRecoilCallback(
     ({ set }: CallbackInterface) => (progressPercent: number, downloadSizeInBytes: number) => {
       set(appUpdateState, (updaterState: AppUpdateState) => {
         return {
@@ -67,11 +65,11 @@ export const applicationDispatcher = () => {
     }
   );
 
-  const setMessage = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (message: string) => {
+  const setMessage = useRecoilCallback(({ set }: CallbackInterface) => (message: string) => {
     set(announcementState, message);
   });
 
-  const onboardingAddCoachMarkRef = useRecoilCallback<[{ [key: string]: any }], void>(
+  const onboardingAddCoachMarkRef = useRecoilCallback(
     ({ set }: CallbackInterface) => (coachMarkRef: { [key: string]: any }) => {
       set(onboardingState, (onboardingObj) => ({
         ...onboardingObj,
@@ -83,23 +81,19 @@ export const applicationDispatcher = () => {
     }
   );
 
-  const onboardingSetComplete = useRecoilCallback<[boolean], void>(
-    ({ set }: CallbackInterface) => (isComplete: boolean) => {
-      set(onboardingState, (onboardingObj) => ({
-        ...onboardingObj,
-        complete: isComplete,
-      }));
-      OnboardingState.setComplete(isComplete);
-    }
-  );
+  const onboardingSetComplete = useRecoilCallback(({ set }: CallbackInterface) => (isComplete: boolean) => {
+    set(onboardingState, (onboardingObj) => ({
+      ...onboardingObj,
+      complete: isComplete,
+    }));
+    OnboardingState.setComplete(isComplete);
+  });
 
-  const setCreationFlowStatus = useRecoilCallback<[CreationFlowStatus], void>(
-    ({ set }: CallbackInterface) => (status: CreationFlowStatus) => {
-      set(creationFlowStatusState, status);
-    }
-  );
+  const setCreationFlowStatus = useRecoilCallback(({ set }: CallbackInterface) => (status: CreationFlowStatus) => {
+    set(creationFlowStatusState, status);
+  });
 
-  const setApplicationLevelError = useRecoilCallback<[StateError | undefined], void>(
+  const setApplicationLevelError = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => (errorObj: StateError | undefined) => {
       setError(callbackHelpers, errorObj);
     }

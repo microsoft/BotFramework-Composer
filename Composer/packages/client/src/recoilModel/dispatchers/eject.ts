@@ -9,7 +9,7 @@ import httpClient from './../../utils/httpUtil';
 import { logMessage } from './shared';
 
 export const ejectDispatcher = () => {
-  const getRuntimeTemplates = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
+  const getRuntimeTemplates = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get(`/runtime/templates`);

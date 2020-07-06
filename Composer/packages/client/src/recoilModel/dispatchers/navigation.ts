@@ -13,7 +13,7 @@ import { focusPathState, breadcrumbState, designPageLocationState, projectIdStat
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
 
 export const navigationDispatcher = () => {
-  const setDesignPageLocation = useRecoilCallback<[DesignPageLocationPayload], Promise<void>>(
+  const setDesignPageLocation = useRecoilCallback(
     ({ set }: CallbackInterface) => async ({
       projectId = '',
       dialogId = '',
@@ -43,8 +43,8 @@ export const navigationDispatcher = () => {
     }
   );
 
-  const navTo = useRecoilCallback<[string, BreadcrumbItem[]?], Promise<void>>(
-    ({ snapshot }: CallbackInterface) => async (dialogId, breadcrumb = []) => {
+  const navTo = useRecoilCallback(
+    ({ snapshot }: CallbackInterface) => async (dialogId: string, breadcrumb: BreadcrumbItem[] = []) => {
       const projectId = await snapshot.getPromise(projectIdState);
       const designPageLocation = await snapshot.getPromise(designPageLocationState);
       const currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
@@ -54,28 +54,26 @@ export const navigationDispatcher = () => {
     }
   );
 
-  const selectTo = useRecoilCallback<[string], Promise<void>>(
-    ({ snapshot }: CallbackInterface) => async (selectPath: string) => {
-      if (!selectPath) return;
-      const designPageLocation = await snapshot.getPromise(designPageLocationState);
-      const breadcrumb = await snapshot.getPromise(breadcrumbState);
-      const currentProjectId = await snapshot.getPromise(projectIdState);
-      // initial dialogId, projectId maybe empty string  ""
-      let { dialogId, projectId } = designPageLocation;
+  const selectTo = useRecoilCallback(({ snapshot }: CallbackInterface) => async (selectPath: string) => {
+    if (!selectPath) return;
+    const designPageLocation = await snapshot.getPromise(designPageLocationState);
+    const breadcrumb = await snapshot.getPromise(breadcrumbState);
+    const currentProjectId = await snapshot.getPromise(projectIdState);
+    // initial dialogId, projectId maybe empty string  ""
+    let { dialogId, projectId } = designPageLocation;
 
-      if (!dialogId) dialogId = 'Main';
-      if (!projectId) projectId = currentProjectId;
+    if (!dialogId) dialogId = 'Main';
+    if (!projectId) projectId = currentProjectId;
 
-      let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
+    let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
-      currentUri = `${currentUri}?selected=${selectPath}`;
+    currentUri = `${currentUri}?selected=${selectPath}`;
 
-      if (checkUrl(currentUri, designPageLocation)) return;
-      navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
-    }
-  );
+    if (checkUrl(currentUri, designPageLocation)) return;
+    navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
+  });
 
-  const focusTo = useRecoilCallback<[string, string], Promise<void>>(
+  const focusTo = useRecoilCallback(
     ({ snapshot }: CallbackInterface) => async (focusPath: string, fragment: string) => {
       const designPageLocation = await snapshot.getPromise(designPageLocationState);
       let breadcrumb = await snapshot.getPromise(breadcrumbState);
@@ -104,7 +102,7 @@ export const navigationDispatcher = () => {
     }
   );
 
-  const setectAndfocus = useRecoilCallback<[string, string, string, BreadcrumbItem[]], Promise<void>>(
+  const setectAndfocus = useRecoilCallback(
     ({ snapshot }: CallbackInterface) => async (
       dialogId: string,
       selectPath: string,

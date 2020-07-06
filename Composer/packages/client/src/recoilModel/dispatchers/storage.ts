@@ -14,13 +14,11 @@ import { logMessage } from './shared';
 const projectFiles = ['bot', 'botproj'];
 
 export const storageDispatcher = () => {
-  const setStorageFileLoadingStatus = useRecoilCallback<[string], void>(
-    ({ set }: CallbackInterface) => (status: string) => {
-      set(storageFileLoadingStatusState, status);
-    }
-  );
+  const setStorageFileLoadingStatus = useRecoilCallback(({ set }: CallbackInterface) => (status: string) => {
+    set(storageFileLoadingStatusState, status);
+  });
 
-  const fetchStorages = useRecoilCallback<[], Promise<void>>((callbackHelpers: CallbackInterface) => async () => {
+  const fetchStorages = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get(`/storages`);
@@ -33,7 +31,7 @@ export const storageDispatcher = () => {
     }
   });
 
-  const updateCurrentPathForStorage = useRecoilCallback<[string, string], Promise<void>>(
+  const updateCurrentPathForStorage = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId: string) => {
       const { set } = callbackHelpers;
       try {
@@ -48,38 +46,34 @@ export const storageDispatcher = () => {
     }
   );
 
-  const addNewStorage = useRecoilCallback<[string, string], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (storageData) => {
-      const { set } = callbackHelpers;
-      try {
-        const response = await httpClient.post(`/storages`, storageData);
-        if (isArray(response.data)) {
-          set(storagesState, [...response.data]);
-        }
-      } catch (ex) {
-        // TODO: Handle exceptions
-        logMessage(callbackHelpers, `Error adding a new storages: ${ex}`);
+  const addNewStorage = useRecoilCallback((callbackHelpers: CallbackInterface) => async (storageData: string) => {
+    const { set } = callbackHelpers;
+    try {
+      const response = await httpClient.post(`/storages`, storageData);
+      if (isArray(response.data)) {
+        set(storagesState, [...response.data]);
       }
+    } catch (ex) {
+      // TODO: Handle exceptions
+      logMessage(callbackHelpers, `Error adding a new storages: ${ex}`);
     }
-  );
+  });
 
-  const fetchStorageByName = useRecoilCallback<[string, string], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (fileName) => {
-      const { set } = callbackHelpers;
-      try {
-        const response = await httpClient.get(`/storage/${fileName}`);
-        if (isArray(response.data)) {
-          set(storagesState, [...response.data]);
-        }
-      } catch (ex) {
-        // TODO: Handle exceptions
-        logMessage(callbackHelpers, `Error getting storages by name: ${ex}`);
+  const fetchStorageByName = useRecoilCallback((callbackHelpers: CallbackInterface) => async (fileName: string) => {
+    const { set } = callbackHelpers;
+    try {
+      const response = await httpClient.get(`/storage/${fileName}`);
+      if (isArray(response.data)) {
+        set(storagesState, [...response.data]);
       }
+    } catch (ex) {
+      // TODO: Handle exceptions
+      logMessage(callbackHelpers, `Error getting storages by name: ${ex}`);
     }
-  );
+  });
 
-  const fetchFolderItemsByPath = useRecoilCallback<[string, string], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (id, path) => {
+  const fetchFolderItemsByPath = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (id: string, path: string) => {
       const { set } = callbackHelpers;
       try {
         const response = await httpClient.get(`/storages/${id}/blobs`, { params: { path } });
