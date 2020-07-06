@@ -346,6 +346,26 @@ async function getAllProjects(req: Request, res: Response) {
   }
 }
 
+async function updateBoilerplate(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    try {
+      // inject shared content into every new project.  this comes from assets/shared
+      await AssectService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+      res.status(200).json({});
+    } catch (e) {
+      res.status(400).json({ message: e.message });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -361,4 +381,5 @@ export const ProjectController = {
   createProject,
   getAllProjects,
   getRecentProjects,
+  updateBoilerplate,
 };
