@@ -17,7 +17,7 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { useMemo, useState } from 'react';
 import formatMessage from 'format-message';
 
-import { Pagination } from '../../components/Pagination';
+import { Pagination } from '../../components/Pagination/Pagination';
 
 import { INotification } from './types';
 import { notification, typeIcon, listRoot, icons, tableView, detailList, tableCell, content } from './styles';

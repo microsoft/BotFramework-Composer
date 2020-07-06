@@ -129,10 +129,10 @@ Now the last step is to publish your LU content to LUIS.
 
 1. Select **Start Bot** on the upper right corner of the Composer.
 
-2. Fill in your **LUIS Primary key** and select **OK**.
+2. Fill in your **LUIS Authoring key** and select **OK**.
 
    > [!Note]
-   > If you do not have a LUIS account, you can get one on the [LUIS](https://www.luis.ai/home). If you have a LUIS account but do not know how to find your LUIS primary key please see the [Azure resources for LUIS](https://aka.ms/LUIS-Authoring-Keys#programmatic-key) section of the _Authoring and runtime keys_ article.
+   > If you do not have a LUIS account, you can get one on the [LUIS](https://www.luis.ai/home). If you have a LUIS account but do not know how to find your LUIS Authoring key please see the [Azure resources for LUIS](https://aka.ms/LUIS-Authoring-Keys#programmatic-key) section of the _Authoring and runtime keys_ article.
 
 3. Select **OK**.
    ![Publish LU](./media/language-understanding/publish-lu.png)
