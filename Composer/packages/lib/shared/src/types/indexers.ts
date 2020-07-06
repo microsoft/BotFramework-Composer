@@ -121,7 +121,7 @@ export interface LgFile {
   content: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
-  options: string[];
+  options?: string[];
 }
 
 // export interface QnAFile {}
