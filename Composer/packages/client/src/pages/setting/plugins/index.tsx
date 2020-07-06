@@ -19,8 +19,8 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import axios from 'axios';
 
 import { Plugin } from '../../../store/types';
-import { useStoreContext } from '../../../hooks';
-import { IToolBarItem, ToolBar } from '../../../components/ToolBar';
+import { useStoreContext } from '../../../hooks/useStoreContext';
+import { IToolBarItem, ToolBar } from '../../../components/ToolBar/ToolBar';
 import httpClient from '../../../utils/httpUtil';
 
 const Plugins: React.FC<RouteComponentProps> = () => {

@@ -21,10 +21,19 @@ export const useLocation = () => {
 
 export const useLinks = () => {
   const { state } = useContext(StoreContext);
-  const { projectId, dialogs, designPageLocation } = state;
+  const { projectId, dialogs, designPageLocation, plugins } = state;
   const openedDialogId = designPageLocation.dialogId || dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
+  const pluginPages = plugins.reduce((pages, p) => {
+    const pageConfig = p.contributes?.views?.page;
 
-  return { topLinks: topLinks(projectId, openedDialogId), bottomLinks };
+    if (pageConfig && pageConfig.length > 0) {
+      return pages.concat(pageConfig.map((c) => ({ ...c, pluginId: p.id })));
+    }
+
+    return pages;
+  }, [] as any[]);
+
+  return { topLinks: topLinks(projectId, openedDialogId, pluginPages), bottomLinks };
 };
 
 export const useRouterCache = (to: string) => {

@@ -5,6 +5,7 @@ import path from 'path';
 import childProcess from 'child_process';
 import { promisify } from 'util';
 
+import { readJson } from 'fs-extra';
 import filter from 'lodash/filter';
 import assign from 'lodash/assign';
 import { pluginLoader } from '@bfc/plugin-loader';
@@ -18,6 +19,22 @@ const exec = promisify(childProcess.exec);
 
 const PLUGINS_DIR = path.resolve(__dirname, '../../../.composer');
 
+interface PluginBundle {
+  id: string;
+  path: string;
+}
+
+interface PluginContributes {
+  views?: {
+    page?: {
+      id: string;
+      name: string;
+      icon?: string;
+      when?: string;
+    }[];
+  };
+}
+
 interface PluginConfig {
   id: string;
   name: string;
@@ -26,6 +43,8 @@ interface PluginConfig {
   configuration: object;
   /** path where module is installed */
   path: string;
+  bundles: PluginBundle[];
+  contributes: PluginContributes;
 }
 
 interface PluginInfo {
@@ -36,9 +55,17 @@ interface PluginInfo {
   url: string;
 }
 
+interface PackageJSON {
+  name: string;
+  version: string;
+  description: string;
+
+  composer: any;
+}
+
 export class PluginManager {
   private dir = PLUGINS_DIR;
-  private cache = new Map<string, PluginInfo>();
+  private searchCache = new Map<string, PluginInfo>();
 
   constructor(pluginsDirectory?: string) {
     if (pluginsDirectory) {
@@ -65,22 +92,28 @@ export class PluginManager {
     log(cmd);
 
     const { stdout, stderr } = await exec(cmd);
-    // eslint-disable-next-line security/detect-non-literal-regexp
-    const versionRegex = new RegExp(`${name}\\@(\\d+\\.\\d+\\.\\d+\\S*)`);
-    const actualVersion = stdout.match(versionRegex);
 
     log('%s', stdout);
     log('%s', stderr);
 
-    await this.updateStore(name, {
-      id: name,
-      // TODO: use better name
-      name: name,
-      version: actualVersion?.[1] ?? version,
-      enabled: true,
-      // TODO: plugins can provide default configuration
-      configuration: {},
-    });
+    const packageJson = await this.getPackageJson(name);
+
+    if (packageJson) {
+      const pluginPath = path.resolve(this.dir, 'node_modules', name);
+      await this.updateStore(name, {
+        id: name,
+        name: packageJson.name,
+        version: packageJson.version,
+        enabled: true,
+        // TODO: plugins can provide default configuration
+        configuration: {},
+        path: pluginPath,
+        bundles: this.processBundles(pluginPath, packageJson.composer?.bundles ?? []),
+        contributes: packageJson.composer?.contributes,
+      });
+    } else {
+      throw new Error(`Unable to install ${packageNameAndVersion}`);
+    }
   }
 
   public async loadAll() {
@@ -149,7 +182,7 @@ export class PluginManager {
           const { name, keywords = [], version, description, links } = searchResult;
           if (keywords.includes('botframework-composer')) {
             const url = links?.npm ?? '';
-            this.cache.set(name, {
+            this.searchCache.set(name, {
               id: name,
               version,
               description,
@@ -163,7 +196,33 @@ export class PluginManager {
       log('%O', err);
     }
 
-    return Array.from(this.cache.values());
+    return Array.from(this.searchCache.values());
+  }
+
+  public async getAllBundles(id: string) {
+    const info = this.find(id);
+
+    if (!info) {
+      throw new Error('plugin not found');
+    }
+
+    return info.bundles ?? [];
+  }
+
+  public getBundle(id: string, bundleId: string): string | null {
+    const info = this.find(id);
+
+    if (!info) {
+      throw new Error('plugin not found');
+    }
+
+    const bundle = info.bundles.find((b) => b.id === bundleId);
+
+    if (!bundle) {
+      throw new Error('bundle not found');
+    }
+
+    return bundle.path;
   }
 
   private async updateStore(pluginId: string, newSettings: Partial<PluginConfig>) {
@@ -184,5 +243,24 @@ export class PluginManager {
     }
 
     Store.set('plugins', allPlugins);
+  }
+
+  private async getPackageJson(id: string): Promise<PackageJSON | undefined> {
+    try {
+      const pluginPackagePath = path.resolve(this.dir, 'node_modules', id, 'package.json');
+      log('fetching package.json for %s at %s', id, pluginPackagePath);
+      const packageJson = await readJson(pluginPackagePath);
+      return packageJson as PackageJSON;
+    } catch (err) {
+      log('Error getting package json for %s', id);
+      console.error(err);
+    }
+  }
+
+  private processBundles(pluginPath: string, bundles: PluginBundle[]) {
+    return bundles.map((b) => ({
+      ...b,
+      path: path.resolve(pluginPath, b.path),
+    }));
   }
 }

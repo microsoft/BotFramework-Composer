@@ -120,6 +120,7 @@ module.exports = function (webpackEnv) {
         // initialization, it doesn't blow up the WebpackDevServer client, and
         // changing JS code would still trigger a refresh.
       ].filter(Boolean),
+      plugins: paths.pluginIndexJs,
     },
     output: {
       // The build folder.
@@ -419,6 +420,26 @@ module.exports = function (webpackEnv) {
             filename: isEnvProduction ? 'index.ejs' : 'index.html',
             template: paths.appHtml,
             chunks: ['main'],
+          },
+          isEnvProduction
+            ? {
+                minify: {
+                  removeComments: true,
+                },
+              }
+            : undefined
+        )
+      ),
+      // Generates an `plugins.html` file with the <script> injected.
+      new HtmlWebpackPlugin(
+        Object.assign(
+          {},
+          {
+            inject: true,
+            // only emit ejs in production because the dev server cannot render ejs templates
+            filename: isEnvProduction ? 'plugins.ejs' : 'plugins.html',
+            template: paths.pluginContainerHtml,
+            chunks: ['plugins'],
           },
           isEnvProduction
             ? {

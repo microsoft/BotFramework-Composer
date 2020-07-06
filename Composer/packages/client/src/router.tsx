@@ -12,6 +12,7 @@ import { NotFound } from './components/NotFound/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
 import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
+import { PluginPageContainer } from './pages/PluginPageContainer';
 
 const DesignPage = React.lazy(() => import('./pages/design'));
 const LUPage = React.lazy(() => import('./pages/language-understanding'));
@@ -54,6 +55,7 @@ const Routes = (props) => {
           <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
+          <PluginPageContainer path=":pluginId/:pluginPage" />
           <NotFound default />
         </Router>
       </Suspense>

@@ -31,6 +31,19 @@ interface SearchPluginsRequest extends Request {
   };
 }
 
+interface PluginBundlesRequest extends Request {
+  params: {
+    id: string;
+  };
+}
+
+interface PluginBundleRequest extends Request {
+  params: {
+    id: string;
+    bundleId: string;
+  };
+}
+
 export async function listPlugins(req: Request, res: Response) {
   res.json(PluginManager.getAll());
 }
@@ -92,4 +105,24 @@ export async function searchPlugins(req: SearchPluginsRequest, res: Response) {
 
   const results = await PluginManager.search(q ?? '');
   res.json(results);
+}
+
+export async function getAllBundles(req: PluginBundlesRequest, res: Response) {
+  const { id } = req.params;
+
+  const bundles = await PluginManager.getAllBundles(id);
+  res.json(bundles);
+}
+
+export async function getBundle(req: PluginBundleRequest, res: Response) {
+  const { id, bundleId } = req.params;
+
+  const bundle = PluginManager.getBundle(id, bundleId);
+
+  console.log('sending bundle', bundle);
+  if (bundle) {
+    res.sendFile(bundle);
+  } else {
+    res.status(404);
+  }
 }

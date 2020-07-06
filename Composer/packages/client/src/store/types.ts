@@ -253,4 +253,18 @@ export interface Plugin {
   enabled: boolean;
   configuration: object;
   version: string;
+  contributes: {
+    views?: {
+      page?: {
+        id: string;
+        name: string;
+        icon?: string;
+        when?: string;
+      }[];
+    };
+  };
+  bundles: {
+    id: string;
+    path: string;
+  }[];
 }

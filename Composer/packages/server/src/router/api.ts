@@ -58,6 +58,8 @@ router.post('/plugins', PluginsController.addPlugin);
 router.delete('/plugins', PluginsController.removePlugin);
 router.patch('/plugins/toggle', PluginsController.togglePlugin);
 router.get('/plugins/search', PluginsController.searchPlugins);
+router.get('/plugins/:id/bundles', PluginsController.getAllBundles);
+router.get('/plugins/:id/bundles/:bundleId', PluginsController.getBundle);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

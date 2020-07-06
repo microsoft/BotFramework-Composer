@@ -43,6 +43,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     onboardingSetComplete(onboardingState.getComplete());
+    actions.fetchPlugins();
   }, []);
 
   const mapNavItemTo = (relPath: string) => resolveToBasePath(BASEPATH, relPath);
