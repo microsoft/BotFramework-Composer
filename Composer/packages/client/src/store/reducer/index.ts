@@ -627,6 +627,8 @@ const ejectSuccess: ReducerFunc = (state, payload) => {
       customRuntime: true,
       path: payload.settings.path,
       command: payload.settings.startCommand,
+      key: payload.settings.key,
+      name: payload.settings.name,
     };
   }
   return state;

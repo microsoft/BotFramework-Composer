@@ -8,14 +8,10 @@ import { AdaptiveDialog } from "botbuilder-dialogs-adaptive";
 
 export class ComposerBot {
   private dialogManager: DialogManager;
-  // private readonly userState: UserState;
-  // private readonly conversationState: ConversationState;
   private readonly resourceExplorer: ResourceExplorer;
   private readonly rootDialogPath: string;
 
   constructor(
-    // userState: UserState,
-    // conversationState: ConversationState,
     resourceExplorer: ResourceExplorer,
     rootDialog: string,
     settings: any
