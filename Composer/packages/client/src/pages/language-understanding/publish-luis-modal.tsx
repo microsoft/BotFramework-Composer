@@ -18,7 +18,7 @@ import { useRecoilValue } from 'recoil';
 
 import { dispatcherState, botNameState, settingsState, projectIdState } from '../../recoilModel';
 import { Text, Tips, Links, nameRegex } from '../../constants';
-import { ILuisConfig } from '../../store/types';
+import { ILuisConfig } from '../../recoilModel/types';
 
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 

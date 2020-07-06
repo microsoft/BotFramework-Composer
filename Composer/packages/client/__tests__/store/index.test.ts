@@ -3,7 +3,7 @@
 import { ActionTypes } from '../../src/constants';
 
 import { applyMiddleware } from './../../src/store';
-import { Store, State } from './../../src/store/types';
+import { Store, State } from './../../src/recoilModel/types';
 
 describe('applyMiddleware', () => {
   it('warns when dispatching during middleware setup', () => {

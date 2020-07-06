@@ -8,7 +8,7 @@ import { PromptTab } from '@bfc/shared';
 
 import { DesignPageLocationPayload } from './../types';
 import { getSelected } from './../../utils';
-import { BreadcrumbItem } from './../../store/types';
+import { BreadcrumbItem } from './../../recoilModel/types';
 import { focusPathState, breadcrumbState, designPageLocationState, projectIdState } from './../atoms/botState';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
 

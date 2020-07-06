@@ -11,7 +11,7 @@ import formatMessage from 'format-message';
 import once from 'lodash/once';
 import { useRecoilValue } from 'recoil';
 
-import { BoundAction } from '../../store/types';
+import { BoundAction } from '../../recoilModel/types';
 import { currentUserState, dispatcherState } from '../../recoilModel';
 
 import { loading, dialog, consoleStyle } from './styles';

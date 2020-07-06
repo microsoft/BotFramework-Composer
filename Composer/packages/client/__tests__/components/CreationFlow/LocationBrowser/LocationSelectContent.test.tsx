@@ -5,7 +5,7 @@ import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 import { MutableSnapshot } from 'recoil';
 
-import { StorageFolder } from '../../../../src/store/types';
+import { StorageFolder } from '../../../../src/recoilModel/types';
 import { LocationSelectContent } from '../../../../src/components/CreationFlow/LocationBrowser/LocationSelectContent';
 import { renderWithRecoil } from '../../../testUtils';
 import { CreationFlowStatus } from '../../../../src/constants';

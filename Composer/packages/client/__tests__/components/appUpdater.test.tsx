@@ -7,7 +7,7 @@ import { AppUpdater } from '../../src/components/AppUpdater/AppUpdater';
 import { AppUpdaterStatus } from '../../src/constants';
 import { renderWithRecoil } from '../testUtils';
 import { appUpdateState } from '../../src/recoilModel';
-import { AppUpdateState } from '../../src/store/types';
+import { AppUpdateState } from '../../src/recoilModel/types';
 
 describe('<AppUpdater />', () => {
   const baseState: AppUpdateState = {

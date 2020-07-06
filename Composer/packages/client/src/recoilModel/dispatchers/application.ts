@@ -14,7 +14,7 @@ import {
 } from '../atoms/appState';
 import { AppUpdaterStatus, CreationFlowStatus } from '../../constants';
 import OnboardingState from '../../utils/onboardingStorage';
-import { StateError, AppUpdateState } from '../../store/types';
+import { StateError, AppUpdateState } from '../../recoilModel/types';
 
 export const applicationDispatcher = () => {
   const setAppUpdateStatus = useRecoilCallback<[AppUpdaterStatus, string | undefined], Promise<void>>(

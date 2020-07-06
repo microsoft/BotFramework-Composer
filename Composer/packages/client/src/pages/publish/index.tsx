@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { navigateTo } from '../../utils';
-import { PublishTarget } from '../../store/types';
+import { PublishTarget } from '../../recoilModel/types';
 import {
   settingsState,
   botNameState,

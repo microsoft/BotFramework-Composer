@@ -5,7 +5,7 @@ import * as React from 'react';
 import { fireEvent, act, waitFor } from '@bfc/test-utils';
 
 import { renderWithRecoil } from '../../../testUtils';
-import { StorageFolder } from '../../../../src/store/types';
+import { StorageFolder } from '../../../../src/recoilModel/types';
 import { templateIdState } from '../../../../src/recoilModel';
 import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation/DefineConversation';
 

@@ -10,7 +10,6 @@ import { RecoilRoot } from 'recoil';
 
 import './index.css';
 import { App } from './App';
-import { StoreProvider } from './store';
 import { DispatcherWrapper } from './recoilModel';
 
 const appHostElm = document.getElementById('root');
@@ -31,11 +30,9 @@ const renderApp = (AppComponent: typeof App) => {
   ReactDOM.render(
     <RecoilRoot>
       <CacheProvider value={emotionCache}>
-        <StoreProvider>
-          <DispatcherWrapper>
-            <AppComponent />
-          </DispatcherWrapper>
-        </StoreProvider>
+        <DispatcherWrapper>
+          <AppComponent />
+        </DispatcherWrapper>
       </CacheProvider>
     </RecoilRoot>,
     appHostElm
