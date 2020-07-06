@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@bfc/test-utils';
+import { DialogInfo } from '@bfc/shared';
 
-import { renderWithStore, renderWithRecoil } from '../testUtils';
+import { renderWithRecoil } from '../testUtils';
 import { dialogs } from '../constants.json';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
@@ -21,17 +22,13 @@ describe('<ProjectTree/>', () => {
     const dialogId = 'todobot';
     const selected = 'triggers[0]';
     const handleSelect = jest.fn(() => {});
-    const handleAddDialog = jest.fn(() => {});
     const handleDeleteDialog = jest.fn(() => {});
     const handleDeleteTrigger = jest.fn(() => {});
-    const openNewTriggerModal = jest.fn(() => {});
     const { findByText } = renderWithRecoil(
       <ProjectTree
         dialogId={dialogId}
-        dialogs={dialogs}
-        openNewTriggerModal={openNewTriggerModal}
+        dialogs={dialogs as DialogInfo[]}
         selected={selected}
-        onAdd={handleAddDialog}
         onDeleteDialog={handleDeleteDialog}
         onDeleteTrigger={handleDeleteTrigger}
         onSelect={handleSelect}

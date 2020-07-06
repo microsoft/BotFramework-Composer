@@ -14,6 +14,8 @@ jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl',
   validateManifestUrl: () => {},
 }));
 
+jest.mock('../../src/components/Modal/styles', () => ({}));
+
 const items: Skill[] = [
   {
     manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',

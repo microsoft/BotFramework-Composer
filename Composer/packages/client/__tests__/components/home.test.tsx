@@ -30,8 +30,8 @@ describe('<Home/>', () => {
 
   it('should dispatch onClick event when clicked on an ExampleList', () => {
     const templates = [
-      { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot', order: 1 },
-      { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot', order: 2 },
+      { description: 'echo bot', id: 'EchoBot', name: 'Echo Bot' },
+      { description: 'empty bot', id: 'EmptyBot', name: 'Empty Bot' },
     ] as ProjectTemplate[];
     const onClickTemplate = jest.fn((item) => item);
     const { container, getByText } = render(<ExampleList examples={templates} onClick={onClickTemplate} />);

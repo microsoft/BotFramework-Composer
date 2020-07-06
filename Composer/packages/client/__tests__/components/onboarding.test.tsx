@@ -71,7 +71,7 @@ describe('<Onboarding />', () => {
       );
 
       for (const { title } of stepSets) {
-        await findByText(title);
+        await findByText(title as string);
       }
     });
 

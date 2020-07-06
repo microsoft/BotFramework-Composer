@@ -6,7 +6,7 @@ import { fireEvent, act, waitFor } from '@bfc/test-utils';
 
 import { renderWithRecoil } from '../../../testUtils';
 import { StorageFolder } from '../../../../src/recoilModel/types';
-import { templateIdState } from '../../../../src/recoilModel';
+import { focusedStorageFolderState, storagesState } from '../../../../src/recoilModel';
 import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation/DefineConversation';
 
 describe('<DefineConversation/>', () => {
@@ -38,13 +38,15 @@ describe('<DefineConversation/>', () => {
         createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
         location={locationMock}
+        templateId={'EchoBot'}
         updateFolder={updateFolder}
         onCurrentPathUpdate={onCurrentPathUpdateMock}
         onDismiss={onDismissMock}
         onSubmit={onSubmitMock}
       />,
       ({ set }) => {
-        set(templateIdState, 'EchoBot');
+        set(focusedStorageFolderState, '');
+        set(storagesState, [{ id: 'default' }]);
       }
     );
   }
@@ -62,13 +64,16 @@ describe('<DefineConversation/>', () => {
     const component = renderComponent();
     const node = await component.findByText('OK');
     fireEvent.click(node);
-    expect(onSubmitMock).toHaveBeenCalledWith({
-      description: 'Test Echo',
-      name: 'EchoBot-11299',
-      location: '',
-      schemaUrl:
-        'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
-    });
+    expect(onSubmitMock).toHaveBeenLastCalledWith(
+      {
+        description: 'Test Echo',
+        name: 'EchoBot-11299',
+        location: '',
+        schemaUrl:
+          'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
+      },
+      'EchoBot'
+    );
   });
 
   it('does not allow submission when the name is invalid', async () => {

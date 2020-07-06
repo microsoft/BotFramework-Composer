@@ -6,13 +6,8 @@ import * as React from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { useLuApi } from '../../src/shell/luApi';
-import { useStoreContext } from '../../src/hooks/useStoreContext';
 import { projectIdState, localeState, luFilesState, dispatcherState } from '../../src/recoilModel';
 import { Dispatcher } from '../../src/recoilModel/dispatchers';
-
-jest.mock('../../src/hooks/useStoreContext', () => ({
-  useStoreContext: jest.fn(),
-}));
 
 jest.mock('../../src/recoilModel/parsers/luWorker', () => {
   return { addIntent: (a, b) => b.Body, updateIntent: (a, b, c) => c.Body, removeIntent: (a, b) => b };
@@ -30,18 +25,6 @@ const state = {
   locale: 'en-us',
   projectId: 'test',
 };
-
-const resolvers = { luFileResolver: jest.fn((id) => state.luFiles.find((file) => file.id === id)) };
-
-const actions = {
-  updateLuFile: jest.fn(),
-};
-
-(useStoreContext as jest.Mock).mockReturnValue({
-  state,
-  resolvers,
-  actions,
-});
 
 describe('use luApi hooks', () => {
   let updateLuFileMockMock, result;
