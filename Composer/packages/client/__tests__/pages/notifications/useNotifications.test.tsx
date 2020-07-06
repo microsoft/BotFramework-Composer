@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { renderHook } from '@bfc/test-utils/lib/hooks';
 import { RecoilRoot } from 'recoil';
+import { renderHook } from '@bfc/test-utils/lib/hooks';
 
 import useNotifications from '../../../src/pages/notifications/useNotifications';
 import {
