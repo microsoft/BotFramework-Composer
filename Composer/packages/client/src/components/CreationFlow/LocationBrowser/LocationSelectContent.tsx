@@ -9,9 +9,9 @@ import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../../constants';
-import { File } from '../../../store/types';
+import { File } from '../../../recoilModel/types';
 import { FileTypes } from '../../../constants';
-import { StorageFolder } from '../../../store/types';
+import { StorageFolder } from '../../../recoilModel/types';
 import { creationFlowStatusState, storagesState, storageFileLoadingStatusState } from '../../../recoilModel';
 
 import { FileSelector } from './FileSelector';

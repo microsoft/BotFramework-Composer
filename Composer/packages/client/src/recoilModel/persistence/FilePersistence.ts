@@ -5,7 +5,7 @@ import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
 import { DialogInfo } from '@bfc/shared';
 
-import { DialogSetting } from '../../store/types';
+import { DialogSetting } from '../../recoilModel/types';
 
 import { SkillManifest } from './../../pages/design/exportSkillModal/constants';
 import { LuFile, LgFile } from './../../../../lib/shared/src/types/indexers';

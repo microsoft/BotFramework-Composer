@@ -15,7 +15,7 @@ import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
 import { getReferredFiles } from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { DialogSetting } from '../../store/types';
+import { DialogSetting } from '../../recoilModel/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 

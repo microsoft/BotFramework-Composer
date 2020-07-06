@@ -13,7 +13,7 @@ import { DialogCreationCopy } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper/DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
-import { StorageFolder } from '../../../store/types';
+import { StorageFolder } from '../../../recoilModel/types';
 interface OpenProjectProps extends RouteComponentProps<{}> {
   focusedStorageFolder: StorageFolder;
   onOpen: (path: string, storage: string) => void;

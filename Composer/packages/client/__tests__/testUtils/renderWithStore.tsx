@@ -5,7 +5,7 @@ import React from 'react';
 import { render } from '@bfc/test-utils';
 import mapValues from 'lodash/mapValues';
 
-import { State } from '../../src/store/types';
+import { State } from '../../src/recoilModel/types';
 import * as initialActions from '../../src/store/action';
 import { initialState, StoreContext, StoreContextValue } from '../../src/store';
 

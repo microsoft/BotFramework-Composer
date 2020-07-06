@@ -4,7 +4,7 @@
 import httpClient from '../../../src/utils/httpUtil';
 import { ActionTypes } from '../../../src/constants';
 import { fetchFolderItemsByPath } from '../../../src/store/action/storage';
-import { Store } from '../../../src/store/types';
+import { Store } from '../../../src/recoilModel/types';
 
 jest.mock('../../../src/utils/httpUtil');
 

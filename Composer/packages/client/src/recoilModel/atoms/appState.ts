@@ -4,7 +4,7 @@
 import { atom } from 'recoil';
 import { ProjectTemplate, UserSettings } from '@bfc/shared';
 
-import { StorageFolder, StateError, RuntimeTemplate, AppUpdateState } from '../../store/types';
+import { StorageFolder, StateError, RuntimeTemplate, AppUpdateState } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import { CreationFlowStatus } from '../../constants';
 

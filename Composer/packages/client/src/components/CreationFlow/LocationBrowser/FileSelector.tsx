@@ -27,7 +27,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import moment from 'moment';
 
 import { FileTypes, nameRegex } from '../../../constants';
-import { StorageFolder, File } from '../../../store/types';
+import { StorageFolder, File } from '../../../recoilModel/types';
 import { getFileIconName, calculateTimeDiff } from '../../../utils';
 
 import {

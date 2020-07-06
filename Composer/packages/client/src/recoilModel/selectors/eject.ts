@@ -8,7 +8,7 @@ import lodashGet from 'lodash/get';
 import { dispatcherState } from '../DispatcherWrapper';
 import httpClient from '../../utils/httpUtil';
 import { Dispatcher } from '../dispatchers';
-import { StateError } from '../../store/types';
+import { StateError } from '../../recoilModel/types';
 
 // Actions
 const ejectRuntimeAction = (dispatcher: Dispatcher) => {

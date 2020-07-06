@@ -17,7 +17,7 @@ import { DialogCreationCopy, nameRegex } from '../../../constants';
 import { DialogWrapper } from '../../DialogWrapper/DialogWrapper';
 import { DialogTypes } from '../../DialogWrapper/styles';
 import { LocationSelectContent } from '../LocationBrowser/LocationSelectContent';
-import { StorageFolder } from '../../../store/types';
+import { StorageFolder } from '../../../recoilModel/types';
 import { FieldConfig, useForm } from '../../../hooks/useForm';
 
 import { name, description, halfstack, stackinput } from './styles';

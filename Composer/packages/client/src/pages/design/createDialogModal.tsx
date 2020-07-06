@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { DialogWrapper } from '../../components/DialogWrapper/DialogWrapper';
 import { DialogTypes } from '../../components/DialogWrapper/styles';
-import { StorageFolder } from '../../store/types';
+import { StorageFolder } from '../../recoilModel/types';
 import { dialogsState } from '../../recoilModel/atoms/botState';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 

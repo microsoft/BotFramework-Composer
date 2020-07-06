@@ -9,7 +9,7 @@ import has from 'lodash/has';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState, publishTargetsState } from '../atoms/botState';
-import { DialogSetting, PublishTarget } from '../../store/types';
+import { DialogSetting, PublishTarget } from '../../recoilModel/types';
 
 export const settingsDispatcher = () => {
   const setSettings = useRecoilCallback<[string, DialogSetting], Promise<void>>(
