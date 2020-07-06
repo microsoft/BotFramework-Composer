@@ -158,7 +158,7 @@ export const projectDispatcher = () => {
     await checkProjectUpdates();
   };
 
-  const openBotProject = useRecoilCallback<[string, string?], Promise<string>>(
+  const openBotProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
       try {
         await setOpenPendingStatusAsync(callbackHelpers);
@@ -172,19 +172,17 @@ export const projectDispatcher = () => {
     }
   );
 
-  const fetchProjectById = useRecoilCallback<[string], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (projectId: string) => {
-      try {
-        const response = await httpClient.get(`/projects/${projectId}`);
-        await initBotState(callbackHelpers, response.data);
-      } catch (ex) {
-        handleProjectFailure(callbackHelpers, ex);
-        navigateTo('/home');
-      }
+  const fetchProjectById = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    try {
+      const response = await httpClient.get(`/projects/${projectId}`);
+      await initBotState(callbackHelpers, response.data);
+    } catch (ex) {
+      handleProjectFailure(callbackHelpers, ex);
+      navigateTo('/home');
     }
-  );
+  });
 
-  const createProject = useRecoilCallback<[string, string, string, string, string], Promise<string>>(
+  const createProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (
       templateId: string,
       name: string,
@@ -214,33 +212,31 @@ export const projectDispatcher = () => {
     }
   );
 
-  const deleteBotProject = useRecoilCallback<[string], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async (projectId: string) => {
-      const { reset } = callbackHelpers;
-      try {
-        await httpClient.delete(`/projects/${projectId}`);
-        luFileStatusStorage.removeAllStatuses(projectId);
-        settingStorage.remove(projectId);
-        reset(projectIdState);
-        reset(dialogsState);
-        reset(botEnvironmentState);
-        reset(botNameState);
-        reset(botStatusState);
-        reset(locationState);
-        reset(lgFilesState);
-        reset(skillsState);
-        reset(schemasState);
-        reset(luFilesState);
-        reset(settingsState);
-        reset(localeState);
-        reset(skillManifestsState);
-      } catch (e) {
-        logMessage(callbackHelpers, e.message);
-      }
+  const deleteBotProject = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const { reset } = callbackHelpers;
+    try {
+      await httpClient.delete(`/projects/${projectId}`);
+      luFileStatusStorage.removeAllStatuses(projectId);
+      settingStorage.remove(projectId);
+      reset(projectIdState);
+      reset(dialogsState);
+      reset(botEnvironmentState);
+      reset(botNameState);
+      reset(botStatusState);
+      reset(locationState);
+      reset(lgFilesState);
+      reset(skillsState);
+      reset(schemasState);
+      reset(luFilesState);
+      reset(settingsState);
+      reset(localeState);
+      reset(skillManifestsState);
+    } catch (e) {
+      logMessage(callbackHelpers, e.message);
     }
-  );
+  });
 
-  const saveProjectAs = useRecoilCallback<[string, string, string, string], Promise<string>>(
+  const saveProjectAs = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId, name, description, location) => {
       try {
         await setOpenPendingStatusAsync(callbackHelpers);
@@ -259,7 +255,7 @@ export const projectDispatcher = () => {
     }
   );
 
-  const fetchRecentProjects = useRecoilCallback<[], void>((callbackHelpers: CallbackInterface) => async () => {
+  const fetchRecentProjects = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
       const response = await httpClient.get(`/projects/recent`);
@@ -270,20 +266,18 @@ export const projectDispatcher = () => {
     }
   });
 
-  const fetchTemplateProjects = useRecoilCallback<[], Promise<void>>(
-    (callbackHelpers: CallbackInterface) => async () => {
-      const { set } = callbackHelpers;
-      try {
-        const response = await httpClient.get(`/assets/projectTemplates`);
-        if (isArray(response.data)) {
-          set(templateProjectsState, [...response.data]);
-        }
-      } catch (ex) {
-        // TODO: Handle exceptions
-        logMessage(callbackHelpers, `Error setting template projects: ${ex}`);
+  const fetchTemplateProjects = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
+    const { set } = callbackHelpers;
+    try {
+      const response = await httpClient.get(`/assets/projectTemplates`);
+      if (isArray(response.data)) {
+        set(templateProjectsState, [...response.data]);
       }
+    } catch (ex) {
+      // TODO: Handle exceptions
+      logMessage(callbackHelpers, `Error setting template projects: ${ex}`);
     }
-  );
+  });
 
   const fetchRuntimeTemplates = useRecoilCallback<[], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async () => {

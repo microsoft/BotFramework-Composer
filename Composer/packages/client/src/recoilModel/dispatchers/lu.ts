@@ -16,7 +16,7 @@ import httpClient from './../../utils/httpUtil';
 import { BotStatus } from './../../constants';
 
 export const luDispatcher = () => {
-  const updateLuFile = useRecoilCallback<[{ id: string; content: any; projectId: string }], Promise<void>>(
+  const updateLuFile = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async ({ id, content, projectId }) => {
       let luFiles = await snapshot.getPromise(luFilesState);
       const result = (await LuWorker.parse(id, content)) as LuFile;
@@ -41,7 +41,7 @@ export const luDispatcher = () => {
     await updateLuFile({ id: file.id, projectId, content: newContent });
   };
 
-  const publishLuis = useRecoilCallback<[string, string], Promise<void>>(
+  const publishLuis = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (authoringKey: string, projectId: string) => {
       const dialogs = await snapshot.getPromise(dialogsState);
       try {
