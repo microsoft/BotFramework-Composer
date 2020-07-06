@@ -23,7 +23,7 @@ const InlineCodeEditor: React.FC<CodeEditorProps> = (props) => {
   const { qnaFiles, locale, projectId, userSettings } = state;
   const { dialogId, indexId } = props;
   const file = useRef(qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`)).current;
-  const qnaPair = useRef(file?.qnaPairs[indexId]).current;
+  const qnaPair = useRef(get(file, 'qnaSections[indexId]', {})).current;
   const diagnostics = get(file, 'diagnostics', []);
   const [templateDiagnostics, setTemplateDiagnostics] = useState(filterTemplateDiagnostics(diagnostics, qnaPair));
   const inlineContent = qnaPair?.Body;

@@ -6,94 +6,14 @@
  * it's designed have no state, input text file, output text file.
  */
 
-import isEmpty from 'lodash/isEmpty';
+//import isEmpty from 'lodash/isEmpty';
 import { QnASection } from '@bfc/shared';
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
+import cloneDeep from 'lodash/cloneDeep';
 
 import { qnaIndexer } from '../qnaIndexer';
 
 const { luParser, sectionOperator } = sectionHandler;
-
-const NEWLINE = '\r\n';
-
-export function contentParse(content: string): QnASection[] {
-  const intentTexts = content.split('# ?').filter((intentText) => intentText.trim() !== '');
-  const intentSections: QnASection[] = [];
-  intentTexts.forEach((text) => {
-    const [question, answer] = text
-      .trim()
-      .substring(0, text.trim().length - 3)
-      .split('```');
-    intentSections.push({
-      Question: `- ${question}`.trim(),
-      Answer: answer.trim(),
-    });
-  });
-  return intentSections;
-}
-
-function generateContent(intentSections: QnASection[]): string {
-  const intentTexts: string[] = [];
-  intentSections.forEach((section) => {
-    const question = '# ? ' + section.Question.replace('-', '').trim();
-    intentTexts.push(`${question} ${NEWLINE} ` + '```' + NEWLINE + section.Answer + NEWLINE + '```' + NEWLINE);
-  });
-  return intentTexts.join(NEWLINE);
-}
-/**
- *
- * @param content origin qna file content
- * @param intentName intent Name.
- * @param {Question, Answer} intent the updates. if intent is empty will do remove.
- */
-export function updateIntent(content: string, intentName: string, intent: QnASection | null): string {
-  let sections = contentParse(content);
-  // if intent is null, do remove
-  // and if remove target not exist return origin content;
-  const targetSection = sections.find(
-    ({ Question }) => Question.replace('-', '').trim() === intentName.replace('-', '').trim()
-  );
-  if (!intent || isEmpty(intent)) {
-    if (targetSection) {
-      sections = sections.filter((section) => section.Question !== targetSection.Question);
-    }
-  } else {
-    // update
-    if (targetSection) {
-      sections.map((section) => {
-        if (section.Question === targetSection.Question) {
-          section.Question = intent.Question;
-          section.Answer = intent.Answer;
-        }
-        return section;
-      });
-      // add if not exist
-    } else {
-      sections.push(intent);
-    }
-  }
-
-  return generateContent(sections);
-}
-
-/**
- *
- * @param content origin qna file content
- * @param {Qunstion, Answer} intent the adds.
- */
-export function addIntent(content: string, { Question, Answer }: QnASection): string {
-  const intentName = Question;
-  return updateIntent(content, intentName, { Question, Answer });
-}
-
-/**
- *
- * @param content origin qna file content
- * @param intentName the remove intentName.
- */
-export function removeIntent(content: string, intentName: string): string {
-  return updateIntent(content, intentName, null);
-}
 
 export function checkIsSingleSection(content: string) {
   const { Sections } = luParser.parse(content);
@@ -131,4 +51,82 @@ export function insertSection(indexId: number, content: string, newContent: stri
 export function getParsedDiagnostics(newContent: string) {
   const { diagnostics } = qnaIndexer.parse(newContent);
   return diagnostics;
+}
+
+export function addQuestion(newContent: string, qnaSections: QnASection[], qnaSectionIndex: number) {
+  const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
+    if (index != qnaSectionIndex) {
+      result = result + '\n' + qnaSection.Body;
+    } else {
+      const newQnASection = addQuestionInQnASection(qnaSection, newContent);
+      result += rebuildQnaSection(newQnASection);
+    }
+    return result;
+  }, '');
+  return qnaFileContent;
+}
+
+export function updateQuestion(
+  newContent: string,
+  questionIndex: number,
+  qnaSections: QnASection[],
+  qnaSectionIndex: number
+) {
+  const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
+    if (index !== qnaSectionIndex) {
+      result = result + '\n' + qnaSection.Body;
+    } else {
+      const newQnASection = updateQuestionInQnASection(qnaSection, newContent, questionIndex);
+      result += rebuildQnaSection(newQnASection);
+    }
+    return result;
+  }, '');
+  return qnaFileContent;
+}
+
+function updateQuestionInQnASection(qnaSection: QnASection, question: string, questionIndex: number) {
+  const newQnASection: QnASection = cloneDeep(qnaSection);
+  newQnASection.Questions[questionIndex] = question;
+  return newQnASection;
+}
+
+function addQuestionInQnASection(qnaSection: QnASection, question: string) {
+  const newQnASection: QnASection = cloneDeep(qnaSection);
+  newQnASection.Questions.push(question);
+  return newQnASection;
+}
+
+function rebuildQnaSection(qnaSection) {
+  const { source, QAPairId, Questions, FilterPairs, Answer, promptsText } = qnaSection;
+  let result = '';
+  if (source && source != 'custom editorial') {
+    result += `> !# @qna.pair.source = ${source}\n`;
+  }
+  if (QAPairId) {
+    result += `<a id = "${QAPairId}"></a>\n`;
+  }
+  if (Questions && Questions.length !== 0) {
+    result += `# ? ${Questions[0]}\n`;
+    Questions.slice(1).forEach((question) => {
+      result += `- ${question}\n`;
+    });
+  }
+  if (FilterPairs && FilterPairs.length !== 0) {
+    result += `**Filters:**\n`;
+    FilterPairs.forEach((filterPair) => {
+      result += `-${filterPair.key}=${filterPair.value}\n`;
+    });
+  }
+  if (Answer) {
+    result += '```\n';
+    result += `${Answer}\n`;
+    result += '```\n';
+  }
+  if (promptsText) {
+    result += '**Prompts:**\n';
+    promptsText.forEach((prompt) => {
+      result += `-${prompt}\n`;
+    });
+  }
+  return result;
 }

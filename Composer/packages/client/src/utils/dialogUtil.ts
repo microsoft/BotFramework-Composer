@@ -31,6 +31,7 @@ export interface TriggerFormData {
   intent: string;
   triggerPhrases: string;
   regEx: string;
+  qnaPhrases: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -38,6 +39,7 @@ export interface TriggerFormDataErrors {
   intent?: string;
   event?: string;
   triggerPhrases?: string;
+  qnaPhrases?: string;
   regEx?: string;
   activity?: string;
 }
@@ -54,6 +56,9 @@ export const activityTypeKey: string = SDKKinds.OnActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
 export const crossTrainedRecognizerSetKey: string = SDKKinds.CrossTrainedRecognizerSet;
 export const customEventKey = 'OnCustomEvent';
+export const qnaMatcherKey: string = SDKKinds.OnQnAMatch;
+export const onChooseIntentKey: string = SDKKinds.OnChooseIntent;
+export const adaptiveCardIntentKey: string = SDKKinds.AdaptiveCardIntent;
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);

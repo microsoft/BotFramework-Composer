@@ -28,6 +28,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     ),
     title: formatMessage('Language Generation'),
   },
+  [SDKKinds.AdaptiveCardIntent]: {
+    title: formatMessage('Adaptive card intent received'),
+  },
   [SDKKinds.AdaptiveDialog]: {
     title: formatMessage('Adaptive dialog'),
   },
@@ -135,6 +138,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
   [SDKKinds.OnCancelDialog]: {
     title: formatMessage('Dialog cancelled'),
     subtitle: formatMessage('Cancel dialog event'),
+  },
+  [SDKKinds.OnChooseIntent]: {
+    title: formatMessage('Duplicated intents recognized'),
   },
   [SDKKinds.OnCondition]: {
     title: formatMessage('Handle a Condition'),
