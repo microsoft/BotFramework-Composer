@@ -138,8 +138,11 @@ export default async (composer: any): Promise<void> => {
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { installOut, installErr } = exec('npm install', { cwd: path.join(runtimePath, '/core'), stdio: 'pipe' });
-      const { install2Out, install2Err } = exec('npm install', {
+      const { installOut, installErr } = await exec('npm install', {
+        cwd: path.join(runtimePath, '/core'),
+        stdio: 'pipe',
+      });
+      const { install2Out, install2Err } = await exec('npm install', {
         cwd: path.join(runtimePath, '/azurewebapp'),
       });
       composer.log('BUILD COMPLETE');
@@ -175,7 +178,10 @@ export default async (composer: any): Promise<void> => {
       // const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
-        await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
+        const excludeFolder = new Set(path.resolve(sourcePath, 'node_modules')).add(
+          path.resolve(sourcePath, 'azurewebapp/node_modules')
+        );
+        await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
         // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         return destPath;
       } else {

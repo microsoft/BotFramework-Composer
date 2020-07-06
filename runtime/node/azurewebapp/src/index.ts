@@ -4,35 +4,27 @@
 import * as restify from "restify";
 import * as fs from "fs";
 import * as path from "path";
-import {
-  BotFrameworkAdapter,
-  MemoryStorage,
-  ConversationState,
-  UserState,
-} from "botbuilder";
+import { BotFrameworkAdapter } from "botbuilder";
 import {
   AdaptiveDialogComponentRegistration,
   LanguageGeneratorMiddleWare,
 } from "botbuilder-dialogs-adaptive";
 import { ResourceExplorer } from "botbuilder-dialogs-declarative";
-import { ComposerBot } from "../../core/src/index";
+import { ComposerBot } from "node-runtime-core";
 
 // Create HTTP server.
 const server = restify.createServer();
 const argv = require("minimist")(process.argv.slice(2));
 // prefer the argv port --port=XXXX over process.env because the parent Composer app uses that.
-const port = argv.port || process.env.port || process.env.PORT ||  3978;
-server.listen(
-  port,
-  (): void => {
-    console.log(
-      `\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`
-    );
-    console.log(
-      `\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`
-    );
-  }
-);
+const port = argv.port || process.env.port || process.env.PORT || 3978;
+server.listen(port, (): void => {
+  console.log(
+    `\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`
+  );
+  console.log(
+    `\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`
+  );
+});
 
 const getProjectRoot = (): string => {
   // Load project settings
@@ -59,6 +51,7 @@ const getRootDialog = (): string => {
       break;
     }
   }
+  console.log(mainDialog);
   return mainDialog;
 };
 
@@ -82,15 +75,7 @@ const Configure = () => {
   adapter.use(new LanguageGeneratorMiddleWare(resourceExplorer));
 
   // get settings
-
-  const userState = new UserState(new MemoryStorage());
-  const conversationState = new ConversationState(new MemoryStorage());
-  const bot = new ComposerBot(
-    userState,
-    conversationState,
-    getRootDialog(),
-    getSettings()
-  );
+  const bot = new ComposerBot(resourceExplorer, getRootDialog(), getSettings());
 
   return { adapter, bot };
 };

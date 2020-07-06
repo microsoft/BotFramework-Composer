@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ConversationState, UserState } from "botbuilder";
+import { ConversationState, UserState, MemoryStorage } from "botbuilder";
 import { DialogManager } from "botbuilder-dialogs";
 import { ResourceExplorer } from "botbuilder-dialogs-declarative";
 import { AdaptiveDialog } from "botbuilder-dialogs-adaptive";
@@ -14,18 +14,21 @@ export class ComposerBot {
   private readonly rootDialogPath: string;
 
   constructor(
-    userState: UserState,
-    conversationState: ConversationState,
+    // userState: UserState,
+    // conversationState: ConversationState,
+    resourceExplorer: ResourceExplorer,
     rootDialog: string,
     settings: any
   ) {
     this.dialogManager = new DialogManager();
-    // this.conversationState = conversationState;
-    // this.userState = userState;
-    this.dialogManager.conversationState = conversationState;
-    this.dialogManager.userState = userState;
+    this.dialogManager.conversationState = new ConversationState(
+      new MemoryStorage()
+    );
+    this.dialogManager.userState = new UserState(new MemoryStorage());
+    this.resourceExplorer = resourceExplorer;
     this.rootDialogPath = rootDialog;
     this.loadRootDialog();
+    console.log(settings);
     this.dialogManager.initialTurnState.set("settings", settings);
   }
 
@@ -37,6 +40,6 @@ export class ComposerBot {
   };
 
   public onTurn = async (context: any) => {
-    this.dialogManager.onTurn(context);
+    await this.dialogManager.onTurn(context);
   };
 }

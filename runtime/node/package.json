@@ -1,0 +1,17 @@
+{
+  "name": "node-runtime",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=12"
+  },
+  "workspaces": [
+    "core",
+    "azurewebapp"
+  ],
+  "scripts": {
+    "build": "yarn build:core && yarn build:azurewebapp",
+    "build:core": "yarn workspace node-runtime-core build",
+    "build:azurewebapp": "yarn workspace node-azurewebapp build"
+  }
+}
