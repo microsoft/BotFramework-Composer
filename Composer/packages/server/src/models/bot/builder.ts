@@ -77,8 +77,9 @@ export class Builder {
       //do cross train before build
       await this.crossTrain(luFiles, qnaFiles);
 
-      await this.runLuBuild(luFiles);
-      await this.runQnaBuild(qnaFiles);
+      const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
+      await this.runLuBuild(interruptionLuFiles);
+      await this.runQnaBuild(interruptionQnaFiles);
       //remove the cross train result
       await this.cleanCrossTrain();
     } catch (error) {
@@ -130,6 +131,30 @@ export class Builder {
     await this.writeFiles(result.qnaResult);
   }
 
+  private async getInterruptionFiles() {
+    const files = await this.storage.readDir(this.interruptionFolderPath);
+    const interruptionLuFiles: FileInfo[] = [];
+    const interruptionQnaFiles: FileInfo[] = [];
+
+    for (const file of files) {
+      const content = await this.storage.readFile(Path.join(this.interruptionFolderPath, file));
+      const path = Path.join(this.interruptionFolderPath, file);
+      const stats = await this.storage.stat(path);
+      const fileInfo: FileInfo = {
+        name: file,
+        content,
+        path: Path.join(this.interruptionFolderPath, file),
+        relativePath: Path.relative(this.interruptionFolderPath, path),
+        lastModified: stats.lastModified,
+      };
+      if (file.endsWith('qna')) {
+        interruptionQnaFiles.push(fileInfo);
+      } else if (file.endsWith('lu')) {
+        interruptionLuFiles.push(fileInfo);
+      }
+    }
+    return { interruptionLuFiles, interruptionQnaFiles };
+  }
   private doDownSampling(luObject: any) {
     //do bootstramp sampling to make the utterances' number ratio to 1:10
     const bootstrapSampler = new ComposerBootstrapSampler(
