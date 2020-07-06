@@ -20,8 +20,8 @@ import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 
-import { createSelectedPath, getFriendlyName } from '../../utils';
 import { dispatcherState, userSettingsState } from '../../recoilModel';
+import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 
 import { groupListStyle, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';

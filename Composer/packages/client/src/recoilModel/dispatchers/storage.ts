@@ -7,7 +7,7 @@ import isArray from 'lodash/isArray';
 import httpClient from '../../utils/httpUtil';
 import { storagesState, storageFileLoadingStatusState, focusedStorageFolderState } from '../atoms/appState';
 import { FileTypes } from '../../constants';
-import { getExtension } from '../../utils';
+import { getExtension } from '../../utils/fileUtil';
 
 import { logMessage } from './shared';
 

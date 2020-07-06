@@ -12,7 +12,6 @@ import { useRecoilValue } from 'recoil';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
-import { navigateTo } from '../../utils';
 import { PublishTarget } from '../../recoilModel/types';
 import {
   settingsState,
@@ -22,6 +21,7 @@ import {
   publishHistoryState,
   dispatcherState,
 } from '../../recoilModel';
+import { navigateTo } from '../../utils/navigation';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 

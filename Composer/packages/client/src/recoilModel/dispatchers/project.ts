@@ -18,7 +18,7 @@ import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { DialogSetting } from '../../recoilModel/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 
 import {
   skillManifestsState,

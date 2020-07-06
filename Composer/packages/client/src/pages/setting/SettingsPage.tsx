@@ -14,7 +14,7 @@ import { projectIdState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page/Page';
 import { INavTreeItem } from '../../components/NavTree/NavTree';
 import { useLocation } from '../../utils/hooks';

@@ -5,7 +5,7 @@ import { Diagnostic, DialogInfo, LuFile, LgFile, LgNamePattern } from '@bfc/shar
 import get from 'lodash/get';
 
 import { getBaseName } from '../../utils/fileUtil';
-import { replaceDialogDiagnosticLabel } from '../../utils';
+import { replaceDialogDiagnosticLabel } from '../../utils/dialogUtil';
 export const DiagnosticSeverity = ['Error', 'Warning']; //'Information', 'Hint'
 
 export enum NotificationType {

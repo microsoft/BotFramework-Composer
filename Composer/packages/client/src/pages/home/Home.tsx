@@ -13,10 +13,10 @@ import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
-import { navigateTo } from '../../utils';
 import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
 import { recentProjectsState, templateProjectsState } from '../../recoilModel/atoms/appState';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
+import { navigateTo } from '../../utils/navigation';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
