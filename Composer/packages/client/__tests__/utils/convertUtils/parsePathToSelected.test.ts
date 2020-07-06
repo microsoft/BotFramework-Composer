@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { parsePathToSelected } from '../../../src/utils/convertUtils';
+import { parsePathToSelected } from '../../../src/utils/convertUtils/parsePathToSelected';
 
 describe('parsePathToSelected', () => {
   it('should return selected path', () => {
