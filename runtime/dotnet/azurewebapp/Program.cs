@@ -43,6 +43,18 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
                 builder.AddJsonFile(configFile, optional: true, reloadOnChange: true);
 
+                try
+                {
+                    foreach (string filePath in Directory.GetFiles(botRoot, "generated/qnamaker.settings.*.json"))
+                    {
+                        builder.AddJsonFile(Path.GetFullPath(filePath), optional: true, reloadOnChange: true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.Message);
+                }               
+
                 // Need to put this part here to override the any customized settings
                 if (!env.IsDevelopment())
                 {

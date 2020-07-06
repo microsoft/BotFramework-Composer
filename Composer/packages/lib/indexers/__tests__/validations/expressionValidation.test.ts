@@ -13,6 +13,9 @@ describe('search lg custom function', () => {
     expect(result.length).toEqual(2);
     expect(result[0]).toEqual('foo.bar');
     expect(result[1]).toEqual('foo.cool');
+    const lgFilesWithoutOptions = [{ id: 'test.en-us' }];
+    const result1 = searchLgCustomFunction(lgFilesWithoutOptions as LgFile[]);
+    expect(result1.length).toEqual(0);
   });
 
   it('should return custom functions with namespace', () => {
