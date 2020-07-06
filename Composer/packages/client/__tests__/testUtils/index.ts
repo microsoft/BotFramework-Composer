@@ -4,3 +4,4 @@
 export * from './renderWithStore';
 export * from './renderWithRecoilAndContext';
 export * from './renderWithRecoil';
+export * from './react-recoil-hooks-testing-library';
