@@ -14,7 +14,6 @@ import {
   dispatcherState,
 } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
-import { Dispatcher } from '../../../src/recoilModel/dispatchers';
 
 jest.mock('../../../src/components/DialogWrapper/DialogWrapper', () => {
   return {
@@ -28,13 +27,15 @@ describe('<CreationFlow/>', () => {
   let locationMock;
   const createProjectMock = jest.fn();
   const initRecoilState = ({ set }) => {
-    set(dispatcherState, (currentDispatcher: Dispatcher) => {
-      return {
-        ...currentDispatcher,
-        createProject: createProjectMock,
-        fetchStorages: jest.fn(),
-        fetchTemplateProjects: jest.fn(),
-      };
+    set(dispatcherState, {
+      createProject: createProjectMock,
+      fetchStorages: jest.fn(),
+      fetchTemplateProjects: jest.fn(),
+      onboardingAddCoachMarkRef: jest.fn(),
+      fetchRecentProjects: jest.fn(),
+      fetchTemplates: jest.fn(),
+      setCreationFlowStatus: jest.fn(),
+      navTo: jest.fn(),
     });
     set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
     set(templateIdState, 'EchoBot');
@@ -54,14 +55,6 @@ describe('<CreationFlow/>', () => {
     });
   };
 
-  function renderComponent() {
-    return (
-      <RecoilRoot initializeState={initRecoilState}>
-        <CreationFlow location={locationMock} />
-      </RecoilRoot>
-    );
-  }
-
   function renderWithRouter(ui, { route = '', history = createHistory(createMemorySource(route)) } = {}) {
     return {
       ...render(<LocationProvider history={history}>{ui}</LocationProvider>),
@@ -74,9 +67,8 @@ describe('<CreationFlow/>', () => {
   });
 
   it('should render the component', async () => {
-    const expectedTemplateId = 'EchoBot';
-
     const {
+      findByText,
       history: { navigate },
     } = renderWithRouter(
       <RecoilRoot initializeState={initRecoilState}>
@@ -84,13 +76,12 @@ describe('<CreationFlow/>', () => {
       </RecoilRoot>
     );
 
-    const component = renderComponent();
-    navigate('create/Emptybot');
-    const node = await component.findByText('OK');
+    navigate('create/EchoBot');
+    const node = await findByText('OK');
 
     act(() => {
       fireEvent.click(node);
     });
-    expect(createProjectMock).toHaveBeenCalledWith(expectedTemplateId, '', '', '');
+    expect(createProjectMock).toHaveBeenCalledWith('EchoBot', 'EchoBot-1', '', '', '');
   });
 });
