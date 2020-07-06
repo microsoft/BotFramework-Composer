@@ -1,14 +1,18 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import * as React from 'react';
 import { renderHook } from '@bfc/test-utils/lib/hooks';
+import { RecoilRoot } from 'recoil';
 
-import { useStoreContext } from '../../../src/hooks/useStoreContext';
 import useNotifications from '../../../src/pages/notifications/useNotifications';
-
-jest.mock('../../../src/hooks/useStoreContext', () => ({
-  useStoreContext: jest.fn(),
-}));
+import {
+  projectIdState,
+  dialogsState,
+  luFilesState,
+  lgFilesState,
+  BotDiagnosticsState,
+} from '../../../src/recoilModel';
 
 const state = {
   projectId: 'test',
@@ -89,27 +93,41 @@ const state = {
   ],
 };
 
-const resolvers = { luFileResolver: jest.fn((id) => state.luFiles.find((file) => file.id === id)) };
-
-const actions = {
-  updateLuFile: jest.fn(),
+const initRecoilState = ({ set }) => {
+  set(projectIdState, state.projectId);
+  set(dialogsState, state.dialogs);
+  set(luFilesState, state.luFiles);
+  set(lgFilesState, state.lgFiles);
+  set(BotDiagnosticsState, state.diagnostics);
 };
 
-(useStoreContext as jest.Mock).mockReturnValue({
-  state,
-  resolvers,
-  actions,
-});
-
 describe('useNotification hooks', () => {
-  it('should return notifications', () => {
-    const { result } = renderHook(() => useNotifications());
+  let renderedResult;
+  beforeEach(() => {
+    const wrapper = (props: { children?: React.ReactNode }) => {
+      const { children } = props;
+      return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
+    };
 
-    expect(result.current.length).toBe(4);
+    const { result } = renderHook(() => useNotifications(), {
+      wrapper,
+    });
+    renderedResult = result;
+  });
+
+  it('should return notifications', () => {
+    expect(renderedResult.current.length).toBe(4);
   });
 
   it('should return filtered notifications', () => {
-    const { result } = renderHook(() => useNotifications('Error'));
+    const wrapper = (props: { children?: React.ReactNode }) => {
+      const { children } = props;
+      return <RecoilRoot initializeState={initRecoilState}>{children}</RecoilRoot>;
+    };
+
+    const { result } = renderHook(() => useNotifications('Error'), {
+      wrapper,
+    });
 
     expect(result.current.length).toBe(2);
   });

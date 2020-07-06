@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils';
+import { fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils';
 import { Skill } from '@bfc/shared';
 
 import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
 import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal/CreateSkillModal';
-import { renderWithStore } from '../testUtils';
+import { renderWithRecoil } from '../testUtils';
 
 jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl', () => ({
   validateManifestUrl: () => {},
@@ -39,7 +39,7 @@ const items: Skill[] = [
 
 describe('Skill page', () => {
   it('can add a new skill', () => {
-    const { getByText } = renderWithStore(<Skills />);
+    const { getByText } = renderWithRecoil(<Skills />);
 
     const button = getByText('Connect to a new skill');
     fireEvent.click(button);
@@ -54,7 +54,7 @@ describe('Skill page', () => {
 
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
-    const { container } = render(
+    const { container } = renderWithRecoil(
       <SkillList projectId="test-project" skills={items} onDelete={jest.fn()} onEdit={jest.fn()} />
     );
     expect(container).toHaveTextContent('Email Skill');
@@ -63,7 +63,7 @@ describe('<SkillList />', () => {
 
   it('can edit the skill', () => {
     const onEdit = jest.fn();
-    const { getAllByTestId } = render(
+    const { getAllByTestId } = renderWithRecoil(
       <SkillList projectId="test-project" skills={items} onDelete={jest.fn()} onEdit={onEdit} />
     );
 
@@ -82,7 +82,7 @@ describe('<SkillForm />', () => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
     const onDismiss = jest.fn(() => {});
-    const { getByLabelText, getByText } = render(
+    const { getByLabelText, getByText } = renderWithRecoil(
       <CreateSkillModal
         isOpen
         editIndex={0}
