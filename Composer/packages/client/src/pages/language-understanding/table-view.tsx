@@ -20,8 +20,8 @@ import { RouteComponentProps } from '@reach/router';
 import { LuFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { navigateTo } from '../../utils';
 import { dialogsState, luFilesState, projectIdState, localeState } from '../../recoilModel/atoms/botState';
+import { navigateTo } from '../../utils/navigation';
 
 import { formCell, luPhraseCell, tableCell, content } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {

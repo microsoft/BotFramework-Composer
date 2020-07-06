@@ -17,16 +17,15 @@ import { useRecoilValue } from 'recoil';
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
-import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
+import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
 import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
-import { clearBreadcrumb } from '../../utils/navigation';
+import { clearBreadcrumb, navigateTo } from '../../utils/navigation';
 import { undoHistory } from '../../recoilModel/undo';
-import { navigateTo } from '../../utils';
 import { useShell } from '../../shell';
 import {
   dialogsState,

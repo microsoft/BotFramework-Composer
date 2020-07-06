@@ -64,16 +64,24 @@ describe('<DefineConversation/>', () => {
     const component = renderComponent();
     const node = await component.findByText('OK');
     fireEvent.click(node);
-    expect(onSubmitMock).toHaveBeenLastCalledWith(
-      {
-        description: 'Test Echo',
-        name: 'EchoBot-11299',
-        location: '',
-        schemaUrl:
-          'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
-      },
-      'EchoBot'
-    );
+    expect(
+      onSubmitMock.mock.calls[0][0] ===
+        {
+          description: 'Test Echo',
+          name: 'EchoBot-11299',
+          location: '\\test-folder\\Desktop',
+          schemaUrl:
+            'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
+        } ||
+        onSubmitMock.mock.calls[0][0] ===
+          {
+            description: 'Test Echo',
+            name: 'EchoBot-11299',
+            location: '/test-folder/Desktop',
+            schemaUrl:
+              'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
+          }
+    ).toBeTruthy;
   });
 
   it('does not allow submission when the name is invalid', async () => {

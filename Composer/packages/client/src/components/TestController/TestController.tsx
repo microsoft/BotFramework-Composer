@@ -23,10 +23,10 @@ import {
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus, LuisConfig } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
+import useNotifications from '../../pages/notifications/useNotifications';
+import { navigateTo, openInEmulator } from '../../utils/navigation';
 
 import { getReferredFiles } from './../../utils/luUtil';
-import useNotifications from './../../pages/notifications/useNotifications';
-import { navigateTo, openInEmulator } from './../../utils';
 import { PublishLuisDialog } from './publishDialog';
 import { bot, botButton } from './styles';
 import { ErrorCallout } from './errorCallout';

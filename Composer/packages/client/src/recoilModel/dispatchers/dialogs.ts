@@ -6,7 +6,7 @@ import { LuFile, importResolverGenerator } from '@bfc/shared';
 import { dialogIndexer, autofixReferInDialog, luIndexer, lgIndexer, validateDialog } from '@bfc/indexers';
 
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { getBaseName } from '../../utils';
+import { getBaseName } from '../../utils/fileUtil';
 import {
   dialogsState,
   lgFilesState,

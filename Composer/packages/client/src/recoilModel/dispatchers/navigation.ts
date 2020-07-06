@@ -7,7 +7,7 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { PromptTab } from '@bfc/shared';
 
 import { DesignPageLocationPayload } from './../types';
-import { getSelected } from './../../utils';
+import { getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
 import { focusPathState, breadcrumbState, designPageLocationState, projectIdState } from './../atoms/botState';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';

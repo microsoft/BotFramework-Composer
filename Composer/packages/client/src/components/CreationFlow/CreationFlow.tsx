@@ -9,7 +9,6 @@ import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { CreationFlowStatus } from '../../constants';
-import Home from '../../pages/home';
 import {
   dispatcherState,
   creationFlowStatusState,
@@ -19,6 +18,7 @@ import {
   focusedStorageFolderState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
+import Home from '../../pages/home/Home';
 
 import { CreateOptions } from './CreateOptions/CreateOptions';
 import { OpenProject } from './OpenProject/OpenProject';

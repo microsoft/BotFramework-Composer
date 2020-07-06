@@ -6,12 +6,12 @@ import { Router, Redirect } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { ErrorBoundary } from '../../components/ErrorBoundary/ErrorBoundary';
-import { About } from '../about';
 import { applicationErrorState, dispatcherState } from '../../recoilModel';
+import { About } from '../about/About';
 
-import { DialogSettings } from './dialog-settings';
-import { AppSettings } from './app-settings';
-import { RuntimeSettings } from './runtime-settings';
+import { DialogSettings } from './dialog-settings/DialogSettings';
+import { AppSettings } from './app-settings/AppSettings';
+import { RuntimeSettings } from './runtime-settings/RuntimeSettings';
 
 export const SettingsRoutes = React.memo(({ projectId }: { projectId: string }) => {
   const applicationError = useRecoilValue(applicationErrorState);

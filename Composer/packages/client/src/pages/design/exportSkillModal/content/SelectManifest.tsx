@@ -19,7 +19,7 @@ import {
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
-import { calculateTimeDiff } from '../../../../utils';
+import { calculateTimeDiff } from '../../../../utils/fileUtil';
 import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
 import { botNameState, dispatcherState } from '../../../../recoilModel';
 

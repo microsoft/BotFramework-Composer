@@ -20,7 +20,7 @@ import { LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, content } from '../language-understanding/styles';
 import { dispatcherState, dialogsState, lgFilesState, projectIdState, localeState } from '../../recoilModel';
 

@@ -7,12 +7,7 @@ import { createHistory, createMemorySource, LocationProvider } from '@reach/rout
 import { RecoilRoot } from 'recoil';
 
 import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
-import {
-  focusedStorageFolderState,
-  creationFlowStatusState,
-  templateIdState,
-  dispatcherState,
-} from '../../../src/recoilModel';
+import { focusedStorageFolderState, creationFlowStatusState, dispatcherState } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
 
 jest.mock('../../../src/components/DialogWrapper/DialogWrapper', () => {
@@ -38,7 +33,7 @@ describe('<CreationFlow/>', () => {
       navTo: jest.fn(),
     });
     set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
-    set(templateIdState, 'EchoBot');
+
     set(focusedStorageFolderState, {
       name: 'Desktop',
       parent: '/test-folder',
@@ -82,6 +77,6 @@ describe('<CreationFlow/>', () => {
     act(() => {
       fireEvent.click(node);
     });
-    expect(createProjectMock).toHaveBeenCalledWith('EchoBot', 'EchoBot-1', '', '', '');
+    expect(createProjectMock).toHaveBeenCalledWith('EchoBot', 'EchoBot-1', '', '/test-folder/Desktop', '');
   });
 });
