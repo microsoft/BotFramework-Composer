@@ -73,7 +73,7 @@ export const onboardingState = atom<{
   key: getFullyQualifiedKey('onboarding'),
   default: {
     coachMarkRefs: {},
-    complete: false,
+    complete: true,
   },
 });
 
