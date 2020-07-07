@@ -7,14 +7,14 @@ import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 import { ToolBar } from '../../components/ToolBar/ToolBar';
+import { navigateTo } from '../../utils/navigation';
+import { convertPathToUrl } from '../../utils/navigation';
 
 import useNotifications from './useNotifications';
 import { NotificationList } from './NotificationList';
 import { NotificationHeader } from './NotificationHeader';
 import { root } from './styles';
 import { INotification, NotificationType } from './types';
-import { navigateTo } from './../../utils';
-import { convertPathToUrl } from './../../utils/navigation';
 
 const Notifications: React.FC<RouteComponentProps> = () => {
   const [filter, setFilter] = useState('');

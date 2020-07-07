@@ -13,13 +13,13 @@ import { BASEPATH } from './constants';
 import { StoreContext } from './store';
 import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
 
-const DesignPage = React.lazy(() => import('./pages/design'));
-const LUPage = React.lazy(() => import('./pages/language-understanding'));
-const LGPage = React.lazy(() => import('./pages/language-generation'));
+const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
+const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
+const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
 const QnAPage = React.lazy(() => import('./pages/qna'));
-const SettingPage = React.lazy(() => import('./pages/setting'));
-const Notifications = React.lazy(() => import('./pages/notifications'));
-const Publish = React.lazy(() => import('./pages/publish'));
+const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
+const Notifications = React.lazy(() => import('./pages/notifications/Notifications'));
+const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 

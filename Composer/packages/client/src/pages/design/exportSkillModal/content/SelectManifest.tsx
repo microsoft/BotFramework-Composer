@@ -18,7 +18,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import formatMessage from 'format-message';
 
-import { calculateTimeDiff } from '../../../../utils';
+import { calculateTimeDiff } from '../../../../utils/fileUtil';
 import { StoreContext } from '../../../../store';
 import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
 
