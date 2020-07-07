@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { act, cleanup, renderHook } from '@testing-library/react-hooks';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { RecoilRoot, RecoilState, useSetRecoilState } from 'recoil';
+import reduce from 'lodash/reduce';
 
 interface MockRecoilState {
   recoilState: RecoilState<any>;
@@ -13,6 +14,7 @@ interface MockRecoilState {
 interface RenderHookOptions {
   states?: MockRecoilState[];
   wrapper?: React.ComponentType;
+  dispatcher: MockRecoilState | undefined;
 }
 
 function recoilStateWrapper(options?: RenderHookOptions) {
@@ -25,8 +27,36 @@ function recoilStateWrapper(options?: RenderHookOptions) {
     return null;
   };
 
+  const DispatcherComponent: React.FC<MockRecoilState> = (props: MockRecoilState) => {
+    const setState = useSetRecoilState(props.recoilState);
+
+    const reducedState = useRef(
+      reduce(
+        props.initialValue,
+        (result, value) => {
+          result = {
+            ...result,
+            ...value(),
+          };
+          return result;
+        },
+        {}
+      )
+    );
+
+    useEffect(() => {
+      setState({ ...reducedState.current });
+    });
+
+    return null;
+  };
+
   const renderStateComponents = () => {
     return options?.states?.map((state) => <StateComponent key={state.recoilState.key} {...state} />);
+  };
+
+  const renderDispatcher = () => {
+    return <DispatcherComponent {...options?.dispatcher} />;
   };
 
   return ({ children }: { children?: React.ReactNode }) => {
@@ -35,6 +65,7 @@ function recoilStateWrapper(options?: RenderHookOptions) {
     return (
       <RecoilRoot>
         {renderStateComponents()}
+        {renderDispatcher()}
         {renderChildren}
       </RecoilRoot>
     );
@@ -61,6 +92,7 @@ function renderRecoilHook<P, R>(
     wrapper: recoilStateWrapper({
       states: options?.states,
       wrapper: options?.wrapper,
+      dispatcher: options?.dispatcher,
     }),
   });
 }
