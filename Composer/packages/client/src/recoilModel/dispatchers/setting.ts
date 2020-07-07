@@ -8,7 +8,7 @@ import get from 'lodash/get';
 import has from 'lodash/has';
 
 import settingStorage from '../../utils/dialogSettingStorage';
-import { settingsState, publishTargetsState } from '../atoms/botState';
+import { settingsState } from '../atoms/botState';
 import { DialogSetting, PublishTarget } from '../../recoilModel/types';
 
 export const settingsDispatcher = () => {
@@ -27,7 +27,10 @@ export const settingsDispatcher = () => {
 
   const setPublishTargets = useRecoilCallback(
     ({ set }: CallbackInterface) => async (publishTargets: PublishTarget[]) => {
-      set(publishTargetsState, publishTargets);
+      set(settingsState, (settings) => ({
+        ...settings,
+        publishTargets,
+      }));
     }
   );
 
