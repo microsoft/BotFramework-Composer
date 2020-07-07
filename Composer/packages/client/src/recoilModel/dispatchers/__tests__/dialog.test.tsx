@@ -110,13 +110,14 @@ describe('dialog dispatcher', () => {
 
   it('begins creating a dialog', async () => {
     const ACTIONS = [{ action: 'stuff' }];
-    const mockOnComplete = jest.fn();
+    const ON_COMPLETE = { action: 'moreStuff' };
 
     await act(async () => {
-      await dispatcher.createDialogBegin({ actions: ACTIONS }, mockOnComplete);
+      await dispatcher.createDialogBegin({ actions: ACTIONS }, ON_COMPLETE);
     });
+    console.log(JSON.stringify(renderedComponent.current));
     expect(renderedComponent.current.actionsSeed).toEqual({ actions: ACTIONS });
-    expect(renderedComponent.current.onCreateDialogComplete).toBe(mockOnComplete);
+    expect(renderedComponent.current.onCreateDialogComplete).toBe(ON_COMPLETE);
     expect(renderedComponent.current.showCreateDialogModal).toBe(true);
   });
 
