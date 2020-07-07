@@ -134,11 +134,6 @@ export const publishTypesState = atom<PublishType[]>({
   default: [],
 });
 
-export const publishTargetsState = atom<PublishTarget[]>({
-  key: 'publishTargets',
-  default: [],
-});
-
 export const botOpeningState = atom<boolean>({
   key: 'botOpening',
   default: false,
