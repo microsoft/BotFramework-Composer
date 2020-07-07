@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { act, cleanup, renderHook } from '@testing-library/react-hooks';
+import { act, cleanup, renderHook, RenderHookResult } from '@testing-library/react-hooks';
 import React, { useEffect, useRef } from 'react';
 import { RecoilRoot, RecoilState, useSetRecoilState } from 'recoil';
 import reduce from 'lodash/reduce';
@@ -14,7 +14,7 @@ interface MockRecoilState {
 interface RenderHookOptions {
   states?: MockRecoilState[];
   wrapper?: React.ComponentType;
-  dispatcher: MockRecoilState | undefined;
+  dispatcher?: MockRecoilState;
 }
 
 function recoilStateWrapper(options?: RenderHookOptions) {
@@ -80,15 +80,7 @@ function renderRecoilHook<P, R>(
     initialProps?: P;
     wrapper?: React.ComponentType;
   }
-): {
-  readonly result: {
-    readonly current: R;
-    readonly error: Error;
-  };
-  readonly waitForNextUpdate: () => Promise<void>;
-  readonly unmount: () => boolean;
-  readonly rerender: (hookProps?: P) => void;
-} {
+): RenderHookResult<P, R> {
   return renderHook(callback, {
     ...options,
     wrapper: recoilStateWrapper({

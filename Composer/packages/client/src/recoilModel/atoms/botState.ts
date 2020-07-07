@@ -4,7 +4,7 @@
 import { atom } from 'recoil';
 import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill } from '@bfc/shared';
 
-import { BotLoadError, DesignPageLocation, PublishTarget } from '../../recoilModel/types';
+import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 
 import { PublishType, DialogSetting, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
