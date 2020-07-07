@@ -17,7 +17,6 @@ import {
   storagesState,
   focusedStorageFolderState,
 } from '../../recoilModel';
-import { navigateTo } from '../../utils/navigation';
 import Home from '../../pages/home/Home';
 
 import { CreateOptions } from './CreateOptions/CreateOptions';
@@ -38,7 +37,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createFolder,
     updateCurrentPathForStorage,
     updateFolder,
-    navTo,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
@@ -82,20 +80,15 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     const projectId = await openBotProject(botFolder);
     if (projectId) {
       setCreationFlowStatus(CreationFlowStatus.CLOSE);
-      const mainUrl = `/bot/${projectId}/dialogs/Main`;
-
-      navigateTo(mainUrl);
     }
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
     await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
-    navTo('main');
   };
 
   const handleSaveAs = async (formData) => {
     await saveProjectAs(projectId, formData.name, formData.description, formData.location);
-    navTo('main');
   };
 
   const handleSubmit = async (formData, templateId: string) => {

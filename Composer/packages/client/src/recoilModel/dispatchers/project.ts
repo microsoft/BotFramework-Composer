@@ -104,35 +104,60 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 };
 
 export const projectDispatcher = () => {
-  const initBotState = async (callbackHelpers: CallbackInterface, data: any) => {
-    const { set, snapshot } = callbackHelpers;
+  const initBotState = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
+    const { snapshot, gotoSnapshot } = callbackHelpers;
     const curLocation = await snapshot.getPromise(locationState);
-    const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics, skills } = data;
-    schemas.sdk.content = processSchema(id, schemas.sdk.content);
+    const {
+      files,
+      botName,
+      botEnvironment,
+      location,
+      schemas,
+      settings,
+      id: projectId,
+      locale,
+      diagnostics,
+      skills,
+    } = data;
+    schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
     const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+    let mainDialog = '';
     const verifiedDialogs = dialogs.map((dialog) => {
+      if (dialog.isRoot) {
+        mainDialog = dialog.id;
+      }
       dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
       return dialog;
     });
-    set(skillManifestsState, skillManifestFiles);
-    set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
-    set(lgFilesState, lgFiles);
-    set(settingsState, settings);
-    set(dialogsState, verifiedDialogs);
-    set(botEnvironmentState, botEnvironment);
-    set(botNameState, botName);
-    if (location !== curLocation) {
-      set(botStatusState, BotStatus.unConnected);
-      set(locationState, location);
+
+    const newSnapshot = snapshot.map(({ set }) => {
+      set(skillManifestsState, skillManifestFiles);
+      set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
+      set(lgFilesState, lgFiles);
+      set(settingsState, settings);
+      set(dialogsState, verifiedDialogs);
+      set(botEnvironmentState, botEnvironment);
+      set(botNameState, botName);
+      if (location !== curLocation) {
+        set(botStatusState, BotStatus.unConnected);
+        set(locationState, location);
+      }
+      set(skillsState, skills);
+      set(schemasState, schemas);
+      set(localeState, locale);
+      set(BotDiagnosticsState, diagnostics);
+      set(botOpeningState, false);
+      set(projectIdState, projectId);
+    });
+
+    gotoSnapshot(newSnapshot);
+    refreshLocalStorage(projectId, settings);
+    mergeLocalStorage(projectId, settings);
+    if (jumpToMain && projectId) {
+      const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
+
+      navigateTo(mainUrl);
     }
-    set(skillsState, skills);
-    set(schemasState, schemas);
-    set(localeState, locale);
-    set(BotDiagnosticsState, diagnostics);
-    set(botOpeningState, false);
-    set(projectIdState, id);
-    refreshLocalStorage(id, settings);
-    mergeLocalStorage(id, settings);
   };
 
   const removeRecentProject = async (callbackHelpers: CallbackInterface, path: string) => {
@@ -163,7 +188,7 @@ export const projectDispatcher = () => {
       try {
         await setOpenPendingStatusAsync(callbackHelpers);
         const response = await httpClient.put(`/projects/open`, { path, storageId });
-        await initBotState(callbackHelpers, response.data);
+        await initBotState(callbackHelpers, response.data, true);
         return response.data.id;
       } catch (ex) {
         removeRecentProject(callbackHelpers, path);
@@ -175,7 +200,7 @@ export const projectDispatcher = () => {
   const fetchProjectById = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
       const response = await httpClient.get(`/projects/${projectId}`);
-      await initBotState(callbackHelpers, response.data);
+      await initBotState(callbackHelpers, response.data, false);
     } catch (ex) {
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
@@ -204,7 +229,7 @@ export const projectDispatcher = () => {
         if (settingStorage.get(projectId)) {
           settingStorage.remove(projectId);
         }
-        await initBotState(callbackHelpers, response.data);
+        await initBotState(callbackHelpers, response.data, true);
         return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -246,7 +271,7 @@ export const projectDispatcher = () => {
           description,
           location,
         });
-        await initBotState(callbackHelpers, response.data);
+        await initBotState(callbackHelpers, response.data, true);
         return response.data.id;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
