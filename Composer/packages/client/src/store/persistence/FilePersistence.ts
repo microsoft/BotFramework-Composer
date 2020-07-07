@@ -204,32 +204,20 @@ class FilePersistence {
     return fileChanges;
   }
 
-  private getLuFileChanges(
-    id: string,
-    previousState: State,
-    currentState: State,
-    changeType: ChangeType,
-    projectId: string
-  ) {
+  private getLuFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
     const fileChanges: IFileChange[] = [];
-    const { luFiles } = currentState;
+    const { luFiles, projectId } = currentState;
 
-    const lu = luFiles.find((lu) => lu.id === id);
+    const lu = luFiles.find((lu) => getBaseName(lu.id) === id);
     fileChanges.push(this.createChange(lu, FileExtensions.Lu, changeType, projectId));
     return fileChanges;
   }
 
-  private getQnaFileChanges(
-    id: string,
-    previousState: State,
-    currentState: State,
-    changeType: ChangeType,
-    projectId: string
-  ) {
+  private getQnaFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
     const fileChanges: IFileChange[] = [];
-    const { qnaFiles } = currentState;
+    const { qnaFiles, projectId } = currentState;
 
-    const qna = qnaFiles.find((qna) => qna.id === id);
+    const qna = qnaFiles.find((qna) => getBaseName(qna.id) === id);
     fileChanges.push(this.createChange(qna, FileExtensions.Qna, changeType, projectId));
     return fileChanges;
   }
@@ -288,23 +276,11 @@ class FilePersistence {
         break;
       }
       case FileExtensions.Lu: {
-        fileChanges = this.getLuFileChanges(
-          targetId,
-          previousState,
-          currentState,
-          changeType,
-          action.payload.projectId
-        );
+        fileChanges = this.getLuFileChanges(targetId, previousState, currentState, changeType);
         break;
       }
       case FileExtensions.Qna: {
-        fileChanges = this.getQnaFileChanges(
-          targetId,
-          previousState,
-          currentState,
-          changeType,
-          action.payload.projectId
-        );
+        fileChanges = this.getQnaFileChanges(targetId, previousState, currentState, changeType);
         break;
       }
       case FileExtensions.Lg: {
