@@ -7,9 +7,10 @@ import { editorDispatcher } from '../editor';
 import { renderRecoilHook, act } from '../../../../__tests__/testUtils';
 import { visualEditorSelectionState, clipboardActionsState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { Dispatcher } from '..';
 
-describe('<Editor />', () => {
-  let renderedComponent, dispatcher;
+describe('Editor dispatcher', () => {
+  let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const [visualEditorState, setVisualEditorState] = useRecoilState(visualEditorSelectionState);
@@ -27,8 +28,8 @@ describe('<Editor />', () => {
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: visualEditorSelectionState, initialValue: [] },
-        { recoilState: clipboardActionsState, initialValue: [{ action1: 'hi123' }] },
+        { recoilState: visualEditorSelectionState, initialValue: [{ action1: 'initialVisualEditorValue' }] },
+        { recoilState: clipboardActionsState, initialValue: [{ action1: 'initialClipboardVal' }] },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -43,8 +44,23 @@ describe('<Editor />', () => {
 
   it('should set clipboard state correctly', () => {
     act(() => {
-      dispatcher.setVisualEditorClipboard([{ action2: 'hi' }]);
+      dispatcher.setVisualEditorClipboard([{ action2: 'updatedVal' }]);
     });
-    expect(renderedComponent.current.clipboardState).toEqual([{ action2: 'hi' }]);
+    expect(renderedComponent.current.clipboardState).toEqual([{ action2: 'updatedVal' }]);
+  });
+
+  it('should set visual editor state', () => {
+    act(() => {
+      dispatcher.setVisualEditorSelection(['update1', 'update2']);
+    });
+    expect(renderedComponent.current.visualEditorState).toEqual(['update1', 'update2']);
+  });
+
+  it('should reset visual editor state', () => {
+    act(() => {
+      dispatcher.setVisualEditorSelection(['update1', 'update2']);
+      dispatcher.resetVisualEditor();
+    });
+    expect(renderedComponent.current.visualEditorState).toEqual([]);
   });
 });
