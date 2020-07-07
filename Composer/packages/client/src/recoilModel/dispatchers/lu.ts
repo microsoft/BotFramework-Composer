@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
-import { LuFile } from '@bfc/shared';
+import { LuFile, LuIntentSection } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
 import * as luUtil from '../../utils/luUtil';
@@ -16,30 +16,70 @@ import httpClient from './../../utils/httpUtil';
 import { BotStatus } from './../../constants';
 
 export const luDispatcher = () => {
+  const updateFile = async (
+    { set, snapshot }: CallbackInterface,
+    { id, content, projectId }: { id: string; content: string; projectId: string }
+  ) => {
+    let luFiles = await snapshot.getPromise(luFilesState);
+    const result = (await LuWorker.parse(id, content)) as LuFile;
+    luFiles = luFiles.map((file) => (file.id === id ? result : file));
+    luFileStatusStorage.updateFileStatus(projectId, id);
+    set(luFilesState, luFiles);
+  };
+
   const updateLuFile = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async ({ id, content, projectId }) => {
-      let luFiles = await snapshot.getPromise(luFilesState);
-      const result = (await LuWorker.parse(id, content)) as LuFile;
-      luFiles = luFiles.map((file) => (file.id === id ? result : file));
-      luFileStatusStorage.updateFileStatus(projectId, id);
-      set(luFilesState, luFiles);
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      content,
+      projectId,
+    }: {
+      id: string;
+      content: string;
+      projectId: string;
+    }) => {
+      await updateFile(callbackHelpers, { id, content, projectId });
     }
   );
 
-  const updateLuIntent = async ({ projectId, file, intentName, intent }) => {
-    const newContent = luUtil.updateIntent(file.content, intentName, intent);
-    await updateLuFile({ id: file.id, projectId, content: newContent });
-  };
+  const updateLuIntent = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      projectId,
+      file,
+      intentName,
+      intent,
+    }: {
+      projectId: string;
+      file: LuFile;
+      intentName: string;
+      intent: LuIntentSection;
+    }) => {
+      const newContent = luUtil.updateIntent(file.content, intentName, intent);
+      await updateFile(callbackHelpers, { id: file.id, projectId, content: newContent });
+    }
+  );
 
-  const createLuIntent = async ({ projectId, file, intent }) => {
+  const createLuIntent = useRecoilCallback<
+    [{ projectId: string; file: LuFile; intentName: string; intent: LuIntentSection }],
+    Promise<void>
+  >((callbackHelpers: CallbackInterface) => async ({ projectId, file, intent }) => {
     const newContent = luUtil.addIntent(file.content, intent);
-    await updateLuFile({ id: file.id, projectId, content: newContent });
-  };
+    await updateFile(callbackHelpers, { id: file.id, projectId, content: newContent });
+  });
 
-  const removeLuIntent = async ({ projectId, file, intentName }) => {
-    const newContent = luUtil.removeIntent(file.content, intentName);
-    await updateLuFile({ id: file.id, projectId, content: newContent });
-  };
+  const removeLuIntent = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({
+      projectId,
+      file,
+      intentName,
+    }: {
+      projectId: string;
+      file: LuFile;
+      intentName: string;
+    }) => {
+      const newContent = luUtil.removeIntent(file.content, intentName);
+      await updateFile(callbackHelpers, { id: file.id, projectId, content: newContent });
+    }
+  );
 
   const publishLuis = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (authoringKey: string, projectId: string) => {
