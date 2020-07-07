@@ -20,7 +20,7 @@ import formatMessage from 'format-message';
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension, getBaseName } from '../../utils';
+import { getExtension, getBaseName } from '../../utils/fileUtil';
 import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
@@ -458,16 +458,7 @@ const syncEnvSetting: ReducerFunc = (state, { settings, projectId }) => {
 };
 
 const setPublishTargets: ReducerFunc = (state, { publishTarget }) => {
-  state.publishTargets = publishTarget;
-  return state;
-};
-
-const setRuntimeSettings: ReducerFunc = (state, { path, command }) => {
-  state.settings.runtime = {
-    customRuntime: true,
-    path,
-    command,
-  };
+  state.settings.publishTargets = publishTarget;
   return state;
 };
 
@@ -621,7 +612,13 @@ const setUserSettings: ReducerFunc<Partial<UserSettings>> = (state, settings) =>
 };
 
 const ejectSuccess: ReducerFunc = (state, payload) => {
-  state.runtimeSettings = payload.settings;
+  if (payload.settings?.path) {
+    state.settings.runtime = {
+      customRuntime: true,
+      path: payload.settings.path,
+      command: payload.settings.startCommand,
+    };
+  }
   return state;
 };
 
@@ -737,7 +734,6 @@ export const reducer = createReducer({
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
   [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
-  [ActionTypes.SET_RUNTIME_SETTINGS]: setRuntimeSettings,
   [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
   [ActionTypes.CREATE_DIALOG_SCHEMA]: createOrUpdateDialogSchema,
