@@ -27,8 +27,8 @@ describe('<Editor />', () => {
 
     renderedComponent = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: visualEditorSelectionState, initialValue: ['test'] },
-        { recoilState: clipboardActionsState, initialValue: [] },
+        { recoilState: visualEditorSelectionState, initialValue: [] },
+        { recoilState: clipboardActionsState, initialValue: [{ action1: 'hi' }] },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -39,10 +39,10 @@ describe('<Editor />', () => {
     });
   });
 
-  it('should set visual editor clipboard', () => {
+  it('should set clipboard state correctly', () => {
     act(() => {
-      renderedComponent.result.current.currentDispatcher.setVisualEditorClipboard([{ test: 'hi' }]);
+      renderedComponent.result.current.currentDispatcher.setVisualEditorClipboard([{ action2: 'hi' }]);
     });
-    expect(renderedComponent.result.current.clipboardState).toEqual([{ test: 'hi' }]);
+    expect(renderedComponent.result.current.clipboardState).toEqual([{ action2: 'hi' }]);
   });
 });
