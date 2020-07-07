@@ -22,6 +22,8 @@ import * as rp from 'request-promise';
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import archiver = require('archiver');
+import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
+import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
 
 const exec = util.promisify(require('child_process').exec);
 const { promisify } = require('util');
@@ -39,7 +41,6 @@ export class BotProjectDeploy {
   private zipPath: string;
   private publishFolder: string;
   private settingsPath: string;
-  private templatePath: string;
   private dotnetProjectPath: string;
   private generatedFolder: string;
   private remoteBotPath: string;
@@ -70,11 +71,6 @@ export class BotProjectDeploy {
     // path to the deployed settings file that contains additional luis information
     this.deploymentSettingsPath =
       config.deploymentSettingsPath ?? path.join(this.publishFolder, 'appsettings.deployment.json');
-
-    // path to the ARM template
-    // this is currently expected to live in the code project
-    this.templatePath =
-      config.templatePath ?? path.join(this.projPath, 'DeploymentTemplates', 'template-with-preexisting-rg.json');
 
     // path to the dotnet project file
     this.dotnetProjectPath =
@@ -195,78 +191,6 @@ export class BotProjectDeploy {
    * Azure API accessors
    **********************************************************************************************/
 
-  /**
-   * Use the Azure API to create a new resource group
-   */
-  private async createResourceGroup(
-    client: ResourceManagementClient,
-    location: string,
-    resourceGroupName: string
-  ): Promise<ResourceGroupsCreateOrUpdateResponse> {
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Creating resource group ...`,
-    });
-    const param = {
-      location: location,
-    } as ResourceGroup;
-
-    return await client.resourceGroups.createOrUpdate(resourceGroupName, param);
-  }
-
-  /**
-   * Validate the deployment using the Azure API
-   */
-  private async validateDeployment(
-    client: ResourceManagementClient,
-    templatePath: string,
-    location: string,
-    resourceGroupName: string,
-    deployName: string,
-    templateParam: any
-  ): Promise<DeploymentsValidateResponse> {
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: '> Validating Azure deployment ...',
-    });
-    const templateFile = await this.readTemplateFile(templatePath);
-    const deployParam = {
-      properties: {
-        template: JSON.parse(templateFile),
-        parameters: templateParam,
-        mode: 'Incremental',
-      },
-    } as Deployment;
-    return await client.deployments.validate(resourceGroupName, deployName, deployParam);
-  }
-
-  /**
-   * Using an ARM template, provision a bunch of resources
-   */
-  private async createDeployment(
-    client: ResourceManagementClient,
-    templatePath: string,
-    location: string,
-    resourceGroupName: string,
-    deployName: string,
-    templateParam: any
-  ): Promise<DeploymentsCreateOrUpdateResponse> {
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: `> Deploying Azure services (this could take a while)...`,
-    });
-    const templateFile = await this.readTemplateFile(templatePath);
-    const deployParam = {
-      properties: {
-        template: JSON.parse(templateFile),
-        parameters: templateParam,
-        mode: 'Incremental',
-      },
-    } as Deployment;
-
-    return await client.deployments.createOrUpdate(resourceGroupName, deployName, deployParam);
-  }
-
   private async createApp(graphClient: GraphRbacManagementClient, displayName: string, appPassword: string) {
     const createRes = await graphClient.applications.create({
       displayName: displayName,
@@ -283,32 +207,6 @@ export class BotProjectDeploy {
     return createRes;
   }
 
-  /**
-   * Write updated settings back to the settings file
-   */
-  private async updateDeploymentJsonFile(
-    client: ResourceManagementClient,
-    resourceGroupName: string,
-    deployName: string,
-    appId: string,
-    appPwd: string
-  ): Promise<any> {
-    const outputs = await client.deployments.get(resourceGroupName, deployName);
-    if (outputs?.properties?.outputs) {
-      const outputResult = outputs.properties.outputs;
-      const applicationResult = {
-        MicrosoftAppId: appId,
-        MicrosoftAppPassword: appPwd,
-      };
-      const outputObj = this.unpackObject(outputResult);
-
-      const result = {};
-      Object.assign(result, outputObj, applicationResult);
-      return result;
-    } else {
-      return null;
-    }
-  }
 
   private async getFiles(dir: string): Promise<string[]> {
     const dirents = await readdir(dir, { withFileTypes: true });
@@ -720,100 +618,31 @@ export class BotProjectDeploy {
 
     // timestamp will be used as deployment name
     const timeStamp = new Date().getTime().toString();
-    const client = new ResourceManagementClient(this.creds, this.subId);
 
-    // Create a resource group to contain the new resources
-    const rpres = await this.createResourceGroup(client, location, resourceGroupName);
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: rpres,
-    });
-
-    // Caste the parameters into the right format
-    const deploymentTemplateParam = this.getDeploymentTemplateParam(
-      appId,
-      appPassword,
-      location,
-      name,
-      createLuisAuthoringResource,
-      createLuisResource,
-      createAppInsights,
-      createCosmosDb,
-      createStorage
-    );
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: deploymentTemplateParam,
-    });
-
-    // Validate the deployment using the Azure API
-    const validation = await this.validateDeployment(
-      client,
-      this.templatePath,
-      location,
-      resourceGroupName,
-      timeStamp,
-      deploymentTemplateParam
-    );
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: validation,
-    });
-
-    // Handle validation errors
-    if (validation.error) {
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `! Template is not valid with provided parameters. Review the log for more information.`,
-      });
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `! Error: ${validation.error.message}`,
-      });
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
-      });
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR_DETAILS,
-        message: validation.error.details,
-      });
-
-      throw new Error(`! Error: ${validation.error.message}`);
-    }
-
-    // Create the entire stack of resources inside the new resource group
-    // this is controlled by an ARM template identified in this.templatePath
-    const deployment = await this.createDeployment(
-      client,
-      this.templatePath,
-      location,
-      resourceGroupName,
-      timeStamp,
-      deploymentTemplateParam
-    );
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: deployment,
-    });
-
-    // Handle errors
-    if (deployment._response.status != 200) {
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `! Template is not valid with provided parameters. Review the log for more information.`,
-      });
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `! Error: ${validation.error}`,
-      });
-      this.logger({
-        status: BotProjectDeployLoggerType.PROVISION_ERROR,
-        message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
-      });
-
-      throw new Error(`! Error: ${validation.error}`);
-    }
+    // azure resource manager class config
+    const armConfig = {
+        createOrNot: {
+            appInsights: createAppInsights,
+            cosmosDB: createCosmosDb,
+            blobStorage: createCosmosDb,
+            luisResource: createLuisResource,
+            luisAuthoringResource: createLuisAuthoringResource,
+            webApp: true,
+            bot: true
+        },
+        bot: {
+            appId: appId ?? undefined
+        },
+        resourceGroup: {
+            name: resourceGroupName,
+            location: location
+        },
+        subId: this.subId,
+        creds: this.creds,
+        logger: this.logger
+    } as AzureResourceManangerConfig;
+    const armInstance = new AzureResourceMananger(armConfig);
+    await armInstance.deployResources();
 
     // If application insights created, update the application insights settings in azure bot service
     if (createAppInsights) {
@@ -886,58 +715,8 @@ export class BotProjectDeploy {
         }
       }
     }
-
-    // Validate that everything was successfully created.
-    // Then, update the settings file with information about the new resources
-    const updateResult = await this.updateDeploymentJsonFile(client, resourceGroupName, timeStamp, appId, appPassword);
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_INFO,
-      message: updateResult,
-    });
-
-    // Handle errors
-    if (!updateResult) {
-      const operations = await client.deploymentOperations.list(resourceGroupName, timeStamp);
-      if (operations) {
-        const failedOperations = operations.filter((value) => value?.properties?.statusMessage.error !== null);
-        if (failedOperations) {
-          failedOperations.forEach((operation) => {
-            switch (operation?.properties?.statusMessage.error.code) {
-              case 'MissingRegistrationForLocation':
-                this.logger({
-                  status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                  message: `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}. This resource is not avaliable in the location provided.`,
-                });
-                break;
-              default:
-                this.logger({
-                  status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                  message: `! Deployment failed for resource of type ${operation?.properties?.targetResource?.resourceType}.`,
-                });
-                this.logger({
-                  status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                  message: `! Code: ${operation?.properties?.statusMessage.error.code}.`,
-                });
-                this.logger({
-                  status: BotProjectDeployLoggerType.PROVISION_ERROR,
-                  message: `! Message: ${operation?.properties?.statusMessage.error.message}.`,
-                });
-                break;
-            }
-          });
-        }
-      } else {
-        this.logger({
-          status: BotProjectDeployLoggerType.PROVISION_ERROR,
-          message: `! Deployment failed. Please refer to the log file for more information.`,
-        });
-      }
-    }
-    this.logger({
-      status: BotProjectDeployLoggerType.PROVISION_SUCCESS,
-      message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
-    });
-    return updateResult;
+    const output = armInstance.getOutput();
+    return output;
   }
 
   /**
