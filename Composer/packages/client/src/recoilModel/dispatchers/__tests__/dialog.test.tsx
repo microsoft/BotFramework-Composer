@@ -1,7 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
 import test from '@bfc/indexers';
@@ -18,6 +16,7 @@ import {
   showCreateDialogModalState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+
 jest.mock('@bfc/indexers', () => {
   return {
     dialogIndexer: {
