@@ -11,7 +11,7 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import { StoreContext } from '../../store';
 import { actionButton } from '../language-understanding/styles';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree/NavTree';
 import { Page } from '../../components/Page/Page';

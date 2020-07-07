@@ -17,7 +17,7 @@ import get from 'lodash/get';
 
 import { StoreContext } from '../../store';
 import { formCell, content } from '../language-understanding/styles';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
