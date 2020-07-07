@@ -78,7 +78,6 @@ function renderRecoilHook<P, R>(
   callback: (props: P) => R,
   options?: RenderHookOptions & {
     initialProps?: P;
-    wrapper?: React.ComponentType;
   }
 ): RenderHookResult<P, R> {
   return renderHook(callback, {
