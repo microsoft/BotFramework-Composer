@@ -8,7 +8,15 @@ import test from '@bfc/indexers';
 
 import { dialogsDispatcher } from '../dialogs';
 import { renderRecoilHook, act } from '../../../../__tests__/testUtils';
-import { dialogsState, lgFilesState, luFilesState, schemasState } from '../../atoms';
+import {
+  dialogsState,
+  lgFilesState,
+  luFilesState,
+  schemasState,
+  actionsSeedState,
+  onCreateDialogCompleteState,
+  showCreateDialogModalState,
+} from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 jest.mock('@bfc/indexers', () => {
   return {
@@ -19,24 +27,46 @@ jest.mock('@bfc/indexers', () => {
       }),
     },
     validateDialog: () => [],
-    autofixReferInDialog: (content) => content,
+    autofixReferInDialog: (_, content) => content,
+    lgIndexer: {
+      parse: (content, id) => ({
+        id,
+        content,
+      }),
+    },
+    luIndexer: {
+      parse: (content, id) => ({
+        id,
+        content,
+      }),
+    },
   };
 });
 
 describe('dialog dispatcher', () => {
-  let renderedComponent;
+  let renderedComponent, dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const dialogs = useRecoilValue(dialogsState);
+      const luFiles = useRecoilValue(luFilesState);
+      const lgFiles = useRecoilValue(lgFilesState);
       const currentDispatcher = useRecoilValue(dispatcherState);
+      const actionsSeed = useRecoilValue(actionsSeedState);
+      const onCreateDialogComplete = useRecoilValue(onCreateDialogCompleteState);
+      const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
 
       return {
         dialogs,
+        luFiles,
+        lgFiles,
         currentDispatcher,
+        actionsSeed,
+        onCreateDialogComplete,
+        showCreateDialogModal,
       };
     };
 
-    renderedComponent = renderRecoilHook(useRecoilTestHook, {
+    const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: dialogsState, initialValue: [{ id: '1' }, { id: '2' }] },
         { recoilState: lgFilesState, initialValue: [{ id: '1' }] },
@@ -50,20 +80,52 @@ describe('dialog dispatcher', () => {
         },
       },
     });
+    renderedComponent = result;
+    dispatcher = renderedComponent.current.currentDispatcher;
   });
 
-  it('remove dialog file', async () => {
+  it('removes a dialog file', async () => {
     await act(async () => {
-      await renderedComponent.result.current.currentDispatcher.removeDialog('1');
+      await dispatcher.removeDialog('1');
     });
-    expect(renderedComponent.result.current.dialogs).toEqual([{ id: '2' }]);
+    expect(renderedComponent.current.dialogs).toEqual([{ id: '2' }]);
   });
 
-  it('create dialog file', async () => {
+  it('updates a dialog file', async () => {
     test.validateDialog = jest.fn().mockReturnValue([]);
     await act(async () => {
-      await renderedComponent.result.current.currentDispatcher.updateDialog({ id: '1', content: 'new' });
+      await dispatcher.updateDialog({ id: '1', content: 'new' });
     });
-    expect(renderedComponent.result.current.dialogs.find((dialog) => dialog.id === '1').content).toEqual('new');
+    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '1').content).toEqual('new');
+  });
+
+  it('creates a dialog file', async () => {
+    await act(async () => {
+      await dispatcher.createDialog({ id: '100', content: 'abcde' });
+    });
+    expect(renderedComponent.current.luFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
+    expect(renderedComponent.current.lgFiles.find((dialog) => dialog.id === '100.en-us')).not.toBeNull();
+    expect(renderedComponent.current.dialogs.find((dialog) => dialog.id === '100').content).toEqual('abcde');
+  });
+
+  it('begins creating a dialog', async () => {
+    const ACTIONS = [{ action: 'stuff' }];
+    const mockOnComplete = jest.fn();
+
+    await act(async () => {
+      await dispatcher.createDialogBegin({ actions: ACTIONS }, mockOnComplete);
+    });
+    expect(renderedComponent.current.actionsSeed).toEqual({ actions: ACTIONS });
+    expect(renderedComponent.current.onCreateDialogComplete).toBe(mockOnComplete);
+    expect(renderedComponent.current.showCreateDialogModal).toBe(true);
+  });
+
+  it('cancels creating a dialog', async () => {
+    await act(async () => {
+      await dispatcher.createDialogCancel();
+    });
+    expect(renderedComponent.current.actionsSeed).toEqual([]);
+    expect(renderedComponent.current.onCreateDialogComplete).toBeUndefined();
+    expect(renderedComponent.current.showCreateDialogModal).toBe(false);
   });
 });
