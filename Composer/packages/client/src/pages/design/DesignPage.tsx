@@ -16,7 +16,7 @@ import { useTriggerApi } from '@bfc/extension';
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
-import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils';
+import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
 import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
@@ -25,7 +25,7 @@ import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import undoHistory from '../../store/middlewares/undo/history';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import { useStoreContext } from '../../hooks/useStoreContext';
 

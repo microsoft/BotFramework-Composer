@@ -7,14 +7,15 @@ import React, { useState, useRef, Fragment, useContext, useEffect, useCallback }
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 
+import { DefaultPublishConfig, QnaConfig, BotStatus, LuisConfig } from '../../constants';
+import { isAbsHosted } from '../../utils/envUtil';
+import useNotifications from '../../pages/notifications/useNotifications';
+import { navigateTo, openInEmulator } from '../../utils/navigation';
+
 import settingsStorage from './../../utils/dialogSettingStorage';
 import { StoreContext } from './../../store';
-import { DefaultPublishConfig, QnaConfig, BotStatus, LuisConfig } from './../../constants';
-import { isAbsHosted } from './../../utils/envUtil';
 import { getReferredLuFiles } from './../../utils/luUtil';
 import { getReferredQnaFiles } from './../../utils/qnaUtil';
-import useNotifications from './../../pages/notifications/useNotifications';
-import { navigateTo, openInEmulator } from './../../utils';
 import { PublishLuisDialog } from './publishDialog';
 import { bot, botButton } from './styles';
 import { ErrorCallout } from './errorCallout';
