@@ -26,7 +26,9 @@ const actionType2ChangeType = {
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.SYNC_ENV_SETTING]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
   [ActionTypes.SET_PUBLISH_TARGETS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
-  [ActionTypes.SET_RUNTIME_SETTINGS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.EJECT_SUCCESS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.SET_RUNTIME_FIELD]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
 };
 
 class FilePersistence {
@@ -238,13 +240,13 @@ class FilePersistence {
     return fileChanges;
   }
 
-  private getSettingsChanges(previousState: State, currentState: State, projectId: string) {
+  private getSettingsChanges(previousState: State, currentState: State) {
     return [
       {
         id: `${FileExtensions.Setting}`,
         change: JSON.stringify(currentState.settings, null, 2),
         type: ChangeType.UPDATE,
-        projectId,
+        projectId: this._projectId,
       },
     ];
   }
@@ -288,7 +290,7 @@ class FilePersistence {
         break;
       }
       case FileExtensions.Setting: {
-        fileChanges = this.getSettingsChanges(previousState, currentState, action.payload.projectId);
+        fileChanges = this.getSettingsChanges(previousState, currentState);
       }
     }
     return fileChanges;
