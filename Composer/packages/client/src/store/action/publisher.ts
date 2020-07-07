@@ -27,7 +27,7 @@ export const startPollingRuntime: ActionCreator = (store) => {
   const botStatusInterval = store.getState().botStatusInterval;
   const projectId = store.getState().projectId;
   if (!botStatusInterval) {
-    const cancelInterval = setInterval(function () {
+    const cancelInterval = setInterval(() => {
       getPublishStatus(store, projectId, DefaultPublishConfig);
     }, POLLING_INTERVAL);
     store.dispatch({
