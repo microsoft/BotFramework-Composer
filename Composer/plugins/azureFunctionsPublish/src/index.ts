@@ -3,7 +3,7 @@
 
 import path from 'path';
 
-import { BotProjectDeploy } from '@bfc/libs/bot-deploy';
+import { BotProjectDeploy } from '@bfc/botframeworkdeploy';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
@@ -141,7 +141,7 @@ class AzurePublisher {
   };
   private removeLoadingStatus = (botId: string, profileName: string, jobId: string) => {
     if (this.publishingBots[botId] && this.publishingBots[botId][profileName]) {
-      const index = this.publishingBots[botId][profileName].findIndex(item => item.result.id === jobId);
+      const index = this.publishingBots[botId][profileName].findIndex((item) => item.result.id === jobId);
       const status = this.publishingBots[botId][profileName][index];
       this.publishingBots[botId][profileName] = this.publishingBots[botId][profileName]
         .slice(0, index)
@@ -154,7 +154,7 @@ class AzurePublisher {
     if (this.publishingBots[botId] && this.publishingBots[botId][profileName].length > 0) {
       // get current status
       if (jobId) {
-        return this.publishingBots[botId][profileName].find(item => item.result.id === jobId);
+        return this.publishingBots[botId][profileName].find((item) => item.result.id === jobId);
       }
       return this.publishingBots[botId][profileName][this.publishingBots[botId][profileName].length - 1];
     }

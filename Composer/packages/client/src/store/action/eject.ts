@@ -5,7 +5,6 @@ import { ActionCreator } from '../types';
 import { ActionTypes } from '../../constants';
 
 import httpClient from './../../utils/httpUtil';
-import { setRuntimeSettings } from './setting';
 
 export const getRuntimeTemplates: ActionCreator = async ({ dispatch }) => {
   try {
@@ -30,9 +29,6 @@ export const ejectRuntime: ActionCreator = async (store, projectId, name) => {
       type: ActionTypes.EJECT_SUCCESS,
       payload: response.data,
     });
-    if (response.data.settings?.path) {
-      setRuntimeSettings(store, projectId, response.data.settings.path, response.data.settings.startCommand);
-    }
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
