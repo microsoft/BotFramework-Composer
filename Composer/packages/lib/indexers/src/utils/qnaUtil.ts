@@ -74,7 +74,7 @@ export function updateQuestion(
 ) {
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
     if (index !== qnaSectionIndex) {
-      result = result + '\n' + qnaSection.Body;
+      result = result + '\n' + qnaSection.Body + '\n';
     } else {
       const newQnASection = updateQuestionInQnASection(qnaSection, newContent, questionIndex);
       result += rebuildQnaSection(newQnASection);

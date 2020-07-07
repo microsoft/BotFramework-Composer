@@ -19,11 +19,11 @@ import { Page } from '../../components/Page/Page';
 import TableView from './table-view';
 const CodeEditorWrapper = React.lazy(() => import('./codeEditorWrapper'));
 
-interface LGPageProps extends RouteComponentProps<{}> {
+interface QnAPageProps extends RouteComponentProps<{}> {
   dialogId?: string;
 }
 
-const LGPage: React.FC<LGPageProps> = (props) => {
+const QnAPage: React.FC<QnAPageProps> = (props) => {
   const { state } = useContext(StoreContext);
   const { dialogs, projectId } = state;
 
@@ -117,4 +117,4 @@ const LGPage: React.FC<LGPageProps> = (props) => {
   );
 };
 
-export default LGPage;
+export default QnAPage;

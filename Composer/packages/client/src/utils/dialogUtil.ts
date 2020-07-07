@@ -58,8 +58,7 @@ export const crossTrainedRecognizerSetKey: string = SDKKinds.CrossTrainedRecogni
 export const customEventKey = 'OnCustomEvent';
 export const qnaMatcherKey: string = SDKKinds.OnQnAMatch;
 export const onChooseIntentKey: string = SDKKinds.OnChooseIntent;
-export const adaptiveCardIntentKey: string = SDKKinds.AdaptiveCardIntent;
-
+export const adaptiveCardKey = 'adaptiveCard';
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -186,6 +185,10 @@ export function getTriggerTypes(): IDropdownOption[] {
     {
       key: customEventKey,
       text: formatMessage('Custom events'),
+    },
+    {
+      key: adaptiveCardKey,
+      text: formatMessage('Adaptive card action received'),
     },
   ];
   return triggerTypes;

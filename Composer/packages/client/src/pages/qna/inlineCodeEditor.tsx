@@ -8,6 +8,7 @@ import { CodeEditorSettings } from '@bfc/shared';
 import get from 'lodash/get';
 import querystring from 'query-string';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
+import { QNA_HELP } from '@bfc/code-editor/lib/constants';
 
 import { removeSection, insertSection, getParsedDiagnostics } from '../../utils/qnaUtil';
 import { StoreContext } from '../../store';
@@ -23,7 +24,7 @@ const InlineCodeEditor: React.FC<CodeEditorProps> = (props) => {
   const { qnaFiles, locale, projectId, userSettings } = state;
   const { dialogId, indexId } = props;
   const file = useRef(qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`)).current;
-  const qnaPair = useRef(get(file, 'qnaSections[indexId]', {})).current;
+  const qnaPair = useRef(get(file, `qnaSections[${indexId}]`, {})).current;
   const diagnostics = get(file, 'diagnostics', []);
   const [templateDiagnostics, setTemplateDiagnostics] = useState(filterTemplateDiagnostics(diagnostics, qnaPair));
   const inlineContent = qnaPair?.Body;
@@ -66,6 +67,7 @@ const InlineCodeEditor: React.FC<CodeEditorProps> = (props) => {
       diagnostics={templateDiagnostics}
       editorDidMount={editorDidMount}
       editorSettings={userSettings.codeEditor}
+      helpURL={QNA_HELP}
       languageServer={{
         path: lspServerPath,
       }}

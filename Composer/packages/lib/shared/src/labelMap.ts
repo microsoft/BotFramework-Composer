@@ -28,9 +28,6 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     ),
     title: formatMessage('Language Generation'),
   },
-  [SDKKinds.AdaptiveCardIntent]: {
-    title: formatMessage('Adaptive card intent received'),
-  },
   [SDKKinds.AdaptiveDialog]: {
     title: formatMessage('Adaptive dialog'),
   },

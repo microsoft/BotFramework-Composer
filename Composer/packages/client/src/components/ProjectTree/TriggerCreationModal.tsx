@@ -35,7 +35,7 @@ import {
   regexRecognizerKey,
   qnaMatcherKey,
   onChooseIntentKey,
-  adaptiveCardIntentKey,
+  adaptiveCardKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
 import { useStoreContext } from '../../hooks/useStoreContext';
@@ -53,6 +53,11 @@ const initialFormDataErrors = {
 
 const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
   const content = `#${intent}\n${triggerPhrases}`;
+  const { diagnostics } = luIndexer.parse(content);
+  return combineMessage(diagnostics);
+};
+
+const getQnADiagnostics = (content: string) => {
   const { diagnostics } = luIndexer.parse(content);
   return combineMessage(diagnostics);
 };
@@ -183,7 +188,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   };
   const [formData, setFormData] = useState(initialFormData);
   const [selectedType, setSelectedType] = useState(intentTypeKey);
-  const showIntentName = selectedType === intentTypeKey;
+  const showIntentName = selectedType === intentTypeKey || selectedType === adaptiveCardKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
   const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
   const showEventDropDown = selectedType === eventTypeKey;
@@ -201,7 +206,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     triggerTypeOptions[index].data = { icon: 'Warning' };
   }
   if (!isLUISnQnA && !isRegEx) {
-    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== adaptiveCardIntentKey);
+    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== adaptiveCardKey);
   }
   useEffect(() => {
     setFormData({ ...formData, qnaPhrases: qnaFile ? qnaFile.content : '' });
@@ -239,6 +244,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     const content = luFile?.content ?? '';
     const luFileId = luFile?.id || `${dialogId}.${locale}`;
+    if (formData.$kind === adaptiveCardKey) {
+      formData.$kind = intentTypeKey;
+    }
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
     if (formData.$kind === intentTypeKey && !isRegEx) {
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
@@ -312,7 +320,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const onQnAPhrasesChange = (body: string) => {
     const errors: TriggerFormDataErrors = {};
-    errors.qnaPhrases = getLuDiagnostics(formData.intent, body);
+    errors.qnaPhrases = getQnADiagnostics(body);
     setFormData({ ...formData, qnaPhrases: body, errors: { ...formData.errors, ...errors } });
   };
 
@@ -383,7 +391,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               label={
                 isRegEx
                   ? formatMessage('What is the name of this trigger (RegEx)')
-                  : formatMessage('What is the name of this trigger (LUIS)')
+                  : formatMessage('What is the name of this trigger (LUIS + QnA)')
               }
               styles={intent}
               onChange={onNameChange}
@@ -423,11 +431,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                 editorSettings={userSettings.codeEditor}
                 errorMessage={formData.errors.qnaPhrases}
                 height={225}
-                luOption={{
-                  projectId,
-                  fileId: dialogId,
-                  sectionId: formData.intent || PlaceHolderSectionName,
-                }}
                 placeholder={defaultQnAPlaceholder}
                 value={formData.qnaPhrases}
                 onChange={onQnAPhrasesChange}

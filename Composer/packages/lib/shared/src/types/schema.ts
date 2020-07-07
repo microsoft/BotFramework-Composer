@@ -13,7 +13,6 @@ import { JSONSchema6 } from 'json-schema';
 export enum SDKKinds {
   ActivityTemplate = 'Microsoft.ActivityTemplate',
   AdaptiveDialog = 'Microsoft.AdaptiveDialog',
-  AdaptiveCardIntent = 'Microsoft.AdaptiveCardIntent',
   AgeEntityRecognizer = 'Microsoft.AgeEntityRecognizer',
   Ask = 'Microsoft.Ask',
   AttachmentInput = 'Microsoft.AttachmentInput',
