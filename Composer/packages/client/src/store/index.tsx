@@ -86,10 +86,7 @@ export const initialBotState: BotState = {
   isEnvSettingUpdated: false,
   settings: {},
   publishVersions: {},
-  publishStatus: 'inactive',
-  lastPublishChange: null,
   publishTypes: [],
-  publishTargets: [],
   publishHistory: {},
   botOpening: false,
 };
@@ -117,10 +114,6 @@ const initialAppState: AppState = {
   clipboardActions: [],
   runtimeTemplates: [],
   userSettings: getUserSettings(),
-  runtimeSettings: {
-    path: '',
-    startCommand: '',
-  },
   announcement: undefined,
   appUpdate: {
     progressPercent: 0,

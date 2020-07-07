@@ -1,5 +1,5 @@
 {
-  "name": "botframeworkdeploy",
+  "name": "@bfc/botframeworkdeploy",
   "version": "1.0.0",
   "description": "typescript version of bot deployment",
   "main": "lib/index.js",
