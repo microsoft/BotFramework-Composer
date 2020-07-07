@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 import { DialogInfo, LgFile, LuFile } from '@bfc/shared';
 
-import { BotAssets } from './../../../src/recoilModel/types';
-import filePersistence from './../../../src/recoilModel/persistence/FilePersistence';
+import { BotAssets } from '../../types';
+import filePersistence from '../FilePersistence';
 
 jest.mock('axios', () => {
   return {
