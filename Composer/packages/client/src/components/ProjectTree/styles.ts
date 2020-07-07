@@ -3,7 +3,7 @@
 
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
+import { NeutralColors, FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
@@ -198,4 +198,21 @@ export const triggerPhrases = {
   fieldGroup: {
     height: 80,
   },
+};
+
+export const optionRow = {
+  display: 'flex',
+  height: 15,
+  fontSize: 15,
+};
+
+export const icon = {
+  marginLeft: 5,
+  color: SharedColors.red10,
+  fontSize: 5,
+};
+
+export const warningText = {
+  color: SharedColors.red10,
+  fontSize: 5,
 };

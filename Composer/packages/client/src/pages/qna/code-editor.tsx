@@ -10,6 +10,7 @@ import querystring from 'query-string';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
+import { QNA_HELP } from '@bfc/code-editor/lib/constants';
 
 import { StoreContext } from '../../store';
 
@@ -67,6 +68,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
       diagnostics={currentDiagnostics}
       editorDidMount={editorDidMount}
       editorSettings={userSettings.codeEditor}
+      helpURL={QNA_HELP}
       languageServer={{
         path: lspServerPath,
       }}

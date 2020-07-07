@@ -136,6 +136,9 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     title: formatMessage('Dialog cancelled'),
     subtitle: formatMessage('Cancel dialog event'),
   },
+  [SDKKinds.OnChooseIntent]: {
+    title: formatMessage('Duplicated intents recognized'),
+  },
   [SDKKinds.OnCondition]: {
     title: formatMessage('Handle a Condition'),
   },

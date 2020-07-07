@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
@@ -15,8 +15,10 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { DialogInfo, SDKKinds } from '@bfc/shared';
-import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
+import { LuEditor, inlineModePlaceholder, defaultQnAPlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import get from 'lodash/get';
 
 import { nameRegex } from '../../constants';
 import {
@@ -31,11 +33,14 @@ import {
   getEventTypes,
   getActivityTypes,
   regexRecognizerKey,
+  qnaMatcherKey,
+  onChooseIntentKey,
+  adaptiveCardKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
 import { useStoreContext } from '../../hooks/useStoreContext';
 
-import { styles, dropdownStyles, dialogWindow, intent } from './styles';
+import { styles, dropdownStyles, dialogWindow, intent, icon, optionRow, warningText } from './styles';
 
 const initialFormDataErrors = {
   $kind: '',
@@ -48,6 +53,11 @@ const initialFormDataErrors = {
 
 const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
   const content = `#${intent}\n${triggerPhrases}`;
+  const { diagnostics } = luIndexer.parse(content);
+  return combineMessage(diagnostics);
+};
+
+const getQnADiagnostics = (content: string) => {
   const { diagnostics } = luIndexer.parse(content);
   return combineMessage(diagnostics);
 };
@@ -143,48 +153,74 @@ export interface LuFilePayload {
   content: string;
 }
 
+export interface QnAFilePayload {
+  id: string;
+  content: string;
+}
+
 interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
+  onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload, QnAFilePayload?: QnAFilePayload) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const { state } = useStoreContext();
-  const { dialogs, luFiles, locale, projectId, schemas, userSettings } = state;
+  const { dialogs, luFiles, qnaFiles, locale, projectId, schemas, userSettings } = state;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
+  const recognizer = get(dialogFile, 'content.recognizer', '');
+  const isLUISnQnA = typeof recognizer === 'string' && recognizer.endsWith('.qna');
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
-  const isNone = !dialogFile?.content?.recognizer;
+  const qnaFile = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
 
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
-    $kind: isNone ? '' : intentTypeKey,
+    $kind: intentTypeKey,
     event: '',
     intent: '',
     triggerPhrases: '',
+    qnaPhrases: qnaFile ? qnaFile.content : '',
     regEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-  const [selectedType, setSelectedType] = useState(isNone ? '' : intentTypeKey);
-  const showIntentName = selectedType === intentTypeKey;
+  const [selectedType, setSelectedType] = useState(intentTypeKey);
+  const showIntentName = selectedType === intentTypeKey || selectedType === adaptiveCardKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
   const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
   const showEventDropDown = selectedType === eventTypeKey;
   const showActivityDropDown = selectedType === activityTypeKey;
   const showCustomEvent = selectedType === customEventKey;
+  const showQnAPhrase = selectedType === qnaMatcherKey;
 
   const eventTypes: IComboBoxOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
   let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
-
-  if (isNone) {
-    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
+  if (isRegEx) {
+    let index = triggerTypeOptions.findIndex((t) => t.key === qnaMatcherKey);
+    triggerTypeOptions[index].data = { icon: 'Warning' };
+    index = triggerTypeOptions.findIndex((t) => t.key === onChooseIntentKey);
+    triggerTypeOptions[index].data = { icon: 'Warning' };
   }
+  if (!isLUISnQnA && !isRegEx) {
+    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== adaptiveCardKey);
+  }
+  useEffect(() => {
+    setFormData({ ...formData, qnaPhrases: qnaFile ? qnaFile.content : '' });
+  }, [qnaFile]);
 
+  const onRenderOption = (option: IDropdownOption) => {
+    return (
+      <div css={optionRow}>
+        {option.text}
+        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={icon} />}
+        {option.data && option.data.icon && <div css={warningText}>{'Not supported with Regex'} </div>}
+      </div>
+    );
+  };
   const shouldDisable = (errors: TriggerFormDataErrors) => {
     for (const key in errors) {
       if (errors[key]) {
@@ -208,6 +244,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     const content = luFile?.content ?? '';
     const luFileId = luFile?.id || `${dialogId}.${locale}`;
+    if (formData.$kind === adaptiveCardKey) {
+      formData.$kind = intentTypeKey;
+    }
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
     if (formData.$kind === intentTypeKey && !isRegEx) {
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
@@ -216,6 +255,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
         content: newContent,
       };
       onSubmit(newDialog, updateLuFile);
+    } else if (formData.$kind === qnaMatcherKey) {
+      const qnaFileId = qnaFile?.id || `${dialogId}.${locale}`;
+      const qnaFilePayload: QnAFilePayload = { id: qnaFileId, content: formData.qnaPhrases };
+      onSubmit(newDialog, undefined, qnaFilePayload);
     } else {
       onSubmit(newDialog);
     }
@@ -274,9 +317,15 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
+
+  const onQnAPhrasesChange = (body: string) => {
+    const errors: TriggerFormDataErrors = {};
+    errors.qnaPhrases = getQnADiagnostics(body);
+    setFormData({ ...formData, qnaPhrases: body, errors: { ...formData.errors, ...errors } });
+  };
+
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
   const disable = shouldDisable(errors);
-
   return (
     <Dialog
       dialogContentProps={{
@@ -301,6 +350,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             options={triggerTypeOptions}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
+            //@ts-ignore：
+            onRenderOption={onRenderOption}
           />
           {showEventDropDown && (
             <Dropdown
@@ -340,7 +391,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               label={
                 isRegEx
                   ? formatMessage('What is the name of this trigger (RegEx)')
-                  : formatMessage('What is the name of this trigger (LUIS)')
+                  : formatMessage('What is the name of this trigger (LUIS + QnA)')
               }
               styles={intent}
               onChange={onNameChange}
@@ -370,6 +421,19 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                 placeholder={inlineModePlaceholder}
                 value={formData.triggerPhrases}
                 onChange={onTriggerPhrasesChange}
+              />
+            </React.Fragment>
+          )}
+          {showQnAPhrase && (
+            <React.Fragment>
+              <Label>{formatMessage('QnA phrases')}</Label>
+              <LuEditor
+                editorSettings={userSettings.codeEditor}
+                errorMessage={formData.errors.qnaPhrases}
+                height={225}
+                placeholder={defaultQnAPlaceholder}
+                value={formData.qnaPhrases}
+                onChange={onQnAPhrasesChange}
               />
             </React.Fragment>
           )}
