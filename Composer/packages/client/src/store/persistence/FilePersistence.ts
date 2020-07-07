@@ -178,13 +178,23 @@ class FilePersistence {
   private getDialogFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
     const projectId = currentState.projectId;
     const fileChanges: IFileChange[] = [];
-    let { dialogs, luFiles, lgFiles } = currentState;
+    let { dialogs, dialogSchemaFiles, luFiles, lgFiles } = currentState;
 
     //if delete dialog the change need to get changes from previousState
     if (changeType === ChangeType.DELETE) {
       dialogs = previousState.dialogs;
+      dialogSchemaFiles = previousState.dialogSchemaFiles;
       luFiles = previousState.luFiles;
       lgFiles = previousState.lgFiles;
+    }
+
+    //delete needs to delete dialog schema files
+    if (changeType === ChangeType.DELETE) {
+      dialogSchemaFiles
+        .filter((schema) => schema.id === id)
+        .forEach((schema) => {
+          fileChanges.push(this.createChange(schema, FileExtensions.DialogSchema, changeType, projectId));
+        });
     }
 
     //create and delete need to delete/create lu and lg files
@@ -236,33 +246,17 @@ class FilePersistence {
   }
 
   private getDialogSchemaFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
-    const fileChanges: IFileChange[] = [];
+    const { dialogSchemaFiles, projectId } = changeType === ChangeType.DELETE ? previousState : currentState;
+    const dialogSchema = dialogSchemaFiles.find((schema) => schema.id === id);
 
-    const { dialogs, projectId } = changeType === ChangeType.DELETE ? previousState : currentState;
-    const dialog = dialogs.find((dialog) => id === dialog.id);
-
-    if (!dialog) {
-      return fileChanges;
-    }
-
-    const { dialogSchema } = dialog;
-
-    if (!dialogSchema) {
-      return fileChanges;
-    }
-
-    fileChanges.push(this.createChange({ id, ...dialogSchema }, FileExtensions.DialogSchema, changeType, projectId));
-    return fileChanges;
+    return dialogSchema ? [this.createChange(dialogSchema, FileExtensions.DialogSchema, changeType, projectId)] : [];
   }
 
   private getSkillManifestsChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
     const projectId = currentState.projectId;
     const fileChanges: IFileChange[] = [];
-    let { skillManifests } = currentState;
+    const { skillManifests } = changeType === ChangeType.DELETE ? previousState : currentState;
 
-    if (changeType === ChangeType.DELETE) {
-      skillManifests = previousState.skillManifests;
-    }
     const skillManifest = skillManifests.find((skill) => skill.id === id);
     fileChanges.push(this.createChange(skillManifest, FileExtensions.Manifest, changeType, projectId));
     return fileChanges;

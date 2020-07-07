@@ -3,6 +3,7 @@
 import { FileInfo, importResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
+import { dialogSchemaIndexer } from './dialogSchemaIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
@@ -43,7 +44,8 @@ class Indexer {
   public index(files: FileInfo[], botName: string, locale: string) {
     const result = this.classifyFile(files);
     return {
-      dialogs: dialogIndexer.index(result[FileExtensions.Dialog], result[FileExtensions.DialogSchema], botName),
+      dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
+      dialogSchemaFiles: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),

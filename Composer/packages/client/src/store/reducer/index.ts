@@ -84,7 +84,7 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
   schemas.sdk.content = processSchema(id, schemas.sdk.content);
-  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+  const { dialogs, dialogSchemaFiles, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
   state.projectId = id;
   state.dialogs = dialogs.map((dialog) => {
     dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
@@ -93,6 +93,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.botEnvironment = botEnvironment || state.botEnvironment;
   state.botName = botName;
   state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
+  state.dialogSchemaFiles = dialogSchemaFiles;
   state.location = location;
   state.lgFiles = lgFiles;
   state.skills = response.data.skills;
@@ -247,6 +248,7 @@ const removeDialog: ReducerFunc = (state, { id }) => {
   //remove dialog should remove all locales lu and lg files
   state = removeLgFile(state, { id });
   state = removeLuFile(state, { id });
+  state = removeDialogSchema(state, id);
   return state;
 };
 
@@ -280,13 +282,20 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const createOrUpdateDialogSchema: ReducerFunc = (state, { content, id }) => {
-  state.dialogs = state.dialogs.map((dialog) => (dialog.id === id ? { ...dialog, dialogSchema: { content } } : dialog));
+const createDialogSchema: ReducerFunc = (state, dialogSchema) => {
+  state.dialogSchemaFiles = [...state.dialogSchemaFiles, dialogSchema];
+  return state;
+};
+
+const updateDialogSchema: ReducerFunc = (state, { content, id }) => {
+  state.dialogSchemaFiles = state.dialogSchemaFiles.map((dialogSchema) =>
+    dialogSchema.id === id ? { ...dialogSchema, content } : dialogSchema
+  );
   return state;
 };
 
 const removeDialogSchema: ReducerFunc = (state, id) => {
-  state.dialogs = state.dialogs.map(({ dialogSchema, ...rest }) => (rest.id === id ? rest : { dialogSchema, ...rest }));
+  state.dialogSchemaFiles = state.dialogSchemaFiles.filter(({ id: schemaId }) => schemaId !== id);
   return state;
 };
 
@@ -736,7 +745,7 @@ export const reducer = createReducer({
   [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
   [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
-  [ActionTypes.CREATE_DIALOG_SCHEMA]: createOrUpdateDialogSchema,
-  [ActionTypes.UPDATE_DIALOG_SCHEMA]: createOrUpdateDialogSchema,
+  [ActionTypes.CREATE_DIALOG_SCHEMA]: createDialogSchema,
+  [ActionTypes.UPDATE_DIALOG_SCHEMA]: updateDialogSchema,
   [ActionTypes.REMOVE_DIALOG_SCHEMA]: removeDialogSchema,
 });

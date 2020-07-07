@@ -24,14 +24,15 @@ export interface ReferredLuIntents {
   path: string;
 }
 
-export interface DialogSchema {
-  content?: string;
+export interface DialogSchemaFile {
+  id: string;
+  content: any;
 }
 
 export interface DialogInfo {
   content: any;
   diagnostics: Diagnostic[];
-  dialogSchema?: DialogSchema;
+  dialogSchema?: DialogSchemaFile;
   displayName: string;
   id: string;
   isRoot: boolean;

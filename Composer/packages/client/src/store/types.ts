@@ -14,6 +14,7 @@ import {
   Skill,
   UserSettings,
   Diagnostic,
+  DialogSchemaFile,
 } from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension';
 
@@ -103,6 +104,7 @@ export interface BotState {
 
   // components of the current bot
   dialogs: DialogInfo[];
+  dialogSchemaFiles: DialogSchemaFile[];
   diagnostics: Diagnostic[];
   lgFiles: LgFile[];
   luFiles: LuFile[];

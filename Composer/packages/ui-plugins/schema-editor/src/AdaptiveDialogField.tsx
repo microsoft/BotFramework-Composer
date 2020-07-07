@@ -19,12 +19,13 @@ const getDefaultDialogSchema = (title: string, description = '') => ({
 });
 
 export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
-  const { dialogs, dialogId, shellApi } = useShellApi();
+  const { dialogs, dialogSchemaFiles, dialogId, shellApi } = useShellApi();
   const { updateDialogSchema } = shellApi;
-  const { content, dialogSchema, displayName } = dialogs.find(({ id }) => id === dialogId) || {};
+  const { content: dialogContent, displayName } = dialogs.find(({ id }) => id === dialogId) || {};
   const {
     $designer: { description },
-  } = content;
+  } = dialogContent;
+  const { content } = dialogSchemaFiles.find(({ id }) => id === dialogId) || {};
 
   const handleChange = (content) => {
     updateDialogSchema({ content, id: dialogId });
@@ -37,11 +38,7 @@ export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
         <FieldLabel label={formatMessage('Dialog schema')} />
         <JsonEditor
           height={300}
-          value={
-            typeof dialogSchema?.content === 'object'
-              ? dialogSchema.content
-              : getDefaultDialogSchema(displayName || dialogId, description)
-          }
+          value={typeof content === 'object' ? content : getDefaultDialogSchema(displayName || dialogId, description)}
           onChange={handleChange}
         />
       </div>
