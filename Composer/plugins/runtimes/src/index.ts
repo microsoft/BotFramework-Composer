@@ -178,9 +178,9 @@ export default async (composer: any): Promise<void> => {
       // const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
-        const excludeFolder = new Set(path.resolve(sourcePath, 'node_modules')).add(
-          path.resolve(sourcePath, 'azurewebapp/node_modules')
-        );
+        const excludeFolder = new Set<string>()
+          .add(path.resolve(sourcePath, 'node_modules'))
+          .add(path.resolve(sourcePath, 'azurewebapp/node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
         // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         return destPath;
