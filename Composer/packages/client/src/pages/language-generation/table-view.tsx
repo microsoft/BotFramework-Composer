@@ -65,44 +65,50 @@ const TableView: React.FC<TableViewProps> = (props) => {
   );
 
   const onCreateNewTemplate = useCallback(() => {
-    const newName = increaseNameUtilNotExist(templates, 'TemplateName');
-    const payload = {
-      file,
-      projectId,
-      template: {
-        name: newName,
-        body: '-TemplateValue',
-      },
-    };
-    createLgTemplate(payload);
-    setFocusedIndex(templates.length);
+    if (file) {
+      const newName = increaseNameUtilNotExist(templates, 'TemplateName');
+      const payload = {
+        file,
+        projectId,
+        template: {
+          name: newName,
+          body: '-TemplateValue',
+        } as LgTemplate,
+      };
+      createLgTemplate(payload);
+      setFocusedIndex(templates.length);
+    }
   }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
     (index) => {
-      const payload = {
-        file,
-        projectId,
-        templateName: templates[index].name,
-      };
+      if (file) {
+        const payload = {
+          file,
+          projectId,
+          templateName: templates[index].name,
+        };
 
-      removeLgTemplate(payload);
+        removeLgTemplate(payload);
+      }
     },
     [templates, file, projectId]
   );
 
   const onCopyTemplate = useCallback(
     (index) => {
-      const name = templates[index].name;
-      const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
-      const payload = {
-        file,
-        projectId,
-        fromTemplateName: name,
-        toTemplateName: resolvedName,
-      };
-      copyLgTemplate(payload);
-      setFocusedIndex(templates.length);
+      if (file) {
+        const name = templates[index].name;
+        const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
+        const payload = {
+          file,
+          projectId,
+          fromTemplateName: name,
+          toTemplateName: resolvedName,
+        };
+        copyLgTemplate(payload);
+        setFocusedIndex(templates.length);
+      }
     },
     [templates, file, projectId]
   );
