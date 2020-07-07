@@ -7,9 +7,9 @@ import { logEntryListState } from '../../atoms/appState';
 import { mockCallback, testAtomUpdate } from './testUtils';
 
 describe('logMessage', () => {
-  const consoleLogSpy = jest.spyOn(console, 'log');
-  const consoleWarnSpy = jest.spyOn(console, 'warn');
-  const consoleErrorSpy = jest.spyOn(console, 'error');
+  const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+  const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
   const MESSAGE = 'test message 12345';
 
