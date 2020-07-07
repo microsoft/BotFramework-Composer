@@ -56,7 +56,9 @@ function recoilStateWrapper(options?: RenderHookOptions) {
   };
 
   const renderDispatcher = () => {
-    return <DispatcherComponent {...options?.dispatcher} />;
+    if (options?.dispatcher) {
+      return <DispatcherComponent {...options?.dispatcher} />;
+    }
   };
 
   return ({ children }: { children?: React.ReactNode }) => {
