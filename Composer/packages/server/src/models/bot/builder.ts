@@ -30,6 +30,7 @@ export interface ICrossTrainConfig {
   triggerRules: { [key: string]: any };
   intentName: string;
   verbose: boolean;
+  botName: string;
 }
 
 export interface IDownSamplingConfig {
@@ -52,6 +53,7 @@ export class Builder {
     triggerRules: {},
     intentName: '_Interruption',
     verbose: true,
+    botName: '',
   };
 
   private luBuilder = new luBuild.Builder((message) => {
@@ -94,7 +96,7 @@ export class Builder {
   };
   public setBuildConfig(config: IConfig, crossTrainConfig: ICrossTrainConfig, downSamplingConfig: IDownSamplingConfig) {
     this.config = config;
-    this.crossTrainConfig = crossTrainConfig;
+    this.crossTrainConfig = { ...crossTrainConfig, botName: this.config.name };
     this.downSamplingConfig = downSamplingConfig;
   }
 
