@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import { AppSettings } from '../../src/pages/setting/app-settings/index';
+import { AppSettings } from '../../src/pages/setting/app-settings/AppSettings';
 import { ElectronSettings } from '../../src/pages/setting/app-settings/electronSettings';
 import { renderWithStore } from '../testUtils';
 

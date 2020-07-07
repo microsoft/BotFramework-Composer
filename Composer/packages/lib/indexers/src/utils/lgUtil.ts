@@ -131,3 +131,18 @@ export function checkSingleLgTemplate(template: LgTemplate) {
     throw new Error('Not a single template');
   }
 }
+
+export function extractOptionByKey(nameOfKey: string, options: string[]): string {
+  let result = '';
+  for (const option of options) {
+    if (nameOfKey && option.includes('=')) {
+      const index = option.indexOf('=');
+      const key = option.substring(0, index).trim().toLowerCase();
+      const value = option.substring(index + 1).trim();
+      if (key === nameOfKey) {
+        result = value;
+      }
+    }
+  }
+  return result;
+}

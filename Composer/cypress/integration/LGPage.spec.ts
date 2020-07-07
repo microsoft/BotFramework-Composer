@@ -24,6 +24,9 @@ context('LG Page', () => {
     // back to table view
     cy.get('@switchButton').click();
 
+    // click the logo to clear any stray navigation
+    cy.findByAltText('Composer Logo').click();
+
     // nav to Main dialog
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('__TestTodoSample').click();

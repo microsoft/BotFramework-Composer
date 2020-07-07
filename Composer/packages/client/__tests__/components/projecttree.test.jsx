@@ -5,7 +5,7 @@ import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
 import { dialogs } from '../constants.json';
-import { ProjectTree } from '../../src/components/ProjectTree/index.tsx';
+import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree.tsx';
 import { renderWithStore } from '../testUtils';
 
 describe('<ProjectTree/>', () => {

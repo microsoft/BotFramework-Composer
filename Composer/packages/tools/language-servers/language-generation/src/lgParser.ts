@@ -4,28 +4,51 @@
 import { fork, ChildProcess } from 'child_process';
 import path from 'path';
 
+import { Templates, Diagnostic } from 'botbuilder-lg';
+import { importResolverGenerator } from '@bfc/shared';
 import { ResolverResource } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
 
 const isTest = process.env?.NODE_ENV === 'test';
-
 export interface WorkerMsg {
   id: string;
   error?: any;
   payload?: any;
 }
 
-// Wrapper class
-export class LgParser {
+function createDiagnostic(diagnostic: Diagnostic) {
+  const { code, range, severity, source, message } = diagnostic;
+  const { start, end } = range;
+  return {
+    code,
+    range: {
+      start: { line: start.line, character: start.character },
+      end: { line: end.line, character: end.character },
+    },
+    severity,
+    source,
+    message,
+  };
+}
+
+class LgParserWithoutWorker {
+  public async parseText(content: string, id: string, resources: ResolverResource[]) {
+    const resolver = importResolverGenerator(resources, '.lg');
+    const { allTemplates, allDiagnostics } = Templates.parseText(content, id, resolver);
+    const templates = allTemplates.map((item) => ({ name: item.name, parameters: item.parameters, body: item.body }));
+    const diagnostics = allDiagnostics.map((item) => createDiagnostic(item));
+    return { templates, diagnostics };
+  }
+}
+
+class LgParserWithWorker {
   private worker: ChildProcess;
   private resolves = {};
   private rejects = {};
 
   constructor() {
-    const fileName = isTest ? 'lgWorker.ts' : 'lgWorker.js';
-    const execArgv = isTest ? ['-r', 'ts-node/register'] : [];
-    const workerScriptPath = path.join(__dirname, fileName);
-    this.worker = fork(workerScriptPath, [], { execArgv });
+    const workerScriptPath = path.join(__dirname, 'lgWorker.js');
+    this.worker = fork(workerScriptPath, []);
     this.worker.on('message', this.handleMsg.bind(this));
   }
 
@@ -55,3 +78,8 @@ export class LgParser {
     delete this.rejects[id];
   }
 }
+
+// Do not use worker when running test.
+const LgParser = isTest ? LgParserWithoutWorker : LgParserWithWorker;
+
+export { LgParser };
