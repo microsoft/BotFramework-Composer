@@ -9,7 +9,7 @@ import { visualEditorSelectionState, clipboardActionsState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 
 describe('<Editor />', () => {
-  let renderedComponent;
+  let renderedComponent, dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
       const [visualEditorState, setVisualEditorState] = useRecoilState(visualEditorSelectionState);
@@ -25,7 +25,7 @@ describe('<Editor />', () => {
       };
     };
 
-    renderedComponent = renderRecoilHook(useRecoilTestHook, {
+    const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: visualEditorSelectionState, initialValue: [] },
         { recoilState: clipboardActionsState, initialValue: [{ action1: 'hi123' }] },
@@ -37,12 +37,14 @@ describe('<Editor />', () => {
         },
       },
     });
+    renderedComponent = result;
+    dispatcher = renderedComponent.current.currentDispatcher;
   });
 
   it('should set clipboard state correctly', () => {
     act(() => {
-      renderedComponent.result.current.currentDispatcher.setVisualEditorClipboard([{ action2: 'hi' }]);
+      dispatcher.setVisualEditorClipboard([{ action2: 'hi' }]);
     });
-    expect(renderedComponent.result.current.clipboardState).toEqual([{ action2: 'hi' }]);
+    expect(renderedComponent.current.clipboardState).toEqual([{ action2: 'hi' }]);
   });
 });
