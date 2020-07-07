@@ -6,7 +6,7 @@ import { ProjectTemplate, UserSettings } from '@bfc/shared';
 
 import { StorageFolder, StateError, RuntimeTemplate, AppUpdateState } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
-import { CreationFlowStatus } from '../../constants';
+import { CreationFlowStatus, AppUpdaterStatus } from '../../constants';
 
 export type BotProject = {
   readonly id: string;
@@ -99,7 +99,11 @@ export const announcementState = atom<string>({
 
 export const appUpdateState = atom<AppUpdateState>({
   key: getFullyQualifiedKey('appUpdate'),
-  default: {} as AppUpdateState,
+  default: {
+    progressPercent: 0,
+    showing: false,
+    status: AppUpdaterStatus.IDLE,
+  } as AppUpdateState,
 });
 
 export const creationFlowStatusState = atom<CreationFlowStatus>({

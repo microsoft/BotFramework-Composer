@@ -9,83 +9,87 @@ import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 import { PublishType, DialogSetting, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
 
+const getFullyQualifiedKey = (value: string) => {
+  return `Bot_${value}_State`;
+};
+
 export const dialogsState = atom<DialogInfo[]>({
-  key: 'dialogs',
+  key: getFullyQualifiedKey('dialogs'),
   default: [],
 });
 
 export const projectIdState = atom<string>({
-  key: 'projectId',
+  key: getFullyQualifiedKey('projectId'),
   default: '',
 });
 
 export const botNameState = atom<string>({
-  key: 'botName',
+  key: getFullyQualifiedKey('botName'),
   default: '',
 });
 
 export const locationState = atom<string>({
-  key: 'location',
+  key: getFullyQualifiedKey('location'),
   default: '',
 });
 
 export const botEnvironmentState = atom<string>({
-  key: 'botEnvironment',
+  key: getFullyQualifiedKey('botEnvironment'),
   default: 'production',
 });
 
 export const localeState = atom<string>({
-  key: 'locale',
+  key: getFullyQualifiedKey('locale'),
   default: 'en-us',
 });
 
 export const BotDiagnosticsState = atom<Diagnostic[]>({
-  key: 'botDiagnostics',
+  key: getFullyQualifiedKey('botDiagnostics'),
   default: [],
 });
 
 export const botStatusState = atom<BotStatus>({
-  key: 'botStatus',
+  key: getFullyQualifiedKey('botStatus'),
   default: BotStatus.unConnected,
 });
 
 export const botLoadErrorState = atom<BotLoadError>({
-  key: 'botLoadErrorMsg',
+  key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: { title: '', message: '' },
 });
 
 export const lgFilesState = atom<LgFile[]>({
-  key: 'lgFiles',
+  key: getFullyQualifiedKey('lgFiles'),
   default: [],
 });
 
 export const luFilesState = atom<LuFile[]>({
-  key: 'luFiles',
+  key: getFullyQualifiedKey('luFiles'),
   default: [],
 });
 
 export const schemasState = atom<BotSchemas>({
-  key: 'schemas',
+  key: getFullyQualifiedKey('schemas'),
   default: {},
 });
 
 export const skillsState = atom<Skill[]>({
-  key: 'skills',
+  key: getFullyQualifiedKey('skills'),
   default: [],
 });
 
 export const actionsSeedState = atom<any>({
-  key: 'actionsSeed',
+  key: getFullyQualifiedKey('actionsSeed'),
   default: [],
 });
 
 export const skillManifestsState = atom<any[]>({
-  key: 'skillManifests',
+  key: getFullyQualifiedKey('skillManifests'),
   default: [],
 });
 
 export const designPageLocationState = atom<DesignPageLocation>({
-  key: 'designPageLocation',
+  key: getFullyQualifiedKey('designPageLocation'),
   default: {
     projectId: '',
     dialogId: '',
@@ -95,71 +99,71 @@ export const designPageLocationState = atom<DesignPageLocation>({
 });
 
 export const breadcrumbState = atom<BreadcrumbItem[]>({
-  key: 'breadcrumb',
+  key: getFullyQualifiedKey('breadcrumb'),
   default: [],
 });
 
 export const showCreateDialogModalState = atom<boolean>({
-  key: 'showCreateDialogModal',
+  key: getFullyQualifiedKey('showCreateDialogModal'),
   default: false,
 });
 
 export const showAddSkillDialogModalState = atom<boolean>({
-  key: 'showAddSkillDialogModal',
+  key: getFullyQualifiedKey('showAddSkillDialogModal'),
   default: false,
 });
 
 export const settingsState = atom<DialogSetting>({
-  key: 'settings',
+  key: getFullyQualifiedKey('settings'),
   default: {} as DialogSetting,
 });
 
 export const publishVersionsState = atom<any>({
-  key: 'publishVersions',
+  key: getFullyQualifiedKey('publishVersions'),
   default: {},
 });
 
 export const publishStatusState = atom<any>({
-  key: 'publishStatus',
+  key: getFullyQualifiedKey('publishStatus'),
   default: 'inactive',
 });
 
 export const lastPublishChangeState = atom<any>({
-  key: 'lastPublishChange',
+  key: getFullyQualifiedKey('lastPublishChange'),
   default: null,
 });
 
 export const publishTypesState = atom<PublishType[]>({
-  key: 'publishTypes',
+  key: getFullyQualifiedKey('publishTypes'),
   default: [],
 });
 
 export const botOpeningState = atom<boolean>({
-  key: 'botOpening',
+  key: getFullyQualifiedKey('botOpening'),
   default: false,
 });
 
 export const publishHistoryState = atom<any>({
-  key: 'publishHistory',
+  key: getFullyQualifiedKey('publishHistory'),
   default: {},
 });
 
 export const onCreateDialogCompleteState = atom<any>({
-  key: 'onCreateDialogComplete',
+  key: getFullyQualifiedKey('onCreateDialogComplete'),
   default: undefined,
 });
 
 export const focusPathState = atom<string>({
-  key: 'focusPath',
+  key: getFullyQualifiedKey('focusPath'),
   default: '',
 });
 
 export const onAddSkillDialogCompleteState = atom<any>({
-  key: 'onAddSkillDialogComplete',
+  key: getFullyQualifiedKey('onAddSkillDialogComplete'),
   default: undefined,
 });
 
 export const displaySkillManifestState = atom<any>({
-  key: 'displaySkillManifest',
+  key: getFullyQualifiedKey('displaySkillManifest'),
   default: undefined,
 });
