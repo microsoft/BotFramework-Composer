@@ -15,11 +15,14 @@ to specific areas of the application, and must adhere to a set of interfaces and
 
 Plugins currently have access to the following functional areas:
 
-* Authentication and identity - plugins can provide a mechanism to gate access to the application, as well as mechanisms used to provide user identity. 
+* Authentication and identity - plugins can provide a mechanism to gate access to the application, as well as mechanisms used to provide user identity.
 * Storage - plugins can override the built in filesystem storage with a new way to read, write and access bot projects.
 * Web server - plugins can add additional web routes to Composer's web server instance.
 * Publishing - plugins can add publishing mechanisms
 * Runtime Templates - plugins can provide a runtime template used when "ejecting" from Composer
+* Bot Project Templates - plugins can add items to the template list shown in the "new bot" flow
+* Boilerplate Content - plugins can provide content copied into all bot projects (such as a readme file or helper scripts)
+
 
 Combining these endpoints, it is possible to achieve scenarios such as:
 
@@ -79,7 +82,7 @@ Developers may choose to override this middleware for various reasons, such as:
 
 Provide custom serialize and deserialize functions for storing and retrieving the user profile and identity information in the Composer session.
 
-By default, the entire user profile is serialized to JSON and stored in the session. If this is not desirable, plugins should override these methods and provide alternate methods. 
+By default, the entire user profile is serialized to JSON and stored in the session. If this is not desirable, plugins should override these methods and provide alternate methods.
 
 For example, the below code demonstrates storing only the user ID in the session during serialization, and the use of a database to load the full profile out of a database using that id during deserialization.
 
@@ -147,7 +150,7 @@ Though this interface is modeled after a filesystem interaction, the implementat
 
 Provide an iFileStorage-compatible class to Composer.
 
-The constructor of the class will receive 2 parameters: a StorageConnection configuration, pulled from Composer's global configuration (currently data.json), and a user identity object, as provided by any configured authentication plugin. 
+The constructor of the class will receive 2 parameters: a StorageConnection configuration, pulled from Composer's global configuration (currently data.json), and a user identity object, as provided by any configured authentication plugin.
 
 The current behavior of Composer is to instantiate a new instance of the storage accessor class each time it is used. As a result, caution must be taken not to undertake expensive operations each time. For example, if a database connection is required, the connection might be implemented as a static member of the class, inside the plugin's init code and made accessible within the plugin module's scope.
 
@@ -166,7 +169,7 @@ class CustomStorage implements IFileStorage {
   constructor(conn: StorageConnection, user?: UserIdentity) {
     ...
   }
-  
+
   ...
 }
 ```
@@ -217,7 +220,7 @@ For middleware dealing with authentication, plugins must use `useAuthMiddleware(
 
 ### Publishing
 
-#### `composer.addPublishMethod(publishMechanism)`
+#### `composer.addPublishMethod(publishMechanism, schema, instructions)`
 
 Provide a new mechanism by which a bot project is transferred from Composer to some external service. The mechanisms can use whatever method necessary to process and transmit the bot project to the desired external service, though it must use a standard signature for the methods.
 
@@ -257,6 +260,35 @@ await composer.addRuntimeTemplate({
   startCommand: 'dotnet run',
 });
 ```
+
+### Bot Project Templates
+
+Add a project template to the list available during the bot creation process. Plugins can bundle arbitrary bundle of content that will be copied into the bot project at create time. The template should contain a functioning bot project, along with any specializations and configuration defaults required to successfully run the project.
+
+#### `composer.addBotTemplate(template)`
+
+```ts
+await composer.addBotTemplate({
+  id: 'name.my.template.bot'
+  name: 'Display Name',
+  description: 'Long description';
+  path: '/path/to/template'
+});
+```
+
+In addition, boilerplate material will also be added to every new bot project. Plugins can bundle additional content that will be copied into every project, regardless of which template is used.
+
+#### `composer.addBaseTemplate(template)`
+
+```ts
+await composer.addBaseTemplate({
+  id: 'name.my.template.bot'
+  name: 'Display Name',
+  description: 'Long description';
+  path: '/path/to/template'
+});
+```
+
 
 ### Accessors
 
