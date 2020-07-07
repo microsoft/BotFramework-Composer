@@ -11,6 +11,7 @@ import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
+import { BotProject } from '../bot/botProject';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -54,4 +55,13 @@ export class AssetManager {
       }
     }
   }
+
+  // read the version number out of the project folder
+  // this assumes the boilerplate contains a scripts/ folder containing a pacakge file
+  // as of 1.0.1 this is true.
+  public getBoilerplateVersionFromProject(project: BotProject) {
+    const location = path.join(project.dataDir, 'scripts/');
+  }
+
+  public getBoilerplateCurrentVersion() {}
 }
