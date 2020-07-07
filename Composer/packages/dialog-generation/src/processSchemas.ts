@@ -10,8 +10,11 @@ import glob from 'globby';
 import * as fg from './dialogGenerator';
 import * as s from './schema';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const allof: any = require('json-schema-merge-allof');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const clone = require('clone');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const parser: any = require('json-schema-ref-parser');
 
 type idToSchema = { [id: string]: any };

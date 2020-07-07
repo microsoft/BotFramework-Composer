@@ -13,7 +13,9 @@ import * as ajv from 'ajv';
 import * as ps from './processSchemas';
 
 export * from './schema';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const allof: any = require('json-schema-merge-allof');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const parser: any = require('json-schema-ref-parser');
 
 export enum EntityType {
@@ -139,6 +141,7 @@ export class Schema {
     if (this.schema.$entities) {
       for (const entity of this.schema.$entities) {
         // Do not include entities generated from property
+        // eslint-disable-next-line no-prototype-builtins
         if (!entities.hasOwnProperty(entity)) {
           const entityWrapper = new Entity(entity, this.path);
           entities.push(entityWrapper);

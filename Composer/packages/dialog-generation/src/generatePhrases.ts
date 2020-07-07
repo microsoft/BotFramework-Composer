@@ -9,43 +9,46 @@ function generateWords(name: string, locale?: string): string[] {
   const words: string[] = [];
   switch (locale) {
     default:
-      let current = 'lower';
-      let start = 0;
-      let i = 0;
-      // Skip first character and treat as lower
-      while (++i < name.length) {
-        let ch = name.charAt(i);
-        let split = false;
-        const end = i;
-        if (ch === ' ' || ch === '_' || ch === '-') {
-          split = true;
-          while (i + 1 < name.length) {
-            ch = name.charAt(i);
-            if (ch === ' ' || ch === '_' || ch === '-') {
-              ++i;
-            } else {
-              break;
+      {
+        let current = 'lower';
+        let start = 0;
+        let i = 0;
+        // Skip first character and treat as lower
+        while (++i < name.length) {
+          let ch = name.charAt(i);
+          let split = false;
+          const end = i;
+          if (ch === ' ' || ch === '_' || ch === '-') {
+            split = true;
+            while (i + 1 < name.length) {
+              ch = name.charAt(i);
+              if (ch === ' ' || ch === '_' || ch === '-') {
+                ++i;
+              } else {
+                break;
+              }
             }
           }
+          if (ch === ch.toLowerCase()) {
+            split = split || current === 'upper';
+            current = 'lower';
+          } else if (ch === ch.toUpperCase()) {
+            split = split || current === 'lower';
+            current = 'upper';
+          }
+          // Word is either all same case or initial case is different
+          if (split && end - start > 1) {
+            words.push(name.substring(start, end).toLowerCase());
+            start = i;
+          }
         }
-        if (ch === ch.toLowerCase()) {
-          split = split || current === 'upper';
-          current = 'lower';
-        } else if (ch === ch.toUpperCase()) {
-          split = split || current === 'lower';
-          current = 'upper';
-        }
-        // Word is either all same case or initial case is different
-        if (split && end - start > 1) {
-          words.push(name.substring(start, end).toLowerCase());
-          start = i;
+        if (start < name.length) {
+          words.push(name.substring(start).toLowerCase());
         }
       }
-      if (start < name.length) {
-        words.push(name.substring(start).toLowerCase());
-      }
+
+      return words;
   }
-  return words;
 }
 
 export function* generatePhrases(

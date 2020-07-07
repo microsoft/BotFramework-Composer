@@ -10,9 +10,13 @@ import * as fs from 'fs-extra';
 
 import { Feedback, FeedbackType, isUnchanged, writeFile, stringify } from './dialogGenerator';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Templates, SwitchCaseBodyContext } = require('botbuilder-lg');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const LUParser = require('@microsoft/bf-lu/lib/parser/lufile/luParser');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const sectionOperator = require('@microsoft/bf-lu/lib/parser/lufile/sectionOperator');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const lusectiontypes = require('@microsoft/bf-lu/lib/parser/utils/enums/lusectiontypes');
 
 const GeneratorPattern = /\r?\n> Generator: ([a-zA-Z0-9]+)/;

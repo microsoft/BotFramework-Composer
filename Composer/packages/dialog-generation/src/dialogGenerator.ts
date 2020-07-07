@@ -405,7 +405,8 @@ async function processTemplates(
         feedback(FeedbackType.error, `${property.path} does not have $entities defined in schema or template.`);
       } else if (!property.schema.$templates) {
         for (const entity of entities) {
-          let [entityName, role] = entity.split(':');
+          const [entityNamePart, role] = entity.split(':');
+          let entityName = entityNamePart;
           scope.entity = entityName;
           scope.role = role;
           if (entityName === `${scope.property}Entity`) {
