@@ -7,7 +7,7 @@ import isEqual from 'lodash/isEqual';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { StoreContext } from '../store';
-import { getDialogData, setDialogData, sanitizeDialogData } from '../utils';
+import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 

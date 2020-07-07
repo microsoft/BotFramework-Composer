@@ -20,7 +20,7 @@ import formatMessage from 'format-message';
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension, getBaseName } from '../../utils';
+import { getExtension, getBaseName } from '../../utils/fileUtil';
 import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
@@ -350,7 +350,7 @@ const saveTemplateId: ReducerFunc = (state, { templateId }) => {
 
 const setError: ReducerFunc = (state, payload) => {
   // if the error originated at the server and the server included message, use it...
-  if (payload && payload.status && payload.status === 409) {
+  if (payload?.status === 409) {
     state.error = {
       status: 409,
       message: formatMessage(
@@ -359,7 +359,7 @@ const setError: ReducerFunc = (state, payload) => {
       summary: formatMessage('Modification Rejected'),
     };
   } else {
-    if (payload && payload.response && payload.response.data && payload.response.data.message) {
+    if (payload?.response?.data?.message) {
       state.error = payload.response.data;
     } else {
       state.error = payload;
@@ -452,6 +452,21 @@ const syncEnvSetting: ReducerFunc = (state, { settings, projectId }) => {
     }
   }
   state.settings = settings;
+  return state;
+};
+
+const setPublishTargets: ReducerFunc = (state, { publishTarget }) => {
+  state.settings.publishTargets = publishTarget;
+  return state;
+};
+
+const setRuntimeField: ReducerFunc = (state, { field, newValue }) => {
+  if (state.settings.runtime != null) state.settings.runtime[field] = newValue;
+  return state;
+};
+
+const setCustomRuntimeToggle: ReducerFunc = (state, { isOn }) => {
+  setRuntimeField(state, { field: 'customRuntime', newValue: isOn });
   return state;
 };
 
@@ -595,7 +610,13 @@ const setUserSettings: ReducerFunc<Partial<UserSettings>> = (state, settings) =>
 };
 
 const ejectSuccess: ReducerFunc = (state, payload) => {
-  state.runtimeSettings = payload.settings;
+  if (payload.settings?.path) {
+    state.settings.runtime = {
+      customRuntime: true,
+      path: payload.settings.path,
+      command: payload.settings.startCommand,
+    };
+  }
   return state;
 };
 
@@ -710,4 +731,7 @@ export const reducer = createReducer({
   [ActionTypes.SET_APP_UPDATE_STATUS]: setAppUpdateStatus,
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
+  [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
+  [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
+  [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
 });

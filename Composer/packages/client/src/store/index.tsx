@@ -10,11 +10,11 @@ import merge from 'lodash/merge';
 import { prepareAxios } from '../utils/auth';
 import storage from '../utils/storage';
 import { isElectron } from '../utils/electronUtil';
+import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from '../constants';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
-import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from './../constants';
 import {
   BotState,
   AppState,
@@ -86,10 +86,7 @@ export const initialBotState: BotState = {
   isEnvSettingUpdated: false,
   settings: {},
   publishVersions: {},
-  publishStatus: 'inactive',
-  lastPublishChange: null,
   publishTypes: [],
-  publishTargets: [],
   publishHistory: {},
   botOpening: false,
 };
@@ -117,10 +114,6 @@ const initialAppState: AppState = {
   clipboardActions: [],
   runtimeTemplates: [],
   userSettings: getUserSettings(),
-  runtimeSettings: {
-    path: '',
-    startCommand: '',
-  },
   announcement: undefined,
   appUpdate: {
     progressPercent: 0,

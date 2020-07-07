@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import { AppUpdater } from '../../src/components/AppUpdater';
+import { AppUpdater } from '../../src/components/AppUpdater/AppUpdater';
 import { AppUpdaterStatus } from '../../src/constants';
 import { renderWithStore } from '../testUtils';
 
