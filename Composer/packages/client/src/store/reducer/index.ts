@@ -5,7 +5,15 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import has from 'lodash/has';
 import merge from 'lodash/merge';
-import { indexer, dialogIndexer, lgIndexer, luIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexers';
+import {
+  indexer,
+  dialogIndexer,
+  lgIndexer,
+  luIndexer,
+  qnaIndexer,
+  autofixReferInDialog,
+  validateDialog,
+} from '@bfc/indexers';
 import {
   SensitiveProperties,
   LuFile,
@@ -244,7 +252,8 @@ const createQnaFile: ReducerFunc = (state, { id, content }) => {
     return state;
   }
 
-  const qnaFile = { id, content };
+  const { parse } = qnaIndexer;
+  const qnaFile = { id, content, ...parse(content, id) };
   state.qnaFiles.push(qnaFile);
   return state;
 };

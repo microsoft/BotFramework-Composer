@@ -17,7 +17,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
-import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
+import { LuFilePayload, QnAFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -167,7 +167,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
+  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload, qnaFile?: QnAFilePayload) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
@@ -180,6 +180,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         projectId,
       };
       actions.updateLuFile(luFilePayload);
+    }
+
+    if (qnaFile) {
+      const qnaFilePayload = {
+        id: qnaFile.id,
+        content: qnaFile.content,
+        projectId,
+      };
+      actions.updateQnaFile(qnaFilePayload);
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;

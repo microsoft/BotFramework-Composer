@@ -108,6 +108,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.OnUnknownIntent,
       SDKKinds.OnDialogEvent,
       SDKKinds.OnActivity,
+      SDKKinds.OnChooseIntent,
     ],
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {

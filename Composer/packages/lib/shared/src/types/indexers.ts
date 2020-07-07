@@ -88,14 +88,15 @@ export interface LuFile {
 }
 
 export interface QnASection {
-  Question: string;
+  Questions: string[];
   Answer: string;
+  Body: string;
 }
 
 export interface QnAFile {
   id: string;
   content: string;
-  qnaSection?: QnASection[];
+  qnaSections: QnASection[];
   [key: string]: any;
 }
 

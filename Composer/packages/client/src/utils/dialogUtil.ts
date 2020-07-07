@@ -31,6 +31,7 @@ export interface TriggerFormData {
   intent: string;
   triggerPhrases: string;
   regEx: string;
+  qnaPhrases: string;
 }
 
 export interface TriggerFormDataErrors {
@@ -38,6 +39,7 @@ export interface TriggerFormDataErrors {
   intent?: string;
   event?: string;
   triggerPhrases?: string;
+  qnaPhrases?: string;
   regEx?: string;
   activity?: string;
 }
@@ -54,7 +56,9 @@ export const activityTypeKey: string = SDKKinds.OnActivity;
 export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
 export const crossTrainedRecognizerSetKey: string = SDKKinds.CrossTrainedRecognizerSet;
 export const customEventKey = 'OnCustomEvent';
-
+export const qnaMatcherKey: string = SDKKinds.OnQnAMatch;
+export const onChooseIntentKey: string = SDKKinds.OnChooseIntent;
+export const adaptiveCardKey = 'adaptiveCard';
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
   const insertAt = typeof position === 'undefined' ? current.length : position;
@@ -181,6 +185,10 @@ export function getTriggerTypes(): IDropdownOption[] {
     {
       key: customEventKey,
       text: formatMessage('Custom events'),
+    },
+    {
+      key: adaptiveCardKey,
+      text: formatMessage('Adaptive card action received'),
     },
   ];
   return triggerTypes;
