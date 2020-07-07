@@ -142,7 +142,6 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       updateDialog({
         id: dialogId,
         content: newDialogData,
-        projectId,
       });
     },
     saveData: (newData, updatePath) => {
@@ -155,7 +154,6 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       const payload = {
         id: dialogId,
         content: updatedDialog,
-        projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);

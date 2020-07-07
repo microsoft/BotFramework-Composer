@@ -77,6 +77,12 @@ describe('<CreationFlow/>', () => {
     act(() => {
       fireEvent.click(node);
     });
-    expect(createProjectMock).toHaveBeenCalledWith('EchoBot', 'EchoBot-1', '', '/test-folder/Desktop', '');
+    expect(createProjectMock).toHaveBeenCalledWith(
+      'EchoBot',
+      'EchoBot-1',
+      '',
+      expect.stringMatching(/(\/|\\)test-folder(\/|\\)Desktop/),
+      ''
+    );
   });
 });
