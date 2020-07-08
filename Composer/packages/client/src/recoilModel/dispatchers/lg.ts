@@ -9,10 +9,9 @@ import { lgFilesState } from './../atoms/botState';
 
 export const lgDispatcher = () => {
   const updateFile = async ({ set, snapshot }: CallbackInterface, { id, content }: { id: string; content: string }) => {
-    let lgFiles = await snapshot.getPromise(lgFilesState);
+    const lgFiles = await snapshot.getPromise(lgFilesState);
     const result = (await LgWorker.parse(id, content, lgFiles)) as LgFile;
-    lgFiles = lgFiles.map((file) => (file.id === id ? result : file));
-    set(lgFilesState, lgFiles);
+    set(lgFilesState, (lgFiles) => lgFiles.map((file) => (file.id === id ? result : file)));
   };
 
   const updateLgFile = useRecoilCallback<[{ id: string; content: any }], Promise<void>>(
