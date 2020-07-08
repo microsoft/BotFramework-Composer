@@ -112,11 +112,6 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
   state.botOpening = false;
-  if (!qnaFiles || qnaFiles.length === 0) {
-    dialogs.forEach((dialog) => {
-      state = createQnaFile(state, { id: dialog.id, content: '' });
-    });
-  }
   refreshLocalStorage(id, state.settings);
   mergeLocalStorage(id, state.settings);
   return state;
@@ -242,6 +237,9 @@ const updateLuTemplate: ReducerFunc = (state, luFile: LuFile) => {
 };
 
 const createQnaFile: ReducerFunc = (state, { id, content }) => {
+  if (!id) {
+    return state;
+  }
   const { qnaFiles, locale } = state;
   id = `${id}.${locale}`;
   if (qnaFiles.find((qna) => qna.id === id)) {

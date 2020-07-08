@@ -287,7 +287,14 @@ export class BotProject {
     if (file) {
       throw new Error(`${name} dialog already exist`);
     }
-    const relativePath = Path.join(dir, name.trim());
+
+    // migration with old bot to create qna file in main dialog
+    let relativeDir = dir;
+    const { fileName, fileExtension } = this._getFileNameInfo(name);
+    if (fileName === `${this.name}.${this.locale}`.toLowerCase() && fileExtension === '.qna') {
+      relativeDir = Path.join('language-understanding', this.locale);
+    }
+    const relativePath = Path.join(relativeDir, name.trim());
     return await this._createFile(relativePath, content);
   };
 
@@ -387,6 +394,12 @@ export class BotProject {
     await this.settingManager.set(settings);
   };
 
+  private _getFileNameInfo = (name) => {
+    const dotIndex = name.lastIndexOf('.');
+    const fileName = name.substring(0, dotIndex);
+    const fileExtension = name.substring(dotIndex);
+    return { fileName, fileExtension };
+  };
   private _cleanUp = async (relativePath: string) => {
     const absolutePath = `${this.dir}/${relativePath}`;
     const dirPath = Path.dirname(absolutePath);
