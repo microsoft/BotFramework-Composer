@@ -26,7 +26,7 @@ export const Header = () => {
   }, []);
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
-  console.log('render headr');
+
   return (
     <div css={headerContainer} role="banner">
       <img
