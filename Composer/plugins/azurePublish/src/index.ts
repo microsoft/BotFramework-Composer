@@ -71,7 +71,6 @@ export default async (composer: any): Promise<void> => {
       return path.resolve(this.baseRuntimeFolder, `${key}/${template}`);
     };
 
-<<<<<<< HEAD
     // path to the declarative assets
     private getBotFolder = (key: string, template: string) =>
       path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
@@ -86,34 +85,6 @@ export default async (composer: any): Promise<void> => {
     private async loadHistoryFromFile() {
       if (await pathExists(this.historyFilePath)) {
         this.histories = await readJson(this.historyFilePath);
-=======
-  private addLoadingStatus = (botId: string, profileName: string, newStatus) => {
-    // save in publishingBots
-    if (!this.publishingBots[botId]) {
-      this.publishingBots[botId] = {};
-    }
-    if (!this.publishingBots[botId][profileName]) {
-      this.publishingBots[botId][profileName] = [];
-    }
-    this.publishingBots[botId][profileName].push(newStatus);
-  };
-  private removeLoadingStatus = (botId: string, profileName: string, jobId: string) => {
-    if (this.publishingBots[botId] && this.publishingBots[botId][profileName]) {
-      const index = this.publishingBots[botId][profileName].findIndex((item) => item.result.id === jobId);
-      const status = this.publishingBots[botId][profileName][index];
-      this.publishingBots[botId][profileName] = this.publishingBots[botId][profileName]
-        .slice(0, index)
-        .concat(this.publishingBots[botId][profileName].slice(index + 1));
-      return status;
-    }
-    return;
-  };
-  private getLoadingStatus = (botId: string, profileName: string, jobId = '') => {
-    if (this.publishingBots[botId] && this.publishingBots[botId][profileName].length > 0) {
-      // get current status
-      if (jobId) {
-        return this.publishingBots[botId][profileName].find((item) => item.result.id === jobId);
->>>>>>> origin/master
       }
     }
 
