@@ -102,7 +102,7 @@ export const navigationDispatcher = () => {
     }
   );
 
-  const setectAndfocus = useRecoilCallback(
+  const selectAndfocus = useRecoilCallback(
     ({ snapshot }: CallbackInterface) => async (
       dialogId: string,
       selectPath: string,
@@ -128,6 +128,6 @@ export const navigationDispatcher = () => {
     navTo,
     selectTo,
     focusTo,
-    setectAndfocus,
+    selectAndfocus,
   };
 };

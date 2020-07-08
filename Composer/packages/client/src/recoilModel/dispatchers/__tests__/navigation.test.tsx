@@ -8,17 +8,16 @@ import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { focusPathState, breadcrumbState, designPageLocationState, projectIdState } from '../../atoms/botState';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
-import { navigateTo, checkUrl, updateBreadcrumb } from '../../../utils/navigation';
+import { navigateTo, checkUrl, updateBreadcrumb, BreadcrumbUpdateType } from '../../../utils/navigation';
 import { getSelected } from '../../../utils/dialogUtil';
 import { BreadcrumbItem } from '../../../recoilModel/types';
 
 jest.mock('../../../utils/navigation');
-jest.mock('../../../utils/dialogUtil', () => ({
-  getSelected: (sel) => sel,
-}));
+jest.mock('../../../utils/dialogUtil');
 
 const mockCheckUrl = checkUrl as jest.Mock<boolean>;
 const mockNavigateTo = navigateTo as jest.Mock<void>;
+const mockGetSelected = getSelected as jest.Mock<string>;
 const mockUpdateBreadcrumb = updateBreadcrumb as jest.Mock<BreadcrumbItem[]>;
 
 const PROJECT_ID = '12345.678';
@@ -32,6 +31,7 @@ describe('navigation dispatcher', () => {
   beforeEach(() => {
     mockCheckUrl.mockClear();
     mockNavigateTo.mockClear();
+    mockUpdateBreadcrumb.mockReturnValue([]);
 
     const useRecoilTestHook = () => {
       const focusPath = useRecoilValue(focusPathState);
@@ -207,10 +207,35 @@ describe('navigation dispatcher', () => {
 
     it('goes to a focused page', async () => {
       mockCheckUrl.mockReturnValue(false);
+      mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
         await dispatcher.focusTo('focus');
       });
-      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId?selected=focus`);
+      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId?selected=select&focused=focus`);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
+    });
+
+    it('goes to a focused page with fragment', async () => {
+      mockCheckUrl.mockReturnValue(false);
+      mockGetSelected.mockReturnValueOnce('select');
+      await act(async () => {
+        await dispatcher.focusTo('focus', 'fragment');
+      });
+      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId?selected=select&focused=focus#fragment`);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
+    });
+
+    it('stays on the same page but updates breadcrumbs with a checked URL', async () => {
+      mockCheckUrl.mockReturnValue(true);
+      mockGetSelected.mockReturnValueOnce('select');
+      await act(async () => {
+        await dispatcher.focusTo('focus', 'fragment');
+      });
+      expect(mockNavigateTo).not.toBeCalled();
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Selected);
+      expect(mockUpdateBreadcrumb).toHaveBeenCalledWith(expect.anything(), BreadcrumbUpdateType.Focused);
     });
   });
 
