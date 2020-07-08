@@ -3,8 +3,9 @@
 
 import React, { useContext } from 'react';
 import { atom, useRecoilState, useRecoilValue } from 'recoil';
+import { act } from '@bfc/test-utils/lib/hooks';
 
-import { act, renderRecoilHook } from './react-recoil-hooks-testing-library';
+import { renderRecoilHook } from './react-recoil-hooks-testing-library';
 
 const atomA = atom({
   key: 'setMockRecoilState__a',
