@@ -7,6 +7,7 @@ import { ProjectTemplate, UserSettings } from '@bfc/shared';
 import { StorageFolder, StateError, RuntimeTemplate, AppUpdateState } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import { CreationFlowStatus } from '../../constants';
+import onboardingStorage from '../../utils/onboardingStorage';
 
 export type BotProject = {
   readonly id: string;
@@ -73,7 +74,7 @@ export const onboardingState = atom<{
   key: getFullyQualifiedKey('onboarding'),
   default: {
     coachMarkRefs: {},
-    complete: true,
+    complete: onboardingStorage.getComplete(),
   },
 });
 
