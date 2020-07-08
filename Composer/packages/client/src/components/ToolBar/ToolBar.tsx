@@ -74,6 +74,9 @@ export function ToolBar(props: ToolbarProps) {
 
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
+    if (!actionSelected) {
+      return {};
+    }
     const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
     const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
