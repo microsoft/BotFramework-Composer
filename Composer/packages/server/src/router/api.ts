@@ -28,6 +28,7 @@ router.post('/projects/:projectId/project/saveAs', ProjectController.saveProject
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 
 // update the boilerplate content
+router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
 router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBoilerplate);
 
 // storages

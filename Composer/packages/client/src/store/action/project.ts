@@ -242,10 +242,26 @@ export const getAllProjects = async () => {
 export const updateBoilerplate: ActionCreator = async (store, projectId) => {
   const { dispatch } = store;
   try {
-    const response = await httpClient.post(`/projects/${projectId}/updateBoilerplate`);
+    await httpClient.post(`/projects/${projectId}/updateBoilerplate`);
     dispatch({
       type: ActionTypes.SET_MESSAGE,
       payload: formatMessage('Scripts successfully updated.'),
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: err,
+    });
+  }
+};
+
+export const getBoilerplateVersion: ActionCreator = async (store, projectId) => {
+  const { dispatch } = store;
+  try {
+    const response = await httpClient.get(`/projects/${projectId}/boilerplateVersion`);
+    dispatch({
+      type: ActionTypes.GET_BOILERPLATE_SUCCESS,
+      payload: response.data,
     });
   } catch (err) {
     dispatch({

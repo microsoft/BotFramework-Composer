@@ -346,11 +346,36 @@ async function getAllProjects(req: Request, res: Response) {
   }
 }
 
+async function checkBoilerplateVersion(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const latestVersion = AssetService.manager.getBoilerplateCurrentVersion();
+    const currentVersion = await AssetService.manager.getBoilerplateVersionFromProject(currentProject);
+    const updateRequired =
+      (latestVersion && currentVersion && latestVersion > currentVersion) || // versions are present in both locations, latest is newer
+      (latestVersion && !currentVersion); // latest version exists, but is mssing from project
+
+    res.status(200).json({
+      currentVersion,
+      latestVersion,
+      updateRequired,
+    });
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 async function updateBoilerplate(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
+
   if (currentProject !== undefined) {
     try {
       // inject shared content into every new project.  this comes from assets/shared
@@ -382,4 +407,5 @@ export const ProjectController = {
   getAllProjects,
   getRecentProjects,
   updateBoilerplate,
+  checkBoilerplateVersion,
 };
