@@ -6,7 +6,7 @@ import { Store, State } from '../types';
 import { setError, fetchProject } from '../action';
 import { ActionTypes } from '../../constants';
 import { ActionType } from '../action/types';
-import { getBaseName } from '../../utils';
+import { getBaseName } from '../../utils/fileUtil';
 
 import * as client from './http';
 import { IFileChange, ChangeType, FileExtensions } from './types';
@@ -26,7 +26,9 @@ const actionType2ChangeType = {
   [ActionTypes.UPDATE_SKILL_MANIFEST]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Manifest },
   [ActionTypes.SYNC_ENV_SETTING]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
   [ActionTypes.SET_PUBLISH_TARGETS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
-  [ActionTypes.SET_RUNTIME_SETTINGS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.EJECT_SUCCESS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.SET_RUNTIME_FIELD]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
 };
 
 class FilePersistence {
