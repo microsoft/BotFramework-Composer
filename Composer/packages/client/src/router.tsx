@@ -5,12 +5,15 @@
 import { jsx, css } from '@emotion/core';
 import React, { useContext, useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
+import formatMessage from 'format-message';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
+import { openAlertModal } from './components/Modal/AlertDialog';
+import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
@@ -86,6 +89,15 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
       actions.fetchProjectById(props.projectId);
     }
   }, [props.projectId]);
+
+  useEffect(() => {
+    const schemaError = state.schemas?.diagnostics ?? [];
+    if (schemaError.length !== 0) {
+      const title = formatMessage('Error Processing Schema');
+      const subTitle = schemaError.join('\n');
+      openAlertModal(title, subTitle, { style: dialogStyle.console });
+    }
+  }, [state.schemas, state.projectId]);
 
   if (state.botOpening || props.projectId !== state.projectId) {
     return <LoadingSpinner />;
