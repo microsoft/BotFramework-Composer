@@ -109,14 +109,14 @@ export const dialogsDispatcher = () => {
   const createDialogBegin = useRecoilCallback((callbackHelpers: CallbackInterface) => (actions, onComplete) => {
     const { set } = callbackHelpers;
     set(actionsSeedState, actions);
-    set(onCreateDialogCompleteState, onComplete);
+    set(onCreateDialogCompleteState, { func: onComplete });
     set(showCreateDialogModalState, true);
   });
 
   const createDialogCancel = useRecoilCallback((callbackHelpers: CallbackInterface) => () => {
     const { set } = callbackHelpers;
     set(actionsSeedState, []);
-    set(onCreateDialogCompleteState, undefined);
+    set(onCreateDialogCompleteState, { func: undefined });
     set(showCreateDialogModalState, false);
   });
 
@@ -134,7 +134,11 @@ export const dialogsDispatcher = () => {
     set(dialogsState, (dialogs) => [...dialogs, dialog]);
     set(actionsSeedState, []);
     set(showCreateDialogModalState, false);
-    set(onCreateDialogCompleteState, undefined);
+    const onComplete = (await snapshot.getPromise(onCreateDialogCompleteState)).func;
+    if (typeof onComplete === 'function') {
+      setTimeout(() => onComplete(id));
+    }
+    set(onCreateDialogCompleteState, { func: undefined });
   });
   return {
     removeDialog,

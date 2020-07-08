@@ -3,9 +3,10 @@
 
 import { useRecoilValue } from 'recoil';
 import test from '@bfc/indexers';
+import { act } from '@bfc/test-utils/lib/hooks';
 
 import { dialogsDispatcher } from '../dialogs';
-import { renderRecoilHook, act } from '../../../../__tests__/testUtils';
+import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
   dialogsState,
   lgFilesState,

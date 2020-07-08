@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import { useRecoilValue } from 'recoil';
+import { act } from '@bfc/test-utils/lib/hooks';
 
 import { navigationDispatcher } from '../navigation';
-import { renderRecoilHook, act } from '../../../../__tests__/testUtils';
+import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { focusPathState, breadcrumbState, designPageLocationState, projectIdState } from '../../atoms/botState';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 

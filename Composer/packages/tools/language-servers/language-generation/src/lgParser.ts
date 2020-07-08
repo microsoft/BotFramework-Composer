@@ -48,7 +48,7 @@ class LgParserWithWorker {
 
   constructor() {
     const workerScriptPath = path.join(__dirname, 'lgWorker.js');
-    this.worker = fork(workerScriptPath, []);
+    this.worker = fork(workerScriptPath, [], { execArgv: [] });
     this.worker.on('message', this.handleMsg.bind(this));
   }
 
