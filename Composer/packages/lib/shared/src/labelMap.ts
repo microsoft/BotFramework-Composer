@@ -205,7 +205,7 @@ export const ConceptLabels: { [key in ConceptLabelKey]?: LabelOverride } = {
     subtitle: formatMessage('Unknown intent recognized'),
   },
   [SDKKinds.OnQnAMatch]: {
-    title: formatMessage('QnA Match recognized'),
+    title: formatMessage('QnA Intent recognized'),
   },
   [SDKKinds.QnAMakerDialog]: {
     title: formatMessage('Connect to QnA Knowledgebase'),
