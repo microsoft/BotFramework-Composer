@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { LgFile, LgTemplate } from '@bfc/shared/src/types/indexers';
-import { useRecoilValue } from 'recoil';
+import { act } from '@testing-library/react-hooks';
 
 import { lgDispatcher } from '../lg';
-import { renderRecoilHook, act } from '../../../../__tests__/testUtils';
+import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { lgFilesState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
@@ -16,6 +16,7 @@ jest.mock('../../parsers/lgWorker', () => {
     addTemplate: (content, template) => new Promise((resolve) => resolve(content)),
     updateIntent: (a, b, c) => c.Body,
     removeIntent: (a, b) => b,
+    parse: (id, content) => ({ id, content }),
   };
 });
 const getLgFile = (id, content): LgFile => ({ id, content } as LgFile);

@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { act } from '@testing-library/react-hooks';
 
 import { editorDispatcher } from '../editor';
-import { renderRecoilHook, act } from '../../../../__tests__/testUtils';
+import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { visualEditorSelectionState, clipboardActionsState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
