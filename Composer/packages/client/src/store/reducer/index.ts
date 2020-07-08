@@ -20,7 +20,7 @@ import formatMessage from 'format-message';
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
-import { getExtension, getBaseName } from '../../utils';
+import { getExtension, getBaseName } from '../../utils/fileUtil';
 import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
@@ -87,7 +87,15 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
-  schemas.sdk.content = processSchema(id, schemas.sdk.content);
+
+  try {
+    schemas.sdk.content = processSchema(id, schemas.sdk.content);
+  } catch (err) {
+    const diagnostics = schemas.diagnostics ?? [];
+    diagnostics.push(err.message);
+    schemas.diagnostics = diagnostics;
+  }
+
   const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
   state.projectId = id;
   state.dialogs = dialogs.map((dialog) => {
