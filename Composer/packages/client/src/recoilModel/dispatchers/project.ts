@@ -167,11 +167,8 @@ export const projectDispatcher = () => {
         snapshot: { getPromise },
       } = callbackHelpers;
       const currentRecentProjects = await getPromise(recentProjectsState);
-      const index = currentRecentProjects.findIndex((p) => p.path == path);
-      currentRecentProjects.splice(index, 1);
-      set(recentProjectsState, {
-        ...currentRecentProjects,
-      });
+      const filtered = currentRecentProjects.filter((p) => p.path !== path);
+      set(recentProjectsState, filtered);
     } catch (ex) {
       logMessage(callbackHelpers, `Error removing recent project: ${ex}`);
     }

@@ -29,8 +29,12 @@ export const applicationDispatcher = () => {
         newAppUpdateState.progressPercent = 0;
         newAppUpdateState.version = undefined;
       }
+
+      newAppUpdateState.status = status;
+
       set(appUpdateState, {
         ...newAppUpdateState,
+        status,
       });
     }
   );
@@ -48,7 +52,7 @@ export const applicationDispatcher = () => {
     set(appUpdateState, (updaterState) => {
       return {
         ...updaterState,
-        error: error,
+        error,
       };
     });
   });
