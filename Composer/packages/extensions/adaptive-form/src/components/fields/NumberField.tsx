@@ -31,8 +31,6 @@ const NumberField: React.FC<FieldProps> = (props) => {
       return;
     }
 
-    console.log(step, value);
-
     // if the number is a float, we need to convert to a fixed decimal place
     // in order to avoid floating point math rounding errors (ex. 1.2000000001)
     // ex. if step = 0.01, we fix to 2 decimals

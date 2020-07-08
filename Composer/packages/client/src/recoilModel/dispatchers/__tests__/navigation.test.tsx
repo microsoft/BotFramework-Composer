@@ -8,7 +8,7 @@ import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { focusPathState, breadcrumbState, designPageLocationState, projectIdState } from '../../atoms/botState';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
-import { navigateTo, checkUrl, updateBreadcrumb, BreadcrumbUpdateType } from '../../../utils/navigation';
+import { navigateTo, checkUrl, updateBreadcrumb, getUrlSearch, BreadcrumbUpdateType } from '../../../utils/navigation';
 import { getSelected } from '../../../utils/dialogUtil';
 import { BreadcrumbItem } from '../../../recoilModel/types';
 
@@ -19,6 +19,7 @@ const mockCheckUrl = checkUrl as jest.Mock<boolean>;
 const mockNavigateTo = navigateTo as jest.Mock<void>;
 const mockGetSelected = getSelected as jest.Mock<string>;
 const mockUpdateBreadcrumb = updateBreadcrumb as jest.Mock<BreadcrumbItem[]>;
+const mockGetUrlSearch = getUrlSearch as jest.Mock<string>;
 
 const PROJECT_ID = '12345.678';
 
@@ -32,6 +33,8 @@ describe('navigation dispatcher', () => {
     mockCheckUrl.mockClear();
     mockNavigateTo.mockClear();
     mockUpdateBreadcrumb.mockReturnValue([]);
+
+    mockCheckUrl.mockReturnValue(false);
 
     const useRecoilTestHook = () => {
       const focusPath = useRecoilValue(focusPathState);
@@ -155,7 +158,6 @@ describe('navigation dispatcher', () => {
 
   describe('navTo', () => {
     it('navigates to a destination', async () => {
-      mockCheckUrl.mockReturnValue(false);
       await act(async () => {
         await dispatcher.navTo('dialogId', []);
       });
@@ -180,7 +182,6 @@ describe('navigation dispatcher', () => {
     });
 
     it('navigates to a default URL with selected path', async () => {
-      mockCheckUrl.mockReturnValue(false);
       await act(async () => {
         await dispatcher.selectTo('selection');
       });
@@ -198,7 +199,6 @@ describe('navigation dispatcher', () => {
 
   describe('focusTo', () => {
     it('goes to the same page with no arguments', async () => {
-      mockCheckUrl.mockReturnValue(false);
       await act(async () => {
         await dispatcher.focusTo();
       });
@@ -206,7 +206,6 @@ describe('navigation dispatcher', () => {
     });
 
     it('goes to a focused page', async () => {
-      mockCheckUrl.mockReturnValue(false);
       mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
         await dispatcher.focusTo('focus');
@@ -217,7 +216,6 @@ describe('navigation dispatcher', () => {
     });
 
     it('goes to a focused page with fragment', async () => {
-      mockCheckUrl.mockReturnValue(false);
       mockGetSelected.mockReturnValueOnce('select');
       await act(async () => {
         await dispatcher.focusTo('focus', 'fragment');
@@ -239,7 +237,21 @@ describe('navigation dispatcher', () => {
     });
   });
 
-  it('sets selection and focus', async () => {
-    await act(async () => {});
+  describe('selectAndFocus', () => {
+    it('sets selection and focus with a valud search', async () => {
+      mockGetUrlSearch.mockReturnValue('?foo=bar&baz=quux');
+      await act(async () => {
+        await dispatcher.selectAndFocus('dialogId', 'select', 'focus');
+      });
+      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId?foo=bar&baz=quux`);
+    });
+
+    it("doesn't go anywhere if we're already there", async () => {
+      mockCheckUrl.mockReturnValue(true);
+      await act(async () => {
+        await dispatcher.selectAndFocus('dialogId', 'select', 'focus');
+      });
+      expect(mockNavigateTo).not.toBeCalled();
+    });
   });
 });
