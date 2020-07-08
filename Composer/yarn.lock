@@ -2787,7 +2787,6 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-<<<<<<< HEAD
 "@microsoft/bf-lu@https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.3.8.tgz":
   version "1.3.8"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.3.8.tgz#084e096d91fc0adbc79712841fe5456d9b5d0ac5"
@@ -2811,30 +2810,29 @@
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-luis-cli@^4.10.0-preview.141651":
-  version "4.10.0-preview.141651"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-luis-cli/-/@microsoft/bf-luis-cli-4.10.0-preview.141651.tgz#29ef283f23d9b59841faff4872cb6900b91ec2e8"
-  integrity sha1-Ke8oPyPZtZhB+v9IcstpALkewug=
+"@microsoft/bf-lu@https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-1.3.6.tgz":
+  version "1.3.6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-1.3.6.tgz#69d09da1444a2db06a95d74c9c2fa4599af28f3c"
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
-    "@azure/cognitiveservices-luis-runtime" "5.0.0"
     "@azure/ms-rest-azure-js" "2.0.1"
-    "@microsoft/bf-cli-command" "4.10.0-preview.141651"
-    "@microsoft/bf-lu" "4.10.0-preview.141651"
     "@oclif/command" "~1.5.19"
-    "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"
     "@types/node-fetch" "~2.5.5"
-    "@types/sinon" "^7.5.0"
-    cli-ux "~5.3.3"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
     fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
     lodash "^4.17.15"
     node-fetch "~2.6.0"
+    semver "^5.5.1"
     tslib "^1.10.0"
-    username "^4.1.0"
 
-=======
->>>>>>> master
 "@microsoft/load-themed-styles@^1.10.26":
   version "1.10.39"
   resolved "https://registry.yarnpkg.com/@microsoft/load-themed-styles/-/load-themed-styles-1.10.39.tgz#23024bfa264a01ab2f05a9fda9c97c1f90ef80d8"
