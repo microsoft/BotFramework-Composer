@@ -75,8 +75,8 @@ export const TestController: React.FC = () => {
   async function handlePublish() {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis : null;
-    const qnaConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).qna : null;
+    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis || {} : {};
+    const qnaConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).qna || {} : {};
     await build(luisConfig.authoringKey, qnaConfig.subscriptKey, state.projectId);
   }
 
