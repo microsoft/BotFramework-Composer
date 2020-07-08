@@ -8,10 +8,31 @@ import { navigationDispatcher } from '../navigation';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { focusPathState, breadcrumbState, designPageLocationState, projectIdState } from '../../atoms/botState';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { navigateTo, checkUrl, updateBreadcrumb } from '../../../utils/navigation';
+import { getSelected } from '../../../utils/dialogUtil';
+import { BreadcrumbItem } from '../../../recoilModel/types';
+
+jest.mock('../../../utils/navigation');
+jest.mock('../../../utils/dialogUtil', () => ({
+  getSelected: (sel) => sel,
+}));
+
+const mockCheckUrl = checkUrl as jest.Mock<boolean>;
+const mockNavigateTo = navigateTo as jest.Mock<void>;
+const mockUpdateBreadcrumb = updateBreadcrumb as jest.Mock<BreadcrumbItem[]>;
+
+const PROJECT_ID = '12345.678';
+
+function expectNavTo(location: string, state: {} | null = null) {
+  expect(mockNavigateTo).toHaveBeenLastCalledWith(location, state == null ? expect.anything() : state);
+}
 
 describe('navigation dispatcher', () => {
   let renderedComponent, dispatcher;
   beforeEach(() => {
+    mockCheckUrl.mockClear();
+    mockNavigateTo.mockClear();
+
     const useRecoilTestHook = () => {
       const focusPath = useRecoilValue(focusPathState);
       const breadcrumb = useRecoilValue(breadcrumbState);
@@ -35,13 +56,13 @@ describe('navigation dispatcher', () => {
         {
           recoilState: designPageLocationState,
           initialValue: {
-            projectId: '12345',
+            projectId: PROJECT_ID,
             dialogId: 'dialogId',
             selected: 'a',
             focused: 'b',
           },
         },
-        { recoilState: projectIdState, initialValue: '12345' },
+        { recoilState: projectIdState, initialValue: PROJECT_ID },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -132,11 +153,68 @@ describe('navigation dispatcher', () => {
     });
   });
 
-  it('navigates to a destination', async () => {});
+  describe('navTo', () => {
+    it('navigates to a destination', async () => {
+      mockCheckUrl.mockReturnValue(false);
+      await act(async () => {
+        await dispatcher.navTo('dialogId', []);
+      });
+      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId`);
+    });
 
-  it('navigates to a selected part of a destination', async () => {});
+    it("doesn't navigate to a destination where we already are", async () => {
+      mockCheckUrl.mockReturnValue(true);
+      await act(async () => {
+        await dispatcher.navTo('dialogId', []);
+      });
+      expect(mockNavigateTo).not.toBeCalled();
+    });
+  });
 
-  it('navigates to a focused part of a destination', async () => {});
+  describe('selectTo', () => {
+    it("doesn't go anywhere without a selection", async () => {
+      await act(async () => {
+        await dispatcher.selectTo('');
+      });
+      expect(mockNavigateTo).not.toBeCalled();
+    });
 
-  it('sets selection and focus', async () => {});
+    it('navigates to a default URL with selected path', async () => {
+      mockCheckUrl.mockReturnValue(false);
+      await act(async () => {
+        await dispatcher.selectTo('selection');
+      });
+      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId?selected=selection`);
+    });
+
+    it("doesn't go anywhere if we're already there", async () => {
+      mockCheckUrl.mockReturnValue(true);
+      await act(async () => {
+        await dispatcher.selectTo('selection');
+      });
+      expect(mockNavigateTo).not.toBeCalled();
+    });
+  });
+
+  describe('focusTo', () => {
+    it('goes to the same page with no arguments', async () => {
+      mockCheckUrl.mockReturnValue(false);
+      await act(async () => {
+        await dispatcher.focusTo();
+      });
+      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId?selected=a`);
+    });
+
+    it('goes to a focused page', async () => {
+      mockCheckUrl.mockReturnValue(false);
+      await act(async () => {
+        await dispatcher.focusTo('focus');
+      });
+      expectNavTo(`/bot/${PROJECT_ID}/dialogs/dialogId?selected=focus`);
+    });
+  });
+
+  it('sets selection and focus', async () => {
+    await act(async () => {});
+  });
 });

@@ -49,6 +49,7 @@ export const navigationDispatcher = () => {
       const currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
       if (checkUrl(currentUri, designPageLocation)) return;
       //if dialog change we should flush some debounced functions
+
       navigateTo(currentUri, { state: { breadcrumb } });
     }
   );
