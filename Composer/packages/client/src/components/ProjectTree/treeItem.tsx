@@ -10,7 +10,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
 
-import { moreButton, overflowSet, menuStyle, navItem, itemText, content } from './styles';
+import { moreButton, overflowSet, menuStyle, navItem, itemText, content, warningIcon, warningText } from './styles';
 
 interface ITreeItemProps {
   link: any;
@@ -45,6 +45,8 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
+        {item.warning && <Icon iconName={'Warning'} style={warningIcon} />}
+        {item.warning && <div css={warningText}>{'Not supported with Regex'} </div>}
       </div>
     </div>
   );
@@ -78,7 +80,6 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
 
 export const TreeItem: React.FC<ITreeItemProps> = (props) => {
   const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
-
   return (
     <div
       css={navItem(isActive, !!isSubItemActive)}
