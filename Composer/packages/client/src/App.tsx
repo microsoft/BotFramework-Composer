@@ -11,7 +11,6 @@ import { MainContainer } from './components/AppComponents/MainContainer';
 initializeIcons(undefined, { disableWarnings: true });
 
 export const App: React.FC = () => {
-  console.log('App');
   return (
     <Fragment>
       <Announcement />
