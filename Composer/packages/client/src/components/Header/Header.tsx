@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { useCallback, Fragment } from 'react';
+import { useCallback, Fragment, memo } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import composerIcon from '../../images/composerIcon.svg';
@@ -19,7 +19,7 @@ type Props = {
   locale: string;
 };
 
-export const Header = (props: Props) => {
+export const Header = memo((props: Props) => {
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
   const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
@@ -57,4 +57,4 @@ export const Header = (props: Props) => {
       )}
     </div>
   );
-};
+});
