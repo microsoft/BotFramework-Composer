@@ -1,1 +1,0 @@
-# Node.js bot launcher for Azure WebApp

@@ -1,17 +1,25 @@
 {
-  "name": "node-runtime",
-  "license": "MIT",
-  "private": true,
-  "engines": {
-    "node": ">=12"
-  },
-  "workspaces": [
-    "core",
-    "azurewebapp"
-  ],
+  "name": "node-",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/webapp.js",
   "scripts": {
-    "build": "yarn build:core && yarn build:azurewebapp",
-    "build:core": "yarn workspace node-runtime-core build",
-    "build:azurewebapp": "yarn workspace node-azurewebapp build"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./lib/webapp.js",
+    "start:function": "node ./lib/function.js",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "botbuilder": "4.10.0-preview-143946",
+    "botbuilder-dialogs": "4.10.0-preview-143946",
+    "botbuilder-dialogs-adaptive": "4.10.0-preview-143946",
+    "botbuilder-dialogs-declarative": "4.10.0-preview-143946",
+    "restify": "7.7.0",
+    "minimist": "1.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.18"
   }
 }

@@ -10,8 +10,8 @@ import {
   LanguageGeneratorMiddleWare,
 } from "botbuilder-dialogs-adaptive";
 import { ResourceExplorer } from "botbuilder-dialogs-declarative";
-import { ComposerBot } from "node-runtime-core";
-
+import { ComposerBot } from "./shared/composerBot";
+import { BotSettings } from "./shared/settings";
 // Create HTTP server.
 const server = restify.createServer();
 const argv = require("minimist")(process.argv.slice(2));
@@ -38,7 +38,7 @@ const getProjectRoot = (): string => {
     projectSettings = require("../appsettings.development.json");
   }
 
-  return path.join(__dirname, "../", projectSettings.root);
+  return path.join(__dirname, projectSettings.root);
 };
 
 const getRootDialog = (): string => {
@@ -51,7 +51,6 @@ const getRootDialog = (): string => {
       break;
     }
   }
-  console.log(mainDialog);
   return mainDialog;
 };
 
@@ -82,7 +81,7 @@ const Configure = () => {
 
 const getSettings = () => {
   // Find settings json file
-  let settings = {};
+  let settings = {} as BotSettings;
   const projectRoot = getProjectRoot();
   // load appsettings.json
   const appsettingsPath = path.join(projectRoot, "settings/appsettings.json");
@@ -123,8 +122,9 @@ const getSettings = () => {
   return settings;
 };
 
+const { adapter, bot } = Configure();
+
 server.post("/api/messages", (req, res): void => {
-  const { adapter, bot } = Configure();
   adapter.processActivity(
     req,
     res,

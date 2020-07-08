@@ -133,18 +133,19 @@ export default async (composer: any): Promise<void> => {
   composer.addRuntimeTemplate({
     key: 'node-azurewebapp',
     name: 'JS',
-    startCommand: 'node azurewebapp/lib/index.js',
+    startCommand: 'node ./lib/webapp.js',
     path: path.resolve(__dirname, '../../../../runtime/node'),
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { installOut, installErr } = await exec('yarn', {
+      const { installOut, installErr } = await exec('npm install', {
         cwd: runtimePath,
         stdio: 'pipe',
       });
-      // const { install2Out, install2Err } = await exec('npm install', {
-      //   cwd: path.join(runtimePath, '/azurewebapp'),
-      // });
+      const { install2Out, install2Err } = await exec('npm build', {
+        cwd: runtimePath,
+        stdio: 'pipe',
+      });
       composer.log('BUILD COMPLETE');
     },
     run: async (project: any, localDisk: IFileStorage) => {
@@ -153,10 +154,14 @@ export default async (composer: any): Promise<void> => {
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { installOut, installErr } = await exec('yarn', { cwd: runtimePath, stdio: 'pipe' });
-      // const { install2Out, install2Err } = exec('npm install', {
-      //   cwd: path.join(runtimePath, '/azurewebapp'),
-      // });
+      const { installOut, installErr } = await exec('npm install', {
+        cwd: path.resolve(runtimePath, '../'),
+        stdio: 'pipe',
+      });
+      const { install2Out, install2Err } = await exec('npm build', {
+        cwd: path.resolve(runtimePath, '../'),
+        stdio: 'pipe',
+      });
 
       // write settings to disk in the appropriate location
       const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
@@ -169,7 +174,7 @@ export default async (composer: any): Promise<void> => {
       fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
 
       composer.log('BUILD COMPLETE');
-      return '';
+      return path.resolve(runtimePath, '../');
     },
     eject: async (project: any, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../runtime/node');
@@ -178,11 +183,11 @@ export default async (composer: any): Promise<void> => {
       // const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
-        const excludeFolder = new Set<string>()
-          .add(path.resolve(sourcePath, 'node_modules'))
-          .add(path.resolve(sourcePath, 'azurewebapp/node_modules'));
+        const excludeFolder = new Set<string>().add(path.resolve(sourcePath, 'node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
         // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
+        // install packages
+        await exec('npm install', { cwd: destPath, stdio: 'pipe' });
         return destPath;
       } else {
         throw new Error(`Runtime already exists at ${destPath}`);
