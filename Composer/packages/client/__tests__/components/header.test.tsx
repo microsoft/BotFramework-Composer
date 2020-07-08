@@ -8,7 +8,7 @@ import { renderWithRecoil } from '../testUtils';
 
 describe('<Header />', () => {
   it('should render the header', () => {
-    const { container } = renderWithRecoil(<Header />);
+    const { container } = renderWithRecoil(<Header botName="Echo" locale="us" />);
 
     expect(container).toHaveTextContent('Bot Framework Composer');
   });
