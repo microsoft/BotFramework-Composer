@@ -40,7 +40,7 @@ import {
 import { addIntent } from '../../utils/luUtil';
 import { useStoreContext } from '../../hooks/useStoreContext';
 
-import { styles, dropdownStyles, dialogWindow, intent, icon, optionRow, warningText } from './styles';
+import { styles, dropdownStyles, dialogWindow, intent, warningIcon, optionRow, warningText } from './styles';
 
 const initialFormDataErrors = {
   $kind: '',
@@ -216,7 +216,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     return (
       <div css={optionRow}>
         {option.text}
-        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={icon} />}
+        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
         {option.data && option.data.icon && <div css={warningText}>{'Not supported with Regex'} </div>}
       </div>
     );

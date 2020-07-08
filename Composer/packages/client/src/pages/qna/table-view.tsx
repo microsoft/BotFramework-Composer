@@ -16,9 +16,11 @@ import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import get from 'lodash/get';
+
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils/navigation';
 import { addQuestion, updateQuestion } from '../../utils/qnaUtil';
+
 import { formCell, content, textField } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -212,7 +214,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       role={''}
                       tabIndex={-1}
                       onClick={(e) =>
-                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, alternative) : () => { }
+                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, alternative) : () => {}
                       }
                       onKeyDown={(e) => {
                         e.preventDefault();

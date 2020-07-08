@@ -206,7 +206,7 @@ export const optionRow = {
   fontSize: 15,
 };
 
-export const icon = {
+export const warningIcon = {
   marginLeft: 5,
   color: SharedColors.red10,
   fontSize: 5,
