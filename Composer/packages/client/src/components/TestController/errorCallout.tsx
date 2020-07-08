@@ -2,14 +2,36 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { Callout } from 'office-ui-fabric-react/lib/Callout';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 
-import { calloutLabel, calloutDescription, calloutContainer, calloutLink } from './styles';
+// -------------------- Styles -------------------- //
+
+const calloutLabel = css`
+  font-size: ${FontSizes.size18};
+  font-weight: ${FontWeights.bold};
+`;
+
+const calloutContainer = css`
+  width: 400px;
+  padding: 10px;
+`;
+
+const calloutDescription = css``;
+
+const calloutLink = css`
+  margin-top: 24px;
+  margin-bottom: 24px;
+`;
+
+// -------------------- ErrorCallout -------------------- //
+
 export interface IErrorCalloutProps {
   onDismiss: () => void;
   onTry: () => void;
