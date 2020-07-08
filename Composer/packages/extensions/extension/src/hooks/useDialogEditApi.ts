@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { BaseSchema, DialogUtils, ShellApi } from '@bfc/shared';
+import { disableNodes, enableNodes } from '@bfc/shared/lib/dialogUtils';
 
 import { useActionApi } from './useActionApi';
 
@@ -53,6 +54,13 @@ export function useDialogEditApi(shellApi: ShellApi) {
     });
   }
 
+  function disableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+    return disableNodes(dialogData, actionIds);
+  }
+
+  function enableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
+    return enableNodes(dialogData, actionIds);
+  }
   async function copySelectedActions(dialogId, dialogData, actionIds: string[]) {
     const actions = queryNodes(dialogData, actionIds);
     return copyActions(dialogId, actions);
@@ -78,5 +86,7 @@ export function useDialogEditApi(shellApi: ShellApi) {
     copySelectedActions,
     cutSelectedActions,
     updateRecognizer,
+    disableSelectedActions,
+    enableSelectedActions,
   };
 }
