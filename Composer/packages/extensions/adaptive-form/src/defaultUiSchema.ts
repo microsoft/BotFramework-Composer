@@ -219,8 +219,8 @@ const DefaultUISchema: UISchema = {
     },
   },
   [SDKKinds.OnQnAMatch]: {
-    label: () => formatMessage('QnA Match recognized'),
-    subtitle: () => formatMessage('QnA Match recognized'),
+    label: () => formatMessage('QnA Intent recognized'),
+    subtitle: () => formatMessage('QnA Intent recognized'),
     order: ['actions', '*'],
     hidden: ['condition', 'entities'],
     properties: {
