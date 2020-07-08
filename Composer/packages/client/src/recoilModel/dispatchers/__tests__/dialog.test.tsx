@@ -116,7 +116,7 @@ describe('dialog dispatcher', () => {
       await dispatcher.createDialogBegin({ actions: ACTIONS }, ON_COMPLETE);
     });
     expect(renderedComponent.current.actionsSeed).toEqual({ actions: ACTIONS });
-    expect(renderedComponent.current.onCreateDialogComplete).toBe(ON_COMPLETE);
+    expect(renderedComponent.current.onCreateDialogComplete).toEqual({ func: ON_COMPLETE });
     expect(renderedComponent.current.showCreateDialogModal).toBe(true);
   });
 
@@ -125,7 +125,7 @@ describe('dialog dispatcher', () => {
       await dispatcher.createDialogCancel();
     });
     expect(renderedComponent.current.actionsSeed).toEqual([]);
-    expect(renderedComponent.current.onCreateDialogComplete).toBeUndefined();
+    expect(renderedComponent.current.onCreateDialogComplete).toEqual({ func: undefined });
     expect(renderedComponent.current.showCreateDialogModal).toBe(false);
   });
 });

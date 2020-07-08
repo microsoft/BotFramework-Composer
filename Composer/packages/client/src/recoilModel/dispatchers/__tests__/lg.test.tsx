@@ -29,7 +29,7 @@ const lgFiles = [
   },
 ] as LgFile[];
 
-const getLgFile = (id, content): LgFile => ({ id, content } as LgFile);
+// const getLgFile = (id, content): LgFile => ({ id, content } as LgFile);
 
 const getLgTemplate = (name, body): LgTemplate =>
   ({
