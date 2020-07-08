@@ -18,6 +18,7 @@ import keys from 'lodash/keys';
 
 import { StoreContext } from '../../store';
 import { Text, Tips, Links, nameRegex } from '../../constants';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
 
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 
@@ -38,15 +39,15 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
-const validationProperties = ['name', 'authoringKey', 'environment'];
+const validationProperties = ['name', 'authoringKey', 'environment', 'subscriptKey'];
 const defaultFields = { authoringRegion: 'westus', defaultLanguage: 'en-us' };
-const validateForm = (data) => {
+const validateForm = (data, ignores) => {
   const result = { errors: {} };
   const dataKeys = keys(data);
 
   dataKeys.forEach((key) => {
     const value = data[key];
-    if (validationProperties.includes(key) && (!value || !nameRegex.test(value))) {
+    if (validationProperties.includes(key) && (!value || !nameRegex.test(value)) && !ignores[key]) {
       result.errors[key] = formatMessage(
         'Spaces and special characters are not allowed. Use letters, numbers, -, or _.'
       );
@@ -99,8 +100,11 @@ const DeployFailure = (props) => {
 export const PublishComponent = (props) => {
   const { state, actions } = useContext(StoreContext);
   const { setSettings } = actions;
-  const { botName, settings } = state;
+  const { botName, settings, dialogs, luFiles, qnaFiles } = state;
   const { onPublish, onDismiss, workState } = props;
+
+  const qnaKeyRequired = getReferredQnaFiles(qnaFiles, dialog).length > 0;
+  const luKeyRequired = getReferredQnaFiles(luFiles, dialog).length > 0;
 
   const initialFormData = {
     name: settings.luis.name || botName,
@@ -123,8 +127,7 @@ export const PublishComponent = (props) => {
 
   const handlePublish = async (e) => {
     e.preventDefault();
-
-    const result = validateForm(formData);
+    const result = validateForm(formData, { subscriptKey: !qnaKeyRequired, authoringKey: !luKeyRequired });
     if (keys(result.errors).length) {
       setFormData({ ...formData, ...result });
       return;
@@ -169,6 +172,7 @@ export const PublishComponent = (props) => {
             defaultValue={formData.authoringKey}
             errorMessage={formData.errors.authoringKey || ''}
             label={formatMessage('LUIS Authoring key:')}
+            required={luKeyRequired}
             onChange={updateForm('authoringKey')}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
           />
@@ -177,6 +181,7 @@ export const PublishComponent = (props) => {
             defaultValue={formData.subscriptKey}
             errorMessage={formData.errors.subscriptKey || ''}
             label={formatMessage('QnA subscript key:')}
+            required={qnaKeyRequired}
             onChange={updateForm('subscriptKey')}
             onRenderLabel={onRenderLabel(Tips.SUBSCRIPT_KEY)}
           />
