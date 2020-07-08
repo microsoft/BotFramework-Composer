@@ -210,7 +210,7 @@ class FilePersistence {
     const fileChanges: IFileChange[] = [];
     const { luFiles, projectId } = currentState;
 
-    const lu = luFiles.find((lu) => getBaseName(lu.id) === id);
+    const lu = luFiles.find((lu) => lu.id === id);
     fileChanges.push(this.createChange(lu, FileExtensions.Lu, changeType, projectId));
     return fileChanges;
   }
@@ -219,7 +219,7 @@ class FilePersistence {
     const fileChanges: IFileChange[] = [];
     const { qnaFiles, projectId } = currentState;
 
-    const qna = qnaFiles.find((qna) => getBaseName(qna.id) === id);
+    const qna = qnaFiles.find((qna) => getBaseName(qna.id) === getBaseName(id));
     fileChanges.push(this.createChange(qna, FileExtensions.Qna, changeType, projectId));
     return fileChanges;
   }
