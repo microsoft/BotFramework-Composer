@@ -83,7 +83,6 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
-  schemas.sdk.content = processSchema(id, schemas.sdk.content);
   const { dialogs, dialogSchemaFiles, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
   state.projectId = id;
   state.dialogs = dialogs.map((dialog) => {
