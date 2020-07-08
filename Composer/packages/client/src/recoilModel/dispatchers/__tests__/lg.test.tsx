@@ -2,22 +2,33 @@
 // Licensed under the MIT License.
 
 import { useRecoilState } from 'recoil';
-import { LgFile, LgTemplate } from '@bfc/shared/src/types/indexers';
+import { LgFile, LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { act } from '@bfc/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
-import { renderRecoilHook, act } from '../../../../__tests__/testUtils';
+import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { lgFilesState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
-    addTemplate: (content, template) => new Promise((resolve) => resolve(content)),
-    updateIntent: (a, b, c) => c.Body,
-    removeIntent: (a, b) => b,
+    parse: (id, content) => ({ id, content }),
+    addTemplate: require('../../../utils/lgUtil').addTemplate,
+    updateTemplate: require('../../../utils/lgUtil').updateTemplate,
+    removeTemplate: require('../../../utils/lgUtil').removeTemplate,
+    removeAllTemplates: require('../../../utils/lgUtil').removeTemplates,
+    copyTemplate: require('../../../utils/lgUtil').copyTemplate,
   };
 });
+const lgFiles = [
+  {
+    id: 'common.en-us',
+    content: `\r\n# Hello\r\n-hi`,
+  },
+] as LgFile[];
+
 const getLgFile = (id, content): LgFile => ({ id, content } as LgFile);
 
 const getLgTemplate = (name, body): LgTemplate =>
@@ -30,18 +41,18 @@ describe('Lg dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const [lgFile, setLgFile] = useRecoilState(lgFilesState);
+      const [lgFiles, setLgFiles] = useRecoilState(lgFilesState);
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
-        lgFile,
-        setLgFile,
+        lgFiles,
+        setLgFiles,
         currentDispatcher,
       };
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
-      states: [{ recoilState: lgFilesState, initialValue: [{ action1: 'initialVisualEditorValue' }] }],
+      states: [{ recoilState: lgFilesState, initialValue: lgFiles }],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
@@ -53,14 +64,60 @@ describe('Lg dispatcher', () => {
     dispatcher = renderedComponent.current.currentDispatcher;
   });
 
-  it('should set clipboard state correctly', async () => {
-    const lgFile: LgFile = getLgFile('1', '# Hello-${Welcome(time)} ${name}');
-    const lgTemplate: LgTemplate = getLgTemplate('new-lg', '-TemplateValue');
-
-    act(async () => {
-      await dispatcher.createLgTemplate({ file: lgFile, projectId: 'project_1', template: lgTemplate });
+  it('should create a lg template', async () => {
+    await act(async () => {
+      await dispatcher.createLgTemplate({
+        file: lgFiles[0],
+        projectId: '',
+        template: getLgTemplate('Test', '-add'),
+      });
     });
 
-    expect(renderedComponent.current.lgFile).toHaveLength(1);
+    expect(renderedComponent.current.lgFiles[0].content).toBe(`\r\n# Hello\r\n-hi\r\n# Test()\r\n-add`);
+  });
+
+  it('should update a lg file', async () => {
+    await act(async () => {
+      await dispatcher.updateLgFile({ id: 'common.en-us', content: `test` });
+    });
+
+    expect(renderedComponent.current.lgFiles[0].content).toBe(`test`);
+  });
+
+  it('should update a lg template', async () => {
+    await act(async () => {
+      await dispatcher.updateLgTemplate({
+        file: lgFiles[0],
+        projectId: '',
+        templateName: 'Hello',
+        template: getLgTemplate('Hello', '-TemplateValue'),
+      });
+    });
+
+    expect(renderedComponent.current.lgFiles[0].content).toBe(`\r\n# Hello()\r\n-TemplateValue`);
+  });
+
+  it('should remove a lg template', async () => {
+    await act(async () => {
+      await dispatcher.removeLgTemplate({
+        file: lgFiles[0],
+        projectId: '',
+        templateName: 'Hello',
+      });
+    });
+
+    expect(renderedComponent.current.lgFiles[0].content).toBe(`\r\n`);
+  });
+
+  it('should remove lg templates', async () => {
+    await act(async () => {
+      await dispatcher.removeLgTemplates({
+        file: lgFiles[0],
+        projectId: '',
+        templateNames: ['Hello'],
+      });
+    });
+
+    expect(renderedComponent.current.lgFiles[0].content).toBe(`\r\n`);
   });
 });
