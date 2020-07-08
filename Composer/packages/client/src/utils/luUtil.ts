@@ -14,10 +14,12 @@ import { getBaseName, getExtension } from './fileUtil';
 
 export * from '@bfc/indexers/lib/utils/luUtil';
 
-export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
+export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], checkContent = true) {
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
-    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale && !file.empty);
+    return dialogs.some(
+      (dialog) => dialog.luFile === idWithOutLocale && ((checkContent && !file.empty) || !checkContent)
+    );
   });
 }
 
@@ -154,7 +156,7 @@ function generateErrorMessage(invalidLuFile: LuFile[]) {
 }
 
 export function checkLuisBuild(luFiles: LuFile[], dialogs: DialogInfo[]) {
-  const referred = getReferredLuFiles(luFiles, dialogs);
+  const referred = getReferredLuFiles(luFiles, dialogs, false);
   const invalidLuFile = referred.filter(
     (file) => file.diagnostics.filter((n) => n.severity === DiagnosticSeverity.Error).length !== 0
   );

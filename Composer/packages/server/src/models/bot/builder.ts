@@ -226,7 +226,7 @@ export class Builder {
       config.suffix,
       config.region
     );
-    for (const recog of loadResult.crosstrainedRecognizers) {
+    for (const [_, recog] of loadResult.crosstrainedRecognizers) {
       const path = Path.join(this.generatedFolderPath, Path.basename(recog.getDialogPath())); // get file path
       await this.storage.writeFile(path, recog.save());
     }
