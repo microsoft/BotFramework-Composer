@@ -48,6 +48,7 @@ class LgParserWithWorker {
 
   constructor() {
     const workerScriptPath = path.join(__dirname, 'lgWorker.js');
+    // set exec arguments to empty, avoid fork nodemon `--inspect` error
     this.worker = fork(workerScriptPath, [], { execArgv: [] });
     this.worker.on('message', this.handleMsg.bind(this));
   }

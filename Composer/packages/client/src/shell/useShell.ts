@@ -1,15 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
-import { openAlertModal } from '../components/Modal/AlertDialog';
-import { dialogStyle } from '../components/Modal/dialogStyle';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 import {
@@ -120,16 +118,6 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
 
     focusTo(dataPath, fragment ?? '');
   }
-
-  // ANDY: should this be somewhere else?
-  useEffect(() => {
-    const schemaError = schemas?.diagnostics ?? [];
-    if (schemaError.length !== 0) {
-      const title = `Static Validation Error`;
-      const subTitle = schemaError.join('\n');
-      openAlertModal(title, subTitle, { style: dialogStyle.console });
-    }
-  }, [schemas, projectId]);
 
   dialogMapRef.current = dialogsMap;
 

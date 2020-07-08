@@ -119,7 +119,14 @@ export const projectDispatcher = () => {
       diagnostics,
       skills,
     } = data;
-    schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
+    try {
+      schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
+    } catch (err) {
+      const diagnostics = schemas.diagnostics ?? [];
+      diagnostics.push(err.message);
+      schemas.diagnostics = diagnostics;
+    }
+
     const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
     let mainDialog = '';
     const verifiedDialogs = dialogs.map((dialog) => {
