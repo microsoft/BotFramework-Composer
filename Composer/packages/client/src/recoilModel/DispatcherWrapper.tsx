@@ -52,6 +52,7 @@ export const DispatcherWrapper = ({ children }) => {
     filePersistence.notify(assets, previousAssets);
   });
 
+  console.log('test');
   useEffect(() => {
     setDispatcher(dispatcherRef.current);
     prepareAxiosWithRecoil(currentDispatcherState);

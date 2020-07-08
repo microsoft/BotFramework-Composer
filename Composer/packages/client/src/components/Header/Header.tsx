@@ -10,17 +10,14 @@ import { useRecoilValue } from 'recoil';
 
 import composerIcon from '../../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../../constants';
-import { dispatcherState, appUpdateState } from '../../recoilModel';
+import { dispatcherState, appUpdateState, botNameState, localeState } from '../../recoilModel';
 
 import { updateAvailableIcon, headerContainer, title, botName, divider, headerTextContainer } from './styles';
 
-type Props = {
-  botName: string;
-  locale: string;
-};
-
-export const Header = (props: Props) => {
+export const Header = () => {
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
+  const curBotName = useRecoilValue(botNameState);
+  const locale = useRecoilValue(localeState);
   const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
 
@@ -29,7 +26,7 @@ export const Header = (props: Props) => {
   }, []);
 
   const showUpdateAvailableIcon = status === AppUpdaterStatus.UPDATE_AVAILABLE && !showing;
-
+  console.log('render headr');
   return (
     <div css={headerContainer} role="banner">
       <img
@@ -40,10 +37,10 @@ export const Header = (props: Props) => {
       />
       <div css={headerTextContainer}>
         <div css={title}>{formatMessage('Bot Framework Composer')}</div>
-        {props.botName && (
+        {curBotName && (
           <Fragment>
             <div css={divider} />
-            <span css={botName}>{`${props.botName} (${props.locale})`}</span>
+            <span css={botName}>{`${curBotName} (${locale})`}</span>
           </Fragment>
         )}
       </div>
