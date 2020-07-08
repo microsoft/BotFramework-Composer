@@ -132,6 +132,21 @@ export const openBotProject: ActionCreator = async (store, absolutePath) => {
         response,
       },
     });
+
+    // migrate to old bot which do not have qna file
+    const state = store.getState();
+
+    if (!state.qnaFiles || state.qnaFiles.length === 0) {
+      state.dialogs.forEach((dialog) => {
+        store.dispatch({
+          type: ActionTypes.CREATE_QNA,
+          payload: {
+            id: dialog.id,
+            content: '',
+          },
+        });
+      });
+    }
     if (files && files.length > 0) {
       // navTo(store, 'Main');
       const mainUrl = `/bot/${projectId}/dialogs/Main`;
