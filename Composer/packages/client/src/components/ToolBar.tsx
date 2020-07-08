@@ -3,13 +3,15 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useCallback, Fragment } from 'react';
+import { useCallback, Fragment, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogInfo } from '@bfc/shared';
+import get from 'lodash/get';
 import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { useStoreContext } from '../hooks/useStoreContext';
+import { VisualEditorAPI } from '../pages/design/FrameAPI';
 
 // -------------------- Styles -------------------- //
 
@@ -97,8 +99,20 @@ export function ToolBar(props: ToolbarProps) {
   } = props;
   const {
     actions: { onboardingAddCoachMarkRef, createDialogBegin, exportToZip },
-    state: { projectId },
+    state: { projectId, visualEditorSelection },
   } = useStoreContext();
+
+  const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
+    const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
+    if (!actionSelected) {
+      return {};
+    }
+    const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
+    const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
+    const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
+    return { actionSelected, showDisableBtn, showEnableBtn };
+  }, [visualEditorSelection]);
+
   const left: IToolBarItem[] = [];
   const right: IToolBarItem[] = [];
 
@@ -152,6 +166,34 @@ export function ToolBar(props: ToolbarProps) {
           </div>
         )}
         {left.map(itemList)}{' '}
+        {window.location.href.includes('/dialogs/') && (
+          <CommandButton
+            css={actionButton}
+            disabled={!actionSelected}
+            iconProps={{ iconName: 'RemoveOccurrence' }}
+            menuProps={{
+              items: [
+                {
+                  key: 'disable',
+                  text: formatMessage('Disable'),
+                  disabled: !showDisableBtn,
+                  onClick: () => {
+                    VisualEditorAPI.disableSelection();
+                  },
+                },
+                {
+                  key: 'enable',
+                  text: formatMessage('Enable'),
+                  disabled: !showEnableBtn,
+                  onClick: () => {
+                    VisualEditorAPI.enableSelection();
+                  },
+                },
+              ],
+            }}
+            text={formatMessage('Disable')}
+          />
+        )}
         {window.location.href.includes('/dialogs/') && (
           <CommandButton
             css={actionButton}
