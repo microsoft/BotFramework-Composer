@@ -17,7 +17,7 @@ export * from '@bfc/indexers/lib/utils/luUtil';
 export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
-    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale);
+    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale && !file.empty);
   });
 }
 
