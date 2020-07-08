@@ -167,7 +167,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload, qnaFile?: QnAFilePayload) => {
+  const onTriggerCreationSubmit = async (dialog: DialogInfo, luFile?: LuFilePayload, qnaFile?: QnAFilePayload) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
@@ -188,7 +188,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         content: qnaFile.content,
         projectId,
       };
-      actions.updateQnaFile(qnaFilePayload);
+      await actions.updateQnaFile(qnaFilePayload);
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
