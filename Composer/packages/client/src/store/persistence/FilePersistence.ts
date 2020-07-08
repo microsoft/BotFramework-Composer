@@ -6,7 +6,7 @@ import { Store, State } from '../types';
 import { setError, fetchProject } from '../action';
 import { ActionTypes } from '../../constants';
 import { ActionType } from '../action/types';
-import { getBaseName } from '../../utils';
+import { getBaseName } from '../../utils/fileUtil';
 
 import * as client from './http';
 import { IFileChange, ChangeType, FileExtensions } from './types';

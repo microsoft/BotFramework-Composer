@@ -28,7 +28,7 @@ import moment from 'moment';
 
 import { FileTypes, nameRegex } from '../../../constants';
 import { StorageFolder, File } from '../../../store/types';
-import { getFileIconName, calculateTimeDiff } from '../../../utils';
+import { getFileIconName, calculateTimeDiff } from '../../../utils/fileUtil';
 
 import {
   detailListContainer,
