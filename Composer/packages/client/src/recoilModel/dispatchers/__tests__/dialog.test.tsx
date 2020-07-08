@@ -3,10 +3,9 @@
 
 import { useRecoilValue } from 'recoil';
 import test from '@bfc/indexers';
-import { act } from '@testing-library/react-hooks';
 
 import { dialogsDispatcher } from '../dialogs';
-import { renderRecoilHook } from '../../../../__tests__/testUtils';
+import { renderRecoilHook, act } from '../../../../__tests__/testUtils';
 import {
   dialogsState,
   lgFilesState,
