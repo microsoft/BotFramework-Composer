@@ -8,10 +8,10 @@ import { Router, Redirect, RouteComponentProps } from '@reach/router';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
-import { NotFound } from './components/NotFound/NotFound';
+import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
-import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from './components/LoadingSpinner';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));

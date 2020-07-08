@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import React, { useState } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -17,8 +17,11 @@ import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import { FontWeights } from '@uifabric/styling';
+import { FontSizes } from '@uifabric/fluent-theme';
 
-import { nameRegex } from '../../constants';
+import { useStoreContext } from '../../hooks/useStoreContext';
+import { addIntent } from '../../utils/luUtil';
 import {
   generateNewDialog,
   getTriggerTypes,
@@ -32,10 +35,56 @@ import {
   getActivityTypes,
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
-import { addIntent } from '../../utils/luUtil';
-import { useStoreContext } from '../../hooks/useStoreContext';
+import { nameRegex } from '../../constants';
 
-import { styles, dropdownStyles, dialogWindow, intent } from './styles';
+// -------------------- Styles -------------------- //
+
+const styles = {
+  dialog: {
+    title: {
+      fontWeight: FontWeights.bold,
+      fontSize: FontSizes.size20,
+      paddingTop: '14px',
+      paddingBottom: '11px',
+    },
+    subText: {
+      fontSize: FontSizes.size14,
+    },
+  },
+  modal: {
+    main: {
+      maxWidth: '600px !important',
+    },
+  },
+};
+
+const dropdownStyles = {
+  label: {
+    fontWeight: FontWeights.semibold,
+  },
+  dropdown: {
+    width: '400px',
+  },
+  root: {
+    marginBottom: '20px',
+  },
+};
+
+const dialogWindow = css`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  min-height: 300px;
+`;
+
+const intent = {
+  root: {
+    width: '400px',
+    paddingBottom: '20px',
+  },
+};
+
+// -------------------- Validation Helpers -------------------- //
 
 const initialFormDataErrors = {
   $kind: '',
@@ -142,6 +191,8 @@ export interface LuFilePayload {
   id: string;
   content: string;
 }
+
+// -------------------- TriggerCreationModal -------------------- //
 
 interface TriggerCreationModalProps {
   dialogId: string;

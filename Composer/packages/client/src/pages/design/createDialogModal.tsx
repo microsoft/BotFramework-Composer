@@ -8,8 +8,7 @@ import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
-import { DialogWrapper } from '../../components/DialogWrapper/DialogWrapper';
-import { DialogTypes } from '../../components/DialogWrapper/styles';
+import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { StorageFolder } from '../../store/types';
 import { StoreContext } from '../../store';
 import { FieldConfig, useForm } from '../../hooks/useForm';
