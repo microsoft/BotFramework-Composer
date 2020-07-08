@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+import { useRef } from 'react';
 import { importResolverGenerator } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { useCallback } from 'react';
 
 import { localeState, lgFilesState, luFilesState } from '../recoilModel';
 
@@ -12,23 +11,26 @@ export const useResolvers = () => {
   const locale = useRecoilValue(localeState);
   const luFiles = useRecoilValue(luFilesState);
 
-  const lgImportresolver = useCallback(() => importResolverGenerator(lgFiles, '.lg'), [lgFiles]);
+  const lgFilesRef = useRef(lgFiles);
+  lgFilesRef.current = lgFiles;
 
-  const lgFileResolver = useCallback(
-    (id: string) => {
-      const fileId = id.includes('.') ? id : `${id}.${locale}`;
-      return lgFiles.find(({ id }) => id === fileId);
-    },
-    [locale, lgFiles]
-  );
+  const localeRef = useRef(locale);
+  localeRef.current = locale;
 
-  const luFileResolver = useCallback(
-    (id: string) => {
-      const fileId = id.includes('.') ? id : `${id}.${locale}`;
-      return luFiles.find(({ id }) => id === fileId);
-    },
-    [locale, luFiles]
-  );
+  const luFilesRef = useRef(luFiles);
+  luFilesRef.current = luFiles;
+
+  const lgImportresolver = () => importResolverGenerator(lgFilesRef.current, '.lg');
+
+  const lgFileResolver = (id: string) => {
+    const fileId = id.includes('.') ? id : `${id}.${localeRef.current}`;
+    return lgFilesRef.current.find(({ id }) => id === fileId);
+  };
+
+  const luFileResolver = (id: string) => {
+    const fileId = id.includes('.') ? id : `${id}.${localeRef.current}`;
+    return luFilesRef.current.find(({ id }) => id === fileId);
+  };
 
   return {
     lgImportresolver,

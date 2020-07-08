@@ -150,7 +150,9 @@ export const publishHistoryState = atom<any>({
 
 export const onCreateDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onCreateDialogComplete'),
-  default: undefined,
+  default: {
+    func: undefined,
+  },
 });
 
 export const focusPathState = atom<string>({
