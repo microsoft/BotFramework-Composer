@@ -16,5 +16,5 @@ export function getFileLocale(fileName: string) {
   return getExtension(getBaseName(fileName));
 }
 export function getReferredQnaFiles(qnaFiles: QnAFile[], dialogs: DialogInfo[]) {
-  return qnaFiles.filter((file) => !file.empty);
+  return qnaFiles.filter((file) => !!file.content);
 }

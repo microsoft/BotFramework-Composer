@@ -18,7 +18,7 @@ export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], che
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
     return dialogs.some(
-      (dialog) => dialog.luFile === idWithOutLocale && ((checkContent && !file.empty) || !checkContent)
+      (dialog) => dialog.luFile === idWithOutLocale && ((checkContent && !!file.content) || !checkContent)
     );
   });
 }
