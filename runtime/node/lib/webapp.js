@@ -8,7 +8,7 @@ const path = require("path");
 const botbuilder_1 = require("botbuilder");
 const botbuilder_dialogs_adaptive_1 = require("botbuilder-dialogs-adaptive");
 const botbuilder_dialogs_declarative_1 = require("botbuilder-dialogs-declarative");
-const node_runtime_core_1 = require("node-runtime-core");
+const composerBot_1 = require("./shared/composerBot");
 // Create HTTP server.
 const server = restify.createServer();
 const argv = require("minimist")(process.argv.slice(2));
@@ -30,7 +30,7 @@ const getProjectRoot = () => {
     else {
         projectSettings = require("../appsettings.development.json");
     }
-    return path.join(__dirname, "../", projectSettings.root);
+    return path.join(__dirname, projectSettings.root);
 };
 const getRootDialog = () => {
     // Find entry dialog file
@@ -42,7 +42,6 @@ const getRootDialog = () => {
             break;
         }
     }
-    console.log(mainDialog);
     return mainDialog;
 };
 const Configure = () => {
@@ -57,7 +56,7 @@ const Configure = () => {
     });
     adapter.use(new botbuilder_dialogs_adaptive_1.LanguageGeneratorMiddleWare(resourceExplorer));
     // get settings
-    const bot = new node_runtime_core_1.ComposerBot(resourceExplorer, getRootDialog(), getSettings());
+    const bot = new composerBot_1.ComposerBot(resourceExplorer, getRootDialog(), getSettings());
     return { adapter, bot };
 };
 const getSettings = () => {
@@ -101,11 +100,11 @@ const getSettings = () => {
     }
     return settings;
 };
+const { adapter, bot } = Configure();
 server.post("/api/messages", (req, res) => {
-    const { adapter, bot } = Configure();
     adapter.processActivity(req, res, async (context) => {
         // Route activity to bot.
         await bot.onTurn(context);
     });
 });
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=webapp.js.map

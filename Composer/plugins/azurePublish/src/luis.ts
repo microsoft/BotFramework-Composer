@@ -88,7 +88,7 @@ export class LuisPublish {
       const generatedFolder = path.join(workingFolder, 'ComposerDialogs/generated');
 
       // Identify the deployment settings file
-      const deploymentSettingsPath = path.join(workingFolder, 'appsettings.deployment.json');
+      // const deploymentSettingsPath = path.join(workingFolder, 'appsettings.deployment.json');
 
       // Ensure the generated folder exists
       if (!(await fs.pathExists(generatedFolder))) {

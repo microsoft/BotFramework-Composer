@@ -61,6 +61,40 @@ class LocalPublisher {
     LocalPublisher.runningBots[botId] = status;
   };
 
+  private publishAsync = async (botId: string, version: string, fullSettings: any, project: any, user) => {
+    try {
+      // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
+      // and export the content into that folder as well.
+      const runtimeType = project.settings.runtime?.name || 'C#';
+      if (!project.settings.runtime || project.settings.runtime.customRuntime !== true) {
+        this.composer.log('Using managed runtime');
+
+        await this.initBot(project);
+        await this.saveContent(botId, version, project.dataDir, user);
+        await this.saveSkillManifests(this.getBotRuntimeDir(botId), project.dataDir, runtimeType);
+      } else if (project.settings.runtime.path && project.settings.runtime.command) {
+        // update manifst into runtime wwwroot
+        await this.saveSkillManifests(project.settings.runtime.path, project.dataDir, runtimeType);
+      } else {
+        throw {
+          status: 500,
+          result: {
+            message: 'Custom runtime settings are incomplete. Please specify path and command.',
+          },
+        };
+      }
+      await this.setBot(botId, version, fullSettings, project);
+    } catch (error) {
+      this.stopBot(botId);
+      this.setBotStatus(botId, {
+        status: 500,
+        result: {
+          message: error.message,
+        },
+      });
+    }
+  };
+
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, metadata, user): Promise<any> => {
     const { templatePath, fullSettings } = config;
@@ -73,31 +107,10 @@ class LocalPublisher {
     // set the running bot status
     this.setBotStatus(botId, { status: 202, result: { message: 'Reloading...' } });
 
-    // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
-    // and export the content into that folder as well.
-    const runtimeType = project.settings.runtime?.name || 'C#';
-    if (!project.settings.runtime || project.settings.runtime.customRuntime !== true) {
-      this.composer.log('Using managed runtime');
-
-      await this.initBot(project);
-      await this.saveContent(botId, version, project.dataDir, user);
-      await this.saveSkillManifests(this.getBotRuntimeDir(botId), project.dataDir, runtimeType);
-    } else if (project.settings.runtime.path && project.settings.runtime.command) {
-      // update manifst into runtime wwwroot
-      await this.saveSkillManifests(project.settings.runtime.path, project.dataDir, runtimeType);
-    } else {
-      return {
-        status: 400,
-        result: {
-          message: 'Custom runtime settings are incomplete. Please specify path and command.',
-        },
-      };
-    }
-
-    // start or restart the bot process
-    // do NOT await this, as it can take a long time
     try {
-      this.setBot(botId, version, fullSettings, project);
+      // start or restart the bot process
+      // do NOT await this, as it can take a long time
+      this.publishAsync(botId, version, fullSettings, project, user);
       return {
         status: 202,
         result: {
@@ -200,11 +213,10 @@ class LocalPublisher {
     this.composer.log('Initializing bot');
     const botId = project.id;
     const isExist = await this.botExist(botId);
-    if (!isExist) {
-      const botDir = this.getBotDir(botId);
-      const runtimeDir = this.getBotRuntimeDir(botId);
-
-      try {
+    try {
+      if (!isExist) {
+        const botDir = this.getBotDir(botId);
+        const runtimeDir = this.getBotRuntimeDir(botId);
         // create bot dir
         await mkDir(botDir, { recursive: true });
         await mkDir(runtimeDir, { recursive: true });
@@ -218,27 +230,29 @@ class LocalPublisher {
         await this.copyDir(this.templatePath, runtimeDir);
         const runtime = this.composer.getRuntimeByProject(project);
         await runtime.build(runtimeDir, project);
-      } catch (error) {
-        // delete the folder to make sure build again.
-        await removeDirAndFiles(botDir);
-        throw new Error(error.toString());
+      } else {
+        // stop bot
+        this.stopBot(botId);
+        // get previous settings
+        // when changing type of runtime
+        // const settings = JSON.parse(
+        //   await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
+        //     encoding: 'utf-8',
+        //   })
+        // );
+        // if (!settings.runtime?.key || settings.runtime?.key !== project.settings.runtime?.key) {
+        //   // in order to change runtime type
+        //   await removeDirAndFiles(this.getBotRuntimeDir(botId));
+        //   // copy runtime template in folder
+        //   await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
+        //   const runtime = this.composer.getRuntimeByProject(project);
+        //   await runtime.build(this.getBotRuntimeDir(botId), project);
+        // }
       }
-    } else {
-      // stop bot
-      this.stopBot(botId);
-      //get previous settings
-      // TODO: Re-enable this for changing type of runtime
-      // const settings = JSON.parse(
-      //   await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
-      //     encoding: 'utf-8',
-      //   })
-      // );
-      // if (settings.runtime?.name !== runtimeType) {
-      //   // in order to change runtime type
-      //   await removeDirAndFiles(this.getBotRuntimeDir(botId));
-      //   // copy runtime template in folder
-      //   await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
-      // }
+    } catch (error) {
+      // delete the folder to make sure build again.
+      await removeDirAndFiles(this.getBotDir(botId));
+      throw new Error(error.toString());
     }
   };
 
@@ -380,6 +394,7 @@ class LocalPublisher {
 
     child.on('error', (err) => {
       logger('error: %s', err.message);
+      console.log(err.message);
       this.setBotStatus(botId, { status: 500, result: { message: err.message } });
       // reject(`Could not launch bot runtime process: ${err.message}`);
     });

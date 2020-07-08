@@ -24,15 +24,13 @@ export class ComposerBot {
     this.resourceExplorer = resourceExplorer;
     this.rootDialogPath = rootDialog;
     this.loadRootDialog();
-    console.log(settings);
     this.dialogManager.initialTurnState.set("settings", settings);
   }
 
-  private loadRootDialog = async () => {
-    const rootDialog = this.resourceExplorer.loadType(
+  private loadRootDialog = () => {
+    this.dialogManager.rootDialog = this.resourceExplorer.loadType(
       this.rootDialogPath
     ) as AdaptiveDialog;
-    this.dialogManager.rootDialog = rootDialog;
   };
 
   public onTurn = async (context: any) => {
