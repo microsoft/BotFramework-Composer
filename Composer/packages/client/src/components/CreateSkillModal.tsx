@@ -43,7 +43,7 @@ const SpinnerLabel = css`
 
 // -------------------- CreateSkillModal -------------------- //
 
-export async function validateManifestUrl(projectId: string, manifestUrl: string): Promise<string | undefined> {
+async function validateManifestUrl(projectId: string, manifestUrl: string): Promise<string | undefined> {
   // skip validation if there are other local errors.
   if (manifestUrl == null || manifestUrl === '') {
     return;
@@ -55,8 +55,6 @@ export async function validateManifestUrl(projectId: string, manifestUrl: string
     return err.response?.data.message ?? err;
   }
 }
-
-// -------------------- CreateSkillModal -------------------- //
 
 export interface ISkillFormData {
   manifestUrl: string;
