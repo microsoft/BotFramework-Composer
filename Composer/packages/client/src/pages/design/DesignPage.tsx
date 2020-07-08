@@ -200,13 +200,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
-  const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
-    const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
-    const selectedActions = visualEditorSelection.map((id) => get(currentDialog.content, id));
-    const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
-    const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
-    return { actionSelected, showDisableBtn, showEnableBtn };
-  }, [visualEditorSelection]);
+  const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
 
   const toolbarItems: IToolBarItem[] = [
     {
@@ -243,7 +237,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.cutSelection(),
       },
       align: 'left',
-      disabled: !actionSelected,
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
@@ -255,7 +249,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.copySelection(),
       },
       align: 'left',
-      disabled: !actionSelected,
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
@@ -267,7 +261,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.moveSelection(),
       },
       align: 'left',
-      disabled: !actionSelected,
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'action',
@@ -279,31 +273,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         onClick: () => VisualEditorAPI.deleteSelection(),
       },
       align: 'left',
-      disabled: !actionSelected,
-    },
-    {
-      type: 'action',
-      text: formatMessage('Disable'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Hide3',
-        },
-        onClick: () => VisualEditorAPI.disableSelection(),
-      },
-      align: 'left',
-      disabled: !showDisableBtn,
-    },
-    {
-      type: 'action',
-      text: formatMessage('Enable'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Lightbulb',
-        },
-        onClick: () => VisualEditorAPI.enableSelection(),
-      },
-      align: 'left',
-      disabled: !showEnableBtn,
+      disabled: !nodeOperationAvailable,
     },
     {
       type: 'element',
