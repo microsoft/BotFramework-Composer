@@ -120,7 +120,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setDesignPageLocation,
     navTo,
     selectTo,
-    setectAndfocus,
+    selectAndfocus,
     addSkillDialogCancel,
     updateLuFile,
     updateSkill,
@@ -305,7 +305,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      setectAndfocus(dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndfocus(dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
