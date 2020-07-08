@@ -322,7 +322,7 @@ export class BotProject {
         crossTrainConfig,
         this.settings.downsampling
       );
-      if (!this.settings.qna.endpointKey) {
+      if (subscriptKey && !this.settings.qna.endpointKey) {
         await this.updateQnaEndpointKey(subscriptKey);
       }
       await this.builder.build(luFiles, qnaFiles);

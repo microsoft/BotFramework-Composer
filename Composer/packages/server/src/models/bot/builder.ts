@@ -76,14 +76,33 @@ export class Builder {
     try {
       await this.createGeneratedDir();
 
-      //do cross train before build
-      await this.crossTrain(luFiles, qnaFiles);
-
-      const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
-      await this.runLuBuild(interruptionLuFiles);
-      await this.runQnaBuild(interruptionQnaFiles);
-      //remove the cross train result
-      await this.cleanCrossTrain();
+      const isEmptyFiles = (files) => {
+        let isEmpty = true;
+        files.length > 0 &&
+          files.forEach((file) => {
+            if (file.content) {
+              isEmpty = false;
+              return;
+            }
+          });
+        return isEmpty;
+      };
+      const isLuEmpty = isEmptyFiles(luFiles);
+      const isQnaEmpty = isEmptyFiles(qnaFiles);
+      if (isLuEmpty && isQnaEmpty) {
+        this.runEmptyFileBuild(luFiles);
+      } else if (!isLuEmpty) {
+        await this.crossTrain(luFiles, qnaFiles);
+        const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
+        if (!isQnaEmpty) {
+          await this.runQnaBuild(interruptionQnaFiles);
+        }
+        await this.runLuBuild(interruptionLuFiles);
+        //remove the cross train result
+        await this.cleanCrossTrain();
+      } else if (!isQnaEmpty) {
+        await this.runQnaBuild(qnaFiles);
+      }
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error building to LUIS.');
     }
@@ -195,6 +214,23 @@ export class Builder {
     }
   }
 
+  private async runEmptyFileBuild(files: FileInfo[]) {
+    const config = await this._getConfig(files, 'lu');
+    if (config.models.length === 0) {
+      throw new Error('No LUIS files exist');
+    }
+
+    const loadResult = await this.luBuilder.loadContents(
+      config.models,
+      config.fallbackLocal,
+      config.suffix,
+      config.region
+    );
+    for (const recog of loadResult.crosstrainedRecognizers) {
+      const path = Path.join(this.generatedFolderPath, Path.basename(recog.getDialogPath())); // get file path
+      await this.storage.writeFile(path, recog.save());
+    }
+  }
   private async runLuBuild(files: FileInfo[]) {
     const config = await this._getConfig(files, 'lu');
     if (config.models.length === 0) {
@@ -240,23 +276,27 @@ export class Builder {
       config.region,
       config.fallbackLocal
     );
-    const subscriptKeyEndpoint =
-      config.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+    if (loadResult.qnaContents) {
+      const subscriptKeyEndpoint =
+        config.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
 
-    const buildResult = await this.qnaBuilder.build(
-      loadResult.qnaContents,
-      loadResult.recognizers,
-      config.subscriptKey,
-      subscriptKeyEndpoint,
-      config.botName,
-      config.suffix,
-      config.fallbackLocal,
-      loadResult.multiRecognizer,
-      loadResult.settings,
-      loadResult.crosstrainedRecognizer,
-      'crosstrained'
-    );
-    await this.qnaBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
+      const buildResult = await this.qnaBuilder.build(
+        loadResult.qnaContents,
+        loadResult.recognizers,
+        config.subscriptKey,
+        subscriptKeyEndpoint,
+        config.botName,
+        config.suffix,
+        config.fallbackLocal,
+        loadResult.multiRecognizer,
+        loadResult.settings,
+        loadResult.crosstrainedRecognizer,
+        'crosstrained'
+      );
+      await this.qnaBuilder.writeDialogAssets(buildResult, true, this.generatedFolderPath);
+    } else {
+      await this.qnaBuilder.writeDialogAssets(loadResult.crosstrainedRecognizer.save(), true, this.generatedFolderPath);
+    }
   }
   //delete files in generated folder
   private async deleteDir(path: string) {
