@@ -88,16 +88,20 @@ export const TestController: React.FC = () => {
 
   function isConfigComplete(config) {
     let complete = true;
-    for (const key in LuisConfig) {
-      if (config?.[LuisConfig[key]] === '') {
-        complete = false;
-        break;
+    if (getReferredLuFiles(luFiles, dialogs).length > 0) {
+      for (const key in LuisConfig) {
+        if (config?.[LuisConfig[key]] === '') {
+          complete = false;
+          break;
+        }
       }
     }
-    for (const key in QnaConfig) {
-      if (config?.[QnaConfig[key]] === '') {
-        complete = false;
-        break;
+    if (getReferredQnaFiles(qnaFiles, dialogs).length > 0) {
+      for (const key in QnaConfig) {
+        if (config?.[QnaConfig[key]] === '') {
+          complete = false;
+          break;
+        }
       }
     }
     return complete;
@@ -106,11 +110,7 @@ export const TestController: React.FC = () => {
   async function handleStart() {
     dismissCallout();
     const config = Object.assign({}, settings.luis, settings.qna);
-
-    if (
-      !isAbsHosted() &&
-      (getReferredLuFiles(luFiles, dialogs).length > 0 || getReferredQnaFiles(qnaFiles, dialogs).length > 0)
-    ) {
+    if (!isAbsHosted()) {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
         openDialog();
       } else {
