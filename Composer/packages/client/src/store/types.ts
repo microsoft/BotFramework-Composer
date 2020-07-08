@@ -133,9 +133,6 @@ export interface BotState {
   actionsSeed: any;
 
   publishVersions: any;
-  publishStatus: any;
-  lastPublishChange: any;
-  publishTargets: any[];
   publishTypes: PublishType[];
   publishHistory: {
     [key: string]: any[];
@@ -178,11 +175,6 @@ export type AppState = {
 
   userSettings: UserSettings; // preferences for the editors
 
-  runtimeSettings: {
-    // custom runtime settings, used in ejection
-    path: string;
-    startCommand: string;
-  };
   displaySkillManifest?: string;
 
   // currently displayed error
