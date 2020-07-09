@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { ErrorBoundary } from '../../src/components/ErrorBoundary/ErrorBoundary';
+import { ErrorBoundary } from '../../src/components/ErrorBoundary';
 
 const Store = React.createContext({
   actions: {

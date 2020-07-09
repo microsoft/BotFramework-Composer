@@ -13,8 +13,8 @@ import { StoreContext } from '../../store';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
-import { INavTreeItem } from '../../components/NavTree/NavTree';
-import { Page } from '../../components/Page/Page';
+import { INavTreeItem } from '../../components/NavTree';
+import { Page } from '../../components/Page';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));

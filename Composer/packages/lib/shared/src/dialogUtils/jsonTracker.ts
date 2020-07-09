@@ -5,6 +5,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
 
+import { walkAdaptiveActionList } from '../walkerUtils';
+
 function parseSelector(path: string): null | string[] {
   if (!path) return null;
 
@@ -151,6 +153,28 @@ export function deleteNodes(inputDialog, nodeIds: string[], callbackOnRemovedNod
   if (callbackOnRemovedNodes && typeof callbackOnRemovedNodes === 'function') {
     callbackOnRemovedNodes(deletedNodes);
   }
+
+  return dialog;
+}
+
+export function disableNodes(inputDialog, nodeIds: string[]) {
+  const dialog = cloneDeep(inputDialog);
+
+  const selectedActions = queryNodes(dialog, nodeIds);
+  walkAdaptiveActionList(selectedActions, (action: any) => {
+    action.disabled = true;
+  });
+
+  return dialog;
+}
+
+export function enableNodes(inputDialog, nodeIds: string[]) {
+  const dialog = cloneDeep(inputDialog);
+
+  const selectedActions = queryNodes(dialog, nodeIds);
+  walkAdaptiveActionList(selectedActions, (action: any) => {
+    delete action.disabled;
+  });
 
   return dialog;
 }
