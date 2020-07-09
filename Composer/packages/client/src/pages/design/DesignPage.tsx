@@ -203,7 +203,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
-  const { actionSelected: nodeOperationAvailable, showDisableBtn, showEnableBtn } = useMemo(() => {
+  const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
       return {};
@@ -218,6 +218,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     {
       type: 'dropdown',
       text: formatMessage('Add'),
+      align: 'left',
       dataTestid: 'AddFlyout',
       buttonProps: {
         iconProps: { iconName: 'Add' },
@@ -244,85 +245,73 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           },
         ],
       },
-      align: 'left',
     },
     {
-      type: 'action',
-      text: formatMessage('Undo'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Undo',
-        },
-        onClick: () => actions.undo(),
-      },
+      type: 'dropdown',
+      text: formatMessage('Edit'),
       align: 'left',
-      disabled: !undoHistory.canUndo(),
-    },
-    {
-      type: 'action',
-      text: formatMessage('Redo'),
+      dataTestid: 'EditFlyout',
       buttonProps: {
-        iconProps: {
-          iconName: 'Redo',
-        },
-        onClick: () => actions.redo(),
+        iconProps: { iconName: 'Edit' },
       },
-      align: 'left',
-      disabled: !undoHistory.canRedo(),
-    },
-    {
-      type: 'action',
-      text: formatMessage('Cut'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Cut',
-        },
-        onClick: () => VisualEditorAPI.cutSelection(),
+      menuProps: {
+        items: [
+          {
+            key: 'edit.undo',
+            text: formatMessage('Undo'),
+            disabled: !undoHistory.canUndo(),
+            onClick: () => {
+              actions.undo();
+            },
+          },
+          {
+            key: 'edit.redo',
+            text: formatMessage('Redo'),
+            disabled: !undoHistory.canRedo(),
+            onClick: () => {
+              actions.redo();
+            },
+          },
+          {
+            key: 'edit.cut',
+            text: formatMessage('Cut'),
+            disabled: !actionSelected,
+            onClick: () => {
+              VisualEditorAPI.cutSelection();
+            },
+          },
+          {
+            key: 'edit.copy',
+            text: formatMessage('Copy'),
+            disabled: !actionSelected,
+            onClick: () => {
+              VisualEditorAPI.copySelection();
+            },
+          },
+          {
+            key: 'edit.move',
+            text: formatMessage('Move'),
+            disabled: !actionSelected,
+            onClick: () => {
+              VisualEditorAPI.moveSelection();
+            },
+          },
+          {
+            key: 'edit.delete',
+            text: formatMessage('Delete'),
+            disabled: !actionSelected,
+            onClick: () => {
+              VisualEditorAPI.deleteSelection();
+            },
+          },
+        ],
       },
-      align: 'left',
-      disabled: !nodeOperationAvailable,
-    },
-    {
-      type: 'action',
-      text: formatMessage('Copy'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Copy',
-        },
-        onClick: () => VisualEditorAPI.copySelection(),
-      },
-      align: 'left',
-      disabled: !nodeOperationAvailable,
-    },
-    {
-      type: 'action',
-      text: formatMessage('Move'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Share',
-        },
-        onClick: () => VisualEditorAPI.moveSelection(),
-      },
-      align: 'left',
-      disabled: !nodeOperationAvailable,
-    },
-    {
-      type: 'action',
-      text: formatMessage('Delete'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Delete',
-        },
-        onClick: () => VisualEditorAPI.deleteSelection(),
-      },
-      align: 'left',
-      disabled: !nodeOperationAvailable,
     },
     {
       type: 'dropdown',
       text: formatMessage('Disable'),
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !actionSelected,
       buttonProps: {
         iconProps: { iconName: 'RemoveOccurrence' },
       },
