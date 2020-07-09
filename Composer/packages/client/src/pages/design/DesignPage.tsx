@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState, useCallback } from 'react';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
@@ -106,6 +106,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     clearUndoHistory,
     createDialogBegin,
     exportToZip,
+    onboardingAddCoachMarkRef,
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
@@ -493,6 +494,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       }
     }
   }
+  const addNewBtnRef = useCallback((addNew) => {
+    onboardingAddCoachMarkRef({ addNew });
+  }, []);
 
   if (!dialogId) {
     return <LoadingSpinner />;
@@ -510,13 +514,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onSelect={handleSelect}
         />
         <div css={contentWrapper} role="main">
-          <ToolBar
-            currentDialog={currentDialog}
-            openNewTriggerModal={openNewTriggerModal}
-            showSkillManifestModal={() => setExportSkillModalVisible(true)}
-            toolbarItems={toolbarItems}
-            onCreateDialogComplete={onCreateDialogComplete}
-          />
+          <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
+            <span
+              ref={addNewBtnRef}
+              css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
+              data-testid="CoachmarkRef-AddNew"
+            />
+            <ToolBar toolbarItems={toolbarItems} />
+          </div>
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
               <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">

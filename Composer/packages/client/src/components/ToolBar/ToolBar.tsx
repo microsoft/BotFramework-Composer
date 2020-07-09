@@ -3,11 +3,9 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useCallback, Fragment } from 'react';
+import { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
-
-import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { IToolBarItem } from './ToolBar.types';
 import { actionButton, leftActions, rightActions, headerSub } from './ToolBarStyles';
@@ -53,9 +51,6 @@ function itemList(item: IToolBarItem, index: number) {
 // fabric-ui IButtonProps interface}
 export function ToolBar(props: ToolbarProps) {
   const { toolbarItems = [], ...rest } = props;
-  const {
-    actions: { onboardingAddCoachMarkRef },
-  } = useStoreContext();
 
   const left: IToolBarItem[] = [];
   const right: IToolBarItem[] = [];
@@ -70,16 +65,9 @@ export function ToolBar(props: ToolbarProps) {
     }
   }
 
-  const addNewRef = useCallback((addNew) => {
-    onboardingAddCoachMarkRef({ addNew });
-  }, []);
-
   return (
     <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
-      <div css={leftActions}>
-        {window.location.href.includes('/dialogs/') && <div ref={addNewRef}></div>}
-        {left.map(itemList)}{' '}
-      </div>
+      <div css={leftActions}>{left.map(itemList)} </div>
       <div css={rightActions}>{right.map(itemList)}</div>
     </div>
   );
