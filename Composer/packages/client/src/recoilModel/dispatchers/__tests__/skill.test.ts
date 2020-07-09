@@ -54,7 +54,7 @@ describe('skill dispatcher', () => {
             { id: 'id2', content: 'content2' },
           ],
         },
-        { recoilState: onAddSkillDialogCompleteState, initialValue: mockDialogComplete },
+        { recoilState: onAddSkillDialogCompleteState, initialValue: () => mockDialogComplete },
         {
           recoilState: skillsState,
           initialValue: [],
@@ -73,8 +73,6 @@ describe('skill dispatcher', () => {
 
     renderedComponent = result;
     dispatcher = renderedComponent.current.currentDispatcher;
-
-    console.log(renderedComponent.current.onAddSkillDialogComplete);
   });
 
   it('createSkillManifest', async () => {
@@ -112,12 +110,11 @@ describe('skill dispatcher', () => {
   });
 
   it('addSkillDialogBegin', async () => {
-    const onComplete = () => {};
     await act(async () => {
-      dispatcher.addSkillDialogBegin(onComplete);
+      dispatcher.addSkillDialogBegin(() => mockDialogComplete);
     });
     expect(renderedComponent.current.showAddSkillDialogModal).toBe(true);
-    expect(renderedComponent.current.onAddSkillDialogComplete).toBe(onComplete);
+    expect(renderedComponent.current.onAddSkillDialogComplete).toBe(mockDialogComplete);
   });
 
   it('addSkillDialogCancel', async () => {
@@ -131,7 +128,6 @@ describe('skill dispatcher', () => {
   describe('addSkillDialogSuccess', () => {
     it('with a function in onAddSkillDialogComplete', async () => {
       await act(async () => {
-        dispatcher.addSkillDialogBegin(mockDialogComplete);
         dispatcher.addSkillDialogSuccess();
       });
       expect(mockDialogComplete).toHaveBeenCalledWith(null);
@@ -142,6 +138,8 @@ describe('skill dispatcher', () => {
     it('with nothing in onAddSkillDialogComplete', async () => {
       await act(async () => {
         dispatcher.addSkillDialogCancel();
+      });
+      await act(async () => {
         dispatcher.addSkillDialogSuccess();
       });
       expect(mockDialogComplete).not.toHaveBeenCalled();
