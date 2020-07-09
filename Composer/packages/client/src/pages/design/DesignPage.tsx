@@ -104,6 +104,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
+    createDialogBegin,
+    exportToZip,
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
@@ -200,9 +202,49 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
-  const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
+  const { actionSelected: nodeOperationAvailable, showDisableBtn, showEnableBtn } = useMemo(() => {
+    const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
+    if (!actionSelected) {
+      return {};
+    }
+    const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
+    const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
+    const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
+    return { actionSelected, showDisableBtn, showEnableBtn };
+  }, [visualEditorSelection]);
 
   const toolbarItems: IToolBarItem[] = [
+    {
+      type: 'dropdown',
+      text: formatMessage('Add'),
+      dataTestid: 'AddFlyout',
+      buttonProps: {
+        iconProps: { iconName: 'Add' },
+      },
+      menuProps: {
+        items: [
+          {
+            'data-testid': 'FlyoutNewDialog',
+            key: 'adddialog',
+            text: formatMessage('Add new dialog'),
+            onClick: () => {
+              createDialogBegin([], onCreateDialogComplete);
+            },
+          },
+          {
+            'data-testid': 'FlyoutNewTrigger',
+            key: 'addtrigger',
+            text: formatMessage(`Add new trigger on {displayName}`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              openNewTriggerModal();
+            },
+          },
+        ],
+      },
+      align: 'left',
+    },
     {
       type: 'action',
       text: formatMessage('Undo'),
@@ -274,6 +316,61 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       },
       align: 'left',
       disabled: !nodeOperationAvailable,
+    },
+    {
+      type: 'dropdown',
+      text: formatMessage('Disable'),
+      align: 'left',
+      disabled: !nodeOperationAvailable,
+      buttonProps: {
+        iconProps: { iconName: 'RemoveOccurrence' },
+      },
+      menuProps: {
+        items: [
+          {
+            key: 'disable',
+            text: formatMessage('Disable'),
+            disabled: !showDisableBtn,
+            onClick: () => {
+              VisualEditorAPI.disableSelection();
+            },
+          },
+          {
+            key: 'enable',
+            text: formatMessage('Enable'),
+            disabled: !showEnableBtn,
+            onClick: () => {
+              VisualEditorAPI.enableSelection();
+            },
+          },
+        ],
+      },
+    },
+    {
+      type: 'dropdown',
+      text: formatMessage('Export'),
+      align: 'left',
+      buttonProps: {
+        iconProps: { iconName: 'OpenInNewWindow' },
+      },
+      menuProps: {
+        items: [
+          {
+            key: 'zipexport',
+            text: formatMessage('Export assets to .zip'),
+            onClick: () => {
+              exportToZip({ projectId });
+            },
+          },
+          {
+            key: 'exportAsSkill',
+            text: formatMessage('Export as skill'),
+            onClick: () => {
+              setExportSkillModalVisible(true);
+            },
+          },
+        ],
+      },
     },
     {
       type: 'element',
