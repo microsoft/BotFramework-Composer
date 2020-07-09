@@ -4,7 +4,7 @@
 import { IContextualMenuProps, IIconProps } from 'office-ui-fabric-react/lib';
 
 export type IToolBarItem = {
-  type: 'element' | 'action' | 'dropdown';
+  type: string;
   element?: any;
   text?: string;
   buttonProps?: {
