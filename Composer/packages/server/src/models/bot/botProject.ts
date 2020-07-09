@@ -345,6 +345,15 @@ export class BotProject {
     return true;
   }
 
+  public generateDialog = async (name: string, content = '', dir: string = this.defaultDir(name)) => {
+    const file = this.files.find((d) => d.name === name);
+    if (file) {
+      throw new Error(`${name} dialog already exists`);
+    }
+    const relativePath = Path.join(dir, name.trim());
+    return await this._createFile(relativePath, content);
+  };
+
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
     if (pluginLoader.extensions.publish[method]?.methods?.stopBot) {
