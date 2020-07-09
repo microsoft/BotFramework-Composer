@@ -13,7 +13,7 @@ import CreateSkillModal from '../../src/components/CreateSkillModal';
 
 jest.mock('../../src//utils/httpUtil');
 
-jest.mock('../../src/components/Modal/styles', () => ({}));
+jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
 
 const items: Skill[] = [
   {
