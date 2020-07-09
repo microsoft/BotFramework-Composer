@@ -18,7 +18,7 @@ import {
   dispatcherState,
   ejectRuntimeSelector,
 } from '../../../recoilModel';
-import { LoadingSpinner } from '../../../components/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 import { EjectModal } from './ejectModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';

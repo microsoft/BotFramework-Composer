@@ -4,8 +4,8 @@
 import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { ToolBar } from '../../src/components/ToolBar/ToolBar';
 import { renderWithRecoil } from '../testUtils';
+import { ToolBar } from '../../src/components/ToolBar';
 
 const toolbarItems = (onClick) => [
   {

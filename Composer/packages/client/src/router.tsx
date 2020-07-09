@@ -10,12 +10,12 @@ import formatMessage from 'format-message';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
-import { NotFound } from './components/NotFound/NotFound';
+import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { botOpeningState, projectIdState, dispatcherState, designPageLocationState, schemasState } from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
-import { LoadingSpinner } from './components/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from './components/LoadingSpinner';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));

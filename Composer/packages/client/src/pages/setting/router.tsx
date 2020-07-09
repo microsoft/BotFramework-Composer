@@ -5,8 +5,8 @@ import * as React from 'react';
 import { Router, Redirect } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { ErrorBoundary } from '../../components/ErrorBoundary/ErrorBoundary';
 import { applicationErrorState, dispatcherState } from '../../recoilModel';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { About } from '../about/About';
 
 import { DialogSettings } from './dialog-settings/DialogSettings';

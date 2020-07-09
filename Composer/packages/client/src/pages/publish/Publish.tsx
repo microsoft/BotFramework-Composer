@@ -22,7 +22,7 @@ import {
   dispatcherState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { TargetList } from './targetList';

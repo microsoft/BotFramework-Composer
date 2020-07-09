@@ -9,10 +9,9 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
 import { skillsState, botNameState, settingsState, projectIdState, dispatcherState } from '../../recoilModel';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar';
 import { TestController } from '../../components/TestController/TestController';
-import { ISkillFormData } from '../../components/SkillForm/types';
-import CreateSkillModal from '../../components/SkillForm/CreateSkillModal/CreateSkillModal';
+import { CreateSkillModal, ISkillFormData } from '../../components/CreateSkillModal';
 
 import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';

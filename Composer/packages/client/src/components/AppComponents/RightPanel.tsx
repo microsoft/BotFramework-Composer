@@ -6,8 +6,9 @@ import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import { forwardRef } from 'react';
 
-import { ErrorBoundary } from './../ErrorBoundary/ErrorBoundary';
-import { RequireAuth } from './../RequireAuth/RequireAuth';
+import { RequireAuth } from '../RequireAuth';
+import { ErrorBoundary } from '../ErrorBoundary';
+
 import Routes from './../../router';
 import { applicationErrorState, dispatcherState, projectIdState } from './../../recoilModel';
 import { rightPanel, content } from './styles';

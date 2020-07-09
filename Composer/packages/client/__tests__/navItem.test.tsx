@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 
-import { NavItem } from '../src/components/NavItem/NavItem';
+import { NavItem } from '../src/components/NavItem';
 
 import { renderWithRecoil } from './testUtils';
 

@@ -5,7 +5,7 @@ import * as React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 
 import { StorageFolder } from '../../../../src/recoilModel/types';
-import { FileSelector } from '../../../../src/components/CreationFlow/LocationBrowser/FileSelector';
+import { FileSelector } from '../../../../src/components/CreationFlow/FileSelector';
 
 describe('<FileSelector/>', () => {
   const onFileChosen = jest.fn();

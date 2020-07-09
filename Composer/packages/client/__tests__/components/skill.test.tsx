@@ -5,14 +5,13 @@ import * as React from 'react';
 import { fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils';
 import { Skill } from '@bfc/shared';
 
+import httpClient from '../../src//utils/httpUtil';
 import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
-import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal/CreateSkillModal';
 import { renderWithRecoil } from '../testUtils';
+import CreateSkillModal from '../../src/components/CreateSkillModal';
 
-jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl', () => ({
-  validateManifestUrl: () => {},
-}));
+jest.mock('../../src//utils/httpUtil');
 
 jest.mock('../../src/components/Modal/styles', () => ({}));
 
@@ -83,6 +82,9 @@ describe('<SkillForm />', () => {
     const onSubmit = jest.fn((formData) => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
+
+    (httpClient.post as jest.Mock).mockResolvedValue(undefined);
+
     const onDismiss = jest.fn(() => {});
     const { getByLabelText, getByText } = renderWithRecoil(
       <CreateSkillModal

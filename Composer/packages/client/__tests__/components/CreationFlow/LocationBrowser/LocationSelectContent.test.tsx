@@ -6,8 +6,8 @@ import { fireEvent } from '@bfc/test-utils';
 import { MutableSnapshot } from 'recoil';
 
 import { StorageFolder } from '../../../../src/recoilModel/types';
-import { LocationSelectContent } from '../../../../src/components/CreationFlow/LocationBrowser/LocationSelectContent';
 import { renderWithRecoil } from '../../../testUtils';
+import { LocationSelectContent } from '../../../../src/components/CreationFlow/LocationSelectContent';
 import { CreationFlowStatus } from '../../../../src/constants';
 import { storageFileLoadingStatusState, creationFlowStatusState, storagesState } from '../../../../src/recoilModel';
 
