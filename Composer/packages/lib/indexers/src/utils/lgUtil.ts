@@ -7,7 +7,7 @@
  *
  */
 
-import { Templates } from 'botbuilder-lg';
+import { Templates, ImportResolverDelegate } from 'botbuilder-lg';
 import { LgTemplate } from '@bfc/shared';
 
 export interface Template {
@@ -32,9 +32,10 @@ export function increaseNameUtilNotExist(templates: LgTemplate[], name: string):
 export function updateTemplate(
   content: string,
   templateName: string,
-  { name, parameters = [], body }: LgTemplate
+  { name, parameters = [], body }: LgTemplate,
+  importResolver?: ImportResolverDelegate
 ): Templates {
-  const resource = Templates.parseText(content);
+  const resource = Templates.parseText(content, undefined, importResolver);
   // add if not exist
   if (resource.toArray().findIndex((t) => t.name === templateName) === -1) {
     return resource.addTemplate(name, parameters, body);
@@ -44,25 +45,35 @@ export function updateTemplate(
 }
 
 // if name exist, throw error.
-export function addTemplate(content: string, { name, parameters = [], body }: LgTemplate): Templates {
-  const resource = Templates.parseText(content);
+export function addTemplate(
+  content: string,
+  { name, parameters = [], body }: LgTemplate,
+  importResolver?: ImportResolverDelegate
+): Templates {
+  const resource = Templates.parseText(content, undefined, importResolver);
   return resource.addTemplate(name, parameters, body);
 }
 
 // if name exist, add it anyway, with name like `${name}1` `${name}2`
 export function addTemplateAnyway(
   content: string,
-  { name = 'TemplateName', parameters = [], body = '-TemplateBody' }: LgTemplate
+  { name = 'TemplateName', parameters = [], body = '-TemplateBody' }: LgTemplate,
+  importResolver?: ImportResolverDelegate
 ): Templates {
-  const resource = Templates.parseText(content);
+  const resource = Templates.parseText(content, undefined, importResolver);
   const newName = increaseNameUtilNotExist(resource.toArray(), name);
 
   return resource.addTemplate(newName, parameters, body);
 }
 
 // if toTemplateName exist, throw error.
-export function copyTemplate(content: string, fromTemplateName: string, toTemplateName: string): Templates {
-  const resource = Templates.parseText(content);
+export function copyTemplate(
+  content: string,
+  fromTemplateName: string,
+  toTemplateName: string,
+  importResolver?: ImportResolverDelegate
+): Templates {
+  const resource = Templates.parseText(content, undefined, importResolver);
   const fromTemplate = resource.toArray().find((t) => t.name === fromTemplateName);
   if (!fromTemplate) {
     throw new Error('fromTemplateName no exist');
@@ -72,8 +83,13 @@ export function copyTemplate(content: string, fromTemplateName: string, toTempla
 }
 
 // if toTemplateName exist, add it anyway, with name like `${toTemplateName}1` `${toTemplateName}2`
-export function copyTemplateAnyway(content: string, fromTemplateName: string, toTemplateName?: string): Templates {
-  const resource = Templates.parseText(content);
+export function copyTemplateAnyway(
+  content: string,
+  fromTemplateName: string,
+  toTemplateName?: string,
+  importResolver?: ImportResolverDelegate
+): Templates {
+  const resource = Templates.parseText(content, undefined, importResolver);
   const fromTemplate = resource.toArray().find((t) => t.name === fromTemplateName);
   if (!fromTemplate) {
     return resource;
@@ -88,13 +104,13 @@ export function copyTemplateAnyway(content: string, fromTemplateName: string, to
   return resource.addTemplate(newName, parameters, body);
 }
 
-export function removeTemplate(content: string, templateName: string) {
-  const resource = Templates.parseText(content);
+export function removeTemplate(content: string, templateName: string, importResolver?: ImportResolverDelegate) {
+  const resource = Templates.parseText(content, undefined, importResolver);
   return resource.deleteTemplate(templateName);
 }
 
-export function removeTemplates(content: string, templateNames: string[]) {
-  let resource = Templates.parseText(content);
+export function removeTemplates(content: string, templateNames: string[], importResolver?: ImportResolverDelegate) {
+  let resource = Templates.parseText(content, undefined, importResolver);
   templateNames.forEach((templateName) => {
     resource = resource.deleteTemplate(templateName);
   });
