@@ -17,13 +17,13 @@ import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vsco
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgTemplate } from '@bfc/shared';
+import * as lgUtil from '@bfc/indexers/lib/utils/lgUtil';
 
 import { LgParser } from './lgParser';
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   LGDocument,
-  checkTemplate,
   convertDiagnostics,
   generageDiagnostic,
   LGOption,
@@ -712,11 +712,16 @@ export class LGServer {
 
     // if inline editor, concat new content for validate
     if (fileId && templateId) {
-      const templateDiags = checkTemplate({
-        name: templateId,
-        parameters: [],
-        body: text,
-      });
+      const templateDiags = lgUtil
+        .checkTemplate({
+          name: templateId,
+          parameters: [],
+          body: text,
+        })
+        .filter((diagnostic) => {
+          // ignore non-exist references in template body.
+          return diagnostic.message.includes('does not have an evaluator') === false;
+        });
       // error in template.
       if (isValid(templateDiags) === false) {
         const lspDiagnostics = convertDiagnostics(templateDiags, document, 1);

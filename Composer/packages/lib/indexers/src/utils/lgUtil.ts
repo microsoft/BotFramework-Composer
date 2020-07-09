@@ -7,7 +7,7 @@
  *
  */
 
-import { Templates } from 'botbuilder-lg';
+import { Templates, Diagnostic as LGDiagnostic } from 'botbuilder-lg';
 import { LgTemplate } from '@bfc/shared';
 
 export interface Template {
@@ -130,6 +130,11 @@ export function checkSingleLgTemplate(template: LgTemplate) {
   if (Templates.parseText(content).toArray().length !== 1) {
     throw new Error('Not a single template');
   }
+}
+
+export function checkTemplate(template: LgTemplate): LGDiagnostic[] {
+  const text = textFromTemplate(template);
+  return Templates.parseText(text, '').diagnostics;
 }
 
 export function extractOptionByKey(nameOfKey: string, options: string[]): string {
