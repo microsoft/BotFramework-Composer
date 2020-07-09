@@ -14,7 +14,7 @@ import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils/navigation';
 import { PublishTarget } from '../../store/types';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { TargetList } from './targetList';

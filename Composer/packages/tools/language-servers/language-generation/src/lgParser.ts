@@ -4,10 +4,10 @@
 import { fork, ChildProcess } from 'child_process';
 import path from 'path';
 
-import { Templates, Diagnostic } from 'botbuilder-lg';
 import { importResolverGenerator } from '@bfc/shared';
 import { ResolverResource } from '@bfc/shared';
 import uniqueId from 'lodash/uniqueId';
+import { lgIndexer } from '@bfc/indexers';
 
 const isTest = process.env?.NODE_ENV === 'test';
 export interface WorkerMsg {
@@ -16,28 +16,11 @@ export interface WorkerMsg {
   payload?: any;
 }
 
-function createDiagnostic(diagnostic: Diagnostic) {
-  const { code, range, severity, source, message } = diagnostic;
-  const { start, end } = range;
-  return {
-    code,
-    range: {
-      start: { line: start.line, character: start.character },
-      end: { line: end.line, character: end.character },
-    },
-    severity,
-    source,
-    message,
-  };
-}
-
 class LgParserWithoutWorker {
   public async parseText(content: string, id: string, resources: ResolverResource[]) {
-    const resolver = importResolverGenerator(resources, '.lg');
-    const { allTemplates, allDiagnostics } = Templates.parseText(content, id, resolver);
-    const templates = allTemplates.map((item) => ({ name: item.name, parameters: item.parameters, body: item.body }));
-    const diagnostics = allDiagnostics.map((item) => createDiagnostic(item));
-    return { templates, diagnostics };
+    const lgImportResolver = importResolverGenerator(resources, '.lg');
+    const { templates, diagnostics } = lgIndexer.parse(content, id, lgImportResolver);
+    return { id, content, templates, diagnostics };
   }
 }
 

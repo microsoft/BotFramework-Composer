@@ -5,7 +5,7 @@ import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
 import { StorageFolder } from '../../../../src/store/types';
-import { LocationSelectContent } from '../../../../src/components/CreationFlow/LocationBrowser/LocationSelectContent';
+import { LocationSelectContent } from '../../../../src/components/CreationFlow/LocationSelectContent';
 import { renderWithStore } from '../../../testUtils';
 import { CreationFlowStatus } from '../../../../src/constants';
 

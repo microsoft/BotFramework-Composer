@@ -28,8 +28,8 @@ function parse(content: string, id = '', importResolver: ImportResolverDelegate 
       body: t.body,
       parameters: t.parameters,
       range: {
-        startLineNumber: get(t, 'parseTree.start.line', 0),
-        endLineNumber: get(t, 'parseTree.stop.line', 0),
+        startLineNumber: get(t, 'sourceRange.parseTree.start.line', 0),
+        endLineNumber: get(t, 'sourceRange.parseTree.stop.line', 0),
       },
     };
   });
