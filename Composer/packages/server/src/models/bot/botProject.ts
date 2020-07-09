@@ -322,9 +322,6 @@ export class BotProject {
         crossTrainConfig,
         this.settings.downsampling
       );
-      if (subscriptKey && !this.settings.qna.endpointKey) {
-        await this.updateQnaEndpointKey(subscriptKey);
-      }
       await this.builder.build(luFiles, qnaFiles);
     }
   };
@@ -386,12 +383,12 @@ export class BotProject {
   }
 
   // update qna endpointKey in settings
-  private updateQnaEndpointKey = async (subscriptKey: string) => {
-    const settings = await this.getEnvSettings(false);
-    const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptKey);
-
-    settings.qna.endpointKey = qnaEndpointKey;
-    await this.settingManager.set(settings);
+  public updateQnaEndpointKey = async (subscriptKey: string) => {
+    const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptKey, {
+      ...this.settings?.luis,
+      subscriptKey,
+    });
+    return qnaEndpointKey;
   };
 
   private _getFileNameInfo = (name) => {
