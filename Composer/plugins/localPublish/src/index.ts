@@ -235,19 +235,19 @@ class LocalPublisher {
         this.stopBot(botId);
         // get previous settings
         // when changing type of runtime
-        // const settings = JSON.parse(
-        //   await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
-        //     encoding: 'utf-8',
-        //   })
-        // );
-        // if (!settings.runtime?.key || settings.runtime?.key !== project.settings.runtime?.key) {
-        //   // in order to change runtime type
-        //   await removeDirAndFiles(this.getBotRuntimeDir(botId));
-        //   // copy runtime template in folder
-        //   await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
-        //   const runtime = this.composer.getRuntimeByProject(project);
-        //   await runtime.build(this.getBotRuntimeDir(botId), project);
-        // }
+        const settings = JSON.parse(
+          await readFile(path.resolve(this.getBotDir(botId), 'settings/appsettings.json'), {
+            encoding: 'utf-8',
+          })
+        );
+        if (!settings.runtime?.key || settings.runtime?.key !== project.settings.runtime?.key) {
+          // in order to change runtime type
+          await removeDirAndFiles(this.getBotRuntimeDir(botId));
+          // copy runtime template in folder
+          await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
+          const runtime = this.composer.getRuntimeByProject(project);
+          await runtime.build(this.getBotRuntimeDir(botId), project);
+        }
       }
     } catch (error) {
       // delete the folder to make sure build again.
@@ -388,7 +388,7 @@ class LocalPublisher {
 
     child.on('exit', (code) => {
       if (code !== 0) {
-        this.setBotStatus(botId, { status: 500, result: { message: erroutput } });
+        // this.setBotStatus(botId, { status: 500, result: { message: erroutput } });
       }
     });
 
