@@ -146,7 +146,9 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       {needsUpdate && (
         <div css={controlGroup}>
           <p>
-            A newer version of the provisioning scripts has been found, and this project can be updated to the latest
+            {formatMessage(
+              'A newer version of the provisioning scripts has been found, and this project can be updated to the latest.'
+            )}
           </p>
           <DefaultButton disabled={working} onClick={callUpdateBoilerplate}>
             {working && (
