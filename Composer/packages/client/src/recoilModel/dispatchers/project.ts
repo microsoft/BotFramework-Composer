@@ -40,6 +40,7 @@ import {
   templateProjectsState,
   runtimeTemplatesState,
   applicationErrorState,
+  templateIdState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 
@@ -372,6 +373,12 @@ export const projectDispatcher = () => {
     }
   );
 
+  const saveTemplateId = useRecoilCallback<[string], void>(({ set }: CallbackInterface) => (templateId) => {
+    if (templateId) {
+      set(templateIdState, templateId);
+    }
+  });
+
   return {
     openBotProject,
     createProject,
@@ -385,5 +392,6 @@ export const projectDispatcher = () => {
     setBotStatus,
     updateFolder,
     createFolder,
+    saveTemplateId,
   };
 };

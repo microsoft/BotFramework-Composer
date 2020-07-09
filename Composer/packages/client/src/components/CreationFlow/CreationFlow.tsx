@@ -37,6 +37,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     createFolder,
     updateCurrentPathForStorage,
     updateFolder,
+    saveTemplateId,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
@@ -94,15 +95,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const handleSubmit = async (formData, templateId: string) => {
     handleDismiss();
     switch (creationFlowStatus) {
-      case CreationFlowStatus.NEW_FROM_SCRATCH:
-      case CreationFlowStatus.NEW_FROM_TEMPLATE:
-        await handleCreateNew(formData, templateId);
-        break;
       case CreationFlowStatus.SAVEAS:
         handleSaveAs(formData);
         break;
 
       default:
+        saveTemplateId(templateId);
         await handleCreateNew(formData, templateId);
     }
   };
