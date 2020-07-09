@@ -3,8 +3,8 @@
 
 import * as React from 'react';
 
-import { Header } from '../../src/components/Header/Header';
 import { renderWithRecoil } from '../testUtils';
+import { Header } from '../../src/components/Header';
 
 describe('<Header />', () => {
   it('should render the header', () => {

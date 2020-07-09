@@ -15,8 +15,8 @@ import { dispatcherState } from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
-import { Page } from '../../components/Page/Page';
-import { INavTreeItem } from '../../components/NavTree/NavTree';
+import { Page } from '../../components/Page';
+import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
 
 import { SettingsRoutes } from './router';

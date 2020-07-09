@@ -9,9 +9,9 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 
-import { NavItem } from '../NavItem/NavItem';
 import { resolveToBasePath } from '../../utils/fileUtil';
 import { BASEPATH } from '../../constants';
+import { NavItem } from '../NavItem';
 
 import { useLinks } from './../../utils/hooks';
 import { globalNav, sideBar, dividerTop, leftNavBottom, divider } from './styles';

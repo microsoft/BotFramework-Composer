@@ -9,11 +9,11 @@ import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
 import { navigateTo } from '../../utils/navigation';
-import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
-import { INavTreeItem } from '../../components/NavTree/NavTree';
-import { Page } from '../../components/Page/Page';
 import { dialogsState, projectIdState } from '../../recoilModel/atoms/botState';
+import { INavTreeItem } from '../../components/NavTree';
+import { Page } from '../../components/Page';
 
 import TableView from './table-view';
 import { actionButton } from './styles';

@@ -9,10 +9,9 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
-import { DialogWrapper } from '../../components/DialogWrapper/DialogWrapper';
-import { DialogTypes } from '../../components/DialogWrapper/styles';
 import { StorageFolder } from '../../recoilModel/types';
 import { dialogsState } from '../../recoilModel/atoms/botState';
+import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 
 import { name, description, styles as wizardStyles } from './styles';

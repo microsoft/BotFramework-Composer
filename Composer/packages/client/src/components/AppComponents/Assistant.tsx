@@ -10,9 +10,7 @@ import { isElectron } from './../../utils/electronUtil';
 import { onboardingState } from './../../recoilModel';
 
 const Onboarding = React.lazy(() => import('./../../Onboarding/Onboarding'));
-const AppUpdater = React.lazy(() =>
-  import('./../AppUpdater/AppUpdater').then((module) => ({ default: module.AppUpdater }))
-);
+const AppUpdater = React.lazy(() => import('./../AppUpdater').then((module) => ({ default: module.AppUpdater })));
 
 export const Assistant = () => {
   const onboarding = useRecoilValue(onboardingState);

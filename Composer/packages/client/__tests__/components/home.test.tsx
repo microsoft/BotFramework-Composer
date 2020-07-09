@@ -7,8 +7,8 @@ import { ProjectTemplate } from '@bfc/shared';
 
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
-import { ToolBar } from '../../src/components/ToolBar/ToolBar';
 import { renderWithRecoil } from '../testUtils';
+import { ToolBar } from '../../src/components/ToolBar';
 describe('<Home/>', () => {
   it('should dispatch onSelectionChanged event when clicked on a link on <RecentBotList>', () => {
     const recentProjects = [

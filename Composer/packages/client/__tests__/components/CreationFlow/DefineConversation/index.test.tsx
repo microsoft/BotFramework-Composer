@@ -7,7 +7,7 @@ import { fireEvent, act, waitFor } from '@bfc/test-utils';
 import { renderWithRecoil } from '../../../testUtils';
 import { StorageFolder } from '../../../../src/recoilModel/types';
 import { focusedStorageFolderState, storagesState } from '../../../../src/recoilModel';
-import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation/DefineConversation';
+import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation';
 
 describe('<DefineConversation/>', () => {
   const onCurrentPathUpdateMock = jest.fn();
