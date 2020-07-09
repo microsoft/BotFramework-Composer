@@ -10,8 +10,6 @@ import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
 import { focusedStorageFolderState, creationFlowStatusState, dispatcherState } from '../../../src/recoilModel';
 import { CreationFlowStatus } from '../../../src/constants';
 
-jest.mock('../../../src/components/DialogWrapper');
-
 describe('<CreationFlow/>', () => {
   let locationMock;
   const createProjectMock = jest.fn();
