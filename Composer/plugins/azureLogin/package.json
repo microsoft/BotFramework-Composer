@@ -1,5 +1,5 @@
 {
-  "name": "@bfc/plugin-azurelogin",
+  "name": "azurelogin",
   "version": "1.0.0",
   "description": "Login to Azure AD",
   "main": "lib/index.js",

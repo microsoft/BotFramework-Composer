@@ -39,7 +39,7 @@ export class LuPublisher {
   public botDir: string;
   public dialogsDir: string;
   public generatedFolderPath: string;
-  public interuptionFolderPath: string;
+  public interruptionFolderPath: string;
   public storage: IFileStorage;
   public config: ILuisConfig | null = null;
   public downSamplingConfig: IDownSamplingConfig = { maxImbalanceRatio: 0, maxUtteranceAllowed: 0 };
@@ -60,21 +60,21 @@ export class LuPublisher {
     this.botDir = path;
     this.dialogsDir = this.botDir;
     this.generatedFolderPath = Path.join(this.dialogsDir, GENERATEDFOLDER);
-    this.interuptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
+    this.interruptionFolderPath = Path.join(this.generatedFolderPath, INTERUPTION);
     this.storage = storage;
     this._locale = locale;
   }
 
   public publish = async (files: FileInfo[]) => {
     try {
-      await this._createGeneratedDir();
+      await this.createGeneratedDir();
 
       //do cross train before publish
-      await this._crossTrain(files);
+      await this.crossTrain(files);
 
-      await this._runBuild(files);
+      await this.runBuild(files);
       //remove the cross train result
-      await this._cleanCrossTrain();
+      await this.cleanCrossTrain();
     } catch (error) {
       throw new Error(error.message ?? error.text ?? 'Error publishing to LUIS.');
     }
@@ -98,28 +98,28 @@ export class LuPublisher {
     this._locale = v;
   }
 
-  private async _createGeneratedDir() {
+  private async createGeneratedDir() {
     // clear previous folder
-    await this._deleteDir(this.generatedFolderPath);
+    await this.deleteDir(this.generatedFolderPath);
     await this.storage.mkDir(this.generatedFolderPath);
   }
 
-  private _needCrossTrain() {
-    return !!this.crossTrainConfig.rootIds.length;
+  private needCrossTrain() {
+    return this.crossTrainConfig.rootIds.length > 0;
   }
 
-  private async _crossTrain(files: FileInfo[]) {
-    if (!this._needCrossTrain()) return;
+  private async crossTrain(files: FileInfo[]) {
+    if (!this.needCrossTrain()) return;
     const luContents = files.map((file) => {
       return { content: file.content, id: file.name };
     });
 
     const result = await crossTrainer.crossTrain(luContents, [], this.crossTrainConfig);
 
-    await this._writeFiles(result.luResult);
+    await this.writeFiles(result.luResult);
   }
 
-  private _doDownSampling(luObject: any) {
+  private doDownSampling(luObject: any) {
     //do bootstramp sampling to make the utterances' number ratio to 1:10
     const bootstrapSampler = new ComposerBootstrapSampler(
       luObject.utterances,
@@ -135,39 +135,38 @@ export class LuPublisher {
     return luObject;
   }
 
-  private async _downSizeUtterances(luContents: any) {
+  private async downsizeUtterances(luContents: any) {
     return await Promise.all(
       luContents.map(async (luContent) => {
         const result = await LuisBuilder.fromLUAsync(luContent.content);
-        const sampledResult = this._doDownSampling(result);
+        const sampledResult = this.doDownSampling(result);
         const content = luisToLuContent(sampledResult);
         return { ...luContent, content };
       })
     );
   }
 
-  private async _writeFiles(crossTrainResult) {
-    if (!(await this.storage.exists(this.interuptionFolderPath))) {
-      await this.storage.mkDir(this.interuptionFolderPath);
+  private async writeFiles(crossTrainResult) {
+    if (!(await this.storage.exists(this.interruptionFolderPath))) {
+      await this.storage.mkDir(this.interruptionFolderPath);
     }
     for (const key of crossTrainResult.keys()) {
       const fileName = Path.basename(key);
-      const newFileId = Path.join(this.interuptionFolderPath, fileName);
+      const newFileId = Path.join(this.interruptionFolderPath, fileName);
       await this.storage.writeFile(newFileId, crossTrainResult.get(key).Content);
     }
   }
 
-  private async _runBuild(files: FileInfo[]) {
+  private async runBuild(files: FileInfo[]) {
     const config = await this._getConfig(files);
     if (config.models.length === 0) {
-      throw new Error('No luis file exist');
+      throw new Error('No LUIS files exist');
     }
-    const loadResult = await this._loadLuConatents(config.models);
-    loadResult.luContents = await this._downSizeUtterances(loadResult.luContents);
-    let authoringEndpoint = config.authoringEndpoint;
-    if (!authoringEndpoint) {
-      authoringEndpoint = `https://${config.region}.api.cognitive.microsoft.com`;
-    }
+
+    const loadResult = await this._loadLuContents(config.models);
+    loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
+    const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
+
     const buildResult = await this.builder.build(
       loadResult.luContents,
       loadResult.recognizers,
@@ -184,13 +183,13 @@ export class LuPublisher {
   }
 
   //delete files in generated folder
-  private async _deleteDir(path: string) {
+  private async deleteDir(path: string) {
     if (await this.storage.exists(path)) {
       const files = await this.storage.readDir(path);
       for (const file of files) {
         const curPath = Path.join(path, file);
         if ((await this.storage.stat(curPath)).isDir) {
-          await this._deleteDir(curPath);
+          await this.deleteDir(curPath);
         } else {
           await this.storage.removeFile(curPath);
         }
@@ -201,35 +200,39 @@ export class LuPublisher {
 
   private _getConfig = async (files: FileInfo[]) => {
     if (!this.config) {
-      throw new Error('Please complete your Luis settings');
+      throw new Error('Please complete your LUIS settings');
     }
 
-    const luConfig: any = {
+    const luConfig = {
       authoringKey: this.config.authoringKey || '',
       region: this.config.authoringRegion || '',
       botName: this.config.name || '',
       suffix: this.config.environment || '',
       fallbackLocal: this.config.defaultLanguage || 'en-us',
+      endpoint: this.config.endpoint || null,
+      authoringEndpoint: this.config.authoringEndpoint || null,
+      models: [] as string[],
     };
 
-    luConfig.models = [];
     //add all lu file after cross train
     let paths: string[] = [];
-    if (this._needCrossTrain()) {
-      paths = await this.storage.glob('**/*.lu', this.interuptionFolderPath);
-      luConfig.models = paths.map((filePath) => Path.join(this.interuptionFolderPath, filePath));
+    if (this.needCrossTrain()) {
+      paths = await this.storage.glob('**/*.lu', this.interruptionFolderPath);
+      luConfig.models = paths.map((filePath) => Path.join(this.interruptionFolderPath, filePath));
     }
 
-    //add the lu file that are not in interuption folder.
+    const pathSet = new Set(paths);
+
+    //add the lu file that are not in interruption folder.
     files.forEach((file) => {
-      if (!~paths.indexOf(file.name)) {
+      if (!pathSet.has(file.name)) {
         luConfig.models.push(Path.resolve(this.botDir, file.relativePath));
       }
     });
     return luConfig;
   };
 
-  private _loadLuConatents = async (paths: string[]) => {
+  private _loadLuContents = async (paths: string[]) => {
     return await this.builder.loadContents(
       paths,
       this._locale,
@@ -238,8 +241,8 @@ export class LuPublisher {
     );
   };
 
-  private async _cleanCrossTrain() {
-    if (!this._needCrossTrain()) return;
-    await this._deleteDir(this.interuptionFolderPath);
+  private async cleanCrossTrain() {
+    if (!this.needCrossTrain()) return;
+    await this.deleteDir(this.interruptionFolderPath);
   }
 }

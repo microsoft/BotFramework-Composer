@@ -8,7 +8,8 @@
     "serialize-javascript": "^3.1.0",
     "lodash": "^4.17.12",
     "set-value": "^3.0.2",
-    "kind-of": "^6.0.3"
+    "kind-of": "^6.0.3",
+    "elliptic": "^6.5.3"
   },
   "engines": {
     "node": ">=12"
@@ -39,12 +40,7 @@
     "build:server": "yarn workspace @bfc/server build",
     "build:client": "yarn workspace @bfc/client build",
     "build:tools": "yarn workspace @bfc/tools build:all",
-    "build:plugins": "yarn build:plugins:localpublish && yarn build:plugins:samples && yarn build:plugins:azurePublish && yarn build:plugins:azureFunctionsPublish && yarn build:plugins:azureLogin",
-    "build:plugins:localpublish": "cd plugins/localPublish && yarn install && yarn build",
-    "build:plugins:samples": "cd plugins/samples && yarn install && yarn build",
-    "build:plugins:azurePublish": "cd plugins/azurePublish && yarn install && yarn build",
-    "build:plugins:azureFunctionsPublish": "cd plugins/azureFunctionsPublish && yarn install && yarn build",
-    "build:plugins:azureLogin": "cd plugins/azureLogin && yarn install && yarn build",
+    "build:plugins": "cd plugins && yarn install && yarn build:all",
     "start": "cross-env NODE_ENV=production PORT=3000 yarn start:server",
     "startall": "yarn start",
     "start:dev": "concurrently  \"npm:start:client\" \"npm:start:server:dev\"",
@@ -54,7 +50,7 @@
     "runtime": "cd ../runtime/dotnet/azurewebapp && dotnet build && dotnet run",
     "test": "yarn typecheck && jest",
     "test:watch": "yarn typecheck && jest --watch",
-    "test:coverage": "yarn test --coverage --no-cache --reporters=default",
+    "test:coverage": "yarn test --coverage --no-cache --forceExit --reporters=default",
     "test:integration": "cypress run --browser edge",
     "test:integration:start-server": "node scripts/e2e.js",
     "test:integration:open": "cypress open",

@@ -12,13 +12,13 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import formatMessage from 'format-message';
 import { PropTypes } from 'prop-types';
+import formatMessage from 'format-message';
 import keys from 'lodash/keys';
 
 import { StoreContext } from '../../store';
+import { Text, Tips, Links, nameRegex } from '../../constants';
 
-import { Text, Tips, Links, nameRegex } from './../../constants';
 import { textFieldLabel, dialog, dialogModal, dialogSubTitle, dialogContent, consoleStyle } from './styles';
 
 const STATE = {
@@ -109,6 +109,8 @@ export const PublishLuis = (props) => {
     authoringRegion: settings.luis.authoringRegion,
     defaultLanguage: settings.luis.defaultLanguage,
     environment: settings.luis.environment,
+    endpoint: settings.luis.endpoint,
+    authoringEndpoint: settings.luis.authoringEndpoint,
     errors: {},
   };
 
@@ -163,7 +165,7 @@ export const PublishLuis = (props) => {
             data-testid="AuthoringKeyInput"
             defaultValue={formData.authoringKey}
             errorMessage={formData.errors.authoringKey || ''}
-            label={formatMessage('LUIS Primary key:')}
+            label={formatMessage('LUIS Authoring key:')}
             onChange={updateForm('authoringKey')}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
           />

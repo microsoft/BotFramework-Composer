@@ -7,11 +7,10 @@ import { RouteComponentProps } from '@reach/router';
 import React, { useContext, useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/index';
-import { TestController } from '../../components/TestController';
+import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { TestController } from '../../components/TestController/TestController';
 import { StoreContext } from '../../store';
-import { ISkillFormData } from '../../components/SkillForm/types';
-import CreateSkillModal from '../../components/SkillForm/CreateSkillModal';
+import { CreateSkillModal, ISkillFormData } from '../../components/CreateSkillModal';
 
 import { ContainerStyle, ContentHeaderStyle, HeaderText } from './styles';
 import SkillSettings from './skill-settings';

@@ -1,0 +1,26 @@
+{
+    "name": "@bfc/plugins",
+    "license": "MIT",
+    "private": true,
+    "engines": {
+      "node": ">=12"
+    },
+    "workspaces": [
+      "azureFunctionsPublish",
+      "azurePublish",
+      "samples",
+      "localPublish",
+      "lib",
+      "lib/*",
+      "azureLogin"
+    ],
+    "scripts": {
+      "build:all": "yarn build:lib && yarn build:localpublish && yarn build:samples && yarn build:azurePublish && yarn build:azureFunctionsPublish",
+      "build:localpublish": "yarn workspace localpublish build",
+      "build:samples": "yarn workspace samples build",
+      "build:azurePublish": "yarn workspace azurePublish build",
+      "build:azureFunctionsPublish": "yarn workspace azureFunctionsPublish build",
+      "build:lib": "yarn workspace @bfc/plugins-libs build:all",
+      "build:azureLogin": "yarn workspace azurelogin build"
+    }
+  }

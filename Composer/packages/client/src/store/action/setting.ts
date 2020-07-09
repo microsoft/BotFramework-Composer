@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { ActionCreator, DialogSetting } from '../types';
-
-import { ActionTypes } from './../../constants/index';
+import { ActionTypes } from '../../constants';
 
 export const setSettings: ActionCreator = async ({ dispatch }, projectId: string, settings: DialogSetting) => {
   dispatch({
@@ -11,6 +10,34 @@ export const setSettings: ActionCreator = async ({ dispatch }, projectId: string
     payload: {
       projectId,
       settings,
+    },
+  });
+};
+
+export const setPublishTargets: ActionCreator = async ({ dispatch }, publishTarget) => {
+  dispatch({
+    type: ActionTypes.SET_PUBLISH_TARGETS,
+    payload: {
+      publishTarget,
+    },
+  });
+};
+
+export const setCustomRuntime: ActionCreator = async ({ dispatch }, _, isOn) => {
+  dispatch({
+    type: ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE,
+    payload: {
+      isOn,
+    },
+  });
+};
+
+export const setRuntimeField: ActionCreator = async ({ dispatch }, _, field, newValue) => {
+  dispatch({
+    type: ActionTypes.SET_RUNTIME_FIELD,
+    payload: {
+      field,
+      newValue,
     },
   });
 };

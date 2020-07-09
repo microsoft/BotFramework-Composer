@@ -10,12 +10,14 @@ import merge from 'lodash/merge';
 import { prepareAxios } from '../utils/auth';
 import storage from '../utils/storage';
 import { isElectron } from '../utils/electronUtil';
+import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from '../constants';
 
 import { reducer } from './reducer';
 import bindActions from './action/bindActions';
 import * as actions from './action';
-import { CreationFlowStatus, BotStatus, AppUpdaterStatus } from './../constants';
 import {
+  BotState,
+  AppState,
   State,
   ActionHandlers,
   BoundActionHandlers,
@@ -55,7 +57,7 @@ const getUserSettings = (): UserSettings => {
   return settings;
 };
 
-export const initialState: State = {
+export const initialBotState: BotState = {
   dialogs: [],
   projectId: '',
   botName: '',
@@ -63,18 +65,9 @@ export const initialState: State = {
   botEnvironment: 'production',
   locale: 'en-us',
   diagnostics: [],
-  botEndpoints: {},
   remoteEndpoints: {},
-  focusPath: '', // the data path for PropertyEditor
-  recentProjects: [],
-  templateProjects: [],
-  storages: [],
-  focusedStorageFolder: {} as StorageFolder,
   botStatus: BotStatus.unConnected,
   botLoadErrorMsg: { title: '', message: '' },
-  creationFlowStatus: CreationFlowStatus.CLOSE,
-  templateId: 'EmptyBot',
-  storageFileLoadingStatus: 'success',
   lgFiles: [],
   schemas: {},
   luFiles: [],
@@ -88,43 +81,50 @@ export const initialState: State = {
     selected: '',
   },
   breadcrumb: [],
-  error: null, // a object with structure {summary: "", message: ""}
   showCreateDialogModal: false,
   showAddSkillDialogModal: false,
   isEnvSettingUpdated: false,
   settings: {},
+  publishVersions: {},
+  publishTypes: [],
+  publishHistory: {},
+  botOpening: false,
+  subscriptions: [],
+  resourceGroups: [],
+};
+
+const initialAppState: AppState = {
+  botEndpoints: {},
+  focusPath: '', // the data path for PropertyEditor
+  recentProjects: [],
+  templateProjects: [],
+  storages: [],
+  focusedStorageFolder: {} as StorageFolder,
+  creationFlowStatus: CreationFlowStatus.CLOSE,
+  templateId: 'EmptyBot',
+  storageFileLoadingStatus: 'success',
+  error: null, // a object with structure {summary: "", message: ""}
   currentUser: {
     token: null,
     sessionExpired: false,
   },
-  publishVersions: {},
-  publishStatus: 'inactive',
-  lastPublishChange: null,
   visualEditorSelection: [],
   onboarding: {
     complete: true,
     coachMarkRefs: {},
   },
   clipboardActions: [],
-  publishTypes: [],
-  publishTargets: [],
   runtimeTemplates: [],
-  publishHistory: {},
   userSettings: getUserSettings(),
-  runtimeSettings: {
-    path: '',
-    startCommand: '',
-  },
   announcement: undefined,
   appUpdate: {
     progressPercent: 0,
     showing: false,
     status: AppUpdaterStatus.IDLE,
   },
-  botOpening: false,
-  subscriptions: [],
-  resourceGroups: [],
 };
+
+export const initialState: State = { ...initialBotState, ...initialAppState };
 
 export interface StoreContextValue {
   state: State;

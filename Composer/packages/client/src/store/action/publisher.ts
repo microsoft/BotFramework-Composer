@@ -2,15 +2,13 @@
 // Licensed under the MIT License.
 
 import formatMessage from 'format-message';
-import { result } from 'lodash';
 
 import { ActionCreator } from '../types';
 import { getAccessTokenInCache, loginPopup } from '../../utils/auth';
+import filePersistence from '../persistence/FilePersistence';
+import { ActionTypes } from '../../constants';
 
-import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
-import httpClient from './../../utils/httpUtil';
-
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/publish/types`);
@@ -124,6 +122,7 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
 
 export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, target) => {
   try {
+    await filePersistence.flush();
     const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
     dispatch({
       type: ActionTypes.GET_PUBLISH_HISTORY,

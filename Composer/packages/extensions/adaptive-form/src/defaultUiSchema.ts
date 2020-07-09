@@ -17,7 +17,7 @@ const DefaultUISchema: UISchema = {
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
     helpLink: 'https://aka.ms/bf-composer-docs-dialog',
     order: ['recognizer', '*'],
-    hidden: ['triggers', 'autoEndDialog', 'generator', 'selector', 'schema'],
+    hidden: ['triggers', 'generator', 'selector', 'schema'],
     properties: {
       recognizer: {
         label: () => formatMessage('Language Understanding'),
@@ -100,7 +100,7 @@ const DefaultUISchema: UISchema = {
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
   },
   [SDKKinds.EndTurn]: {
-    label: () => formatMessage('End dialog turn'),
+    label: () => formatMessage('End turn'),
     subtitle: () => formatMessage('End Turn'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
   },
@@ -224,8 +224,8 @@ const DefaultUISchema: UISchema = {
   },
   [SDKKinds.OnMessageActivity]: {
     ...triggerUiSchema,
-    label: () => formatMessage('Message recieved'),
-    subtitle: () => formatMessage('Message recieved activity'),
+    label: () => formatMessage('Message received'),
+    subtitle: () => formatMessage('Message received activity'),
   },
   [SDKKinds.OnMessageDeleteActivity]: {
     ...triggerUiSchema,

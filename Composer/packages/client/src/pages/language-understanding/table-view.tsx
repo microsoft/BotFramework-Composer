@@ -20,7 +20,7 @@ import { RouteComponentProps } from '@reach/router';
 import { LuFile } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 
 import { formCell, luPhraseCell, tableCell, content } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -44,6 +44,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const listRef = useRef(null);
+
+  const moreLabel = formatMessage('Open inline editor');
 
   function getIntentState(file: LuFile): string {
     if (!file.diagnostics) {
@@ -196,15 +198,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item, index) => {
           return (
-            <IconButton
-              ariaLabel={formatMessage('Open inline editor')}
-              menuIconProps={{ iconName: 'MoreVertical' }}
-              menuProps={{
-                shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index),
-              }}
-              styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-            />
+            <TooltipHost calloutProps={{ gapSpace: 10 }} content={moreLabel}>
+              <IconButton
+                ariaLabel={moreLabel}
+                menuIconProps={{ iconName: 'MoreVertical' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: getTemplatesMoreButtons(item, index),
+                }}
+                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+              />
+            </TooltipHost>
           );
         },
       },

@@ -26,6 +26,19 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       MicrosoftAppPassword: '',
       MicrosoftAppId: '',
+      cosmosDb: {
+        authKey: '',
+        collectionId: 'botstate-collection',
+        cosmosDBEndpoint: '',
+        databaseId: 'botstate-db',
+      },
+      applicationInsights: {
+        InstrumentationKey: '',
+      },
+      blobStorage: {
+        connectionString: '',
+        container: 'transcripts',
+      },
       luis: {
         name: '',
         authoringKey: '',

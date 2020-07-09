@@ -7,14 +7,17 @@ import { SelectorElement } from '../utils/cursorTracker';
 
 export interface SelectionContextData {
   getNodeIndex: (id: string) => number;
+  getSelectableIds: () => string[];
   selectedIds: string[];
   setSelectedIds: (ids: string[]) => any;
   selectableElements: SelectorElement[];
 }
 
-export const SelectionContext = React.createContext<SelectionContextData>({
+export const defaultSelectionContextValue = {
   getNodeIndex: (_: string): number => 0,
+  getSelectableIds: () => [],
   selectedIds: [] as string[],
   setSelectedIds: () => null,
   selectableElements: [],
-});
+};
+export const SelectionContext = React.createContext<SelectionContextData>(defaultSelectionContextValue);

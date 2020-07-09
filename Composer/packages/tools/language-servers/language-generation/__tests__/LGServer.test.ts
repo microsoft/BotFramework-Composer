@@ -57,6 +57,14 @@ function jsonEscape(str) {
 const content = jsonEscape(lgFile);
 
 describe('LG LSP server test', () => {
+  const oldEnv = process.env;
+  beforeAll(() => {
+    process.env.NODE_ENV = 'test';
+  });
+
+  afterAll(() => {
+    process.env = oldEnv;
+  });
   const server = startServer();
   beforeAll(async () => {
     await new Promise((resolve) => {

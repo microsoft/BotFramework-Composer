@@ -256,6 +256,7 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       // ensure the specified runtime path exists
       if (!fs.existsSync(botDir)) {
         reject(`Runtime path ${botDir} does not exist.`);
+        return;
       }
 
       // take the 0th item off the array, leaving just the args

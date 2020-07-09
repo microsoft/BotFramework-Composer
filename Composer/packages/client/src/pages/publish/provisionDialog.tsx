@@ -12,8 +12,7 @@ import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 
 import { PublishTarget, PublishType } from '../../store/types';
-import { DialogWrapper } from '../../components/DialogWrapper';
-import { DialogTypes } from '../../components/DialogWrapper/styles';
+import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { StoreContext } from '../../store';
 
 import { CreateNewResource } from './createNewResources';

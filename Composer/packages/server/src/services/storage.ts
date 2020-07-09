@@ -80,9 +80,10 @@ class StorageService {
             name: d,
             type: 'folder',
             path: d,
-            writable: false,
+            writable: true,
           };
         }),
+        writable: false,
       };
     }
     const storageClient = this.getStorageClient(storageId, user);
@@ -110,12 +111,37 @@ class StorageService {
   };
 
   public updateCurrentPath = (path: string, storageId: string) => {
-    const storage = this.storageConnections.find((s) => s.id === storageId);
-    if (storage) {
-      storage.path = path;
-      Store.set(this.STORE_KEY, this.storageConnections);
+    //A path in windows should never start with \, but the fs.existsSync() return true
+    if (path && path.startsWith('\\') && settings.platform === 'win32') {
+      return this.storageConnections;
+    }
+    if (path && path.endsWith(':')) {
+      path = path + '/';
+    }
+    if (Path.isAbsolute(path) && fs.existsSync(path)) {
+      const storage = this.storageConnections.find((s) => s.id === storageId);
+      if (storage) {
+        storage.path = path;
+        Store.set(this.STORE_KEY, this.storageConnections);
+      }
     }
     return this.storageConnections;
+  };
+
+  public createFolder = (path: string) => {
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    }
+  };
+
+  public updateFolder = (path: string, oldName: string, newName: string) => {
+    const currentPath = Path.join(path, oldName);
+    const newPath = Path.join(path, newName);
+    if (fs.existsSync(currentPath)) {
+      fs.renameSync(currentPath, newPath);
+    } else {
+      throw new Error(`The folder ${currentPath} does not exist`);
+    }
   };
 
   private ensureDefaultBotFoldersExist = () => {

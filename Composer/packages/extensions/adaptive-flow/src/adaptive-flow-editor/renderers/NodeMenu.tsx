@@ -5,6 +5,7 @@
 import { jsx } from '@emotion/core';
 import { useContext } from 'react';
 import formatMessage from 'format-message';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 
 import { NodeEventTypes, EditorEventHandler } from '../../adaptive-flow-renderer/constants/NodeEventTypes';
 import { MenuTypes } from '../constants/MenuTypes';
@@ -39,6 +40,8 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
   const { selectedIds } = useContext(SelectionContext);
   const nodeSelected = selectedIds.includes(`${id}${MenuTypes.NodeMenu}`);
 
+  const moreLabel = formatMessage('Node menu');
+
   return (
     <div
       css={{
@@ -46,27 +49,29 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
       }}
       {...declareElementAttributes(id)}
     >
-      <IconMenu
-        iconName="MoreVertical"
-        iconSize={12}
-        iconStyles={{
-          color: `${colors.color}`,
-          selectors: {
-            ':focus': {
-              outline: 'none',
-              selectors: {
-                '::after': {
-                  outline: '1px solid #0078d4 !important',
+      <TooltipHost content={moreLabel}>
+        <IconMenu
+          iconName="MoreVertical"
+          iconSize={12}
+          iconStyles={{
+            color: `${colors.color}`,
+            selectors: {
+              ':focus': {
+                outline: 'none',
+                selectors: {
+                  '::after': {
+                    outline: '1px solid #0078d4 !important',
+                  },
                 },
               },
             },
-          },
-        }}
-        label={formatMessage('node menu')}
-        menuItems={menuItems}
-        menuWidth={100}
-        nodeSelected={nodeSelected}
-      />
+          }}
+          label={moreLabel}
+          menuItems={menuItems}
+          menuWidth={100}
+          nodeSelected={nodeSelected}
+        />
+      </TooltipHost>
     </div>
   );
 };

@@ -88,22 +88,28 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
-export interface State {
-  dialogs: DialogInfo[];
+export interface BotState {
+  // Unique identifier of a bot
   projectId: string;
+  // User-given name
   botName: string;
+
+  // are these two ever read?
   location: string;
   botEnvironment: string;
+
+  // locale of the LG/LU files being worked on in the current bot
   locale: string;
+
+  // components of the current bot
+  dialogs: DialogInfo[];
   diagnostics: Diagnostic[];
-  botEndpoints: { [key: string]: string };
-  remoteEndpoints: { [key: string]: string };
-  /** the data path for PropertyEditor */
-  focusPath: string;
-  templateProjects: ProjectTemplate[];
-  recentProjects: any[];
-  storages: any[];
-  focusedStorageFolder: StorageFolder;
+  lgFiles: LgFile[];
+  luFiles: LuFile[];
+  skills: Skill[];
+
+  remoteEndpoints: { [key: string]: string }; // possibly unused?
+
   botStatus: BotStatus;
   botLoadErrorMsg: {
     title: string;
@@ -111,24 +117,70 @@ export interface State {
     linkAfterMessage?: { url: string; text: string };
     link?: { url: string; text: string };
   };
-  creationFlowStatus: CreationFlowStatus;
-  templateId: string;
-  storageFileLoadingStatus: string;
+
   schemas: BotSchemas;
-  lgFiles: LgFile[];
-  luFiles: LuFile[];
-  skills: Skill[];
   skillManifests: any[];
   designPageLocation: DesignPageLocation;
-  error: StateError | null;
   breadcrumb: BreadcrumbItem[];
   showCreateDialogModal: boolean;
   showAddSkillDialogModal: boolean;
-  isEnvSettingUpdated: boolean;
-  settings: DialogSetting;
+
+  isEnvSettingUpdated: boolean; // seems to be unused
+  settings: DialogSetting; // used for LUIS publishing
+
   actionsSeed: any;
-  onCreateDialogComplete?: (dialogId: string | null) => void;
+
+  publishVersions: any;
+  publishTypes: PublishType[];
+  publishHistory: {
+    [key: string]: any[];
+  };
+
+  // If a bot is opening, we should show a Loading spinner
+  botOpening: boolean;
+
+  subscriptions: Subscription[];
+  resourceGroups: ResourceGroups[];
+}
+
+export type AppState = {
+  /** the data path for PropertyEditor */
+  focusPath: string;
+  templateProjects: ProjectTemplate[];
+  recentProjects: any[];
+  storages: any[];
+  focusedStorageFolder: StorageFolder;
+
+  announcement: string | undefined;
+  appUpdate: AppUpdateState;
+
+  // URL of running bots, used to link with Emulator. Key is the project ID of a bot, value is the URL
+  botEndpoints: { [key: string]: string };
+
+  visualEditorSelection: string[];
+  onboarding: {
+    coachMarkRefs: { [key: string]: any };
+    complete: boolean;
+  };
+  clipboardActions: any[];
+
+  creationFlowStatus: CreationFlowStatus; // TODO: can be removed with minor refactoring
+  storageFileLoadingStatus: string;
+
+  templateId: string; // TODO: can be removed with minor refactoring
+
+  onCreateDialogComplete?: (dialogId: string | null) => void; // callback triggered when the current dialog finishes
   onAddSkillDialogComplete?: (dialogId: string | null) => void;
+
+  runtimeTemplates: RuntimeTemplate[];
+
+  userSettings: UserSettings; // preferences for the editors
+
+  displaySkillManifest?: string;
+
+  // currently displayed error
+  error: StateError | null;
+
   currentUser: {
     token: string | null;
     email?: string;
@@ -136,33 +188,7 @@ export interface State {
     expiration?: number;
     sessionExpired: boolean;
   };
-  publishVersions: any;
-  publishStatus: any;
-  lastPublishChange: any;
-  visualEditorSelection: string[];
-  onboarding: {
-    coachMarkRefs: { [key: string]: any };
-    complete: boolean;
-  };
-  clipboardActions: any[];
-  publishTargets: any[];
-  runtimeTemplates: RuntimeTemplate[];
-  publishTypes: PublishType[];
-  publishHistory: {
-    [key: string]: any[];
-  };
-  userSettings: UserSettings;
-  runtimeSettings: {
-    path: string;
-    startCommand: string;
-  };
-  announcement: string | undefined;
-  appUpdate: AppUpdateState;
-  displaySkillManifest?: string;
-  botOpening: boolean;
-  subscriptions: Subscription[];
-  resourceGroups: ResourceGroups[];
-}
+};
 
 export interface Subscription {
   subscriptionId: string;
@@ -178,6 +204,8 @@ export interface ResourceGroups {
   properties: any;
 }
 
+export type State = BotState & AppState;
+
 export type ReducerFunc<T = any> = (state: State, payload: T) => State;
 export interface MiddlewareApi {
   getState: () => State;
@@ -190,6 +218,8 @@ export interface ILuisConfig {
   name: string;
   authoringKey: string;
   endpointKey: string;
+  endpoint: string;
+  authoringEndpoint: string;
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';

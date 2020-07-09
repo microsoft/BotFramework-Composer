@@ -4,8 +4,7 @@
 import React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { DialogWrapper } from '../../../src/components/DialogWrapper';
-import { DialogTypes } from '../../../src/components/DialogWrapper/styles';
+import { DialogWrapper, DialogTypes } from '../../../src/components/DialogWrapper';
 
 describe('<DialogWrapper />', () => {
   const props = {

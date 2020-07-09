@@ -61,6 +61,9 @@ context('Notification Page', () => {
 
     cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
 
+    // move away from the Notifications button (clicking the logo should do nothing)
+    cy.findByAltText('Composer Logo').click();
+
     cy.findByTestId('notifications-table-view').within(() => {
       cy.findAllByText('__testtodobotwithluissample.dialog').should('exist').first().dblclick();
     });

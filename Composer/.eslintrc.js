@@ -40,7 +40,19 @@ module.exports = {
     'no-console': 'warn',
     'dot-notation': 'error',
     yoda: 'error',
+    'no-bitwise': 'error',
     // eqeqeq: 'error',
+    'no-underscore-dangle': [
+      'error',
+      {
+        // add special window.__foo__ names as exceptions here
+        allow: ['__nonce__', '__IS_ELECTRON__'],
+        // allow this._name so custom getters and setters can be written gracefully
+        allowAfterThis: true,
+        enforceInMethodNames: true,
+      },
+    ],
+    'prefer-arrow-callback': 'error',
 
     // plugin: import
     'import/first': 'error',

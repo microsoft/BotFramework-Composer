@@ -33,6 +33,8 @@ router.put('/storages/currentPath', StorageController.updateCurrentPath);
 router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs', StorageController.getBlob);
+router.post('/storages/folder', StorageController.createFolder);
+router.put('/storages/folder', StorageController.updateFolder);
 
 // provision
 router.get('/publish/subscriptions', ProvisionController.getSubscriptions);

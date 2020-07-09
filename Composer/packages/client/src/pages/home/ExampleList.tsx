@@ -35,7 +35,7 @@ const resolveIcon = (exampleId: string): string => {
 export const ExampleList: React.FC<ExampleListProps> = (props) => {
   const { onClick, examples } = props;
 
-  function _onRenderCell(item?: ProjectTemplate): React.ReactNode {
+  function onRenderCell(item?: ProjectTemplate): React.ReactNode {
     if (!item) {
       return;
     }
@@ -46,6 +46,7 @@ export const ExampleList: React.FC<ExampleListProps> = (props) => {
         data-is-focusable
         aria-label={item.name + '; ' + item.description}
         css={exampleListCell}
+        role="button"
         tabIndex={0}
         onClick={() => onClick(item.id)}
         onKeyDown={(ev) => {
@@ -66,7 +67,7 @@ export const ExampleList: React.FC<ExampleListProps> = (props) => {
   return (
     <div css={exampleListContainer} data-is-scrollable="true">
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-        <List items={examples} onRenderCell={_onRenderCell} />
+        <List items={examples} onRenderCell={onRenderCell} />
       </ScrollablePane>
     </div>
   );

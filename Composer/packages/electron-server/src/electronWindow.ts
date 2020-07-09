@@ -14,11 +14,11 @@ const log = logger.extend('electron-window');
 
 export default class ElectronWindow {
   private static instance: ElectronWindow | undefined;
-  private _currentBrowserWindow: BrowserWindow;
+  private currentBrowserWindow: BrowserWindow;
 
   get browserWindow(): BrowserWindow | undefined {
     if (ElectronWindow.instance) {
-      return ElectronWindow.instance._currentBrowserWindow;
+      return ElectronWindow.instance.currentBrowserWindow;
     }
   }
 
@@ -33,6 +33,7 @@ export default class ElectronWindow {
       width: adjustedWidth,
       height: adjustedHeight,
       webPreferences: {
+        nodeIntegrationInWorker: false,
         nodeIntegration: false,
         preload: join(__dirname, 'preload.js'),
       },
@@ -44,10 +45,10 @@ export default class ElectronWindow {
       // (https://github.com/electron-userland/electron-builder/releases/tag/v21.0.1)
       browserWindowOptions.icon = join(getUnpackedAsarPath(), 'resources/composerIcon_1024x1024.png');
     }
-    this._currentBrowserWindow = new BrowserWindow(browserWindowOptions);
-    this._currentBrowserWindow.on('page-title-updated', (ev) => ev.preventDefault()); // preserve explicit window title
-    this._currentBrowserWindow.webContents.on('new-window', this.onOpenNewWindow.bind(this));
-    log('Rendered Electron window dimensions: ', this._currentBrowserWindow.getSize());
+    this.currentBrowserWindow = new BrowserWindow(browserWindowOptions);
+    this.currentBrowserWindow.on('page-title-updated', (ev) => ev.preventDefault()); // preserve explicit window title
+    this.currentBrowserWindow.webContents.on('new-window', this.onOpenNewWindow.bind(this));
+    log('Rendered Electron window dimensions: ', this.currentBrowserWindow.getSize());
   }
 
   public static destroy() {

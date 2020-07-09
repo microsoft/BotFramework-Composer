@@ -16,6 +16,7 @@ import { moveCursor } from '../utils/cursorTracker';
 import { AttrNames } from '../constants/ElementAttributes';
 import { NodeRendererContextValue } from '../contexts/NodeRendererContext';
 import { SelectionContextData } from '../contexts/SelectionContext';
+import { calculateRangeSelection } from '../utils/calculateRangeSelection';
 
 export const useEditorEventApi = (
   state: { path: string; data: any; nodeContext: NodeRendererContextValue; selectionContext: SelectionContextData },
@@ -29,6 +30,8 @@ export const useEditorEventApi = (
     cutSelectedActions,
     deleteSelectedAction,
     deleteSelectedActions,
+    disableSelectedActions,
+    enableSelectedActions,
     updateRecognizer,
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
@@ -78,6 +81,47 @@ export const useEditorEventApi = (
           setSelectedIds([...newFocusedIds]);
           onFocusSteps([...newFocusedIds], e.tab);
           announce(ScreenReaderMessage.ActionFocused);
+        };
+        break;
+      case NodeEventTypes.CtrlClick:
+        handler = (e: { id: string; tab?: string }) => {
+          if (!focusedId && !selectedIds.length) {
+            return handleEditorEvent(NodeEventTypes.Focus, e);
+          }
+
+          // Toggle the selection state of clicked id
+          const alreadySelected = selectedIds.some((x) => x === e.id);
+          if (alreadySelected) {
+            const shrinkedSelection = selectedIds.filter((x) => x !== e.id);
+            setSelectedIds(shrinkedSelection);
+            if (focusedId === e.id) {
+              onFocusSteps([shrinkedSelection[0] || '']);
+            }
+            announce(ScreenReaderMessage.ActionUnfocused);
+          } else {
+            const expandedSelection = [...selectedIds, e.id];
+            setSelectedIds(expandedSelection);
+            onFocusSteps([e.id], e.tab);
+            announce(ScreenReaderMessage.ActionFocused);
+          }
+        };
+        break;
+      case NodeEventTypes.ShiftClick:
+        handler = (e: { id: string; tab?: string }) => {
+          if (!focusedId && !selectedIds.length) {
+            return handleEditorEvent(NodeEventTypes.Focus, e);
+          }
+
+          if (!focusedId) {
+            return handleEditorEvent(NodeEventTypes.CtrlClick, e);
+          }
+
+          // Maintained by NodeIndexGenerator, `selectableIds` is in pre-order natively.
+          const selectableIds = selectionContext.getSelectableIds();
+          // Range selection from 'focusedId' to Shift-Clicked id.
+          const newSelectedIds = calculateRangeSelection(focusedId, e.id, selectableIds);
+          setSelectedIds(newSelectedIds);
+          announce(ScreenReaderMessage.RangeSelection);
         };
         break;
       case NodeEventTypes.FocusEvent:
@@ -225,6 +269,20 @@ export const useEditorEventApi = (
           announce(ScreenReaderMessage.ActionsDeleted);
         };
         break;
+      case NodeEventTypes.DisableSelection:
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          onChange(disableSelectedActions(path, data, actionIds));
+          announce(ScreenReaderMessage.ActionsDisabled);
+        };
+        break;
+      case NodeEventTypes.EnableSelection:
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          onChange(enableSelectedActions(path, data, actionIds));
+          announce(ScreenReaderMessage.ActionsEnabled);
+        };
+        break;
       case NodeEventTypes.AppendSelection:
         handler = (e) => {
           trackActionListChange(e.target);
@@ -258,6 +316,8 @@ export const useEditorEventApi = (
   (window as any).cutSelection = () => handleEditorEvent(NodeEventTypes.CutSelection);
   (window as any).moveSelection = () => handleEditorEvent(NodeEventTypes.MoveSelection);
   (window as any).deleteSelection = () => handleEditorEvent(NodeEventTypes.DeleteSelection);
+  (window as any).disableSelection = () => handleEditorEvent(NodeEventTypes.DisableSelection);
+  (window as any).enableSelection = () => handleEditorEvent(NodeEventTypes.EnableSelection);
 
   return {
     handleEditorEvent,
