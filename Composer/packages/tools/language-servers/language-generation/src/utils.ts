@@ -3,7 +3,7 @@
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
 import { DiagnosticSeverity as LGDiagnosticSeverity, Diagnostic as LGDiagnostic, Templates } from 'botbuilder-lg';
-import { LgTemplate, Diagnostic as BFDiagnostic, LgFile, LgParsed } from '@bfc/shared';
+import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
 import { offsetRange } from '@bfc/indexers';
 
 // state should map to tokenizer state
@@ -36,12 +36,7 @@ export interface LGDocument {
   projectId?: string;
   fileId?: string;
   templateId?: string;
-  index: () => Promise<LgParsed>;
-}
-
-export interface LGParsedResource {
-  templates: LgTemplate[];
-  diagnostics: Diagnostic[];
+  index: () => Promise<LgFile>;
 }
 
 export type LGFileResolver = (id: string) => LgFile | undefined;
