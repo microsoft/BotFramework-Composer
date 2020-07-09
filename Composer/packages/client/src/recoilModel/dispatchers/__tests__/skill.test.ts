@@ -17,7 +17,30 @@ import {
 } from '../../atoms/botState';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 
+jest.mock('../../../utils/httpUtil', () => {
+  return {
+    __esModule: true,
+    default: {
+      post: (url, skillObject) => ({
+        url,
+        data: skillObject.skills,
+      }),
+    },
+  };
+});
+
 const mockDialogComplete = jest.fn();
+
+const makeTestSkill: (number) => Skill = (n) => ({
+  manifestUrl: 'url',
+  name: 'skill' + n,
+  protocol: 'GET',
+  description: 'test skill' + n,
+  endpointUrl: 'url',
+  endpoints: [{ test: 'foo' }],
+  msAppId: 'ID',
+  body: 'body',
+});
 
 describe('skill dispatcher', () => {
   let renderedComponent, dispatcher;
@@ -57,7 +80,7 @@ describe('skill dispatcher', () => {
         { recoilState: onAddSkillDialogCompleteState, initialValue: () => mockDialogComplete },
         {
           recoilState: skillsState,
-          initialValue: [],
+          initialValue: [makeTestSkill(1), makeTestSkill(2)],
         },
         { recoilState: settingsState, initialValue: {} },
         { recoilState: showAddSkillDialogModalState, initialValue: false },
@@ -104,8 +127,49 @@ describe('skill dispatcher', () => {
   });
 
   describe('updateSkill', () => {
-    it('runs', async () => {
-      await act(async () => {});
+    it('adds a skill', async () => {
+      await act(async () => {
+        dispatcher.updateSkill({
+          projectId: 'projectId',
+          targetId: -1,
+          skillData: makeTestSkill(3),
+        });
+      });
+      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
+      expect(renderedComponent.current.onAddSkillDialogCompleteState).toBeUndefined();
+      //   expect(renderedComponent.current.settingsState.skill).toContain({
+      //     manifestUrl: 'url',
+      //     name: 'skill3',
+      //   });
+      expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(3));
+    });
+    it('modifies a skill', async () => {
+      await act(async () => {
+        dispatcher.updateSkill({
+          projectId: 'projectId',
+          targetId: 0,
+          skillData: makeTestSkill(100),
+        });
+      });
+      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
+      expect(renderedComponent.current.onAddSkillDialogCompleteState).toBeUndefined();
+      //   expect(renderedComponent.current.settingsState.skill).toContain({
+      //     manifestUrl: 'url',
+      //     name: 'skill100',
+      //   });
+      expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
+      expect(renderedComponent.current.skills).toContainEqual(makeTestSkill(100));
+    });
+    it('deletes a skill', async () => {
+      await act(async () => {
+        dispatcher.updateSkill({
+          projectId: 'projectId',
+          targetId: 0,
+        });
+      });
+      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
+      expect(renderedComponent.current.onAddSkillDialogCompleteState).toBeUndefined();
+      expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
     });
   });
 
