@@ -2,62 +2,18 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { useCallback, Fragment, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogInfo } from '@bfc/shared';
 import get from 'lodash/get';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
-import { useStoreContext } from '../hooks/useStoreContext';
-import { VisualEditorAPI } from '../pages/design/FrameAPI';
+import { VisualEditorAPI } from '../../pages/design/FrameAPI';
+import { useStoreContext } from '../../hooks/useStoreContext';
 
-// -------------------- Styles -------------------- //
-
-const headerSub = css`
-  height: 44px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid ${NeutralColors.gray30};
-`;
-
-const leftActions = css`
-  position: relative;
-  display: flex;
-  align-items: stretch;
-  height: 44px;
-`;
-
-const rightActions = css`
-  position: relative;
-  height: 44px;
-  margin-right: 20px;
-`;
-
-const actionButton = css`
-  font-size: 16px;
-  margin-top: 2px;
-  margin-left: 15px;
-`;
-
-// -------------------- ToolBar -------------------- //
-
-export type IToolBarItem = {
-  type: string;
-  element?: any;
-  text?: string;
-  buttonProps?: {
-    iconProps: {
-      iconName: string;
-    };
-    onClick: () => void;
-  };
-  align?: string;
-  dataTestid?: string;
-  disabled?: boolean;
-};
+import { IToolBarItem } from './ToolBar.types';
+import { actionButton, leftActions, rightActions, headerSub } from './ToolBarStyles';
 
 type ToolbarProps = {
   toolbarItems?: Array<IToolBarItem>;
@@ -67,21 +23,35 @@ type ToolbarProps = {
   showSkillManifestModal?: () => void;
 };
 
-function itemList(action: IToolBarItem, index: number) {
-  if (action.type === 'element') {
-    return <Fragment key={index}>{action.element}</Fragment>;
-  } else {
+function itemList(item: IToolBarItem, index: number) {
+  if (item.type === 'element') {
+    return <Fragment key={index}>{item.element}</Fragment>;
+  } else if (item.type === 'action') {
     return (
       <ActionButton
         key={index}
         css={actionButton}
-        {...action.buttonProps}
-        data-testid={action.dataTestid}
-        disabled={action.disabled}
+        {...item.buttonProps}
+        data-testid={item.dataTestid}
+        disabled={item.disabled}
       >
-        {action.text}
+        {item.text}
       </ActionButton>
     );
+  } else if (item.type === 'dropdown') {
+    return (
+      <CommandButton
+        key={index}
+        css={actionButton}
+        data-testid={item.dataTestid}
+        disabled={item.disabled}
+        iconProps={item.buttonProps?.iconProps}
+        menuProps={item.menuProps}
+        text={item.text}
+      />
+    );
+  } else {
+    return null;
   }
 }
 
