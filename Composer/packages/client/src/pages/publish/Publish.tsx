@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useState, useContext, useEffect, Fragment, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
-import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import settingsStorage from '../../utils/dialogSettingStorage';

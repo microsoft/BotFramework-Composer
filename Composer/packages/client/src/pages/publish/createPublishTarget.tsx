@@ -9,10 +9,9 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Fragment, useState, useMemo } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
-// import { JsonEditor } from '@bfc/code-editor';
+import { JsonEditor } from '@bfc/code-editor';
 
 import { PublishTarget, PublishType } from '../../store/types';
-import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { label } from './styles';
 
@@ -29,9 +28,6 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [name, setName] = useState(props.current ? props.current.name : '');
   const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
-  const {
-    state: { userSettings },
-  } = useStoreContext();
 
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));
@@ -109,8 +105,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
         />
         {instructions && <p>{instructions}</p>}
         <div css={label}>{formatMessage('Publish Configuration')}</div>
-        {/* <JsonEditor key={targetType} height={200} schema={schema} value={config} onChange={updateConfig} /> */}
-
+        <JsonEditor key={targetType} height={200} schema={schema} value={config} onChange={updateConfig} />
         <button hidden disabled={isDisable()} type="submit" />
       </form>
       <DialogFooter>

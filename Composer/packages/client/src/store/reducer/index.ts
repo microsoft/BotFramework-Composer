@@ -18,7 +18,7 @@ import {
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
-import { DialogSetting, ReducerFunc, Subscription, ResourceGroups } from '../types';
+import { DialogSetting, ReducerFunc, Subscription, ResourceGroups, Resource, DeployLocation } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils/fileUtil';
 import storage from '../../utils/storage';
@@ -681,6 +681,18 @@ const setResourceGroups: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const setResources: ReducerFunc = (state, payload) => {
+  const { value } = payload;
+  state.resources = value as Resource[];
+  return state;
+};
+
+const setDeployLocations: ReducerFunc = (state, payload) => {
+  const { value } = payload;
+  state.deployLocations = value as DeployLocation[];
+  return state;
+};
+
 const noOp: ReducerFunc = (state) => {
   return state;
 };
@@ -755,4 +767,6 @@ export const reducer = createReducer({
   [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
   [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
+  [ActionTypes.GET_RESOURCES_SUCCESS]: setResources,
+  [ActionTypes.GET_DEPLOY_LOCATIONS_SUCCESS]: setDeployLocations,
 });

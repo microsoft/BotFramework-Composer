@@ -141,6 +141,8 @@ export interface BotState {
 
   subscriptions: Subscription[];
   resourceGroups: ResourceGroups[];
+  resources: Resource[];
+  deployLocations: DeployLocation[];
 }
 
 export type AppState = {
@@ -202,6 +204,21 @@ export interface ResourceGroups {
   location: string;
   id: string;
   properties: any;
+}
+
+export interface Resource {
+  name: string;
+  id: string;
+  type: string;
+  location: string;
+  kind?: string;
+  [key: string]: any;
+}
+
+export interface DeployLocation {
+  id: string;
+  name: string;
+  displayName: string;
 }
 
 export type State = BotState & AppState;

@@ -15,7 +15,7 @@
       "azureLogin"
     ],
     "scripts": {
-      "build:all": "yarn build:lib && yarn build:localpublish && yarn build:samples && yarn build:azurePublish && yarn build:azureFunctionsPublish",
+      "build:all": "yarn build:lib && yarn build:localpublish && yarn build:samples && yarn build:azurePublish && yarn build:azureFunctionsPublish && yarn build:azureLogin",
       "build:localpublish": "yarn workspace localpublish build",
       "build:samples": "yarn workspace samples build",
       "build:azurePublish": "yarn workspace azurePublish build",

@@ -91,6 +91,8 @@ export const initialBotState: BotState = {
   botOpening: false,
   subscriptions: [],
   resourceGroups: [],
+  resources: [],
+  deployLocations: [],
 };
 
 const initialAppState: AppState = {

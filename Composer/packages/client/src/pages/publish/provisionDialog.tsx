@@ -16,6 +16,7 @@ import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { StoreContext } from '../../store';
 
 import { CreateNewResource } from './createNewResources';
+import { SelectExistedResources } from './selectExistedResources';
 
 // import { getAccessTokenInCache } from '../../utils/auth';
 interface ProvisionDialogProps {
@@ -98,45 +99,70 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
   const steps = [
     {
       children: (
-        <form>
-          <TextField
-            defaultValue={props.current ? props.current.name : ''}
-            errorMessage={errorMessage}
-            label={formatMessage('Name')}
-            placeholder={formatMessage('My Publish Profile')}
-            onChange={updateName}
-          />
-          <Dropdown
-            defaultSelectedKey={props.current ? props.current.type : null}
-            label={formatMessage('Publish Destination Type')}
-            options={targetTypes}
-            placeholder={formatMessage('Choose One')}
-            onChange={updateType}
-          />
-          <ChoiceGroup
-            required
-            defaultSelectedKey={choiceOptions[0].key}
-            label={formatMessage('Create from')}
-            options={choiceOptions}
-            onChange={choiceChanged}
-          />
-        </form>
+        <Fragment>
+          <form>
+            <TextField
+              defaultValue={props.current ? props.current.name : ''}
+              errorMessage={errorMessage}
+              label={formatMessage('Name')}
+              placeholder={formatMessage('My Publish Profile')}
+              onChange={updateName}
+            />
+            <Dropdown
+              defaultSelectedKey={props.current ? props.current.type : null}
+              label={formatMessage('Publish Destination Type')}
+              options={targetTypes}
+              placeholder={formatMessage('Choose One')}
+              onChange={updateType}
+            />
+            <ChoiceGroup
+              required
+              defaultSelectedKey={choiceOptions[0].key}
+              label={formatMessage('Create from')}
+              options={choiceOptions}
+              onChange={choiceChanged}
+            />
+          </form>
+          <DialogFooter>
+            <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+            <PrimaryButton
+              disabled={isDisable()}
+              text={formatMessage('Next')}
+              onClick={async () => {
+                if (choice === choiceOptions[0].key) {
+                  setCurrentStep(1);
+                } else if (choice === choiceOptions[1].key) {
+                  setCurrentStep(2);
+                }
+                await actions.getSubscriptions();
+                await props.onSubmit({ name: name, type: targetType, choice: choice });
+              }}
+            />
+          </DialogFooter>
+        </Fragment>
       ),
-      next: async () => {
-        // create new resource
-        if (choice === choiceOptions[0].key) {
-          setCurrentStep(1);
-        } else if (choice === choiceOptions[1].key) {
-          setCurrentStep(2);
-        }
-        await actions.getSubscriptions();
-      },
     },
     {
-      children: <CreateNewResource />,
-      next: () => {
-        props.onDismiss();
-      },
+      children: (
+        <CreateNewResource
+          onDismiss={props.onDismiss}
+          onSubmit={(value) => {
+            props.onSubmit({ ...value, name: name, type: targetType, choice: choice });
+            props.onDismiss();
+          }}
+        />
+      ),
+    },
+    {
+      children: (
+        <SelectExistedResources
+          onDismiss={props.onDismiss}
+          onSubmit={(value) => {
+            props.onSubmit({ ...value, name: name, type: targetType, choice: choice });
+            props.onDismiss();
+          }}
+        />
+      ),
     },
   ];
   return (
@@ -148,20 +174,7 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
       title={props.current ? formatMessage('Edit a publish profile') : formatMessage('Add a publish profile')}
       onDismiss={props.onDismiss}
     >
-      <Fragment>
-        {steps[currentStep].children}
-        <DialogFooter>
-          <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
-          <PrimaryButton
-            disabled={isDisable()}
-            text={formatMessage('Next')}
-            onClick={
-              steps[currentStep].next
-              // await props.onSubmit({ name: name, type: targetType, choice: choice });
-            }
-          />
-        </DialogFooter>
-      </Fragment>
+      {steps[currentStep].children}
     </DialogWrapper>
   );
 };

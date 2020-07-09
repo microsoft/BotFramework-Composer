@@ -15,6 +15,11 @@
     "@azure/ms-rest-js" "^2.0.3"
     tslib "^1.10.0"
 
+"@azure/ms-rest-azure-env@^2.0.0":
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/ms-rest-azure-env/-/@azure/ms-rest-azure-env-2.0.0.tgz#45809f89763a480924e21d3c620cd40866771625"
+  integrity sha1-RYCfiXY6SAkk4h08YgzUCGZ3FiU=
+
 "@azure/ms-rest-azure-js@2.0.1":
   version "2.0.1"
   resolved "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@azure/ms-rest-azure-js/-/@azure/ms-rest-azure-js-2.0.1.tgz#fa1b38f039b3ee48a9e086a88c8a5b5b7776491c"
@@ -22,6 +27,16 @@
   dependencies:
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
+
+"@azure/ms-rest-browserauth@^1.0.0":
+  version "1.0.0"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/ms-rest-browserauth/-/@azure/ms-rest-browserauth-1.0.0.tgz#37befdac5bd64afc5b22796d71ac3d6c54e8a878"
+  integrity sha1-N779rFvWSvxbInltcaw9bFToqHg=
+  dependencies:
+    "@azure/ms-rest-azure-env" "^2.0.0"
+    "@azure/ms-rest-js" "^2.0.4"
+    adal-angular "^1.0.17"
+    tslib "^1.9.3"
 
 "@azure/ms-rest-js@1.7.0":
   version "1.7.0"
@@ -4173,6 +4188,11 @@ acorn@^7.1.1:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.2.0.tgz#17ea7e40d7c8640ff54a694c889c26f31704effe"
   integrity sha512-apwXVmYVpQ34m/i71vrApRrRKCWQnZZF1+npOD0WV5xZFfwWOmKGQ2RWlfdy9vWITsenisM8M0Qeq8agcFHNiQ==
+
+adal-angular@^1.0.17:
+  version "1.0.17"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/adal-angular/-/adal-angular-1.0.17.tgz#6e936e0e41f91d3b2a88e7ffca9c2f6f6f562cc4"
+  integrity sha1-bpNuDkH5HTsqiOf/ypwvb29WLMQ=
 
 adaptive-expressions@4.10.0-preview-135858:
   version "4.10.0-preview-135858"
