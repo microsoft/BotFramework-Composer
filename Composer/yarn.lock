@@ -4181,9 +4181,9 @@ acorn@^7.1.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.2.0.tgz#17ea7e40d7c8640ff54a694c889c26f31704effe"
   integrity sha512-apwXVmYVpQ34m/i71vrApRrRKCWQnZZF1+npOD0WV5xZFfwWOmKGQ2RWlfdy9vWITsenisM8M0Qeq8agcFHNiQ==
 
-adaptive-expressions@4.10.0-preview-135858:
-  version "4.10.0-preview-135858"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-135858.tgz#b48f2849825cdb0b0876b7b8be001fbd7a171d14"
+adaptive-expressions@4.10.0-preview-144442:
+  version "4.10.0-preview-144442"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-144442.tgz#43fb734022bccb1d520811f055a03e4a146ad804"
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"
@@ -5224,11 +5224,12 @@ boolean@^3.0.0:
   resolved "https://registry.yarnpkg.com/boolean/-/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha512-HRZPIjPcbwAVQvOTxR4YE3o8Xs98NqbbL1iEZDCz7CL8ql0Lt5iOyJFxfnAB0oFs8Oh02F/lLlg30Mexv46LjA==
 
-botbuilder-lg@4.10.0-preview-135858:
-  version "4.10.0-preview-135858"
-  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-135858.tgz#b0a96755d854ec17830b52a8f89beca31dd73b3f"
+"botbuilder-lg@4.10.0-preview-144442":
+  version "4.10.0-preview-144442"
+  uid "3b16facfb0e05a707b16d1bf969609e91754a1c1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-144442.tgz#3b16facfb0e05a707b16d1bf969609e91754a1c1"
   dependencies:
-    adaptive-expressions "4.10.0-preview-135858"
+    adaptive-expressions "4.10.0-preview-144442"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.11"
     path "^0.12.7"

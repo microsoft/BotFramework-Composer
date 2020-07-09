@@ -20,9 +20,8 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   return result;
 }
 
-function parse(content: string, id = '', importResolver: ImportResolverDelegate = defaultFileResolver) {
-  const lgFile = Templates.parseText(content, id, importResolver);
-  const templates = lgFile.toArray().map((t) => {
+function convertTemplatesToLgFile(id = '', content: string, templates: Templates): LgFile {
+  const used = templates.toArray().map((t) => {
     return {
       name: t.name,
       body: t.body,
@@ -33,10 +32,16 @@ function parse(content: string, id = '', importResolver: ImportResolverDelegate 
       },
     };
   });
-  const diagnostics = lgFile.diagnostics.map((d: LGDiagnostic) => {
+  const diagnostics = templates.diagnostics.map((d: LGDiagnostic) => {
     return convertLGDiagnostic(d, id);
   });
-  return { templates, diagnostics, options: lgFile.options };
+
+  return { id, content, templates: used, diagnostics, options: templates.options };
+}
+
+function parse(content: string, id = '', importResolver: ImportResolverDelegate = defaultFileResolver) {
+  const lgFile = Templates.parseText(content, id, importResolver);
+  return convertTemplatesToLgFile(id, content, lgFile);
 }
 
 function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFile[] {
@@ -46,7 +51,7 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
     const { name, content } = file;
     if (name.endsWith('.lg')) {
       const id = getBaseName(name, '.lg');
-      lgFiles.push({ id, content, ...parse(content, id, importResolver) });
+      lgFiles.push(parse(content, id, importResolver));
     }
   }
   return lgFiles;
@@ -54,5 +59,6 @@ function index(files: FileInfo[], importResolver?: ImportResolverDelegate): LgFi
 
 export const lgIndexer = {
   index,
+  convertTemplatesToLgFile,
   parse,
 };
