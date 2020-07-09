@@ -32,14 +32,22 @@ export function increaseNameUtilNotExist(templates: LgTemplate[], name: string):
 export function updateTemplate(
   content: string,
   templateName: string,
-  { name, parameters = [], body }: LgTemplate
+  { name, parameters, body }: { name?: string; parameters?: string[]; body?: string }
 ): string {
   const resource = Templates.parseText(content);
+  const originTemplate = resource.toArray().find((t) => t.name === templateName);
   // add if not exist
-  if (resource.toArray().findIndex((t) => t.name === templateName) === -1) {
-    return resource.addTemplate(name, parameters, body).toString();
+  if (!originTemplate) {
+    return resource.addTemplate(templateName, parameters || [], body || '').toString();
   } else {
-    return resource.updateTemplate(templateName, name, parameters, body).toString();
+    return resource
+      .updateTemplate(
+        templateName,
+        name || originTemplate.name,
+        parameters || originTemplate.parameters,
+        body || originTemplate.body
+      )
+      .toString();
   }
 }
 

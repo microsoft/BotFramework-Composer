@@ -160,17 +160,17 @@ export class LGServer {
     const { uri } = document;
     const { fileId, templateId, projectId } = lgOption || {};
     const index = async () => {
-      let content: string = document.getText();
+      let content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
       if (this.getLgResources && fileId && templateId) {
-        try {
-          const resources = this.getLgResources(projectId);
-          content = resources.find((item) => item.id === fileId)?.content || content;
-        } catch (error) {
-          // ignore if file not exist
+        const resources = this.getLgResources(projectId);
+        const lastContent = resources.find((item) => item.id === fileId)?.content;
+
+        if (lastContent) {
+          const body = content;
+          content = lgUtil.updateTemplate(lastContent, templateId, { body });
         }
       }
-
       const id = fileId || uri;
       let templates: LgTemplate[] = [];
       let diagnostics: any[] = [];
