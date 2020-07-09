@@ -39,7 +39,7 @@
     "@uifabric/react-hooks": "^7.3.4",
     "@uifabric/styling": "^7.10.4",
     "axios": "^0.19.2",
-    "botbuilder-lg": "4.10.0-preview-135858",
+    "botbuilder-lg": "4.10.0-preview-144442",
     "format-message": "^6.2.3",
     "immer": "^5.2.0",
     "jwt-decode": "^2.2.0",

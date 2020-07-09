@@ -83,7 +83,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         if (!file || !template) return;
         const { name, parameters } = template;
         const payload = {
-          file,
+          id: file.id,
           projectId,
           templateName: name,
           template: {

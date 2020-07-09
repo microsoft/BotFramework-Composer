@@ -67,8 +67,7 @@ describe('Lg dispatcher', () => {
   it('should create a lg template', async () => {
     await act(async () => {
       await dispatcher.createLgTemplate({
-        file: lgFiles[0],
-        projectId: '',
+        id: 'common.en-us',
         template: getLgTemplate('Test', '-add'),
       });
     });
@@ -87,8 +86,7 @@ describe('Lg dispatcher', () => {
   it('should update a lg template', async () => {
     await act(async () => {
       await dispatcher.updateLgTemplate({
-        file: lgFiles[0],
-        projectId: '',
+        id: 'common.en-us',
         templateName: 'Hello',
         template: getLgTemplate('Hello', '-TemplateValue'),
       });
@@ -100,24 +98,22 @@ describe('Lg dispatcher', () => {
   it('should remove a lg template', async () => {
     await act(async () => {
       await dispatcher.removeLgTemplate({
-        file: lgFiles[0],
-        projectId: '',
+        id: 'common.en-us',
         templateName: 'Hello',
       });
     });
 
-    expect(renderedComponent.current.lgFiles[0].content).toBe(`\r\n`);
+    expect(renderedComponent.current.lgFiles[0].content).toBe(``);
   });
 
   it('should remove lg templates', async () => {
     await act(async () => {
       await dispatcher.removeLgTemplates({
-        file: lgFiles[0],
-        projectId: '',
+        id: 'common.en-us',
         templateNames: ['Hello'],
       });
     });
 
-    expect(renderedComponent.current.lgFiles[0].content).toBe(`\r\n`);
+    expect(renderedComponent.current.lgFiles[0].content).toBe(``);
   });
 });
