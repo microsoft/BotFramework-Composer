@@ -96,7 +96,6 @@ export class BotProject {
     });
 
     return files;
-    // return this.files.filter((f) => f.name.endsWith('.dialog'));
   }
 
   public get lgFiles() {
@@ -108,7 +107,6 @@ export class BotProject {
     });
 
     return files;
-    // return this.files.filter((f) => f.name.endsWith('.lg'));
   }
 
   public get luFiles() {
@@ -120,7 +118,6 @@ export class BotProject {
     });
 
     return files;
-    // return this.files.filter((f) => f.name.endsWith('.lu'));
   }
 
   public get schema() {
@@ -129,6 +126,10 @@ export class BotProject {
 
   public get uiSchema() {
     return this.files.get('ui.schema');
+  }
+
+  public getFile(id: string) {
+    return this.files.get(id);
   }
 
   public init = async () => {
@@ -273,7 +274,6 @@ export class BotProject {
   }
 
   public updateBotInfo = async (name: string, description: string) => {
-    // const mainDialogFile = this.files.find((file) => !file.relativePath.includes('/') && file.name.endsWith('.dialog'));
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
     const entryDialogId = name.trim().toLowerCase();
@@ -518,7 +518,6 @@ export class BotProject {
     };
 
     // update this.files which is memory cache of all files
-    // this.files.push(file);
     this.files.set(file.name, file);
     return file;
   };
@@ -526,7 +525,6 @@ export class BotProject {
   // update file in this project this function will gurantee the memory cache
   // (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
-    // const index = this.files.findIndex((f) => f.relativePath === relativePath);
     const file = this.files.get(Path.basename(relativePath));
     if (!file) {
       throw new Error(`no such file at ${relativePath}`);
@@ -550,12 +548,10 @@ export class BotProject {
   // remove file in this project this function will gurantee the memory cache
   // (this.files, all indexes) also gets updated
   private _removeFile = async (relativePath: string) => {
-    // const index = this.files.findIndex((f) => f.relativePath === relativePath);
     const name = Path.basename(relativePath);
     if (!this.files.has(name)) {
       throw new Error(`no such file at ${relativePath}`);
     }
-    // this.files.splice(index, 1);
     this.files.delete(name);
 
     const absolutePath = `${this.dir}/${relativePath}`;
