@@ -31,6 +31,7 @@ describe('<CreationFlow/>', () => {
       fetchTemplates: jest.fn(),
       setCreationFlowStatus: jest.fn(),
       navTo: jest.fn(),
+      saveTemplateId: jest.fn(),
     });
     set(creationFlowStatusState, CreationFlowStatus.NEW_FROM_TEMPLATE);
 

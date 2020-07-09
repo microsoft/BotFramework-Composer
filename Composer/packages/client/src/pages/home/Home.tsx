@@ -14,7 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
 import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
-import { recentProjectsState, templateProjectsState } from '../../recoilModel/atoms/appState';
+import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
 import { navigateTo } from '../../utils/navigation';
 
@@ -62,9 +62,14 @@ const Home: React.FC<RouteComponentProps> = () => {
   const botName = useRecoilValue(botNameState);
   const recentProjects = useRecoilValue(recentProjectsState);
   const projectId = useRecoilValue(projectIdState);
-  const { openBotProject, fetchRecentProjects, setCreationFlowStatus, onboardingAddCoachMarkRef } = useRecoilValue(
-    dispatcherState
-  );
+  const templateId = useRecoilValue(templateIdState);
+  const {
+    openBotProject,
+    fetchRecentProjects,
+    setCreationFlowStatus,
+    onboardingAddCoachMarkRef,
+    saveTemplateId,
+  } = useRecoilValue(dispatcherState);
 
   const onClickRecentBotProject = async (path) => {
     const projectId = await openBotProject(path);
@@ -81,6 +86,7 @@ const Home: React.FC<RouteComponentProps> = () => {
   };
 
   const onClickTemplate = async (id: string) => {
+    saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`projects/create/${id}`);
   };
@@ -131,7 +137,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`projects/${projectId}/save`);
+          navigate(`projects/${projectId}/${templateId}/save`);
         },
       },
       align: 'left',
