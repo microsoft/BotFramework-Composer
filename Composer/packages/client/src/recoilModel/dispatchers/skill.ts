@@ -22,7 +22,7 @@ export const skillDispatcher = () => {
   });
 
   const removeSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async (id: string) => {
-    set(skillManifestsState, (skillManifests) => skillManifests.filter((manifest) => manifest.name === id));
+    set(skillManifestsState, (skillManifests) => skillManifests.filter((manifest) => manifest.id !== id));
   });
 
   const updateSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async ({ id, content }) => {

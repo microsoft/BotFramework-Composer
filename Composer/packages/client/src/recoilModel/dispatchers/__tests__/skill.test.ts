@@ -22,6 +22,8 @@ const mockDialogComplete = jest.fn();
 describe('skill dispatcher', () => {
   let renderedComponent, dispatcher;
   beforeEach(() => {
+    mockDialogComplete.mockClear();
+
     const useRecoilTestHook = () => {
       const skillManifests = useRecoilValue(skillManifestsState);
       const onAddSkillDialogComplete = useRecoilValue(onAddSkillDialogCompleteState);
@@ -71,15 +73,18 @@ describe('skill dispatcher', () => {
 
     renderedComponent = result;
     dispatcher = renderedComponent.current.currentDispatcher;
+
+    console.log(renderedComponent.current.onAddSkillDialogComplete);
   });
 
   it('createSkillManifest', async () => {
     await act(async () => {
-      dispatcher.createSkillManifest({ id: 'id2', content: 'content2' });
+      dispatcher.createSkillManifest({ id: 'id3', content: 'content3' });
     });
     expect(renderedComponent.current.skillManifests).toEqual([
       { id: 'id1', content: 'content1' },
       { id: 'id2', content: 'content2' },
+      { id: 'id3', content: 'content3' },
     ]);
   });
 
@@ -87,11 +92,17 @@ describe('skill dispatcher', () => {
     await act(async () => {
       dispatcher.removeSkillManifest('id1');
     });
-    expect(renderedComponent.current.skillManifests).toEqual([]);
+    expect(renderedComponent.current.skillManifests).toEqual([{ id: 'id2', content: 'content2' }]);
   });
 
   it('updateSkillManifest', async () => {
-    await act(async () => {});
+    await act(async () => {
+      dispatcher.updateSkillManifest({ id: 'id1', content: 'newContent' });
+    });
+    expect(renderedComponent.current.skillManifests).toEqual([
+      { id: 'id1', content: 'newContent' },
+      { id: 'id2', content: 'content2' },
+    ]);
   });
 
   describe('updateSkill', () => {
@@ -101,22 +112,55 @@ describe('skill dispatcher', () => {
   });
 
   it('addSkillDialogBegin', async () => {
-    await act(async () => {});
+    const onComplete = () => {};
+    await act(async () => {
+      dispatcher.addSkillDialogBegin(onComplete);
+    });
+    expect(renderedComponent.current.showAddSkillDialogModal).toBe(true);
+    expect(renderedComponent.current.onAddSkillDialogComplete).toBe(onComplete);
   });
 
   it('addSkillDialogCancel', async () => {
-    await act(async () => {});
+    await act(async () => {
+      dispatcher.addSkillDialogCancel();
+    });
+    expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
+    expect(renderedComponent.current.onAddSkillDialogComplete).toBe(undefined);
   });
 
-  it('addSkillDialogSuccess', async () => {
-    await act(async () => {});
+  describe('addSkillDialogSuccess', () => {
+    it('with a function in onAddSkillDialogComplete', async () => {
+      await act(async () => {
+        dispatcher.addSkillDialogBegin(mockDialogComplete);
+        dispatcher.addSkillDialogSuccess();
+      });
+      expect(mockDialogComplete).toHaveBeenCalledWith(null);
+      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
+      expect(renderedComponent.current.onAddSkillDialogComplete).toBe(undefined);
+    });
+
+    it('with nothing in onAddSkillDialogComplete', async () => {
+      await act(async () => {
+        dispatcher.addSkillDialogCancel();
+        dispatcher.addSkillDialogSuccess();
+      });
+      expect(mockDialogComplete).not.toHaveBeenCalled();
+      expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
+      expect(renderedComponent.current.onAddSkillDialogComplete).toBe(undefined);
+    });
   });
 
   it('displayManifestModal', async () => {
-    await act(async () => {});
+    await act(async () => {
+      dispatcher.displayManifestModal('foo');
+    });
+    expect(renderedComponent.current.displaySkillManifest).toEqual('foo');
   });
 
   it('dismissManifestModal', async () => {
-    await act(async () => {});
+    await act(async () => {
+      dispatcher.dismissManifestModal();
+    });
+    expect(renderedComponent.current.displaySkillManifest).toBeUndefined();
   });
 });
