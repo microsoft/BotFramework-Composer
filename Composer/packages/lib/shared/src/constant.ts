@@ -6,6 +6,7 @@ export const SensitiveProperties = [
   'luis.authoringKey',
   'luis.endpointKey',
   'qna.subscriptKey',
+  'qna.endpointKey',
 ];
 export const FieldNames = {
   Events: 'triggers',
