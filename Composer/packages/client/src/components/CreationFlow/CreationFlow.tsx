@@ -11,9 +11,9 @@ import { CreationFlowStatus } from '../../constants';
 import { StoreContext } from '../../store';
 import Home from '../../pages/home/Home';
 
-import { CreateOptions } from './CreateOptions/CreateOptions';
-import { OpenProject } from './OpenProject/OpenProject';
-import DefineConversation from './DefineConversation/DefineConversation';
+import { CreateOptions } from './CreateOptions';
+import { OpenProject } from './OpenProject';
+import DefineConversation from './DefineConversation';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 

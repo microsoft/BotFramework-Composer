@@ -2,32 +2,28 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { FC, ReactNode } from 'react';
 import { TextDiv } from '@bfc/ui-shared';
 
-import { StandardNodeWidth, HeaderHeight, StandardSectionHeight } from '../../constants/ElementSizes';
+import { StandardNodeWidth } from '../../constants/ElementSizes';
 import { ObiColors } from '../../constants/ElementColors';
 import { ArrowLine } from '../../components/ArrowLine';
 
-const containerCSS = css`
-  font-size: 12px;
-  cursor: pointer;
-  overflow: hidden;
-  background-color: white;
-  border-radius: 2px 2px 0 0;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const fullWidthSection = css`
-  width: 100%;
-  box-sizing: border-box;
-`;
+import {
+  HeaderCSS,
+  BodyCSS,
+  FooterCSS,
+  SeparateLineCSS,
+  CardContainerCSS,
+  DisabledCardContainerCSS,
+} from './CardTemplateStyle';
 
 export interface CardTemplateProps {
   header: ReactNode;
   body?: ReactNode;
   footer?: ReactNode;
+  disabled?: boolean;
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onClickHeader?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onClickBody?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -38,61 +34,37 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   header,
   body,
   footer,
+  disabled,
   onClick,
   onClickHeader,
   onClickBody,
   onClickFooter,
 }) => {
+  const headerCSS = HeaderCSS;
+  const bodyCSS = BodyCSS;
+  const footerCSS = FooterCSS;
+  const containerCSS = disabled ? DisabledCardContainerCSS : CardContainerCSS;
+
   const renderHeader = (header: ReactNode) => (
-    <div
-      className="CardNode__Header"
-      css={css`
-        ${fullWidthSection};
-        height: ${HeaderHeight}px;
-      `}
-      onClick={onClickHeader}
-    >
+    <div className="CardNode__Header" css={headerCSS} onClick={onClickHeader}>
       {header}
     </div>
   );
 
   const renderBody = (body: ReactNode) => (
-    <div
-      className="CardNode__Body"
-      css={css`
-        ${fullWidthSection};
-        min-height: ${StandardSectionHeight}px;
-        padding: 7px 8px;
-      `}
-      onClick={onClickBody}
-    >
+    <div className="CardNode__Body" css={bodyCSS} onClick={onClickBody}>
       <TextDiv css={{ width: '100%' }}>{body}</TextDiv>
     </div>
   );
 
   const renderFooter = (footer: ReactNode) => (
-    <div
-      className="CardNode__Footer"
-      css={css`
-        ${fullWidthSection};
-        min-height: ${StandardSectionHeight}px;
-        padding: 8px 8px;
-      `}
-      onClick={onClickFooter}
-    >
+    <div className="CardNode__Footer" css={footerCSS} onClick={onClickFooter}>
       <TextDiv css={{ width: '100%' }}>{footer}</TextDiv>
     </div>
   );
 
   const renderSeparateline = () => (
-    <div
-      className="Separator"
-      css={css`
-        display: block;
-        height: 0px;
-        overflow: visible;
-      `}
-    >
+    <div className="Separator" css={SeparateLineCSS}>
       <ArrowLine arrowsize={8} color={ObiColors.AzureGray3} width={StandardNodeWidth} />
     </div>
   );
@@ -103,11 +75,7 @@ export const CardTemplate: FC<CardTemplateProps> = ({
   return (
     <div
       className="CardNode"
-      css={css`
-        ${containerCSS};
-        width: ${StandardNodeWidth}px;
-        min-height: ${HeaderHeight}px;
-      `}
+      css={containerCSS}
       onClick={
         onClick
           ? (e) => {
