@@ -13,7 +13,7 @@ import { RouteComponentProps } from '@reach/router';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
-import { LoadingSpinner } from '../../../components/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { StoreContext } from '../../../store';
 
 import { EjectModal } from './ejectModal';

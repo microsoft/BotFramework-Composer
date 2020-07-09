@@ -5,7 +5,7 @@
 import { jsx } from '@emotion/core';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
-import { LoadingSpinner } from '../../../components/LoadingSpinner/LoadingSpinner';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 import { modalControlGroup } from './style';
 
