@@ -37,7 +37,7 @@ export const dialogsDispatcher = () => {
 
     const { parse } = lgIndexer;
     const lgImportresolver = importResolverGenerator(lgFiles, '.lg');
-    const lgFile = { id, content, ...parse(content, id, lgImportresolver) };
+    const lgFile = parse(content, id, lgImportresolver);
     set(lgFilesState, [...lgFiles, lgFile]);
   };
 

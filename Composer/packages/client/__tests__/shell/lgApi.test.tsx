@@ -76,12 +76,7 @@ describe('use lgApi hooks', () => {
     result.current.updateLgTemplate.flush();
     expect(updateLgTemplateMock).toBeCalledTimes(1);
     const arg = {
-      file: {
-        content: 'test',
-        id: 'test.en-us',
-        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
-      },
-      projectId: 'test',
+      id: 'test.en-us',
       template: {
         body: 'update',
         name: 'bar',
@@ -97,13 +92,8 @@ describe('use lgApi hooks', () => {
 
     expect(copyLgTemplateMock).toBeCalledTimes(1);
     const arg = {
-      file: {
-        content: 'test',
-        id: 'test.en-us',
-        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
-      },
+      id: 'test.en-us',
       fromTemplateName: 'from',
-      projectId: 'test',
       toTemplateName: 'to',
     };
     expect(copyLgTemplateMock).toBeCalledWith(arg);
@@ -115,12 +105,7 @@ describe('use lgApi hooks', () => {
     expect(removeLgTemplateMock).toBeCalledTimes(1);
 
     const arg = {
-      file: {
-        content: 'test',
-        id: 'test.en-us',
-        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
-      },
-      projectId: 'test',
+      id: 'test.en-us',
       templateName: 'bar',
     };
     expect(removeLgTemplateMock).toBeCalledWith(arg);
@@ -131,12 +116,7 @@ describe('use lgApi hooks', () => {
 
     expect(removeLgTemplatesMock).toBeCalledTimes(1);
     const arg = {
-      file: {
-        content: 'test',
-        id: 'test.en-us',
-        templates: [{ body: '- ${add(1,2)}', name: 'bar' }],
-      },
-      projectId: 'test',
+      id: 'test.en-us',
       templateNames: ['bar'],
     };
     expect(removeLgTemplatesMock).toBeCalledWith(arg);
