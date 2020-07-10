@@ -13,7 +13,6 @@ import { navigationDispatcher } from './navigation';
 import { publisherDispatcher } from './publisher';
 import { settingsDispatcher } from './setting';
 import { skillDispatcher } from './skill';
-import { ejectDispatcher } from './eject';
 import { userDispatcher } from './user';
 
 const createDispatchers = () => {
@@ -30,7 +29,6 @@ const createDispatchers = () => {
     ...publisherDispatcher(),
     ...settingsDispatcher(),
     ...skillDispatcher(),
-    ...ejectDispatcher(),
     ...userDispatcher(),
   };
 };
