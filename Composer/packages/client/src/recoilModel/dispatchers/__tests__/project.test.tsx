@@ -5,6 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { act, RenderHookResult, HookResult } from '@bfc/test-utils/lib/hooks';
 import { useRecoilState } from 'recoil';
 
+import httpClient from '../../../utils/httpUtil';
 import { projectDispatcher } from '../project';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import {
@@ -29,9 +30,9 @@ import {
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 
-import mockProjectResponse from './__mocks__/mockProjectResponse.json';
+import mockProjectResponse from './mocks/mockProjectResponse.json';
 
-let httpMocks;
+// let httpMocks;
 let navigateTo;
 
 jest.mock('../../../utils/navigation', () => {
@@ -42,18 +43,7 @@ jest.mock('../../../utils/navigation', () => {
   };
 });
 
-jest.mock('axios', () => {
-  const mockedVal = {
-    get: jest.fn(),
-    put: jest.fn(),
-    post: jest.fn(),
-    delete: jest.fn(),
-  };
-  httpMocks = mockedVal;
-  return {
-    create: jest.fn(() => mockedVal),
-  };
-});
+jest.mock('../../../utils/httpUtil');
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
@@ -139,7 +129,7 @@ describe('Project dispatcher', () => {
 
   it('should open bot project', async () => {
     let result;
-    httpMocks.put.mockResolvedValueOnce({
+    (httpClient.put as jest.Mock).mockResolvedValueOnce({
       data: mockProjectResponse,
     });
     await act(async () => {
@@ -165,7 +155,7 @@ describe('Project dispatcher', () => {
     const errorObj = {
       data: 'Project does not exist in cache',
     };
-    httpMocks.put.mockRejectedValueOnce(errorObj);
+    (httpClient.put as jest.Mock).mockRejectedValueOnce(errorObj);
 
     await act(async () => {
       renderedComponent.current.setRecentProjects([
@@ -183,9 +173,7 @@ describe('Project dispatcher', () => {
 
   it('should fetch recent projects', async () => {
     const recentProjects = [{ path: '../test/empty-bot1' }, { path: '../test/empty-bot2' }];
-    httpMocks.get.mockResolvedValueOnce({
-      data: recentProjects,
-    });
+    (httpClient.get as jest.Mock).mockResolvedValue({ data: recentProjects });
     await act(async () => {
       await dispatcher.fetchRecentProjects();
     });
