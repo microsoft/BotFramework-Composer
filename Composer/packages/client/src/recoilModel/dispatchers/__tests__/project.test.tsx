@@ -173,17 +173,30 @@ describe('Project dispatcher', () => {
       data: 'Project does not exist in cache',
     };
     httpMocks.put.mockRejectedValueOnce(errorObj);
-    renderedComponent.current.setRecentProjects([
-      {
-        path: '../test/empty-bot',
-      },
-    ]);
+
     await act(async () => {
+      renderedComponent.current.setRecentProjects([
+        {
+          path: '../test/empty-bot',
+        },
+      ]);
       await dispatcher.openBotProject('../test/empty-bot', 'default');
-      expect(renderedComponent.current.botOpening).toBeFalsy();
     });
+    expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.appError).toEqual(errorObj);
     expect(renderedComponent.current.recentProjects.length).toBe(0);
     expect(navigateTo).not.toHaveBeenCalled();
+  });
+
+  it('should fetch recent projects', async () => {
+    const recentProjects = [{ path: '../test/empty-bot1' }, { path: '../test/empty-bot2' }];
+    httpMocks.get.mockResolvedValueOnce({
+      data: recentProjects,
+    });
+    await act(async () => {
+      await dispatcher.fetchRecentProjects();
+    });
+
+    expect(renderedComponent.current.recentProjects).toEqual(recentProjects);
   });
 });
