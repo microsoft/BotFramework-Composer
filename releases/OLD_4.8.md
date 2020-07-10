@@ -121,11 +121,11 @@
 
 - chore: update bug issue template to create correct label ([#2303](https://github.com/microsoft/BotFramework-Composer/pull/2303)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
 - chore: change templates to use $type over $kind ([#2302](https://github.com/microsoft/BotFramework-Composer/pull/2302)) ([@cwhitten](https://github.com/cwhitten))
-- chore: merge stable into master ([#2223](https://github.com/microsoft/BotFramework-Composer/pull/2223)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: merge stable into main ([#2223](https://github.com/microsoft/BotFramework-Composer/pull/2223)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
 - chore: deploy to publish ([#2227](https://github.com/microsoft/BotFramework-Composer/pull/2227)) ([@cwhitten](https://github.com/cwhitten))
 - ci: add a11y pr title prefix for accessibility prs ([#2171](https://github.com/microsoft/BotFramework-Composer/pull/2171)) ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
 - docs: update docs to fix LU file format link ([#2071](https://github.com/microsoft/BotFramework-Composer/pull/2071)) ([@vishwacsena](https://github.com/vishwacsena))
-- chore: merge stable release into master ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: merge stable release into main ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
 - docs: clarify setup ([#2145](https://github.com/microsoft/BotFramework-Composer/pull/2145)) ([@DaraOladapo](https://github.com/DaraOladapo))
 - docs: update dotnet requirement in setup docs ([#2160](https://github.com/microsoft/BotFramework-Composer/pull/2160)) ([@vkacherov](https://github.com/vkacherov))
 - samples: Update HttpRequest sample ([#2161](https://github.com/microsoft/BotFramework-Composer/pull/2161)) ([@luhan2017](https://github.com/luhan2017))
