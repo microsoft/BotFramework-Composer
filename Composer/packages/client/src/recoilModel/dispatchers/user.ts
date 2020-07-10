@@ -75,8 +75,12 @@ export const userDispatcher = () => {
           ...currentSettings,
         };
         for (const key in settings) {
-          if (newSettings[key]) {
-            newSettings[key] = { ...newSettings[key], ...settings[key] };
+          if (newSettings[key] != null) {
+            if (typeof newSettings[key] === 'object') {
+              newSettings[key] = { ...newSettings[key], ...settings[key] };
+            } else {
+              newSettings[key] = settings[key];
+            }
           }
         }
         return newSettings;
