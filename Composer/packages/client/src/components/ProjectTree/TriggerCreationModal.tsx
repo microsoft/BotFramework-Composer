@@ -20,7 +20,7 @@ import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import get from 'lodash/get';
 import { FontWeights } from '@uifabric/styling';
-import { FontSizes } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
 import { useStoreContext } from '../../hooks/useStoreContext';
 import { addIntent } from '../../utils/luUtil';
