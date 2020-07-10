@@ -13,7 +13,7 @@ export const topLinks = (projectId: string) => {
       disabled: false,
     },
     {
-      to: `/bot/${projectId}/dialogs`,
+      to: `/bot/${projectId}/dialogs/main`,
       iconName: 'SplitObject',
       labelName: formatMessage('Design'),
       exact: false,
