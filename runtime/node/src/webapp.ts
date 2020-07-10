@@ -16,7 +16,7 @@ import { BotSettings } from "./shared/settings";
 const server = restify.createServer();
 const argv = require("minimist")(process.argv.slice(2));
 // prefer the argv port --port=XXXX over process.env because the parent Composer app uses that.
-const port = argv.port || process.env.port || process.env.PORT || 3978;
+const port = argv.port || process.env.port || process.env.PORT || 3979;
 server.listen(port, (): void => {
   console.log(
     `\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`

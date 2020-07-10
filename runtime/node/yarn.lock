@@ -4,42 +4,16 @@
 
 "@azure/cognitiveservices-luis-runtime@2.0.0":
   version "2.0.0"
-  resolved "https://registry.npmjs.org/@azure/cognitiveservices-luis-runtime/-/cognitiveservices-luis-runtime-2.0.0.tgz#97686f2897ee2e3c2f8d6ba1aed6b98757a10b98"
-  integrity sha512-NZuqxiwpn8iYM76/QDIBDGq1jJ+YHiwS0S/yprAMeaaQgu1S5VtVhWDbTrZl+AfaqCn6iDpRewI7EKRv1GJx0g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@azure/cognitiveservices-luis-runtime/-/@azure/cognitiveservices-luis-runtime-2.0.0.tgz#97686f2897ee2e3c2f8d6ba1aed6b98757a10b98"
+  integrity sha1-l2hvKJfuLjwvjWuhrta5h1ehC5g=
   dependencies:
     "@azure/ms-rest-js" "^1.6.0"
     tslib "^1.9.3"
 
-"@azure/ms-rest-js@1.2.6":
-  version "1.2.6"
-  resolved "https://registry.npmjs.org/@azure/ms-rest-js/-/ms-rest-js-1.2.6.tgz#2ebd4f922677f31437c82f4f626cec9def4d32cd"
-  integrity sha512-8cmDpxsQjVdveJwYKtNnkJorxEORLYJu9UHaUvLZA6yHExzDeISHAcSVWE0J05+VkJtqheVHF17M+2ro18Cdnw==
-  dependencies:
-    axios "^0.18.0"
-    form-data "^2.3.2"
-    tough-cookie "^2.4.3"
-    tslib "^1.9.2"
-    uuid "^3.2.1"
-    xml2js "^0.4.19"
-
-"@azure/ms-rest-js@1.8.13":
-  version "1.8.13"
-  resolved "https://registry.npmjs.org/@azure/ms-rest-js/-/ms-rest-js-1.8.13.tgz#ed0cd86469697378cd39d79d5589e877a3bc87a6"
-  integrity sha512-jAa6Y2XrvwbEqkaEXDHK+ReNo0WnCPS+LgQ1dRAJUUNxK4CghF5u+SXsVtPENritilVE7FVteqsLOtlhTk+haA==
-  dependencies:
-    "@types/tunnel" "0.0.0"
-    axios "^0.19.0"
-    form-data "^2.3.2"
-    tough-cookie "^2.4.3"
-    tslib "^1.9.2"
-    tunnel "0.0.6"
-    uuid "^3.2.1"
-    xml2js "^0.4.19"
-
-"@azure/ms-rest-js@^1.6.0":
+"@azure/ms-rest-js@1.8.15", "@azure/ms-rest-js@^1.6.0":
   version "1.8.15"
-  resolved "https://registry.npmjs.org/@azure/ms-rest-js/-/ms-rest-js-1.8.15.tgz#4267b6b8c00d85301791fe0cf347e0455a807338"
-  integrity sha512-kIB71V3DcrA4iysBbOsYcxd4WWlOE7OFtCUYNfflPODM0lbIR23A236QeTn5iAeYwcHmMjR/TAKp5KQQh/WqoQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@azure/ms-rest-js/-/@azure/ms-rest-js-1.8.15.tgz#4267b6b8c00d85301791fe0cf347e0455a807338"
+  integrity sha1-Qme2uMANhTAXkf4M80fgRVqAczg=
   dependencies:
     "@types/tunnel" "0.0.0"
     axios "^0.19.0"
@@ -52,21 +26,21 @@
 
 "@microsoft/recognizers-text-choice@1.1.4", "@microsoft/recognizers-text-choice@~1.1.4":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@microsoft/recognizers-text-choice/-/recognizers-text-choice-1.1.4.tgz#8e9ae8f804ae49bd57dd6bbf227a2ab0e14a9041"
-  integrity sha512-4CddwFe4RVhZeJgW65ocBrEdeukBMghK8pgI0K0Qy2eA5ysPZQpeZ7BGSDz5QMQei5LPY+QaAQ3CHU+ORHoO7A==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-choice/-/@microsoft/recognizers-text-choice-1.1.4.tgz#8e9ae8f804ae49bd57dd6bbf227a2ab0e14a9041"
+  integrity sha1-jpro+ASuSb1X3Wu/InoqsOFKkEE=
   dependencies:
     "@microsoft/recognizers-text" "~1.1.4"
     grapheme-splitter "^1.0.2"
 
 "@microsoft/recognizers-text-data-types-timex-expression@1.1.4":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@microsoft/recognizers-text-data-types-timex-expression/-/recognizers-text-data-types-timex-expression-1.1.4.tgz#623453ae65e8df212d8156f6a314675c30696c1d"
-  integrity sha512-2vICaEJfV9EpaDKs5P1PLAEs+WpNqrtpkl7CLsmc5gKmxgpQtsojG4tk6km5JRKg1mYuLV5ZzJ/65oOEeyTMvQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-data-types-timex-expression/-/@microsoft/recognizers-text-data-types-timex-expression-1.1.4.tgz#623453ae65e8df212d8156f6a314675c30696c1d"
+  integrity sha1-YjRTrmXo3yEtgVb2oxRnXDBpbB0=
 
 "@microsoft/recognizers-text-date-time@1.1.4", "@microsoft/recognizers-text-date-time@~1.1.4":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@microsoft/recognizers-text-date-time/-/recognizers-text-date-time-1.1.4.tgz#d3ccddbc9b9f81bfa564df5b957dbdd740036425"
-  integrity sha512-leMnjN+KYNwNvRD5T4G0ORUzkjlek/BBZDvQIjAujtyrd/pkViUnuouWIPkFT/dbSOxXML8et54CSk2KfHiWIA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-date-time/-/@microsoft/recognizers-text-date-time-1.1.4.tgz#d3ccddbc9b9f81bfa564df5b957dbdd740036425"
+  integrity sha1-08zdvJufgb+lZN9blX2910ADZCU=
   dependencies:
     "@microsoft/recognizers-text" "~1.1.4"
     "@microsoft/recognizers-text-number" "~1.1.4"
@@ -76,8 +50,8 @@
 
 "@microsoft/recognizers-text-number-with-unit@~1.1.4":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@microsoft/recognizers-text-number-with-unit/-/recognizers-text-number-with-unit-1.1.4.tgz#a7f2614d419adb2fea99e5c324151ea455262aa8"
-  integrity sha512-zl+CfmfWK0x/x+iSgaBAevKTYO0F4+z7SYHAHztaaaGuX8FERw2jmUjSgVetm5KA3EveyCx0XYGU1mRNY8p7Eg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-number-with-unit/-/@microsoft/recognizers-text-number-with-unit-1.1.4.tgz#a7f2614d419adb2fea99e5c324151ea455262aa8"
+  integrity sha1-p/JhTUGa2y/qmeXDJBUepFUmKqg=
   dependencies:
     "@microsoft/recognizers-text" "~1.1.4"
     "@microsoft/recognizers-text-number" "~1.1.4"
@@ -87,8 +61,8 @@
 
 "@microsoft/recognizers-text-number@1.1.4", "@microsoft/recognizers-text-number@~1.1.4":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@microsoft/recognizers-text-number/-/recognizers-text-number-1.1.4.tgz#1fbe0473322e6292bb93f9af86c6ca5ce05212d9"
-  integrity sha512-6EmlR+HR+eJBIX7sQby1vs6LJB64wxLowHaGpIU9OCXFvZ5Nb0QT8qh10rC40v3Mtrz4DpScXfSXr9tWkIO5MQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-number/-/@microsoft/recognizers-text-number-1.1.4.tgz#1fbe0473322e6292bb93f9af86c6ca5ce05212d9"
+  integrity sha1-H74EczIuYpK7k/mvhsbKXOBSEtk=
   dependencies:
     "@microsoft/recognizers-text" "~1.1.4"
     bignumber.js "^7.2.1"
@@ -98,16 +72,16 @@
 
 "@microsoft/recognizers-text-sequence@~1.1.4":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@microsoft/recognizers-text-sequence/-/recognizers-text-sequence-1.1.4.tgz#339f38292ba207cd78ee27defeea1ab79206fa5d"
-  integrity sha512-rb5j8/aE7HSOdIxaVfCGFrj0wWPpSq0CuykFg/A/iJNPP+FnAU71bgP5HexrwQcpCsDinauisX7u0DKIChrHRA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-sequence/-/@microsoft/recognizers-text-sequence-1.1.4.tgz#339f38292ba207cd78ee27defeea1ab79206fa5d"
+  integrity sha1-M584KSuiB8147ife/uoat5IG+l0=
   dependencies:
     "@microsoft/recognizers-text" "~1.1.4"
     grapheme-splitter "^1.0.2"
 
 "@microsoft/recognizers-text-suite@1.1.4":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@microsoft/recognizers-text-suite/-/recognizers-text-suite-1.1.4.tgz#8adb2128ed3aa60a042be008d4e3449d7128f1df"
-  integrity sha512-hNIaR4M2G0nNeI9WZxt9C0KYh/1vhjeKzX5Ds8XDdT0pxF7zwCSo19WNcPjrVK6aCOeZTw/ULofsAjdu9gSkcA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text-suite/-/@microsoft/recognizers-text-suite-1.1.4.tgz#8adb2128ed3aa60a042be008d4e3449d7128f1df"
+  integrity sha1-itshKO06pgoEK+AI1ONEnXEo8d8=
   dependencies:
     "@microsoft/recognizers-text" "~1.1.4"
     "@microsoft/recognizers-text-choice" "~1.1.4"
@@ -118,84 +92,84 @@
 
 "@microsoft/recognizers-text@~1.1.4":
   version "1.1.4"
-  resolved "https://registry.npmjs.org/@microsoft/recognizers-text/-/recognizers-text-1.1.4.tgz#264530f748b2cad3fac54d53538f88ad2bf99b7e"
-  integrity sha512-hlSVXcaX5i8JcjuUJpVxmy2Z/GxvFXarF0KVySCFop57wNEnrLWMHe4I4DjP866G19VyIKRw+vPA32pkGhZgTg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@microsoft/recognizers-text/-/@microsoft/recognizers-text-1.1.4.tgz#264530f748b2cad3fac54d53538f88ad2bf99b7e"
+  integrity sha1-JkUw90iyytP6xU1TU4+IrSv5m34=
 
-"@types/atob@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.npmjs.org/@types/atob/-/atob-2.1.2.tgz#157eb0cc46264a8c55f2273a836c7a1a644fb820"
-  integrity sha512-8GAYQ1jDRUQkSpHzJUqXwAkYFOxuWAOGLhIR4aPd/Y/yL12Q/9m7LsKpHKlfKdNE/362Hc9wPI1Yh6opDfxVJg==
+"@types/atob-lite@^2.0.0":
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/atob-lite/-/@types/atob-lite-2.0.0.tgz#bd44ca72e65a58477e81309a66e401524f187053"
+  integrity sha1-vUTKcuZaWEd+gTCaZuQBUk8YcFM=
 
 "@types/jsonpath@^0.2.0":
   version "0.2.0"
-  resolved "https://registry.npmjs.org/@types/jsonpath/-/jsonpath-0.2.0.tgz#13c62db22a34d9c411364fac79fd374d63445aa1"
-  integrity sha512-v7qlPA0VpKUlEdhghbDqRoKMxFB3h3Ch688TApBJ6v+XLDdvWCGLJIYiPKGZnS6MAOie+IorCfNYVHOPIHSWwQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/jsonpath/-/@types/jsonpath-0.2.0.tgz#13c62db22a34d9c411364fac79fd374d63445aa1"
+  integrity sha1-E8Ytsio02cQRNk+sef03TWNEWqE=
 
 "@types/jsonwebtoken@7.2.8":
   version "7.2.8"
-  resolved "https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-7.2.8.tgz#8d199dab4ddb5bba3234f8311b804d2027af2b3a"
-  integrity sha512-XENN3YzEB8D6TiUww0O8SRznzy1v+77lH7UmuN54xq/IHIsyWjWOzZuFFTtoiRuaE782uAoRwBe/wwow+vQXZw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/jsonwebtoken/-/@types/jsonwebtoken-7.2.8.tgz#8d199dab4ddb5bba3234f8311b804d2027af2b3a"
+  integrity sha1-jRmdq03bW7oyNPgxG4BNICevKzo=
   dependencies:
     "@types/node" "*"
 
 "@types/lru-cache@^5.1.0":
   version "5.1.0"
-  resolved "https://registry.npmjs.org/@types/lru-cache/-/lru-cache-5.1.0.tgz#57f228f2b80c046b4a1bd5cac031f81f207f4f03"
-  integrity sha512-RaE0B+14ToE4l6UqdarKPnXwVDuigfFv+5j9Dze/Nqr23yyuqdNvzcZi3xB+3Agvi5R4EOgAksfv3lXX4vBt9w==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/lru-cache/-/@types/lru-cache-5.1.0.tgz#57f228f2b80c046b4a1bd5cac031f81f207f4f03"
+  integrity sha1-V/Io8rgMBGtKG9XKwDH4HyB/TwM=
 
 "@types/moment-timezone@^0.5.12":
   version "0.5.13"
-  resolved "https://registry.npmjs.org/@types/moment-timezone/-/moment-timezone-0.5.13.tgz#0317ccc91eb4c7f4901704166166395c39276528"
-  integrity sha512-SWk1qM8DRssS5YR9L4eEX7WUhK/wc96aIr4nMa6p0kTk9YhGGOJjECVhIdPEj13fvJw72Xun69gScXSZ/UmcPg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/moment-timezone/-/@types/moment-timezone-0.5.13.tgz#0317ccc91eb4c7f4901704166166395c39276528"
+  integrity sha1-AxfMyR60x/SQFwQWYWY5XDknZSg=
   dependencies:
     moment ">=2.14.0"
 
 "@types/node-fetch@^2.5.3":
   version "2.5.7"
-  resolved "https://registry.npmjs.org/@types/node-fetch/-/node-fetch-2.5.7.tgz#20a2afffa882ab04d44ca786449a276f9f6bbf3c"
-  integrity sha512-o2WVNf5UhWRkxlf6eq+jMZDu7kjgpgJfl4xVNlvryc95O/6F2ld8ztKX+qu+Rjyet93WAWm5LjeX9H5FGkODvw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/node-fetch/-/@types/node-fetch-2.5.7.tgz#20a2afffa882ab04d44ca786449a276f9f6bbf3c"
+  integrity sha1-IKKv/6iCqwTUTKeGRJonb59rvzw=
   dependencies:
     "@types/node" "*"
     form-data "^3.0.0"
 
 "@types/node@*":
-  version "14.0.13"
-  resolved "https://registry.npmjs.org/@types/node/-/node-14.0.13.tgz#ee1128e881b874c371374c1f72201893616417c9"
-  integrity sha512-rouEWBImiRaSJsVA+ITTFM6ZxibuAlTuNOCyxVbwreu6k6+ujs7DfnU9o+PShFhET78pMBl3eH+AGSI5eOTkPA==
+  version "14.0.20"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/node/-/@types/node-14.0.20.tgz#0da05cddbc761e1fa98af88a17244c8c1ff37231"
+  integrity sha1-DaBc3bx2Hh+piviKFyRMjB/zcjE=
 
 "@types/node@^10.12.18":
   version "10.17.26"
-  resolved "https://registry.npmjs.org/@types/node/-/node-10.17.26.tgz#a8a119960bff16b823be4c617da028570779bcfd"
-  integrity sha512-myMwkO2Cr82kirHY8uknNRHEVtn0wV3DTQfkrjx17jmkstDRZ24gNUdl8AHXVyVclTYI/bNjgTPTAWvWLqXqkw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/node/-/@types/node-10.17.26.tgz#a8a119960bff16b823be4c617da028570779bcfd"
+  integrity sha1-qKEZlgv/FrgjvkxhfaAoVwd5vP0=
 
 "@types/node@^8.0.47":
   version "8.10.61"
-  resolved "https://registry.npmjs.org/@types/node/-/node-8.10.61.tgz#d299136ce54bcaf1abaa4a487f9e4bedf6b0d393"
-  integrity sha512-l+zSbvT8TPRaCxL1l9cwHCb0tSqGAGcjPJFItGGYat5oCTiq1uQQKYg5m7AF1mgnEBzFXGLJ2LRmNjtreRX76Q==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/node/-/@types/node-8.10.61.tgz#d299136ce54bcaf1abaa4a487f9e4bedf6b0d393"
+  integrity sha1-0pkTbOVLyvGrqkpIf55L7faw05M=
 
 "@types/tunnel@0.0.0":
   version "0.0.0"
-  resolved "https://registry.npmjs.org/@types/tunnel/-/tunnel-0.0.0.tgz#c2a42943ee63c90652a5557b8c4e56cda77f944e"
-  integrity sha512-FGDp0iBRiBdPjOgjJmn1NH0KDLN+Z8fRmo+9J7XGBhubq1DPrGrbmG4UTlGzrpbCpesMqD0sWkzi27EYkOMHyg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/tunnel/-/@types/tunnel-0.0.0.tgz#c2a42943ee63c90652a5557b8c4e56cda77f944e"
+  integrity sha1-wqQpQ+5jyQZSpVV7jE5Wzad/lE4=
   dependencies:
     "@types/node" "*"
 
 "@types/ws@^6.0.3":
   version "6.0.4"
-  resolved "https://registry.npmjs.org/@types/ws/-/ws-6.0.4.tgz#7797707c8acce8f76d8c34b370d4645b70421ff1"
-  integrity sha512-PpPrX7SZW9re6+Ha8ojZG4Se8AZXgf0GK6zmfqEuCsY49LFDNXO3SByp44X3dFEqtB73lkCDAdUazhAjVPiNwg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/ws/-/@types/ws-6.0.4.tgz#7797707c8acce8f76d8c34b370d4645b70421ff1"
+  integrity sha1-d5dwfIrM6PdtjDSzcNRkW3BCH/E=
   dependencies:
     "@types/node" "*"
 
 "@types/xmldom@^0.1.29":
-  version "0.1.29"
-  resolved "https://registry.npmjs.org/@types/xmldom/-/xmldom-0.1.29.tgz#c4428b0ca86d3b881475726fd94980b38a27c381"
-  integrity sha1-xEKLDKhtO4gUdXJv2UmAs4onw4E=
+  version "0.1.30"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/@types/xmldom/-/@types/xmldom-0.1.30.tgz#d36d9a7d64af4693d3b18d5dc02ce432a95be12e"
+  integrity sha1-022afWSvRpPTsY1dwCzkMqlb4S4=
 
 adal-node@0.2.1:
   version "0.2.1"
-  resolved "https://registry.npmjs.org/adal-node/-/adal-node-0.2.1.tgz#19e401bd579977448c1a77ce0e5b4c9accdc334e"
-  integrity sha512-C/oasZuTy0NIqh5wPWjG/09XaG+zS7elC8upf1ZVExt9lSRncme4Ejbx8CKYk+wsGgj609y84txtRAXQVvqApg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adal-node/-/adal-node-0.2.1.tgz#19e401bd579977448c1a77ce0e5b4c9accdc334e"
+  integrity sha1-GeQBvVeZd0SMGnfODltMmszcM04=
   dependencies:
     "@types/node" "^8.0.47"
     async "^2.6.3"
@@ -207,18 +181,18 @@ adal-node@0.2.1:
     xmldom ">= 0.1.x"
     xpath.js "~1.1.0"
 
-adaptive-expressions@4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/adaptive-expressions/-/adaptive-expressions-4.9.2.tgz#0a3d278370d301088700210a026677dec63c59f6"
-  integrity sha512-hywLFmj0NwMR2GoIg185p/oSc7hp+fagEwG4/1415fhL+lsbR25E/GS1InCUhWa8JSoyn+0EuneLey+BCGlOiA==
+adaptive-expressions@4.10.0-preview-143946:
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-143946.tgz#6f9845b5ed7b83627714a3f16a3e0b894b61a4ea"
+  integrity sha1-b5hFte17g2J3FKPxaj4LiUthpOo=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
-    "@types/atob" "^2.1.2"
+    "@types/atob-lite" "^2.0.0"
     "@types/lru-cache" "^5.1.0"
     "@types/moment-timezone" "^0.5.12"
     "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.1"
-    atob "^2.1.2"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
     big-integer "^1.6.48"
     jspath "^0.4.0"
     lodash "^4.17.15"
@@ -227,156 +201,146 @@ adaptive-expressions@4.9.2:
     moment-timezone "^0.5.28"
 
 ajv@^6.5.5:
-  version "6.12.2"
-  resolved "https://registry.npmjs.org/ajv/-/ajv-6.12.2.tgz#c629c5eced17baf314437918d2da88c99d5958cd"
-  integrity sha512-k+V+hzjm5q/Mr8ef/1Y9goCmlsK4I6Sm74teeyGvFk1XrOsbsKLjEdrvny42CZ+a8sXbk8KWpY/bDwS+FLL2UQ==
+  version "6.12.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ajv/-/ajv-6.12.3.tgz#18c5af38a111ddeb4f2697bd78d68abc1cabd706"
+  integrity sha1-GMWvOKER3etPJpe9eNaKvByr1wY=
   dependencies:
     fast-deep-equal "^3.1.1"
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-antlr4ts@0.5.0-alpha.1:
-  version "0.5.0-alpha.1"
-  resolved "https://registry.npmjs.org/antlr4ts/-/antlr4ts-0.5.0-alpha.1.tgz#c421d8269523356c42c5533603aec0410b423806"
-  integrity sha512-LU5FLWq2fUwg2cTL/DeIL16ucUm5jv6SNVFoMjbYLviXAp6p5g1ZzkTAnWiOKX/muEEy0PY78perPj6WUBSQCw==
+antlr4ts@0.5.0-alpha.3:
+  version "0.5.0-alpha.3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/antlr4ts/-/antlr4ts-0.5.0-alpha.3.tgz#fa6d39d88d6b96341a8afef45867af9abcb38766"
+  integrity sha1-+m052I1rljQaiv70WGevmryzh2Y=
 
 asn1@~0.2.3:
   version "0.2.4"
-  resolved "https://registry.npmjs.org/asn1/-/asn1-0.2.4.tgz#8d2475dfab553bb33e77b54e59e880bb8ce23136"
-  integrity sha512-jxwzQpLQjSmWXgwaCZE9Nz+glAG01yF1QnWgbhGwHI5A6FRIEY6IVqtHhIepHqI7/kyEyQEagBC5mBEFlIYvdg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/asn1/-/asn1-0.2.4.tgz#8d2475dfab553bb33e77b54e59e880bb8ce23136"
+  integrity sha1-jSR136tVO7M+d7VOWeiAu4ziMTY=
   dependencies:
     safer-buffer "~2.1.0"
 
 assert-plus@1.0.0, assert-plus@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/assert-plus/-/assert-plus-1.0.0.tgz#f12e0f3c5d77b0b1cdd9146942e4e96c1e4dd525"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/assert-plus/-/assert-plus-1.0.0.tgz#f12e0f3c5d77b0b1cdd9146942e4e96c1e4dd525"
   integrity sha1-8S4PPF13sLHN2RRpQuTpbB5N1SU=
 
 assert@^1.4.1:
   version "1.5.0"
-  resolved "https://registry.npmjs.org/assert/-/assert-1.5.0.tgz#55c109aaf6e0aefdb3dc4b71240c70bf574b18eb"
-  integrity sha512-EDsgawzwoun2CZkCgtxJbv392v4nbk9XDD06zI+kQYoBM/3RBWLlEyJARDOmhAAosBjWACEkKL6S+lIZtcAubA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/assert/-/assert-1.5.0.tgz#55c109aaf6e0aefdb3dc4b71240c70bf574b18eb"
+  integrity sha1-VcEJqvbgrv2z3EtxJAxwv1dLGOs=
   dependencies:
     object-assign "^4.1.1"
     util "0.10.3"
 
 async@^2.6.3:
   version "2.6.3"
-  resolved "https://registry.npmjs.org/async/-/async-2.6.3.tgz#d72625e2344a3656e3a3ad4fa749fa83299d82ff"
-  integrity sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/async/-/async-2.6.3.tgz#d72625e2344a3656e3a3ad4fa749fa83299d82ff"
+  integrity sha1-1yYl4jRKNlbjo61Pp0n6gymdgv8=
   dependencies:
     lodash "^4.17.14"
 
 asynckit@^0.4.0:
   version "0.4.0"
-  resolved "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
-atob@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
-  integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
+atob-lite@^2.0.0:
+  version "2.0.0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/atob-lite/-/atob-lite-2.0.0.tgz#0fef5ad46f1bd7a8502c65727f0367d5ee43d696"
+  integrity sha1-D+9a1G8b16hQLGVyfwNn1e5D1pY=
 
 aws-sign2@~0.7.0:
   version "0.7.0"
-  resolved "https://registry.npmjs.org/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
   integrity sha1-tG6JCTSpWR8tL2+G1+ap8bP+dqg=
 
 aws4@^1.8.0:
   version "1.10.0"
-  resolved "https://registry.npmjs.org/aws4/-/aws4-1.10.0.tgz#a17b3a8ea811060e74d47d306122400ad4497ae2"
-  integrity sha512-3YDiu347mtVtjpyV3u5kVqQLP242c06zwDOgpeRnybmXlYYsLbtTrUBUm8i8srONt+FWobl5aibnU1030PeeuA==
-
-axios@^0.18.0:
-  version "0.18.1"
-  resolved "https://registry.npmjs.org/axios/-/axios-0.18.1.tgz#ff3f0de2e7b5d180e757ad98000f1081b87bcea3"
-  integrity sha512-0BfJq4NSfQXd+SkFdrvFbG7addhYSBA2mQwISr46pD6E5iqkWg02RAs8vyTT/j0RTnoYmeXauBuSv1qKwR179g==
-  dependencies:
-    follow-redirects "1.5.10"
-    is-buffer "^2.0.2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/aws4/-/aws4-1.10.0.tgz#a17b3a8ea811060e74d47d306122400ad4497ae2"
+  integrity sha1-oXs6jqgRBg501H0wYSJACtRJeuI=
 
 axios@^0.19.0:
   version "0.19.2"
-  resolved "https://registry.npmjs.org/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
-  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha1-PqNsXYgY0NX4qKl6bTa4bNwAyyc=
   dependencies:
     follow-redirects "1.5.10"
 
 balanced-match@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
 base64url@^3.0.0:
   version "3.0.1"
-  resolved "https://registry.npmjs.org/base64url/-/base64url-3.0.1.tgz#6399d572e2bc3f90a9a8b22d5dbb0a32d33f788d"
-  integrity sha512-ir1UPr3dkwexU7FdV8qBBbNDRUhMmIekYMFZfi+C/sLNnRESKPl23nB9b2pltqfOQNnGzsDdId90AEtG5tCx4A==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/base64url/-/base64url-3.0.1.tgz#6399d572e2bc3f90a9a8b22d5dbb0a32d33f788d"
+  integrity sha1-Y5nVcuK8P5CpqLItXbsKMtM/eI0=
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.2.tgz#a4301d389b6a43f9b67ff3ca11a3f6637e360e9e"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.2.tgz#a4301d389b6a43f9b67ff3ca11a3f6637e360e9e"
   integrity sha1-pDAdOJtqQ/m2f/PKEaP2Y342Dp4=
   dependencies:
     tweetnacl "^0.14.3"
 
 big-integer@^1.6.48:
   version "1.6.48"
-  resolved "https://registry.npmjs.org/big-integer/-/big-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"
-  integrity sha512-j51egjPa7/i+RdiRuJbPdJ2FIUYYPhvYLjzoYbcMMm62ooO6F94fETG4MTs46zPAF9Brs04OajboA/qTGuz78w==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/big-integer/-/big-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"
+  integrity sha1-j9iL0WMsukocjD49cVnwi7lbS54=
 
 bignumber.js@^7.2.1:
   version "7.2.1"
-  resolved "https://registry.npmjs.org/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
-  integrity sha512-S4XzBk5sMB+Rcb/LNcpzXr57VRTxgAvaAEDAl1AwRx27j00hT84O6OkteE7u8UB3NuaaygCRrEpqox4uDOrbdQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
+  integrity sha1-gMBIdZ2CaACAfEv9Uh5Q7bulel8=
 
-botbuilder-ai@4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/botbuilder-ai/-/botbuilder-ai-4.9.2.tgz#d3c5215b6030f1cf355387d22c289958fdb61f19"
-  integrity sha512-DYbNZo0PMy5zF4avKKhBT3BcbWJTn0vJBUEHxt9FkJHQkkvIgo0sDP7GB9PjdZ5u7UL9GJ00W9kUkkC2+b/64w==
+botbuilder-ai@4.10.0-preview-143946:
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-ai/-/botbuilder-ai-4.10.0-preview-143946.tgz#93cf4fd5d87610586bfc0ed7bc48d77b4a2da25d"
+  integrity sha1-k89P1dh2EFhr/A7XvEjXe0otol0=
   dependencies:
     "@azure/cognitiveservices-luis-runtime" "2.0.0"
-    "@azure/ms-rest-js" "1.8.13"
+    "@azure/ms-rest-js" "1.8.15"
     "@microsoft/recognizers-text-date-time" "1.1.4"
     "@types/node" "^10.12.18"
-    botbuilder-core "4.9.2"
-    botbuilder-dialogs "4.9.2"
-    moment "^2.25.1"
+    botbuilder-core "4.10.0-preview-143946"
+    botbuilder-dialogs "4.10.0-preview-143946"
     node-fetch "^2.3.0"
     url-parse "^1.4.4"
 
-botbuilder-core@4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/botbuilder-core/-/botbuilder-core-4.9.2.tgz#9e305ebdcd7d8231d71ff38e6653e36fbb91c5eb"
-  integrity sha512-1AMalL8SOwnINS16IOPrXGCIrPNeV1BAUubUoe2jeZa30mCfNhXrCPMknKNUne/5xduYPEDSkZq8v3i5cmEwaQ==
+botbuilder-core@4.10.0-preview-143946:
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-core/-/botbuilder-core-4.10.0-preview-143946.tgz#ea1c111ab9d84cb5a58076c507633ffe9364f32f"
+  integrity sha1-6hwRGrnYTLWlgHbFB2M//pNk8y8=
   dependencies:
     assert "^1.4.1"
-    botframework-schema "4.9.2"
+    botframework-schema "4.10.0-preview-143946"
 
-botbuilder-dialogs-adaptive@^4.9.2-preview:
-  version "4.9.2-preview"
-  resolved "https://registry.npmjs.org/botbuilder-dialogs-adaptive/-/botbuilder-dialogs-adaptive-4.9.2-preview.tgz#55d0ce40d7c30efab95bade8f6fb88d6afd105c8"
-  integrity sha512-3c2ByfRXqquxGCV8SNqDTPW+qNACD5Y/TeM6BYn7886unr0xevgTKe45p+LGG+MibV2TTkS/HubK+QHHWdfWAQ==
+"botbuilder-dialogs-adaptive@https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-dialogs-adaptive/-/botbuilder-dialogs-adaptive-4.10.0-preview-143946.tgz":
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-dialogs-adaptive/-/botbuilder-dialogs-adaptive-4.10.0-preview-143946.tgz#fc58a5da10eef659363853e1cc273777a2e9d537"
   dependencies:
     "@microsoft/recognizers-text-suite" "1.1.4"
     "@types/jsonpath" "^0.2.0"
     "@types/node" "^10.12.18"
     "@types/node-fetch" "^2.5.3"
-    adaptive-expressions "4.9.2"
-    botbuilder-ai "4.9.2"
-    botbuilder-core "4.9.2"
-    botbuilder-dialogs "4.9.2"
-    botbuilder-dialogs-declarative "4.9.2-preview"
-    botbuilder-lg "4.9.2"
-    botframework-connector "4.9.2"
-    botframework-schema "4.9.2"
+    adaptive-expressions "4.10.0-preview-143946"
+    botbuilder-ai "4.10.0-preview-143946"
+    botbuilder-core "4.10.0-preview-143946"
+    botbuilder-dialogs "4.10.0-preview-143946"
+    botbuilder-dialogs-declarative "4.10.0-preview-143946"
+    botbuilder-lg "4.10.0-preview-143946"
+    botframework-connector "4.10.0-preview-143946"
+    botframework-schema "4.10.0-preview-143946"
     jsonpath "^1.0.0"
     node-fetch "^2.6.0"
 
-botbuilder-dialogs-declarative@4.9.2-preview, botbuilder-dialogs-declarative@^4.9.2-preview:
-  version "4.9.2-preview"
-  resolved "https://registry.npmjs.org/botbuilder-dialogs-declarative/-/botbuilder-dialogs-declarative-4.9.2-preview.tgz#d1b6db628028c8fa23dfda12d6b0b791a97ab44d"
-  integrity sha512-xqrqJQOwn0qwySWbvHX4Rn2+ANWQM5Yq9gQfqpJEw7Ml+WoGdf/s9t0SvlGqNAKrNFqUUcvP/259COJoKejU5Q==
+botbuilder-dialogs-declarative@4.10.0-preview-143946, "botbuilder-dialogs-declarative@https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-dialogs-declarative/-/botbuilder-dialogs-declarative-4.10.0-preview-143946.tgz":
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-dialogs-declarative/-/botbuilder-dialogs-declarative-4.10.0-preview-143946.tgz#52a4b3991b753c3cca8899dbad2492933c764179"
+  integrity sha1-UqSzmRt1PDzKiJnbrSSSkzx2QXk=
   dependencies:
     "@microsoft/recognizers-text-choice" "1.1.4"
     "@microsoft/recognizers-text-date-time" "1.1.4"
@@ -384,77 +348,75 @@ botbuilder-dialogs-declarative@4.9.2-preview, botbuilder-dialogs-declarative@^4.
     "@microsoft/recognizers-text-suite" "1.1.4"
     "@types/jsonpath" "^0.2.0"
     "@types/node" "^10.12.18"
-    botbuilder-core "4.9.2"
-    botbuilder-dialogs "4.9.2"
-    botframework-connector "4.9.2"
-    botframework-schema "4.9.2"
+    botbuilder-core "4.10.0-preview-143946"
+    botbuilder-dialogs "4.10.0-preview-143946"
+    botframework-connector "4.10.0-preview-143946"
+    botframework-schema "4.10.0-preview-143946"
     jsonpath "^1.0.0"
     node-watch "^0.6.3"
 
-botbuilder-dialogs@4.9.2, botbuilder-dialogs@^4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/botbuilder-dialogs/-/botbuilder-dialogs-4.9.2.tgz#27a8337e8c1fac96959bf24e6f292025e0fc023f"
-  integrity sha512-vXfaAEgphWPT0YZM3pmNeWMnvGXgN7t7ZDu2GvMy+6ZB/iHnKYR36HGtCphl+whWiqP7rcr7lZGneGFDU3Ovjw==
+botbuilder-dialogs@4.10.0-preview-143946, "botbuilder-dialogs@https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-dialogs/-/botbuilder-dialogs-4.10.0-preview-143946.tgz":
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-dialogs/-/botbuilder-dialogs-4.10.0-preview-143946.tgz#26f9e8866081f51128f9975bacf69154f801dab3"
   dependencies:
     "@microsoft/recognizers-text-choice" "1.1.4"
     "@microsoft/recognizers-text-date-time" "1.1.4"
     "@microsoft/recognizers-text-number" "1.1.4"
     "@microsoft/recognizers-text-suite" "1.1.4"
     "@types/node" "^10.12.18"
-    botbuilder-core "4.9.2"
+    botbuilder-core "4.10.0-preview-143946"
     globalize "^1.4.2"
 
-botbuilder-lg@4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/botbuilder-lg/-/botbuilder-lg-4.9.2.tgz#cdeb08ea504f97024b97bc0f488633d888f6ff42"
-  integrity sha512-lHp/zgUWiWjCXguQTl0hzBS++vAgzaSZW4FSZL+oHHhFjMKwcE0GGfqFgayRaYQwKEycdamLXlK38k1XBzs/xw==
+botbuilder-lg@4.10.0-preview-143946:
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-143946.tgz#968e2870ea0375e1e4564ec493b55d9624fbe48e"
+  integrity sha1-lo4ocOoDdeHkVk7Ek7VdliT75I4=
   dependencies:
-    adaptive-expressions "4.9.2"
-    antlr4ts "0.5.0-alpha.1"
+    adaptive-expressions "4.10.0-preview-143946"
+    antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.11"
     path "^0.12.7"
     uuid "^3.3.3"
 
-botbuilder@^4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/botbuilder/-/botbuilder-4.9.2.tgz#20e6cfa6ad299ddcdecba677f515ed75b55e9c60"
-  integrity sha512-V/e9Clg1+hbmLDtuP+yEuBpqh6qyoLKyJEGKnIDHACIjn2jPw5uVFoPcIO9wv1KjifbjlUwEG5Wi68XNjIxZJA==
+"botbuilder@https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder/-/botbuilder-4.10.0-preview-143946.tgz":
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder/-/botbuilder-4.10.0-preview-143946.tgz#e5a68de2bddc199a7417cf2c3b15de3d75c0eaa4"
   dependencies:
-    "@azure/ms-rest-js" "1.2.6"
+    "@azure/ms-rest-js" "1.8.15"
     "@types/node" "^10.12.18"
     axios "^0.19.0"
-    botbuilder-core "4.9.2"
-    botframework-connector "4.9.2"
-    botframework-streaming "4.9.2"
+    botbuilder-core "4.10.0-preview-143946"
+    botframework-connector "4.10.0-preview-143946"
+    botframework-streaming "4.10.0-preview-143946"
     filenamify "^4.1.0"
     fs-extra "^7.0.1"
     moment-timezone "^0.5.28"
 
-botframework-connector@4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/botframework-connector/-/botframework-connector-4.9.2.tgz#392d8d28486b217026f0669fa613425de20eb4d3"
-  integrity sha512-i0XvZ53T9MyUNU1MB4QPklTmqv/W8WgP3d3J3CR7ms/qI6ubxgFVasy6DpON4yepNEoYMDkq2q5lMz+fkwyUzg==
+botframework-connector@4.10.0-preview-143946:
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botframework-connector/-/botframework-connector-4.10.0-preview-143946.tgz#6d3e42e8bc99c412e7f398d87b211db8d1fd05e3"
+  integrity sha1-bT5C6LyZxBLn85jYeyEduNH9BeM=
   dependencies:
-    "@azure/ms-rest-js" "1.2.6"
+    "@azure/ms-rest-js" "1.8.15"
     "@types/jsonwebtoken" "7.2.8"
     "@types/node" "^10.12.18"
     adal-node "0.2.1"
     base64url "^3.0.0"
-    botframework-schema "4.9.2"
+    botframework-schema "4.10.0-preview-143946"
     form-data "^2.3.3"
     jsonwebtoken "8.0.1"
     node-fetch "^2.2.1"
     rsa-pem-from-mod-exp "^0.8.4"
 
-botframework-schema@4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/botframework-schema/-/botframework-schema-4.9.2.tgz#2dbec6fb95b34437fa41eb7354de2a5a35383b2a"
-  integrity sha512-zeZiVvkn8dyYyl6J2pSUrCbBy4ZE3LABg8VcTX2P6Evw3Uj9m9DyILxiJllhHo/hoxU7/3EysDIJ6OXIP4ByEQ==
+botframework-schema@4.10.0-preview-143946:
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botframework-schema/-/botframework-schema-4.10.0-preview-143946.tgz#ff7e8932de4f974b2cce29b4dac50cd966a81826"
+  integrity sha1-/36JMt5Pl0sszim02sUM2WaoGCY=
 
-botframework-streaming@4.9.2:
-  version "4.9.2"
-  resolved "https://registry.npmjs.org/botframework-streaming/-/botframework-streaming-4.9.2.tgz#560e407f5d44ab12897d9706a8823c3e4dac609d"
-  integrity sha512-Vl94e6SnKUp94R1akKpFAUK5kinaKLAAmSBrol/fV8xghtfsZNLMWyVLDYPmstWdemuH5Jccpahb3mgPuEqV8A==
+botframework-streaming@4.10.0-preview-143946:
+  version "4.10.0-preview-143946"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botframework-streaming/-/botframework-streaming-4.10.0-preview-143946.tgz#8703ee8933a58dfcc5da2546fe496ab618376270"
+  integrity sha1-hwPuiTOljfzF2iVG/klqthg3YnA=
   dependencies:
     "@types/ws" "^6.0.3"
     uuid "^3.3.2"
@@ -462,74 +424,74 @@ botframework-streaming@4.9.2:
 
 brace-expansion@^1.1.7:
   version "1.1.11"
-  resolved "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
-  integrity sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
+  integrity sha1-PH/L9SnYcibz0vUrlm/1Jx60Qd0=
   dependencies:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
 buffer-equal-constant-time@1.0.1:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
   integrity sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
 
 bunyan@^1.8.12:
-  version "1.8.12"
-  resolved "https://registry.npmjs.org/bunyan/-/bunyan-1.8.12.tgz#f150f0f6748abdd72aeae84f04403be2ef113797"
-  integrity sha1-8VDw9nSKvdcq6uhPBEA74u8RN5c=
+  version "1.8.14"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/bunyan/-/bunyan-1.8.14.tgz#3d8c1afea7de158a5238c7cb8a66ab6b38dd45b4"
+  integrity sha1-PYwa/qfeFYpSOMfLimarazjdRbQ=
   optionalDependencies:
     dtrace-provider "~0.8"
-    moment "^2.10.6"
+    moment "^2.19.3"
     mv "~2"
     safe-json-stringify "~1"
 
 caseless@~0.12.0:
   version "0.12.0"
-  resolved "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
 cldrjs@^0.5.0:
   version "0.5.1"
-  resolved "https://registry.npmjs.org/cldrjs/-/cldrjs-0.5.1.tgz#b5dc4beae02555634b04b94deb8e22e13ff10319"
-  integrity sha512-xyiP8uAm8K1IhmpDndZLraloW1yqu0L+HYdQ7O1aGPxx9Cr+BMnPANlNhSt++UKfxytL2hd2NPXgTjiy7k43Ew==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/cldrjs/-/cldrjs-0.5.1.tgz#b5dc4beae02555634b04b94deb8e22e13ff10319"
+  integrity sha1-tdxL6uAlVWNLBLlN644i4T/xAxk=
 
 combined-stream@^1.0.6, combined-stream@^1.0.8, combined-stream@~1.0.6:
   version "1.0.8"
-  resolved "https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
-  integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
+  integrity sha1-w9RaizT9cwYxoRCoolIGgrMdWn8=
   dependencies:
     delayed-stream "~1.0.0"
 
 concat-map@0.0.1:
   version "0.0.1"
-  resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
 
 csv-generate@^1.1.2:
   version "1.1.2"
-  resolved "https://registry.npmjs.org/csv-generate/-/csv-generate-1.1.2.tgz#ec6b00edaed6e59ad9c20582f4c364e28b146240"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/csv-generate/-/csv-generate-1.1.2.tgz#ec6b00edaed6e59ad9c20582f4c364e28b146240"
   integrity sha1-7GsA7a7W5ZrZwgWC9MNk4osUYkA=
 
 csv-parse@^1.3.3:
   version "1.3.3"
-  resolved "https://registry.npmjs.org/csv-parse/-/csv-parse-1.3.3.tgz#d1cfd8743c2f849a0abb2fd544db56695d19a490"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/csv-parse/-/csv-parse-1.3.3.tgz#d1cfd8743c2f849a0abb2fd544db56695d19a490"
   integrity sha1-0c/YdDwvhJoKuy/VRNtWaV0ZpJA=
 
 csv-stringify@^1.1.2:
   version "1.1.2"
-  resolved "https://registry.npmjs.org/csv-stringify/-/csv-stringify-1.1.2.tgz#77a41526581bce3380f12b00d7c5bbac70c82b58"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/csv-stringify/-/csv-stringify-1.1.2.tgz#77a41526581bce3380f12b00d7c5bbac70c82b58"
   integrity sha1-d6QVJlgbzjOA8SsA18W7rHDIK1g=
   dependencies:
     lodash.get "~4.4.2"
 
 csv@^1.1.1:
   version "1.2.1"
-  resolved "https://registry.npmjs.org/csv/-/csv-1.2.1.tgz#5231edfc1c7152512ec45781076a7a97ff525c0c"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/csv/-/csv-1.2.1.tgz#5231edfc1c7152512ec45781076a7a97ff525c0c"
   integrity sha1-UjHt/BxxUlEuxFeBB2p6l/9SXAw=
   dependencies:
     csv-generate "^1.1.2"
@@ -539,55 +501,55 @@ csv@^1.1.1:
 
 dashdash@^1.12.0:
   version "1.14.1"
-  resolved "https://registry.npmjs.org/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   integrity sha1-hTz6D3y+L+1d4gMmuN1YEDX24vA=
   dependencies:
     assert-plus "^1.0.0"
 
 date-utils@*:
   version "1.2.21"
-  resolved "https://registry.npmjs.org/date-utils/-/date-utils-1.2.21.tgz#61fb16cdc1274b3c9acaaffe9fc69df8720a2b64"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/date-utils/-/date-utils-1.2.21.tgz#61fb16cdc1274b3c9acaaffe9fc69df8720a2b64"
   integrity sha1-YfsWzcEnSzyayq/+n8ad+HIKK2Q=
 
 debug@=3.1.0:
   version "3.1.0"
-  resolved "https://registry.npmjs.org/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
-  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  integrity sha1-W7WgZyYotkFJVmuhaBnmFRjGcmE=
   dependencies:
     ms "2.0.0"
 
 debug@^2.6.8:
   version "2.6.9"
-  resolved "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
-  integrity sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
+  integrity sha1-XRKFFd8TT/Mn6QpMk/Tgd6U2NB8=
   dependencies:
     ms "2.0.0"
 
 deep-is@~0.1.3:
   version "0.1.3"
-  resolved "https://registry.npmjs.org/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
 
 delayed-stream@~1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
 detect-node@^2.0.3:
   version "2.0.4"
-  resolved "https://registry.npmjs.org/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
-  integrity sha512-ZIzRpLJrOj7jjP2miAtgqIfmzbxa4ZOr5jJc601zklsfEx9oTzmmj2nVpIPRpNlRTIh8lc1kyViIY7BWSGNmKw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/detect-node/-/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
+  integrity sha1-AU7o+PZpxcWAI9pkuBecCDooxGw=
 
 dtrace-provider@^0.8.1, dtrace-provider@~0.8:
   version "0.8.8"
-  resolved "https://registry.npmjs.org/dtrace-provider/-/dtrace-provider-0.8.8.tgz#2996d5490c37e1347be263b423ed7b297fb0d97e"
-  integrity sha512-b7Z7cNtHPhH9EJhNNbbeqTcXB8LGFFZhq1PGgEvpeHlzd36bhbdTWoE/Ba/YguqpBSlAPKnARWhVlhunCMwfxg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/dtrace-provider/-/dtrace-provider-0.8.8.tgz#2996d5490c37e1347be263b423ed7b297fb0d97e"
+  integrity sha1-KZbVSQw34TR74mO0I+17KX+w2X4=
   dependencies:
     nan "^2.14.0"
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
-  resolved "https://registry.npmjs.org/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
   integrity sha1-OoOpBOVDUyh4dMVkt1SThoSamMk=
   dependencies:
     jsbn "~0.1.0"
@@ -595,25 +557,25 @@ ecc-jsbn@~0.1.1:
 
 ecdsa-sig-formatter@1.0.11:
   version "1.0.11"
-  resolved "https://registry.npmjs.org/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz#ae0f0fa2d85045ef14a817daa3ce9acd0489e5bf"
-  integrity sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz#ae0f0fa2d85045ef14a817daa3ce9acd0489e5bf"
+  integrity sha1-rg8PothQRe8UqBfao86azQSJ5b8=
   dependencies:
     safe-buffer "^5.0.1"
 
 escape-regexp-component@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/escape-regexp-component/-/escape-regexp-component-1.0.2.tgz#9c63b6d0b25ff2a88c3adbd18c5b61acc3b9faa2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/escape-regexp-component/-/escape-regexp-component-1.0.2.tgz#9c63b6d0b25ff2a88c3adbd18c5b61acc3b9faa2"
   integrity sha1-nGO20LJf8qiMOtvRjFthrMO5+qI=
 
 escape-string-regexp@^1.0.2:
   version "1.0.5"
-  resolved "https://registry.npmjs.org/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
 
 escodegen@^1.8.1:
   version "1.14.3"
-  resolved "https://registry.npmjs.org/escodegen/-/escodegen-1.14.3.tgz#4e7b81fba61581dc97582ed78cab7f0e8d63f503"
-  integrity sha512-qFcX0XJkdg+PB3xjZZG/wKSuT1PnQWx57+TVSjIMmILd2yC/6ByYElPwJnslDsuWuSAp4AwJGumarAAmJch5Kw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/escodegen/-/escodegen-1.14.3.tgz#4e7b81fba61581dc97582ed78cab7f0e8d63f503"
+  integrity sha1-TnuB+6YVgdyXWC7XjKt/Do1j9QM=
   dependencies:
     esprima "^4.0.1"
     estraverse "^4.2.0"
@@ -624,80 +586,80 @@ escodegen@^1.8.1:
 
 esprima@1.2.2:
   version "1.2.2"
-  resolved "https://registry.npmjs.org/esprima/-/esprima-1.2.2.tgz#76a0fd66fcfe154fd292667dc264019750b1657b"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/esprima/-/esprima-1.2.2.tgz#76a0fd66fcfe154fd292667dc264019750b1657b"
   integrity sha1-dqD9Zvz+FU/SkmZ9wmQBl1CxZXs=
 
 esprima@^4.0.1:
   version "4.0.1"
-  resolved "https://registry.npmjs.org/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
-  integrity sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
+  integrity sha1-E7BM2z5sXRnfkatph6hpVhmwqnE=
 
 estraverse@^4.2.0:
   version "4.3.0"
-  resolved "https://registry.npmjs.org/estraverse/-/estraverse-4.3.0.tgz#398ad3f3c5a24948be7725e83d11a7de28cdbd1d"
-  integrity sha512-39nnKffWz8xN1BU/2c79n9nB9HDzo0niYUqx6xyqUnyoAnQyyWpOTdZEeiCch8BBu515t4wp9ZmgVfVhn9EBpw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/estraverse/-/estraverse-4.3.0.tgz#398ad3f3c5a24948be7725e83d11a7de28cdbd1d"
+  integrity sha1-OYrT88WiSUi+dyXoPRGn3ijNvR0=
 
 esutils@^2.0.2:
   version "2.0.3"
-  resolved "https://registry.npmjs.org/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
-  integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
+  integrity sha1-dNLrTeC42hKTcRkQ1Qd1ubcQ72Q=
 
 ewma@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.npmjs.org/ewma/-/ewma-2.0.1.tgz#9876c1c491ac5733c8666001a3961a04c97cf1e8"
-  integrity sha512-MYYK17A76cuuyvkR7MnqLW4iFYPEi5Isl2qb8rXiWpLiwFS9dxW/rncuNnjjgSENuVqZQkIuR4+DChVL4g1lnw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ewma/-/ewma-2.0.1.tgz#9876c1c491ac5733c8666001a3961a04c97cf1e8"
+  integrity sha1-mHbBxJGsVzPIZmABo5YaBMl88eg=
   dependencies:
     assert-plus "^1.0.0"
 
 extend@~3.0.2:
   version "3.0.2"
-  resolved "https://registry.npmjs.org/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
-  integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
+  integrity sha1-+LETa0Bx+9jrFAr/hYsQGewpFfo=
 
 extsprintf@1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/extsprintf/-/extsprintf-1.2.0.tgz#5ad946c22f5b32ba7f8cd7426711c6e8a3fc2529"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/extsprintf/-/extsprintf-1.2.0.tgz#5ad946c22f5b32ba7f8cd7426711c6e8a3fc2529"
   integrity sha1-WtlGwi9bMrp/jNdCZxHG6KP8JSk=
 
 extsprintf@1.3.0:
   version "1.3.0"
-  resolved "https://registry.npmjs.org/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"
   integrity sha1-lpGEQOMEGnpBT4xS48V06zw+HgU=
 
 extsprintf@^1.2.0:
   version "1.4.0"
-  resolved "https://registry.npmjs.org/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
 
 fast-decode-uri-component@^1.0.0:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/fast-decode-uri-component/-/fast-decode-uri-component-1.0.1.tgz#46f8b6c22b30ff7a81357d4f59abfae938202543"
-  integrity sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/fast-decode-uri-component/-/fast-decode-uri-component-1.0.1.tgz#46f8b6c22b30ff7a81357d4f59abfae938202543"
+  integrity sha1-Rvi2wisw/3qBNX1PWav66TggJUM=
 
 fast-deep-equal@^3.1.1:
   version "3.1.3"
-  resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
-  integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
+  integrity sha1-On1WtVnWy8PrUSMlJE5hmmXGxSU=
 
 fast-json-stable-stringify@^2.0.0:
   version "2.1.0"
-  resolved "https://registry.npmjs.org/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz#874bf69c6f404c2b5d99c481341399fd55892633"
-  integrity sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/fast-json-stable-stringify/-/fast-json-stable-stringify-2.1.0.tgz#874bf69c6f404c2b5d99c481341399fd55892633"
+  integrity sha1-h0v2nG9ATCtdmcSBNBOZ/VWJJjM=
 
 fast-levenshtein@~2.0.6:
   version "2.0.6"
-  resolved "https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
 filename-reserved-regex@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/filename-reserved-regex/-/filename-reserved-regex-2.0.0.tgz#abf73dfab735d045440abfea2d91f389ebbfa229"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/filename-reserved-regex/-/filename-reserved-regex-2.0.0.tgz#abf73dfab735d045440abfea2d91f389ebbfa229"
   integrity sha1-q/c9+rc10EVECr/qLZHzieu/oik=
 
 filenamify@^4.1.0:
   version "4.1.0"
-  resolved "https://registry.npmjs.org/filenamify/-/filenamify-4.1.0.tgz#54d110810ae74eebfe115c1b995bd07e03cf2184"
-  integrity sha512-KQV/uJDI9VQgN7sHH1Zbk6+42cD6mnQ2HONzkXUfPJ+K2FC8GZ1dpewbbHw0Sz8Tf5k3EVdHVayM4DoAwWlmtg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/filenamify/-/filenamify-4.1.0.tgz#54d110810ae74eebfe115c1b995bd07e03cf2184"
+  integrity sha1-VNEQgQrnTuv+EVwbmVvQfgPPIYQ=
   dependencies:
     filename-reserved-regex "^2.0.0"
     strip-outer "^1.0.1"
@@ -705,8 +667,8 @@ filenamify@^4.1.0:
 
 find-my-way@^1.13.0:
   version "1.18.1"
-  resolved "https://registry.npmjs.org/find-my-way/-/find-my-way-1.18.1.tgz#5db605eab7211ee6af7ab08eb4f568060aa8e9f6"
-  integrity sha512-5M9oQuUPNDxr7w7g65Rv2acToLUIjVUbnMsltXNQaSYWOwjf+2MBp7sMuY+pfO+OPCo2qwcxsr29VQQ09ouVMg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/find-my-way/-/find-my-way-1.18.1.tgz#5db605eab7211ee6af7ab08eb4f568060aa8e9f6"
+  integrity sha1-XbYF6rchHuaverCOtPVoBgqo6fY=
   dependencies:
     fast-decode-uri-component "^1.0.0"
     safe-regex "^1.1.0"
@@ -714,20 +676,20 @@ find-my-way@^1.13.0:
 
 follow-redirects@1.5.10:
   version "1.5.10"
-  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
-  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  integrity sha1-e3qfmuov3/NnhqlP9kPtB/T/Xio=
   dependencies:
     debug "=3.1.0"
 
 forever-agent@~0.6.1:
   version "0.6.1"
-  resolved "https://registry.npmjs.org/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
 
 form-data@^2.3.2, form-data@^2.3.3:
   version "2.5.1"
-  resolved "https://registry.npmjs.org/form-data/-/form-data-2.5.1.tgz#f2cbec57b5e59e23716e128fe44d4e5dd23895f4"
-  integrity sha512-m21N3WOmEEURgk6B9GLOE4RuWOFf28Lhh9qGYeNlGq4VDXUlJy2th2slBNU8Gp8EzloYZOibZJ7t5ecIrFSjVA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/form-data/-/form-data-2.5.1.tgz#f2cbec57b5e59e23716e128fe44d4e5dd23895f4"
+  integrity sha1-8svsV7XlniNxbhKP5E1OXdI4lfQ=
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
@@ -735,8 +697,8 @@ form-data@^2.3.2, form-data@^2.3.3:
 
 form-data@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/form-data/-/form-data-3.0.0.tgz#31b7e39c85f1355b7139ee0c647cf0de7f83c682"
-  integrity sha512-CKMFDglpbMi6PyN+brwB9Q/GOw0eAnsrEZDgcsH5Krhz5Od/haKHAX0NmQfha2zPPz0JpWzA7GJHGSnvCRLWsg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/form-data/-/form-data-3.0.0.tgz#31b7e39c85f1355b7139ee0c647cf0de7f83c682"
+  integrity sha1-MbfjnIXxNVtxOe4MZHzw3n+DxoI=
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
@@ -744,8 +706,8 @@ form-data@^3.0.0:
 
 form-data@~2.3.2:
   version "2.3.3"
-  resolved "https://registry.npmjs.org/form-data/-/form-data-2.3.3.tgz#dcce52c05f644f298c6a7ab936bd724ceffbf3a6"
-  integrity sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/form-data/-/form-data-2.3.3.tgz#dcce52c05f644f298c6a7ab936bd724ceffbf3a6"
+  integrity sha1-3M5SwF9kTymManq5Nr1yTO/786Y=
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
@@ -753,13 +715,13 @@ form-data@~2.3.2:
 
 formidable@^1.2.1:
   version "1.2.2"
-  resolved "https://registry.npmjs.org/formidable/-/formidable-1.2.2.tgz#bf69aea2972982675f00865342b982986f6b8dd9"
-  integrity sha512-V8gLm+41I/8kguQ4/o1D3RIHRmhYFG4pnNyonvua+40rqcEmT4+V71yaZ3B457xbbgCsCfjSPi65u/W6vK1U5Q==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/formidable/-/formidable-1.2.2.tgz#bf69aea2972982675f00865342b982986f6b8dd9"
+  integrity sha1-v2muopcpgmdfAIZTQrmCmG9rjdk=
 
 fs-extra@^7.0.1:
   version "7.0.1"
-  resolved "https://registry.npmjs.org/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
-  integrity sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
+  integrity sha1-TxicRKoSO4lfcigE9V6iPq3DSOk=
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"
@@ -767,14 +729,14 @@ fs-extra@^7.0.1:
 
 getpass@^0.1.1:
   version "0.1.7"
-  resolved "https://registry.npmjs.org/getpass/-/getpass-0.1.7.tgz#5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/getpass/-/getpass-0.1.7.tgz#5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
   integrity sha1-Xv+OPmhNVprkyysSgmBOi6YhSfo=
   dependencies:
     assert-plus "^1.0.0"
 
 glob@^6.0.1:
   version "6.0.4"
-  resolved "https://registry.npmjs.org/glob/-/glob-6.0.4.tgz#0f08860f6a155127b2fadd4f9ce24b1aab6e4d22"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/glob/-/glob-6.0.4.tgz#0f08860f6a155127b2fadd4f9ce24b1aab6e4d22"
   integrity sha1-DwiGD2oVUSey+t1PnOJLGqtuTSI=
   dependencies:
     inflight "^1.0.4"
@@ -785,42 +747,42 @@ glob@^6.0.1:
 
 globalize@^1.4.2:
   version "1.5.0"
-  resolved "https://registry.npmjs.org/globalize/-/globalize-1.5.0.tgz#c3419de78b92d3efee0d54e6da388934c7b45b11"
-  integrity sha512-76fcPQO/WLthtSwjgIZ/Zv2XSXqv9ifvl1PwIxJNCZNFHigGCpg3fBZ0poJ30b2kdDgofPkYl478lVZA6esESQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/globalize/-/globalize-1.5.0.tgz#c3419de78b92d3efee0d54e6da388934c7b45b11"
+  integrity sha1-w0Gd54uS0+/uDVTm2jiJNMe0WxE=
   dependencies:
     cldrjs "^0.5.0"
 
 graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.2.4"
-  resolved "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
-  integrity sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
+  integrity sha1-Ila94U02MpWMRl68ltxGfKB6Kfs=
 
 grapheme-splitter@^1.0.2:
   version "1.0.4"
-  resolved "https://registry.npmjs.org/grapheme-splitter/-/grapheme-splitter-1.0.4.tgz#9cf3a665c6247479896834af35cf1dbb4400767e"
-  integrity sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/grapheme-splitter/-/grapheme-splitter-1.0.4.tgz#9cf3a665c6247479896834af35cf1dbb4400767e"
+  integrity sha1-nPOmZcYkdHmJaDSvNc8du0QAdn4=
 
 handle-thing@^1.2.5:
   version "1.2.5"
-  resolved "https://registry.npmjs.org/handle-thing/-/handle-thing-1.2.5.tgz#fd7aad726bf1a5fd16dfc29b2f7a6601d27139c4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/handle-thing/-/handle-thing-1.2.5.tgz#fd7aad726bf1a5fd16dfc29b2f7a6601d27139c4"
   integrity sha1-/Xqtcmvxpf0W38KbL3pmAdJxOcQ=
 
 har-schema@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/har-schema/-/har-schema-2.0.0.tgz#a94c2224ebcac04782a0d9035521f24735b7ec92"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/har-schema/-/har-schema-2.0.0.tgz#a94c2224ebcac04782a0d9035521f24735b7ec92"
   integrity sha1-qUwiJOvKwEeCoNkDVSHyRzW37JI=
 
 har-validator@~5.1.3:
   version "5.1.3"
-  resolved "https://registry.npmjs.org/har-validator/-/har-validator-5.1.3.tgz#1ef89ebd3e4996557675eed9893110dc350fa080"
-  integrity sha512-sNvOCzEQNr/qrvJgc3UG/kD4QtlHycrzwS+6mfTrrSq97BvaYcPZZI1ZSqGSPR73Cxn4LKTD4PttRwfU7jWq5g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/har-validator/-/har-validator-5.1.3.tgz#1ef89ebd3e4996557675eed9893110dc350fa080"
+  integrity sha1-HvievT5JllV2de7ZiTEQ3DUPoIA=
   dependencies:
     ajv "^6.5.5"
     har-schema "^2.0.0"
 
 hpack.js@^2.1.6:
   version "2.1.6"
-  resolved "https://registry.npmjs.org/hpack.js/-/hpack.js-2.1.6.tgz#87774c0949e513f42e84575b3c45681fade2a0b2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/hpack.js/-/hpack.js-2.1.6.tgz#87774c0949e513f42e84575b3c45681fade2a0b2"
   integrity sha1-h3dMCUnlE/QuhFdbPEVoH63ioLI=
   dependencies:
     inherits "^2.0.1"
@@ -830,13 +792,13 @@ hpack.js@^2.1.6:
 
 http-deceiver@^1.2.7:
   version "1.2.7"
-  resolved "https://registry.npmjs.org/http-deceiver/-/http-deceiver-1.2.7.tgz#fa7168944ab9a519d337cb0bec7284dc3e723d87"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/http-deceiver/-/http-deceiver-1.2.7.tgz#fa7168944ab9a519d337cb0bec7284dc3e723d87"
   integrity sha1-+nFolEq5pRnTN8sL7HKE3D5yPYc=
 
 http-signature@^1.2.0:
   version "1.3.4"
-  resolved "https://registry.npmjs.org/http-signature/-/http-signature-1.3.4.tgz#a65b41193110b222364e776fd1ac848655a0e2f0"
-  integrity sha512-CbG3io8gUSIxNNSgq+XMjgpTMzAeVRipxVXjuGrDhH5M1a2kZ03w20s8FCLR1NjnnJj10KbvabvckmtQcYNb9g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/http-signature/-/http-signature-1.3.4.tgz#a65b41193110b222364e776fd1ac848655a0e2f0"
+  integrity sha1-pltBGTEQsiI2Tndv0ayEhlWg4vA=
   dependencies:
     assert-plus "^1.0.0"
     jsprim "^1.2.2"
@@ -844,7 +806,7 @@ http-signature@^1.2.0:
 
 http-signature@~1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/http-signature/-/http-signature-1.2.0.tgz#9aecd925114772f3d95b65a60abb8f7c18fbace1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/http-signature/-/http-signature-1.2.0.tgz#9aecd925114772f3d95b65a60abb8f7c18fbace1"
   integrity sha1-muzZJRFHcvPZW2WmCruPfBj7rOE=
   dependencies:
     assert-plus "^1.0.0"
@@ -853,7 +815,7 @@ http-signature@~1.2.0:
 
 inflight@^1.0.4:
   version "1.0.6"
-  resolved "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
   integrity sha1-Sb1jMdfQLQwJvJEKEHW6gWW1bfk=
   dependencies:
     once "^1.3.0"
@@ -861,70 +823,65 @@ inflight@^1.0.4:
 
 inherits@2, inherits@^2.0.1, inherits@~2.0.3:
   version "2.0.4"
-  resolved "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
-  integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
+  integrity sha1-D6LGT5MpF8NDOg3tVTY6rjdBa3w=
 
 inherits@2.0.1:
   version "2.0.1"
-  resolved "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz#b17d08d326b4423e568eff719f91b0b1cbdf69f1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/inherits/-/inherits-2.0.1.tgz#b17d08d326b4423e568eff719f91b0b1cbdf69f1"
   integrity sha1-sX0I0ya0Qj5Wjv9xn5GwscvfafE=
 
 inherits@2.0.3:
   version "2.0.3"
-  resolved "https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
-
-is-buffer@^2.0.2:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/is-buffer/-/is-buffer-2.0.4.tgz#3e572f23c8411a5cfd9557c849e3665e0b290623"
-  integrity sha512-Kq1rokWXOPXWuaMAqZiJW4XxsmD9zGx9q4aePabbn3qCRGedtH7Cm+zV8WETitMfu1wdh+Rvd6w5egwSngUX2A==
 
 is-typedarray@~1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/is-typedarray/-/is-typedarray-1.0.0.tgz#e479c80858df0c1b11ddda6940f96011fcda4a9a"
   integrity sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=
 
 isarray@~1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
   integrity sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
 
 isstream@~0.1.2:
   version "0.1.2"
-  resolved "https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
 jsbn@~0.1.0:
   version "0.1.1"
-  resolved "https://registry.npmjs.org/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
 
 json-schema-traverse@^0.4.1:
   version "0.4.1"
-  resolved "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz#69f6a87d9513ab8bb8fe63bdb0979c448e684660"
-  integrity sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/json-schema-traverse/-/json-schema-traverse-0.4.1.tgz#69f6a87d9513ab8bb8fe63bdb0979c448e684660"
+  integrity sha1-afaofZUTq4u4/mO9sJecRI5oRmA=
 
 json-schema@0.2.3:
   version "0.2.3"
-  resolved "https://registry.npmjs.org/json-schema/-/json-schema-0.2.3.tgz#b480c892e59a2f05954ce727bd3f2a4e882f9e13"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/json-schema/-/json-schema-0.2.3.tgz#b480c892e59a2f05954ce727bd3f2a4e882f9e13"
   integrity sha1-tIDIkuWaLwWVTOcnvT8qTogvnhM=
 
 json-stringify-safe@~5.0.1:
   version "5.0.1"
-  resolved "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
 jsonfile@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
   integrity sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=
   optionalDependencies:
     graceful-fs "^4.1.6"
 
 jsonpath@^1.0.0:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/jsonpath/-/jsonpath-1.0.2.tgz#e6aae681d03e9a77b4651d5d96eac5fc63b1fd13"
-  integrity sha512-rmzlgFZiQPc6q4HDyK8s9Qb4oxBnI5sF61y/Co5PV0lc3q2bIuRsNdueVbhoSHdKM4fxeimphOAtfz47yjCfeA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jsonpath/-/jsonpath-1.0.2.tgz#e6aae681d03e9a77b4651d5d96eac5fc63b1fd13"
+  integrity sha1-5qrmgdA+mne0ZR1dlurF/GOx/RM=
   dependencies:
     esprima "1.2.2"
     static-eval "2.0.2"
@@ -932,7 +889,7 @@ jsonpath@^1.0.0:
 
 jsonwebtoken@8.0.1:
   version "8.0.1"
-  resolved "https://registry.npmjs.org/jsonwebtoken/-/jsonwebtoken-8.0.1.tgz#50daef8d0a8c7de2cd06bc1013b75b04ccf3f0cf"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jsonwebtoken/-/jsonwebtoken-8.0.1.tgz#50daef8d0a8c7de2cd06bc1013b75b04ccf3f0cf"
   integrity sha1-UNrvjQqMfeLNBrwQE7dbBMzz8M8=
   dependencies:
     jws "^3.1.4"
@@ -948,12 +905,12 @@ jsonwebtoken@8.0.1:
 
 jspath@^0.4.0:
   version "0.4.0"
-  resolved "https://registry.npmjs.org/jspath/-/jspath-0.4.0.tgz#2f5fd1808ff2249a88a3c45e642288a226f85e1d"
-  integrity sha512-2/R8wkot8NCXrppBT/onp+4mcAUAZqtPxsW6aSJU3hrFAVqKqtFYcat2XJZ7inN4RtATUxfv0UQSYOmvJKiIGA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jspath/-/jspath-0.4.0.tgz#2f5fd1808ff2249a88a3c45e642288a226f85e1d"
+  integrity sha1-L1/RgI/yJJqIo8ReZCKIoib4Xh0=
 
 jsprim@^1.2.2:
   version "1.4.1"
-  resolved "https://registry.npmjs.org/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
   integrity sha1-MT5mvB5cwG5Di8G3SZwuXFastqI=
   dependencies:
     assert-plus "1.0.0"
@@ -963,8 +920,8 @@ jsprim@^1.2.2:
 
 jwa@^1.4.1:
   version "1.4.1"
-  resolved "https://registry.npmjs.org/jwa/-/jwa-1.4.1.tgz#743c32985cb9e98655530d53641b66c8645b039a"
-  integrity sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jwa/-/jwa-1.4.1.tgz#743c32985cb9e98655530d53641b66c8645b039a"
+  integrity sha1-dDwymFy56YZVUw1TZBtmyGRbA5o=
   dependencies:
     buffer-equal-constant-time "1.0.1"
     ecdsa-sig-formatter "1.0.11"
@@ -972,15 +929,15 @@ jwa@^1.4.1:
 
 jws@3.x.x, jws@^3.1.4:
   version "3.2.2"
-  resolved "https://registry.npmjs.org/jws/-/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
-  integrity sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/jws/-/jws-3.2.2.tgz#001099f3639468c9414000e99995fa52fb478304"
+  integrity sha1-ABCZ82OUaMlBQADpmZX6UvtHgwQ=
   dependencies:
     jwa "^1.4.1"
     safe-buffer "^5.0.1"
 
 levn@~0.3.0:
   version "0.3.0"
-  resolved "https://registry.npmjs.org/levn/-/levn-0.3.0.tgz#3b09924edf9f083c0490fdd4c0bc4421e04764ee"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/levn/-/levn-0.3.0.tgz#3b09924edf9f083c0490fdd4c0bc4421e04764ee"
   integrity sha1-OwmSTt+fCDwEkP3UwLxEIeBHZO4=
   dependencies:
     prelude-ls "~1.1.2"
@@ -988,165 +945,165 @@ levn@~0.3.0:
 
 lodash.escaperegexp@^4.1.2:
   version "4.1.2"
-  resolved "https://registry.npmjs.org/lodash.escaperegexp/-/lodash.escaperegexp-4.1.2.tgz#64762c48618082518ac3df4ccf5d5886dae20347"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.escaperegexp/-/lodash.escaperegexp-4.1.2.tgz#64762c48618082518ac3df4ccf5d5886dae20347"
   integrity sha1-ZHYsSGGAglGKw99Mz11YhtriA0c=
 
 lodash.get@~4.4.2:
   version "4.4.2"
-  resolved "https://registry.npmjs.org/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
   integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
 
 lodash.includes@^4.3.0:
   version "4.3.0"
-  resolved "https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz#60bb98a87cb923c68ca1e51325483314849f553f"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.includes/-/lodash.includes-4.3.0.tgz#60bb98a87cb923c68ca1e51325483314849f553f"
   integrity sha1-YLuYqHy5I8aMoeUTJUgzFISfVT8=
 
 lodash.isboolean@^3.0.3:
   version "3.0.3"
-  resolved "https://registry.npmjs.org/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
   integrity sha1-bC4XHbKiV82WgC/UOwGyDV9YcPY=
 
 lodash.isequal@^4.5.0:
   version "4.5.0"
-  resolved "https://registry.npmjs.org/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
   integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
 
 lodash.isinteger@^4.0.4:
   version "4.0.4"
-  resolved "https://registry.npmjs.org/lodash.isinteger/-/lodash.isinteger-4.0.4.tgz#619c0af3d03f8b04c31f5882840b77b11cd68343"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.isinteger/-/lodash.isinteger-4.0.4.tgz#619c0af3d03f8b04c31f5882840b77b11cd68343"
   integrity sha1-YZwK89A/iwTDH1iChAt3sRzWg0M=
 
 lodash.isnumber@^3.0.3:
   version "3.0.3"
-  resolved "https://registry.npmjs.org/lodash.isnumber/-/lodash.isnumber-3.0.3.tgz#3ce76810c5928d03352301ac287317f11c0b1ffc"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.isnumber/-/lodash.isnumber-3.0.3.tgz#3ce76810c5928d03352301ac287317f11c0b1ffc"
   integrity sha1-POdoEMWSjQM1IwGsKHMX8RwLH/w=
 
 lodash.isplainobject@^4.0.6:
   version "4.0.6"
-  resolved "https://registry.npmjs.org/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"
   integrity sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
 
 lodash.isstring@^4.0.1:
   version "4.0.1"
-  resolved "https://registry.npmjs.org/lodash.isstring/-/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.isstring/-/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
   integrity sha1-1SfftUVuynzJu5XV2ur4i6VKVFE=
 
 lodash.last@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.npmjs.org/lodash.last/-/lodash.last-3.0.0.tgz#242f663112dd4c6e63728c60a3c909d1bdadbd4c"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.last/-/lodash.last-3.0.0.tgz#242f663112dd4c6e63728c60a3c909d1bdadbd4c"
   integrity sha1-JC9mMRLdTG5jcoxgo8kJ0b2tvUw=
 
 lodash.max@^4.0.1:
   version "4.0.1"
-  resolved "https://registry.npmjs.org/lodash.max/-/lodash.max-4.0.1.tgz#8735566c618b35a9f760520b487ae79658af136a"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.max/-/lodash.max-4.0.1.tgz#8735566c618b35a9f760520b487ae79658af136a"
   integrity sha1-hzVWbGGLNan3YFILSHrnllivE2o=
 
 lodash.once@^4.0.0:
   version "4.1.1"
-  resolved "https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"
-  resolved "https://registry.npmjs.org/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
   integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
 
 lodash.tonumber@^4.0.3:
   version "4.0.3"
-  resolved "https://registry.npmjs.org/lodash.tonumber/-/lodash.tonumber-4.0.3.tgz#0b96b31b35672793eb7f5a63ee791f1b9e9025d9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.tonumber/-/lodash.tonumber-4.0.3.tgz#0b96b31b35672793eb7f5a63ee791f1b9e9025d9"
   integrity sha1-C5azGzVnJ5Prf1pj7nkfG56QJdk=
 
 lodash.trimend@^4.5.1:
   version "4.5.1"
-  resolved "https://registry.npmjs.org/lodash.trimend/-/lodash.trimend-4.5.1.tgz#12804437286b98cad8996b79414e11300114082f"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash.trimend/-/lodash.trimend-4.5.1.tgz#12804437286b98cad8996b79414e11300114082f"
   integrity sha1-EoBENyhrmMrYmWt5QU4RMAEUCC8=
 
 lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.2.1:
-  version "4.17.15"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.19"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha1-5I3e2+MLMyF4PFtDAfvTU7weSks=
 
 lru-cache@^4.1.3:
   version "4.1.5"
-  resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-4.1.5.tgz#8bbe50ea85bed59bc9e33dcab8235ee9bcf443cd"
-  integrity sha512-sWZlbEP2OsHNkXrMl5GYk/jKk70MBng6UU4YI/qGDYbgf6YbP4EvmqISbXCoJiRKs+1bSpFHVgQxvJ17F2li5g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lru-cache/-/lru-cache-4.1.5.tgz#8bbe50ea85bed59bc9e33dcab8235ee9bcf443cd"
+  integrity sha1-i75Q6oW+1ZvJ4z3KuCNe6bz0Q80=
   dependencies:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
 lru-cache@^5.1.1:
   version "5.1.1"
-  resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz#1da27e6710271947695daf6848e847f01d84b920"
-  integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/lru-cache/-/lru-cache-5.1.1.tgz#1da27e6710271947695daf6848e847f01d84b920"
+  integrity sha1-HaJ+ZxAnGUdpXa9oSOhH8B2EuSA=
   dependencies:
     yallist "^3.0.2"
 
 mime-db@1.44.0:
   version "1.44.0"
-  resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.44.0.tgz#fa11c5eb0aca1334b4233cb4d52f10c5a6272f92"
-  integrity sha512-/NOTfLrsPBVeH7YtFPgsVWveuL+4SjjYxaQ1xtM1KMFj7HdxlBlxeyNLzhyJVx7r4rZGJAZ/6lkKCitSc/Nmpg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mime-db/-/mime-db-1.44.0.tgz#fa11c5eb0aca1334b4233cb4d52f10c5a6272f92"
+  integrity sha1-+hHF6wrKEzS0Izy01S8QxaYnL5I=
 
 mime-types@^2.1.12, mime-types@~2.1.19:
   version "2.1.27"
-  resolved "https://registry.npmjs.org/mime-types/-/mime-types-2.1.27.tgz#47949f98e279ea53119f5722e0f34e529bec009f"
-  integrity sha512-JIhqnCasI9yD+SsmkquHBxTSEuZdQX5BuQnS2Vc7puQQQ+8yiP5AY5uWhpdv4YL4VM5c6iliiYWPgJ/nJQLp7w==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mime-types/-/mime-types-2.1.27.tgz#47949f98e279ea53119f5722e0f34e529bec009f"
+  integrity sha1-R5SfmOJ56lMRn1ci4PNOUpvsAJ8=
   dependencies:
     mime-db "1.44.0"
 
 mime@^1.5.0:
   version "1.6.0"
-  resolved "https://registry.npmjs.org/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
-  integrity sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
+  integrity sha1-Ms2eXGRVO9WNGaVor0Uqz/BJgbE=
 
 minimalistic-assert@^1.0.0:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
-  integrity sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
+  integrity sha1-LhlN4ERibUoQ5/f7wAznPoPk1cc=
 
 "minimatch@2 || 3":
   version "3.0.4"
-  resolved "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
-  integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
+  integrity sha1-UWbihkV/AzBgZL5Ul+jbsMPTIIM=
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@^1.2.5:
+minimist@1.2.5, minimist@^1.2.5:
   version "1.2.5"
-  resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
+  integrity sha1-Z9ZgFLZqaoqqDAg8X9WN9OTpdgI=
 
 mkdirp@~0.5.1:
   version "0.5.5"
-  resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
-  integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
+  integrity sha1-2Rzv1i0UNsoPQWIOJRKI1CAJne8=
   dependencies:
     minimist "^1.2.5"
 
 moment-timezone@^0.5.28:
   version "0.5.31"
-  resolved "https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.5.31.tgz#9c40d8c5026f0c7ab46eda3d63e49c155148de05"
-  integrity sha512-+GgHNg8xRhMXfEbv81iDtrVeTcWt0kWmTEY1XQK14dICTXnWJnT0dxdlPspwqF3keKMVPXwayEsk1DI0AA/jdA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/moment-timezone/-/moment-timezone-0.5.31.tgz#9c40d8c5026f0c7ab46eda3d63e49c155148de05"
+  integrity sha1-nEDYxQJvDHq0bto9Y+ScFVFI3gU=
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@>=2.14.0, moment@^2.10.6, moment@^2.25.1:
+"moment@>= 2.9.0", moment@>=2.14.0, moment@^2.19.3, moment@^2.25.1:
   version "2.27.0"
-  resolved "https://registry.npmjs.org/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
-  integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
+  integrity sha1-i/9OPiaiNiIN/j423nVrbrqgEF0=
 
 ms@2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
   integrity sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=
 
 ms@^2.0.0:
   version "2.1.2"
-  resolved "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
-  integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
+  integrity sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=
 
 mv@~2:
   version "2.1.1"
-  resolved "https://registry.npmjs.org/mv/-/mv-2.1.1.tgz#ae6ce0d6f6d5e0a4f7d893798d03c1ea9559b6a2"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/mv/-/mv-2.1.1.tgz#ae6ce0d6f6d5e0a4f7d893798d03c1ea9559b6a2"
   integrity sha1-rmzg1vbV4KT32JN5jQPB6pVZtqI=
   dependencies:
     mkdirp "~0.5.1"
@@ -1155,55 +1112,55 @@ mv@~2:
 
 nan@^2.14.0:
   version "2.14.1"
-  resolved "https://registry.npmjs.org/nan/-/nan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"
-  integrity sha512-isWHgVjnFjh2x2yuJ/tj3JbwoHu3UC2dX5G/88Cm24yB6YopVgxvBObDY7n5xW6ExmFhJpSEQqFPvq9zaXc8Jw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/nan/-/nan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"
+  integrity sha1-174036MQW5FJTDFHCJMV7/iHSwE=
 
 ncp@~2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/ncp/-/ncp-2.0.0.tgz#195a21d6c46e361d2fb1281ba38b91e9df7bdbb3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ncp/-/ncp-2.0.0.tgz#195a21d6c46e361d2fb1281ba38b91e9df7bdbb3"
   integrity sha1-GVoh1sRuNh0vsSgbo4uR6d9727M=
 
 negotiator@^0.6.1:
   version "0.6.2"
-  resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
-  integrity sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/negotiator/-/negotiator-0.6.2.tgz#feacf7ccf525a77ae9634436a64883ffeca346fb"
+  integrity sha1-/qz3zPUlp3rpY0Q2pkiD/+yjRvs=
 
 node-fetch@^2.2.1, node-fetch@^2.3.0, node-fetch@^2.6.0:
   version "2.6.0"
-  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
-  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
+  integrity sha1-5jNFY4bUqlWGP2dqerDaqP3ssP0=
 
 node-watch@^0.6.3:
   version "0.6.4"
-  resolved "https://registry.npmjs.org/node-watch/-/node-watch-0.6.4.tgz#50e564046eb7be15151c25f9c5aac4b5f495c291"
-  integrity sha512-cI6CHzivIFESe8djiK3Wh90CtWQBxLwMem8x8S+2GSvCvFgoMuOKVlfJtQ/2v3Afg3wOnHl/+tXotEs8z5vOrg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/node-watch/-/node-watch-0.6.4.tgz#50e564046eb7be15151c25f9c5aac4b5f495c291"
+  integrity sha1-UOVkBG63vhUVHCX5xarEtfSVwpE=
 
 oauth-sign@~0.9.0:
   version "0.9.0"
-  resolved "https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.9.0.tgz#47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
-  integrity sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/oauth-sign/-/oauth-sign-0.9.0.tgz#47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
+  integrity sha1-R6ewFrqmi1+g7PPe4IqFxnmsZFU=
 
 object-assign@^4.1.1:
   version "4.1.1"
-  resolved "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
 
 obuf@^1.0.0, obuf@^1.1.1:
   version "1.1.2"
-  resolved "https://registry.npmjs.org/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
-  integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
+  integrity sha1-Cb6jND1BhZ69RGKS0RydTbYZCE4=
 
 once@^1.3.0, once@^1.4.0:
   version "1.4.0"
-  resolved "https://registry.npmjs.org/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
   integrity sha1-WDsap3WWHUsROsF9nFC6753Xa9E=
   dependencies:
     wrappy "1"
 
 optionator@^0.8.1:
   version "0.8.3"
-  resolved "https://registry.npmjs.org/optionator/-/optionator-0.8.3.tgz#84fa1d036fe9d3c7e21d99884b601167ec8fb495"
-  integrity sha512-+IW9pACdk3XWmmTXG8m3upGUJst5XRGzxMRjXzAuJ1XnIFNvfhjjIuYkDvysnPQ7qzqVzLt78BCruntqRhWQbA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/optionator/-/optionator-0.8.3.tgz#84fa1d036fe9d3c7e21d99884b601167ec8fb495"
+  integrity sha1-hPodA2/p08fiHZmIS2ARZ+yPtJU=
   dependencies:
     deep-is "~0.1.3"
     fast-levenshtein "~2.0.6"
@@ -1214,12 +1171,12 @@ optionator@^0.8.1:
 
 path-is-absolute@^1.0.0:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
   integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
 
 path@^0.12.7:
   version "0.12.7"
-  resolved "https://registry.npmjs.org/path/-/path-0.12.7.tgz#d4dc2a506c4ce2197eb481ebfcd5b36c0140b10f"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/path/-/path-0.12.7.tgz#d4dc2a506c4ce2197eb481ebfcd5b36c0140b10f"
   integrity sha1-1NwqUGxM4hl+tIHr/NWzbAFAsQ8=
   dependencies:
     process "^0.11.1"
@@ -1227,63 +1184,63 @@ path@^0.12.7:
 
 performance-now@^2.1.0:
   version "2.1.0"
-  resolved "https://registry.npmjs.org/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
 pidusage@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/pidusage/-/pidusage-1.2.0.tgz#65ee96ace4e08a4cd3f9240996c85b367171ee92"
-  integrity sha512-OGo+iSOk44HRJ8q15AyG570UYxcm5u+R99DI8Khu8P3tKGkVu5EZX4ywHglWSTMNNXQ274oeGpYrvFEhDIFGPg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/pidusage/-/pidusage-1.2.0.tgz#65ee96ace4e08a4cd3f9240996c85b367171ee92"
+  integrity sha1-Ze6WrOTgikzT+SQJlshbNnFx7pI=
 
 prelude-ls@~1.1.2:
   version "1.1.2"
-  resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
-  resolved "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
-  integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
+  integrity sha1-eCDZsWEgzFXKmud5JoCufbptf+I=
 
 process@^0.11.1:
   version "0.11.10"
-  resolved "https://registry.npmjs.org/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
 
 pseudomap@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
   integrity sha1-8FKijacOYYkX7wqKw0wa5aaChrM=
 
 psl@^1.1.28:
   version "1.8.0"
-  resolved "https://registry.npmjs.org/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
-  integrity sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
+  integrity sha1-kyb4vPsBOtzABf3/BWrM4CDlHCQ=
 
 punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
-  resolved "https://registry.npmjs.org/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
-  integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
+  integrity sha1-tYsBCsQMIsVldhbI0sLALHv0eew=
 
 qs@^6.5.2:
   version "6.9.4"
-  resolved "https://registry.npmjs.org/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
-  integrity sha512-A1kFqHekCTM7cz0udomYUoYNWjBebHm/5wzU/XqrBRBNWectVH0QIiN+NEcZ0Dte5hvzHwbr8+XQmguPhJ6WdQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
+  integrity sha1-kJCykNH5FyjTwi5UhDykSupatoc=
 
 qs@~6.5.2:
   version "6.5.2"
-  resolved "https://registry.npmjs.org/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
-  integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
+  integrity sha1-yzroBuh0BERYTvFUzo7pjUA/PjY=
 
 querystringify@^2.1.1:
   version "2.1.1"
-  resolved "https://registry.npmjs.org/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
-  integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
+  integrity sha1-YOWl/WSn+L+k0qsu1v30yFutFU4=
 
 readable-stream@^2.0.1, readable-stream@^2.2.9:
   version "2.3.7"
-  resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
-  integrity sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
+  integrity sha1-Hsoc9xGu+BTAT2IlKjamL2yyO1c=
   dependencies:
     core-util-is "~1.0.0"
     inherits "~2.0.3"
@@ -1295,8 +1252,8 @@ readable-stream@^2.0.1, readable-stream@^2.2.9:
 
 request@^2.88.0:
   version "2.88.2"
-  resolved "https://registry.npmjs.org/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
-  integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
+  integrity sha1-1zyRhzHLWofaBH4gcjQUb2ZNErM=
   dependencies:
     aws-sign2 "~0.7.0"
     aws4 "^1.8.0"
@@ -1321,13 +1278,13 @@ request@^2.88.0:
 
 requires-port@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
 restify-errors@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.npmjs.org/restify-errors/-/restify-errors-5.0.0.tgz#668717e100683eec6ce0d515f89ff1dbec254a8d"
-  integrity sha512-+vby9Kxf7qlzvbZSTIEGkIixkeHG+pVCl34dk6eKnL+ua4pCezpdLT/1/eabzPZb65ADrgoc04jeWrrF1E1pvQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/restify-errors/-/restify-errors-5.0.0.tgz#668717e100683eec6ce0d515f89ff1dbec254a8d"
+  integrity sha1-ZocX4QBoPuxs4NUV+J/x2+wlSo0=
   dependencies:
     assert-plus "^1.0.0"
     lodash "^4.2.1"
@@ -1335,10 +1292,10 @@ restify-errors@^5.0.0:
   optionalDependencies:
     safe-json-stringify "^1.0.3"
 
-restify@^7.7.0:
+restify@7.7.0:
   version "7.7.0"
-  resolved "https://registry.npmjs.org/restify/-/restify-7.7.0.tgz#4e0e3884fc8716f14bea292c2957ca706fc427f7"
-  integrity sha512-BGirRv70pIy5W7tqX7s7+NNjBcjzU2YYgV4KABVbR5g8JjMeucgUzaf2VvTUSmz83qMZAuQ/gXEmPFyPHIcfJQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/restify/-/restify-7.7.0.tgz#4e0e3884fc8716f14bea292c2957ca706fc427f7"
+  integrity sha1-Tg44hPyHFvFL6iksKVfKcG/EJ/c=
   dependencies:
     assert-plus "^1.0.0"
     bunyan "^1.8.12"
@@ -1366,77 +1323,77 @@ restify@^7.7.0:
 
 ret@~0.1.10:
   version "0.1.15"
-  resolved "https://registry.npmjs.org/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
-  integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
+  integrity sha1-uKSCXVvbH8P29Twrwz+BOIaBx7w=
 
 rimraf@~2.4.0:
   version "2.4.5"
-  resolved "https://registry.npmjs.org/rimraf/-/rimraf-2.4.5.tgz#ee710ce5d93a8fdb856fb5ea8ff0e2d75934b2da"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/rimraf/-/rimraf-2.4.5.tgz#ee710ce5d93a8fdb856fb5ea8ff0e2d75934b2da"
   integrity sha1-7nEM5dk6j9uFb7Xqj/Di11k0sto=
   dependencies:
     glob "^6.0.1"
 
 rsa-pem-from-mod-exp@^0.8.4:
   version "0.8.4"
-  resolved "https://registry.npmjs.org/rsa-pem-from-mod-exp/-/rsa-pem-from-mod-exp-0.8.4.tgz#362a42c6d304056d493b3f12bceabb2c6576a6d4"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/rsa-pem-from-mod-exp/-/rsa-pem-from-mod-exp-0.8.4.tgz#362a42c6d304056d493b3f12bceabb2c6576a6d4"
   integrity sha1-NipCxtMEBW1JOz8SvOq7LGV2ptQ=
 
 safe-buffer@^5.0.1, safe-buffer@^5.1.2:
   version "5.2.1"
-  resolved "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
-  integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
+  integrity sha1-Hq+fqb2x/dTsdfWPnNtOa3gn7sY=
 
 safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
-  resolved "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
-  integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
+  integrity sha1-mR7GnSluAxN0fVm9/St0XDX4go0=
 
 safe-json-stringify@^1.0.3, safe-json-stringify@~1:
   version "1.2.0"
-  resolved "https://registry.npmjs.org/safe-json-stringify/-/safe-json-stringify-1.2.0.tgz#356e44bc98f1f93ce45df14bcd7c01cda86e0afd"
-  integrity sha512-gH8eh2nZudPQO6TytOvbxnuhYBOvDBBLW52tz5q6X58lJcd/tkmqFR+5Z9adS8aJtURSXWThWy/xJtJwixErvg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/safe-json-stringify/-/safe-json-stringify-1.2.0.tgz#356e44bc98f1f93ce45df14bcd7c01cda86e0afd"
+  integrity sha1-NW5EvJjx+TzkXfFLzXwBzahuCv0=
 
 safe-regex@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.npmjs.org/safe-regex/-/safe-regex-1.1.0.tgz#40a3669f3b077d1e943d44629e157dd48023bf2e"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/safe-regex/-/safe-regex-1.1.0.tgz#40a3669f3b077d1e943d44629e157dd48023bf2e"
   integrity sha1-QKNmnzsHfR6UPURinhV91IAjvy4=
   dependencies:
     ret "~0.1.10"
 
 safer-buffer@^2.0.2, safer-buffer@^2.1.0, safer-buffer@~2.1.0:
   version "2.1.2"
-  resolved "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
-  integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
+  integrity sha1-RPoWGwGHuVSd2Eu5GAL5vYOFzWo=
 
 sax@>=0.6.0:
   version "1.2.4"
-  resolved "https://registry.npmjs.org/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
-  integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
+  integrity sha1-KBYjTiN4vdxOU1T6tcqold9xANk=
 
 select-hose@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
 semver-store@^0.3.0:
   version "0.3.0"
-  resolved "https://registry.npmjs.org/semver-store/-/semver-store-0.3.0.tgz#ce602ff07df37080ec9f4fb40b29576547befbe9"
-  integrity sha512-TcZvGMMy9vodEFSse30lWinkj+JgOBvPn8wRItpQRSayhc+4ssDs335uklkfvQQJgL/WvmHLVj4Ycv2s7QCQMg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/semver-store/-/semver-store-0.3.0.tgz#ce602ff07df37080ec9f4fb40b29576547befbe9"
+  integrity sha1-zmAv8H3zcIDsn0+0CylXZUe+++k=
 
 semver@^5.4.1:
   version "5.7.1"
-  resolved "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
-  integrity sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
+  integrity sha1-qVT5Ma66UI0we78Gnv8MAclhFvc=
 
 source-map@~0.6.1:
   version "0.6.1"
-  resolved "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
-  integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+  integrity sha1-dHIq8y6WFOnCh6jQu95IteLxomM=
 
 spdy-transport@^2.0.18:
   version "2.1.1"
-  resolved "https://registry.npmjs.org/spdy-transport/-/spdy-transport-2.1.1.tgz#c54815d73858aadd06ce63001e7d25fa6441623b"
-  integrity sha512-q7D8c148escoB3Z7ySCASadkegMmUZW8Wb/Q1u0/XBgDKMO880rLQDj8Twiew/tYi7ghemKUi/whSYOwE17f5Q==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/spdy-transport/-/spdy-transport-2.1.1.tgz#c54815d73858aadd06ce63001e7d25fa6441623b"
+  integrity sha1-xUgV1zhYqt0GzmMAHn0l+mRBYjs=
   dependencies:
     debug "^2.6.8"
     detect-node "^2.0.3"
@@ -1448,7 +1405,7 @@ spdy-transport@^2.0.18:
 
 spdy@^3.4.7:
   version "3.4.7"
-  resolved "https://registry.npmjs.org/spdy/-/spdy-3.4.7.tgz#42ff41ece5cc0f99a3a6c28aabb73f5c3b03acbc"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/spdy/-/spdy-3.4.7.tgz#42ff41ece5cc0f99a3a6c28aabb73f5c3b03acbc"
   integrity sha1-Qv9B7OXMD5mjpsKKq7c/XDsDrLw=
   dependencies:
     debug "^2.6.8"
@@ -1460,8 +1417,8 @@ spdy@^3.4.7:
 
 sshpk@^1.14.1, sshpk@^1.7.0:
   version "1.16.1"
-  resolved "https://registry.npmjs.org/sshpk/-/sshpk-1.16.1.tgz#fb661c0bef29b39db40769ee39fa70093d6f6877"
-  integrity sha512-HXXqVUq7+pcKeLqqZj6mHFUMvXtOJt1uoUx09pFW6011inTMxqI8BA8PM95myrIyyKwdnzjdFjLiE6KBPVtJIg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/sshpk/-/sshpk-1.16.1.tgz#fb661c0bef29b39db40769ee39fa70093d6f6877"
+  integrity sha1-+2YcC+8ps520B2nuOfpwCT1vaHc=
   dependencies:
     asn1 "~0.2.3"
     assert-plus "^1.0.0"
@@ -1475,138 +1432,138 @@ sshpk@^1.14.1, sshpk@^1.7.0:
 
 static-eval@2.0.2:
   version "2.0.2"
-  resolved "https://registry.npmjs.org/static-eval/-/static-eval-2.0.2.tgz#2d1759306b1befa688938454c546b7871f806a42"
-  integrity sha512-N/D219Hcr2bPjLxPiV+TQE++Tsmrady7TqAJugLy7Xk1EumfDWS/f5dtBbkRCGE7wKKXuYockQoj8Rm2/pVKyg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/static-eval/-/static-eval-2.0.2.tgz#2d1759306b1befa688938454c546b7871f806a42"
+  integrity sha1-LRdZMGsb76aIk4RUxUa3hx+AakI=
   dependencies:
     escodegen "^1.8.1"
 
 stream-transform@^0.2.2:
   version "0.2.2"
-  resolved "https://registry.npmjs.org/stream-transform/-/stream-transform-0.2.2.tgz#75867487f49528f8bf1d82499658753d02df7838"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/stream-transform/-/stream-transform-0.2.2.tgz#75867487f49528f8bf1d82499658753d02df7838"
   integrity sha1-dYZ0h/SVKPi/HYJJllh1PQLfeDg=
 
 string_decoder@~1.1.1:
   version "1.1.1"
-  resolved "https://registry.npmjs.org/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
-  integrity sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/string_decoder/-/string_decoder-1.1.1.tgz#9cf1611ba62685d7030ae9e4ba34149c3af03fc8"
+  integrity sha1-nPFhG6YmhdcDCunkujQUnDrwP8g=
   dependencies:
     safe-buffer "~5.1.0"
 
 strip-outer@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/strip-outer/-/strip-outer-1.0.1.tgz#b2fd2abf6604b9d1e6013057195df836b8a9d631"
-  integrity sha512-k55yxKHwaXnpYGsOzg4Vl8+tDrWylxDEpknGjhTiZB8dFRU5rTo9CAzeycivxV3s+zlTKwrs6WxMxR95n26kwg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/strip-outer/-/strip-outer-1.0.1.tgz#b2fd2abf6604b9d1e6013057195df836b8a9d631"
+  integrity sha1-sv0qv2YEudHmATBXGV34Nrip1jE=
   dependencies:
     escape-string-regexp "^1.0.2"
 
 tough-cookie@^2.4.3, tough-cookie@~2.5.0:
   version "2.5.0"
-  resolved "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.5.0.tgz#cd9fb2a0aa1d5a12b473bd9fb96fa3dcff65ade2"
-  integrity sha512-nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tough-cookie/-/tough-cookie-2.5.0.tgz#cd9fb2a0aa1d5a12b473bd9fb96fa3dcff65ade2"
+  integrity sha1-zZ+yoKodWhK0c72fuW+j3P9lreI=
   dependencies:
     psl "^1.1.28"
     punycode "^2.1.1"
 
 trim-repeated@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/trim-repeated/-/trim-repeated-1.0.0.tgz#e3646a2ea4e891312bf7eace6cfb05380bc01c21"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/trim-repeated/-/trim-repeated-1.0.0.tgz#e3646a2ea4e891312bf7eace6cfb05380bc01c21"
   integrity sha1-42RqLqTokTEr9+rObPsFOAvAHCE=
   dependencies:
     escape-string-regexp "^1.0.2"
 
 tslib@^1.9.2, tslib@^1.9.3:
   version "1.13.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
-  integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
+  integrity sha1-yIHhPMcBWJTtkUhi0nZDb6mkcEM=
 
 tunnel-agent@^0.6.0:
   version "0.6.0"
-  resolved "https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
   integrity sha1-J6XeoGs2sEoKmWZ3SykIaPD8QP0=
   dependencies:
     safe-buffer "^5.0.1"
 
 tunnel@0.0.6:
   version "0.0.6"
-  resolved "https://registry.npmjs.org/tunnel/-/tunnel-0.0.6.tgz#72f1314b34a5b192db012324df2cc587ca47f92c"
-  integrity sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tunnel/-/tunnel-0.0.6.tgz#72f1314b34a5b192db012324df2cc587ca47f92c"
+  integrity sha1-cvExSzSlsZLbASMk3yzFh8pH+Sw=
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
-  resolved "https://registry.npmjs.org/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
 type-check@~0.3.2:
   version "0.3.2"
-  resolved "https://registry.npmjs.org/type-check/-/type-check-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/type-check/-/type-check-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"
   integrity sha1-WITKtRLPHTVeP7eE8wgEsrUg23I=
   dependencies:
     prelude-ls "~1.1.2"
 
 underscore@1.7.0:
   version "1.7.0"
-  resolved "https://registry.npmjs.org/underscore/-/underscore-1.7.0.tgz#6bbaf0877500d36be34ecaa584e0db9fef035209"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/underscore/-/underscore-1.7.0.tgz#6bbaf0877500d36be34ecaa584e0db9fef035209"
   integrity sha1-a7rwh3UA02vjTsqlhODbn+8DUgk=
 
 "underscore@>= 1.3.1":
   version "1.10.2"
-  resolved "https://registry.npmjs.org/underscore/-/underscore-1.10.2.tgz#73d6aa3668f3188e4adb0f1943bd12cfd7efaaaf"
-  integrity sha512-N4P+Q/BuyuEKFJ43B9gYuOj4TQUHXX+j2FqguVOpjkssLUUrnJofCcBccJSCoeturDoZU6GorDTHSvUDlSQbTg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/underscore/-/underscore-1.10.2.tgz#73d6aa3668f3188e4adb0f1943bd12cfd7efaaaf"
+  integrity sha1-c9aqNmjzGI5K2w8ZQ70Sz9fvqq8=
 
 universalify@^0.1.0:
   version "0.1.2"
-  resolved "https://registry.npmjs.org/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
-  integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
+  integrity sha1-tkb2m+OULavOzJ1mOcgNwQXvqmY=
 
 uri-js@^4.2.2:
   version "4.2.2"
-  resolved "https://registry.npmjs.org/uri-js/-/uri-js-4.2.2.tgz#94c540e1ff772956e2299507c010aea6c8838eb0"
-  integrity sha512-KY9Frmirql91X2Qgjry0Wd4Y+YTdrdZheS8TFwvkbLWf/G5KNJDCh6pKL5OZctEW4+0Baa5idK2ZQuELRwPznQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/uri-js/-/uri-js-4.2.2.tgz#94c540e1ff772956e2299507c010aea6c8838eb0"
+  integrity sha1-lMVA4f93KVbiKZUHwBCupsiDjrA=
   dependencies:
     punycode "^2.1.0"
 
 url-parse@^1.4.4:
   version "1.4.7"
-  resolved "https://registry.npmjs.org/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
-  integrity sha512-d3uaVyzDB9tQoSXFvuSUNFibTd9zxd2bkVrDRvF5TmvWWQwqE4lgYJ5m+x1DbecWkw+LK4RNl2CU1hHuOKPVlg==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
+  integrity sha1-qKg1NejACjFuQDpdtKwbm4U64ng=
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
 util-deprecate@~1.0.1:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
 util@0.10.3:
   version "0.10.3"
-  resolved "https://registry.npmjs.org/util/-/util-0.10.3.tgz#7afb1afe50805246489e3db7fe0ed379336ac0f9"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/util/-/util-0.10.3.tgz#7afb1afe50805246489e3db7fe0ed379336ac0f9"
   integrity sha1-evsa/lCAUkZInj23/g7TeTNqwPk=
   dependencies:
     inherits "2.0.1"
 
 util@^0.10.3:
   version "0.10.4"
-  resolved "https://registry.npmjs.org/util/-/util-0.10.4.tgz#3aa0125bfe668a4672de58857d3ace27ecb76901"
-  integrity sha512-0Pm9hTQ3se5ll1XihRic3FDIku70C+iHUdT/W926rSgHV5QgXsYbKZN8MSC3tJtSkhuROzvsQjAaFENRXr+19A==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/util/-/util-0.10.4.tgz#3aa0125bfe668a4672de58857d3ace27ecb76901"
+  integrity sha1-OqASW/5mikZy3liFfTrOJ+y3aQE=
   dependencies:
     inherits "2.0.3"
 
 uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2, uuid@^3.3.3:
   version "3.4.0"
-  resolved "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
-  integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
+  integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=
 
 vasync@^1.6.4:
   version "1.6.4"
-  resolved "https://registry.npmjs.org/vasync/-/vasync-1.6.4.tgz#dfe93616ad0e7ae801b332a9d88bfc5cdc8e1d1f"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/vasync/-/vasync-1.6.4.tgz#dfe93616ad0e7ae801b332a9d88bfc5cdc8e1d1f"
   integrity sha1-3+k2Fq0OeugBszKp2Iv8XNyOHR8=
   dependencies:
     verror "1.6.0"
 
 verror@1.10.0, verror@^1.10.0, verror@^1.8.1:
   version "1.10.0"
-  resolved "https://registry.npmjs.org/verror/-/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/verror/-/verror-1.10.0.tgz#3a105ca17053af55d6e270c1f8288682e18da400"
   integrity sha1-OhBcoXBTr1XW4nDB+CiGguGNpAA=
   dependencies:
     assert-plus "^1.0.0"
@@ -1615,67 +1572,67 @@ verror@1.10.0, verror@^1.10.0, verror@^1.8.1:
 
 verror@1.6.0:
   version "1.6.0"
-  resolved "https://registry.npmjs.org/verror/-/verror-1.6.0.tgz#7d13b27b1facc2e2da90405eb5ea6e5bdd252ea5"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/verror/-/verror-1.6.0.tgz#7d13b27b1facc2e2da90405eb5ea6e5bdd252ea5"
   integrity sha1-fROyex+swuLakEBetepuW90lLqU=
   dependencies:
     extsprintf "1.2.0"
 
 wbuf@^1.1.0, wbuf@^1.7.2:
   version "1.7.3"
-  resolved "https://registry.npmjs.org/wbuf/-/wbuf-1.7.3.tgz#c1d8d149316d3ea852848895cb6a0bfe887b87df"
-  integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/wbuf/-/wbuf-1.7.3.tgz#c1d8d149316d3ea852848895cb6a0bfe887b87df"
+  integrity sha1-wdjRSTFtPqhShIiVy2oL/oh7h98=
   dependencies:
     minimalistic-assert "^1.0.0"
 
 word-wrap@~1.2.3:
   version "1.2.3"
-  resolved "https://registry.npmjs.org/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
-  integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
+  integrity sha1-YQY29rH3A4kb00dxzLF/uTtHB5w=
 
 wrappy@1:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
   integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
 
 ws@^7.1.2:
-  version "7.3.0"
-  resolved "https://registry.npmjs.org/ws/-/ws-7.3.0.tgz#4b2f7f219b3d3737bc1a2fbf145d825b94d38ffd"
-  integrity sha512-iFtXzngZVXPGgpTlP1rBqsUK82p9tKqsWRPg5L56egiljujJT3vGAYnHANvFxBieXrTFavhzhxW52jnaWV+w2w==
+  version "7.3.1"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/ws/-/ws-7.3.1.tgz#d0547bf67f7ce4f12a72dfe31262c68d7dc551c8"
+  integrity sha1-0FR79n985PEqct/jEmLGjX3FUcg=
 
 xml2js@^0.4.19:
   version "0.4.23"
-  resolved "https://registry.npmjs.org/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
-  integrity sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
+  integrity sha1-oMaVFnUkIesqx1juTUzPWIQ+rGY=
   dependencies:
     sax ">=0.6.0"
     xmlbuilder "~11.0.0"
 
 xmlbuilder@~11.0.0:
   version "11.0.1"
-  resolved "https://registry.npmjs.org/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
-  integrity sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
+  integrity sha1-vpuuHIoEbnazESdyY0fQrXACvrM=
 
 "xmldom@>= 0.1.x":
   version "0.3.0"
-  resolved "https://registry.npmjs.org/xmldom/-/xmldom-0.3.0.tgz#e625457f4300b5df9c2e1ecb776147ece47f3e5a"
-  integrity sha512-z9s6k3wxE+aZHgXYxSTpGDo7BYOUfJsIRyoZiX6HTjwpwfS2wpQBQKa2fD+ShLyPkqDYo5ud7KitmLZ2Cd6r0g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xmldom/-/xmldom-0.3.0.tgz#e625457f4300b5df9c2e1ecb776147ece47f3e5a"
+  integrity sha1-5iVFf0MAtd+cLh7Ld2FH7OR/Plo=
 
 xpath.js@~1.1.0:
   version "1.1.0"
-  resolved "https://registry.npmjs.org/xpath.js/-/xpath.js-1.1.0.tgz#3816a44ed4bb352091083d002a383dd5104a5ff1"
-  integrity sha512-jg+qkfS4K8E7965sqaUl8mRngXiKb3WZGfONgE18pr03FUQiuSV6G+Ej4tS55B+rIQSFEIw3phdVAQ4pPqNWfQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xpath.js/-/xpath.js-1.1.0.tgz#3816a44ed4bb352091083d002a383dd5104a5ff1"
+  integrity sha1-OBakTtS7NSCRCD0AKjg91RBKX/E=
 
 xtend@^4.0.1:
   version "4.0.2"
-  resolved "https://registry.npmjs.org/xtend/-/xtend-4.0.2.tgz#bb72779f5fa465186b1f438f674fa347fdb5db54"
-  integrity sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/xtend/-/xtend-4.0.2.tgz#bb72779f5fa465186b1f438f674fa347fdb5db54"
+  integrity sha1-u3J3n1+kZRhrH0OPZ0+jR/2121Q=
 
 yallist@^2.1.2:
   version "2.1.2"
-  resolved "https://registry.npmjs.org/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
   integrity sha1-HBH5IY8HYImkfdUS+TxmmaaoHVI=
 
 yallist@^3.0.2:
   version "3.1.1"
-  resolved "https://registry.npmjs.org/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
-  integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
+  integrity sha1-27fa+b/YusmrRev2ArjLrQ1dCP0=
