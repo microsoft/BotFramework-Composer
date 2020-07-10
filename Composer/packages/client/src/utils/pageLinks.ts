@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
 
-export const topLinks = (projectId: string) => {
+export const topLinks = (projectId: string, openedDialogId: string) => {
   const botLoaded = !!projectId;
   let links = [
     {
@@ -13,7 +13,7 @@ export const topLinks = (projectId: string) => {
       disabled: false,
     },
     {
-      to: `/bot/${projectId}/dialogs/main`,
+      to: `/bot/${projectId}/dialogs/${openedDialogId}`,
       iconName: 'SplitObject',
       labelName: formatMessage('Design'),
       exact: false,
