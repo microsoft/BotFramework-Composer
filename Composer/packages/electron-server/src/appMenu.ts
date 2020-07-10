@@ -119,13 +119,13 @@ export function initAppMenu() {
         {
           label: 'View License',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/main/LICENSE.md');
+            await shell.openExternal('https://aka.ms/bfcomposer-license');
           },
         },
         {
           label: 'Privacy Statement',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/main/PRIVACY.md');
+            await shell.openExternal('https://aka.ms/bfcomposer-privacy');
           },
         },
         { type: 'separator' },
