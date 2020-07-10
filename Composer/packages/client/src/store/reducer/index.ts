@@ -14,6 +14,7 @@ import {
   importResolverGenerator,
   UserSettings,
   dereferenceDefinitions,
+  defaultPublishConfig,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -517,7 +518,7 @@ const runtimePollingUpdate: ReducerFunc = (state, payload) => {
 };
 
 const publishSuccess: ReducerFunc = (state, payload) => {
-  if (payload.target.name === 'default') {
+  if (payload.target.name === defaultPublishConfig.name) {
     if (payload.status == PUBLISH_SUCCESS && payload.endpointURL) {
       state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
       state.botStatus = BotStatus.connected;
@@ -536,7 +537,7 @@ const publishSuccess: ReducerFunc = (state, payload) => {
 };
 
 const publishFailure: (title: string) => ReducerFunc = (title) => (state, { error, target }) => {
-  if (target.name === 'default') {
+  if (target.name === defaultPublishConfig.name) {
     state.botStatus = BotStatus.failed;
 
     state.botLoadErrorMsg = { ...error, title };
@@ -552,7 +553,7 @@ const publishFailure: (title: string) => ReducerFunc = (title) => (state, { erro
 const getPublishStatus: ReducerFunc = (state, payload) => {
   // the action below only applies to when a bot is being started using the "start bot" button
   // a check should be added to this that ensures this ONLY applies to the "default" profile.
-  if (payload.target.name === 'default') {
+  if (payload.target.name === defaultPublishConfig.name) {
     if (payload.status == PUBLISH_SUCCESS && payload.endpointURL) {
       state.botEndpoints[state.projectId] = `${payload.endpointURL}/api/messages`;
       state.botStatus = BotStatus.connected;
@@ -560,7 +561,7 @@ const getPublishStatus: ReducerFunc = (state, payload) => {
       state.botStatus = BotStatus.reloading;
     } else if (payload.status == PUBLISH_FAILED) {
       state.botStatus = BotStatus.failed;
-      state.botLoadErrorMsg = { ...payload, title: 'Start bot failed' };
+      state.botLoadErrorMsg = { ...payload, title: formatMessage('Start bot failed') };
     }
   }
 

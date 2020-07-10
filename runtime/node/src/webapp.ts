@@ -17,14 +17,6 @@ const server = restify.createServer();
 const argv = require("minimist")(process.argv.slice(2));
 // prefer the argv port --port=XXXX over process.env because the parent Composer app uses that.
 const port = argv.port || process.env.port || process.env.PORT || 3979;
-server.listen(port, (): void => {
-  console.log(
-    `\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`
-  );
-  console.log(
-    `\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`
-  );
-});
 
 const getProjectRoot = (): string => {
   // Load project settings
@@ -123,6 +115,15 @@ const getSettings = () => {
 };
 
 const { adapter, bot } = Configure();
+
+server.listen(port, (): void => {
+  console.log(
+    `\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`
+  );
+  console.log(
+    `\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`
+  );
+});
 
 server.post("/api/messages", (req, res): void => {
   adapter.processActivity(

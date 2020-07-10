@@ -5,16 +5,10 @@ import path from 'path';
 
 import merge from 'lodash/merge';
 import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
+import { DEFAULT_RUNTIME, defaultPublishConfig } from '@bfc/shared';
 
 import { BotProjectService } from '../services/project';
 import { runtimeFolder } from '../settings/env';
-
-const defaultPublishConfig = {
-  name: 'default',
-  type: 'localpublish',
-  configuration: JSON.stringify({}),
-};
-const DEFAULT_RUNTIME = 'dotnet';
 
 export const PublishController = {
   getTypes: async (req, res) => {
