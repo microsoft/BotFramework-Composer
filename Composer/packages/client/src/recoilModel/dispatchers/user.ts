@@ -4,11 +4,8 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import jwtDecode from 'jwt-decode';
-import merge from 'lodash/merge';
 
 import { userSettingsState, currentUserState, CurrentUser } from '../atoms/appState';
-import { isElectron } from '../../utils/electronUtil';
-import storage from '../../utils/storage';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
 import { UserSettingsPayload } from '../types';
 
@@ -72,14 +69,16 @@ export const userDispatcher = () => {
   });
 
   const updateUserSettings = useRecoilCallback(
-    ({ set }: CallbackInterface) => (settings: Partial<UserSettingsPayload>) => {
+    ({ set }: CallbackInterface) => async (settings: Partial<UserSettingsPayload>) => {
       set(userSettingsState, (currentSettings) => {
-        const newSettings = merge(currentSettings, settings);
-        if (isElectron()) {
-          // push updated settings to electron main process
-          window.ipcRenderer.send('update-user-settings', newSettings);
+        const newSettings = {
+          ...currentSettings,
+        };
+        for (const key in settings) {
+          if (newSettings[key]) {
+            newSettings[key] = { ...newSettings[key], ...settings[key] };
+          }
         }
-        storage.set('userSettings', newSettings);
         return newSettings;
       });
     }
