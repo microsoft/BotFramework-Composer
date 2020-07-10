@@ -136,6 +136,12 @@ export interface BotState {
     [key: string]: any[];
   };
 
+  boilerplateVersion: {
+    latestVersion?: string;
+    currentVersion?: string;
+    updateRequired?: boolean;
+  };
+
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
 }

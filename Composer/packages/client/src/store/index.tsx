@@ -89,6 +89,9 @@ export const initialBotState: BotState = {
   publishTypes: [],
   publishHistory: {},
   botOpening: false,
+  boilerplateVersion: {
+    updateRequired: false,
+  },
 };
 
 const initialAppState: AppState = {
