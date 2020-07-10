@@ -161,9 +161,9 @@ export const projectDispatcher = () => {
     gotoSnapshot(newSnapshot);
     refreshLocalStorage(projectId, settings);
     mergeLocalStorage(projectId, settings);
+
     if (jumpToMain && projectId) {
       const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
-
       navigateTo(mainUrl);
     }
   };
@@ -182,7 +182,7 @@ export const projectDispatcher = () => {
     }
   };
 
-  const setOpenPendingStatusAsync = async (callbackHelpers: CallbackInterface) => {
+  const setBotOpeningStatus = async (callbackHelpers: CallbackInterface) => {
     const { set } = callbackHelpers;
     set(botOpeningState, true);
     await checkProjectUpdates();
@@ -191,7 +191,7 @@ export const projectDispatcher = () => {
   const openBotProject = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
       try {
-        await setOpenPendingStatusAsync(callbackHelpers);
+        await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.put(`/projects/open`, { path, storageId });
         await initBotState(callbackHelpers, response.data, true);
         return response.data.id;
@@ -221,7 +221,7 @@ export const projectDispatcher = () => {
       schemaUrl?: string
     ) => {
       try {
-        await setOpenPendingStatusAsync(callbackHelpers);
+        await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.post(`/projects`, {
           storageId: 'default',
           templateId,
@@ -269,7 +269,7 @@ export const projectDispatcher = () => {
   const saveProjectAs = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId, name, description, location) => {
       try {
-        await setOpenPendingStatusAsync(callbackHelpers);
+        await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.post(`/projects/${projectId}/project/saveAs`, {
           storageId: 'default',
           name,
