@@ -51,14 +51,7 @@ jest.mock('axios', () => {
   };
   httpMocks = mockedVal;
   return {
-    create: jest.fn(() => {
-      return {
-        put: mockedVal.put,
-        post: mockedVal.post,
-        delete: mockedVal.delete,
-        get: mockedVal.get,
-      };
-    }),
+    create: jest.fn(() => mockedVal),
   };
 });
 
