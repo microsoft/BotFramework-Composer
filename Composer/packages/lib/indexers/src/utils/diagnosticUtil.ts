@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuIntentSection, Diagnostic, DiagnosticSeverity, Range, Position, CodeRange } from '@bfc/shared';
+import { Diagnostic, DiagnosticSeverity, Range, Position, CodeRange, LgFile, LuFile } from '@bfc/shared';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
@@ -47,7 +47,10 @@ export function isDiagnosticWithInRange(diagnostic: Diagnostic, range: CodeRange
   return diagnostic.range.start.line >= range.startLineNumber && diagnostic.range.end.line <= range.endLineNumber;
 }
 
-export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: { range?: CodeRange }): Diagnostic[] {
+export function filterTemplateDiagnostics(file: LgFile, name: string): Diagnostic[] {
+  const { diagnostics, templates } = file;
+  const range = templates.find((t) => t.name === name)?.range;
+
   if (!range) return [];
   const filteredDiags = diagnostics.filter((d) => {
     return d.range && isDiagnosticWithInRange(d, range);
@@ -65,8 +68,10 @@ export function filterTemplateDiagnostics(diagnostics: Diagnostic[], { range }: 
   });
 }
 
-export function filterSectionDiagnostics(diagnostics: Diagnostic[], section: LuIntentSection): Diagnostic[] {
-  const { range } = section;
+export function filterSectionDiagnostics(file: LuFile, name: string): Diagnostic[] {
+  const { diagnostics, intents } = file;
+  const range = intents.find((t) => t.Name === name)?.range;
+
   if (!range) return diagnostics;
   const filteredDiags = diagnostics.filter((d) => {
     return isDiagnosticWithInRange(d, range);
