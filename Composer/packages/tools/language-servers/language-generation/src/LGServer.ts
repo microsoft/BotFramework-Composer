@@ -168,7 +168,7 @@ export class LGServer {
 
         if (lastContent) {
           const body = content;
-          content = lgUtil.updateTemplate(lastContent, templateId, { body });
+          content = lgUtil.updateTemplate(lastContent, templateId, { body }).toString();
         }
       }
       const id = fileId || uri;

@@ -12,7 +12,7 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { botOpeningState, projectIdState, dispatcherState, designPageLocationState, schemasState } from './recoilModel';
+import { botOpeningState, projectIdState, dispatcherState, schemasState } from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
