@@ -162,7 +162,7 @@ export const focusPathState = atom<string>({
 
 export const onAddSkillDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onAddSkillDialogComplete'),
-  default: undefined,
+  default: { func: undefined },
 });
 
 export const displaySkillManifestState = atom<any>({
