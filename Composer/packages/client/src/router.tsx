@@ -28,7 +28,6 @@ const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
-  const designPageLocation = useRecoilValue(designPageLocationState);
   return (
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>
@@ -42,11 +41,6 @@ const Routes = (props) => {
             noThrow
             from="/bot/:projectId/language-understanding"
             to="/bot/:projectId/language-understanding/all"
-          />
-          <Redirect
-            noThrow
-            from="/bot/:projectId/dialogs"
-            to={`/bot/:projectId/dialogs/${designPageLocation.dialogId}`}
           />
           <Redirect noThrow from="/bot/:projectId/publish" to="/bot/:projectId/publish/all" />
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
