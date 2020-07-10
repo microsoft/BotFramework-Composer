@@ -3,7 +3,7 @@
 
 import { Templates } from 'botbuilder-lg';
 
-import { updateTemplate, addTemplate, removeTemplate, extractOptionByKey } from '../src/utils/lgUtil';
+import { updateTemplate, addTemplate, checkTemplate, removeTemplate, extractOptionByKey } from '../src/utils/lgUtil';
 
 describe('update lg template', () => {
   it('should update lg template', () => {
@@ -23,7 +23,7 @@ describe('update lg template', () => {
 
   it('should update lg template with error', () => {
     const content = `# Exit
--Thanks for using todo bot.\${ 
+-Thanks for using todo bot.\${
 
 # Greeting
 -What's up bro`;
@@ -56,8 +56,8 @@ describe('add lg template', () => {
   });
 });
 
-describe('add lg template', () => {
-  it('should add lg template', () => {
+describe('remove lg template', () => {
+  it('should remove lg template', () => {
     const content = `# Exit
 -Thanks for using todo bot.
 
@@ -67,6 +67,28 @@ describe('add lg template', () => {
     const templates = Templates.parseText(newContent).toArray();
     expect(templates.length).toEqual(1);
     expect(templates[0].name).toEqual('Exit');
+  });
+});
+
+describe('check lg template', () => {
+  it('check a valid template', () => {
+    const template = {
+      name: 'Greeting',
+      body: '-hi',
+      parameters: [],
+    };
+    const diags = checkTemplate(template);
+    expect(diags).toHaveLength(0);
+  });
+
+  it('check an invalid template', () => {
+    const template = {
+      name: 'Greeting',
+      body: 'hi ${ ',
+      parameters: [],
+    };
+    const diags = checkTemplate(template);
+    expect(diags).toHaveLength(1);
   });
 });
 
