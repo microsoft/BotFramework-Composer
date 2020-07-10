@@ -12,6 +12,8 @@ import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { dispatcherState } from '../../DispatcherWrapper';
 import { getUserTokenFromCache, loginPopup } from '../../../utils/auth';
 
+const realDate = Date.now;
+
 jest.mock('../../../utils/auth', () => {
   return {
     getUserTokenFromCache: jest.fn(),
@@ -19,6 +21,15 @@ jest.mock('../../../utils/auth', () => {
   };
 });
 jest.mock('jwt-decode');
+jest.useFakeTimers();
+
+beforeAll(() => {
+  global.Date.now = jest.fn(() => 10000000);
+});
+
+afterAll(() => {
+  global.Date.now = realDate;
+});
 
 const mockGetUserToken = getUserTokenFromCache as jest.Mock;
 const mockLoginPopup = loginPopup as jest.Mock;
@@ -83,7 +94,7 @@ describe('user dispatcher', () => {
 
     describe('with a token', () => {
       mockGetUserToken.mockImplementation(() => 'token');
-      it('spits out an error', async () => {
+      it("spits out an error if it can't decode", async () => {
         jest.spyOn(console, 'error');
         mockJwtDecode.mockImplementationOnce(() => {
           throw new Error();
@@ -100,10 +111,55 @@ describe('user dispatcher', () => {
           sessionExpired: false,
         });
       });
+
+      it('sets values given a decodable token', async () => {
+        mockJwtDecode.mockImplementationOnce(() => {
+          return {
+            exp: 12345,
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn': 'email',
+            'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name': 'name',
+          };
+        });
+        await act(async () => {
+          dispatcher.loginUser();
+        });
+        expect(renderedComponent.current.currentUser).toEqual({
+          token: 'token',
+          email: 'email',
+          name: 'name',
+          expiration: 12345000,
+          sessionExpired: false,
+        });
+        // 12345 is the expiration time in seconds, *1000 = 12345000
+        // 10000000 is the mock time we set
+        // 2045000 = 12345000 - 10000000 - (1000 * 60 * 5)
+        expect(setTimeout).toHaveBeenCalledWith(expect.anything(), 2045000);
+      });
     });
   });
 
-  it('updateUserSettings', async () => {});
+  it('updateUserSettings', async () => {
+    await act(async () => {
+      dispatcher.updateUserSettings({
+        appUpdater: { autoDownload: true }, // updates one object deep
+        dialogNavWidth: 555, // to test non-object updating
+        nonsense: 'foo', // should not appear in results
+      });
+    });
+    expect(renderedComponent.current.userSettings).toEqual({
+      appUpdater: {
+        autoDownload: true,
+        useNightly: false,
+      },
+      codeEditor: {
+        lineNumbers: false,
+        wordWrap: false,
+        minimap: false,
+      },
+      propertyEditorWidth: 400,
+      dialogNavWidth: 555,
+    });
+  });
 
   describe('setUserToken', () => {
     it('with a token', async () => {
