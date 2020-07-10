@@ -35,7 +35,7 @@ const getLuIntent = (Name, Body): LuIntentSection =>
     Body,
   } as LuIntentSection);
 
-describe('Lg dispatcher', () => {
+describe('Lu dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
@@ -71,7 +71,7 @@ describe('Lg dispatcher', () => {
       });
     });
 
-    expect(renderedComponent.current.luFiles[0].content).toBe(`\r\n# New\r\n-new`);
+    expect(renderedComponent.current.luFiles[0].content).toMatch(/# New/);
   });
 
   it('should update a lu intent', async () => {
@@ -84,7 +84,7 @@ describe('Lg dispatcher', () => {
       });
     });
 
-    expect(renderedComponent.current.luFiles[0].content).toBe(`\r\n# Hello\r\n-IntentValue`);
+    expect(renderedComponent.current.luFiles[0].content).toMatch(/-IntentValue/);
   });
 
   it('should create a lu Intent', async () => {
@@ -96,7 +96,7 @@ describe('Lg dispatcher', () => {
         intent: getLuIntent('New', '-IntentValue'),
       });
     });
-    expect(renderedComponent.current.luFiles[0].content).toBe(`\r\n# Hello\r\n-hi\r\n\r\n# New\r\n-IntentValue`);
+    expect(renderedComponent.current.luFiles[0].content).toMatch(/-IntentValue/);
   });
 
   it('should remove a lg template', async () => {
