@@ -28,6 +28,7 @@ import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import { useStoreContext } from '../../hooks/useStoreContext';
+import { DialogGenerationModal } from '../../components/DialogGenerationModal';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
@@ -109,6 +110,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
+  const [generateDialogModalVisibility, setGenerateDialogModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
@@ -164,6 +166,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const openNewTriggerModal = () => {
     setTriggerModalVisibility(true);
+  };
+
+  const onGenerateDialogModalDismiss = () => {
+    setGenerateDialogModalVisibility(false);
+  };
+
+  const openGenerateDialogModal = () => {
+    setGenerateDialogModalVisibility(true);
   };
 
   const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
@@ -415,6 +425,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <div css={contentWrapper} role="main">
           <ToolBar
             currentDialog={currentDialog}
+            openGenerateDialogModal={openGenerateDialogModal}
             openNewTriggerModal={openNewTriggerModal}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
             toolbarItems={toolbarItems}
@@ -475,6 +486,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             isOpen={triggerModalVisible}
             onDismiss={onTriggerCreationDismiss}
             onSubmit={onTriggerCreationSubmit}
+          />
+        )}
+        {generateDialogModalVisibility && (
+          <DialogGenerationModal
+            isOpen={generateDialogModalVisibility}
+            onDismiss={onGenerateDialogModalDismiss}
+            onGenerate={(str) => console.log(str)}
           />
         )}
         {displaySkillManifest && (

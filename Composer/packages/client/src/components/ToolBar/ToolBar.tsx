@@ -2,15 +2,16 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import { DialogInfo } from '@bfc/shared';
 import { jsx } from '@emotion/core';
-import { useCallback, Fragment } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
-import { DialogInfo } from '@bfc/shared';
+import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { Fragment, useCallback } from 'react';
 
 import { useStoreContext } from '../../hooks/useStoreContext';
 
-import { headerSub, leftActions, rightActions, actionButton } from './styles';
+import { actionButton, headerSub, leftActions, rightActions } from './styles';
 
 export type IToolBarItem = {
   type: string;
@@ -32,6 +33,7 @@ type ToolbarProps = {
   currentDialog?: DialogInfo;
   onCreateDialogComplete?: (...args: any[]) => void;
   openNewTriggerModal?: () => void;
+  openGenerateDialogModal?: () => void;
   showSkillManifestModal?: () => void;
 };
 
@@ -62,6 +64,7 @@ export function ToolBar(props: ToolbarProps) {
     currentDialog,
     onCreateDialogComplete,
     openNewTriggerModal,
+    openGenerateDialogModal,
     showSkillManifestModal,
     ...rest
   } = props;
@@ -113,6 +116,18 @@ export function ToolBar(props: ToolbarProps) {
                     }),
                     onClick: () => {
                       openNewTriggerModal?.();
+                    },
+                  },
+                  {
+                    itemType: ContextualMenuItemType.Divider,
+                    key: 'dividerdialog',
+                  },
+                  {
+                    'data-testid': 'FlyoutGenerateDialog',
+                    key: 'generatedialog',
+                    text: formatMessage('Generate dialog'),
+                    onClick: () => {
+                      openGenerateDialogModal?.();
                     },
                   },
                 ],
