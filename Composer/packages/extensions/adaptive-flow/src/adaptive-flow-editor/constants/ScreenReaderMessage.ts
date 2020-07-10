@@ -9,6 +9,8 @@ export enum ScreenReaderMessage {
   DialogOpened = 'Dialog opened',
   ActionDeleted = 'Action deleted',
   ActionsDeleted = 'Actions deleted',
+  ActionsDisabled = 'Actions disabled',
+  ActionsEnabled = 'Actions enabled',
   ActionCreated = 'Action created',
   ActionsCreated = 'Actions created',
   EventCreated = 'Event created',

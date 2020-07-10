@@ -5,6 +5,8 @@ import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
 import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 
+import { inheritParentProperties } from './inheritParentProperty';
+
 const IfBranchKey = AdaptiveFieldNames.Actions;
 const ElseBranchKey = AdaptiveFieldNames.ElseActions;
 
@@ -33,5 +35,6 @@ export function transformIfCondtion(
     }),
   };
 
+  inheritParentProperties(input, Object.values(result));
   return result;
 }
