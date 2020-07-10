@@ -15,7 +15,7 @@ import {
   showAddSkillDialogModalState,
   displaySkillManifestState,
 } from '../../atoms/botState';
-import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
+import { dispatcherState } from '../../DispatcherWrapper';
 
 jest.mock('../../../utils/httpUtil', () => {
   return {
@@ -77,7 +77,7 @@ describe('skill dispatcher', () => {
             { id: 'id2', content: 'content2' },
           ],
         },
-        { recoilState: onAddSkillDialogCompleteState, initialValue: () => mockDialogComplete },
+        { recoilState: onAddSkillDialogCompleteState, initialValue: { func: undefined } },
         {
           recoilState: skillsState,
           initialValue: [makeTestSkill(1), makeTestSkill(2)],
@@ -136,7 +136,7 @@ describe('skill dispatcher', () => {
         });
       });
       expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogCompleteState).toBeUndefined();
+      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
       //   expect(renderedComponent.current.settingsState.skill).toContain({
       //     manifestUrl: 'url',
       //     name: 'skill3',
@@ -152,7 +152,7 @@ describe('skill dispatcher', () => {
         });
       });
       expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogCompleteState).toBeUndefined();
+      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
       //   expect(renderedComponent.current.settingsState.skill).toContain({
       //     manifestUrl: 'url',
       //     name: 'skill100',
@@ -168,17 +168,17 @@ describe('skill dispatcher', () => {
         });
       });
       expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogCompleteState).toBeUndefined();
+      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBeUndefined();
       expect(renderedComponent.current.skills).not.toContain(makeTestSkill(1));
     });
   });
 
   it('addSkillDialogBegin', async () => {
     await act(async () => {
-      dispatcher.addSkillDialogBegin(() => mockDialogComplete);
+      dispatcher.addSkillDialogBegin(mockDialogComplete);
     });
     expect(renderedComponent.current.showAddSkillDialogModal).toBe(true);
-    expect(renderedComponent.current.onAddSkillDialogComplete).toBe(mockDialogComplete);
+    expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(mockDialogComplete);
   });
 
   it('addSkillDialogCancel', async () => {
@@ -186,17 +186,20 @@ describe('skill dispatcher', () => {
       dispatcher.addSkillDialogCancel();
     });
     expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-    expect(renderedComponent.current.onAddSkillDialogComplete).toBe(undefined);
+    expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(undefined);
   });
 
   describe('addSkillDialogSuccess', () => {
     it('with a function in onAddSkillDialogComplete', async () => {
       await act(async () => {
+        dispatcher.addSkillDialogBegin(mockDialogComplete);
+      });
+      await act(async () => {
         dispatcher.addSkillDialogSuccess();
       });
       expect(mockDialogComplete).toHaveBeenCalledWith(null);
       expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogComplete).toBe(undefined);
+      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(undefined);
     });
 
     it('with nothing in onAddSkillDialogComplete', async () => {
@@ -208,7 +211,7 @@ describe('skill dispatcher', () => {
       });
       expect(mockDialogComplete).not.toHaveBeenCalled();
       expect(renderedComponent.current.showAddSkillDialogModal).toBe(false);
-      expect(renderedComponent.current.onAddSkillDialogComplete).toBe(undefined);
+      expect(renderedComponent.current.onAddSkillDialogComplete.func).toBe(undefined);
     });
   });
 
