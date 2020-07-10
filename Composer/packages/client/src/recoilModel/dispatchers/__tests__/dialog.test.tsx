@@ -69,8 +69,8 @@ describe('dialog dispatcher', () => {
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
         { recoilState: dialogsState, initialValue: [{ id: '1' }, { id: '2' }] },
-        { recoilState: lgFilesState, initialValue: [{ id: '1' }] },
-        { recoilState: luFilesState, initialValue: [{ id: '1' }] },
+        { recoilState: lgFilesState, initialValue: [{ id: '1.lg' }, { id: '2' }] },
+        { recoilState: luFilesState, initialValue: [{ id: '1.lu' }, { id: '2' }] },
         { recoilState: schemasState, initialValue: { sdk: { content: '' } } },
       ],
       dispatcher: {
@@ -89,6 +89,8 @@ describe('dialog dispatcher', () => {
       await dispatcher.removeDialog('1');
     });
     expect(renderedComponent.current.dialogs).toEqual([{ id: '2' }]);
+    expect(renderedComponent.current.lgFiles).toEqual([{ id: '2' }]);
+    expect(renderedComponent.current.luFiles).toEqual([{ id: '2' }]);
   });
 
   it('updates a dialog file', async () => {
