@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import { TextDocument, Range, Position, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver-types';
-import { DiagnosticSeverity as LGDiagnosticSeverity, Diagnostic as LGDiagnostic, Templates } from 'botbuilder-lg';
-import { LgTemplate, Diagnostic as BFDiagnostic, LgFile, LgParsed } from '@bfc/shared';
+import { DiagnosticSeverity as LGDiagnosticSeverity } from 'botbuilder-lg';
+import { Diagnostic as BFDiagnostic, LgFile } from '@bfc/shared';
 import { offsetRange } from '@bfc/indexers';
 
 // state should map to tokenizer state
@@ -36,12 +36,7 @@ export interface LGDocument {
   projectId?: string;
   fileId?: string;
   templateId?: string;
-  index: () => Promise<LgParsed>;
-}
-
-export interface LGParsedResource {
-  templates: LgTemplate[];
-  diagnostics: Diagnostic[];
+  index: () => Promise<LgFile>;
 }
 
 export type LGFileResolver = (id: string) => LgFile | undefined;
@@ -101,38 +96,6 @@ export function convertDiagnostics(lgDiags: BFDiagnostic[] = [], document: TextD
     diagnostics.push(diagnostic);
   });
   return diagnostics;
-}
-
-export function textFromTemplate(template: Template): string {
-  const { name, parameters = [], body } = template;
-  const textBuilder: string[] = [];
-  if (name && body) {
-    textBuilder.push(`# ${name.trim()}`);
-    if (parameters.length) {
-      textBuilder.push(`(${parameters.join(', ')})`);
-    }
-    textBuilder.push(`\n${template.body.trim()}`);
-  }
-  return textBuilder.join('');
-}
-
-export function checkTemplate(template: Template): LGDiagnostic[] {
-  const text = textFromTemplate(template);
-  return Templates.parseText(text, '').diagnostics.filter((diagnostic) => {
-    // ignore non-exist references in template body.
-    return diagnostic.message.includes('does not have an evaluator') === false;
-  });
-}
-
-export function updateTemplate(content: string, name: string, body: string): string {
-  const lgFile = Templates.parseText(content);
-  const template = lgFile.toArray().find((t) => t.name === name);
-  // add if not exist
-  if (!template) {
-    return lgFile.addTemplate(name, [], body).toString();
-  } else {
-    return lgFile.updateTemplate(name, name, template.parameters, body).toString();
-  }
 }
 
 export const cardTypes = [

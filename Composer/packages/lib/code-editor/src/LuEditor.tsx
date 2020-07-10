@@ -4,7 +4,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import get from 'lodash/get';
-import { MonacoServices } from 'monaco-languageclient';
+import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { EditorDidMount, Monaco } from '@monaco-editor/react';
 
 import { registerLULanguage } from './languages';
@@ -31,6 +31,7 @@ const defaultLUServer = {
 declare global {
   interface Window {
     monacoServiceInstance: MonacoServices;
+    monacoLUEditorInstance: MonacoLanguageClient;
   }
 }
 
@@ -87,37 +88,53 @@ const LuEditor: React.FC<LULSPEditorProps> = (props) => {
     }
 
     const uri = get(editor.getModel(), 'uri._formatted', '');
-    const url = createUrl(luServer);
-    const webSocket: WebSocket = createWebSocket(url);
-    listen({
-      webSocket,
-      onConnection: (connection: MessageConnection) => {
-        const languageClient = createLanguageClient('LU Language Client', ['lu'], connection);
 
-        const m = monacoRef.current;
-        if (m) {
-          // this is the correct way to combine keycodes in Monaco
-          // eslint-disable-next-line no-bitwise
-          editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, () => {
-            const position = editor.getPosition();
-            SendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
-          });
-        }
+    if (!window.monacoLUEditorInstance) {
+      const url = createUrl(luServer);
+      const webSocket: WebSocket = createWebSocket(url);
+      listen({
+        webSocket,
+        onConnection: (connection: MessageConnection) => {
+          const languageClient = createLanguageClient('LU Language Client', ['lu'], connection);
 
-        SendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
-
-        languageClient.onReady().then(() =>
-          languageClient.onNotification('addUnlabelUtterance', (result) => {
-            const edits = result.edits.map((e) => {
-              return convertEdit(e);
+          const m = monacoRef.current;
+          if (m) {
+            // this is the correct way to combine keycodes in Monaco
+            // eslint-disable-next-line no-bitwise
+            editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, () => {
+              const position = editor.getPosition();
+              SendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
             });
-            editor.executeEdits(uri, edits);
-          })
-        );
-        const disposable = languageClient.start();
-        connection.onClose(() => disposable.dispose());
-      },
-    });
+          }
+
+          SendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
+
+          languageClient.onReady().then(() =>
+            languageClient.onNotification('addUnlabelUtterance', (result) => {
+              const edits = result.edits.map((e) => {
+                return convertEdit(e);
+              });
+              editor.executeEdits(uri, edits);
+            })
+          );
+          const disposable = languageClient.start();
+          connection.onClose(() => disposable.dispose());
+          window.monacoLUEditorInstance = languageClient;
+        },
+      });
+    } else {
+      const m = monacoRef.current;
+      const languageClient = window.monacoLUEditorInstance;
+      if (m) {
+        // this is the correct way to combine keycodes in Monaco
+        // eslint-disable-next-line no-bitwise
+        editor.addCommand(m.KeyMod.Shift | m.KeyCode.Enter, () => {
+          const position = editor.getPosition();
+          SendRequestWithRetry(languageClient, 'labelingExperienceRequest', { uri, position });
+        });
+      }
+      SendRequestWithRetry(languageClient, 'initializeDocuments', { luOption, uri });
+    }
   }, [editor]);
   const onInit: OnInit = (monaco) => {
     registerLULanguage(monaco);

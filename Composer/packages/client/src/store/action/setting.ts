@@ -23,17 +23,6 @@ export const setPublishTargets: ActionCreator = async ({ dispatch }, publishTarg
   });
 };
 
-export const setRuntimeSettings: ActionCreator = async ({ dispatch }, projectId: string, path, command) => {
-  dispatch({
-    type: ActionTypes.SET_RUNTIME_SETTINGS,
-    payload: {
-      projectId,
-      path,
-      command,
-    },
-  });
-};
-
 export const setCustomRuntime: ActionCreator = async ({ dispatch }, _, isOn) => {
   dispatch({
     type: ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE,

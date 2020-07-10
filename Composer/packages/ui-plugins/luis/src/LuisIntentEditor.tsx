@@ -45,7 +45,7 @@ const LuisIntentEditor: React.FC<FieldProps<string>> = (props) => {
     shellApi.updateUserSettings({ codeEditor: settings });
   };
 
-  const diagnostics = luFile ? filterSectionDiagnostics(luFile.diagnostics, luIntent) : [];
+  const diagnostics = luFile ? filterSectionDiagnostics(luFile, luIntent.Name) : [];
 
   return (
     <LuEditor
