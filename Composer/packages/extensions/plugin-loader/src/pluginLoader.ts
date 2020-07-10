@@ -8,11 +8,11 @@ import passport from 'passport';
 import { Express } from 'express';
 import { pathToRegexp } from 'path-to-regexp';
 import glob from 'globby';
+import formatMessage from 'format-message';
 
 import { ComposerPluginRegistration } from './composerPluginRegistration';
 import { UserIdentity, ExtensionCollection, RuntimeTemplate } from './types';
 import log from './logger';
-
 const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
 export class PluginLoader {
@@ -82,7 +82,7 @@ export class PluginLoader {
       // the module exported an object with an initialize method
       thisPlugin.initialize.call(null, pluginRegistration);
     } else {
-      throw new Error('Could not init plugin');
+      throw new Error(formatMessage('Could not init plugin'));
     }
   }
 
@@ -118,7 +118,7 @@ export class PluginLoader {
     if (templates.length) {
       return templates[0];
     } else {
-      throw new Error(`Support for runtime with name ${type} not available`);
+      throw new Error(formatMessage(`Support for runtime with name ${type} not available`));
     }
   }
 
@@ -131,7 +131,7 @@ export class PluginLoader {
     if (templates.length) {
       return templates[0];
     } else {
-      throw new Error(`Support for runtime type ${type} not available`);
+      throw new Error(formatMessage(`Support for runtime type ${type} not available`));
     }
   }
 

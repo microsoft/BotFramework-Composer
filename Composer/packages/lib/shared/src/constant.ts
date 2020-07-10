@@ -10,3 +10,9 @@ export const FieldNames = {
   DefaultCase: 'default',
   Cases: 'cases',
 };
+export const defaultPublishConfig = {
+  name: 'default',
+  type: 'localpublish',
+  configuration: JSON.stringify({}),
+};
+export const DEFAULT_RUNTIME = 'dotnet';
