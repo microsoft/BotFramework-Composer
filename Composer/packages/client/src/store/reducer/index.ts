@@ -83,7 +83,15 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 
 const getProjectSuccess: ReducerFunc = (state, { response }) => {
   const { files, botName, botEnvironment, location, schemas, settings, id, locale, diagnostics } = response.data;
-  schemas.sdk.content = processSchema(id, schemas.sdk.content);
+
+  try {
+    schemas.sdk.content = processSchema(id, schemas.sdk.content);
+  } catch (err) {
+    const diagnostics = schemas.diagnostics ?? [];
+    diagnostics.push(err.message);
+    schemas.diagnostics = diagnostics;
+  }
+
   const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
   state.projectId = id;
   state.dialogs = dialogs.map((dialog) => {
@@ -448,16 +456,7 @@ const syncEnvSetting: ReducerFunc = (state, { settings, projectId }) => {
 };
 
 const setPublishTargets: ReducerFunc = (state, { publishTarget }) => {
-  state.publishTargets = publishTarget;
-  return state;
-};
-
-const setRuntimeSettings: ReducerFunc = (state, { path, command }) => {
-  state.settings.runtime = {
-    customRuntime: true,
-    path,
-    command,
-  };
+  state.settings.publishTargets = publishTarget;
   return state;
 };
 
@@ -611,7 +610,13 @@ const setUserSettings: ReducerFunc<Partial<UserSettings>> = (state, settings) =>
 };
 
 const ejectSuccess: ReducerFunc = (state, payload) => {
-  state.runtimeSettings = payload.settings;
+  if (payload.settings?.path) {
+    state.settings.runtime = {
+      customRuntime: true,
+      path: payload.settings.path,
+      command: payload.settings.startCommand,
+    };
+  }
   return state;
 };
 
@@ -727,7 +732,6 @@ export const reducer = createReducer({
   [ActionTypes.DISPLAY_SKILL_MANIFEST_MODAL]: displaySkillManifestModal,
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
   [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
-  [ActionTypes.SET_RUNTIME_SETTINGS]: setRuntimeSettings,
   [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
 });

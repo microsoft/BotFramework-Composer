@@ -17,13 +17,13 @@ import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vsco
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgTemplate } from '@bfc/shared';
+import * as lgUtil from '@bfc/indexers/lib/utils/lgUtil';
 
 import { LgParser } from './lgParser';
 import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   LGDocument,
-  checkTemplate,
   convertDiagnostics,
   generageDiagnostic,
   LGOption,
@@ -148,16 +148,6 @@ export class LGServer {
 
     if (!this.getLgResources) {
       diagnostics.push('[Error lgOption] getLgResources is required but not exist.');
-    } else {
-      const { fileId, templateId } = lgOption;
-      const lgFile = await this.getLGDocument(document)?.index();
-      if (!lgFile) {
-        diagnostics.push(`[Error lgOption] File ${fileId}.lg do not exist`);
-      } else if (templateId) {
-        const { templates } = lgFile;
-        const template = templates.find(({ name }) => name === templateId);
-        if (!template) diagnostics.push(`Template ${fileId}.lg#${templateId} do not exist`);
-      }
     }
     this.connection.console.log(diagnostics.join('\n'));
     this.sendDiagnostics(
@@ -170,17 +160,17 @@ export class LGServer {
     const { uri } = document;
     const { fileId, templateId, projectId } = lgOption || {};
     const index = async () => {
-      let content: string = document.getText();
+      let content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
       if (this.getLgResources && fileId && templateId) {
-        try {
-          const resources = this.getLgResources(projectId);
-          content = resources.find((item) => item.id === fileId)?.content || content;
-        } catch (error) {
-          // ignore if file not exist
+        const resources = this.getLgResources(projectId);
+        const lastContent = resources.find((item) => item.id === fileId)?.content;
+
+        if (lastContent) {
+          const body = content;
+          content = lgUtil.updateTemplate(lastContent, templateId, { body });
         }
       }
-
       const id = fileId || uri;
       let templates: LgTemplate[] = [];
       let diagnostics: any[] = [];
@@ -192,7 +182,7 @@ export class LGServer {
         diagnostics.push(generageDiagnostic(error.message, DiagnosticSeverity.Error, document));
       }
 
-      return { templates, diagnostics };
+      return { id, content, templates, diagnostics };
     };
     const lgDocument: LGDocument = {
       uri,
@@ -720,26 +710,27 @@ export class LGServer {
       return;
     }
 
-    const { templates, diagnostics } = lgFile;
-
     // if inline editor, concat new content for validate
     if (fileId && templateId) {
-      const templateDiags = checkTemplate({
-        name: templateId,
-        parameters: [],
-        body: text,
-      });
+      const templateDiags = lgUtil
+        .checkTemplate({
+          name: templateId,
+          parameters: [],
+          body: text,
+        })
+        .filter((diagnostic) => {
+          // ignore non-exist references in template body.
+          return diagnostic.message.includes('does not have an evaluator') === false;
+        });
       // error in template.
       if (isValid(templateDiags) === false) {
         const lspDiagnostics = convertDiagnostics(templateDiags, document, 1);
         this.sendDiagnostics(document, lspDiagnostics);
         return;
       }
-      const template = templates.find(({ name }) => name === templateId);
-      if (!template) return;
 
       // filter diagnostics belong to this template.
-      const lgDiagnostics = filterTemplateDiagnostics(diagnostics, template);
+      const lgDiagnostics = filterTemplateDiagnostics(lgFile, templateId);
       const lspDiagnostics = convertDiagnostics(lgDiagnostics, document, 1);
       this.sendDiagnostics(document, lspDiagnostics);
       return;
