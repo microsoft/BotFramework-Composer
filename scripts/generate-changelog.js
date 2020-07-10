@@ -41,7 +41,7 @@ const getLatestTag = () =>
   execSync("git describe --tags $(git rev-list --tags --max-count=1)").toString().trim();
 
 const getLog = (tag) =>
-  execSync(`git log --pretty=format:'%s | %an' ${tag}..master`)
+  execSync(`git log --pretty=format:'%s | %an' ${tag}..main`)
     .toString()
     .split("\n");
 
