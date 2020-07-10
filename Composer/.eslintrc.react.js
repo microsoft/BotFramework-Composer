@@ -44,7 +44,7 @@ module.exports = {
     'emotion/jsx-import': 'error',
 
     // jsx-a11y
-    // taken from https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/src/index.js
+    // taken from https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/main/src/index.js
     'jsx-a11y/accessible-emoji': 'warn',
     'jsx-a11y/alt-text': 'warn',
     'jsx-a11y/anchor-has-content': 'warn',

@@ -99,7 +99,7 @@ export function initAppMenu() {
         {
           label: 'Composer on GitHub',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/tree/master');
+            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer');
           },
         },
         {
@@ -119,13 +119,13 @@ export function initAppMenu() {
         {
           label: 'View License',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/master/LICENSE.md');
+            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/main/LICENSE.md');
           },
         },
         {
           label: 'Privacy Statement',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/master/PRIVACY.md');
+            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/main/PRIVACY.md');
           },
         },
         { type: 'separator' },
@@ -144,7 +144,7 @@ export function initAppMenu() {
               title: 'Bot Framework Composer',
               message: `
                 Bot Framework Composer
-                
+
                 Version:  ${app.getVersion()}
                 Electron: ${process.versions.electron}
                 Chrome: ${process.versions.chrome}
