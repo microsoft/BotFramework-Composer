@@ -5,6 +5,8 @@ import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
 import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 
+import { inheritParentProperties } from './inheritParentProperty';
+
 const StepsKey = AdaptiveFieldNames.Actions;
 
 export function transformForeach(
@@ -24,10 +26,13 @@ export function transformForeach(
     children: steps,
   });
 
-  return {
+  const result = {
     foreachDetail: foreachDetailNode,
     stepGroup: stepsNode,
     loopBegin: new IndexedNode(jsonpath, { $kind: AdaptiveKinds.LoopIndicator }),
     loopEnd: new IndexedNode(jsonpath, { $kind: AdaptiveKinds.LoopIndicator }),
   };
+
+  inheritParentProperties(input, Object.values(result));
+  return result;
 }

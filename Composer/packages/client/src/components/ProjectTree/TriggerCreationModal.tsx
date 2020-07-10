@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import React, { useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -19,8 +19,11 @@ import { LuEditor, inlineModePlaceholder, defaultQnAPlaceholder } from '@bfc/cod
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import get from 'lodash/get';
+import { FontWeights } from '@uifabric/styling';
+import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 
-import { nameRegex } from '../../constants';
+import { useStoreContext } from '../../hooks/useStoreContext';
+import { addIntent } from '../../utils/luUtil';
 import {
   generateNewDialog,
   getTriggerTypes,
@@ -37,10 +40,72 @@ import {
   onChooseIntentKey,
   adaptiveCardKey,
 } from '../../utils/dialogUtil';
-import { addIntent } from '../../utils/luUtil';
-import { useStoreContext } from '../../hooks/useStoreContext';
+import { nameRegex } from '../../constants';
 
-import { styles, dropdownStyles, dialogWindow, intent, warningIcon, optionRow, warningText } from './styles';
+// -------------------- Styles -------------------- //
+
+const styles = {
+  dialog: {
+    title: {
+      fontWeight: FontWeights.bold,
+      fontSize: FontSizes.size20,
+      paddingTop: '14px',
+      paddingBottom: '11px',
+    },
+    subText: {
+      fontSize: FontSizes.size14,
+    },
+  },
+  modal: {
+    main: {
+      maxWidth: '600px !important',
+    },
+  },
+};
+
+const dropdownStyles = {
+  label: {
+    fontWeight: FontWeights.semibold,
+  },
+  dropdown: {
+    width: '400px',
+  },
+  root: {
+    marginBottom: '20px',
+  },
+};
+
+const dialogWindow = css`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  min-height: 300px;
+`;
+
+const intent = {
+  root: {
+    width: '400px',
+    paddingBottom: '20px',
+  },
+};
+
+const optionRow = {
+  display: 'flex',
+  height: 15,
+  fontSize: 15,
+};
+
+const warningIcon = {
+  marginLeft: 5,
+  color: SharedColors.red10,
+  fontSize: 5,
+};
+
+const warningText = {
+  color: SharedColors.red10,
+  fontSize: 5,
+};
+// -------------------- Validation Helpers -------------------- //
 
 const initialFormDataErrors = {
   $kind: '',
@@ -157,6 +222,7 @@ export interface QnAFilePayload {
   id: string;
   content: string;
 }
+// -------------------- TriggerCreationModal -------------------- //
 
 interface TriggerCreationModalProps {
   dialogId: string;

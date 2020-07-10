@@ -93,6 +93,7 @@ export const dialogGroups: DialogGroupsMap = {
       SDKKinds.EmitEvent,
       SDKKinds.OAuthInput,
       SDKKinds.QnAMakerDialog,
+      SDKKinds.SignOutUser,
       //  SDKKinds.CodeStep
     ],
   },
