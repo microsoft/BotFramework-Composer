@@ -12,6 +12,7 @@ import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { LgFile } from '@bfc/shared/src/types/indexers';
 
 import { localeState, lgFilesState, projectIdState } from '../../recoilModel/atoms/botState';
 import { userSettingsState, dispatcherState } from '../../recoilModel';
@@ -33,7 +34,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
   } = useRecoilValue(dispatcherState);
   const { dialogId } = props;
-  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const file: LgFile | undefined = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const diagnostics = get(file, 'diagnostics', []);
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<any>(null);
