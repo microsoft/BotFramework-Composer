@@ -1,20 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import React from 'react';
+import React, { DOMAttributes } from 'react';
 
 import { mapShortcutToKeyboardCommand } from '../constants/KeyboardCommandTypes';
-
-const styles = css`
-  border: 1px solid transparent;
-
-  &:focus {
-    outline: none;
-    border-color: black;
-  }
-`;
 
 const KeyNameByModifierAttr = {
   ctrlKey: 'Control',
@@ -30,16 +19,11 @@ interface KeyboardCommand {
   command: string;
 }
 
-interface KeyboardZoneProps {
-  onCommand: (action: KeyboardCommand, e: KeyboardEvent) => object | void;
-  children: React.ReactChild;
-}
-
 const isMac = () => {
   return /macintosh|mac os x/i.test(navigator.userAgent);
 };
 
-const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
+const buildModifierKeyPrefix = (e: React.KeyboardEvent): string => {
   let prefix = isMac() ? 'Mac.' : 'Windows.';
   ['ctrlKey', 'metaKey', 'altKey', 'shiftKey'].forEach((modifierAttr) => {
     if (e[modifierAttr]) {
@@ -49,8 +33,10 @@ const buildModifierKeyPrefix = (e: KeyboardEvent): string => {
   return prefix;
 };
 
-export const KeyboardZone = React.forwardRef<HTMLDivElement, KeyboardZoneProps>(({ onCommand, children }, ref) => {
-  const handleKeyDown = (e) => {
+export type KeyboardCommandHandler = (action: KeyboardCommand, e: React.KeyboardEvent) => object | void;
+
+export const enableKeyboardCommandAttributes = (onCommand: KeyboardCommandHandler): DOMAttributes<HTMLDivElement> => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (overriddenKeyCodes.includes(e.key)) {
       e.preventDefault();
       e.stopPropagation();
@@ -60,10 +46,7 @@ export const KeyboardZone = React.forwardRef<HTMLDivElement, KeyboardZoneProps>(
     const shortcut = modifierPrefix + e.key;
     onCommand(mapShortcutToKeyboardCommand(shortcut), e);
   };
-
-  return (
-    <div ref={ref} css={styles} data-testid="keyboard-zone" tabIndex={0} onKeyDown={handleKeyDown}>
-      {children}
-    </div>
-  );
-});
+  return {
+    onKeyDown: handleKeyDown,
+  };
+};
