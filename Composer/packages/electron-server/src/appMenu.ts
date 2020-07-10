@@ -99,7 +99,7 @@ export function initAppMenu() {
         {
           label: 'Composer on GitHub',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer');
+            await shell.openExternal('https://aka.ms/BotFrameworkComposer');
           },
         },
         {
