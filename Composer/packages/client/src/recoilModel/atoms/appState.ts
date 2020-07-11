@@ -4,7 +4,13 @@
 import { atom } from 'recoil';
 import { ProjectTemplate, UserSettings } from '@bfc/shared';
 
-import { StorageFolder, StateError, RuntimeTemplate, AppUpdateState } from '../../recoilModel/types';
+import {
+  StorageFolder,
+  StateError,
+  RuntimeTemplate,
+  AppUpdateState,
+  BoilerplateVersion,
+} from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
 import { CreationFlowStatus, AppUpdaterStatus } from '../../constants';
@@ -136,4 +142,11 @@ export const botEndpointsState = atom<any>({
 export const templateIdState = atom<string>({
   key: getFullyQualifiedKey('templateId'),
   default: 'EmptyBot',
+});
+
+export const boilerplateVersionState = atom<BoilerplateVersion>({
+  key: getFullyQualifiedKey('boilerplateVersion'),
+  default: {
+    updateRequired: false,
+  },
 });

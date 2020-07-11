@@ -41,6 +41,8 @@ import {
   runtimeTemplatesState,
   applicationErrorState,
   templateIdState,
+  announcementState,
+  boilerplateVersionState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 
@@ -379,6 +381,25 @@ export const projectDispatcher = () => {
     }
   });
 
+  const updateBoilerplate = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    try {
+      await httpClient.post(`/projects/${projectId}/updateBoilerplate`);
+      callbackHelpers.set(announcementState, formatMessage('Scripts successfully updated.'));
+    } catch (ex) {
+      setError(callbackHelpers, ex);
+    }
+  });
+
+  const getBoilerplateVersion = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    try {
+      const response = await httpClient.get(`/projects/${projectId}/boilerplateVersion`);
+      const { updateRequired, latestVersion, currentVersion } = response.data;
+      callbackHelpers.set(boilerplateVersionState, { updateRequired, latestVersion, currentVersion });
+    } catch (ex) {
+      setError(callbackHelpers, ex);
+    }
+  });
+
   return {
     openBotProject,
     createProject,
@@ -393,5 +414,7 @@ export const projectDispatcher = () => {
     updateFolder,
     createFolder,
     saveTemplateId,
+    updateBoilerplate,
+    getBoilerplateVersion,
   };
 };

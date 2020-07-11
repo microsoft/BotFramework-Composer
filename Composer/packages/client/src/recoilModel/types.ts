@@ -142,3 +142,9 @@ export type BotAssets = {
   skillManifests: SkillManifest[];
   setting: DialogSetting;
 };
+
+export type BoilerplateVersion = {
+  latestVersion?: string;
+  currentVersion?: string;
+  updateRequired?: boolean;
+};
