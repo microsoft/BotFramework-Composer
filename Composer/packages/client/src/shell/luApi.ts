@@ -8,8 +8,8 @@ import { useRecoilValue } from 'recoil';
 
 import luWorker from '../recoilModel/parsers/luWorker';
 import { projectIdState } from '../recoilModel/atoms/botState';
+import { useResolvers } from '../hooks/useResolver';
 
-import { useResolvers } from './../hooks/useRecolver';
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 import { focusPathState } from './../recoilModel/atoms/botState';
 
