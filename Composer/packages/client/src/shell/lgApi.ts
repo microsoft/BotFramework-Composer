@@ -6,8 +6,9 @@ import { LgFile } from '@bfc/shared';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 
+import { useResolvers } from '../hooks/useResolver';
+
 import { projectIdState, focusPathState } from './../recoilModel';
-import { useResolvers } from './../hooks/useRecolver';
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
 function createLgApi(
