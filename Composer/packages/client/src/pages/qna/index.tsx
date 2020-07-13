@@ -17,7 +17,7 @@ import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 
 import TableView from './table-view';
-const CodeEditorWrapper = React.lazy(() => import('./codeEditorWrapper'));
+const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface QnAPageProps extends RouteComponentProps<{}> {
   dialogId?: string;
@@ -109,7 +109,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditorWrapper dialogId={dialogId} path="/edit" />
+          <CodeEditor dialogId={dialogId} path="/edit" />
           <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>

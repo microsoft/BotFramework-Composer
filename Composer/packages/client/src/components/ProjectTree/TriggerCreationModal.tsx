@@ -242,7 +242,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const isLUISnQnA = typeof recognizer === 'string' && recognizer.endsWith('.qna');
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
   const qnaFile = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
     $kind: intentTypeKey,
@@ -256,7 +255,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const [selectedType, setSelectedType] = useState(intentTypeKey);
   const showIntentName = selectedType === intentTypeKey || selectedType === adaptiveCardKey;
   const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
-  const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
+  const showTriggerPhrase = selectedType === intentTypeKey && isLUISnQnA;
   const showEventDropDown = selectedType === eventTypeKey;
   const showActivityDropDown = selectedType === activityTypeKey;
   const showCustomEvent = selectedType === customEventKey;
@@ -314,7 +313,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       formData.$kind = intentTypeKey;
     }
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
-    if (formData.$kind === intentTypeKey && !isRegEx) {
+    if (formData.$kind === intentTypeKey && isLUISnQnA) {
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
       const updateLuFile = {
         id: luFileId,
