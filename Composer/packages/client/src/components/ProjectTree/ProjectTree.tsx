@@ -142,16 +142,18 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const onRenderHeader = (props: IGroupHeaderProps) => {
     const toggleCollapse = (): void => {
       groupRef.current?.toggleCollapseAll(true);
-      props.onToggleCollapse?.(props.group!);
-      onSelect(props.group!.key);
+      if (props.group != null) {
+        props.onToggleCollapse?.(props.group);
+        onSelect(props.group.key);
+      }
     };
     return (
       <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
           depth={0}
-          isActive={!props.group!.isCollapsed}
+          isActive={!props.group?.isCollapsed}
           isSubItemActive={!!selected}
-          link={props.group!.data}
+          link={props.group?.data}
           onDelete={onDeleteDialog}
           onSelect={toggleCollapse}
         />
