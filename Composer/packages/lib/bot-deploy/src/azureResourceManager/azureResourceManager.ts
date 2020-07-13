@@ -216,11 +216,8 @@ export class AzureResourceMananger {
           resourceGroupName: this.config.resourceGroup.name,
           location: this.config.resourceGroup.location,
           name: this.config.resourceGroup.name.replace('_', '').substr(0, 31).toLowerCase(),
-          databaseName: `${this.config.resourceGroup.name.replace('_', '').substr(0, 31).toLowerCase()}/botstate-db`,
-          containerName: `${this.config.resourceGroup.name
-            .replace('_', '')
-            .substr(0, 31)
-            .toLowerCase()}/botstate-db/botstate-container`,
+          databaseName: `botstate-db`,
+          containerName: `botstate-container`,
         };
       }
       if (!this.config.cosmosDB.resourceGroupName) {
@@ -233,10 +230,10 @@ export class AzureResourceMananger {
         this.config.cosmosDB.name = this.config.resourceGroup.name.replace('_', '').substr(0, 31).toLowerCase();
       }
       if (!this.config.cosmosDB.databaseName) {
-        this.config.cosmosDB.databaseName = `${this.config.cosmosDB.name}/botstate-db`;
+        this.config.cosmosDB.databaseName = `botstate-db`;
       }
       if (!this.config.cosmosDB.containerName) {
-        this.config.cosmosDB.containerName = `${this.config.cosmosDB.databaseName}/botstate-container`;
+        this.config.cosmosDB.containerName = `botstate-container`;
       }
 
       await this.deployCosmosDBResource(this.config.cosmosDB);
@@ -557,7 +554,6 @@ export class AzureResourceMananger {
         config.name,
         config.databaseName,
         {
-          location: config.location,
           resource: {
             id: 'botstate-db',
           },
@@ -593,7 +589,7 @@ export class AzureResourceMananger {
               ],
               excludedPaths: [
                 {
-                  path: '/"_etag"?',
+                  path: '/"_etag"/?',
                 },
               ],
             },
