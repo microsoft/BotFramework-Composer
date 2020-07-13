@@ -5,23 +5,19 @@
 import { jsx } from '@emotion/core';
 import React, { useContext, useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
-import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import get from 'lodash/get';
 
 import { StoreContext } from '../../store';
-import { navigateTo } from '../../utils/navigation';
-import { addQuestion, updateQuestion } from '../../utils/qnaUtil';
+import { addQuestion, updateQuestion, updateAnswer as updateAnswerUtil } from '../../utils/qnaUtil';
 
-import { formCell, content, textField } from './styles';
+import { formCell, content, textField, bold } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
@@ -46,6 +42,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         dialogId: qnaDialog?.id || '',
         used: !!qnaDialog && qnaDialog,
         indexId: index,
+        key: qnaSection.Body,
         ...qnaSection,
       };
     });
@@ -68,6 +65,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [questionIndex, setQuestionIndex] = useState(-1); //used in QnASection.Questions array
   const [question, setQuestion] = useState('');
   const [editMode, setEditMode] = useState(EditMode.None);
+  const [answerIndex, setAnswerIndex] = useState(-1);
+  const [answer, setAnswer] = useState('');
+
   const createOrUpdateQuestion = () => {
     if (question) {
       if (editMode === EditMode.Creating) {
@@ -75,43 +75,40 @@ const TableView: React.FC<TableViewProps> = (props) => {
         actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
       }
       if (editMode === EditMode.Updating) {
-        const updatedQnAFileContent = updateQuestion(question, questionIndex + 1, qnaSections, qnaSectionIndex);
+        const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
         actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
       }
-      setEditMode(EditMode.None);
-      setQnASectionIndex(-1);
-      setQuestion('');
     }
-
-    if (!question) {
-      // an empty name means to cancel the operation
-      cancelEditOperation();
-    }
+    // an empty name means to cancel the operation
+    cancelQuestionEditOperation();
   };
 
-  const cancelEditOperation = () => {
+  const updateAnswer = () => {
+    if (editMode === EditMode.Updating) {
+      const updatedQnAFileContent = updateAnswerUtil(answer, qnaSections, qnaSectionIndex);
+      actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
+    }
+    // an empty name means to cancel the operation
+    cancelAnswerEditOperation();
+  };
+
+  const cancelQuestionEditOperation = () => {
     setEditMode(EditMode.None);
     setQuestion('');
+    setQuestionIndex(-1);
+    setQnASectionIndex(-1);
+  };
+
+  const cancelAnswerEditOperation = () => {
+    setEditMode(EditMode.None);
+    setAnswer('');
+    setAnswerIndex(-1);
     setQnASectionIndex(-1);
   };
 
   useEffect(() => {
     setShowAllAlternatives(Array(qnaSections.length).fill(false));
   }, [dialogId, projectId]);
-
-  const getTemplatesMoreButtons = (item, index): IContextualMenuItem[] => {
-    const buttons = [
-      {
-        key: 'edit',
-        name: 'Edit',
-        onClick: () => {
-          const { dialogId, indexId } = qnaSections[index];
-          navigateTo(`/bot/${projectId}/qna/${dialogId}/edit?t=${indexId}`);
-        },
-      },
-    ];
-    return buttons;
-  };
 
   const toggleShowAllAlternatives = (index) => {
     const newArray = showAllAlternatives.map((element, i) => {
@@ -124,27 +121,20 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setShowAllAlternatives(newArray);
   };
 
-  const handleKeydown = (e) => {
+  const handleQuestionKeydown = (e) => {
     if (e.key === 'Enter') {
       createOrUpdateQuestion();
       setEditMode(EditMode.None);
-      setQnASectionIndex(-1);
-      setQuestionIndex(-1);
       e.preventDefault();
     }
     if (e.key === 'Escape') {
-      setEditMode(EditMode.None);
-      setQnASectionIndex(-1);
-      setQuestionIndex(-1);
+      cancelQuestionEditOperation();
       e.preventDefault();
     }
   };
 
-  const handleOnBlur = (e) => {
+  const handleQuestionOnBlur = (e) => {
     createOrUpdateQuestion();
-    setEditMode(EditMode.None);
-    setQnASectionIndex(-1);
-    setQuestionIndex(-1);
     e.preventDefault();
   };
 
@@ -154,16 +144,52 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setQuestionIndex(-1);
   };
 
-  const handleUpdateingAlternatives = (qnaSectionIndex, questionIndex, alternative) => {
+  const handleUpdateingAlternatives = (qnaSectionIndex, questionIndex, question) => {
     setEditMode(EditMode.Updating);
-    setQuestion(alternative);
+    setQuestion(question);
     setQnASectionIndex(qnaSectionIndex);
     setQuestionIndex(questionIndex);
   };
 
-  const handleOnChange = (newValue, index) => {
+  const handleQuestionOnChange = (newValue, index) => {
     if (index !== qnaSectionIndex) return;
     setQuestion(newValue);
+  };
+
+  const handleAnswerKeydown = (e) => {
+    if (e.key === 'Enter') {
+      updateAnswer();
+      setEditMode(EditMode.None);
+      setQnASectionIndex(-1);
+      setAnswerIndex(-1);
+      e.preventDefault();
+    }
+    if (e.key === 'Escape') {
+      setEditMode(EditMode.None);
+      setQnASectionIndex(-1);
+      setAnswerIndex(-1);
+      e.preventDefault();
+    }
+  };
+
+  const handleAnswerOnBlur = (e) => {
+    updateAnswer();
+    setEditMode(EditMode.None);
+    setQnASectionIndex(-1);
+    setQuestionIndex(-1);
+    e.preventDefault();
+  };
+
+  const handleUpdateingAnswer = (qnaSectionIndex, answer) => {
+    setEditMode(EditMode.Updating);
+    setAnswer(answer);
+    setQnASectionIndex(qnaSectionIndex);
+    setAnswerIndex(0);
+  };
+
+  const handleAnswerOnChange = (answer, index) => {
+    if (index !== qnaSectionIndex) return;
+    setAnswer(answer);
   };
 
   const getTableColums = () => {
@@ -176,16 +202,69 @@ const TableView: React.FC<TableViewProps> = (props) => {
         maxWidth: 250,
         isResizable: true,
         data: 'string',
-        onRender: (item) => {
+        onRender: (item, qnaIndex) => {
+          const questions = get(item, 'Questions', []);
+          const showingQuestions = showAllAlternatives[qnaIndex] ? questions : questions.slice(0, limitedNumber);
           return (
             <div data-is-focusable css={formCell}>
-              <div
-                aria-label={formatMessage(`Question is {question}`, { question: get(item, 'Questions[0]', '') })}
-                css={content}
-                tabIndex={-1}
-              >
-                {get(item, 'Questions[0]', '')}
-              </div>
+              {showingQuestions.map((q, qIndex) => {
+                if (qnaIndex !== qnaSectionIndex || questionIndex !== qIndex || editMode !== EditMode.Updating) {
+                  return (
+                    <div
+                      css={content}
+                      role={''}
+                      key={q}
+                      tabIndex={-1}
+                      onClick={(e) =>
+                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => {}
+                      }
+                      onKeyDown={(e) => {
+                        e.preventDefault();
+                        if (e.key === 'Enter') {
+                          handleUpdateingAlternatives(qnaIndex, qIndex, q);
+                        }
+                      }}
+                    >
+                      <div css={qIndex === 0 ? bold : {}}>{q}</div>
+                    </div>
+                  );
+                  //It is updating this qnaSection's qIndex-th Question
+                } else if (qnaIndex === qnaSectionIndex && questionIndex === qIndex && editMode === EditMode.Updating) {
+                  return (
+                    <TextField
+                      autoFocus
+                      styles={textField}
+                      value={question}
+                      onBlur={(e) => {
+                        handleQuestionOnBlur(e);
+                      }}
+                      onChange={(e, newValue) => {
+                        handleQuestionOnChange(newValue, qnaIndex);
+                      }}
+                      onKeyDown={(e) => handleQuestionKeydown(e)}
+                    />
+                  );
+                }
+              })}
+
+              {editMode === EditMode.Creating && qnaSectionIndex === qnaIndex && dialogId !== 'all' && (
+                <TextField
+                  autoFocus
+                  onBlur={(e) => {
+                    handleQuestionOnBlur(e);
+                  }}
+                  onChange={(e, newValue) => {
+                    e.preventDefault();
+                    handleQuestionOnChange(newValue, qnaIndex);
+                  }}
+                  onKeyDown={(e) => handleQuestionKeydown(e)}
+                />
+              )}
+              {!(editMode === EditMode.Creating && qnaSectionIndex === qnaIndex) && dialogId !== 'all' && (
+                <Link onClick={() => handleAddingAlternatives(qnaIndex)}>
+                  {formatMessage('add alternative phrasing')}
+                </Link>
+              )}
             </div>
           );
         },
@@ -200,68 +279,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         isPadded: true,
         onRender: (item, qnaIndex) => {
-          const alternatives = get(item, 'Questions', []).slice(1);
+          const alternatives = get(item, 'Questions', []);
           const showingAlternatives = showAllAlternatives[qnaIndex]
             ? alternatives
             : alternatives.slice(0, limitedNumber);
           return (
             <div data-is-focusable css={formCell}>
-              {showingAlternatives.map((alternative, qIndex) => {
-                if (qnaIndex !== qnaSectionIndex || questionIndex !== qIndex || editMode !== EditMode.Updating) {
-                  return (
-                    <div
-                      css={content}
-                      role={''}
-                      tabIndex={-1}
-                      onClick={(e) =>
-                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, alternative) : () => {}
-                      }
-                      onKeyDown={(e) => {
-                        e.preventDefault();
-                        if (e.key === 'Enter') {
-                          handleUpdateingAlternatives(qnaIndex, qIndex, alternative);
-                        }
-                      }}
-                    >
-                      {alternative}
-                    </div>
-                  );
-                } else if (qnaIndex === qnaSectionIndex && questionIndex === qIndex && editMode === EditMode.Updating) {
-                  return (
-                    <TextField
-                      autoFocus
-                      styles={textField}
-                      value={question}
-                      onBlur={(e) => {
-                        handleOnBlur(e);
-                      }}
-                      onChange={(e, newValue) => {
-                        handleOnChange(newValue, qnaIndex);
-                      }}
-                      onKeyDown={(e) => handleKeydown(e)}
-                    />
-                  );
-                }
-              })}
-
-              {editMode === EditMode.Creating && qnaSectionIndex === qnaIndex && dialogId !== 'all' && (
-                <TextField
-                  autoFocus
-                  onBlur={(e) => {
-                    handleOnBlur(e);
-                  }}
-                  onChange={(e, newValue) => {
-                    e.preventDefault();
-                    handleOnChange(newValue, qnaIndex);
-                  }}
-                  onKeyDown={(e) => handleKeydown(e)}
-                />
-              )}
-              {!(editMode === EditMode.Creating && qnaSectionIndex === qnaIndex) && dialogId !== 'all' && (
-                <Link onClick={() => handleAddingAlternatives(qnaIndex)}>
-                  {formatMessage('add alternative phrasing')}
-                </Link>
-              )}
               <Link onClick={() => toggleShowAllAlternatives(qnaIndex)}>
                 {formatMessage('showing {current} of {all}', {
                   current: showingAlternatives.length,
@@ -281,46 +304,47 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isResizable: true,
         data: 'string',
         isPadded: true,
-        onRender: (item) => {
+        onRender: (item, qnaIndex) => {
           return (
             <div data-is-focusable css={formCell}>
-              <div
-                aria-label={formatMessage(`Answer is {answer}`, { answer: item.Answer })}
-                css={content}
-                tabIndex={-1}
-              >
-                {item.Answer}
-              </div>
+              {(qnaIndex !== qnaSectionIndex || answerIndex === -1 || editMode !== EditMode.Updating) && (
+                <div
+                  aria-label={formatMessage(`Answer is {answer}`, { answer: item.Answer })}
+                  css={content}
+                  tabIndex={-1}
+                  onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(qnaIndex, item.Answer) : () => {})}
+                  onKeyDown={(e) => {
+                    e.preventDefault();
+                    if (e.key === 'Enter') {
+                      handleUpdateingAnswer(qnaIndex, item.Answer);
+                    }
+                  }}
+                >
+                  {item.Answer}
+                </div>
+              )}
+              {qnaIndex === qnaSectionIndex && answerIndex === 0 && editMode === EditMode.Updating && (
+                <TextField
+                  autoFocus
+                  styles={textField}
+                  value={answer}
+                  onBlur={(e) => {
+                    handleAnswerOnBlur(e);
+                  }}
+                  onChange={(e, newValue) => {
+                    handleAnswerOnChange(newValue, qnaIndex);
+                  }}
+                  onKeyDown={(e) => handleAnswerKeydown(e)}
+                />
+              )}
             </div>
-          );
-        },
-      },
-      {
-        key: 'buttons',
-        name: '',
-        minWidth: 50,
-        maxWidth: 50,
-        isResizable: false,
-        fieldName: 'buttons',
-        data: 'string',
-        onRender: (item, index) => {
-          return (
-            <IconButton
-              ariaLabel={formatMessage('Open inline editor')}
-              menuIconProps={{ iconName: 'MoreVertical' }}
-              menuProps={{
-                shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index),
-              }}
-              styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-            />
           );
         },
       },
     ];
 
     // all view, show used in column
-    if (!dialogId) {
+    if (dialogId === 'all') {
       const beenUsedColumn = {
         key: 'usedIn',
         name: formatMessage('Used In'),
@@ -333,8 +357,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item) => {
           return (
             <div data-is-focusable css={formCell}>
-              <div aria-label={formatMessage(`id is {id}`, { id: item.id })} css={content} tabIndex={-1}>
-                {item.id}
+              <div aria-label={formatMessage(`id is {id}`, { id: item.dialogId })} css={content} tabIndex={-1}>
+                {item.dialogId}
               </div>
             </div>
           );
@@ -359,7 +383,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     );
   }, []);
 
-  const getKeyCallback = useCallback((item) => item.name, []);
+  const getKeyCallback = useCallback((item) => item.Body, []);
   return (
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -369,7 +393,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           getKey={getKeyCallback}
           //initialFocusedIndex={0}
           items={qnaSections}
-          // getKey={item => item.name}
+          //getKey={item => item.Body}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.none}
           styles={{
