@@ -268,7 +268,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => {
             onCreateNewTemplate();
-            ('item added');
+            setMessage('item added');
           }}
         >
           {formatMessage('New template')}
