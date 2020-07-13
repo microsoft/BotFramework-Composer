@@ -26,9 +26,15 @@ import {
   projectIdState,
   recentProjectsState,
   applicationErrorState,
+  templateIdState,
+  announcementState,
+  boilerplateVersionState,
+  templateProjectsState,
+  runtimeTemplatesState,
 } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
+import { BotStatus } from '../../../constants';
 
 import mockProjectResponse from './mocks/mockProjectResponse.json';
 
@@ -83,6 +89,11 @@ describe('Project dispatcher', () => {
     const currentDispatcher = useRecoilValue(dispatcherState);
     const [recentProjects, setRecentProjects] = useRecoilState(recentProjectsState);
     const appError = useRecoilValue(applicationErrorState);
+    const templateId = useRecoilValue(templateIdState);
+    const announcement = useRecoilValue(announcementState);
+    const boilerplateVersion = useRecoilValue(boilerplateVersionState);
+    const templates = useRecoilValue(templateProjectsState);
+    const runtimeTemplates = useRecoilValue(runtimeTemplatesState);
 
     return {
       botOpening,
@@ -104,6 +115,11 @@ describe('Project dispatcher', () => {
       recentProjects,
       appError,
       setRecentProjects,
+      templateId,
+      announcement,
+      boilerplateVersion,
+      templates,
+      runtimeTemplates,
     };
   };
 
@@ -179,5 +195,95 @@ describe('Project dispatcher', () => {
     });
 
     expect(renderedComponent.current.recentProjects).toEqual(recentProjects);
+  });
+
+  it('should get runtime templates', async () => {
+    const templates = [
+      { id: 'EchoBot', index: 1, name: 'Echo Bot' },
+      { id: 'EmptyBot', index: 2, name: 'Empty Bot' },
+    ];
+    (httpClient.get as jest.Mock).mockResolvedValue({
+      data: templates,
+    });
+    await act(async () => {
+      await dispatcher.fetchRuntimeTemplates();
+    });
+
+    expect(renderedComponent.current.runtimeTemplates).toEqual(templates);
+  });
+
+  it('should get templates', async () => {
+    const templates = [
+      { id: 'EchoBot', index: 1, name: 'Echo Bot' },
+      { id: 'EmptyBot', index: 2, name: 'Empty Bot' },
+    ];
+    (httpClient.get as jest.Mock).mockResolvedValue({
+      data: templates,
+    });
+    await act(async () => {
+      await dispatcher.fetchTemplates();
+    });
+
+    expect(renderedComponent.current.templates).toEqual(templates);
+  });
+
+  it('should delete a project', async () => {
+    (httpClient.delete as jest.Mock).mockResolvedValue({ data: {} });
+    (httpClient.put as jest.Mock).mockResolvedValueOnce({
+      data: mockProjectResponse,
+    });
+    await act(async () => {
+      await dispatcher.openBotProject('../test/empty-bot', 'default');
+      await dispatcher.deleteBotProject('30876.502871204648');
+    });
+
+    expect(renderedComponent.current.botName).toEqual('');
+    expect(renderedComponent.current.projectId).toBe('');
+    expect(renderedComponent.current.locale).toBe('en-us');
+    expect(renderedComponent.current.lgFiles.length).toBe(0);
+    expect(renderedComponent.current.luFiles.length).toBe(0);
+    expect(renderedComponent.current.botEnvironment).toBe('production');
+    expect(renderedComponent.current.skills.length).toBe(0);
+    expect(renderedComponent.current.botOpening).toBeFalsy();
+    expect(renderedComponent.current.schemas.sdk).toBeUndefined();
+    expect(renderedComponent.current.schemas.default).toBeUndefined();
+    expect(renderedComponent.current.schemas.diagnostics?.length).toBeUndefined();
+  });
+
+  it('should set bot status', async () => {
+    await act(async () => {
+      await dispatcher.setBotStatus(BotStatus.pending);
+    });
+
+    expect(renderedComponent.current.botStatus).toEqual(BotStatus.pending);
+  });
+
+  it('should save template id', async () => {
+    act(() => {
+      dispatcher.saveTemplateId('EchoBot');
+    });
+
+    expect(renderedComponent.current.templateId).toEqual('EchoBot');
+  });
+
+  it('should update bolierplate', async () => {
+    httpClient.get as jest.Mock;
+    await act(async () => {
+      await dispatcher.updateBoilerplate('30876.502871204648');
+    });
+
+    expect(renderedComponent.current.announcement).toEqual('Scripts successfully updated.');
+  });
+
+  it('should get bolierplate version', async () => {
+    const version = { updateRequired: true, latestVersion: '3', currentVersion: '2' };
+    (httpClient.get as jest.Mock).mockResolvedValue({
+      data: version,
+    });
+    await act(async () => {
+      await dispatcher.getBoilerplateVersion('30876.502871204648');
+    });
+
+    expect(renderedComponent.current.boilerplateVersion).toEqual(version);
   });
 });

@@ -298,19 +298,6 @@ export const projectDispatcher = () => {
     }
   });
 
-  const fetchTemplateProjects = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    const { set } = callbackHelpers;
-    try {
-      const response = await httpClient.get(`/assets/projectTemplates`);
-      if (isArray(response.data)) {
-        set(templateProjectsState, [...response.data]);
-      }
-    } catch (ex) {
-      // TODO: Handle exceptions
-      logMessage(callbackHelpers, `Error setting template projects: ${ex}`);
-    }
-  });
-
   const fetchRuntimeTemplates = useRecoilCallback<[], Promise<void>>(
     (callbackHelpers: CallbackInterface) => async () => {
       const { set } = callbackHelpers;
@@ -408,7 +395,6 @@ export const projectDispatcher = () => {
     fetchTemplates,
     fetchProjectById,
     fetchRecentProjects,
-    fetchTemplateProjects,
     fetchRuntimeTemplates,
     setBotStatus,
     updateFolder,
