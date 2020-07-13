@@ -125,7 +125,7 @@ export class BotProject {
   }
 
   public get uiSchema() {
-    return this.files.get('ui.schema');
+    return this.files.get('app.uischema');
   }
 
   public getFile(id: string) {
@@ -619,7 +619,7 @@ export class BotProject {
 
     debug('Schemas directory found.');
     const schemas: FileInfo[] = [];
-    const paths = await this.fileStorage.glob('*.schema', schemasDir);
+    const paths = await this.fileStorage.glob('*.{uischema,schema}', schemasDir);
 
     for (const path of paths) {
       const fileInfo = await this._getFileInfo(Path.join(schemasDir, path));
