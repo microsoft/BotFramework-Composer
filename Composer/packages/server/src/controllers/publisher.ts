@@ -52,7 +52,7 @@ export const PublishController = {
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
-    const { subscriptKey } = sensitiveSettings.qna;
+    const { subscriptKey } = sensitiveSettings.qna || '';
     const qnaEndpointKey =
       subscriptKey && !currentProject.settings?.qna.endpointKey
         ? await currentProject.updateQnaEndpointKey(subscriptKey)
