@@ -15,7 +15,7 @@ const getDefaultDialogSchema = (title: string) => ({
   title,
   type: 'object',
   properties: {},
-  $resultValue: {
+  $result: {
     type: 'object',
     properties: {},
   },
@@ -41,7 +41,7 @@ export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
   };
 
   const handleResultValueChange = (properties) => {
-    handleChange({ ...value, $resultValue: { ...value.$resultValue, properties } });
+    handleChange({ ...value, $result: { ...value.$result, properties } });
   };
 
   return (
@@ -53,7 +53,7 @@ export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
       </div>
       <div css={schemaField.container(0)}>
         <FieldLabel label={formatMessage('Dialog result value')} />
-        <JsonEditor height={150} value={value?.$resultValue?.properties ?? {}} onChange={handleResultValueChange} />
+        <JsonEditor height={150} value={value?.$result?.properties ?? {}} onChange={handleResultValueChange} />
       </div>
     </React.Fragment>
   );
