@@ -17,7 +17,7 @@ import get from 'lodash/get';
 import { StoreContext } from '../../store';
 import { addQuestion, updateQuestion, updateAnswer as updateAnswerUtil } from '../../utils/qnaUtil';
 
-import { formCell, content, textField } from './styles';
+import { formCell, content, textField, bold } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
@@ -42,6 +42,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         dialogId: qnaDialog?.id || '',
         used: !!qnaDialog && qnaDialog,
         indexId: index,
+        key: qnaSection.Body,
         ...qnaSection,
       };
     });
@@ -66,6 +67,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [editMode, setEditMode] = useState(EditMode.None);
   const [answerIndex, setAnswerIndex] = useState(-1);
   const [answer, setAnswer] = useState('');
+
   const createOrUpdateQuestion = () => {
     if (question) {
       if (editMode === EditMode.Creating) {
@@ -211,6 +213,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     <div
                       css={content}
                       role={''}
+                      key={q}
                       tabIndex={-1}
                       onClick={(e) =>
                         dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => {}
@@ -222,7 +225,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         }
                       }}
                     >
-                      {q}
+                      <div css={qIndex === 0 ? bold : {}}>{q}</div>
                     </div>
                   );
                   //It is updating this qnaSection's qIndex-th Question

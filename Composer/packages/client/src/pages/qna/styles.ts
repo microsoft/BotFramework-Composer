@@ -21,13 +21,14 @@ export const formCell = css`
 export const textField = {
   root: {
     height: 28,
+    marginLeft: -5,
   },
   field: {
-    paddingLeft: 0,
-    marginTop: -3,
+    paddingLeft: 4,
+    marginTop: -5,
   },
 };
 
-export const bold = {
-  fontWeight: FontWeights.bold,
-};
+export const bold = css`
+  font-weight: ${FontWeights.semibold};
+`;

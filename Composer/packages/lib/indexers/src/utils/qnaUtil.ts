@@ -74,7 +74,7 @@ export function updateQuestion(
 ) {
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
     if (index !== qnaSectionIndex) {
-      result = result + '\n' + qnaSection.Body + '\n';
+      result = result + '\n' + qnaSection.Body;
     } else {
       const newQnASection = updateQuestionInQnASection(qnaSection, newContent, questionIndex);
       result += rebuildQnaSection(newQnASection);
@@ -87,7 +87,7 @@ export function updateQuestion(
 export function updateAnswer(newContent: string, qnaSections: QnASection[], qnaSectionIndex: number) {
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
     if (index !== qnaSectionIndex) {
-      result = result + '\n' + qnaSection.Body + '\n';
+      result = result + '\n' + qnaSection.Body;
     } else {
       const newQnASection = updateAnswerInQnASection(qnaSection, newContent);
       result += rebuildQnaSection(newQnASection);
@@ -119,32 +119,32 @@ function rebuildQnaSection(qnaSection) {
   const { source, QAPairId, Questions, FilterPairs, Answer, promptsText } = qnaSection;
   let result = '';
   if (source && source != 'custom editorial') {
-    result += `> !# @qna.pair.source = ${source}\n`;
+    result += `\n> !# @qna.pair.source = ${source}`;
   }
   if (QAPairId) {
-    result += `<a id = "${QAPairId}"></a>\n`;
+    result += `\n<a id = "${QAPairId}"></a>`;
   }
   if (Questions && Questions.length !== 0) {
-    result += `# ? ${Questions[0]}\n`;
+    result += `\n# ? ${Questions[0]}`;
     Questions.slice(1).forEach((question) => {
-      result += `- ${question}\n`;
+      result += `\n- ${question}`;
     });
   }
   if (FilterPairs && FilterPairs.length !== 0) {
-    result += `**Filters:**\n`;
+    result += `\n**Filters:**`;
     FilterPairs.forEach((filterPair) => {
-      result += `-${filterPair.key}=${filterPair.value}\n`;
+      result += `\n-${filterPair.key}=${filterPair.value}`;
     });
   }
   if (Answer) {
-    result += '```\n';
-    result += `${Answer}\n`;
-    result += '```\n';
+    result += '\n```';
+    result += `\n${Answer}`;
+    result += '\n```';
   }
   if (promptsText) {
-    result += '**Prompts:**\n';
+    result += '\n**Prompts:**';
     promptsText.forEach((prompt) => {
-      result += `-${prompt}\n`;
+      result += `\n-${prompt}`;
     });
   }
   return result;
