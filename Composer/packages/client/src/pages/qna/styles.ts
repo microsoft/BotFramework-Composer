@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { css } from '@emotion/core';
-
+import { FontWeights } from '@uifabric/styling';
 export const content = css`
   outline: none;
 `;
@@ -26,4 +26,8 @@ export const textField = {
     paddingLeft: 0,
     marginTop: -3,
   },
+};
+
+export const bold = {
+  fontWeight: FontWeights.bold,
 };

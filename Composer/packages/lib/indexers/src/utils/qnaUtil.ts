@@ -84,6 +84,25 @@ export function updateQuestion(
   return qnaFileContent;
 }
 
+export function updateAnswer(newContent: string, qnaSections: QnASection[], qnaSectionIndex: number) {
+  const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
+    if (index !== qnaSectionIndex) {
+      result = result + '\n' + qnaSection.Body + '\n';
+    } else {
+      const newQnASection = updateAnswerInQnASection(qnaSection, newContent);
+      result += rebuildQnaSection(newQnASection);
+    }
+    return result;
+  }, '');
+  return qnaFileContent;
+}
+
+function updateAnswerInQnASection(qnaSection: QnASection, answer: string) {
+  const newQnASection: QnASection = cloneDeep(qnaSection);
+  newQnASection.Answer = answer;
+  return newQnASection;
+}
+
 function updateQuestionInQnASection(qnaSection: QnASection, question: string, questionIndex: number) {
   const newQnASection: QnASection = cloneDeep(qnaSection);
   newQnASection.Questions[questionIndex] = question;
