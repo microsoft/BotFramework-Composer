@@ -2,10 +2,33 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { SharedColors } from '@uifabric/fluent-theme';
 
-import { errorButton, errorCount, errorInfo } from './styles';
+// -------------------- Styles -------------------- //
+
+const errorInfo = css`
+  float: left;
+  display: flex;
+`;
+
+const errorButton = css`
+  color: ${SharedColors.red20};
+  &:hover {
+    color: ${SharedColors.red20};
+  }
+`;
+
+const errorCount = css`
+  height: 32px;
+  line-height: 32px;
+  font-size 16px;
+  cursor: pointer;
+  display:inline-block;
+`;
+
+// -------------------- ErrorInfo -------------------- //
 
 interface IErrorInfoProps {
   hidden: boolean;
