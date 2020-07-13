@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { RequestHandler } from 'express-serve-static-core';
 import { JSONSchema7 } from 'json-schema';
+import { DialogSetting } from '@bfc/client/src/store/types';
 
 // TODO: this will be possible when ifilestorage is in a shared module
 // import { IFileStorage } from '../../../server/src/models/storage/interface';
@@ -35,25 +36,35 @@ export interface BotTemplate {
 
 // TODO: Add types for project, metadata
 export interface PublishPlugin<Config = any> {
-  publish: (config: Config, project: any, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
-  getStatus?: (config: Config, project: any, user?: UserIdentity) => Promise<PublishResponse>;
-  getHistory?: (config: Config, project: any, user?: UserIdentity) => Promise<PublishResult[]>;
-  rollback?: (config: Config, project: any, rollbackToVersion: string, user?: UserIdentity) => Promise<PublishResponse>;
+  publish: (config: Config, project: BotProject, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
+  getStatus?: (config: Config, project: BotProject, user?: UserIdentity) => Promise<PublishResponse>;
+  getHistory?: (config: Config, project: BotProject, user?: UserIdentity) => Promise<PublishResult[]>;
+  rollback?: (
+    config: Config,
+    project: BotProject,
+    rollbackToVersion: string,
+    user?: UserIdentity
+  ) => Promise<PublishResponse>;
   [key: string]: any;
 }
 
 export interface RuntimeTemplate {
   /** method used to eject the runtime into a project. returns resulting path of runtime! */
-  eject: (project: any, localDisk?: any) => Promise<string>;
+  eject: (project: BotProject, localDisk?: any) => Promise<string>;
 
   /** build method  */
-  build: (runtimePath: string, project: any) => Promise<void>;
+  build: (runtimePath: string, project: BotProject) => Promise<void>;
 
   /** run  */
-  run: (project: any, localDisk?: any) => Promise<void>;
+  run: (project: BotProject, localDisk?: any) => Promise<void>;
 
   /** build for deploy method  */
-  buildDeploy: (runtimePath: string, project: any, settings: any, profileName: string) => Promise<string>;
+  buildDeploy: (
+    runtimePath: string,
+    project: BotProject,
+    settings: DialogSetting,
+    profileName: string
+  ) => Promise<string>;
 
   /** path to code template */
   path: string;
@@ -100,4 +111,26 @@ export interface ExtensionCollection {
   runtimeTemplates: RuntimeTemplate[];
   botTemplates: BotTemplate[];
   baseTemplates: BotTemplate[];
+}
+
+export interface BotProject {
+  locale: string;
+  id: string | undefined;
+  name: string;
+  dir: string;
+  dataDir: string;
+  files: FileInfo[];
+  defaultSDKSchema: {
+    [key: string]: string;
+  };
+  settings: DialogSetting | null;
+  [key: string]: any;
+}
+
+export interface FileInfo {
+  name: string;
+  content: string;
+  path: string;
+  relativePath: string;
+  lastModified: string;
 }

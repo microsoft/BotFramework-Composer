@@ -5,6 +5,6 @@ module.exports = {
     tsconfigRootDir: __dirname,
   },
   rules: {
-    'security/detect-non-literal-fs-filename': 'off',
+    // 'security/detect-non-literal-fs-filename': 'off',
   },
 };

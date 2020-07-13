@@ -21,10 +21,6 @@ export default async (composer: any): Promise<void> => {
     startCommand: 'dotnet run --project azurewebapp',
     path: path.resolve(__dirname, '../../../../runtime/dotnet'),
     build: async (runtimePath: string, _project: any) => {
-      // TODO: copy source into temporary folder
-      // copyDir(path.resolve(__dirname, '../../../../../runtime/dotnet'), runtimePath);
-
-      // do stuff
       composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
       // TODO: capture output of this and store it somewhere useful
@@ -42,7 +38,6 @@ export default async (composer: any): Promise<void> => {
       composer.log('FINISHED BUILDING!');
     },
     run: async (project: any, localDisk: IFileStorage) => {
-      // do stuff
       composer.log('RUN THIS C# PROJECT!');
     },
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
@@ -95,7 +90,7 @@ export default async (composer: any): Promise<void> => {
       // write settings to disk in the appropriate location
       const settingsPath = path.join(publishFolder, 'ComposerDialogs', 'settings', 'appsettings.json');
       // Set the bot and root fields to `ComposerDialogs` - this points the runtime to the appropriate deployed location
-      // todo: are both necessary?
+      // root parameter is read by botbuilder SDK, bot parameter is read by dotnet runtime.
       Object.assign(settings, { bot: 'ComposerDialogs', root: 'ComposerDialogs' });
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
         fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
