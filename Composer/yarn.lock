@@ -52,6 +52,15 @@
     "@azure/ms-rest-js" "^2.0.4"
     tslib "^1.10.0"
 
+"@azure/arm-cosmosdb@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/arm-cosmosdb/-/arm-cosmosdb-9.0.0.tgz#e72c6c83fa03461866770e165ee0295d04a3c15f"
+  integrity sha512-RO54cvLoHfMI6lMgLJnYMscquDm/V/wGgp4YdFGZ9DsAw+Tk5tHFOm+vMTGNC/bDnw1Oo4BD2xQZ46XUoPXDcg==
+  dependencies:
+    "@azure/ms-rest-azure-js" "^2.0.1"
+    "@azure/ms-rest-js" "^2.0.4"
+    tslib "^1.10.0"
+
 "@azure/arm-deploymentmanager@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@azure/arm-deploymentmanager/-/arm-deploymentmanager-3.0.0.tgz#793ae174d043d2118d520eaec67f0986c319f7a3"
@@ -239,10 +248,26 @@
     uuid "^3.3.2"
     xml2js "^0.4.19"
 
-"@azure/ms-rest-nodeauth@^3.0.3":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@azure/ms-rest-nodeauth/-/ms-rest-nodeauth-3.0.3.tgz#e485b9c960da718d0476115e9f0ec550ccbba561"
-  integrity sha512-/KAgVV68vkOdrx6O3T6qO7thCep4nPbWzkpNIPFN3P6uzEzDIk6BCGgkzabnmkb2kXaf4+IGHs0UMoXSfN/IgQ==
+"@azure/ms-rest-js@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-js/-/ms-rest-js-2.0.7.tgz#3165bb7068387bf36c4c43db85d3662c916fd581"
+  integrity sha512-rQpNxDhyOIyS4E+4sUCBMvjrtbNwB32wH06cC2SFoQM4TR29bIKaTlIC1tMe0K07w9c5tNk/2uUHs6/ld/Z3+A==
+  dependencies:
+    "@types/node-fetch" "^2.3.7"
+    "@types/tunnel" "0.0.1"
+    abort-controller "^3.0.0"
+    form-data "^2.5.0"
+    node-fetch "^2.6.0"
+    tough-cookie "^3.0.1"
+    tslib "^1.10.0"
+    tunnel "0.0.6"
+    uuid "^3.3.2"
+    xml2js "^0.4.19"
+
+"@azure/ms-rest-nodeauth@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-nodeauth/-/ms-rest-nodeauth-3.0.5.tgz#f277ec6e323178fd13c05ca82321ba99c767d4bc"
+  integrity sha512-GoP9tn4rFNHJqE00+ARtHmPKufC3h4j7xEuyveOueUrguLT/Q0c5aEPgS9bmXWiHGoreRn2hVGGwd3m8oDdV3g==
   dependencies:
     "@azure/ms-rest-azure-env" "^2.0.0"
     "@azure/ms-rest-js" "^2.0.4"
