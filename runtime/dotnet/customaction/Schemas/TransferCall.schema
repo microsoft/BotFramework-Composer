@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema",
+  "$role": "implements(Microsoft.IDialog)",
+  "title": "Transfer Call",
+  "description": "This submit the user text to the chit chat database",
+  "type": "object",
+  "required": [
+    "$kind"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^\\$": {
+      "title": "Tooling property",
+      "description": "Open ended property for tooling."
+    }
+  },
+  "properties": {
+    "reason": {
+      "$ref": "schema:#/definitions/stringExpression",
+      "title": "Handover reason",
+      "description": "The reason for handover the call"
+    },
+    "phoneNumber": {
+      "$ref": "schema:#/definitions/stringExpression",
+      "title": "Phone number to transfer to:",
+      "description": "Phone number ot transfer the call to (e.g. +49123456789)"
+    }
+  }
+}

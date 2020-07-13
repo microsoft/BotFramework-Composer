@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema",
+  "$role": "implements(Microsoft.IDialog)",
+  "title": "End Call",
+  "description": "This submit the user text to the chit chat database",
+  "type": "object",
+  "required": [
+    "$kind"
+  ],
+  "additionalProperties": false,
+  "patternProperties": {
+    "^\\$": {
+      "title": "Tooling property",
+      "description": "Open ended property for tooling."
+    }
+  },
+   "properties": {
+    "reason": {
+      "$ref": "schema:#/definitions/stringExpression",
+      "title": "Hangup reason",
+      "description": "The reason for hung up the call"
+    }
+ }
+}

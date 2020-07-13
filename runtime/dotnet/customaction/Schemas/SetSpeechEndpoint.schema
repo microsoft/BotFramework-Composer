@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema",
+  "$role": "implements(Microsoft.IDialog)",
+  "title": "Set Speech Endpoint",
+  "description": "This submit the user text to the chit chat database",
+  "type": "object",
+  "required": [
+    "$kind"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "endpoint": {
+      "$ref": "schema:#/definitions/stringExpression",
+      "title": "Endpoint",
+      "description": "Endpoint to use for the speech generation",
+      "oneOf": [
+        {
+          "type": "string",
+          "title": "Endpoint",
+          "description": "The speech endpoint.",
+          "enum": [
+            "gkc_privatkunden_nolog",
+            "gkc_privatkunden_log",
+            "gkc_gmsb"
+          ],
+          "default": "gkc_privatkunden_nolog"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema",
+  "$role": "implements(Microsoft.IDialog)",
+  "title": "Set Text-To-Speech-Caching",
+  "description": "This submit the user text to the chit chat database",
+  "type": "object",
+  "required": [
+    "$kind"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "enableCache": {
+      "type" : "boolean",
+      "title": "Cache Text To Speech",
+      "description": "The reason for hung up the call"
+    }
+  }
+}

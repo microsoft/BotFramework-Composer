@@ -1,0 +1,112 @@
+ {
+ "$schema": "https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema",
+			"$role": "implements(Microsoft.IDialog)",
+			"type": "object",
+			"title": "Call Azure Function",
+			"description": "Make a HTTP request to an Azure Function.",
+			"required": [
+				"url",
+				"method",
+				"$kind"
+			],
+			"additionalProperties": false,
+			"patternProperties": {
+				"^\\$": {
+					"title": "Tooling property",
+					"description": "Open ended property for tooling."
+				}
+			},
+			"properties": {
+				"id": {
+					"type": "string",
+					"title": "Id",
+					"description": "Optional id for the dialog"
+				},
+				"disabled": {
+					"$ref": "schema:#/definitions/booleanExpression",
+					"title": "Disabled",
+					"description": "Optional condition which if true will disable this action.",
+					"examples": [
+						"user.age > 3"
+					]
+				},
+				"method": {
+					"type": "string",
+					"title": "HTTP method",
+					"description": "HTTP method to use.",
+					"enum": [
+						"GET",
+						"POST",
+						"PATCH",
+						"PUT",
+						"DELETE"
+					],
+					"examples": [
+						"GET",
+						"POST"
+					]
+				},
+				"url": {
+					"$ref": "schema:#/definitions/stringExpression",
+					"title": "Url",
+					"description": "URL to call (supports data binding).",
+					"examples": [
+						"https://contoso.com"
+					]
+				},
+				"body": {
+					"$ref": "schema:#/definitions/valueExpression",
+					"title": "Body",
+					"description": "Body to include in the HTTP call (supports data binding).",
+					"additionalProperties": true
+				},
+				"resultProperty": {
+					"$ref": "schema:#/definitions/stringExpression",
+					"title": "Result property",
+					"description": "Property to store the result of this action. The result includes 4 properties from the http response: statusCode, reasonPhrase, content and headers. If the content is json it will be a deserialized object.",
+					"examples": [
+						"dialog.contosodata"
+					]
+				},
+				"contentType": {
+					"$ref": "schema:#/definitions/stringExpression",
+					"title": "Content type",
+					"description": "Content media type for the body.",
+					"examples": [
+						"application/json",
+						"text/plain"
+					]
+				},
+				"headers": {
+					"type": "object",
+					"title": "Headers",
+					"description": "One or more headers to include in the request (supports data binding).",
+					"additionalProperties": {
+						"$ref": "schema:#/definitions/stringExpression"
+					}
+				},
+				"responseType": {
+					"$ref": "schema:#/definitions/stringExpression",
+					"title": "Response type",
+					"description": "Defines the type of HTTP response. Automatically calls the 'Send a response' action if set to 'Activity' or 'Activities'.",
+					"oneOf": [
+						{
+							"type": "string",
+							"title": "Standard response",
+							"description": "Standard response type.",
+							"enum": [
+								"none",
+								"json",
+								"activity",
+								"activities"
+							],
+							"default": "json"
+						},
+						{
+							"$ref": "schema:#/definitions/equalsExpression"
+						}
+					]
+				}
+				}
+			}
+		
