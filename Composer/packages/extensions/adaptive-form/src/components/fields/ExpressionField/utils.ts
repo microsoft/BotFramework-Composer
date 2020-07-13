@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 
 import { JSONSchema7, JSONSchema7Definition, SchemaDefinitions } from '@bfc/extension';
-import { resolveRef, getValueType } from '@bfc/adaptive-form';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+
+import { resolveRef, getValueType } from '../../../utils';
 
 export interface SchemaOption extends IDropdownOption {
   data: {

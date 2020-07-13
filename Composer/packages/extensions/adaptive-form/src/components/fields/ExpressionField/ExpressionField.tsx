@@ -5,10 +5,13 @@
 import { jsx, css } from '@emotion/core';
 import React, { useMemo, useState } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
-import { FieldLabel, resolveFieldWidget, usePluginConfig, getUiPlaceholder } from '@bfc/adaptive-form';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
+
+import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
+import { usePluginConfig } from '../../../hooks';
+import { FieldLabel } from '../../FieldLabel';
 
 import { ExpressionEditor } from './ExpressionEditor';
 import { getOptions, getSelectedOption, SchemaOption } from './utils';

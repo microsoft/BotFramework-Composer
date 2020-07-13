@@ -22,24 +22,15 @@ describe('resolveFieldWidget', () => {
   });
 
   describe('schema.$role', () => {
-    it('uses global overrides', () => {
-      const schema = {
-        type: 'string' as const,
-        $role: 'expression',
-      };
+    describe('$role: expression', () => {
+      it('returns ExpressionField', () => {
+        const schema = {
+          type: 'string' as const,
+          $role: 'expression',
+        };
 
-      const globalSchema = {
-        roleSchema: {
-          expression: {
-            field: DefaultFields.StringField,
-          },
-        },
-        formSchema: {},
-        recognizers: [],
-        visualSchema: {},
-      };
-
-      expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.StringField);
+        expect(resolveFieldWidget(schema, {})).toEqual(DefaultFields.ExpressionField);
+      });
     });
   });
 

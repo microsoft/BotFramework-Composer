@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UISchema } from '@bfc/extension';
+import { FormUISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -11,7 +11,7 @@ const triggerUiSchema = {
   hidden: ['actions'],
 };
 
-const DefaultUISchema: UISchema = {
+const DefaultUISchema: FormUISchema = {
   [SDKKinds.AdaptiveDialog]: {
     label: 'Adaptive dialog',
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),

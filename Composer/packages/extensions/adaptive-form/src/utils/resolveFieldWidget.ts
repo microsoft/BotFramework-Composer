@@ -22,14 +22,15 @@ export function resolveFieldWidget(
   }
 
   if (schema) {
-    if (globalConfig) {
-      const RoleOverride = schema.$role && globalConfig?.roleSchema[schema.$role]?.field;
-
-      if (RoleOverride) {
-        return RoleOverride;
+    if (schema.$role) {
+      switch (schema.$role) {
+        case 'expression':
+          return DefaultFields.ExpressionField;
       }
+    }
 
-      const KindOverride = schema.$kind && globalConfig?.formSchema[schema.$kind]?.field;
+    if (globalConfig) {
+      const KindOverride = schema.$kind && globalConfig.formSchema[schema.$kind]?.field;
 
       if (KindOverride) {
         return KindOverride;
