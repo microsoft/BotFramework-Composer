@@ -1,5 +1,5 @@
 # Controlling conversation flow
-The conversations a bot has with its users are controlled by the content of its dialog. Dialogs contain templates for messages the bot will send, along with instructions for the bot to carry out tasks. While some dialogs are linear - just one message after the other - more complex interactions will require dialogs that branch and loop based on what the user says and the choices they make. This article explains how to add both simple and more complex conversation flow using example from the [ControllingConversationFlowSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ControllingConversationFlowSample/).
+The conversations a bot has with its users are controlled by the content of its dialog. Dialogs contain templates for messages the bot will send, along with instructions for the bot to carry out tasks. While some dialogs are linear - just one message after the other - more complex interactions will require dialogs that branch and loop based on what the user says and the choices they make. This article explains how to add both simple and more complex conversation flow using example from the [ControllingConversationFlowSample](https://github.com/microsoft/BotFramework-Composer/tree/main/Composer/packages/server/assets/projects/ControllingConversationFlowSample/).
 
 ## Conditional branching
 Bot Framework Composer offers several mechanisms for controlling the flow of the conversation. These building blocks instruct the bot to make a decision based on a [property in memory](./concept-memory.md) or the result of an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). Below is a screenshot of the **Create a Condition** menu:
@@ -17,11 +17,11 @@ The **Branch: If/Else** action creates a decision point for the bot, after which
 
 ![Select If/Else Branch](./media/controlling-conversation-flow/select-if-else.png)
 
-The decision is controlled by the **Condition** field, which should contain an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) that evaluates to true or false. In the screenshot below the bot is evaluating whether `user.age` is greater than or equal to 18.
+The decision is controlled by the **Condition** field, which should contain an [expression](https://github.com/microsoft/BotBuilder-Samples/tree/main/experimental/common-expression-language) that evaluates to true or false. In the screenshot below the bot is evaluating whether `user.age` is greater than or equal to 18.
 
 ![If/Else Condition](./media/controlling-conversation-flow/if-else-condition.png)
 
-Once the condition has been set, the corresponding branches can be built. The editor will now display two parallel paths in the flow - one that will be used if the condition evaluates to `true`, and one if the condition evaluates `false`. Below the bot will **Send a response** based on whether `user.age>=18` evaluates to `true` or `false`. 
+Once the condition has been set, the corresponding branches can be built. The editor will now display two parallel paths in the flow - one that will be used if the condition evaluates to `true`, and one if the condition evaluates `false`. Below the bot will **Send a response** based on whether `user.age>=18` evaluates to `true` or `false`.
 
 ![Add If/Else display messages](./media/controlling-conversation-flow/if-else-send-response.png)
 
@@ -42,10 +42,10 @@ In addition to any cases created, there will always be a "default" branch which 
 
 ![Select For Each Loop](./media/controlling-conversation-flow/select-for-each.png)
 
- On the right in the property panel you will see **Items property**. This is where you enter the array property to be iterated. 
+ On the right in the property panel you will see **Items property**. This is where you enter the array property to be iterated.
 ![For Each Loop Properties](./media/controlling-conversation-flow/for-each-items-property.png)
 
-After setting the properties you then decide what action your bot should perform in the array. In this sample the bot sends the the result of the expression `@{dialog.foreach.index}: @{dialog.foreach.value}`. 
+After setting the properties you then decide what action your bot should perform in the array. In this sample the bot sends the the result of the expression `@{dialog.foreach.index}: @{dialog.foreach.value}`.
 
 ![For each send reponse](./media/controlling-conversation-flow/for-each-send-response.png)
 
@@ -62,7 +62,7 @@ On the right you will see the **Items Property** of the array to iterate and the
 
 ![For Each Page Propertes](./media/controlling-conversation-flow/for-each-page-property.png)
 
-After setting the aforementioned properties your **Loop: for each page (multiple items)** loop is ready. As seen in the sample below, you can nest for **Loop: for each item** within your **Loop: for each page (multiple items)** loop, causing your bot to loop through all the items in one page and take an action before handling the next page. 
+After setting the aforementioned properties your **Loop: for each page (multiple items)** loop is ready. As seen in the sample below, you can nest for **Loop: for each item** within your **Loop: for each page (multiple items)** loop, causing your bot to loop through all the items in one page and take an action before handling the next page.
 
 ![Nested For Each](./media/controlling-conversation-flow/nested-for-each.png)
 
@@ -80,7 +80,7 @@ When the child dialog begins, the parent dialog _pauses_ until the child dialog 
 
 It is possible to pass parameters into the child dialog. Parameters can be added to the **Begin a new dialog** action as name/value pairs - the value of each parameter can be a property in memory or an expression.
 
-![Begin Dialog properties](./media/controlling-conversation-flow/begin-a-new-dialog-options.png) 
+![Begin Dialog properties](./media/controlling-conversation-flow/begin-a-new-dialog-options.png)
 
 In the example above, the child dialog `menu` will be started, and will be passed 2 options:
 
@@ -96,12 +96,12 @@ In addition to **Begin a new dialog**, there are a few other methods for launchi
 #### Replace this Dialog
 **Replace this Dialog** works just like **Begin a new dialog**, with one major difference: the parent dialog *does not* resume when the child finishes. To replace a dialog click the **+** button, mouse over **Dialog management**, and select **Replace this Dialog**.
 
-![Select Replace this Dialog](./media/controlling-conversation-flow/select-replace-this-dialog.png) 
+![Select Replace this Dialog](./media/controlling-conversation-flow/select-replace-this-dialog.png)
 
 #### Repeat this Dialog
 **Repeat this Dialog** causes the current dialog to repeat from the beginning. Note that this does not reset any properties that may have been set during the course of the dialog's first run. To repeat a dialog click the **+** button, mouse over **Dialog management**, and select **Repeat this Dialog**.
 
-![Select Replace this Dialog](./media/controlling-conversation-flow/select-repeat-this-dialog.png)  
+![Select Replace this Dialog](./media/controlling-conversation-flow/select-repeat-this-dialog.png)
 
 ### Ending Dialogs
 Any dialog called will naturally end and return control to any parent dialog when it reaches the last action it the flow. It is not necessary to explicitly call **End this dialog**.
@@ -117,7 +117,7 @@ Imagine a child dialog used to collect a display name for a user profile. It ask
 ![End dialog properties](./media/controlling-conversation-flow/end-this-dialog.png)
 
 ## Conditional versions of a message in LG
-In addition to creating explicit branches and loops in the flow, it is also possible to create conditional versions of messages using the Language Generation syntax. The LG syntax supports the same `common expression language` as is used in the action blocks. 
+In addition to creating explicit branches and loops in the flow, it is also possible to create conditional versions of messages using the Language Generation syntax. The LG syntax supports the same `common expression language` as is used in the action blocks.
 
 For example, you can create a welcome message that is different depending on whether the `user.name` property is set or not. The message template could look something like this:
 
