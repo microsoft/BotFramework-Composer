@@ -6,7 +6,7 @@ import { fireEvent } from '@bfc/test-utils';
 
 import { renderWithStore } from '../../../testUtils';
 import { StorageFolder } from '../../../../src/store/types';
-import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation/DefineConversation';
+import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation';
 
 describe('<DefineConversation/>', () => {
   const onCurrentPathUpdateMock = jest.fn();
@@ -75,13 +75,24 @@ describe('<DefineConversation/>', () => {
     const component = renderComponent();
     const node = await component.findByText('OK');
     fireEvent.click(node);
-    expect(onSubmitMock).toHaveBeenCalledWith({
-      description: 'Test Echo',
-      name: 'EchoBot-11299',
-      location: '',
-      schemaUrl:
-        'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
-    });
+    expect(
+      onSubmitMock.mock.calls[0][0] ===
+        {
+          description: 'Test Echo',
+          name: 'EchoBot-11299',
+          location: '\\test-folder\\Desktop',
+          schemaUrl:
+            'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
+        } ||
+        onSubmitMock.mock.calls[0][0] ===
+          {
+            description: 'Test Echo',
+            name: 'EchoBot-11299',
+            location: '/test-folder/Desktop',
+            schemaUrl:
+              'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
+          }
+    ).toBeTruthy;
   });
 
   it('does not allow submission when the name is invalid', async () => {

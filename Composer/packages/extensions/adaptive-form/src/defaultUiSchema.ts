@@ -294,6 +294,10 @@ const DefaultUISchema: UISchema = {
     subtitle: () => formatMessage('Set Properties'),
     helpLink: 'https://aka.ms/bfc-using-memory',
   },
+  [SDKKinds.SignOutUser]: {
+    label: () => formatMessage('Sign out user'),
+    subtitle: () => formatMessage('Signout User'),
+  },
   [SDKKinds.BeginSkill]: {
     label: () => formatMessage('Connect to a skill'),
     subtitle: () => formatMessage('Skill Dialog'),

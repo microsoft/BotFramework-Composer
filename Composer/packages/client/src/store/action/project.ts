@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { navigate } from '@reach/router';
+import formatMessage from 'format-message';
 
 import { ActionCreator } from '../types';
 import filePersistence from '../persistence/FilePersistence';
@@ -235,5 +236,37 @@ export const getAllProjects = async () => {
     return (await httpClient.get(`/projects`)).data.children;
   } catch (err) {
     return err;
+  }
+};
+
+export const updateBoilerplate: ActionCreator = async (store, projectId) => {
+  const { dispatch } = store;
+  try {
+    await httpClient.post(`/projects/${projectId}/updateBoilerplate`);
+    dispatch({
+      type: ActionTypes.SET_MESSAGE,
+      payload: formatMessage('Scripts successfully updated.'),
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: err,
+    });
+  }
+};
+
+export const getBoilerplateVersion: ActionCreator = async (store, projectId) => {
+  const { dispatch } = store;
+  try {
+    const response = await httpClient.get(`/projects/${projectId}/boilerplateVersion`);
+    dispatch({
+      type: ActionTypes.GET_BOILERPLATE_SUCCESS,
+      payload: response.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: ActionTypes.SET_ERROR,
+      payload: err,
+    });
   }
 };

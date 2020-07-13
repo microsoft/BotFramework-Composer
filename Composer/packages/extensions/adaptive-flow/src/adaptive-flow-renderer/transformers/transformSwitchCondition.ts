@@ -5,6 +5,8 @@ import { AdaptiveFieldNames } from '../constants/AdaptiveFieldNames';
 import { AdaptiveKinds } from '../constants/AdaptiveKinds';
 import { IndexedNode } from '../models/IndexedNode';
 
+import { inheritParentProperties } from './inheritParentProperty';
+
 const ConditionKey = AdaptiveFieldNames.Condition;
 const CasesKey = AdaptiveFieldNames.Cases;
 const CaseStepKey = AdaptiveFieldNames.Actions;
@@ -52,5 +54,7 @@ export function transformSwitchCondition(
       });
     })
   );
+
+  inheritParentProperties(input, [result.condition, result.choice, ...result.branches]);
   return result;
 }
