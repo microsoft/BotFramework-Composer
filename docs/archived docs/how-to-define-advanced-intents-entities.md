@@ -1,6 +1,6 @@
 # Advanced intent and entity definition
 
-In this article, we will cover some details of how LUIS recognizer extracts the intent and entity you may define in Composer. We will also instruct on how to define the different types of entities as shown in the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample).
+In this article, we will cover some details of how LUIS recognizer extracts the intent and entity you may define in Composer. We will also instruct on how to define the different types of entities as shown in the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/main/Composer/packages/server/assets/projects/ToDoBotWithLuisSample).
 
 ## Prerequisites:
 
@@ -78,7 +78,7 @@ Use Simple type entities when the data has the following characteristics:
 - The data does not match exactly to a list of known words.
 - The data does not contain other data items.
 
-You can define [Simple](<(https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-primary-and-secondary-data)>) type entities using \$\<entityName\>:simple notation. Here is an example from the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample):
+You can define [Simple](<(https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-quickstart-primary-and-secondary-data)>) type entities using \$\<entityName\>:simple notation. Here is an example from the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/main/Composer/packages/server/assets/projects/ToDoBotWithLuisSample):
 
 ```markdown
 > Entity definitions
@@ -124,7 +124,7 @@ You can define [List](https://docs.microsoft.com/en-us/azure/cognitive-services/
 \$listEntity:\<normalized-value\>= - \<synonym1\> - \<synonym2\>
 ```
 
-When using list entity, you should include a value from the list directly in the utterance, not an entity label or any other value. Here is an example definition of a list entity from the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample):
+When using list entity, you should include a value from the list directly in the utterance, not an entity label or any other value. Here is an example definition of a list entity from the [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/main/Composer/packages/server/assets/projects/ToDoBotWithLuisSample):
 
 ```markdown
 > Add a list entity to detect list tye
@@ -151,7 +151,7 @@ When using list entity, you should include a value from the list directly in the
 
 This entity definition contains three lists of entities. Based on the user's input, any extracted normalized entity value (e.g. todo/shopping/grocery) will be available as `@listType` within any triggered actions.
 
-After publishing the model of [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/master/Composer/packages/server/assets/projects/ToDoBotWithLuisSample) to [LUIS](https://www.luis.ai/), you can view in [LUIS](https://www.luis.ai/) the intents and entities you have defined in Composer:
+After publishing the model of [ToDoBotWithLuisSample](https://github.com/microsoft/BotFramework-Composer/tree/main/Composer/packages/server/assets/projects/ToDoBotWithLuisSample) to [LUIS](https://www.luis.ai/), you can view in [LUIS](https://www.luis.ai/) the intents and entities you have defined in Composer:
 
 ![entities](./media/entities/entities.png)
 
