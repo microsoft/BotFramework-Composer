@@ -52,7 +52,8 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     setContent(value);
   }, [file, templateId, projectId]);
 
-  const currentDiagnostics = inlineMode && template ? filterTemplateDiagnostics(diagnostics, template) : diagnostics;
+  const currentDiagnostics =
+    inlineMode && file && template ? filterTemplateDiagnostics(file, template.name) : diagnostics;
 
   const editorDidMount: EditorDidMount = (_getValue, lgEditor) => {
     setLgEditor(lgEditor);

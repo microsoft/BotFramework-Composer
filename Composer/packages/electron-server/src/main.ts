@@ -145,7 +145,7 @@ async function main() {
 
     mainWindow.show();
 
-    mainWindow.on('closed', function () {
+    mainWindow.on('closed', () => {
       ElectronWindow.destroy();
     });
     log('Rendered application.');
@@ -188,7 +188,7 @@ async function run() {
   });
 
   // Quit when all windows are closed.
-  app.on('window-all-closed', function () {
+  app.on('window-all-closed', () => {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (!isMac()) {
@@ -196,7 +196,7 @@ async function run() {
     }
   });
 
-  app.on('activate', function () {
+  app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (!ElectronWindow.isBrowserWindowCreated) {
@@ -204,7 +204,7 @@ async function run() {
     }
   });
 
-  app.on('will-finish-launching', function () {
+  app.on('will-finish-launching', () => {
     // Protocol handler for osx
     app.on('open-url', (event, url) => {
       event.preventDefault();

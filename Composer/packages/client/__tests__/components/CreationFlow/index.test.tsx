@@ -7,15 +7,10 @@ import { createHistory, createMemorySource, LocationProvider } from '@reach/rout
 
 import { StoreContext } from '../../../src/store';
 import CreationFlow from '../../../src/components/CreationFlow/CreationFlow';
+import { DialogWrapper } from '../../../src/components/DialogWrapper';
 import { CreationFlowStatus } from '../../../src/constants';
 
-jest.mock('../../../src/components/DialogWrapper/DialogWrapper', () => {
-  return {
-    DialogWrapper: jest.fn((props) => {
-      return props.children;
-    }),
-  };
-});
+jest.mock('../../../src/components/DialogWrapper');
 
 describe('<CreationFlow/>', () => {
   let storeContext, saveTemplateMock, locationMock, createProjectMock;
@@ -36,6 +31,10 @@ describe('<CreationFlow/>', () => {
   }
 
   beforeEach(() => {
+    (DialogWrapper as jest.Mock).mockImplementation((props) => {
+      return props.children;
+    });
+
     saveTemplateMock = jest.fn();
     locationMock = {};
     storeContext = {
@@ -66,7 +65,7 @@ describe('<CreationFlow/>', () => {
     storeContext.state.templateId = 'EchoBot';
     storeContext.actions.createProject = async (templateId, name, description, location) => {
       expect(templateId).toBe(expectedTemplateId);
-      expect(location === '').toBeTruthy();
+      expect(location === '/test-folder/Desktop' || location === '\\test-folder\\Desktop').toBeTruthy();
     };
     storeContext.state.focusedStorageFolder = {
       name: 'Desktop',

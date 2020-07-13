@@ -2,7 +2,7 @@
 // Licensed under the MIT License
 import { PromptTab } from '@bfc/shared';
 
-import { parseTypeToFragment } from '../../../src/utils/convertUtils';
+import { parseTypeToFragment } from '../../../src/utils/convertUtils/parseTypeToFragment';
 
 describe('parseTypeToFragment', () => {
   it('should return corrent tab name', () => {

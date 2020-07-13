@@ -11,8 +11,7 @@
     "build:shared": "cd shared && yarn build",
     "build:indexers": "cd indexers && yarn build",
     "build:uishared": "cd ui-shared && yarn build",
-    "build:bot-deploy": "cd bot-deploy && yarn build",
-    "build:all": "yarn build:shared && yarn build:indexers && yarn build:code-editor && yarn build:uishared && yarn build:bot-deploy"
+    "build:all": "yarn build:shared && yarn build:indexers && yarn build:code-editor && yarn build:uishared"
   },
   "author": "",
   "license": "ISC"
