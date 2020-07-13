@@ -60,7 +60,7 @@ export class BaseWorker<ActionType> {
     });
   }
 
-  private isEmpty() {
+  public isEmpty() {
     return !Object.keys(this.resolves).length;
   }
 }
