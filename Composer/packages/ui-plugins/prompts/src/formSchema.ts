@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UISchema, UIOptions } from '@bfc/extension';
+import { FormUISchema, UIOptions } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import { StringField, JsonField } from '@bfc/adaptive-form';
@@ -28,7 +28,7 @@ const choiceSchema: UIOptions = {
   },
 };
 
-const formSchema: UISchema = {
+const formSchema: FormUISchema = {
   [SDKKinds.AttachmentInput]: {
     field: PromptField,
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',

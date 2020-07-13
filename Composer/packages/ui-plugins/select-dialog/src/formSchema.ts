@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { UISchema } from '@bfc/extension';
+import { FormUISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
 import { SelectDialog } from './SelectDialog';
 
-const formSchema: UISchema = {
+const formSchema: FormUISchema = {
   [SDKKinds.BeginDialog]: {
     properties: {
       dialog: {
