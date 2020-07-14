@@ -96,6 +96,9 @@ class StorageService {
       return JSON.parse(await storageClient.readFile(filePath));
     } else {
       let writable = true;
+      if (stat.isWritable != null) {
+        writable = stat.isWritable;
+      }
       try {
         fs.accessSync(filePath, fs.constants.W_OK);
       } catch (err) {
