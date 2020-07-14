@@ -13,6 +13,7 @@ import {
 } from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
@@ -21,6 +22,7 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
+import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
@@ -52,8 +54,22 @@ const root = css`
   overflow-y: auto;
   overflow-x: hidden;
   .ms-List-cell {
-    min-height: 36px;
+    min-height: 24px;
   }
+`;
+
+const sectionTag = css`
+  display: block;
+  font-family: Segoe UI;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  width: 100%;
+  height: 22px;
+  line-height: 22px;
+  padding-left: 12px;
+  color: ${NeutralColors.gray130};
+  background-color: ${NeutralColors.gray50};
 `;
 
 // -------------------- ProjectTree -------------------- //
@@ -113,7 +129,23 @@ function createItemsAndGroups(
       },
       { items: [], groups: [] }
     );
-  return result;
+  return {
+    items: result.items,
+    groups: [
+      {
+        level: 0,
+        startIndex: 0,
+        count: position,
+        key: 'all',
+        name: 'bot name',
+        children: result.groups,
+        data: {
+          displayName: 'EchoBot-1',
+          isRoot: true,
+        },
+      },
+    ],
+  };
 }
 
 interface IProjectTreeProps {
@@ -125,8 +157,12 @@ interface IProjectTreeProps {
   onDeleteDialog: (id: string) => void;
 }
 
+const TYPE_TO_ICON_MAP = {
+  'Microsoft.OnUnknownIntent': '',
+};
+
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
-  const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, updateUserSettings, navTo, createDialogBegin } = useRecoilValue(dispatcherState);
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
@@ -134,6 +170,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
+
+  const onCreateDialogComplete = (newDialog) => {
+    if (newDialog) {
+      navTo(newDialog, []);
+    }
+  };
 
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);
@@ -147,10 +189,33 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
         onSelect(props.group.key);
       }
     };
+    const level = props.group?.level;
     return (
       <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
-          depth={0}
+          commands={
+            level === 0 ? (
+              <IconButton
+                ariaLabel={formatMessage('Add Dialog')}
+                className="dialog-more-btn"
+                data-testid="dialogMoreButton"
+                iconProps={{
+                  iconName: 'CommentAdd',
+                  styles: {
+                    root: {
+                      fontSize: '12px',
+                      color: '#000',
+                    },
+                  },
+                }}
+                onClick={() => {
+                  createDialogBegin([], onCreateDialogComplete);
+                }}
+              />
+            ) : undefined
+          }
+          depth={level ?? 0}
+          icon={level === 1 ? 'CannedChat' : undefined}
           isActive={!props.group?.isCollapsed}
           isSubItemActive={!!selected}
           link={props.group?.data}
@@ -165,6 +230,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return (
       <TreeItem
         depth={nestingDepth}
+        icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
         isActive={createSelectedPath(item.index) === selected}
         link={item}
         onDelete={() => onDeleteTrigger(dialogId, item.index)}
@@ -232,6 +298,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             )}
             aria-live={'polite'}
           />
+          <span css={sectionTag}>{formatMessage('Core Bot')}</span>
           <GroupedList
             {...itemsAndGroups}
             componentRef={groupRef}
@@ -247,6 +314,9 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             styles={groupListStyle}
             onRenderCell={onRenderCell}
           />
+          <span css={sectionTag}>{formatMessage('Local Skill Bots')}</span>
+          <span css={sectionTag}>{formatMessage('Remote Skill Bots')}</span>
+          <span css={sectionTag}>{formatMessage('QnA Knowledge Base')}</span>
         </FocusZone>
       </div>
     </Resizable>

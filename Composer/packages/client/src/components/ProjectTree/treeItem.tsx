@@ -75,7 +75,7 @@ const moreButton = (isActive: boolean): IButtonStyles => {
 const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
   width: 100%;
   position: relative;
-  height: 36px;
+  height: 24px;
   font-size: 12px;
   color: #545454;
   background: ${isActive && !isSubItemActive ? '#f2f2f2' : 'transparent'};
@@ -111,7 +111,7 @@ export const overflowSet = css`
   padding-left: 12px;
   padding-right: 12px;
   box-sizing: border-box;
-  line-height: 36px;
+  line-height: 24px;
   justify-content: space-between;
   display: flex;
   justify-content: space-between;
@@ -126,6 +126,12 @@ interface ITreeItemProps {
   depth: number | undefined;
   onDelete: (id: string) => void;
   onSelect: (id: string) => void;
+  icon?: string;
+  commands?: Array<{
+    ariaLabel: string;
+    iconName: string;
+    onClick: () => void;
+  }>;
 }
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
@@ -139,9 +145,9 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
       onFocus={item.onFocus}
     >
       <div css={content} tabIndex={-1}>
-        {item.depth !== 0 && (
+        {item.icon != null && (
           <Icon
-            iconName="Flow"
+            iconName={item.icon}
             styles={{
               root: {
                 marginRight: '8px',
@@ -152,6 +158,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
+        {item.commands}
       </div>
     </div>
   );
@@ -184,7 +191,7 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
 };
 
 export const TreeItem: React.FC<ITreeItemProps> = (props) => {
-  const { link, isActive, isSubItemActive, depth, onDelete, onSelect } = props;
+  const { link, isActive, isSubItemActive, depth, onDelete, onSelect, icon, commands } = props;
 
   return (
     <div
@@ -209,6 +216,8 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
           {
             key: link.id,
             depth,
+            icon,
+            commands,
             ...link,
           },
         ]}
