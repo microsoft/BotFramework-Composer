@@ -44,15 +44,16 @@ const Configure = () => {
     // Create resource explorer.
     const resourceExplorer = new botbuilder_dialogs_declarative_1.ResourceExplorer().addFolders(getProjectRoot(), ["runtime"], false);
     resourceExplorer.addComponent(new botbuilder_dialogs_adaptive_1.AdaptiveDialogComponentRegistration(resourceExplorer));
+    const settings = getSettings();
     // Create adapter.
     // See https://aka.ms/about-bot-adapter to learn more about .bot file its use and bot configuration.
     const adapter = new botbuilder_1.BotFrameworkAdapter({
-        appId: process.env.microsoftAppID,
-        appPassword: process.env.microsoftAppPassword,
+        appId: process.env.microsoftAppID || settings.MicrosoftAppId,
+        appPassword: process.env.microsoftAppPassword || settings.MicrosoftAppPassword,
     });
     adapter.use(new botbuilder_dialogs_adaptive_1.LanguageGeneratorMiddleWare(resourceExplorer));
     // get settings
-    const bot = new composerBot_1.ComposerBot(resourceExplorer, getRootDialog(), getSettings());
+    const bot = new composerBot_1.ComposerBot(resourceExplorer, getRootDialog(), settings);
     return { adapter, bot };
 };
 const getSettings = () => {
@@ -72,7 +73,7 @@ const getSettings = () => {
         for (let file of generatedFiles) {
             if (file.endsWith(".json")) {
                 const items = require(path.join(generatedPath, file));
-                settings = Object.assign(settings, items); // merge settings
+                settings.luis = Object.assign(settings.luis, items.luis); // merge luis settings
             }
         }
     }

@@ -771,7 +771,6 @@ export const reducer = createReducer({
   [ActionTypes.DISMISS_SKILL_MANIFEST_MODAL]: dismissSkillManifestModal,
   [ActionTypes.RUNTIME_POLLING_UPDATE]: runtimePollingUpdate,
   [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
-  [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
   [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
   [ActionTypes.GET_BOILERPLATE_SUCCESS]: getBoilerplateSuccess,

@@ -1,5 +1,5 @@
 {
-  "name": "plugin-azure-publish",
+  "name": "azurePublish",
   "version": "1.0.0",
   "description": "Publish bot to an Azure Web App (Preview)",
   "main": "lib/index.js",

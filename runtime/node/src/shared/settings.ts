@@ -4,8 +4,8 @@
 export interface BotSettings {
   feature: BotFeatureSettings;
   blobStorage: BlobStorageConfiguration;
-  microsoftAppId: string;
-  microsoftAppPassword: string;
+  MicrosoftAppId: string;
+  MicrosoftAppPassword: string;
   cosmosDb: CosmosDb;
   applicationInsights: { InstrumentationKey: string };
   luis: LuisSettings;
