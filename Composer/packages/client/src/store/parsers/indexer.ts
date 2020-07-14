@@ -4,12 +4,12 @@ import { FileInfo } from '@bfc/shared';
 
 import Worker from './workers/indexer.worker.ts';
 import { BaseWorker } from './baseWorker';
-import { IndexPayload } from './types';
+import { IndexPayload, IndexerActionType } from './types';
 
 // Wrapper class
-class Indexer extends BaseWorker {
+class Indexer extends BaseWorker<IndexerActionType> {
   index(files: FileInfo, botName: string, schemas: any, locale: string) {
-    return this.sendMsg<IndexPayload>({ files, botName, schemas, locale });
+    return this.sendMsg<IndexPayload>(IndexerActionType.Index, { files, botName, schemas, locale });
   }
 }
 

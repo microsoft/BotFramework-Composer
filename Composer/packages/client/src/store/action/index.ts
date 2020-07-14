@@ -18,4 +18,5 @@ export * from './storage';
 export * from './user';
 export * from './skill';
 export * from './export';
+export * from './import';
 export * from '../middlewares/undo/actions';

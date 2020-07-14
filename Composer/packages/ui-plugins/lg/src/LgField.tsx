@@ -49,7 +49,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
 
   const updateLgTemplate = useCallback(
     (body: string) => {
-      shellApi.updateLgTemplate(lgFileId, lgName, body).catch(() => {});
+      shellApi.updateLgTemplate(lgFileId, lgName, body);
     },
     [lgName, lgFileId]
   );
@@ -64,7 +64,7 @@ const LgField: React.FC<FieldProps<string>> = (props) => {
     body: getInitialTemplate(name, value),
   };
 
-  const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile.diagnostics, template) : [];
+  const diagnostics = lgFile ? filterTemplateDiagnostics(lgFile, template.name) : [];
 
   const lgOption = {
     projectId,

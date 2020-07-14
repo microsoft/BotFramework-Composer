@@ -1,6 +1,50 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { ArrayItem, getArrayItemProps } from '../arrayUtils';
+
+import { renderHook, act } from '@bfc/test-utils/lib/hooks';
+
+import { ArrayItem, getArrayItemProps, useArrayItems } from '../arrayUtils';
+
+describe('useArrayItems', () => {
+  const onChange = jest.fn();
+  const items = [1, 2, 3];
+
+  it('returns array item wrappers', () => {
+    const { result } = renderHook(() => useArrayItems(items, onChange));
+
+    expect(result.current.arrayItems).toHaveLength(3);
+    expect(result.current.arrayItems[0]).toMatchObject({
+      id: expect.any(String),
+      value: 1,
+    });
+  });
+
+  it('can add an item', () => {
+    const { result } = renderHook(() => useArrayItems(items, onChange));
+
+    expect(result.current.arrayItems).toHaveLength(3);
+
+    act(() => {
+      result.current.addItem(42);
+    });
+
+    expect(result.current.arrayItems).toHaveLength(4);
+    expect(result.current.arrayItems[3].value).toEqual(42);
+    expect(onChange).toHaveBeenCalledWith([1, 2, 3, 42]);
+  });
+
+  it('can set new items', () => {
+    const { result } = renderHook(() => useArrayItems(items, onChange));
+    const { arrayItems } = result.current;
+
+    act(() => {
+      result.current.handleChange([arrayItems[0], arrayItems[2]]);
+    });
+
+    expect(result.current.arrayItems).toHaveLength(2);
+    expect(onChange).toHaveBeenCalledWith([1, 3]);
+  });
+});
 
 describe('getArrayItemProps', () => {
   let onChange: jest.Mock;

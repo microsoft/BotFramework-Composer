@@ -27,12 +27,13 @@ function getRegexIntentPattern(currentDialog: DialogInfo, intent: string): strin
 const RegexIntentField: React.FC<FieldProps> = ({ value: intentName, ...rest }) => {
   const { currentDialog, shellApi } = useShellApi();
   const [localValue, setLocalValue] = useState(getRegexIntentPattern(currentDialog, intentName));
-  const handleIntentchange = (pattern): void => {
-    setLocalValue(pattern);
-    shellApi.updateRegExIntent(currentDialog.id, intentName, pattern);
+
+  const handleIntentChange = (pattern?: string) => {
+    setLocalValue(pattern ?? '');
+    shellApi.updateRegExIntent(currentDialog.id, intentName, pattern ?? '');
   };
 
-  return <StringField {...rest} label={false} value={localValue} onChange={handleIntentchange} />;
+  return <StringField {...rest} label={false} value={localValue} onChange={handleIntentChange} />;
 };
 
 export { RegexIntentField };

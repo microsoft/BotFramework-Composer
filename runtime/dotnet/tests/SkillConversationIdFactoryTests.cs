@@ -63,7 +63,7 @@ namespace Tests
                 BotFrameworkSkill = skill
             };
 
-            var conversationId = _idFactory.CreateSkillConversationIdAsync(options, CancellationToken.None).Result;
+            var conversationId = await _idFactory.CreateSkillConversationIdAsync(options, CancellationToken.None);
             Assert.IsNotNull(conversationId);
         }
 
@@ -149,7 +149,6 @@ namespace Tests
         private bool RefEquals(ConversationReference ref1, ConversationReference ref2)
         {
             return ref1.Conversation.Id == ref2.Conversation.Id && ref1.ServiceUrl == ref2.ServiceUrl;
-
         }
     }
 }

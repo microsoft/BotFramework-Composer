@@ -2,7 +2,7 @@
 
 Tests inside of the Composer project are run via Jest ([documentation](https://jestjs.io/docs/en/24.0/getting-started.html)), with coverage reporting from Jest's built-in reporting tool istanbul.
 
-Tests are scoped to each of the packages within the Composer project, and can be found in the `__tests__` directory inside of each package directory. For example, **client** tests can be found under the `<root>/Composer/packages/client/__tests__/` directory, **visual designer** tests can be found under the `<root>/Composer/packages/extensions/visual-designer/__tests__` directory, etc.
+Tests are scoped to each of the packages within the Composer project, and can be found in the `__tests__` directory inside of each package directory. For example, **client** tests can be found under the `<root>/Composer/packages/client/__tests__/` directory, **Adaptive Flow** tests can be found under the `<root>/Composer/packages/extensions/adaptive-flow/__tests__` directory, etc.
 
 ## Running Tests
 

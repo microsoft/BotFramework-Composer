@@ -11,10 +11,12 @@ const AUTHORS = {
   "Chris Whitten": "cwhitten",
   "Dong Lei": "boydc2014",
   "Gary Pretty": "garypretty",
+  "Geoff Cox (Microsoft)": "GeoffCoxMSFT",
   "Hongyang Du (hond)": "Danieladu",
   "Kamran Iqbal": "Kaiqb",
   "Long Alan": "alanlong9278",
   "Lu Han": "luhan2017",
+  "mareekuh": "mareekuh",
   "Pooja Nagpal": "p-nagpal",
   "Qi Kang": "zidaneymar",
   "sangwoohaan": "srinaath",
@@ -32,11 +34,14 @@ const AUTHORS = {
   VanyLaw: "VanyLaw",
   xieofxie: "xieofxie",
   zeye: "yeze322",
-  zhixzhan: "zhixzhan",
+  zhixzhan: "zhixzhan"
 };
 
-const getLog = () =>
-  execSync("git log --pretty=format:'%s | %an' stable..master")
+const getLatestTag = () =>
+  execSync("git describe --tags $(git rev-list --tags --max-count=1)").toString().trim();
+
+const getLog = (tag) =>
+  execSync(`git log --pretty=format:'%s | %an' ${tag}..main`)
     .toString()
     .split("\n");
 
@@ -143,7 +148,8 @@ const formatChangeLog = groups => {
 };
 
 function run() {
-  const commits = getLog();
+  const tag = getLatestTag();
+  const commits = getLog(tag);
   const groups = groupCommits(commits);
   const output = formatChangeLog(groups);
   console.log(output);

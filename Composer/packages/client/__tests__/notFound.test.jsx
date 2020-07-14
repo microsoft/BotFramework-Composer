@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { render } from '@bfc/test-utils';
 
-import { BASEPATH } from '../src/constants/index';
+import { BASEPATH } from '../src/constants';
 import { NotFound } from '../src/components/NotFound';
 
 describe('<NotFound />', () => {

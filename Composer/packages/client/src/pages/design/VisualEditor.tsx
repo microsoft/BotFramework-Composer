@@ -7,7 +7,7 @@ import React, { useContext, useCallback, useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
-import VisualDesigner from '@bfc/visual-designer';
+import VisualDesigner from '@bfc/adaptive-flow';
 import Extension from '@bfc/extension';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
@@ -74,7 +74,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
     <React.Fragment>
       <div
         ref={addRef}
-        aria-label={formatMessage('visual editor')}
+        aria-label={formatMessage('Visual editor')}
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >

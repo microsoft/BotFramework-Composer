@@ -3,14 +3,13 @@
 
 import { IFileStorage } from './interface';
 
-/**
- * Copy a dir from one storage to another storage
- * @param srcDir path of the src dir
- * @param srcStorage src storage
- * @param dstDir path of the dst dir
- * @param dstStorage dst storage
- */
-export async function copyDir(srcDir: string, srcStorage: IFileStorage, dstDir: string, dstStorage: IFileStorage) {
+export async function copyDir(
+  srcDir: string,
+  srcStorage: IFileStorage,
+  dstDir: string,
+  dstStorage: IFileStorage,
+  pathsToExclude?: Set<string>
+) {
   if (!(await srcStorage.exists(srcDir)) || !(await srcStorage.stat(srcDir)).isDir) {
     throw new Error(`No such dir ${srcDir}}`);
   }
@@ -20,8 +19,12 @@ export async function copyDir(srcDir: string, srcStorage: IFileStorage, dstDir: 
   }
 
   const paths = await srcStorage.readDir(srcDir);
+
   for (const path of paths) {
     const srcPath = `${srcDir}/${path}`;
+    if (pathsToExclude && pathsToExclude.has(srcPath)) {
+      continue;
+    }
     const dstPath = `${dstDir}/${path}`;
 
     if ((await srcStorage.stat(srcPath)).isFile) {
@@ -30,7 +33,7 @@ export async function copyDir(srcDir: string, srcStorage: IFileStorage, dstDir: 
       await dstStorage.writeFile(dstPath, content);
     } else {
       // recursively copy dirs
-      await copyDir(srcPath, srcStorage, dstPath, dstStorage);
+      await copyDir(srcPath, srcStorage, dstPath, dstStorage, pathsToExclude);
     }
   }
 }

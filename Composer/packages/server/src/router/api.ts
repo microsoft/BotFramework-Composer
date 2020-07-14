@@ -28,11 +28,17 @@ router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLui
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 
+// update the boilerplate content
+router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
+router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBoilerplate);
+
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
 router.get('/storages', StorageController.getStorageConnections);
 router.post('/storages', StorageController.createStorageConnection);
 router.get('/storages/:storageId/blobs', StorageController.getBlob);
+router.post('/storages/folder', StorageController.createFolder);
+router.put('/storages/folder', StorageController.updateFolder);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);
@@ -51,6 +57,7 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
 // import
+router.post('/projects/:projectId/import', ImportController.import);
 router.get('/projects/:projectId/import', ImportController.import);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {

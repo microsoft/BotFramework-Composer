@@ -38,7 +38,7 @@ const SkillSettings: React.FC<ISkillFormProps> = (props) => {
       [event.target.id]: event.target.value,
     };
     setSkillSettings({ ...localSettings });
-    props.setSettings(props.projectId, props.botName, { ...props.settings, ...localSettings }, undefined);
+    props.setSettings(props.projectId, { ...props.settings, ...localSettings });
   };
 
   return (

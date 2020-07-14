@@ -98,7 +98,7 @@ describe('getReferredFiles', () => {
     const dialogs = [{ luFile: 'a' }] as DialogInfo[];
     const diagnostics: Diagnostic[] = [];
     const luFiles = [
-      { id: 'a.en-us', diagnostics, content: 'test', intents: [{ Name: '1', Body: '1' }] },
+      { id: 'a.en-us', diagnostics, content: 'test', intents: [{ Name: '1', Body: '1' }], empty: false },
       { id: 'b.en-us', diagnostics },
       { id: 'c.en-us', diagnostics },
     ] as LuFile[];
@@ -111,5 +111,16 @@ describe('getReferredFiles', () => {
     expect(() => {
       checkLuisPublish(luFiles, dialogs);
     }).toThrowError(/wrong/);
+
+    luFiles[0].diagnostics = [];
+    luFiles[0].intents = [];
+    luFiles[0].empty = true;
+    expect(() => {
+      checkLuisPublish(luFiles, dialogs);
+    }).toThrowError('You have the following empty LuFile(s): a.en-us');
+
+    luFiles[0].empty = false;
+
+    expect(checkLuisPublish(luFiles, dialogs)[0].id).toEqual('a.en-us');
   });
 });

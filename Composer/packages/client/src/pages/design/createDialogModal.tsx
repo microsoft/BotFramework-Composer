@@ -7,12 +7,11 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
-import { DialogCreationCopy } from '../../constants';
-import { DialogWrapper } from '../../components/DialogWrapper';
-import { DialogTypes } from '../../components/DialogWrapper/styles';
+import { DialogCreationCopy, nameRegex } from '../../constants';
+import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { StorageFolder } from '../../store/types';
 import { StoreContext } from '../../store';
-import { FieldConfig, useForm } from '../../hooks';
+import { FieldConfig, useForm } from '../../hooks/useForm';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -37,8 +36,6 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
     name: {
       required: true,
       validate: (value) => {
-        const nameRegex = /^[a-zA-Z0-9-_.]+$/;
-
         if (!nameRegex.test(value)) {
           return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
@@ -104,7 +101,12 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
 
         <DialogFooter>
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
-          <PrimaryButton disabled={hasErrors} text={formatMessage('Next')} onClick={handleSubmit} />
+          <PrimaryButton
+            data-testid="SubmitNewDialogBtn"
+            disabled={hasErrors}
+            text={formatMessage('OK')}
+            onClick={handleSubmit}
+          />
         </DialogFooter>
       </form>
     </DialogWrapper>

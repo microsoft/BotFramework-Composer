@@ -1,15 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useEffect, useContext, useMemo, useRef } from 'react';
+import { useContext, useMemo, useRef } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
-import get from 'lodash/get';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { StoreContext } from '../store';
-import { getDialogData, setDialogData, sanitizeDialogData } from '../utils';
-import { OpenAlertModal, DialogStyle } from '../components/Modal';
+import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 
@@ -94,16 +92,6 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
 
     actions.focusTo(dataPath, fragment);
   }
-
-  // ANDY: should this be somewhere else?
-  useEffect(() => {
-    const schemaError = get(schemas, 'diagnostics', []);
-    if (schemaError.length !== 0) {
-      const title = `StaticValidationError`;
-      const subTitle = schemaError.join('\n');
-      OpenAlertModal(title, subTitle, { style: DialogStyle.Console });
-    }
-  }, [schemas, projectId]);
 
   dialogMapRef.current = dialogsMap;
 
@@ -197,7 +185,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         luFiles,
         currentDialog,
         userSettings,
-        designerId: get(editorData, '$designer.id'),
+        designerId: editorData?.$designer?.id,
         focusedEvent: selected,
         focusedActions: focused ? [focused] : [],
         focusedSteps: focused ? [focused] : selected ? [selected] : [],

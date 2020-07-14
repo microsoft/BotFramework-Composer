@@ -1,5 +1,9 @@
 {
   "old": "value",
+  "$designer": {
+    "id": "288769",
+    "description": "This is a bot that demonstrates how to manage a ToDo list using Regular Expressions."
+  },
   "steps": [
     {
       "$kind": "Microsoft.TextInput",

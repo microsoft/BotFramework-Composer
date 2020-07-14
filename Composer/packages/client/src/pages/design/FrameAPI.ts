@@ -21,11 +21,11 @@ export const VisualEditorAPI = (() => {
   }
 
   return {
-    hasElementFocused: () => visualEditorFrameAPI.invoke('hasElementFocused'),
-    hasElementSelected: () => visualEditorFrameAPI.invoke('hasElementSelected'),
     copySelection: () => visualEditorFrameAPI.invoke('copySelection'),
     cutSelection: () => visualEditorFrameAPI.invoke('cutSelection'),
     moveSelection: () => visualEditorFrameAPI.invoke('moveSelection'),
     deleteSelection: () => visualEditorFrameAPI.invoke('deleteSelection'),
+    disableSelection: () => visualEditorFrameAPI.invoke('disableSelection'),
+    enableSelection: () => visualEditorFrameAPI.invoke('enableSelection'),
   };
 })();

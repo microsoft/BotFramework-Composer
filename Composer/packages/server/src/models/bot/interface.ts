@@ -23,8 +23,10 @@ export enum FileUpdateType {
 
 export interface ILuisConfig {
   name: string;
+  endpoint: string;
   authoringKey: string;
   endpointKey: string;
+  authoringEndpoint: string;
   authoringRegion: string | 'westus';
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';

@@ -20,7 +20,7 @@ import { LgTemplate } from '@bfc/shared';
 
 import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
-import { navigateTo } from '../../utils';
+import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, content } from '../language-understanding/styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -47,6 +47,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
     setTemplates(file.templates);
   }, [file, activeDialog, projectId]);
+
+  const moreLabel = formatMessage('Actions');
 
   const onClickEdit = useCallback(
     (template: LgTemplate) => {
@@ -183,15 +185,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
         data: 'string',
         onRender: (item, index) => {
           return (
-            <IconButton
-              ariaLabel={formatMessage('actions')}
-              menuIconProps={{ iconName: 'MoreVertical' }}
-              menuProps={{
-                shouldFocusOnMount: true,
-                items: getTemplatesMoreButtons(item, index),
-              }}
-              styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-            />
+            <TooltipHost calloutProps={{ gapSpace: 10 }} content={moreLabel}>
+              <IconButton
+                ariaLabel={moreLabel}
+                menuIconProps={{ iconName: 'MoreVertical' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: getTemplatesMoreButtons(item, index),
+                }}
+                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+              />
+            </TooltipHost>
           );
         },
       },

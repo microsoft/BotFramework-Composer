@@ -5,8 +5,7 @@ on:
     types: [opened, reopened, synchronize]
   push:
     branches:
-      - master
-      - stable
+      - main
   schedule:
     - cron: "0 0 * * *"
 
@@ -42,7 +41,7 @@ jobs:
       - name: yarn test:coverage
         run: yarn test:coverage
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v1.1.1
         continue-on-error: true
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

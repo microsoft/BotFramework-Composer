@@ -16,3 +16,5 @@ export const defaultPlaceholder = formatMessage(
 > {LU_HELP}`,
   { LU_HELP }
 );
+
+export const LG_HELP = 'https://aka.ms/lg-file-format';
