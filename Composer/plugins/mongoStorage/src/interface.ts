@@ -11,7 +11,7 @@ export interface StorageConnection {
 export interface Stat {
   isDir: boolean;
   isFile: boolean;
-  isWritable?: boolean;
+  isWritable: boolean;
   lastModified: string;
   size: string;
 }
