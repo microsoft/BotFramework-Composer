@@ -16,8 +16,6 @@ import {
   childrenContainer,
 } from './styles';
 
-const { openExternal: openExternalLink } = window as Window;
-
 interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 'title'> {
   onClick?: () => void | Promise<void>;
   title: string | JSX.Element;
@@ -31,6 +29,7 @@ interface ItemContainerProps extends Omit<IButtonProps, 'onChange' | 'styles' | 
   disabled?: boolean;
   forwardedRef?: (project: any) => void | Promise<void>;
   openExternal?: boolean;
+  ariaLabel: string;
 }
 
 export const ItemContainer: React.FC<ItemContainerProps> = ({
@@ -42,11 +41,12 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
   disabled,
   forwardedRef,
   openExternal,
+  ariaLabel,
   ...rest
 }) => {
   const onRenderChildren = () => {
     return (
-      <div ref={forwardedRef} css={childrenContainer}>
+      <div ref={forwardedRef} aria-label={ariaLabel} css={childrenContainer}>
         <div css={[itemContainer, styles.title, disabled ? disabledItem.title : undefined]}>
           <div css={itemContainerTitle}>
             <Text block variant="large">
@@ -74,12 +74,7 @@ export const ItemContainer: React.FC<ItemContainerProps> = ({
     <DefaultButton
       css={[itemContainerWrapper(disabled), styles.container]}
       onClick={async (e) => {
-        // todo: clean this up
-        const { href } = rest as Partial<{ href: string }>;
-        if (openExternal) {
-          e.preventDefault();
-          return openExternalLink(href, { activate: true });
-        } else if (onClick && !href) {
+        if (onClick != null) {
           e.preventDefault();
           await onClick();
         }

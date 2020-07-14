@@ -84,7 +84,7 @@ describe('copyTo', () => {
         let files: string[] = [];
         if (fs.existsSync(path)) {
           files = fs.readdirSync(path);
-          files.forEach(function (file) {
+          files.forEach((file) => {
             const curPath = path + '/' + file;
             if (fs.statSync(curPath).isDirectory()) {
               // recurse

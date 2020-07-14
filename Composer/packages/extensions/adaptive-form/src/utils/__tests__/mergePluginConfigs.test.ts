@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { SDKKinds, SDKRoles } from '@bfc/shared';
+import { PluginConfig } from '@bfc/extension';
 
 import { mergePluginConfigs } from '../mergePluginConfigs';
 import DefaultUISchema from '../../defaultUiSchema';
@@ -55,5 +56,22 @@ describe('mergePluginConfigs', () => {
         },
       },
     });
+  });
+
+  it('merges recognizers into default recognizer list', () => {
+    expect(mergePluginConfigs({}).recognizers).toHaveLength(2);
+
+    const overrides: Partial<PluginConfig> = {
+      recognizers: [
+        {
+          id: 'new',
+          displayName: 'New Recognizer',
+          isSelected: () => false,
+          handleRecognizerChange: jest.fn(),
+        },
+      ],
+    };
+
+    expect(mergePluginConfigs(overrides).recognizers).toHaveLength(3);
   });
 });

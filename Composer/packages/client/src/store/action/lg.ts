@@ -4,7 +4,6 @@ import clonedeep from 'lodash/cloneDeep';
 import { LgFile } from '@bfc/shared';
 
 import { ActionTypes } from '../../constants';
-import * as lgUtil from '../../utils/lgUtil';
 import { undoable } from '../middlewares/undo';
 import { ActionCreator, State, Store } from '../types';
 import LgWorker from '../parsers/lgWorker';
@@ -48,26 +47,26 @@ export const undoableUpdateLgFile = undoable(
 );
 
 export const updateLgTemplate: ActionCreator = async (store, { file, projectId, templateName, template }) => {
-  const newContent = lgUtil.updateTemplate(file.content, templateName, template);
+  const newContent = await LgWorker.updateTemplate(file.content, templateName, template);
   return await undoableUpdateLgFile(store, { id: file.id, projectId, content: newContent });
 };
 
 export const createLgTemplate: ActionCreator = async (store, { file, projectId, template }) => {
-  const newContent = lgUtil.addTemplate(file.content, template);
+  const newContent = await LgWorker.addTemplate(file.content, template);
   return await undoableUpdateLgFile(store, { id: file.id, projectId, content: newContent });
 };
 
 export const removeLgTemplate: ActionCreator = async (store, { file, projectId, templateName }) => {
-  const newContent = lgUtil.removeTemplate(file.content, templateName);
+  const newContent = await LgWorker.removeTemplate(file.content, templateName);
   return await undoableUpdateLgFile(store, { id: file.id, projectId, content: newContent });
 };
 
 export const removeLgTemplates: ActionCreator = async (store, { file, projectId, templateNames }) => {
-  const newContent = lgUtil.removeTemplates(file.content, templateNames);
+  const newContent = await LgWorker.removeAllTemplates(file.content, templateNames);
   return await undoableUpdateLgFile(store, { id: file.id, projectId, content: newContent });
 };
 
 export const copyLgTemplate: ActionCreator = async (store, { file, fromTemplateName, toTemplateName, projectId }) => {
-  const newContent = lgUtil.copyTemplate(file.content, fromTemplateName, toTemplateName);
+  const newContent = await LgWorker.copyTemplate(file.content, fromTemplateName, toTemplateName);
   return await undoableUpdateLgFile(store, { id: file.id, content: newContent, projectId });
 };

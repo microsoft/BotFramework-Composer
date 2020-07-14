@@ -14,20 +14,20 @@ class DialogSettingStorage {
     this.storage = storage;
     this._all = this.storage.get(KEY, {});
   }
-  get(botName: string) {
-    return this._all[botName] || {};
+  get(projectId: string) {
+    return this._all[projectId] || {};
   }
-  setField(botName: string, field: string, value: any) {
-    let current = this._all[botName];
+  setField(projectId: string, field: string, value: any) {
+    let current = this._all[projectId];
     if (!current) {
       current = {};
     }
     set(current, field, value);
-    this._all[botName] = current;
+    this._all[projectId] = current;
     this.storage.set(KEY, this._all);
   }
-  remove(botName: string) {
-    delete this._all[botName];
+  remove(projectId: string) {
+    delete this._all[projectId];
     this.storage.set(KEY, this._all);
   }
 }

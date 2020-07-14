@@ -7,6 +7,7 @@ import React, { forwardRef, useContext, useEffect, useState, Fragment, Suspense 
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone } from 'office-ui-fabric-react/lib/FocusZone';
+import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 
 import { Header } from './components/Header';
@@ -24,7 +25,7 @@ import { useLinks } from './utils/hooks';
 
 initializeIcons(undefined, { disableWarnings: true });
 
-const Onboarding = React.lazy(() => import('./Onboarding'));
+const Onboarding = React.lazy(() => import('./Onboarding/Onboarding'));
 const AppUpdater = React.lazy(() =>
   import('./components/AppUpdater').then((module) => ({ default: module.AppUpdater }))
 );
@@ -44,9 +45,12 @@ export const App: React.FC = () => {
     onboardingSetComplete(onboardingState.getComplete());
   }, []);
 
-  const mapNavItemTo = (x) => resolveToBasePath(BASEPATH, x);
+  const mapNavItemTo = (relPath: string) => resolveToBasePath(BASEPATH, relPath);
 
   const renderAppUpdater = isElectron();
+
+  const globalNavButtonText = sideBarExpand ? formatMessage('Collapse Navigation') : formatMessage('Expand Navigation');
+  const showTooltips = (link) => !sideBarExpand && !link.disabled;
 
   return (
     <Fragment>
@@ -67,17 +71,19 @@ export const App: React.FC = () => {
       <div css={main}>
         <nav css={sideBar(sideBarExpand)}>
           <div>
-            <IconButton
-              ariaLabel={sideBarExpand ? formatMessage('Collapse Nav') : formatMessage('Expand Nav')}
-              css={globalNav}
-              data-testid={'LeftNavButton'}
-              iconProps={{
-                iconName: 'GlobalNavButton',
-              }}
-              onClick={() => {
-                setSideBarExpand(!sideBarExpand);
-              }}
-            />
+            <TooltipHost content={globalNavButtonText} directionalHint={DirectionalHint.rightCenter}>
+              <IconButton
+                ariaLabel={globalNavButtonText}
+                css={globalNav}
+                data-testid={'LeftNavButton'}
+                iconProps={{
+                  iconName: 'GlobalNavButton',
+                }}
+                onClick={() => {
+                  setSideBarExpand((current) => !current);
+                }}
+              />
+            </TooltipHost>
             <div css={dividerTop} />{' '}
             <FocusZone allowFocusRoot>
               {topLinks.map((link, index) => {
@@ -88,6 +94,7 @@ export const App: React.FC = () => {
                     exact={link.exact}
                     iconName={link.iconName}
                     labelName={link.labelName}
+                    showTooltip={showTooltips(link)}
                     to={mapNavItemTo(link.to)}
                   />
                 );
@@ -104,6 +111,7 @@ export const App: React.FC = () => {
                   exact={link.exact}
                   iconName={link.iconName}
                   labelName={link.labelName}
+                  showTooltip={showTooltips(link)}
                   to={mapNavItemTo(link.to)}
                 />
               );

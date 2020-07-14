@@ -9,9 +9,9 @@ import { ActionCreator, State, Store } from '../types';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { Text } from '../../constants';
 import LuWorker from '../parsers/luWorker';
+import { ActionTypes } from '../../constants';
 
 import httpClient from './../../utils/httpUtil';
-import { ActionTypes } from './../../constants/index';
 
 export const updateLuFile: ActionCreator = async (store, { id, projectId, content }) => {
   const result = (await LuWorker.parse(id, content)) as LuFile;
@@ -78,7 +78,7 @@ export const publishLuis: ActionCreator = async ({ dispatch, getState }, authori
       crossTrainConfig,
       luFiles: referred.map((file) => file.id),
     });
-    luFileStatusStorage.publishAll(getState().botName);
+    luFileStatusStorage.publishAll(getState().projectId);
     dispatch({
       type: ActionTypes.PUBLISH_LU_SUCCCESS,
       payload: { response },

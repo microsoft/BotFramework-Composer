@@ -4,10 +4,10 @@
 import formatMessage from 'format-message';
 
 import { ActionCreator } from '../types';
+import filePersistence from '../persistence/FilePersistence';
+import { ActionTypes } from '../../constants';
 
-import { ActionTypes } from './../../constants/index';
 import httpClient from './../../utils/httpUtil';
-
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/publish/types`);
@@ -40,7 +40,11 @@ export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, ta
     });
   } catch (err) {
     // special case to handle dotnet issues
-    if (/dotnet/.test(err.response?.data?.message as string)) {
+    if (
+      /(Command failed: dotnet user-secrets)|(install[\w\r\s\S\t\n]*\.NET Core SDK)/.test(
+        err.response?.data?.message as string
+      )
+    ) {
       dispatch({
         type: ActionTypes.PUBLISH_FAILED_DOTNET,
         payload: {
@@ -117,6 +121,7 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
 
 export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, target) => {
   try {
+    await filePersistence.flush();
     const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
     dispatch({
       type: ActionTypes.GET_PUBLISH_HISTORY,

@@ -1,13 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-import {
-  validateTitle,
-  validateBody,
-  validateBaseBranch,
-  PullRequestInfo,
-  isRelease,
-} from './utils';
+import { validateTitle, validateBody, PullRequestInfo } from './utils';
 
 const OWNER = github.context.repo.owner;
 const REPO = github.context.repo.repo;
@@ -57,22 +51,15 @@ async function run() {
       return;
     }
 
-    if (!isRelease(pr)) {
-      const titleErrors = validateTitle(pr.title);
-      const bodyErrors = validateBody(pr.body);
-      const branchErrors = validateBaseBranch(pr.title, pr.baseRefName);
+    const titleErrors = validateTitle(pr.title);
+    const bodyErrors = validateBody(pr.body);
 
-      if (titleErrors.length) {
-        core.setFailed(titleErrors.join('\n'));
-      }
+    if (titleErrors.length) {
+      core.setFailed(titleErrors.join('\n'));
+    }
 
-      if (bodyErrors.length) {
-        core.setFailed(bodyErrors.join('\n'));
-      }
-
-      if (branchErrors.length) {
-        core.setFailed(branchErrors.join('\n'));
-      }
+    if (bodyErrors.length) {
+      core.setFailed(bodyErrors.join('\n'));
     }
   } catch (err) {
     core.error(err);
@@ -80,7 +67,7 @@ async function run() {
   }
 }
 
-run().catch(err => {
+run().catch((err) => {
   core.error(err);
   core.setFailed('Error verifying conventional PR.');
 });

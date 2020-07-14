@@ -62,6 +62,7 @@ export interface LuIntentSection {
 }
 
 export interface LuParsed {
+  empty: boolean;
   intents: LuIntentSection[];
   diagnostics: Diagnostic[];
 }
@@ -81,6 +82,7 @@ export interface LuFile {
   content: string;
   diagnostics: Diagnostic[];
   intents: LuIntentSection[];
+  empty: boolean;
   [key: string]: any;
 }
 export interface CodeRange {
@@ -105,6 +107,7 @@ export interface LgFile {
   content: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
+  options?: string[];
 }
 
 export interface Skill {

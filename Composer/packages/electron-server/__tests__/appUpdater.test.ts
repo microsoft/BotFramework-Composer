@@ -33,6 +33,7 @@ describe('App updater', () => {
     appUpdater = AppUpdater.getInstance();
     (appUpdater as any).checkingForUpdate = false;
     (appUpdater as any).downloadingUpdate = false;
+    (appUpdater as any)._downloadedUpdate = false;
     (appUpdater as any).settings = { autoDownload: false, useNightly: true };
     mockAutoUpdater.checkForUpdates.mockClear();
     mockAutoUpdater.checkForUpdates.mockClear();
@@ -173,10 +174,12 @@ describe('App updater', () => {
     const emitSpy = jest.spyOn(appUpdater, 'emit');
     (appUpdater as any).checkingForUpdate = true;
     (appUpdater as any).downloadingUpdate = true;
+    (appUpdater as any)._downloadedUpdate = false;
     (appUpdater as any).onUpdateDownloaded('update info');
 
     expect((appUpdater as any).checkingForUpdate).toBe(false);
     expect((appUpdater as any).downloadingUpdate).toBe(false);
+    expect(appUpdater.downloadedUpdate).toBe(true);
     expect(emitSpy).toHaveBeenCalledWith('update-downloaded', 'update info');
   });
 

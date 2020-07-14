@@ -8,12 +8,51 @@ import { FieldProps, UIOptions } from '@bfc/extension';
 
 import { resolvePropSchema } from '../utils';
 
-import SchemaField from './SchemaField';
+import { SchemaField } from './SchemaField';
 
-interface FormRowProps extends Omit<FieldProps, 'onChange'> {
+export interface FormRowProps extends Omit<FieldProps, 'onChange'> {
   onChange: (field: string) => (data: any) => void;
   row: string | [string, string];
 }
+
+export const getRowProps = (rowProps: FormRowProps, field: string) => {
+  const {
+    id,
+    depth,
+    schema,
+    definitions,
+    value,
+    uiOptions,
+    transparentBorder,
+    className,
+    label,
+    rawErrors,
+    onBlur,
+    onFocus,
+    onChange,
+  } = rowProps;
+
+  const { required = [] } = schema;
+  const fieldSchema = resolvePropSchema(schema, field, definitions);
+
+  return {
+    id: `${id}.${field}`,
+    schema: fieldSchema ?? {},
+    label: (label === false ? false : undefined) as false | undefined,
+    name: field,
+    rawErrors: rawErrors?.[field],
+    required: required.includes(field),
+    uiOptions: (uiOptions.properties?.[field] as UIOptions) ?? {},
+    value: value && value[field],
+    onChange: onChange(field),
+    depth,
+    definitions,
+    transparentBorder,
+    className,
+    onBlur,
+    onFocus,
+  };
+};
 
 const formRow = {
   row: css`
@@ -40,79 +79,18 @@ const formRow = {
 };
 
 const FormRow: React.FC<FormRowProps> = (props) => {
-  const {
-    id,
-    depth,
-    schema,
-    row,
-    definitions,
-    value,
-    uiOptions,
-    transparentBorder,
-    className,
-    label,
-    rawErrors,
-    onBlur,
-    onFocus,
-    onChange,
-  } = props;
-
-  const { required = [] } = schema;
+  const { id, row } = props;
 
   if (Array.isArray(row)) {
     return (
       <div css={formRow.row}>
         {row.map((property) => (
-          <SchemaField
-            key={`${id}.${property}`}
-            className={className}
-            css={formRow.property}
-            definitions={definitions}
-            depth={depth}
-            id={`${id}.${property}`}
-            label={label === false ? false : undefined}
-            name={property}
-            rawErrors={rawErrors?.[property]}
-            required={required.includes(property)}
-            schema={resolvePropSchema(schema, property, definitions) || {}}
-            transparentBorder={transparentBorder}
-            uiOptions={(uiOptions.properties?.[property] as UIOptions) ?? {}}
-            value={value && value[property]}
-            onBlur={onBlur}
-            onChange={onChange(property)}
-            onFocus={onFocus}
-          />
+          <SchemaField key={`${id}.${property}`} css={formRow.property} {...getRowProps(props, property)} />
         ))}
       </div>
     );
   }
-  const propSchema = resolvePropSchema(schema, row, definitions);
-
-  if (propSchema) {
-    return (
-      <SchemaField
-        key={`${id}.${row}`}
-        className={className}
-        css={formRow.full}
-        definitions={definitions}
-        depth={depth}
-        id={`${id}.${row}`}
-        label={label === false ? false : undefined}
-        name={row}
-        rawErrors={rawErrors?.[row]}
-        required={required.includes(row)}
-        schema={propSchema}
-        transparentBorder={transparentBorder}
-        uiOptions={(uiOptions.properties?.[row] as UIOptions) ?? {}}
-        value={value && value[row]}
-        onBlur={onBlur}
-        onChange={onChange(row)}
-        onFocus={onFocus}
-      />
-    );
-  }
-
-  return null;
+  return <SchemaField key={`${id}.${row}`} css={formRow.full} {...getRowProps(props, row)} />;
 };
 
 export { FormRow };

@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "description": "",
-  "main": "index.js",
-  "types": "types.d.ts",
+  "main": "lib/index.js",
   "author": "",
   "license": "MIT",
+  "scripts": {
+    "build": "rimraf lib && tsc"
+  },
   "dependencies": {
     "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
@@ -14,7 +16,7 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "@testing-library/jest-dom": "^5.7.0",
+    "@testing-library/jest-dom": "^5.9.0",
     "@testing-library/react": "^10.0.4",
     "@testing-library/react-hooks": "^3.2.1",
     "babel-jest": "^26.0.1",

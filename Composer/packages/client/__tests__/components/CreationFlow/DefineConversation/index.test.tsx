@@ -2,17 +2,20 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { fireEvent } from '@bfc/test-utils';
 
-import { StoreContext } from '../../../../src/store';
+import { renderWithStore } from '../../../testUtils';
 import { StorageFolder } from '../../../../src/store/types';
 import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation';
 
 describe('<DefineConversation/>', () => {
-  let onSubmitMock;
-  let onDismissMock;
   const onCurrentPathUpdateMock = jest.fn();
-  let component, storeContext, saveTemplateMock, locationMock;
+  const saveTemplateMock = jest.fn();
+  const onSubmitMock = jest.fn();
+  const onDismissMock = jest.fn();
+  const createFolder = jest.fn();
+  const updateFolder = jest.fn();
+  let storeContext, locationMock;
   const focusedStorageFolder: StorageFolder = {
     name: 'Desktop',
     parent: '/test-folder',
@@ -30,56 +33,73 @@ describe('<DefineConversation/>', () => {
     ],
   };
   function renderComponent() {
-    return render(
-      <StoreContext.Provider value={storeContext}>
-        <DefineConversation
-          focusedStorageFolder={focusedStorageFolder}
-          location={locationMock}
-          onCurrentPathUpdate={onCurrentPathUpdateMock}
-          onDismiss={onDismissMock}
-          onSubmit={onSubmitMock}
-        />
-      </StoreContext.Provider>
+    return renderWithStore(
+      <DefineConversation
+        createFolder={createFolder}
+        focusedStorageFolder={focusedStorageFolder}
+        location={locationMock}
+        updateFolder={updateFolder}
+        onCurrentPathUpdate={onCurrentPathUpdateMock}
+        onDismiss={onDismissMock}
+        onSubmit={onSubmitMock}
+      />,
+      storeContext.state,
+      storeContext.action
     );
   }
 
   beforeEach(() => {
-    saveTemplateMock = jest.fn();
     locationMock = {};
     storeContext = {
       actions: {
         saveTemplateId: saveTemplateMock,
       },
       state: {
-        templateId: '',
+        templateId: 'EchoBot',
         focusedStorageFolder: '',
+        storages: [{ id: 'default' }],
       },
     };
-
-    onSubmitMock = jest.fn();
   });
 
   it('should render the component', () => {
-    storeContext.state.storages = [];
-    component = renderComponent();
+    const component = renderComponent();
     expect(component.container).toBeDefined();
   });
 
   it('should update formdata with data passed through location props', async () => {
-    storeContext.state.storages = [];
-    storeContext.state.templateId = 'EchoBot';
     locationMock = {
       search:
         'schemaUrl%3Dhttps%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2Fbotframework-sdk%2Fmaster%2Fschemas%2Fcomponent%2Fcomponent.schema%26name%3DEchoBot-11299%26description%3DTest%20Echo',
     };
-    component = renderComponent();
-    const node = await component.findByText('Next');
+    const component = renderComponent();
+    const node = await component.findByText('OK');
     fireEvent.click(node);
-    expect(onSubmitMock).toHaveBeenCalledWith({
-      description: 'Test Echo',
-      name: 'EchoBot-11299',
-      schemaUrl:
-        'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
-    });
+    expect(
+      onSubmitMock.mock.calls[0][0] ===
+        {
+          description: 'Test Echo',
+          name: 'EchoBot-11299',
+          location: '\\test-folder\\Desktop',
+          schemaUrl:
+            'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
+        } ||
+        onSubmitMock.mock.calls[0][0] ===
+          {
+            description: 'Test Echo',
+            name: 'EchoBot-11299',
+            location: '/test-folder/Desktop',
+            schemaUrl:
+              'https://raw.githubusercontent.com/microsoft/botframework-sdk/master/schemas/component/component.schema',
+          }
+    ).toBeTruthy;
+  });
+
+  it('does not allow submission when the name is invalid', async () => {
+    const component = renderComponent();
+    const nameField = await component.getByTestId('NewDialogName');
+    fireEvent.change(nameField, { target: { value: 'invalidName;' } });
+    const node = await component.getByTestId('SubmitNewBotBtn');
+    expect(node).toBeDisabled();
   });
 });

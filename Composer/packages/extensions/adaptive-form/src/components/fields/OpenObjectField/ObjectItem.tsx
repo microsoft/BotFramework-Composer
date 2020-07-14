@@ -7,6 +7,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 
 import { EditableField } from '../EditableField';
@@ -15,8 +16,8 @@ import { container, item } from './styles';
 
 interface ObjectItemProps {
   name: string;
-  formData: any;
-  value: any;
+  formData: object;
+  value: unknown;
   onNameChange: (name: string) => void;
   onValueChange: (value?: string) => void;
   onDelete: () => void;
@@ -31,7 +32,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
   onDelete,
 }) => {
   const initialName = useMemo(() => originalName, []);
-  const initialValue = useMemo(() => value, []);
+  const initialValue = useMemo(() => value as string, []);
   const [name, setName] = useState<string>(originalName);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -43,6 +44,8 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
       text: 'Remove',
     },
   ];
+
+  const moreLabel = formatMessage('Edit Property');
 
   const handleBlur = useCallback(() => {
     if (!name || name === '') {
@@ -56,7 +59,7 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
   }, [name, formData]);
 
   return (
-    <div css={container}>
+    <div css={container} data-testid="ObjectItem">
       <div css={item}>
         <EditableField
           transparentBorder
@@ -94,15 +97,18 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
           onChange={onValueChange}
         />
       </div>
-      <IconButton
-        ariaLabel={formatMessage('Edit Property')}
-        menuIconProps={{ iconName: 'MoreVertical' }}
-        menuProps={{ items: contextItems }}
-        styles={{
-          root: { margin: '7px 0 7px 0' },
-          menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 },
-        }}
-      />
+      <TooltipHost content={moreLabel}>
+        <IconButton
+          ariaLabel={moreLabel}
+          data-testid="ObjectItemActions"
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          menuProps={{ items: contextItems }}
+          styles={{
+            root: { margin: '7px 0 7px 0' },
+            menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 },
+          }}
+        />
+      </TooltipHost>
     </div>
   );
 };

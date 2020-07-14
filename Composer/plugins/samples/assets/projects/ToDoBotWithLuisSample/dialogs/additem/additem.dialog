@@ -23,7 +23,7 @@
           "assignments": [
             {
               "property": "dialog.itemTitle",
-              "value": "=coalesce(@itemTite, $itemTitle)"
+              "value": "=coalesce(@itemTitle, $itemTitle)"
             },
             {
               "property": "dialog.listType",

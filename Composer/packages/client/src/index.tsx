@@ -11,6 +11,8 @@ import './index.css';
 import { App } from './App';
 import { StoreProvider } from './store';
 
+const appHostElm = document.getElementById('root');
+
 formatMessage.setup({
   missingTranslation: 'ignore',
 });
@@ -20,11 +22,29 @@ const emotionCache = createCache({
   nonce: window.__nonce__,
 });
 
-ReactDOM.render(
-  <CacheProvider value={emotionCache}>
-    <StoreProvider>
-      <App />
-    </StoreProvider>
-  </CacheProvider>,
-  document.getElementById('root')
-);
+/**
+ * Renders the React App module.
+ */
+const renderApp = (AppComponent: typeof App) => {
+  ReactDOM.render(
+    <CacheProvider value={emotionCache}>
+      <StoreProvider>
+        <AppComponent />
+      </StoreProvider>
+    </CacheProvider>,
+    appHostElm
+  );
+};
+
+// Rendering the App for the first time.
+renderApp(App);
+
+/**
+ * Re-render updated App Module when hot module notifies a change.
+ */
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    const NextApp = require<{ App: typeof App }>('./App').App;
+    renderApp(NextApp);
+  });
+}

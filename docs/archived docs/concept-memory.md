@@ -1,0 +1,196 @@
+# Conversation flow and memory
+
+All bots built with the Bot Framework Composer have a "memory", a representation of everything that is currently in the bot's active mind. Developers can store and retrieve values in the bot's memory, and can use those values to create loops, branches, dynamic messages and behaviors in the bot. Properties stored in memory can be used inside templates or as part of a calculation.
+
+The memory system makes it possible for bots built in Composer to do things like:
+
+- Store user profiles and preferences.
+- Remember things between sessions such as the last search query or a list of recently mentioned locations.
+- Pass information between dialogs.
+
+## Anatomy of a property in memory
+
+A piece of data in memory is referred to as a **property**. A property is a distinct value identified by a specific address comprised of two parts, the **scope** of the property and the **name** of the property: `scope.name`.
+
+Here are a couple of examples:
+
+- `user.name`
+- `turn.activity`
+- `dialog.index`
+- `user.profile.age`
+
+The scope of the property determines when the property is available, and how long the value will be retained.
+
+### Storing information about users and ongoing conversations
+
+The bot's memory has two "permanent" scopes. The first is a place to store information about individual users, the second is a place to store information about ongoing conversations:
+
+1. **user** is associated with a specific user. Properties in the user scope are retained forever.
+
+2. **conversation** is associated with the conversation id. Properties in the user scope are retained forever and may be accessed by multiple users within the same conversation (for example, multiple users together in a Microsoft Teams channel).
+
+### Storing temporary values during task handling
+
+The bot's memory also has two "ephemeral" scopes. Ephemeral scopes are a place to store temporary values that are only relevant while a task is being handled. The two scopes are:
+
+1. **dialog** is associated with the active dialog and any child or parent dialogs. Properties in the dialog scope are retained until the last active dialog ends.
+
+2. **turn** is associated with a single turn. You can also think of this as the bot handling a single message from the user. Properties in the turn scope are discarded at the end of the turn.
+
+## Set properties with prompts
+
+Input is collected from user's with prompt types provided in the **Ask a question** sub-menu.
+
+![Ask a question submenu](./media/memory/ask-a-question-menu.png)
+
+Prompts define the question posed to the user and are set in the **Prompt** box under the **Bot Asks** tab in the properties panel on the left.
+
+![Prompt Bot Asks](./media/memory/bot-asks.png)
+
+Under the **User Input** tab you'll see **Property to fill**, where the user's response will be stored. Prompt responses can be formatted before being stored by selecting an option for **Output Format**, and their locale can be set with **Default locale**.
+
+![Prompt User Input](./media/memory/user-input.png)
+
+In the above example of a number prompt, the result of the prompt "What is your age?" will be stored as the `user.age` property. The result will be stored as a float since the `float` output format was selected.
+
+For more information about implementing text other prompts see the article [Asking users for input](./how-to-ask-for-user-input.md).
+
+## Manipulating properties using memory actions
+
+The Bot Framework Composer provides a set of memory manipulation actions in the **Manage properties** sub-menu. These actions can be used to create, initialize, modify and delete properties in memory. Properties can be created in the editor and during runtime. Composer will automatically manage the underlying data for you.
+
+![Memory manipulation menu](./media/memory/memory-mainpulation-menu.png)
+
+### Set a property
+
+Use **Set a property** to set the value of a property.
+
+![Set a property](./media/memory/set-property.png)
+
+The value of a property can be set to a literal value, like `true`, `0`, or `fred`, or it can be set to the result of a [computed expression](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language). When storing simple values it is not necessary to initialize the property.
+
+### Set properties
+
+Use **Set properties** to set a group of properties.
+
+![Set properties](./media/memory/set-properties.png)
+
+The value of each property is assigned individually in the **Properties panel**. Don't forget to press `Enter` to save the property setting before you set the next one.
+
+### Initialize a property
+
+Use **Initialize a property** to create new properties that are objects or arrays.
+
+![Initialize property](./media/memory/initialize-property.png)
+
+It is important to note that before setting the value of a sub-property like `user.profile.age` that `user.profile` must first be initialized. It is not necessary to also initialize `user.profile.age` unless `age` also contains sub-values.
+
+### Delete a property
+
+Use **Delete a Property** to remove a property from memory.
+
+![Delete a property](./media/memory/delete-property.png)
+
+### Delete properties
+
+Use **Delete properties** to remove properties from memory.
+
+![Delete properties](./media/memory/delete-properties.png)
+
+### Edit an Array Property
+
+Use **Edit an Array Property** to add and remove items from an array. Items set in **Value** can be added or removed from the beginning or end of an array in the **Items property** using push, pop, take, remove, and clear in **Type of change**. The result of the edited array is saved to **Result Property**
+
+![Edit an Array Property](./media/memory/edit-array-property.png)
+
+Note that it is possible to push the value of an existing property into an array property. For example, push `turn.choice` onto `dialog.choices`.
+
+## Manipulating properties with dialogs
+
+Child dialogs can return values to their parent dialogs. In this way, a child dialog can encapsulate a multi-step interaction, collect and compute multiple values, and then return a single value to its parent dialog.
+
+For example, a child dialog might first **Initialize an object** property called `dialog.profile`. Then, using prompts, build a compound property representing a user profile:
+
+![Initialize object profile](./media/memory/initialize-object-profile.png)
+
+Finally, the dialog returns the compound value to the parent dialog. The return value is specified as the **Default result property** within the trigger for the child dialog:
+
+![Default result property](./media/memory/default-result-property.png)
+
+Finally, the parent dialog is configured to capture the return value inside the **Begin a new dialog** action:
+
+![Return value stored in parent dialog](./media/memory/begin-new-dialog.png)
+
+When executed, the bot will execute the **profile** child dialog, collect the user's name and age in a _temporary_ scope, then return it to the parent dialog where it is captured into the `user.profile` property and stored permanently.
+
+## Automatic properties
+
+Some properties are automatically created and managed by the bot. These are available automatically.
+
+| Property                           | Description                                                                                                                   |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| turn.activity                      | The full incoming [Activity](https://aka.ms/typescript-namespace-latest-activity-interface?view=botbuilder-ts-latest) object. |
+| turn.intents                       | If a recognizer is run, the intents found.                                                                                    |
+| turn.entities                      | If a recognizer is run, the entities found.                                                                                   |
+| turn.dialogEvents.event name.value | Payload of a custom event fired using the EmitEvent action.                                                                   |
+
+## Refer to properties in memory
+
+Bots can retrieve values from memory for a variety of purposes. The bot may need to use a value in order to construct an outgoing message, or make a decision based on a value then perform actions based on that decision, or use the value to calculate other values.
+
+Sometimes, you will refer directly to a property by its address in memory: `user.name`. Other times, you will refer to one or more properties as part of an expression: `(dialog.orderTotal + dialog.orderTax) > 50`.
+
+### Expressions
+
+The Bot Framework Composer uses the [common expression language](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language) to calculate computed values. This syntax allows developers to create composite values, define complex conditional tests, and transform the content and format of values. For more information see the common expression language [operators](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/common-expression-language#operators) and [pre-built functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md#pre-built-functions).
+
+When used in expressions, no special notation is necessary to refer to a property from memory.
+
+### Memory in branching actions
+
+A bot can evaluate values from memory when making decisions inside a [branching action](./how-to-control-conversation-flow.md) like an **If/Else** or **Switch** branch. The conditional expression that is tested in one of these branching actions is an expression that, when evaluated, drives the decision.
+
+In the example below, the expression `user.profile.age > 13` will evaluate to either `True` or `False`, and the flow will continue through the appropriate branch.
+
+![If/Else Condition](./media/memory/if-else.png)
+
+In this second example, the value of `turn.choice` is used to match against multiple `Switch` cases. Note that, while it looks like a raw reference to a property, this is actually an expression and since no operation is being taken on the property, the expression evaluates to the raw value.
+
+![Switch condition](./media/memory/switch.png)
+
+### Memory in loops
+
+When using **For each** and **For each page** loops, properties also come into play. Both require an **Items property** that holds the array, and **For each page** loops also require a **Page size**, or number of items per page.
+
+![For each page properties](./media/memory/for-each.png)
+
+### Memory in LG
+
+One of the most powerful features of the Bot Framework system is Language Generation, particularly when used alongside properties pulled from memory.
+
+You can refer to properties in the text of any message, including prompts.
+
+You can also refer to properties in [LG templates](https://aka.ms/lg-file-format). See the Language Generation [readme](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation) to learn more the Language Generation system.
+
+To use the value of a property from memory inside a message, wrap the property reference in curly brackets: `{user.profile.name}`
+
+The screenshot below demonstrates how a bot can prompt a user for a value, then immediately use that value in a confirmation message.
+
+![LG memory](./media/memory/lg.png)
+
+In addition to getting properties values, it is also possible to embed properties in [expressions](#expressions) used in a message template. Refer to the _Common Expression Language_ page for the full list of [pre-built functions](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md).
+
+Properties can also be used within an LG template to provide conditional variants of a message and can be passed as parameters to both built-in and custom functions. [Learn more about LG](https://github.com/microsoft/BotBuilder-Samples/tree/master/experimental/language-generation).
+
+### Memory shorthand notations
+
+The Bot Framework Composer provides a variety of shortcuts for referring to properties in memory. Refer to the _Managing state_ documentation for the complete list of [memory shorthand notations](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/memory-model-overview.md#memory-short-hand-notations).
+
+## Further reading
+
+- [The Bot Framework Adaptive dialogs Memory Model](https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/adaptive-dialog/docs/memory-model-overview.md).
+- [The Microsoft Bot Framework](https://github.com/microsoft/botframework).
+
+## Next
+
+- [Language Generation](./concept-language-generation.md) in the Bot Framework Composer.

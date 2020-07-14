@@ -1,5 +1,5 @@
 trigger:
-  - master
+  - main
 
 pr:
   autoCancel: true
@@ -83,7 +83,7 @@ jobs:
         scanType: 'Register'
         verbosity: 'Verbose'
         alertWarningLevel: 'High'
-        failOnAlert: false
+        failOnAlert: true
 
 
 

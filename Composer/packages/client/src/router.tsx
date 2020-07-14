@@ -5,23 +5,26 @@
 import { jsx, css } from '@emotion/core';
 import React, { useContext, useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
+import formatMessage from 'format-message';
 
 import { resolveToBasePath } from './utils/fileUtil';
-import { About } from './pages/about';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
+import { openAlertModal } from './components/Modal/AlertDialog';
+import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
 
-const DesignPage = React.lazy(() => import('./pages/design'));
-const LUPage = React.lazy(() => import('./pages/language-understanding'));
-const LGPage = React.lazy(() => import('./pages/language-generation'));
-const SettingPage = React.lazy(() => import('./pages/setting'));
-const Notifications = React.lazy(() => import('./pages/notifications'));
-const Publish = React.lazy(() => import('./pages/publish'));
+const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
+const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
+const LGPage = React.lazy(() => import('./pages/language-generation/LGPage'));
+const SettingPage = React.lazy(() => import('./pages/setting/SettingsPage'));
+const Notifications = React.lazy(() => import('./pages/notifications/Notifications'));
+const Publish = React.lazy(() => import('./pages/publish/Publish'));
+const Library = React.lazy(() => import('./pages/library/Library'));
 const Skills = React.lazy(() => import('./pages/skills'));
-const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow'));
+const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 
 const Routes = (props) => {
   const { state } = useContext(StoreContext);
@@ -45,16 +48,17 @@ const Routes = (props) => {
           <Redirect noThrow from="/" to={resolveToBasePath(BASEPATH, 'home')} />
           <ProjectRouter path="/bot/:projectId">
             <DesignPage path="dialogs/:dialogId/*" />
-            <SettingPage path="settings/*" />
             <LUPage path="language-understanding/:dialogId/*" />
             <LGPage path="language-generation/:dialogId/*" />
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
+            <Library path="library" />
             <Skills path="skills/*" />
+            <DesignPage path="*" />
           </ProjectRouter>
+          <SettingPage path="settings/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
-          <About path="about" />
           <NotFound default />
         </Router>
       </Suspense>
@@ -87,6 +91,15 @@ const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (pro
       actions.fetchProjectById(props.projectId);
     }
   }, [props.projectId]);
+
+  useEffect(() => {
+    const schemaError = state.schemas?.diagnostics ?? [];
+    if (schemaError.length !== 0) {
+      const title = formatMessage('Error Processing Schema');
+      const subTitle = schemaError.join('\n');
+      openAlertModal(title, subTitle, { style: dialogStyle.console });
+    }
+  }, [state.schemas, state.projectId]);
 
   if (state.botOpening || props.projectId !== state.projectId) {
     return <LoadingSpinner />;

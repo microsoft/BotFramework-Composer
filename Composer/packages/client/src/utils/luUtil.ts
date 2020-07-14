@@ -17,7 +17,7 @@ export * from '@bfc/indexers/lib/utils/luUtil';
 export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
-    return !!~dialogs.findIndex((dialog) => dialog.luFile === idWithOutLocale);
+    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale);
   });
 }
 
@@ -153,14 +153,6 @@ function generateErrorMessage(invalidLuFile: LuFile[]) {
   }, '');
 }
 
-function isLuFileEmpty(file: LuFile) {
-  const { content, intents } = file;
-  if (content && intents?.length) {
-    return false;
-  }
-  return true;
-}
-
 export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
   const referred = getReferredFiles(luFiles, dialogs);
   const invalidLuFile = referred.filter(
@@ -170,7 +162,7 @@ export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
     const msg = generateErrorMessage(invalidLuFile);
     throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
   }
-  const emptyLuFiles = referred.filter(isLuFileEmpty);
+  const emptyLuFiles = referred.filter((file) => file.empty);
   if (emptyLuFiles.length !== 0) {
     const msg = emptyLuFiles.map((file) => file.id).join(' ');
     throw new Error(`You have the following empty LuFile(s): ` + msg);

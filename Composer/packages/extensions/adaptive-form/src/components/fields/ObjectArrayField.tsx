@@ -9,6 +9,7 @@ import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JSONSchema7 } from 'json-schema';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField, ITextField } from 'office-ui-fabric-react/lib/TextField';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import { FontSizes, NeutralColors, SharedColors } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import map from 'lodash/map';
@@ -40,6 +41,8 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
   const { arrayItems, handleChange, addItem } = useArrayItems(value, onChange);
   const firstNewFieldRef: React.RefObject<ITextField> = useRef(null);
   const { announce } = useShellApi().shellApi;
+
+  const moreLabel = formatMessage('Item actions');
 
   const END_OF_ROW_LABEL = formatMessage('press Enter to add this item or Tab to move to the next interactive element');
 
@@ -180,21 +183,23 @@ const ObjectArrayField: React.FC<FieldProps<any[]>> = (props) => {
                   }
                 })}
             </div>
-            <IconButton
-              disabled
-              ariaLabel="Item Actions"
-              menuIconProps={{ iconName: 'MoreVertical' }}
-              styles={{
-                menuIcon: {
-                  backgroundColor: NeutralColors.white,
-                  color: NeutralColors.gray130,
-                  fontSize: FontSizes.size16,
-                },
-                rootDisabled: {
-                  backgroundColor: NeutralColors.white,
-                },
-              }}
-            />
+            <TooltipHost content={moreLabel}>
+              <IconButton
+                disabled
+                ariaLabel={moreLabel}
+                menuIconProps={{ iconName: 'MoreVertical' }}
+                styles={{
+                  menuIcon: {
+                    backgroundColor: NeutralColors.white,
+                    color: NeutralColors.gray130,
+                    fontSize: FontSizes.size16,
+                  },
+                  rootDisabled: {
+                    backgroundColor: NeutralColors.white,
+                  },
+                }}
+              />
+            </TooltipHost>
           </React.Fragment>
         ) : (
           <DefaultButton type="button" onClick={handleAdd}>

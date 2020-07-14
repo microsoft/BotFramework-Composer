@@ -22,6 +22,7 @@ assignees: ""
 
 <!-- What browser are you using? -->
 
+- [ ] Electron distribution
 - [ ] Chrome
 - [ ] Safari
 - [ ] Firefox

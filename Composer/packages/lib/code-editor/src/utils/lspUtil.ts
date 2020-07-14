@@ -59,3 +59,27 @@ export function createLanguageClient(
     },
   });
 }
+
+export async function SendRequestWithRetry(
+  languageClient: MonacoLanguageClient,
+  method: string,
+  data: any,
+  interval = 1000
+) {
+  let sendTimer;
+
+  const send = (data) => {
+    try {
+      languageClient.sendRequest(method, data);
+      if (sendTimer) clearInterval(sendTimer);
+    } catch (error) {
+      sendTimer = setTimeout(() => {
+        send(data);
+      }, interval);
+    }
+  };
+  if (languageClient) {
+    await languageClient.onReady();
+    send(data);
+  }
+}

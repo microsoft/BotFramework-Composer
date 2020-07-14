@@ -1,9 +1,9 @@
-# ![Microsoft Bot Framework Composer](./docs/media/gh-banner.png)
+# ![Microsoft Bot Framework Composer](./docs/Assets/gh-banner.png)
 
 # Microsoft Bot Framework Composer
 
-[![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=master)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Amaster)
-[![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=master)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=master)
+[![Build Status](https://github.com/microsoft/BotFramework-Composer/workflows/Composer%20CI/badge.svg?branch=main)](https://github.com/microsoft/BotFramework-Composer/actions?query=branch%3Amain)
+[![Coverage Status](https://coveralls.io/repos/github/microsoft/BotFramework-Composer/badge.svg?branch=main)](https://coveralls.io/github/microsoft/BotFramework-Composer?branch=main)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/microsoft/BotFramework-Composer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/microsoft/BotFramework-Composer/alerts/)
 
 ## Overview
@@ -28,6 +28,7 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 - To learn about the Bot Framework Composer, read the [documentation][5].
 - To get yourself familiar with the Composer, read [Introduction to Bot Framework Composer][1].
 - [Create your first bot][3]!
+- To find the most recent release and learn what has changed in Bot Framework Composer, see the [latest release][204].
 
 
 ## Build Composer Locally
@@ -35,7 +36,7 @@ The Bot Framework Composer is an open source tool based on the Bot Framework SDK
 To build and run the Composer project locally as a web application, clone the source code from Github and build the application using the instructions below.
 
 ```
-$ git clone git@github.com:microsoft/BotFramework-Composer.git
+$ git clone https://github.com/microsoft/BotFramework-Composer.git
 $ cd BotFramework-Composer
 $ cd Composer // switch to Composer folder
 $ yarn install // install dependencies
@@ -114,3 +115,4 @@ the [Security TechCenter][103].
 [201]: https://aka.ms/bf-composer-download-win
 [202]: https://aka.ms/bf-composer-download-linux
 [203]: https://aka.ms/bf-composer-download-mac
+[204]: https://github.com/microsoft/BotFramework-Composer/releases/latest

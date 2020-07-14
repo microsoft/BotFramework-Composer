@@ -20,7 +20,7 @@ import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { Skill } from '@bfc/shared';
 
-import { DisplayManifestModal } from '../../components/Modal/DisplayManifest';
+import { DisplayManifestModal } from '../../components/Modal/DisplayManifestModal';
 
 import { TableView, TableCell } from './styles';
 
@@ -156,7 +156,7 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
 
   return (
     <React.Fragment>
-      <div css={TableView}>
+      <div aria-label={formatMessage('List view')} css={TableView} role="region">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
           <DetailsList
             isHeaderVisible

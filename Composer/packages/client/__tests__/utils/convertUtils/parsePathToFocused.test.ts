@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License
 
-import { parsePathToFocused } from '../../../src/utils/convertUtils';
+import { parsePathToFocused } from '../../../src/utils/convertUtils/parsePathToFocused';
 
 describe('parsePathToFocused', () => {
   it('should return focusedPath', () => {
