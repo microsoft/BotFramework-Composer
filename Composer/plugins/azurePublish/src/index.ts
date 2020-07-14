@@ -300,10 +300,8 @@ export default async (composer: any): Promise<void> => {
       }
     };
 
-    /**************************************************************************************************
-     * plugin methods
-     *************************************************************************************************/
-    publish = async (config: PublishConfig, project, metadata, user) => {
+    // move the init folder and publsih together and not wait in publish method. because init folder take a long time
+    private asyncPublish = async (config: PublishConfig, project, resourcekey, jobId) => {
       const {
         // these are provided by Composer
         fullSettings, // all the bot's settings - includes sensitive values not included in projet.settings
@@ -321,20 +319,11 @@ export default async (composer: any): Promise<void> => {
         accessToken,
       } = config;
 
-      // point to the declarative assets (possibly in remote storage)
-      const botFiles = project.files;
-
-      // get the bot id from the project
-      const botId = project.id;
-
-      // generate an id to track this deploy
-      const jobId = uuid();
-
       // get the appropriate runtime template which contains methods to build and configure the runtime
       const runtime = composer.getRuntimeByProject(project);
 
-      // resource key to map to one provision resource
-      const resourcekey = md5([project.name, name, environment, settings?.MicrosoftAppPassword].join());
+      // point to the declarative assets (possibly in remote storage)
+      const botFiles = project.files;
 
       // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
       // TODO: this templatePath should come from the runtime instead of this magic parameter
@@ -347,6 +336,61 @@ export default async (composer: any): Promise<void> => {
       ) {
         runtimeCodePath = project.settings.runtime.path;
       }
+
+      // Prepare the temporary project
+      // this writes all the settings to the root settings/appsettings.json file
+      await this.init(botFiles, runtimeCodePath, resourcekey);
+
+      // Merge all the settings
+      // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
+      // these will be written to the appropriate settings file inside the appropriate runtime plugin.
+      const mergedSettings = mergeDeep(fullSettings, settings);
+
+      // Prepare parameters and then perform the actual deployment action
+      const customizeConfiguration: CreateAndDeployResources = {
+        accessToken,
+        subscriptionID,
+        name,
+        environment,
+        hostname,
+        luisResource,
+        language,
+      };
+      await this.performDeploymentAction(
+        project,
+        mergedSettings,
+        runtime,
+        project.id,
+        profileName,
+        jobId,
+        resourcekey,
+        customizeConfiguration
+      );
+    };
+
+    /**************************************************************************************************
+     * plugin methods
+     *************************************************************************************************/
+    publish = async (config: PublishConfig, project, metadata, user) => {
+      const {
+        // these are provided by Composer
+        profileName, // the name of the publishing profile "My Azure Prod Slot"
+
+        // these are specific to the azure publish profile shape
+        name,
+        environment,
+        settings,
+        accessToken,
+      } = config;
+
+      // get the bot id from the project
+      const botId = project.id;
+
+      // generate an id to track this deploy
+      const jobId = uuid();
+
+      // resource key to map to one provision resource
+      const resourcekey = md5([project.name, name, environment, settings?.MicrosoftAppPassword].join());
 
       // Initialize the output logs...
       this.logMessages = ['Publish starting...'];
@@ -372,35 +416,7 @@ export default async (composer: any): Promise<void> => {
           throw new Error('Required field `settings` is missing from publishing profile.');
         }
 
-        // Prepare the temporary project
-        // this writes all the settings to the root settings/appsettings.json file
-        await this.init(botFiles, runtimeCodePath, resourcekey);
-
-        // Merge all the settings
-        // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
-        // these will be written to the appropriate settings file inside the appropriate runtime plugin.
-        const mergedSettings = mergeDeep(fullSettings, settings);
-
-        // Prepare parameters and then perform the actual deployment action
-        const customizeConfiguration: CreateAndDeployResources = {
-          accessToken,
-          subscriptionID,
-          name,
-          environment,
-          hostname,
-          luisResource,
-          language,
-        };
-        this.performDeploymentAction(
-          project,
-          mergedSettings,
-          runtime,
-          botId,
-          profileName,
-          jobId,
-          resourcekey,
-          customizeConfiguration
-        );
+        this.asyncPublish(config, project, resourcekey, jobId);
       } catch (err) {
         console.log(err);
         if (err instanceof Error) {
@@ -414,7 +430,8 @@ export default async (composer: any): Promise<void> => {
         response.status = 500;
         response.result.message = this.logMessages[this.logMessages.length - 1];
 
-        this.updateHistory(botId, profileName, { status: response.status, ...response.result });
+        await this.updateHistory(botId, profileName, { status: response.status, ...response.result });
+        this.removeLoadingStatus(botId, profileName, jobId);
         this.cleanup(resourcekey);
       }
 
@@ -457,7 +474,7 @@ export default async (composer: any): Promise<void> => {
     azureFunctionsPublish,
     schema,
     instructions,
-    'plugin-azure-functions-publish',
+    'azureFunctionsPublish',
     'Publish bot to Azure Functions (Preview)'
   );
 };
