@@ -137,9 +137,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     intentName: '_Interruption',
     verbose: true,
   };
-  crossTrainConfig.rootIds = keys(countMap).filter(
-    (key) => (countMap[key] === 0 || key === rootId) && triggerRules[key]
-  );
+  crossTrainConfig.rootIds = keys(countMap).filter((key) => countMap[key] === 0 || key === rootId);
   crossTrainConfig.triggerRules = triggerRules;
   return addLocaleToConfig(crossTrainConfig, luFiles);
 }
