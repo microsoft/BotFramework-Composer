@@ -293,6 +293,10 @@ class LocalPublisher implements PublishPlugin<PublishConfig> {
       configList.push('--luis:endpointKey');
       configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
+    if (config.qna.endpointKey) {
+      configList.push('--qna:endpointKey');
+      configList.push(config.qna.endpointKey);
+    }
     return configList;
   };
 
