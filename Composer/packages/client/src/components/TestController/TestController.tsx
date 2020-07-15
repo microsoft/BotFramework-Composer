@@ -44,7 +44,7 @@ export const TestController: React.FC = () => {
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const { botEndpoints, botName, botStatus, dialogs, luFiles, qnaFiles, settings, projectId, botLoadErrorMsg } = state;
-  const { publishToTarget, onboardingAddCoachMarkRef, build, getPublishStatus, setBotStatus } = actions;
+  const { setQnASettings, publishToTarget, onboardingAddCoachMarkRef, build, getPublishStatus, setBotStatus } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
@@ -96,6 +96,9 @@ export const TestController: React.FC = () => {
 
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
+    if (state.settings.qna && Object(state.settings.qna).subscriptionKey) {
+      await setQnASettings(projectId, Object(state.settings.qna).subscriptionKey);
+    }
     const sensitiveSettings = settingsStorage.get(projectId);
     await publishToTarget(state.projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
