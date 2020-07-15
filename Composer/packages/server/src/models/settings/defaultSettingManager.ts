@@ -53,7 +53,7 @@ export class DefaultSettingManager extends FileSettingManager {
       qna: {
         subscriptKey: '',
         knowledgebaseid: '',
-        endpointkey: '',
+        endpointKey: '',
         hostname: '',
       },
       telemetry: {

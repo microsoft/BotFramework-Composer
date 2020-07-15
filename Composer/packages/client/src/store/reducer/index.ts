@@ -707,6 +707,21 @@ const setAppUpdateStatus: ReducerFunc<{ status: AppUpdaterStatus; version?: stri
   return state;
 };
 
+const getBoilerplateSuccess: ReducerFunc<{
+  updateRequired: boolean;
+  latestVersion: string | undefined;
+  currentVersion: string | undefined;
+}> = (state, payload) => {
+  const { updateRequired, latestVersion, currentVersion } = payload;
+
+  state.boilerplateVersion = {
+    updateRequired: updateRequired,
+    latestVersion: latestVersion,
+    currentVersion: currentVersion,
+  };
+  return state;
+};
+
 const noOp: ReducerFunc = (state) => {
   return state;
 };
@@ -782,4 +797,5 @@ export const reducer = createReducer({
   [ActionTypes.SET_PUBLISH_TARGETS]: setPublishTargets,
   [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
+  [ActionTypes.GET_BOILERPLATE_SUCCESS]: getBoilerplateSuccess,
 });
