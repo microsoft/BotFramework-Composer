@@ -3,5 +3,11 @@
 
 export function scrollNodeIntoView(selector: string) {
   const node = document.querySelector(selector);
-  node?.scrollIntoView(true);
+  if (!node) return;
+
+  if ((node as any).scrollIntoViewIfNeeded) {
+    (node as any).scrollIntoViewIfNeeded(true);
+  } else {
+    node.scrollIntoView(true);
+  }
 }

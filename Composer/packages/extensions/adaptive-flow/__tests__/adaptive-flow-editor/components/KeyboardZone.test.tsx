@@ -4,7 +4,15 @@
 import React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 
-import { KeyboardZone } from '../../../src/adaptive-flow-editor/components/KeyboardZone';
+import { enableKeyboardCommandAttributes } from '../../../src/adaptive-flow-editor/components/KeyboardZone';
+
+const KeyboardZone = ({ onCommand, children }) => {
+  return (
+    <div data-testid="keyboard-zone" tabIndex={0} {...enableKeyboardCommandAttributes(onCommand)}>
+      {children}
+    </div>
+  );
+};
 
 describe('KeyboardZone', () => {
   it('can be rendered.', () => {

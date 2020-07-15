@@ -9,7 +9,7 @@ import { PluginLoader } from '@bfc/plugin-loader';
 
 import log from '../logger';
 import { BotProjectService } from '../services/project';
-import AssectService from '../services/asset';
+import AssetService from '../services/asset';
 import { LocationRef } from '../models/bot/interface';
 import { getSkillByUrl } from '../models/bot/skillManager';
 import StorageService from '../services/storage';
@@ -46,12 +46,12 @@ async function createProject(req: Request, res: Response) {
 
   try {
     await BotProjectService.cleanProject(locationRef);
-    const newProjRef = await AssectService.manager.copyProjectTemplateTo(templateId, locationRef, user);
+    const newProjRef = await AssetService.manager.copyProjectTemplateTo(templateId, locationRef, user);
     const id = await BotProjectService.openProject(newProjRef, user);
     const currentProject = await BotProjectService.getProjectById(id, user);
 
     // inject shared content into every new project.  this comes from assets/shared
-    await AssectService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+    await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
 
     if (currentProject !== undefined) {
       await currentProject.updateBotInfo(name, description);
@@ -315,7 +315,7 @@ async function publishLuis(req: Request, res: Response) {
   if (currentProject !== undefined) {
     try {
       const luFiles = await currentProject.publishLuis(
-        req.body.authoringKey,
+        req.body.luisConfig,
         req.body.luFiles,
         req.body.crossTrainConfig
       );
@@ -346,6 +346,51 @@ async function getAllProjects(req: Request, res: Response) {
   }
 }
 
+async function checkBoilerplateVersion(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    const latestVersion = AssetService.manager.getBoilerplateCurrentVersion();
+    const currentVersion = await AssetService.manager.getBoilerplateVersionFromProject(currentProject);
+    const updateRequired =
+      (latestVersion && currentVersion && latestVersion > currentVersion) || // versions are present in both locations, latest is newer
+      (latestVersion && !currentVersion); // latest version exists, but is mssing from project
+
+    res.status(200).json({
+      currentVersion,
+      latestVersion,
+      updateRequired,
+    });
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
+async function updateBoilerplate(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+
+  if (currentProject !== undefined) {
+    try {
+      // inject shared content into every new project.  this comes from assets/shared
+      await AssetService.manager.copyBoilerplate(currentProject.dataDir, currentProject.fileStorage);
+      res.status(200).json({});
+    } catch (e) {
+      res.status(400).json({ message: e.message });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -361,4 +406,6 @@ export const ProjectController = {
   createProject,
   getAllProjects,
   getRecentProjects,
+  updateBoilerplate,
+  checkBoilerplateVersion,
 };

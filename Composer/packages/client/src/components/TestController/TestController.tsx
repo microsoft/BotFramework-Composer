@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
@@ -17,11 +17,25 @@ import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
 
 import { PublishLuisDialog } from './publishDialog';
-import { bot, botButton } from './styles';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
 import { Loading } from './loading';
 import { ErrorInfo } from './errorInfo';
+
+// -------------------- Styles -------------------- //
+
+export const bot = css`
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 100%;
+`;
+
+export const botButton = css`
+  margin-left: 5px;
+`;
+
+// -------------------- TestController -------------------- //
 
 export const TestController: React.FC = () => {
   const { state, actions } = useContext(StoreContext);
@@ -30,7 +44,14 @@ export const TestController: React.FC = () => {
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const { botEndpoints, botName, botStatus, dialogs, luFiles, settings, projectId, botLoadErrorMsg } = state;
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, getPublishStatus, setBotStatus } = actions;
+  const {
+    publishToTarget,
+    onboardingAddCoachMarkRef,
+    publishLuis,
+    getPublishStatus,
+    setBotStatus,
+    setSettings,
+  } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
@@ -72,11 +93,11 @@ export const TestController: React.FC = () => {
     setCalloutVisible(true);
   }
 
-  async function handlePublishLuis() {
+  async function handlePublishLuis(luisConfig) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis : null;
-    await publishLuis(luisConfig.authoringKey, state.projectId);
+    await setSettings(projectId, { ...settings, luis: luisConfig });
+    await publishLuis(luisConfig, projectId);
   }
 
   async function handleLoadBot() {
@@ -104,7 +125,7 @@ export const TestController: React.FC = () => {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isLuisConfigComplete(config)) {
         openDialog();
       } else {
-        await handlePublishLuis();
+        await handlePublishLuis(config);
       }
     } else {
       await handleLoadBot();
@@ -158,7 +179,13 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      <PublishLuisDialog botName={botName} isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} />
+      <PublishLuisDialog
+        botName={botName}
+        config={settings.luis}
+        isOpen={modalOpen}
+        onDismiss={dismissDialog}
+        onPublish={handlePublishLuis}
+      />
     </Fragment>
   );
 };

@@ -5,14 +5,13 @@ import * as React from 'react';
 import { render, fireEvent, getByLabelText, getByTestId } from '@bfc/test-utils';
 import { Skill } from '@bfc/shared';
 
+import httpClient from '../../src//utils/httpUtil';
 import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
-import CreateSkillModal from '../../src/components/SkillForm/CreateSkillModal/CreateSkillModal';
+import CreateSkillModal from '../../src/components/CreateSkillModal';
 import { renderWithStore } from '../testUtils';
 
-jest.mock('../../src/components/SkillForm/CreateSkillModal/validateManifestUrl', () => ({
-  validateManifestUrl: () => {},
-}));
+jest.mock('../../src//utils/httpUtil');
 
 const items: Skill[] = [
   {
@@ -37,9 +36,26 @@ const items: Skill[] = [
   },
 ];
 
+const state = {
+  projectId: '12345',
+  botName: 'sampleBot0',
+  settings: {
+    luis: {
+      name: '',
+      authoringKey: '12345',
+      authoringEndpoint: 'testAuthoringEndpoint',
+      endpointKey: '12345',
+      endpoint: 'testEndpoint',
+      authoringRegion: 'westus',
+      defaultLanguage: 'en-us',
+      environment: 'composer',
+    },
+  },
+};
+
 describe('Skill page', () => {
   it('can add a new skill', () => {
-    const { getByText } = renderWithStore(<Skills />);
+    const { getByText } = renderWithStore(<Skills />, state);
 
     const button = getByText('Connect to a new skill');
     fireEvent.click(button);
@@ -81,6 +97,9 @@ describe('<SkillForm />', () => {
     const onSubmit = jest.fn((formData) => {
       expect(formData.manifestUrl).toBe('http://AwesomeSkill');
     });
+
+    (httpClient.post as jest.Mock).mockResolvedValue(undefined);
+
     const onDismiss = jest.fn(() => {});
     const { getByLabelText, getByText } = render(
       <CreateSkillModal
