@@ -217,7 +217,7 @@ export interface ILuisConfig {
 }
 
 export interface IConfig extends ILuisConfig {
-  subscriptKey: string;
+  subscriptionKey: string;
 }
 export interface DialogSetting {
   MicrosoftAppId?: string;

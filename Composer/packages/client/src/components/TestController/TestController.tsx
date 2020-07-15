@@ -91,7 +91,7 @@ export const TestController: React.FC = () => {
     dismissDialog();
     const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis || {} : {};
     const qnaConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).qna || {} : {};
-    await build(luisConfig.authoringKey, qnaConfig.subscriptKey, state.projectId);
+    await build(luisConfig.authoringKey, qnaConfig.subscriptionKey, state.projectId);
   }
 
   async function handleLoadBot() {

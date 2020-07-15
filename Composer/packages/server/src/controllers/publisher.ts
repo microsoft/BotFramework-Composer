@@ -52,10 +52,10 @@ export const PublishController = {
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
-    const { subscriptKey } = sensitiveSettings.qna || '';
+    const { subscriptionKey } = sensitiveSettings.qna || '';
     const qnaEndpointKey =
-      subscriptKey && !currentProject.settings?.qna.endpointKey
-        ? await currentProject.updateQnaEndpointKey(subscriptKey)
+      subscriptionKey && !currentProject.settings?.qna.endpointKey
+        ? await currentProject.updateQnaEndpointKey(subscriptionKey)
         : '';
     if (profile && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
       // append config from client(like sensitive settings)

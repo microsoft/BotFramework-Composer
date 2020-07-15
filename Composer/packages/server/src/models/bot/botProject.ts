@@ -300,7 +300,7 @@ export class BotProject {
 
   public buildFiles = async (
     authoringKey: string,
-    subscriptKey: string,
+    subscriptionKey: string,
     luFileIds: string[] = [],
     qnaFileIds: string[] = [],
     crossTrainConfig: ICrossTrainConfig
@@ -318,7 +318,7 @@ export class BotProject {
       const qnaFiles = this.files.filter((file) => qnaMap[Path.basename(file.name, '.qna')]);
 
       this.builder.setBuildConfig(
-        { ...this.settings.luis, authoringKey, subscriptKey },
+        { ...this.settings.luis, authoringKey, subscriptionKey },
         crossTrainConfig,
         this.settings.downsampling
       );
@@ -383,10 +383,10 @@ export class BotProject {
   }
 
   // update qna endpointKey in settings
-  public updateQnaEndpointKey = async (subscriptKey: string) => {
-    const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptKey, {
+  public updateQnaEndpointKey = async (subscriptionKey: string) => {
+    const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptionKey, {
       ...this.settings?.luis,
-      subscriptKey,
+      subscriptionKey,
     });
     return qnaEndpointKey;
   };

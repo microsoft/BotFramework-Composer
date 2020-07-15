@@ -316,7 +316,7 @@ async function build(req: Request, res: Response) {
     try {
       const files = await currentProject.buildFiles(
         req.body.authoringKey,
-        req.body.subscriptKey,
+        req.body.subscriptionKey,
         req.body.luFiles,
         req.body.qnaFiles,
         req.body.crossTrainConfig
