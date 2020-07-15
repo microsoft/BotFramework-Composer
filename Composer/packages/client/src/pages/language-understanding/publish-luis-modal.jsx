@@ -39,7 +39,7 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
-const validationProperties = ['name', 'authoringKey', 'environment', 'subscriptKey'];
+const validationProperties = ['name', 'authoringKey', 'environment', 'subscriptionKey'];
 const defaultFields = { authoringRegion: 'westus', defaultLanguage: 'en-us' };
 const validateForm = (data, ignores) => {
   const result = { errors: {} };
@@ -109,7 +109,7 @@ export const PublishComponent = (props) => {
   const initialFormData = {
     name: settings.luis.name || botName,
     authoringKey: settings.luis.authoringKey,
-    subscriptKey: settings.qna.subscriptKey,
+    subscriptionKey: settings.qna.subscriptionKey,
     endpointKey: settings.luis.endpointKey,
     authoringRegion: settings.luis.authoringRegion,
     defaultLanguage: settings.luis.defaultLanguage,
@@ -127,17 +127,17 @@ export const PublishComponent = (props) => {
 
   const handlePublish = async (e) => {
     e.preventDefault();
-    const result = validateForm(formData, { subscriptKey: !qnaKeyRequired, authoringKey: !luKeyRequired });
+    const result = validateForm(formData, { subscriptionKey: !qnaKeyRequired, authoringKey: !luKeyRequired });
     if (keys(result.errors).length) {
       setFormData({ ...formData, ...result });
       return;
     }
     // save the settings change to store and persist to server
     const newValue = { ...formData, ...result };
-    const subscriptKey = newValue.subscriptKey;
+    const subscriptionKey = newValue.subscriptionKey;
     delete newValue.errors;
-    delete newValue.subscriptKey;
-    await setSettings(state.projectId, { ...settings, luis: newValue, qna: { subscriptKey } });
+    delete newValue.subscriptionKey;
+    await setSettings(state.projectId, { ...settings, luis: newValue, qna: { subscriptionKey } });
     await onPublish();
   };
 
@@ -177,13 +177,13 @@ export const PublishComponent = (props) => {
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
           />
           <TextField
-            data-testid="SubscriptKeyInput"
-            defaultValue={formData.subscriptKey}
-            errorMessage={formData.errors.subscriptKey || ''}
+            data-testid="subscriptionKeyInput"
+            defaultValue={formData.subscriptionKey}
+            errorMessage={formData.errors.subscriptionKey || ''}
             label={formatMessage('QnA subscript key:')}
             required={qnaKeyRequired}
-            onChange={updateForm('subscriptKey')}
-            onRenderLabel={onRenderLabel(Tips.SUBSCRIPT_KEY)}
+            onChange={updateForm('subscriptionKey')}
+            onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
           />
           <TextField
             disabled

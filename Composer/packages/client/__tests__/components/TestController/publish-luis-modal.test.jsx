@@ -17,7 +17,7 @@ describe('<PublishComponent />', () => {
         luis: {
           name: '',
           authoringKey: '12345',
-          subscriptKey: '12345',
+          subscriptionKey: '12345',
           authoringEndpoint: 'testAuthoringEndpoint',
           endpointKey: '12345',
           endpoint: 'testEndpoint',

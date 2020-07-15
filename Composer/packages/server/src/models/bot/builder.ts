@@ -85,9 +85,9 @@ export class Builder {
     }
   };
 
-  public getQnaEndpointKey = async (subscriptKey: string, config: IConfig) => {
-    const subscriptKeyEndpoint = `https://${config?.authoringRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
-    const endpointKey = await this.qnaBuilder.getEndpointKeys(subscriptKey, subscriptKeyEndpoint);
+  public getQnaEndpointKey = async (subscriptionKey: string, config: IConfig) => {
+    const subscriptionKeyEndpoint = `https://${config?.authoringRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+    const endpointKey = await this.qnaBuilder.getEndpointKeys(subscriptionKey, subscriptionKeyEndpoint);
     return endpointKey.primaryEndpointKey;
   };
   public setBuildConfig(config: IConfig, crossTrainConfig: ICrossTrainConfig, downSamplingConfig: IDownSamplingConfig) {
@@ -237,14 +237,14 @@ export class Builder {
       config.fallbackLocal
     );
     if (loadResult.qnaContents) {
-      const subscriptKeyEndpoint =
+      const subscriptionKeyEndpoint =
         config.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
 
       const buildResult = await this.qnaBuilder.build(
         loadResult.qnaContents,
         loadResult.recognizers,
-        config.subscriptKey,
-        subscriptKeyEndpoint,
+        config.subscriptionKey,
+        subscriptionKeyEndpoint,
         config.botName,
         config.suffix,
         config.fallbackLocal,
@@ -281,7 +281,7 @@ export class Builder {
 
     const config = {
       authoringKey: this.config.authoringKey || '',
-      subscriptKey: this.config.subscriptKey || '',
+      subscriptionKey: this.config.subscriptionKey || '',
       region: this.config.authoringRegion || '',
       botName: this.config.name || '',
       suffix: this.config.environment || '',
