@@ -12,6 +12,7 @@ export * from './ObjectField';
 export * from './OneOfField';
 export * from './OpenObjectField';
 export * from './RecognizerField';
+export * from './RegexIntentField';
 export * from './SelectField';
 export * from './StringField';
 export * from './UnsupportedField';

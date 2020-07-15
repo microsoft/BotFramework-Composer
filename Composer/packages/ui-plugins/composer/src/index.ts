@@ -1,17 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { FormUISchema } from '@bfc/extension';
+
+import { PluginConfig, FormUISchema, RecognizerSchema } from '@bfc/extension';
+import { IntentField, RecognizerField, RegexIntentField } from '@bfc/adaptive-form';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
+import mapValues from 'lodash/mapValues';
 
-import { IntentField, RecognizerField } from './components/fields';
+const DefaultRecognizers: RecognizerSchema[] = [
+  {
+    id: 'none',
+    displayName: () => formatMessage('None'),
+    isSelected: (data) => data === undefined,
+    handleRecognizerChange: (props) => props.onChange(undefined),
+  },
+  {
+    id: SDKKinds.RegexRecognizer,
+    displayName: () => formatMessage('Regular Expression'),
+    editor: RegexIntentField,
+    isSelected: (data) => {
+      return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
+    },
+    handleRecognizerChange: (props) => {
+      props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
+    },
+  },
+];
 
 const triggerUiSchema = {
   order: ['condition', '*'],
   hidden: ['actions'],
 };
 
-const DefaultUISchema: FormUISchema = {
+const DefaultFormSchema: FormUISchema = {
   [SDKKinds.AdaptiveDialog]: {
     label: 'Adaptive dialog',
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
@@ -322,4 +343,9 @@ const DefaultUISchema: FormUISchema = {
   },
 };
 
-export default DefaultUISchema;
+const config: PluginConfig = {
+  uiSchema: mapValues(DefaultFormSchema, (val) => ({ form: val })),
+  recognizers: DefaultRecognizers,
+};
+
+export default config;
