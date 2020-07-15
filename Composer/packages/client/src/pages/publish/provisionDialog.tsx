@@ -21,7 +21,9 @@ import { SelectExistedResources } from './selectExistedResources';
 // import { getAccessTokenInCache } from '../../utils/auth';
 interface ProvisionDialogProps {
   onDismiss: () => void;
-  onSubmit: (value: any) => void;
+  // onSubmit: (value: any) => void;
+  createNew: (value: any) => void;
+  selectedExist: (value: any) => void;
   types: PublishType[];
   targets: PublishTarget[];
   current: PublishTarget | null;
@@ -135,7 +137,7 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
                   setCurrentStep(2);
                 }
                 await actions.getSubscriptions();
-                await props.onSubmit({ name: name, type: targetType, choice: choice });
+                // await props.onSubmit({ name: name, type: targetType, choice: choice });
               }}
             />
           </DialogFooter>
@@ -147,8 +149,9 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
         <CreateNewResource
           onDismiss={props.onDismiss}
           onSubmit={(value) => {
-            props.onSubmit({ ...value, name: name, type: targetType, choice: choice });
+            // props.onSubmit({ ...value, name: name, type: targetType, choice: choice });
             props.onDismiss();
+            props.createNew({ ...value, name: name, type: targetType, choice: choice });
           }}
         />
       ),
@@ -158,8 +161,9 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
         <SelectExistedResources
           onDismiss={props.onDismiss}
           onSubmit={(value) => {
-            props.onSubmit({ ...value, name: name, type: targetType, choice: choice });
+            // props.onSubmit({ ...value, name: name, type: targetType, choice: choice });
             props.onDismiss();
+            props.selectedExist({ ...value, name: name, type: targetType, choice: choice });
           }}
         />
       ),

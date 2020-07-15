@@ -52,7 +52,7 @@ export const SelectExistedResources: React.FC<SelectExistedResourcesProps> = (pr
 
       if (group) {
         setResourceGroup(group);
-        actions.getResourcesByResourceGroup(currentSubscription?.subscriptionId, group.name);
+        // actions.getResourcesByResourceGroup(currentSubscription?.subscriptionId, group.name);
       }
     },
     [resourceGroups]

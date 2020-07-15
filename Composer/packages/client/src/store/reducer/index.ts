@@ -693,6 +693,11 @@ const setDeployLocations: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const setDeployConfig: ReducerFunc = (state, payload) => {
+  state.settings.provisionConfig = payload;
+  return state;
+};
+
 const noOp: ReducerFunc = (state) => {
   return state;
 };
@@ -769,4 +774,5 @@ export const reducer = createReducer({
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
   [ActionTypes.GET_RESOURCES_SUCCESS]: setResources,
   [ActionTypes.GET_DEPLOY_LOCATIONS_SUCCESS]: setDeployLocations,
+  [ActionTypes.PROVISION_SUCCESS]: setDeployConfig,
 });

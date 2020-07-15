@@ -179,23 +179,23 @@ export const getResourceGroups: ActionCreator = async ({ dispatch }, subscriptio
   }
 };
 
-export const getResourcesByResourceGroup: ActionCreator = async ({ dispatch }, subscriptionId, resourceGroup) => {
-  try {
-    const token = getAccessTokenInCache();
-    const result = await httpClient.get(`/publish/resources/${subscriptionId}/${resourceGroup}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    console.log(result.data);
-    dispatch({
-      type: ActionTypes.GET_RESOURCES_SUCCESS,
-      payload: result.data,
-    });
-  } catch (error) {
-    if (error.response.data.redirectUri) {
-      await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
-    }
-  }
-};
+// export const getResourcesByResourceGroup: ActionCreator = async ({ dispatch }, subscriptionId, resourceGroup) => {
+//   try {
+//     const token = getAccessTokenInCache();
+//     const result = await httpClient.get(`/publish/resources/${subscriptionId}/${resourceGroup}`, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+//     console.log(result.data);
+//     dispatch({
+//       type: ActionTypes.GET_RESOURCES_SUCCESS,
+//       payload: result.data,
+//     });
+//   } catch (error) {
+//     if (error.response.data.redirectUri) {
+//       await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+//     }
+//   }
+// };
 
 export const getDeployLocations: ActionCreator = async ({ dispatch }, subscriptionId) => {
   try {
@@ -206,6 +206,24 @@ export const getDeployLocations: ActionCreator = async ({ dispatch }, subscripti
     console.log(result.data);
     dispatch({
       type: ActionTypes.GET_DEPLOY_LOCATIONS_SUCCESS,
+      payload: result.data,
+    });
+  } catch (error) {
+    if (error.response.data.redirectUri) {
+      await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
+    }
+  }
+};
+
+export const provision: ActionCreator = async ({ dispatch }, config, type, projectId) => {
+  try {
+    const token = getAccessTokenInCache();
+    const result = await httpClient.post(`/publish/${projectId}/provision/${type}`, config, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(result.data);
+    dispatch({
+      type: ActionTypes.PROVISION_SUCCESS,
       payload: result.data,
     });
   } catch (error) {

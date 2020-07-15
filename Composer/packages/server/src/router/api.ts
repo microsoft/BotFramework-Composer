@@ -39,8 +39,9 @@ router.put('/storages/folder', StorageController.updateFolder);
 // provision
 router.get('/publish/subscriptions', ProvisionController.getSubscriptions);
 router.get('/publish/resourceGroups/:subscriptionId', ProvisionController.getResourceGroups);
-router.get('/publish/resources/:subscriptionId/:resourceGroup', ProvisionController.getResourceByResourceGroup);
+// router.get('/publish/resources/:subscriptionId/:resourceGroup', ProvisionController.getResourceByResourceGroup);
 router.get('/publish/:subscriptionId/locations', ProvisionController.getDeployLocations);
+router.post('/publish/:projectId/provision/:type', ProvisionController.provision);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);

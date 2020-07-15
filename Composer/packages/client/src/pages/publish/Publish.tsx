@@ -8,6 +8,7 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { ProvisionType } from '@bfc/shared';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
@@ -285,15 +286,20 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       )}
       {!provisionDialogHidden && (
         <ProvisionDialog
+          createNew={(value) => {
+            console.log(value);
+            actions.provision(value, ProvisionType.createNew, projectId);
+          }}
           current={editTarget ? editTarget.item : null}
+          selectedExist={(value) => {
+            console.log(value);
+            actions.provision(value, ProvisionType.selectExisted, projectId);
+          }}
           targets={settings.publishTargets || []}
           types={publishTypes}
           onDismiss={() => {
             setProvisionDialogHidden(true);
             setEditTarget(null);
-          }}
-          onSubmit={(value) => {
-            console.log(value);
           }}
         />
       )}

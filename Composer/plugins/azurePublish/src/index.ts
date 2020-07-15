@@ -34,6 +34,19 @@ interface PublishConfig {
   [key: string]: any;
 }
 
+interface ProvisionConfig {
+  name: string;
+  type: string;
+  subscription: { subscriptionId: string; tenantId: string; displayName: string };
+  hostname: string;
+  password: string;
+  location: { id: string; name: string; displayName: string };
+  externalResources: string[];
+  choice: string;
+  accessToken: string;
+  [key: string]: any;
+}
+
 class AzurePublisher {
   private publishingBots: { [key: string]: any };
   private historyFilePath: string;
@@ -374,6 +387,22 @@ class AzurePublisher {
     const profileName = config.profileName;
     const botId = project.id;
     return await this.getHistory(botId, profileName);
+  };
+
+  provision = async (config: ProvisionConfig, project, user) => {
+    const { hostname, password, subscription, accessToken, location } = config;
+    const botproj = new BotProjectDeploy({
+      subId: subscription.subscriptionId,
+      logger: (msg: any) => {
+        console.log(msg);
+        this.logMessages.push(JSON.stringify(msg, null, 2));
+      },
+      accessToken: accessToken,
+      projPath: 'test',
+    });
+    const provisionResult = await botproj.create(hostname, location.name, '', password);
+    console.log(provisionResult);
+    return provisionResult;
   };
 }
 

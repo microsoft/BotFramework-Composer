@@ -16,21 +16,29 @@ interface CreateNewResourceProps {
   onDismiss: () => void;
   onSubmit: (value) => void;
 }
+
+const extenstionResourceOptions = [
+  { key: 'cosmoDb', text: 'CosmoDb' },
+  { key: 'applicationInsight', text: 'ApplicationInsight' },
+  { key: 'luisAuthoring', text: 'Luis Authoring Resource' },
+  { key: 'luisQuerying', text: 'Luis Querying Resource' },
+  { key: 'blobStorage', text: 'BlobStorage' },
+];
+
 export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
   const { state, actions } = useContext(StoreContext);
   const { subscriptions, resourceGroups, deployLocations } = state;
   const [currentSubscription, setSubscription] = useState<Subscription>();
-  const [currentResourceGroup, setResourceGroup] = useState('');
-  const [errorMessage, setErrorMsg] = useState('');
+  const [currentHostName, setHostName] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorHostName, setErrorHostName] = useState('');
+  const [errorPassword, setErrorPassword] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
+  const [selectedResources, setExternalResources] = useState<string[]>([]);
 
   const subscriptionOption = useMemo(() => {
     return subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
-
-  const resourceGroupsOption = useMemo(() => {
-    return resourceGroups.map((t) => ({ key: t.id, text: t.name }));
-  }, [resourceGroups]);
 
   const deployLocationsOption = useMemo(() => {
     return deployLocations.map((t) => ({ key: t.id, text: t.displayName }));
@@ -47,29 +55,43 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
     [subscriptions]
   );
 
-  const updateCurrentResoruceGroup = useMemo(
-    () => (_e, option?: IDropdownOption) => {
-      const group = resourceGroups.find((t) => t.id === option?.key);
+  // const updateCurrentResoruceGroup = useMemo(
+  //   () => (_e, option?: IDropdownOption) => {
+  //     const group = resourceGroups.find((t) => t.id === option?.key);
 
-      if (group) {
-        setResourceGroup(group.name);
-      }
-    },
-    [resourceGroups]
-  );
+  //     if (group) {
+  //       setResourceGroup(group.name);
+  //     }
+  //   },
+  //   [resourceGroups]
+  // );
 
   const newResourceGroup = useMemo(
     () => (e, newName) => {
       // validate existed or not
       const existed = resourceGroups.find((t) => t.name === newName);
       if (existed) {
-        setErrorMsg('this resource group already exist');
+        setErrorHostName('this resource group already exist');
       } else {
-        setErrorMsg('');
-        setResourceGroup(newName);
+        setErrorHostName('');
+        setHostName(newName);
       }
     },
     [resourceGroups]
+  );
+
+  const updatePassword = useMemo(
+    () => (e, newValue) => {
+      const patt = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![a-zA-Z0-9]+$)[\w$&~!*@#%^{}|]{16}$/;
+      if (newValue.length <= 16 && !patt.test(newValue)) {
+        setPassword(newValue);
+        setErrorPassword('Password need to include characters, number and special-characters, 16 characters length');
+      } else if (newValue.length === 16) {
+        setErrorPassword('');
+        setPassword(newValue);
+      }
+    },
+    []
   );
 
   const updateCurrentLocation = useMemo(
@@ -81,6 +103,19 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
       }
     },
     [deployLocations]
+  );
+
+  const onSelectedResource = useMemo(
+    () => (event, item?: IDropdownOption) => {
+      if (item) {
+        const newselected = item.selected
+          ? [...selectedResources, item.key as string]
+          : selectedResources.filter((key) => key !== item.key);
+        setExternalResources(newselected);
+        console.log(newselected);
+      }
+    },
+    [selectedResources]
   );
 
   useEffect(() => {
@@ -95,46 +130,57 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
     <Fragment>
       <form>
         <Dropdown
+          required
           label={formatMessage('Subscription')}
           options={subscriptionOption}
           placeholder={formatMessage('Select your subscription')}
           onChange={updateCurrentSubscription}
         />
         <TextField
-          errorMessage={errorMessage}
-          label={formatMessage('Name')}
+          required
+          errorMessage={errorHostName}
+          label={formatMessage('HostName')}
           placeholder={formatMessage('Name of your new resource group')}
           onChange={newResourceGroup}
         />
         <TextField
-          errorMessage={errorMessage}
+          required
+          errorMessage={errorPassword}
           label={formatMessage('Password')}
           placeholder={formatMessage('Password to assess resources')}
-          onChange={newResourceGroup}
+          value={password}
+          onChange={updatePassword}
         />
         <Dropdown
+          required
           label={formatMessage('Locations')}
           options={deployLocationsOption}
           placeholder={formatMessage('Select your location')}
           onChange={updateCurrentLocation}
         />
         <Dropdown
-          label={formatMessage('Resource group')}
-          options={resourceGroupsOption}
-          placeholder={formatMessage('Select your resource group')}
-          onChange={updateCurrentResoruceGroup}
+          multiSelect
+          label="Add more external resources"
+          options={extenstionResourceOptions}
+          placeholder="Select options"
+          selectedKeys={selectedResources}
+          onChange={onSelectedResource}
         />
       </form>
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
         <PrimaryButton
-          disabled={!currentSubscription || !currentResourceGroup || errorMessage !== ''}
+          disabled={
+            !currentSubscription || !currentHostName || !password || errorPassword !== '' || errorHostName !== ''
+          }
           text={formatMessage('Ok')}
           onClick={async () => {
             await props.onSubmit({
               subscription: currentSubscription,
-              resourceGroup: currentResourceGroup,
+              hostname: currentHostName,
+              password: password,
               location: currentLocation,
+              externalResources: selectedResources,
             });
           }}
         />

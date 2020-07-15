@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import axios from 'axios';
+import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
+
+import { BotProjectService } from '../services/project';
 
 export const ProvisionController = {
   // get all subscriptions for current user
@@ -52,5 +55,35 @@ export const ProvisionController = {
       }
     );
     res.status(200).json(result.data);
+  },
+  provision: async (req, res) => {
+    if (!req.body || !req.body.accessToken) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+    const user = await PluginLoader.getUserFromRequest(req);
+    const { type } = req.body;
+
+    const projectId = req.params.projectId;
+    const currentProject = await BotProjectService.getProjectById(projectId, user);
+    // deal with publishTargets not exist in settings
+    // const publishTargets = currentProject.settings?.publishTargets || [];
+
+    if (pluginLoader?.extensions?.publish[type]?.methods?.provision) {
+      // get the externally defined method
+      const pluginMethod = pluginLoader.extensions.publish[type].methods.provision;
+
+      try {
+        // call the method
+        await pluginMethod.call(null, req.body, currentProject, user);
+        // set status and return value as json
+        res.status(200);
+      } catch (err) {
+        res.status(400).json({
+          statusCode: '400',
+          message: err.message,
+        });
+      }
+    }
   },
 };

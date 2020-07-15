@@ -10,3 +10,7 @@ export const FieldNames = {
   DefaultCase: 'default',
   Cases: 'cases',
 };
+export enum ProvisionType {
+  createNew = 'createNew',
+  selectExisted = 'selectExisted',
+}
