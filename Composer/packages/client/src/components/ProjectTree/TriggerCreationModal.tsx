@@ -17,10 +17,9 @@ import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder, defaultQnAPlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import get from 'lodash/get';
 import { FontWeights } from '@uifabric/styling';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes } from '@uifabric/fluent-theme';
 
 import { useStoreContext } from '../../hooks/useStoreContext';
 import { addIntent } from '../../utils/luUtil';
@@ -93,17 +92,6 @@ const optionRow = {
   display: 'flex',
   height: 15,
   fontSize: 15,
-};
-
-const warningIcon = {
-  marginLeft: 5,
-  color: SharedColors.red10,
-  fontSize: 5,
-};
-
-const warningText = {
-  color: SharedColors.red10,
-  fontSize: 5,
 };
 // -------------------- Validation Helpers -------------------- //
 
@@ -278,13 +266,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   }, [qnaFile]);
 
   const onRenderOption = (option: IDropdownOption) => {
-    return (
-      <div css={optionRow}>
-        {option.text}
-        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
-        {option.data && option.data.icon && <div css={warningText}>{'Not supported with Regex'} </div>}
-      </div>
-    );
+    return <div css={optionRow}>{option.text}</div>;
   };
   const shouldDisable = (errors: TriggerFormDataErrors) => {
     for (const key in errors) {
