@@ -129,7 +129,6 @@ interface ITreeItemProps {
   onDelete: (id: string) => void;
   onSelect: (id: string) => void;
   icon?: string;
-  commands?: JSX.Element;
 }
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
@@ -156,7 +155,6 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
-        {item.commands}
       </div>
     </div>
   );
@@ -189,7 +187,7 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
 };
 
 export const TreeItem: React.FC<ITreeItemProps> = (props) => {
-  const { link, isActive, isSubItemActive, depth, onDelete, onSelect, icon, commands } = props;
+  const { link, isActive, isSubItemActive, depth, onDelete, onSelect, icon } = props;
 
   return (
     <div
@@ -215,7 +213,6 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
             key: link.id,
             depth,
             icon,
-            commands,
             ...link,
           },
         ]}

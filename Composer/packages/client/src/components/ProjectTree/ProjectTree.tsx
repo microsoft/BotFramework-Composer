@@ -13,7 +13,6 @@ import {
 } from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
-import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
@@ -22,12 +21,12 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
-import { NeutralColors } from '@uifabric/fluent-theme';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 
 import { TreeItem } from './treeItem';
+import { RevealDropdown } from './RevealDropdown';
 
 // -------------------- Styles -------------------- //
 
@@ -56,34 +55,6 @@ const root = css`
   .ms-List-cell {
     min-height: 24px;
   }
-`;
-
-const sectionTag = css`
-  display: block;
-  font-family: Segoe UI;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 11px;
-  width: 100%;
-  height: 22px;
-  line-height: 22px;
-  padding-left: 12px;
-  color: ${NeutralColors.gray130};
-  background-color: ${NeutralColors.gray50};
-`;
-
-const sectionTagDark = css`
-  display: block;
-  font-family: Segoe UI;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 11px;
-  width: 100%;
-  height: 22px;
-  line-height: 22px;
-  padding-left: 12px;
-  color: ${NeutralColors.white};
-  background-color: ${NeutralColors.gray130};
 `;
 
 // -------------------- ProjectTree -------------------- //
@@ -176,7 +147,7 @@ const TYPE_TO_ICON_MAP = {
 };
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
-  const { onboardingAddCoachMarkRef, updateUserSettings, navTo, createDialogBegin } = useRecoilValue(dispatcherState);
+  const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
@@ -185,50 +156,9 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
 
-  const onCreateDialogComplete = (newDialog) => {
-    if (newDialog) {
-      navTo(newDialog, []);
-    }
-  };
-
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);
   }, [dialogs]);
-
-  const commandsByLevel = {
-    0: (
-      <IconButton
-        ariaLabel={formatMessage('Add Dialog')}
-        iconProps={{
-          iconName: 'CommentAdd',
-          styles: {
-            root: {
-              fontSize: '12px',
-              color: '#000',
-            },
-          },
-        }}
-        onClick={() => {
-          createDialogBegin([], onCreateDialogComplete);
-        }}
-      />
-    ),
-    1: (
-      <IconButton
-        ariaLabel={formatMessage('Add Trigger')}
-        iconProps={{
-          iconName: 'Add',
-          styles: {
-            root: {
-              fontSize: '12px',
-              color: '#000',
-            },
-          },
-        }}
-        onClick={() => {}}
-      />
-    ),
-  };
 
   const onRenderHeader = (props: IGroupHeaderProps) => {
     const toggleCollapse = (): void => {
@@ -242,7 +172,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return (
       <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
-          commands={level !== undefined ? commandsByLevel[level] : undefined}
           depth={level ?? 0}
           icon={level === 1 ? 'CannedChat' : undefined}
           isActive={!props.group?.isCollapsed}
@@ -327,26 +256,27 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             )}
             aria-live={'polite'}
           />
-          <span css={sectionTagDark}>{formatMessage('Core Bot')}</span>
-          <GroupedList
-            {...itemsAndGroups}
-            componentRef={groupRef}
-            groupProps={
-              {
-                onRenderHeader: onRenderHeader,
-                onRenderShowAll: onRenderShowAll,
-                showEmptyGroups: true,
-                showAllProps: false,
-                isAllGroupsCollapsed: true,
-              } as Partial<IGroupRenderProps>
-            }
-            styles={groupListStyle}
-            onRenderCell={onRenderCell}
-          />
-          <span css={sectionTagDark}>{formatMessage('Assets')}</span>
-          <span css={sectionTag}>{formatMessage('Local Skill Bots')}</span>
-          <span css={sectionTag}>{formatMessage('Remote Skill Bots')}</span>
-          <span css={sectionTag}>{formatMessage('QnA Knowledge Base')}</span>
+          <RevealDropdown dark title={formatMessage('Core Bot')}>
+            <GroupedList
+              {...itemsAndGroups}
+              componentRef={groupRef}
+              groupProps={
+                {
+                  onRenderHeader: onRenderHeader,
+                  onRenderShowAll: onRenderShowAll,
+                  showEmptyGroups: true,
+                  showAllProps: false,
+                  isAllGroupsCollapsed: true,
+                } as Partial<IGroupRenderProps>
+              }
+              styles={groupListStyle}
+              onRenderCell={onRenderCell}
+            />
+          </RevealDropdown>
+          <RevealDropdown dark title={formatMessage('Assets')}></RevealDropdown>
+          <RevealDropdown title={formatMessage('Local Skill Bots')}></RevealDropdown>
+          <RevealDropdown title={formatMessage('Remote Skill Bots')}></RevealDropdown>
+          <RevealDropdown title={formatMessage('QnA Knowledge Base')}></RevealDropdown>
         </FocusZone>
       </div>
     </Resizable>
