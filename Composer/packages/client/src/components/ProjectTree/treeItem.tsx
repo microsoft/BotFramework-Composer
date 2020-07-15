@@ -127,11 +127,7 @@ interface ITreeItemProps {
   onDelete: (id: string) => void;
   onSelect: (id: string) => void;
   icon?: string;
-  commands?: Array<{
-    ariaLabel: string;
-    iconName: string;
-    onClick: () => void;
-  }>;
+  commands?: JSX.Element;
 }
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
