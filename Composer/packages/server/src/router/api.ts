@@ -26,7 +26,7 @@ router.post('/projects/:projectId/skill/check', ProjectController.getSkill);
 router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
-router.post('/projects/:projectId/generate/dialog', ProjectController.generateDialog);
+router.post('/projects/:projectId/generateDialog', ProjectController.generateDialog);
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);

@@ -354,9 +354,9 @@ async function generateDialog(req: Request, res: Response) {
   if (currentProject !== undefined) {
     const { name, schema } = req.body;
 
-    //dir = id
-    const file = await currentProject.generateDialog(name, schema);
-    res.status(200).json(file);
+    await currentProject.generateDialog(name, JSON.stringify(schema));
+    const updatedProject = await BotProjectService.getProjectById(projectId, user);
+    res.status(200).json(updatedProject);
   } else {
     res.status(404).json({
       message: 'No such bot project opened',

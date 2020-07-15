@@ -21,6 +21,7 @@
     "ajv": "^6.9.1",
     "botbuilder-lg": "4.10.0-preview-135858",
     "adaptive-expressions": "4.10.0-preview-135858",
+    "clone": "^2.1.2",
     "fs-extra": "^7.0.1",
     "globby": "^11.0.1",
     "json-schema-merge-allof": "^0.6.0",

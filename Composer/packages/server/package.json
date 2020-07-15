@@ -55,6 +55,7 @@
   "dependencies": {
     "@azure/ms-rest-js": "^2.0.6",
     "@bfc/client": "*",
+    "@bfc/dialog-generation": "*",
     "@bfc/indexers": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
