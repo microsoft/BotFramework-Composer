@@ -10,10 +10,12 @@ import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { NeutralColors, SharedColors } from '@uifabric/fluent-theme';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { IButtonStyles } from 'office-ui-fabric-react/lib/Button';
 import { IContextualMenuStyles } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { ICalloutContentStyles } from 'office-ui-fabric-react/lib/Callout';
+
+const indent = 16;
 
 // -------------------- Styles -------------------- //
 
@@ -23,7 +25,7 @@ const itemText = (depth: number) => css`
     outline: rgb(102, 102, 102) solid 1px;
     z-index: 1;
   }
-  padding-left: ${depth * 16}px;
+  padding-left: ${depth * indent}px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -38,8 +40,12 @@ const content = css`
   outline: none;
   display: flex;
   align-items: center;
-
   label: ProjectTreeItem;
+`;
+
+const leftIndent = css`
+  height: 100%;
+  width: ${indent}px;
 `;
 
 const moreMenu: Partial<ICalloutContentStyles> = {
@@ -118,14 +124,9 @@ export const overflowSet = css`
 `;
 
 const warningIcon = {
-  marginLeft: 5,
-  color: SharedColors.red10,
-  fontSize: 5,
-};
-
-const warningText = {
-  color: SharedColors.red10,
-  fontSize: 5,
+  marginRight: 5,
+  color: '#BE880A',
+  fontSize: 9,
 };
 // -------------------- TreeItem -------------------- //
 
@@ -139,6 +140,9 @@ interface ITreeItemProps {
 }
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
+  const warningContent = formatMessage(
+    'This trigger type is not supported by the RegEx recognizer and will not be fired.'
+  );
   return (
     <div
       data-is-focusable
@@ -149,6 +153,13 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
       onFocus={item.onFocus}
     >
       <div css={content} tabIndex={-1}>
+        {item.warning ? (
+          <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
+            <Icon iconName={'Warning'} style={warningIcon} />
+          </TooltipHost>
+        ) : (
+          <div css={leftIndent} />
+        )}
         {item.depth !== 0 && (
           <Icon
             iconName="Flow"
@@ -162,8 +173,6 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
           />
         )}
         {item.displayName}
-        {item.warning && <Icon iconName={'Warning'} style={warningIcon} />}
-        {item.warning && <div css={warningText}>{'Not supported with Regex'} </div>}
       </div>
     </div>
   );

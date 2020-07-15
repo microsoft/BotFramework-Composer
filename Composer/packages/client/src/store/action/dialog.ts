@@ -65,3 +65,15 @@ export const createDialogCancel: ActionCreator = (store) => {
     type: ActionTypes.CREATE_DIALOG_CANCEL,
   });
 };
+
+export const openRecognizerDropdown: ActionCreator = (store) => {
+  store.dispatch({
+    type: ActionTypes.OPEN_RECOGNIZER_DROPDOWN,
+  });
+};
+
+export const closeRecognizerDropdown: ActionCreator = (store) => {
+  store.dispatch({
+    type: ActionTypes.CLOSE_RECOGNIZER_DROPDOWN,
+  });
+};

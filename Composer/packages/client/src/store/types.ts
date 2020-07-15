@@ -146,6 +146,7 @@ export interface BotState {
 
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
+  openRecognizer: boolean;
 }
 
 export type AppState = {

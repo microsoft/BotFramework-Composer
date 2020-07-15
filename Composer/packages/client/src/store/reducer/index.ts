@@ -722,6 +722,16 @@ const getBoilerplateSuccess: ReducerFunc<{
   return state;
 };
 
+const openRecognizerDropDown: ReducerFunc = (state) => {
+  state.openRecognizer = true;
+  return state;
+};
+
+const closeRecognizerDropDown: ReducerFunc = (state) => {
+  state.openRecognizer = false;
+  return state;
+};
+
 const noOp: ReducerFunc = (state) => {
   return state;
 };
@@ -798,4 +808,6 @@ export const reducer = createReducer({
   [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: setCustomRuntimeToggle,
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
   [ActionTypes.GET_BOILERPLATE_SUCCESS]: getBoilerplateSuccess,
+  [ActionTypes.OPEN_RECOGNIZER_DROPDOWN]: openRecognizerDropDown,
+  [ActionTypes.CLOSE_RECOGNIZER_DROPDOWN]: closeRecognizerDropDown,
 });
