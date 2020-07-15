@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { css } from '@emotion/core';
-import { FontWeights, FontSizes, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
+import { FontSizes, mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 
 export const actionButton = css`
   font-size: 16px;
@@ -61,31 +61,6 @@ export const navLinkText = css`
 `;
 
 export const navLinkBtns = css``;
-export const textFieldLabel = css`
-  font-weight: ${FontWeights.semibold};
-`;
-
-export const dialog = {
-  title: {
-    fontWeight: FontWeights.bold,
-  },
-};
-
-export const dialogModal = {
-  main: {
-    maxWidth: '450px !important',
-  },
-};
-
-export const dialogSubTitle = css`
-  font-size: ${FontSizes.medium};
-  font-weight: ${FontWeights.semibold};
-`;
-
-export const dialogContent = css`
-  margin-top: 20px;
-  margin-bottom: 50px;
-`;
 
 export const consoleStyle = css`
   background: #000;
