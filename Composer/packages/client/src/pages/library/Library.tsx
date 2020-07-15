@@ -10,10 +10,13 @@ import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 
 import { StoreContext } from '../../store';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { LibraryRef } from '../../store/types';
+import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { ImportDialog } from './importDialog';
-import { LibraryList, LibraryItem } from './libraryList';
+import { LibraryList } from './libraryList';
+import { WorkingModal } from './workingModal';
 
 interface LibraryPageProps extends RouteComponentProps<{}> {
   targetName?: string;
@@ -22,14 +25,15 @@ interface LibraryPageProps extends RouteComponentProps<{}> {
 const Library: React.FC<LibraryPageProps> = (props) => {
   const { state, actions } = useContext(StoreContext);
   const { settings } = state;
-  const [items, setItems] = useState<LibraryItem[]>([]);
+  const [items, setItems] = useState<LibraryRef[]>([]);
+  const [selectedItem, setSelectedItem] = useState<LibraryRef>();
+  const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
 
-  props;
-
   useEffect(() => {
-    setItems([{ name: 'foo-library', lastImported: new Date(), url: 'http://foo.goo' }]);
-  }, [settings]);
+    setItems(settings.importedLibraries || []);
+  }, [settings.importedLibraries]);
+
   const toolbarItems: IToolBarItem[] = [
     {
       type: 'action',
@@ -51,7 +55,36 @@ const Library: React.FC<LibraryPageProps> = (props) => {
   };
 
   const importFromWeb = async (packageName, version) => {
-    await actions.importLibrary(packageName, version);
+    console.log('IMPORT FROM WEB', packageName);
+    // TODO: check to see if package already exists in this project
+    const existing = settings.importedLibraries?.find((l) => l.name === packageName);
+    let okToProceed = true;
+    if (existing) {
+      const title = formatMessage('Update Library');
+      const msg = formatMessage(
+        'Any changes you made to this library will be lost! Are you sure you want to continue?'
+      );
+      okToProceed = (await OpenConfirmModal(title, msg)) ? true : false;
+    }
+
+    if (okToProceed) {
+      closeDialog();
+      setWorking(true);
+      await actions.importLibrary(packageName, version);
+      setWorking(false);
+    }
+  };
+
+  const redownload = async () => {
+    return importFromWeb(selectedItem?.name, selectedItem?.version);
+  };
+
+  const selectItem = (item: LibraryRef | null) => {
+    if (item) {
+      setSelectedItem(item);
+    } else {
+      setSelectedItem(undefined);
+    }
   };
 
   return (
@@ -65,6 +98,7 @@ const Library: React.FC<LibraryPageProps> = (props) => {
       >
         <ImportDialog closeDialog={closeDialog} doImport={importFromWeb} />
       </Dialog>
+      <WorkingModal hidden={!working} title={formatMessage('Importing library...')} />
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('External Libraries')}</h1>
@@ -72,9 +106,9 @@ const Library: React.FC<LibraryPageProps> = (props) => {
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <Fragment>
-            <LibraryList items={items} />
+            <LibraryList items={items} redownload={redownload} updateItems={setItems} onItemClick={selectItem} />
             {!items || items.length === 0 ? (
-              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No publish history</div>
+              <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No libraries installed</div>
             ) : null}
           </Fragment>
         </div>

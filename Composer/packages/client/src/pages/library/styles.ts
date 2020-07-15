@@ -114,3 +114,8 @@ export const targetSelected = css`
   font-weight: ${FontWeights.bold};
   font-size: ${FontSizes.small};
 `;
+
+export const modalControlGroup = css`
+  border: 1px solid rgb(237, 235, 233);
+  padding: 0.5rem 1rem 1rem 1rem;
+`;
