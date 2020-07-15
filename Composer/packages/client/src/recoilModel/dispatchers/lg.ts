@@ -3,7 +3,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { LgTemplate, LgFile, importResolverGenerator } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { lgIndexer } from '@bfc/indexers';
 
 import LgWorker from './../parsers/lgWorker';
 import { lgFilesState } from './../atoms/botState';
@@ -34,8 +33,7 @@ export const lgDispatcher = () => {
     }) => {
       set(lgFilesState, (lgFiles) => {
         const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const templates = lgUtil.updateTemplate(content, templateName, template, lgFileResolver(lgFiles));
-        const result = lgIndexer.convertTemplatesToLgFile(id, templates.toString(), templates);
+        const result = lgUtil.updateTemplate(id, content, templateName, template, lgFileResolver(lgFiles));
         return lgFiles.map((file) => (file.id === id ? result : file));
       });
     }
@@ -45,8 +43,7 @@ export const lgDispatcher = () => {
     ({ set }: CallbackInterface) => async ({ id, template }: { id: string; template: LgTemplate }) => {
       set(lgFilesState, (lgFiles) => {
         const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const templates = lgUtil.addTemplate(content, template, lgFileResolver(lgFiles));
-        const result = lgIndexer.convertTemplatesToLgFile(id, templates.toString(), templates);
+        const result = lgUtil.addTemplate(id, content, template, lgFileResolver(lgFiles));
 
         return lgFiles.map((file) => (file.id === id ? result : file));
       });
@@ -57,8 +54,7 @@ export const lgDispatcher = () => {
     ({ set }: CallbackInterface) => async ({ id, templateName }: { id: string; templateName: string }) => {
       set(lgFilesState, (lgFiles) => {
         const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const templates = lgUtil.removeTemplate(content, templateName, lgFileResolver(lgFiles));
-        const result = lgIndexer.convertTemplatesToLgFile(id, templates.toString(), templates);
+        const result = lgUtil.removeTemplate(id, content, templateName, lgFileResolver(lgFiles));
 
         return lgFiles.map((file) => (file.id === id ? result : file));
       });
@@ -69,8 +65,7 @@ export const lgDispatcher = () => {
     ({ set }: CallbackInterface) => async ({ id, templateNames }: { id: string; templateNames: string[] }) => {
       set(lgFilesState, (lgFiles) => {
         const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const templates = lgUtil.removeTemplates(content, templateNames, lgFileResolver(lgFiles));
-        const result = lgIndexer.convertTemplatesToLgFile(id, templates.toString(), templates);
+        const result = lgUtil.removeTemplates(id, content, templateNames, lgFileResolver(lgFiles));
 
         return lgFiles.map((file) => (file.id === id ? result : file));
       });
@@ -89,8 +84,7 @@ export const lgDispatcher = () => {
     }) => {
       set(lgFilesState, (lgFiles) => {
         const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const templates = lgUtil.copyTemplate(content, fromTemplateName, toTemplateName, lgFileResolver(lgFiles));
-        const result = lgIndexer.convertTemplatesToLgFile(id, templates.toString(), templates);
+        const result = lgUtil.copyTemplate(id, content, fromTemplateName, toTemplateName, lgFileResolver(lgFiles));
 
         return lgFiles.map((file) => (file.id === id ? result : file));
       });
