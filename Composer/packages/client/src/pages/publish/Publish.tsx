@@ -8,12 +8,12 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { PublishTarget } from '@bfc/shared';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
 import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils/navigation';
-import { PublishTarget } from '../../store/types';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 

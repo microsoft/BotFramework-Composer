@@ -51,7 +51,7 @@ export const PublishController = {
     const runtime = pluginLoader.getRuntimeByProject(currentProject);
     const pathToRuntime = runtime.path;
 
-    if (profile && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
+    if (profile && method && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
       // append config from client(like sensitive settings)
       const configuration = {
         profileName: profile.name,
@@ -103,6 +103,7 @@ export const PublishController = {
     const method = profile ? profile.type : undefined;
     if (
       profile &&
+      method &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.getStatus
@@ -150,6 +151,7 @@ export const PublishController = {
 
     if (
       profile &&
+      method &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.history
@@ -190,20 +192,20 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined;
 
-    // append config from client(like sensitive settings)
-    const configuration = {
-      profileName: profile.name,
-      fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-      templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
-      ...JSON.parse(profile.configuration),
-    };
-
     if (
       profile &&
+      method &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.rollback
     ) {
+      // append config from client(like sensitive settings)
+      const configuration = {
+        profileName: profile.name,
+        fullSettings: merge({}, currentProject.settings, sensitiveSettings),
+        templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
+        ...JSON.parse(profile.configuration),
+      };
       // get the externally defined method
       const pluginMethod = pluginLoader.extensions.publish[method].methods.rollback;
       if (typeof pluginMethod === 'function') {
@@ -239,6 +241,7 @@ export const PublishController = {
     const method = profile.type;
     if (
       profile &&
+      method &&
       pluginLoader.extensions.publish[method] &&
       pluginLoader.extensions.publish[method].methods &&
       pluginLoader.extensions.publish[method].methods.stopBot

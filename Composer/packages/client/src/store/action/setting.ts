@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ActionCreator, DialogSetting } from '../types';
+import { DialogSetting } from '@bfc/shared';
+
+import { ActionCreator } from '../types';
 import { ActionTypes } from '../../constants';
 
 export const setSettings: ActionCreator = async ({ dispatch }, projectId: string, settings: DialogSetting) => {

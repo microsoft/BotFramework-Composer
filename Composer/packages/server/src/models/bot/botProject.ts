@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic, DialogSetting } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -22,7 +22,6 @@ import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
 import { extractSkillManifestUrl } from './skillManager';
-import { DialogSetting } from './interface';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -88,7 +87,7 @@ export class BotProject {
   public init = async () => {
     this.diagnostics = [];
     this.settings = await this.getEnvSettings(false);
-    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || []);
+    const { skillsParsed, diagnostics } = await extractSkillManifestUrl(this.settings?.skill || ([] as any));
     this.skills = skillsParsed;
     this.diagnostics.push(...diagnostics);
     this.files = await this._getFiles();

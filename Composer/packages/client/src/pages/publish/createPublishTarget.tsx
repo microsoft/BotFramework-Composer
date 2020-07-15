@@ -10,8 +10,9 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Fragment, useState, useMemo } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
+import { PublishTarget } from '@bfc/shared';
 
-import { PublishTarget, PublishType } from '../../store/types';
+import { PublishType } from '../../store/types';
 import { useStoreContext } from '../../hooks/useStoreContext';
 
 import { label } from './styles';

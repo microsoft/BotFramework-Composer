@@ -15,11 +15,12 @@ import {
   UserSettings,
   dereferenceDefinitions,
   defaultPublishConfig,
+  DialogSetting,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../../constants';
-import { DialogSetting, ReducerFunc } from '../types';
+import { ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils/fileUtil';
 import storage from '../../utils/storage';

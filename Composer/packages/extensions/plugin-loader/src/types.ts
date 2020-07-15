@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { RequestHandler } from 'express-serve-static-core';
 import { JSONSchema7 } from 'json-schema';
-import { DialogSetting } from '@bfc/client/src/store/types';
+import { DialogSetting } from '@bfc/shared';
 
 // TODO: this will be possible when ifilestorage is in a shared module
 // import { IFileStorage } from '../../../server/src/models/storage/interface';

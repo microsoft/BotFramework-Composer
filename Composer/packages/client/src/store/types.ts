@@ -14,6 +14,7 @@ import {
   Skill,
   UserSettings,
   Diagnostic,
+  DialogSetting,
 } from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/extension';
 
@@ -68,13 +69,6 @@ export interface PublishType {
     rollback: boolean;
     status: boolean;
   };
-}
-
-export interface PublishTarget {
-  name: string;
-  type: string;
-  configuration: string;
-  lastPublished?: Date;
 }
 
 export interface RuntimeTemplate {
@@ -203,31 +197,6 @@ export interface MiddlewareApi {
 }
 
 export type MiddlewareFunc = (middlewareApi: MiddlewareApi) => (next: any) => React.Dispatch<ActionType>;
-
-export interface ILuisConfig {
-  name: string;
-  authoringKey: string;
-  endpointKey: string;
-  endpoint: string;
-  authoringEndpoint: string;
-  authoringRegion: string | 'westus';
-  defaultLanguage: string | 'en-us';
-  environment: string | 'composer';
-}
-export interface DialogSetting {
-  MicrosoftAppId?: string;
-  MicrosoftAppPassword?: string;
-  luis?: ILuisConfig;
-  publishTargets?: PublishTarget[];
-  runtime?: {
-    customRuntime: boolean;
-    path: string;
-    command: string;
-    key: string;
-    name: string;
-  };
-  [key: string]: unknown;
-}
 
 export interface DesignPageLocation {
   projectId: string;

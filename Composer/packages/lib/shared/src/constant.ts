@@ -16,3 +16,36 @@ export const defaultPublishConfig = {
   configuration: JSON.stringify({}),
 };
 export const DEFAULT_RUNTIME = 'dotnet';
+
+export interface DialogSetting {
+  MicrosoftAppId?: string;
+  MicrosoftAppPassword?: string;
+  luis?: ILuisConfig;
+  publishTargets?: PublishTarget[];
+  runtime?: {
+    customRuntime: boolean;
+    path: string;
+    command: string;
+    key: string;
+    name: string;
+  };
+  [key: string]: unknown;
+}
+
+export interface ILuisConfig {
+  name: string;
+  authoringKey: string;
+  endpointKey: string;
+  endpoint: string;
+  authoringEndpoint: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
+}
+
+export interface PublishTarget {
+  name: string;
+  type: string;
+  configuration: string;
+  lastPublished?: Date;
+}
