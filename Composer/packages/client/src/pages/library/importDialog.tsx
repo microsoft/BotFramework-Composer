@@ -34,6 +34,7 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
     setVersion(val);
   };
   const submit = () => {
+    console.log('SUBMIT NAME', name, version);
     props.doImport(name, version);
   };
 

@@ -84,7 +84,9 @@ export const initialBotState: BotState = {
   showCreateDialogModal: false,
   showAddSkillDialogModal: false,
   isEnvSettingUpdated: false,
-  settings: {},
+  settings: {
+    importedLibraries: [],
+  },
   publishVersions: {},
   publishTypes: [],
   publishHistory: {},

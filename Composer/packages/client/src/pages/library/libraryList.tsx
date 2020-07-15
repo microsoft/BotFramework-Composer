@@ -3,30 +3,29 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
+import formatMessage from 'format-message';
 import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
-  IColumn,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import moment from 'moment';
-import { useState } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
+import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
+
+import { LibraryRef } from '../../store/types';
 
 import { listRoot, tableView, detailList } from './styles';
 
 export interface ILibraryListProps {
-  items: LibraryItem[];
-  // onItemClick: (item: IStatus | null) => void;
-  // updateItems: (items: IStatus[]) => void;
-}
-
-export interface LibraryItem {
-  name: string;
-  lastImported: Date;
-  url: string;
+  items: LibraryRef[];
+  redownload: (evt: any) => void;
+  onItemClick: (item: LibraryRef | null) => void;
+  updateItems: (items: LibraryRef[]) => void;
 }
 
 function onRenderDetailsHeader(props, defaultRender) {
@@ -42,27 +41,19 @@ function onRenderDetailsHeader(props, defaultRender) {
 
 export const LibraryList: React.FC<ILibraryListProps> = (props) => {
   const { items } = props;
+  const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({ key: 'ItemName', descending: true });
-  const sortByDate = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    if (column.isSorted) {
-      column.isSortedDescending = !column.isSortedDescending;
-      // const newItems: LibraryItem[] = [];
-      // props.updateItems(newItems);
-    }
-  };
   const columns = [
     {
       key: 'ItemName',
       name: 'Name',
-      // className: 'publishdate',
       fieldName: 'name',
-      minWidth: 70,
-      maxWidth: 90,
+      minWidth: 150,
+      maxWidth: 300,
       isRowHeader: true,
       isResizable: true,
-      onColumnClick: sortByDate,
       data: 'string',
-      onRender: (item: LibraryItem) => {
+      onRender: (item: LibraryRef) => {
         return <span>{item.name}</span>;
       },
       isPadded: true,
@@ -70,20 +61,68 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
     {
       key: 'PublishDate',
       name: 'Date',
-      className: 'publishdate',
       fieldName: 'date',
       minWidth: 70,
       maxWidth: 90,
       isRowHeader: true,
       isResizable: true,
-      onColumnClick: sortByDate,
       data: 'string',
-      onRender: (item: LibraryItem) => {
+      onRender: (item: LibraryRef) => {
         return <span>{moment(item.lastImported).format('MM-DD-YYYY')}</span>;
       },
       isPadded: true,
     },
+    {
+      key: 'Version',
+      name: 'Version',
+      fieldName: 'version',
+      minWidth: 70,
+      maxWidth: 90,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: LibraryRef) => {
+        return <span>{item.version}</span>;
+      },
+      isPadded: true,
+    },
+    {
+      key: 'actions',
+      name: '',
+      minWidth: 70,
+      maxWidth: 90,
+      isRowHeader: true,
+      isResizable: true,
+      data: 'string',
+      onRender: (item: LibraryRef) => {
+        return (
+          <Fragment>
+            <DefaultButton text={formatMessage('Update')} onClick={props.redownload} />
+          </Fragment>
+        );
+      },
+      isPadded: true,
+    },
   ];
+
+  const selection = useMemo(() => {
+    return new Selection({
+      onSelectionChanged: () => {
+        const selectedIndexs = selection.getSelectedIndices();
+        if (selectedIndexs.length > 0) {
+          setSelectedIndex(selectedIndexs[0]);
+        }
+      },
+    });
+  }, [items]);
+
+  useEffect(() => {
+    if (items && typeof selectIndex === 'number' && items.length > selectIndex) {
+      props.onItemClick(items[selectIndex]);
+    } else {
+      props.onItemClick(null);
+    }
+  }, [selectIndex, items]);
 
   return (
     <div css={listRoot}>
@@ -103,6 +142,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
           }}
           items={items}
           layoutMode={DetailsListLayoutMode.justified}
+          selection={selection}
           selectionMode={SelectionMode.single}
           setKey="none"
           onColumnHeaderClick={(_, clickedCol) => {

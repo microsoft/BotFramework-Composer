@@ -33,19 +33,23 @@ export const ImportController = {
 
     if (packageName) {
       try {
-        const files = await ImportController.importRemoteAsset(currentProject, packageName, version);
-        return res.json(files);
+        const importResults = await ImportController.importRemoteAsset(currentProject, packageName, version);
+        res.json(importResults);
       } catch (err) {
-        console.error('Error in import', err);
-        return res.status(500).json(err);
+        console.error('Error in import', { message: err.message });
+        res.status(500).json({ message: err.message });
       }
     } else {
       res.status(500).json({ message: 'Please specify a package name or git url to import' });
     }
   },
-  importRemoteAsset: async function (currentProject, packageName, version): Promise<FileRef[]> {
+  importRemoteAsset: async function (
+    currentProject,
+    packageName,
+    version
+  ): Promise<{ installedVersion: string; files: Partial<FileRef>[] }> {
     console.log('Fetching package', packageName);
-    const files = await ImportController.fetchAndExtract(packageName, version);
+    const { files, installedVersion } = await ImportController.fetchAndExtract(packageName, version);
     console.log(`Got ${files.length} files`);
     if (files.length) {
       // copy declarative files into this project's imported dialogs folder
@@ -53,6 +57,14 @@ export const ImportController = {
         await currentProject.fileStorage.mkDir(path.join(currentProject.dataDir, 'importedDialogs', packageName), {
           recursive: true,
         });
+      }
+
+      // TODO: FIRST! Make sure that no files overlap! Can't have any name collisions!
+      for (let f = 0; f < files.length; f++) {
+        const basename = path.basename(files[f].filename);
+        if (currentProject.files.find((f) => basename === path.basename(f.path))) {
+          throw new Error(`A declarative asset with the name ${basename} already exists in this project`);
+        }
       }
 
       for (let f = 0; f < files.length; f++) {
@@ -80,9 +92,17 @@ export const ImportController = {
       }
     }
 
-    return files;
+    const results = {
+      files: files.map((f) => {
+        return { filename: f.filename, path: f.path };
+      }),
+      name: packageName,
+      installedVersion,
+    };
+
+    return results;
   },
-  fetchAndExtract: async function (uri, version): Promise<FileRef[]> {
+  fetchAndExtract: async function (uri, version): Promise<{ installedVersion: string; files: FileRef[] }> {
     // process package as an npm module.
 
     const filterFiles = async () => {
@@ -91,8 +111,8 @@ export const ImportController = {
         '**/*.lg',
         '**/*.lu',
         'manifests/*.json',
-        '!(generated/**)',
-        '!(runtime/**)',
+        '!(**/generated/**)',
+        '!(**/runtime/**)',
       ];
       const ldfs = new LocalDiskStorage();
       const files = await ldfs.glob(patterns, path.join(TMP_DIR, uri));
@@ -109,7 +129,10 @@ export const ImportController = {
       // clean up temporary files.
       ldfs.rmrfDir(path.join(TMP_DIR, uri));
 
-      return results;
+      return {
+        files: results,
+        installedVersion: version,
+      };
     };
 
     return new Promise(async (resolve, reject) => {
@@ -143,10 +166,16 @@ export const ImportController = {
         case 'npm':
           console.log(`Fetching with NPM`);
           // download and extract the files from Npm
-          await downloadNpmPackage({
-            arg: `${uri}@${version}`,
-            dir: TMP_DIR,
-          });
+          try {
+            await downloadNpmPackage({
+              arg: `${uri}@${version}`,
+              dir: TMP_DIR,
+            });
+          } catch (err) {
+            console.error('NPM fetch failed', err);
+            return reject(err);
+          }
+          // get version from package file
           resolve(await filterFiles());
           break;
         case 'github':
@@ -171,6 +200,7 @@ export const ImportController = {
           });
           stream.data.pipe(
             unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
+              // possible to get version from some package file?
               resolve(await filterFiles());
             })
           );

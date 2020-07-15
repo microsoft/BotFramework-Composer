@@ -203,6 +203,12 @@ export interface MiddlewareApi {
 
 export type MiddlewareFunc = (middlewareApi: MiddlewareApi) => (next: any) => React.Dispatch<ActionType>;
 
+export interface LibraryRef {
+  name: string;
+  version: string;
+  lastImported: Date;
+}
+
 export interface ILuisConfig {
   name: string;
   authoringKey: string;
@@ -223,6 +229,7 @@ export interface DialogSetting {
     path: string;
     command: string;
   };
+  importedLibraries: LibraryRef[];
   [key: string]: unknown;
 }
 
