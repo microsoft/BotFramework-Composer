@@ -93,6 +93,7 @@ export const initialBotState: BotState = {
   boilerplateVersion: {
     updateRequired: false,
   },
+  openRecognizer: false,
 };
 
 const initialAppState: AppState = {

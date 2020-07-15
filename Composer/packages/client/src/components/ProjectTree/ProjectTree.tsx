@@ -64,6 +64,9 @@ const root = css`
 // -------------------- ProjectTree -------------------- //
 
 function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
+  const isRegEx = (dialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
+  const isNotSupported =
+    isRegEx && dialog.triggers.some((t) => t.type === qnaMatcherKey || t.type === onChooseIntentKey);
   return {
     key: dialog.id,
     name: dialog.displayName,
@@ -72,7 +75,7 @@ function createGroupItem(dialog: DialogInfo, currentId: string, position: number
     count: dialog.triggers.length,
     hasMoreData: true,
     isCollapsed: dialog.id !== currentId,
-    data: dialog,
+    data: { ...dialog, warning: isNotSupported },
   };
 }
 
