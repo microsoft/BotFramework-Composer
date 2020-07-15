@@ -72,6 +72,20 @@ const sectionTag = css`
   background-color: ${NeutralColors.gray50};
 `;
 
+const sectionTagDark = css`
+  display: block;
+  font-family: Segoe UI;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+  width: 100%;
+  height: 22px;
+  line-height: 22px;
+  padding-left: 12px;
+  color: ${NeutralColors.white};
+  background-color: ${NeutralColors.gray130};
+`;
+
 // -------------------- ProjectTree -------------------- //
 
 function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
@@ -181,6 +195,41 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return sortDialog(dialogs);
   }, [dialogs]);
 
+  const commandsByLevel = {
+    0: (
+      <IconButton
+        ariaLabel={formatMessage('Add Dialog')}
+        iconProps={{
+          iconName: 'CommentAdd',
+          styles: {
+            root: {
+              fontSize: '12px',
+              color: '#000',
+            },
+          },
+        }}
+        onClick={() => {
+          createDialogBegin([], onCreateDialogComplete);
+        }}
+      />
+    ),
+    1: (
+      <IconButton
+        ariaLabel={formatMessage('Add Trigger')}
+        iconProps={{
+          iconName: 'Add',
+          styles: {
+            root: {
+              fontSize: '12px',
+              color: '#000',
+            },
+          },
+        }}
+        onClick={() => {}}
+      />
+    ),
+  };
+
   const onRenderHeader = (props: IGroupHeaderProps) => {
     const toggleCollapse = (): void => {
       groupRef.current?.toggleCollapseAll(true);
@@ -193,27 +242,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return (
       <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
         <TreeItem
-          commands={
-            level === 0 ? (
-              <IconButton
-                ariaLabel={formatMessage('Add Dialog')}
-                className="dialog-more-btn"
-                data-testid="dialogMoreButton"
-                iconProps={{
-                  iconName: 'CommentAdd',
-                  styles: {
-                    root: {
-                      fontSize: '12px',
-                      color: '#000',
-                    },
-                  },
-                }}
-                onClick={() => {
-                  createDialogBegin([], onCreateDialogComplete);
-                }}
-              />
-            ) : undefined
-          }
+          commands={level !== undefined ? commandsByLevel[level] : undefined}
           depth={level ?? 0}
           icon={level === 1 ? 'CannedChat' : undefined}
           isActive={!props.group?.isCollapsed}
@@ -298,7 +327,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             )}
             aria-live={'polite'}
           />
-          <span css={sectionTag}>{formatMessage('Core Bot')}</span>
+          <span css={sectionTagDark}>{formatMessage('Core Bot')}</span>
           <GroupedList
             {...itemsAndGroups}
             componentRef={groupRef}
@@ -314,6 +343,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             styles={groupListStyle}
             onRenderCell={onRenderCell}
           />
+          <span css={sectionTagDark}>{formatMessage('Assets')}</span>
           <span css={sectionTag}>{formatMessage('Local Skill Bots')}</span>
           <span css={sectionTag}>{formatMessage('Remote Skill Bots')}</span>
           <span css={sectionTag}>{formatMessage('QnA Knowledge Base')}</span>

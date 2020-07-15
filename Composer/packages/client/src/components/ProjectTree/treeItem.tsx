@@ -38,6 +38,8 @@ const content = css`
   outline: none;
   display: flex;
   align-items: center;
+  justify-items: middle;
+  height: 24px;
 
   label: ProjectTreeItem;
 `;
