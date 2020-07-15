@@ -120,6 +120,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
 const resetProjectState: ReducerFunc = (state) => {
   state.projectId = initialState.projectId;
   state.dialogs = initialState.dialogs;
+  state.dialogSchemaFiles = initialState.dialogSchemaFiles;
   state.botEnvironment = initialState.botEnvironment;
   state.botName = initialState.botName;
   state.botStatus = initialState.botStatus;
