@@ -18,9 +18,17 @@ export interface EditorSchema {
   };
 }
 
+type UISchema = {
+  [key: string]: {
+    form?: any;
+    flow?: any;
+    menu?: any;
+  };
+};
 export interface BotSchemas {
   default?: OBISchema;
   sdk?: any;
+  ui?: { content: UISchema };
   diagnostics?: any[];
 }
 

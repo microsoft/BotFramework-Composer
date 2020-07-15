@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UIOptions, FieldWidget, PluginConfig, JSONSchema7 } from '@bfc/extension';
+import { UIOptions, FieldWidget, JSONSchema7, FormUISchema } from '@bfc/extension';
 
 import * as DefaultFields from '../components/fields';
 
@@ -13,7 +13,7 @@ import * as DefaultFields from '../components/fields';
 export function resolveFieldWidget(
   schema?: JSONSchema7,
   uiOptions?: UIOptions,
-  globalConfig?: Required<PluginConfig>
+  globalUIOptions?: FormUISchema
 ): FieldWidget {
   const FieldOverride = uiOptions?.field;
 
@@ -29,8 +29,8 @@ export function resolveFieldWidget(
       }
     }
 
-    if (globalConfig) {
-      const KindOverride = schema.$kind && globalConfig.formSchema[schema.$kind]?.field;
+    if (globalUIOptions) {
+      const KindOverride = schema.$kind && globalUIOptions[schema.$kind]?.field;
 
       if (KindOverride) {
         return KindOverride;

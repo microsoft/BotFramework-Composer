@@ -24,6 +24,7 @@
     "@bfc/extension": "*",
     "@bfc/indexers": "*",
     "@bfc/shared": "*",
+    "@bfc/ui-plugin-composer": "*",
     "@bfc/ui-plugin-lg": "*",
     "@bfc/ui-plugin-luis": "*",
     "@bfc/ui-plugin-prompts": "*",

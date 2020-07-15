@@ -42,14 +42,9 @@ describe('resolveFieldWidget', () => {
       };
 
       const globalSchema = {
-        roleSchema: {},
-        formSchema: {
-          'Microsoft.IRecognizer': {
-            field: DefaultFields.RecognizerField,
-          },
+        'Microsoft.IRecognizer': {
+          field: DefaultFields.RecognizerField,
         },
-        recognizers: [],
-        visualSchema: {},
       };
 
       expect(resolveFieldWidget(schema, {}, globalSchema)).toEqual(DefaultFields.RecognizerField);

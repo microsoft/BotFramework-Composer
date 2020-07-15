@@ -47,7 +47,6 @@ module.exports = {
     '<rootDir>/packages/server',
     '<rootDir>/packages/electron-server',
     '<rootDir>/packages/tools/language-servers/language-generation',
-    '<rootDir>/packages/ui-plugins/expressions',
     '<rootDir>/packages/ui-plugins/lg',
     '<rootDir>/packages/ui-plugins/luis',
     '<rootDir>/packages/ui-plugins/prompts',
