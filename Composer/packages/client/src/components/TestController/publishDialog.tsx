@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -18,6 +18,9 @@ import formatMessage from 'format-message';
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { IConfig } from '../../store/types';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
+import { getReferredLuFiles } from '../../utils/luUtil';
+import { StoreContext } from '../../store';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`
@@ -74,7 +77,7 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
-interface IPublishLuisDialogProps {
+interface IPublishDialogProps {
   botName: string;
   isOpen: boolean;
   config: IConfig;
@@ -82,8 +85,10 @@ interface IPublishLuisDialogProps {
   onPublish: (data: FormData) => void;
 }
 
-export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
+export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
   const { isOpen, onDismiss, onPublish, botName, config } = props;
+  const { state } = useContext(StoreContext);
+  const { luFiles, qnaFiles, dialogs } = state;
 
   const luisFormConfig: FieldConfig<FormData> = {
     name: {
@@ -92,12 +97,12 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
       defaultValue: config.name || botName,
     },
     authoringKey: {
-      required: true,
+      required: getReferredLuFiles(luFiles, dialogs).length > 0,
       validate: validate,
       defaultValue: config.authoringKey,
     },
     subscriptionKey: {
-      required: true,
+      required: getReferredQnaFiles(qnaFiles, dialogs).length > 0,
       validate: validate,
       defaultValue: config.subscriptionKey,
     },
@@ -193,7 +198,7 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
             data-testid="SubscriptionKeyInput"
             errorMessage={formErrors.subscriptionKey}
             label={formatMessage('QNA Subscription key:')}
-            value={formData.authoringKey}
+            value={formData.subscriptionKey}
             onChange={(_e, val) => updateField('subscriptionKey', val)}
             onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
           />

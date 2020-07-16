@@ -18,7 +18,7 @@ import settingsStorage from './../../utils/dialogSettingStorage';
 import { StoreContext } from './../../store';
 import { getReferredLuFiles } from './../../utils/luUtil';
 import { getReferredQnaFiles } from './../../utils/qnaUtil';
-import { PublishLuisDialog } from './publishDialog';
+import { PublishDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
 import { Loading } from './loading';
@@ -199,7 +199,7 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      <PublishLuisDialog
+      <PublishDialog
         botName={botName}
         config={publishConfig}
         isOpen={modalOpen}
