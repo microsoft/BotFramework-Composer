@@ -4,8 +4,8 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
-import lodashGet from 'lodash/get';
-import lodashSet from 'lodash/get';
+import objectGet from 'lodash/get';
+import objectSet from 'lodash/set';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 
@@ -65,7 +65,7 @@ const processSchema = (projectId: string, schema: any) => ({
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {
   for (const property of SensitiveProperties) {
-    const value = lodashGet(settings, property);
+    const value = objectGet(settings, property);
     if (value) {
       settingStorage.setField(projectId, property, value);
     }
@@ -75,16 +75,18 @@ const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {
 // merge sensitive values in localStorage
 const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
   const localSetting = settingStorage.get(projectId);
+  const mergedSettings = { ...settings };
   if (localSetting) {
     for (const property of SensitiveProperties) {
-      const value = lodashGet(localSetting, property);
+      const value = objectGet(localSetting, property);
       if (value) {
-        lodashSet(settings, property, value);
+        objectSet(mergedSettings, property, value);
       } else {
-        lodashSet(settings, property, ''); // set those key back, because that were omit after persisited
+        objectSet(mergedSettings, property, ''); // set those key back, because that were omit after persisited
       }
     }
   }
+  return mergedSettings;
 };
 
 const updateLuFilesStatus = (projectId: string, luFiles: LuFile[]) => {
@@ -144,7 +146,6 @@ export const projectDispatcher = () => {
       set(skillManifestsState, skillManifestFiles);
       set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
       set(lgFilesState, lgFiles);
-      set(settingsState, settings);
       set(dialogsState, verifiedDialogs);
       set(botEnvironmentState, botEnvironment);
       set(botNameState, botName);
@@ -158,12 +159,11 @@ export const projectDispatcher = () => {
       set(BotDiagnosticsState, diagnostics);
       set(botOpeningState, false);
       set(projectIdState, projectId);
+      refreshLocalStorage(projectId, settings);
+      const mergedSettings = mergeLocalStorage(projectId, settings);
+      set(settingsState, mergedSettings);
     });
-
     gotoSnapshot(newSnapshot);
-    refreshLocalStorage(projectId, settings);
-    mergeLocalStorage(projectId, settings);
-
     if (jumpToMain && projectId) {
       const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
       navigateTo(mainUrl);
