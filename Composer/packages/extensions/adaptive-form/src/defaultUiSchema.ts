@@ -163,6 +163,11 @@ const DefaultUISchema: UISchema = {
     label: () => formatMessage('Activities'),
     subtitle: () => formatMessage('Activity received'),
   },
+  [SDKKinds.OnAssignEntity]: {
+    ...triggerUiSchema,
+    label: () => formatMessage('On Assign Entity'),
+    subtitle: () => formatMessage('On Assign Entity'),
+  },
   [SDKKinds.OnBeginDialog]: {
     ...triggerUiSchema,
     label: () => formatMessage('Dialog started'),

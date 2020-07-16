@@ -107,7 +107,13 @@ export const dialogGroups: DialogGroupsMap = {
   },
   [DialogGroup.DIALOG_EVENT_TYPES]: {
     label: 'OnDialogEvents Types',
-    types: [SDKKinds.OnBeginDialog, SDKKinds.OnCancelDialog, SDKKinds.OnError, SDKKinds.OnRepromptDialog],
+    types: [
+      SDKKinds.OnBeginDialog,
+      SDKKinds.OnCancelDialog,
+      SDKKinds.OnError,
+      SDKKinds.OnRepromptDialog,
+      SDKKinds.OnAssignEntity,
+    ],
   },
   [DialogGroup.ADVANCED_EVENTS]: {
     label: 'Advanced Events',
