@@ -12,7 +12,6 @@ namespace Microsoft.BotFramework.Composer.Core
     {
         public static IConfigurationBuilder UseBotPathAdapter(this IConfigurationBuilder builder, bool isDevelopment = true)
         {
-            var configuration = builder.Build();
             var settings = new Dictionary<string, string>();
             if (isDevelopment)
             {
