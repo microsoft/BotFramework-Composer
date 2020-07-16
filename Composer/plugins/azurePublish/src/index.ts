@@ -287,7 +287,7 @@ class AzurePublisher {
       // implement interchangeable runtimes
       const resourcePath = path.resolve(
         this.getProjectFolder(resourcekey, DEFAULT_RUNTIME),
-        'appsettings.deployment.json'
+        'appsettings.json'
       );
       const appSettings = await readJson(resourcePath);
       await writeJson(

@@ -45,17 +45,12 @@ namespace Microsoft.BotFramework.Composer.Functions
             // Config precedence 1: root app.settings
             config
                 .SetBasePath(rootDirectory)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .UseLuisConfigAdapter()
-                .UseLuisSettings();
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             // Config precedence 2: ComposerDialogs/settings settings which are injected by the composer publish
             // Hard code the settings path to 'ComposerDialogs' for deployment
             var configFile = Path.GetFullPath(Path.Combine(rootDirectory, @"ComposerDialogs/settings/appsettings.json"));
             config.AddJsonFile(configFile, optional: true, reloadOnChange: true);
-
-            // Config Precedence 3: Deployment specific config
-            config.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
 
             if (!Debugger.IsAttached)
             {

@@ -29,12 +29,6 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
                 builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-                if (env.IsDevelopment())
-                {
-                    // Local Debug
-                    builder.AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true);
-                }
-
                 var configuration = builder.Build();
 
                 // Hard code the settings path to 'ComposerDialogs' while deployment
@@ -43,15 +37,11 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
 
                 builder.AddJsonFile(configFile, optional: true, reloadOnChange: true);
 
-                // Need to put this part here to override the any customized settings
-                if (!env.IsDevelopment())
-                {
-                    //Azure Deploy
-                    builder.AddJsonFile("appsettings.deployment.json", optional: true, reloadOnChange: true);
-                }
+                // Use Composer bot path adapter
+                builder.UseBotPathAdapter(env.IsDevelopment());
 
-                builder.UseLuisConfigAdapter()
-                    .UseLuisSettings();
+                // Use Composer luis settings extensions
+                builder.UseComposerLuisSettings();
 
                 builder.AddEnvironmentVariables()
                        .AddCommandLine(args);
