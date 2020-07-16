@@ -109,6 +109,8 @@ export enum ActionTypes {
   SET_CUSTOM_RUNTIME_TOGGLE = 'SET_CUSTOM_RUNTIME_TOGGLE',
   SET_RUNTIME_FIELD = 'SET_RUNTIME_FIELD',
   GET_BOILERPLATE_SUCCESS = 'GET_BOILERPLATE_SUCCESS',
+  OPEN_RECOGNIZER_DROPDOWN = 'OPEN_RECOGNIZER_DROPDOWN',
+  CLOSE_RECOGNIZER_DROPDOWN = 'CLOSE_RECOGNIZER_DROPDOWN',
 }
 
 export const Tips = {
@@ -117,7 +119,7 @@ export const Tips = {
   ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
     models independently from each other tied to the source control.`),
   AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
-  SUBSCRIPT_KEY: formatMessage('A subscript key is created automatically when you create a QnA account.'),
+  SUBSCRIPTION_KEY: formatMessage('A subscript key is created automatically when you create a QnA account.'),
   AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
   DEFAULT_LANGUAGE: formatMessage(
     `Configures default language model to use if there is no culture code in the file name (Default:en-us)`
@@ -148,7 +150,7 @@ export enum LuisConfig {
 }
 
 export enum QnaConfig {
-  SUBSCRIPT_KEY = 'subscriptKey',
+  SUBSCRIPTION_KEY = 'subscriptionKey',
 }
 
 export const FileTypes = {

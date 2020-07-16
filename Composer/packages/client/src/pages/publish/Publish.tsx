@@ -299,6 +299,9 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     () => async (comment) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
+        if (settings.qna && Object(settings.qna).subscriptionKey) {
+          await actions.setQnASettings(projectId, Object(settings.qna).subscriptionKey);
+        }
         const sensitiveSettings = settingsStorage.get(projectId);
         await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 

@@ -3,11 +3,11 @@
 import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { PublishComponent } from '../../../src/pages/language-understanding/publish-luis-modal';
+import { PublishDialog } from '../../../src/components/TestController/publishDialog';
 import { renderWithStore } from '../../testUtils';
 
-describe('<PublishComponent />', () => {
-  it('should render the <PublishComponent />', () => {
+describe('<PublishDialog />', () => {
+  it('should render the <PublishDialog />', () => {
     const onDismiss = jest.fn(() => {});
     const onPublish = jest.fn(() => {});
     const state = {
@@ -17,7 +17,7 @@ describe('<PublishComponent />', () => {
         luis: {
           name: '',
           authoringKey: '12345',
-          subscriptKey: '12345',
+          subscriptionKey: '12345',
           authoringEndpoint: 'testAuthoringEndpoint',
           endpointKey: '12345',
           endpoint: 'testEndpoint',
@@ -27,36 +27,30 @@ describe('<PublishComponent />', () => {
         },
       },
     };
-    const actions = {
-      setSettings: jest.fn((projectId, settings) => {
-        state.settings = settings;
-      }),
-    };
     const { getByText } = renderWithStore(
-      <PublishComponent workState={0} onDismiss={onDismiss} onPublish={onPublish} />,
-      state,
-      actions
+      <PublishDialog
+        isOpen
+        botName={'sampleBot0'}
+        config={state.settings.luis}
+        onDismiss={onDismiss}
+        onPublish={onPublish}
+      />,
+      state
     );
     expect(getByText('What is the name of your bot?')).not.toBeNull();
     const publishButton = getByText('OK');
     expect(publishButton).not.toBeNull();
     fireEvent.click(publishButton);
-    expect(actions.setSettings).toBeCalled();
-    expect(state).toEqual({
-      projectId: '12345',
-      botName: 'sampleBot0',
-      settings: {
-        luis: {
-          name: 'sampleBot0',
-          authoringKey: '12345',
-          authoringEndpoint: 'testAuthoringEndpoint',
-          endpointKey: '12345',
-          endpoint: 'testEndpoint',
-          authoringRegion: 'westus',
-          defaultLanguage: 'en-us',
-          environment: 'composer',
-        },
-      },
+    expect(onPublish).toBeCalled();
+    expect(onPublish).toBeCalledWith({
+      name: 'sampleBot0',
+      authoringKey: '12345',
+      authoringEndpoint: 'testAuthoringEndpoint',
+      endpointKey: '12345',
+      endpoint: 'testEndpoint',
+      authoringRegion: 'westus',
+      defaultLanguage: 'en-us',
+      environment: 'composer',
     });
   });
 });

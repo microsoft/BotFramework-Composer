@@ -211,9 +211,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 if (qnaIndex !== qnaSectionIndex || questionIndex !== qIndex || editMode !== EditMode.Updating) {
                   return (
                     <div
+                      key={q}
                       css={content}
                       role={''}
-                      key={q}
                       tabIndex={-1}
                       onClick={(e) =>
                         dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => {}
