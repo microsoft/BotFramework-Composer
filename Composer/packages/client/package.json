@@ -65,6 +65,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/recoil": "^0.0.1",
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.4",
     "@babel/runtime": "7.3.4",
