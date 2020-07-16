@@ -8,7 +8,7 @@ import httpClient from '../../utils/httpUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 
-export const build: ActionCreator = async ({ dispatch, getState }, authoringKey, subscriptKey, projectId) => {
+export const build: ActionCreator = async ({ dispatch, getState }, authoringKey, subscriptionKey, projectId) => {
   try {
     const { dialogs, luFiles, qnaFiles } = getState();
     const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
@@ -16,7 +16,7 @@ export const build: ActionCreator = async ({ dispatch, getState }, authoringKey,
     const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referredLuFiles);
     const response = await httpClient.post(`/projects/${projectId}/build`, {
       authoringKey,
-      subscriptKey,
+      subscriptionKey,
       projectId,
       crossTrainConfig,
       luFiles: referredLuFiles.map((file) => file.id),

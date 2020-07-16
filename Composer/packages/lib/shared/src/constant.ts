@@ -5,7 +5,7 @@ export const SensitiveProperties = [
   'MicrosoftAppPassword',
   'luis.authoringKey',
   'luis.endpointKey',
-  'qna.subscriptKey',
+  'qna.subscriptionKey',
   'qna.endpointKey',
 ];
 export const FieldNames = {

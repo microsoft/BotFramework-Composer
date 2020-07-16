@@ -1,8 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import merge from 'lodash/merge';
+
 import { ActionCreator, DialogSetting } from '../types';
 import { ActionTypes } from '../../constants';
+import httpClient from '../../utils/httpUtil';
 
 export const setSettings: ActionCreator = async ({ dispatch }, projectId: string, settings: DialogSetting) => {
   dispatch({
@@ -40,4 +43,23 @@ export const setRuntimeField: ActionCreator = async ({ dispatch }, _, field, new
       newValue,
     },
   });
+};
+
+export const setQnASettings: ActionCreator = async (store, projectId, subscriptionKey) => {
+  try {
+    const response = await httpClient.post(`/projects/${projectId}/qnaSettings/set`, {
+      projectId,
+      subscriptionKey,
+    });
+    const settings = merge({}, store.getState().settings, { qna: { endpointKey: response.data } });
+    store.dispatch({
+      type: ActionTypes.SYNC_ENV_SETTING,
+      payload: {
+        projectId,
+        settings,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };

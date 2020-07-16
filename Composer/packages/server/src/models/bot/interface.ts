@@ -25,7 +25,7 @@ export interface IConfig {
   name: string;
   endpoint: string;
   authoringKey: string;
-  subscriptKey: string;
+  subscriptionKey: string;
   endpointKey: string;
   authoringEndpoint: string;
   authoringRegion: string | 'westus';

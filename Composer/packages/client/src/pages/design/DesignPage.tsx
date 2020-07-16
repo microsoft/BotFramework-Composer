@@ -4,12 +4,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Suspense, useEffect, useMemo, useState, useCallback } from 'react';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { SharedColors } from '@uifabric/fluent-theme';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 import { DialogFactory, SDKKinds, DialogInfo, PromptTab } from '@bfc/shared';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
 
@@ -28,6 +30,7 @@ import undoHistory from '../../store/middlewares/undo/history';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import { useStoreContext } from '../../hooks/useStoreContext';
+import { regexRecognizerKey, onChooseIntentKey, qnaMatcherKey } from '../../utils/dialogUtil';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
@@ -47,6 +50,35 @@ const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
 const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
+
+const warningIcon = {
+  marginLeft: 5,
+  color: '#8A8780',
+  fontSize: 20,
+  cursor: 'pointer',
+};
+
+const warningRoot = {
+  display: 'flex',
+  background: '#FFF4CE',
+  height: 50,
+  alignItems: 'center',
+};
+
+const warningFont = {
+  color: SharedColors.gray40,
+  fontSize: 9,
+  paddingLeft: 10,
+};
+
+const changeRecognizerButton = {
+  root: {
+    marginLeft: 200,
+    border: '1px solid',
+    borderRadius: 2,
+    fontSize: 14,
+  },
+};
 
 function onRenderContent(subTitle, style) {
   return (
@@ -115,6 +147,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
+  const [showWarning, setShowWarning] = useState(true);
   const shell = useShell('ProjectTree');
   const triggerApi = useTriggerApi(shell.api);
   const shellData = shell.data;
@@ -130,6 +163,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
       return;
     }
+    setShowWarning(true);
   }, [dialogId, dialogs, location]);
 
   useEffect(() => {
@@ -502,6 +536,35 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return <LoadingSpinner />;
   }
 
+  console.log(currentDialog);
+  console.log(selected);
+
+  const changeRecognizerComponent = useMemo(() => {
+    return (
+      <div css={warningRoot}>
+        <Icon iconName={'Warning'} style={warningIcon} />
+        <div css={warningFont}>
+          {formatMessage(
+            'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
+          )}
+        </div>
+        <Button
+          styles={changeRecognizerButton}
+          text={formatMessage('Change Recognizer')}
+          onClick={() => {
+            actions.openRecognizerDropdown();
+          }}
+        />
+        <Icon iconName={'Cancel'} style={warningIcon} onClick={() => setShowWarning(false)} />
+      </div>
+    );
+  }, []);
+  const isRegEx = (currentDialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
+  const selectedTrigger = currentDialog.triggers.find((t) => t.id === selected);
+  const isNotSupported =
+    isRegEx && (selectedTrigger?.type === qnaMatcherKey || selectedTrigger?.type === onChooseIntentKey);
+
+  console.log(isNotSupported);
   return (
     <React.Fragment>
       <div css={pageRoot}>
@@ -537,6 +600,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                       actions.updateDialog({ id: currentDialog.id, projectId, content: data });
                     }}
                   />
+                ) : isNotSupported ? (
+                  showWarning && changeRecognizerComponent
                 ) : (
                   <VisualEditor openNewTriggerModal={openNewTriggerModal} />
                 )}

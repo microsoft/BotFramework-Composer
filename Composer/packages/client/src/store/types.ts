@@ -146,6 +146,7 @@ export interface BotState {
 
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
+  openRecognizer: boolean;
 }
 
 export type AppState = {
@@ -217,7 +218,7 @@ export interface ILuisConfig {
 }
 
 export interface IConfig extends ILuisConfig {
-  subscriptKey: string;
+  subscriptionKey: string;
 }
 export interface DialogSetting {
   MicrosoftAppId?: string;
