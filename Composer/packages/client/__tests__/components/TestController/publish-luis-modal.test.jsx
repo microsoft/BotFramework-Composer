@@ -3,11 +3,11 @@
 import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { PublishLuisDialog } from '../../../src/components/TestController/publishDialog';
+import { PublishDialog } from '../../../src/components/TestController/publishDialog';
 import { renderWithStore } from '../../testUtils';
 
-describe('<PublishLuisDialog />', () => {
-  it('should render the <PublishLuisDialog />', () => {
+describe('<PublishDialog />', () => {
+  it('should render the <PublishDialog />', () => {
     const onDismiss = jest.fn(() => {});
     const onPublish = jest.fn(() => {});
     const state = {
@@ -28,7 +28,7 @@ describe('<PublishLuisDialog />', () => {
       },
     };
     const { getByText } = renderWithStore(
-      <PublishLuisDialog
+      <PublishDialog
         isOpen
         botName={'sampleBot0'}
         config={state.settings.luis}
