@@ -64,12 +64,12 @@ export class BotProjectDeploy {
     // path to the built, ready to deploy code assets
     this.publishFolder = config.publishFolder ?? path.join(this.projPath, 'bin', 'Release', 'netcoreapp3.1');
 
-    // path to the source appsettings.deployment.json file
-    this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
+    // path to the source appsettings.json file
+    this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.json');
 
     // path to the deployed settings file that contains additional luis information
     this.deploymentSettingsPath =
-      config.deploymentSettingsPath ?? path.join(this.publishFolder, 'appsettings.deployment.json');
+      config.deploymentSettingsPath ?? path.join(this.publishFolder, 'appsettings.json');
 
     // path to the ARM template
     // this is currently expected to live in the code project
