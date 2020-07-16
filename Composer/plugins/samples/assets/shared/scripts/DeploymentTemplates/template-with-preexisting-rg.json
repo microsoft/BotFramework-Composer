@@ -513,7 +513,7 @@
       "type": "object",
       "value": {
         "endpoint": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('qnaMakerWebAppName'))).hostNames[0])]",
-        "key": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('qnaMakerServiceName')),'2017-04-18').key1]"
+        "subscriptionKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('qnaMakerServiceName')),'2017-04-18').key1]"
       }
     }
   }
