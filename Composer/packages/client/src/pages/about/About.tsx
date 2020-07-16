@@ -20,11 +20,11 @@ export const About: React.FC<RouteComponentProps> = () => {
           <div css={about.description}>
             <p>
               {formatMessage(`Bot Framework Composer is a visual authoring canvas for building
-            bots and other types of conversational software with the Microsoft Bot Framework technology stack.
+            bots and other types of conversational application with the Microsoft Bot Framework technology stack.
             With Composer you will find everything you need to build a modern, state-of-the-art conversational experience.`)}
             </p>
             <p>
-              {formatMessage(`Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the
+              {formatMessage(`Bot Framework Composer enables developers and multi-disciplinary teams to build all kinds of conversational experiences, using the
             latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code.`)}
               <Link
                 href={'https://docs.microsoft.com/en-us/composer/'}
