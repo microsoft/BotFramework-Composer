@@ -803,6 +803,14 @@ export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, 
     ),
   ],
   [
+    'expandText',
+    new FunctionEntity(
+      ['text: string'],
+      ReturnType.Object,
+      'Return the evaluated result of the plain text and get the data binding result.'
+    ),
+  ],
+  [
     'isTemplate',
     new FunctionEntity(
       ['templateName: string'],
