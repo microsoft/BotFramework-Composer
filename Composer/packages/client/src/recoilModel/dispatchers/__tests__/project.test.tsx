@@ -163,7 +163,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
     expect(renderedComponent.current.schemas.diagnostics?.length).toBe(0);
-    expect(navigateTo).toHaveBeenLastCalledWith('/bot/30876.502871204648/dialogs');
+    expect(navigateTo).toHaveBeenLastCalledWith('/bot/30876.502871204648/dialogs/');
     expect(result).toBe(renderedComponent.current.projectId);
   });
 
