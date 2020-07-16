@@ -17,6 +17,7 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 
+import { ILuisConfig } from './interface';
 import { ICrossTrainConfig } from './luPublisher';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
@@ -289,18 +290,14 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
-  public publishLuis = async (authoringKey: string, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
+  public publishLuis = async (luisConfig: ILuisConfig, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
     if (fileIds.length && this.settings) {
       const map = fileIds.reduce((result, id) => {
         result[id] = true;
         return result;
       }, {});
       const files = this.files.filter((file) => map[Path.basename(file.name, '.lu')]);
-      this.luPublisher.setPublishConfig(
-        { ...this.settings.luis, authoringKey },
-        crossTrainConfig,
-        this.settings.downsampling
-      );
+      this.luPublisher.setPublishConfig(luisConfig, crossTrainConfig, this.settings.downsampling);
       await this.luPublisher.publish(files);
     }
   };
