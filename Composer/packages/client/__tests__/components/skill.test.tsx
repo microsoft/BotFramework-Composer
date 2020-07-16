@@ -36,9 +36,26 @@ const items: Skill[] = [
   },
 ];
 
+const state = {
+  projectId: '12345',
+  botName: 'sampleBot0',
+  settings: {
+    luis: {
+      name: '',
+      authoringKey: '12345',
+      authoringEndpoint: 'testAuthoringEndpoint',
+      endpointKey: '12345',
+      endpoint: 'testEndpoint',
+      authoringRegion: 'westus',
+      defaultLanguage: 'en-us',
+      environment: 'composer',
+    },
+  },
+};
+
 describe('Skill page', () => {
   it('can add a new skill', () => {
-    const { getByText } = renderWithStore(<Skills />);
+    const { getByText } = renderWithStore(<Skills />, state);
 
     const button = getByText('Connect to a new skill');
     fireEvent.click(button);
