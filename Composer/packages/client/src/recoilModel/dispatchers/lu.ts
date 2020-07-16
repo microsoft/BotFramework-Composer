@@ -82,7 +82,7 @@ export const luDispatcher = () => {
   );
 
   const publishLuis = useRecoilCallback(
-    ({ set, snapshot }: CallbackInterface) => async (authoringKey: string, projectId: string) => {
+    ({ set, snapshot }: CallbackInterface) => async (luisConfig, projectId: string) => {
       const dialogs = await snapshot.getPromise(dialogsState);
       try {
         const luFiles = await snapshot.getPromise(luFilesState);
@@ -90,7 +90,7 @@ export const luDispatcher = () => {
         //TODO crosstrain should add locale
         const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referred);
         await httpClient.post(`/projects/${projectId}/luFiles/publish`, {
-          authoringKey,
+          luisConfig,
           projectId,
           crossTrainConfig,
           luFiles: referred.map((file) => file.id),
