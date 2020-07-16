@@ -150,7 +150,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [showWarning, setShowWarning] = useState(true);
   const shell = useShell('ProjectTree');
   const triggerApi = useTriggerApi(shell.api);
-  const shellData = shell.data;
 
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
