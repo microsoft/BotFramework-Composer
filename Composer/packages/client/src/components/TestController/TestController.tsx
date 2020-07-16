@@ -140,7 +140,7 @@ export const TestController: React.FC = () => {
 
   async function handleStart() {
     dismissCallout();
-    const config = Object.assign({}, settings.luis, settings.qna);
+    const config = Object.assign({}, settings.luis, { subscriptionKey: Object(settings.qna).subscriptionKey });
     if (!isAbsHosted()) {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
         openDialog();
