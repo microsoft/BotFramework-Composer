@@ -146,7 +146,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div aria-label={formatMessage('Composer introduction')} css={home.introduction} role="region">
             {formatMessage(
-              'Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates language understanding services such as LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation.'
+              'Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation.'
             )}
           </div>
           <div css={home.newBotContainer}>
