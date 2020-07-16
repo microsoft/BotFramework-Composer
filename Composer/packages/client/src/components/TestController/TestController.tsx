@@ -52,6 +52,7 @@ export const TestController: React.FC = () => {
     setBotStatus,
     startPollingRuntime,
     stopPollingRuntime,
+    setSettings,
   } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
@@ -108,11 +109,11 @@ export const TestController: React.FC = () => {
     setCalloutVisible(true);
   }
 
-  async function handlePublishLuis() {
+  async function handlePublishLuis(luisConfig) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis : null;
-    await publishLuis(luisConfig.authoringKey, state.projectId);
+    await setSettings(projectId, { ...settings, luis: luisConfig });
+    await publishLuis(luisConfig, projectId);
   }
 
   async function handleLoadBot() {
@@ -140,7 +141,7 @@ export const TestController: React.FC = () => {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isLuisConfigComplete(config)) {
         openDialog();
       } else {
-        await handlePublishLuis();
+        await handlePublishLuis(config);
       }
     } else {
       await handleLoadBot();
@@ -194,7 +195,13 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      <PublishLuisDialog botName={botName} isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} />
+      <PublishLuisDialog
+        botName={botName}
+        config={settings.luis}
+        isOpen={modalOpen}
+        onDismiss={dismissDialog}
+        onPublish={handlePublishLuis}
+      />
     </Fragment>
   );
 };

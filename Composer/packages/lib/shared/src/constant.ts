@@ -20,7 +20,7 @@ export const DEFAULT_RUNTIME = 'dotnet';
 export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
-  luis?: ILuisConfig;
+  luis: ILuisConfig;
   publishTargets?: PublishTarget[];
   downsampling?: IDownSamplingConfig;
   runtime?: {

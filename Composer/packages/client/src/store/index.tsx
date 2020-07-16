@@ -4,7 +4,7 @@
 import React, { useReducer, useRef } from 'react';
 import once from 'lodash/once';
 import { ImportResolverDelegate, TemplatesParser } from 'botbuilder-lg';
-import { LgFile, LuFile, importResolverGenerator, UserSettings } from '@bfc/shared';
+import { LgFile, LuFile, importResolverGenerator, UserSettings, DialogSetting } from '@bfc/shared';
 import merge from 'lodash/merge';
 
 import { prepareAxios } from '../utils/auth';
@@ -85,7 +85,7 @@ export const initialBotState: BotState = {
   showCreateDialogModal: false,
   showAddSkillDialogModal: false,
   isEnvSettingUpdated: false,
-  settings: {},
+  settings: {} as DialogSetting,
   publishVersions: {},
   publishTypes: [],
   publishHistory: {},

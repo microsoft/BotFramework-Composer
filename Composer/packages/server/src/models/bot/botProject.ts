@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, DialogSetting } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic, DialogSetting, ILuisConfig } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -288,18 +288,14 @@ export class BotProject {
     return await this._createFile(relativePath, content);
   };
 
-  public publishLuis = async (authoringKey: string, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
-    if (fileIds.length && this.settings?.luis && this.settings?.downsampling) {
+  public publishLuis = async (luisConfig: ILuisConfig, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
+    if (fileIds.length && this.settings && this.settings.downsampling) {
       const map = fileIds.reduce((result, id) => {
         result[id] = true;
         return result;
       }, {});
       const files = this.files.filter((file) => map[Path.basename(file.name, '.lu')]);
-      this.luPublisher.setPublishConfig(
-        { ...this.settings.luis, authoringKey },
-        crossTrainConfig,
-        this.settings.downsampling
-      );
+      this.luPublisher.setPublishConfig(luisConfig, crossTrainConfig, this.settings.downsampling);
       await this.luPublisher.publish(files);
     }
   };
