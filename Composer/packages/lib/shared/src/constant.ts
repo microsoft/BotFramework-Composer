@@ -22,6 +22,7 @@ export interface DialogSetting {
   MicrosoftAppPassword?: string;
   luis?: ILuisConfig;
   publishTargets?: PublishTarget[];
+  downsampling?: IDownSamplingConfig;
   runtime?: {
     customRuntime: boolean;
     path: string;
@@ -30,6 +31,11 @@ export interface DialogSetting {
     name: string;
   };
   [key: string]: unknown;
+}
+
+export interface IDownSamplingConfig {
+  maxImbalanceRatio: number;
+  maxUtteranceAllowed: number;
 }
 
 export interface ILuisConfig {

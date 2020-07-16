@@ -289,7 +289,7 @@ export class BotProject {
   };
 
   public publishLuis = async (authoringKey: string, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
-    if (fileIds.length && this.settings) {
+    if (fileIds.length && this.settings?.luis && this.settings?.downsampling) {
       const map = fileIds.reduce((result, id) => {
         result[id] = true;
         return result;
