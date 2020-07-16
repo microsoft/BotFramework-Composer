@@ -62,9 +62,14 @@ export const TestController: React.FC = () => {
   const projectId = useRecoilValue(projectIdState);
   const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
   const botEndpoints = useRecoilValue(botEndpointsState);
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, getPublishStatus, setBotStatus } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    publishToTarget,
+    onboardingAddCoachMarkRef,
+    publishLuis,
+    getPublishStatus,
+    setBotStatus,
+    setSettings,
+  } = useRecoilValue(dispatcherState);
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
@@ -106,11 +111,11 @@ export const TestController: React.FC = () => {
     setCalloutVisible(true);
   }
 
-  async function handlePublishLuis() {
+  async function handlePublishLuis(luisConfig) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis : null;
-    await publishLuis(luisConfig.authoringKey, projectId);
+    await setSettings(projectId, { ...settings, luis: luisConfig });
+    await publishLuis(luisConfig, projectId);
   }
 
   async function handleLoadBot() {
@@ -138,7 +143,7 @@ export const TestController: React.FC = () => {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isLuisConfigComplete(config)) {
         openDialog();
       } else {
-        await handlePublishLuis();
+        await handlePublishLuis(config);
       }
     } else {
       await handleLoadBot();
@@ -192,7 +197,13 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      <PublishLuisDialog botName={botName} isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} />
+      <PublishLuisDialog
+        botName={botName}
+        config={settings.luis}
+        isOpen={modalOpen}
+        onDismiss={dismissDialog}
+        onPublish={handlePublishLuis}
+      />
     </Fragment>
   );
 };

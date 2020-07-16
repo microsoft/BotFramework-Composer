@@ -102,7 +102,7 @@ export interface BreadcrumbItem {
 export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
-  luis?: ILuisConfig;
+  luis: ILuisConfig;
   publishTargets?: PublishTarget[];
   runtime: {
     customRuntime: boolean;
