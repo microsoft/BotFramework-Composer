@@ -19,9 +19,9 @@ export const About: React.FC<RouteComponentProps> = () => {
           <div css={about.version}>{formatMessage(`Release: `) + (process.env.COMPOSER_VERSION || 'Unknown')}</div>
           <div css={about.description}>
             <p>
-              {formatMessage(`Bot Framework Composer is an integrated development environment (IDE) for building
+              {formatMessage(`Bot Framework Composer is a visual authoring canvas for building
             bots and other types of conversational software with the Microsoft Bot Framework technology stack.
-            Inside this web-based tool you will find everything you need to build a modern, state-of-the-art conversational experience.`)}
+            With Composer you will find everything you need to build a modern, state-of-the-art conversational experience.`)}
             </p>
             <p>
               {formatMessage(`Bot Framework Composer enables teams working to create bots to build all kinds of conversational experiences that use the
