@@ -197,13 +197,15 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      <PublishLuisDialog
-        botName={botName}
-        config={settings.luis}
-        isOpen={modalOpen}
-        onDismiss={dismissDialog}
-        onPublish={handlePublishLuis}
-      />
+      {settings.luis && (
+        <PublishLuisDialog
+          botName={botName}
+          config={settings.luis}
+          isOpen={modalOpen}
+          onDismiss={dismissDialog}
+          onPublish={handlePublishLuis}
+        />
+      )}
     </Fragment>
   );
 };
