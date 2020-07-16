@@ -61,7 +61,7 @@ export const TestController: React.FC = () => {
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
-  const publishConfig = merge(settings.luis, settings.qna) as IConfig;
+  const publishConfig = merge(settings.luis, { subscriptionKey: Object(settings.qna).subscriptionKey }) as IConfig;
 
   useEffect(() => {
     if (projectId) {
