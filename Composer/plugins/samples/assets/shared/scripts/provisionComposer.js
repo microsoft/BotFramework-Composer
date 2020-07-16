@@ -38,6 +38,7 @@ const usage = () => {
     ['createCosmosDb', 'Create a CosmosDB? Default true'],
     ['createStorage', 'Create a storage account? Default true'],
     ['createAppInsights', 'Create an AppInsights resource? Default true'],
+    ['createQnAResource', 'Create a QnA resource? Default true'],
     [
       'customArmTemplate',
       'Path to runtime ARM template. By default it will use an Azure WebApp template. Pass `DeploymentTemplates/function-template-with-preexisting-rg.json` for Azure Functions or your own template for a custom deployment.',
@@ -92,6 +93,8 @@ const createLuisAuthoringResource = argv.createLuisAuthoringResource == 'false' 
 const createCosmosDb = argv.createCosmosDb == 'false' ? false : true;
 const createStorage = argv.createStorage == 'false' ? false : true;
 const createAppInsights = argv.createAppInsights == 'false' ? false : true;
+const createQnAResource = argv.createQnAResource == 'false' ? false : true;
+
 var tenantId = argv.tenantId ? argv.tenantId : '';
 
 const templatePath =
@@ -215,6 +218,7 @@ const getDeploymentTemplateParam = (
   name,
   shouldCreateAuthoringResource,
   shouldCreateLuisResource,
+  shouldCreateQnAResource,
   useAppInsights,
   useCosmosDb,
   useStorage
@@ -226,6 +230,7 @@ const getDeploymentTemplateParam = (
     botId: pack(name),
     shouldCreateAuthoringResource: pack(shouldCreateAuthoringResource),
     shouldCreateLuisResource: pack(shouldCreateLuisResource),
+    shouldCreateQnAResource: pack(shouldCreateQnAResource),
     useAppInsights: pack(useAppInsights),
     useCosmosDb: pack(useCosmosDb),
     useStorage: pack(useStorage),
@@ -345,6 +350,7 @@ const create = async (
   appPassword,
   createLuisResource = true,
   createLuisAuthoringResource = true,
+  createQnAResource = true,
   createCosmosDb = true,
   createStorage = true,
   createAppInsights = true
@@ -425,6 +431,7 @@ const create = async (
     name,
     createLuisAuthoringResource,
     createLuisResource,
+    createQnAResource,
     createAppInsights,
     createCosmosDb,
     createStorage
@@ -627,6 +634,7 @@ msRestNodeAuth
       appPassword,
       createLuisResource,
       createLuisAuthoringResource,
+      createQnAResource,
       createCosmosDb,
       createStorage,
       createAppInsights
