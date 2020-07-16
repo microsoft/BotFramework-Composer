@@ -12,7 +12,6 @@ import * as ajv from 'ajv';
 
 import * as ps from './processSchemas';
 
-export * from './schema';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const allof: any = require('json-schema-merge-allof');
 // eslint-disable-next-line @typescript-eslint/no-var-requires

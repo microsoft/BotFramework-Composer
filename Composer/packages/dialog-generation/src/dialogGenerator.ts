@@ -146,11 +146,9 @@ const expressionEngine = new expressions.ExpressionParser((func: string): any =>
   }
 });
 
-const generatorTemplate = lg.Templates.parseFile(
-  ppath.join(__dirname, '../../templates/', 'generator.lg'),
-  undefined,
-  expressionEngine
-);
+const getGeneratorTemplate = () => {
+  return lg.Templates.parseFile(ppath.resolve('./templates/generator.lg'), undefined, expressionEngine);
+};
 
 // Walk over JSON object, stopping if true from walker.
 // Walker gets the current value, the parent object and full path to that object
@@ -508,7 +506,7 @@ function expandSchema(
     }
   } else if (typeof schema === 'string' && schema.startsWith('${')) {
     try {
-      const value = generatorTemplate.evaluateText(schema, scope);
+      const value = getGeneratorTemplate().evaluateText(schema, scope);
       if (value && value !== 'null') {
         newSchema = value;
       } else {
@@ -697,7 +695,7 @@ export async function generate(
 
     // User templates + cli templates to find schemas
     const startDirs = [...templateDirs];
-    const templates = normalize(ppath.join(__dirname, '../../templates'));
+    const templates = normalize(ppath.resolve('templates'));
     for (const dirName of await fs.readdir(templates)) {
       const dir = ppath.join(templates, dirName);
       if ((await (await fs.lstat(dir)).isDirectory()) && !startDirs.includes(dir)) {

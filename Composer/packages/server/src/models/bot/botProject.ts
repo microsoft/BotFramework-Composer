@@ -5,6 +5,7 @@ import { promisify } from 'util';
 import fs from 'fs';
 
 import axios from 'axios';
+import { generate, FeedbackType } from '@bfc/dialog-generation';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
@@ -344,6 +345,52 @@ export class BotProject {
     }
     return true;
   }
+
+  public generateDialog = async (name: string, content = '') => {
+    const outDir = Path.resolve(this.dir, `dialogs/${name}`);
+    await this.ensureDirExists(outDir);
+    const schemaPath = Path.join(outDir, `${name}.schema`);
+    await this.fileStorage.writeFile(schemaPath, content);
+
+    const rootDir = Path.join(this.dir, '../');
+    const templateDirs = [Path.join(rootDir, 'templates/standard')];
+
+    const feedback = (type: FeedbackType, message: string): void => {
+      // eslint-disable-next-line no-console
+      console.log(`${type} - ${message}`);
+    };
+
+    const generateParams = {
+      schemaPath,
+      prefix: undefined,
+      outDir,
+      metaSchema: undefined,
+      allLocales: undefined,
+      templateDirs,
+      force: false,
+      merge: false,
+      singleton: false,
+      feedback,
+    };
+
+    const cwd = process.cwd();
+    process.chdir(rootDir);
+
+    await generate(
+      generateParams.schemaPath,
+      generateParams.prefix,
+      generateParams.outDir,
+      generateParams.metaSchema,
+      generateParams.allLocales,
+      generateParams.templateDirs,
+      generateParams.force,
+      generateParams.merge,
+      generateParams.singleton,
+      generateParams.feedback
+    );
+
+    process.chdir(cwd);
+  };
 
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
