@@ -6,11 +6,13 @@ import { jsx, css } from '@emotion/core';
 import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import merge from 'lodash/merge';
 
 import { DefaultPublishConfig, QnaConfig, BotStatus, LuisConfig } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
+import { IConfig } from '../../store/types';
 
 import settingsStorage from './../../utils/dialogSettingStorage';
 import { StoreContext } from './../../store';
@@ -44,13 +46,22 @@ export const TestController: React.FC = () => {
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const { botEndpoints, botName, botStatus, dialogs, luFiles, qnaFiles, settings, projectId, botLoadErrorMsg } = state;
-  const { setQnASettings, publishToTarget, onboardingAddCoachMarkRef, build, getPublishStatus, setBotStatus } = actions;
+  const {
+    setQnASettings,
+    publishToTarget,
+    onboardingAddCoachMarkRef,
+    build,
+    getPublishStatus,
+    setBotStatus,
+    setSettings,
+  } = actions;
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
+  const publishConfig = merge(settings.luis, settings.qna) as IConfig;
 
   useEffect(() => {
     if (projectId) {
@@ -86,12 +97,15 @@ export const TestController: React.FC = () => {
     setCalloutVisible(true);
   }
 
-  async function handlePublish() {
+  async function handlePublish(config) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis || {} : {};
-    const qnaConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).qna || {} : {};
-    await build(luisConfig.authoringKey, qnaConfig.subscriptionKey, state.projectId);
+    // save the settings change to store and persist to server
+    const newValue = config;
+    const subscriptionKey = newValue.subscriptionKey;
+    delete newValue.subscriptionKey;
+    await setSettings(state.projectId, { ...settings, luis: newValue, qna: { subscriptionKey } });
+    await build(newValue.authoringKey, subscriptionKey, state.projectId);
   }
 
   async function handleLoadBot() {
@@ -131,7 +145,7 @@ export const TestController: React.FC = () => {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
         openDialog();
       } else {
-        await handlePublish();
+        await handlePublish(config);
       }
     } else {
       await handleLoadBot();
@@ -185,7 +199,13 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      <PublishLuisDialog botName={botName} isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublish} />
+      <PublishLuisDialog
+        botName={botName}
+        config={publishConfig}
+        isOpen={modalOpen}
+        onDismiss={dismissDialog}
+        onPublish={handlePublish}
+      />
     </Fragment>
   );
 };
