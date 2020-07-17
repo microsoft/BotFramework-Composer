@@ -44,6 +44,7 @@ interface ProvisionConfig {
   externalResources: string[];
   choice: string;
   accessToken: string;
+  graphToken: string;
   [key: string]: any;
 }
 
@@ -390,7 +391,7 @@ class AzurePublisher {
   };
 
   provision = async (config: ProvisionConfig, project, user) => {
-    const { hostname, password, subscription, accessToken, location } = config;
+    const { hostname, password, subscription, accessToken, graphToken, location } = config;
     const botproj = new BotProjectDeploy({
       subId: subscription.subscriptionId,
       logger: (msg: any) => {
@@ -398,7 +399,9 @@ class AzurePublisher {
         this.logMessages.push(JSON.stringify(msg, null, 2));
       },
       accessToken: accessToken,
-      projPath: 'test',
+      graphToken: graphToken,
+      projPath: '../../plugins/samples/assets/shared/scripts',
+      tenantId: subscription.tenantId,
     });
     const provisionResult = await botproj.create(hostname, location.name, '', password);
     console.log(provisionResult);

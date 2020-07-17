@@ -4,6 +4,7 @@
 import * as path from 'path';
 import * as util from 'util';
 
+import { TokenCredentials } from '@azure/ms-rest-js';
 import { ResourceManagementClient } from '@azure/arm-resources';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { AzureBotService } from '@azure/arm-botservice';
@@ -15,7 +16,6 @@ import {
   ResourceGroupsCreateOrUpdateResponse,
 } from '@azure/arm-resources/esm/models';
 import { GraphRbacManagementClient } from '@azure/graph';
-import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 
@@ -32,7 +32,7 @@ const readdir = promisify(fs.readdir);
 export class BotProjectDeploy {
   private subId: string;
   private accessToken: string;
-  private creds: any; // credential from interactive login
+  private graphToken: string;
   private projPath: string;
   private deploymentSettingsPath: string;
   private deployFilePath: string;
@@ -52,8 +52,9 @@ export class BotProjectDeploy {
     this.subId = config.subId;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
-    this.creds = config.creds;
+    this.graphToken = config.graphToken;
     this.projPath = config.projPath;
+    this.tenantId = config.tenantId;
 
     // set path to .deployment file which points at the BotProject.csproj
     this.deployFilePath = config.deployFilePath ?? path.join(this.projPath ?? '.', '.deployment');
@@ -120,13 +121,9 @@ export class BotProjectDeploy {
    */
   private async getTenantId() {
     if (!this.accessToken) {
-      const token = await this.creds.getToken();
-      this.accessToken = token.accessToken;
-      if (!this.accessToken) {
-        throw new Error(
-          'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
-        );
-      }
+      throw new Error(
+        'Error: Missing access token. Please provide a non-expired Azure access token. Tokens can be obtained by running az account get-access-token'
+      );
     }
     if (!this.subId) {
       throw new Error(`Error: Missing subscription Id. Please provide a valid Azure subscription id.`);
@@ -659,17 +656,20 @@ export class BotProjectDeploy {
     createAppInsights = true
   ) {
     if (!this.tenantId) {
+      // will throw error
       this.tenantId = await this.getTenantId();
     }
-    const graphCreds = new DeviceTokenCredentials(
-      this.creds.clientId,
-      this.tenantId,
-      this.creds.username,
-      'graph',
-      this.creds.environment,
-      this.creds.tokenCache
-    );
-    const graphClient = new GraphRbacManagementClient(graphCreds, this.tenantId, {
+    const tokenCredential = new TokenCredentials(this.accessToken);
+    const graphCredential = new TokenCredentials(this.graphToken);
+    // const graphCreds = new DeviceTokenCredentials(
+    //   this.creds.clientId,
+    //   this.tenantId,
+    //   this.creds.username,
+    //   'graph',
+    //   this.creds.environment,
+    //   this.creds.tokenCache
+    // );
+    const graphClient = new GraphRbacManagementClient(graphCredential, this.tenantId, {
       baseUri: 'https://graph.windows.net',
     });
 
@@ -718,7 +718,7 @@ export class BotProjectDeploy {
 
     // timestamp will be used as deployment name
     const timeStamp = new Date().getTime().toString();
-    const client = new ResourceManagementClient(this.creds, this.subId);
+    const client = new ResourceManagementClient(tokenCredential, this.subId);
 
     // Create a resource group to contain the new resources
     const rpres = await this.createResourceGroup(client, location, resourceGroupName);
@@ -819,7 +819,7 @@ export class BotProjectDeploy {
         message: `> Linking Application Insights settings to Bot Service ...`,
       });
 
-      const appinsightsClient = new ApplicationInsightsManagementClient(this.creds, this.subId);
+      const appinsightsClient = new ApplicationInsightsManagementClient(tokenCredential, this.subId);
       const appComponents = await appinsightsClient.components.get(resourceGroupName, resourceGroupName);
       const appinsightsId = appComponents.appId;
       const appinsightsInstrumentationKey = appComponents.instrumentationKey;
@@ -854,7 +854,7 @@ export class BotProjectDeploy {
       });
 
       if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
-        const botServiceClient = new AzureBotService(this.creds, this.subId);
+        const botServiceClient = new AzureBotService(tokenCredential, this.subId);
         const botCreated = await botServiceClient.bots.get(resourceGroupName, name);
         if (botCreated.properties) {
           botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
@@ -935,14 +935,14 @@ export class BotProjectDeploy {
       message: `+ To delete this resource group, run 'az group delete -g ${resourceGroupName} --no-wait'`,
     });
 
-    let provisionResult = {};
+    const provisionResult: any = {};
 
-    provisionResult['settings'] = updateResult;
-    provisionResult['name'] = name;
+    provisionResult.settings = updateResult;
+    provisionResult.name = name;
     if (createLuisResource) {
-      provisionResult['luisResource'] = `${name}-luis`;
+      provisionResult.luisResource = `${name}-luis`;
     } else {
-      provisionResult['luisResource'] = '';
+      provisionResult.luisResource = '';
     }
 
     return provisionResult;

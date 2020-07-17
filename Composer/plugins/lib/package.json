@@ -1,13 +1,15 @@
 {
-    "name": "@bfc/plugins-libs",
-    "version": "1.0.0",
-    "engines": {
-      "node": ">=12"
-    },
-    "scripts": {
-      "build:bot-deploy": "cd bot-deploy && yarn build",
-      "build:all": "yarn build:bot-deploy"
-    },
-    "author": "",
-    "license": "ISC"
-  }
+  "name": "@bfc/plugins-libs",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "build:bot-deploy": "cd bot-deploy && yarn build",
+    "build:botservice": "cd arm-botservice && yarn build",
+    "build:appinsight": "cd arm-appinsights && yarn build",
+    "build:all": "yarn build:bot-deploy && yarn build:botservice && yarn build:appinsight"
+  },
+  "author": "",
+  "license": "ISC"
+}

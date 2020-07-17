@@ -21,7 +21,7 @@ const extenstionResourceOptions = [
   { key: 'cosmoDb', text: 'CosmoDb' },
   { key: 'applicationInsight', text: 'ApplicationInsight' },
   { key: 'luisAuthoring', text: 'Luis Authoring Resource' },
-  { key: 'luisQuerying', text: 'Luis Querying Resource' },
+  { key: 'luisPrediction', text: 'Luis Prediction Resource' },
   { key: 'blobStorage', text: 'BlobStorage' },
 ];
 
@@ -40,7 +40,7 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
     return subscriptions.map((t) => ({ key: t.subscriptionId, text: t.displayName }));
   }, [subscriptions]);
 
-  const deployLocationsOption = useMemo(() => {
+  const deployLocationsOption = useMemo((): IDropdownOption[] => {
     return deployLocations.map((t) => ({ key: t.id, text: t.displayName }));
   }, [deployLocations]);
 
@@ -82,7 +82,7 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
 
   const updatePassword = useMemo(
     () => (e, newValue) => {
-      const patt = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![a-zA-Z0-9]+$)[\w$&~!*@#%^{}|]{16}$/;
+      const patt = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![a-zA-Z0-9]+$)[\w$&~!*@#%^{}|]{16,}$/;
       if (newValue.length <= 16 && !patt.test(newValue)) {
         setPassword(newValue);
         setErrorPassword('Password need to include characters, number and special-characters, 16 characters length');

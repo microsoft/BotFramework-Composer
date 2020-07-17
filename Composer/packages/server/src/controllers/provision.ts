@@ -75,10 +75,19 @@ export const ProvisionController = {
 
       try {
         // call the method
-        await pluginMethod.call(null, req.body, currentProject, user);
+        await pluginMethod.call(
+          null,
+          {
+            ...req.body,
+            graphToken: process.env.graphToken,
+          },
+          currentProject,
+          user
+        );
         // set status and return value as json
         res.status(200);
       } catch (err) {
+        console.log(err);
         res.status(400).json({
           statusCode: '400',
           message: err.message,
