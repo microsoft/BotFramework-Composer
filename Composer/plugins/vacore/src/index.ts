@@ -29,7 +29,7 @@ export default async (composer: any): Promise<void> => {
     startCommand: 'dotnet run --project azurewebapp',
     path: path.resolve(__dirname, '../template/runtime'),
     build: async (runtimePath: string, _project: any) => {
-      // TODO: copy source into temporary folder
+
       // copyDir(path.resolve(__dirname, '../../../../../runtime/dotnet'), runtimePath);
 
       // do stuff
