@@ -4,6 +4,7 @@ export interface PullRequestInfo {
   title: string;
   body: string;
   baseRefName: string;
+  author: {login: string};
 }
 type ValidationResult = string[];
 
