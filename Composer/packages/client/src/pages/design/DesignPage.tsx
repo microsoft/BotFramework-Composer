@@ -440,11 +440,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     );
   }, [dialogs, breadcrumb, dialogJsonVisible]);
 
-  async function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
-    await updateSkill({ projectId, targetId: -1, skillData });
+  function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
+    updateSkill({ projectId, targetId: -1, skillData });
   }
 
-  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
+  function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
@@ -452,8 +452,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (seededContent.triggers?.[0]) {
       seededContent.triggers[0].actions = actionsSeed;
     }
-
-    await createDialog({ id: data.name, content: seededContent });
+    createDialog({ id: data.name, content: seededContent });
   }
 
   async function handleDeleteDialog(id) {
@@ -477,7 +476,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      await removeDialog(id);
+      removeDialog(id);
     }
   }
 
