@@ -4,7 +4,6 @@
   "description": "",
   "main": "./lib/webapp.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./lib/webapp.js",
     "start:function": "node ./lib/function.js",
     "build": "tsc"
