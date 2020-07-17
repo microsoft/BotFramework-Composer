@@ -535,9 +535,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return <LoadingSpinner />;
   }
 
-  console.log(currentDialog);
-  console.log(selected);
-
   const changeRecognizerComponent = useMemo(() => {
     return (
       <div css={warningRoot}>
