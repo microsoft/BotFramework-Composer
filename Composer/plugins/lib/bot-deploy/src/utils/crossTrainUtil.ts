@@ -7,9 +7,10 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 import keys from 'lodash/keys';
-import { LuFile, DialogInfo } from '@bfc/shared';
+import { LuFile, DialogInfo, IIntentTrigger, FieldNames, SDKKinds } from '@bfc/shared';
 
 import { getBaseName, getExtension } from './fileUtil';
+import { VisitorFunc, JsonWalk } from './jsonWalk';
 
 export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], checkContent = true) {
   return luFiles.filter((file) => {
@@ -20,12 +21,55 @@ export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], che
   });
 }
 
+function ExtractAllBeginDialogs(value: any): string[] {
+  const dialogs: string[] = [];
+
+  const visitor: VisitorFunc = (path: string, value: any): boolean => {
+    if (value?.$kind === SDKKinds.BeginDialog && value?.dialog) {
+      dialogs.push(value.dialog);
+      return true;
+    }
+    return false;
+  };
+
+  JsonWalk('$', value, visitor);
+
+  return dialogs;
+}
+
+// find out all properties from given dialog
+function ExtractIntentTriggers(value: any): IIntentTrigger[] {
+  const intentTriggers: IIntentTrigger[] = [];
+  const triggers = value?.[FieldNames.Events];
+
+  if (triggers && triggers.length) {
+    for (const trigger of triggers) {
+      const dialogs = ExtractAllBeginDialogs(trigger);
+
+      if (trigger.$kind === SDKKinds.OnIntent && trigger.intent) {
+        intentTriggers.push({ intent: trigger.intent, dialogs });
+      } else if (trigger.$kind !== SDKKinds.OnIntent && dialogs.length) {
+        const emptyIntent = intentTriggers.find((e) => e.intent === '');
+        if (emptyIntent) {
+          //remove the duplication dialogs
+          const all = new Set<string>([...emptyIntent.dialogs, ...dialogs]);
+          emptyIntent.dialogs = Array.from(all);
+        } else {
+          intentTriggers.push({ intent: '', dialogs });
+        }
+      }
+    }
+  }
+
+  return intentTriggers;
+}
+
 function createConfigId(fileId) {
   return `${fileId}.lu`;
 }
 
-function getLuFilesByDialogId(dialogId: string, luFiles: LuFile[]) {
-  return luFiles.filter((lu) => getBaseName(lu.id) === dialogId).map((lu) => createConfigId(lu.id));
+function getLuFilesByDialogId(dialogId: string, luFiles: string[]) {
+  return luFiles.filter((lu) => getBaseName(lu) === dialogId).map((lu) => createConfigId(lu));
 }
 
 function getFileLocale(fileName: string) {
@@ -34,7 +78,7 @@ function getFileLocale(fileName: string) {
 }
 
 //replace the dialogId with luFile's name
-function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
+function addLocaleToConfig(config: ICrossTrainConfig, luFiles: string[]) {
   const { rootIds, triggerRules } = config;
   config.rootIds = rootIds.reduce((result: string[], id: string) => {
     return [...result, ...getLuFilesByDialogId(id, luFiles)];
@@ -62,6 +106,19 @@ function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
   return config;
 }
 
+function parse(botName: string, id: string, content: any) {
+  const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
+  const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
+
+  return {
+    id: getBaseName(id),
+    isRoot: botName === getBaseName(id),
+    content,
+    luFile: getBaseName(luFile, '.lu'),
+    qnaFile: getBaseName(qnaFile, '.qna'),
+    intentTriggers: ExtractIntentTriggers(content),
+  };
+}
 export interface ICrossTrainConfig {
   rootIds: string[];
   triggerRules: { [key: string]: any };
@@ -94,17 +151,21 @@ export interface ICrossTrainConfig {
       verbose: true
     }
   */
-export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[]): ICrossTrainConfig {
+export function createCrossTrainConfig(botName: string, dialogs: any[], luFiles: string[]): ICrossTrainConfig {
   const triggerRules = {};
   const countMap = {};
+  const wrapDialogs: { [key: string]: any }[] = [];
+  for (const dialog of dialogs) {
+    wrapDialogs.push(parse(botName, dialog.id, dialog.content));
+  }
 
   //map all referred lu files
   luFiles.forEach((file) => {
-    countMap[getBaseName(file.id)] = 1;
+    countMap[getBaseName(file)] = 1;
   });
 
   let rootId = '';
-  dialogs.forEach((dialog) => {
+  wrapDialogs.forEach((dialog) => {
     if (dialog.isRoot) rootId = dialog.id;
 
     const { intentTriggers } = dialog;
@@ -130,6 +191,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
   });
 
   const crossTrainConfig: ICrossTrainConfig = {
+    botName: '',
     rootIds: [],
     triggerRules: {},
     intentName: '_Interruption',

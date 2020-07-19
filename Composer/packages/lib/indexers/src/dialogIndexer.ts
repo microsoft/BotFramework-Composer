@@ -156,8 +156,8 @@ function ExtractReferredDialogs(dialog): string[] {
 
 function parse(id: string, content: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
+  const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
-  const qnaFile = typeof content.generator === 'string' ? content.generator : '';
   const diagnostics: Diagnostic[] = [];
 
   return {
