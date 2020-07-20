@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
@@ -16,6 +16,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
   const { recognizers } = usePluginConfig();
+  const [isCustomType, setIsCustomType] = useState(false);
 
   useEffect(() => {
     if (value === undefined) {
@@ -37,6 +38,9 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   }, [recognizers]);
 
   const selectedType = useMemo(() => {
+    if (isCustomType) {
+      return 'Custom';
+    }
     let selected =
       value === undefined ? [recognizers[0].id] : recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
 
@@ -60,14 +64,19 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       return;
     }
 
-    if (selected[0] === 'Luis') {
-      selected[0] = 'Luis + QnA';
+    if (selected[0] === SDKKinds.LuisRecognizer) {
+      selected[0] = SDKKinds.CrossTrainedRecognizerSet;
     }
     return selected[0];
   }, [value]);
 
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
+      if (option.key === 'Custom') {
+        setIsCustomType(true);
+      } else {
+        setIsCustomType(false);
+      }
       const handler = recognizers.find((r) => r.id === option.key)?.handleRecognizerChange;
 
       if (handler) {
@@ -76,6 +85,10 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
     }
   };
 
+  const handleCustomChange = (value: string): void => {
+    setIsCustomType(true);
+    onChange(value);
+  };
   return (
     <React.Fragment>
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
@@ -97,7 +110,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
           height={200}
           id={'customRecog'}
           value={value as object}
-          onChange={onChange}
+          onChange={handleCustomChange}
         />
       )}
     </React.Fragment>

@@ -560,7 +560,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const isNotSupported =
     isRegEx && (selectedTrigger?.type === qnaMatcherKey || selectedTrigger?.type === onChooseIntentKey);
 
-  console.log(isNotSupported);
   return (
     <React.Fragment>
       <div css={pageRoot}>
