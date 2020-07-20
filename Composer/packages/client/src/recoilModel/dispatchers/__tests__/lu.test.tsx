@@ -27,8 +27,6 @@ const luFiles = [
   },
 ] as LuFile[];
 
-const getLuFile = (id, content): LuFile => ({ id, content } as LuFile);
-
 const getLuIntent = (Name, Body): LuIntentSection =>
   ({
     Name,
@@ -77,9 +75,8 @@ describe('Lu dispatcher', () => {
   it('should update a lu intent', async () => {
     await act(async () => {
       await dispatcher.updateLuIntent({
-        file: getLuFile(luFiles[0].id, luFiles[0].content),
+        id: luFiles[0].id,
         intentName: 'Hello',
-        projectId: 'test',
         intent: getLuIntent('Hello', '-IntentValue'),
       });
     });
@@ -90,9 +87,7 @@ describe('Lu dispatcher', () => {
   it('should create a lu Intent', async () => {
     await act(async () => {
       await dispatcher.createLuIntent({
-        file: getLuFile(luFiles[0].id, luFiles[0].content),
-        intentName: 'Hello',
-        projectId: 'test',
+        id: luFiles[0].id,
         intent: getLuIntent('New', '-IntentValue'),
       });
     });
@@ -102,9 +97,8 @@ describe('Lu dispatcher', () => {
   it('should remove a lg template', async () => {
     await act(async () => {
       await dispatcher.removeLuIntent({
-        file: getLuFile(luFiles[0].id, luFiles[0].content),
+        id: luFiles[0].id,
         intentName: 'Hello',
-        projectId: 'test',
       });
     });
 

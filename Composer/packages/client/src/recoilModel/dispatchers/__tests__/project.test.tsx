@@ -154,7 +154,7 @@ describe('Project dispatcher', () => {
     expect(renderedComponent.current.projectId).toBe(mockProjectResponse.id);
     expect(renderedComponent.current.botName).toBe(mockProjectResponse.botName);
     expect(renderedComponent.current.locale).toBe(mockProjectResponse.locale);
-    expect(renderedComponent.current.settings).toBe(mockProjectResponse.settings);
+    expect(renderedComponent.current.settings).toStrictEqual(mockProjectResponse.settings);
     expect(renderedComponent.current.lgFiles.length).toBe(1);
     expect(renderedComponent.current.luFiles.length).toBe(1);
     expect(renderedComponent.current.botEnvironment).toBe(mockProjectResponse.botEnvironment);

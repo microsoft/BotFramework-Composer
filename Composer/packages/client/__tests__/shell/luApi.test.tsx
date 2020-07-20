@@ -38,6 +38,9 @@ describe('use luApi hooks', () => {
       set(dispatcherState, (current: Dispatcher) => ({
         ...current,
         updateLuFile: updateLuFileMockMock,
+        removeLuIntent: updateLuFileMockMock,
+        updateLuIntent: updateLuFileMockMock,
+        createLuIntent: updateLuFileMockMock,
       }));
     };
 
@@ -54,7 +57,13 @@ describe('use luApi hooks', () => {
   it('should call add lu intent action', async () => {
     await result.current.addLuIntent('test.en-us', 'test', { Body: '- test add', Name: 'add' });
     expect(updateLuFileMockMock).toBeCalledTimes(1);
-    const arg = { content: '- test add', id: 'test.en-us', projectId: 'test' };
+    const arg = {
+      id: 'test.en-us',
+      intent: {
+        Body: '- test add',
+        Name: 'add',
+      },
+    };
     expect(updateLuFileMockMock).toBeCalledWith(arg);
   });
 
@@ -63,16 +72,23 @@ describe('use luApi hooks', () => {
     expect(updateLuFileMockMock).toBeCalledTimes(1);
     await result.current.updateLuIntent('test.en-us', 'test', { Body: '- test update', Name: 'update' });
     expect(updateLuFileMockMock).toBeCalledTimes(2);
-    const arg = { content: '- test update', id: 'test.en-us', projectId: 'test' };
+    const arg = {
+      id: 'test.en-us',
+      intent: {
+        Body: '- test update',
+        Name: 'update',
+      },
+      intentName: 'test',
+    };
     expect(updateLuFileMockMock).toBeCalledWith(arg);
   });
 
   it('should call remove lu intent action', async () => {
     await result.current.addLuIntent('test.en-us', 'test', { Body: '- test add', Name: 'add' });
     await result.current.updateLuIntent('test.en-us', 'test', { Body: '- test update', Name: 'update' });
-    await result.current.removeLuIntent('test.en-us', 'remove');
+    await result.current.removeLuIntent('test.en-us', 'test', 'remove');
     expect(updateLuFileMockMock).toBeCalledTimes(3);
-    const arg = { content: 'remove', id: 'test.en-us', projectId: 'test' };
+    const arg = { intentName: 'test', id: 'test.en-us' };
     expect(updateLuFileMockMock).toBeCalledWith(arg);
   });
 
