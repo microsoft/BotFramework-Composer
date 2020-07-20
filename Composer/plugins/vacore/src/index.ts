@@ -34,19 +34,19 @@ export default async (composer: any): Promise<void> => {
 
       // do stuff
       composer.log(`BUILD THIS VA CORE! at ${runtimePath}...`);
-      // composer.log('Run dotnet user-secrets init...');
-      // // TODO: capture output of this and store it somewhere useful
-      // const { initOut, initErr } = await exec('dotnet user-secrets init --project azurewebapp', {
-      //   cwd: runtimePath,
-      // });
-      // if (initErr) {
-      //   throw new Error(initErr);
-      // }
-      // composer.log('Run dotnet build...');
-      // const { buildOut, buildErr } = await exec('dotnet build', { cwd: runtimePath });
-      // if (buildErr) {
-      //   throw new Error(buildErr);
-      // }
+      composer.log('Run dotnet user-secrets init...');
+      // TODO: capture output of this and store it somewhere useful
+      const { initOut, initErr } = await exec('dotnet user-secrets init --project azurewebapp', {
+        cwd: runtimePath,
+      });
+      if (initErr) {
+        throw new Error(initErr);
+      }
+      composer.log('Run dotnet build...');
+      const { buildOut, buildErr } = await exec('dotnet build', { cwd: runtimePath });
+      if (buildErr) {
+        throw new Error(buildErr);
+      }
       composer.log('FINISHED BUILDING!');
     },
     run: async (project: any, localDisk: IFileStorage) => {
