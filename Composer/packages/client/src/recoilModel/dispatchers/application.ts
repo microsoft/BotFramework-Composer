@@ -14,27 +14,22 @@ import { setError } from './shared';
 
 export const applicationDispatcher = () => {
   const setAppUpdateStatus = useRecoilCallback(
-    ({ set, snapshot: { getPromise } }: CallbackInterface) => async (
-      status: AppUpdaterStatus,
-      version: string | undefined
-    ) => {
-      const currentAppUpdate = await getPromise(appUpdateState);
-      const newAppUpdateState = {
-        ...currentAppUpdate,
-      };
-      if (status === AppUpdaterStatus.UPDATE_AVAILABLE) {
-        newAppUpdateState.version = version;
-      }
-      if (status === AppUpdaterStatus.IDLE) {
-        newAppUpdateState.progressPercent = 0;
-        newAppUpdateState.version = undefined;
-      }
+    ({ set }: CallbackInterface) => (status: AppUpdaterStatus, version: string | undefined) => {
+      set(appUpdateState, (currentAppUpdate) => {
+        const newAppUpdateState = {
+          ...currentAppUpdate,
+        };
+        if (status === AppUpdaterStatus.UPDATE_AVAILABLE) {
+          newAppUpdateState.version = version;
+        }
+        if (status === AppUpdaterStatus.IDLE) {
+          newAppUpdateState.progressPercent = 0;
+          newAppUpdateState.version = undefined;
+        }
 
-      newAppUpdateState.status = status;
+        newAppUpdateState.status = status;
 
-      set(appUpdateState, {
-        ...newAppUpdateState,
-        status,
+        return newAppUpdateState;
       });
     }
   );
