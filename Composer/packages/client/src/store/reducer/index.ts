@@ -21,6 +21,7 @@ import { ActionTypes, FileTypes, BotStatus, Text, AppUpdaterStatus } from '../..
 import { DialogSetting, ReducerFunc } from '../types';
 import { UserTokenPayload } from '../action/types';
 import { getExtension, getBaseName } from '../../utils/fileUtil';
+import { navigateTo } from '../../utils/navigation';
 import storage from '../../utils/storage';
 import settingStorage from '../../utils/dialogSettingStorage';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
@@ -92,28 +93,36 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
     schemas.diagnostics = diagnostics;
   }
 
-  const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
-  state.projectId = id;
-  state.dialogs = dialogs.map((dialog) => {
-    dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-    return dialog;
-  });
-  state.botEnvironment = botEnvironment || state.botEnvironment;
-  state.botName = botName;
-  state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
-  state.location = location;
-  state.lgFiles = lgFiles;
-  state.skills = response.data.skills;
-  state.schemas = schemas;
-  state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
-  state.settings = settings;
-  state.locale = locale;
-  state.diagnostics = diagnostics;
-  state.skillManifests = skillManifestFiles;
-  state.botOpening = false;
-  refreshLocalStorage(id, state.settings);
-  mergeLocalStorage(id, state.settings);
-  return state;
+  try {
+    const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+    state.projectId = id;
+    state.dialogs = dialogs.map((dialog) => {
+      dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+      return dialog;
+    });
+    state.botEnvironment = botEnvironment || state.botEnvironment;
+    state.botName = botName;
+    state.botStatus = location === state.location ? state.botStatus : BotStatus.unConnected;
+    state.location = location;
+    state.lgFiles = lgFiles;
+    state.skills = response.data.skills;
+    state.schemas = schemas;
+    state.luFiles = initLuFilesStatus(botName, luFiles, dialogs);
+    state.settings = settings;
+    state.locale = locale;
+    state.diagnostics = diagnostics;
+    state.skillManifests = skillManifestFiles;
+    state.botOpening = false;
+    refreshLocalStorage(id, state.settings);
+    mergeLocalStorage(id, state.settings);
+    return state;
+  } catch (e) {
+    // something went wrong opening a bot, so we should display an error and cancel out
+    state.botOpening = false;
+    setError(state, e);
+    navigateTo('/home');
+    return state;
+  }
 };
 
 const resetProjectState: ReducerFunc = (state) => {
@@ -162,7 +171,7 @@ const createLgFile: ReducerFunc = (state, { id, content }) => {
   id = `${id}.${locale}`;
   if (lgFiles.find((lg) => lg.id === id)) {
     state.error = {
-      message: `${id} ${formatMessage(`lg file already exist`)}`,
+      message: `${id} ${formatMessage(`lg file already exists`)}`,
       summary: formatMessage('Creation Rejected'),
     };
     return state;
@@ -202,7 +211,7 @@ const createLuFile: ReducerFunc = (state, { id, content }) => {
   id = `${id}.${locale}`;
   if (luFiles.find((lu) => lu.id === id)) {
     state.error = {
-      message: `${id} ${formatMessage(`lu file already exist`)}`,
+      message: `${id} ${formatMessage(`lu file already exists`)}`,
       summary: formatMessage('Creation Rejected'),
     };
     return state;
