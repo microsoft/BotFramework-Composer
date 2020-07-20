@@ -106,16 +106,17 @@ function addLocaleToConfig(config: ICrossTrainConfig, luFiles: string[]) {
   return config;
 }
 
-function parse(botName: string, id: string, content: any) {
-  const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
-  const qnaFile = typeof content.recognizer === 'string' ? content.recognizer : '';
+function parse(dialog) {
+  const { id, content, isRoot } = dialog;
+  const luFile = typeof content.recognizer === 'string' ? getBaseName(id) : '';
+  const qnaFile = typeof content.recognizer === 'string' ? getBaseName(id) : '';
 
   return {
     id: getBaseName(id),
-    isRoot: botName === getBaseName(id),
+    isRoot: isRoot,
     content,
-    luFile: getBaseName(luFile, '.lu'),
-    qnaFile: getBaseName(qnaFile, '.qna'),
+    luFile: luFile,
+    qnaFile: qnaFile,
     intentTriggers: ExtractIntentTriggers(content),
   };
 }
@@ -151,22 +152,27 @@ export interface ICrossTrainConfig {
       verbose: true
     }
   */
-export function createCrossTrainConfig(botName: string, dialogs: any[], luFiles: string[]): ICrossTrainConfig {
+export function createCrossTrainConfig(dialogs: any[], luFiles: string[]): ICrossTrainConfig {
   const triggerRules = {};
   const countMap = {};
   const wrapDialogs: { [key: string]: any }[] = [];
   for (const dialog of dialogs) {
-    wrapDialogs.push(parse(botName, dialog.id, dialog.content));
+    wrapDialogs.push(parse(dialog));
   }
 
+  luFiles = luFiles.map((luFile) => getBaseName(luFile));
   //map all referred lu files
   luFiles.forEach((file) => {
     countMap[getBaseName(file)] = 1;
   });
 
   let rootId = '';
+  let botName = '';
   wrapDialogs.forEach((dialog) => {
-    if (dialog.isRoot) rootId = dialog.id;
+    if (dialog.isRoot) {
+      rootId = dialog.id;
+      botName = dialog.content.$designer.name;
+    }
 
     const { intentTriggers } = dialog;
     const fileId = dialog.id;
@@ -191,7 +197,7 @@ export function createCrossTrainConfig(botName: string, dialogs: any[], luFiles:
   });
 
   const crossTrainConfig: ICrossTrainConfig = {
-    botName: '',
+    botName: botName,
     rootIds: [],
     triggerRules: {},
     intentName: '_Interruption',
