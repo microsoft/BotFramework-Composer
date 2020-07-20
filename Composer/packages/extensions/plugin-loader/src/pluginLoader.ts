@@ -34,6 +34,7 @@ export class PluginLoader {
       runtimeTemplates: [],
       botTemplates: [],
       baseTemplates: [],
+      libraries: [],
     };
     this._passport = passport;
   }

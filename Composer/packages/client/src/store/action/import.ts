@@ -50,3 +50,21 @@ export const removeLibrary: ActionCreator = async (store, packageName) => {
     });
   }
 };
+
+export const getLibraries: ActionCreator = async (store) => {
+  try {
+    const response = await httpClient.get(`/library`);
+
+    // fire off a project reload to update the index, etc.
+    store.dispatch({
+      type: ActionTypes.GET_LIBRARIES_SUCCESS,
+      payload: response.data,
+    });
+  } catch (err) {
+    setError(store, {
+      status: err.response.status,
+      message: err.response && err.response.data.message ? err.response.data.message : err,
+      summary: 'LIBRARY ERROR',
+    });
+  }
+};

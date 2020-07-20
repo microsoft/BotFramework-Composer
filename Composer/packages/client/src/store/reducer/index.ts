@@ -681,6 +681,7 @@ const importSuccess: ReducerFunc<{
   name: string;
   files: { name: string; path: string }[];
   installedVersion: string;
+  location: string;
 }> = (state, payload) => {
   if (!state.settings.importedLibraries) {
     state.settings.importedLibraries = [];
@@ -707,25 +708,12 @@ const unimportSuccess: ReducerFunc = (state, payload) => {
   if (!state.settings.importedLibraries) {
     state.settings.importedLibraries = [];
   }
-
-  console.log('REMOVE THE PACKAGE FROM THE LIST ', payload);
-
   state.settings.importedLibraries = state.settings.importedLibraries.filter((f) => f.name !== payload.package);
+  return state;
+};
 
-  // // if this library exists, update the date and version
-  // const existing = state.settings.importedLibraries.find((f) => f.name === payload.name);
-  // if (existing) {
-  //   existing.lastImported = new Date();
-  //   existing.version = payload.installedVersion;
-  // } else {
-  //   state.settings.importedLibraries.push({
-  //     name: payload.name,
-  //     lastImported: new Date(),
-  //     version: payload.installedVersion,
-  //     location: payload.location,
-  //   });
-  // }
-
+const getLibrariesSuccess: ReducerFunc = (state, payload) => {
+  state.libraries = payload;
   return state;
 };
 
@@ -804,4 +792,5 @@ export const reducer = createReducer({
   [ActionTypes.GET_BOILERPLATE_SUCCESS]: getBoilerplateSuccess,
   [ActionTypes.IMPORT_SUCCESS]: importSuccess,
   [ActionTypes.UNIMPORT_SUCCESS]: unimportSuccess,
+  [ActionTypes.GET_LIBRARIES_SUCCESS]: getLibrariesSuccess,
 });

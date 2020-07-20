@@ -89,6 +89,7 @@ export const initialBotState: BotState = {
   },
   publishVersions: {},
   publishTypes: [],
+  libraries: [],
   publishHistory: {},
   botOpening: false,
   boilerplateVersion: {

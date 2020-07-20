@@ -63,6 +63,12 @@ export interface UserIdentity {
   [key: string]: any;
 }
 
+export interface DeclarativeLibrary {
+  name: string;
+  description: string;
+  version: string;
+}
+
 export interface ExtensionCollection {
   storage: {
     [key: string]: any;
@@ -87,4 +93,5 @@ export interface ExtensionCollection {
   runtimeTemplates: RuntimeTemplate[];
   botTemplates: BotTemplate[];
   baseTemplates: BotTemplate[];
+  libraries: DeclarativeLibrary[];
 }

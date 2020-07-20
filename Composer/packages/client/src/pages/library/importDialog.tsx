@@ -11,7 +11,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 
 interface ImportDialogProps {
   closeDialog: () => void;
-  doImport: (packageName: string, version: string | undefined) => void;
+  doImport: (packageName: string, version: string | undefined, isUpdating: boolean) => void;
   name?: string;
   version?: string;
 }
@@ -34,8 +34,7 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
     setVersion(val);
   };
   const submit = () => {
-    console.log('SUBMIT NAME', name, version);
-    props.doImport(name, version);
+    props.doImport(name, version, false);
   };
 
   return (
