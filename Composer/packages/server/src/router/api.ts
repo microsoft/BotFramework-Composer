@@ -60,6 +60,8 @@ router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 router.post('/projects/:projectId/import', ImportController.import);
 router.get('/projects/:projectId/import', ImportController.import);
 router.post('/projects/:projectId/unimport', ImportController.removeImported);
+router.get('/library', ImportController.getLibrary);
+router.post('/library/add', ImportController.addToLibrary);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

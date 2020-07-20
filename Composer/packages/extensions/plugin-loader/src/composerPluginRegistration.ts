@@ -7,7 +7,7 @@ import { JSONSchema7 } from 'json-schema';
 
 import { PluginLoader } from './pluginLoader';
 import log from './logger';
-import { PublishPlugin, RuntimeTemplate, BotTemplate } from './types';
+import { PublishPlugin, RuntimeTemplate, BotTemplate, DeclarativeLibrary } from './types';
 
 export class ComposerPluginRegistration {
   public loader: PluginLoader;
@@ -101,6 +101,13 @@ export class ComposerPluginRegistration {
    *************************************************************************************/
   public addBaseTemplate(template: BotTemplate) {
     this.loader.extensions.baseTemplates.push(template);
+  }
+
+  /**************************************************************************************
+   * Add Libraries that appear in the library UI
+   *************************************************************************************/
+  public addLibrary(template: DeclarativeLibrary) {
+    this.loader.extensions.libraries.push(template);
   }
 
   /**************************************************************************************

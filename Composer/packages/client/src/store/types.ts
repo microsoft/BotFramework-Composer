@@ -88,6 +88,12 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
+export interface DeclarativeLibrary {
+  name: string;
+  description?: string;
+  version?: string;
+}
+
 export interface BotState {
   // Unique identifier of a bot
   projectId: string;
@@ -141,6 +147,8 @@ export interface BotState {
     currentVersion?: string;
     updateRequired?: boolean;
   };
+
+  libraries: DeclarativeLibrary[];
 
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;

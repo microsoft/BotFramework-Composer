@@ -6,11 +6,12 @@ import fs from 'fs';
 
 import * as unzipper from 'unzip-stream';
 import axios from 'axios';
-import { PluginLoader } from '@bfc/plugin-loader';
+import { PluginLoader, pluginLoader } from '@bfc/plugin-loader';
 import downloadNpmPackage from 'download-npm-package';
 
 import { BotProjectService } from '../services/project';
 import { LocalDiskStorage } from '../models/storage/localDiskStorage';
+import { Store } from '../store/store';
 
 const TMP_DIR = '/tmp';
 
@@ -22,6 +23,22 @@ export interface FileRef {
 }
 
 export const ImportController = {
+  addToLibrary: async function (req, res) {
+    const library = Store.get('library', []);
+    console.log('put to library', req.body);
+    Store.set('library', library);
+    res.json(library);
+  },
+  getLibrary: async function (req, res) {
+    // get libraries installed "locally"
+    const localLibrary = Store.get('library', []);
+
+    console.log('GOT SOME EXTENSION LIBRARIES', pluginLoader.extensions.libraries);
+
+    const combined = localLibrary.concat(pluginLoader.extensions.libraries);
+    // mix in any libraries installed via plugins
+    res.json(combined);
+  },
   import: async function (req, res) {
     const user = await PluginLoader.getUserFromRequest(req);
     const projectId = req.params.projectId;

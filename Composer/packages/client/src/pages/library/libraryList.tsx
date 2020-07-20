@@ -9,6 +9,7 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
   CheckboxVisibility,
+  IGroup,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -23,8 +24,10 @@ import { listRoot, tableView, detailList } from './styles';
 
 export interface ILibraryListProps {
   items: LibraryRef[];
+  groups: IGroup[];
   redownload: (evt: any) => void;
-  removeLibrary: (evt: any) => void;
+  isInstalled: (item: LibraryRef) => boolean;
+  removeLibrary?: (evt: any) => void;
   onItemClick: (item: LibraryRef | null) => void;
   updateItems: (items: LibraryRef[]) => void;
 }
@@ -41,7 +44,7 @@ function onRenderDetailsHeader(props, defaultRender) {
 }
 
 export const LibraryList: React.FC<ILibraryListProps> = (props) => {
-  const { items } = props;
+  const { items, groups } = props;
   const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({ key: 'ItemName', descending: true });
   const columns = [
@@ -69,7 +72,11 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       isResizable: true,
       data: 'string',
       onRender: (item: LibraryRef) => {
-        return <span>{moment(item.lastImported).format('MM-DD-YYYY')}</span>;
+        if (item.lastImported) {
+          return <span>{moment(item.lastImported).format('MM-DD-YYYY')}</span>;
+        } else {
+          return '';
+        }
       },
       isPadded: true,
     },
@@ -98,8 +105,20 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       onRender: (item: LibraryRef) => {
         return (
           <Fragment>
-            <DefaultButton text={formatMessage('Update')} onClick={props.redownload} />
-            <DefaultButton text={formatMessage('Remove')} onClick={props.removeLibrary} />
+            {item.lastImported && (
+              <Fragment>
+                <DefaultButton text={formatMessage('Update')} onClick={props.redownload} />
+                {props.removeLibrary && <DefaultButton text={formatMessage('Remove')} onClick={props.removeLibrary} />}
+              </Fragment>
+            )}
+            {!item.lastImported && (
+              <Fragment>
+                {props.isInstalled(item) && formatMessage('Installed')}
+                {!props.isInstalled(item) && (
+                  <DefaultButton text={formatMessage('Install')} onClick={props.redownload} />
+                )}
+              </Fragment>
+            )}
           </Fragment>
         );
       },
@@ -142,6 +161,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
           groupProps={{
             showEmptyGroups: true,
           }}
+          groups={groups}
           items={items}
           layoutMode={DetailsListLayoutMode.justified}
           selection={selection}
