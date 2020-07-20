@@ -2,32 +2,18 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import ReactDOM from 'react-dom';
 
-import { dialogStyle } from './dialogStyle';
+import { dialogStyle, NORMAL_STYLE, CONSOLE_STYLE } from './dialogStyle';
 
 // -------------------- Styles -------------------- //
 
 export const builtInStyles = {
-  [dialogStyle.normal]: css`
-    padding: 15px;
-    margin-bottom: 20px;
-    white-space: pre-line;
-  `,
-  [dialogStyle.console]: css`
-    background: #000;
-    max-height: 90px;
-    overflow-y: auto;
-    font-size: 16px;
-    line-height: 23px;
-    color: #fff;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    white-space: pre-line;
-  `,
+  [dialogStyle.normal]: NORMAL_STYLE,
+  [dialogStyle.console]: CONSOLE_STYLE,
 };
 
 // -------------------- AlertDialog -------------------- //

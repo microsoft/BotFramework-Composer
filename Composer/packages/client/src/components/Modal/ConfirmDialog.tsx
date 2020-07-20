@@ -11,27 +11,13 @@ import ReactDOM from 'react-dom';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
 
-import { dialogStyle } from './dialogStyle';
+import { dialogStyle, NORMAL_STYLE, CONSOLE_STYLE } from './dialogStyle';
 
 // -------------------- Styles -------------------- //
 
 const builtInStyles = {
-  [dialogStyle.normal]: css`
-    padding: 15px;
-    margin-bottom: 20px;
-    white-space: pre-line;
-  `,
-  [dialogStyle.console]: css`
-    background: #000;
-    max-height: 90px;
-    overflow-y: auto;
-    font-size: 16px;
-    line-height: 23px;
-    color: #fff;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    white-space: pre-line;
-  `,
+  [dialogStyle.normal]: NORMAL_STYLE,
+  [dialogStyle.console]: CONSOLE_STYLE,
 };
 
 export const dialog = {
