@@ -35,6 +35,7 @@ export class BotProjectDeploy {
   private dotnetProjectPath: string;
   private generatedFolder: string;
   private remoteBotPath: string;
+  private azureResourceManagementClient?: AzureResourceMananger;
   private logger: (string) => any;
 
   // Will be assigned by create or deploy
@@ -582,6 +583,10 @@ export class BotProjectDeploy {
         logger: this.logger
       } as AzureResourceManangerConfig;
       const armInstance = new AzureResourceMananger(armConfig);
+      if (!this.azureResourceManagementClient) {
+        this.azureResourceManagementClient = armInstance;
+      }
+
       await armInstance.deployResources();
 
       // If application insights created, update the application insights settings in azure bot service
@@ -675,6 +680,14 @@ export class BotProjectDeploy {
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
     }
+  }
+
+  public getProvisionStatus(){
+    if (!this.azureResourceManagementClient) {
+      return undefined;
+    }
+
+    return this.azureResourceManagementClient.getStatus();
   }
 
   /**
