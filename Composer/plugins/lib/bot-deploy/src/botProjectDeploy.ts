@@ -691,12 +691,12 @@ export class BotProjectDeploy {
     const endpointKey = await builder.getEndpointKeys(subscriptionKey, endpoint);
     const qnaConfig: any = {
       subscriptionKey: subscriptionKey,
-      endpointKey,
+      endpointKey: endpointKey.primaryEndpointKey,
     };
 
     // Update deploymentSettings with the luis config
     const settings: any = await fs.readJson(this.deploymentSettingsPath);
-    settings.qna = qnaConfig;
+    settings.qna = Object.assign({}, settings.qna, qnaConfig);
 
     await fs.writeJson(this.deploymentSettingsPath, settings, {
       spaces: 4,
