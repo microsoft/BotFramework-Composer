@@ -470,7 +470,8 @@
             "SecondaryEndpointKey": "[concat(variables('qnaMakerWebAppName'), '-SecondaryEndpointKey')]",
             "DefaultAnswer": "No good match found in KB.",
             "QNAMAKER_EXTENSION_VERSION": "latest"
-          }
+          },
+          "condition": "[parameters('shouldCreateQnAResource')]"
         }
       ]
     }
@@ -512,8 +513,8 @@
     "qna": {
       "type": "object",
       "value": {
-        "endpoint": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('qnaMakerWebAppName'))).hostNames[0])]",
-        "subscriptionKey": "[listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('qnaMakerServiceName')),'2017-04-18').key1]"
+        "endpoint": "[if(parameters('shouldCreateQnAResource'), concat('https://', reference(resourceId('Microsoft.Web/sites', variables('qnaMakerWebAppName'))).hostNames[0]), '')]",
+        "subscriptionKey": "[if(parameters('shouldCreateQnAResource'), listKeys(resourceId('Microsoft.CognitiveServices/accounts', parameters('qnaMakerServiceName')),'2017-04-18').key1, '')]"
       }
     }
   }
