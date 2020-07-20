@@ -125,3 +125,7 @@ export type BoilerplateVersion = {
   currentVersion?: string;
   updateRequired?: boolean;
 };
+
+export type BotProject = {
+  projectId: string;
+};
