@@ -698,6 +698,21 @@ const setDeployConfig: ReducerFunc = (state, payload) => {
   return state;
 };
 
+const getBoilerplateSuccess: ReducerFunc<{
+  updateRequired: boolean;
+  latestVersion: string | undefined;
+  currentVersion: string | undefined;
+}> = (state, payload) => {
+  const { updateRequired, latestVersion, currentVersion } = payload;
+
+  state.boilerplateVersion = {
+    updateRequired: updateRequired,
+    latestVersion: latestVersion,
+    currentVersion: currentVersion,
+  };
+  return state;
+};
+
 const noOp: ReducerFunc = (state) => {
   return state;
 };
@@ -775,4 +790,5 @@ export const reducer = createReducer({
   [ActionTypes.GET_RESOURCES_SUCCESS]: setResources,
   [ActionTypes.GET_DEPLOY_LOCATIONS_SUCCESS]: setDeployLocations,
   [ActionTypes.PROVISION_SUCCESS]: setDeployConfig,
+  [ActionTypes.GET_BOILERPLATE_SUCCESS]: getBoilerplateSuccess,
 });

@@ -3,25 +3,41 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext } from 'react';
+import { useState, useContext, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
+import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
+import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { StoreContext } from '../../../store';
 
 import { EjectModal } from './ejectModal';
+import { WorkingModal } from './workingModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const { state, actions } = useContext(StoreContext);
-  const { setCustomRuntime, setRuntimeField } = actions;
-  const { botName, settings, projectId } = state;
+  const { setCustomRuntime, setRuntimeField, ejectRuntime, updateBoilerplate, getBoilerplateVersion } = actions;
+  const { botName, settings, projectId, boilerplateVersion } = state;
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
+  const [working, setWorking] = useState(false);
+  const [ejecting, setEjecting] = useState(false);
+  const [needsUpdate, setNeedsUpdate] = useState(false);
+
+  useEffect(() => {
+    // check the status of the boilerplate material and see if it requires an update
+    getBoilerplateVersion(projectId);
+  }, []);
+
+  useEffect(() => {
+    setNeedsUpdate(boilerplateVersion.updateRequired || false);
+  }, [boilerplateVersion.updateRequired]);
 
   const handleChangeToggle = (_, isOn = false) => {
     setCustomRuntime(projectId, isOn);
@@ -68,9 +84,27 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
     setEjectModalVisible(false);
   };
 
-  const ejectRuntime = async (templateKey: string) => {
-    await actions.ejectRuntime(projectId, templateKey);
+  const callEjectRuntime = async (templateKey: string) => {
+    setEjecting(true);
     closeEjectModal();
+    await ejectRuntime(projectId, templateKey);
+    setEjecting(false);
+  };
+
+  const callUpdateBoilerplate = async () => {
+    const title = formatMessage('Update Scripts');
+    const msg = formatMessage(
+      'Existing files in scripts/ folder will be overwritten. Are you sure you want to continue?'
+    );
+    const res = await OpenConfirmModal(title, msg);
+    if (res) {
+      setWorking(true);
+      await updateBoilerplate(projectId);
+      // add a slight delay, so the working indicator is visible for a moment at least!
+      setTimeout(() => {
+        setWorking(false);
+      }, 500);
+    }
   };
 
   return botName ? (
@@ -108,7 +142,28 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
           onChange={updateSetting('command')}
         />
       </div>
-      <EjectModal closeModal={closeEjectModal} ejectRuntime={ejectRuntime} hidden={!ejectModalVisible} />
+      <br />
+      {needsUpdate && (
+        <div css={controlGroup}>
+          <p>
+            {formatMessage(
+              'A newer version of the provisioning scripts has been found, and this project can be updated to the latest.'
+            )}
+          </p>
+          <DefaultButton disabled={working} onClick={callUpdateBoilerplate}>
+            {working && (
+              <Fragment>
+                <Spinner />
+                &nbsp;
+                {formatMessage('Updating scripts... ')}
+              </Fragment>
+            )}
+            {!working && <Fragment>{formatMessage('Update scripts')}</Fragment>}
+          </DefaultButton>
+        </div>
+      )}
+      <WorkingModal hidden={!ejecting} title={formatMessage('Ejecting runtime...')} />
+      <EjectModal closeModal={closeEjectModal} ejectRuntime={callEjectRuntime} hidden={!ejectModalVisible} />
     </div>
   ) : (
     <LoadingSpinner />

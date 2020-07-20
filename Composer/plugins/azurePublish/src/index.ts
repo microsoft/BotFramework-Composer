@@ -50,6 +50,7 @@ interface ProvisionConfig {
 
 class AzurePublisher {
   private publishingBots: { [key: string]: any };
+  private provisionStatus: { [key: string]: any };
   private historyFilePath: string;
   private histories: any;
   private azDeployer: BotProjectDeploy;
@@ -61,6 +62,7 @@ class AzurePublisher {
       this.loadHistoryFromFile();
     }
     this.publishingBots = {};
+    this.provisionStatus = {};
     this.logMessages = [];
   }
 
@@ -184,6 +186,7 @@ class AzurePublisher {
     return undefined;
   };
 
+  private addProvisionStatus = (botId: string, profileName: string, newStatus) => {};
   private createAndDeploy = async (
     botId: string,
     profileName: string,
@@ -403,10 +406,11 @@ class AzurePublisher {
       projPath: '../../plugins/samples/assets/shared/scripts',
       tenantId: subscription.tenantId,
     });
-    const provisionResult = await botproj.create(hostname, location.name, '', password);
-    console.log(provisionResult);
-    return provisionResult;
+    botproj.create(hostname, location.name, '', password);
+    return { status: 202, config: {} };
   };
+
+  getProvisionStatus = async (config: ProvisionConfig, project, user) => {};
 }
 
 const azurePublish = new AzurePublisher();

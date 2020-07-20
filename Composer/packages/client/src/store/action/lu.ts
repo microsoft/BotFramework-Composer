@@ -66,14 +66,14 @@ export const removeLuIntent: ActionCreator = async (store, { projectId, file, in
   return await undoableUpdateLuFile(store, { id: file.id, projectId, content: newContent });
 };
 
-export const publishLuis: ActionCreator = async ({ dispatch, getState }, authoringKey, projectId) => {
+export const publishLuis: ActionCreator = async ({ dispatch, getState }, luisConfig, projectId) => {
   try {
     const { dialogs, luFiles } = getState();
     const referred = luUtil.checkLuisPublish(luFiles, dialogs);
     //TODO crosstrain should add locale
     const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referred);
     const response = await httpClient.post(`/projects/${projectId}/luFiles/publish`, {
-      authoringKey,
+      luisConfig,
       projectId,
       crossTrainConfig,
       luFiles: referred.map((file) => file.id),

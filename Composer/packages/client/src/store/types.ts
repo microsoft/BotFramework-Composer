@@ -136,6 +136,12 @@ export interface BotState {
     [key: string]: any[];
   };
 
+  boilerplateVersion: {
+    latestVersion?: string;
+    currentVersion?: string;
+    updateRequired?: boolean;
+  };
+
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
 
@@ -244,7 +250,7 @@ export interface ILuisConfig {
 export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
-  luis?: ILuisConfig;
+  luis: ILuisConfig;
   publishTargets?: PublishTarget[];
   runtime?: {
     customRuntime: boolean;

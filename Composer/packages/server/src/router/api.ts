@@ -28,6 +28,10 @@ router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLui
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 
+// update the boilerplate content
+router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
+router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBoilerplate);
+
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
 router.get('/storages', StorageController.getStorageConnections);
@@ -42,6 +46,7 @@ router.get('/publish/resourceGroups/:subscriptionId', ProvisionController.getRes
 router.get('/publish/resources/:subscriptionId/:resourceGroup', ProvisionController.getResourceByResourceGroup);
 router.get('/publish/:subscriptionId/locations', ProvisionController.getDeployLocations);
 router.post('/publish/:projectId/provision/:type', ProvisionController.provision);
+router.get('/publish/:projectId/provisionStatus', ProvisionController.getProvisionStatus);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);

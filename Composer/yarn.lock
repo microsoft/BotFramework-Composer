@@ -17,8 +17,8 @@
 
 "@azure/ms-rest-azure-env@^2.0.0":
   version "2.0.0"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@azure/ms-rest-azure-env/-/@azure/ms-rest-azure-env-2.0.0.tgz#45809f89763a480924e21d3c620cd40866771625"
-  integrity sha1-RYCfiXY6SAkk4h08YgzUCGZ3FiU=
+  resolved "https://registry.yarnpkg.com/@azure/ms-rest-azure-env/-/ms-rest-azure-env-2.0.0.tgz#45809f89763a480924e21d3c620cd40866771625"
+  integrity sha512-dG76W7ElfLi+fbTjnZVGj+M9e0BIEJmRxU6fHaUQ12bZBe8EJKYb2GV50YWNaP2uJiVQ5+7nXEVj1VN1UQtaEw==
 
 "@azure/ms-rest-azure-js@2.0.1":
   version "2.0.1"
