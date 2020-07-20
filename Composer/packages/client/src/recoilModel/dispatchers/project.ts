@@ -132,41 +132,47 @@ export const projectDispatcher = () => {
       schemas.diagnostics = diagnostics;
     }
 
-    const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
-    let mainDialog = '';
-    const verifiedDialogs = dialogs.map((dialog) => {
-      if (dialog.isRoot) {
-        mainDialog = dialog.id;
-      }
-      dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-      return dialog;
-    });
+    try {
+      const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+      let mainDialog = '';
+      const verifiedDialogs = dialogs.map((dialog) => {
+        if (dialog.isRoot) {
+          mainDialog = dialog.id;
+        }
+        dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+        return dialog;
+      });
 
-    const newSnapshot = snapshot.map(({ set }) => {
-      set(skillManifestsState, skillManifestFiles);
-      set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
-      set(lgFilesState, lgFiles);
-      set(dialogsState, verifiedDialogs);
-      set(botEnvironmentState, botEnvironment);
-      set(botNameState, botName);
-      if (location !== curLocation) {
-        set(botStatusState, BotStatus.unConnected);
-        set(locationState, location);
+      const newSnapshot = snapshot.map(({ set }) => {
+        set(skillManifestsState, skillManifestFiles);
+        set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
+        set(lgFilesState, lgFiles);
+        set(dialogsState, verifiedDialogs);
+        set(botEnvironmentState, botEnvironment);
+        set(botNameState, botName);
+        if (location !== curLocation) {
+          set(botStatusState, BotStatus.unConnected);
+          set(locationState, location);
+        }
+        set(skillsState, skills);
+        set(schemasState, schemas);
+        set(localeState, locale);
+        set(BotDiagnosticsState, diagnostics);
+        set(botOpeningState, false);
+        set(projectIdState, projectId);
+        refreshLocalStorage(projectId, settings);
+        const mergedSettings = mergeLocalStorage(projectId, settings);
+        set(settingsState, mergedSettings);
+      });
+      gotoSnapshot(newSnapshot);
+      if (jumpToMain && projectId) {
+        const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
+        navigateTo(mainUrl);
       }
-      set(skillsState, skills);
-      set(schemasState, schemas);
-      set(localeState, locale);
-      set(BotDiagnosticsState, diagnostics);
-      set(botOpeningState, false);
-      set(projectIdState, projectId);
-      refreshLocalStorage(projectId, settings);
-      const mergedSettings = mergeLocalStorage(projectId, settings);
-      set(settingsState, mergedSettings);
-    });
-    gotoSnapshot(newSnapshot);
-    if (jumpToMain && projectId) {
-      const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
-      navigateTo(mainUrl);
+    } catch (err) {
+      callbackHelpers.set(botOpeningState, false);
+      setError(callbackHelpers, err);
+      navigateTo('/home');
     }
   };
 
