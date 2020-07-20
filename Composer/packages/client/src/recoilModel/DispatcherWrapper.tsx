@@ -39,8 +39,7 @@ export const dispatcherState = atom<Dispatcher>({
 
 const wrapDispatcher = (dispatchers, forceUpdate) => {
   return Object.keys(dispatchers).reduce((boundDispatchers, dispatcherName) => {
-    let dispatcher = dispatchers[dispatcherName];
-    dispatcher = async (...args) => {
+    const dispatcher = async (...args) => {
       forceUpdate([]); //gurarantee the snapshot get the latset state
       await dispatchers[dispatcherName](...args);
     };
