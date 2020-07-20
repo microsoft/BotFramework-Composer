@@ -62,6 +62,7 @@ const SchemaField: React.FC<FieldProps> = (props) => {
   const handleChange = (newValue: any) => {
     const serializedValue =
       typeof uiOptions?.serializer?.set === 'function' ? uiOptions.serializer.set(newValue) : newValue;
+
     onChange(serializedValue);
   };
 

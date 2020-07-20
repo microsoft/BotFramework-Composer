@@ -205,7 +205,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         },
       ]);
     }
-  }, [publishHistory, selectedTargetName]);
+  }, [publishHistory, selectedTargetName, settings.publishTargets]);
 
   // check history to see if a 202 is found
   useEffect(() => {

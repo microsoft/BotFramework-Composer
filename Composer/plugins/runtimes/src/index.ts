@@ -182,7 +182,10 @@ export default async (composer: any): Promise<void> => {
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
         // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         // install packages
-        await exec('npm install', { cwd: destPath, stdio: 'pipe' });
+        const { initErr } = await exec('npm install', { cwd: destPath, stdio: 'pipe' });
+        if (initErr) {
+          throw new Error(initErr);
+        }
         return destPath;
       } else {
         throw new Error(`Runtime already exists at ${destPath}`);

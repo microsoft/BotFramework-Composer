@@ -149,15 +149,17 @@ export const getPublishStatus: ActionCreator = async ({ dispatch }, projectId, t
 
 export const getPublishHistory: ActionCreator = async ({ dispatch }, projectId, target) => {
   try {
-    await filePersistence.flush();
-    const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
-    dispatch({
-      type: ActionTypes.GET_PUBLISH_HISTORY,
-      payload: {
-        history: response.data,
-        target: target,
-      },
-    });
+    const saved = await filePersistence.flush();
+    if (saved) {
+      const response = await httpClient.get(`/publish/${projectId}/history/${target.name}`);
+      dispatch({
+        type: ActionTypes.GET_PUBLISH_HISTORY,
+        payload: {
+          history: response.data,
+          target: target,
+        },
+      });
+    }
   } catch (err) {
     dispatch({
       type: ActionTypes.SET_ERROR,
