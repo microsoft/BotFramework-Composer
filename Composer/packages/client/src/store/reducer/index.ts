@@ -177,7 +177,7 @@ const createLgFile: ReducerFunc = (state, { id, content }) => {
 
   const { parse } = lgIndexer;
   const lgImportresolver = importResolverGenerator(state.lgFiles, '.lg');
-  const lgFile = { id, content, ...parse(content, id, lgImportresolver) };
+  const lgFile = { ...parse(content, id, lgImportresolver), id, content };
   state.lgFiles.push(lgFile);
   return state;
 };

@@ -132,11 +132,11 @@ describe('getSelectedOption', () => {
       },
     },
     {
-      key: 'integer',
-      text: 'integer',
+      key: 'number',
+      text: 'number',
       data: {
         schema: {
-          type: 'integer' as const,
+          type: 'number' as const,
         },
       },
     },
