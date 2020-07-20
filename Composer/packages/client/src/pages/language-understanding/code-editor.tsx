@@ -82,8 +82,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         if (!file || !intent) return;
         const { Name } = intent;
         const payload = {
-          projectId,
-          file,
+          id: file.id,
           intentName: Name,
           intent: {
             Name,
