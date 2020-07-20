@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { atom } from 'recoil';
 import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill, DialogSetting } from '@bfc/shared';
+import { atom, atomFamily } from 'recoil';
 
 import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 
@@ -189,4 +189,11 @@ export const onAddLanguageDialogCompleteState = atom<any>({
 export const onDelLanguageDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
+});
+
+export const dialogsNewState = atomFamily<DialogInfo[], string>({
+  key: 'dialogsNew',
+  default: (id) => {
+    return [];
+  },
 });
