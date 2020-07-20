@@ -9,3 +9,9 @@
     - Age : ${user.profile.age}
 - ELSE:
     - Age : unknown
+
+# ChoiceInput_Prompt_OnChooseIntent()
+- Which intent do you want to trigger?
+
+# SendActivity_QnAMatch()
+- ${expandText(@answer)}

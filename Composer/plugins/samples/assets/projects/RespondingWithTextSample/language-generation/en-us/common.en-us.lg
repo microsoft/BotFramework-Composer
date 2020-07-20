@@ -44,3 +44,9 @@
 alarm1: 7:00 am
 alarm2: 9:00 pm
 ```
+
+# ChoiceInput_Prompt_OnChooseIntent()
+- Which intent do you want to trigger?
+
+# SendActivity_QnAMatch()
+- ${expandText(@answer)}
