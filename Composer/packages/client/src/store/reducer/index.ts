@@ -696,8 +696,35 @@ const importSuccess: ReducerFunc<{
       name: payload.name,
       lastImported: new Date(),
       version: payload.installedVersion,
+      location: payload.location,
     });
   }
+
+  return state;
+};
+
+const unimportSuccess: ReducerFunc = (state, payload) => {
+  if (!state.settings.importedLibraries) {
+    state.settings.importedLibraries = [];
+  }
+
+  console.log('REMOVE THE PACKAGE FROM THE LIST ', payload);
+
+  state.settings.importedLibraries = state.settings.importedLibraries.filter((f) => f.name !== payload.package);
+
+  // // if this library exists, update the date and version
+  // const existing = state.settings.importedLibraries.find((f) => f.name === payload.name);
+  // if (existing) {
+  //   existing.lastImported = new Date();
+  //   existing.version = payload.installedVersion;
+  // } else {
+  //   state.settings.importedLibraries.push({
+  //     name: payload.name,
+  //     lastImported: new Date(),
+  //     version: payload.installedVersion,
+  //     location: payload.location,
+  //   });
+  // }
 
   return state;
 };
@@ -776,4 +803,5 @@ export const reducer = createReducer({
   [ActionTypes.SET_RUNTIME_FIELD]: setRuntimeField,
   [ActionTypes.GET_BOILERPLATE_SUCCESS]: getBoilerplateSuccess,
   [ActionTypes.IMPORT_SUCCESS]: importSuccess,
+  [ActionTypes.UNIMPORT_SUCCESS]: unimportSuccess,
 });

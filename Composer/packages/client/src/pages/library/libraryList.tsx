@@ -24,6 +24,7 @@ import { listRoot, tableView, detailList } from './styles';
 export interface ILibraryListProps {
   items: LibraryRef[];
   redownload: (evt: any) => void;
+  removeLibrary: (evt: any) => void;
   onItemClick: (item: LibraryRef | null) => void;
   updateItems: (items: LibraryRef[]) => void;
 }
@@ -98,6 +99,7 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
         return (
           <Fragment>
             <DefaultButton text={formatMessage('Update')} onClick={props.redownload} />
+            <DefaultButton text={formatMessage('Remove')} onClick={props.removeLibrary} />
           </Fragment>
         );
       },

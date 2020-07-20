@@ -207,6 +207,7 @@ export interface LibraryRef {
   name: string;
   version: string;
   lastImported: Date;
+  location: string;
 }
 
 export interface ILuisConfig {

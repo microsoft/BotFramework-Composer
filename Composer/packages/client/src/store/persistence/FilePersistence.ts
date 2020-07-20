@@ -30,6 +30,7 @@ const actionType2ChangeType = {
   [ActionTypes.SET_RUNTIME_FIELD]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
   [ActionTypes.SET_CUSTOM_RUNTIME_TOGGLE]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
   [ActionTypes.IMPORT_SUCCESS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
+  [ActionTypes.UNIMPORT_SUCCESS]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Setting },
 };
 
 class FilePersistence {

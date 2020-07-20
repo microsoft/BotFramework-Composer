@@ -54,7 +54,7 @@ const Library: React.FC<LibraryPageProps> = (props) => {
     setAddDialogHidden(true);
   };
 
-  const importFromWeb = async (packageName, version) => {
+  const importFromWeb = async (packageName, version, isUpdating) => {
     console.log('IMPORT FROM WEB', packageName);
     // TODO: check to see if package already exists in this project
     const existing = settings.importedLibraries?.find((l) => l.name === packageName);
@@ -70,13 +70,33 @@ const Library: React.FC<LibraryPageProps> = (props) => {
     if (okToProceed) {
       closeDialog();
       setWorking(true);
-      await actions.importLibrary(packageName, version);
+      await actions.importLibrary(packageName, version, isUpdating || false);
+      // reload modified contents
+      actions.fetchProjectById(state.projectId);
       setWorking(false);
     }
   };
 
   const redownload = async () => {
-    return importFromWeb(selectedItem?.name, selectedItem?.version);
+    return importFromWeb(selectedItem?.name, selectedItem?.version, true);
+  };
+
+  const removeLibrary = async () => {
+    if (selectedItem) {
+      const title = formatMessage('Remove Library');
+      const msg = formatMessage(
+        'Any changes you made to this library will be lost! In addition, this may leave your bot in a broken state. Are you sure you want to continue?'
+      );
+      const okToProceed = (await OpenConfirmModal(title, msg)) ? true : false;
+      if (okToProceed) {
+        closeDialog();
+        setWorking(true);
+        await actions.removeLibrary(selectedItem.name);
+        // reload modified contents
+        actions.fetchProjectById(state.projectId);
+        setWorking(false);
+      }
+    }
   };
 
   const selectItem = (item: LibraryRef | null) => {
@@ -106,7 +126,13 @@ const Library: React.FC<LibraryPageProps> = (props) => {
       <div css={ContentStyle} data-testid="Publish" role="main">
         <div aria-label={formatMessage('List view')} css={contentEditor} role="region">
           <Fragment>
-            <LibraryList items={items} redownload={redownload} updateItems={setItems} onItemClick={selectItem} />
+            <LibraryList
+              items={items}
+              redownload={redownload}
+              removeLibrary={removeLibrary}
+              updateItems={setItems}
+              onItemClick={selectItem}
+            />
             {!items || items.length === 0 ? (
               <div style={{ marginLeft: '50px', fontSize: 'smaller', marginTop: '20px' }}>No libraries installed</div>
             ) : null}

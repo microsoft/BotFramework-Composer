@@ -59,6 +59,7 @@ router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 // import
 router.post('/projects/:projectId/import', ImportController.import);
 router.get('/projects/:projectId/import', ImportController.import);
+router.post('/projects/:projectId/unimport', ImportController.removeImported);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
