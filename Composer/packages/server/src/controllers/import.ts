@@ -23,18 +23,9 @@ export interface FileRef {
 }
 
 export const ImportController = {
-  addToLibrary: async function (req, res) {
-    const library = Store.get('library', []);
-    console.log('put to library', req.body);
-    Store.set('library', library);
-    res.json(library);
-  },
   getLibrary: async function (req, res) {
     // get libraries installed "locally"
     const localLibrary = Store.get('library', []);
-
-    console.log('GOT SOME EXTENSION LIBRARIES', pluginLoader.extensions.libraries);
-
     const combined = localLibrary.concat(pluginLoader.extensions.libraries);
     // mix in any libraries installed via plugins
     res.json(combined);
