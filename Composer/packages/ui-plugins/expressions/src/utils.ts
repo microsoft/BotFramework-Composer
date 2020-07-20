@@ -112,10 +112,14 @@ export function getOptions(schema: JSONSchema7, definitions): SchemaOption[] {
 
 export function getSelectedOption(value: any | undefined, options: SchemaOption[]): SchemaOption | undefined {
   const expressionOption = options.find(({ key }) => key === 'expression');
-  const valueType = getValueType(value);
+  let valueType = getValueType(value);
 
   // if its an array, we know it's not an expression
-  if (valueType === 'array') {
+
+  if (valueType === 'integer') {
+    // integer-type values should also count as numbers as far as the schema goes
+    valueType = 'number';
+  } else if (valueType === 'array') {
     const item = value[0];
     const firstArrayOption = options.find((o) => o.data.schema.type === 'array');
 
@@ -135,10 +139,8 @@ export function getSelectedOption(value: any | undefined, options: SchemaOption[
         return typeof itemSchema === 'object' && getValueType(item) === itemSchema.type;
       }) || firstArrayOption
     );
-  }
-
-  // if the value if undefined, either default to expression or the first option
-  if (typeof value === 'undefined' || value === null) {
+  } else if (typeof value === 'undefined' || value === null) {
+    // if the value if undefined, either default to expression or the first option
     return options.length > 2 ? expressionOption : options[0];
     // else if the value is a string and starts with '=' it is an expression
   } else if (
