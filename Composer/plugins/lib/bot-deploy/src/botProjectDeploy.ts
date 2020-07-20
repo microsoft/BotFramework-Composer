@@ -687,6 +687,20 @@ export class BotProjectDeploy {
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: `qnabuild succeed`,
     });
+
+    const endpointKey = await builder.getEndpointKeys(subscriptionKey, endpoint);
+    const qnaConfig: any = {
+      subscriptionKey: subscriptionKey,
+      endpointKey,
+    };
+
+    // Update deploymentSettings with the luis config
+    const settings: any = await fs.readJson(this.deploymentSettingsPath);
+    settings.qna = qnaConfig;
+
+    await fs.writeJson(this.deploymentSettingsPath, settings, {
+      spaces: 4,
+    });
   }
   /**
    * Deploy a bot to a location
