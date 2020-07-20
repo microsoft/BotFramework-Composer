@@ -29,7 +29,6 @@ function getAppMenu(): MenuItemConstructorOptions[] {
 function getRestOfEditMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
     return [
-      { role: 'delete' },
       { type: 'separator' },
       {
         label: 'Speech',
@@ -37,7 +36,7 @@ function getRestOfEditMenu(): MenuItemConstructorOptions[] {
       },
     ];
   }
-  return [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }];
+  return [{ type: 'separator' }, { role: 'selectAll' }];
 }
 
 function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
@@ -48,6 +47,8 @@ function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
 }
 
 export function initAppMenu() {
+  // Global window functions registered by Composer core app.
+  const { EditorAPI } = window as any;
   const template: MenuItemConstructorOptions[] = [
     // App (Mac)
     ...getAppMenu(),
@@ -60,12 +61,13 @@ export function initAppMenu() {
     {
       label: 'Edit',
       submenu: [
-        { role: 'undo' },
-        { role: 'redo' },
+        { role: 'undo', click: () => EditorAPI.undo() },
+        { role: 'redo', click: () => EditorAPI.redo() },
         { type: 'separator' },
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' },
+        { role: 'cut', click: () => EditorAPI.cutSelection() },
+        { role: 'copy', click: () => EditorAPI.copySelection() },
+        { role: 'paste', click: () => EditorAPI.pasteSelection() },
+        { role: 'delete', click: () => EditorAPI.deleteSelection() },
         ...getRestOfEditMenu(),
       ],
     },
