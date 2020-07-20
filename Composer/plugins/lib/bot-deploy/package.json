@@ -20,7 +20,7 @@
     "@azure/graph": "^5.0.1",
     "@azure/ms-rest-browserauth": "^0.1.4",
     "@azure/ms-rest-nodeauth": "^3.0.3",
-    "@microsoft/bf-lu": "^4.10.0-preview.141651",
+    "@microsoft/bf-lu": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.4.0.tgz",
     "@microsoft/bf-luis-cli": "^4.10.0-preview.141651",
     "@types/archiver": "^3.1.0",
     "@types/fs-extra": "^8.1.0",

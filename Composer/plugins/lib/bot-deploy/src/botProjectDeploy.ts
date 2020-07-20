@@ -21,14 +21,35 @@ import * as rp from 'request-promise';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
+import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
+
 import archiver = require('archiver');
 
 const exec = util.promisify(require('child_process').exec);
 const { promisify } = require('util');
 
+const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
+const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
 const readdir = promisify(fs.readdir);
+const INTERUPTION = 'interuption';
 
+interface LuisProperty {
+  endpoint: string;
+  authoringEndpoint: string;
+  endpointKey: string;
+  authoringKey?: string;
+  authoringRegion?: string;
+  resource?: string;
+}
+
+interface QnaProperty {
+  endpoint: string;
+  authoringEndpoint: string;
+  subscriptionKey: string;
+  authoringRegion?: string;
+  resource?: string;
+}
 export class BotProjectDeploy {
   private subId: string;
   private accessToken: string;
@@ -42,8 +63,11 @@ export class BotProjectDeploy {
   private templatePath: string;
   private dotnetProjectPath: string;
   private generatedFolder: string;
+  private interruptionFolderPath: string;
   private remoteBotPath: string;
   private logger: (string) => any;
+
+  private crossTrainConfig: ICrossTrainConfig;
 
   // Will be assigned by create or deploy
   private tenantId = '';
@@ -85,6 +109,16 @@ export class BotProjectDeploy {
 
     // path to the ready to deploy generated folder
     this.generatedFolder = config.generatedFolder ?? path.join(this.remoteBotPath, 'generated');
+    this.interruptionFolderPath = path.join(this.generatedFolder, INTERUPTION);
+
+    // Cross Train config
+    this.crossTrainConfig = {
+      rootIds: [],
+      triggerRules: {},
+      intentName: '_Interruption',
+      verbose: true,
+      botName: '',
+    };
   }
 
   private getErrorMesssage(err) {
@@ -373,147 +407,355 @@ export class BotProjectDeploy {
     });
   }
 
-  private notEmptyLuisModel(file: string) {
+  private notEmptyModel(file: string) {
     return fs.readFileSync(file).length > 0;
   }
 
+  private async createGeneratedDir() {
+    if (!(await fs.pathExists(this.generatedFolder))) {
+      await fs.mkdir(this.generatedFolder);
+    }
+  }
+
+  private async setCrossTrainConfig(botName: string, dialogFiles: string[], luFiles: string[]) {
+    const dialogs: { [key: string]: any }[] = [];
+    for (const dialog of dialogFiles) {
+      dialogs.push({ id: dialog, content: fs.readJSONSync(dialog) });
+    }
+    this.crossTrainConfig = createCrossTrainConfig(botName, dialogs, luFiles);
+  }
+  private needCrossTrain() {
+    return this.crossTrainConfig.rootIds.length > 0;
+  }
+
+  private async writeCrossTrainFiles(crossTrainResult) {
+    if (!(await fs.pathExists(this.interruptionFolderPath))) {
+      await fs.mkdir(this.interruptionFolderPath);
+    }
+    for (const key of crossTrainResult.keys()) {
+      const fileName = path.basename(key);
+      const newFileId = path.join(this.interruptionFolderPath, fileName);
+      await fs.writeFile(newFileId, crossTrainResult.get(key).Content);
+    }
+  }
+
+  private async crossTrain(luFiles: string[], qnaFiles: string[]) {
+    if (!this.needCrossTrain()) return;
+    const luContents: { [key: string]: any }[] = [];
+    const qnaContents: { [key: string]: any }[] = [];
+    for (const luFile of luFiles) {
+      luContents.push({ content: fs.readFileSync(luFile), id: luFile.split('.lu') });
+    }
+    for (const qnaFile of qnaFiles) {
+      qnaContents.push({ content: fs.readFileSync(qnaFile), id: qnaFile.split('.lu') });
+    }
+    const result = await crossTrainer.crossTrain(luContents, qnaContents, this.crossTrainConfig);
+
+    await this.writeCrossTrainFiles(result.luResult);
+    await this.writeCrossTrainFiles(result.qnaResult);
+  }
+
+  private async cleanCrossTrain() {
+    if (!this.needCrossTrain()) return;
+    fs.rmdirSync(this.interruptionFolderPath, { recursive: true });
+  }
+  private async getInterruptionFiles() {
+    const files = await this.getFiles(this.interruptionFolderPath);
+    const interruptionLuFiles: string[] = [];
+    const interruptionQnaFiles: string[] = [];
+    files.forEach((file) => {
+      if (file.endsWith('qna')) {
+        interruptionQnaFiles.push(file);
+      } else if (file.endsWith('lu')) {
+        interruptionLuFiles.push(file);
+      }
+    });
+    return { interruptionLuFiles, interruptionQnaFiles };
+  }
   // Run through the lubuild process
   // This happens in the build folder, NOT in the original source folder
+  private async publishLuisAndQna(
+    name: string,
+    environment: string,
+    language: string,
+    luisProperty: LuisProperty,
+    qnaProperty: QnaProperty
+  ) {
+    const { authoringKey, authoringRegion } = luisProperty;
+    const { subscriptionKey } = qnaProperty;
+    if ((authoringKey && authoringRegion) || subscriptionKey) {
+      const botFiles = await this.getFiles(this.remoteBotPath);
+      const luFiles = botFiles.filter((name) => {
+        return name.endsWith('.lu') && this.notEmptyModel(name);
+      });
+      const qnaFiles = botFiles.filter((name) => {
+        return name.endsWith('.qna') && this.notEmptyModel(name);
+      });
+      const dialogFiles = botFiles.filter((name) => {
+        return name.endsWith('.dialog') && this.notEmptyModel(name);
+      });
+
+      await this.setCrossTrainConfig(name, dialogFiles, luFiles);
+      await this.createGeneratedDir();
+      await this.crossTrain(luFiles, qnaFiles);
+      const { interruptionLuFiles, interruptionQnaFiles } = await this.getInterruptionFiles();
+      await this.publishLuis(name, environment, language, luisProperty, interruptionLuFiles);
+      await this.publishQna(name, environment, language, qnaProperty, interruptionQnaFiles);
+      await this.cleanCrossTrain();
+    }
+  }
   private async publishLuis(
     name: string,
     environment: string,
     language: string,
-    luisEndpoint: string,
-    luisAuthoringEndpoint: string,
-    luisEndpointKey: string,
-    luisAuthoringKey?: string,
-    luisAuthoringRegion?: string,
-    luisResource?: string
+    luisProperty: LuisProperty,
+    interruptionLuFiles: string[]
   ) {
-    if (luisAuthoringKey && luisAuthoringRegion) {
-      // publishing luis
-      const botFiles = await this.getFiles(this.remoteBotPath);
-      const modelFiles = botFiles.filter((name) => {
-        return name.endsWith('.lu') && this.notEmptyLuisModel(name);
-      });
-
-      if (!(await fs.pathExists(this.generatedFolder))) {
-        await fs.mkdir(this.generatedFolder);
-      }
-      const builder = new luBuild.Builder((msg) =>
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: msg,
-        })
-      );
-
-      const loadResult = await builder.loadContents(
-        modelFiles,
-        language || '',
-        environment || '',
-        luisAuthoringRegion || ''
-      );
-
-      if (!luisEndpoint) {
-        luisEndpoint = `https://${luisAuthoringRegion}.api.cognitive.microsoft.com`;
-      }
-
-      if (!luisAuthoringEndpoint) {
-        luisAuthoringEndpoint = luisEndpoint;
-      }
-
-      const buildResult = await builder.build(
-        loadResult.luContents,
-        loadResult.recognizers,
-        luisAuthoringKey,
-        luisAuthoringEndpoint,
-        name,
-        environment,
-        language,
-        false,
-        loadResult.multiRecognizers,
-        loadResult.settings
-      );
-      await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
-
+    // eslint-disable-next-line prefer-const
+    let { endpoint, authoringEndpoint, endpointKey, authoringKey, authoringRegion, resource } = luisProperty;
+    // publishing luis
+    const builder = new luBuild.Builder((msg) =>
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: `lubuild succeed`,
-      });
+        message: msg,
+      })
+    );
 
-      const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter((filename) =>
-        filename.includes('luis.settings')
-      );
-      const luisAppIds: any = {};
+    const loadResult = await builder.loadContents(
+      interruptionLuFiles,
+      language || '',
+      environment || '',
+      authoringRegion || ''
+    );
 
-      for (const luisConfigFile of luisConfigFiles) {
-        const luisSettings = await fs.readJson(luisConfigFile);
-        Object.assign(luisAppIds, luisSettings.luis);
+    if (!endpoint) {
+      endpoint = `https://${authoringRegion}.api.cognitive.microsoft.com`;
+    }
+
+    if (!authoringEndpoint) {
+      authoringEndpoint = endpoint;
+    }
+
+    const buildResult = await builder.build(
+      loadResult.luContents,
+      loadResult.recognizers,
+      authoringKey,
+      authoringEndpoint,
+      name,
+      environment,
+      language,
+      false,
+      false,
+      loadResult.multiRecognizers,
+      loadResult.settings,
+      loadResult.crosstrainedRecognizers,
+      'crosstrained'
+    );
+    await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
+
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: `lubuild succeed`,
+    });
+
+    const luisConfigFiles = (await this.getFiles(this.remoteBotPath)).filter((filename) =>
+      filename.includes('luis.settings')
+    );
+    const luisAppIds: any = {};
+
+    for (const luisConfigFile of luisConfigFiles) {
+      const luisSettings = await fs.readJson(luisConfigFile);
+      Object.assign(luisAppIds, luisSettings.luis);
+    }
+
+    const luisConfig: any = {
+      endpoint: endpoint,
+      endpointKey: endpointKey,
+      authoringRegion: authoringRegion,
+      authoringKey: authoringRegion,
+    };
+
+    Object.assign(luisConfig, luisAppIds);
+
+    // Update deploymentSettings with the luis config
+    const settings: any = await fs.readJson(this.deploymentSettingsPath);
+    settings.luis = luisConfig;
+
+    await fs.writeJson(this.deploymentSettingsPath, settings, {
+      spaces: 4,
+    });
+
+    let jsonRes;
+    try {
+      // Assign a LUIS key to the endpoint of each app
+      const getAccountUri = `${endpoint}/luis/api/v2.0/azureaccounts`;
+      const options = {
+        headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+      } as rp.RequestPromiseOptions;
+      const response = await rp.get(getAccountUri, options);
+      jsonRes = JSON.parse(response);
+    } catch (err) {
+      // handle the token invalid
+      const error = JSON.parse(err.error);
+      if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+        throw new Error(
+          `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+        );
+      } else {
+        throw err;
       }
+    }
+    const account = this.getAccount(jsonRes, resource ? resource : `${name}-${environment}-luis`);
 
-      const luisConfig: any = {
-        endpoint: luisEndpoint,
-        endpointKey: luisEndpointKey,
-        authoringRegion: luisAuthoringRegion,
-        authoringKey: luisAuthoringRegion,
-      };
-
-      Object.assign(luisConfig, luisAppIds);
-
-      // Update deploymentSettings with the luis config
-      const settings: any = await fs.readJson(this.deploymentSettingsPath);
-      settings.luis = luisConfig;
-
-      await fs.writeJson(this.deploymentSettingsPath, settings, {
-        spaces: 4,
-      });
-
-      let jsonRes;
-      try {
-        // Assign a LUIS key to the endpoint of each app
-        const getAccountUri = `${luisEndpoint}/luis/api/v2.0/azureaccounts`;
-        const options = {
-          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-        } as rp.RequestPromiseOptions;
-        const response = await rp.get(getAccountUri, options);
-        jsonRes = JSON.parse(response);
-      } catch (err) {
-        // handle the token invalid
-        const error = JSON.parse(err.error);
-        if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
-          throw new Error(
-            `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
-          );
-        } else {
-          throw err;
-        }
-      }
-      const account = this.getAccount(jsonRes, luisResource ? luisResource : `${name}-${environment}-luis`);
-
-      for (const k in luisAppIds) {
-        const luisAppId = luisAppIds[k];
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: `Assigning to luis app id: ${luisAppId}`,
-        });
-
-        const luisAssignEndpoint = `${luisEndpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
-        const options = {
-          body: account,
-          json: true,
-          headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
-        } as rp.RequestPromiseOptions;
-        const response = await rp.post(luisAssignEndpoint, options);
-        this.logger({
-          status: BotProjectDeployLoggerType.DEPLOY_INFO,
-          message: response,
-        });
-      }
+    for (const k in luisAppIds) {
+      const luisAppId = luisAppIds[k];
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_INFO,
-        message: 'Luis Publish Success! ...',
+        message: `Assigning to luis app id: ${luisAppId}`,
+      });
+
+      const luisAssignEndpoint = `${endpoint}/luis/api/v2.0/apps/${luisAppId}/azureaccounts`;
+      const options = {
+        body: account,
+        json: true,
+        headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': luisAuthoringKey },
+      } as rp.RequestPromiseOptions;
+      const response = await rp.post(luisAssignEndpoint, options);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: response,
       });
     }
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Luis Publish Success! ...',
+    });
+  }
+
+  private async publishQna(
+    name: string,
+    environment: string,
+    language: string,
+    qnaProperty: QnaProperty,
+    interruptionQnaFiles: string[]
+  ) {
+    // eslint-disable-next-line prefer-const
+    let { endpoint, authoringEndpoint, subscriptionKey, authoringRegion, resource } = qnaProperty;
+    // publishing luis
+    const builder = new qnaBuild.Builder((msg) =>
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: msg,
+      })
+    );
+
+    const loadResult = await builder.loadContents(
+      interruptionQnaFiles,
+      name,
+      environment || '',
+      authoringRegion || '',
+      language || ''
+    );
+
+    if (!endpoint) {
+      endpoint = `https://${authoringRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+    }
+
+    if (!authoringEndpoint) {
+      authoringEndpoint = endpoint;
+    }
+
+    const buildResult = await builder.build(
+      loadResult.qnaContents,
+      loadResult.recognizers,
+      subscriptionKey,
+      authoringEndpoint,
+      name,
+      environment,
+      language,
+      loadResult.multiRecognizers,
+      loadResult.settings,
+      loadResult.crosstrainedRecognizers,
+      'crosstrained'
+    );
+    await builder.writeDialogAssets(buildResult, true, this.generatedFolder);
+
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: `qnabuild succeed`,
+    });
+
+    const qnaConfigFiles = (await this.getFiles(this.remoteBotPath)).filter((filename) =>
+      filename.includes('qna.settings')
+    );
+    const qnaAppIds: any = {};
+
+    for (const qnaConfigFile of qnaConfigFiles) {
+      const qnaSettings = await fs.readJson(qnaConfigFile);
+      Object.assign(qnaAppIds, qnaSettings.qna);
+    }
+
+    const qnaConfig: any = {
+      endpoint: endpoint,
+      authoringRegion: authoringRegion,
+      subscriptionKey: subscriptionKey,
+    };
+
+    Object.assign(qnaConfig, qnaAppIds);
+
+    // Update deploymentSettings with the luis config
+    const settings: any = await fs.readJson(this.deploymentSettingsPath);
+    settings.qna = qnaConfig;
+
+    await fs.writeJson(this.deploymentSettingsPath, settings, {
+      spaces: 4,
+    });
+
+    let jsonRes;
+    try {
+      // Assign a LUIS key to the endpoint of each app
+      const getAccountUri = `${endpoint}/qna/api/v2.0/azureaccounts`;
+      const options = {
+        headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': subscriptionKey },
+      } as rp.RequestPromiseOptions;
+      const response = await rp.get(getAccountUri, options);
+      jsonRes = JSON.parse(response);
+    } catch (err) {
+      // handle the token invalid
+      const error = JSON.parse(err.error);
+      if (error?.error?.message && error?.error?.message.indexOf('access token expiry') > 0) {
+        throw new Error(
+          `Type: ${error?.error?.code}, Message: ${error?.error?.message}, run az account get-access-token, then replace the accessToken in your configuration`
+        );
+      } else {
+        throw err;
+      }
+    }
+    const account = this.getAccount(jsonRes, resource ? resource : `${name}-${environment}-qna`);
+
+    for (const k in qnaAppIds) {
+      const qnaAppId = qnaAppIds[k];
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: `Assigning to qna app id: ${qnaAppId}`,
+      });
+
+      const qnaAssignEndpoint = `${endpoint}/qna/api/v2.0/apps/${qnaAppId}/azureaccounts`;
+      const options = {
+        body: account,
+        json: true,
+        headers: { Authorization: `Bearer ${this.accessToken}`, 'Ocp-Apim-Subscription-Key': subscriptionKey },
+      } as rp.RequestPromiseOptions;
+      const response = await rp.post(qnaAssignEndpoint, options);
+      this.logger({
+        status: BotProjectDeployLoggerType.DEPLOY_INFO,
+        message: response,
+      });
+    }
+    this.logger({
+      status: BotProjectDeployLoggerType.DEPLOY_INFO,
+      message: 'Qna Publish Success! ...',
+    });
   }
   /**
    * Deploy a bot to a location
@@ -523,6 +765,7 @@ export class BotProjectDeploy {
     environment: string,
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
+    qnaSubscriptionKey?: string,
     botPath?: string,
     language?: string,
     hostname?: string,
@@ -562,17 +805,21 @@ export class BotProjectDeploy {
         language = 'en-us';
       }
 
-      await this.publishLuis(
-        name,
-        environment,
-        language,
-        luisEndpoint,
-        luisAuthoringEndpoint,
-        luisEndpointKey,
-        luisAuthoringKey,
-        luisAuthoringRegion,
-        luisResource
-      );
+      const luisProperty = {
+        endpoint: luisEndpoint,
+        authoringEndpoint: luisAuthoringEndpoint,
+        authoringKey: luisAuthoringKey,
+        endpointKey: luisEndpointKey,
+        authoringRegion: luisAuthoringRegion,
+        resource: luisResource,
+      };
+      const qnaProperty = {
+        endpoint: luisEndpoint,
+        authoringEndpoint: luisAuthoringEndpoint,
+        subscriptionKey: qnaSubscriptionKey || '',
+        authoringRegion: luisAuthoringRegion,
+      };
+      await this.publishLuisAndQna(name, environment, language, luisProperty, qnaProperty);
 
       // Build a zip file of the project
       this.logger({
@@ -953,6 +1200,6 @@ export class BotProjectDeploy {
     luisAuthoringRegion?: string
   ) {
     await this.create(name, location, environment, appPassword);
-    await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion);
+    await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion, qnaSubscriptionKey);
   }
 }

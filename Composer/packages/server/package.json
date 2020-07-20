@@ -81,7 +81,7 @@
     "immer": "^5.2.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.6.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",
