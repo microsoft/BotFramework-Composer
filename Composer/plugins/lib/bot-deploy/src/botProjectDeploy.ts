@@ -14,7 +14,7 @@ import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import archiver = require('archiver');
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
-import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
+import { AzureResourceMananger, AzureResourceDeploymentStatus } from './azureResourceManager/azureResourceManager';
 
 const exec = util.promisify(require('child_process').exec);
 const { promisify } = require('util');
@@ -684,7 +684,7 @@ export class BotProjectDeploy {
 
   public getProvisionStatus(){
     if (!this.azureResourceManagementClient) {
-      return undefined;
+      return new AzureResourceDeploymentStatus();
     }
 
     return this.azureResourceManagementClient.getStatus();
