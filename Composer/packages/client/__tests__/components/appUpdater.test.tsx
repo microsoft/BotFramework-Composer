@@ -105,7 +105,6 @@ describe('<AppUpdater />', () => {
       set(appUpdateState, {
         ...baseState,
         error: '408 Request timed out.',
-        downloadSizeInBytes: 14760000,
         status: AppUpdaterStatus.UPDATE_FAILED,
       });
     });
