@@ -14,7 +14,6 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { generateUniqueId } from '@bfc/shared/src/generateUniqueId';
 
 import { StoreContext } from '../../store';
 import {
@@ -81,7 +80,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
       actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
-    if (editMode === EditMode.Updating) {
+    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Questions[questionIndex] !== question) {
       const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
       actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
@@ -89,7 +88,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const updateAnswer = () => {
-    if (editMode === EditMode.Updating) {
+    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Answer !== answer) {
       const updatedQnAFileContent = updateAnswerUtil(answer, qnaSections, qnaSectionIndex);
       actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
@@ -215,7 +214,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 if (qnaIndex !== qnaSectionIndex || questionIndex !== qIndex || editMode !== EditMode.Updating) {
                   return (
                     <div
-                      key={q + generateUniqueId(6)}
+                      key={q}
                       css={content}
                       role={'textbox'}
                       tabIndex={0}
