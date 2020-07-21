@@ -84,7 +84,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
       actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
-    // an empty name means to cancel the operation
     cancelQuestionEditOperation();
   };
 
@@ -93,7 +92,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const updatedQnAFileContent = updateAnswerUtil(answer, qnaSections, qnaSectionIndex);
       actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
-    // an empty name means to cancel the operation
     cancelAnswerEditOperation();
   };
 
@@ -221,7 +219,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       role={'textbox'}
                       tabIndex={0}
                       onClick={(e) =>
-                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => {}
+                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => { }
                       }
                       onKeyDown={(e) => {
                         e.preventDefault();
@@ -316,7 +314,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   css={content}
                   role={'textbox'}
                   tabIndex={0}
-                  onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(qnaIndex, item.Answer) : () => {})}
+                  onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(qnaIndex, item.Answer) : () => { })}
                   onKeyDown={(e) => {
                     e.preventDefault();
                     if (e.key === 'Enter') {
