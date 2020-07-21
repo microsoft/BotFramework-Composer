@@ -279,6 +279,11 @@ const updateQnaTemplate: ReducerFunc = (state, { qnaFile }) => {
   return state;
 };
 
+const setQnAUpdateStatus: ReducerFunc = (state, { status }) => {
+  state.qnaAllUpViewStatus = status;
+  return state;
+};
+
 const updateDialog: ReducerFunc = (state, { id, content }) => {
   state.dialogs = state.dialogs.map((dialog) => {
     if (dialog.id === id) {
@@ -765,6 +770,7 @@ export const reducer = createReducer({
   [ActionTypes.UPDATE_QNA]: updateQnaTemplate,
   [ActionTypes.CREATE_QNA]: createQnaFile,
   [ActionTypes.REMOVE_QNA]: removeQnaFile,
+  [ActionTypes.SET_QNA_UPDATE_STATUS]: setQnAUpdateStatus,
   [ActionTypes.BUILD_SUCCCESS]: buildSuccess,
   [ActionTypes.BUILD_FAILED]: buildFailure,
   [ActionTypes.RELOAD_BOT_FAILURE]: setBotLoadErrorMsg,

@@ -5,9 +5,11 @@ import { QnAFile } from '@bfc/shared';
 
 import qnaWorker from '../parsers/qnaWorker';
 import { undoable } from '../middlewares/undo';
-import { ActionCreator, State, Store } from '../types';
+import { ActionCreator, State, Store, QnAAllUpViewStatus } from '../types';
 import { ActionTypes } from '../../constants';
+import httpClient from '../../utils/httpUtil';
 
+import { setError } from './error';
 export const updateQnaFile: ActionCreator = async (store, { id, projectId, content }) => {
   const qnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
   store.dispatch({
@@ -48,4 +50,32 @@ export const undoableUpdateQnaFile = undoable(
 
 export const updateQnAContent: ActionCreator = async (store, { projectId, file, content }) => {
   return await undoableUpdateQnaFile(store, { id: file.id, projectId, content });
+};
+
+export const importQnAFromUrl: ActionCreator = async (
+  store,
+  { projectId, id, qnaFileContent, subscriptionKey, url, region }
+) => {
+  store.dispatch({
+    type: ActionTypes.SET_QNA_UPDATE_STATUS,
+    payload: { status: QnAAllUpViewStatus.Loading },
+  });
+  try {
+    const response = await httpClient.get(`/qnaContent`, { params: { subscriptionKey, url, region } });
+    const content = qnaFileContent ? qnaFileContent + '\n' + response.data : response.data;
+    const qnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
+    store.dispatch({
+      type: ActionTypes.UPDATE_QNA,
+      payload: { id, projectId, content, qnaFile },
+    });
+  } catch (err) {
+    setError(store, {
+      message: err.message,
+      summary: `Failed to import QnA`,
+    });
+  }
+  store.dispatch({
+    type: ActionTypes.SET_QNA_UPDATE_STATUS,
+    payload: { status: QnAAllUpViewStatus.Success },
+  });
 };

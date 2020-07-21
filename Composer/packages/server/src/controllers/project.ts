@@ -17,6 +17,9 @@ import settings from '../settings';
 
 import { Path } from './../utility/path';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
+
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
   const { name, description, storageId, location, schemaUrl } = req.body;
@@ -413,6 +416,24 @@ async function updateBoilerplate(req: Request, res: Response) {
   }
 }
 
+async function parseQnAContent(req: Request, res: Response) {
+  const subscriptionKey = req.query.subscriptionKey;
+  const url = req.query.url;
+  const region = req.query.region;
+  const subscriptionKeyEndpoint = `https://${region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+  try {
+    const builder = new qnaBuild.Builder((message) => {
+      log(message);
+    });
+    const qnaContent = await builder.importUrlReference(url, subscriptionKey, subscriptionKeyEndpoint, 'default');
+    res.status(200).json(qnaContent);
+  } catch (e) {
+    res.status(400).json({
+      message: e.message,
+    });
+  }
+}
+
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -425,6 +446,7 @@ export const ProjectController = {
   build,
   setQnASettings,
   exportProject,
+  parseQnAContent,
   saveProjectAs,
   createProject,
   getAllProjects,

@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
+import React, { useContext, Fragment, useMemo, useCallback, Suspense, useEffect, useState } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
@@ -15,8 +15,10 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
+import { QnAAllUpViewStatus } from '../../store/types';
 
 import TableView from './table-view';
+import { ImportQnAFromUrlModal } from './ImportQnAFromUrlModal';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
 interface QnAPageProps extends RouteComponentProps<{}> {
@@ -24,14 +26,16 @@ interface QnAPageProps extends RouteComponentProps<{}> {
 }
 
 const QnAPage: React.FC<QnAPageProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { dialogs, projectId } = state;
+  const { state, actions } = useContext(StoreContext);
+  const { dialogs, projectId, qnaFiles, locale, qnaAllUpViewStatus } = state;
+  const [importQnAFromUrlModalVisiability, setImportQnAFromUrlModalVisiability] = useState(false);
 
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
-
+  const qnaFile = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const qnaFileContent = qnaFile ? qnaFile.content : '';
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
       return {
@@ -74,6 +78,27 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
 
   const toolbarItems = [
     {
+      type: 'dropdown',
+      text: formatMessage('Add'),
+      align: 'left',
+      dataTestid: 'AddFlyout',
+      buttonProps: {
+        iconProps: { iconName: 'Add' },
+      },
+      menuProps: {
+        items: [
+          {
+            'data-testid': 'FlyoutNewDialog',
+            key: 'importQnAFromUrl',
+            text: formatMessage('Import QnA From Url'),
+            onClick: () => {
+              setImportQnAFromUrlModalVisiability(true);
+            },
+          },
+        ],
+      },
+    },
+    {
       type: 'element',
       element: <TestController />,
       align: 'right',
@@ -97,6 +122,22 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     return null;
   };
 
+  const onDismiss = () => {
+    setImportQnAFromUrlModalVisiability(false);
+  };
+
+  const onSubmit = (location: string, subscriptionKey: string, region: string) => {
+    actions.importQnAFromUrl({
+      projectId,
+      id: `${dialogId}.${locale}`,
+      qnaFileContent,
+      subscriptionKey,
+      url: location,
+      region,
+    });
+    setImportQnAFromUrlModalVisiability(false);
+  };
+
   return (
     <Page
       data-testid="QnAPage"
@@ -110,8 +151,17 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} path="/edit" />
-          <TableView dialogId={dialogId} path="/" />
+          {qnaAllUpViewStatus === QnAAllUpViewStatus.Success && <TableView dialogId={dialogId} path="/" />}
         </Router>
+        {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && <LoadingSpinner />}
+        {setImportQnAFromUrlModalVisiability && (
+          <ImportQnAFromUrlModal
+            dialogId={dialogId}
+            isOpen={importQnAFromUrlModalVisiability}
+            onDismiss={onDismiss}
+            onSubmit={onSubmit}
+          />
+        )}
       </Suspense>
     </Page>
   );

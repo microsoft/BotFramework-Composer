@@ -80,20 +80,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
       actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
-    if (editMode === EditMode.Updating) {
+    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Questions[questionIndex] !== question) {
       const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
       actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
-    // an empty name means to cancel the operation
     cancelQuestionEditOperation();
   };
 
   const updateAnswer = () => {
-    if (editMode === EditMode.Updating) {
+    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Answer !== answer) {
       const updatedQnAFileContent = updateAnswerUtil(answer, qnaSections, qnaSectionIndex);
       actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
-    // an empty name means to cancel the operation
     cancelAnswerEditOperation();
   };
 

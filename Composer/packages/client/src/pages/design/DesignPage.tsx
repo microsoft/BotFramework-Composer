@@ -195,6 +195,27 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }, [location]);
 
+  const changeRecognizerComponent = useMemo(() => {
+    return (
+      <div css={warningRoot}>
+        <Icon iconName={'Warning'} style={warningIcon} />
+        <div css={warningFont}>
+          {formatMessage(
+            'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
+          )}
+        </div>
+        <Button
+          styles={changeRecognizerButton}
+          text={formatMessage('Change Recognizer')}
+          onClick={() => {
+            actions.openRecognizerDropdown();
+          }}
+        />
+        <Icon iconName={'Cancel'} style={warningIcon} onClick={() => setShowWarning(false)} />
+      </div>
+    );
+  }, []);
+
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
   };
@@ -535,26 +556,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return <LoadingSpinner />;
   }
 
-  const changeRecognizerComponent = useMemo(() => {
-    return (
-      <div css={warningRoot}>
-        <Icon iconName={'Warning'} style={warningIcon} />
-        <div css={warningFont}>
-          {formatMessage(
-            'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
-          )}
-        </div>
-        <Button
-          styles={changeRecognizerButton}
-          text={formatMessage('Change Recognizer')}
-          onClick={() => {
-            actions.openRecognizerDropdown();
-          }}
-        />
-        <Icon iconName={'Cancel'} style={warningIcon} onClick={() => setShowWarning(false)} />
-      </div>
-    );
-  }, []);
   const isRegEx = (currentDialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const selectedTrigger = currentDialog.triggers.find((t) => t.id === selected);
   const isNotSupported =

@@ -26,6 +26,7 @@ import {
   StorageFolder,
   Store,
   DialogSetting,
+  QnAAllUpViewStatus,
 } from './types';
 import { undoActionsMiddleware } from './middlewares/undo';
 import { ActionType } from './action/types';
@@ -95,6 +96,7 @@ export const initialBotState: BotState = {
     updateRequired: false,
   },
   openRecognizer: false,
+  qnaAllUpViewStatus: QnAAllUpViewStatus.Success,
 };
 
 const initialAppState: AppState = {

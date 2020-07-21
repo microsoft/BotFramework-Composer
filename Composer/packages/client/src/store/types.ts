@@ -89,6 +89,11 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
+export enum QnAAllUpViewStatus {
+  Loading,
+  Success,
+}
+
 export interface BotState {
   // Unique identifier of a bot
   projectId: string;
@@ -147,6 +152,7 @@ export interface BotState {
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
   openRecognizer: boolean;
+  qnaAllUpViewStatus: QnAAllUpViewStatus;
 }
 
 export type AppState = {
