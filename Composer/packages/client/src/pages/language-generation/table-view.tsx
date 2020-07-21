@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useContext, useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -22,7 +22,15 @@ import { useRecoilValue } from 'recoil';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, content } from '../language-understanding/styles';
-import { dispatcherState, dialogsState, lgFilesState, projectIdState, localeState } from '../../recoilModel';
+import {
+  dispatcherState,
+  dialogsState,
+  lgFilesState,
+  projectIdState,
+  localeState,
+  settingsState,
+} from '../../recoilModel';
+import { languageListTemplates } from '../../components/MultiLanguage';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -34,6 +42,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const lgFiles = useRecoilValue(lgFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
+  const settings = useRecoilValue(settingsState);
+  const { languages, defaultLanguage } = settings;
 
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
@@ -144,7 +154,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
   );
 
   const getTableColums = useCallback(() => {
-    const tableColums = [
+    const languagesList = languageListTemplates(languages, locale, defaultLanguage);
+    const defaultLangTeamplate = languagesList.find((item) => item.locale === defaultLanguage);
+    const currentLangTeamplate = languagesList.find((item) => item.locale === locale);
+    // eslint-disable-next-line format-message/literal-pattern
+    const currentLangResponsesHeader = formatMessage(`Responses - ${currentLangTeamplate?.language}`);
+    // eslint-disable-next-line format-message/literal-pattern
+    const defaultLangResponsesHeader = formatMessage(`Responses - ${defaultLangTeamplate?.language} (default)`);
+
+    let tableColums = [
       {
         key: 'name',
         name: formatMessage('Name'),
@@ -186,33 +204,44 @@ const TableView: React.FC<TableViewProps> = (props) => {
         },
       },
       {
-        key: 'buttons',
-        name: '',
-        minWidth: 50,
-        maxWidth: 50,
-        fieldName: 'buttons',
+        key: 'responses-lang',
+        name: currentLangResponsesHeader,
+        fieldName: 'responses',
+        minWidth: 300,
+        isResizable: true,
         data: 'string',
-        onRender: (item, index) => {
+        isPadded: true,
+        onRender: (item) => {
+          const text = item.body;
           return (
-            <TooltipHost calloutProps={{ gapSpace: 10 }} content={moreLabel}>
-              <IconButton
-                ariaLabel={moreLabel}
-                menuIconProps={{ iconName: 'MoreVertical' }}
-                menuProps={{
-                  shouldFocusOnMount: true,
-                  items: getTemplatesMoreButtons(item, index),
-                }}
-                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              />
-            </TooltipHost>
+            <div data-is-focusable css={formCell}>
+              <div aria-label={formatMessage(`Response is {response}`, { response: text })} css={content} tabIndex={-1}>
+                {text}
+              </div>
+            </div>
           );
         },
       },
-    ];
-
-    // all view, show used in column
-    if (activeDialog) {
-      const beenUsedColumn = {
+      {
+        key: 'responses-default-lang',
+        name: defaultLangResponsesHeader,
+        fieldName: 'responses-default-lang',
+        minWidth: 300,
+        isResizable: true,
+        data: 'string',
+        isPadded: true,
+        onRender: (item) => {
+          const text = item[`body-${defaultLanguage}`];
+          return (
+            <div data-is-focusable css={formCell}>
+              <div aria-label={formatMessage(`Response is {response}`, { response: text })} css={content} tabIndex={-1}>
+                {text}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
         key: 'beenUsed',
         name: formatMessage('Been used'),
         fieldName: 'beenUsed',
@@ -237,8 +266,43 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <div data-is-focusable aria-label={formatMessage('Unused') + ';'} />
           );
         },
-      };
-      tableColums.splice(2, 0, beenUsedColumn);
+      },
+      {
+        key: 'buttons',
+        name: '',
+        minWidth: 50,
+        maxWidth: 50,
+        fieldName: 'buttons',
+        data: 'string',
+        onRender: (item, index) => {
+          return (
+            <TooltipHost calloutProps={{ gapSpace: 10 }} content={moreLabel}>
+              <IconButton
+                ariaLabel={moreLabel}
+                menuIconProps={{ iconName: 'MoreVertical' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: getTemplatesMoreButtons(item, index),
+                }}
+                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+              />
+            </TooltipHost>
+          );
+        },
+      },
+    ];
+
+    // show compairable column when current lang is not default lang
+    if (locale === defaultLanguage) {
+      tableColums = tableColums.filter(
+        ({ key }) => ['responses-default-lang', 'responses-lang'].includes(key) === false
+      );
+    } else {
+      tableColums = tableColums.filter(({ key }) => ['responses'].includes(key) === false);
+    }
+    // when is not common, show beenUsed column
+    if (!activeDialog) {
+      tableColums = tableColums.filter(({ key }) => ['beenUsed'].includes(key) === false);
     }
 
     return tableColums;
@@ -279,6 +343,21 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const getKeyCallback = useCallback((item) => item.name, []);
 
+  const templatesToRender = useMemo(() => {
+    if (locale !== defaultLanguage) {
+      const defaultLangTeamplates = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`)?.templates;
+
+      return templates.map((item) => {
+        const itemInDefaultLang = defaultLangTeamplates?.find(({ name }) => name === item.name);
+        return {
+          ...item,
+          [`body-${defaultLanguage}`]: itemInDefaultLang?.body || '',
+        };
+      });
+    }
+    return templates;
+  }, [templates]);
+
   return (
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -288,7 +367,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           componentRef={listRef}
           getKey={getKeyCallback}
           initialFocusedIndex={focusedIndex}
-          items={templates}
+          items={templatesToRender}
           // getKey={item => item.name}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.none}
