@@ -29,6 +29,7 @@ export interface BotSchemas {
   default?: OBISchema;
   sdk?: any;
   ui?: { content: UISchema };
+  uiOverrides?: { content: UISchema };
   diagnostics?: any[];
 }
 

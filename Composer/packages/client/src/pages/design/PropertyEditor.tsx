@@ -64,8 +64,11 @@ const PropertyEditor: React.FC = () => {
   }, [schemas?.sdk?.content, localData.$kind]);
 
   const pluginConfig: PluginConfig = useMemo(() => {
-    return mergePluginConfigs(plugins, { uiSchema: schemas?.ui?.content ?? {} } as PluginConfig);
-  }, [schemas?.ui?.content]);
+    const sdkUISchema = schemas?.ui?.content ?? {};
+    const userUISchema = schemas?.uiOverrides?.content ?? {};
+
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
   const $uiOptions = useMemo(() => {
     return getUIOptions($schema, mapValues(pluginConfig.uiSchema, 'form'));

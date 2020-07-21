@@ -126,7 +126,11 @@ export class BotProject {
   }
 
   public get uiSchema() {
-    return this.files.get('app.uischema');
+    return this.files.get('sdk.uischema');
+  }
+
+  public get uiSchemaOverrides() {
+    return this.files.get('sdk.override.uischema');
   }
 
   public getFile(id: string) {
@@ -205,6 +209,7 @@ export class BotProject {
   public getSchemas = () => {
     let sdkSchema = this.defaultSDKSchema;
     let uiSchema = {};
+    let uiSchemaOverrides = {};
     const diagnostics: string[] = [];
 
     const userSDKSchemaFile = this.schema;
@@ -227,7 +232,19 @@ export class BotProject {
         uiSchema = JSON.parse(uiSchemaFile.content);
       } catch (err) {
         debug('Attempt to parse ui schema as JSON failed.\nError: %s', err.messagee);
-        diagnostics.push(`Error in ui.schema, ${err.message}`);
+        diagnostics.push(`Error in sdk.uischema, ${err.message}`);
+      }
+    }
+
+    const uiSchemaOverridesFile = this.uiSchemaOverrides;
+
+    if (uiSchemaOverridesFile !== undefined) {
+      debug('UI Schema overrides found.');
+      try {
+        uiSchemaOverrides = JSON.parse(uiSchemaOverridesFile.content);
+      } catch (err) {
+        debug('Attempt to parse ui schema as JSON failed.\nError: %s', err.messagee);
+        diagnostics.push(`Error in sdk.override.uischema, ${err.message}`);
       }
     }
 
@@ -237,6 +254,9 @@ export class BotProject {
       },
       ui: {
         content: uiSchema,
+      },
+      uiOverrides: {
+        content: uiSchemaOverrides,
       },
       default: this.defaultSDKSchema,
       diagnostics,
