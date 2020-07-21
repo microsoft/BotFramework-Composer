@@ -14,6 +14,7 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
+import { generateUniqueId } from '@bfc/shared/src/generateUniqueId';
 
 import { StoreContext } from '../../store';
 import {
@@ -214,12 +215,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 if (qnaIndex !== qnaSectionIndex || questionIndex !== qIndex || editMode !== EditMode.Updating) {
                   return (
                     <div
-                      key={q}
+                      key={q + generateUniqueId(6)}
                       css={content}
                       role={'textbox'}
                       tabIndex={0}
                       onClick={(e) =>
-                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => { }
+                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => {}
                       }
                       onKeyDown={(e) => {
                         e.preventDefault();
@@ -314,7 +315,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   css={content}
                   role={'textbox'}
                   tabIndex={0}
-                  onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(qnaIndex, item.Answer) : () => { })}
+                  onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(qnaIndex, item.Answer) : () => {})}
                   onKeyDown={(e) => {
                     e.preventDefault();
                     if (e.key === 'Enter') {

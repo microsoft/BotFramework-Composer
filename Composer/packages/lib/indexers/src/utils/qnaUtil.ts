@@ -24,7 +24,7 @@ export function generateQnAPair() {
   let result = '';
   result += `# ? newQuestion\n`;
   result += '\n```';
-  result += `\n- newAnswer`;
+  result += `\nnewAnswer`;
   result += '\n```';
   return result;
 }
