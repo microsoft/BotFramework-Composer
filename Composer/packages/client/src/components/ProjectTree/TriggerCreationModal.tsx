@@ -17,11 +17,10 @@ import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { DialogInfo, SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import { useRecoilValue } from 'recoil';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
-import { useStoreContext } from '../../hooks/useStoreContext';
-import { addIntent } from '../../utils/luUtil';
 import {
   generateNewDialog,
   getTriggerTypes,
@@ -35,6 +34,15 @@ import {
   getActivityTypes,
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
+import { addIntent } from '../../utils/luUtil';
+import {
+  dialogsState,
+  luFilesState,
+  localeState,
+  projectIdState,
+  schemasState,
+} from '../../recoilModel/atoms/botState';
+import { userSettingsState } from '../../recoilModel';
 import { nameRegex } from '../../constants';
 
 // -------------------- Styles -------------------- //
@@ -203,8 +211,12 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const { state } = useStoreContext();
-  const { dialogs, luFiles, locale, projectId, schemas, userSettings } = state;
+  const dialogs = useRecoilValue(dialogsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const locale = useRecoilValue(localeState);
+  const projectId = useRecoilValue(projectIdState);
+  const schemas = useRecoilValue(schemasState);
+  const userSettings = useRecoilValue(userSettingsState);
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;

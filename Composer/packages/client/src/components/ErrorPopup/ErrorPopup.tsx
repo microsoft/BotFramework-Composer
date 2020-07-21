@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
@@ -22,6 +22,14 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
     setHidden(true);
     props.onDismiss();
   };
+
+  useEffect(() => {
+    if (props.error) {
+      setHidden(false);
+    } else {
+      setHidden(true);
+    }
+  }, [props.error]);
 
   return (
     <Dialog

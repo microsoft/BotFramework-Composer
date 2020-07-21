@@ -13,13 +13,14 @@ import {
   ReferredLuIntents,
   Diagnostic,
 } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 import { JsonWalk, VisitorFunc } from './utils/jsonWalk';
 import { getBaseName } from './utils/help';
-import ExtractIntentTriggers from './dialogUtils/extractIntentTriggers';
+import extractIntentTriggers from './dialogUtils/extractIntentTriggers';
 import { createPath } from './validations/expressionValidation/utils';
 // find out all lg templates given dialog
-function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
+function extractLgTemplates(id, dialog): LgTemplateJsonPath[] {
   const templates: LgTemplateJsonPath[] = [];
   /**
    *
@@ -76,7 +77,7 @@ function ExtractLgTemplates(id, dialog): LgTemplateJsonPath[] {
 }
 
 // find out all lu intents given dialog
-function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
+function extractLuIntents(dialog, id: string): ReferredLuIntents[] {
   const intents: ReferredLuIntents[] = [];
   /**    *
    * @param path , jsonPath string
@@ -99,7 +100,7 @@ function ExtractLuIntents(dialog, id: string): ReferredLuIntents[] {
 }
 
 // find out all triggers given dialog
-function ExtractTriggers(dialog): ITrigger[] {
+function extractTriggers(dialog): ITrigger[] {
   const triggers: ITrigger[] = [];
   /**    *
    * @param path , jsonPath string
@@ -135,7 +136,7 @@ function ExtractTriggers(dialog): ITrigger[] {
 }
 
 // find out all referred dialog
-function ExtractReferredDialogs(dialog): string[] {
+function extractReferredDialogs(dialog): string[] {
   const dialogs: string[] = [];
   /**    *
    * @param path , jsonPath string
@@ -162,13 +163,13 @@ function parse(id: string, content: any) {
     id,
     content,
     diagnostics,
-    referredDialogs: ExtractReferredDialogs(content),
-    lgTemplates: ExtractLgTemplates(id, content),
-    referredLuIntents: ExtractLuIntents(content, id),
+    referredDialogs: extractReferredDialogs(content),
+    lgTemplates: extractLgTemplates(id, content),
+    referredLuIntents: extractLuIntents(content, id),
     luFile: getBaseName(luFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
-    triggers: ExtractTriggers(content),
-    intentTriggers: ExtractIntentTriggers(content),
+    triggers: extractTriggers(content),
+    intentTriggers: extractIntentTriggers(content),
   };
 }
 
@@ -180,6 +181,10 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
         if (file.name.endsWith('.dialog') && !file.name.endsWith('.lu.dialog')) {
           const dialogJson = JSON.parse(file.content);
           const id = getBaseName(file.name, '.dialog');
+          if (id === '') {
+            // break immediately, because this won't work
+            throw new Error(formatMessage('a dialog file must have a name'));
+          }
           const isRoot = file.relativePath.includes('/') === false; // root dialog should be in root path
 
           const dialog = {
@@ -190,7 +195,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
           dialogs.push(dialog);
         }
       } catch (e) {
-        throw new Error(`parse failed at ${file.name}, ${e}`);
+        throw new Error(`Parse failed at ${file.name}: ${e}`);
       }
     }
   }

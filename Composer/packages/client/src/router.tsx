@@ -3,15 +3,16 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useContext, useEffect, Suspense } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Router, Redirect, RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { StoreContext } from './store';
+import { botOpeningState, projectIdState, dispatcherState, schemasState } from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -26,9 +27,7 @@ const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
 
 const Routes = (props) => {
-  const { state } = useContext(StoreContext);
-  const { botOpening } = state;
-
+  const botOpening = useRecoilValue(botOpeningState);
   return (
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>
@@ -82,24 +81,27 @@ const projectStyle = css`
 `;
 
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
-  const { actions, state } = useContext(StoreContext);
+  const botOpening = useRecoilValue(botOpeningState);
+  const projectId = useRecoilValue(projectIdState);
+  const schemas = useRecoilValue(schemasState);
+  const { fetchProjectById } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
-    if (state.projectId !== props.projectId && props.projectId) {
-      actions.fetchProjectById(props.projectId);
+    if (projectId !== props.projectId && props.projectId) {
+      fetchProjectById(props.projectId);
     }
   }, [props.projectId]);
 
   useEffect(() => {
-    const schemaError = state.schemas?.diagnostics ?? [];
+    const schemaError = schemas?.diagnostics ?? [];
     if (schemaError.length !== 0) {
       const title = formatMessage('Error Processing Schema');
       const subTitle = schemaError.join('\n');
       openAlertModal(title, subTitle, { style: dialogStyle.console });
     }
-  }, [state.schemas, state.projectId]);
+  }, [schemas, projectId]);
 
-  if (state.botOpening || props.projectId !== state.projectId) {
+  if (botOpening || props.projectId !== projectId) {
     return <LoadingSpinner />;
   }
 

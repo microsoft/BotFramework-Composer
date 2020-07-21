@@ -4,7 +4,7 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -18,8 +18,9 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LuFile } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
+import { dialogsState, luFilesState, projectIdState, localeState } from '../../recoilModel/atoms/botState';
 import { navigateTo } from '../../utils/navigation';
 
 import { formCell, luPhraseCell, tableCell, content } from './styles';
@@ -37,8 +38,10 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { dialogs, luFiles, locale, projectId } = state;
+  const dialogs = useRecoilValue(dialogsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const projectId = useRecoilValue(projectIdState);
+  const locale = useRecoilValue(localeState);
   const { dialogId } = props;
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 

@@ -3,13 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
+import React, { Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
+import { dialogsState, projectIdState } from '../../recoilModel/atoms/botState';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { StoreContext } from '../../store';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
@@ -24,8 +25,8 @@ interface LGPageProps extends RouteComponentProps<{}> {
 }
 
 const LGPage: React.FC<LGPageProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { dialogs, projectId } = state;
+  const dialogs = useRecoilValue(dialogsState);
+  const projectId = useRecoilValue(projectIdState);
 
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
