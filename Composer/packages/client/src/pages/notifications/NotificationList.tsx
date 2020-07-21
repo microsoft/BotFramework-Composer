@@ -45,7 +45,7 @@ const columns: IColumn[] = [
   },
   {
     key: 'NotificationType',
-    name: 'Type',
+    name: formatMessage('Type'),
     className: notification.columnCell,
     fieldName: 'type',
     minWidth: 70,
@@ -70,7 +70,7 @@ const columns: IColumn[] = [
   },
   {
     key: 'NotificationLocation',
-    name: 'Location',
+    name: formatMessage('Location'),
     className: notification.columnCell,
     fieldName: 'location',
     minWidth: 70,
@@ -94,7 +94,7 @@ const columns: IColumn[] = [
   },
   {
     key: 'NotificationDetail',
-    name: 'Message',
+    name: formatMessage('Message'),
     className: notification.columnCell,
     fieldName: 'message',
     minWidth: 70,

@@ -60,10 +60,10 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
 
   const updateSetting = (field) => (e, newValue) => {
     let valid = true;
-    let error = 'There was an error';
+    let error = formatMessage('There was an error');
     if (newValue === '') {
       valid = false;
-      error = 'This is a required field.';
+      error = formatMessage('This is a required field.');
     }
 
     setRuntimeField(projectId, field, newValue);

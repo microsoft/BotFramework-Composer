@@ -123,7 +123,7 @@ const validateDupRegExIntent = (
   regExIntents: [{ intent: string; pattern: string }]
 ): string | undefined => {
   if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
-    return `regEx ${intent} is already defined`;
+    return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
 };

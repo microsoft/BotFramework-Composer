@@ -10,6 +10,7 @@ import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import ReactDOM from 'react-dom';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { SharedColors } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
 
 import { dialogStyle, NORMAL_STYLE, CONSOLE_STYLE } from './dialogStyle';
 
@@ -62,8 +63,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
     title,
     subTitle = '',
     onRenderContent = defaultContentRender,
-    confirmText = 'Yes',
-    cancelText = 'Cancel',
+    confirmText = formatMessage('Yes'),
+    cancelText = formatMessage('Cancel'),
     style = dialogStyle.normal,
     checkboxLabel,
     styles = { content: {}, main: {}, modal: {} },
@@ -76,7 +77,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
   };
 
   if (!title) {
-    throw new Error('Confirmation modal must have a title');
+    throw new Error(formatMessage('Confirmation modal must have a title'));
   }
 
   function defaultContentRender() {

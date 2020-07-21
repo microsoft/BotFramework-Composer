@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
+import formatMessage from 'format-message';
 
 import { projectIdState } from '../recoilModel/atoms/botState';
 import { useResolvers } from '../hooks/useResolver';
@@ -14,6 +15,9 @@ import { focusPathState } from './../recoilModel/atoms/botState';
 
 const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
+const fileNotFound = (id: string) => formatMessage(`lu file {id} not found`, { id });
+const INTENT_ERROR = formatMessage('intentName is missing or empty');
+
 function createLuApi(
   state: { focusPath: string; projectId: string },
   dispatchers: any, //TODO
@@ -21,24 +25,24 @@ function createLuApi(
 ) {
   const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
     const file = luFileResolver(id);
-    if (!file) throw new Error(`lu file ${id} not found`);
-    if (!intentName) throw new Error(`intentName is missing or empty`);
+    if (!file) throw new Error(fileNotFound(id));
+    if (!intentName) throw new Error(INTENT_ERROR);
 
     return await dispatchers.createLuIntent({ id: file.id, intent });
   };
 
   const updateLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
     const file = luFileResolver(id);
-    if (!file) throw new Error(`lu file ${id} not found`);
-    if (!intentName) throw new Error(`intentName is missing or empty`);
+    if (!file) throw new Error(fileNotFound(id));
+    if (!intentName) throw new Error(INTENT_ERROR);
 
     return await dispatchers.updateLuIntent({ id: file.id, intentName, intent });
   };
 
   const removeLuIntent = async (id: string, intentName: string) => {
     const file = luFileResolver(id);
-    if (!file) throw new Error(`lu file ${id} not found`);
-    if (!intentName) throw new Error(`intentName is missing or empty`);
+    if (!file) throw new Error(fileNotFound(id));
+    if (!intentName) throw new Error(INTENT_ERROR);
 
     return await dispatchers.removeLuIntent({ id: file.id, intentName });
   };
@@ -47,13 +51,13 @@ function createLuApi(
     if (id === undefined) throw new Error('must have a file id');
     const focusedDialogId = state.focusPath.split('#').shift() || id;
     const file = luFileResolver(focusedDialogId);
-    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!file) throw new Error(fileNotFound(id));
     return file.intents;
   };
 
   const getLuIntent = (id: string, intentName: string): LuIntentSection | undefined => {
     const file = luFileResolver(id);
-    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!file) throw new Error(fileNotFound(id));
     return file.intents.find(({ Name }) => Name === intentName);
   };
 

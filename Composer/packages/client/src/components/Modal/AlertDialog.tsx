@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import ReactDOM from 'react-dom';
+import formatMessage from 'format-message';
 
 import { dialogStyle, NORMAL_STYLE, CONSOLE_STYLE } from './dialogStyle';
 
@@ -31,9 +32,9 @@ type Props = {
 
 const AlertDialog = (props: Props) => {
   const { setting, onCancel, onConfirm } = props;
-  const { title, subtitle = '', confirmText = 'Ok', style = dialogStyle.normal } = setting;
+  const { title, subtitle = '', confirmText = formatMessage('Ok'), style = dialogStyle.normal } = setting;
   if (!title) {
-    throw new Error('Confirmation modal must have a title');
+    throw new Error(formatMessage('Confirmation modal must have a title'));
   }
 
   return (

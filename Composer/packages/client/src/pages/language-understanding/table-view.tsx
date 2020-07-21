@@ -95,7 +95,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const buttons = [
       {
         key: 'edit',
-        name: 'Edit',
+        name: formatMessage('Edit'),
         onClick: () => {
           const { name, dialogId } = intents[index];
           navigateTo(`/bot/${projectId}/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
