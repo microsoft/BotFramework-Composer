@@ -3,13 +3,14 @@
 
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
-import React, { useContext, useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import AdaptiveForm, { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps, JSONSchema7, UIOptions } from '@bfc/extension';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { useRecoilValue } from 'recoil';
 
 import { ContentProps } from '../constants';
-import { StoreContext } from '../../../../store';
+import { botNameState } from '../../../../recoilModel/atoms/botState';
 
 const styles = {
   row: css`
@@ -49,8 +50,7 @@ const InlineLabelField: React.FC<FieldProps> = (props) => {
 };
 
 export const Description: React.FC<ContentProps> = ({ errors, value, schema, onChange }) => {
-  const { state } = useContext(StoreContext);
-  const { botName } = state;
+  const botName = useRecoilValue(botNameState);
   const { $schema, ...rest } = value;
 
   const { hidden, properties } = useMemo(

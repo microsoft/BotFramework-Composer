@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { LgEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
@@ -11,8 +11,11 @@ import { filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
+import { LgFile } from '@bfc/shared/src/types/indexers';
 
-import { StoreContext } from '../../store';
+import { localeState, lgFilesState, projectIdState } from '../../recoilModel/atoms/botState';
+import { userSettingsState, dispatcherState } from '../../recoilModel';
 
 const lspServerPath = '/lg-language-server';
 
@@ -21,10 +24,17 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { actions, state } = useContext(StoreContext);
-  const { lgFiles, locale, projectId, userSettings } = state;
+  const userSettings = useRecoilValue(userSettingsState);
+  const projectId = useRecoilValue(projectIdState);
+  const locale = useRecoilValue(localeState);
+  const lgFiles = useRecoilValue(lgFilesState);
+  const {
+    updateLgTemplate: updateLgTemplateDispatcher,
+    updateLgFile: updateLgFileDispatcher,
+    updateUserSettings,
+  } = useRecoilValue(dispatcherState);
   const { dialogId } = props;
-  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const file: LgFile | undefined = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const diagnostics = get(file, 'diagnostics', []);
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<any>(null);
@@ -75,7 +85,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         if (!file || !template) return;
         const { name, parameters } = template;
         const payload = {
-          file,
+          id: file.id,
           projectId,
           templateName: name,
           template: {
@@ -84,7 +94,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
             body,
           },
         };
-        actions.updateLgTemplate(payload);
+        updateLgTemplateDispatcher(payload);
       }, 500),
     [file, template, projectId]
   );
@@ -99,7 +109,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           projectId,
           content,
         };
-        actions.updateLgFile(payload);
+        updateLgFileDispatcher(payload);
       }, 500),
     [file, projectId]
   );
@@ -122,7 +132,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   );
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
-    actions.updateUserSettings({ codeEditor: settings });
+    updateUserSettings({ codeEditor: settings });
   };
 
   const lgOption = {
