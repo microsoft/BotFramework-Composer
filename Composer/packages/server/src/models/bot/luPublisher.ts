@@ -175,7 +175,7 @@ export class LuPublisher {
       config.botName,
       config.suffix,
       config.fallbackLocal,
-      false,
+      true,
       loadResult.multiRecognizers,
       loadResult.settings
     );
