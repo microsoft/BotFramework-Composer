@@ -77,7 +77,7 @@ export class BotProject {
   constructor(ref: LocationRef, user?: UserIdentity) {
     this.ref = ref;
     this.locale = 'en-us'; // default to en-us
-    this.dir = Path.resolve(this.ref.path); // make sure we swtich to posix style after here
+    this.dir = Path.resolve(this.ref.path); // make sure we switch to posix style after here
     this.dataDir = this.dir;
     this.name = Path.basename(this.dir);
 
@@ -534,7 +534,7 @@ export class BotProject {
     return file;
   };
 
-  // update file in this project this function will gurantee the memory cache
+  // update file in this project this function will guarantee the memory cache
   // (this.files, all indexes) also gets updated
   private _updateFile = async (relativePath: string, content: string) => {
     const file = this.files.get(Path.basename(relativePath));
@@ -557,7 +557,7 @@ export class BotProject {
     return stats.lastModified;
   };
 
-  // remove file in this project this function will gurantee the memory cache
+  // remove file in this project this function will guarantee the memory cache
   // (this.files, all indexes) also gets updated
   private _removeFile = async (relativePath: string) => {
     const name = Path.basename(relativePath);
