@@ -3,13 +3,15 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
+import { projectIdState } from '../../recoilModel/atoms/botState';
+import { dispatcherState } from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { navigateTo } from '../../utils/navigation';
@@ -24,9 +26,8 @@ const getProjectLink = (path: string, id?: string) => {
 };
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { projectId } = state;
-
+  const { deleteBotProject } = useRecoilValue(dispatcherState);
+  const projectId = useRecoilValue(projectIdState);
   const { navigate } = useLocation();
 
   // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
@@ -123,7 +124,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     };
     const res = await OpenConfirmModal(title, null, settings);
     if (res) {
-      await actions.deleteBotProject(projectId);
+      await deleteBotProject(projectId);
       navigateTo('home');
     }
   };

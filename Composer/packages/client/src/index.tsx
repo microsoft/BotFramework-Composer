@@ -6,10 +6,11 @@ import ReactDOM from 'react-dom';
 import formatMessage from 'format-message';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
-import './index.css';
+import { RecoilRoot } from 'recoil';
 
+import './index.css';
 import { App } from './App';
-import { StoreProvider } from './store';
+import { DispatcherWrapper } from './recoilModel';
 
 const appHostElm = document.getElementById('root');
 
@@ -27,11 +28,13 @@ const emotionCache = createCache({
  */
 const renderApp = (AppComponent: typeof App) => {
   ReactDOM.render(
-    <CacheProvider value={emotionCache}>
-      <StoreProvider>
-        <AppComponent />
-      </StoreProvider>
-    </CacheProvider>,
+    <RecoilRoot>
+      <CacheProvider value={emotionCache}>
+        <DispatcherWrapper>
+          <AppComponent />
+        </DispatcherWrapper>
+      </CacheProvider>
+    </RecoilRoot>,
     appHostElm
   );
 };
