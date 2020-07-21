@@ -3,6 +3,7 @@
 import { css } from '@emotion/core';
 import { FontWeights } from '@uifabric/styling';
 export const content = css`
+  min-height: 28px;
   outline: none;
 `;
 
@@ -31,4 +32,17 @@ export const textField = {
 
 export const bold = css`
   font-weight: ${FontWeights.semibold};
+`;
+
+export const link = {
+  root: {
+    fontSize: 14,
+    lineHeight: 28,
+  },
+};
+
+export const actionButton = css`
+  font-size: 16px;
+  margin: 0;
+  margin-left: 15px;
 `;

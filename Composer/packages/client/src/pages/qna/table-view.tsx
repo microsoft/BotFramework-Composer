@@ -7,6 +7,7 @@ import React, { useContext, useRef, useEffect, useState, useCallback, useMemo } 
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -15,9 +16,15 @@ import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
 
 import { StoreContext } from '../../store';
-import { addQuestion, updateQuestion, updateAnswer as updateAnswerUtil } from '../../utils/qnaUtil';
+import {
+  addQuestion,
+  updateQuestion,
+  updateAnswer as updateAnswerUtil,
+  generateQnAPair,
+  addSection,
+} from '../../utils/qnaUtil';
 
-import { formCell, content, textField, bold } from './styles';
+import { formCell, content, textField, bold, link, actionButton } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
@@ -69,15 +76,13 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [answer, setAnswer] = useState('');
 
   const createOrUpdateQuestion = () => {
-    if (question) {
-      if (editMode === EditMode.Creating) {
-        const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
-        actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
-      }
-      if (editMode === EditMode.Updating) {
-        const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
-        actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
-      }
+    if (question && editMode === EditMode.Creating) {
+      const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
+      actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
+    }
+    if (editMode === EditMode.Updating) {
+      const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
+      actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: updatedQnAFileContent });
     }
     // an empty name means to cancel the operation
     cancelQuestionEditOperation();
@@ -213,8 +218,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     <div
                       key={q}
                       css={content}
-                      role={''}
-                      tabIndex={-1}
+                      role={'textbox'}
+                      tabIndex={0}
                       onClick={(e) =>
                         dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => {}
                       }
@@ -284,14 +289,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
             ? alternatives
             : alternatives.slice(0, limitedNumber);
           return (
-            <div data-is-focusable css={formCell}>
-              <Link onClick={() => toggleShowAllAlternatives(qnaIndex)}>
-                {formatMessage('showing {current} of {all}', {
-                  current: showingAlternatives.length,
-                  all: alternatives.length,
-                })}
-              </Link>
-            </div>
+            <Link styles={link} onClick={() => toggleShowAllAlternatives(qnaIndex)}>
+              {formatMessage('showing {current} of {all}', {
+                current: showingAlternatives.length,
+                all: alternatives.length,
+              })}
+            </Link>
           );
         },
       },
@@ -311,7 +314,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 <div
                   aria-label={formatMessage(`Answer is {answer}`, { answer: item.Answer })}
                   css={content}
-                  tabIndex={-1}
+                  role={'textbox'}
+                  tabIndex={0}
                   onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(qnaIndex, item.Answer) : () => {})}
                   onKeyDown={(e) => {
                     e.preventDefault();
@@ -383,6 +387,31 @@ const TableView: React.FC<TableViewProps> = (props) => {
     );
   }, []);
 
+  const onCreateNewTemplate = () => {
+    const newQnAPair = generateQnAPair();
+    const content = get(file, 'content', '');
+    const newContent = addSection(content, newQnAPair);
+    actions.updateQnaFile({ id: `${dialogId}.${locale}`, projectId, content: newContent });
+  };
+
+  const onRenderDetailsFooter = () => {
+    if (dialogId === 'all') return null;
+    return (
+      <div data-testid="tableFooter">
+        <ActionButton
+          css={actionButton}
+          iconProps={{ iconName: 'CirclePlus' }}
+          onClick={() => {
+            onCreateNewTemplate();
+            actions.setMessage('item added');
+          }}
+        >
+          {formatMessage('New QnA Section')}
+        </ActionButton>
+      </div>
+    );
+  };
+
   const getKeyCallback = useCallback((item) => item.Body, []);
   return (
     <div className={'table-view'} data-testid={'table-view'}>
@@ -407,6 +436,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
               },
             },
           }}
+          onRenderDetailsFooter={onRenderDetailsFooter}
           onRenderDetailsHeader={onRenderDetailsHeader}
         />
       </ScrollablePane>

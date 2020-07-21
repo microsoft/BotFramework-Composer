@@ -20,6 +20,15 @@ export function checkIsSingleSection(content: string) {
   return Sections.length === 1;
 }
 
+export function generateQnAPair() {
+  let result = '';
+  result += `# ? newQuestion\n`;
+  result += '\n```';
+  result += `\n- newAnswer`;
+  result += '\n```';
+  return result;
+}
+
 export function addSection(content: string, newContent: string) {
   const resource = luParser.parse(content);
   const res = new sectionOperator(resource).addSection(newContent);
@@ -105,7 +114,11 @@ function updateAnswerInQnASection(qnaSection: QnASection, answer: string) {
 
 function updateQuestionInQnASection(qnaSection: QnASection, question: string, questionIndex: number) {
   const newQnASection: QnASection = cloneDeep(qnaSection);
-  newQnASection.Questions[questionIndex] = question;
+  if (question) {
+    newQnASection.Questions[questionIndex] = question;
+  } else {
+    newQnASection.Questions.splice(questionIndex, 1);
+  }
   return newQnASection;
 }
 
@@ -136,7 +149,7 @@ function rebuildQnaSection(qnaSection) {
       result += `\n-${filterPair.key}=${filterPair.value}`;
     });
   }
-  if (Answer) {
+  if (Answer !== undefined) {
     result += '\n```';
     result += `\n${Answer}`;
     result += '\n```';
