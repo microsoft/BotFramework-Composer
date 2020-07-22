@@ -93,7 +93,7 @@ export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
       $result: { ...value.$result, properties: resultValue },
       ...(Object.keys(definitions).length ? { definitions } : {}),
     };
-    updateDialogSchema(dialogId, content);
+    updateDialogSchema({ content, id: dialogId });
   };
 
   return (

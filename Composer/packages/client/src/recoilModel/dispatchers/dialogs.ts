@@ -6,7 +6,6 @@ import { dialogIndexer, autofixReferInDialog, validateDialog } from '@bfc/indexe
 
 import {
   dialogsState,
-  dialogSchemasState,
   lgFilesState,
   luFilesState,
   schemasState,
@@ -17,31 +16,9 @@ import {
 
 import { createLgFileState, removeLgFileState } from './lg';
 import { createLuFileState, removeLuFileState } from './lu';
+import { removeDialogSchema } from './dialogSchema';
 
 export const dialogsDispatcher = () => {
-  const createDialogSchema = ({ set }: CallbackInterface, id: string, content: any) => {
-    set(dialogSchemasState, (dialogSchemas) => [...dialogSchemas, { id, content }]);
-  };
-
-  const updateDialogSchema = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (id: string, content: any) => {
-      const { set, snapshot } = callbackHelpers;
-      const dialogSchemas = await snapshot.getPromise(dialogSchemasState);
-
-      if (!dialogSchemas.some((dialog) => dialog.id === id)) {
-        return createDialogSchema(callbackHelpers, id, content);
-      }
-
-      set(dialogSchemasState, (dialogSchemas) =>
-        dialogSchemas.map((dialogSchema) => (dialogSchema.id === id ? { ...dialogSchema, content } : dialogSchema))
-      );
-    }
-  );
-
-  const removeDialogSchema = ({ set }: CallbackInterface, id: string) => {
-    set(dialogSchemasState, (dialogSchemas) => dialogSchemas.filter((dialogSchema) => dialogSchema.id !== id));
-  };
-
   const removeDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async (id: string) => {
     const { set, snapshot } = callbackHelpers;
     let dialogs = await snapshot.getPromise(dialogsState);
@@ -113,6 +90,5 @@ export const dialogsDispatcher = () => {
     createDialogCancel,
     createDialogBegin,
     updateDialog,
-    updateDialogSchema,
   };
 };

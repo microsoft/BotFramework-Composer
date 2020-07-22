@@ -13,8 +13,14 @@ export const uiOptions: UIOptions = {
       resultValue: Object.entries(value.resultValue || {}).map(([property, value]) => ({ property, value })),
     }),
     set: (value) => ({
-      dialogValue: (value.dialogValue || []).reduce((acc, { property, value }) => ({ ...acc, [property]: value }), {}),
-      resultValue: (value.resultValue || []).reduce((acc, { property, value }) => ({ ...acc, [property]: value }), {}),
+      dialogValue: (value.dialogValue || []).reduce(
+        (acc, { property = '', value = {} }) => ({ ...acc, [property]: value }),
+        {}
+      ),
+      resultValue: (value.resultValue || []).reduce(
+        (acc, { property = '', value = {} }) => ({ ...acc, [property]: value }),
+        {}
+      ),
     }),
   },
   properties: {
