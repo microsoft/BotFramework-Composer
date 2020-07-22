@@ -110,6 +110,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
         defaultChecked={isEnabled}
         disabled={isEnabled}
         label={label}
+        title={locale}
         onChange={onChange(locale)}
       />
     );
@@ -122,6 +123,7 @@ const AddLanguageModal: React.FC<IAddLanguageModalProps> = (props) => {
       const { language, locale } = item;
       return {
         key: locale,
+        title: locale,
         text: language,
       };
     });

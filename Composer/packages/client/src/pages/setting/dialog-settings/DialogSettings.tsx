@@ -87,6 +87,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
       const { language, locale } = item;
       return {
         key: locale,
+        title: locale,
         text: language,
       };
     });

@@ -83,6 +83,7 @@ const DeleteLanguageModal: React.FC<IDeleteLanguageModalProps> = (props) => {
           className={classNames.checkboxItem}
           disabled={isDefault || isCurrent}
           label={label}
+          title={locale}
           onChange={onChange(locale)}
         />
       );
