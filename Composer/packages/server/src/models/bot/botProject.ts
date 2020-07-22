@@ -5,7 +5,7 @@ import { promisify } from 'util';
 import fs from 'fs';
 
 import axios from 'axios';
-import { generate, FeedbackType } from '@bfc/dialog-generation';
+import { generate, FeedbackType } from '@microsoft/bf-generate-library';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
