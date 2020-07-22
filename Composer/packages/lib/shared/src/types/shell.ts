@@ -36,7 +36,7 @@ export interface ShellData {
   designerId: string;
   dialogId: string;
   dialogs: DialogInfo[];
-  dialogSchemaFiles: DialogSchemaFile[];
+  dialogSchemas: DialogSchemaFile[];
   focusedEvent: string;
   focusedActions: string[];
   focusedSteps: string[];
@@ -81,5 +81,5 @@ export interface ShellApi {
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
-  updateDialogSchema: (_: { content: { [key: string]: any }; id: string }) => void;
+  updateDialogSchema: (id: string, content: any) => Promise<void>;
 }

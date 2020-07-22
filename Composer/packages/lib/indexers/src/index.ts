@@ -45,7 +45,7 @@ class Indexer {
     const result = this.classifyFile(files);
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
-      dialogSchemaFiles: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
+      dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
@@ -56,6 +56,7 @@ class Indexer {
 export const indexer = new Indexer();
 
 export * from './dialogIndexer';
+export * from './dialogSchemaIndexer';
 export * from './lgIndexer';
 export * from './luIndexer';
 export * from './utils';

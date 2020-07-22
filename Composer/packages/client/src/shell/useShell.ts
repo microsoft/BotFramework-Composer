@@ -16,6 +16,7 @@ import {
   skillsState,
   lgFilesState,
   dialogsState,
+  dialogSchemasState,
   projectIdState,
   localeState,
   luFilesState,
@@ -38,6 +39,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const dialogMapRef = useRef({});
   const botName = useRecoilValue(botNameState);
   const dialogs = useRecoilValue(dialogsState);
+  const dialogSchemas = useRecoilValue(dialogSchemasState);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
@@ -51,6 +53,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const clipboardActions = useRecoilValue(clipboardActionsState);
   const {
     updateDialog,
+    updateDialogSchema,
     createDialogBegin,
     navTo,
     focusTo,
@@ -186,6 +189,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     updateUserSettings: updateUserSettings,
     announce: setMessage,
     displayManifestModal: displayManifestModal,
+    updateDialogSchema,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
@@ -202,7 +206,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         botName,
         projectId,
         dialogs,
-        dialogSchemaFiles,
+        dialogSchemas,
         dialogId,
         focusPath,
         schemas,

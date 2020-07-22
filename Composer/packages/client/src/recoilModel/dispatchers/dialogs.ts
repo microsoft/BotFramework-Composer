@@ -9,6 +9,7 @@ import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
 import {
   dialogsState,
+  dialogSchemasState,
   lgFilesState,
   luFilesState,
   projectIdState,
@@ -76,14 +77,38 @@ export const dialogsDispatcher = () => {
     set(luFilesState, luFiles);
   };
 
+  const createDialogSchema = ({ set }: CallbackInterface, id: string, content: any) => {
+    set(dialogSchemasState, (dialogSchemas) => [...dialogSchemas, { id, content }]);
+  };
+
+  const updateDialogSchema = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (id: string, content: any) => {
+      const { set, snapshot } = callbackHelpers;
+      const dialogSchemas = await snapshot.getPromise(dialogSchemasState);
+
+      if (!dialogSchemas.some((dialog) => dialog.id === id)) {
+        return createDialogSchema(callbackHelpers, id, content);
+      }
+
+      set(dialogSchemasState, (dialogSchemas) =>
+        dialogSchemas.map((dialogSchema) => (dialogSchema.id === id ? { ...dialogSchema, content } : dialogSchema))
+      );
+    }
+  );
+
+  const removeDialogSchema = ({ set }: CallbackInterface, id: string) => {
+    set(dialogSchemasState, (dialogSchemas) => dialogSchemas.filter((dialogSchema) => dialogSchema.id !== id));
+  };
+
   const removeDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async (id: string) => {
     const { set, snapshot } = callbackHelpers;
     let dialogs = await snapshot.getPromise(dialogsState);
     dialogs = dialogs.filter((dialog) => dialog.id !== id);
     set(dialogsState, dialogs);
-    //remove dialog should remove all locales lu and lg files
+    //remove dialog should remove all locales lu and lg files and the dialog schema file
     await removeLgFile(callbackHelpers, id);
     await removeLuFile(callbackHelpers, id);
+    await removeDialogSchema(callbackHelpers, id);
   });
 
   const updateDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id, content }) => {
@@ -146,5 +171,6 @@ export const dialogsDispatcher = () => {
     createDialogCancel,
     createDialogBegin,
     updateDialog,
+    updateDialogSchema,
   };
 };

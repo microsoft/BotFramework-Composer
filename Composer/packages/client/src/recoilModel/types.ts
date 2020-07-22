@@ -1,7 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema7 } from '@bfc/extension';
-import { AppUpdaterSettings, CodeEditorSettings, DialogInfo, LuFile, LgFile, PromptTab } from '@bfc/shared';
+import {
+  AppUpdaterSettings,
+  CodeEditorSettings,
+  DialogInfo,
+  LuFile,
+  LgFile,
+  PromptTab,
+  DialogSchemaFile,
+} from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
@@ -141,6 +149,7 @@ export type BotAssets = {
   lgFiles: LgFile[];
   skillManifests: SkillManifest[];
   setting: DialogSetting;
+  dialogSchemas: DialogSchemaFile[];
 };
 
 export type BoilerplateVersion = {

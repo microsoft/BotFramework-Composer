@@ -32,7 +32,6 @@ export interface DialogSchemaFile {
 export interface DialogInfo {
   content: any;
   diagnostics: Diagnostic[];
-  dialogSchema?: DialogSchemaFile;
   displayName: string;
   id: string;
   isRoot: boolean;

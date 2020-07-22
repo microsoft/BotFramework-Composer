@@ -38,40 +38,37 @@ const getDefaultDialogSchema = (title: string) => ({
   },
 });
 
-const useFetch = (url) => {
-  const controller = new AbortController();
-  const { signal } = controller;
-  const [cache, setCache] = useState({});
+const cache = {};
+
+export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
+  const { dialogs, dialogSchemas, dialogId, shellApi } = useShellApi();
+  const { updateDialogSchema } = shellApi;
+
+  const { displayName } = dialogs.find(({ id }) => id === dialogId) || {};
+  const { content } = dialogSchemas.find(({ id }) => id === dialogId) || {};
+
+  const [dialogSchema, setDialogSchema] = useState(cache[schemaUrl]);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+
     (async function () {
-      if (!cache[url]) {
+      if (!dialogSchema) {
         try {
-          const res = await fetch(url, { signal });
+          const res = await fetch(schemaUrl, { signal });
           const data = await res.json();
 
-          setCache((cache) => ({ ...cache, [url]: data }));
+          setDialogSchema(data);
+          cache[schemaUrl] = data;
         } catch (error) {
-          if (error.name === 'AbortError') {
-          }
+          // TODO: error
         }
       }
     })();
 
     return () => controller.abort();
-  }, [url]);
-
-  return cache[url];
-};
-
-export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
-  const { dialogs, dialogSchemaFiles, dialogId, shellApi } = useShellApi();
-  const { updateDialogSchema } = shellApi;
-
-  const { displayName } = dialogs.find(({ id }) => id === dialogId) || {};
-  const { content } = dialogSchemaFiles.find(({ id }) => id === dialogId) || {};
-
-  const dialogSchema = useFetch(schemaUrl);
+  }, []);
 
   const value = useMemo(
     () => (typeof content === 'object' ? content : getDefaultDialogSchema(displayName || dialogId)),
@@ -96,7 +93,7 @@ export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
       $result: { ...value.$result, properties: resultValue },
       ...(Object.keys(definitions).length ? { definitions } : {}),
     };
-    updateDialogSchema({ content, id: dialogId });
+    updateDialogSchema(dialogId, content);
   };
 
   return (
@@ -104,10 +101,10 @@ export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
       <ObjectField {...props} />
       <DialogSchemaContext.Provider value={{ schema: dialogSchema }}>
         <AdaptiveForm
-          schema={schema as JSONSchema7}
           formData={formValue}
-          onChange={handleChange}
+          schema={schema as JSONSchema7}
           uiOptions={uiOptions}
+          onChange={handleChange}
         />
       </DialogSchemaContext.Provider>
     </React.Fragment>
