@@ -1,26 +1,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { luIndexer } from '@bfc/indexers';
+
 import * as luUtil from '@bfc/indexers/lib/utils/luUtil';
 
 import { LuActionType } from '../types';
 const ctx: Worker = self as any;
 
-const parse = (id: string, content: string) => {
-  return { id, content, ...luIndexer.parse(content, id) };
-};
-
 export const handleMessage = (msg) => {
   const { type, payload } = msg.data;
-  const { content, id, intentName, intent } = payload;
+  const { content, id, intentName, intentNames, intent, intents } = payload;
   let result: any = null;
   switch (type) {
     case LuActionType.Parse: {
-      result = parse(id, content);
+      result = luUtil.parse(id, content);
       break;
     }
     case LuActionType.AddIntent: {
       result = luUtil.addIntent(content, intent);
+      break;
+    }
+    case LuActionType.AddIntents: {
+      result = luUtil.addIntents(content, intents);
       break;
     }
     case LuActionType.UpdateIntent: {
@@ -29,6 +29,10 @@ export const handleMessage = (msg) => {
     }
     case LuActionType.RemoveIntent: {
       result = luUtil.removeIntent(content, intentName);
+      break;
+    }
+    case LuActionType.RemoveIntents: {
+      result = luUtil.removeIntents(content, intentNames);
       break;
     }
   }
