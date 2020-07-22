@@ -24,6 +24,7 @@ import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
 import { extractSkillManifestUrl } from './skillManager';
 import { DialogSetting } from './interface';
+import { defaultFilePath, serializeFiles } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -33,30 +34,10 @@ const oauthInput = () => ({
   MicrosoftAppPassword: process.env.MicrosoftAppPassword || '',
 });
 
-// Define the project structure
-const BotStructureTemplate = {
-  folder: '',
-  entry: '${BOTNAME}.dialog',
-  schema: '${FILENAME}',
-  settings: 'settings/${FILENAME}',
-  common: {
-    lg: 'language-generation/${LOCALE}/common.${LOCALE}.lg',
-  },
-  dialogs: {
-    folder: 'dialogs/${DIALOGNAME}',
-    entry: '${DIALOGNAME}.dialog',
-    lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
-    lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
-  },
-  skillManifests: 'manifests/${MANIFESTNAME}.json',
-};
-
-const templateInterpolate = (str: string, obj: { [key: string]: string }) =>
-  str.replace(/\${([^}]+)}/g, (_, prop) => obj[prop]);
+const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
 
 export class BotProject {
   public ref: LocationRef;
-  public locale: string;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
   public id: string | undefined;
   public name: string;
@@ -76,7 +57,6 @@ export class BotProject {
 
   constructor(ref: LocationRef, user?: UserIdentity) {
     this.ref = ref;
-    this.locale = 'en-us'; // default to en-us
     this.dir = Path.resolve(this.ref.path); // make sure we switch to posix style after here
     this.dataDir = this.dir;
     this.name = Path.basename(this.dir);
@@ -85,7 +65,7 @@ export class BotProject {
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
-    this.luPublisher = new LuPublisher(this.dir, this.fileStorage, this.locale);
+    this.luPublisher = new LuPublisher(this.dir, this.fileStorage, defaultLanguage);
   }
 
   public get dialogFiles() {
@@ -149,7 +129,6 @@ export class BotProject {
   public getProject = () => {
     return {
       botName: this.name,
-      locale: this.locale,
       files: Array.from(this.files.values()),
       location: this.dir,
       schemas: this.getSchemas(),
@@ -170,6 +149,14 @@ export class BotProject {
     }
     if (settings && oauthInput().MicrosoftAppPassword && oauthInput().MicrosoftAppPassword !== OBFUSCATED_VALUE) {
       settings.MicrosoftAppPassword = oauthInput().MicrosoftAppPassword;
+    }
+
+    // fix old bot have no language settings
+    if (!settings?.defaultLanguage) {
+      settings.defaultLanguage = defaultLanguage;
+    }
+    if (!settings?.languages) {
+      settings.languages = [defaultLanguage];
     }
     return settings;
   };
@@ -297,7 +284,7 @@ export class BotProject {
   public updateBotInfo = async (name: string, description: string) => {
     const mainDialogFile = this.dialogFiles.find((file) => !file.relativePath.includes('/'));
     if (!mainDialogFile) return;
-    const entryDialogId = name.trim().toLowerCase();
+    const botName = name.trim().toLowerCase();
     const { relativePath } = mainDialogFile;
     const content = JSON.parse(mainDialogFile.content);
     if (!content.$designer) return;
@@ -313,26 +300,9 @@ export class BotProject {
       newDesigner = getNewDesigner(name, description);
     }
     content.$designer = newDesigner;
-    const updatedContent = autofixReferInDialog(entryDialogId, JSON.stringify(content, null, 2));
+    const updatedContent = autofixReferInDialog(botName, JSON.stringify(content, null, 2));
     await this._updateFile(relativePath, updatedContent);
-    // when create/saveAs bot, serialize entry dialog/lg/lu
-    const entryPatterns = [
-      templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
-      templateInterpolate(BotStructureTemplate.dialogs.lg, { LOCALE: '*', DIALOGNAME: '*' }),
-      templateInterpolate(BotStructureTemplate.dialogs.lu, { LOCALE: '*', DIALOGNAME: '*' }),
-    ];
-    for (const pattern of entryPatterns) {
-      const root = this.dataDir;
-      const paths = await this.fileStorage.glob(pattern, root);
-      for (const filePath of paths.sort()) {
-        const realFilePath = Path.join(root, filePath);
-        // skip common file, do not rename.
-        if (Path.basename(realFilePath).startsWith('common.')) continue;
-        // rename file to new botname
-        const targetFilePath = realFilePath.replace(/(.*)\/[^.]*(\..*$)/i, `$1/${entryDialogId}$2`);
-        await this.fileStorage.rename(realFilePath, targetFilePath);
-      }
-    }
+    await serializeFiles(this.fileStorage, this.dataDir, botName);
   };
 
   public updateFile = async (name: string, content: string): Promise<string> => {
@@ -363,13 +333,31 @@ export class BotProject {
     await this._cleanUp(file.relativePath);
   };
 
-  public createFile = async (name: string, content = '', dir: string = this.defaultDir(name)) => {
-    const file = this.files.get(name);
-    if (file) {
-      throw new Error(`${name} dialog already exist`);
+  public deleteFiles = async (files) => {
+    for (const { name } of files) {
+      await this.deleteFile(name);
     }
-    const relativePath = Path.join(dir, name.trim());
+  };
+
+  public createFile = async (name: string, content = '') => {
+    const filename = name.trim();
+    const botName = this.name;
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const relativePath = defaultFilePath(botName, defaultLocale, filename);
+    const file = this.files.get(filename);
+    if (file) {
+      throw new Error(`${filename} dialog already exist`);
+    }
     return await this._createFile(relativePath, content);
+  };
+
+  public createFiles = async (files) => {
+    const createdFiles: any = [];
+    for (const { name, content } of files) {
+      const file = await this.createFile(name, content);
+      createdFiles.push(file);
+    }
+    return createdFiles;
   };
 
   public publishLuis = async (luisConfig: ILuisConfig, fileIds: string[] = [], crossTrainConfig: ICrossTrainConfig) => {
@@ -467,46 +455,6 @@ export class BotProject {
         // pass
       }
     }
-  };
-
-  private getLocale(id: string): string {
-    const index = id.lastIndexOf('.');
-    if (index >= 0) return '';
-    return id.substring(index + 1);
-  }
-
-  private defaultDir = (name: string) => {
-    const fileType = Path.extname(name);
-    const id = Path.basename(name, fileType);
-    const idWithoutLocale = Path.basename(id, `.${this.locale}`);
-    const DIALOGNAME = idWithoutLocale;
-    const LOCALE = this.getLocale(id) || this.locale;
-    const folder = BotStructureTemplate.dialogs.folder;
-    let dir = BotStructureTemplate.folder;
-    if (fileType === '.dialog') {
-      dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.entry)), {
-        DIALOGNAME,
-        LOCALE,
-      });
-    } else if (fileType === '.lg') {
-      dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.lg)), {
-        DIALOGNAME,
-        LOCALE,
-      });
-    } else if (fileType === '.lu') {
-      dir = templateInterpolate(Path.dirname(Path.join(folder, BotStructureTemplate.dialogs.lu)), {
-        DIALOGNAME,
-        LOCALE,
-      });
-    } else if (fileType === '.json') {
-      dir = templateInterpolate(
-        Path.dirname(Path.join(BotStructureTemplate.folder, BotStructureTemplate.skillManifests)),
-        {
-          MANIFESTNAME: id,
-        }
-      );
-    }
-    return dir;
   };
 
   // create a file with relativePath and content relativePath is a path relative
