@@ -303,7 +303,7 @@ describe('skill operation', () => {
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
+  }, 5000);
 
   it('should update skill', async () => {
     const mockReq = {
@@ -319,9 +319,9 @@ describe('skill operation', () => {
     } as Request;
     await ProjectController.updateSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
+  }, 5000);
 
-  it('should update skill', async () => {
+  it('should update skill, remove', async () => {
     const mockReq = {
       params: { projectId },
       query: {},

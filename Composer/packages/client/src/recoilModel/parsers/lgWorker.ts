@@ -17,32 +17,33 @@ import {
 
 // Wrapper class
 class LgWorker extends BaseWorker<LgActionType> {
-  parse(targetId: string, content: string, lgFiles: LgFile[]) {
-    return this.sendMsg<LgParsePayload>(LgActionType.Parse, { targetId, content, lgFiles: lgFiles });
+  parse(id: string, content: string, lgFiles: LgFile[]) {
+    return this.sendMsg<LgParsePayload>(LgActionType.Parse, { id, content, lgFiles: lgFiles });
   }
 
-  addTemplate(content: string, template: LgTemplate) {
-    return this.sendMsg<LgCreateTemplatePayload>(LgActionType.AddTemplate, { content, template });
+  addTemplate(id: string, content: string, template: LgTemplate) {
+    return this.sendMsg<LgCreateTemplatePayload>(LgActionType.AddTemplate, { id, content, template });
   }
 
-  addTemplates(content: string, templates: LgTemplate[]) {
-    return this.sendMsg<LgCreateTemplatesPayload>(LgActionType.AddTemplates, { content, templates });
+  addTemplates(id: string, content: string, templates: LgTemplate[]) {
+    return this.sendMsg<LgCreateTemplatesPayload>(LgActionType.AddTemplates, { id, content, templates });
   }
 
-  updateTemplate(content: string, templateName: string, template: LgTemplate) {
-    return this.sendMsg<LgUpdateTemplatePayload>(LgActionType.UpdateTemplate, { content, templateName, template });
+  updateTemplate(id: string, content: string, templateName: string, template: LgTemplate) {
+    return this.sendMsg<LgUpdateTemplatePayload>(LgActionType.UpdateTemplate, { id, content, templateName, template });
   }
 
-  removeTemplate(content: string, templateName: string) {
-    return this.sendMsg<LgRemoveTemplatePayload>(LgActionType.RemoveTemplate, { content, templateName });
+  removeTemplate(id: string, content: string, templateName: string) {
+    return this.sendMsg<LgRemoveTemplatePayload>(LgActionType.RemoveTemplate, { id, content, templateName });
   }
 
-  removeTemplates(content: string, templateNames: string[]) {
-    return this.sendMsg<LgRemoveAllTemplatesPayload>(LgActionType.RemoveAllTemplates, { content, templateNames });
+  removeTemplates(id: string, content: string, templateNames: string[]) {
+    return this.sendMsg<LgRemoveAllTemplatesPayload>(LgActionType.RemoveAllTemplates, { id, content, templateNames });
   }
 
-  copyTemplate(content: string, fromTemplateName: string, toTemplateName: string) {
+  copyTemplate(id: string, content: string, fromTemplateName: string, toTemplateName: string) {
     return this.sendMsg<LgCopyTemplatePayload>(LgActionType.CopyTemplate, {
+      id,
       content,
       fromTemplateName,
       toTemplateName,

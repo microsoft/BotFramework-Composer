@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
@@ -37,21 +36,19 @@ interface TableViewProps extends RouteComponentProps<{}> {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState);
   const lgFiles = useRecoilValue(lgFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
   const settings = useRecoilValue(settingsState);
+  const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage } = useRecoilValue(dispatcherState);
+
   const { languages, defaultLanguage } = settings;
 
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
-  const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
-  const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
+
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
-  const { setMessage } = useRecoilValue(dispatcherState);
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);

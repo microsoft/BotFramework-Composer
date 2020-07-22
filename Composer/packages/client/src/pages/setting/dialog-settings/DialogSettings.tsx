@@ -123,7 +123,13 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
               onChange={onLanguageChange}
             />
 
-            <Link onClick={addLanguageDialogBegin}>{BotSettings.languageAddLanauge}</Link>
+            <Link
+              onClick={() => {
+                addLanguageDialogBegin(() => {});
+              }}
+            >
+              {BotSettings.languageAddLanauge}
+            </Link>
           </div>
 
           <Dropdown

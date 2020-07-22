@@ -183,9 +183,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
             key: 'edit.addLanguage',
             text: formatMessage('Add language'),
             onClick: () => {
-              addLanguageDialogBegin((newLanguages) => {
-                console.log(newLanguages);
-              });
+              addLanguageDialogBegin(() => {});
             },
           },
           {

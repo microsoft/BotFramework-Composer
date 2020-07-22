@@ -10,38 +10,44 @@ export type LuPayload = {
 };
 
 export type LgParsePayload = {
-  targetId: string;
+  id: string;
   content: string;
   lgFiles: LgFile[];
 };
 
 export interface LgCreateTemplatePayload {
+  id: string;
   content: string;
   template: LgTemplate;
 }
 
 export interface LgCreateTemplatesPayload {
+  id: string;
   content: string;
   templates: LgTemplate[];
 }
 
 export interface LgUpdateTemplatePayload {
+  id: string;
   content: string;
   templateName: string;
   template: LgTemplate;
 }
 
 export interface LgRemoveTemplatePayload {
+  id: string;
   content: string;
   templateName: string;
 }
 
 export interface LgRemoveAllTemplatesPayload {
+  id: string;
   content: string;
   templateNames: string[];
 }
 
 export interface LgCopyTemplatePayload {
+  id: string;
   content: string;
   fromTemplateName: string;
   toTemplateName: string;

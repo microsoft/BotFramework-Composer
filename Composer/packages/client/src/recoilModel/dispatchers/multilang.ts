@@ -70,6 +70,7 @@ export const multilangDispatcher = () => {
       const prevlgFiles = await snapshot.getPromise(lgFilesState);
       const prevluFiles = await snapshot.getPromise(luFilesState);
       const prevSettings = await snapshot.getPromise(settingsState);
+      const onAddLanguageDialogComplete = (await snapshot.getPromise(onAddLanguageDialogCompleteState)).func;
 
       // copy files from default language
       const lgFiles = copyLanguageResources(prevlgFiles, defaultLang, languages);
@@ -92,7 +93,10 @@ export const multilangDispatcher = () => {
       set(luFilesState, [...prevluFiles, ...luFiles]);
       set(settingsState, settings);
 
-      // better way?
+      if (typeof onAddLanguageDialogComplete === 'function') {
+        onAddLanguageDialogComplete(languages);
+      }
+
       set(showAddLanguageModalState, false);
       set(onAddLanguageDialogCompleteState, { func: undefined });
     }
@@ -103,6 +107,7 @@ export const multilangDispatcher = () => {
     const prevlgFiles = await snapshot.getPromise(lgFilesState);
     const prevluFiles = await snapshot.getPromise(luFilesState);
     const prevSettings = await snapshot.getPromise(settingsState);
+    const onDelLanguageDialogComplete = (await snapshot.getPromise(onDelLanguageDialogCompleteState)).func;
 
     // copy files from default language
     const { left: leftLgFiles } = deleteLanguageResources(prevlgFiles, languages);
@@ -116,6 +121,10 @@ export const multilangDispatcher = () => {
     set(lgFilesState, leftLgFiles);
     set(luFilesState, leftLuFiles);
     set(settingsState, settings);
+
+    if (typeof onDelLanguageDialogComplete === 'function') {
+      onDelLanguageDialogComplete(leftLanguages);
+    }
 
     set(showDelLanguageModalState, false);
     set(onDelLanguageDialogCompleteState, { func: undefined });
