@@ -1,9 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-type SubmenuOptions = string[];
-
-export type MenuSchema = {
+type SubmenuGroup = {
   label?: string;
-  submenu?: SubmenuOptions | SubmenuOptions[] | false;
+  group?: string;
+  submenu?: string[] | false;
 };
+
+export type MenuSchema = SubmenuGroup | SubmenuGroup[];
