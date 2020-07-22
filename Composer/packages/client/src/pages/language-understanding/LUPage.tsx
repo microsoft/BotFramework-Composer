@@ -2,15 +2,16 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, Suspense, useCallback, useEffect } from 'react';
+import React, { Fragment, useMemo, Suspense, useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { navigateTo } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
+import { dialogsState, projectIdState } from '../../recoilModel/atoms/botState';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
 
@@ -24,8 +25,9 @@ interface LUPageProps extends RouteComponentProps<{}> {
 }
 
 const LUPage: React.FC<LUPageProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { dialogs, projectId } = state;
+  const dialogs = useRecoilValue(dialogsState);
+  const projectId = useRecoilValue(projectIdState);
+
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);

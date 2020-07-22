@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { useContext, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/components/Dialog';
 import { IDragOptions } from 'office-ui-fabric-react/lib/Modal';
@@ -14,8 +14,9 @@ import { FontSizes } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
 import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
+import { skillsState, userSettingsState } from '../../recoilModel';
 
 // -------------------- Styles -------------------- //
 
@@ -62,8 +63,8 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   manifestId,
   onDismiss,
 }) => {
-  const { state } = useContext(StoreContext);
-  const { skills, userSettings } = state;
+  const skills = useRecoilValue(skillsState);
+  const userSettings = useRecoilValue(userSettingsState);
 
   useEffect(() => onDismiss, []);
 
