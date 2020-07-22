@@ -5,8 +5,8 @@
   "5_minute_intro_7ea06d2b": {
     "message": "5 Minute Intro"
   },
-  "a_minimap_gives_a_overview_of_your_source_code_for_f280b2b8": {
-    "message": "A minimap gives a overview of your source code for quick navigation and code understanding."
+  "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
+    "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
   },
   "a_newer_version_of_the_provisioning_scripts_has_be_85d3ad94": {
     "message": "A newer version of the provisioning scripts has been found, and this project can be updated to the latest."
@@ -46,6 +46,9 @@
   },
   "add_custom_runtime_6b73dc44": {
     "message": "Add custom runtime"
+  },
+  "add_language_75dee49e": {
+    "message": "Add language"
   },
   "add_new_dialog_25f12c9": {
     "message": "Add new dialog"
@@ -95,8 +98,8 @@
   "authoring_region_b5d1b661": {
     "message": "Authoring Region"
   },
-  "authoring_region_to_use_westus_westeurope_australi_c509d125": {
-    "message": "Authoring region to use [westus,westeurope,australiaeast]"
+  "authoring_region_to_use_e_g_westus_westeurope_aust_d43d5245": {
+    "message": "Authoring region to use (e.g. westus, westeurope, australiaeast)"
   },
   "auto_update_86eb33b0": {
     "message": "Auto update"
@@ -128,6 +131,12 @@
   "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
     "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
   },
+  "bot_language_6cf30c2": {
+    "message": "Bot language"
+  },
+  "bot_language_active_7cf9dc78": {
+    "message": "Bot language (active)"
+  },
   "bot_name_is_botname_a28c2d05": {
     "message": "Bot name is { botName }"
   },
@@ -136,6 +145,9 @@
   },
   "bot_responses_c4e63601": {
     "message": "Bot Responses"
+  },
+  "bot_settings_3751e1b2": {
+    "message": "Bot settings"
   },
   "bot_settings_ce2783e4": {
     "message": "Bot Settings"
@@ -191,6 +203,9 @@
   "comment_7ef1428e": {
     "message": "Comment"
   },
+  "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
+    "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
+  },
   "composer_introduction_98a93701": {
     "message": "Composer introduction"
   },
@@ -212,8 +227,8 @@
   "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
     "message": "Configure Composer to start your bot using runtime code you can customize and control."
   },
-  "configures_default_language_model_to_use_if_there__9820babb": {
-    "message": "Configures default language model to use if there is no culture code in the file name (Default:en-us)"
+  "configures_default_language_model_to_use_if_there__f09f1acd": {
+    "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
   },
   "confirm_6556b3a6": {
     "message": "Confirm"
@@ -230,6 +245,9 @@
   "copy_9748f9f": {
     "message": "Copy"
   },
+  "copy_content_for_translation_7affbcbb": {
+    "message": "Copy content for translation"
+  },
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
   },
@@ -237,7 +255,7 @@
     "message": "Create"
   },
   "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
-    "message": "Create a name for the project which will be used to name the application:\n    (projectname-environment-LUfilename)"
+    "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
   },
   "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
     "message": "Create a new skill manifest or select which one you want to edit"
@@ -247,6 +265,9 @@
   },
   "create_bot_from_template_or_scratch_92f0fefa": {
     "message": "Create bot from template or scratch?"
+  },
+  "create_copy_to_translate_bot_content_efc872c": {
+    "message": "Create copy to translate bot content"
   },
   "create_folder_error_38aa86f5": {
     "message": "Create Folder Error"
@@ -265,6 +286,9 @@
   },
   "create_or_edit_skill_manifest_8ad98da9": {
     "message": "Create or edit skill manifest"
+  },
+  "current_40c0812f": {
+    "message": " - Current"
   },
   "custom_events_d6f0e45b": {
     "message": "Custom events"
@@ -287,6 +311,9 @@
   "date_modified_e1c8ac8f": {
     "message": "Date Modified"
   },
+  "default_language_486a558d": {
+    "message": "Default language"
+  },
   "default_language_b11c37db": {
     "message": "Default Language"
   },
@@ -301,6 +328,9 @@
   },
   "delete_bot_73586104": {
     "message": "Delete Bot"
+  },
+  "delete_language_1527609d": {
+    "message": "Delete language"
   },
   "describe_your_skill_88554792": {
     "message": "Describe your skill"
@@ -398,8 +428,8 @@
   "examples_c435f08c": {
     "message": "Examples"
   },
-  "existing_files_in_scripts_folder_will_be_overwritt_19590dea": {
-    "message": "Existing files in scripts/ folder will be overwritten. Are you sure you want to continue?"
+  "existing_files_in_scripts_folder_will_be_overwritt_afa8d787": {
+    "message": "Existing files in scripts/folder will be overwritten. Are you sure you want to continue?"
   },
   "expand_2f2fadbd": {
     "message": "Expand"
@@ -436,6 +466,9 @@
   },
   "gb_7570760e": {
     "message": "GB"
+  },
+  "general_24ac26a8": {
+    "message": "General"
   },
   "get_a_new_copy_of_the_runtime_code_84970bf": {
     "message": "Get a new copy of the runtime code"
@@ -533,8 +566,8 @@
   "lg_editor_ee0184e6": {
     "message": "LG editor"
   },
-  "lg_file_id_not_found_97e57479": {
-    "message": "lg file { id } not found"
+  "lg_file_id_not_found_6bd6869b": {
+    "message": "LG file { id } not found"
   },
   "lg_navigation_pane_97b15c3d": {
     "message": "LG Navigation Pane"
@@ -542,8 +575,8 @@
   "line_numbers_1bfa7fb": {
     "message": "Line numbers"
   },
-  "link_to_where_this_luis_intent_defined_27f660a0": {
-    "message": "link to where this luis intent defined"
+  "link_to_where_this_luis_intent_is_defined_9be25fb7": {
+    "message": "link to where this LUIS intent is defined"
   },
   "list_view_e33843f0": {
     "message": "List view"
@@ -557,9 +590,6 @@
   "location_e17bd402": {
     "message": "Location"
   },
-  "location_is_location_72c14ba4": {
-    "message": "Location is { location }"
-  },
   "location_is_location_8c17b5de": {
     "message": "location is { location }"
   },
@@ -572,8 +602,8 @@
   "lu_editor_d09fb2b0": {
     "message": "LU editor"
   },
-  "lu_file_id_not_found_7b0121dc": {
-    "message": "lu file { id } not found"
+  "lu_file_id_not_found_8732d33e": {
+    "message": "LU file { id } not found"
   },
   "lu_navigation_pane_54dc5587": {
     "message": "LU Navigation Pane"
@@ -713,6 +743,9 @@
   "or_4f7d4edb": {
     "message": "Or: "
   },
+  "original_ce7b7e64": {
+    "message": " - Original"
+  },
   "page_number_cdee4179": {
     "message": "Page number"
   },
@@ -724,9 +757,6 @@
   },
   "please_input_a_manifest_url_ef6bab5f": {
     "message": "Please input a manifest url"
-  },
-  "please_input_regex_pattern_138b5a72": {
-    "message": "Please input regex pattern"
   },
   "please_input_regex_pattern_5cd659a2": {
     "message": "Please input regEx pattern"
@@ -866,6 +896,9 @@
   "select_an_event_type_3d7108f1": {
     "message": "Select an event type"
   },
+  "select_language_to_delete_d1662d3d": {
+    "message": "Select language to delete"
+  },
   "select_manifest_version_4f5b1230": {
     "message": "Select manifest version"
   },
@@ -874,6 +907,9 @@
   },
   "select_runtime_version_to_add_d63d383b": {
     "message": "Select runtime version to add"
+  },
+  "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
+    "message": "Select the language that bot will be able to understand (User input) and respond to (Bot responses).\n    To make this bot available in other languages, click “Add’ to create a copy of the default language, and translate the content into the new language."
   },
   "sentence_wrap_930c8ced": {
     "message": "Sentence wrap"
@@ -1010,6 +1046,9 @@
   "this_is_a_severity_notification_9beabb58": {
     "message": "This is a { severity } notification"
   },
+  "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
+    "message": "This language will be copied and used as the basis (and fallback language) for the translation."
+  },
   "this_version_of_the_content_is_out_of_date_and_you_5e878f29": {
     "message": "This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed."
   },
@@ -1045,6 +1084,9 @@
   },
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."
+  },
+  "to_which_language_will_you_be_translating_your_bot_77219d69": {
+    "message": "To which language will you be translating your bot?"
   },
   "toolbar_bafd4228": {
     "message": "toolbar"
@@ -1169,8 +1211,14 @@
   "what_is_the_type_of_this_trigger_d2701744": {
     "message": "What is the type of this trigger?"
   },
+  "when_deleting_a_language_only_the_content_will_be__8f7f8dee": {
+    "message": "When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional."
+  },
+  "when_done_switch_to_the_newly_created_language_and_862b7dd9": {
+    "message": "When done, switch to the newly created language and start the (manual) translation process."
+  },
   "when_multiple_people_are_working_with_models_you_w_32b48099": {
-    "message": "When multiple people are working with models you want to be able to work with\n    models independently from each other tied to the source control."
+    "message": "When multiple people are working with models you want to be able to work with models independently from each other tied to the source control."
   },
   "which_activity_type_18333457": {
     "message": "Which activity type?"

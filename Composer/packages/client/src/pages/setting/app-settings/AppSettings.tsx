@@ -106,7 +106,7 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
         <SettingToggle
           checked={userSettings.codeEditor.minimap}
           description={formatMessage(
-            'A minimap gives a overview of your source code for quick navigation and code understanding.'
+            'A minimap gives an overview of your source code for quick navigation and code understanding.'
           )}
           image={images.minimap}
           title={formatMessage('Minimap')}

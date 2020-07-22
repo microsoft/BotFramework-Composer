@@ -239,7 +239,7 @@ export const MultiLanguagesDialog = {
   DELETE_DIALOG: {
     title: formatMessage('Select language to delete'),
     subText: formatMessage(
-      `When deleting a lanuage, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
+      `When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
     ),
   },
 };
