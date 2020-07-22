@@ -70,8 +70,8 @@ export const dialogsDispatcher = () => {
     const luFiles = await snapshot.getPromise(luFilesState);
     const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
     dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-    await createLgFileState(callbackHelpers, { id });
-    await createLuFileState(callbackHelpers, { id });
+    await createLgFileState(callbackHelpers, { id, content: '' });
+    await createLuFileState(callbackHelpers, { id, content: '' });
 
     set(dialogsState, (dialogs) => [...dialogs, dialog]);
     set(actionsSeedState, []);

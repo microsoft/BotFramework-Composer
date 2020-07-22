@@ -80,7 +80,7 @@ export const updateLgFileState = async (
 // when do create, passed id do not carried with locale
 export const createLgFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content = '' }: { id: string; content: string }
+  { id, content }: { id: string; content: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
   const lgFiles = await snapshot.getPromise(lgFilesState);

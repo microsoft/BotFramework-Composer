@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo, useContext, useCallback, Fragment } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, Fragment } from 'react';
 import { LuEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
@@ -29,6 +29,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateLuIntent: updateLuIntentDispatcher,
     updateLuFile: updateLuFileDispatcher,
     updateUserSettings,
+    setLocale,
   } = useRecoilValue(dispatcherState);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
@@ -177,7 +178,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           left={currentLanguageFileEditor}
           locale={locale}
           right={defaultLanguageFileEditor}
-          onLanguageChange={actions.setLocale}
+          onLanguageChange={setLocale}
         ></DiffCodeEditor>
       )}
     </Fragment>

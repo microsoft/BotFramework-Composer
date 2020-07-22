@@ -4,7 +4,7 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext, useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
