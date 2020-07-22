@@ -49,7 +49,7 @@ export const ErrorInfo: React.FC<IErrorInfoProps> = (props) => {
         ariaLabel={formatMessage('Error')}
         css={errorButton}
         iconProps={{ iconName: 'ErrorBadge' }}
-        title="Error"
+        title={formatMessage('Error')}
       />
     </div>
   );
