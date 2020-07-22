@@ -27,6 +27,16 @@ class LuWorker extends BaseWorker<LuActionType> {
     const payload = { content, intentName };
     return this.sendMsg<LuPayload>(LuActionType.RemoveIntent, payload);
   }
+
+  addIntents(content: string, intents: LuIntentSection[]) {
+    const payload = { content, intents };
+    return this.sendMsg<LuPayload>(LuActionType.AddIntents, payload);
+  }
+
+  removeIntents(content: string, intentNames: string[]) {
+    const payload = { content, intentNames };
+    return this.sendMsg<LuPayload>(LuActionType.RemoveIntents, payload);
+  }
 }
 
 export default new LuWorker(new Worker());
