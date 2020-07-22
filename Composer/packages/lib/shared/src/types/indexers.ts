@@ -6,6 +6,7 @@ import { IIntentTrigger } from './dialogUtils';
 
 export enum FileExtensions {
   Dialog = '.dialog',
+  DialogSchema = '.schema',
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
