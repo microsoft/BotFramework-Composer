@@ -2,19 +2,62 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { Fragment } from 'react';
 import formatMessage from 'format-message';
+import { NeutralColors } from '@uifabric/fluent-theme';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { IContextualMenuProps, IIconProps } from 'office-ui-fabric-react/lib';
 
-import { IToolBarItem } from './ToolBar.types';
-import { actionButton, leftActions, rightActions, headerSub } from './ToolBarStyles';
+// -------------------- Styles -------------------- //
 
-type ToolbarProps = {
-  toolbarItems?: Array<IToolBarItem>;
+export const headerSub = css`
+  height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid ${NeutralColors.gray30};
+`;
+
+export const leftActions = css`
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 44px;
+`;
+
+export const rightActions = css`
+  position: relative;
+  height: 44px;
+  margin-right: 20px;
+`;
+
+export const actionButton = css`
+  font-size: 16px;
+  margin-top: 2px;
+  margin-left: 15px;
+`;
+
+// -------------------- IToolBarItem -------------------- //
+
+export type IToolBarItem = {
+  type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  element?: any;
+  text?: string;
+  buttonProps?: {
+    iconProps?: IIconProps;
+    onClick?: () => void;
+  };
+  menuProps?: IContextualMenuProps;
+  align?: string;
+  dataTestid?: string;
+  disabled?: boolean;
 };
 
-function itemList(item: IToolBarItem, index: number) {
+// -------------------- Toolbar -------------------- //
+
+const renderItemList = (item: IToolBarItem, index: number) => {
   if (item.type === 'element') {
     return <Fragment key={index}>{item.element}</Fragment>;
   } else if (item.type === 'action') {
@@ -44,12 +87,16 @@ function itemList(item: IToolBarItem, index: number) {
   } else {
     return null;
   }
-}
+};
+
+type ToolbarProps = {
+  toolbarItems?: Array<IToolBarItem>;
+};
 
 // support ActionButton or React Elements, the display order is array index.
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
-export function ToolBar(props: ToolbarProps) {
+export const ToolBar = (props: ToolbarProps) => {
   const { toolbarItems = [], ...rest } = props;
 
   const left: IToolBarItem[] = [];
@@ -67,8 +114,8 @@ export function ToolBar(props: ToolbarProps) {
 
   return (
     <div aria-label={formatMessage('toolbar')} css={headerSub} role="region" {...rest}>
-      <div css={leftActions}>{left.map(itemList)} </div>
-      <div css={rightActions}>{right.map(itemList)}</div>
+      <div css={leftActions}>{left.map(renderItemList)} </div>
+      <div css={rightActions}>{right.map(renderItemList)}</div>
     </div>
   );
-}
+};
