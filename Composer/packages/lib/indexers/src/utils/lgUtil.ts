@@ -8,8 +8,10 @@
  */
 
 import { Templates, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
-import { LgTemplate, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
+import { LgTemplate, importResolverGenerator, TextFile, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
 import get from 'lodash/get';
+
+import { lgIndexer } from '../lgIndexer';
 
 export interface Template {
   name: string;
@@ -95,6 +97,19 @@ export function addTemplate(
   const resource = Templates.parseText(content, undefined, importResolver);
   const templates = resource.addTemplate(name, parameters, body);
   return convertTemplatesToLgFile(id, templates.toString(), templates);
+}
+
+export function addTemplates(
+  id = '',
+  content: string,
+  templates: LgTemplate[],
+  importResolver?: ImportResolverDelegate
+): LgFile {
+  const resource = Templates.parseText(content, undefined, importResolver);
+  for (const { name, parameters = [], body } of templates) {
+    resource.addTemplate(name, parameters, body);
+  }
+  return convertTemplatesToLgFile(id, resource.toString(), resource);
 }
 
 // if name exist, add it anyway, with name like `${name}1` `${name}2`
@@ -226,4 +241,11 @@ export function extractOptionByKey(nameOfKey: string, options: string[]): string
     }
   }
   return result;
+}
+
+export function parse(id: string, content: string, lgFiles: TextFile[]): LgFile {
+  const lgImportResolver = importResolverGenerator(lgFiles, '.lg');
+
+  const { templates, diagnostics } = lgIndexer.parse(content, id, lgImportResolver);
+  return { id, content, templates, diagnostics } as LgFile;
 }

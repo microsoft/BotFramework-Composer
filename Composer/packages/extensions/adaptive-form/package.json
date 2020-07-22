@@ -13,6 +13,7 @@
     "build:ts": "tsc --build ./tsconfig.build.json",
     "clean": "rimraf lib demo/dist",
     "lint": "eslint --quiet src",
+    "lint:fix": "yarn lint --fix",
     "prepare": "yarn build"
   },
   "license": "MIT",

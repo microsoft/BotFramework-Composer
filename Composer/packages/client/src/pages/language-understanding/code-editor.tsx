@@ -2,19 +2,20 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, Fragment } from 'react';
 import { LuEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
-import isEmpty from 'lodash/isEmpty';
 import { filterSectionDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { luFilesState, projectIdState, localeState } from '../../recoilModel/atoms/botState';
+import { luFilesState, projectIdState, localeState, settingsState } from '../../recoilModel/atoms/botState';
 import { userSettingsState, dispatcherState } from '../../recoilModel';
+
+import { DiffCodeEditor } from './diff-editor';
 
 const lspServerPath = '/lu-language-server';
 
@@ -28,12 +29,19 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateLuIntent: updateLuIntentDispatcher,
     updateLuFile: updateLuFileDispatcher,
     updateUserSettings,
+    setLocale,
   } = useRecoilValue(dispatcherState);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
+  const settings = useRecoilValue(settingsState);
+
+  const { languages, defaultLanguage } = settings;
+
   const { dialogId } = props;
   const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const defaultLangFile = luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+
   const diagnostics = get(file, 'diagnostics', []);
   const [luEditor, setLuEditor] = useState<any>(null);
 
@@ -51,14 +59,9 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
 
   const inlineMode = !!intent;
-  const [content, setContent] = useState(intent?.Body || file?.content);
-
-  useEffect(() => {
-    // reset content with file.content initial state
-    if (!file || isEmpty(file) || content) return;
-    const value = intent ? intent.Body : file.content;
-    setContent(value);
-  }, [file, sectionId, projectId]);
+  const content = intent?.Body || file?.content;
+  const defaultLangContent =
+    (inlineMode && defaultLangFile?.intents.find(({ Name }) => Name === sectionId)?.Body) || defaultLangFile?.content;
 
   const currentDiagnostics = inlineMode && file && sectionId ? filterSectionDiagnostics(file, sectionId) : diagnostics;
 
@@ -111,7 +114,6 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
 
   const onChange = useCallback(
     (value) => {
-      setContent(value);
       if (!file) return;
       if (inlineMode) {
         updateLuIntent(value);
@@ -132,19 +134,54 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings({ codeEditor: settings });
   };
 
+  const currentLanguageFileEditor = useMemo(() => {
+    return (
+      <LuEditor
+        diagnostics={currentDiagnostics}
+        editorDidMount={editorDidMount}
+        editorSettings={userSettings.codeEditor}
+        languageServer={{
+          path: lspServerPath,
+        }}
+        luOption={luOption}
+        value={content}
+        onChange={onChange}
+        onChangeSettings={handleSettingsChange}
+      />
+    );
+  }, [luOption]);
+
+  const defaultLanguageFileEditor = useMemo(() => {
+    return (
+      <LuEditor
+        editorSettings={userSettings.codeEditor}
+        luOption={{
+          fileId: dialogId,
+        }}
+        options={{
+          readOnly: true,
+        }}
+        value={defaultLangContent}
+        onChange={() => {}}
+      />
+    );
+  }, [dialogId]);
+
   return (
-    <LuEditor
-      diagnostics={currentDiagnostics}
-      editorDidMount={editorDidMount}
-      editorSettings={userSettings.codeEditor}
-      languageServer={{
-        path: lspServerPath,
-      }}
-      luOption={luOption}
-      value={content}
-      onChange={onChange}
-      onChangeSettings={handleSettingsChange}
-    />
+    <Fragment>
+      {locale === defaultLanguage ? (
+        currentLanguageFileEditor
+      ) : (
+        <DiffCodeEditor
+          defaultLanguage={defaultLanguage}
+          languages={languages}
+          left={currentLanguageFileEditor}
+          locale={locale}
+          right={defaultLanguageFileEditor}
+          onLanguageChange={setLocale}
+        ></DiffCodeEditor>
+      )}
+    </Fragment>
   );
 };
 
