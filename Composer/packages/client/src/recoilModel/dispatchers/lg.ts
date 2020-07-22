@@ -142,7 +142,7 @@ export const lgDispatcher = () => {
   };
 
   const updateLgTemplate = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       templateName,
       template,
@@ -151,49 +151,46 @@ export const lgDispatcher = () => {
       templateName: string;
       template: LgTemplate;
     }) => {
-      set(lgFilesState, (lgFiles) => {
-        const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const result = lgUtil.updateTemplate(id, content, templateName, template, lgFileResolver(lgFiles));
-        return lgFiles.map((file) => (file.id === id ? result : file));
-      });
+      const { snapshot } = callbackHelpers;
+      const lgFiles = await snapshot.getPromise(lgFilesState);
+      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
+      content = lgUtil.updateTemplate(id, content, templateName, template, lgFileResolver(lgFiles)).content;
+      await updateLgFileState(callbackHelpers, { id, content });
     }
   );
 
   const createLgTemplate = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({ id, template }: { id: string; template: LgTemplate }) => {
-      set(lgFilesState, (lgFiles) => {
-        const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const result = lgUtil.addTemplate(id, content, template, lgFileResolver(lgFiles));
-
-        return lgFiles.map((file) => (file.id === id ? result : file));
-      });
+    (callbackHelpers: CallbackInterface) => async ({ id, template }: { id: string; template: LgTemplate }) => {
+      const { snapshot } = callbackHelpers;
+      const lgFiles = await snapshot.getPromise(lgFilesState);
+      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
+      content = lgUtil.addTemplate(id, content, template, lgFileResolver(lgFiles)).content;
+      await updateLgFileState(callbackHelpers, { id, content });
     }
   );
 
   const removeLgTemplate = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({ id, templateName }: { id: string; templateName: string }) => {
-      set(lgFilesState, (lgFiles) => {
-        const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const result = lgUtil.removeTemplate(id, content, templateName, lgFileResolver(lgFiles));
-
-        return lgFiles.map((file) => (file.id === id ? result : file));
-      });
+    (callbackHelpers: CallbackInterface) => async ({ id, templateName }: { id: string; templateName: string }) => {
+      const { snapshot } = callbackHelpers;
+      const lgFiles = await snapshot.getPromise(lgFilesState);
+      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
+      content = lgUtil.removeTemplate(id, content, templateName, lgFileResolver(lgFiles)).content;
+      await updateLgFileState(callbackHelpers, { id, content });
     }
   );
 
   const removeLgTemplates = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({ id, templateNames }: { id: string; templateNames: string[] }) => {
-      set(lgFilesState, (lgFiles) => {
-        const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const result = lgUtil.removeTemplates(id, content, templateNames, lgFileResolver(lgFiles));
-
-        return lgFiles.map((file) => (file.id === id ? result : file));
-      });
+    (callbackHelpers: CallbackInterface) => async ({ id, templateNames }: { id: string; templateNames: string[] }) => {
+      const { snapshot } = callbackHelpers;
+      const lgFiles = await snapshot.getPromise(lgFilesState);
+      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
+      content = lgUtil.removeTemplates(id, content, templateNames, lgFileResolver(lgFiles)).content;
+      await updateLgFileState(callbackHelpers, { id, content });
     }
   );
 
   const copyLgTemplate = useRecoilCallback(
-    ({ set }: CallbackInterface) => async ({
+    (callbackHelpers: CallbackInterface) => async ({
       id,
       fromTemplateName,
       toTemplateName,
@@ -202,12 +199,11 @@ export const lgDispatcher = () => {
       fromTemplateName: string;
       toTemplateName: string;
     }) => {
-      set(lgFilesState, (lgFiles) => {
-        const content = lgFiles.find((file) => file.id === id)?.content ?? '';
-        const result = lgUtil.copyTemplate(id, content, fromTemplateName, toTemplateName, lgFileResolver(lgFiles));
-
-        return lgFiles.map((file) => (file.id === id ? result : file));
-      });
+      const { snapshot } = callbackHelpers;
+      const lgFiles = await snapshot.getPromise(lgFilesState);
+      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
+      content = lgUtil.copyTemplate(id, content, fromTemplateName, toTemplateName, lgFileResolver(lgFiles)).content;
+      await updateLgFileState(callbackHelpers, { id, content });
     }
   );
 
