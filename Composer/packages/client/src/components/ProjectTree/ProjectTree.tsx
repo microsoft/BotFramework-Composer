@@ -29,13 +29,6 @@ import { TreeItem } from './treeItem';
 
 // -------------------- Styles -------------------- //
 
-const groupListStyle: Partial<IGroupedListStyles> = {
-  root: {
-    width: '100%',
-    boxSizing: 'border-box',
-  },
-};
-
 const searchBox: ISearchBoxStyles = {
   root: {
     borderBottom: '1px solid #edebe9',
@@ -113,6 +106,7 @@ function createItemsAndGroups(
       },
       { items: [], groups: [] }
     );
+  console.log(result);
   return result;
 }
 
@@ -138,42 +132,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const sortedDialogs = useMemo(() => {
     return sortDialog(dialogs);
   }, [dialogs]);
-
-  const onRenderHeader = (props: IGroupHeaderProps) => {
-    const toggleCollapse = (): void => {
-      groupRef.current?.toggleCollapseAll(true);
-      props.onToggleCollapse?.(props.group!);
-      onSelect(props.group!.key);
-    };
-    return (
-      <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
-        <TreeItem
-          depth={0}
-          isActive={!props.group!.isCollapsed}
-          isSubItemActive={!!selected}
-          link={props.group!.data}
-          onDelete={onDeleteDialog}
-          onSelect={toggleCollapse}
-        />
-      </span>
-    );
-  };
-
-  function onRenderCell(nestingDepth?: number, item?: any): React.ReactNode {
-    return (
-      <TreeItem
-        depth={nestingDepth}
-        isActive={createSelectedPath(item.index) === selected}
-        link={item}
-        onDelete={() => onDeleteTrigger(dialogId, item.index)}
-        onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
-      />
-    );
-  }
-
-  const onRenderShowAll = () => {
-    return null;
-  };
 
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
@@ -230,7 +188,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             )}
             aria-live={'polite'}
           />
-          <GroupedList
+          {/* <GroupedList
             {...itemsAndGroups}
             componentRef={groupRef}
             groupProps={
@@ -244,7 +202,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             }
             styles={groupListStyle}
             onRenderCell={onRenderCell}
-          />
+          /> */}
         </FocusZone>
       </div>
     </Resizable>

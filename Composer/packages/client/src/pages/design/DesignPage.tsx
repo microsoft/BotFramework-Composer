@@ -43,7 +43,8 @@ import {
   skillsState,
   actionsSeedState,
   userSettingsState,
-  dialogsNewState,
+  designViewQuerySelector,
+  botProjectsState,
 } from '../../recoilModel';
 
 import { VisualEditorAPI } from './FrameAPI';
@@ -101,6 +102,7 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const dialogs = useRecoilValue(dialogsState);
+  const projects = useRecoilValue(botProjectsState);
 
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
@@ -114,6 +116,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
+  // const designView = useRecoilValue(designViewQuerySelector);
   const {
     removeDialog,
     updateDialog,
@@ -524,7 +527,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onDeleteTrigger={handleDeleteTrigger}
           onSelect={handleSelect}
         />
-        <div css={contentWrapper} role="main">
+        {/*  <div css={contentWrapper} role="main">
           <div css={{ position: 'relative' }} data-testid="DesignPage-Toolbar">
             <span
               ref={addNewBtnRef}
@@ -555,7 +558,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               <PropertyEditor key={focusPath} />
             </div>
           </Conversation>
-        </div>
+        </div> */}
       </div>
       {/* <Suspense fallback={<LoadingSpinner />}>
         {showCreateDialogModal && (
