@@ -46,9 +46,9 @@ export default async (composer: any): Promise<void> => {
       let csproj = '';
       // find publishing profile in list
       const profile = project.settings.publishTargets.find((p) => p.name === profileName);
-      if (profile.type === 'plugin-azure-publish') {
+      if (profile.type === 'azurePublish') {
         csproj = 'Microsoft.BotFramework.Composer.WebApp.csproj';
-      } else if (profile.type === 'plugin-azure-functions-publish') {
+      } else if (profile.type === 'azureFunctionsPublish') {
         csproj = 'Microsoft.BotFramework.Composer.Functions.csproj';
       }
       const publishFolder = path.join(runtimePath, 'bin', 'Release', 'netcoreapp3.1');
