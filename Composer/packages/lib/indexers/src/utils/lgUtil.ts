@@ -10,6 +10,7 @@
 import { Templates, Diagnostic as LGDiagnostic, ImportResolverDelegate } from 'botbuilder-lg';
 import { LgTemplate, Diagnostic, Position, Range, LgFile } from '@bfc/shared';
 import get from 'lodash/get';
+import formatMessage from 'format-message';
 
 export interface Template {
   name: string;
@@ -122,7 +123,7 @@ export function copyTemplate(
   const resource = Templates.parseText(content, undefined, importResolver);
   const fromTemplate = resource.toArray().find((t) => t.name === fromTemplateName);
   if (!fromTemplate) {
-    throw new Error('fromTemplateName no exist');
+    throw new Error(formatMessage('fromTemplateName does not exist'));
   }
   const { parameters, body } = fromTemplate;
   const templates = resource.addTemplate(toTemplateName, parameters, body);
@@ -145,7 +146,7 @@ export function copyTemplateAnyway(
 
   let newName = toTemplateName;
   if (!newName) {
-    const copyName = `${fromTemplate.name}_Copy`;
+    const copyName = formatMessage(`{name}_Copy`, { name: fromTemplate.name });
     newName = increaseNameUtilNotExist(resource.toArray(), copyName);
   }
   const { parameters, body } = fromTemplate;
@@ -204,7 +205,7 @@ export function checkSingleLgTemplate(template: LgTemplate) {
   const content = textFromTemplates([template]);
 
   if (Templates.parseText(content).toArray().length !== 1) {
-    throw new Error('Not a single template');
+    throw new Error(formatMessage('Not a single template'));
   }
 }
 

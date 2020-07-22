@@ -6,6 +6,7 @@ import { listen, MessageConnection } from 'vscode-ws-jsonrpc';
 import get from 'lodash/get';
 import { MonacoServices, MonacoLanguageClient } from 'monaco-languageclient';
 import { EditorDidMount } from '@monaco-editor/react';
+import formatMessage from 'format-message';
 
 import { registerLGLanguage } from './languages';
 import { createUrl, createWebSocket, createLanguageClient, SendRequestWithRetry } from './utils/lspUtil';
@@ -13,8 +14,11 @@ import { BaseEditor, BaseEditorProps, OnInit } from './BaseEditor';
 import { LGOption } from './utils';
 import { LG_HELP } from './constants';
 
-const placeholder = `> To learn more about the LG file format, read the documentation at
-> ${LG_HELP}`;
+const placeholder = formatMessage(
+  `> To learn more about the LG file format, read the documentation at
+> {lgHelp}`,
+  { lgHelp: LG_HELP }
+);
 
 export interface LGLSPEditorProps extends BaseEditorProps {
   lgOption?: LGOption;
@@ -71,7 +75,11 @@ export function LgEditor(props: LGLSPEditorProps) {
       listen({
         webSocket,
         onConnection: (connection: MessageConnection) => {
-          const languageClient = createLanguageClient('LG Language Client', ['botbuilderlg'], connection);
+          const languageClient = createLanguageClient(
+            formatMessage('LG Language Client'),
+            ['botbuilderlg'],
+            connection
+          );
           SendRequestWithRetry(languageClient, 'initializeDocuments', { lgOption, uri });
           const disposable = languageClient.start();
           connection.onClose(() => disposable.dispose());

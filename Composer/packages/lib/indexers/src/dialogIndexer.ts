@@ -194,7 +194,7 @@ function index(files: FileInfo[], botName: string): DialogInfo[] {
           dialogs.push(dialog);
         }
       } catch (e) {
-        throw new Error(`Parse failed at ${file.name}: ${e}`);
+        throw new Error(formatMessage(`Parse failed at {name}: {error}`, { name: file.name, error: e }));
       }
     }
   }

@@ -5,6 +5,7 @@ import React from 'react';
 import { FlowWidget } from '@bfc/extension';
 import { SDKKinds, getInputType, PromptTab, PropmtTabTitles } from '@bfc/shared';
 import { VisualEditorColors as Colors, ListOverview, BorderedDiv, FixedInfo } from '@bfc/ui-shared';
+import formatMessage from 'format-message';
 
 const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
   widget: 'PromptWidget',
@@ -47,7 +48,7 @@ const generateInputSchema = (inputBody?, inputFooter?): FlowWidget => ({
 const PropertyInfo = (data) =>
   data.property ? (
     <>
-      {data.property} <FixedInfo>= Input({getInputType(data.$kind)})</FixedInfo>
+      {data.property} <FixedInfo>{formatMessage('= Input({type})', { type: getInputType(data.$kind) })}</FixedInfo>
     </>
   ) : null;
 

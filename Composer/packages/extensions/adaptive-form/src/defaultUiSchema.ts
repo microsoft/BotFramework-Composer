@@ -13,7 +13,7 @@ const triggerUiSchema = {
 
 const DefaultUISchema: UISchema = {
   [SDKKinds.AdaptiveDialog]: {
-    label: 'Adaptive dialog',
+    label: () => formatMessage('Adaptive dialog'),
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
     helpLink: 'https://aka.ms/bf-composer-docs-dialog',
     order: ['recognizer', '*'],
@@ -29,12 +29,12 @@ const DefaultUISchema: UISchema = {
     },
   },
   [SDKKinds.AttachmentInput]: {
-    label: 'Prompt for a file or an attachment',
+    label: () => formatMessage('Prompt for a file or an attachment'),
     subtitle: () => formatMessage('Attachment Input'),
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
   },
   [SDKKinds.BeginDialog]: {
-    label: 'Begin a new dialog',
+    label: () => formatMessage('Begin a new dialog'),
     subtitle: () => formatMessage('Begin Dialog'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
     order: ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
