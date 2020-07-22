@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -17,25 +17,31 @@ import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, content } from '../language-understanding/styles';
+import { dispatcherState, dialogsState, lgFilesState, projectIdState, localeState } from '../../recoilModel';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { state, actions } = useContext(StoreContext);
-  const { dialogs, lgFiles, projectId, locale } = state;
+  const actions = useRecoilValue(dispatcherState);
+  const dialogs = useRecoilValue(dialogsState);
+  const lgFiles = useRecoilValue(lgFilesState);
+  const projectId = useRecoilValue(projectIdState);
+  const locale = useRecoilValue(localeState);
+
   const { dialogId } = props;
   const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const createLgTemplate = useRef(debounce(actions.createLgTemplate, 500)).current;
   const copyLgTemplate = useRef(debounce(actions.copyLgTemplate, 500)).current;
   const removeLgTemplate = useRef(debounce(actions.removeLgTemplate, 500)).current;
   const [templates, setTemplates] = useState<LgTemplate[]>([]);
+  const { setMessage } = useRecoilValue(dispatcherState);
   const listRef = useRef(null);
 
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -59,44 +65,47 @@ const TableView: React.FC<TableViewProps> = (props) => {
   );
 
   const onCreateNewTemplate = useCallback(() => {
-    const newName = increaseNameUtilNotExist(templates, 'TemplateName');
-    const payload = {
-      file,
-      projectId,
-      template: {
-        name: newName,
-        body: '-TemplateValue',
-      },
-    };
-    createLgTemplate(payload);
-    setFocusedIndex(templates.length);
+    if (file) {
+      const newName = increaseNameUtilNotExist(templates, 'TemplateName');
+      const payload = {
+        id: file.id,
+        template: {
+          name: newName,
+          body: '-TemplateValue',
+        } as LgTemplate,
+      };
+      createLgTemplate(payload);
+      setFocusedIndex(templates.length);
+    }
   }, [templates, file, projectId]);
 
   const onRemoveTemplate = useCallback(
     (index) => {
-      const payload = {
-        file,
-        projectId,
-        templateName: templates[index].name,
-      };
+      if (file) {
+        const payload = {
+          id: file.id,
+          templateName: templates[index].name,
+        };
 
-      removeLgTemplate(payload);
+        removeLgTemplate(payload);
+      }
     },
     [templates, file, projectId]
   );
 
   const onCopyTemplate = useCallback(
     (index) => {
-      const name = templates[index].name;
-      const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
-      const payload = {
-        file,
-        projectId,
-        fromTemplateName: name,
-        toTemplateName: resolvedName,
-      };
-      copyLgTemplate(payload);
-      setFocusedIndex(templates.length);
+      if (file) {
+        const name = templates[index].name;
+        const resolvedName = increaseNameUtilNotExist(templates, `${name}_Copy`);
+        const payload = {
+          id: file.id,
+          fromTemplateName: name,
+          toTemplateName: resolvedName,
+        };
+        copyLgTemplate(payload);
+        setFocusedIndex(templates.length);
+      }
     },
     [templates, file, projectId]
   );
@@ -115,7 +124,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           key: 'delete',
           name: formatMessage('Delete'),
           onClick: () => {
-            actions.setMessage('item deleted');
+            setMessage('item deleted');
             onRemoveTemplate(index);
           },
         },
@@ -123,7 +132,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           key: 'copy',
           name: formatMessage('Make a copy'),
           onClick: () => {
-            actions.setMessage('item copied');
+            setMessage('item copied');
             onCopyTemplate(index);
           },
         },
@@ -259,7 +268,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => {
             onCreateNewTemplate();
-            actions.setMessage('item added');
+            setMessage('item added');
           }}
         >
           {formatMessage('New template')}

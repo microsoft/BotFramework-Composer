@@ -17,7 +17,7 @@ import formatMessage from 'format-message';
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { ILuisConfig } from '../../store/types';
+import { ILuisConfig } from '../../recoilModel/types';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`

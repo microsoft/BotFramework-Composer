@@ -6,8 +6,8 @@ import querystring from 'query-string';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
-import { USER_TOKEN_STORAGE_KEY, BASEURL, ActionTypes } from '../constants';
-import { Store } from '../store/types';
+import { USER_TOKEN_STORAGE_KEY, BASEURL } from '../constants';
+import { Dispatcher } from '../recoilModel/dispatchers';
 
 import storage from './storage';
 import httpClient from './httpUtil';
@@ -57,7 +57,7 @@ export function getUserTokenFromCache(): string | null {
   }
 }
 
-export function prepareAxios(store: Store) {
+export function prepareAxios({ setUserSessionExpired }: Dispatcher) {
   if (process.env.COMPOSER_REQUIRE_AUTH) {
     const cancelSource = axios.CancelToken.source();
 
@@ -85,11 +85,7 @@ export function prepareAxios(store: Store) {
 
           // remove user token from the cache
           clearUserTokenFromCache();
-
-          store.dispatch({
-            type: ActionTypes.USER_SESSION_EXPIRED,
-            payload: { expired: true },
-          });
+          setUserSessionExpired(true);
         }
 
         return Promise.reject(err);

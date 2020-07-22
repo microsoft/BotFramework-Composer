@@ -5,10 +5,11 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import formatMessage from 'format-message';
 import debounce from 'lodash/debounce';
 import { TeachingBubble } from 'office-ui-fabric-react/lib/TeachingBubble';
+import { useRecoilValue } from 'recoil';
 
+import { onboardingState } from '../../recoilModel';
 import OnboardingContext from '../OnboardingContext';
 import { getTeachingBubble } from '../onboardingUtils';
-import { StoreContext } from '../../store';
 
 import { teachingBubbleStyles, teachingBubbleTheme } from './styles';
 
@@ -23,11 +24,8 @@ function getPrimaryButtonText(currentStep, setLength) {
 }
 
 const TeachingBubbles = () => {
-  const {
-    state: {
-      onboarding: { coachMarkRefs },
-    },
-  } = useContext(StoreContext);
+  const onboarding = useRecoilValue(onboardingState);
+  const coachMarkRefs = onboarding.coachMarkRefs;
 
   const {
     actions: { nextStep, previousStep },

@@ -4,13 +4,12 @@
 import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { renderWithStore } from '../../../testUtils';
+import { renderWithRecoil } from '../../../testUtils';
 import { CreateOptions } from '../../../../src/components/CreationFlow/CreateOptions';
 
 describe('<CreateOptions/>', () => {
   const handleDismissMock = jest.fn();
   const handleCreateNextMock = jest.fn();
-  const saveTemplateMock = jest.fn();
   const templates = [
     {
       description: 'empty bot',
@@ -31,26 +30,12 @@ describe('<CreateOptions/>', () => {
       tags: ['Basic'],
     },
   ];
-  let storeContext;
 
   const renderComponent = () => {
-    return renderWithStore(
-      <CreateOptions path="create" templates={templates} onDismiss={handleDismissMock} onNext={handleCreateNextMock} />,
-      storeContext.state,
-      storeContext.action
+    return renderWithRecoil(
+      <CreateOptions path="create" templates={templates} onDismiss={handleDismissMock} onNext={handleCreateNextMock} />
     );
   };
-
-  beforeEach(() => {
-    storeContext = {
-      actions: {
-        saveTemplateId: saveTemplateMock,
-      },
-      state: {
-        templateId: '',
-      },
-    };
-  });
 
   it('should save empty bot template id', async () => {
     const component = renderComponent();
