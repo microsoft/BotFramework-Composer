@@ -5,13 +5,14 @@
 import { jsx, css } from '@emotion/core';
 import formatMessage from 'format-message';
 import { IconButton, IButtonStyles } from 'office-ui-fabric-react/lib/Button';
-import { useContext, useCallback, Fragment } from 'react';
+import { useCallback, Fragment } from 'react';
+import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
+import { dispatcherState, appUpdateState, botNameState, localeState } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
-import { StoreContext } from '../store';
 
 // -------------------- Styles -------------------- //
 
@@ -71,16 +72,11 @@ const headerTextContainer = css`
 
 // -------------------- Header -------------------- //
 
-type Props = {
-  botName: string;
-  locale: string;
-};
-
-export const Header = (props: Props) => {
-  const {
-    actions: { setAppUpdateShowing },
-    state: { appUpdate },
-  } = useContext(StoreContext);
+export const Header = () => {
+  const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
+  const curBotName = useRecoilValue(botNameState);
+  const locale = useRecoilValue(localeState);
+  const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
 
   const onUpdateAvailableClick = useCallback(() => {
@@ -99,10 +95,10 @@ export const Header = (props: Props) => {
       />
       <div css={headerTextContainer}>
         <div css={title}>{formatMessage('Bot Framework Composer')}</div>
-        {props.botName && (
+        {curBotName && (
           <Fragment>
             <div css={divider} />
-            <span css={botName}>{`${props.botName} (${props.locale})`}</span>
+            <span css={botName}>{`${curBotName} (${locale})`}</span>
           </Fragment>
         )}
       </div>

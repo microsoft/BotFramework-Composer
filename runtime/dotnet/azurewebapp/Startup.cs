@@ -43,7 +43,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
         public IWebHostEnvironment HostingEnvironment { get; }
 
         public IConfiguration Configuration { get; }
-        
+
         public void ConfigureTranscriptLoggerMiddleware(BotFrameworkHttpAdapter adapter, BotSettings settings)
         {
             if (ConfigSectionValid(settings.BlobStorage.ConnectionString) && ConfigSectionValid(settings.BlobStorage.Container))
@@ -132,7 +132,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             ComponentRegistration.Add(new LanguageGenerationComponentRegistration());
             ComponentRegistration.Add(new QnAMakerComponentRegistration());
             ComponentRegistration.Add(new LuisComponentRegistration());
-            
+
             // This is for custom action component registration.
             //ComponentRegistration.Add(new CustomActionComponentRegistration());
 
@@ -171,7 +171,7 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
             var resourceExplorer = new ResourceExplorer().AddFolder(botDir);
             var rootDialog = GetRootDialog(botDir);
 
-            var defaultLocale = Configuration.GetValue<string>("defaultLocale") ?? "en-us";
+            var defaultLocale = Configuration.GetValue<string>("defaultLanguage") ?? "en-us";
 
             services.AddSingleton(resourceExplorer);
 

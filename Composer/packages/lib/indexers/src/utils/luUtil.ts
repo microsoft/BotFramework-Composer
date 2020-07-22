@@ -15,8 +15,6 @@ import { luIndexer } from '../luIndexer';
 
 import { buildNewlineText, splitNewlineText } from './help';
 
-const { parse } = luIndexer;
-
 const { luParser, sectionOperator } = sectionHandler;
 
 const NEWLINE = '\r\n';
@@ -71,7 +69,7 @@ export function textFromIntents(intents: LuIntentSection[], nestedLevel = 1): st
 
 export function checkSection(intent: LuIntentSection, enableSections = true): Diagnostic[] {
   const text = textFromIntent(intent, 1, enableSections);
-  return parse(text).diagnostics;
+  return luIndexer.parse(text).diagnostics;
 }
 
 export function checkIsSingleSection(intent: LuIntentSection, enableSections = true): boolean {
@@ -175,6 +173,14 @@ export function addIntent(content: string, { Name, Body, Entities }: LuIntentSec
   return updateIntent(content, intentName, { Name, Body, Entities });
 }
 
+export function addIntents(content: string, intents: LuIntentSection[]): string {
+  let result = content;
+  for (const intent of intents) {
+    result = addIntent(result, intent);
+  }
+  return result;
+}
+
 /**
  *
  * @param content origin lu file content
@@ -191,4 +197,15 @@ export function removeIntent(content: string, intentName: string): string {
     return new sectionOperator(resource).deleteSection(targetSection.Id).Content;
   }
   return content;
+}
+export function removeIntents(content: string, intentNames: string[]): string {
+  let result = content;
+  for (const intentName of intentNames) {
+    result = removeIntent(result, intentName);
+  }
+  return result;
+}
+
+export function parse(id: string, content: string) {
+  return { id, content, ...luIndexer.parse(content, id) };
 }

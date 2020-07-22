@@ -59,7 +59,7 @@ context('Notification Page', () => {
       cy.findByTestId('FieldErrorMessage').should('exist');
     });
 
-    cy.findByTestId('LeftNav-CommandBarButtonNotifications').click();
+    cy.findByTestId('notifications-info-button').click();
 
     // move away from the Notifications button (clicking the logo should do nothing)
     cy.findByAltText('Composer Logo').click();

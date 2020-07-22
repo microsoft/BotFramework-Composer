@@ -22,7 +22,7 @@ describe('<NumberField />', () => {
         type: 'number',
       };
 
-      const { getByLabelText } = renderSubject({ onChange, schema });
+      const { getByLabelText } = renderSubject({ onChange, schema, value: 0 });
       const upButton = getByLabelText('increment by 0.01');
       const downButton = getByLabelText('decrement by 0.01');
 
@@ -48,7 +48,7 @@ describe('<NumberField />', () => {
         type: 'integer',
       };
 
-      const { getByLabelText } = renderSubject({ onChange, schema });
+      const { getByLabelText } = renderSubject({ onChange, schema, value: 0 });
       const upButton = getByLabelText('increment by 1');
       const downButton = getByLabelText('decrement by 1');
 
