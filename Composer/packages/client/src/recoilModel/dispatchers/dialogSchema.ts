@@ -2,8 +2,9 @@
 // Licensed under the MIT License.
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dialogSchemasState } from '../atoms/botState';
 import { DialogSchemaFile } from '@bfc/shared';
+
+import { dialogSchemasState } from '../atoms/botState';
 
 const createDialogSchema = ({ set }: CallbackInterface, dialogSchema: DialogSchemaFile) => {
   set(dialogSchemasState, (dialogSchemas) => [...dialogSchemas, dialogSchema]);
