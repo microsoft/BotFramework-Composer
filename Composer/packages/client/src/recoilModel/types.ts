@@ -11,7 +11,7 @@ import {
   DialogSetting,
 } from '@bfc/shared';
 
-import { AppUpdaterStatus } from '../constants';
+import { AppUpdaterStatus, BotStatus } from '../constants';
 
 import { SkillManifest } from './../pages/design/exportSkillModal/constants';
 
@@ -124,8 +124,4 @@ export type BoilerplateVersion = {
   latestVersion?: string;
   currentVersion?: string;
   updateRequired?: boolean;
-};
-
-export type BotProject = {
-  projectId: string;
 };
