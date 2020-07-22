@@ -81,7 +81,7 @@ const columns: IColumn[] = [
       return (
         <div data-is-focusable css={tableCell}>
           <div
-            aria-label={formatMessage(`Location is {location}`, { location: item.location })}
+            aria-label={formatMessage(`location is {location}`, { location: item.location })}
             css={content}
             tabIndex={-1}
           >

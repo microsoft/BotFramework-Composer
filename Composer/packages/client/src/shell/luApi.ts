@@ -15,7 +15,7 @@ import { focusPathState } from './../recoilModel/atoms/botState';
 
 const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
-const fileNotFound = (id: string) => formatMessage(`lu file {id} not found`, { id });
+const fileNotFound = (id: string) => formatMessage(`LU file {id} not found`, { id });
 const INTENT_ERROR = formatMessage('intentName is missing or empty');
 
 function createLuApi(

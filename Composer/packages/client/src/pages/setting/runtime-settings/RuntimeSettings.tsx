@@ -109,7 +109,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const callUpdateBoilerplate = async () => {
     const title = formatMessage('Update Scripts');
     const msg = formatMessage(
-      'Existing files in scripts/ folder will be overwritten. Are you sure you want to continue?'
+      'Existing files in scripts/folder will be overwritten. Are you sure you want to continue?'
     );
     const res = await OpenConfirmModal(title, msg);
     if (res) {

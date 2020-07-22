@@ -413,7 +413,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <TextField
               data-testid="RegExField"
               errorMessage={formData.errors.regEx}
-              label={formatMessage('Please input regex pattern')}
+              label={formatMessage('Please input regEx pattern')}
               onChange={onChangeRegEx}
             />
           )}

@@ -232,7 +232,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <div
               key={id}
               data-is-focusable
-              aria-label={formatMessage(`link to where this luis intent defined`)}
+              aria-label={formatMessage(`link to where this LUIS intent is defined`)}
               onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
             >
               <Link>{id}</Link>

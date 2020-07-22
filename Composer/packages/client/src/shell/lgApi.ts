@@ -12,7 +12,7 @@ import { useResolvers } from '../hooks/useResolver';
 import { projectIdState, focusPathState } from './../recoilModel';
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
-const fileNotFound = (id: string) => formatMessage('lg file {id} not found', { id });
+const fileNotFound = (id: string) => formatMessage('LG file {id} not found', { id });
 const TEMPLATE_ERROR = formatMessage('templateName is missing or empty');
 
 function createLgApi(
