@@ -5,6 +5,7 @@ import { ConversationState, UserState, MemoryStorage } from "botbuilder";
 import { DialogManager } from "botbuilder-dialogs";
 import { ResourceExplorer } from "botbuilder-dialogs-declarative";
 import { AdaptiveDialog } from "botbuilder-dialogs-adaptive";
+import { TurnContext } from "botbuilder-core";
 
 export class ComposerBot {
   private dialogManager: DialogManager;
@@ -33,7 +34,7 @@ export class ComposerBot {
     ) as AdaptiveDialog;
   };
 
-  public onTurn = async (context: any) => {
-    await this.dialogManager.onTurn(context);
+  public onTurn = async (context: TurnContext) => {
+    return await this.dialogManager.onTurn(context);
   };
 }

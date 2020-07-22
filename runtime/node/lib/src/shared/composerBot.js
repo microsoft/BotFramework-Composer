@@ -11,7 +11,7 @@ class ComposerBot {
             this.dialogManager.rootDialog = this.resourceExplorer.loadType(this.rootDialogPath);
         };
         this.onTurn = async (context) => {
-            await this.dialogManager.onTurn(context);
+            return await this.dialogManager.onTurn(context);
         };
         this.dialogManager = new botbuilder_dialogs_1.DialogManager();
         this.dialogManager.conversationState = new botbuilder_1.ConversationState(new botbuilder_1.MemoryStorage());

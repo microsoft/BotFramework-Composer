@@ -5,6 +5,7 @@ import * as restify from "restify";
 import * as fs from "fs";
 import * as path from "path";
 import { BotFrameworkAdapter } from "botbuilder";
+import { TurnContext } from "botbuilder-core";
 import {
   AdaptiveDialogComponentRegistration,
   LanguageGeneratorMiddleWare,
@@ -18,7 +19,7 @@ const argv = require("minimist")(process.argv.slice(2));
 // prefer the argv port --port=XXXX over process.env because the parent Composer app uses that.
 const port = argv.port || process.env.port || process.env.PORT || 3979;
 
-const getProjectRoot = (): string => {
+export const getProjectRoot = (): string => {
   // Load project settings
   let projectSettings = {
     bot: "../../",
@@ -33,10 +34,10 @@ const getProjectRoot = (): string => {
   return path.join(__dirname, projectSettings.root);
 };
 
-const getRootDialog = (): string => {
+export const getRootDialog = (projRoot: string): string => {
   // Find entry dialog file
   let mainDialog = "main.dialog";
-  const files = fs.readdirSync(getProjectRoot());
+  const files = fs.readdirSync(projRoot);
   for (let file of files) {
     if (file.endsWith(".dialog")) {
       mainDialog = file;
@@ -46,17 +47,17 @@ const getRootDialog = (): string => {
   return mainDialog;
 };
 
-const Configure = () => {
+export const Configure = (projRoot: string) => {
   // Create resource explorer.
   const resourceExplorer = new ResourceExplorer().addFolders(
-    getProjectRoot(),
+    projRoot,
     ["runtime"],
     false
   );
   resourceExplorer.addComponent(
     new AdaptiveDialogComponentRegistration(resourceExplorer)
   );
-  const settings = getSettings();
+  const settings = getSettings(projRoot);
   // Create adapter.
   // See https://aka.ms/about-bot-adapter to learn more about .bot file its use and bot configuration.
   const adapter = new BotFrameworkAdapter({
@@ -67,15 +68,18 @@ const Configure = () => {
   adapter.use(new LanguageGeneratorMiddleWare(resourceExplorer));
 
   // get settings
-  const bot = new ComposerBot(resourceExplorer, getRootDialog(), settings);
+  const bot = new ComposerBot(
+    resourceExplorer,
+    getRootDialog(projRoot),
+    settings
+  );
 
   return { adapter, bot };
 };
 
-const getSettings = () => {
+export const getSettings = (projectRoot: string) => {
   // Find settings json file
   let settings = {} as BotSettings;
-  const projectRoot = getProjectRoot();
   // load appsettings.json
   const appsettingsPath = path.join(projectRoot, "settings/appsettings.json");
   if (fs.existsSync(appsettingsPath)) {
@@ -115,7 +119,8 @@ const getSettings = () => {
   return settings;
 };
 
-const { adapter, bot } = Configure();
+const projectRoot = getProjectRoot();
+const { adapter, bot } = Configure(projectRoot);
 
 server.listen(port, (): void => {
   console.log(
@@ -130,7 +135,7 @@ server.post("/api/messages", (req, res): void => {
   adapter.processActivity(
     req,
     res,
-    async (context): Promise<any> => {
+    async (context: TurnContext): Promise<any> => {
       // Route activity to bot.
       await bot.onTurn(context);
     }

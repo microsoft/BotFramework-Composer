@@ -2,6 +2,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getSettings = exports.Configure = exports.getRootDialog = exports.getProjectRoot = void 0;
 const restify = require("restify");
 const fs = require("fs");
 const path = require("path");
@@ -14,7 +15,7 @@ const server = restify.createServer();
 const argv = require("minimist")(process.argv.slice(2));
 // prefer the argv port --port=XXXX over process.env because the parent Composer app uses that.
 const port = argv.port || process.env.port || process.env.PORT || 3979;
-const getProjectRoot = () => {
+exports.getProjectRoot = () => {
     // Load project settings
     let projectSettings = {
         bot: "../../",
@@ -28,10 +29,10 @@ const getProjectRoot = () => {
     }
     return path.join(__dirname, projectSettings.root);
 };
-const getRootDialog = () => {
+exports.getRootDialog = (projRoot) => {
     // Find entry dialog file
     let mainDialog = "main.dialog";
-    const files = fs.readdirSync(getProjectRoot());
+    const files = fs.readdirSync(projRoot);
     for (let file of files) {
         if (file.endsWith(".dialog")) {
             mainDialog = file;
@@ -40,11 +41,11 @@ const getRootDialog = () => {
     }
     return mainDialog;
 };
-const Configure = () => {
+exports.Configure = (projRoot) => {
     // Create resource explorer.
-    const resourceExplorer = new botbuilder_dialogs_declarative_1.ResourceExplorer().addFolders(getProjectRoot(), ["runtime"], false);
+    const resourceExplorer = new botbuilder_dialogs_declarative_1.ResourceExplorer().addFolders(projRoot, ["runtime"], false);
     resourceExplorer.addComponent(new botbuilder_dialogs_adaptive_1.AdaptiveDialogComponentRegistration(resourceExplorer));
-    const settings = getSettings();
+    const settings = exports.getSettings(projRoot);
     // Create adapter.
     // See https://aka.ms/about-bot-adapter to learn more about .bot file its use and bot configuration.
     const adapter = new botbuilder_1.BotFrameworkAdapter({
@@ -53,13 +54,12 @@ const Configure = () => {
     });
     adapter.use(new botbuilder_dialogs_adaptive_1.LanguageGeneratorMiddleWare(resourceExplorer));
     // get settings
-    const bot = new composerBot_1.ComposerBot(resourceExplorer, getRootDialog(), settings);
+    const bot = new composerBot_1.ComposerBot(resourceExplorer, exports.getRootDialog(projRoot), settings);
     return { adapter, bot };
 };
-const getSettings = () => {
+exports.getSettings = (projectRoot) => {
     // Find settings json file
     let settings = {};
-    const projectRoot = getProjectRoot();
     // load appsettings.json
     const appsettingsPath = path.join(projectRoot, "settings/appsettings.json");
     if (fs.existsSync(appsettingsPath)) {
@@ -97,7 +97,8 @@ const getSettings = () => {
     }
     return settings;
 };
-const { adapter, bot } = Configure();
+const projectRoot = exports.getProjectRoot();
+const { adapter, bot } = exports.Configure(projectRoot);
 server.listen(port, () => {
     console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
     console.log(`\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`);
