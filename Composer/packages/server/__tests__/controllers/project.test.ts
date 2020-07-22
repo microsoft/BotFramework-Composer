@@ -271,7 +271,7 @@ describe('lg operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'test1.lg', content: '' },
+      body: { name: 'test1.en-us.lg', content: '' },
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -279,7 +279,7 @@ describe('lg operation', () => {
 
   it('should remove lg file', async () => {
     const mockReq = {
-      params: { name: 'test1.lg', projectId },
+      params: { name: 'test1.en-us.lg', projectId },
       query: {},
       body: {},
     } as Request;
@@ -308,7 +308,7 @@ describe('lu operation', () => {
     const mockReq = {
       params: { projectId },
       query: {},
-      body: { name: 'c.lu', content: '' },
+      body: { name: 'c.en-us.lu', content: '' },
     } as Request;
     await ProjectController.createFile(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -316,7 +316,7 @@ describe('lu operation', () => {
 
   it('should remove lu file', async () => {
     const mockReq = {
-      params: { name: 'c.lu', projectId },
+      params: { name: 'c.en-us.lu', projectId },
       query: {},
       body: {},
     } as Request;
@@ -341,7 +341,7 @@ describe('skill operation', () => {
     } as Request;
     await ProjectController.getSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
+  }, 5000);
 
   it('should update skill', async () => {
     const mockReq = {
@@ -357,9 +357,9 @@ describe('skill operation', () => {
     } as Request;
     await ProjectController.updateSkill(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
-  });
+  }, 5000);
 
-  it('should update skill', async () => {
+  it('should update skill, remove', async () => {
     const mockReq = {
       params: { projectId },
       query: {},

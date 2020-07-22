@@ -43,6 +43,7 @@ export const botEnvironmentState = atom<string>({
   default: 'production',
 });
 
+// current bot authoring language
 export const localeState = atom<string>({
   key: getFullyQualifiedKey('locale'),
   default: 'en-us',
@@ -120,7 +121,7 @@ export const showAddSkillDialogModalState = atom<boolean>({
 
 export const settingsState = atom<DialogSetting>({
   key: getFullyQualifiedKey('settings'),
-  default: {} as DialogSetting,
+  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {} } as DialogSetting,
 });
 
 export const publishVersionsState = atom<any>({
@@ -173,4 +174,24 @@ export const onAddSkillDialogCompleteState = atom<any>({
 export const displaySkillManifestState = atom<any>({
   key: getFullyQualifiedKey('displaySkillManifest'),
   default: undefined,
+});
+
+export const showAddLanguageModalState = atom<boolean>({
+  key: getFullyQualifiedKey('showAddLanguageModal'),
+  default: false,
+});
+
+export const showDelLanguageModalState = atom<boolean>({
+  key: getFullyQualifiedKey('showDelLanguageModal'),
+  default: false,
+});
+
+export const onAddLanguageDialogCompleteState = atom<any>({
+  key: getFullyQualifiedKey('onAddLanguageDialogComplete'),
+  default: { func: undefined },
+});
+
+export const onDelLanguageDialogCompleteState = atom<any>({
+  key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
+  default: { func: undefined },
 });

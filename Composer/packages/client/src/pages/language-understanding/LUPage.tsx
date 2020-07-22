@@ -35,9 +35,13 @@ const LUPage: React.FC<LUPageProps> = (props) => {
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
+      let url = `/bot/${projectId}/language-understanding/${dialog.id}`;
+      if (edit) {
+        url += `/edit`;
+      }
       return {
         id: dialog.id,
-        url: `/bot/${projectId}/language-understanding/${dialog.id}`,
+        url: url,
         name: dialog.displayName,
         ariaLabel: formatMessage('language understanding file'),
       };
@@ -55,7 +59,7 @@ const LUPage: React.FC<LUPageProps> = (props) => {
       url: `/bot/${projectId}/language-understanding/all`,
     });
     return newDialogLinks;
-  }, [dialogs]);
+  }, [dialogs, edit]);
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -88,7 +92,6 @@ const LUPage: React.FC<LUPageProps> = (props) => {
           checked={!!edit}
           className={'toggleEditMode'}
           css={actionButton}
-          defaultChecked={false}
           offText={formatMessage('Edit mode')}
           onChange={onToggleEditMode}
           onText={formatMessage('Edit mode')}

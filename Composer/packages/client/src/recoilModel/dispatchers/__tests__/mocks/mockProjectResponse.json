@@ -1,7 +1,6 @@
 {
   "id": "30876.502871204648",
   "botName": "EmptyBot-1",
-  "locale": "en-us",
   "botEnvironment": "test",
   "files": [
     {
@@ -8647,6 +8646,8 @@
       "connectionString": "",
       "container": "transcripts"
     },
+    "defaultLanguage": "en-us",
+    "languages": ["en-us"],
     "luis": {
       "name": "",
       "authoringKey": "",

@@ -117,6 +117,8 @@ export interface DialogSetting {
     path: string;
     command: string;
   };
+  defaultLanguage: string;
+  languages: string[];
   [key: string]: unknown;
 }
 

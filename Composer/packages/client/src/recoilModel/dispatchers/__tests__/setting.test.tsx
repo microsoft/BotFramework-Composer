@@ -31,6 +31,8 @@ const settings = {
     connectionString: '',
     container: 'transcripts',
   },
+  defaultLanguage: 'en-us',
+  languages: ['en-us'],
   luis: {
     name: '',
     authoringKey: '',

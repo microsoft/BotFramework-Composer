@@ -137,7 +137,7 @@ describe('lg operations', () => {
     await proj.init();
     const filesCount = proj.files.length;
     const lgFilesCount = lgFileLength(proj.files);
-    const id = 'root.lg';
+    const id = 'root.en-us.lg';
     const content = '# hello \n - hello';
     const file = await proj.createFile(id, content);
 
@@ -155,7 +155,7 @@ describe('lg operations', () => {
     const filesCount = proj.files.length;
     const lgFilesCount = lgFileLength(proj.files);
 
-    const id = 'root.lg';
+    const id = 'root.en-us.lg';
     let content = '# hello \n - hello';
     await proj.createFile(id, content);
 
@@ -173,7 +173,7 @@ describe('lg operations', () => {
   });
 
   it('should delete lg file and update index', async () => {
-    const id = 'root.lg';
+    const id = 'root.en-us.lg';
     const content = '# hello \n - hello';
     await proj.createFile(id, content);
 
@@ -205,7 +205,7 @@ describe('lu operations', () => {
     const filesCount = proj.files.length;
     const luFilesCount = luFileLength(proj.files);
 
-    const id = 'root.lu';
+    const id = 'root.en-us.lu';
     const content = '# hello \n - hello';
     const file = await proj.createFile(id, content);
 
@@ -223,7 +223,7 @@ describe('lu operations', () => {
     const filesCount = proj.files.length;
     const luFilesCount = luFileLength(proj.files);
 
-    const id = 'root.lu';
+    const id = 'root.en-us.lu';
     let content = '## hello \n - hello';
     await proj.createFile(id, content);
     content = '## hello \n - hello2';
@@ -239,7 +239,7 @@ describe('lu operations', () => {
   });
 
   it('should delete lu file and update index', async () => {
-    const id = 'root.lu';
+    const id = 'root.en-us.lu';
     const content = '## hello \n - hello2';
     await proj.createFile(id, content);
     const filesCount = proj.files.length;

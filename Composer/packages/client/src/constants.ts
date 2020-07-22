@@ -114,6 +114,28 @@ export const DialogDeleting = {
   CONFIRM_CONTENT: formatMessage('Do you wish to continue?'),
 };
 
+export const MultiLanguagesDialog = {
+  ADD_DIALOG: {
+    title: formatMessage('Copy content for translation'),
+    subText: formatMessage(
+      `Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated.`
+    ),
+    selectDefaultLangTitle: formatMessage(
+      'This language will be copied and used as the basis (and fallback language) for the translation.'
+    ),
+    selectionTitle: formatMessage('To which language will you be translating your bot?'),
+    whenDoneText: formatMessage(
+      'When done, switch to the newly created language and start the (manual) translation process.'
+    ),
+  },
+  DELETE_DIALOG: {
+    title: formatMessage('Select language to delete'),
+    subText: formatMessage(
+      `When deleting a lanuage, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
+    ),
+  },
+};
+
 export const addSkillDialog = {
   SKILL_MANIFEST_FORM: {
     title: formatMessage('Add a skill'),
