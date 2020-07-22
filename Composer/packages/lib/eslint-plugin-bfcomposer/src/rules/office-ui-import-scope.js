@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import formatMessage from 'format-message';
-
 const isOfficeUiFullImport = (str) => /office-ui-fabric-react$/.test(str);
 
 module.exports = {
@@ -10,7 +8,7 @@ module.exports = {
     return {
       ImportDeclaration(node) {
         if (isOfficeUiFullImport(node.source.value)) {
-          context.report({ node, message: formatMessage('Import Office UI components from /lib directory') });
+          context.report({ node, message: 'Import Office UI components from /lib directory' });
         }
       },
     };
