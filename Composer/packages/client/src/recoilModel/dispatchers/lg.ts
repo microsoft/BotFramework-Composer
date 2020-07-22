@@ -56,13 +56,12 @@ export const updateLgFileState = async (
   // sync add/remove templates
   if (onlyAdds || onlyDeletes) {
     for (const { id, content } of sameIdOtherLocaleFiles) {
-      let newContent: string = (await LgWorker.addTemplates(id, content, addedTemplates)) as string;
-      newContent = (await LgWorker.removeTemplates(
+      let newLgFile = (await LgWorker.addTemplates(id, content, addedTemplates)) as LgFile;
+      newLgFile = (await LgWorker.removeTemplates(
         id,
-        newContent,
+        newLgFile.content,
         deletedTemplates.map(({ name }) => name)
-      )) as string;
-      const newLgFile = (await LgWorker.parse(id, newContent, lgFiles)) as LgFile;
+      )) as LgFile;
       changes.push(newLgFile);
     }
   }
