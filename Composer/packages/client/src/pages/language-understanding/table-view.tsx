@@ -4,7 +4,7 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
@@ -17,10 +17,18 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import formatMessage from 'format-message';
 import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
-import { LuFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { LuFile, LuIntentSection } from '@bfc/shared';
 
-import { dialogsState, luFilesState, projectIdState, localeState } from '../../recoilModel/atoms/botState';
+import { getExtension } from '../../utils/fileUtil';
+import { languageListTemplates } from '../../components/MultiLanguage';
+import {
+  dialogsState,
+  luFilesState,
+  projectIdState,
+  localeState,
+  settingsState,
+} from '../../recoilModel/atoms/botState';
 import { navigateTo } from '../../utils/navigation';
 
 import { formCell, luPhraseCell, tableCell, content } from './styles';
@@ -42,6 +50,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
+  const settings = useRecoilValue(settingsState);
+
+  const { languages, defaultLanguage } = settings;
   const { dialogId } = props;
   const activeDialog = dialogs.find(({ id }) => id === dialogId);
 
@@ -65,23 +76,24 @@ const TableView: React.FC<TableViewProps> = (props) => {
   useEffect(() => {
     if (isEmpty(luFiles)) return;
 
-    const allIntents = luFiles.reduce((result: Intent[], luFile: LuFile) => {
-      const items: Intent[] = [];
-      const luDialog = dialogs.find((dialog) => luFile.id === `${dialog.id}.${locale}`);
-      get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
-        const state = getIntentState(luFile);
-
-        items.push({
-          name,
-          phrases,
-          fileId: luFile.id,
-          dialogId: luDialog?.id || '',
-          used: !!luDialog && luDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
-          state,
+    const allIntents = luFiles
+      .filter(({ id }) => getExtension(id) === locale)
+      .reduce((result: Intent[], luFile: LuFile) => {
+        const items: Intent[] = [];
+        const luDialog = dialogs.find((dialog) => luFile.id === `${dialog.id}.${locale}`);
+        get(luFile, 'intents', []).forEach(({ Name: name, Body: phrases }) => {
+          const state = getIntentState(luFile);
+          items.push({
+            name,
+            phrases,
+            fileId: luFile.id,
+            dialogId: luDialog?.id || '',
+            used: !!luDialog && luDialog.referredLuIntents.some((lu) => lu.name === name), // used by it's dialog or not
+            state,
+          });
         });
-      });
-      return result.concat(items);
-    }, []);
+        return result.concat(items);
+      }, []);
 
     if (!activeDialog) {
       setIntents(allIntents);
@@ -106,7 +118,15 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const getTableColums = () => {
-    const tableColums = [
+    const languagesList = languageListTemplates(languages, locale, defaultLanguage);
+    const defaultLangTeamplate = languagesList.find((item) => item.locale === defaultLanguage);
+    const currentLangTeamplate = languagesList.find((item) => item.locale === locale);
+    // eslint-disable-next-line format-message/literal-pattern
+    const currentLangResponsesHeader = formatMessage(`Sample Phrases - ${currentLangTeamplate?.language}`);
+    // eslint-disable-next-line format-message/literal-pattern
+    const defaultLangResponsesHeader = formatMessage(`Sample Phrases - ${defaultLangTeamplate?.language} (default)`);
+
+    let tableColums = [
       {
         key: 'name',
         name: formatMessage('Intent'),
@@ -146,6 +166,52 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 tabIndex={-1}
               >
                 {item.phrases}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        key: 'phrases-lang',
+        name: currentLangResponsesHeader,
+        fieldName: 'phrases',
+        minWidth: 100,
+        maxWidth: 500,
+        isResizable: true,
+        data: 'string',
+        onRender: (item) => {
+          const text = item.phrases;
+          return (
+            <div data-is-focusable css={luPhraseCell}>
+              <div
+                aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
+                css={content}
+                tabIndex={-1}
+              >
+                {text}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        key: 'phrases-default-lang',
+        name: defaultLangResponsesHeader,
+        fieldName: 'phrases-default-lang',
+        minWidth: 100,
+        maxWidth: 500,
+        isResizable: true,
+        data: 'string',
+        onRender: (item) => {
+          const text = item[`body-${defaultLanguage}`];
+          return (
+            <div data-is-focusable css={luPhraseCell}>
+              <div
+                aria-label={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
+                css={content}
+                tabIndex={-1}
+              >
+                {text}
               </div>
             </div>
           );
@@ -236,9 +302,16 @@ const TableView: React.FC<TableViewProps> = (props) => {
       },
     ];
 
+    // show compairable column when current lang is not default lang
+    if (locale === defaultLanguage) {
+      tableColums = tableColums.filter(({ key }) => ['phrases-default-lang', 'phrases-lang'].includes(key) === false);
+    } else {
+      tableColums = tableColums.filter(({ key }) => ['phrases'].includes(key) === false);
+    }
+
     // all view, hide defineIn column
-    if (activeDialog) {
-      tableColums.splice(2, 1);
+    if (!activeDialog) {
+      tableColums = tableColums.filter(({ key }) => ['definedIn'].includes(key) === false);
     }
 
     return tableColums;
@@ -257,6 +330,30 @@ const TableView: React.FC<TableViewProps> = (props) => {
     );
   }
 
+  const intentsToRender = useMemo(() => {
+    if (locale !== defaultLanguage) {
+      let defaultLangTeamplates;
+      if (activeDialog) {
+        defaultLangTeamplates = luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`)?.intents;
+      } else {
+        defaultLangTeamplates = luFiles
+          .filter(({ id }) => getExtension(id) === defaultLanguage)
+          .reduce((result: LuIntentSection[], luFile: LuFile) => {
+            return result.concat(luFile.intents);
+          }, []);
+      }
+
+      return intents.map((item) => {
+        const itemInDefaultLang = defaultLangTeamplates?.find(({ Name }) => Name === item.name);
+        return {
+          ...item,
+          [`body-${defaultLanguage}`]: itemInDefaultLang?.Body || '',
+        };
+      });
+    }
+    return intents;
+  }, [intents]);
+
   return (
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
@@ -265,7 +362,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           columns={getTableColums()}
           componentRef={listRef}
           getKey={(item) => item.Name}
-          items={intents}
+          items={intentsToRender}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.none}
           styles={{

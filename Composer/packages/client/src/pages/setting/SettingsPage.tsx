@@ -10,7 +10,13 @@ import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { useRecoilValue } from 'recoil';
 
-import { projectIdState } from '../../recoilModel/atoms/botState';
+import {
+  projectIdState,
+  localeState,
+  showAddLanguageModalState,
+  showDelLanguageModalState,
+  settingsState,
+} from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { TestController } from '../../components/TestController/TestController';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -18,6 +24,8 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
+import { IToolBarItem } from '../../components/ToolBar';
+import { AddLanguageModal, DeleteLanguageModal } from '../../components/MultiLanguage/index';
 
 import { SettingsRoutes } from './router';
 
@@ -26,8 +34,20 @@ const getProjectLink = (path: string, id?: string) => {
 };
 
 const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
-  const { deleteBotProject } = useRecoilValue(dispatcherState);
+  const {
+    deleteBotProject,
+    addLanguageDialogBegin,
+    addLanguageDialogCancel,
+    delLanguageDialogBegin,
+    delLanguageDialogCancel,
+    addLanguages,
+    deleteLanguages,
+  } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(projectIdState);
+  const locale = useRecoilValue(localeState);
+  const showAddLanguageModal = useRecoilValue(showAddLanguageModalState);
+  const showDelLanguageModal = useRecoilValue(showDelLanguageModalState);
+  const { defaultLanguage, languages } = useRecoilValue(settingsState);
   const { navigate } = useLocation();
 
   // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
@@ -129,18 +149,54 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     }
   };
 
-  const toolbarItems = [
+  const onAddLangModalSubmit = async (formData) => {
+    await addLanguages({
+      ...formData,
+      projectId,
+    });
+  };
+
+  const onDeleteLangModalSubmit = async (formData) => {
+    await deleteLanguages({
+      ...formData,
+      projectId,
+    });
+  };
+
+  const toolbarItems: IToolBarItem[] = [
     {
-      type: 'action',
-      text: formatMessage('Delete'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Delete',
-        },
-        onClick: openDeleteBotModal,
-      },
+      type: 'dropdown',
+      text: formatMessage('Edit'),
       align: 'left',
+      dataTestid: 'EditFlyout',
+      buttonProps: {
+        iconProps: { iconName: 'Edit' },
+      },
+      menuProps: {
+        items: [
+          {
+            key: 'edit.deleteBot',
+            text: formatMessage('Delete Bot'),
+            onClick: openDeleteBotModal,
+          },
+          {
+            key: 'edit.addLanguage',
+            text: formatMessage('Add language'),
+            onClick: () => {
+              addLanguageDialogBegin(() => {});
+            },
+          },
+          {
+            key: 'edit.deleteLanguage',
+            text: formatMessage('Delete language'),
+            onClick: () => {
+              delLanguageDialogBegin(() => {});
+            },
+          },
+        ],
+      },
     },
+
     {
       type: 'element',
       element: <TestController />,
@@ -165,6 +221,22 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
       title={title}
       toolbarItems={toolbarItems}
     >
+      <AddLanguageModal
+        defaultLanguage={defaultLanguage}
+        isOpen={showAddLanguageModal}
+        languages={languages}
+        locale={locale}
+        onDismiss={addLanguageDialogCancel}
+        onSubmit={onAddLangModalSubmit}
+      ></AddLanguageModal>
+      <DeleteLanguageModal
+        defaultLanguage={defaultLanguage}
+        isOpen={showDelLanguageModal}
+        languages={languages}
+        locale={locale}
+        onDismiss={delLanguageDialogCancel}
+        onSubmit={onDeleteLangModalSubmit}
+      ></DeleteLanguageModal>
       <SettingsRoutes projectId={projectId} />
     </Page>
   );

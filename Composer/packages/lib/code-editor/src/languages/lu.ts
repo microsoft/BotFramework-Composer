@@ -79,11 +79,11 @@ export function registerLULanguage(monaco: Monaco) {
       { token: 'intent', foreground: '0000FF' },
       { token: 'pattern', foreground: '00B7C3' },
       { token: 'entity-name', foreground: '038387' },
-      { token: 'comments', foreground: '7A7A7A' },
+      { token: 'comments', foreground: '656565' },
       { token: 'import-desc', foreground: '00A32B' },
       { token: 'entity-type', foreground: 'DF2C2C' },
-      { token: 'prebult-type', foreground: 'DF2C2C' },
-      { token: 'keywords', foreground: '0078D7' },
+      { token: 'prebult-type', foreground: '393939' },
+      { token: 'keywords', foreground: '038387' },
     ],
   });
 }
