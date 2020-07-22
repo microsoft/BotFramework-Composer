@@ -19,6 +19,7 @@ import { DialogSetting } from '../../recoilModel/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
+import { designPageLocationState } from '../atoms/botState';
 
 import {
   skillManifestsState,
@@ -271,6 +272,7 @@ export const projectDispatcher = () => {
       reset(settingsState);
       reset(localeState);
       reset(skillManifestsState);
+      reset(designPageLocationState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }
