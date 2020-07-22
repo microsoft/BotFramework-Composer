@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
 import { skillsState, botNameState, settingsState, projectIdState, dispatcherState } from '../../recoilModel';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { ToolBar, IToolBarItem } from '../../components/Toolbar';
 import { TestController } from '../../components/TestController/TestController';
 import { CreateSkillModal, ISkillFormData } from '../../components/CreateSkillModal';
 

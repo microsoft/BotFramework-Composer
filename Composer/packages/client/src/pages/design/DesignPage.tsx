@@ -24,7 +24,7 @@ import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { undoHistory } from '../../recoilModel/undo';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { ToolBar, IToolBarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';

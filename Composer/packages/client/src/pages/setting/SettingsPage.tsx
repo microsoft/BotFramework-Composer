@@ -24,7 +24,7 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
-import { IToolBarItem } from '../../components/ToolBar';
+import { IToolBarItem } from '../../components/Toolbar';
 import { AddLanguageModal, DeleteLanguageModal } from '../../components/MultiLanguage/index';
 
 import { SettingsRoutes } from './router';

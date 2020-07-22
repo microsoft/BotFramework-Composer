@@ -15,7 +15,7 @@ import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
 import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
 import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { ToolBar, IToolBarItem } from '../../components/Toolbar';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';

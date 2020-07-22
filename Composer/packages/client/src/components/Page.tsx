@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
-import { ToolBar, IToolBarItem } from './ToolBar';
+import { ToolBar, IToolBarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
 
 // -------------------- Styles -------------------- //

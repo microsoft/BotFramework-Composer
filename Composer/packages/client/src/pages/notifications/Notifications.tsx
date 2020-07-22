@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
-import { ToolBar } from '../../components/ToolBar';
+import { ToolBar } from '../../components/Toolbar';
 import { navigateTo } from '../../utils/navigation';
 import { convertPathToUrl } from '../../utils/navigation';
 
