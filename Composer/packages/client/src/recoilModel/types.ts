@@ -111,6 +111,12 @@ export interface DialogSetting {
   };
   defaultLanguage: string;
   languages: string[];
+  skill?: {
+    name: string;
+    manifestUrl: string;
+  }[];
+  botId?: string;
+  skillHostEndpoint?: string;
   [key: string]: unknown;
 }
 
