@@ -1,158 +1,159 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import formatMessage from 'format-message';
 import { MenuUISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
 const SubmenuNames = {
-  AskQuestion: 'Ask a question',
-  CreateCondition: 'Create a condition',
-  Looping: 'Looping',
-  DialogManagement: 'Dialog management',
-  PropertyManagement: 'Manage properties',
-  AccessExternalResources: 'Access external resources',
-  Debugging: 'Debugging options',
+  AskQuestion: formatMessage('Ask a question'),
+  CreateCondition: formatMessage('Create a condition'),
+  Looping: formatMessage('Looping'),
+  DialogManagement: formatMessage('Dialog management'),
+  PropertyManagement: formatMessage('Manage properties'),
+  AccessExternalResources: formatMessage('Access external resources'),
+  Debugging: formatMessage('Debugging options'),
 };
 
 export const DefaultMenuSchema: MenuUISchema = {
   // Send a response
   [SDKKinds.SendActivity]: {
-    label: 'Send a response',
+    label: formatMessage('Send a response'),
     submenu: false,
   },
   // Ask a question
   [SDKKinds.TextInput]: {
-    label: 'Text',
+    label: formatMessage('Text'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.NumberInput]: {
-    label: 'Number',
+    label: formatMessage('Number'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.ConfirmInput]: {
-    label: 'Confirmation',
+    label: formatMessage('Confirmation'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.ChoiceInput]: {
-    label: 'Multi-choice',
+    label: formatMessage('Multi-choice'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.AttachmentInput]: {
-    label: 'File or attachment',
+    label: formatMessage('File or attachment'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.DateTimeInput]: {
-    label: 'Date or time',
+    label: formatMessage('Date or time'),
     submenu: [SubmenuNames.AskQuestion],
   },
   [SDKKinds.OAuthInput]: {
-    label: 'OAuth login',
+    label: formatMessage('OAuth login'),
     submenu: [SubmenuNames.AskQuestion],
   },
   // Create a condition
   [SDKKinds.IfCondition]: {
-    label: 'Branch: If/else',
+    label: formatMessage('Branch: If/else'),
     submenu: [SubmenuNames.CreateCondition],
   },
   [SDKKinds.SwitchCondition]: {
-    label: 'Branch: Switch (multiple options)',
+    label: formatMessage('Branch: Switch (multiple options)'),
     submenu: [SubmenuNames.CreateCondition],
   },
   // Looping
   [SDKKinds.Foreach]: {
-    label: 'Loop: For each item',
+    label: formatMessage('Loop: For each item'),
     submenu: [SubmenuNames.Looping],
   },
   [SDKKinds.ForeachPage]: {
-    label: 'Loop: For each page (multiple items)',
+    label: formatMessage('Loop: For each page (multiple items)'),
     submenu: [SubmenuNames.Looping],
   },
   [SDKKinds.ContinueLoop]: {
-    label: 'Continue loop',
+    label: formatMessage('Continue loop'),
     submenu: [SubmenuNames.Looping],
   },
   [SDKKinds.BreakLoop]: {
-    label: 'Break out of loop',
+    label: formatMessage('Break out of loop'),
     submenu: [SubmenuNames.Looping],
   },
   // Dialog management
   [SDKKinds.BeginDialog]: {
-    label: 'Begin a new dialog',
+    label: formatMessage('Begin a new dialog'),
     submenu: [SubmenuNames.DialogManagement],
   },
   [SDKKinds.EndDialog]: {
-    label: 'End this dialog',
+    label: formatMessage('End this dialog'),
     submenu: [SubmenuNames.DialogManagement],
   },
   [SDKKinds.CancelAllDialogs]: {
-    label: 'Cancel all active dialogs',
+    label: formatMessage('Cancel all active dialogs'),
     submenu: [SubmenuNames.DialogManagement],
   },
   [SDKKinds.EndTurn]: {
-    label: 'End turn',
+    label: formatMessage('End turn'),
     submenu: [SubmenuNames.DialogManagement],
   },
   [SDKKinds.RepeatDialog]: {
-    label: 'Repeat this dialog',
+    label: formatMessage('Repeat this dialog'),
     submenu: [SubmenuNames.DialogManagement],
   },
   [SDKKinds.ReplaceDialog]: {
-    label: 'Replace this dialog',
+    label: formatMessage('Replace this dialog'),
     submenu: [SubmenuNames.DialogManagement],
   },
   // Manage properties
   [SDKKinds.SetProperty]: {
-    label: 'Set a property',
+    label: formatMessage('Set a property'),
     submenu: [SubmenuNames.PropertyManagement],
   },
   [SDKKinds.SetProperties]: {
-    label: 'Set properties',
+    label: formatMessage('Set properties'),
     submenu: [SubmenuNames.PropertyManagement],
   },
   [SDKKinds.DeleteProperty]: {
-    label: 'Delete a property',
+    label: formatMessage('Delete a property'),
     submenu: [SubmenuNames.PropertyManagement],
   },
   [SDKKinds.DeleteProperties]: {
-    label: 'Delete properties',
+    label: formatMessage('Delete properties'),
     submenu: [SubmenuNames.PropertyManagement],
   },
   [SDKKinds.EditArray]: {
-    label: 'Edit an array property',
+    label: formatMessage('Edit an array property'),
     submenu: [SubmenuNames.PropertyManagement],
   },
   // Access external resources
   [SDKKinds.BeginSkill]: {
-    label: 'Connect to a skill',
+    label: formatMessage('Connect to a skill'),
     submenu: [SubmenuNames.AccessExternalResources],
   },
   [SDKKinds.HttpRequest]: {
-    label: 'Send an HTTP request',
+    label: formatMessage('Send an HTTP request'),
     submenu: [SubmenuNames.AccessExternalResources],
   },
   [SDKKinds.EmitEvent]: {
-    label: 'Emit a custom event',
+    label: formatMessage('Emit a custom event'),
     submenu: [SubmenuNames.AccessExternalResources],
   },
   [SDKKinds.OAuthInput]: {
-    label: 'OAuth login',
+    label: formatMessage('OAuth login'),
     submenu: [SubmenuNames.AccessExternalResources],
   },
   [SDKKinds.QnAMakerDialog]: {
-    label: 'Connect to QnA Knowledgebase',
+    label: formatMessage('Connect to QnA Knowledgebase'),
     submenu: [SubmenuNames.AccessExternalResources],
   },
   [SDKKinds.SignOutUser]: {
-    label: 'Sign out user',
+    label: formatMessage('Sign out user'),
     submenu: [SubmenuNames.AccessExternalResources],
   },
   // Debugging options
   [SDKKinds.LogAction]: {
-    label: 'Log to console',
+    label: formatMessage('Log to console'),
     submenu: [SubmenuNames.Debugging],
   },
   [SDKKinds.TraceActivity]: {
-    label: 'Emit a trace event',
+    label: formatMessage('Emit a trace event'),
     submenu: [SubmenuNames.Debugging],
   },
 };
