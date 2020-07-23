@@ -53,15 +53,19 @@ export const updateLgFileState = async (
   );
   const onlyAdds = addedTemplates.length && !deletedTemplates.length;
   const onlyDeletes = !addedTemplates.length && deletedTemplates.length;
+
   // sync add/remove templates
   if (onlyAdds || onlyDeletes) {
-    for (const { id, content } of sameIdOtherLocaleFiles) {
-      let newLgFile = (await LgWorker.addTemplates(id, content, addedTemplates)) as LgFile;
-      newLgFile = (await LgWorker.removeTemplates(
-        id,
+    for (const file of sameIdOtherLocaleFiles) {
+      const lgImportResolver = importResolverGenerator(lgFiles, '.lg', getExtension(file.id));
+      let newLgFile = lgUtil.addTemplates(file.id, file.content, addedTemplates, lgImportResolver);
+      newLgFile = lgUtil.removeTemplates(
+        file.id,
         newLgFile.content,
-        deletedTemplates.map(({ name }) => name)
-      )) as LgFile;
+        deletedTemplates.map(({ name }) => name),
+        lgImportResolver
+      );
+
       changes.push(newLgFile);
     }
   }
@@ -125,11 +129,9 @@ export const lgDispatcher = () => {
     }
   );
 
-  const removeLgFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
-      await createLgFileState(callbackHelpers, { id, content });
-    }
-  );
+  const removeLgFile = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id }: { id: string }) => {
+    await removeLgFileState(callbackHelpers, { id });
+  });
 
   const updateLgFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
