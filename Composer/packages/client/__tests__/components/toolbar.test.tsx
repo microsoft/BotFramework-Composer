@@ -5,7 +5,7 @@ import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
 import { renderWithRecoil } from '../testUtils';
-import { ToolBar } from '../../src/components/Toolbar';
+import { Toolbar } from '../../src/components/Toolbar';
 
 const toolbarItems = (onClick) => [
   {
@@ -48,9 +48,9 @@ const toolbarItems = (onClick) => [
   },
 ];
 
-describe('<ToolBar />', () => {
-  it('should render the ToolBar', () => {
-    const { container } = renderWithRecoil(<ToolBar toolbarItems={toolbarItems(() => {})} />);
+describe('<Toolbar />', () => {
+  it('should render the Toolbar', () => {
+    const { container } = renderWithRecoil(<Toolbar toolbarItems={toolbarItems(() => {})} />);
 
     expect(container).toHaveTextContent('New');
     expect(container).toHaveTextContent('Open');
@@ -60,7 +60,7 @@ describe('<ToolBar />', () => {
 
   it('should have item click event', async () => {
     const mockSetCreationFlowStatus = jest.fn(() => null);
-    const { findByText } = renderWithRecoil(<ToolBar toolbarItems={toolbarItems(mockSetCreationFlowStatus)} />);
+    const { findByText } = renderWithRecoil(<Toolbar toolbarItems={toolbarItems(mockSetCreationFlowStatus)} />);
     const newButton = await findByText(/New/);
     const openButton = await findByText(/Open/);
     const saveButton = await findByText(/Save as/);

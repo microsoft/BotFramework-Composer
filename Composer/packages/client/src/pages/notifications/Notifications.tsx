@@ -6,7 +6,7 @@ import { jsx } from '@emotion/core';
 import { useState } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
-import { ToolBar } from '../../components/Toolbar';
+import { Toolbar } from '../../components/Toolbar';
 import { navigateTo } from '../../utils/navigation';
 import { convertPathToUrl } from '../../utils/navigation';
 
@@ -50,7 +50,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
   };
   return (
     <div css={root} data-testid="notifications-page">
-      <ToolBar />
+      <Toolbar />
       <NotificationHeader onChange={setFilter} />
       <NotificationList items={notifications} onItemClick={handleItemClick} />
     </div>

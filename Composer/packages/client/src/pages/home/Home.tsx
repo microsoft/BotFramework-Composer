@@ -15,7 +15,7 @@ import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
 import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
 import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
-import { ToolBar, IToolBarItem } from '../../components/Toolbar';
+import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -86,7 +86,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
       text: formatMessage('New'),
@@ -100,7 +100,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
       },
       align: 'left',
-      dataTestid: 'homePage-ToolBar-New',
+      dataTestid: 'homePage-Toolbar-New',
       disabled: false,
     },
     {
@@ -116,7 +116,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
       },
       align: 'left',
-      dataTestid: 'homePage-ToolBar-Open',
+      dataTestid: 'homePage-Toolbar-Open',
       disabled: false,
     },
     {
@@ -142,7 +142,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar toolbarItems={toolbarItems} />
+      <Toolbar toolbarItems={toolbarItems} />
       <div css={home.page}>
         <div css={home.leftPage} role="main">
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>

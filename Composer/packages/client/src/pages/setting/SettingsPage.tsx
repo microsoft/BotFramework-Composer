@@ -24,7 +24,7 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
-import { IToolBarItem } from '../../components/Toolbar';
+import { IToolbarItem } from '../../components/Toolbar';
 import { AddLanguageModal, DeleteLanguageModal } from '../../components/MultiLanguage/index';
 
 import { SettingsRoutes } from './router';
@@ -163,7 +163,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     });
   };
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
       text: formatMessage('Edit'),

@@ -38,9 +38,9 @@ export const actionButton = css`
   margin-left: 15px;
 `;
 
-// -------------------- IToolBarItem -------------------- //
+// -------------------- IToolbarItem -------------------- //
 
-export type IToolBarItem = {
+export type IToolbarItem = {
   type: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   element?: any;
@@ -57,7 +57,7 @@ export type IToolBarItem = {
 
 // -------------------- Toolbar -------------------- //
 
-const renderItemList = (item: IToolBarItem, index: number) => {
+const renderItemList = (item: IToolbarItem, index: number) => {
   if (item.type === 'element') {
     return <Fragment key={index}>{item.element}</Fragment>;
   } else if (item.type === 'action') {
@@ -90,17 +90,17 @@ const renderItemList = (item: IToolBarItem, index: number) => {
 };
 
 type ToolbarProps = {
-  toolbarItems?: Array<IToolBarItem>;
+  toolbarItems?: Array<IToolbarItem>;
 };
 
 // support ActionButton or React Elements, the display order is array index.
 // action = {type:action/element, text, align, element, buttonProps: use
 // fabric-ui IButtonProps interface}
-export const ToolBar = (props: ToolbarProps) => {
+export const Toolbar = (props: ToolbarProps) => {
   const { toolbarItems = [], ...rest } = props;
 
-  const left: IToolBarItem[] = [];
-  const right: IToolBarItem[] = [];
+  const left: IToolbarItem[] = [];
+  const right: IToolbarItem[] = [];
 
   for (const item of toolbarItems) {
     switch (item.align) {

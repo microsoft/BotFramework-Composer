@@ -9,7 +9,7 @@ import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
 import { skillsState, botNameState, settingsState, projectIdState, dispatcherState } from '../../recoilModel';
-import { ToolBar, IToolBarItem } from '../../components/Toolbar';
+import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { TestController } from '../../components/TestController/TestController';
 import { CreateSkillModal, ISkillFormData } from '../../components/CreateSkillModal';
 
@@ -26,7 +26,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
   const skills = useRecoilValue(skillsState);
   const { setSettings, updateSkill } = useRecoilValue(dispatcherState);
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
       text: formatMessage('Connect to a new skill'),
@@ -78,7 +78,7 @@ const Skills: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={ContainerStyle} data-testid="skills-page">
-      <ToolBar toolbarItems={toolbarItems} />
+      <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Skills')}</h1>
       </div>

@@ -8,7 +8,7 @@ import { ProjectTemplate } from '@bfc/shared';
 import { RecentBotList } from '../../src/pages/home/RecentBotList';
 import { ExampleList } from '../../src/pages/home/ExampleList';
 import { renderWithRecoil } from '../testUtils';
-import { ToolBar } from '../../src/components/Toolbar';
+import { Toolbar } from '../../src/components/Toolbar';
 describe('<Home/>', () => {
   it('should dispatch onSelectionChanged event when clicked on a link on <RecentBotList>', () => {
     const recentProjects = [
@@ -54,7 +54,7 @@ describe('<Home/>', () => {
           onClick: () => setCreationFlowStatus('NEW'),
         },
         align: 'left',
-        dataTestid: 'homePage-ToolBar-New',
+        dataTestid: 'homePage-Toolbar-New',
         disabled: false,
       },
       {
@@ -67,7 +67,7 @@ describe('<Home/>', () => {
           onClick: () => setCreationFlowStatus('OPEN'),
         },
         align: 'left',
-        dataTestid: 'homePage-ToolBar-Open',
+        dataTestid: 'homePage-Toolbar-Open',
         disabled: false,
       },
       {
@@ -83,7 +83,7 @@ describe('<Home/>', () => {
         disabled: false,
       },
     ];
-    const { container, getByText } = renderWithRecoil(<ToolBar toolbarItems={items} />);
+    const { container, getByText } = renderWithRecoil(<Toolbar toolbarItems={items} />);
     expect(container).toHaveTextContent('New');
     const link = getByText('New');
     fireEvent.click(link);
