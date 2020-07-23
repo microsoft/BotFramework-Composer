@@ -391,21 +391,16 @@ export const projectDispatcher = () => {
     }
   });
 
-  const initBotStateMock = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
-    const { snapshot, gotoSnapshot } = callbackHelpers;
+  async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
+
+  const initBotProjectState = async ({ snapshot, gotoSnapshot }: CallbackInterface, projectData: any) => {
     const curLocation = await snapshot.getPromise(locationState);
-    const {
-      files,
-      botName,
-      botEnvironment,
-      location,
-      schemas,
-      settings,
-      id: projectId,
-      locale,
-      diagnostics,
-      skills,
-    } = data;
+    const { files, botName, schemas, id: projectId, locale } = projectData;
+
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
     } catch (err) {
@@ -413,72 +408,53 @@ export const projectDispatcher = () => {
       diagnostics.push(err.message);
       schemas.diagnostics = diagnostics;
     }
-  };
-
-  async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index++) {
-      await callback(array[index], index, array);
-    }
-  }
-
-  const initBotProjectState = ({ snapshot, gotoSnapshot }: CallbackInterface, projects: any[]) => {
-    asyncForEach(projects, async (projectData) => {
-      const curLocation = await snapshot.getPromise(locationState);
-      const {
-        files,
-        botName,
-        botEnvironment,
-        location,
-        schemas,
-        settings,
-        id: projectId,
-        locale,
-        diagnostics,
-        skills,
-      } = projectData;
-
-      try {
-        schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
-      } catch (err) {
-        const diagnostics = schemas.diagnostics ?? [];
-        diagnostics.push(err.message);
-        schemas.diagnostics = diagnostics;
+    const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+    let mainDialog = '';
+    const verifiedDialogs = dialogs.map((dialog) => {
+      if (dialog.isRoot) {
+        mainDialog = dialog.id;
       }
-      const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
-      let mainDialog = '';
-      const verifiedDialogs = dialogs.map((dialog) => {
-        if (dialog.isRoot) {
-          mainDialog = dialog.id;
-        }
-        dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-        return dialog;
-      });
-
-      const newSnapshot = snapshot.map(({ set }) => {
-        set(botProjectsState, (current) => [...current, projectId]);
-        set(dialogsNewState(projectId), dialogs);
-      });
-      gotoSnapshot(newSnapshot);
+      dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+      return dialog;
     });
+    const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
+    return {
+      projectId,
+      dialogs,
+      mainUrl,
+    };
   };
 
   const openBotProjectWorkspace = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     try {
       await setBotOpeningStatus(callbackHelpers);
-      const meetingVaPromise = httpClient.put(`/projects/open`, { path: meetingVA.workspace, storage: 'default' });
+      const meetingVaPromise = httpClient.put(`/projects/open`, { path: meetingVA.workspace, storageId: 'default' });
 
       const skillPromise = meetingVA.skills.map((skill) => {
-        return httpClient.put(`/projects/open`, { path: skill.workspace, storage: 'default' });
+        return httpClient.put(`/projects/open`, { path: skill.workspace, storageId: 'default' });
       });
       const botProjectResponses = await Promise.all([...skillPromise, meetingVaPromise]);
-      initBotProjectState(callbackHelpers, botProjectResponses);
+      const dataResponses = botProjectResponses.map((response) => response.data);
+      const results: any[] = [];
+      for (const response of dataResponses) {
+        const result = await initBotProjectState(callbackHelpers, response);
+        results.push(result);
+      }
+      const projectIds = results.map((result) => result.projectId);
+      callbackHelpers.set(botProjectsState, projectIds);
+      results.forEach((result, index) => {
+        callbackHelpers.set(dialogsNewState(result.projectId), result.dialogs);
+        if (index === 0) {
+          navigateTo(result.mainUrl);
+        }
+      });
     } catch (ex) {
       setError(callbackHelpers, ex);
     }
   });
 
   return {
-    openBotProject,
+    openBotProject: openBotProjectWorkspace,
     createProject,
     deleteBotProject,
     saveProjectAs,

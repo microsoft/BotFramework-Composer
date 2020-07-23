@@ -43,8 +43,6 @@ import {
   skillsState,
   actionsSeedState,
   userSettingsState,
-  designViewQuerySelector,
-  botProjectsState,
 } from '../../recoilModel';
 
 import { VisualEditorAPI } from './FrameAPI';
@@ -102,8 +100,6 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const dialogs = useRecoilValue(dialogsState);
-  const projects = useRecoilValue(botProjectsState);
-
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const displaySkillManifest = useRecoilValue(displaySkillManifestState);
@@ -116,7 +112,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
-  // const designView = useRecoilValue(designViewQuerySelector);
   const {
     removeDialog,
     updateDialog,
@@ -596,8 +591,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {displaySkillManifest && (
           <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />
         )}
-        </Suspense>
-      */}
+      </Suspense> */}
     </React.Fragment>
   );
 };

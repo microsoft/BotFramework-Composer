@@ -26,8 +26,16 @@ import { dispatcherState, userSettingsState } from '../../recoilModel';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 
 import { TreeItem } from './treeItem';
+import { ProjectTreeContainer } from './ProjectTreeContainer';
 
 // -------------------- Styles -------------------- //
+
+const groupListStyle: Partial<IGroupedListStyles> = {
+  root: {
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+};
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -106,7 +114,6 @@ function createItemsAndGroups(
       },
       { items: [], groups: [] }
     );
-  console.log(result);
   return result;
 }
 
@@ -129,10 +136,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
 
-  const sortedDialogs = useMemo(() => {
-    return sortDialog(dialogs);
-  }, [dialogs]);
-
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
       delayedSetFilter(newValue);
@@ -142,8 +145,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
-
-  const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, dialogId, filter);
 
   return (
     <Resizable
@@ -171,38 +172,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             styles={searchBox}
             onChange={onFilter}
           />
-          <div
-            aria-label={formatMessage(
-              `{
-            dialogNum, plural,
-                =0 {No dialogs}
-                =1 {One dialog}
-              other {# dialogs}
-            } have been found.
-            {
-              dialogNum, select,
-                  0 {}
-                other {Press down arrow key to navigate the search results}
-            }`,
-              { dialogNum: itemsAndGroups.groups.length }
-            )}
-            aria-live={'polite'}
+          <ProjectTreeContainer
+            selected={selected}
+            onDeleteDialog={onDeleteDialog}
+            onDeleteTrigger={onDeleteTrigger}
+            onSelect={onSelect}
           />
-          {/* <GroupedList
-            {...itemsAndGroups}
-            componentRef={groupRef}
-            groupProps={
-              {
-                onRenderHeader: onRenderHeader,
-                onRenderShowAll: onRenderShowAll,
-                showEmptyGroups: true,
-                showAllProps: false,
-                isAllGroupsCollapsed: true,
-              } as Partial<IGroupRenderProps>
-            }
-            styles={groupListStyle}
-            onRenderCell={onRenderCell}
-          /> */}
         </FocusZone>
       </div>
     </Resizable>
