@@ -4,19 +4,15 @@
 import React from 'react';
 import { render, fireEvent } from '@bfc/test-utils';
 import assign from 'lodash/assign';
-import { useShellApi } from '@bfc/extension';
+import { useShellApi, useRecognizerConfig } from '@bfc/extension';
 
 import { IntentField } from '../IntentField';
-import { usePluginConfig } from '../../../hooks/usePluginConfig';
 
 import { fieldProps } from './testUtils';
 
 jest.mock('@bfc/extension', () => ({
   useShellApi: jest.fn(),
-}));
-
-jest.mock('../../../hooks/usePluginConfig', () => ({
-  usePluginConfig: jest.fn(),
+  useRecognizerConfig: jest.fn(),
 }));
 
 function renderSubject(overrides = {}) {
@@ -26,23 +22,21 @@ function renderSubject(overrides = {}) {
 
 describe('<IntentField />', () => {
   beforeEach(() => {
-    (usePluginConfig as jest.Mock).mockReturnValue({
-      recognizers: [
-        {
-          id: 'TestRecognizer',
-          isSelected: (data) => data?.$kind === 'TestRecognizer',
-          editor: ({ id, onChange }) => (
-            <div id={id}>
-              Test Recognizer <button onClick={onChange}>Update</button>
-            </div>
-          ),
-        },
-        {
-          id: 'OtherRecognizer',
-          isSelected: (data) => data?.$kind === 'OtherRecognizer',
-        },
-      ],
-    });
+    (useRecognizerConfig as jest.Mock).mockReturnValue([
+      {
+        id: 'TestRecognizer',
+        isSelected: (data) => data?.$kind === 'TestRecognizer',
+        editor: ({ id, onChange }) => (
+          <div id={id}>
+            Test Recognizer <button onClick={onChange}>Update</button>
+          </div>
+        ),
+      },
+      {
+        id: 'OtherRecognizer',
+        isSelected: (data) => data?.$kind === 'OtherRecognizer',
+      },
+    ]);
   });
 
   it('uses a custom label', () => {

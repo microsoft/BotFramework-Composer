@@ -51,6 +51,7 @@ export interface DialogInfo {
   referredDialogs: string[];
   triggers: ITrigger[];
   intentTriggers: IIntentTrigger[];
+  skills: string[];
 }
 
 export interface LgTemplateJsonPath {
