@@ -3,10 +3,10 @@
 
 import { PluginConfig } from '@bfc/extension';
 
-import formSchema from './formSchema';
+import uiSchema from './formSchema';
 
 const config: PluginConfig = {
-  formSchema,
+  uiSchema,
 };
 
 export default config;

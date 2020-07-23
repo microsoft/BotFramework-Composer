@@ -8,7 +8,7 @@ import { FieldProps } from '@bfc/extension';
 
 import { useDialogSchemaContext } from './DialogSchemaContext';
 
-export const ValueField: React.FC<FieldProps> = ({ description, id, label, value, required, onChange }) => {
+export const RefField: React.FC<FieldProps> = ({ description, id, label, value, required, onChange }) => {
   const { schema } = useDialogSchemaContext();
 
   const expressions = useMemo(

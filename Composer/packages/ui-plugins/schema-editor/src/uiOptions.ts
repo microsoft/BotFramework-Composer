@@ -3,7 +3,7 @@
 
 import { UIOptions } from '@bfc/extension';
 
-import { ValueField } from './ValueField';
+import { RefField } from './RefField';
 
 const serializer = {
   get: ({ $ref, ...rest }: any = {}) => ($ref ? { ...rest, ref: $ref } : rest),
@@ -19,7 +19,7 @@ export const uiOptions: UIOptions = {
           serializer,
           properties: {
             ref: {
-              field: ValueField,
+              field: RefField,
             },
           },
         },
@@ -29,6 +29,11 @@ export const uiOptions: UIOptions = {
       properties: {
         additionalProperties: {
           serializer,
+          properties: {
+            ref: {
+              field: RefField,
+            },
+          },
         },
       },
     },

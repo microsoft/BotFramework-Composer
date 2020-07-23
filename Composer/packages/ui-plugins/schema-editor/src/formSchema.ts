@@ -6,10 +6,12 @@ import { SDKKinds } from '@bfc/shared';
 
 import { AdaptiveDialogField } from './AdaptiveDialogField';
 
-const formSchema: UISchema = {
+const uiSchema: UISchema = {
   [SDKKinds.AdaptiveDialog]: {
-    field: AdaptiveDialogField,
+    form: {
+      field: AdaptiveDialogField,
+    },
   },
 };
 
-export default formSchema;
+export default uiSchema;
