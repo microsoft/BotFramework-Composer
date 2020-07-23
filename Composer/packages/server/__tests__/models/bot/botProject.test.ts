@@ -20,9 +20,6 @@ const mockLocationRef: LocationRef = {
   storageId: 'default',
   path: Path.join(__dirname, `${botDir}`),
 };
-const luFileLength = (files) => files.filter((file) => file.name.endsWith('.lu')).length;
-const lgFileLength = (files) => files.filter((file) => file.name.endsWith('.lg')).length;
-const dialogFileLength = (files) => files.filter((file) => file.name.endsWith('.dialog')).length;
 let proj: BotProject;
 
 beforeEach(async () => {
@@ -42,9 +39,8 @@ describe('updateDialog', () => {
     const initValue = JSON.stringify({ old: 'value' });
     const newValue = JSON.stringify({ new: 'value' });
     await proj.updateFile('a.dialog', newValue);
-    const aDialog = proj.files.find((f: { name: string }) => f.name === 'a.dialog');
-    // @ts-ignore
-    expect(aDialog.content).toEqual(newValue);
+    const aDialog = proj.getFile('a.dialog');
+    expect(aDialog?.content).toEqual(newValue);
     await proj.updateFile('a.dialog', initValue);
   });
 });
@@ -133,14 +129,12 @@ describe('lg operations', () => {
 
   it('should create lg file and update index', async () => {
     await proj.init();
-    const filesCount = proj.files.length;
-    const lgFilesCount = lgFileLength(proj.files);
+    const lgFilesCount = proj.lgFiles.length;
     const id = 'root.lg';
     const content = '# hello \n - hello';
     const file = await proj.createFile(id, content);
 
-    expect(proj.files.length).toEqual(filesCount + 1);
-    expect(lgFileLength(proj.files)).toEqual(lgFilesCount + 1);
+    expect(proj.lgFiles).toHaveLength(lgFilesCount + 1);
 
     expect(file).not.toBeUndefined();
     if (file !== undefined) {
@@ -150,19 +144,17 @@ describe('lg operations', () => {
 
   it('should update lg file and update index', async () => {
     await proj.init();
-    const filesCount = proj.files.length;
-    const lgFilesCount = lgFileLength(proj.files);
+    const lgFilesCount = proj.lgFiles.length;
 
-    const id = 'root.lg';
+    const id = 'root.en-us.lg';
     let content = '# hello \n - hello';
     await proj.createFile(id, content);
 
     content = '# hello \n - hello2';
     await proj.updateFile(id, content);
-    const result = proj.files.find((f) => f.name === id);
+    const result = proj.getFile(id);
 
-    expect(proj.files.length).toEqual(filesCount + 1);
-    expect(lgFileLength(proj.files)).toEqual(lgFilesCount + 1);
+    expect(proj.lgFiles).toHaveLength(lgFilesCount + 1);
 
     expect(result).not.toBeUndefined();
     if (result !== undefined) {
@@ -171,20 +163,15 @@ describe('lg operations', () => {
   });
 
   it('should delete lg file and update index', async () => {
-    const id = 'root.lg';
+    const id = 'root.en-us.lg';
     const content = '# hello \n - hello';
     await proj.createFile(id, content);
 
-    const filesCount = proj.files.length;
-    const lgFilesCount = lgFileLength(proj.files);
+    const lgFilesCount = proj.lgFiles.length;
 
     await proj.deleteFile(id);
-    const result = proj.files.find((f) => f.name === id);
-
-    expect(proj.files.length).toEqual(filesCount - 1);
-    expect(lgFileLength(proj.files)).toEqual(lgFilesCount - 1);
-
-    expect(result).toBeUndefined();
+    expect(proj.lgFiles).toHaveLength(lgFilesCount - 1);
+    expect(proj.getFile(id)).toBeUndefined();
   });
 });
 
@@ -200,15 +187,13 @@ describe('lu operations', () => {
 
   it('should create lu file and update index', async () => {
     await proj.init();
-    const filesCount = proj.files.length;
-    const luFilesCount = luFileLength(proj.files);
+    const luFilesCount = proj.luFiles.length;
 
-    const id = 'root.lu';
+    const id = 'root.en-us.lu';
     const content = '# hello \n - hello';
     const file = await proj.createFile(id, content);
 
-    expect(proj.files.length).toEqual(filesCount + 1);
-    expect(luFileLength(proj.files)).toEqual(luFilesCount + 1);
+    expect(proj.luFiles).toHaveLength(luFilesCount + 1);
 
     expect(file).not.toBeUndefined();
     if (file !== undefined) {
@@ -218,63 +203,54 @@ describe('lu operations', () => {
 
   it('should update lu file and update index', async () => {
     await proj.init();
-    const filesCount = proj.files.length;
-    const luFilesCount = luFileLength(proj.files);
+    const luFilesCount = proj.luFiles.length;
 
-    const id = 'root.lu';
+    const id = 'root.en-us.lu';
     let content = '## hello \n - hello';
     await proj.createFile(id, content);
     content = '## hello \n - hello2';
 
     await proj.updateFile(id, content);
-    const result = proj.files.find((f) => f.name === id);
+    const result = proj.getFile(id);
 
-    expect(proj.files.length).toEqual(filesCount + 1);
-    expect(luFileLength(proj.files)).toEqual(luFilesCount + 1);
+    expect(proj.luFiles).toHaveLength(luFilesCount + 1);
 
-    expect(result).not.toBeUndefined();
+    expect(result).toBeDefined();
     expect(result?.content).toContain(content);
   });
 
   it('should delete lu file and update index', async () => {
-    const id = 'root.lu';
+    const id = 'root.en-us.lu';
     const content = '## hello \n - hello2';
     await proj.createFile(id, content);
-    const filesCount = proj.files.length;
-    const luFilesCount = luFileLength(proj.files);
+    const luFilesCount = proj.luFiles.length;
 
     await proj.deleteFile(id);
-    const result = proj.files.find((f) => f.name === id);
+    const result = proj.getFile(id);
 
-    expect(proj.files.length).toEqual(filesCount - 1);
-    expect(luFileLength(proj.files)).toEqual(luFilesCount - 1);
-
+    expect(proj.luFiles.length).toEqual(luFilesCount - 1);
     expect(result).toBeUndefined();
   });
 });
 
 describe('dialog operations', () => {
   it('should create dialog', async () => {
-    const filesCount = proj.files.length;
-    const dialogsFilesCount = dialogFileLength(proj.files);
+    const dialogsFilesCount = proj.dialogFiles.length;
 
     const id = 'root.dialog';
     const content = '{}';
     await proj.createFile(id, content);
 
-    expect(proj.files.length).toEqual(filesCount + 1);
-    expect(dialogFileLength(proj.files)).toEqual(dialogsFilesCount + 1);
+    expect(proj.dialogFiles).toHaveLength(dialogsFilesCount + 1);
   });
 
   it('should delete dialog', async () => {
     const id = 'root.dialog';
-    const filesCount = proj.files.length;
-    const dialogsFilesCount = dialogFileLength(proj.files);
+    const dialogsFilesCount = proj.dialogFiles.length;
 
     await proj.deleteFile(id);
 
-    expect(proj.files.length).toEqual(filesCount - 1);
-    expect(dialogFileLength(proj.files)).toEqual(dialogsFilesCount - 1);
+    expect(proj.dialogFiles).toHaveLength(dialogsFilesCount - 1);
   });
 });
 

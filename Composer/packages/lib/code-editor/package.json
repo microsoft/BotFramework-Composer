@@ -59,7 +59,7 @@
     "@emotion/core": "^10.0.27",
     "@monaco-editor/react": "^3.1.0",
     "json-schema-defaults": "^0.4.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "monaco-editor": "^0.19.0",
     "monaco-languageclient": "^0.10.0",
     "normalize-url": "^4.5.0",

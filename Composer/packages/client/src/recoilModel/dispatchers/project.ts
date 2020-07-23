@@ -4,8 +4,8 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
-import lodashGet from 'lodash/get';
-import lodashSet from 'lodash/get';
+import objectGet from 'lodash/get';
+import objectSet from 'lodash/set';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
 
@@ -19,6 +19,8 @@ import { DialogSetting } from '../../recoilModel/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
+import languageStorage from '../../utils/languageStorage';
+import { designPageLocationState } from '../atoms/botState';
 
 import {
   skillManifestsState,
@@ -65,7 +67,7 @@ const processSchema = (projectId: string, schema: any) => ({
 // if user set value in terminal or appsetting.json, it should update the value in localStorage
 const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {
   for (const property of SensitiveProperties) {
-    const value = lodashGet(settings, property);
+    const value = objectGet(settings, property);
     if (value) {
       settingStorage.setField(projectId, property, value);
     }
@@ -75,16 +77,18 @@ const refreshLocalStorage = (projectId: string, settings: DialogSetting) => {
 // merge sensitive values in localStorage
 const mergeLocalStorage = (projectId: string, settings: DialogSetting) => {
   const localSetting = settingStorage.get(projectId);
+  const mergedSettings = { ...settings };
   if (localSetting) {
     for (const property of SensitiveProperties) {
-      const value = lodashGet(localSetting, property);
+      const value = objectGet(localSetting, property);
       if (value) {
-        lodashSet(settings, property, value);
+        objectSet(mergedSettings, property, value);
       } else {
-        lodashSet(settings, property, ''); // set those key back, because that were omit after persisited
+        objectSet(mergedSettings, property, ''); // set those key back, because that were omit after persisited
       }
     }
   }
+  return mergedSettings;
 };
 
 const updateLuFilesStatus = (projectId: string, luFiles: LuFile[]) => {
@@ -110,18 +114,10 @@ export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
     const { snapshot, gotoSnapshot } = callbackHelpers;
     const curLocation = await snapshot.getPromise(locationState);
-    const {
-      files,
-      botName,
-      botEnvironment,
-      location,
-      schemas,
-      settings,
-      id: projectId,
-      locale,
-      diagnostics,
-      skills,
-    } = data;
+    const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
+    const storedLocale = languageStorage.get(botName)?.locale;
+    const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
+
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
     } catch (err) {
@@ -130,43 +126,47 @@ export const projectDispatcher = () => {
       schemas.diagnostics = diagnostics;
     }
 
-    const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
-    let mainDialog = '';
-    const verifiedDialogs = dialogs.map((dialog) => {
-      if (dialog.isRoot) {
-        mainDialog = dialog.id;
+    try {
+      const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+      let mainDialog = '';
+      const verifiedDialogs = dialogs.map((dialog) => {
+        if (dialog.isRoot) {
+          mainDialog = dialog.id;
+        }
+        dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+        return dialog;
+      });
+
+      const newSnapshot = snapshot.map(({ set }) => {
+        set(skillManifestsState, skillManifestFiles);
+        set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
+        set(lgFilesState, lgFiles);
+        set(dialogsState, verifiedDialogs);
+        set(botEnvironmentState, botEnvironment);
+        set(botNameState, botName);
+        if (location !== curLocation) {
+          set(botStatusState, BotStatus.unConnected);
+          set(locationState, location);
+        }
+        set(skillsState, skills);
+        set(schemasState, schemas);
+        set(localeState, locale);
+        set(BotDiagnosticsState, diagnostics);
+        set(botOpeningState, false);
+        set(projectIdState, projectId);
+        refreshLocalStorage(projectId, settings);
+        const mergedSettings = mergeLocalStorage(projectId, settings);
+        set(settingsState, mergedSettings);
+      });
+      gotoSnapshot(newSnapshot);
+      if (jumpToMain && projectId) {
+        const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
+        navigateTo(mainUrl);
       }
-      dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-      return dialog;
-    });
-
-    const newSnapshot = snapshot.map(({ set }) => {
-      set(skillManifestsState, skillManifestFiles);
-      set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
-      set(lgFilesState, lgFiles);
-      set(settingsState, settings);
-      set(dialogsState, verifiedDialogs);
-      set(botEnvironmentState, botEnvironment);
-      set(botNameState, botName);
-      if (location !== curLocation) {
-        set(botStatusState, BotStatus.unConnected);
-        set(locationState, location);
-      }
-      set(skillsState, skills);
-      set(schemasState, schemas);
-      set(localeState, locale);
-      set(BotDiagnosticsState, diagnostics);
-      set(botOpeningState, false);
-      set(projectIdState, projectId);
-    });
-
-    gotoSnapshot(newSnapshot);
-    refreshLocalStorage(projectId, settings);
-    mergeLocalStorage(projectId, settings);
-
-    if (jumpToMain && projectId) {
-      const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
-      navigateTo(mainUrl);
+    } catch (err) {
+      callbackHelpers.set(botOpeningState, false);
+      setError(callbackHelpers, err);
+      navigateTo('/home');
     }
   };
 
@@ -263,6 +263,7 @@ export const projectDispatcher = () => {
       reset(settingsState);
       reset(localeState);
       reset(skillManifestsState);
+      reset(designPageLocationState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
     }

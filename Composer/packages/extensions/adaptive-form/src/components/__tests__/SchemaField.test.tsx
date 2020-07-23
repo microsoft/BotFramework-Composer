@@ -3,13 +3,12 @@
 
 import React from 'react';
 import { render, waitFor, fireEvent } from '@bfc/test-utils';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, useFormConfig } from '@bfc/extension';
 import assign from 'lodash/assign';
 
 import { SchemaField } from '../SchemaField';
 import { getUIOptions } from '../../utils/getUIOptions';
 import { resolveFieldWidget } from '../../utils/resolveFieldWidget';
-import { usePluginConfig } from '../../hooks';
 
 jest.mock('../../utils/getUIOptions', () => ({
   getUIOptions: jest.fn(),
@@ -19,8 +18,8 @@ jest.mock('../../utils/resolveFieldWidget', () => ({
   resolveFieldWidget: jest.fn(),
 }));
 
-jest.mock('../../hooks', () => ({
-  usePluginConfig: jest.fn(),
+jest.mock('@bfc/extension', () => ({
+  useFormConfig: jest.fn(),
 }));
 
 const defaultProps: FieldProps = {
@@ -46,7 +45,7 @@ function renderSubject(overrides: Partial<FieldProps> = {}) {
 
 describe('<SchemaField />', () => {
   beforeEach(() => {
-    (usePluginConfig as jest.Mock).mockReturnValue({ formSchema: 'form schema', roleSchema: 'role schema' });
+    (useFormConfig as jest.Mock).mockReturnValue('form ui options');
     (resolveFieldWidget as jest.Mock).mockReturnValue(({ value, onChange, rawErrors }) => (
       <div>
         <input data-testid="resolved-field" value={value} onChange={(e) => onChange(e.target.value)} />
@@ -65,7 +64,7 @@ describe('<SchemaField />', () => {
     (getUIOptions as jest.Mock).mockReturnValue({ label: 'resolved label' });
     renderSubject();
 
-    expect(getUIOptions).toHaveBeenCalledWith(defaultProps.schema, 'form schema', 'role schema');
+    expect(getUIOptions).toHaveBeenCalledWith(defaultProps.schema, 'form ui options');
   });
 
   describe('when no value set', () => {

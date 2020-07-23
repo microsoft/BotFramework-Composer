@@ -68,7 +68,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     }
     if (newPath) {
       const formattedPath = Path.normalize(newPath);
-      await updateCurrentPathForStorage(formattedPath, storageId);
+      updateCurrentPathForStorage(formattedPath, storageId);
     }
   };
 
@@ -78,18 +78,16 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const openBot = async (botFolder) => {
-    const projectId = await openBotProject(botFolder);
-    if (projectId) {
-      setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    }
+    setCreationFlowStatus(CreationFlowStatus.CLOSE);
+    openBotProject(botFolder);
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
-    await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
+    createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
   };
 
-  const handleSaveAs = async (formData) => {
-    await saveProjectAs(projectId, formData.name, formData.description, formData.location);
+  const handleSaveAs = (formData) => {
+    saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
   const handleSubmit = async (formData, templateId: string) => {
@@ -101,12 +99,12 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
       default:
         saveTemplateId(templateId);
-        await handleCreateNew(formData, templateId);
+        handleCreateNew(formData, templateId);
     }
   };
 
   const handleCreateNext = async (data) => {
-    await setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
+    setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`./create/${data}`);
   };
 

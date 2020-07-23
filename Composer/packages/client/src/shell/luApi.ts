@@ -6,7 +6,6 @@ import { LuFile, LuIntentSection } from '@bfc/shared';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
 
-import luWorker from '../recoilModel/parsers/luWorker';
 import { projectIdState } from '../recoilModel/atoms/botState';
 import { useResolvers } from '../hooks/useResolver';
 
@@ -17,7 +16,7 @@ const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing
 
 function createLuApi(
   state: { focusPath: string; projectId: string },
-  actions: any, //TODO
+  dispatchers: any, //TODO
   luFileResolver: (id: string) => LuFile | undefined
 ) {
   const addLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
@@ -25,9 +24,7 @@ function createLuApi(
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const content = await luWorker.addIntent(file.content, intent);
-    const projectId = state.projectId;
-    return await actions.updateLuFile({ id: file.id, projectId, content });
+    return await dispatchers.createLuIntent({ id: file.id, intent });
   };
 
   const updateLuIntent = async (id: string, intentName: string, intent: LuIntentSection) => {
@@ -35,9 +32,7 @@ function createLuApi(
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const content = await luWorker.updateIntent(file.content, intentName, intent);
-    const projectId = state.projectId;
-    return await actions.updateLuFile({ id: file.id, projectId, content });
+    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent });
   };
 
   const removeLuIntent = async (id: string, intentName: string) => {
@@ -45,9 +40,7 @@ function createLuApi(
     if (!file) throw new Error(`lu file ${id} not found`);
     if (!intentName) throw new Error(`intentName is missing or empty`);
 
-    const content = await luWorker.removeIntent(file.content, intentName);
-    const projectId = state.projectId;
-    return await actions.updateLuFile({ id: file.id, projectId, content });
+    return await dispatchers.removeLuIntent({ id: file.id, intentName });
   };
 
   const getLuIntents = (id: string): LuIntentSection[] => {
@@ -76,12 +69,12 @@ function createLuApi(
 export function useLuApi() {
   const focusPath = useRecoilValue(focusPathState);
   const projectId = useRecoilValue(projectIdState);
-  const actions = useRecoilValue(dispatcherState);
+  const dispatchers = useRecoilValue(dispatcherState);
   const { luFileResolver } = useResolvers();
-  const [api, setApi] = useState(createLuApi({ focusPath, projectId }, actions, luFileResolver));
+  const [api, setApi] = useState(createLuApi({ focusPath, projectId }, dispatchers, luFileResolver));
 
   useEffect(() => {
-    const newApi = createLuApi({ focusPath, projectId }, actions, luFileResolver);
+    const newApi = createLuApi({ focusPath, projectId }, dispatchers, luFileResolver);
     setApi(newApi);
 
     return () => {

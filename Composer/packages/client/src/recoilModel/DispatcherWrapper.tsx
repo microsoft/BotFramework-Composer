@@ -3,7 +3,7 @@
 
 import { useRef, useEffect, useState, Fragment } from 'react';
 // eslint-disable-next-line @typescript-eslint/camelcase
-import { atom, useRecoilState, useRecoilTransactionObserver_UNSTABLE, Snapshot } from 'recoil';
+import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
 import React from 'react';
 
@@ -37,14 +37,37 @@ export const dispatcherState = atom<Dispatcher>({
   default: {} as Dispatcher,
 });
 
-export const DispatcherWrapper = ({ children }) => {
-  const [init, setInit] = useState(false);
+const wrapDispatcher = (dispatchers, forceUpdate) => {
+  return Object.keys(dispatchers).reduce((boundDispatchers, dispatcherName) => {
+    const dispatcher = async (...args) => {
+      forceUpdate([]); //gurarantee the snapshot get the latset state
+      await dispatchers[dispatcherName](...args);
+    };
+    boundDispatchers[dispatcherName] = dispatcher;
+    return boundDispatchers;
+  }, {} as any);
+};
+
+const InitDispatcher = ({ onLoad }) => {
+  const [, forceUpdate] = useState([]);
   const prepareAxiosWithRecoil = once(prepareAxios);
 
   // Use a ref to ensure the dispatcher is only created once
-  const dispatcherRef = useRef(createDispatchers());
+  const dispatcherRef = useRef(wrapDispatcher(createDispatchers(), forceUpdate));
 
   const [currentDispatcherState, setDispatcher] = useRecoilState(dispatcherState);
+
+  useEffect(() => {
+    setDispatcher(dispatcherRef.current);
+    prepareAxiosWithRecoil(currentDispatcherState);
+    onLoad(true);
+  }, []);
+
+  return null;
+};
+
+export const DispatcherWrapper = ({ children }) => {
+  const [loaded, setLoaded] = useState(false);
 
   useRecoilTransactionObserver_UNSTABLE(async ({ snapshot, previousSnapshot }) => {
     const assets = await getBotAssets(snapshot);
@@ -52,11 +75,10 @@ export const DispatcherWrapper = ({ children }) => {
     filePersistence.notify(assets, previousAssets);
   });
 
-  useEffect(() => {
-    setDispatcher(dispatcherRef.current);
-    prepareAxiosWithRecoil(currentDispatcherState);
-    setInit(true);
-  }, []);
-
-  return <Fragment>{init ? children : null}</Fragment>;
+  return (
+    <Fragment>
+      <InitDispatcher onLoad={setLoaded} />
+      {loaded ? children : null}
+    </Fragment>
+  );
 };

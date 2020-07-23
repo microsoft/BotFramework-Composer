@@ -15,7 +15,6 @@ import { CreationFlowStatus } from '../../constants';
 import { dispatcherState } from '../../recoilModel';
 import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
 import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
-import { navigateTo } from '../../utils/navigation';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar';
 
 import * as home from './styles';
@@ -71,17 +70,9 @@ const Home: React.FC<RouteComponentProps> = () => {
     saveTemplateId,
   } = useRecoilValue(dispatcherState);
 
-  const onClickRecentBotProject = async (path) => {
-    const projectId = await openBotProject(path);
-    if (projectId) {
-      const mainUrl = `/bot/${projectId}/dialogs/Main`;
-      navigateTo(mainUrl);
-    }
-  };
-
   const onItemChosen = async (item) => {
     if (item && item.path) {
-      await onClickRecentBotProject(item.path);
+      openBotProject(item.path);
     }
   };
 
@@ -157,7 +148,7 @@ const Home: React.FC<RouteComponentProps> = () => {
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div aria-label={formatMessage('Composer introduction')} css={home.introduction} role="region">
             {formatMessage(
-              'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack.'
+              'Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation.'
             )}
           </div>
           <div css={home.newBotContainer}>
@@ -181,7 +172,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.latestBotItem}
                 title={''}
                 onClick={async () => {
-                  await onClickRecentBotProject(recentProjects[0].path);
+                  openBotProject(recentProjects[0].path);
                 }}
               />
             ) : (

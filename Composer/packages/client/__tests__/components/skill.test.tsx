@@ -10,6 +10,7 @@ import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
 import { renderWithRecoil } from '../testUtils';
 import CreateSkillModal from '../../src/components/CreateSkillModal';
+import { settingsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
 
@@ -38,9 +39,24 @@ const items: Skill[] = [
   },
 ];
 
+const recoilInitState = ({ set }) => {
+  set(settingsState, {
+    luis: {
+      name: '',
+      authoringKey: '12345',
+      authoringEndpoint: 'testAuthoringEndpoint',
+      endpointKey: '12345',
+      endpoint: 'testEndpoint',
+      authoringRegion: 'westus',
+      defaultLanguage: 'en-us',
+      environment: 'composer',
+    },
+  });
+};
+
 describe('Skill page', () => {
   it('can add a new skill', () => {
-    const { getByText } = renderWithRecoil(<Skills />);
+    const { getByText } = renderWithRecoil(<Skills />, recoilInitState);
 
     const button = getByText('Connect to a new skill');
     fireEvent.click(button);

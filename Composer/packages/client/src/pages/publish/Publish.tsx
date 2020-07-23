@@ -155,7 +155,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
       setTimeout(async () => {
-        await getPublishStatus(projectId, target);
+        getPublishStatus(projectId, target);
       }, 10000);
     }
   };

@@ -315,7 +315,7 @@ async function publishLuis(req: Request, res: Response) {
   if (currentProject !== undefined) {
     try {
       const luFiles = await currentProject.publishLuis(
-        req.body.authoringKey,
+        req.body.luisConfig,
         req.body.luFiles,
         req.body.crossTrainConfig
       );

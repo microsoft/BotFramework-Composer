@@ -153,17 +153,16 @@ describe('Project dispatcher', () => {
     });
     expect(renderedComponent.current.projectId).toBe(mockProjectResponse.id);
     expect(renderedComponent.current.botName).toBe(mockProjectResponse.botName);
-    expect(renderedComponent.current.locale).toBe(mockProjectResponse.locale);
-    expect(renderedComponent.current.settings).toBe(mockProjectResponse.settings);
-    expect(renderedComponent.current.lgFiles.length).toBe(7);
-    expect(renderedComponent.current.luFiles.length).toBe(6);
+    expect(renderedComponent.current.settings).toStrictEqual(mockProjectResponse.settings);
+    expect(renderedComponent.current.lgFiles.length).toBe(1);
+    expect(renderedComponent.current.luFiles.length).toBe(1);
     expect(renderedComponent.current.botEnvironment).toBe(mockProjectResponse.botEnvironment);
     expect(renderedComponent.current.skills.length).toBe(0);
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.schemas.sdk).toBeDefined();
     expect(renderedComponent.current.schemas.default).toBeDefined();
     expect(renderedComponent.current.schemas.diagnostics?.length).toBe(0);
-    expect(navigateTo).toHaveBeenLastCalledWith('/bot/30876.502871204648/dialogs/emptybot-1');
+    expect(navigateTo).toHaveBeenLastCalledWith('/bot/30876.502871204648/dialogs/');
     expect(result).toBe(renderedComponent.current.projectId);
   });
 
@@ -239,6 +238,7 @@ describe('Project dispatcher', () => {
 
     expect(renderedComponent.current.botName).toEqual('');
     expect(renderedComponent.current.projectId).toBe('');
+    7;
     expect(renderedComponent.current.locale).toBe('en-us');
     expect(renderedComponent.current.lgFiles.length).toBe(0);
     expect(renderedComponent.current.luFiles.length).toBe(0);

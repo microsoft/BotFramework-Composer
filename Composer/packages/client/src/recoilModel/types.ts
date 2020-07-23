@@ -102,13 +102,21 @@ export interface BreadcrumbItem {
 export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
-  luis?: ILuisConfig;
+  luis: ILuisConfig;
   publishTargets?: PublishTarget[];
   runtime: {
     customRuntime: boolean;
     path: string;
     command: string;
   };
+  defaultLanguage: string;
+  languages: string[];
+  skill?: {
+    name: string;
+    manifestUrl: string;
+  }[];
+  botId?: string;
+  skillHostEndpoint?: string;
   [key: string]: unknown;
 }
 
