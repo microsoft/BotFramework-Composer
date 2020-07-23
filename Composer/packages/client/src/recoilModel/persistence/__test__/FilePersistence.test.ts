@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { DialogInfo, LgFile, LuFile } from '@bfc/shared';
+import { DialogInfo, LgFile, LuFile, DialogSchemaFile } from '@bfc/shared';
 
 import { BotAssets } from '../../types';
 import filePersistence from '../FilePersistence';
@@ -33,6 +33,7 @@ describe('test persistence layer', () => {
     const previous = {
       projectId: 'test',
       dialogs: [{ id: 'a', content: { a: 'old' } }] as DialogInfo[],
+      dialogSchemas: [{ id: 'a', content: { a: 'old schema' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: '' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: '' }] as LuFile[],
     } as BotAssets;
@@ -40,6 +41,7 @@ describe('test persistence layer', () => {
     const current = {
       projectId: 'test',
       dialogs: [{ id: 'a', content: { a: 'new' } }] as DialogInfo[],
+      dialogSchemas: [{ id: 'a', content: { a: 'new schema' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a.lg' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a.lu' }] as LuFile[],
     } as BotAssets;
@@ -47,6 +49,7 @@ describe('test persistence layer', () => {
     filePersistence.notify(current, previous);
     filePersistence.notify(current, previous);
     expect(JSON.parse(filePersistence.taskQueue['a.dialog'][0].change).a).toBe('new');
+    expect(JSON.parse(filePersistence.taskQueue['a.dialog.schema'][0].change).a).toBe('new schema');
     expect(filePersistence.taskQueue['a.en-us.lg'][0].change).toBe('a.lg');
     expect(filePersistence.taskQueue['a.en-us.lu'][0].change).toBe('a.lu');
   });
@@ -55,6 +58,7 @@ describe('test persistence layer', () => {
     const previous = {
       projectId: 'test',
       dialogs: [{ id: 'a', content: { a: 'a' } }] as DialogInfo[],
+      dialogSchemas: [{ id: 'a', content: { a: 'a' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
     } as BotAssets;
@@ -65,6 +69,10 @@ describe('test persistence layer', () => {
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b' } },
       ] as DialogInfo[],
+      dialogSchemas: [
+        { id: 'a', content: { a: 'a' } },
+        { id: 'b', content: { b: 'b' } },
+      ] as DialogSchemaFile[],
       lgFiles: [
         { id: 'a.en-us', content: 'a' },
         { id: 'b.en-us', content: 'b.lg' },
@@ -78,6 +86,7 @@ describe('test persistence layer', () => {
     filePersistence.notify(current, previous);
     filePersistence.notify(current, previous);
     expect(JSON.parse(filePersistence.taskQueue['b.dialog'][0].change).b).toBe('b');
+    expect(JSON.parse(filePersistence.taskQueue['b.dialog.schema'][0].change).b).toBe('b');
     expect(filePersistence.taskQueue['b.en-us.lg'][0].change).toBe('b.lg');
     expect(filePersistence.taskQueue['b.en-us.lu'][0].change).toBe('b.lu');
   });
@@ -89,6 +98,10 @@ describe('test persistence layer', () => {
         { id: 'a', content: { a: 'a' } },
         { id: 'b', content: { b: 'b.pre' } },
       ] as DialogInfo[],
+      dialogSchemas: [
+        { id: 'a', content: { a: 'a' } },
+        { id: 'b', content: { b: 'b.pre' } },
+      ] as DialogSchemaFile[],
       lgFiles: [
         { id: 'a.en-us', content: 'a' },
         { id: 'b.en-us', content: 'b.pre.lg' },
@@ -102,6 +115,7 @@ describe('test persistence layer', () => {
     const current = {
       projectId: 'test',
       dialogs: [{ id: 'a', content: { a: 'a' } }] as DialogInfo[],
+      dialogSchemas: [{ id: 'a', content: { a: 'a' } }] as DialogSchemaFile[],
       lgFiles: [{ id: 'a.en-us', content: 'a' }] as LgFile[],
       luFiles: [{ id: 'a.en-us', content: 'a' }] as LuFile[],
     } as BotAssets;
