@@ -61,7 +61,7 @@ export interface VisualDesignerProps {
   schema?: JSONSchema7;
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
-  const { shellApi, plugins, ...shellData } = useShellApi();
+  const { shellApi, ...shellData } = useShellApi();
   const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = useFlowUIOptions();
   const {
     dialogId,
