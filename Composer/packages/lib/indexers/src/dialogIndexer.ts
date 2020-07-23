@@ -155,6 +155,26 @@ function extractReferredDialogs(dialog): string[] {
   return uniq(dialogs);
 }
 
+// find out all skill
+function extractReferredSkills(dialog): string[] {
+  const skills: string[] = [];
+  /**    *
+   * @param path , jsonPath string
+   * @param value , current node value    *
+   * @return boolean, true to stop walk
+   * */
+  const visitor: VisitorFunc = (path: string, value: any): boolean => {
+    // it's a valid schema dialog node.
+    if (has(value, '$kind') && value.$kind === SDKKinds.BeginSkill) {
+      const skillId = value.id;
+      skills.push(skillId);
+    }
+    return false;
+  };
+  JsonWalk('$', dialog, visitor);
+  return uniq(skills);
+}
+
 function parse(id: string, content: any) {
   const luFile = typeof content.recognizer === 'string' ? content.recognizer : '';
   const lgFile = typeof content.generator === 'string' ? content.generator : '';
@@ -170,6 +190,7 @@ function parse(id: string, content: any) {
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: extractTriggers(content),
     intentTriggers: extractIntentTriggers(content),
+    skills: extractReferredSkills(content),
   };
 }
 

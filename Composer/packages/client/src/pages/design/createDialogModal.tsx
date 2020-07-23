@@ -39,7 +39,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
         if (!nameRegex.test(value)) {
           return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
-        if (dialogs.some((dialog) => dialog.id === value)) {
+        if (dialogs.some((dialog) => dialog.id.toLowerCase() === value.toLowerCase())) {
           return formatMessage('Duplicate dialog name');
         }
       },
