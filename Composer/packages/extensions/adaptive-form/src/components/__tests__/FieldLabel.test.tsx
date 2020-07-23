@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import React from 'react';
-import { render, fireEvent, findByText } from '@bfc/test-utils';
+import { render } from '@bfc/test-utils';
 
 import { FieldLabel } from '../FieldLabel';
 
