@@ -41,6 +41,7 @@ export interface DialogInfo {
   lgFile: string;
   lgTemplates: LgTemplateJsonPath[];
   luFile: string;
+  qnaFile: string;
   referredLuIntents: ReferredLuIntents[];
   referredDialogs: string[];
   triggers: ITrigger[];
@@ -91,6 +92,19 @@ export interface LuFile {
   diagnostics: Diagnostic[];
   intents: LuIntentSection[];
   empty: boolean;
+  [key: string]: any;
+}
+
+export interface QnASection {
+  Questions: string[];
+  Answer: string;
+  Body: string;
+}
+
+export interface QnAFile {
+  id: string;
+  content: string;
+  qnaSections: QnASection[];
   [key: string]: any;
 }
 export interface CodeRange {

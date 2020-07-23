@@ -5,6 +5,7 @@ import { FileInfo, importResolverGenerator } from '@bfc/shared';
 import { dialogIndexer } from './dialogIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
+import { qnaIndexer } from './qnaIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
 import { FileExtensions } from './utils/fileExtensions';
 import { getExtension, getBaseName } from './utils/help';
@@ -19,7 +20,13 @@ class Indexer {
         }
         return result;
       },
-      { [FileExtensions.lg]: [], [FileExtensions.Lu]: [], [FileExtensions.Dialog]: [], [FileExtensions.Manifest]: [] }
+      {
+        [FileExtensions.lg]: [],
+        [FileExtensions.Lu]: [],
+        [FileExtensions.QnA]: [],
+        [FileExtensions.Dialog]: [],
+        [FileExtensions.Manifest]: [],
+      }
     );
   }
 
@@ -36,10 +43,12 @@ class Indexer {
 
   public index(files: FileInfo[], botName: string, locale: string) {
     const result = this.classifyFile(files);
+    console.log(result);
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
+      qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
     };
   }
@@ -50,5 +59,6 @@ export const indexer = new Indexer();
 export * from './dialogIndexer';
 export * from './lgIndexer';
 export * from './luIndexer';
+export * from './qnaIndexer';
 export * from './utils';
 export * from './validations';

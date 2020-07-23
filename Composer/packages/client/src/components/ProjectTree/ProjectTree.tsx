@@ -23,7 +23,13 @@ import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
-import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
+import {
+  createSelectedPath,
+  getFriendlyName,
+  regexRecognizerKey,
+  onChooseIntentKey,
+  qnaMatcherKey,
+} from '../../utils/dialogUtil';
 
 import { TreeItem } from './treeItem';
 
@@ -59,6 +65,9 @@ const root = css`
 // -------------------- ProjectTree -------------------- //
 
 function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
+  const isRegEx = (dialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
+  const isNotSupported =
+    isRegEx && dialog.triggers.some((t) => t.type === qnaMatcherKey || t.type === onChooseIntentKey);
   return {
     key: dialog.id,
     name: dialog.displayName,
@@ -67,14 +76,15 @@ function createGroupItem(dialog: DialogInfo, currentId: string, position: number
     count: dialog.triggers.length,
     hasMoreData: true,
     isCollapsed: dialog.id !== currentId,
-    data: dialog,
+    data: { ...dialog, warning: isNotSupported },
   };
 }
 
-function createItem(trigger: ITrigger, index: number) {
+function createItem(trigger: ITrigger, index: number, isNotSupported?: boolean) {
   return {
     ...trigger,
     index,
+    warning: isNotSupported,
     displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
   };
 }
@@ -106,8 +116,10 @@ function createItemsAndGroups(
       (result: { items: any[]; groups: IGroup[] }, dialog) => {
         result.groups.push(createGroupItem(dialog, dialogId, position));
         position += dialog.triggers.length;
+        const isRegEx = (dialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
         dialog.triggers.forEach((item, index) => {
-          result.items.push(createItem(item, index));
+          const isNotSupported = isRegEx && (item.type === qnaMatcherKey || item.type === onChooseIntentKey);
+          result.items.push(createItem(item, index, isNotSupported));
         });
         return result;
       },
