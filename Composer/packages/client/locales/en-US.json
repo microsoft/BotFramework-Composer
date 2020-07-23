@@ -161,14 +161,11 @@
   "calculating_17b21be7": {
     "message": "Calculating..."
   },
-  "can_not_connect_the_storage_6f6b89a6": {
-    "message": "Can not connect the storage."
-  },
   "cancel_caeb1e68": {
     "message": "Cancel"
   },
-  "check_for_updates_and_installs_them_automatically_18817bca": {
-    "message": "Check for updates and installs them automatically."
+  "check_for_updates_and_install_them_automatically_50337340": {
+    "message": "Check for updates and install them automatically."
   },
   "choose_a_location_for_your_new_bot_project_e979f2d5": {
     "message": "Choose a location for your new bot project."
@@ -233,8 +230,8 @@
   "confirm_6556b3a6": {
     "message": "Confirm"
   },
-  "confirmation_modal_must_have_a_title_d314a490": {
-    "message": "Confirmation modal must have a title"
+  "confirmation_modal_must_have_a_title_b0816e0b": {
+    "message": "Confirmation modal must have a title."
   },
   "congratulations_your_model_is_successfully_publish_52ebc297": {
     "message": "Congratulations! Your model is successfully published."
@@ -247,6 +244,9 @@
   },
   "copy_content_for_translation_7affbcbb": {
     "message": "Copy content for translation"
+  },
+  "could_not_connect_to_storage_50411de0": {
+    "message": "Could not connect to storage."
   },
   "couldn_t_complete_the_update_a337a359": {
     "message": "Couldn''t complete the update:"
@@ -548,9 +548,6 @@
   "last_modified_time_is_time_b1497d3": {
     "message": "Last modified time is { time }"
   },
-  "learn_more_7a8d626": {
-    "message": "Learn More"
-  },
   "learn_more_a79a7918": {
     "message": "Learn more"
   },
@@ -800,8 +797,8 @@
   "property_editor_preferences_ad7a4b62": {
     "message": "Property editor preferences"
   },
-  "provide_a_brief_description_of_this_publish_it_wil_546cdd88": {
-    "message": "Provide a brief description of this publish. It will appear on the publish history list"
+  "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
+    "message": "Provide a brief description. It will appear on the publish history list."
   },
   "publish_5211dca3": {
     "message": "Publish"

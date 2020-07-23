@@ -12,23 +12,27 @@ import { dialogStyle } from './dialogStyle';
 
 // -------------------- Styles -------------------- //
 
+const normalStyle = css`
+  padding: 15px;
+  margin-bottom: 20px;
+  white-space: pre-line;
+`;
+
+const consoleStyle = css`
+  background: #000;
+  max-height: 90px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 23px;
+  color: #fff;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  white-space: pre-line;
+`;
+
 export const builtInStyles = {
-  [dialogStyle.normal]: css`
-    padding: 15px;
-    margin-bottom: 20px;
-    white-space: pre-line;
-  `,
-  [dialogStyle.console]: css`
-    background: #000;
-    max-height: 90px;
-    overflow-y: auto;
-    font-size: 16px;
-    line-height: 23px;
-    color: #fff;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    white-space: pre-line;
-  `,
+  [dialogStyle.normal]: normalStyle,
+  [dialogStyle.console]: consoleStyle,
 };
 
 // -------------------- AlertDialog -------------------- //
