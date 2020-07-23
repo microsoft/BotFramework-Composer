@@ -45,10 +45,6 @@ const createDropdownOption = (pageCount: number) => {
   }));
 };
 
-// Note: these should be made RTL-aware at some point
-const PREVIOUS_LABEL = '← ' + formatMessage('Previous');
-const NEXT_LABEL = formatMessage('Next') + ' →';
-
 export const Pagination: React.FC<IPaginationProps> = (props) => {
   const [index, setIndex] = useState(0);
   const { pageCount, onChange } = props;
@@ -75,9 +71,18 @@ export const Pagination: React.FC<IPaginationProps> = (props) => {
     changePage(index + 1);
   };
 
+  // Note: the labels will need to be made RTL-aware at some point
   return (
     <div aria-label={formatMessage('navigation control')} css={container} role="region">
-      <DefaultButton allowDisabledFocus disabled={index === 0} text={PREVIOUS_LABEL} onClick={handlePreviousClick} />
+      <DefaultButton
+        allowDisabledFocus
+        disabled={index === 0}
+        iconProps={{
+          iconName: 'ChevronLeft',
+        }}
+        text={formatMessage('Previous')}
+        onClick={handlePreviousClick}
+      />
       <span css={text}>Page</span>
       <Dropdown
         ariaLabel={formatMessage('Page number')}
@@ -91,7 +96,10 @@ export const Pagination: React.FC<IPaginationProps> = (props) => {
       <DefaultButton
         allowDisabledFocus
         disabled={index === pageCount - 1}
-        text={NEXT_LABEL}
+        iconProps={{
+          iconName: 'ChevronRight',
+        }}
+        text={formatMessage('Next')}
         onClick={handleNextClick}
       />
     </div>

@@ -44,7 +44,7 @@ export function importResolverGenerator(
     const targetFile =
       resources.find(({ id }) => id === `${targetId}.${locale}`) || resources.find(({ id }) => id === targetId);
 
-    if (!targetFile) throw new Error(formatMessage(`file not found`));
+    if (!targetFile) throw new Error(formatMessage(`File not found`));
     return {
       id: resourceId,
       content: targetFile.content,

@@ -36,9 +36,7 @@ export const PublishDialog = (props) => {
             multiline
             label={formatMessage('Comment')}
             // styles={styles.textarea}
-            placeholder={formatMessage(
-              'Provide a brief description of this publish. It will appear on the publish history list'
-            )}
+            placeholder={formatMessage('Provide a brief description. It will appear on the publish history list.')}
             onChange={(e, newvalue) => setComment(newvalue || '')}
           />
         </form>
