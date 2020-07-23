@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema7 } from '@bfc/extension';
-import { AppUpdaterSettings, CodeEditorSettings, DialogInfo, LuFile, LgFile, PromptTab } from '@bfc/shared';
+import { AppUpdaterSettings, CodeEditorSettings, DialogInfo, LuFile, QnAFile, LgFile, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 
@@ -140,6 +140,7 @@ export type BotAssets = {
   projectId: string;
   dialogs: DialogInfo[];
   luFiles: LuFile[];
+  qnaFiles: QnAFile[];
   lgFiles: LgFile[];
   skillManifests: SkillManifest[];
   setting: DialogSetting;
@@ -150,3 +151,8 @@ export type BoilerplateVersion = {
   currentVersion?: string;
   updateRequired?: boolean;
 };
+
+export enum QnAAllUpViewStatus {
+  Loading,
+  Success,
+}

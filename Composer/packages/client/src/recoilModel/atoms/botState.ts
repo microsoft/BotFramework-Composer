@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import { atom } from 'recoil';
-import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill } from '@bfc/shared';
+import { DialogInfo, Diagnostic, LgFile, LuFile, QnAFile, BotSchemas, Skill } from '@bfc/shared';
 
-import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
+import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
 
 import { PublishType, DialogSetting, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
@@ -66,6 +66,11 @@ export const lgFilesState = atom<LgFile[]>({
 
 export const luFilesState = atom<LuFile[]>({
   key: getFullyQualifiedKey('luFiles'),
+  default: [],
+});
+
+export const qnaFilesState = atom<QnAFile[]>({
+  key: getFullyQualifiedKey('qnaFiles'),
   default: [],
 });
 
@@ -189,4 +194,14 @@ export const onAddLanguageDialogCompleteState = atom<any>({
 export const onDelLanguageDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
+});
+
+export const qnaAllUpViewStatusState = atom<any>({
+  key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
+  default: QnAAllUpViewStatus.Success,
+});
+
+export const isRecognizerDropdownOpen = atom<boolean>({
+  key: getFullyQualifiedKey('isRecognizerDropdownOpen'),
+  default: false,
 });

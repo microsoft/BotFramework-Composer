@@ -450,7 +450,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.qna', 'manifests/*.json'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

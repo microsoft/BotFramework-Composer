@@ -8,7 +8,7 @@ import { DialogInfo } from '@bfc/shared';
 import { DialogSetting } from '../../recoilModel/types';
 
 import { SkillManifest } from './../../pages/design/exportSkillModal/constants';
-import { LuFile, LgFile } from './../../../../lib/shared/src/types/indexers';
+import { LuFile, LgFile, QnAFile } from './../../../../lib/shared/src/types/indexers';
 import { BotAssets } from './../types';
 import * as client from './http';
 import { IFileChange, ChangeType, FileExtensions } from './types';
@@ -181,6 +181,12 @@ class FilePersistence {
     return changes;
   }
 
+  private getQnAChanges(current: QnAFile[], previous: QnAFile[]) {
+    const changeItems = this.getDifferenceItems(current, previous);
+    const changes = this.getFileChanges(FileExtensions.QnA, changeItems);
+    return changes;
+  }
+
   private getLgChanges(current: LgFile[], previous: LgFile[]) {
     const changeItems = this.getDifferenceItems(current, previous);
     const changes = this.getFileChanges(FileExtensions.Lg, changeItems);
@@ -210,6 +216,7 @@ class FilePersistence {
   private getAssetsChanges(currentAssets: BotAssets, previousAssets: BotAssets): IFileChange[] {
     const dialogChanges = this.getDialogChanges(currentAssets.dialogs, previousAssets.dialogs);
     const luChanges = this.getLuChanges(currentAssets.luFiles, previousAssets.luFiles);
+    const qnaChanges = this.getQnAChanges(currentAssets.qnaFiles, previousAssets.qnaFiles);
     const lgChanges = this.getLgChanges(currentAssets.lgFiles, previousAssets.lgFiles);
     const skillManifestChanges = this.getSkillManifestsChanges(
       currentAssets.skillManifests,
@@ -219,6 +226,7 @@ class FilePersistence {
     const fileChanges: IFileChange[] = [
       ...dialogChanges,
       ...luChanges,
+      ...qnaChanges,
       ...lgChanges,
       ...skillManifestChanges,
       ...settingChanges,

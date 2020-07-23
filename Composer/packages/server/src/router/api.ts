@@ -30,6 +30,7 @@ router.get('/projects/:projectId/export', ProjectController.exportProject);
 // update the boilerplate content
 router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
 router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBoilerplate);
+router.get('/qnaContent', ProjectController.parseQnAContent);
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);

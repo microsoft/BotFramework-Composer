@@ -11,6 +11,7 @@ import formatMessage from 'format-message';
 
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
+import qnaWorker from '../parsers/qnaWorker';
 import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
 import { getReferredFiles } from '../../utils/luUtil';
@@ -28,6 +29,7 @@ import {
   settingsState,
   localeState,
   luFilesState,
+  qnaFilesState,
   skillsState,
   schemasState,
   lgFilesState,
@@ -54,7 +56,7 @@ const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
 };
 
 const checkProjectUpdates = async () => {
-  const workers = [filePersistence, lgWorker, luWorker];
+  const workers = [filePersistence, lgWorker, luWorker, qnaWorker];
 
   return Promise.all(workers.map((w) => w.flush()));
 };
@@ -127,7 +129,8 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+      const { dialogs, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+      console.log(qnaFiles);
       let mainDialog = '';
       const verifiedDialogs = dialogs.map((dialog) => {
         if (dialog.isRoot) {
@@ -140,6 +143,7 @@ export const projectDispatcher = () => {
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);
         set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
+        set(qnaFilesState, qnaFiles);
         set(lgFilesState, lgFiles);
         set(dialogsState, verifiedDialogs);
         set(botEnvironmentState, botEnvironment);
