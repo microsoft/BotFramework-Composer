@@ -16,18 +16,13 @@ const argv = require("minimist")(process.argv.slice(2));
 // prefer the argv port --port=XXXX over process.env because the parent Composer app uses that.
 const port = argv.port || process.env.port || process.env.PORT || 3979;
 exports.getProjectRoot = () => {
-    // Load project settings
-    let projectSettings = {
-        bot: "../../",
-        root: "../../",
-    };
+    // get the root folder according to environment
     if (process.env.node_environment === "production") {
-        projectSettings = require("../appsettings.deployment.json");
+        return path.join(__dirname, "../azurewebapp/ComposerDialogs");
     }
     else {
-        projectSettings = require("../appsettings.development.json");
+        return path.join(__dirname, "../../");
     }
-    return path.join(__dirname, projectSettings.root);
 };
 exports.getRootDialog = (projRoot) => {
     // Find entry dialog file

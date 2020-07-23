@@ -20,18 +20,12 @@ const argv = require("minimist")(process.argv.slice(2));
 const port = argv.port || process.env.port || process.env.PORT || 3979;
 
 export const getProjectRoot = (): string => {
-  // Load project settings
-  let projectSettings = {
-    bot: "../../",
-    root: "../../",
-  };
+  // get the root folder according to environment
   if (process.env.node_environment === "production") {
-    projectSettings = require("../appsettings.deployment.json");
+    return path.join(__dirname, "../azurewebapp/ComposerDialogs");
   } else {
-    projectSettings = require("../appsettings.development.json");
+    return path.join(__dirname, "../../");
   }
-
-  return path.join(__dirname, projectSettings.root);
 };
 
 export const getRootDialog = (projRoot: string): string => {

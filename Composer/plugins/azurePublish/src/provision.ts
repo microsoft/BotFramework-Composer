@@ -26,7 +26,6 @@ export class BotProjectProvision {
   private accessToken: string;
   private creds: any; // credential from interactive login
   private projPath: string;
-  private settingsPath: string;
   private templatePath: string;
   private logger: (string) => any;
 
@@ -40,9 +39,6 @@ export class BotProjectProvision {
     this.creds = config.creds;
     this.projPath = config.projPath;
 
-    // path to the source appsettings.deployment.json file
-    this.settingsPath = config.settingsPath ?? path.join(this.projPath, 'appsettings.deployment.json');
-
     // path to the ARM template
     // this is currently expected to live in the code project
     this.templatePath =
@@ -50,7 +46,7 @@ export class BotProjectProvision {
   }
 
   /*******************************************************************************************************************************/
-  /* This section has to do with creating new Azure resources 
+  /* This section has to do with creating new Azure resources
   /*******************************************************************************************************************************/
 
   /**
@@ -305,10 +301,7 @@ export class BotProjectProvision {
       baseUri: 'https://graph.windows.net',
     });
 
-    let settings: any = {};
-    if (fs.existsSync(this.settingsPath)) {
-      settings = await fs.readJson(this.settingsPath);
-    }
+    const settings: any = {};
 
     // Validate settings
     let appId = settings.MicrosoftAppId;

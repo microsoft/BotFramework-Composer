@@ -4,8 +4,8 @@
     "module": "commonjs",
     "declaration": true,
     "sourceMap": true,
-    "outDir": "lib",
-    "rootDir": ".",
+    "outDir": "./lib",
+    "rootDir": "./src",
     "types": ["node", "jest"]
   },
   "include": ["src/**/*"],

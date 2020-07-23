@@ -45,9 +45,6 @@ beforeAll(() => {
   resourceExplorer.addComponent(
     new AdaptiveDialogComponentRegistration(resourceExplorer)
   );
-});
-
-beforeEach(() => {
   adapter = new TestAdapter(
     async (context: TurnContext): Promise<any> => {
       // Route activity to bot.
@@ -57,12 +54,15 @@ beforeEach(() => {
     false
   );
   adapter.use(new LanguageGeneratorMiddleWare(resourceExplorer));
+});
+
+beforeEach(() => {
   bot = new ComposerBot(resourceExplorer, "actionssample.dialog", {});
 });
 
 afterEach(() => {
+  // adapter = null;
   bot = null;
-  adapter = null;
 });
 
 describe("test runtime used ActionsSample", () => {
@@ -175,19 +175,6 @@ describe("test runtime used ActionsSample", () => {
       .send("No")
       .startTest();
   });
-  it("Actions_08TraceAndLog", async () => {
-    await adapter
-      .send(conversationUpdateActivity)
-      .assertReply(
-        "I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n13 - QnAMaker"
-      )
-      .send("09")
-      .send("luhan")
-      .assertReply((activity) => {
-        expect(activity.type).toBe(ActivityTypes.Message);
-      })
-      .startTest();
-  });
   it("Actions_09EditActions", async () => {
     await adapter
       .send(conversationUpdateActivity)
@@ -235,6 +222,30 @@ describe("test runtime used ActionsSample", () => {
       .assertReply("Yippee ki-yay!")
       .send("emit")
       .assertReply("CustomEvent Fired.")
+      .startTest();
+  });
+
+  it("Actions_08TraceAndLog", async () => {
+    // use different adapter to support trace activity
+    adapter = new TestAdapter(
+      async (context: TurnContext): Promise<any> => {
+        // Route activity to bot.
+        return await bot.onTurn(context);
+      },
+      basicActiivty,
+      true
+    );
+    adapter.use(new LanguageGeneratorMiddleWare(resourceExplorer));
+    await adapter
+      .send(conversationUpdateActivity)
+      .assertReply(
+        "I can show you examples on how to use actions. Enter the number next to the entity that you with to see in action.\n01 - Actions\n02 - EndTurn\n03 - IfCondiftion\n04 - EditArray, Foreach\n05 - EndDialog\n06 - HttpRequest\n07 - SwitchCondition\n08 - RepeatDialog\n09 - TraceAndLog\n10 - EditActions\n11 - ReplaceDialog\n12 - EmitEvent\n13 - QnAMaker"
+      )
+      .send("09")
+      .send("luhan")
+      .assertReply((activity) => {
+        expect(activity.type).toBe(ActivityTypes.Trace);
+      })
       .startTest();
   });
 });

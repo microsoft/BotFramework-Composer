@@ -19,9 +19,6 @@ export interface BotProjectDeployConfig {
   // Logger
   logger: (string) => any;
 
-  // Deployment settings file path
-  deploymentSettingsPath?: string;
-
   // Deploy file path, default is .deployment file
   deployFilePath?: string;
 
@@ -30,9 +27,6 @@ export interface BotProjectDeployConfig {
 
   // Publishing folder for 'dotnet publish' command, default is 'bin/Release/netcoreapp3.1'
   publishFolder?: string;
-
-  // The deployment settings file path, default is 'appsettings.deployment.json'
-  settingsPath?: string;
 
   // The ARM template file path, default is 'DeploymentTemplates/template-with-preexisting-rg.json'
   templatePath?: string;
