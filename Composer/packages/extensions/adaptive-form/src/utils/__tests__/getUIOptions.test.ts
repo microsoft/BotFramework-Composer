@@ -19,11 +19,7 @@ describe('getUIOptions', () => {
         },
       },
     };
-    expect(getUIOptions(schema)).toMatchInlineSnapshot(`
-Object {
-  "field": undefined,
-}
-`);
+    expect(getUIOptions(schema)).toMatchInlineSnapshot(`Object {}`);
   });
 
   it('merges overrides into default schema', () => {
@@ -42,15 +38,14 @@ Object {
       },
     };
     expect(getUIOptions(schema, uiSchema)).toMatchInlineSnapshot(`
-Object {
-  "field": undefined,
-  "label": "First Label",
-  "order": Array [
-    "*",
-    "recognizer",
-  ],
-}
-`);
+      Object {
+        "label": "First Label",
+        "order": Array [
+          "*",
+          "recognizer",
+        ],
+      }
+    `);
   });
 
   it('merges overrides and a plugin into default schema', () => {
@@ -77,15 +72,13 @@ Object {
     };
 
     expect(getUIOptions(schema, uiSchema, plugin)).toMatchInlineSnapshot(`
-Object {
-  "field": undefined,
-  "helpLink": "https://example.com/plugin",
-  "label": "First Label",
-  "order": Array [
-    "*",
-    "recognizer",
-  ],
-}
-`);
+      Object {
+        "label": "First Label",
+        "order": Array [
+          "*",
+          "recognizer",
+        ],
+      }
+    `);
   });
 });
