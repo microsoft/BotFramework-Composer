@@ -48,6 +48,9 @@ export class BotProject {
   public defaultSDKSchema: {
     [key: string]: string;
   };
+  public defaultUISchema: {
+    [key: string]: string;
+  };
   public skills: Skill[] = [];
   public diagnostics: Diagnostic[] = [];
   public settingManager: ISettingManager;
@@ -62,6 +65,7 @@ export class BotProject {
     this.name = Path.basename(this.dir);
 
     this.defaultSDKSchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.schema'), 'utf-8'));
+    this.defaultUISchema = JSON.parse(fs.readFileSync(Path.join(__dirname, '../../../schemas/sdk.uischema'), 'utf-8'));
 
     this.settingManager = new DefaultSettingManager(this.dir);
     this.fileStorage = StorageService.getStorageClient(this.ref.storageId, user);
@@ -195,7 +199,7 @@ export class BotProject {
 
   public getSchemas = () => {
     let sdkSchema = this.defaultSDKSchema;
-    let uiSchema = {};
+    let uiSchema = this.defaultUISchema;
     let uiSchemaOverrides = {};
     const diagnostics: string[] = [];
 
