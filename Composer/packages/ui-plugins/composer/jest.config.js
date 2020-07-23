@@ -4,4 +4,4 @@
 
 const { createConfig } = require('@bfc/test-utils');
 
-module.exports = createConfig('ui-plugin/expressions', 'react');
+module.exports = createConfig('ui-plugin/composer', 'react');

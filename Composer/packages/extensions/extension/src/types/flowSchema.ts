@@ -4,21 +4,11 @@
 import { FC, ComponentClass } from 'react';
 import { BaseSchema, SDKKinds } from '@bfc/shared';
 
-export interface FlowEditorConfig {
-  widgets?: FlowEditorWidgetMap;
-  schema?: FlowSchema;
-}
-
 export type FlowEditorWidgetMap = { [widgetName: string]: WidgetComponent<any> };
 export enum FlowSchemaBuiltinKeys {
   default = 'default',
   custom = 'custom',
 }
-
-/** schema */
-export type FlowSchema = {
-  [key in SDKKinds | FlowSchemaBuiltinKeys]?: FlowWidget;
-};
 
 export interface FlowWidget {
   /** Widget implementation (React Class) or Widget name (string) */
@@ -44,3 +34,7 @@ export interface WidgetContainerProps {
 export type FlowWidgetProp = Value | PropGenerator | FlowWidget;
 type Value = string | number | boolean | undefined | { [key: string]: any };
 type PropGenerator = (data: any) => string | number | object | JSX.Element;
+
+export type FlowUISchema = {
+  [key in SDKKinds]?: FlowWidget;
+};
