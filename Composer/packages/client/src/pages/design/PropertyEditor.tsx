@@ -4,16 +4,17 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import AdaptiveForm, { resolveRef, getUIOptions, mergePluginConfigs } from '@bfc/adaptive-form';
-import Extension, { FormErrors, JSONSchema7 } from '@bfc/extension';
+import AdaptiveForm, { resolveRef, getUIOptions } from '@bfc/adaptive-form';
+import Extension, { FormErrors, JSONSchema7, PluginConfig } from '@bfc/extension';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
+import mapValues from 'lodash/mapValues';
 import { Resizable, ResizeCallback } from 're-resizable';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
 import { useShell } from '../../shell';
-import plugins from '../../plugins';
+import plugins, { mergePluginConfigs } from '../../plugins';
 
 import { formEditor } from './styles';
 
@@ -62,12 +63,15 @@ const PropertyEditor: React.FC = () => {
     }
   }, [schemas?.sdk?.content, localData.$kind]);
 
-  const pluginConfig = useMemo(() => {
-    return mergePluginConfigs(...plugins);
-  }, []);
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = schemas?.ui?.content ?? {};
+    const userUISchema = schemas?.uiOverrides?.content ?? {};
 
-  const $uiSchema = useMemo(() => {
-    return getUIOptions($schema, pluginConfig.formSchema, pluginConfig.roleSchema);
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
+
+  const $uiOptions = useMemo(() => {
+    return getUIOptions($schema, mapValues(pluginConfig.uiSchema, 'form'));
   }, [$schema, pluginConfig]);
 
   const errors = useMemo(() => {
@@ -129,13 +133,12 @@ const PropertyEditor: React.FC = () => {
       onResizeStop={handleResize}
     >
       <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor" role="region">
-        <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
+        <Extension plugins={pluginConfig} shell={shellApi} shellData={shellData}>
           <AdaptiveForm
             errors={errors}
             formData={localData}
-            pluginConfig={pluginConfig}
             schema={$schema}
-            uiOptions={$uiSchema}
+            uiOptions={$uiOptions}
             onChange={handleDataChange}
           />
         </Extension>
