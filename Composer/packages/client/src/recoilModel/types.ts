@@ -11,7 +11,7 @@ import {
   DialogSetting,
 } from '@bfc/shared';
 
-import { AppUpdaterStatus, BotStatus } from '../constants';
+import { AppUpdaterStatus } from '../constants';
 
 import { SkillManifest } from './../pages/design/exportSkillModal/constants';
 

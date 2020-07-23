@@ -17,14 +17,15 @@ interface IProjectTreeProps {
   filter: string;
 }
 
-export const ProjectTreeController: React.FC<IProjectTreeProps> = (props: IProjectTreeProps) => {
+export const ProjectTreeContainer: React.FC<IProjectTreeProps> = (props: IProjectTreeProps) => {
   const botProjects = useRecoilValue(botProjectsState);
 
   return (
     <Fragment>
-      {botProjects.map((projectId) => (
-        <IndividualProjectTree key={projectId} projectId={projectId} {...props}></IndividualProjectTree>
-      ))}
+      {botProjects.map((projectId) => {
+        console.log(projectId);
+        return <IndividualProjectTree key={projectId} projectId={projectId} {...props} />;
+      })}
     </Fragment>
   );
 };
