@@ -5,7 +5,7 @@ import { generateUniqueId } from '@bfc/shared';
 import { ChangeHandler } from '@bfc/extension';
 import { useState } from 'react';
 
-type ItemType = { [key: string]: unknown };
+type ItemType<T> = { [key: string]: T };
 type ObjectChangeHandler = (items: ObjectItem[]) => void;
 
 export interface ObjectItem {
@@ -20,7 +20,7 @@ interface ObjectItemState {
   addProperty: (name?: string, value?: unknown) => void;
 }
 
-const generateObjectEntries = (value: ItemType): ObjectItem[] => {
+const generateObjectEntries = (value: ItemType<unknown>): ObjectItem[] => {
   return Object.entries(value || {}).map((entry) => createObjectItem(...entry));
 };
 
@@ -54,7 +54,7 @@ export const getPropertyItemProps = (items: ObjectItem[], index: number, onChang
   };
 };
 
-export function useObjectItems(items: ItemType, onChange: ChangeHandler<ItemType>): ObjectItemState {
+export function useObjectItems(items: ItemType<unknown>, onChange: ChangeHandler<ItemType<unknown>>): ObjectItemState {
   const [cache, setCache] = useState(generateObjectEntries(items));
 
   const handleChange = (items: ObjectItem[]) => {
@@ -62,12 +62,12 @@ export function useObjectItems(items: ItemType, onChange: ChangeHandler<ItemType
     onChange(
       items.reduce(
         (acc, { propertyName, propertyValue }) => ({ ...acc, [propertyName]: propertyValue }),
-        {} as ItemType
+        {} as ItemType<unknown>
       )
     );
   };
 
-  const addProperty = (name: string = '', value?: unknown) => {
+  const addProperty = <ValueType = unknown>(name: string = '', value?: ValueType) => {
     if (!cache.some(({ propertyName }) => propertyName === name)) {
       handleChange([...cache, createObjectItem(name, value)]);
     }

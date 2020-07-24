@@ -89,11 +89,11 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
         <div css={item}>
           <SchemaField
             {...rest}
-            schema={schema}
-            placeholder={placeholder}
             definitions={definitions}
             id={`${name}.value`}
             name="value"
+            placeholder={placeholder}
+            schema={schema}
             transparentBorder={!stackedLayout}
             value={value}
             onChange={onChange}
