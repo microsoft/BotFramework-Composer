@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.botframework.com/schemas/botprojects/v0.1/worskspace.json",
+  "name": "OfficeVA",
+  "workspace": "../Projects/OfficeVA",
+  "provisioningProfile": "../Projects/DeploymentProfiles/officeVA.json",
+  "skills": [
+    {
+      "workspace": "../Projects/RoomSchedulerSkill",
+      "manifest": "room-scheduler-skill-manifest-v2.1.0",
+      "provisioningProfile": "../Projects/DeploymentProfiles/roomSchedulerProfile.json",
+      "remote": false,
+      "endpointName": "local"
+    },
+    {
+      "manifest": "https://calendar-skill/calendar-skill-manifest-v2.1.0.json",
+      "remote": true
+    },
+    {
+      "workspace": "../Projects/LunchOrderingSkill",
+      "provisioningProfile": "../Projects/DeploymentProfiles/lunchOrderingSkillProfile.json",
+      "remote": false
+    }
+  ]
+}

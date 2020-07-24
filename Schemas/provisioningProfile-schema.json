@@ -1,0 +1,106 @@
+{
+    "$id": "https://schemas.botframework.com/schemas/botprojects/v0.1/provisioning.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$version": "0.1",
+    "title": "Provisioning profile schema for Bot Projects",
+    "description": "This is a schema that captures the resource provisioning needs for a bot which maybe a Virtual Assistant or a skill",
+    "type": "object",
+    "required": ["$schema", "MicrosoftAppId", "MicrosoftAppPassword", "accessToken"],
+    "additionalProperties": false,
+    "properties": {
+      "$schema": {
+        "type": "string",
+        "format": "uri",
+        "description": "The schema to verify this provisioning profile file against"
+      },
+      "MicrosoftAppId": {
+        "type": "string",
+        "description": "Micorosft App ID of the resource"
+      },
+      "MicrosoftAppPassword": {
+        "type": "string",
+        "description": "Micorosft App Password of the resource"
+      },
+      "hostname": {
+        "type": "string",
+        "description": "Optional hostname"
+      },
+      "name": {
+        "type": "string",
+        "description": "Optional name of the publishing target"
+      },
+      "accessToken": {
+        "type": "string",
+        "description": "Access token for azure account"
+      },
+      "applicationInsights": {
+        "type": "object",
+        "description": "Application Insights resourcing",
+        "properties": {
+          "instrumentationKey": {
+            "type": "string",
+            "description": "Instrumentation key for application insights"
+          }
+        }
+      },
+      "blobStorage": {
+        "type": "object",
+        "description": "Configuring blob storage on azure",
+        "properties": {
+          "connectionString": {
+            "type": "string",
+            "description": "Connection string for blob storage"
+          },
+          "container": {
+            "type": "string",
+            "description": "Container name for the blob storage"
+          }
+        }
+      },
+      "luis": {
+        "type": "object",
+        "description": "LUIS resourcing properties",
+        "properties": {
+          "endpointKey": {
+            "type": "string",
+            "description": "Endpoint key for LUIS provisioning"
+          },
+          "authoringKey": {
+            "type": "string",
+            "description": "Authoring key for LUIS provisioning"
+          },
+          "region": {
+            "type": "string",
+            "description": "Region for LUIS provisioning"
+          },
+          "endpoint": {
+            "type": "string",
+            "description": "LUIS endpoint configuration"
+          },
+          "authoringEndpoint": {
+            "type": "string",
+            "description": "Authoring endpoint for LUIS"
+          }
+        }
+      },
+      "qna": {
+        "type": "object",
+        "description": "Qna maker resourcing properties",
+        "properties": {
+          "knowledgebaseid": {
+            "type": "string",
+            "description": "Qna maker knowledge base id"
+          },
+          "endpointkey": {
+            "type": "string",
+            "description": "Endpoint key for Qna maker resource"
+          },
+          "hostname": {
+            "type": "string",
+            "description": "Qna maker hostname"
+          }
+        }
+      }
+    }
+  }
+  
