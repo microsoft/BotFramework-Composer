@@ -81,7 +81,7 @@
       "name": "Server: Attach",
       "port": 9228,
       "sourceMaps": true
-    }
+    },
     {
       "type": "node",
       "request": "launch",

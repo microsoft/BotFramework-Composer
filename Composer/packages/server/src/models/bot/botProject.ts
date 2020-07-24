@@ -47,6 +47,9 @@ const BotStructureTemplate = {
     lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
   },
+  dialogSchemas: {
+    folder: 'dialog-schemas',
+  },
   skillManifests: 'manifests/${MANIFESTNAME}.json',
 };
 
@@ -423,6 +426,8 @@ export class BotProject {
           MANIFESTNAME: id,
         }
       );
+    } else if (fileType === '.dialog-schema') {
+      dir = BotStructureTemplate.dialogSchemas.folder;
     }
     return dir;
   };
@@ -505,7 +510,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json', '**/*.dialog-schema'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

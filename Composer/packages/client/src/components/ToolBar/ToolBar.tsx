@@ -6,7 +6,6 @@ import { DialogInfo } from '@bfc/shared';
 import { jsx } from '@emotion/core';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
-import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Fragment, useCallback } from 'react';
 
 import { useStoreContext } from '../../hooks/useStoreContext';
@@ -64,7 +63,6 @@ export function ToolBar(props: ToolbarProps) {
     currentDialog,
     onCreateDialogComplete,
     openNewTriggerModal,
-    openGenerateDialogModal,
     showSkillManifestModal,
     ...rest
   } = props;
@@ -116,18 +114,6 @@ export function ToolBar(props: ToolbarProps) {
                     }),
                     onClick: () => {
                       openNewTriggerModal?.();
-                    },
-                  },
-                  {
-                    itemType: ContextualMenuItemType.Divider,
-                    key: 'dividerdialog',
-                  },
-                  {
-                    'data-testid': 'FlyoutGenerateDialog',
-                    key: 'generatedialog',
-                    text: formatMessage('Generate dialog'),
-                    onClick: () => {
-                      openGenerateDialogModal?.();
                     },
                   },
                 ],

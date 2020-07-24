@@ -2,35 +2,34 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
-import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
-import formatMessage from 'format-message';
-import { globalHistory, RouteComponentProps } from '@reach/router';
-import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab } from '@bfc/shared';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
+import { DialogFactory, DialogInfo, PromptTab, SDKKinds } from '@bfc/shared';
+import { jsx } from '@emotion/core';
+import { globalHistory, RouteComponentProps } from '@reach/router';
+import formatMessage from 'format-message';
+import get from 'lodash/get';
+import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
-import { TestController } from '../../components/TestController/TestController';
-import { DialogDeleting } from '../../constants';
-import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
-import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation/Conversation';
-import { dialogStyle } from '../../components/Modal/dialogStyle';
+import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
+import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar/ToolBar';
-import { clearBreadcrumb } from '../../utils/navigation';
-import undoHistory from '../../store/middlewares/undo/history';
-import { navigateTo } from '../../utils/navigation';
-import { useShell } from '../../shell';
+import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
+import { TestController } from '../../components/TestController/TestController';
+import { IToolBarItem, ToolBar } from '../../components/ToolBar/ToolBar';
+import { DialogDeleting } from '../../constants';
 import { useStoreContext } from '../../hooks/useStoreContext';
-import { DialogGenerationModal } from '../../components/DialogGenerationModal';
+import { useShell } from '../../shell';
+import undoHistory from '../../store/middlewares/undo/history';
+import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
+import { clearBreadcrumb, navigateTo } from '../../utils/navigation';
 
 import { VisualEditorAPI } from './FrameAPI';
+import { PropertyEditor } from './PropertyEditor';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -41,7 +40,6 @@ import {
   visualPanel,
 } from './styles';
 import { VisualEditor } from './VisualEditor';
-import { PropertyEditor } from './PropertyEditor';
 
 const CreateSkillModal = React.lazy(() => import('../../components/SkillForm/CreateSkillModal/CreateSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
@@ -110,7 +108,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
-  const [generateDialogModalVisibility, setGenerateDialogModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
@@ -166,14 +163,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const openNewTriggerModal = () => {
     setTriggerModalVisibility(true);
-  };
-
-  const onGenerateDialogModalDismiss = () => {
-    setGenerateDialogModalVisibility(false);
-  };
-
-  const openGenerateDialogModal = () => {
-    setGenerateDialogModalVisibility(true);
   };
 
   const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
@@ -425,7 +414,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         <div css={contentWrapper} role="main">
           <ToolBar
             currentDialog={currentDialog}
-            openGenerateDialogModal={openGenerateDialogModal}
             openNewTriggerModal={openNewTriggerModal}
             showSkillManifestModal={() => setExportSkillModalVisible(true)}
             toolbarItems={toolbarItems}
@@ -486,13 +474,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             isOpen={triggerModalVisible}
             onDismiss={onTriggerCreationDismiss}
             onSubmit={onTriggerCreationSubmit}
-          />
-        )}
-        {generateDialogModalVisibility && (
-          <DialogGenerationModal
-            isOpen={generateDialogModalVisibility}
-            onDismiss={onGenerateDialogModalDismiss}
-            onGenerate={(str) => console.log(str)}
           />
         )}
         {displaySkillManifest && (

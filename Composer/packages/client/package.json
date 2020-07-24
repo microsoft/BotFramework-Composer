@@ -21,6 +21,7 @@
     "@bfc/adaptive-flow": "*",
     "@bfc/adaptive-form": "*",
     "@bfc/code-editor": "*",
+    "@bfc/dialog-generation-flow": "*",
     "@bfc/extension": "*",
     "@bfc/indexers": "*",
     "@bfc/shared": "*",

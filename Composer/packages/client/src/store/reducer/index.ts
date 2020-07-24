@@ -14,6 +14,7 @@ import {
   importResolverGenerator,
   UserSettings,
   dereferenceDefinitions,
+  FileInfo,
 } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -27,6 +28,7 @@ import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import { getReferredFiles } from '../../utils/luUtil';
 import { isElectron } from '../../utils/electronUtil';
 import { initialState } from '..';
+import { FileExtensions } from '../persistence/types';
 
 import createReducer from './createReducer';
 
@@ -103,6 +105,9 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
   state.botOpening = false;
+  state.dialogSchemas = files
+    .filter((f: FileInfo) => f.name.endsWith(FileExtensions.DialogSchema))
+    .map((f: FileInfo) => ({ id: f.name.split('.')[0], content: f.content }));
   refreshLocalStorage(id, state.settings);
   mergeLocalStorage(id, state.settings);
   return state;
@@ -277,6 +282,35 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   state.showCreateDialogModal = false;
   state.actionsSeed = [];
   delete state.onCreateDialogComplete;
+  return state;
+};
+
+const createDialogSchema: ReducerFunc = (state, { id, content }) => {
+  if (state.dialogSchemas.find((ds) => ds.id === id)) {
+    state.error = {
+      message: `${id} ${formatMessage(`dialog schema file already exist`)}`,
+      summary: formatMessage('Creation Rejected'),
+    };
+    return state;
+  }
+
+  state.dialogSchemas.push({ id, content });
+
+  return state;
+};
+
+const updateDialogSchema: ReducerFunc = (state, { id, content }) => {
+  const dialogSchema = state.dialogSchemas.find((ds) => ds.id === id);
+  if (dialogSchema) {
+    dialogSchema.content = content;
+  }
+
+  return state;
+};
+
+const removeDialogSchema: ReducerFunc = (state, { id }) => {
+  state.dialogSchemas = state.dialogSchemas.filter((ds) => ds.id !== id);
+
   return state;
 };
 
@@ -675,6 +709,9 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_DIALOG]: createDialog,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.REMOVE_DIALOG]: removeDialog,
+  [ActionTypes.CREATE_SCHEMA]: createDialogSchema,
+  [ActionTypes.UPDATE_SCHEMA]: updateDialogSchema,
+  [ActionTypes.REMOVE_SCHEMA]: removeDialogSchema,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.GET_STORAGE_FAILURE]: noOp,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,

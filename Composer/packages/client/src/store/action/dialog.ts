@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { ActionCreator, State } from '../types';
-import { undoable } from '../middlewares/undo';
 import { ActionTypes } from '../../constants';
+import { undoable } from '../middlewares/undo';
+import { ActionCreator, State } from '../types';
 
 import { Store } from './../types';
 
@@ -63,5 +63,30 @@ export const createDialogCancel: ActionCreator = (store) => {
   }
   store.dispatch({
     type: ActionTypes.CREATE_DIALOG_CANCEL,
+  });
+};
+
+export const createDialogSchema: ActionCreator = async (store, { id, content }) => {
+  store.dispatch({
+    type: ActionTypes.CREATE_SCHEMA,
+    payload: { id, content },
+  });
+};
+
+export const updateDialogSchema: ActionCreator = async (store, { id, content }) => {
+  if (store.getState().dialogSchemas.findIndex((ds) => ds.id === id) === -1) {
+    return;
+  }
+
+  store.dispatch({
+    type: ActionTypes.UPDATE_SCHEMA,
+    payload: { id, content },
+  });
+};
+
+export const removeDialogSchema: ActionCreator = async (store, { id }) => {
+  store.dispatch({
+    type: ActionTypes.REMOVE_SCHEMA,
+    payload: { id },
   });
 };

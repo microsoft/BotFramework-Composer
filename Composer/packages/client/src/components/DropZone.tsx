@@ -6,6 +6,27 @@ import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import { DefaultPalette } from '@uifabric/styling';
 import * as React from 'react';
 
+const validateAccept = (file: File, accept: string | undefined) => {
+  if (file && accept) {
+    const acceptedFilesArray = Array.isArray(accept) ? accept : accept.split(',');
+    const fileName = file.name || '';
+    const mimeType = file.type || '';
+    const baseMimeType = mimeType.replace(/\/.*$/, '');
+
+    return acceptedFilesArray.some((type) => {
+      const validType = type.trim();
+      if (validType.charAt(0) === '.') {
+        return fileName.toLowerCase().endsWith(validType.toLowerCase());
+      } else if (validType.endsWith('/*')) {
+        // This is something like a image/* mime type
+        return baseMimeType === validType.replace(/\/.*$/, '');
+      }
+      return mimeType === validType;
+    });
+  }
+  return true;
+};
+
 const DropZoneRoot = styled.div<{
   overZone: boolean;
   dropMessage: string | undefined;
@@ -18,12 +39,12 @@ const DropZoneRoot = styled.div<{
           border: `4px dashed ${DefaultPalette.accent}`,
           padding: 0,
           position: 'absolute',
-          background: 'rgba(0,0,0,0.25)',
+          background: 'rgba(0,0,0,0.75)',
           left: 0,
           top: 0,
           height: 'calc(100% - 8px)',
           width: 'calc(100% - 8px)',
-          zIndex: 1,
+          zIndex: 2,
         },
         '&:after': {
           pointerEvents: 'none',
@@ -39,7 +60,7 @@ const DropZoneRoot = styled.div<{
           fontWeight: 500,
           textAlign: 'justify',
           color: NeutralColors.gray20,
-          zIndex: 1,
+          zIndex: 2,
         },
       }
     : null
@@ -47,13 +68,15 @@ const DropZoneRoot = styled.div<{
 
 export type DropZoneProps = {
   children: React.ReactNode;
-  onDropFiles: (files: readonly File[]) => void;
+  onDropFiles: (acceptedFiles: readonly File[], rejectedFiles: readonly File[]) => void;
   dropMessage?: string | undefined;
+  style?: React.CSSProperties;
   multiple?: boolean;
+  accept?: string;
 };
 
 export const DropZone = (props: DropZoneProps) => {
-  const { onDropFiles, dropMessage, multiple = false } = props;
+  const { onDropFiles, dropMessage, multiple = false, accept, style } = props;
 
   const [overZone, setOverZone] = React.useState(false);
 
@@ -63,8 +86,10 @@ export const DropZone = (props: DropZoneProps) => {
     const { dataTransfer } = evt;
     if (dataTransfer.files && dataTransfer.files.length) {
       const filesArray = Array.from(dataTransfer.files);
-      const files: File[] = !multiple ? [filesArray[0]] : filesArray;
-      onDropFiles(files);
+      const acceptedFiles = (!multiple ? [filesArray[0]] : filesArray).filter((f) => validateAccept(f, accept));
+      const rejectedFiles = (!multiple ? [filesArray[0]] : filesArray).filter((f) => !validateAccept(f, accept));
+
+      onDropFiles(acceptedFiles, rejectedFiles);
     }
 
     setOverZone(false);
@@ -93,6 +118,7 @@ export const DropZone = (props: DropZoneProps) => {
     <DropZoneRoot
       dropMessage={dropMessage}
       overZone={overZone}
+      style={style}
       onDragLeave={onDragLeave}
       onDragOver={onDragOver}
       onDrop={onDrop}
