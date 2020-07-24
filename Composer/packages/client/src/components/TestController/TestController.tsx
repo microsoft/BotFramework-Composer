@@ -8,8 +8,8 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { defaultPublishConfig } from '@bfc/shared';
 
-import { DefaultPublishConfig } from '../../constants';
 import {
   botNameState,
   botStatusState,
@@ -81,7 +81,7 @@ export const TestController: React.FC = () => {
 
   useEffect(() => {
     if (projectId) {
-      getPublishStatus(projectId, DefaultPublishConfig);
+      getPublishStatus(projectId, defaultPublishConfig);
     }
   }, [projectId]);
 
@@ -137,7 +137,7 @@ export const TestController: React.FC = () => {
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
     const sensitiveSettings = settingsStorage.get(projectId);
-    await publishToTarget(projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
+    await publishToTarget(projectId, defaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   function isLuisConfigComplete(config) {

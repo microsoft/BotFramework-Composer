@@ -96,7 +96,7 @@ export const publisherDispatcher = () => {
     }
 
     const publishHistory = await snapshot.getPromise(publishHistoryState);
-    const history = { ...data, target: target };
+    // const history = { ...data, target: target };
     const historys = publishHistory[target.name];
     let tempHistorys = historys ? [...historys] : [];
     // if no history exists, create one with the latest status
@@ -111,6 +111,8 @@ export const publisherDispatcher = () => {
       } else {
         tempHistorys.unshift(history);
       }
+    } else {
+      return;
     }
     set(publishHistoryState, (publishHistory) => ({
       ...publishHistory,
