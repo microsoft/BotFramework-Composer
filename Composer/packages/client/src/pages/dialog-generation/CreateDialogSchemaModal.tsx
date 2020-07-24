@@ -7,8 +7,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import React, { useCallback, useContext } from 'react';
 
-import { DialogWrapper } from '../../components/DialogWrapper/DialogWrapper';
-import { DialogTypes } from '../../components/DialogWrapper/styles';
+import { DialogTypes, DialogWrapper } from '../../components/DialogWrapper';
 import { nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StoreContext } from '../../store';

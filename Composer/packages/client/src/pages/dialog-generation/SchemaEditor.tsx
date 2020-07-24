@@ -40,7 +40,7 @@ const editorTopBarStyles = classNamesFunction<IStackProps, IStackStyles>()({
 const validateSchemaFileName = (file: File) => file.name.endsWith(FileExtensions.DialogSchema);
 
 type Props = {
-  projectId: string;
+  projectId?: string;
   schema: { id: string; content: string };
   onChange: (id: string, content: string) => void;
 };

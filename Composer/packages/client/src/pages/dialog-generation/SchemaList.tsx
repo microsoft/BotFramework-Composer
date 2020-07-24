@@ -10,7 +10,7 @@ import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZ
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { List } from 'office-ui-fabric-react/lib/List';
 import { ISearchBoxProps, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
-import { Stack, IStackItemStyles, IStackItemProps } from 'office-ui-fabric-react/lib/Stack';
+import { IStackItemProps, IStackItemStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { Resizable, ResizeCallback } from 're-resizable';
 import * as React from 'react';

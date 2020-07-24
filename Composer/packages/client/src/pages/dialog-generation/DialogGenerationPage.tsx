@@ -27,9 +27,7 @@ const EmptyView = styled(Stack)({
   },
 });
 
-type Props = RouteComponentProps<{}> & {
-  projectId: string;
-};
+type Props = RouteComponentProps<{ projectId: string }>;
 
 const DialogGenerationPage: React.FC<Props> = (props: Props) => {
   const { projectId } = props;
