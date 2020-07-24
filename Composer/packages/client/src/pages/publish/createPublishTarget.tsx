@@ -10,9 +10,10 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Fragment, useState, useMemo } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
+import { useRecoilValue } from 'recoil';
 
-import { PublishTarget, PublishType } from '../../store/types';
-import { useStoreContext } from '../../hooks/useStoreContext';
+import { PublishTarget, PublishType } from '../../recoilModel/types';
+import { userSettingsState } from '../../recoilModel';
 
 import { label } from './styles';
 
@@ -29,9 +30,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
   const [name, setName] = useState(props.current ? props.current.name : '');
   const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : undefined);
   const [errorMessage, setErrorMsg] = useState('');
-  const {
-    state: { userSettings },
-  } = useStoreContext();
+  const userSettings = useRecoilValue(userSettingsState);
 
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));

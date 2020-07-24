@@ -3,22 +3,20 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useContext } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../../store';
+import { userSettingsState, dispatcherState } from '../../../recoilModel';
 
 import { link, section } from './styles';
 import { SettingToggle } from './SettingToggle';
 import * as images from './images';
 
 export const ElectronSettings: React.FC<RouteComponentProps> = () => {
-  const {
-    actions: { updateUserSettings },
-    state: { userSettings },
-  } = useContext(StoreContext);
+  const userSettings = useRecoilValue(userSettingsState);
+  const { updateUserSettings } = useRecoilValue(dispatcherState);
 
   const onAppUpdatesChange = (key: string) => (checked: boolean) => {
     updateUserSettings({ appUpdater: { [key]: checked } });

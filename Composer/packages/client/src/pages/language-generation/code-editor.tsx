@@ -2,17 +2,22 @@
 // Licensed under the MIT License.
 
 /* eslint-disable react/display-name */
-import React, { useState, useEffect, useMemo, useContext, useCallback } from 'react';
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
+import React, { useState, useEffect, useMemo, useCallback, Fragment } from 'react';
 import { LgEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
-import isEmpty from 'lodash/isEmpty';
 import { filterTemplateDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
+import { LgFile } from '@bfc/shared/src/types/indexers';
 
-import { StoreContext } from '../../store';
+import { localeState, lgFilesState, projectIdState, settingsState } from '../../recoilModel/atoms/botState';
+import { userSettingsState, dispatcherState } from '../../recoilModel';
+import { DiffCodeEditor } from '../language-understanding/diff-editor';
 
 const lspServerPath = '/lg-language-server';
 
@@ -21,10 +26,24 @@ interface CodeEditorProps extends RouteComponentProps<{}> {
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
-  const { actions, state } = useContext(StoreContext);
-  const { lgFiles, locale, projectId, userSettings } = state;
+  const userSettings = useRecoilValue(userSettingsState);
+  const projectId = useRecoilValue(projectIdState);
+  const locale = useRecoilValue(localeState);
+  const lgFiles = useRecoilValue(lgFilesState);
+  const settings = useRecoilValue(settingsState);
+
+  const { languages, defaultLanguage } = settings;
+
+  const {
+    updateLgTemplate: updateLgTemplateDispatcher,
+    updateLgFile: updateLgFileDispatcher,
+    updateUserSettings,
+    setLocale,
+  } = useRecoilValue(dispatcherState);
   const { dialogId } = props;
-  const file = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const file: LgFile | undefined = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const defaultLangFile = lgFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
+
   const diagnostics = get(file, 'diagnostics', []);
   const [errorMsg, setErrorMsg] = useState('');
   const [lgEditor, setLgEditor] = useState<any>(null);
@@ -43,14 +62,10 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const line = Array.isArray(hashLine) ? +hashLine[0] : typeof hashLine === 'string' ? +hashLine : 0;
 
   const inlineMode = !!template;
-  const [content, setContent] = useState(template?.body || file?.content);
-
-  useEffect(() => {
-    // reset content with file.content's initial state
-    if (!file || isEmpty(file) || content) return;
-    const value = template ? template.body : file.content;
-    setContent(value);
-  }, [file, templateId, projectId]);
+  const content = template?.body || file?.content;
+  const defaultLangContent =
+    (inlineMode && defaultLangFile?.templates.find(({ name }) => name === templateId)?.body) ||
+    defaultLangFile?.content;
 
   const currentDiagnostics =
     inlineMode && file && template ? filterTemplateDiagnostics(file, template.name) : diagnostics;
@@ -75,7 +90,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         if (!file || !template) return;
         const { name, parameters } = template;
         const payload = {
-          file,
+          id: file.id,
           projectId,
           templateName: name,
           template: {
@@ -84,7 +99,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
             body,
           },
         };
-        actions.updateLgTemplate(payload);
+        updateLgTemplateDispatcher(payload);
       }, 500),
     [file, template, projectId]
   );
@@ -99,7 +114,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           projectId,
           content,
         };
-        actions.updateLgFile(payload);
+        updateLgFileDispatcher(payload);
       }, 500),
     [file, projectId]
   );
@@ -122,7 +137,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   );
 
   const handleSettingsChange = (settings: Partial<CodeEditorSettings>) => {
-    actions.updateUserSettings({ codeEditor: settings });
+    updateUserSettings({ codeEditor: settings });
   };
 
   const lgOption = {
@@ -131,21 +146,56 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     templateId: template?.name,
   };
 
+  const currentLanguageFileEditor = useMemo(() => {
+    return (
+      <LgEditor
+        diagnostics={currentDiagnostics}
+        editorDidMount={editorDidMount}
+        editorSettings={userSettings.codeEditor}
+        errorMessage={errorMsg}
+        hidePlaceholder={inlineMode}
+        languageServer={{
+          path: lspServerPath,
+        }}
+        lgOption={lgOption}
+        value={content}
+        onChange={onChange}
+        onChangeSettings={handleSettingsChange}
+      />
+    );
+  }, [lgOption]);
+
+  const defaultLanguageFileEditor = useMemo(() => {
+    return (
+      <LgEditor
+        editorSettings={userSettings.codeEditor}
+        lgOption={{
+          fileId: dialogId,
+        }}
+        options={{
+          readOnly: true,
+        }}
+        value={defaultLangContent}
+        onChange={() => {}}
+      />
+    );
+  }, [dialogId]);
+
   return (
-    <LgEditor
-      diagnostics={currentDiagnostics}
-      editorDidMount={editorDidMount}
-      editorSettings={userSettings.codeEditor}
-      errorMessage={errorMsg}
-      hidePlaceholder={inlineMode}
-      languageServer={{
-        path: lspServerPath,
-      }}
-      lgOption={lgOption}
-      value={content}
-      onChange={onChange}
-      onChangeSettings={handleSettingsChange}
-    />
+    <Fragment>
+      {locale === defaultLanguage ? (
+        currentLanguageFileEditor
+      ) : (
+        <DiffCodeEditor
+          defaultLanguage={defaultLanguage}
+          languages={languages}
+          left={currentLanguageFileEditor}
+          locale={locale}
+          right={defaultLanguageFileEditor}
+          onLanguageChange={setLocale}
+        ></DiffCodeEditor>
+      )}
+    </Fragment>
   );
 };
 

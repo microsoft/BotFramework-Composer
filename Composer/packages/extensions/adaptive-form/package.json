@@ -13,6 +13,7 @@
     "build:ts": "tsc --build ./tsconfig.build.json",
     "clean": "rimraf lib demo/dist",
     "lint": "eslint --quiet src",
+    "lint:fix": "yarn lint --fix",
     "prepare": "yarn build"
   },
   "license": "MIT",
@@ -39,7 +40,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.27",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "react-error-boundary": "^1.2.5"
   }
 }

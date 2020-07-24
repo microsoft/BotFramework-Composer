@@ -2,14 +2,24 @@
 // Licensed under the MIT License.
 
 import { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { useStoreContext } from '../../hooks/useStoreContext';
+import {
+  dialogsState,
+  luFilesState,
+  lgFilesState,
+  projectIdState,
+  BotDiagnosticsState,
+} from '../../recoilModel/atoms/botState';
 
 import { Notification, DialogNotification, LuNotification, LgNotification, ServerNotification } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
-  const { state } = useStoreContext();
-  const { dialogs, luFiles, lgFiles, projectId, diagnostics } = state;
+  const dialogs = useRecoilValue(dialogsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const projectId = useRecoilValue(projectIdState);
+  const lgFiles = useRecoilValue(lgFilesState);
+  const diagnostics = useRecoilValue(BotDiagnosticsState);
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];
     diagnostics.forEach((d) => {

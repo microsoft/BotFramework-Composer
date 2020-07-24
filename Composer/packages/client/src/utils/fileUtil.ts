@@ -4,7 +4,7 @@
 import moment from 'moment';
 
 import { FileTypes, SupportedFileTypes } from '../constants';
-import { File } from '../store/types';
+import { File } from '../recoilModel/types';
 
 export function getExtension(filename?: string): string | any {
   if (typeof filename !== 'string') return filename;
