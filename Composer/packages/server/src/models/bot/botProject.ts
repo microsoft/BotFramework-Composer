@@ -17,7 +17,6 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 
-import { ILuisConfig } from './interface';
 import { ICrossTrainConfig, Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';

@@ -90,7 +90,7 @@ export const createLuFileState = async (
   const { languages } = await snapshot.getPromise(settingsState);
   const createdLuId = `${id}.${locale}`;
   const createdLuFile = (await luWorker.parse(id, content)) as LuFile;
-  if (luFiles.find((lg) => lg.id === createdLuId)) {
+  if (luFiles.find((lu) => lu.id === createdLuId)) {
     throw new Error('lu file already exist');
   }
   const changes: LuFile[] = [];
