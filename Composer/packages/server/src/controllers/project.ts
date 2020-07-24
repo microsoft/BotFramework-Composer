@@ -396,14 +396,26 @@ async function updateBoilerplate(req: Request, res: Response) {
 
 async function parseQnAContent(req: Request, res: Response) {
   const subscriptionKey = req.query.subscriptionKey;
-  const url = req.query.url;
+  const url = req.query.url as string;
   const region = req.query.region;
   const subscriptionKeyEndpoint = `https://${region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+  const extension = ['.pdf', '.tsv', '.doc', '.docx', '.xlsx'];
   try {
     const builder = new qnaBuild.Builder((message) => {
       log(message);
     });
-    const qnaContent = await builder.importUrlReference(url, subscriptionKey, subscriptionKeyEndpoint, 'default');
+    let qnaContent = '';
+    if (extension.some((e) => url.endsWith(e))) {
+      qnaContent = await builder.importFileReference(
+        'onlineFile',
+        'https://download.microsoft.com/download/2/9/B/29B20383-302C-4517-A006-B0186F04BE28/surface-pro-4-user-guide-EN.pdf',
+        subscriptionKey,
+        subscriptionKeyEndpoint,
+        'default'
+      );
+    } else {
+      qnaContent = await builder.importUrlReference(url, subscriptionKey, subscriptionKeyEndpoint, 'default');
+    }
     res.status(200).json(qnaContent);
   } catch (e) {
     res.status(400).json({
