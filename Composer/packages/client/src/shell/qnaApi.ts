@@ -20,7 +20,7 @@ function createQnaApi(
     const projectId = state.projectId;
     if (!file) throw new Error(`qna file ${id} not found`);
 
-    return await dispatchers.updateQnaFile({ id, projectId, content });
+    return await dispatchers.updateQnAFile({ id, projectId, content });
   };
   return {
     updateQnaContent: updateQnaContentHandler,
@@ -34,7 +34,7 @@ export function useQnaApi() {
   const [api, setApi] = useState(createQnaApi({ projectId }, dispatchers, qnaFileResolver));
 
   useEffect(() => {
-    const newApi = createQnaApi({ focusPath, projectId }, dispatchers, qnaFileResolver);
+    const newApi = createQnaApi({ projectId }, dispatchers, qnaFileResolver);
     setApi(newApi);
 
     return () => {
@@ -44,7 +44,7 @@ export function useQnaApi() {
         }
       });
     };
-  }, [projectId, focusPath]);
+  }, [projectId]);
 
   return api;
 }

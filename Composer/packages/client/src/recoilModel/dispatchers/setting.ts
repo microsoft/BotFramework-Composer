@@ -6,7 +6,6 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SensitiveProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import has from 'lodash/has';
-import merge from 'lodash/merge';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
@@ -73,14 +72,14 @@ export const settingsDispatcher = () => {
           projectId,
           subscriptionKey,
         });
-        const settings = merge({}, settingsState, { qna: { endpointKey: response.data } });
-        for (const property of SensitiveProperties) {
-          if (has(settings, property)) {
-            const propertyValue = get(settings, property, '');
-            settingStorage.setField(projectId, property, propertyValue);
-          }
-        }
-        set(settingsState, settings);
+        settingStorage.setField(projectId, 'qna.endpointKey', response.data);
+        set(settingsState, (currentValue) => ({
+          ...currentValue,
+          qna: {
+            ...currentValue.qna,
+            endpointKey: response.data,
+          },
+        }));
       } catch (err) {
         console.log(err);
       }
