@@ -125,7 +125,7 @@ function createItemsAndGroups(
         name: 'bot name',
         children: result.groups,
         data: {
-          displayName: 'EchoBot-1',
+          displayName: formatMessage('{botName} (Core Bot)', { botName: dialogs[0].displayName }),
           isRoot: true,
         },
       },
@@ -161,8 +161,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   }, [dialogs]);
 
   const onRenderHeader = (props: IGroupHeaderProps) => {
-    const toggleCollapse = (): void => {
-      groupRef.current?.toggleCollapseAll(true);
+    const toggleCollapse = () => {
       if (props.group != null) {
         props.onToggleCollapse?.(props.group);
         onSelect(props.group.key);
@@ -174,7 +173,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
         <TreeItem
           depth={level ?? 0}
           icon={level === 1 ? 'CannedChat' : undefined}
-          isActive={!props.group?.isCollapsed}
           isSubItemActive={!!selected}
           link={props.group?.data}
           onDelete={onDeleteDialog}
@@ -256,7 +254,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             )}
             aria-live={'polite'}
           />
-          <RevealDropdown dark title={formatMessage('Core Bot')}>
+          <RevealDropdown title={formatMessage('Bot Project')}>
             <GroupedList
               {...itemsAndGroups}
               componentRef={groupRef}
@@ -273,10 +271,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               onRenderCell={onRenderCell}
             />
           </RevealDropdown>
-          <RevealDropdown dark title={formatMessage('Assets')}></RevealDropdown>
-          <RevealDropdown title={formatMessage('Local Skill Bots')}></RevealDropdown>
-          <RevealDropdown title={formatMessage('Remote Skill Bots')}></RevealDropdown>
-          <RevealDropdown title={formatMessage('QnA Knowledge Base')}></RevealDropdown>
+          <RevealDropdown title={formatMessage('Asset Library')}></RevealDropdown>
         </FocusZone>
       </div>
     </Resizable>

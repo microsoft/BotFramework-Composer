@@ -74,13 +74,13 @@ const moreButton = (isActive: boolean): IButtonStyles => {
   };
 };
 
-const navItem = (isActive: boolean, isSubItemActive: boolean) => css`
+const navItem = (isActive: boolean) => css`
   width: 100%;
   position: relative;
   height: 24px;
   font-size: 12px;
-  color: #545454;
-  background: ${isActive && !isSubItemActive ? '#f2f2f2' : 'transparent'};
+  color: ${isActive ? '#ffffff' : '#545454'};
+  background: ${isActive ? '#0078d4' : 'transparent'};
   font-weight: ${isActive ? FontWeights.semibold : FontWeights.regular};
   &:hover {
     color: #545454;
@@ -123,7 +123,7 @@ export const overflowSet = css`
 
 interface ITreeItemProps {
   link: any;
-  isActive: boolean;
+  isActive?: boolean;
   isSubItemActive?: boolean;
   depth: number | undefined;
   onDelete: (id: string) => void;
@@ -187,11 +187,11 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
 };
 
 export const TreeItem: React.FC<ITreeItemProps> = (props) => {
-  const { link, isActive, isSubItemActive, depth, onDelete, onSelect, icon } = props;
+  const { link, isActive, depth, onDelete, onSelect, icon } = props;
 
   return (
     <div
-      css={navItem(isActive, !!isSubItemActive)}
+      css={navItem(!!isActive)}
       role="presentation"
       onClick={() => {
         onSelect(link.id);
@@ -226,7 +226,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
         role="row"
         styles={{ item: { flex: 1 } }}
         onRenderItem={onRenderItem}
-        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, isActive)}
+        onRenderOverflowButton={onRenderOverflowButton(link.isRoot, !!isActive)}
       />
     </div>
   );
