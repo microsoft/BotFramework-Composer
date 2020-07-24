@@ -4,6 +4,7 @@ import LUParser from '@microsoft/bf-lu/lib/parser/lufile/luParser';
 import { FileInfo, QnAFile } from '@bfc/shared';
 import get from 'lodash/get';
 import { Diagnostic, Position, Range, DiagnosticSeverity } from '@bfc/shared';
+import { nanoid } from 'nanoid';
 
 import { getBaseName } from './utils/help';
 import { FileExtensions } from './utils/fileExtensions';
@@ -46,13 +47,20 @@ function parse(content: string, id = '') {
       startLineNumber: get(section, 'ParseTree.start.line', 0),
       endLineNumber: get(section, 'ParseTree.stop.line', 0),
     };
+    const QuestionsWithId = Questions.map((Q) => {
+      return {
+        content: Q,
+        id: nanoid(6),
+      };
+    });
+
     qnaSections.push({
       Answer,
       Body,
       FilterPairs,
       Id,
       QAPairId,
-      Questions,
+      Questions: QuestionsWithId,
       SectionType,
       StartLine,
       StopLine,
@@ -60,6 +68,7 @@ function parse(content: string, id = '') {
       promptsText,
       source,
       range,
+      uuid: nanoid(6),
     });
   });
   const diagnostics = Errors.map((e) => convertQnADiagnostic(e, id));

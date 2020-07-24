@@ -115,7 +115,7 @@ function updateAnswerInQnASection(qnaSection: QnASection, answer: string) {
 function updateQuestionInQnASection(qnaSection: QnASection, question: string, questionIndex: number) {
   const newQnASection: QnASection = cloneDeep(qnaSection);
   if (question) {
-    newQnASection.Questions[questionIndex] = question;
+    newQnASection.Questions[questionIndex].content = question;
   } else {
     newQnASection.Questions.splice(questionIndex, 1);
   }
@@ -124,7 +124,7 @@ function updateQuestionInQnASection(qnaSection: QnASection, question: string, qu
 
 function addQuestionInQnASection(qnaSection: QnASection, question: string) {
   const newQnASection: QnASection = cloneDeep(qnaSection);
-  newQnASection.Questions.push(question);
+  newQnASection.Questions.push({ content: question, id: '' });
   return newQnASection;
 }
 
@@ -138,9 +138,9 @@ function rebuildQnaSection(qnaSection) {
     result += `\n<a id = "${QAPairId}"></a>`;
   }
   if (Questions && Questions.length !== 0) {
-    result += `\n# ? ${Questions[0]}`;
+    result += `\n# ? ${Questions[0].content}`;
     Questions.slice(1).forEach((question) => {
-      result += `\n- ${question}`;
+      result += `\n- ${question.content}`;
     });
   }
   if (FilterPairs && FilterPairs.length !== 0) {

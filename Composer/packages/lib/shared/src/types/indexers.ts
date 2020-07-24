@@ -96,7 +96,7 @@ export interface LuFile {
 }
 
 export interface QnASection {
-  Questions: string[];
+  Questions: { content: string; id: string }[];
   Answer: string;
   Body: string;
 }
