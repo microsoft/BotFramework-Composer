@@ -24,7 +24,7 @@ const generateObjectEntries = (value: ItemType<unknown>): ObjectItem[] => {
   return Object.entries(value || {}).map((entry) => createObjectItem(...entry));
 };
 
-const createObjectItem = (propertyName = '', propertyValue?: unknown): ObjectItem => {
+const createObjectItem = (propertyName: string = '', propertyValue?: unknown): ObjectItem => {
   return {
     id: generateUniqueId(),
     propertyName,

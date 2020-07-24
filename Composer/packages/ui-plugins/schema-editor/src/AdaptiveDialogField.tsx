@@ -84,11 +84,12 @@ export const AdaptiveDialogField: React.FC<FieldProps> = (props) => {
   );
 
   const handleChange = ({ dialogValue = {}, resultValue = {} }) => {
+    const { definitions: _, ...rest } = value;
     const expressions = [...Object.values(dialogValue), ...Object.values(resultValue)];
     const definitions = getDefinitions(expressions as JSONSchema7[], dialogSchema);
 
     const content = {
-      ...value,
+      ...rest,
       properties: dialogValue,
       $result: { ...value.$result, properties: resultValue },
       ...(Object.keys(definitions).length ? { definitions } : {}),
