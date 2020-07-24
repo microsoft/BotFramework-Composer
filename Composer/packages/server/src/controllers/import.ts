@@ -142,6 +142,8 @@ export const ImportController = {
           path.join(currentProject.dataDir, 'importedDialogs', packageName, file.filename),
           file.content
         );
+
+        // TODO: if found a new LG file that is not bound to a specific dialog, write it as an import into the common.lg file so they are available.
       }
 
       const results = {
