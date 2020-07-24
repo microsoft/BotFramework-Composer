@@ -35,7 +35,7 @@ const defaultOptions = {
 };
 
 const styles = {
-  container: ({ hovered, focused, error, warning, height }) => {
+  container: ({ hovered, focused, error, warning, height, editorOptions }) => {
     let borderColor = NeutralColors.gray120;
 
     if (hovered) {
@@ -68,7 +68,9 @@ const styles = {
       transition: border-color 0.1s linear;
       box-sizing: border-box;
       height: calc(${typeof height === 'string' ? height : `${height}px`} - ${heightAdj}px);
-
+      > * {
+        opacity: ${editorOptions?.readOnly ? 0.4 : 1};
+      }
       label: BaseEditor;
     `;
   },
@@ -218,7 +220,9 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
           error: hasError,
           warning: hasWarning,
           height,
+          editorOptions,
         })}
+        data-testid="BaseEditor"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >

@@ -48,7 +48,11 @@ export const ImportController = {
           version,
           isUpdating
         );
-        res.json(importResults);
+        if (importResults) {
+          res.json(importResults);
+        } else {
+          res.status(500).json({ message: 'No declarative assets were found in the specified package.' });
+        }
       } catch (err) {
         console.error('Error in import', { message: err.message });
         res.status(500).json({ message: err.message });
@@ -88,7 +92,7 @@ export const ImportController = {
     packageName,
     version,
     isUpdating
-  ): Promise<{ installedVersion: string; files: Partial<FileRef>[] }> {
+  ): Promise<{ installedVersion: string; files: Partial<FileRef>[] } | undefined> {
     console.log('Fetching package', packageName);
     const { files, installedVersion } = await ImportController.fetchAndExtract(packageName, version);
     console.log(`Got ${files.length} files`);
@@ -139,18 +143,20 @@ export const ImportController = {
           file.content
         );
       }
+
+      const results = {
+        files: files.map((f) => {
+          return { filename: f.filename, path: f.path };
+        }),
+        name: packageName,
+        location: path.join('importedDialogs', packageName),
+        installedVersion,
+      };
+
+      return results;
+    } else {
+      return;
     }
-
-    const results = {
-      files: files.map((f) => {
-        return { filename: f.filename, path: f.path };
-      }),
-      name: packageName,
-      location: path.join('importedDialogs', packageName),
-      installedVersion,
-    };
-
-    return results;
   },
   fetchAndExtract: async function (uri, version): Promise<{ installedVersion: string; files: FileRef[] }> {
     // process package as an npm module.
@@ -204,7 +210,10 @@ export const ImportController = {
 
       // github packages are in the form of user/repo and potentially #version
       if (uri.match(/\//)) {
-        type = 'github';
+        // npm packages can be in the form @foo/bar
+        if (!uri.match(/^@/)) {
+          type = 'github';
+        }
       }
       if (uri.match(/\./)) {
         type = 'nuget';
@@ -237,37 +246,59 @@ export const ImportController = {
             });
           } catch (err) {
             console.error('NPM fetch failed', err);
-            return reject(err);
+            if (err.message === 'Response code 404 (Not Found)') {
+              reject(new Error('The package or version you requested could be not found on npm.'));
+            } else {
+              reject(err);
+            }
           }
           // get version from package file
           resolve(await filterFiles(type));
           break;
         case 'github':
           console.log(`Fetching from Github`);
-          stream = await axios({
-            method: 'get',
-            url: `https://github.com/${uri}/archive/${version}.zip`,
-            responseType: 'stream',
-          });
-          stream.data.pipe(
-            unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
-              resolve(await filterFiles(type));
-            })
-          );
+          try {
+            stream = await axios({
+              method: 'get',
+              url: `https://github.com/${uri}/archive/${version}.zip`,
+              responseType: 'stream',
+            });
+            stream.data.pipe(
+              unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
+                resolve(await filterFiles(type));
+              })
+            );
+          } catch (err) {
+            console.error('Github fetch failed', err);
+            if (err.message === 'Request failed with status code 404') {
+              reject(new Error('The package or version you requested could not be found on Github'));
+            } else {
+              reject(err);
+            }
+          }
           break;
         case 'nuget':
           console.log(`Fetching from Nuget`);
-          stream = await axios({
-            method: 'get',
-            url: `https://www.nuget.org/api/v2/package/${uri}${version ? `/${version}` : ''}`,
-            responseType: 'stream',
-          });
-          stream.data.pipe(
-            unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
-              // possible to get version from some package file?
-              resolve(await filterFiles(type));
-            })
-          );
+          try {
+            stream = await axios({
+              method: 'get',
+              url: `https://www.nuget.org/api/v2/package/${uri}${version ? `/${version}` : ''}`,
+              responseType: 'stream',
+            });
+            stream.data.pipe(
+              unzipper.Extract({ path: path.join(TMP_DIR, uri) }).on('close', async () => {
+                // possible to get version from some package file?
+                resolve(await filterFiles(type));
+              })
+            );
+          } catch (err) {
+            console.error('Nuget fetch failed', err);
+            if (err.message === 'Request failed with status code 404') {
+              reject(new Error('The package or version you requested could not be found on nuget'));
+            } else {
+              reject(err);
+            }
+          }
           break;
       }
     });

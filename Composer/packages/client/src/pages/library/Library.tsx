@@ -3,16 +3,18 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { ToolBar, IToolBarItem } from '../../components/ToolBar';
-import { LibraryRef } from '../../store/types';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
+import { settingsState, projectIdState, dispatcherState } from '../../recoilModel';
 
+import httpClient from './../../utils/httpUtil';
+import { LibraryRef } from './types';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { ImportDialog } from './importDialog';
 import { LibraryList } from './libraryList';
@@ -23,25 +25,31 @@ interface LibraryPageProps extends RouteComponentProps<{}> {
 }
 
 const Library: React.FC<LibraryPageProps> = (props) => {
-  const { state, actions } = useContext(StoreContext);
-  const { settings } = state;
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
+  const settings = useRecoilValue(settingsState);
+  const projectId = useRecoilValue(projectIdState);
+
+  const [availableLibraries, updateAvailableLibraries] = useState<any[]>([]);
 
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
+  const { setImportedLibraries, fetchProjectById, setApplicationLevelError } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
-    console.log('LOAD AVAILABLE LIBS');
-    actions.getLibraries();
+    getLibraries();
+
+    return () => {
+      fetchProjectById(projectId);
+    };
   }, []);
 
   useEffect(() => {
     const groups: any[] = [];
     let items: any[] = [];
 
-    items = items.concat(settings.importedLibraries || []).concat(state.libraries || []);
+    items = items.concat(settings.importedLibraries || []).concat(availableLibraries || []);
 
     setItems(items);
 
@@ -56,12 +64,12 @@ const Library: React.FC<LibraryPageProps> = (props) => {
       key: 'available',
       name: 'Available',
       startIndex: settings.importedLibraries ? settings.importedLibraries.length : 0,
-      count: state.libraries ? state.libraries.length : 0,
+      count: availableLibraries ? availableLibraries.length : 0,
       level: 0,
     });
 
     setGroups(groups);
-  }, [settings.importedLibraries, state.libraries]);
+  }, [settings.importedLibraries, availableLibraries]);
 
   const toolbarItems: IToolBarItem[] = [
     {
@@ -98,10 +106,60 @@ const Library: React.FC<LibraryPageProps> = (props) => {
     if (okToProceed) {
       closeDialog();
       setWorking(true);
-      await actions.importLibrary(packageName, version, isUpdating || false);
-      // reload modified contents
-      actions.fetchProjectById(state.projectId);
+      await importLibrary(packageName, version, isUpdating || false);
       setWorking(false);
+    }
+  };
+
+  const importLibrary = async (packageName, version, isUpdating) => {
+    try {
+      const response = await httpClient.post(`/projects/${projectId}/import`, {
+        package: packageName,
+        version: version,
+        isUpdating,
+      });
+
+      const payload = response.data;
+      console.log('Got results: ', payload);
+      const newList = settings.importedLibraries?.slice() || [];
+      // if this library exists, update the date and version
+      const existing = newList.find((f) => f.name === payload.name);
+      if (existing) {
+        existing.lastImported = new Date();
+        existing.version = payload.installedVersion;
+      } else {
+        newList.push({
+          name: payload.name,
+          lastImported: new Date(),
+          version: payload.installedVersion,
+          location: payload.location,
+        });
+      }
+
+      await setImportedLibraries(newList);
+
+      // reload modified content -- TODO: HOW TO DO THIS?
+      // await fetchProjectById(projectId);
+    } catch (err) {
+      // TODO: HOW TO DO THIS??
+      setApplicationLevelError({
+        status: err.response.status,
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: 'IMPORT ERROR',
+      });
+    }
+  };
+
+  const getLibraries = async () => {
+    try {
+      const response = await httpClient.get(`/library`);
+      updateAvailableLibraries(response.data);
+    } catch (err) {
+      setApplicationLevelError({
+        status: err.response.status,
+        message: err.response && err.response.data.message ? err.response.data.message : err,
+        summary: 'LIBRARY ERROR',
+      });
     }
   };
 
@@ -119,9 +177,26 @@ const Library: React.FC<LibraryPageProps> = (props) => {
       if (okToProceed) {
         closeDialog();
         setWorking(true);
-        await actions.removeLibrary(selectedItem.name);
-        // reload modified contents
-        actions.fetchProjectById(state.projectId);
+        try {
+          const response = await httpClient.post(`/projects/${projectId}/unimport`, {
+            package: selectedItem.name,
+          });
+
+          // remove the item from settings
+          const filtered = settings.importedLibraries.filter((f) => f.name !== response.data.package);
+
+          // persist settings change
+          setImportedLibraries(filtered);
+
+          // reload modified content
+          // await fetchProjectById(projectId);
+        } catch (err) {
+          setApplicationLevelError({
+            status: err.response.status,
+            message: err.response && err.response.data.message ? err.response.data.message : err,
+            summary: 'IMPORT ERROR',
+          });
+        }
         setWorking(false);
       }
     }
