@@ -8,14 +8,12 @@ import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DialogSetting } from '@bfc/shared';
 
-import { BoundAction } from '../../store/types';
-
 import { FormFieldAlignHorizontalBotSettings } from './styles';
 
 export interface ISkillFormProps {
   botId?: string;
   skillHostEndpoint?: string;
-  setSettings: BoundAction;
+  setSettings: (projectId: string, settings: DialogSetting) => Promise<void>;
   projectId: string;
   botName: string;
   settings: DialogSetting;

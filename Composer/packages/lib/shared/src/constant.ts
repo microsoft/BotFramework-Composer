@@ -21,16 +21,24 @@ export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  defaultLanguage: string;
+  languages: string[];
   publishTargets?: PublishTarget[];
   downsampling?: IDownSamplingConfig;
   runtime?: {
-    customRuntime: boolean;
-    path: string;
-    command: string;
-    key: string;
-    name: string;
+    customRuntime?: boolean;
+    path?: string;
+    command?: string;
+    key?: string;
+    name?: string;
   };
-  [key: string]: unknown;
+  skill?: {
+    name: string;
+    manifestUrl: string;
+  }[];
+  botId?: string;
+  skillHostEndpoint?: string;
+  [key: string]: any;
 }
 
 export interface IDownSamplingConfig {

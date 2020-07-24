@@ -114,7 +114,6 @@ export interface ExtensionCollection {
 }
 
 export interface BotProject {
-  locale: string;
   id: string | undefined;
   name: string;
   dir: string;

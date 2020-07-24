@@ -2,14 +2,15 @@
 // Licensed under the MIT License.
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useEffect, useMemo, useState, useContext } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import formatMessage from 'format-message';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../../store';
+import { runtimeTemplatesState, dispatcherState } from '../../../recoilModel';
 
 import { modalControlGroup } from './style';
 
@@ -21,12 +22,13 @@ export interface EjectModalProps {
 
 export const EjectModal: React.FC<EjectModalProps> = (props) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>();
-  const [copying, setCopying] = useState(false);
-  const { state, actions } = useContext(StoreContext);
-  const { runtimeTemplates } = state;
+  // const [copying, setCopying] = useState(false);
+
+  const runtimeTemplates = useRecoilValue(runtimeTemplatesState);
+  const { fetchRuntimeTemplates } = useRecoilValue(dispatcherState);
 
   useEffect(() => {
-    actions.getRuntimeTemplates();
+    fetchRuntimeTemplates();
   }, []);
 
   const availableRuntimeTemplates = useMemo(() => {
@@ -46,9 +48,9 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
 
   const doEject = async () => {
     if (selectedTemplate) {
-      setCopying(true);
+      // setCopying(true);
       await props.ejectRuntime(selectedTemplate);
-      setCopying(false);
+      // setCopying(false);
     }
   };
 
@@ -70,7 +72,7 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
       </div>
       <DialogFooter>
         <DefaultButton onClick={props.closeModal}>Cancel</DefaultButton>
-        <PrimaryButton disabled={selectedTemplate && !copying ? false : true} onClick={doEject}>
+        <PrimaryButton disabled={!!selectedTemplate} onClick={doEject}>
           {formatMessage('Okay')}
         </PrimaryButton>
       </DialogFooter>
