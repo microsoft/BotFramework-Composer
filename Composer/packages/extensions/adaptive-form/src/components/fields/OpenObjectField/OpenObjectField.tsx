@@ -12,6 +12,7 @@ import { FieldProps } from '@bfc/extension';
 import formatMessage from 'format-message';
 
 import { FieldLabel } from '../../FieldLabel';
+import { getPropertyItemProps, useObjectItems } from '../../../utils/objectUtils';
 
 import * as styles from './styles';
 import { ObjectItem } from './ObjectItem';
@@ -38,41 +39,19 @@ const OpenObjectField: React.FC<FieldProps<{
 
   const moreLabel = formatMessage('Edit Property');
 
+  const { addProperty, objectEntries, onChange: handleChange } = useObjectItems(value, onChange);
+
   const handleKeyDown = (event) => {
     if (event.key.toLowerCase() === 'enter') {
       event.preventDefault();
 
       if (name && !Object.keys(value).includes(name)) {
-        onChange({ ...value, [name]: newValue });
-        setName('');
-        setNewValue('');
+        addProperty(name, newValue);
 
         if (fieldRef.current) {
           fieldRef.current.focus();
         }
       }
-    }
-  };
-
-  const handleNameChange = (name: string) => (newName: string) => {
-    const { [name]: currentValue, ...rest } = value;
-    const newFormData = !(newName || currentValue) ? rest : { ...rest, [newName]: currentValue };
-    onChange(newFormData);
-  };
-
-  const handleValueChange = (name: string) => (newValue?: any) => {
-    onChange({ ...value, [name]: newValue });
-  };
-
-  const handleDropPropertyClick = (name: string) => () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { [name]: _, ...newFormData } = value;
-    onChange(newFormData);
-  };
-
-  const handleAdd = () => {
-    if (!Object.keys(value).includes('')) {
-      onChange({ ...value, '': undefined });
     }
   };
 
@@ -95,7 +74,7 @@ const OpenObjectField: React.FC<FieldProps<{
           <div css={styles.filler} />
         </div>
       )}
-      {Object.entries(value).map(([name, itemValue], index) => {
+      {objectEntries.map(({ id, propertyName, propertyValue }, index) => {
         return (
           <ObjectItem
             key={index}
@@ -103,14 +82,12 @@ const OpenObjectField: React.FC<FieldProps<{
             depth={depth + 1}
             formData={value}
             id={`${id}.value`}
-            name={name}
+            name={propertyName}
             schema={typeof additionalProperties === 'object' ? additionalProperties : {}}
             stackedLayout={stackedLayout}
             uiOptions={uiOptions.properties?.additionalProperties || {}}
-            value={itemValue}
-            onChange={handleValueChange(name)}
-            onDelete={handleDropPropertyClick(name)}
-            onNameChange={handleNameChange(name)}
+            value={propertyValue}
+            {...getPropertyItemProps(objectEntries, index, handleChange)}
           />
         );
       })}
@@ -165,7 +142,7 @@ const OpenObjectField: React.FC<FieldProps<{
           </div>
         ) : (
           <div css={styles.addButtonContainer}>
-            <DefaultButton type="button" onClick={handleAdd}>
+            <DefaultButton type="button" onClick={() => addProperty()}>
               {formatMessage('Add')}
             </DefaultButton>
           </div>
