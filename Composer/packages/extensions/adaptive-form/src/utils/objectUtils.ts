@@ -32,13 +32,17 @@ const createObjectItem = <ValueType = unknown>(propertyName = '', propertyValue?
   };
 };
 
-export const getPropertyItemProps = (items: ObjectItem[], index: number, onChange: any) => {
+export const getPropertyItemProps = <ValueType = unknown>(
+  items: ObjectItem<ValueType>[],
+  index: number,
+  onChange: any
+) => {
   const handlePropertyNameChange = (propertyName: string) => {
     const updated = items.map((item, idx) => (idx === index ? { ...item, propertyName } : item));
     onChange(updated);
   };
 
-  const handlePropertyValueChange = (propertyValue: ObjectItem) => {
+  const handlePropertyValueChange = (propertyValue: ValueType) => {
     const updated = items.map((item, idx) => (idx === index ? { ...item, propertyValue } : item));
     onChange(updated);
   };
