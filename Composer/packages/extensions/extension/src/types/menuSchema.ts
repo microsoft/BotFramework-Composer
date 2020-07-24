@@ -9,4 +9,5 @@ export interface MenuOptions {
   submenu?: string[] | false;
 }
 
-export type MenuUISchema = { [key in SDKKinds]?: MenuOptions };
+// A $kind may be referenced by have multiple menu items. In this case, its typed with MenuOptions[].
+export type MenuUISchema = { [key in SDKKinds]?: MenuOptions | MenuOptions[] };

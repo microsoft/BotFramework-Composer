@@ -46,10 +46,17 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Date or time'),
     submenu: [SubmenuNames.AskQuestion],
   },
-  [SDKKinds.OAuthInput]: {
-    label: formatMessage('OAuth login'),
-    submenu: [SubmenuNames.AskQuestion],
-  },
+  // OAuthInput appears twice
+  [SDKKinds.OAuthInput]: [
+    {
+      label: formatMessage('OAuth login'),
+      submenu: [SubmenuNames.AskQuestion],
+    },
+    {
+      label: formatMessage('OAuth login'),
+      submenu: [SubmenuNames.AccessExternalResources],
+    },
+  ],
   // Create a condition
   [SDKKinds.IfCondition]: {
     label: formatMessage('Branch: If/else'),
