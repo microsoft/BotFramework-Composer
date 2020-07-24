@@ -30,12 +30,14 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
   formData,
   value,
   stackedLayout,
+  schema,
   onChange,
   onNameChange,
   onDelete,
   ...rest
 }) => {
   const initialName = useMemo(() => originalName, []);
+  const initialValue = useMemo(() => value, []);
   const [name, setName] = useState<string>(originalName);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -61,6 +63,9 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
     }
   }, [name, formData]);
 
+  const placeholder =
+    schema.type === 'string' || !schema.type ? initialValue || formatMessage('Add a new value') : undefined;
+
   return (
     <div css={container} data-testid="ObjectItem">
       <div css={itemContainer(stackedLayout)}>
@@ -84,6 +89,8 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
         <div css={item}>
           <SchemaField
             {...rest}
+            schema={schema}
+            placeholder={placeholder}
             definitions={definitions}
             id={`${name}.value`}
             name="value"
