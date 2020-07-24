@@ -59,7 +59,7 @@ const root = css`
 
 // -------------------- ProjectTree -------------------- //
 
-function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
+function createGroupItem(dialog: DialogInfo, position: number) {
   return {
     key: dialog.id,
     name: dialog.displayName,
@@ -67,7 +67,7 @@ function createGroupItem(dialog: DialogInfo, currentId: string, position: number
     startIndex: position,
     count: dialog.triggers.length,
     hasMoreData: true,
-    isCollapsed: dialog.id !== currentId,
+    isCollapsed: false,
     data: dialog,
   };
 }
@@ -93,11 +93,7 @@ function sortDialog(dialogs: DialogInfo[]) {
   });
 }
 
-function createItemsAndGroups(
-  dialogs: DialogInfo[],
-  dialogId: string,
-  filter: string
-): { items: any[]; groups: IGroup[] } {
+function createItemsAndGroups(dialogs: DialogInfo[], filter: string): { items: any[]; groups: IGroup[] } {
   let position = 0;
   const result = dialogs
     .filter((dialog) => {
@@ -105,7 +101,7 @@ function createItemsAndGroups(
     })
     .reduce(
       (result: { items: any[]; groups: IGroup[] }, dialog) => {
-        result.groups.push(createGroupItem(dialog, dialogId, position));
+        result.groups.push(createGroupItem(dialog, position));
         position += dialog.triggers.length;
         dialog.triggers.forEach((item, index) => {
           result.items.push(createItem(item, index));
@@ -114,6 +110,7 @@ function createItemsAndGroups(
       },
       { items: [], groups: [] }
     );
+
   return {
     items: result.items,
     groups: [
@@ -209,7 +206,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
 
-  const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, dialogId, filter);
+  const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, filter);
 
   return (
     <Resizable
@@ -264,7 +261,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
                   onRenderShowAll: onRenderShowAll,
                   showEmptyGroups: true,
                   showAllProps: false,
-                  isAllGroupsCollapsed: true,
+                  isAllGroupsCollapsed: false,
                 } as Partial<IGroupRenderProps>
               }
               styles={groupListStyle}

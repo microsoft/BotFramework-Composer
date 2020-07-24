@@ -54,24 +54,28 @@ export const navigationDispatcher = () => {
     }
   );
 
-  const selectTo = useRecoilCallback(({ snapshot }: CallbackInterface) => async (selectPath: string) => {
-    if (!selectPath) return;
-    const designPageLocation = await snapshot.getPromise(designPageLocationState);
-    const breadcrumb = await snapshot.getPromise(breadcrumbState);
-    const currentProjectId = await snapshot.getPromise(projectIdState);
-    // initial dialogId, projectId maybe empty string  ""
-    let { dialogId, projectId } = designPageLocation;
+  const selectTo = useRecoilCallback(
+    ({ snapshot }: CallbackInterface) => async (
+      selectPath: string,
+      dialogId: string | null = null,
+      projectId: string | null = null
+    ) => {
+      if (!selectPath) return;
+      const designPageLocation = await snapshot.getPromise(designPageLocationState);
+      const breadcrumb = await snapshot.getPromise(breadcrumbState);
+      const currentProjectId = await snapshot.getPromise(projectIdState);
 
-    if (!dialogId) dialogId = 'Main';
-    if (!projectId) projectId = currentProjectId;
+      dialogId = dialogId ?? designPageLocation.dialogId ?? 'Main';
+      projectId = projectId ?? designPageLocation.projectId === '' ? currentProjectId : designPageLocation.projectId;
 
-    let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
+      let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
-    currentUri = `${currentUri}?selected=${selectPath}`;
+      currentUri = `${currentUri}?selected=${selectPath}`;
 
-    if (checkUrl(currentUri, designPageLocation)) return;
-    navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
-  });
+      if (checkUrl(currentUri, designPageLocation)) return;
+      navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
+    }
+  );
 
   const focusTo = useRecoilCallback(
     ({ snapshot }: CallbackInterface) => async (focusPath: string, fragment: string) => {
