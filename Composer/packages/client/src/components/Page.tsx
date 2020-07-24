@@ -6,7 +6,7 @@ import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 
-import { ToolBar, IToolBarItem } from './ToolBar';
+import { Toolbar, IToolbarItem } from './Toolbar';
 import { NavTree, INavTreeItem } from './NavTree';
 
 // -------------------- Styles -------------------- //
@@ -80,7 +80,7 @@ export const content = css`
 
 interface IPageProps {
   // TODO: add type
-  toolbarItems: IToolBarItem[];
+  toolbarItems: IToolbarItem[];
   navLinks: INavTreeItem[];
   title: string;
   navRegionName: string;
@@ -95,7 +95,7 @@ const Page: React.FC<IPageProps> = (props) => {
   return (
     <div css={root} data-testid={props['data-testid']}>
       <div css={pageWrapper}>
-        <ToolBar toolbarItems={toolbarItems} />
+        <Toolbar toolbarItems={toolbarItems} />
         <div css={header}>
           <h1 css={headerTitle}>{title}</h1>
           {onRenderHeaderContent && <div css={headerContent}>{onRenderHeaderContent()}</div>}
