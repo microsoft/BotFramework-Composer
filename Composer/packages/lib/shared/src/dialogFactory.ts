@@ -72,6 +72,71 @@ const initialDialogShape = () => ({
   [SDKKinds.SendActivity]: {
     activity: '',
   },
+  [SDKKinds.OnQnAMatch]: {
+    $kind: SDKKinds.OnQnAMatch,
+    actions: [
+      {
+        $kind: SDKKinds.SendActivity,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        activity: '${SendActivity_QnAMatch()}',
+      },
+    ],
+  },
+  [SDKKinds.OnChooseIntent]: {
+    $kind: SDKKinds.OnChooseIntent,
+    actions: [
+      {
+        $kind: SDKKinds.SetProperty,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        property: 'dialog.recognized',
+        value: '=turn.recognized',
+      },
+      {
+        $kind: SDKKinds.ChoiceInput,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        defaultLocale: 'en-us',
+        disabled: false,
+        maxTurnCount: 3,
+        alwaysPrompt: false,
+        allowInterruptions: false,
+        prompt: '${ChoiceInput_Prompt_OnChooseIntent()}',
+        choiceOptions: {
+          includeNumbers: true,
+          inlineOrMore: ', or ',
+          inlineOr: ' or ',
+          inlineSeparator: ', ',
+        },
+        property: 'dialog.choice',
+        choices: '=foreach(dialog.recognized.candidates, x, x.intent)',
+        outputFormat: 'index',
+        top: 3,
+        cardNoMatchResponse: 'Thanks for the feedback.',
+      },
+      {
+        $kind: SDKKinds.EmitEvent,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        eventValue: '=dialog.recognized.candidates[dialog.choice].result',
+        eventName: 'recognizedIntent',
+        top: 3,
+        cardNoMatchResponse: 'Thanks for the feedback.',
+        cardNoMatchText: 'None of the above.',
+        activeLearningCardTitle: 'Did you mean:',
+        threshold: 0.3,
+        noAnswer: 'Sorry, I did not find an answer.',
+        hostname: '=settings.qna.hostname',
+        endpointKey: '=settings.qna.endpointkey',
+        knowledgeBaseId: '=settings.qna.knowledgebaseid',
+      },
+    ],
+  },
   [SDKKinds.AttachmentInput]: initialInputDialog,
   [SDKKinds.ChoiceInput]: initialInputDialog,
   [SDKKinds.ConfirmInput]: initialInputDialog,

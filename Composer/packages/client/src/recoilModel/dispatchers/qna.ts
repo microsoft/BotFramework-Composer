@@ -5,9 +5,11 @@ import { QnAFile } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 
 import qnaWorker from '../parsers/qnaWorker';
-import { qnaFilesState, qnaAllUpViewStatusState } from '../atoms/botState';
+import { qnaFilesState, qnaAllUpViewStatusState, projectIdState, localeState, settingsState } from '../atoms/botState';
 import { applicationErrorState } from '../atoms';
 import { QnAAllUpViewStatus } from '../types';
+import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
+import { getBaseName } from '../../utils/fileUtil';
 
 import httpClient from './../../utils/httpUtil';
 // import { Text, BotStatus } from './../../constants';
@@ -28,6 +30,50 @@ export const updateQnAFileState = async (
   });
 
   set(qnaFilesState, newQnAFiles);
+};
+
+export const createQnAFileState = async (
+  callbackHelpers: CallbackInterface,
+  { id, content }: { id: string; content: string }
+) => {
+  const { set, snapshot } = callbackHelpers;
+  const qnaFiles = await snapshot.getPromise(qnaFilesState);
+  const projectId = await snapshot.getPromise(projectIdState);
+  const locale = await snapshot.getPromise(localeState);
+  const { languages } = await snapshot.getPromise(settingsState);
+  const createdQnaId = `${id}.${locale}`;
+  const createdQnaFile = (await qnaWorker.parse(id, content)) as QnAFile;
+  if (qnaFiles.find((qna) => qna.id === createdQnaId)) {
+    throw new Error('qna file already exist');
+  }
+  const changes: QnAFile[] = [];
+
+  // copy to other locales
+  languages.forEach((lang) => {
+    const fileId = `${id}.${lang}`;
+    qnaFileStatusStorage.updateFileStatus(projectId, fileId);
+    changes.push({
+      ...createdQnaFile,
+      id: fileId,
+    });
+  });
+
+  set(qnaFilesState, [...qnaFiles, ...changes]);
+};
+
+export const removeQnAFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {
+  const { set, snapshot } = callbackHelpers;
+  let qnaFiles = await snapshot.getPromise(qnaFilesState);
+  const projectId = await snapshot.getPromise(projectIdState);
+
+  qnaFiles.forEach((file) => {
+    if (getBaseName(file.id) === getBaseName(id)) {
+      qnaFileStatusStorage.removeFileStatus(projectId, id);
+    }
+  });
+
+  qnaFiles = qnaFiles.filter((file) => getBaseName(file.id) !== id);
+  set(qnaFilesState, qnaFiles);
 };
 
 export const qnaDispatcher = () => {

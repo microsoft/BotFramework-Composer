@@ -37,3 +37,9 @@ ${join(foreach(user.todos, x, showSingleTodo(x)), '\n')}
 -I can add a todo, show todos, remove a todo, and clear all todos
 -I can help you yes I can
 -Help, we don't need no stinkin' help!
+
+# ChoiceInput_Prompt_OnChooseIntent()
+- Which intent do you want to trigger?
+
+# SendActivity_QnAMatch()
+- ${expandText(@answer)}

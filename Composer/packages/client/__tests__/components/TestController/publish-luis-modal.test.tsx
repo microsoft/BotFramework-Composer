@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { fireEvent } from '@bfc/test-utils';
 
-import { PublishLuisDialog } from '../../../src/components/TestController/publishDialog';
+import { PublishDialog } from '../../../src/components/TestController/publishDialog';
 import { projectIdState, botNameState, settingsState, dispatcherState } from '../../../src/recoilModel';
 import { renderWithRecoil } from '../../testUtils';
 jest.useFakeTimers();
@@ -18,8 +18,8 @@ const luisConfig = {
   defaultLanguage: 'en-us',
   environment: 'composer',
 };
-describe('<PublishLuisDialog />', () => {
-  it('should render the <PublishLuisDialog />', () => {
+describe('<PublishDialog />', () => {
+  it('should render the <PublishDialog />', () => {
     const onDismiss = jest.fn(() => {});
     const onPublish = jest.fn(() => {});
     const setSettingsMock = jest.fn(() => {});
@@ -34,13 +34,7 @@ describe('<PublishLuisDialog />', () => {
       });
     };
     const { getByText } = renderWithRecoil(
-      <PublishLuisDialog
-        isOpen
-        botName={'sampleBot0'}
-        config={luisConfig}
-        onDismiss={onDismiss}
-        onPublish={onPublish}
-      />,
+      <PublishDialog isOpen botName={'sampleBot0'} config={luisConfig} onDismiss={onDismiss} onPublish={onPublish} />,
       recoilInitState
     );
 
