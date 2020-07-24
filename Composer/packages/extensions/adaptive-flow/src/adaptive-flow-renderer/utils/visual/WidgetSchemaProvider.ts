@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import get from 'lodash/get';
+import merge from 'lodash/merge';
 
 import { FlowWidget, FlowSchema } from '../../types/flowRenderer.types';
 
@@ -17,7 +18,7 @@ export class WidgetSchemaProvider {
 
   private mergeSchemas(orderedSchemas: FlowSchema[]): FlowSchema {
     if (!Array.isArray(orderedSchemas) || !orderedSchemas.length) return {};
-    return Object.assign({}, ...orderedSchemas);
+    return merge({}, ...orderedSchemas);
   }
 
   get = ($kind: string): FlowWidget => {

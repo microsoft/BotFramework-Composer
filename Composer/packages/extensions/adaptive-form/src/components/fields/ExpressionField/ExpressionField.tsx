@@ -4,11 +4,13 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import React, { useMemo, useState } from 'react';
-import { FieldProps, useShellApi } from '@bfc/extension';
-import { FieldLabel, resolveFieldWidget, usePluginConfig, getUiPlaceholder } from '@bfc/adaptive-form';
+import { FieldProps, useShellApi, useFormConfig } from '@bfc/extension';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
 import formatMessage from 'format-message';
+
+import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
+import { FieldLabel } from '../../FieldLabel';
 
 import { ExpressionEditor } from './ExpressionEditor';
 import { getOptions, getSelectedOption, SchemaOption } from './utils';
@@ -33,8 +35,9 @@ const styles = {
 
 const ExpressionField: React.FC<FieldProps> = (props) => {
   const { id, value, label, description, schema, uiOptions, definitions, required, className } = props;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { $role, ...expressionSchema } = schema;
-  const pluginConfig = usePluginConfig();
+  const formUIOptions = useFormConfig();
   const { userSettings } = useShellApi();
 
   const options = useMemo(() => getOptions(expressionSchema, definitions), []);
@@ -95,7 +98,7 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
       );
     }
 
-    const Field = resolveFieldWidget(selectedSchema, uiOptions, pluginConfig);
+    const Field = resolveFieldWidget(selectedSchema, uiOptions, formUIOptions);
     return (
       <Field
         key={selectedSchema.type}
@@ -107,6 +110,7 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
         placeholder={placeholder}
         schema={selectedSchema}
         transparentBorder={false}
+        uiOptions={{ ...props.uiOptions, helpLink: 'https://bing.com' }}
       />
     );
   };
