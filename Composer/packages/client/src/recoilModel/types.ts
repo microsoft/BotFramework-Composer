@@ -68,6 +68,13 @@ export interface ILuisConfig {
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
 }
+export interface IQnAConfig {
+  subscriptionKey: string;
+  endpointKey?: string;
+}
+export interface IConfig extends ILuisConfig {
+  subscriptionKey: string;
+}
 
 export interface DesignPageLocation {
   projectId: string;
@@ -103,6 +110,7 @@ export interface DialogSetting {
   MicrosoftAppId?: string;
   MicrosoftAppPassword?: string;
   luis: ILuisConfig;
+  qna: IQnAConfig;
   publishTargets?: PublishTarget[];
   runtime: {
     customRuntime: boolean;

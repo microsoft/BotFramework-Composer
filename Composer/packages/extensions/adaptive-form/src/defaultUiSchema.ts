@@ -5,6 +5,7 @@ import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 
 import { IntentField, RecognizerField } from './components/fields';
+import { QnAActionsField } from './components/fields/QnAActionsField';
 
 const triggerUiSchema = {
   order: ['condition', '*'],
@@ -214,6 +215,17 @@ const DefaultUISchema: UISchema = {
     properties: {
       intent: {
         field: IntentField,
+      },
+    },
+  },
+  [SDKKinds.OnQnAMatch]: {
+    label: () => formatMessage('QnA Intent recognized'),
+    subtitle: () => formatMessage('QnA Intent recognized'),
+    order: ['actions', '*'],
+    hidden: ['condition', 'entities'],
+    properties: {
+      actions: {
+        field: QnAActionsField,
       },
     },
   },

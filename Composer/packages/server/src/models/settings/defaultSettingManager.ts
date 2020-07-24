@@ -51,8 +51,9 @@ export class DefaultSettingManager extends FileSettingManager {
       },
       publishTargets: [],
       qna: {
+        subscriptionKey: '',
         knowledgebaseid: '',
-        endpointkey: '',
+        endpointKey: '',
         hostname: '',
       },
       telemetry: {

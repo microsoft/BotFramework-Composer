@@ -19,6 +19,7 @@ import {
   projectIdState,
   localeState,
   luFilesState,
+  qnaFilesState,
   dispatcherState,
   breadcrumbState,
   designPageLocationState,
@@ -29,6 +30,7 @@ import {
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
+import { useQnaApi } from './qnaApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
@@ -39,6 +41,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const botName = useRecoilValue(botNameState);
   const dialogs = useRecoilValue(dialogsState);
   const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
   const lgFiles = useRecoilValue(lgFilesState);
@@ -65,6 +68,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   } = useRecoilValue(dispatcherState);
   const lgApi = useLgApi();
   const luApi = useLuApi();
+  const qnaApi = useQnaApi();
 
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
@@ -160,6 +164,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     },
     ...lgApi,
     ...luApi,
+    ...qnaApi,
     updateRegExIntent: updateRegExIntentHandler,
     navTo: navigationTo,
     onFocusEvent: focusEvent,
@@ -207,6 +212,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         schemas,
         lgFiles,
         luFiles,
+        qnaFiles,
         currentDialog,
         userSettings,
         designerId: editorData?.$designer?.id,

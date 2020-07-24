@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -45,6 +45,7 @@ export interface ShellData {
   hosted: boolean;
   lgFiles: LgFile[];
   luFiles: LuFile[];
+  qnaFiles: QnAFile[];
   userSettings: UserSettings;
   skills: any[];
   // TODO: remove
@@ -70,6 +71,7 @@ export interface ShellApi {
   addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
   removeLuIntent: (id: string, intentName: string) => void;
+  updateQnaContent: (id: string, content: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;

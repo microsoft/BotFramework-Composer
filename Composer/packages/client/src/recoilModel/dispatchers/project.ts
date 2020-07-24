@@ -2,7 +2,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
+import { dereferenceDefinitions, LuFile, QnAFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -14,8 +14,10 @@ import luWorker from '../parsers/luWorker';
 import qnaWorker from '../parsers/qnaWorker';
 import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
-import { getReferredFiles } from '../../utils/luUtil';
+import { getReferredLuFiles } from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
+import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { DialogSetting } from '../../recoilModel/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
@@ -49,6 +51,7 @@ import {
   boilerplateVersionState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
+import { createQnAFileState } from './qna';
 
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);
@@ -107,11 +110,29 @@ const updateLuFilesStatus = (projectId: string, luFiles: LuFile[]) => {
 const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: DialogInfo[]) => {
   luFileStatusStorage.checkFileStatus(
     projectId,
-    getReferredFiles(luFiles, dialogs).map((file) => file.id)
+    getReferredLuFiles(luFiles, dialogs).map((file) => file.id)
   );
   return updateLuFilesStatus(projectId, luFiles);
 };
 
+const updateQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[]) => {
+  const status = qnaFileStatusStorage.get(projectId);
+  return qnaFiles.map((qnaFile) => {
+    if (typeof status[qnaFile.id] === 'boolean') {
+      return { ...qnaFile, published: status[qnaFile.id] };
+    } else {
+      return { ...qnaFile, published: false };
+    }
+  });
+};
+
+const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: DialogInfo[]) => {
+  qnaFileStatusStorage.checkFileStatus(
+    projectId,
+    getReferredQnaFiles(qnaFiles, dialogs).map((file) => file.id)
+  );
+  return updateQnaFilesStatus(projectId, qnaFiles);
+};
 export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
     const { snapshot, gotoSnapshot } = callbackHelpers;
@@ -131,6 +152,12 @@ export const projectDispatcher = () => {
     try {
       const { dialogs, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(files, botName, locale);
       console.log(qnaFiles);
+
+      if (!qnaFiles || qnaFiles.length === 0) {
+        dialogs.forEach(async (dialog) => {
+          await createQnAFileState(callbackHelpers, { id: dialog.id, content: '' });
+        });
+      }
       let mainDialog = '';
       const verifiedDialogs = dialogs.map((dialog) => {
         if (dialog.isRoot) {
@@ -143,7 +170,7 @@ export const projectDispatcher = () => {
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);
         set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
-        set(qnaFilesState, qnaFiles);
+        set(qnaFilesState, initQnaFilesStatus(botName, qnaFiles, dialogs));
         set(lgFilesState, lgFiles);
         set(dialogsState, verifiedDialogs);
         set(botEnvironmentState, botEnvironment);
@@ -200,6 +227,7 @@ export const projectDispatcher = () => {
         await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.put(`/projects/open`, { path, storageId });
         await initBotState(callbackHelpers, response.data, true);
+
         return response.data.id;
       } catch (ex) {
         removeRecentProject(callbackHelpers, path);
@@ -253,6 +281,7 @@ export const projectDispatcher = () => {
     try {
       await httpClient.delete(`/projects/${projectId}`);
       luFileStatusStorage.removeAllStatuses(projectId);
+      qnaFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
       reset(projectIdState);
       reset(dialogsState);

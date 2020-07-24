@@ -3,13 +3,13 @@
 
 import { LuFile, DialogInfo, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
 
-import { getReferredFiles, checkLuisPublish, createCrossTrainConfig } from '../../src/utils/luUtil';
+import { getReferredLuFiles, checkLuisPublish, createCrossTrainConfig } from '../../src/utils/luUtil';
 
-describe('getReferredFiles', () => {
+describe('getReferredLuFiles', () => {
   it('returns referred luFiles from dialog', () => {
     const dialogs = [{ luFile: 'a' }];
     const luFiles = [{ id: 'a.en-us' }, { id: 'b.en-us' }, { id: 'c.en-us' }];
-    const referred = getReferredFiles(luFiles as LuFile[], dialogs as DialogInfo[]);
+    const referred = getReferredLuFiles(luFiles as LuFile[], dialogs as DialogInfo[]);
     expect(referred.length).toEqual(1);
     expect(referred[0].id).toEqual('a.en-us');
   });

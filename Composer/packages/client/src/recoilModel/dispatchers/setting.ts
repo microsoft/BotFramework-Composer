@@ -6,10 +6,13 @@ import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { SensitiveProperties } from '@bfc/shared';
 import get from 'lodash/get';
 import has from 'lodash/has';
+import merge from 'lodash/merge';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
 import { DialogSetting, PublishTarget } from '../../recoilModel/types';
+
+import httpClient from './../../utils/httpUtil';
 
 export const settingsDispatcher = () => {
   const setSettings = useRecoilCallback<[string, DialogSetting], Promise<void>>(
@@ -63,11 +66,33 @@ export const settingsDispatcher = () => {
     setRuntimeField('', 'customRuntime', isOn);
   });
 
+  const setQnASettings = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (projectId: string, subscriptionKey: string) => {
+      try {
+        const response = await httpClient.post(`/projects/${projectId}/qnaSettings/set`, {
+          projectId,
+          subscriptionKey,
+        });
+        const settings = merge({}, settingsState, { qna: { endpointKey: response.data } });
+        for (const property of SensitiveProperties) {
+          if (has(settings, property)) {
+            const propertyValue = get(settings, property, '');
+            settingStorage.setField(projectId, property, propertyValue);
+          }
+        }
+        set(settingsState, settings);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  );
+
   return {
     setSettings,
     setRuntimeSettings,
     setPublishTargets,
     setRuntimeField,
     setCustomRuntime,
+    setQnASettings,
   };
 };
