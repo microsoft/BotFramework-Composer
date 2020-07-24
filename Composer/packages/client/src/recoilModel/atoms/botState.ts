@@ -121,7 +121,7 @@ export const showAddSkillDialogModalState = atom<boolean>({
 
 export const settingsState = atom<DialogSetting>({
   key: getFullyQualifiedKey('settings'),
-  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {} } as DialogSetting,
+  default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {}, qna: {} } as DialogSetting,
 });
 
 export const publishVersionsState = atom<any>({
