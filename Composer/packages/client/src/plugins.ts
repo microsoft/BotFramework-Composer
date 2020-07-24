@@ -6,5 +6,6 @@ import selectDialog from '@bfc/ui-plugin-select-dialog';
 import selectSkillDialog from '@bfc/ui-plugin-select-skill-dialog';
 import lg from '@bfc/ui-plugin-lg';
 import lu from '@bfc/ui-plugin-luis';
+import crossTrained from '@bfc/ui-plugin-cross-trained';
 
-export default [prompts, selectDialog, selectSkillDialog, lg, lu, expressions];
+export default [prompts, selectDialog, selectSkillDialog, lg, lu, crossTrained, expressions];

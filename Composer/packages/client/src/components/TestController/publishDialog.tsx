@@ -14,10 +14,14 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { ILuisConfig } from '../../recoilModel/types';
+import { IConfig } from '../../recoilModel/types';
+import { dialogsState, luFilesState, qnaFilesState } from '../../recoilModel/atoms/botState';
+import { getReferredQnaFiles } from '../../utils/qnaUtil';
+import { getReferredLuFiles } from '../../utils/luUtil';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`
@@ -45,10 +49,10 @@ const dialogModal = {
     maxWidth: '450px !important',
   },
 };
-
-interface LuisFormData {
+interface FormData {
   name: string;
   authoringKey: string;
+  subscriptionKey: string;
   endpointKey: string;
   authoringRegion: string;
   defaultLanguage: string;
@@ -73,27 +77,35 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
-interface IPublishLuisDialogProps {
+interface IPublishDialogProps {
   botName: string;
   isOpen: boolean;
-  config: ILuisConfig;
+  config: IConfig;
   onDismiss: () => void;
-  onPublish: (data: LuisFormData) => void;
+  onPublish: (data: FormData) => void;
 }
 
-export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
+export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
   const { isOpen, onDismiss, onPublish, botName, config } = props;
+  const dialogs = useRecoilValue(dialogsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
 
-  const luisFormConfig: FieldConfig<LuisFormData> = {
+  const formConfig: FieldConfig<FormData> = {
     name: {
       required: true,
       validate: validate,
       defaultValue: config.name || botName,
     },
     authoringKey: {
-      required: true,
+      required: getReferredLuFiles(luFiles, dialogs).length > 0,
       validate: validate,
       defaultValue: config.authoringKey,
+    },
+    subscriptionKey: {
+      required: getReferredQnaFiles(qnaFiles, dialogs).length > 0,
+      validate: validate,
+      defaultValue: config.subscriptionKey,
     },
     endpointKey: {
       required: false,
@@ -122,7 +134,7 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
     },
   };
 
-  const { formData, formErrors, hasErrors, updateField } = useForm(luisFormConfig, { validateOnMount: true });
+  const { formData, formErrors, hasErrors, updateField } = useForm(formConfig, { validateOnMount: true });
 
   const handlePublish = useCallback(
     (e) => {
@@ -140,7 +152,7 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage('Publish LUIS models'),
+        title: formatMessage('Publish models'),
         styles: dialog,
       }}
       hidden={!isOpen}
@@ -182,6 +194,14 @@ export const PublishLuisDialog: React.FC<IPublishLuisDialogProps> = (props) => {
             value={formData.authoringKey}
             onChange={(_e, val) => updateField('authoringKey', val)}
             onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
+          />
+          <TextField
+            data-testid="SubscriptionKeyInput"
+            errorMessage={formErrors.subscriptionKey}
+            label={formatMessage('QNA Subscription key:')}
+            value={formData.subscriptionKey}
+            onChange={(_e, val) => updateField('subscriptionKey', val)}
+            onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
           />
           <TextField
             disabled

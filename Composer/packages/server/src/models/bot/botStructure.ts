@@ -10,6 +10,7 @@ const BotStructureTemplate = {
   entry: '${BOTNAME}.dialog',
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
+  qna: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.qna',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
   common: {
@@ -19,6 +20,7 @@ const BotStructureTemplate = {
     entry: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog',
     lg: 'dialogs/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
+    qna: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.qna',
   },
   skillManifests: 'manifests/${MANIFESTFILENAME}',
 };
@@ -74,6 +76,9 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
   if (fileType === FileExtensions.Lu) {
     TemplatePath = isRootFile ? BotStructureTemplate.lu : BotStructureTemplate.dialogs.lu;
   }
+  if (fileType === FileExtensions.Qna) {
+    TemplatePath = isRootFile ? BotStructureTemplate.qna : BotStructureTemplate.dialogs.qna;
+  }
   return templateInterpolate(TemplatePath, {
     BOTNAME,
     DIALOGNAME,
@@ -87,6 +92,7 @@ export const serializeFiles = async (fileStorage, rootPath, botName) => {
     templateInterpolate(BotStructureTemplate.entry, { BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.lg, { LOCALE: '*', BOTNAME: '*' }),
     templateInterpolate(BotStructureTemplate.lu, { LOCALE: '*', BOTNAME: '*' }),
+    templateInterpolate(BotStructureTemplate.qna, { LOCALE: '*', BOTNAME: '*' }),
   ];
   for (const pattern of entryPatterns) {
     const paths = await fileStorage.glob(pattern, rootPath);

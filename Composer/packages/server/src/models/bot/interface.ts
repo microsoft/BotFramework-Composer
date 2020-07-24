@@ -31,6 +31,17 @@ export interface ILuisConfig {
   defaultLanguage: string | 'en-us';
   environment: string | 'composer';
 }
+export interface IConfig {
+  name: string;
+  endpoint: string;
+  authoringKey: string;
+  subscriptionKey: string;
+  endpointKey: string;
+  authoringEndpoint: string;
+  authoringRegion: string | 'westus';
+  defaultLanguage: string | 'en-us';
+  environment: string | 'composer';
+}
 
 export interface IOperationLUFile {
   diagnostics?: any[]; // ludown parser output
@@ -47,7 +58,7 @@ export interface ILuisStatusOperation {
 export interface DialogSetting {
   MicrosoftAppId: string;
   MicrosoftAppPassword: string;
-  luis: ILuisConfig;
+  config: IConfig;
   skill: { manifestUrl: string; name: string }[];
   defaultLanguage: string;
   languages: string[];

@@ -310,19 +310,42 @@ async function exportProject(req: Request, res: Response) {
   });
 }
 
-async function publishLuis(req: Request, res: Response) {
+async function setQnASettings(req: Request, res: Response) {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
     try {
-      const luFiles = await currentProject.publishLuis(
-        req.body.luisConfig,
+      const qnaEndpointKey = await currentProject.updateQnaEndpointKey(req.body.subscriptionKey);
+      res.status(200).json(qnaEndpointKey);
+    } catch (error) {
+      res.status(400).json({
+        message: error instanceof Error ? error.message : error,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: 'No such bot project opened',
+    });
+  }
+}
+
+async function build(req: Request, res: Response) {
+  const projectId = req.params.projectId;
+  const user = await PluginLoader.getUserFromRequest(req);
+
+  const currentProject = await BotProjectService.getProjectById(projectId, user);
+  if (currentProject !== undefined) {
+    try {
+      const files = await currentProject.buildFiles(
+        req.body.authoringKey,
+        req.body.subscriptionKey,
         req.body.luFiles,
+        req.body.qnaFiles,
         req.body.crossTrainConfig
       );
-      res.status(200).json({ luFiles });
+      res.status(200).json(files);
     } catch (error) {
       res.status(400).json({
         message: error instanceof Error ? error.message : error,
@@ -433,7 +456,8 @@ export const ProjectController = {
   removeFile,
   updateSkill,
   getSkill,
-  publishLuis,
+  build,
+  setQnASettings,
   exportProject,
   saveProjectAs,
   createProject,
