@@ -5,26 +5,26 @@ import { generateUniqueId } from '@bfc/shared';
 import { ChangeHandler } from '@bfc/extension';
 import { useState } from 'react';
 
-type ItemType<T> = { [key: string]: T };
-type ObjectChangeHandler = (items: ObjectItem[]) => void;
+type ItemType<ValueType = unknown> = { [key: string]: ValueType };
+type ObjectChangeHandler<ValueType = unknown> = (items: ObjectItem<ValueType>[]) => void;
 
-export interface ObjectItem {
+export interface ObjectItem<ValueType = unknown> {
   id: string;
   propertyName: string;
-  propertyValue?: unknown;
+  propertyValue?: ValueType;
 }
 
-interface ObjectItemState {
-  objectEntries: ObjectItem[];
-  onChange: ObjectChangeHandler;
-  addProperty: (name?: string, value?: unknown) => void;
+interface ObjectItemState<ValueType = unknown> {
+  objectEntries: ObjectItem<ValueType>[];
+  onChange: ObjectChangeHandler<ValueType>;
+  addProperty: (name?: string, value?: ValueType) => void;
 }
 
-const generateObjectEntries = (value: ItemType<unknown>): ObjectItem[] => {
+const generateObjectEntries = <ValueType = unknown>(value: ItemType<ValueType>): ObjectItem<ValueType>[] => {
   return Object.entries(value || {}).map((entry) => createObjectItem(...entry));
 };
 
-const createObjectItem = (propertyName: string = '', propertyValue?: unknown): ObjectItem => {
+const createObjectItem = <ValueType = unknown>(propertyName = '', propertyValue?: ValueType): ObjectItem<ValueType> => {
   return {
     id: generateUniqueId(),
     propertyName,
@@ -54,20 +54,18 @@ export const getPropertyItemProps = (items: ObjectItem[], index: number, onChang
   };
 };
 
-export function useObjectItems(items: ItemType<unknown>, onChange: ChangeHandler<ItemType<unknown>>): ObjectItemState {
+export function useObjectItems<ValueType = unknown>(
+  items: ItemType<ValueType>,
+  onChange: ChangeHandler<ItemType<ValueType>>
+): ObjectItemState<ValueType> {
   const [cache, setCache] = useState(generateObjectEntries(items));
 
-  const handleChange = (items: ObjectItem[]) => {
+  const handleChange = (items) => {
     setCache(items);
-    onChange(
-      items.reduce(
-        (acc, { propertyName, propertyValue }) => ({ ...acc, [propertyName]: propertyValue }),
-        {} as ItemType<unknown>
-      )
-    );
+    onChange(items.reduce((acc, { propertyName, propertyValue }) => ({ ...acc, [propertyName]: propertyValue }), {}));
   };
 
-  const addProperty = <ValueType = unknown>(name: string = '', value?: ValueType) => {
+  const addProperty = (name = '', value?: ValueType) => {
     if (!cache.some(({ propertyName }) => propertyName === name)) {
       handleChange([...cache, createObjectItem(name, value)]);
     }
