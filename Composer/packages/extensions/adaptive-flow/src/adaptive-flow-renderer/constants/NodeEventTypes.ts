@@ -15,6 +15,8 @@ export enum NodeEventTypes {
   PasteSelection = 'event.data.paste-selection',
   MoveSelection = 'event.data.move-selection',
   DeleteSelection = 'event.data.delete-selection',
+  DisableSelection = 'event.data.disable-selection',
+  EnableSelection = 'event.data.enable-selection',
   AppendSelection = 'event.data.paste-selection--keyboard',
   InsertSelection = 'event.data.paste-selection--menu',
   Undo = 'event.operation.undo',

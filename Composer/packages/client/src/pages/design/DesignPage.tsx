@@ -11,16 +11,16 @@ import formatMessage from 'format-message';
 import get from 'lodash/get';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
-import React, { Suspense, useEffect, useMemo, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Conversation } from '../../components/Conversation/Conversation';
-import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
+import { Conversation } from '../../components/Conversation';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { TestController } from '../../components/TestController/TestController';
-import { IToolBarItem, ToolBar } from '../../components/ToolBar/ToolBar';
+import { IToolBarItem, ToolBar } from '../../components/ToolBar';
 import { DialogDeleting } from '../../constants';
 import { useStoreContext } from '../../hooks/useStoreContext';
 import { useShell } from '../../shell';
@@ -41,7 +41,7 @@ import {
 } from './styles';
 import { VisualEditor } from './VisualEditor';
 
-const CreateSkillModal = React.lazy(() => import('../../components/SkillForm/CreateSkillModal/CreateSkillModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
@@ -103,6 +103,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setectAndfocus,
     updateDialog,
     clearUndoHistory,
+    createDialogBegin,
+    exportToZip,
+    onboardingAddCoachMarkRef,
   } = actions;
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
@@ -199,80 +202,164 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
-  const nodeOperationAvailable = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
+  const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
+    const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
+    if (!actionSelected) {
+      return {};
+    }
+    const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
+    const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
+    const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
+    return { actionSelected, showDisableBtn, showEnableBtn };
+  }, [visualEditorSelection]);
 
   const toolbarItems: IToolBarItem[] = [
     {
-      type: 'action',
-      text: formatMessage('Undo'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Undo',
-        },
-        onClick: () => actions.undo(),
-      },
+      type: 'dropdown',
+      text: formatMessage('Add'),
       align: 'left',
-      disabled: !undoHistory.canUndo(),
+      dataTestid: 'AddFlyout',
+      buttonProps: {
+        iconProps: { iconName: 'Add' },
+      },
+      menuProps: {
+        items: [
+          {
+            'data-testid': 'FlyoutNewDialog',
+            key: 'adddialog',
+            text: formatMessage('Add new dialog'),
+            onClick: () => {
+              createDialogBegin([], onCreateDialogComplete);
+            },
+          },
+          {
+            'data-testid': 'FlyoutNewTrigger',
+            key: 'addtrigger',
+            text: formatMessage(`Add new trigger on {displayName}`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              openNewTriggerModal();
+            },
+          },
+        ],
+      },
     },
     {
-      type: 'action',
-      text: formatMessage('Redo'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Redo',
-        },
-        onClick: () => actions.redo(),
-      },
+      type: 'dropdown',
+      text: formatMessage('Edit'),
       align: 'left',
-      disabled: !undoHistory.canRedo(),
+      dataTestid: 'EditFlyout',
+      buttonProps: {
+        iconProps: { iconName: 'Edit' },
+      },
+      menuProps: {
+        items: [
+          {
+            key: 'edit.undo',
+            text: formatMessage('Undo'),
+            disabled: !undoHistory.canUndo(),
+            onClick: () => {
+              actions.undo();
+            },
+          },
+          {
+            key: 'edit.redo',
+            text: formatMessage('Redo'),
+            disabled: !undoHistory.canRedo(),
+            onClick: () => {
+              actions.redo();
+            },
+          },
+          {
+            key: 'edit.cut',
+            text: formatMessage('Cut'),
+            disabled: !actionSelected,
+            onClick: () => {
+              VisualEditorAPI.cutSelection();
+            },
+          },
+          {
+            key: 'edit.copy',
+            text: formatMessage('Copy'),
+            disabled: !actionSelected,
+            onClick: () => {
+              VisualEditorAPI.copySelection();
+            },
+          },
+          {
+            key: 'edit.move',
+            text: formatMessage('Move'),
+            disabled: !actionSelected,
+            onClick: () => {
+              VisualEditorAPI.moveSelection();
+            },
+          },
+          {
+            key: 'edit.delete',
+            text: formatMessage('Delete'),
+            disabled: !actionSelected,
+            onClick: () => {
+              VisualEditorAPI.deleteSelection();
+            },
+          },
+        ],
+      },
     },
     {
-      type: 'action',
-      text: formatMessage('Cut'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Cut',
-        },
-        onClick: () => VisualEditorAPI.cutSelection(),
-      },
+      type: 'dropdown',
+      text: formatMessage('Disable'),
       align: 'left',
-      disabled: !nodeOperationAvailable,
+      disabled: !actionSelected,
+      buttonProps: {
+        iconProps: { iconName: 'RemoveOccurrence' },
+      },
+      menuProps: {
+        items: [
+          {
+            key: 'disable',
+            text: formatMessage('Disable'),
+            disabled: !showDisableBtn,
+            onClick: () => {
+              VisualEditorAPI.disableSelection();
+            },
+          },
+          {
+            key: 'enable',
+            text: formatMessage('Enable'),
+            disabled: !showEnableBtn,
+            onClick: () => {
+              VisualEditorAPI.enableSelection();
+            },
+          },
+        ],
+      },
     },
     {
-      type: 'action',
-      text: formatMessage('Copy'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Copy',
-        },
-        onClick: () => VisualEditorAPI.copySelection(),
-      },
+      type: 'dropdown',
+      text: formatMessage('Export'),
       align: 'left',
-      disabled: !nodeOperationAvailable,
-    },
-    {
-      type: 'action',
-      text: formatMessage('Move'),
       buttonProps: {
-        iconProps: {
-          iconName: 'Share',
-        },
-        onClick: () => VisualEditorAPI.moveSelection(),
+        iconProps: { iconName: 'OpenInNewWindow' },
       },
-      align: 'left',
-      disabled: !nodeOperationAvailable,
-    },
-    {
-      type: 'action',
-      text: formatMessage('Delete'),
-      buttonProps: {
-        iconProps: {
-          iconName: 'Delete',
-        },
-        onClick: () => VisualEditorAPI.deleteSelection(),
+      menuProps: {
+        items: [
+          {
+            key: 'zipexport',
+            text: formatMessage('Export assets to .zip'),
+            onClick: () => {
+              exportToZip({ projectId });
+            },
+          },
+          {
+            key: 'exportAsSkill',
+            text: formatMessage('Export as skill'),
+            onClick: () => {
+              setExportSkillModalVisible(true);
+            },
+          },
+        ],
       },
-      align: 'left',
-      disabled: !nodeOperationAvailable,
     },
     {
       type: 'element',
@@ -395,6 +482,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       }
     }
   }
+  const addNewBtnRef = useCallback((addNew) => {
+    onboardingAddCoachMarkRef({ addNew });
+  }, []);
 
   if (!dialogId) {
     return <LoadingSpinner />;
@@ -412,13 +502,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onSelect={handleSelect}
         />
         <div css={contentWrapper} role="main">
-          <ToolBar
-            currentDialog={currentDialog}
-            openNewTriggerModal={openNewTriggerModal}
-            showSkillManifestModal={() => setExportSkillModalVisible(true)}
-            toolbarItems={toolbarItems}
-            onCreateDialogComplete={onCreateDialogComplete}
-          />
+          <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
+            <span
+              ref={addNewBtnRef}
+              css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
+              data-testid="CoachmarkRef-AddNew"
+            />
+            <ToolBar toolbarItems={toolbarItems} />
+          </div>
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>
               <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">

@@ -7,12 +7,15 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 
 import { IconBrickSize } from '../constants/ElementSizes';
 
-export const IconBrick = ({ onClick }): JSX.Element => {
+export const IconBrick = ({ onClick, disabled = false }): JSX.Element => {
+  const brickColor = disabled ? 'transparent' : '#FFFFFF';
+  const iconColor = disabled ? '#ddd' : '#FED9CC';
+
   return (
     <div
       css={{
         ...IconBrickSize,
-        background: '#FFFFFF',
+        background: brickColor,
         boxShadow: '0px 0.6px 1.8px rgba(0, 0, 0, 0.108), 0px 3.2px 7.2px rgba(0, 0, 0, 0.132)',
         borderRadius: '2px',
         cursor: 'pointer',
@@ -31,7 +34,7 @@ export const IconBrick = ({ onClick }): JSX.Element => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#FED9CC',
+          background: iconColor,
           width: 16,
           height: 16,
           borderRadius: '8px',
