@@ -86,7 +86,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
       actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
     }
-    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Questions[questionIndex] !== question) {
+    if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Questions[questionIndex].content !== question) {
       const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
       actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
     }
@@ -220,21 +220,21 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 if (qnaIndex !== qnaSectionIndex || questionIndex !== qIndex || editMode !== EditMode.Updating) {
                   return (
                     <div
-                      key={qIndex}
+                      key={q.id}
                       css={content}
                       role={'textbox'}
                       tabIndex={0}
                       onClick={(e) =>
-                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q) : () => {}
+                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q.content) : () => {}
                       }
                       onKeyDown={(e) => {
                         e.preventDefault();
                         if (e.key === 'Enter') {
-                          handleUpdateingAlternatives(qnaIndex, qIndex, q);
+                          handleUpdateingAlternatives(qnaIndex, qIndex, q.content);
                         }
                       }}
                     >
-                      <div css={qIndex === 0 ? bold : {}}>{q}</div>
+                      <div css={qIndex === 0 ? bold : {}}>{q.content}</div>
                     </div>
                   );
                   //It is updating this qnaSection's qIndex-th Question
@@ -416,7 +416,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     );
   };
 
-  const getKeyCallback = useCallback((item) => item.Body, []);
+  const getKeyCallback = useCallback((item) => item.uuid, []);
   return (
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

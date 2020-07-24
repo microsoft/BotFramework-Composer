@@ -43,7 +43,6 @@ class Indexer {
 
   public index(files: FileInfo[], botName: string, locale: string) {
     const result = this.classifyFile(files);
-    console.log(result);
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
