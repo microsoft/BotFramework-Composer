@@ -5,9 +5,8 @@ import { PluginConfig, FormUISchema, RecognizerSchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import mapValues from 'lodash/mapValues';
+import { IntentField, RecognizerField, RegexIntentField, QnAActionsField } from '@bfc/adaptive-form';
 
-import { IntentField, RecognizerField, RegexIntentField } from './codponents/fields';
-import { QnAActionsField } from './components/fields/QnAActionsField';
 const DefaultRecognizers: RecognizerSchema[] = [
   {
     id: SDKKinds.RegexRecognizer,
