@@ -8,10 +8,11 @@ import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react'
 import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
+import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
@@ -22,6 +23,7 @@ import {
   updateAnswer as updateAnswerUtil,
   generateQnAPair,
   addSection,
+  removeSection,
 } from '../../utils/qnaUtil';
 import { dialogsState, qnaFilesState, projectIdState, localeState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
@@ -119,7 +121,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setShowAllAlternatives(Array(qnaSections.length).fill(false));
   }, [dialogId, projectId]);
 
-  const toggleShowAllAlternatives = (index) => {
+  const toggleShowAllAlternatives = (index: number) => {
     const newArray = showAllAlternatives.map((element, i) => {
       if (i === index) {
         return !element;
@@ -147,20 +149,20 @@ const TableView: React.FC<TableViewProps> = (props) => {
     e.preventDefault();
   };
 
-  const handleAddingAlternatives = (index) => {
+  const handleAddingAlternatives = (index: number) => {
     setEditMode(EditMode.Creating);
     setQnASectionIndex(index);
     setQuestionIndex(-1);
   };
 
-  const handleUpdateingAlternatives = (qnaSectionIndex, questionIndex, question) => {
+  const handleUpdateingAlternatives = (qnaSectionIndex: number, questionIndex: number, question: string) => {
     setEditMode(EditMode.Updating);
     setQuestion(question);
     setQnASectionIndex(qnaSectionIndex);
     setQuestionIndex(questionIndex);
   };
 
-  const handleQuestionOnChange = (newValue, index) => {
+  const handleQuestionOnChange = (newValue, index: number) => {
     if (index !== qnaSectionIndex) return;
     setQuestion(newValue);
   };
@@ -189,17 +191,38 @@ const TableView: React.FC<TableViewProps> = (props) => {
     e.preventDefault();
   };
 
-  const handleUpdateingAnswer = (qnaSectionIndex, answer) => {
+  const handleUpdateingAnswer = (qnaSectionIndex: number, answer: string) => {
     setEditMode(EditMode.Updating);
     setAnswer(answer);
     setQnASectionIndex(qnaSectionIndex);
     setAnswerIndex(0);
   };
 
-  const handleAnswerOnChange = (answer, index) => {
+  const handleAnswerOnChange = (answer, index: number) => {
     if (index !== qnaSectionIndex) return;
     setAnswer(answer);
   };
+
+  const getTemplatesMoreButtons = useCallback(
+    (item, index) => {
+      const buttons = [
+        {
+          key: 'delete',
+          name: formatMessage('Delete'),
+          onClick: () => {
+            actions.setMessage('item deleted');
+            if (file) {
+              const updatedQnAFileContent = removeSection(index, file.content);
+              actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
+            }
+          },
+        },
+      ];
+
+      return buttons;
+    },
+    [dialogId, locale, file]
+  );
 
   const getTableColums = () => {
     const tableColums = [
@@ -214,6 +237,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         onRender: (item, qnaIndex) => {
           const questions = get(item, 'Questions', []);
           const showingQuestions = showAllAlternatives[qnaIndex] ? questions : questions.slice(0, limitedNumber);
+          //This question of this qna Section is '#?'
+          const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           return (
             <div data-is-focusable css={formCell}>
               {showingQuestions.map((q, qIndex) => {
@@ -234,7 +259,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         }
                       }}
                     >
-                      <div css={qIndex === 0 ? bold : {}}>{q.content}</div>
+                      {isQuestionEmpty && <div css={bold}>{formatMessage('Enter a question')}</div>}
+                      {!isQuestionEmpty && <div css={qIndex === 0 ? bold : {}}>{q.content}</div>}
                     </div>
                   );
                   //It is updating this qnaSection's qIndex-th Question
@@ -307,7 +333,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: formatMessage('answer'),
         fieldName: 'answer',
         minWidth: 150,
-        maxWidth: 350,
+        maxWidth: 400,
         isResizable: true,
         data: 'string',
         isPadded: true,
@@ -328,7 +354,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                     }
                   }}
                 >
-                  {item.Answer}
+                  {item.Answer || formatMessage('Enter an answer')}
                 </div>
               )}
               {qnaIndex === qnaSectionIndex && answerIndex === 0 && editMode === EditMode.Updating && (
@@ -350,6 +376,34 @@ const TableView: React.FC<TableViewProps> = (props) => {
         },
       },
     ];
+    const moreLabel = formatMessage('Actions');
+    if (dialogId !== 'all') {
+      const extraOperations = {
+        key: 'buttons',
+        name: '',
+        minWidth: 50,
+        maxWidth: 50,
+        isResizable: true,
+        fieldName: 'buttons',
+        data: 'string',
+        onRender: (item, index) => {
+          return (
+            <TooltipHost calloutProps={{ gapSpace: 10 }} content={moreLabel}>
+              <IconButton
+                ariaLabel={moreLabel}
+                menuIconProps={{ iconName: 'MoreVertical' }}
+                menuProps={{
+                  shouldFocusOnMount: true,
+                  items: getTemplatesMoreButtons(item, index),
+                }}
+                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
+              />
+            </TooltipHost>
+          );
+        },
+      };
+      tableColums.splice(3, 0, extraOperations);
+    }
 
     // all view, show used in column
     if (dialogId === 'all') {
@@ -374,7 +428,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
       };
       tableColums.splice(3, 0, beenUsedColumn);
     }
-
     return tableColums;
   };
 

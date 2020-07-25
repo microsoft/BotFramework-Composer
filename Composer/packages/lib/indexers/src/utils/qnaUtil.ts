@@ -22,7 +22,7 @@ export function checkIsSingleSection(content: string) {
 
 export function generateQnAPair() {
   let result = '';
-  result += `# ? newQuestion\n`;
+  result += `\n# ? newQuestion`;
   result += '\n```';
   result += `\nnewAnswer`;
   result += '\n```';
@@ -64,11 +64,11 @@ export function getParsedDiagnostics(newContent: string) {
 
 export function addQuestion(newContent: string, qnaSections: QnASection[], qnaSectionIndex: number) {
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
-    if (index != qnaSectionIndex) {
-      result = result + '\n' + qnaSection.Body;
+    if (index !== qnaSectionIndex) {
+      result = result + (index === 0 ? qnaSection.Body : '\n' + qnaSection.Body);
     } else {
       const newQnASection = addQuestionInQnASection(qnaSection, newContent);
-      result += rebuildQnaSection(newQnASection);
+      result += rebuildQnaSection(newQnASection, index === 0);
     }
     return result;
   }, '');
@@ -83,10 +83,10 @@ export function updateQuestion(
 ) {
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
     if (index !== qnaSectionIndex) {
-      result = result + '\n' + qnaSection.Body;
+      result = result + (index === 0 ? qnaSection.Body : '\n' + qnaSection.Body);
     } else {
       const newQnASection = updateQuestionInQnASection(qnaSection, newContent, questionIndex);
-      result += rebuildQnaSection(newQnASection);
+      result += rebuildQnaSection(newQnASection, index === 0);
     }
     return result;
   }, '');
@@ -96,10 +96,10 @@ export function updateQuestion(
 export function updateAnswer(newContent: string, qnaSections: QnASection[], qnaSectionIndex: number) {
   const qnaFileContent = qnaSections.reduce((result, qnaSection, index) => {
     if (index !== qnaSectionIndex) {
-      result = result + '\n' + qnaSection.Body;
+      result = result + (index === 0 ? qnaSection.Body : '\n' + qnaSection.Body);
     } else {
       const newQnASection = updateAnswerInQnASection(qnaSection, newContent);
-      result += rebuildQnaSection(newQnASection);
+      result += rebuildQnaSection(newQnASection, index === 0);
     }
     return result;
   }, '');
@@ -122,23 +122,33 @@ function updateQuestionInQnASection(qnaSection: QnASection, question: string, qu
   return newQnASection;
 }
 
+//will replace an empty question or add a new question
 function addQuestionInQnASection(qnaSection: QnASection, question: string) {
   const newQnASection: QnASection = cloneDeep(qnaSection);
+  const emptyQuestionIndex = newQnASection.Questions.findIndex((q) => q.content === '');
+  if (emptyQuestionIndex > -1) {
+    newQnASection.Questions[emptyQuestionIndex].content = question;
+    return newQnASection;
+  }
   newQnASection.Questions.push({ content: question, id: '' });
   return newQnASection;
 }
 
-function rebuildQnaSection(qnaSection) {
+function rebuildQnaSection(qnaSection, isfirstQnA: boolean) {
   const { source, QAPairId, Questions, FilterPairs, Answer, promptsText } = qnaSection;
   let result = '';
-  if (source && source != 'custom editorial') {
-    result += `\n> !# @qna.pair.source = ${source}`;
+  if (source && source !== 'custom editorial') {
+    result += !result && isfirstQnA ? '' : '\n';
+    result += `> !# @qna.pair.source = ${source}`;
   }
   if (QAPairId) {
-    result += `\n<a id = "${QAPairId}"></a>`;
+    result += !result && isfirstQnA ? '' : '\n';
+    result += `<a id = "${QAPairId}"></a>`;
   }
+  result += !result && isfirstQnA ? '' : '\n';
+  result += `# ?`;
   if (Questions && Questions.length !== 0) {
-    result += `\n# ? ${Questions[0].content}`;
+    result += `${Questions[0].content}`;
     Questions.slice(1).forEach((question) => {
       result += `\n- ${question.content}`;
     });
@@ -149,11 +159,13 @@ function rebuildQnaSection(qnaSection) {
       result += `\n-${filterPair.key}=${filterPair.value}`;
     });
   }
-  if (Answer !== undefined) {
-    result += '\n```';
+  result += '\n```';
+  if (Answer) {
     result += `\n${Answer}`;
-    result += '\n```';
+  } else {
+    result += `\n`;
   }
+  result += '\n```';
   if (promptsText) {
     result += '\n**Prompts:**';
     promptsText.forEach((prompt) => {
