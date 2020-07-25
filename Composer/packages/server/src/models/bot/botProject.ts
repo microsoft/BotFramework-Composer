@@ -379,7 +379,7 @@ export class BotProject {
       });
       const qnaFiles: FileInfo[] = [];
       qnaFileIds.forEach((id) => {
-        const f = this.files.get(`${id}.lu`);
+        const f = this.files.get(`${id}.qna`);
         if (f) {
           qnaFiles.push(f);
         }
