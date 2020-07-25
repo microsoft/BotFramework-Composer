@@ -3,19 +3,18 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { useMemo, useState, useEffect } from 'react';
-import { FieldProps, useShellApi } from '@bfc/extension';
+import { FieldProps, useShellApi, useRecognizerConfig } from '@bfc/extension';
 import { MicrosoftIRecognizer, SDKKinds } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 import { JsonEditor } from '@bfc/code-editor';
 
 import { FieldLabel } from '../FieldLabel';
-import { usePluginConfig } from '../../hooks';
 
 const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
-  const { recognizers } = usePluginConfig();
+  const recognizers = useRecognizerConfig();
   const [isCustomType, setIsCustomType] = useState(false);
 
   useEffect(() => {

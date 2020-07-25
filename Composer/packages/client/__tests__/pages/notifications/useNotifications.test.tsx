@@ -30,6 +30,7 @@ const state = {
           source: 'test',
         },
       ],
+      skills: ['https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json'],
     },
   ],
   luFiles: [
@@ -91,6 +92,14 @@ const state = {
       source: 'server',
     },
   ],
+  settings: {
+    skill: [
+      {
+        manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+        name: 'Email Skill',
+      },
+    ],
+  },
 };
 
 const initRecoilState = ({ set }) => {
@@ -116,7 +125,7 @@ describe('useNotification hooks', () => {
   });
 
   it('should return notifications', () => {
-    expect(renderedResult.current.length).toBe(4);
+    expect(renderedResult.current.length).toBe(5);
   });
 
   it('should return filtered notifications', () => {
