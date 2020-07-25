@@ -151,7 +151,6 @@ export const projectDispatcher = () => {
 
     try {
       const { dialogs, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(files, botName, locale);
-      console.log(qnaFiles);
 
       if (!qnaFiles || qnaFiles.length === 0) {
         dialogs.forEach(async (dialog) => {
