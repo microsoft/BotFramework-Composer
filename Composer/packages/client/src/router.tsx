@@ -24,6 +24,7 @@ const Notifications = React.lazy(() => import('./pages/notifications/Notificatio
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
+const DialogGenerationPage = React.lazy(() => import('./pages/dialog-generation/DialogGenerationPage'));
 
 const Routes = (props) => {
   const { state } = useContext(StoreContext);
@@ -52,6 +53,7 @@ const Routes = (props) => {
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
+            <DialogGenerationPage path="dialog-generation" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />

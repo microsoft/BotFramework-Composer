@@ -3,12 +3,12 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { Fragment } from 'react';
 import formatMessage from 'format-message';
 import { ActionButton, CommandButton } from 'office-ui-fabric-react/lib/Button';
+import { Fragment } from 'react';
 
 import { IToolBarItem } from './ToolBar.types';
-import { actionButton, leftActions, rightActions, headerSub } from './ToolBarStyles';
+import { actionButton, headerSub, leftActions, rightActions } from './ToolBarStyles';
 
 type ToolbarProps = {
   toolbarItems?: Array<IToolBarItem>;

@@ -59,6 +59,7 @@ const getUserSettings = (): UserSettings => {
 
 export const initialBotState: BotState = {
   dialogs: [],
+  dialogSchemas: [],
   projectId: '',
   botName: '',
   location: '', // the path to the bot project

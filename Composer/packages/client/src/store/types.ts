@@ -88,6 +88,11 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
+export type DialogSchema = {
+  id: string;
+  content: string;
+};
+
 export interface BotState {
   // Unique identifier of a bot
   projectId: string;
@@ -138,6 +143,8 @@ export interface BotState {
 
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
+
+  dialogSchemas: DialogSchema[];
 }
 
 export type AppState = {

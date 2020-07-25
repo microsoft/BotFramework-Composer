@@ -15,6 +15,9 @@ const actionType2ChangeType = {
   [ActionTypes.CREATE_DIALOG]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Dialog },
   [ActionTypes.UPDATE_DIALOG]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Dialog },
   [ActionTypes.REMOVE_DIALOG]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Dialog },
+  [ActionTypes.CREATE_SCHEMA]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.DialogSchema },
+  [ActionTypes.UPDATE_SCHEMA]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.DialogSchema },
+  [ActionTypes.REMOVE_SCHEMA]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.DialogSchema },
   [ActionTypes.UPDATE_LG]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Lg },
   [ActionTypes.CREATE_LG]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Lg },
   [ActionTypes.REMOVE_LG]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Lg },
@@ -251,6 +254,21 @@ class FilePersistence {
     ];
   }
 
+  private getDialogSchemaFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+    const fileChanges: IFileChange[] = [];
+    let { dialogSchemas } = currentState;
+
+    //if delete dialog the change need to get changes from previousState
+    if (changeType === ChangeType.DELETE) {
+      dialogSchemas = previousState.dialogSchemas;
+    }
+
+    const dialogSchema = dialogSchemas.find((ds) => ds.id === id);
+
+    fileChanges.push(this.createChange(dialogSchema, FileExtensions.DialogSchema, changeType, currentState.projectId));
+    return fileChanges;
+  }
+
   private getFileChanges(previousState: State, currentState: State, action: ActionType): IFileChange[] {
     let fileChanges: IFileChange[] = [];
     const fileChangeType = actionType2ChangeType[action.type];
@@ -291,6 +309,10 @@ class FilePersistence {
       }
       case FileExtensions.Setting: {
         fileChanges = this.getSettingsChanges(previousState, currentState);
+        break;
+      }
+      case FileExtensions.DialogSchema: {
+        fileChanges = this.getDialogSchemaFileChanges(targetId, previousState, currentState, changeType);
       }
     }
     return fileChanges;

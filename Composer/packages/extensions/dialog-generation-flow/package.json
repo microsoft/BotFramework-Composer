@@ -1,0 +1,66 @@
+{
+    "name": "@bfc/dialog-generation-flow",
+    "version": "1.0.0",
+    "description": "",
+    "main": "./lib/index.js",
+    "typings": "./lib/VisualSchemaEditor.d.ts",
+    "files": [
+        "lib/*index*",
+        "lib/VisualSchemaEditor.d.ts",
+        "LICENSE"
+    ],
+    "scripts": {
+        "clean": "rimraf lib dist",
+        "start": "node tools/devServer.js",
+        "build:app": "rimraf dist && cross-env NODE_ENV=production BUILD_DEV=false webpack -p",
+        "build": "rimraf lib && webpack --config webpack.lib.config.js --mode production",
+        "lint": "eslint --quiet ./src",
+        "lint:fix": "yarn lint --fix"
+    },
+    "dependencies": {
+        "@fluentui/react": "^7.120.1",
+        "@uifabric/experiments": "^7.27.6",
+        "mobx": "^5.15.4",
+        "mobx-react": "^6.2.2",
+        "mobx-state-tree": "^3.13.0",
+        "mst-middlewares": "^3.16.0",
+        "react-beautiful-dnd": "^13.0.0",
+        "react-virtualized-auto-sizer": "^1.0.2",
+        "stylist-react": "^2.0.0-beta.16"
+    },
+    "peerDependencies": {
+        "react": "16.13.0",
+        "react-dom": "16.13.0"
+    },
+    "devDependencies": {
+        "@types/react": "^16.8.18",
+        "@types/react-beautiful-dnd": "^13.0.0",
+        "@types/react-dom": "^16.8.4",
+        "@types/react-virtualized-auto-sizer": "^1.0.0",
+        "cross-env": "^5.2.0",
+        "css-loader": "^2.1.1",
+        "eslint": "^7.5.0",
+        "eslint-loader": "4.0.0",
+        "express": "^4.14.0",
+        "html-webpack-plugin": "^3.2.0",
+        "mini-css-extract-plugin": "^0.6.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.1",
+        "react-dev-utils": "7.0.3",
+        "rimraf": "^2.6.3",
+        "source-map-loader": "^0.2.4",
+        "style-loader": "^0.23.1",
+        "ts-loader": "^6.0.1",
+        "typescript": "^3.5.3",
+        "webpack": "^4.32.0",
+        "webpack-bundle-analyzer": "^3.8.0",
+        "webpack-cli": "^3.3.2",
+        "webpack-dev-middleware": "^3.7.0",
+        "webpack-hot-middleware": "^2.25.0",
+        "webpack-notifier": "^1.7.0"
+    },
+    "license": "MIT",
+    "author": {
+        "name": "Soroush",
+        "email": "sorgh@microsoft.com"
+    }
+}

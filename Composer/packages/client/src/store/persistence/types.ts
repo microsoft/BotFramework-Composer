@@ -13,6 +13,7 @@ export enum FileExtensions {
   Lu = '.lu',
   Lg = '.lg',
   Setting = 'appsettings.json',
+  DialogSchema = '.dialog-schema',
 }
 
 export type FileErrorHandler = (error) => void;

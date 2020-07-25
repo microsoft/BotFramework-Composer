@@ -2,34 +2,34 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React, { Suspense, useEffect, useMemo, useState, useCallback } from 'react';
-import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
-import formatMessage from 'format-message';
-import { globalHistory, RouteComponentProps } from '@reach/router';
-import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab } from '@bfc/shared';
-import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
+import { DialogFactory, DialogInfo, PromptTab, SDKKinds } from '@bfc/shared';
+import { jsx } from '@emotion/core';
+import { globalHistory, RouteComponentProps } from '@reach/router';
+import formatMessage from 'format-message';
+import get from 'lodash/get';
+import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { TestController } from '../../components/TestController/TestController';
-import { DialogDeleting } from '../../constants';
-import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
-import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
-import { dialogStyle } from '../../components/Modal/dialogStyle';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
+import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
-import { clearBreadcrumb } from '../../utils/navigation';
-import undoHistory from '../../store/middlewares/undo/history';
-import { navigateTo } from '../../utils/navigation';
-import { useShell } from '../../shell';
+import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
+import { TestController } from '../../components/TestController/TestController';
+import { IToolBarItem, ToolBar } from '../../components/ToolBar';
+import { DialogDeleting } from '../../constants';
 import { useStoreContext } from '../../hooks/useStoreContext';
+import { useShell } from '../../shell';
+import undoHistory from '../../store/middlewares/undo/history';
+import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
+import { clearBreadcrumb, navigateTo } from '../../utils/navigation';
 
 import { VisualEditorAPI } from './FrameAPI';
+import { PropertyEditor } from './PropertyEditor';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -40,7 +40,6 @@ import {
   visualPanel,
 } from './styles';
 import { VisualEditor } from './VisualEditor';
-import { PropertyEditor } from './PropertyEditor';
 
 const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
 const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
