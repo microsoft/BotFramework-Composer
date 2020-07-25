@@ -1,18 +1,39 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UISchema } from '@bfc/extension';
+
+import { PluginConfig, FormUISchema, RecognizerSchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
+import mapValues from 'lodash/mapValues';
 
-import { IntentField, RecognizerField } from './components/fields';
+import { IntentField, RecognizerField, RegexIntentField } from './codponents/fields';
 import { QnAActionsField } from './components/fields/QnAActionsField';
+const DefaultRecognizers: RecognizerSchema[] = [
+  {
+    id: SDKKinds.RegexRecognizer,
+    displayName: () => formatMessage('Regular Expression recognizer(Regex)'),
+    editor: RegexIntentField,
+    isSelected: (data) => {
+      return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;
+    },
+    handleRecognizerChange: (props) => {
+      props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
+    },
+  },
+  {
+    id: 'Custom',
+    displayName: () => formatMessage('Custom recognizer'),
+    isSelected: (data) => typeof data === 'object',
+    handleRecognizerChange: (props) => props.onChange({}),
+  },
+];
 
 const triggerUiSchema = {
   order: ['condition', '*'],
   hidden: ['actions'],
 };
 
-const DefaultUISchema: UISchema = {
+const DefaultFormSchema: FormUISchema = {
   [SDKKinds.AdaptiveDialog]: {
     label: 'Adaptive dialog',
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
@@ -334,4 +355,9 @@ const DefaultUISchema: UISchema = {
   },
 };
 
-export default DefaultUISchema;
+const config: PluginConfig = {
+  uiSchema: mapValues(DefaultFormSchema, (val) => ({ form: val })),
+  recognizers: DefaultRecognizers,
+};
+
+export default config;

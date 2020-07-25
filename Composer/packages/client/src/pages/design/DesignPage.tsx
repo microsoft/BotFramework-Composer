@@ -26,7 +26,7 @@ import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
 import { undoHistory } from '../../recoilModel/undo';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
@@ -300,7 +300,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
       text: formatMessage('Add'),
@@ -594,13 +594,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onSelect={handleSelect}
         />
         <div css={contentWrapper} role="main">
-          <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
+          <div css={{ position: 'relative' }} data-testid="DesignPage-Toolbar">
             <span
               ref={addNewBtnRef}
               css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
               data-testid="CoachmarkRef-AddNew"
             />
-            <ToolBar toolbarItems={toolbarItems} />
+            <Toolbar toolbarItems={toolbarItems} />
           </div>
           <Conversation css={editorContainer}>
             <div css={editorWrapper}>

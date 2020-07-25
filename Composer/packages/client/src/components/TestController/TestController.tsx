@@ -36,6 +36,7 @@ import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
 import { Loading } from './loading';
 import { ErrorInfo } from './errorInfo';
+import { WarningInfo } from './warningInfo';
 
 // -------------------- Styles -------------------- //
 
@@ -82,6 +83,8 @@ export const TestController: React.FC = () => {
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
   const publishConfig = merge(settings.luis, { subscriptionKey: Object(settings.qna).subscriptionKey }) as IConfig;
+  const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
+  const showWarning = !showError && warningLength > 0;
 
   useEffect(() => {
     if (projectId) {
@@ -203,6 +206,7 @@ export const TestController: React.FC = () => {
         <Loading botStatus={botStatus} />
         <div ref={addRef}>
           <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
+          <WarningInfo count={warningLength} hidden={!showWarning} onClick={handleErrorButtonClick} />
           <PrimaryButton
             css={botButton}
             disabled={showError || publishing || reloading}

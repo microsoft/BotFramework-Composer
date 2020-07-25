@@ -22,7 +22,7 @@ import {
   dispatcherState,
 } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { TargetList } from './targetList';
@@ -88,7 +88,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     [projectId, publishTypes]
   );
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
       text: formatMessage('Add new profile'),
@@ -99,7 +99,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         onClick: () => setAddDialogHidden(false),
       },
       align: 'left',
-      dataTestid: 'publishPage-ToolBar-Add',
+      dataTestid: 'publishPage-Toolbar-Add',
       disabled: false,
     },
     {
@@ -112,7 +112,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         onClick: () => setPublishDialogHidden(false),
       },
       align: 'left',
-      dataTestid: 'publishPage-ToolBar-Publish',
+      dataTestid: 'publishPage-Toolbar-Publish',
       disabled: selectedTargetName !== 'all' ? false : true,
     },
     {
@@ -126,7 +126,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       },
       align: 'left',
       disabled: selectedVersion ? false : true,
-      dataTestid: 'publishPage-ToolBar-Log',
+      dataTestid: 'publishPage-Toolbar-Log',
     },
     {
       type: 'action',
@@ -139,7 +139,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       },
       align: 'left',
       disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
-      dataTestid: 'publishPage-ToolBar-Log',
+      dataTestid: 'publishPage-Toolbar-Log',
     },
   ];
 
@@ -397,7 +397,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
-      <ToolBar toolbarItems={toolbarItems} />
+      <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>

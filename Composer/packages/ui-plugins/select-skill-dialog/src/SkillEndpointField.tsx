@@ -4,7 +4,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
-import { FieldProps } from '@bfc/extension';
+import { FieldProps, useFormConfig } from '@bfc/extension';
 import {
   getUiLabel,
   getUIOptions,
@@ -12,15 +12,14 @@ import {
   getUiDescription,
   schemaField,
   SelectField,
-  usePluginConfig,
 } from '@bfc/adaptive-form';
 
 export const SkillEndpointField: React.FC<FieldProps> = (props) => {
   const { depth, schema, uiOptions: baseUIOptions, value, onChange } = props;
-  const pluginConfig = usePluginConfig();
+  const formUIOptions = useFormConfig();
 
   const uiOptions = {
-    ...getUIOptions(schema, pluginConfig.formSchema),
+    ...getUIOptions(schema, formUIOptions),
     ...baseUIOptions,
   };
 
