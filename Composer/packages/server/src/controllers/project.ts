@@ -431,7 +431,7 @@ async function parseQnAContent(req: Request, res: Response) {
     if (extension.some((e) => url.endsWith(e))) {
       qnaContent = await builder.importFileReference(
         'onlineFile',
-        'https://download.microsoft.com/download/2/9/B/29B20383-302C-4517-A006-B0186F04BE28/surface-pro-4-user-guide-EN.pdf',
+        url,
         subscriptionKey,
         subscriptionKeyEndpoint,
         'default'
