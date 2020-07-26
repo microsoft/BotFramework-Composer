@@ -15,7 +15,6 @@ import RespondingWithTextSample from './RespondingWithTextSample.svg';
 import ToDoBotWithLuisSample from './ToDoBotWithLuisSample.svg';
 import TodoSample from './TodoSample.svg';
 import VisionAPISample from './VisionAPISample.svg';
-import FormSample from './FormSample.svg';
 
 export {
   ActionsSample,
@@ -32,5 +31,4 @@ export {
   ToDoBotWithLuisSample,
   TodoSample,
   VisionAPISample,
-  FormSample,
 };

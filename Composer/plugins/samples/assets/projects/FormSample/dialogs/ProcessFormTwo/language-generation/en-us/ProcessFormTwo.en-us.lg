@@ -1,4 +1,0 @@
-[import](common.lg)
-
-# SendActivity_tqP8kx()
-- Looks like you pressed the submit button on the second form and the data you entered was:\n\n**City:** ${json(user.formData).yourCity}\n\n**State:** ${json(user.formData).yourState}
