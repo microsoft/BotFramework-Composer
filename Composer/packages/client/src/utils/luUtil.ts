@@ -14,10 +14,12 @@ import { getBaseName, getExtension } from './fileUtil';
 
 export * from '@bfc/indexers/lib/utils/luUtil';
 
-export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
+export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], checkContent = true) {
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
-    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale);
+    return dialogs.some(
+      (dialog) => dialog.luFile === idWithOutLocale && ((checkContent && !!file.content) || !checkContent)
+    );
   });
 }
 
@@ -135,9 +137,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     intentName: '_Interruption',
     verbose: true,
   };
-  crossTrainConfig.rootIds = keys(countMap).filter(
-    (key) => (countMap[key] === 0 || key === rootId) && triggerRules[key]
-  );
+  crossTrainConfig.rootIds = keys(countMap).filter((key) => countMap[key] === 0 || key === rootId);
   crossTrainConfig.triggerRules = triggerRules;
   return addLocaleToConfig(crossTrainConfig, luFiles);
 }
@@ -154,18 +154,13 @@ function generateErrorMessage(invalidLuFile: LuFile[]) {
 }
 
 export function checkLuisBuild(luFiles: LuFile[], dialogs: DialogInfo[]) {
-  const referred = getReferredLuFiles(luFiles, dialogs);
+  const referred = getReferredLuFiles(luFiles, dialogs, false);
   const invalidLuFile = referred.filter(
     (file) => file.diagnostics.filter((n) => n.severity === DiagnosticSeverity.Error).length !== 0
   );
   if (invalidLuFile.length !== 0) {
     const msg = generateErrorMessage(invalidLuFile);
     throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
-  }
-  const emptyLuFiles = referred.filter((file) => file.empty);
-  if (emptyLuFiles.length !== 0) {
-    const msg = emptyLuFiles.map((file) => file.id).join(' ');
-    throw new Error(`You have the following empty LuFile(s): ` + msg);
   }
   return referred;
 }
