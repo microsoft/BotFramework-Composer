@@ -1,0 +1,4 @@
+[import](common.lg)
+
+# SendActivity_imujUe()
+- Looks like you pressed the submit button on the first form and the data you entered was:\n\n**Name:** ${json(user.formData).yourName}\n\n**Phone Number:** ${json(user.formData).yourPhone}

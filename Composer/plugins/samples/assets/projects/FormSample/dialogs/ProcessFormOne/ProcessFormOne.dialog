@@ -1,0 +1,29 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "p7u0g5",
+    "name": "ProcessFormOne",
+    "description": "Dialog to process the first form"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "id": "J3SsoS"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "imujUe"
+          },
+          "activity": "${SendActivity_imujUe()}"
+        }
+      ]
+    }
+  ],
+  "generator": "ProcessFormOne.lg"
+}

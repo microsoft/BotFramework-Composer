@@ -59,6 +59,10 @@ const samplesRegitry = {
   QnAMakerLUISSample: {
     name: 'QnA Maker and LUIS',
     description: 'A sample bot that demonstrates use of both QnA Maker & LUIS',
+  },
+  FormSample: {
+    name: 'Form Sample',
+    description: 'A sample bot that demonstrates handling data from multiple forms in composer'
   }
 }
 
