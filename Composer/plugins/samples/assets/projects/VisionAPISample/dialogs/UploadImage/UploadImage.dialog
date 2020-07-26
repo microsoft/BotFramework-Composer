@@ -1,0 +1,152 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "NR6LWh",
+    "name": "UploadImage"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "id": "tMgmPw"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.ChoiceInput",
+          "$designer": {
+            "id": "ymRKsh"
+          },
+          "defaultLocale": "en-us",
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "prompt": "${ChoiceInput_Prompt_ymRKsh()}",
+          "choiceOptions": {
+            "includeNumbers": true,
+            "inlineOrMore": ", or ",
+            "inlineOr": " or ",
+            "inlineSeparator": ", "
+          },
+          "property": "dialog.imageMethod",
+          "choices": [
+            "Local File",
+            "URL"
+          ],
+          "recognizerOptions": {
+            "recognizeOrdinals": true
+          },
+          "style": "suggestedAction"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "VDkb9Z"
+          },
+          "condition": "dialog.imageMethod == \"Local File\"",
+          "actions": [
+            {
+              "$kind": "Microsoft.AttachmentInput",
+              "$designer": {
+                "id": "dGa2AP"
+              },
+              "disabled": false,
+              "maxTurnCount": 3,
+              "alwaysPrompt": false,
+              "allowInterruptions": true,
+              "prompt": "${AttachmentInput_Prompt_dGa2AP()}",
+              "property": "dialog.attachments",
+              "outputFormat": "first"
+            },
+            {
+              "$kind": "Microsoft.SetProperty",
+              "$designer": {
+                "id": "XnKotm"
+              },
+              "property": "dialog.imageUrl",
+              "value": "${dialog.attachments.contentUrl}"
+            }
+          ],
+          "elseActions": [
+            {
+              "$kind": "Microsoft.TextInput",
+              "$designer": {
+                "id": "OWKHET"
+              },
+              "disabled": false,
+              "maxTurnCount": 3,
+              "alwaysPrompt": false,
+              "allowInterruptions": false,
+              "prompt": "${TextInput_Prompt_OWKHET()}",
+              "property": "dialog.imageUrl"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "A0Tab0"
+          },
+          "activity": "${SendActivity_A0Tab0()}"
+        },
+        {
+          "$kind": "Microsoft.TextInput",
+          "$designer": {
+            "id": "j6wUCT"
+          },
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "prompt": "${TextInput_Prompt_j6wUCT()}",
+          "property": "user.APIKey"
+        },
+        {
+          "$kind": "Microsoft.TextInput",
+          "$designer": {
+            "id": "rawimi"
+          },
+          "disabled": false,
+          "maxTurnCount": 3,
+          "alwaysPrompt": false,
+          "allowInterruptions": true,
+          "prompt": "${TextInput_Prompt_rawimi()}",
+          "property": "user.endPoint"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "Ylrl2t"
+          },
+          "activity": "${SendActivity_Ylrl2t()}"
+        },
+        {
+          "$kind": "Microsoft.HttpRequest",
+          "$designer": {
+            "id": "D4KTOe"
+          },
+          "method": "POST",
+          "url": "https://bradtestvision.cognitiveservices.azure.com/vision/v3.0/analyze?visualFeatures=adult,brands,color,description,faces,objects,tags,imageType",
+          "resultProperty": "dialog.api_result",
+          "headers": {
+            "Ocp-Apim-Subscription-Key": "${user.APIKey}"
+          },
+          "contentType": "application/json",
+          "responseType": "json",
+          "body": "{\"url\":\"${dialog.imageUrl}\"}"
+        },
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "vyTJjh"
+          },
+          "activity": "${SendActivity_vyTJjh()}"
+        }
+      ]
+    }
+  ],
+  "generator": "UploadImage.lg"
+}

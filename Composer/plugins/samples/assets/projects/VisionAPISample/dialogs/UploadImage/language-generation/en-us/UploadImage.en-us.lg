@@ -1,0 +1,22 @@
+[import](common.lg)
+
+
+# SendActivity_Ylrl2t()
+- Sending your image to the Vision API...
+# TextInput_Prompt_j6wUCT()
+-  Enter your Computer VIsion serivce's API Key:
+# TextInput_Prompt_rawimi()
+- Enter your Computer Vision services's API endpoint:
+# SendActivity_vyTJjh()
+-  ${AnalysisResults(dialog.imageUrl)}
+# SendActivity_A0Tab0()
+- ${UploadReceived(dialog.imageUrl)}
+# ChoiceInput_Prompt_ymRKsh()
+- Do you want to upload a local file or provide an image url? (note, local file upload does not work in emulator)
+# AttachmentInput_Prompt_dGa2AP()
+- Upload your image now that you want to analyze.  If you are using the Botframework Emulator, you can upload a file by clicking the paper clip icon on the message line.  You can upload an image in PNG or JPG format:
+# TextInput_Prompt_OWKHET()
+- Enter the URL of the image you want to analyze.  The URL has to be publically available:
+
+
+

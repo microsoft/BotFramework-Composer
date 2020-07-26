@@ -1,0 +1,63 @@
+# WelcomeUser
+[Activity
+    Attachments = ${StepOne()} | ${StepTwo()} | ${StepThree()} | ${StepFour()} | ${StepFive()} | ${StepSix()}
+    AttachmentLayout = carousel
+]
+
+# StepOne
+[HeroCard
+    title = Image Analysis Sample
+    subtitle = Step One
+    text = Welcome to the Image upload and analysis sample.  This sample accepts an uploaded image or image URL and processes it with the [Azure Computer Vision AI Service](https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/). \n\nTo get started follow the steps in the cards to the right. \n\nWhen you are ready press the Upload button or type upload to start the analysis process.
+    buttons = Upload
+]
+
+#StepTwo
+[HeroCard
+    title = Azure Prerequisites
+    subtitle = Step Two
+    text = You will need to have access to an **Azure subscription** and have sufficient access to create a Computer Vision Service to run this sample successfully.\n\nYou may create a free trial Azure subscription by [here](https://azure.microsoft.com/en-us/free/)
+]
+
+# StepThree
+[HeroCard
+    title = Computer Vision Service
+    subtitle = Step Three
+    text = In the [Azure Portal](https://portal.azure.com), create a **Computer Vision** service if you do not already have one.\n\nIf you are already logged into the portal you can create the service by following this [link](https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesComputerVision).
+]
+
+# StepFour
+[HeroCard
+    title = Get Your API Key
+    subtitle = Step Four
+    text = In your newly created Computer Vision resource, select the **Keys and Endpoint** option from the menu and copy your **API key** and **Endpoint** for use later in the sample.\n\nYou now have everything you need to run this sample!
+]
+
+# StepFive
+[HeroCard
+title = SDK Bug Workaround
+subtitle = Step Five
+text = At the time this sample was created, there is a bug in version 4.9.3 of the SDK when accessing an external API.  Follow the instructions in this [thread](https://github.com/microsoft/BotFramework-Composer/issues/3412) to update your runtime configuration to fix the bug.
+]
+
+# StepSix
+[HeroCard
+title = Deploy The Sample
+subtitle = Step Six (Optional)
+text = This sample must be deployed to Azure if you wish to upload a local file and not provide a URL.  This is because if you load a file using the emulator, the URL is a local only URL and the Computer Vision API will not be able to access it.\n\nCurrently in Composer, there is no built in method to read a URL to an array of bytes.\n\nFollow the instructions [here](https://docs.microsoft.com/en-us/composer/how-to-publish-bot) to deploy your bot to Azure if you want to test upload functionality.
+]
+
+# UploadReceived(url)
+[ThumbnailCard
+    title = A thumbnail of image should\n\nappear in this card to the right -->
+    image = ${url}
+]
+
+# AnalysisResults(url)
+[ThumbnailCard
+	title = Analysis Results
+    text = **Width:** ${dialog.api_result.content.metadata.width}    **Height:** ${dialog.api_result.content.metadata.height}    **Type:** ${dialog.api_result.content.metadata.format}\n\n**Adult:** ${dialog.api_result.content.adult.isAdultContent}    **Racy:** ${dialog.api_result.content.adult.isRacyContent}    **Gory:** ${dialog.api_result.content.adult.isGoryContent}\n\n**Dominant Colors:** ${dialog.api_result.content.color.dominantColors}\n\n**Tags:** ${dialog.api_result.content.description.tags}
+    subtitle = **Caption:** ${dialog.api_result.content.description.captions[0].text}
+    image = ${url}
+    buttons = Process Another Image
+]

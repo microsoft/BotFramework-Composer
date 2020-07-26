@@ -1,0 +1,36 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "id": "Q4XqVK",
+    "name": "Cancel",
+    "description": "Cancel and restart"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnBeginDialog",
+      "$designer": {
+        "name": "BeginDialog",
+        "id": "qsfSZs"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SendActivity",
+          "$designer": {
+            "id": "es7Ggh"
+          },
+          "activity": "${SendActivity_es7Ggh()}"
+        },
+        {
+          "$kind": "Microsoft.CancelAllDialogs",
+          "$designer": {
+            "id": "kQjh4H"
+          },
+          "activityProcessed": true
+        }
+      ]
+    }
+  ],
+  "generator": "Cancel.lg"
+}

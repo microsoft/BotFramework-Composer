@@ -59,6 +59,10 @@ const samplesRegitry = {
   QnAMakerLUISSample: {
     name: 'QnA Maker and LUIS',
     description: 'A sample bot that demonstrates use of both QnA Maker & LUIS',
+  },
+  VisionAPISample: {
+    name: 'Image Upload and Vision API',
+    description: 'A sample bot that demonstrates uploading a file and calling an external API.'
   }
 }
 
