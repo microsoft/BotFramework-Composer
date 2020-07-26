@@ -77,7 +77,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     },
     region: {
       required: true,
-      defaultValue: '',
+      defaultValue: 'westus',
     },
   };
   const { formData, updateField } = useForm(formConfig);

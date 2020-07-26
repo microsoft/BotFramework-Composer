@@ -61,7 +61,7 @@
     "@bfc/plugin-loader": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
-    "@microsoft/bf-lu": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.4.0.tgz",
+    "@microsoft/bf-lu": "https://botbuilder.myget.org/F/botbuilder-declarative/npm/@bfcomposer/bf-lu/-/@bfcomposer/bf-lu-1.4.2.tgz",
     "archiver": "^3.0.0",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
