@@ -63,6 +63,10 @@ const samplesRegitry = {
   VisionAPISample: {
     name: 'Image Upload and Vision API',
     description: 'A sample bot that demonstrates uploading a file and calling an external API.'
+  },
+  FormSample: {
+    name: 'Form Submission Handling',
+    description: 'A sample bot that demonstrates processing data from multiple forms in composer with no code.'
   }
 }
 

@@ -1,0 +1,148 @@
+# WelcomeUser
+[HeroCard
+text = Welcome to the SampleForm bot sample.  This example will show how to collect and act on information collected from using multiple adaptive cards / forms in a bot using a completely no code approach.\n\nThe method used can easily handle identifying multiple form submissions as follows:\n\n* A trigger is placed on the unknown intent handler\n\n* Added an input field to identify the form that has isVisible set to false\n\n* The unknown intent handler looks for postback == true and the value attribute to exist to identify a message activity as a form submission\n\n* The submitted data is stored for retrieval by a later dialog into the user data\n\n* Use the hidden input value to start the appropriate dialog to process the form data saved
+title = Multiple Form Sample
+subtitle = Adaptive Card Submit demo 
+buttons = Show Form One | Show Form Two
+] 
+
+# AdaptiveCardOne
+[Activity
+    Attachments = ${json(adaptivecardjsonone())}
+]
+
+# adaptivecardjsonone
+- ```
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": 1,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Sample Input Form #1",
+                            "weight": "Bolder",
+                            "size": "Medium"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Enter in some sample data below to be processed.",
+                            "isSubtle": true,
+                            "wrap": true
+                        },
+                        {
+                            "type": "Container",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "Input Fields",
+                                    "wrap": true
+                                },
+                                {
+                                    "type": "Input.Text",
+                                    "id": "yourName",
+                                    "placeholder": "Enter Your Name"
+                                },
+                                {
+                                    "type": "Input.Text",
+                                    "id": "yourPhone",
+                                    "placeholder": "Enter Your Phone Number",
+                                    "style": "Tel"
+                                },
+                                {
+                                    "type": "Input.Text",
+                                    "id": "form1",
+                                    "isVisible": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.Submit",
+            "title": "Submit"
+        }
+    ]
+}
+```
+
+# AdaptiveCardTwo
+[Activity
+    Attachments = ${json(adaptivecardjsontwo())}
+]
+
+# adaptivecardjsontwo
+- ```
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "body": [
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": 1,
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Sample Input Form #2",
+                            "weight": "Bolder",
+                            "size": "Medium"
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "Enter in some sample data below to be processed.",
+                            "isSubtle": true,
+                            "wrap": true
+                        },
+                        {
+                            "type": "Container",
+                            "items": [
+                                {
+                                    "type": "TextBlock",
+                                    "text": "Input Fields",
+                                    "wrap": true
+                                },
+                                {
+                                    "type": "Input.Text",
+                                    "id": "yourCity",
+                                    "placeholder": "Enter Your City"
+                                },
+                                {
+                                    "type": "Input.Text",
+                                    "id": "yourState",
+                                    "placeholder": "Enter Your State",
+                                },
+                                {
+                                    "type": "Input.Text",
+                                    "id": "form2",
+                                    "isVisible": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.Submit",
+            "title": "Submit"
+        }
+    ]
+}
+```
