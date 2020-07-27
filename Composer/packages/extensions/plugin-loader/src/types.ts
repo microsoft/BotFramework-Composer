@@ -2,11 +2,9 @@
 // Licensed under the MIT License.
 import { RequestHandler } from 'express-serve-static-core';
 import { JSONSchema7 } from 'json-schema';
-
+import { IBotProject } from '@bfc/shared';
 // TODO: this will be possible when ifilestorage is in a shared module
 // import { IFileStorage } from '../../../server/src/models/storage/interface';
-
-import { IBotProject } from '@bfc/shared';
 
 import { ComposerPluginRegistration } from './composerPluginRegistration';
 
