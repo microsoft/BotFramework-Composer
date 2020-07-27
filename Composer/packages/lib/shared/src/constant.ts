@@ -24,7 +24,6 @@ export interface DialogSetting {
   defaultLanguage: string;
   languages: string[];
   publishTargets?: PublishTarget[];
-  downsampling?: IDownSamplingConfig;
   runtime?: {
     customRuntime?: boolean;
     path?: string;

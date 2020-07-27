@@ -16,6 +16,7 @@ const ejectRuntimeAction = (dispatcher: Dispatcher) => {
     onAction: async (projectId: string, name: string) => {
       try {
         const response = await httpClient.post(`/runtime/eject/${projectId}/${name}`);
+        console.log(response);
         if (!lodashGet(response, 'data.settings.path', '') || !lodashGet(response, 'data.settings.startCommand', '')) {
           throw new Error('Runtime cannot be ejected');
         }
@@ -26,9 +27,9 @@ const ejectRuntimeAction = (dispatcher: Dispatcher) => {
         dispatcher.setRuntimeSettings(projectId, path, command, key, runtimename);
       } catch (ex) {
         const errorToShow: StateError = {
-          message: ex.message,
+          message: ex.response.data.message,
           summary: formatMessage('Error occured ejecting runtime!'),
-          status: ex.status,
+          status: ex.response.data.status,
         };
         dispatcher.setApplicationLevelError(errorToShow);
       }

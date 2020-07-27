@@ -5,8 +5,8 @@
 import { jsx } from '@emotion/core';
 import React, { Fragment } from 'react';
 import { SDKKinds, MicrosoftInputDialog, ChoiceInput, ConfirmInput, LuMetaData, LuType } from '@bfc/shared';
-import { FieldLabel, SchemaField, usePluginConfig } from '@bfc/adaptive-form';
-import { JSONSchema7, useShellApi } from '@bfc/extension';
+import { FieldLabel, SchemaField } from '@bfc/adaptive-form';
+import { JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension';
 import formatMessage from 'format-message';
 
 import { PromptFieldProps } from './types';
@@ -33,7 +33,7 @@ const expectedResponsesPlaceholder = () =>
 const UserInput: React.FC<PromptFieldProps<MicrosoftInputDialog>> = (props) => {
   const { onChange, getSchema, value, id, uiOptions, getError, definitions, depth, schema = {} } = props;
   const { currentDialog, designerId } = useShellApi();
-  const { recognizers } = usePluginConfig();
+  const recognizers = useRecognizerConfig();
 
   const { const: $kind } = (schema?.properties?.$kind as { const: string }) || {};
   const intentName = new LuMetaData(new LuType($kind).toString(), designerId).toString();

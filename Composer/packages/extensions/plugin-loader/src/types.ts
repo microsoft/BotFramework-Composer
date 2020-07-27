@@ -118,7 +118,6 @@ export interface BotProject {
   name: string;
   dir: string;
   dataDir: string;
-  files: FileInfo[];
   defaultSDKSchema: {
     [key: string]: string;
   };

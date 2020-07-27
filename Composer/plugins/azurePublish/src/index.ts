@@ -323,7 +323,7 @@ export default async (composer: any): Promise<void> => {
       const runtime = composer.getRuntimeByProject(project);
 
       // point to the declarative assets (possibly in remote storage)
-      const botFiles = project.files;
+      const botFiles = project.getProject().files;
 
       // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
       // TODO: this templatePath should come from the runtime instead of this magic parameter
