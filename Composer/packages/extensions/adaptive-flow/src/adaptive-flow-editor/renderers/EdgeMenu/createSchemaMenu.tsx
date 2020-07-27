@@ -204,12 +204,10 @@ export const createActionMenu = (
 
   // Append a 'Custom Actions' item conditionally.
   if (customActionGroups) {
-    const customActionItems = createCustomActionSubMenu(
-      customActionGroups,
-      onClick,
-      // Exclude those $kinds already grouped by uischema
-      ($kind: SDKKinds) => !!menuOptions[$kind]
-    );
+    // Exclude those $kinds already grouped by uischema
+    const is$kindUngrouped = ($kind: SDKKinds) => !!menuOptions[$kind];
+
+    const customActionItems = createCustomActionSubMenu(customActionGroups, onClick, is$kindUngrouped);
     if (customActionItems.length) {
       const customActionTitle = formatMessage('Custom Actions');
       resultItems.push(createSubMenu(customActionTitle, onClick, customActionItems));
