@@ -55,7 +55,6 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     plugins: { uiSchema },
   } = useContext(ExtensionContext);
 
-  // TODO: merge uiSchema to menu tree
   const menuItems = createActionMenu(
     (item) => {
       if (!item) return;
