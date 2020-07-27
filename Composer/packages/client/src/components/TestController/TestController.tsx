@@ -8,7 +8,6 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import merge from 'lodash/merge';
 
 import {
   botNameState,
@@ -82,7 +81,7 @@ export const TestController: React.FC = () => {
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
-  const publishConfig = { subscriptionKey: settings.qna.subscriptionKey, ...settings.luis };
+  const publishConfig = { subscriptionKey: settings.qna.subscriptionKey, ...settings.luis } as IConfig;
   const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
   const showWarning = !showError && warningLength > 0;
 
