@@ -7,6 +7,7 @@ import { BotProjectDeploy } from '@bfc/botframeworkdeploy';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
+import { IBotProject } from '@bfc/shared';
 
 import schema from './schema';
 
@@ -202,7 +203,7 @@ class AzurePublisher {
   /**************************************************************************************************
    * plugin methods
    *************************************************************************************************/
-  publish = async (config: PublishConfig, project, metadata, user) => {
+  publish = async (config: PublishConfig, project: IBotProject, metadata, user) => {
     // templatePath point to the dotnet code
     const {
       fullSettings,
@@ -219,7 +220,7 @@ class AzurePublisher {
     } = config;
 
     // point to the declarative assets (possibly in remote storage)
-    const botFiles = project.files;
+    const botFiles = project.getProject().files;
 
     // get the bot id from the project
     const botId = project.id;
@@ -328,7 +329,7 @@ class AzurePublisher {
     }
   };
 
-  getStatus = async (config: PublishConfig, project, user) => {
+  getStatus = async (config: PublishConfig, project: IBotProject, user) => {
     const profileName = config.profileName;
     const botId = project.id;
     // return latest status
@@ -349,7 +350,7 @@ class AzurePublisher {
     }
   };
 
-  history = async (config: PublishConfig, project, user) => {
+  history = async (config: PublishConfig, project: IBotProject, user) => {
     const profileName = config.profileName;
     const botId = project.id;
     return await this.getHistory(botId, profileName);
