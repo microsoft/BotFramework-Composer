@@ -8,6 +8,7 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { IConfig } from '@bfc/shared';
 
 import {
   botNameState,
@@ -27,7 +28,6 @@ import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
-import { IConfig } from '../../recoilModel/types';
 
 import { getReferredLuFiles } from './../../utils/luUtil';
 import { PublishDialog } from './publishDialog';
@@ -126,7 +126,7 @@ export const TestController: React.FC = () => {
     const newValue = config;
     const subscriptionKey = newValue.subscriptionKey;
     delete newValue.subscriptionKey;
-    await setSettings(projectId, { ...settings, luis: newValue, qna: { subscriptionKey } });
+    await setSettings(projectId, { ...settings, luis: newValue, qna: { subscriptionKey, endpointKey: '' } });
     await build(newValue.authoringKey, subscriptionKey, projectId);
   }
 

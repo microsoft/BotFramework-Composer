@@ -15,10 +15,10 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
+import { IConfig } from '@bfc/shared';
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { IConfig } from '../../recoilModel/types';
 import { dialogsState, luFilesState, qnaFilesState } from '../../recoilModel/atoms/botState';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
 import { getReferredLuFiles } from '../../utils/luUtil';
