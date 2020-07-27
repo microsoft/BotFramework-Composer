@@ -1,24 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import React from 'react';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 
 import { announcementState } from './../../recoilModel';
 
 export const Announcement = () => {
+  const style = css`
+    display: block;
+    position: absolute;
+    top: -9999px;
+    height: 1px;
+    width: 1px;
+  `;
+
   const announcement = useRecoilValue(announcementState);
   return (
-    <div
-      aria-live="assertive"
-      role="alert"
-      style={{
-        display: 'block',
-        position: 'absolute',
-        top: '-9999px',
-        height: '1px',
-        width: '1px',
-      }}
-    >
+    <div aria-live="assertive" css={style} role="alert">
       {announcement}
     </div>
   );
