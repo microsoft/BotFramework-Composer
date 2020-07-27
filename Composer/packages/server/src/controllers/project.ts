@@ -418,9 +418,9 @@ async function updateBoilerplate(req: Request, res: Response) {
 }
 
 async function parseQnAContent(req: Request, res: Response) {
-  const subscriptionKey = req.query.subscriptionKey;
-  const url = req.query.url as string;
-  const region = req.query.region;
+  const subscriptionKey = req.query.subscriptionKey.trim();
+  const url = req.query.url.trim() as string;
+  const region = req.query.region.trim();
   const subscriptionKeyEndpoint = `https://${region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
   const extension = ['.pdf', '.tsv', '.doc', '.docx', '.xlsx'];
   try {

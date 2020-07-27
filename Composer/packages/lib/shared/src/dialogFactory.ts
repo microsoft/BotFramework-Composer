@@ -80,7 +80,7 @@ const initialDialogShape = () => ({
         $designer: {
           id: generateDesignerId(),
         },
-        activity: '${SendActivity_QnAMatch()}',
+        activity: '',
       },
     ],
   },
@@ -105,7 +105,7 @@ const initialDialogShape = () => ({
         maxTurnCount: 3,
         alwaysPrompt: false,
         allowInterruptions: false,
-        prompt: '${ChoiceInput_Prompt_OnChooseIntent()}',
+        prompt: '',
         choiceOptions: {
           includeNumbers: true,
           inlineOrMore: ', or ',
@@ -235,7 +235,6 @@ class DialogFactory {
 
     const { $designer, ...propertyOverrides } = overrides;
     const defaultProperties = initialDialogShape()[$kind] || {};
-
     return merge(
       { $kind, $designer: merge({ id: generateDesignerId() }, $designer) },
       this.seedDefaults($kind),
