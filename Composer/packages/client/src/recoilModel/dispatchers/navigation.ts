@@ -8,7 +8,7 @@ import { PromptTab } from '@bfc/shared';
 
 import { getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
-import { focusPathState, breadcrumbState, designPageLocationState, projectIdState } from './../atoms/botState';
+import { focusPathState, breadcrumbState, designPageLocationState, currentProjectIdState } from './../atoms/botState';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
 
 export const navigationDispatcher = () => {
@@ -44,7 +44,7 @@ export const navigationDispatcher = () => {
 
   const navTo = useRecoilCallback(
     ({ snapshot }: CallbackInterface) => async (dialogId: string, breadcrumb: BreadcrumbItem[] = []) => {
-      const projectId = await snapshot.getPromise(projectIdState);
+      const projectId = await snapshot.getPromise(currentProjectIdState);
       const designPageLocation = await snapshot.getPromise(designPageLocationState);
       const currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
       if (checkUrl(currentUri, designPageLocation)) return;
@@ -58,7 +58,7 @@ export const navigationDispatcher = () => {
     if (!selectPath) return;
     const designPageLocation = await snapshot.getPromise(designPageLocationState);
     const breadcrumb = await snapshot.getPromise(breadcrumbState);
-    const currentProjectId = await snapshot.getPromise(projectIdState);
+    const currentProjectId = await snapshot.getPromise(currentProjectIdState);
     // initial dialogId, projectId maybe empty string  ""
     let { dialogId, projectId } = designPageLocation;
 
@@ -112,7 +112,7 @@ export const navigationDispatcher = () => {
       const search = getUrlSearch(selectPath, focusPath);
       const designPageLocation = await snapshot.getPromise(designPageLocationState);
       if (search) {
-        const projectId = await snapshot.getPromise(projectIdState);
+        const projectId = await snapshot.getPromise(currentProjectIdState);
         const currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
 
         if (checkUrl(currentUri, designPageLocation)) return;

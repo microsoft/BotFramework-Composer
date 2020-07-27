@@ -29,8 +29,7 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import {
-  dialogsState,
-  projectIdState,
+  dialogsNewState,
   schemasState,
   showCreateDialogModalState,
   dispatcherState,
@@ -39,32 +38,31 @@ import {
   visualEditorSelectionState,
   focusPathState,
   designPageLocationState,
-  // showAddSkillDialogModalState,
-  // skillsState,
-  // actionsSeedState,
-  // userSettingsState,
-  // designViewQuerySelector,
-  // botProjectsState,
+  showAddSkillDialogModalState,
+  skillsState,
+  actionsSeedState,
+  userSettingsState,
+  currentProjectIdState,
 } from '../../recoilModel';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
-  // breadcrumbClass,
-  // contentWrapper,
+  breadcrumbClass,
+  contentWrapper,
   deleteDialogContent,
-  // editorContainer,
-  // editorWrapper,
+  editorContainer,
+  editorWrapper,
   pageRoot,
   visualPanel,
 } from './styles';
-// import { VisualEditor } from './VisualEditor';
-// import { PropertyEditor } from './PropertyEditor';
+import { VisualEditor } from './VisualEditor';
+import { PropertyEditor } from './PropertyEditor';
 
-// const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
-// const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
-// const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
-// const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
-// const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
+const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
+const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
+const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
+const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
+const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
 
 function onRenderContent(subTitle, style) {
   return (
@@ -101,43 +99,43 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
-
-  const projectId = useRecoilValue(projectIdState);
-  // const schemas = useRecoilValue(schemasState);
-  // const displaySkillManifest = useRecoilValue(displaySkillManifestState);
+  const schemas = useRecoilValue(schemasState);
+  const displaySkillManifest = useRecoilValue(displaySkillManifestState);
   const breadcrumb = useRecoilValue(breadcrumbState);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
-  // const focusPath = useRecoilValue(focusPathState);
+  const focusPath = useRecoilValue(focusPathState);
   const designPageLocation = useRecoilValue(designPageLocationState);
-  // const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-  // const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
-  // const skills = useRecoilValue(skillsState);
-  // const actionsSeed = useRecoilValue(actionsSeedState);
-  // const userSettings = useRecoilValue(userSettingsState);
-  // const designView = useRecoilValue(designViewQuerySelector);
+  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
+  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
+  const skills = useRecoilValue(skillsState);
+  const actionsSeed = useRecoilValue(actionsSeedState);
+  const userSettings = useRecoilValue(userSettingsState);
   const {
     removeDialog,
     updateDialog,
-    // createDialogCancel,
+    createDialogCancel,
     createDialogBegin,
+    createDialog,
+    dismissManifestModal,
     setDesignPageLocation,
     navTo,
     selectTo,
     selectAndFocus,
-    // addSkillDialogCancel,
+    addSkillDialogCancel,
     updateLuFile,
-    // updateSkill,
+    updateSkill,
     exportToZip,
-    // onboardingAddCoachMarkRef,
+    onboardingAddCoachMarkRef,
+    setCurrentProjectId,
   } = useRecoilValue(dispatcherState);
-
+  const projectId = useRecoilValue(currentProjectIdState);
+  const dialogs = useRecoilValue(dialogsNewState(projectId));
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
-  const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
+  const [currentDialog, setCurrentDialog] = useState<DialogInfo>({} as DialogInfo);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const shell = useShell('ProjectTree');
   const triggerApi = useTriggerApi(shell.api);
@@ -156,9 +154,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [dialogId, dialogs, location]);
 
   useEffect(() => {
-    const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
-    if (index >= 0 && !designPageLocation.selected) {
-      selectTo(createSelectedPath(index));
+    if (currentDialog?.id) {
+      const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
+      if (index >= 0 && !designPageLocation.selected) {
+        selectTo(createSelectedPath(index));
+      }
     }
   }, [currentDialog?.id]);
 
@@ -212,7 +212,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateDialog(dialogPayload);
   };
 
-  function handleSelect(id, selected = '') {
+  function handleSelect(projectId, id, selected = '') {
+    setCurrentProjectId(projectId);
     if (selected) {
       selectTo(selected);
     } else {
@@ -399,63 +400,63 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  // const breadcrumbItems = useMemo(() => {
-  //   const items =
-  //     dialogs.length > 0
-  //       ? breadcrumb.reduce((result, item, index) => {
-  //           const { dialogId, selected, focused } = item;
-  //           const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
-  //           if (text) {
-  //             result.push({
-  //               // @ts-ignore
-  //               index,
-  //               isRoot: !selected && !focused,
-  //               text,
-  //               ...item,
-  //               onClick: handleBreadcrumbItemClick,
-  //             });
-  //           }
-  //           return result;
-  //         }, [] as IBreadcrumbItem[])
-  //       : [];
-  //   return (
-  //     <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
-  //       <Breadcrumb
-  //         ariaLabel={formatMessage('Navigation Path')}
-  //         data-testid="Breadcrumb"
-  //         items={items}
-  //         maxDisplayedItems={3}
-  //         styles={breadcrumbClass}
-  //         onReduceData={() => undefined}
-  //         onRenderItem={onRenderBreadcrumbItem}
-  //       />
-  //       <div style={{ padding: '10px' }}>
-  //         <ActionButton
-  //           onClick={() => {
-  //             setDialogJsonVisibility((current) => !current);
-  //           }}
-  //         >
-  //           {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-  //         </ActionButton>
-  //       </div>
-  //     </div>
-  //   );
-  // }, [dialogs, breadcrumb, dialogJsonVisible]);
+  const breadcrumbItems = useMemo(() => {
+    const items =
+      dialogs.length > 0
+        ? breadcrumb.reduce((result, item, index) => {
+            const { dialogId, selected, focused } = item;
+            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+            if (text) {
+              result.push({
+                // @ts-ignore
+                index,
+                isRoot: !selected && !focused,
+                text,
+                ...item,
+                onClick: handleBreadcrumbItemClick,
+              });
+            }
+            return result;
+          }, [] as IBreadcrumbItem[])
+        : [];
+    return (
+      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
+        <Breadcrumb
+          ariaLabel={formatMessage('Navigation Path')}
+          data-testid="Breadcrumb"
+          items={items}
+          maxDisplayedItems={3}
+          styles={breadcrumbClass}
+          onReduceData={() => undefined}
+          onRenderItem={onRenderBreadcrumbItem}
+        />
+        <div style={{ padding: '10px' }}>
+          <ActionButton
+            onClick={() => {
+              setDialogJsonVisibility((current) => !current);
+            }}
+          >
+            {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+          </ActionButton>
+        </div>
+      </div>
+    );
+  }, [dialogs, breadcrumb, dialogJsonVisible]);
 
-  // function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
-  //   updateSkill({ projectId, targetId: -1, skillData });
-  // }
+  function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
+    updateSkill({ projectId, targetId: -1, skillData });
+  }
 
-  // function handleCreateDialogSubmit(data: { name: string; description: string }) {
-  //   const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
-  //     $designer: { name: data.name, description: data.description },
-  //     generator: `${data.name}.lg`,
-  //   });
-  //   if (seededContent.triggers?.[0]) {
-  //     seededContent.triggers[0].actions = actionsSeed;
-  //   }
-  //   createDialog({ id: data.name, content: seededContent });
-  // }
+  function handleCreateDialogSubmit(data: { name: string; description: string }) {
+    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
+      $designer: { name: data.name, description: data.description },
+      generator: `${data.name}.lg`,
+    });
+    if (seededContent.triggers?.[0]) {
+      seededContent.triggers[0].actions = actionsSeed;
+    }
+    createDialog({ id: data.name, content: seededContent });
+  }
 
   async function handleDeleteDialog(id) {
     const refs = getAllRef(id, dialogs);
@@ -505,9 +506,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       }
     }
   }
-  // const addNewBtnRef = useCallback((addNew) => {
-  //   onboardingAddCoachMarkRef({ addNew });
-  // }, []);
+  const addNewBtnRef = useCallback((addNew) => {
+    onboardingAddCoachMarkRef({ addNew });
+  }, []);
 
   if (!dialogId) {
     return <LoadingSpinner />;
@@ -524,8 +525,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           onDeleteTrigger={handleDeleteTrigger}
           onSelect={handleSelect}
         />
-        {/*  <div css={contentWrapper} role="main">
-          <div css={{ position: 'relative' }} data-testid="DesignPage-Toolbar">
+        <div css={contentWrapper} role="main">
+          <div css={{ position: 'relative' }} data-testid="DesignPage-ToolBar">
             <span
               ref={addNewBtnRef}
               css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
@@ -555,9 +556,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
               <PropertyEditor key={focusPath} />
             </div>
           </Conversation>
-        </div> */}
+        </div>
       </div>
-      {/* <Suspense fallback={<LoadingSpinner />}>
+      <Suspense fallback={<LoadingSpinner />}>
         {showCreateDialogModal && (
           <CreateDialogModal
             isOpen={showCreateDialogModal}
@@ -593,7 +594,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         {displaySkillManifest && (
           <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />
         )}
-      </Suspense> */}
+      </Suspense>
     </React.Fragment>
   );
 };
