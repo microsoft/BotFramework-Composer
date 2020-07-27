@@ -82,7 +82,7 @@ export const TestController: React.FC = () => {
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
-  const publishConfig = merge(settings.luis, { subscriptionKey: Object(settings.qna).subscriptionKey }) as IConfig;
+  const publishConfig = { subscriptionKey: settings.qna.subscriptionKey, ...settings.luis };
   const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
   const showWarning = !showError && warningLength > 0;
 
@@ -223,7 +223,7 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      {settings.luis && (
+      {settings.luis && modalOpen && (
         <PublishDialog
           botName={botName}
           config={publishConfig}
