@@ -5,7 +5,7 @@ context('Creating a new bot', () => {
   beforeEach(() => {
     cy.visit('/home');
     cy.findByTestId('LeftNav-CommandBarButtonHome').click();
-    cy.findByTestId('homePage-ToolBar-New').within(() => {
+    cy.findByTestId('homePage-Toolbar-New').within(() => {
       cy.findByText('New').click();
     });
   });
