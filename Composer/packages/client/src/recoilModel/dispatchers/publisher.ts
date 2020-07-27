@@ -68,20 +68,21 @@ export const publisherDispatcher = () => {
     if (status !== 404) {
       set(publishHistoryState, (publishHistory) => {
         const currentHistory = { ...data, target: target };
-        const targetHistories = publishHistory[target.name];
+        let targetHistories = publishHistory[target.name];
         // if no history exists, create one with the latest status
         // otherwise, replace the latest publish history with this one
         if (!targetHistories) {
-          publishHistory[target.name] = [currentHistory];
+          targetHistories = [currentHistory];
         } else {
           // make sure this status payload represents the same item as item 0 (most of the time)
           // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
           if (targetHistories.length && targetHistories[0].id === id) {
-            publishHistory[target.name][0] = currentHistory;
+            targetHistories[0] = currentHistory;
           } else {
-            publishHistory[target.name].unshift(currentHistory);
+            targetHistories.unshift(currentHistory);
           }
         }
+        publishHistory[target.name] = targetHistories;
         return publishHistory;
       });
     }
