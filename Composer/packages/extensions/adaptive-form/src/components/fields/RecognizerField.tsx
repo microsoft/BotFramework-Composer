@@ -51,7 +51,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
         return involvedCustomItem;
       }
     }
-    if (selected.length !== 1) {
+    if (selected.length < 1) {
       /* istanbul ignore next */
       if (process.env.NODE_ENV === 'development') {
         console.error(
