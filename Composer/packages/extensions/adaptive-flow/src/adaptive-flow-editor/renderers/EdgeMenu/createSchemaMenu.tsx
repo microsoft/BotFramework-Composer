@@ -19,12 +19,14 @@ import { MenuEventTypes } from '../../constants/MenuTypes';
 type ActionMenuItemClickHandler = (item?: IContextualMenuItem) => any;
 type ActionKindFilter = ($kind: SDKKinds) => boolean;
 
+type MenuTree = { [key: string]: SDKKinds | MenuTree };
+
 const createBaseActionMenu = (
   menuSchema: MenuUISchema,
   onClick: ActionMenuItemClickHandler,
   filter?: ActionKindFilter
 ): IContextualMenuItem[] => {
-  const menuTree = Object.entries(menuSchema).reduce((result, [$kind, options]) => {
+  const menuTree: MenuTree = Object.entries(menuSchema).reduce((result, [$kind, options]) => {
     if (filter && !filter($kind as SDKKinds)) return result;
 
     const optionList: MenuOptions[] = Array.isArray(options) ? options : options ? [options] : [];
@@ -43,7 +45,7 @@ const createBaseActionMenu = (
     return result;
   }, {});
 
-  const genMenuItem = (labelName: string, labelData: string | object): IContextualMenuItem => {
+  const buildMenuItemFromMenuTree = (labelName: string, labelData: SDKKinds | MenuTree): IContextualMenuItem => {
     if (typeof labelData === 'string') {
       const $kind = labelData;
       return {
@@ -53,14 +55,14 @@ const createBaseActionMenu = (
       };
     } else {
       const subMenuItems: IContextualMenuItem[] = Object.entries(labelData).map(([sublabelName, sublabelData]) =>
-        genMenuItem(sublabelName, sublabelData)
+        buildMenuItemFromMenuTree(sublabelName, sublabelData)
       );
       return createSubMenu(labelName, onClick, subMenuItems);
     }
   };
 
   const stepMenuItems = Object.entries(menuTree).map(([labelName, labelData]) =>
-    genMenuItem(labelName, labelData as any)
+    buildMenuItemFromMenuTree(labelName, labelData)
   );
 
   return stepMenuItems;
