@@ -1,9 +1,7 @@
 {
   "$schema": "https://schemas.botframework.com/schemas/botprojects/v0.1/provisioningProfile-schema.json",
   "accessToken": "SDFSDFSDFSDBNASKDJASDJJLKJSADJLKMXRNZW",
-  "name": "SampleSkill",
   "environment": "dev",
-  "hostname": "SampleSkill-dev",
   "MicrosoftAppId": "fd38ebff-02e2-427c-234234-234234",
   "MicrosoftAppPassword": "XYZSASJDLKASjksdhfks!sfs",
   "blobStorage": {
@@ -11,13 +9,12 @@
     "container": "transcripts"
   },
   "cosmosDb": {
-    "cosmosDBEndpoint": "https://todoluissample2-dev.documents.azure.com:443/",
+    "endpoint": "https://todoluissample2-dev.documents.azure.com:443/",
     "authKey": "XSFDDSFOHOI"
   },
   "qna": {
-    "knowledgebaseid": "6ea9080e0dsfsdfsdfb4c44",
-    "endpointkey": "https://composerdemovenky.cognitiveservices.azure.com/qnamaker/v4.0/knowledgebases/89366431-a501-324324-asdhas",
-    "hostname": "qna-host"
+    "knowledgebaseId": "6ea9080e0dsfsdfsdfb4c44",
+    "endpoint": "https://composerdemovenky.cognitiveservices.azure.com/qnamaker/v4.0/knowledgebases/89366431-a501-324324-asdhas"
   },
   "luis": {
     "endpointKey": "234kj23h4asdjajdkjashdkjAAsad",
@@ -27,6 +24,6 @@
     "authoringEndpoint": "https://westus.api.cognitive.microsoft.com/"
   },
   "applicationInsights": {
-    "InstrumentationKey": "Asdfsdfa23432adsfsdf"
+    "endpointKey": "Asdfsdfa23432adsfsdf!sdsad"
   }
 }

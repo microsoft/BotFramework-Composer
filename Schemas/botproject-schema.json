@@ -3,9 +3,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$version": "0.1",
   "title": "Virtual Assistant and Skills workspace schema",
-  "description": "This is a schema that captures the relationship between the virtual assistant and its skills",
+  "description": "This is a schema that captures the relationship between the virtual assistant and its skills.",
   "type": "object",
-  "required": ["$schema", "name", "workspace"],
+  "required": ["$schema", "name", "workspace", "skills"],
   "properties": {
     "$schema": {
       "type": "string",
@@ -14,18 +14,21 @@
     },
     "name": {
       "type": "string",
-      "description": "Name of the Virtual Assistant"
+      "description": "Name of the Virtual Assistant or Root Bot."
     },
     "workspace": {
       "type": "string",
-      "description": "Path to the virtual assistant. Relative to the workspace file or an absolute path"
+      "description": "Path to the virtual assistant or Root Bot. Relative to the workspace file or an absolute path."
     },
-    "provisioningProfile": { "$ref": "#/definitions/provisioningProfile" },
+    "provisioningProfile": {
+      "type": "string",
+      "description": "Path to provisioning profile."
+    },
     "skills": {
       "type": "array",
       "minItems": 0,
       "uniqueItems": true,
-      "description": "List of endpoints supported by the skill",
+      "description": "List of skills callable.",
       "items": {
         "$ref": "#/definitions/skill"
       }
@@ -34,36 +37,35 @@
   "definitions": {
     "skill": {
       "type": "object",
-      "description": "Properties",
+      "description": "Properties of a skill.",
       "additionalProperties": false,
       "required": ["manifest", "remote"],
       "properties": {
         "manifest": {
           "type": "string",
-          "description": "Path to the manifest file on local file system or a URL to a remote skill"
+          "description": "Path to the manifest file on local file system or a URL to a remote skill."
         },
         "workspace": {
           "type": "string",
-          "description": "Path to the local skill project"
+          "description": "Path to the local skill project."
         },
         "remote": {
           "type": "string",
-          "description": "Indication if the skill is remote or local skill",
+          "description": "Indication if the skill is remote or local skill.",
           "$ref": "#/definitions/booleanExpression",
           "title": "isRemote",
           "default": false
         },
         "endpointName": {
           "type": "string",
-          "description": "Indicates the name of the skill endpoint to use for binding with the Virtual assistant. If skill is remote no need for this property.",
+          "description": "Indicates the name of the skill endpoint to use for writing the skill URL. If skill is remote no need for this property.",
           "default": "default"
         },
-        "provisioningProfile": { "$ref": "#/definitions/provisioningProfile" }
+        "provisioningProfile": {
+          "type": "string",
+          "description": "Path to provisioning profile."
+        }
       }
-    },
-    "provisioningProfile": {
-      "type": "string",
-      "description": "Path to provisioning profile"
     }
   }
 }

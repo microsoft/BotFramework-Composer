@@ -21,10 +21,6 @@
         "type": "string",
         "description": "Micorosft App Password of the resource"
       },
-      "hostname": {
-        "type": "string",
-        "description": "Optional hostname"
-      },
       "name": {
         "type": "string",
         "description": "Optional name of the publishing target"
@@ -37,7 +33,7 @@
         "type": "object",
         "description": "Application Insights resourcing",
         "properties": {
-          "instrumentationKey": {
+          "endpointKey": {
             "type": "string",
             "description": "Instrumentation key for application insights"
           }
@@ -59,7 +55,7 @@
       },
       "luis": {
         "type": "object",
-        "description": "LUIS resourcing properties",
+        "description": "LUIS provisioning for a bot",
         "properties": {
           "endpointKey": {
             "type": "string",
@@ -85,19 +81,29 @@
       },
       "qna": {
         "type": "object",
-        "description": "Qna maker resourcing properties",
+        "description": "Qna maker provisioning for a bot",
         "properties": {
           "knowledgebaseid": {
             "type": "string",
             "description": "Qna maker knowledge base id"
           },
-          "endpointkey": {
+          "endpoint": {
             "type": "string",
-            "description": "Endpoint key for Qna maker resource"
+            "description": "Hostname for QNA maker resource"
+          }
+        }
+      },
+      "cosmosDb": {
+        "type": "object",
+        "description": "Cosmos db provisioning for a bot",
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "description": "Endpoint configuration for cosmos db"
           },
-          "hostname": {
+          "authKey": {
             "type": "string",
-            "description": "Qna maker hostname"
+            "description": "Authorization key for cosmos db"
           }
         }
       }
