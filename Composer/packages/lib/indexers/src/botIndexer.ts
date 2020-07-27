@@ -4,8 +4,10 @@
  * Verify bot settings, files meet LUIS/QnA requirments.
  */
 
-import { BotAssets, BotInfo, LUISLocales, Diagnostic, DiagnosticSeverity } from '@bfc/shared';
+import { BotAssets, BotInfo, LUISLocales, Diagnostic, DiagnosticSeverity, LuFile } from '@bfc/shared';
 import difference from 'lodash/difference';
+
+import { getLocale } from './utils/help';
 
 // Verify bot settings, files meet LUIS/QnA requirments.
 const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
@@ -54,8 +56,16 @@ const checkSkillSetting = (assets: BotAssets): Diagnostic[] => {
   return diagnostics;
 };
 
+const filterLUISFilesToPublish = (luFiles: LuFile[]): LuFile[] => {
+  return luFiles.filter((file) => {
+    const locale = getLocale(file.id);
+    return locale && LUISLocales.includes(locale);
+  });
+};
+
 const index = (name: string, assets: BotAssets): BotInfo => {
-  const diagnostics = [];
+  const diagnostics: Diagnostic[] = [];
+  diagnostics.push(...checkLUISLocales(assets), ...checkSkillSetting(assets));
 
   return {
     name,
@@ -68,4 +78,5 @@ export const BotIndexer = {
   index,
   checkLUISLocales,
   checkSkillSetting,
+  filterLUISFilesToPublish,
 };

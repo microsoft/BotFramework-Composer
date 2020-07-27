@@ -18,6 +18,7 @@ import {
 import {
   Notification,
   DialogNotification,
+  SettingNotification,
   LuNotification,
   LgNotification,
   ServerNotification,
@@ -52,6 +53,11 @@ export default function useNotifications(filter?: string) {
       } else {
         notifactions.push(new DialogNotification(projectId, item.source, item.source, item));
       }
+    });
+    const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
+
+    luisLocaleDiagnostics.forEach((item) => {
+      notifactions.push(new SettingNotification(projectId, item.source, item.source, item));
     });
 
     dialogs.forEach((dialog) => {

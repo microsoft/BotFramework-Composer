@@ -198,3 +198,9 @@ export type BotAssets = {
   skillManifests: SkillManifest[];
   setting: DialogSetting;
 };
+
+export interface BotInfo {
+  assets: BotAssets;
+  diagnostics: Diagnostic[];
+  name: string;
+}
