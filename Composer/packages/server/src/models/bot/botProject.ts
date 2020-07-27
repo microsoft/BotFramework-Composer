@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, ILuisConfig } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -21,7 +21,6 @@ import { ICrossTrainConfig, Builder } from './builder';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { extractSkillManifestUrl } from './skillManager';
-import { DialogSetting } from './interface';
 import { defaultFilePath, serializeFiles } from './botStructure';
 
 const debug = log.extend('bot-project');
@@ -34,7 +33,7 @@ const oauthInput = () => ({
 
 const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
 
-export class BotProject {
+export class BotProject implements IBotProject {
   public ref: LocationRef;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
   public id: string | undefined;
