@@ -17,9 +17,3 @@ I can show you examples on how to use actions, You can enter number 01-07
 
 # Welcome
 -Welcome to input samples.
-
-# ChoiceInput_Prompt_OnChooseIntent()
-- Which intent do you want to trigger?
-
-# SendActivity_QnAMatch()
-- ${expandText(@answer)}

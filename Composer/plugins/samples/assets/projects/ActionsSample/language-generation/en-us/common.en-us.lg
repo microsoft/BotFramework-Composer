@@ -16,9 +16,3 @@
 
 # SendActivity_839941
 -Hello ${user.name}, nice to meet you!
-
-# ChoiceInput_Prompt_OnChooseIntent()
-- Which intent do you want to trigger?
-
-# SendActivity_QnAMatch()
-- ${expandText(@answer)}
