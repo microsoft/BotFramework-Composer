@@ -48,6 +48,7 @@ import {
   boilerplateVersionState,
   botProjectsState,
   dialogsNewState,
+  currentProjectIdState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 
@@ -442,9 +443,11 @@ export const projectDispatcher = () => {
       }
       const projectIds = results.map((result) => result.projectId);
       callbackHelpers.set(botProjectsState, projectIds);
+
       results.forEach((result, index) => {
         callbackHelpers.set(dialogsNewState(result.projectId), result.dialogs);
         if (index === 0) {
+          callbackHelpers.set(currentProjectIdState, result.projectId);
           navigateTo(result.mainUrl);
         }
       });
@@ -453,8 +456,16 @@ export const projectDispatcher = () => {
     }
   });
 
+  const setCurrentProjectId = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    try {
+      callbackHelpers.set(currentProjectIdState, projectId);
+    } catch (ex) {
+      setError(callbackHelpers, ex);
+    }
+  });
+
   return {
-    openBotProject,
+    openBotProject: openBotProjectWorkspace,
     createProject,
     deleteBotProject,
     saveProjectAs,
@@ -469,5 +480,6 @@ export const projectDispatcher = () => {
     updateBoilerplate,
     getBoilerplateVersion,
     openBotProjectWorkspace,
+    setCurrentProjectId,
   };
 };

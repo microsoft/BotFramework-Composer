@@ -197,3 +197,8 @@ export const dialogsNewState = atomFamily<DialogInfo[], string>({
     return [];
   },
 });
+
+export const currentProjectIdState = atom<string>({
+  key: getFullyQualifiedKey('currentProjectId'),
+  default: '',
+});

@@ -8,6 +8,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { DialogInfo, ITrigger } from '@bfc/shared/src/types/indexers';
 import { IGroupedList } from 'office-ui-fabric-react/lib/GroupedList';
 import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
+import { jsx, css } from '@emotion/core';
 
 import { dialogsNewState, dispatcherState } from '../../recoilModel';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
@@ -27,7 +28,7 @@ interface IIndividualProjectTreeProps {
   projectId: string;
   dialogId: string;
   selected: string;
-  onSelect: (id: string, selected?: string) => void;
+  onSelect: (projectId: string, id: string, selected?: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
   filter: string;
@@ -90,6 +91,7 @@ function createItemsAndGroups(
       },
       { items: [], groups: [] }
     );
+  console.log(result);
   return result;
 }
 
@@ -117,7 +119,7 @@ export const IndividualProjectTree: React.FC<IIndividualProjectTreeProps> = ({
     const toggleCollapse = (): void => {
       groupRef.current?.toggleCollapseAll(true);
       props.onToggleCollapse?.(props.group!);
-      onSelect(props.group!.key);
+      onSelect(projectId, props.group!.key);
     };
     return (
       <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
@@ -140,7 +142,7 @@ export const IndividualProjectTree: React.FC<IIndividualProjectTreeProps> = ({
         isActive={createSelectedPath(item.index) === selected}
         link={item}
         onDelete={() => onDeleteTrigger(dialogId, item.index)}
-        onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
+        onSelect={() => onSelect(projectId, dialogId, createSelectedPath(item.index))}
       />
     );
   }
@@ -151,23 +153,22 @@ export const IndividualProjectTree: React.FC<IIndividualProjectTreeProps> = ({
 
   return (
     <Fragment>
-      {dialogs.map((dialogId) => {
-        <GroupedList
-          {...itemsAndGroups}
-          componentRef={groupRef}
-          groupProps={
-            {
-              onRenderHeader: onRenderHeader,
-              onRenderShowAll: onRenderShowAll,
-              showEmptyGroups: true,
-              showAllProps: false,
-              isAllGroupsCollapsed: true,
-            } as Partial<IGroupRenderProps>
-          }
-          styles={groupListStyle}
-          onRenderCell={onRenderCell}
-        />;
-      })}
+      <GroupedList
+        {...itemsAndGroups}
+        componentRef={groupRef}
+        groupProps={
+          {
+            onRenderHeader: onRenderHeader,
+            onRenderShowAll: onRenderShowAll,
+            showEmptyGroups: true,
+            showAllProps: false,
+            isAllGroupsCollapsed: true,
+          } as Partial<IGroupRenderProps>
+        }
+        styles={groupListStyle}
+        onRenderCell={onRenderCell}
+      />
+      <hr />
     </Fragment>
   );
 };
