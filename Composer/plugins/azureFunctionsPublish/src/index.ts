@@ -219,7 +219,7 @@ class AzurePublisher {
     } = config;
 
     // point to the declarative assets (possibly in remote storage)
-    const botFiles = project.files;
+    const botFiles = project.getProject().files;
 
     // get the bot id from the project
     const botId = project.id;
