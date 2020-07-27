@@ -68,7 +68,7 @@ export const publisherDispatcher = () => {
     if (status !== 404) {
       set(publishHistoryState, (publishHistory) => {
         const currentHistory = { ...data, target: target };
-        let targetHistories = publishHistory[target.name];
+        let targetHistories = publishHistory[target.name] ? [...publishHistory[target.name]] : [];
         // if no history exists, create one with the latest status
         // otherwise, replace the latest publish history with this one
         if (!targetHistories) {
@@ -82,8 +82,7 @@ export const publisherDispatcher = () => {
             targetHistories.unshift(currentHistory);
           }
         }
-        publishHistory[target.name] = targetHistories;
-        return publishHistory;
+        return { ...publishHistory, [target.name]: targetHistories };
       });
     }
   };
@@ -155,6 +154,7 @@ export const publisherDispatcher = () => {
         const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
+        console.log(err);
         updatePublishStatus(callbackHelpers, projectId, target, err.response.data);
       }
     }
