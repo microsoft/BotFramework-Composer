@@ -1,8 +1,2 @@
 # WelcomeUser
 - Welcome to the EmptyBot sample
-
-# ChoiceInput_Prompt_OnChooseIntent()
-- Which intent do you want to trigger?
-
-# SendActivity_QnAMatch()
-- ${expandText(@answer)}
