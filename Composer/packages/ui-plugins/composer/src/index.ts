@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FormUISchema, RecognizerSchema } from '@bfc/extension';
+import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema } from '@bfc/extension';
 import { IntentField, RecognizerField, RegexIntentField } from '@bfc/adaptive-form';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import mapValues from 'lodash/mapValues';
+
+import { DefaultMenuSchema } from './defaultMenuSchema';
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
@@ -343,8 +345,20 @@ const DefaultFormSchema: FormUISchema = {
   },
 };
 
+const synthesizeUISchema = (formSchema: FormUISchema, menuSchema: MenuUISchema): UISchema => {
+  const uiSchema: UISchema = mapValues(formSchema, (val) => ({ form: val }));
+  for (const [$kind, menuConfig] of Object.entries(menuSchema)) {
+    if (uiSchema[$kind]) {
+      uiSchema[$kind].menu = menuConfig;
+    } else {
+      uiSchema[$kind] = { menu: menuConfig };
+    }
+  }
+  return uiSchema;
+};
+
 const config: PluginConfig = {
-  uiSchema: mapValues(DefaultFormSchema, (val) => ({ form: val })),
+  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema),
   recognizers: DefaultRecognizers,
 };
 
