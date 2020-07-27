@@ -454,7 +454,7 @@ export const projectDispatcher = () => {
   });
 
   return {
-    openBotProject: openBotProjectWorkspace,
+    openBotProject,
     createProject,
     deleteBotProject,
     saveProjectAs,

@@ -2,40 +2,22 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { jsx, css } from '@emotion/core';
-import {
-  GroupedList,
-  IGroup,
-  IGroupHeaderProps,
-  IGroupRenderProps,
-  IGroupedList,
-} from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
-import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
-import { DialogInfo, ITrigger } from '@bfc/shared';
+import { DialogInfo } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
-import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
-import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 
-import { TreeItem } from './treeItem';
 import { ProjectTreeContainer } from './ProjectTreeContainer';
 
 // -------------------- Styles -------------------- //
-
-const groupListStyle: Partial<IGroupedListStyles> = {
-  root: {
-    width: '100%',
-    boxSizing: 'border-box',
-  },
-};
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -59,64 +41,6 @@ const root = css`
 
 // -------------------- ProjectTree -------------------- //
 
-function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
-  return {
-    key: dialog.id,
-    name: dialog.displayName,
-    level: 1,
-    startIndex: position,
-    count: dialog.triggers.length,
-    hasMoreData: true,
-    isCollapsed: dialog.id !== currentId,
-    data: dialog,
-  };
-}
-
-function createItem(trigger: ITrigger, index: number) {
-  return {
-    ...trigger,
-    index,
-    displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
-  };
-}
-
-function sortDialog(dialogs: DialogInfo[]) {
-  const dialogsCopy = cloneDeep(dialogs);
-  return dialogsCopy.sort((x, y) => {
-    if (x.isRoot) {
-      return -1;
-    } else if (y.isRoot) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
-}
-
-function createItemsAndGroups(
-  dialogs: DialogInfo[],
-  dialogId: string,
-  filter: string
-): { items: any[]; groups: IGroup[] } {
-  let position = 0;
-  const result = dialogs
-    .filter((dialog) => {
-      return dialog.displayName.toLowerCase().includes(filter.toLowerCase());
-    })
-    .reduce(
-      (result: { items: any[]; groups: IGroup[] }, dialog) => {
-        result.groups.push(createGroupItem(dialog, dialogId, position));
-        position += dialog.triggers.length;
-        dialog.triggers.forEach((item, index) => {
-          result.items.push(createItem(item, index));
-        });
-        return result;
-      },
-      { items: [], groups: [] }
-    );
-  return result;
-}
-
 interface IProjectTreeProps {
   dialogs: DialogInfo[];
   dialogId: string;
@@ -127,14 +51,12 @@ interface IProjectTreeProps {
 }
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
-  const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
+  const { updateUserSettings } = useRecoilValue(dispatcherState);
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
-  const groupRef: React.RefObject<IGroupedList> = useRef(null);
-  const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
+  const { dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
-  const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
 
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
@@ -172,7 +94,26 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
             styles={searchBox}
             onChange={onFilter}
           />
+          <div
+            aria-label={formatMessage(
+              `{
+            dialogNum, plural,
+                =0 {No dialogs}
+                =1 {One dialog}
+              other {# dialogs}
+            } have been found.
+            {
+              dialogNum, select,
+                  0 {}
+                other {Press down arrow key to navigate the search results}
+            }`,
+              { dialogNum: 10 }
+            )}
+            aria-live={'polite'}
+          />
           <ProjectTreeContainer
+            dialogId={dialogId}
+            filter={filter}
             selected={selected}
             onDeleteDialog={onDeleteDialog}
             onDeleteTrigger={onDeleteTrigger}

@@ -22,10 +22,18 @@ export const ProjectTreeContainer: React.FC<IProjectTreeProps> = (props: IProjec
 
   return (
     <Fragment>
-      {botProjects.map((projectId) => {
-        console.log(projectId);
-        return <IndividualProjectTree key={projectId} projectId={projectId} {...props} />;
-      })}
+      {botProjects.map((projectId) => (
+        <IndividualProjectTree
+          key={projectId}
+          dialogId={props.dialogId}
+          filter={props.filter}
+          projectId={projectId}
+          selected={props.selected}
+          onDeleteDialog={props.onDeleteDialog}
+          onDeleteTrigger={props.onDeleteTrigger}
+          onSelect={props.onSelect}
+        />
+      ))}
     </Fragment>
   );
 };

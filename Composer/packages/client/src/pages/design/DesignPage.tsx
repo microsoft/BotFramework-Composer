@@ -39,30 +39,32 @@ import {
   visualEditorSelectionState,
   focusPathState,
   designPageLocationState,
-  showAddSkillDialogModalState,
-  skillsState,
-  actionsSeedState,
-  userSettingsState,
+  // showAddSkillDialogModalState,
+  // skillsState,
+  // actionsSeedState,
+  // userSettingsState,
+  // designViewQuerySelector,
+  // botProjectsState,
 } from '../../recoilModel';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
-  breadcrumbClass,
-  contentWrapper,
+  // breadcrumbClass,
+  // contentWrapper,
   deleteDialogContent,
-  editorContainer,
-  editorWrapper,
+  // editorContainer,
+  // editorWrapper,
   pageRoot,
   visualPanel,
 } from './styles';
-import { VisualEditor } from './VisualEditor';
-import { PropertyEditor } from './PropertyEditor';
+// import { VisualEditor } from './VisualEditor';
+// import { PropertyEditor } from './PropertyEditor';
 
-const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
-const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
-const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
-const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
-const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
+// const CreateSkillModal = React.lazy(() => import('../../components/CreateSkillModal'));
+// const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
+// const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
+// const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
+// const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
 
 function onRenderContent(subTitle, style) {
   return (
@@ -100,34 +102,34 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const dialogs = useRecoilValue(dialogsState);
+
   const projectId = useRecoilValue(projectIdState);
-  const schemas = useRecoilValue(schemasState);
-  const displaySkillManifest = useRecoilValue(displaySkillManifestState);
+  // const schemas = useRecoilValue(schemasState);
+  // const displaySkillManifest = useRecoilValue(displaySkillManifestState);
   const breadcrumb = useRecoilValue(breadcrumbState);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
-  const focusPath = useRecoilValue(focusPathState);
+  // const focusPath = useRecoilValue(focusPathState);
   const designPageLocation = useRecoilValue(designPageLocationState);
-  const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
-  const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
-  const skills = useRecoilValue(skillsState);
-  const actionsSeed = useRecoilValue(actionsSeedState);
-  const userSettings = useRecoilValue(userSettingsState);
+  // const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
+  // const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
+  // const skills = useRecoilValue(skillsState);
+  // const actionsSeed = useRecoilValue(actionsSeedState);
+  // const userSettings = useRecoilValue(userSettingsState);
+  // const designView = useRecoilValue(designViewQuerySelector);
   const {
     removeDialog,
     updateDialog,
-    createDialogCancel,
+    // createDialogCancel,
     createDialogBegin,
-    createDialog,
-    dismissManifestModal,
     setDesignPageLocation,
     navTo,
     selectTo,
     selectAndFocus,
-    addSkillDialogCancel,
+    // addSkillDialogCancel,
     updateLuFile,
-    updateSkill,
+    // updateSkill,
     exportToZip,
-    onboardingAddCoachMarkRef,
+    // onboardingAddCoachMarkRef,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
@@ -397,63 +399,63 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }
 
-  const breadcrumbItems = useMemo(() => {
-    const items =
-      dialogs.length > 0
-        ? breadcrumb.reduce((result, item, index) => {
-            const { dialogId, selected, focused } = item;
-            const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
-            if (text) {
-              result.push({
-                // @ts-ignore
-                index,
-                isRoot: !selected && !focused,
-                text,
-                ...item,
-                onClick: handleBreadcrumbItemClick,
-              });
-            }
-            return result;
-          }, [] as IBreadcrumbItem[])
-        : [];
-    return (
-      <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
-        <Breadcrumb
-          ariaLabel={formatMessage('Navigation Path')}
-          data-testid="Breadcrumb"
-          items={items}
-          maxDisplayedItems={3}
-          styles={breadcrumbClass}
-          onReduceData={() => undefined}
-          onRenderItem={onRenderBreadcrumbItem}
-        />
-        <div style={{ padding: '10px' }}>
-          <ActionButton
-            onClick={() => {
-              setDialogJsonVisibility((current) => !current);
-            }}
-          >
-            {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
-          </ActionButton>
-        </div>
-      </div>
-    );
-  }, [dialogs, breadcrumb, dialogJsonVisible]);
+  // const breadcrumbItems = useMemo(() => {
+  //   const items =
+  //     dialogs.length > 0
+  //       ? breadcrumb.reduce((result, item, index) => {
+  //           const { dialogId, selected, focused } = item;
+  //           const text = getbreadcrumbLabel(dialogs, dialogId, selected, focused);
+  //           if (text) {
+  //             result.push({
+  //               // @ts-ignore
+  //               index,
+  //               isRoot: !selected && !focused,
+  //               text,
+  //               ...item,
+  //               onClick: handleBreadcrumbItemClick,
+  //             });
+  //           }
+  //           return result;
+  //         }, [] as IBreadcrumbItem[])
+  //       : [];
+  //   return (
+  //     <div style={{ display: 'flex', justifyContent: 'space-between', height: '65px' }}>
+  //       <Breadcrumb
+  //         ariaLabel={formatMessage('Navigation Path')}
+  //         data-testid="Breadcrumb"
+  //         items={items}
+  //         maxDisplayedItems={3}
+  //         styles={breadcrumbClass}
+  //         onReduceData={() => undefined}
+  //         onRenderItem={onRenderBreadcrumbItem}
+  //       />
+  //       <div style={{ padding: '10px' }}>
+  //         <ActionButton
+  //           onClick={() => {
+  //             setDialogJsonVisibility((current) => !current);
+  //           }}
+  //         >
+  //           {dialogJsonVisible ? formatMessage('Hide code') : formatMessage('Show code')}
+  //         </ActionButton>
+  //       </div>
+  //     </div>
+  //   );
+  // }, [dialogs, breadcrumb, dialogJsonVisible]);
 
-  function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
-    updateSkill({ projectId, targetId: -1, skillData });
-  }
+  // function handleAddSkillDialogSubmit(skillData: { manifestUrl: string }) {
+  //   updateSkill({ projectId, targetId: -1, skillData });
+  // }
 
-  function handleCreateDialogSubmit(data: { name: string; description: string }) {
-    const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
-      $designer: { name: data.name, description: data.description },
-      generator: `${data.name}.lg`,
-    });
-    if (seededContent.triggers?.[0]) {
-      seededContent.triggers[0].actions = actionsSeed;
-    }
-    createDialog({ id: data.name, content: seededContent });
-  }
+  // function handleCreateDialogSubmit(data: { name: string; description: string }) {
+  //   const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
+  //     $designer: { name: data.name, description: data.description },
+  //     generator: `${data.name}.lg`,
+  //   });
+  //   if (seededContent.triggers?.[0]) {
+  //     seededContent.triggers[0].actions = actionsSeed;
+  //   }
+  //   createDialog({ id: data.name, content: seededContent });
+  // }
 
   async function handleDeleteDialog(id) {
     const refs = getAllRef(id, dialogs);
@@ -503,9 +505,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       }
     }
   }
-  const addNewBtnRef = useCallback((addNew) => {
-    onboardingAddCoachMarkRef({ addNew });
-  }, []);
+  // const addNewBtnRef = useCallback((addNew) => {
+  //   onboardingAddCoachMarkRef({ addNew });
+  // }, []);
 
   if (!dialogId) {
     return <LoadingSpinner />;
