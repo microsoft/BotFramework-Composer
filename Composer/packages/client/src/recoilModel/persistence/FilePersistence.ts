@@ -3,9 +3,7 @@
 import keys from 'lodash/keys';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import { DialogInfo } from '@bfc/shared';
-
-import { DialogSetting } from '../../recoilModel/types';
+import { DialogInfo, DialogSetting } from '@bfc/shared';
 
 import { SkillManifest } from './../../pages/design/exportSkillModal/constants';
 import { LuFile, LgFile, QnAFile } from './../../../../lib/shared/src/types/indexers';

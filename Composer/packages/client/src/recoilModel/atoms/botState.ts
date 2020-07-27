@@ -2,11 +2,11 @@
 // Licensed under the MIT License.
 
 import { atom } from 'recoil';
-import { DialogInfo, Diagnostic, LgFile, LuFile, QnAFile, BotSchemas, Skill } from '@bfc/shared';
+import { DialogInfo, Diagnostic, LgFile, LuFile, QnAFile, BotSchemas, Skill, DialogSetting } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
 
-import { PublishType, DialogSetting, BreadcrumbItem } from './../../recoilModel/types';
+import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
 
 const getFullyQualifiedKey = (value: string) => {
