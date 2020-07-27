@@ -23,7 +23,38 @@ const DefaultRecognizers: RecognizerSchema[] = [
     id: 'Custom',
     displayName: () => formatMessage('Custom recognizer'),
     isSelected: (data) => typeof data === 'object',
-    handleRecognizerChange: (props) => props.onChange({}),
+    handleRecognizerChange: (props) =>
+      props.onChange({
+        $kind: 'Microsoft.MultiLanguageRecognizer',
+        recognizers: {
+          'en-us': {
+            $kind: 'Microsoft.RegexRecognizer',
+            intents: [
+              {
+                intent: 'greeting',
+                pattern: 'hello',
+              },
+              {
+                intent: 'test',
+                pattern: 'test',
+              },
+            ],
+          },
+          'zh-cn': {
+            $kind: 'Microsoft.RegexRecognizer',
+            intents: [
+              {
+                intent: 'greeting',
+                pattern: '你好',
+              },
+              {
+                intent: 'test',
+                pattern: '测试',
+              },
+            ],
+          },
+        },
+      }),
   },
 ];
 
