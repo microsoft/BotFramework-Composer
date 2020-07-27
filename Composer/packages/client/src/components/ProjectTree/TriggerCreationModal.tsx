@@ -21,6 +21,7 @@ import { useRecoilValue } from 'recoil';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import get from 'lodash/get';
+import { generateUniqueId } from '@bfc/shared';
 
 import {
   generateNewDialog,
@@ -38,9 +39,11 @@ import {
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
+import { addTemplate } from '../../utils/lgUtil';
 import {
   dialogsState,
   luFilesState,
+  lgFilesState,
   localeState,
   projectIdState,
   schemasState,
@@ -205,6 +208,11 @@ export interface LuFilePayload {
   content: string;
 }
 
+export interface LgFilePayload {
+  id: string;
+  content: string;
+}
+
 export interface QnAFilePayload {
   id: string;
   content: string;
@@ -216,18 +224,25 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload, QnAFilePayload?: QnAFilePayload) => void;
+  onSubmit: (
+    dialog: DialogInfo,
+    luFilePayload?: LuFilePayload,
+    lgFilePayload?: LgFilePayload,
+    QnAFilePayload?: QnAFilePayload
+  ) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const dialogs = useRecoilValue(dialogsState);
   const luFiles = useRecoilValue(luFilesState);
+  const lgFiles = useRecoilValue(lgFilesState);
   const locale = useRecoilValue(localeState);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const userSettings = useRecoilValue(userSettingsState);
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const lgFile = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const recognizer = get(dialogFile, 'content.recognizer', '');
@@ -285,17 +300,44 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       });
       return;
     }
-    const content = luFile?.content ?? '';
-    const luFileId = luFile?.id || `${dialogId}.${locale}`;
-    const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
+
     if (formData.$kind === intentTypeKey && isLUISnQnA && formData.triggerPhrases) {
+      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, {});
+      const content = luFile?.content ?? '';
+      const luFileId = luFile?.id || `${dialogId}.${locale}`;
       const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
       const updateLuFile = {
         id: luFileId,
         content: newContent,
       };
       onSubmit(newDialog, updateLuFile);
+    } else if (formData.$kind === qnaMatcherKey || formData.$kind === onChooseIntentKey) {
+      const lgTemplateId = generateUniqueId(6);
+      const extraTriggerAttributes = { lgTemplateId };
+      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
+      const content = lgFile?.content ?? '';
+      const lgFileId = lgFile?.id || `common.${locale}`;
+      let body = '';
+      let name = '';
+      if (formData.$kind === qnaMatcherKey) {
+        name = `SendActivity_${lgTemplateId}`;
+        body = '- ${@answer}';
+      } else if (formData.$kind === onChooseIntentKey) {
+        name = `ChoiceInput_Prompt_${lgTemplateId}`;
+        body = '- Multiple intents detected, please choose which intent do you want to trigger?';
+      }
+      const newLgFile = addTemplate(lgFileId, content, {
+        name,
+        parameters: [],
+        body,
+      });
+      const updateLgFile = {
+        id: newLgFile.id,
+        content: newLgFile.content,
+      };
+      onSubmit(newDialog, undefined, updateLgFile);
     } else {
+      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, {});
       onSubmit(newDialog);
     }
     onDismiss();
@@ -426,7 +468,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               label={
                 isRegEx
                   ? formatMessage('What is the name of this trigger (RegEx)')
-                  : formatMessage('What is the name of this trigger (LUIS)')
+                  : isLUISnQnA
+                  ? formatMessage('What is the name of this trigger (LUIS)')
+                  : formatMessage('What is the name of this trigger')
               }
               styles={intent}
               onChange={onNameChange}
