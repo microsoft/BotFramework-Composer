@@ -7,52 +7,62 @@ import {
   IContextualMenuItem,
   ContextualMenuItemType,
 } from 'office-ui-fabric-react/lib/components/ContextualMenu/ContextualMenu.types';
-import { ConceptLabels, DialogGroup, dialogGroups, SDKKinds, DefinitionSummary } from '@bfc/shared';
+import { SDKKinds, DefinitionSummary } from '@bfc/shared';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
+import { UISchema, MenuUISchema, MenuOptions } from '@bfc/extension';
+import mapValues from 'lodash/mapValues';
+import set from 'lodash/set';
 
 import { MenuEventTypes } from '../../constants/MenuTypes';
-
-const resolveMenuTitle = ($kind: SDKKinds): string => {
-  const conceptLabel = ConceptLabels[$kind];
-  return conceptLabel?.title || $kind;
-};
 
 type ActionMenuItemClickHandler = (item?: IContextualMenuItem) => any;
 type ActionKindFilter = ($kind: SDKKinds) => boolean;
 
 const createBaseActionMenu = (
+  menuSchema: MenuUISchema,
   onClick: ActionMenuItemClickHandler,
   filter?: ActionKindFilter
 ): IContextualMenuItem[] => {
-  const pickedGroups: DialogGroup[] = [
-    DialogGroup.RESPONSE,
-    DialogGroup.INPUT,
-    DialogGroup.BRANCHING,
-    DialogGroup.LOOPING,
-    DialogGroup.STEP,
-    DialogGroup.MEMORY,
-    DialogGroup.CODE,
-    DialogGroup.LOG,
-  ];
-  const stepMenuItems = pickedGroups
-    .map((key) => dialogGroups[key])
-    .filter((groupItem) => groupItem && Array.isArray(groupItem.types) && groupItem.types.length)
-    .map(({ label, types: actionKinds }) => {
-      const subMenuItems: IContextualMenuItem[] = actionKinds
-        .filter(($kind) => (filter ? filter($kind) : true))
-        .map(($kind) => ({
-          key: $kind,
-          name: resolveMenuTitle($kind),
-          onClick: (e, itemData) => onClick(itemData),
-        }));
+  const menuTree = Object.entries(menuSchema).reduce((result, [$kind, options]) => {
+    if (filter && !filter($kind as SDKKinds)) return result;
 
-      if (subMenuItems.length === 1) {
-        // hoists the only item to upper level
-        return subMenuItems[0];
+    const optionList: MenuOptions[] = Array.isArray(options) ? options : options ? [options] : [];
+
+    optionList.map((opt) => {
+      // use $kind as fallback label
+      const label = opt.label || $kind;
+      const submenu = opt.submenu;
+
+      if (submenu === false) {
+        result[label] = $kind;
+      } else if (Array.isArray(submenu)) {
+        set(result, [...submenu, label], $kind);
       }
-      return createSubMenu(label, onClick, subMenuItems);
     });
+    return result;
+  }, {});
+
+  const genMenuItem = (labelName: string, labelData: string | object): IContextualMenuItem => {
+    if (typeof labelData === 'string') {
+      const $kind = labelData;
+      return {
+        key: $kind,
+        name: labelName || $kind,
+        onClick: (e, itemData) => onClick(itemData),
+      };
+    } else {
+      const subMenuItems: IContextualMenuItem[] = Object.entries(labelData).map(([sublabelName, sublabelData]) =>
+        genMenuItem(sublabelName, sublabelData)
+      );
+      return createSubMenu(labelName, onClick, subMenuItems);
+    }
+  };
+
+  const stepMenuItems = Object.entries(menuTree).map(([labelName, labelData]) =>
+    genMenuItem(labelName, labelData as any)
+  );
+
   return stepMenuItems;
 };
 
@@ -67,7 +77,8 @@ const get$kindFrom$ref = ($ref: string): SDKKinds => {
 
 const createCustomActionSubMenu = (
   customizedActionGroups: DefinitionSummary[][],
-  onClick: ActionMenuItemClickHandler
+  onClick: ActionMenuItemClickHandler,
+  filter?: ($kind: SDKKinds) => boolean
 ): IContextualMenuItem[] => {
   if (!Array.isArray(customizedActionGroups) || customizedActionGroups.length === 0) {
     return [];
@@ -76,7 +87,7 @@ const createCustomActionSubMenu = (
   const itemGroups: IContextualMenuItem[][] = customizedActionGroups
     .filter((actionGroup) => Array.isArray(actionGroup) && actionGroup.length)
     .map((actionGroup) => {
-      return actionGroup.map(
+      const items = actionGroup.map(
         ({ title, $ref }) =>
           ({
             key: get$kindFrom$ref($ref),
@@ -84,6 +95,10 @@ const createCustomActionSubMenu = (
             onClick: (e, itemData) => onClick(itemData),
           } as IContextualMenuItem)
       );
+      if (filter) {
+        return items.filter(({ key }) => filter(key as SDKKinds));
+      }
+      return items;
     });
 
   const flatMenuItems: IContextualMenuItem[] = itemGroups.reduce((resultItems, currentGroup, currentIndex) => {
@@ -170,12 +185,16 @@ const createSubMenu = (
 export const createActionMenu = (
   onClick: ActionMenuItemClickHandler,
   options: ActionMenuOptions,
+  uiOptions?: UISchema,
   customActionGroups?: DefinitionSummary[][]
 ) => {
   const resultItems: IContextualMenuItem[] = [];
 
+  const menuOptions: MenuUISchema = mapValues(uiOptions, (x) => x?.menu);
+
   // base SDK menu
   const baseMenuItems = createBaseActionMenu(
+    menuOptions,
     onClick,
     options.isSelfHosted ? ($kind: SDKKinds) => $kind !== SDKKinds.LogAction : undefined
   );
@@ -183,7 +202,12 @@ export const createActionMenu = (
 
   // Append a 'Custom Actions' item conditionally.
   if (customActionGroups) {
-    const customActionItems = createCustomActionSubMenu(customActionGroups, onClick);
+    const customActionItems = createCustomActionSubMenu(
+      customActionGroups,
+      onClick,
+      // Exclude those $kinds already grouped by uischema
+      ($kind: SDKKinds) => !!menuOptions[$kind]
+    );
     if (customActionItems.length) {
       const customActionTitle = formatMessage('Custom Actions');
       resultItems.push(createSubMenu(customActionTitle, onClick, customActionItems));
