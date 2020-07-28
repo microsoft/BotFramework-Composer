@@ -39,9 +39,7 @@ function getFileLocale(fileName: string) {
 //replace the dialogId with luFile's name
 function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
   const { rootIds, triggerRules } = config;
-  config.rootIds = rootIds.reduce((result: string[], id: string) => {
-    return [...result, ...getLuFilesByDialogId(id, luFiles)];
-  }, []);
+  config.rootIds = rootIds;
   config.triggerRules = keys(triggerRules).reduce((result, key) => {
     const fileNames = getLuFilesByDialogId(key, luFiles);
     return {
@@ -100,35 +98,32 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
   const triggerRules = {};
   const countMap = {};
 
-  //map all referred lu files
-  luFiles.forEach((file) => {
-    countMap[getBaseName(file.id)] = 1;
-  });
-
   let rootId = '';
   dialogs.forEach((dialog) => {
     if (dialog.isRoot) rootId = dialog.id;
 
-    const { intentTriggers } = dialog;
-    const fileId = dialog.id;
-    //find the trigger's dialog that use a recognizer
-    intentTriggers.forEach((item) => {
-      //find all dialogs in trigger that has a luis recognizer
-      const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
+    if (luFiles.find((luFile) => getBaseName(luFile.id) === dialog.luFile)) {
+      const { intentTriggers } = dialog;
+      const fileId = dialog.id;
+      //find the trigger's dialog that use a recognizer
+      intentTriggers.forEach((item) => {
+        //find all dialogs in trigger that has a luis recognizer
+        const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
 
-      const deduped = Array.from(new Set<string>(used));
+        const deduped = Array.from(new Set<string>(used));
 
-      const result = {};
-      if (deduped.length === 1) {
-        result[item.intent] = deduped[0];
-      } else if (deduped.length) {
-        result[item.intent] = deduped;
-      } else {
-        result[item.intent] = '';
-      }
+        const result = {};
+        if (deduped.length === 1) {
+          result[item.intent] = deduped[0];
+        } else if (deduped.length) {
+          result[item.intent] = deduped;
+        } else {
+          result[item.intent] = '';
+        }
 
-      triggerRules[fileId] = { ...triggerRules[fileId], ...result };
-    });
+        triggerRules[fileId] = { ...triggerRules[fileId], ...result };
+      });
+    }
   });
 
   const crossTrainConfig: ICrossTrainConfig = {
@@ -137,7 +132,7 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     intentName: '_Interruption',
     verbose: true,
   };
-  crossTrainConfig.rootIds = keys(countMap).filter((key) => countMap[key] === 0 || key === rootId);
+  crossTrainConfig.rootIds = [rootId];
   crossTrainConfig.triggerRules = triggerRules;
   return addLocaleToConfig(crossTrainConfig, luFiles);
 }

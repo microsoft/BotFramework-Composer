@@ -160,6 +160,10 @@ export const TestController: React.FC = () => {
     return complete;
   }
 
+  function isDefaultRecognizer(recognizer) {
+    return typeof recognizer === 'string';
+  }
+
   async function handleStart() {
     dismissCallout();
     const config = Object.assign({}, settings.luis, { subscriptionKey: Object(settings.qna).subscriptionKey });
