@@ -160,11 +160,26 @@ export const TestController: React.FC = () => {
     return complete;
   }
 
+  function isDialogDefaultRecognizer(dialogs) {
+    let isDefaultRecognizer = false;
+    dialogs.map((dialog) => {
+      if (typeof dialog.recognizer === 'string') {
+        isDefaultRecognizer = true;
+        return;
+      }
+    });
+    return isDefaultRecognizer;
+  }
+
   async function handleStart() {
     dismissCallout();
     const config = Object.assign({}, settings.luis, { subscriptionKey: Object(settings.qna).subscriptionKey });
     if (!isAbsHosted()) {
-      if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
+      if (
+        botStatus === BotStatus.failed ||
+        botStatus === BotStatus.pending ||
+        (isDialogDefaultRecognizer(dialogs) && !isConfigComplete(config))
+      ) {
         openDialog();
       } else {
         await handlePublish(config);
