@@ -198,9 +198,9 @@ export class Builder {
 
   private async runLuBuild(files: FileInfo[]) {
     const config = await this._getConfig(files, 'lu');
-    if (config.models.length === 0) {
-      throw new Error('No LUIS files exist');
-    }
+    // if (config.models.length === 0) {
+    //   throw new Error('No LUIS files exist');
+    // }
 
     const loadResult = await this.luBuilder.loadContents(
       config.models,
@@ -231,9 +231,9 @@ export class Builder {
 
   private async runQnaBuild(files: FileInfo[]) {
     const config = await this._getConfig(files, 'qna');
-    if (config.models.length === 0) {
-      throw new Error('No QnA files exist');
-    }
+    // if (config.models.length === 0) {
+    //   throw new Error('No QnA files exist');
+    // }
 
     const loadResult = await this.qnaBuilder.loadContents(
       config.models,
