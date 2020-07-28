@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
@@ -45,7 +45,6 @@ import {
   userSettingsState,
 } from '../../recoilModel';
 
-import { VisualEditorAPI } from './FrameAPI';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -235,6 +234,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
+  const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
@@ -298,7 +298,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Cut'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.cutSelection();
+              EditorAPI.Actions.CutSelection();
             },
           },
           {
@@ -306,7 +306,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Copy'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.copySelection();
+              EditorAPI.Actions.CopySelection();
             },
           },
           {
@@ -314,7 +314,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Move'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.moveSelection();
+              EditorAPI.Actions.MoveSelection();
             },
           },
           {
@@ -322,7 +322,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Delete'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.deleteSelection();
+              EditorAPI.Actions.DeleteSelection();
             },
           },
         ],
@@ -343,7 +343,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Disable'),
             disabled: !showDisableBtn,
             onClick: () => {
-              VisualEditorAPI.disableSelection();
+              EditorAPI.Actions.DisableSelection();
             },
           },
           {
@@ -351,7 +351,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Enable'),
             disabled: !showEnableBtn,
             onClick: () => {
-              VisualEditorAPI.enableSelection();
+              EditorAPI.Actions.EnableSelection();
             },
           },
         ],
