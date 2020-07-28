@@ -270,3 +270,8 @@ export function removeIntents(luFile: LuFile, intentNames: string[]): LuFile {
   }
   return result;
 }
+
+export function parse(id: string, content: string): LuFile {
+  const result = luParser.parse(content);
+  return convertLuParseResultToLuFile(id, result);
+}

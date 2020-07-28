@@ -8,7 +8,6 @@ import differenceBy from 'lodash/differenceBy';
 import { getBaseName, getExtension } from '../../utils/fileUtil';
 import * as luUtil from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import luWorker from '../parsers/luWorker';
 import {
   luFilesState,
   botLoadErrorState,
@@ -30,7 +29,7 @@ const initialBody = '- ';
 
 export const updateLuFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content }: { id: string; content: string }
+  { id, content, updatedFile }: { id: string; content: string; updatedFile?: LuFile }
 ) => {
   const { set, snapshot } = callbackHelpers;
   const luFiles = await snapshot.getPromise(luFilesState);
@@ -38,7 +37,7 @@ export const updateLuFileState = async (
 
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
-  const updatedLuFile = (await luWorker.parse(id, content)) as LuFile;
+  const updatedLuFile = updatedFile || luUtil.parse(id, content); // if exist updated luFile, do not parse again.
   const originLuFile = luFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = luFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);
@@ -65,13 +64,12 @@ export const updateLuFileState = async (
   const onlyDeletes = !addedIntents.length && deletedIntents.length;
   // sync add/remove intents
   if (onlyAdds || onlyDeletes) {
-    for (const { id, content } of sameIdOtherLocaleFiles) {
-      let newContent: string = (await luWorker.addIntents(content, addedIntents)) as string;
-      newContent = (await luWorker.removeIntents(
-        newContent,
+    for (const item of sameIdOtherLocaleFiles) {
+      let newLuFile = luUtil.addIntents(item, addedIntents);
+      newLuFile = luUtil.removeIntents(
+        newLuFile,
         deletedIntents.map(({ Name }) => Name)
-      )) as string;
-      const newLuFile = (await luWorker.parse(id, newContent)) as LuFile;
+      );
       changes.push(newLuFile);
     }
   }
@@ -101,7 +99,7 @@ export const createLuFileState = async (
   const locale = await snapshot.getPromise(localeState);
   const { languages } = await snapshot.getPromise(settingsState);
   const createdLuId = `${id}.${locale}`;
-  const createdLuFile = (await luWorker.parse(id, content)) as LuFile;
+  const createdLuFile = (await luUtil.parse(id, content)) as LuFile;
   if (luFiles.find((lg) => lg.id === createdLuId)) {
     throw new Error('lu file already exist');
   }
@@ -145,7 +143,10 @@ export const luDispatcher = () => {
       content: string;
       projectId: string;
     }) => {
+      console.time('updateLuFile');
+
       await updateLuFileState(callbackHelpers, { id, content });
+      console.timeEnd('updateLuFile');
     }
   );
 
@@ -162,8 +163,10 @@ export const luDispatcher = () => {
       const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return;
-      const content = (await luWorker.updateIntent(file.content, intentName, intent)) as string;
+      console.time('updateLuIntent');
+      const content = luUtil.updateIntent(file, intentName, intent).content;
       await updateLuFileState(callbackHelpers, { id: file.id, content });
+      console.timeEnd('updateLuIntent');
     }
   );
 
@@ -172,7 +175,7 @@ export const luDispatcher = () => {
       const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return;
-      const content = (await luWorker.addIntent(file.content, intent)) as string;
+      const content = luUtil.addIntent(file, intent).content;
       await updateLuFileState(callbackHelpers, { id: file.id, content });
     }
   );
@@ -182,7 +185,7 @@ export const luDispatcher = () => {
       const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return;
-      const content = (await luWorker.removeIntent(file.content, intentName)) as string;
+      const content = luUtil.removeIntent(file, intentName).content;
       await updateLuFileState(callbackHelpers, { id: file.id, content });
     }
   );
