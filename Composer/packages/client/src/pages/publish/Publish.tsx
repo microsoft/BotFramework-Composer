@@ -9,10 +9,10 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { useRecoilValue } from 'recoil';
+import { PublishTarget } from '@bfc/shared';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
-import { PublishTarget } from '../../recoilModel/types';
 import {
   settingsState,
   botNameState,
