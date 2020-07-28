@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { app, dialog, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import { getEditorAPI } from '@bfc/shared';
 
 import { isMac } from './utility/platform';
 import { AppUpdater } from './appUpdater';
@@ -48,7 +49,7 @@ function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
 
 export function initAppMenu() {
   // Global window functions registered by Composer core app.
-  const { EditorAPI } = window as any;
+  const EditorAPI = getEditorAPI();
   const template: MenuItemConstructorOptions[] = [
     // App (Mac)
     ...getAppMenu(),
@@ -61,13 +62,12 @@ export function initAppMenu() {
     {
       label: 'Edit',
       submenu: [
-        { role: 'undo', click: () => EditorAPI.undo() },
-        { role: 'redo', click: () => EditorAPI.redo() },
+        { role: 'undo', click: () => EditorAPI.Editing.Undo() },
+        { role: 'redo', click: () => EditorAPI.Editing.Redo() },
         { type: 'separator' },
-        { role: 'cut', click: () => EditorAPI.cutSelection() },
-        { role: 'copy', click: () => EditorAPI.copySelection() },
-        { role: 'paste', click: () => EditorAPI.pasteSelection() },
-        { role: 'delete', click: () => EditorAPI.deleteSelection() },
+        { role: 'cut', click: () => EditorAPI.Actions.CutSelection() },
+        { role: 'copy', click: () => EditorAPI.Actions.CopySelection() },
+        { role: 'delete', click: () => EditorAPI.Actions.DeleteSelection() },
         ...getRestOfEditMenu(),
       ],
     },
