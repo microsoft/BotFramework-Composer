@@ -9,3 +9,4 @@ export * from './sdk';
 export * from './settings';
 export * from './server';
 export * from './shell';
+export * from './EditorAPI';
