@@ -50,7 +50,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
   // delegate menu events to Renderer process (Composer web app)
   const handleMenuEvents = (menuEventName: string) => {
     if (win) {
-      win.webContents.send('electron-menu-clicked', { l: menuEventName });
+      win.webContents.send('electron-menu-clicked', { label: menuEventName });
     }
   };
 
@@ -66,12 +66,13 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
     {
       label: 'Edit',
       submenu: [
-        { role: 'undo', click: () => handleMenuEvents('undo') },
-        { role: 'redo', click: () => handleMenuEvents('redo') },
+        // NOTE: Avoid using builtin `role`, it won't override the click handler.
+        { label: 'Undo', click: () => handleMenuEvents('undo') },
+        { label: 'Redo', click: () => handleMenuEvents('redo') },
         { type: 'separator' },
-        { role: 'cut', click: () => handleMenuEvents('cut') },
-        { role: 'copy', click: () => handleMenuEvents('copy') },
-        { role: 'delete', click: () => handleMenuEvents('delete') },
+        { label: 'Cut', click: () => handleMenuEvents('cut') },
+        { label: 'Copy', click: () => handleMenuEvents('copy') },
+        { label: 'Delete', click: () => handleMenuEvents('delete') },
         ...getRestOfEditMenu(),
       ],
     },
