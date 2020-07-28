@@ -282,6 +282,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Undo'),
             disabled: !undoHistory.canUndo(),
             onClick: () => {
+              // TODO: register EditorAPI.Editing.Undo()
               //ToDo undo
             },
           },
@@ -290,6 +291,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Redo'),
             disabled: !undoHistory.canRedo(),
             onClick: () => {
+              // TODO: register EditorAPI.Editing.Redo()
               //ToDo redo
             },
           },
