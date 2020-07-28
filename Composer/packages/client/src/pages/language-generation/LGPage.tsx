@@ -3,13 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useContext, Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
+import React, { Fragment, useMemo, useCallback, Suspense, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
+import { dialogsState, projectIdState } from '../../recoilModel/atoms/botState';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { StoreContext } from '../../store';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
@@ -24,8 +25,8 @@ interface LGPageProps extends RouteComponentProps<{}> {
 }
 
 const LGPage: React.FC<LGPageProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { dialogs, projectId } = state;
+  const dialogs = useRecoilValue(dialogsState);
+  const projectId = useRecoilValue(projectIdState);
 
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;
@@ -33,11 +34,15 @@ const LGPage: React.FC<LGPageProps> = (props) => {
 
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
+      let url = `/bot/${projectId}/language-generation/${dialog.id}`;
+      if (edit) {
+        url += `/edit`;
+      }
       return {
         id: dialog.id,
         name: dialog.displayName,
         ariaLabel: formatMessage('language generation file'),
-        url: `/bot/${projectId}/language-generation/${dialog.id}`,
+        url,
       };
     });
     const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
@@ -46,14 +51,19 @@ const LGPage: React.FC<LGPageProps> = (props) => {
       const mainDialog = newDialogLinks.splice(mainDialogIndex, 1)[0];
       newDialogLinks.splice(0, 0, mainDialog);
     }
+    let commonUrl = `/bot/${projectId}/language-generation/common`;
+    if (edit) {
+      commonUrl += '/edit';
+    }
+
     newDialogLinks.splice(0, 0, {
       id: 'common',
       name: 'All',
       ariaLabel: formatMessage('all language generation files'),
-      url: `/bot/${projectId}/language-generation/common`,
+      url: commonUrl,
     });
     return newDialogLinks;
-  }, [dialogs]);
+  }, [dialogs, edit]);
 
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
@@ -85,7 +95,6 @@ const LGPage: React.FC<LGPageProps> = (props) => {
         checked={!!edit}
         className={'toggleEditMode'}
         css={actionButton}
-        defaultChecked={false}
         offText={formatMessage('Edit mode')}
         onChange={onToggleEditMode}
         onText={formatMessage('Edit mode')}

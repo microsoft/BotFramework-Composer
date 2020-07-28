@@ -147,11 +147,11 @@ export function registerLGLanguage(monaco: Monaco) {
       { token: 'template-name', foreground: 'CA5010' },
       { token: 'function-name', foreground: 'CA5010' },
       { token: 'keywords', foreground: '0078D7' },
-      { token: 'comments', foreground: '7A7574' },
+      { token: 'comments', foreground: '656565' },
       { token: 'parameter', foreground: '004E8C' },
       { token: 'fence-block', foreground: '038387' },
-      { token: 'string', foreground: 'DF2C2C' },
-      { token: 'structure-name', foreground: '00B7C3' },
+      { token: 'string', foreground: '393939' },
+      { token: 'structure-name', foreground: '038387' },
     ],
   });
 

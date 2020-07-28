@@ -2,20 +2,20 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent } from '@bfc/test-utils';
+import { fireEvent, act, waitFor } from '@bfc/test-utils';
 
-import { renderWithStore } from '../../../testUtils';
-import { StorageFolder } from '../../../../src/store/types';
+import { renderWithRecoil } from '../../../testUtils';
+import { StorageFolder } from '../../../../src/recoilModel/types';
+import { focusedStorageFolderState, storagesState } from '../../../../src/recoilModel';
 import DefineConversation from '../../../../src/components/CreationFlow/DefineConversation';
 
 describe('<DefineConversation/>', () => {
   const onCurrentPathUpdateMock = jest.fn();
-  const saveTemplateMock = jest.fn();
   const onSubmitMock = jest.fn();
   const onDismissMock = jest.fn();
   const createFolder = jest.fn();
   const updateFolder = jest.fn();
-  let storeContext, locationMock;
+  let locationMock;
   const focusedStorageFolder: StorageFolder = {
     name: 'Desktop',
     parent: '/test-folder',
@@ -33,34 +33,23 @@ describe('<DefineConversation/>', () => {
     ],
   };
   function renderComponent() {
-    return renderWithStore(
+    return renderWithRecoil(
       <DefineConversation
         createFolder={createFolder}
         focusedStorageFolder={focusedStorageFolder}
         location={locationMock}
+        templateId={'EchoBot'}
         updateFolder={updateFolder}
         onCurrentPathUpdate={onCurrentPathUpdateMock}
         onDismiss={onDismissMock}
         onSubmit={onSubmitMock}
       />,
-      storeContext.state,
-      storeContext.action
+      ({ set }) => {
+        set(focusedStorageFolderState, '');
+        set(storagesState, [{ id: 'default' }]);
+      }
     );
   }
-
-  beforeEach(() => {
-    locationMock = {};
-    storeContext = {
-      actions: {
-        saveTemplateId: saveTemplateMock,
-      },
-      state: {
-        templateId: 'EchoBot',
-        focusedStorageFolder: '',
-        storages: [{ id: 'default' }],
-      },
-    };
-  });
 
   it('should render the component', () => {
     const component = renderComponent();
@@ -98,8 +87,11 @@ describe('<DefineConversation/>', () => {
   it('does not allow submission when the name is invalid', async () => {
     const component = renderComponent();
     const nameField = await component.getByTestId('NewDialogName');
-    fireEvent.change(nameField, { target: { value: 'invalidName;' } });
-    const node = await component.getByTestId('SubmitNewBotBtn');
+    act(() => {
+      fireEvent.change(nameField, { target: { value: 'invalidName;' } });
+    });
+
+    const node = await waitFor(() => component.getByTestId('SubmitNewBotBtn'));
     expect(node).toBeDisabled();
   });
 });

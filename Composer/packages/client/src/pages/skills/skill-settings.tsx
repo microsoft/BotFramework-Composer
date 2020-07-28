@@ -6,15 +6,14 @@ import { jsx } from '@emotion/core';
 import React, { useState, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-
-import { DialogSetting, BoundAction } from '../../store/types';
+import { DialogSetting } from '@bfc/shared';
 
 import { FormFieldAlignHorizontalBotSettings } from './styles';
 
 export interface ISkillFormProps {
   botId?: string;
   skillHostEndpoint?: string;
-  setSettings: BoundAction;
+  setSettings: (projectId: string, settings: DialogSetting) => Promise<void>;
   projectId: string;
   botName: string;
   settings: DialogSetting;

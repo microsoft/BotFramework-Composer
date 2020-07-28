@@ -21,17 +21,6 @@ export enum FileUpdateType {
   DELETE = 'delete',
 }
 
-export interface ILuisConfig {
-  name: string;
-  endpoint: string;
-  authoringKey: string;
-  endpointKey: string;
-  authoringEndpoint: string;
-  authoringRegion: string | 'westus';
-  defaultLanguage: string | 'en-us';
-  environment: string | 'composer';
-}
-
 export interface IOperationLUFile {
   diagnostics?: any[]; // ludown parser output
   relativePath?: string;
@@ -42,12 +31,4 @@ export interface IOperationLUFile {
 
 export interface ILuisStatusOperation {
   [key: string]: IOperationLUFile;
-}
-
-export interface DialogSetting {
-  MicrosoftAppId: string;
-  MicrosoftAppPassword: string;
-  luis: ILuisConfig;
-  skill: { manifestUrl: string; name: string }[];
-  [key: string]: any;
 }

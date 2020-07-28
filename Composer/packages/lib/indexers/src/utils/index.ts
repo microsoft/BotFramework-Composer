@@ -4,3 +4,5 @@
 export * from './diagnosticUtil';
 export * from './jsonWalk';
 export * from './dialogCheckUtil';
+export * as lgUtil from './lgUtil';
+export * as luUtil from './luUtil';

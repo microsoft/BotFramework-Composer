@@ -3,27 +3,42 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { RouteComponentProps } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
+import {
+  botNameState,
+  settingsState,
+  projectIdState,
+  dispatcherState,
+  ejectRuntimeSelector,
+  boilerplateVersionState,
+} from '../../../recoilModel';
 import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { StoreContext } from '../../../store';
 
 import { EjectModal } from './ejectModal';
 import { WorkingModal } from './workingModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { setCustomRuntime, setRuntimeField, ejectRuntime, updateBoilerplate, getBoilerplateVersion } = actions;
-  const { botName, settings, projectId, boilerplateVersion } = state;
+  const botName = useRecoilValue(botNameState);
+  const settings = useRecoilValue(settingsState);
+  const projectId = useRecoilValue(projectIdState);
+  const boilerplateVersion = useRecoilValue(boilerplateVersionState);
+
+  const { setCustomRuntime, setRuntimeField, getBoilerplateVersion, updateBoilerplate } = useRecoilValue(
+    dispatcherState
+  );
+  const runtimeEjection = useRecoilValue(ejectRuntimeSelector);
+
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
   const [ejectModalVisible, setEjectModalVisible] = useState(false);
   const [working, setWorking] = useState(false);
@@ -87,7 +102,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const callEjectRuntime = async (templateKey: string) => {
     setEjecting(true);
     closeEjectModal();
-    await ejectRuntime(projectId, templateKey);
+    await runtimeEjection?.onAction(projectId, templateKey);
     setEjecting(false);
   };
 
@@ -101,9 +116,12 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
       setWorking(true);
       await updateBoilerplate(projectId);
       // add a slight delay, so the working indicator is visible for a moment at least!
-      setTimeout(() => {
-        setWorking(false);
-      }, 500);
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          setWorking(false);
+          resolve();
+        }, 500);
+      });
     }
   };
 
