@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { useRecoilCallback, CallbackInterface, Snapshot } from 'recoil';
-import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
+import { useRecoilCallback, CallbackInterface } from 'recoil';
+import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -15,7 +15,6 @@ import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
 import { getReferredFiles } from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { DialogSetting } from '../../recoilModel/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
@@ -393,6 +392,7 @@ export const projectDispatcher = () => {
     createProject,
     deleteBotProject,
     saveProjectAs,
+    checkProjectUpdates,
     fetchTemplates,
     fetchProjectById,
     fetchRecentProjects,

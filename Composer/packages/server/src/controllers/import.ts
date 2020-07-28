@@ -108,7 +108,12 @@ export const ImportController = {
       for (let f = 0; f < files.length; f++) {
         const basename = path.basename(files[f].filename);
         const importedDirname = path.relative(TMP_DIR, files[f].fullpath);
-        const found = currentProject.files.find((f) => basename === path.basename(f.path));
+        let found;
+        currentProject.files.forEach((f, name) => {
+          if (!found && basename === path.basename(f.path)) {
+            found = currentProject.files.get(name) as FileRef;
+          }
+        });
         if (found) {
           const existingDirname = path.relative(path.join(currentProject.dataDir, 'importedDialogs'), found.path);
           // if we are not updating, do not allow overwrite

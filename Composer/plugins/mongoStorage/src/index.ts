@@ -82,6 +82,7 @@ class MongoStorage implements IFileStorage {
               isDir: true,
               isFile: false,
               lastModified: file.lastModified,
+              isWritable: true,
               size: 1, // TODO: real size
             });
           } else {
@@ -89,6 +90,7 @@ class MongoStorage implements IFileStorage {
               isDir: false,
               isFile: true,
               lastModified: file.lastModified,
+              isWritable: true,
               size: 1, // TODO: real size
             });
           }
@@ -103,6 +105,7 @@ class MongoStorage implements IFileStorage {
                   isDir: true,
                   isFile: false,
                   lastModified: new Date(),
+                  isWritable: true,
                   size: 0, // TODO: ??
                 });
               } else {
@@ -113,6 +116,7 @@ class MongoStorage implements IFileStorage {
                 isDir: true,
                 isFile: false,
                 lastModified: file.lastModified,
+                isWritable: true,
                 size: 0, // TODO: ??
               });
             }

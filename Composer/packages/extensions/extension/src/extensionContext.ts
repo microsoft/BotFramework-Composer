@@ -8,13 +8,13 @@ import { PluginConfig } from './types';
 interface ExtensionContext {
   shellApi: ShellApi;
   shellData: ShellData;
-  plugins: PluginConfig[];
+  plugins: PluginConfig;
 }
 
 const ExtensionContext = React.createContext<ExtensionContext>({
   shellApi: {},
   shellData: {},
-  plugins: [] as PluginConfig[],
+  plugins: {},
 } as ExtensionContext);
 
 export default ExtensionContext;
