@@ -392,12 +392,6 @@ export const projectDispatcher = () => {
     }
   });
 
-  async function asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index++) {
-      await callback(array[index], index, array);
-    }
-  }
-
   const initBotProjectState = async ({ snapshot, gotoSnapshot }: CallbackInterface, projectData: any) => {
     const curLocation = await snapshot.getPromise(locationState);
     const { files, botName, schemas, id: projectId, locale } = projectData;
