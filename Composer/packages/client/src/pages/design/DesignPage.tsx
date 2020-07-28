@@ -181,9 +181,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }, [location]);
 
+  const EditorAPI = getEditorAPI();
   // Subscribe Electron app menu events (copy/cut/del/undo/redo)
   useEffect(() => {
-    const EditorAPI = getEditorAPI();
     if (!window.__IS_ELECTRON__) return;
     if (!window.ipcRenderer || typeof window.ipcRenderer.on !== 'function') return;
 
@@ -257,7 +257,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
