@@ -56,7 +56,8 @@ Composer's UI can be customized using the UI Schema. You can either customize on
 There are 2 ways to do this.
 
 1. **Component UI Schema File**
-   To customize a specific component, simply create a `.uischema` file inside of the `/schemas` directory with the same name as the component, These files will be merged into a single `.uischema` file when running the `update-schema` script.
+
+To customize a specific component, simply create a `.uischema` file inside of the `/schemas` directory with the same name as the component, These files will be merged into a single `.uischema` file when running the `update-schema` script.
 
 Example:
 
@@ -71,7 +72,8 @@ Example:
 ```
 
 2. **UI Schema Override File**
-   This approach allows you to co-locate all of your UI customizations into a single file. This will not be merged into the `sdk.uischema`, instead it will be loaded by Composer and applied as overrides.
+
+This approach allows you to co-locate all of your UI customizations into a single file. This will not be merged into the `sdk.uischema`, instead it will be loaded by Composer and applied as overrides.
 
 Example:
 
