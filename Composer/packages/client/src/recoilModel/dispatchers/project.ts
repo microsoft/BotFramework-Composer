@@ -51,7 +51,6 @@ import {
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 import { createQnAFileState } from './qna';
-import { dialogsDispatcher } from './dialogs';
 
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);
