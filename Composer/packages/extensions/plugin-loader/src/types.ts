@@ -3,7 +3,7 @@
 import { RequestHandler } from 'express-serve-static-core';
 import { JSONSchema7 } from 'json-schema';
 import { DialogSetting } from '@bfc/shared';
-
+import { IBotProject } from '@bfc/shared';
 // TODO: this will be possible when ifilestorage is in a shared module
 // import { IFileStorage } from '../../../server/src/models/storage/interface';
 
@@ -36,12 +36,12 @@ export interface BotTemplate {
 
 // TODO: Add types for project, metadata
 export interface PublishPlugin<Config = any> {
-  publish: (config: Config, project: BotProject, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
-  getStatus?: (config: Config, project: BotProject, user?: UserIdentity) => Promise<PublishResponse>;
-  getHistory?: (config: Config, project: BotProject, user?: UserIdentity) => Promise<PublishResult[]>;
+  publish: (config: Config, project: IBotProject, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
+  getStatus?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResponse>;
+  getHistory?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResult[]>;
   rollback?: (
     config: Config,
-    project: BotProject,
+    project: IBotProject,
     rollbackToVersion: string,
     user?: UserIdentity
   ) => Promise<PublishResponse>;
@@ -50,18 +50,18 @@ export interface PublishPlugin<Config = any> {
 
 export interface RuntimeTemplate {
   /** method used to eject the runtime into a project. returns resulting path of runtime! */
-  eject: (project: BotProject, localDisk?: any) => Promise<string>;
+  eject: (project: IBotProject, localDisk?: any) => Promise<string>;
 
   /** build method  */
-  build: (runtimePath: string, project: BotProject) => Promise<void>;
+  build: (runtimePath: string, project: IBotProject) => Promise<void>;
 
   /** run  */
-  run: (project: BotProject, localDisk?: any) => Promise<void>;
+  run: (project: IBotProject, localDisk?: any) => Promise<void>;
 
   /** build for deploy method  */
   buildDeploy: (
     runtimePath: string,
-    project: BotProject,
+    project: IBotProject,
     settings: DialogSetting,
     profileName: string
   ) => Promise<string>;
@@ -111,18 +111,6 @@ export interface ExtensionCollection {
   runtimeTemplates: RuntimeTemplate[];
   botTemplates: BotTemplate[];
   baseTemplates: BotTemplate[];
-}
-
-export interface BotProject {
-  id: string | undefined;
-  name: string;
-  dir: string;
-  dataDir: string;
-  defaultSDKSchema: {
-    [key: string]: string;
-  };
-  settings: DialogSetting | null;
-  [key: string]: any;
 }
 
 export interface FileInfo {

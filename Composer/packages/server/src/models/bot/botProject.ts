@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, DialogSetting, ILuisConfig } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, ILuisConfig } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -34,7 +34,7 @@ const oauthInput = () => ({
 
 const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
 
-export class BotProject {
+export class BotProject implements IBotProject {
   public ref: LocationRef;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
   public id: string | undefined;

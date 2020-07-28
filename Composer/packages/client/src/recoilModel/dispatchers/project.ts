@@ -2,13 +2,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
+import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
-import { DialogSetting } from '@bfc/shared';
 
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';

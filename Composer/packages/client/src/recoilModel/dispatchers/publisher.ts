@@ -71,12 +71,7 @@ export const publisherDispatcher = () => {
     set(publishTypesState, data);
   };
 
-  const updatePublishStatus = async (
-    { set, snapshot }: CallbackInterface,
-    projectId: string,
-    target: any,
-    data: any
-  ) => {
+  const updatePublishStatus = ({ set }: CallbackInterface, projectId: string, target: any, data: any) => {
     const { endpointURL, status, id } = data;
     // the action below only applies to when a bot is being started using the "start bot" button
     // a check should be added to this that ensures this ONLY applies to the "default" profile.
@@ -95,29 +90,26 @@ export const publisherDispatcher = () => {
       }
     }
 
-    const publishHistory = await snapshot.getPromise(publishHistoryState);
-    // const history = { ...data, target: target };
-    const historys = publishHistory[target.name];
-    let tempHistorys = historys ? [...historys] : [];
-    // if no history exists, create one with the latest status
-    // otherwise, replace the latest publish history with this one
-    if (!historys && status !== 404) {
-      tempHistorys = [history];
-    } else if (status !== 404) {
-      // make sure this status payload represents the same item as item 0 (most of the time)
-      // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
-      if (tempHistorys.length && tempHistorys[0].id === id) {
-        tempHistorys.splice(0, 1, history);
-      } else {
-        tempHistorys.unshift(history);
-      }
-    } else {
-      return;
+    if (status !== 404) {
+      set(publishHistoryState, (publishHistory) => {
+        const currentHistory = { ...data, target: target };
+        let targetHistories = publishHistory[target.name] ? [...publishHistory[target.name]] : [];
+        // if no history exists, create one with the latest status
+        // otherwise, replace the latest publish history with this one
+        if (!targetHistories) {
+          targetHistories = [currentHistory];
+        } else {
+          // make sure this status payload represents the same item as item 0 (most of the time)
+          // otherwise, prepend it to the list to indicate a NEW publish has occurred since last loading history
+          if (targetHistories.length && targetHistories[0].id === id) {
+            targetHistories[0] = currentHistory;
+          } else {
+            targetHistories.unshift(currentHistory);
+          }
+        }
+        return { ...publishHistory, [target.name]: targetHistories };
+      });
     }
-    set(publishHistoryState, (publishHistory) => ({
-      ...publishHistory,
-      [target.name]: tempHistorys,
-    }));
   };
 
   const getPublishStatusHelper = async (callbackHelpers: CallbackInterface, projectId: string, target: any) => {
@@ -230,7 +222,7 @@ export const publisherDispatcher = () => {
         }));
       } catch (err) {
         //TODO: error
-        logMessage(callbackHelpers, err.message);
+        logMessage(callbackHelpers, err.response?.data?.message || err.message);
       }
     }
   );

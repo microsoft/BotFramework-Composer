@@ -6,11 +6,11 @@ import path from 'path';
 import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
+import { IBotProject } from '@bfc/shared';
 
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
 import schema from './schema';
-
 // This option controls whether the history is serialized to a file between sessions with Composer
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
@@ -174,7 +174,7 @@ export default async (composer: any): Promise<void> => {
      * @param customizeConfiguration
      */
     private performDeploymentAction = async (
-      project: any,
+      project: IBotProject,
       settings: any,
       runtime: any,
       botId: string,
@@ -371,7 +371,7 @@ export default async (composer: any): Promise<void> => {
     /**************************************************************************************************
      * plugin methods
      *************************************************************************************************/
-    publish = async (config: PublishConfig, project, metadata, user) => {
+    publish = async (config: PublishConfig, project: IBotProject, metadata, user) => {
       const {
         // these are provided by Composer
         profileName, // the name of the publishing profile "My Azure Prod Slot"
@@ -438,7 +438,7 @@ export default async (composer: any): Promise<void> => {
       return response;
     };
 
-    getStatus = async (config: PublishConfig, project, user) => {
+    getStatus = async (config: PublishConfig, project: IBotProject, user) => {
       const profileName = config.profileName;
       const botId = project.id;
       // return latest status
@@ -459,7 +459,7 @@ export default async (composer: any): Promise<void> => {
       }
     };
 
-    history = async (config: PublishConfig, project, user) => {
+    history = async (config: PublishConfig, project: IBotProject, user) => {
       const profileName = config.profileName;
       const botId = project.id;
       return await this.getHistory(botId, profileName);

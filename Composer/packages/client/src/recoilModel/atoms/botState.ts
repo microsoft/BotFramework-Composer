@@ -2,8 +2,7 @@
 // Licensed under the MIT License.
 
 import { atom } from 'recoil';
-import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill } from '@bfc/shared';
-import { DialogSetting } from '@bfc/shared';
+import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill, DialogSetting } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 
