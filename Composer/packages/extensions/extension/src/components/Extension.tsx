@@ -9,7 +9,7 @@ import { PluginConfig } from '../types';
 interface ExtensionProps {
   shell: ShellApi;
   shellData: ShellData;
-  plugins: PluginConfig[];
+  plugins: PluginConfig;
 }
 
 export const Extension: React.FC<ExtensionProps> = function Extension(props) {

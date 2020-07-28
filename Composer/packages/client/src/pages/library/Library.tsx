@@ -8,13 +8,13 @@ import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { useRecoilValue } from 'recoil';
+import { LibraryRef } from '@bfc/shared';
 
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { settingsState, projectIdState, dispatcherState } from '../../recoilModel';
 
 import httpClient from './../../utils/httpUtil';
-import { LibraryRef } from './types';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor } from './styles';
 import { ImportDialog } from './importDialog';
 import { LibraryList } from './libraryList';
@@ -35,14 +35,16 @@ const Library: React.FC<LibraryPageProps> = (props) => {
   const [selectedItem, setSelectedItem] = useState<LibraryRef>();
   const [working, setWorking] = useState(false);
   const [addDialogHidden, setAddDialogHidden] = useState(true);
-  const { setImportedLibraries, fetchProjectById, setApplicationLevelError } = useRecoilValue(dispatcherState);
+  const { setImportedLibraries, fetchProjectById, setApplicationLevelError, checkProjectUpdates } = useRecoilValue(
+    dispatcherState
+  );
 
   useEffect(() => {
     getLibraries();
 
-    return () => {
-      fetchProjectById(projectId);
-    };
+    // return () => {
+    //   fetchProjectById(projectId);
+    // };
   }, []);
 
   useEffect(() => {
@@ -71,7 +73,7 @@ const Library: React.FC<LibraryPageProps> = (props) => {
     setGroups(groups);
   }, [settings.importedLibraries, availableLibraries]);
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
       text: formatMessage('Import Library'),
@@ -120,13 +122,16 @@ const Library: React.FC<LibraryPageProps> = (props) => {
       });
 
       const payload = response.data;
-      console.log('Got results: ', payload);
       const newList = settings.importedLibraries?.slice() || [];
       // if this library exists, update the date and version
       const existing = newList.find((f) => f.name === payload.name);
       if (existing) {
-        existing.lastImported = new Date();
-        existing.version = payload.installedVersion;
+        const index = newList.indexOf(existing);
+        newList.splice(index, 1, {
+          ...existing,
+          lastImported: new Date(),
+          version: payload.installedVersion,
+        });
       } else {
         newList.push({
           name: payload.name,
@@ -138,10 +143,13 @@ const Library: React.FC<LibraryPageProps> = (props) => {
 
       await setImportedLibraries(newList);
 
-      // reload modified content -- TODO: HOW TO DO THIS?
-      // await fetchProjectById(projectId);
+      // wait til the file persistence completes
+      await checkProjectUpdates();
+
+      // reload modified content
+      await fetchProjectById(projectId);
     } catch (err) {
-      // TODO: HOW TO DO THIS??
+      console.error(err);
       setApplicationLevelError({
         status: err.response.status,
         message: err.response && err.response.data.message ? err.response.data.message : err,
@@ -188,8 +196,11 @@ const Library: React.FC<LibraryPageProps> = (props) => {
           // persist settings change
           setImportedLibraries(filtered);
 
+          // wait til the file persistence completes
+          await checkProjectUpdates();
+
           // reload modified content
-          // await fetchProjectById(projectId);
+          await fetchProjectById(projectId);
         } catch (err) {
           setApplicationLevelError({
             status: err.response.status,
@@ -225,7 +236,7 @@ const Library: React.FC<LibraryPageProps> = (props) => {
         <ImportDialog closeDialog={closeDialog} doImport={importFromWeb} />
       </Dialog>
       <WorkingModal hidden={!working} title={formatMessage('Importing library...')} />
-      <ToolBar toolbarItems={toolbarItems} />
+      <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{formatMessage('Asset Library')}</h1>
       </div>

@@ -17,8 +17,9 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import moment from 'moment';
 import { useState, useEffect, useMemo, Fragment } from 'react';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
-
-import { LibraryRef } from '../../store/types';
+import { LibraryRef } from '@bfc/shared';
+import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 
 import { listRoot, tableView, detailList } from './styles';
 
@@ -27,7 +28,7 @@ export interface ILibraryListProps {
   groups: IGroup[];
   redownload: (evt: any) => void;
   isInstalled: (item: LibraryRef) => boolean;
-  removeLibrary?: (evt: any) => void;
+  removeLibrary: (evt: any) => void;
   onItemClick: (item: LibraryRef | null) => void;
   updateItems: (items: LibraryRef[]) => void;
 }
@@ -47,6 +48,22 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
   const { items, groups } = props;
   const [selectIndex, setSelectedIndex] = useState<number>();
   const [currentSort, setSort] = useState({ key: 'ItemName', descending: true });
+
+  const onRenderOverflowButton = (overflowItems: any[] | undefined) => {
+    return (
+      <IconButton
+        menuIconProps={{ iconName: 'MoreVertical' }}
+        menuProps={{ items: overflowItems! }}
+        role="menuitem"
+        title="More options"
+      />
+    );
+  };
+  const onRenderItem = (item: IOverflowSetItemProps) => {
+    const { name, key } = item;
+    return <div key={key}>{name}</div>;
+  };
+
   const columns = [
     {
       key: 'ItemName',
@@ -106,10 +123,22 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
         return (
           <Fragment>
             {item.lastImported && (
-              <Fragment>
-                <DefaultButton text={formatMessage('Update')} onClick={props.redownload} />
-                {props.removeLibrary && <DefaultButton text={formatMessage('Remove')} onClick={props.removeLibrary} />}
-              </Fragment>
+              <OverflowSet
+                overflowItems={[
+                  {
+                    key: 'Update',
+                    name: 'Update',
+                    onClick: () => props.redownload(item),
+                  },
+                  {
+                    key: 'remove',
+                    name: 'Remove',
+                    onClick: () => props.removeLibrary(item),
+                  },
+                ]}
+                onRenderItem={onRenderItem}
+                onRenderOverflowButton={onRenderOverflowButton}
+              />
             )}
             {!item.lastImported && (
               <Fragment>

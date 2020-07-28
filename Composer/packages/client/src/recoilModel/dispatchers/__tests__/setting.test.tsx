@@ -44,6 +44,7 @@ const settings = {
     environment: 'composer',
   },
   publishTargets: [],
+  importedLibraries: [],
   qna: {
     knowledgebaseid: '',
     endpointkey: '',
