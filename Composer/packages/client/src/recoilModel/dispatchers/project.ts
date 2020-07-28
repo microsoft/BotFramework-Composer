@@ -50,7 +50,6 @@ import {
   boilerplateVersionState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
-import { createQnAFileState } from './qna';
 
 const handleProjectFailure = (callbackHelpers: CallbackInterface, ex) => {
   callbackHelpers.set(botOpeningState, false);
@@ -150,12 +149,6 @@ export const projectDispatcher = () => {
 
     try {
       const { dialogs, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(files, botName, locale);
-
-      dialogs.forEach(async (dialog) => {
-        if (!qnaFiles || qnaFiles.length === 0) {
-          await createQnAFileState(callbackHelpers, { id: dialog.id, content: '' });
-        }
-      });
 
       let mainDialog = '';
       const verifiedDialogs = dialogs.map((dialog) => {

@@ -83,6 +83,11 @@ export const qnaDispatcher = () => {
     }
   );
 
+  const createQnAFile = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
+      await createQnAFileState(callbackHelpers, { id, content });
+    }
+  );
   const importQnAFromUrl = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       id,
@@ -115,6 +120,7 @@ export const qnaDispatcher = () => {
   );
 
   return {
+    createQnAFile,
     updateQnAFile,
     importQnAFromUrl,
   };
