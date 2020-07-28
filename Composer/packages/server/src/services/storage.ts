@@ -95,17 +95,11 @@ class StorageService {
       // TODO: fix this behavior and the upper layer interface accordingly
       return JSON.parse(await storageClient.readFile(filePath));
     } else {
-      let writable = true;
-      try {
-        fs.accessSync(filePath, fs.constants.W_OK);
-      } catch (err) {
-        writable = false;
-      }
       return {
         name: Path.basename(filePath),
         parent: Path.dirname(filePath),
         children: await this.getChildren(storageClient, filePath),
-        writable: writable,
+        writable: stat.isWritable,
       };
     }
   };
