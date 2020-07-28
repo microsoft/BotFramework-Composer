@@ -222,6 +222,11 @@ For middleware dealing with authentication, plugins must use `useAuthMiddleware(
 
 #### `composer.addPublishMethod(publishMechanism, schema, instructions)`
 
+By default, the publish method will use the name and description from the package.json file. However, you may provide a customized name:
+```ts
+composer.addPublishMethod(publishMechanism, schema, instructions, customDisplayName, customDisplayDescription);
+```
+
 Provide a new mechanism by which a bot project is transferred from Composer to some external service. The mechanisms can use whatever method necessary to process and transmit the bot project to the desired external service, though it must use a standard signature for the methods.
 
 In most cases, the plugin itself does NOT include the configuration information required to communicate with the external service. Configuration is provided by the Composer application at invocation time.
@@ -236,6 +241,68 @@ Publishing plugins support the following features:
 * rollback - roll back to a previous publish (as provided by getHistory). Optional.
 
 ##### publish(config, project, metadata, user)
+
+This method is responsible for publishing the `project` using the provided `config` using whatever method the plugin is implementing - for example, publish to Azure.
+
+In order to publish a project, this method must perform any necessary actions such as:
+
+* The LUIS lubuild process
+* Calling the appropriate runtime `buildDeploy` method
+* Doing the actual deploy operation
+
+
+**Parameters:**
+| Parameter | Description
+|-- |--
+| config | an object containing information from the publishing profile, as well as the bot's settings -- see below
+| project | an object representing the bot project
+| metadata | any comment passed by the user during publishing
+| user | a user object if one has been provided by an authentication plugin
+
+Config will include:
+
+```ts
+{
+  templatePath: '/path/to/runtime/code',
+  fullSettings: {
+    // all of the bot's settings from project.settings, but also including sensitive keys managed in-app.
+    // this should be used instead of project.settings which may be incomplete
+  },
+  profileName: 'name of publishing profile',
+  ... // All fields from the publishing profile
+}
+```
+
+The project will include:
+```ts
+{
+  id: 'bot id',
+  dataDir: '/path/to/bot/project',
+  files: // A map of files including the name, path and content
+  settings: {
+    // content of settings/appsettings.json
+  }
+}
+```
+
+Below is an simplified implementation of this process:
+```ts
+const publish = async(config, project, metadata, user) => {
+
+  const { fullSettings, profileName } = config;
+
+  // Prepare a copy of the project to build
+
+  // Run the lubuild process
+
+  // Run the runtime.buildDeploy process
+
+  // Now do the final actual deploy somehow...
+
+}
+```
+
+
 
 ##### getStatus(config, project, user)
 
@@ -254,11 +321,39 @@ to communicate with the Bot Framework Emulator.
 
 ```ts
 await composer.addRuntimeTemplate({
-  key: 'azurewebapp',
-  name: 'C#',
-  path: __dirname + '/../../../../runtime/dotnet/azurewebapp',
+  key: 'myUniqueKey',
+  name: 'My Runtime',
+  path: __dirname + '/path/to/runtime/template/code',
   startCommand: 'dotnet run',
+  build: async(runtimePath, project) => {
+    // implement necessary actions that must happen before project can be run
+  },
+  buildDeploy: async(runtimePath, project, settings, publishProfileName) => {
+    // implement necessary actions that must happen before project can be deployed to azure
+
+    return pathToBuildArtifacts;
+  },
 });
+```
+
+#### `composer.getRuntimeByProject(project)`
+
+Returns a reference to the appropriate runtime template based on the project's settings.
+
+```ts
+// load the appropriate runtime config
+const runtime = composer.getRuntimeByProject(project);
+
+// run the build step from the runtime, passing in the project as a parameter
+await runtime.build(project.dataDir, project);
+```
+
+#### `composer.getRuntime(type)`
+
+Get a runtime template by its key.
+
+```ts
+const dotnetRuntime = composer.getRuntime('csharp-azurewebapp');
 ```
 
 ### Bot Project Templates
