@@ -12,8 +12,13 @@ import { getLocale } from './utils/help';
 // Verify bot settings, files meet LUIS/QnA requirments.
 const checkLUISLocales = (assets: BotAssets): Diagnostic[] => {
   const {
+    dialogs,
     setting: { languages },
   } = assets;
+
+  // if use LUIS, continue
+  const useLUIS = dialogs.some((item) => !!item.luFile);
+  if (!useLUIS) return [];
 
   const unsupportedLocales = difference(languages, LUISLocales);
   return unsupportedLocales.map((locale) => {

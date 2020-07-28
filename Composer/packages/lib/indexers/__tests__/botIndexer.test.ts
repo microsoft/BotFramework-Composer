@@ -23,6 +23,7 @@ const botAssets: BotAssets = {
   skillManifests: [],
   dialogs: [
     {
+      luFile: 'a.lu',
       skills: ['skill1', 'skill2'],
     } as DialogInfo,
   ],
