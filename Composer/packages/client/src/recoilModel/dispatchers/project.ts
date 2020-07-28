@@ -8,7 +8,6 @@ import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
 import isArray from 'lodash/isArray';
 import formatMessage from 'format-message';
-import produce from 'immer';
 
 import lgWorker from '../parsers/lgWorker';
 import luWorker from '../parsers/luWorker';
@@ -37,7 +36,6 @@ import {
   botNameState,
   botEnvironmentState,
   dialogsState,
-  projectIdState,
   botOpeningState,
   recentProjectsState,
   templateProjectsState,
@@ -47,7 +45,6 @@ import {
   announcementState,
   boilerplateVersionState,
   botProjectsState,
-  dialogsNewState,
   currentProjectIdState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -157,7 +154,6 @@ export const projectDispatcher = () => {
         set(localeState, locale);
         set(BotDiagnosticsState, diagnostics);
         set(botOpeningState, false);
-        set(projectIdState, projectId);
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
         set(settingsState, mergedSettings);
@@ -254,8 +250,7 @@ export const projectDispatcher = () => {
       await httpClient.delete(`/projects/${projectId}`);
       luFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
-      reset(projectIdState);
-      reset(dialogsState);
+      reset(dialogsState(projectId));
       reset(botEnvironmentState);
       reset(botNameState);
       reset(botStatusState);
@@ -459,7 +454,7 @@ export const projectDispatcher = () => {
   });
 
   return {
-    openBotProject: openBotProjectWorkspace,
+    openBotProject,
     createProject,
     deleteBotProject,
     saveProjectAs,

@@ -13,14 +13,11 @@ const getFullyQualifiedKey = (value: string) => {
   return `Bot_${value}_State`;
 };
 
-export const dialogsState = atom<DialogInfo[]>({
-  key: getFullyQualifiedKey('dialogs'),
-  default: [],
-});
-
-export const projectIdState = atom<string>({
-  key: getFullyQualifiedKey('projectId'),
-  default: '',
+export const dialogsState = atomFamily<DialogInfo[], string>({
+  key: 'dialogsNew',
+  default: (id) => {
+    return [];
+  },
 });
 
 export const botNameState = atom<string>({
@@ -191,14 +188,12 @@ export const onDelLanguageDialogCompleteState = atom<any>({
   default: { func: undefined },
 });
 
-export const dialogsNewState = atomFamily<DialogInfo[], string>({
-  key: 'dialogsNew',
-  default: (id) => {
-    return [];
-  },
-});
-
 export const currentProjectIdState = atom<string>({
   key: getFullyQualifiedKey('currentProjectId'),
   default: '',
+});
+
+export const botProjectsState = atom<string[]>({
+  key: getFullyQualifiedKey('botProjects'),
+  default: [],
 });

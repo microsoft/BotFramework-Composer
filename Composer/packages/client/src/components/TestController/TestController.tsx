@@ -16,10 +16,10 @@ import {
   dialogsState,
   luFilesState,
   settingsState,
-  projectIdState,
   botLoadErrorState,
   botEndpointsState,
   dispatcherState,
+  currentProjectIdState,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus, LuisConfig } from '../../constants';
@@ -57,10 +57,10 @@ export const TestController: React.FC = () => {
   const notifications = useNotifications();
   const botName = useRecoilValue(botNameState);
   const botStatus = useRecoilValue(botStatusState);
-  const dialogs = useRecoilValue(dialogsState);
+  const projectId = useRecoilValue(currentProjectIdState);
+  const dialogs = useRecoilValue(dialogsState(projectId));
   const luFiles = useRecoilValue(luFilesState);
   const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
   const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
   const botEndpoints = useRecoilValue(botEndpointsState);
   const {

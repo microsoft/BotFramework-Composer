@@ -29,7 +29,7 @@ import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import {
-  dialogsNewState,
+  dialogsState,
   schemasState,
   showCreateDialogModalState,
   dispatcherState,
@@ -129,7 +129,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setCurrentProjectId,
   } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(currentProjectIdState);
-  const dialogs = useRecoilValue(dialogsNewState(projectId));
+  const dialogs = useRecoilValue(dialogsState(projectId));
   const { location, dialogId } = props;
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
@@ -587,6 +587,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           <TriggerCreationModal
             dialogId={dialogId}
             isOpen={triggerModalVisible}
+            projectId={projectId}
             onDismiss={onTriggerCreationDismiss}
             onSubmit={onTriggerCreationSubmit}
           />
