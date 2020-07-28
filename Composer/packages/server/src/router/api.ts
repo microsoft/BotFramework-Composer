@@ -8,7 +8,7 @@ import { StorageController } from '../controllers/storage';
 import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
-import { ImportController } from '../controllers/import';
+import { LibraryController } from '../controllers/library';
 
 const router: Router = express.Router({});
 
@@ -57,10 +57,9 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
 // import
-router.post('/projects/:projectId/import', ImportController.import);
-router.get('/projects/:projectId/import', ImportController.import);
-router.post('/projects/:projectId/unimport', ImportController.removeImported);
-router.get('/library', ImportController.getLibrary);
+router.post('/projects/:projectId/import', LibraryController.import);
+router.post('/projects/:projectId/unimport', LibraryController.removeImported);
+router.get('/library', LibraryController.getLibrary);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);

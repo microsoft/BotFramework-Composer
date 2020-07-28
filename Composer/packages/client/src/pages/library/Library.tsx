@@ -24,6 +24,8 @@ interface LibraryPageProps extends RouteComponentProps<{}> {
   targetName?: string;
 }
 
+const DEFAULT_CATEGORY = formatMessage('Available');
+
 const Library: React.FC<LibraryPageProps> = (props) => {
   const [items, setItems] = useState<LibraryRef[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
@@ -51,9 +53,7 @@ const Library: React.FC<LibraryPageProps> = (props) => {
     const groups: any[] = [];
     let items: any[] = [];
 
-    items = items.concat(settings.importedLibraries || []).concat(availableLibraries || []);
-
-    setItems(items);
+    items = items.concat(settings.importedLibraries || []);
 
     groups.push({
       key: 'installed',
@@ -62,14 +62,33 @@ const Library: React.FC<LibraryPageProps> = (props) => {
       count: settings.importedLibraries ? settings.importedLibraries.length : 0,
       level: 0,
     });
-    groups.push({
-      key: 'available',
-      name: 'Available',
-      startIndex: settings.importedLibraries ? settings.importedLibraries.length : 0,
-      count: availableLibraries ? availableLibraries.length : 0,
-      level: 0,
+
+    // find all categories listed in the available libraries
+    const categories = [DEFAULT_CATEGORY];
+    availableLibraries.forEach((item) => {
+      if (!item.category) {
+        item.category = DEFAULT_CATEGORY;
+      }
+      if (item.category && categories.indexOf(item.category) == -1) {
+        categories.push(item.category);
+      }
     });
 
+    categories.forEach((category) => {
+      const categoryItems = availableLibraries.filter((i) => i.category === category);
+      if (categoryItems.length) {
+        groups.push({
+          key: category,
+          name: category,
+          startIndex: items.length,
+          count: categoryItems.length,
+          level: 0,
+        });
+        items = items.concat(categoryItems || []);
+      }
+    });
+
+    setItems(items);
     setGroups(groups);
   }, [settings.importedLibraries, availableLibraries]);
 

@@ -115,7 +115,6 @@ export const LibraryList: React.FC<ILibraryListProps> = (props) => {
       key: 'actions',
       name: '',
       minWidth: 70,
-      maxWidth: 90,
       isRowHeader: true,
       isResizable: true,
       data: 'string',

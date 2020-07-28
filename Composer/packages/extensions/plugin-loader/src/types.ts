@@ -70,7 +70,8 @@ export interface UserIdentity {
 
 export interface DeclarativeLibrary {
   name: string;
-  description: string;
+  description?: string;
+  category?: string;
   version: string;
 }
 
