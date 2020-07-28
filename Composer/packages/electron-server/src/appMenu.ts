@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 import { app, dialog, Menu, MenuItemConstructorOptions, shell } from 'electron';
-import { getEditorAPI } from '@bfc/shared';
 
 import { isMac } from './utility/platform';
 import { AppUpdater } from './appUpdater';
@@ -47,9 +46,14 @@ function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
   return [{ role: 'close' }];
 }
 
-export function initAppMenu() {
-  // Global window functions registered by Composer core app.
-  const EditorAPI = getEditorAPI();
+export function initAppMenu(win?: Electron.BrowserWindow) {
+  // delegate menu events to Renderer process (Composer web app)
+  const handleMenuEvents = (menuEventName: string) => {
+    if (win) {
+      win.webContents.send('electron-menu', { event: menuEventName });
+    }
+  };
+
   const template: MenuItemConstructorOptions[] = [
     // App (Mac)
     ...getAppMenu(),
@@ -62,12 +66,12 @@ export function initAppMenu() {
     {
       label: 'Edit',
       submenu: [
-        { role: 'undo', click: () => EditorAPI.Editing.Undo() },
-        { role: 'redo', click: () => EditorAPI.Editing.Redo() },
+        { role: 'undo', click: () => handleMenuEvents('undo') },
+        { role: 'redo', click: () => handleMenuEvents('redo') },
         { type: 'separator' },
-        { role: 'cut', click: () => EditorAPI.Actions.CutSelection() },
-        { role: 'copy', click: () => EditorAPI.Actions.CopySelection() },
-        { role: 'delete', click: () => EditorAPI.Actions.DeleteSelection() },
+        { role: 'cut', click: () => handleMenuEvents('cut') },
+        { role: 'copy', click: () => handleMenuEvents('copy') },
+        { role: 'delete', click: () => handleMenuEvents('delete') },
         ...getRestOfEditMenu(),
       ],
     },
