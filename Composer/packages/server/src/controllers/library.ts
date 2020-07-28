@@ -22,7 +22,7 @@ export interface FileRef {
   content: string;
 }
 
-export const ImportController = {
+export const LibraryController = {
   getLibrary: async function (req, res) {
     // get libraries installed "locally"
     const localLibrary = Store.get('library', []);
@@ -42,7 +42,7 @@ export const ImportController = {
 
     if (packageName) {
       try {
-        const importResults = await ImportController.importRemoteAsset(
+        const importResults = await LibraryController.importRemoteAsset(
           currentProject,
           packageName,
           version,
@@ -93,9 +93,7 @@ export const ImportController = {
     version,
     isUpdating
   ): Promise<{ installedVersion: string; files: Partial<FileRef>[] } | undefined> {
-    console.log('Fetching package', packageName);
-    const { files, installedVersion } = await ImportController.fetchAndExtract(packageName, version);
-    console.log(`Got ${files.length} files`);
+    const { files, installedVersion } = await LibraryController.fetchAndExtract(packageName, version);
     if (files.length) {
       // copy declarative files into this project's imported dialogs folder
       if (!currentProject.fileStorage.exists(path.join(currentProject.dataDir, 'importedDialogs', packageName))) {
@@ -244,7 +242,6 @@ export const ImportController = {
 
       switch (type) {
         case 'npm':
-          console.log(`Fetching with NPM`);
           // download and extract the files from Npm
           try {
             await downloadNpmPackage({
@@ -263,7 +260,6 @@ export const ImportController = {
           resolve(await filterFiles(type));
           break;
         case 'github':
-          console.log(`Fetching from Github`);
           try {
             stream = await axios({
               method: 'get',
@@ -285,7 +281,6 @@ export const ImportController = {
           }
           break;
         case 'nuget':
-          console.log(`Fetching from Nuget`);
           try {
             stream = await axios({
               method: 'get',

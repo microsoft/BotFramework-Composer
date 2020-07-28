@@ -3,8 +3,21 @@
 
 export default async (composer: any): Promise<void> => {
   composer.addLibrary({
-    name: 'benbrown/hackathon-dialogs',
-    version: 'clean', // points to a specific branch
-    description: 'helpful utility dialogs like getEmail and getPhone',
+    name: 'benbrown/dialogs-getemail',
+    version: 'main', // points to a specific branch
+    category: 'Input Helpers',
+    description: 'collect and validate an email address',
+  });
+  composer.addLibrary({
+    name: 'benbrown/dialogs-getphone',
+    version: 'main', // points to a specific branch
+    category: 'Input Helpers',
+    description: 'collect and validate a phone number',
+  });
+  composer.addLibrary({
+    name: 'benbrown/dialogs-multiline',
+    version: 'main', // points to a specific branch
+    category: 'Input Helpers',
+    description: 'collect multiple messages into a single field with a [DONE] button',
   });
 };

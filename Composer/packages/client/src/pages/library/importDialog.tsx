@@ -33,8 +33,10 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
   const updateVersion = (e, val) => {
     setVersion(val);
   };
-  const submit = () => {
+  const submit = (e) => {
+    e && e.preventDefault();
     props.doImport(name, version, false);
+    return false;
   };
 
   return (
@@ -53,11 +55,11 @@ const ImportDialog: React.FC<ImportDialogProps> = (props) => {
           placeholder={formatMessage('1.0.0')}
           onChange={updateVersion}
         />
+        <DialogFooter>
+          <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
+          <PrimaryButton disabled={isDisable()} text={formatMessage('Import')} type="submit" onClick={submit} />
+        </DialogFooter>
       </form>
-      <DialogFooter>
-        <DefaultButton text={formatMessage('Cancel')} onClick={props.closeDialog} />
-        <PrimaryButton disabled={isDisable()} text={formatMessage('Import')} onClick={submit} />
-      </DialogFooter>
     </Fragment>
   );
 };
