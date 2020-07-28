@@ -35,13 +35,7 @@ import {
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
-import {
-  dialogsState,
-  luFilesState,
-  localeState,
-  projectIdState,
-  schemasState,
-} from '../../recoilModel/atoms/botState';
+import { dialogsState, luFilesState, localeState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { nameRegex } from '../../constants';
 
@@ -207,14 +201,14 @@ interface TriggerCreationModalProps {
   isOpen: boolean;
   onDismiss: () => void;
   onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
+  projectId: string;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
-  const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const dialogs = useRecoilValue(dialogsState);
+  const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
+  const dialogs = useRecoilValue(dialogsState(projectId));
   const luFiles = useRecoilValue(luFilesState);
   const locale = useRecoilValue(localeState);
-  const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const userSettings = useRecoilValue(userSettingsState);
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
