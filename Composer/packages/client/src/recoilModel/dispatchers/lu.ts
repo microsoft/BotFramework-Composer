@@ -164,8 +164,8 @@ export const luDispatcher = () => {
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return;
       console.time('updateLuIntent');
-      const content = luUtil.updateIntent(file, intentName, intent).content;
-      await updateLuFileState(callbackHelpers, { id: file.id, content });
+      const updatedFile = luUtil.updateIntent(file, intentName, intent);
+      await updateLuFileState(callbackHelpers, { id: file.id, updatedFile, content: updatedFile.content });
       console.timeEnd('updateLuIntent');
     }
   );
@@ -175,8 +175,8 @@ export const luDispatcher = () => {
       const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return;
-      const content = luUtil.addIntent(file, intent).content;
-      await updateLuFileState(callbackHelpers, { id: file.id, content });
+      const updatedFile = luUtil.addIntent(file, intent);
+      await updateLuFileState(callbackHelpers, { id: file.id, updatedFile, content: updatedFile.content });
     }
   );
 
@@ -185,8 +185,8 @@ export const luDispatcher = () => {
       const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return;
-      const content = luUtil.removeIntent(file, intentName).content;
-      await updateLuFileState(callbackHelpers, { id: file.id, content });
+      const updatedFile = luUtil.removeIntent(file, intentName);
+      await updateLuFileState(callbackHelpers, { id: file.id, updatedFile, content: updatedFile.content });
     }
   );
 
