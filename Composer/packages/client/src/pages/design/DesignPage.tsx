@@ -46,7 +46,9 @@ import {
   skillsState,
   actionsSeedState,
   userSettingsState,
+  qnaFilesState,
 } from '../../recoilModel';
+import { getBaseName } from '../../utils/fileUtil';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
@@ -145,6 +147,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
+  const qnaFiles = useRecoilValue(qnaFilesState);
   const {
     removeDialog,
     updateDialog,
@@ -159,6 +162,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     addSkillDialogCancel,
     updateLuFile,
     updateLgFile,
+    createQnAFile,
     updateQnAFile,
     updateSkill,
     exportToZip,
@@ -188,14 +192,27 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       return;
     }
     setShowWarning(true);
+  }, [dialogId, dialogs, location]);
 
-    // migration: add id to dialog when dialog doesn't have id
+  // migration: add id to dialog when dialog doesn't have id
+  useEffect(() => {
+    const currentDialog = dialogs.find(({ id }) => id === dialogId);
+
     const dialogContent = currentDialog?.content ? Object.assign({}, currentDialog.content) : { emptyDialog: true };
     if (!dialogContent.emptyDialog && !dialogContent.id) {
       dialogContent.id = dialogId;
       updateDialog({ id: dialogId, content: dialogContent });
     }
-  }, [dialogId, dialogs, location]);
+  }, [dialogId]);
+
+  // migration: add qna file for dialog
+  useEffect(() => {
+    dialogs.forEach(async (dialog) => {
+      if (!qnaFiles || qnaFiles.length === 0 || !qnaFiles.find((qnaFile) => getBaseName(qnaFile.id) === dialog.id)) {
+        await createQnAFile({ id: dialog.id, content: '' });
+      }
+    });
+  }, [dialogs]);
 
   useEffect(() => {
     const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);

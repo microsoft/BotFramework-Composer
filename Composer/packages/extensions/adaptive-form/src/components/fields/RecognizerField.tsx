@@ -15,11 +15,11 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const { value, id, label, description, uiOptions, required, onChange } = props;
   const { shellApi, ...shellData } = useShellApi();
   const recognizers = useRecognizerConfig();
+  const { qnaFiles, luFiles, currentDialog, locale } = shellData;
   const [isCustomType, setIsCustomType] = useState(false);
 
   useEffect(() => {
     if (value === undefined) {
-      const { qnaFiles, luFiles, currentDialog, locale } = shellData;
       const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
       const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
       if (qnaFile && luFile) {
@@ -63,6 +63,11 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       return;
     }
 
+    selected.map((s) => {
+      if (s === SDKKinds.LuisRecognizer) {
+        onChange(`${currentDialog.id}.lu.qna`);
+      }
+    });
     if (selected[0] === SDKKinds.LuisRecognizer) {
       selected[0] = SDKKinds.CrossTrainedRecognizerSet;
     }
