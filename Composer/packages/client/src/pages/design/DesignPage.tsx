@@ -188,6 +188,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       return;
     }
     setShowWarning(true);
+
+    // migration: add id to dialog when dialog doesn't have id
+    const dialogContent = currentDialog?.content ? Object.assign({}, currentDialog.content) : { emptyDialog: true };
+    if (!dialogContent.emptyDialog && !dialogContent.id) {
+      dialogContent.id = dialogId;
+      updateDialog({ id: dialogId, content: dialogContent });
+    }
   }, [dialogId, dialogs, location]);
 
   useEffect(() => {
