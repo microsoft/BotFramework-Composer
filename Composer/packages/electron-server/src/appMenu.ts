@@ -50,7 +50,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
   // delegate menu events to Renderer process (Composer web app)
   const handleMenuEvents = (menuEventName: string) => {
     if (win) {
-      win.webContents.send('electron-menu', { event: menuEventName });
+      win.webContents.send('electron-menu-clicked', { l: menuEventName });
     }
   };
 

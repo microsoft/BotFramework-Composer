@@ -181,6 +181,29 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }, [location]);
 
+  // Subscribe Electron app menu events (copy/cut/del/undo/redo)
+  useEffect(() => {
+    const EditorAPI = getEditorAPI();
+    if (!window.__IS_ELECTRON__) return;
+    if (!window.ipcRenderer || typeof window.ipcRenderer.on !== 'function') return;
+
+    window.ipcRenderer.on('electron-menu-clicked', (e, data) => {
+      const label = get(data, 'label', '');
+      switch (label) {
+        case 'undo':
+          return EditorAPI.Editing.Undo();
+        case 'redo':
+          return EditorAPI.Editing.Redo();
+        case 'cut':
+          return EditorAPI.Actions.CutSelection();
+        case 'copy':
+          return EditorAPI.Actions.CopySelection();
+        case 'delete':
+          return EditorAPI.Actions.DeleteSelection();
+      }
+    });
+  }, []);
+
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
   };
