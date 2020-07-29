@@ -222,13 +222,42 @@ export const provision: ActionCreator = async ({ dispatch }, config, type, proje
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log(result.data);
-    dispatch({
-      type: ActionTypes.PROVISION_SUCCESS,
-      payload: result.data,
-    });
+    // dispatch({
+    //   type: ActionTypes.PROVISION_SUCCESS,
+    //   payload: result.data,
+    // });
   } catch (error) {
     if (error.response.data.redirectUri) {
       await loginPopup(error.response.data.redirectUri, 'https://dev.botframework.com/cb');
     }
+  }
+};
+
+// get bot status from target publisher
+export const getProvisionStatus: ActionCreator = async ({ dispatch }, projectId, target) => {
+  try {
+    const timer = setInterval(async () => {
+      const response = await httpClient.get(`/publish/${projectId}/provisionStatus/${target.name}`);
+      console.log(response.data);
+      if (response.data.config && response.data.config != {}) {
+        clearInterval(timer);
+      }
+    }, 10000);
+
+    // dispatch({
+    //   type: ActionTypes.GET_PUBLISH_STATUS,
+    //   payload: {
+    //     ...response.data,
+    //     target: target,
+    //   },
+    // });
+  } catch (err) {
+    // dispatch({
+    //   type: ActionTypes.GET_PUBLISH_STATUS_FAILED,
+    //   payload: {
+    //     ...err.response.data,
+    //     target: target,
+    //   },
+    // });
   }
 };

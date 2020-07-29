@@ -38,6 +38,9 @@ export class BotProjectDeploy {
   private remoteBotPath: string;
   private logger: (string) => any;
 
+  private provisionStatus: any;
+  private armInstance: any;
+
   // Will be assigned by create or deploy
   private tenantId = '';
 
@@ -48,6 +51,7 @@ export class BotProjectDeploy {
     this.graphToken = config.graphToken;
     this.projPath = config.projPath;
     this.tenantId = config.tenantId;
+    this.provisionStatus = {};
 
     // set path to .deployment file which points at the BotProject.csproj
     this.deployFilePath = config.deployFilePath ?? path.join(this.projPath ?? '.', '.deployment');
@@ -477,6 +481,14 @@ export class BotProjectDeploy {
     }
   }
 
+  public getProvisionStatus() {
+    if (this.armInstance) {
+      return this.armInstance.getStatus();
+    } else {
+      return this.provisionStatus;
+    }
+  }
+
   /**
    * Provision a set of Azure resources for use with a bot
    */
@@ -485,13 +497,16 @@ export class BotProjectDeploy {
     location: string,
     appId: string,
     appPassword?: string,
-    createLuisResource = true,
-    createLuisAuthoringResource = true,
-    createCosmosDb = true,
-    createStorage = true,
-    createAppInsights = true
+    createLuisResource = false,
+    createLuisAuthoringResource = false,
+    createCosmosDb = false,
+    createStorage = false,
+    createAppInsights = false
   ) {
     try {
+      // clear previous provisionStatus
+      this.provisionStatus = null;
+
       if (!this.tenantId) {
         this.tenantId = await this.getTenantId();
       }
@@ -570,8 +585,9 @@ export class BotProjectDeploy {
         logger: this.logger,
       } as AzureResourceManangerConfig;
       const armInstance = new AzureResourceMananger(armConfig);
-      await armInstance.deployResources();
+      this.armInstance = armInstance;
 
+      await armInstance.deployResources();
       // If application insights created, update the application insights settings in azure bot service
       if (createAppInsights) {
         this.logger({
@@ -644,6 +660,14 @@ export class BotProjectDeploy {
         }
       }
       const output = armInstance.getOutput();
+
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: output,
+      });
+      // update provisionStatus
+      this.provisionStatus = armInstance.getStatus();
+      this.armInstance = null;
 
       const provisionResult = {} as any;
 

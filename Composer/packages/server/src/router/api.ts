@@ -46,7 +46,7 @@ router.get('/publish/resourceGroups/:subscriptionId', ProvisionController.getRes
 router.get('/publish/resources/:subscriptionId/:resourceGroup', ProvisionController.getResourceByResourceGroup);
 router.get('/publish/:subscriptionId/locations', ProvisionController.getDeployLocations);
 router.post('/publish/:projectId/provision/:type', ProvisionController.provision);
-router.get('/publish/:projectId/provisionStatus', ProvisionController.getProvisionStatus);
+router.get('/publish/:projectId/provisionStatus/:target', ProvisionController.getProvisionStatus);
 
 // publishing
 router.get('/publish/types', PublishController.getTypes);

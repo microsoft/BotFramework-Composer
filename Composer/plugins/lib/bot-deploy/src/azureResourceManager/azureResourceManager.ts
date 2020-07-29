@@ -1,6 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
+import { StorageManagementClient } from '@azure/arm-storage';
+import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
+import { WebSiteManagementClient } from '@azure/arm-appservice';
+import { AzureBotService } from '@azure/arm-botservice';
+import { ResourceManagementClient } from '@azure/arm-resources';
+import { CosmosDBManagementClient } from '@azure/arm-cosmosdb';
+
+import { BotProjectDeployLoggerType } from '../botProjectLoggerType';
+
+import { AzureDeploymentOutput } from './azureDeploymentOutput';
 import {
   AzureResourceManangerConfig,
   CosmosDBConfig,
@@ -12,15 +23,6 @@ import {
   BotConfig,
   ResourceGroupConfig,
 } from './azureResourceManagerConfig';
-import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
-import { StorageManagementClient } from '@azure/arm-storage';
-import { BotProjectDeployLoggerType } from '../botProjectLoggerType';
-import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
-import { AzureDeploymentOutput } from './azureDeploymentOutput';
-import { WebSiteManagementClient } from '@azure/arm-appservice';
-import { AzureBotService } from '@azure/arm-botservice';
-import { ResourceManagementClient } from '@azure/arm-resources';
-import { CosmosDBManagementClient } from '@azure/arm-cosmosdb';
 
 export class AzureResourceDeploymentStatus {
   public resourceGroupStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
@@ -77,6 +79,8 @@ export class AzureResourceMananger {
   }
 
   public getOutput() {
+    console.log(this.deploymentOutput);
+    console.log(this.deployStatus);
     return this.deploymentOutput;
   }
 
@@ -524,7 +528,7 @@ export class AzureResourceMananger {
       this.deployStatus.cosmosDBStatus = DeploymentStatus.DEPLOYING;
 
       // Create DB accounts
-      let cosmosDBManagementClient = new CosmosDBManagementClient(this.creds, this.subId);
+      const cosmosDBManagementClient = new CosmosDBManagementClient(this.creds, this.subId);
       const dbAccountDeployResult = await cosmosDBManagementClient.databaseAccounts.createOrUpdate(
         config.resourceGroupName,
         config.name,

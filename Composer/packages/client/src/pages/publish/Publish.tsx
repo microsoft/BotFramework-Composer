@@ -279,6 +279,21 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     [settings.publishTargets, projectId, botName]
   );
 
+  const savePublishTarget = useCallback(
+    async (name: string, type: string, configuration: string) => {
+      const targets = (settings.publishTargets || []).concat([
+        {
+          name,
+          type,
+          configuration,
+        },
+      ]);
+      await actions.setPublishTargets(targets);
+      // onSelectTarget(name);
+    },
+    [settings.publishTargets, projectId, botName]
+  );
+
   return (
     <Fragment>
       {!publishDialogHidden && (
@@ -289,11 +304,15 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           createNew={(value) => {
             console.log(value);
             actions.provision(value, ProvisionType.createNew, projectId);
+            savePublishTarget(value.name, value.type, JSON.stringify(value));
+            actions.getProvisionStatus(projectId, value);
           }}
           current={editTarget ? editTarget.item : null}
           selectedExist={(value) => {
             console.log(value);
             actions.provision(value, ProvisionType.selectExisted, projectId);
+            savePublishTarget(value.name, value.type, JSON.stringify(value));
+            actions.getProvisionStatus(projectId, value);
           }}
           targets={settings.publishTargets || []}
           types={publishTypes}

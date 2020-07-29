@@ -35,8 +35,8 @@ interface PublishConfig {
 }
 
 interface ProvisionConfig {
-  name: string;
-  type: string;
+  name: string; // profile name
+  type: string; // webapp or function
   subscription: { subscriptionId: string; tenantId: string; displayName: string };
   hostname: string;
   password: string;
@@ -186,7 +186,13 @@ class AzurePublisher {
     return undefined;
   };
 
-  private addProvisionStatus = (botId: string, profileName: string, newStatus) => {};
+  private setProvisionStatus = (botId: string, profileName: string, newStatus) => {
+    if (!this.provisionStatus[botId]) {
+      this.provisionStatus[botId] = {};
+    }
+    this.provisionStatus[botId][profileName] = newStatus;
+  };
+  // private getProvisionStatus = (botId: string, profileName: string, newStatus) => {};
   private createAndDeploy = async (
     botId: string,
     profileName: string,
@@ -393,7 +399,7 @@ class AzurePublisher {
     return await this.getHistory(botId, profileName);
   };
 
-  provision = async (config: ProvisionConfig, project, user) => {
+  private asyncProvision = async (config: ProvisionConfig, project, user) => {
     const { hostname, password, subscription, accessToken, graphToken, location } = config;
     const botproj = new BotProjectDeploy({
       subId: subscription.subscriptionId,
@@ -406,11 +412,48 @@ class AzurePublisher {
       projPath: '../../plugins/samples/assets/shared/scripts',
       tenantId: subscription.tenantId,
     });
-    botproj.create(hostname, location.name, '', password);
-    return { status: 202, config: {} };
+    // set interval to update status
+    const updatetimer = setInterval(() => {
+      if (this.provisionStatus[project.id][config.name]) {
+        this.provisionStatus[project.id][config.name].details = botproj.getProvisionStatus();
+      } else {
+        this.provisionStatus[project.id][config.name] = {
+          status: 202,
+          details: botproj.getProvisionStatus(),
+        };
+      }
+    }, 10000);
+
+    const result = await botproj.create(hostname, location.name, '', password);
+
+    clearInterval(updatetimer);
+
+    const previous = this.provisionStatus[project.id][config.name];
+    previous.status = 200;
+    previous.config = result;
+    previous.details = botproj.getProvisionStatus();
+    this.setProvisionStatus(project.id, config.name, previous);
+    console.log(result);
+    return result;
   };
 
-  getProvisionStatus = async (config: ProvisionConfig, project, user) => {};
+  provision = async (config: ProvisionConfig, project, user) => {
+    const response = { status: 202 };
+
+    // set in provision status
+    this.setProvisionStatus(project.id, config.name, response);
+    this.asyncProvision(config, project, user);
+    return response;
+  };
+
+  getProvisionStatus = async (config: ProvisionConfig, project, user) => {
+    // update provision status then return
+    if (this.provisionStatus[project.id] && this.provisionStatus[project.id][config.name]) {
+      return this.provisionStatus[project.id][config.name];
+    } else {
+      return {};
+    }
+  };
 }
 
 const azurePublish = new AzurePublisher();
