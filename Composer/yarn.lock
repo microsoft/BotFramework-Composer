@@ -9695,7 +9695,7 @@ form-data@^3.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
-format-message-cli@^6.2.3:
+format-message-cli@6.2.3, format-message-cli@^6.2.3:
   version "6.2.3"
   resolved "https://registry.yarnpkg.com/format-message-cli/-/format-message-cli-6.2.3.tgz#63e64e52d296445e29a25f3114519758c2921a49"
   integrity sha512-WdQYkH9WnAH7ghHTMye+aqxFsvXyO3+OQCAyeuVjLu46WjBlZBQfMNXv7MO6FTpqGpppukfxupb/Z+Xn2dAt0Q==
