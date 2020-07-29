@@ -36,7 +36,7 @@ import {
 } from '../../utils/dialogUtil';
 import { addIntent } from '../../utils/luUtil';
 import { dialogsState, luFilesState, localeState, schemasState } from '../../recoilModel/atoms/botState';
-import { userSettingsState } from '../../recoilModel';
+import { userSettingsState, botStateByProjectIdSelector } from '../../recoilModel';
 import { nameRegex } from '../../constants';
 
 // -------------------- Styles -------------------- //
@@ -206,10 +206,8 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const { dialogs, locale, schemas } = useRecoilValue(botStateByProjectIdSelector);
   const luFiles = useRecoilValue(luFilesState);
-  const locale = useRecoilValue(localeState);
-  const schemas = useRecoilValue(schemasState);
   const userSettings = useRecoilValue(userSettingsState);
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
