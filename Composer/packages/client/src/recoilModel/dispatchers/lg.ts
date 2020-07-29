@@ -134,9 +134,7 @@ export const lgDispatcher = () => {
 
   const updateLgFile = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
-      console.time('updateLgFile');
       await updateLgFileState(callbackHelpers, { id, content });
-      console.timeEnd('updateLgFile');
     }
   );
 
@@ -160,10 +158,7 @@ export const lgDispatcher = () => {
       if (!lgFile) {
         throw new Error(`lg file ${id} not exist`);
       }
-      console.time('updateLgTemplate');
       const updatedFile = lgUtil.updateTemplate(lgFile, templateName, template, lgFileResolver(lgFiles));
-      console.timeEnd('updateLgTemplate');
-
       await updateLgFileState(callbackHelpers, { id, content: updatedFile.content, updatedFile });
     }
   );

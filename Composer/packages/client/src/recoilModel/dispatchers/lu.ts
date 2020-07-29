@@ -144,10 +144,7 @@ export const luDispatcher = () => {
       content: string;
       projectId: string;
     }) => {
-      console.time('updateLuFile');
-
       await updateLuFileState(callbackHelpers, { id, content });
-      console.timeEnd('updateLuFile');
     }
   );
 
@@ -164,10 +161,8 @@ export const luDispatcher = () => {
       const luFiles = await callbackHelpers.snapshot.getPromise(luFilesState);
       const file = luFiles.find((temp) => temp.id === id);
       if (!file) return;
-      console.time('updateLuIntent');
       const updatedFile = luUtil.updateIntent(file, intentName, intent);
       await updateLuFileState(callbackHelpers, { id: file.id, updatedFile, content: updatedFile.content });
-      console.timeEnd('updateLuIntent');
     }
   );
 
