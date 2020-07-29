@@ -142,10 +142,6 @@ export const DefaultMenuSchema: MenuUISchema = {
     label: formatMessage('Emit a custom event'),
     submenu: [SubmenuNames.AccessExternalResources],
   },
-  [SDKKinds.OAuthInput]: {
-    label: formatMessage('OAuth login'),
-    submenu: [SubmenuNames.AccessExternalResources],
-  },
   [SDKKinds.QnAMakerDialog]: {
     label: formatMessage('Connect to QnA Knowledgebase'),
     submenu: [SubmenuNames.AccessExternalResources],
