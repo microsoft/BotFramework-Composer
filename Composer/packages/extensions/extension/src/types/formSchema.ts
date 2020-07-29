@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
-
-import { FieldWidget, FieldProps } from './form';
+import { FieldProps, FieldWidget } from './form';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UIOptionValue<R = string, D = any> = R | UIOptionFunc<R, D>;
@@ -47,6 +46,7 @@ export interface UIOptions {
   };
   /** subtitle rendered in form title, defaults to schema.$kind */
   subtitle?: UIOptionValue<string>;
+  intellisenseScopes?: string[];
 }
 
 export type RoleSchema = { [key in SDKRoles]?: Omit<UIOptions, 'properties'> };

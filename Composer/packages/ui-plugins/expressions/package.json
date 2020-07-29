@@ -18,6 +18,7 @@
   "peerDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension": "*",
+    "@bfc/intellisense": "*",
     "@uifabric/fluent-theme": "^7.1.4",
     "@uifabric/icons": "^7.3.0",
     "@uifabric/styling": "^7.7.4",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@bfc/adaptive-form": "*",
     "@bfc/extension": "*",
+    "@bfc/intellisense": "*",
     "@bfc/test-utils": "*",
     "@types/react": "16.9.23",
     "@types/react-dom": "16.9.5",

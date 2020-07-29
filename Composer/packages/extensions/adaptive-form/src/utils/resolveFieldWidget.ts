@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { UIOptions, FieldWidget, PluginConfig, JSONSchema7 } from '@bfc/extension';
-
+import { FieldWidget, JSONSchema7, PluginConfig, UIOptions } from '@bfc/extension';
 import * as DefaultFields from '../components/fields';
 
 /**
@@ -42,6 +41,10 @@ export function resolveFieldWidget(
 
     if (Array.isArray(schema.enum)) {
       return DefaultFields.SelectField;
+    }
+
+    if (uiOptions?.intellisenseScopes?.length) {
+      return DefaultFields.IntellisenseField;
     }
 
     switch (schema.type) {

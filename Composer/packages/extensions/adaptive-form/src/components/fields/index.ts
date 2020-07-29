@@ -3,6 +3,7 @@
 export * from './ArrayField';
 export * from './BooleanField';
 export * from './EditableField';
+export * from './IntellisenseField';
 export * from './IntentField';
 export * from './JsonField';
 export * from './NumberField';
