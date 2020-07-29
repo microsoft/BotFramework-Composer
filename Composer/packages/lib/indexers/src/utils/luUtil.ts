@@ -9,9 +9,6 @@
  */
 import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import isEmpty from 'lodash/isEmpty';
-import cloneDeep from 'lodash/cloneDeep';
-import cloneDeepWith from 'lodash/cloneDeepWith';
-import isFunction from 'lodash/isFunction';
 
 import get from 'lodash/get';
 import { LuFile, LuSectionTypes, LuIntentSection, Diagnostic, Position, Range, DiagnosticSeverity } from '@bfc/shared';
@@ -43,10 +40,7 @@ export function convertLuDiagnostic(d: any, source: string): Diagnostic {
 
 export function convertLuParseResultToLuFile(id = '', resource): LuFile {
   // filter structured-object from LUParser result.
-  // TODO: remove this once LUParser return pure data.
-  const { Sections, Errors, Content } = cloneDeepWith(resource, (value) => {
-    return isFunction(value) ? undefined : cloneDeep(value);
-  });
+  const { Sections, Errors, Content } = resource;
   const intents: LuIntentSection[] = [];
   Sections.forEach((section) => {
     const { Name, Body, SectionType } = section;
@@ -179,8 +173,7 @@ function updateInSections(
 export function updateIntent(luFile: LuFile, intentName: string, intent: LuIntentSection | null): LuFile {
   let targetSection;
   let targetSectionContent;
-  // TODO: ensure LUParser not modify arguments, remove clone here later.
-  const { id, resource } = cloneDeep(luFile);
+  const { id, resource } = luFile;
 
   const updatedSectionContent = textFromIntent(intent);
   const { Sections } = resource;
@@ -248,7 +241,7 @@ export function addIntent(luFile: LuFile, { Name, Body, Entities }: LuIntentSect
 }
 
 export function addIntents(luFile: LuFile, intents: LuIntentSection[]): LuFile {
-  let result = cloneDeep(luFile);
+  let result = luFile;
   for (const intent of intents) {
     result = addIntent(result, intent);
   }
@@ -264,7 +257,7 @@ export function removeIntent(luFile: LuFile, intentName: string): LuFile {
   return updateIntent(luFile, intentName, null);
 }
 export function removeIntents(luFile: LuFile, intentNames: string[]): LuFile {
-  let result = cloneDeep(luFile);
+  let result = luFile;
   for (const intentName of intentNames) {
     result = removeIntent(result, intentName);
   }

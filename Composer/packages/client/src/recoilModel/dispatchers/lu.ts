@@ -4,7 +4,7 @@
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
-
+import luWorker from '../parsers/luWorker';
 import { getBaseName, getExtension } from '../../utils/fileUtil';
 import * as luUtil from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
@@ -37,7 +37,7 @@ export const updateLuFileState = async (
 
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
-  const updatedLuFile = updatedFile || luUtil.parse(id, content); // if exist updated luFile, do not parse again.
+  const updatedLuFile = updatedFile || ((await luWorker.parse(id, content)) as LuFile); // if exist updated luFile, do not parse again.
   const originLuFile = luFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = luFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);

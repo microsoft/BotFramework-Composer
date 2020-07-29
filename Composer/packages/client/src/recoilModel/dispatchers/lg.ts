@@ -6,6 +6,7 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
+import LgWorker from './../parsers/lgWorker';
 
 import { lgFilesState, localeState, settingsState } from './../atoms/botState';
 import * as lgUtil from './../../utils/lgUtil';
@@ -25,7 +26,7 @@ export const updateLgFileState = async (
   const lgFiles = await snapshot.getPromise(lgFilesState);
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
-  const updatedLgFile = updatedFile || lgUtil.parse(id, content, lgFiles);
+  const updatedLgFile = updatedFile || ((await LgWorker.parse(id, content, lgFiles)) as LgFile);
   const originLgFile = lgFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = lgFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);
