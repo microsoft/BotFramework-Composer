@@ -208,12 +208,19 @@ export const createActionMenu = (
   // Append a 'Custom Actions' item conditionally.
   if (customActionGroups) {
     // Exclude those $kinds already grouped by uischema
-    const is$kindUngrouped = ($kind: SDKKinds) => !!menuOptions[$kind];
+    const is$kindUngrouped = ($kind: SDKKinds) => !menuOptions[$kind];
 
     const customActionItems = createCustomActionSubMenu(customActionGroups, onClick, is$kindUngrouped);
     if (customActionItems.length) {
-      const customActionTitle = formatMessage('Custom Actions');
-      resultItems.push(createSubMenu(customActionTitle, onClick, customActionItems));
+      const customActionGroupName = formatMessage('Custom Actions');
+      const submenuWithDuplicatedName = resultItems.find((item) => item.text === customActionGroupName);
+      if (submenuWithDuplicatedName) {
+        // When 'Custom Actions' label exists, append custom actions after that submenu.
+        submenuWithDuplicatedName.subMenuProps?.items.push(...customActionItems);
+      } else {
+        // Otherwise create a new submenu named as 'Custom Actions'.
+        resultItems.push(createSubMenu(customActionGroupName, onClick, customActionItems));
+      }
     }
   }
 
