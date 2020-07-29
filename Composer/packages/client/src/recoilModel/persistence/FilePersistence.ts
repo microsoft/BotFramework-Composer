@@ -3,9 +3,7 @@
 import keys from 'lodash/keys';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import { DialogInfo, DialogSchemaFile } from '@bfc/shared';
-
-import { DialogSetting } from '../../recoilModel/types';
+import { DialogInfo, DialogSchemaFile, DialogSetting } from '@bfc/shared';
 
 import { SkillManifest } from './../../pages/design/exportSkillModal/constants';
 import { LuFile, LgFile } from './../../../../lib/shared/src/types/indexers';
@@ -76,7 +74,7 @@ class FilePersistence {
       if (this._isFlushing) {
         return new Promise((resolve) => {
           const timer = setInterval(() => {
-            if (this.isEmpty()) {
+            if (this.isEmpty() && !this._isFlushing) {
               clearInterval(timer);
               resolve(true);
             }

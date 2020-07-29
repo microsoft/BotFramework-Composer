@@ -2,11 +2,20 @@
 // Licensed under the MIT License.
 
 import { atom } from 'recoil';
-import { DialogInfo, DialogSchemaFile, Diagnostic, LgFile, LuFile, BotSchemas, Skill } from '@bfc/shared';
+import {
+  DialogInfo,
+  DialogSchemaFile,
+  Diagnostic,
+  LgFile,
+  LuFile,
+  BotSchemas,
+  Skill,
+  DialogSetting,
+} from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 
-import { PublishType, DialogSetting, BreadcrumbItem } from './../../recoilModel/types';
+import { PublishType, BreadcrumbItem } from './../../recoilModel/types';
 import { BotStatus } from './../../constants';
 
 const getFullyQualifiedKey = (value: string) => {
