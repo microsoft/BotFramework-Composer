@@ -18,12 +18,6 @@ jest.mock('./../workers/luParser.worker.ts', () => {
   return Test;
 });
 
-const getLuIntent = (Name, Body): LuIntentSection =>
-  ({
-    Name,
-    Body,
-  } as LuIntentSection);
-
 describe('test lu worker', () => {
   it('get expected parse result', async () => {
     const content = `# Hello
