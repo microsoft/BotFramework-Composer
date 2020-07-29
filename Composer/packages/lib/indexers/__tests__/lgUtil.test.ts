@@ -13,6 +13,31 @@ import {
 } from '../src/utils/lgUtil';
 
 describe('update lg template', () => {
+  it('should parse lg file', () => {
+    const content = `# Exit
+-Thanks for using todo bot.
+
+# Greeting
+-What's up bro`;
+
+    const templates = parse('a.lg', content, []).templates;
+    expect(templates.length).toEqual(2);
+    expect(templates[0].name).toEqual('Exit');
+    expect(templates[0].body).toContain('-Thanks for using todo bot.');
+    expect(templates[0].parameters).toEqual([]);
+    expect(templates[0].range).toEqual({
+      startLineNumber: 1,
+      endLineNumber: 3,
+    });
+    expect(templates[1].name).toEqual('Greeting');
+    expect(templates[1].body).toContain(`-What's up bro`);
+    expect(templates[1].parameters).toEqual([]);
+    expect(templates[1].range).toEqual({
+      startLineNumber: 4,
+      endLineNumber: 5,
+    });
+  });
+
   it('should update lg template', () => {
     const content = `# Exit
 -Thanks for using todo bot.

@@ -1,8 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { LuIntentSection } from '@bfc/shared';
-
 import luWorker from '../luWorker';
 
 jest.mock('./../workers/luParser.worker.ts', () => {

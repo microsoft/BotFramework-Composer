@@ -51,8 +51,8 @@ export function convertLuParseResultToLuFile(id = '', resource): LuFile {
   Sections.forEach((section) => {
     const { Name, Body, SectionType } = section;
     const range = {
-      startLineNumber: get(section, 'ParseTree.start.line', 0),
-      endLineNumber: get(section, 'ParseTree.stop.line', 0),
+      startLineNumber: get(section, 'Range.Start.Line', 0),
+      endLineNumber: get(section, 'Range.End.Line', 0),
     };
     if (SectionType === LuSectionTypes.SIMPLEINTENTSECTION) {
       const Entities = section.Entities.map(({ Name }) => Name);
@@ -61,8 +61,8 @@ export function convertLuParseResultToLuFile(id = '', resource): LuFile {
       const Children = section.SimpleIntentSections.map((subSection) => {
         const { Name, Body } = subSection;
         const range = {
-          startLineNumber: get(subSection, 'ParseTree.start.line', 0),
-          endLineNumber: get(subSection, 'ParseTree.stop.line', 0),
+          startLineNumber: get(subSection, 'Range.Start.Line', 0),
+          endLineNumber: get(subSection, 'Range.End.Line', 0),
         };
         const Entities = subSection.Entities.map(({ Name }) => Name);
         return { Name, Body, Entities, range };

@@ -37,8 +37,8 @@ export function convertTemplatesToLgFile(id = '', content: string, templates: Te
       body: t.body,
       parameters: t.parameters,
       range: {
-        startLineNumber: get(t, 'sourceRange.parseTree.start.line', 0),
-        endLineNumber: get(t, 'sourceRange.parseTree.stop.line', 0),
+        startLineNumber: get(t, 'sourceRange.range.start.line', 0),
+        endLineNumber: get(t, 'sourceRange.range.end.line', 0),
       },
     };
   });
