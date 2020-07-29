@@ -7,7 +7,7 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 import keys from 'lodash/keys';
-import { createSingleMessage } from '@bfc/indexers';
+import { createSingleMessage, BotIndexer } from '@bfc/indexers';
 import { LuFile, DialogInfo, DiagnosticSeverity } from '@bfc/shared';
 import formatMessage from 'format-message';
 
@@ -168,5 +168,7 @@ export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
     const msg = emptyLuFiles.map((file) => file.id).join(' ');
     throw new Error(formatMessage(`You have the following empty LuFile(s): `) + msg);
   }
-  return referred;
+  // supported LUIS locale.
+  const supported = BotIndexer.filterLUISFilesToPublish(referred);
+  return supported;
 }
