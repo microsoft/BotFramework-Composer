@@ -16,3 +16,25 @@ export const defaultPublishConfig = {
   configuration: JSON.stringify({}),
 };
 export const DEFAULT_RUNTIME = 'dotnet';
+
+export const LUISLocales = [
+  'en-us',
+  'ar-ar',
+  'zh-cn',
+  'nl-nl',
+  'fr-fr',
+  'fr-ca',
+  'de-de',
+  'gu-in',
+  'hi-in',
+  'it-it',
+  'ja-jp',
+  'ko-kr',
+  'mr-in',
+  'pt-br',
+  'es-es',
+  'es-mx',
+  'ta-in',
+  'te-in',
+  'tr-tr',
+];
