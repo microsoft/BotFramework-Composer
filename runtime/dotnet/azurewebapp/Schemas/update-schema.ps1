@@ -8,8 +8,15 @@ $BACKUP_UISCHEMA_FILE="sdk-backup.schema"
 
 Write-Host "Running schema merge on $runtime runtime."
 
-Move-Item -Force -Path $SCHEMA_FILE -Destination $BACKUP_SCHEMA_FILE
-Move-Item -Force -Path $UISCHEMA_FILE -Destination $BACKUP_UISCHEMA_FILE
+if (Test-Path $SCHEMA_FILE -PathType leaf)
+{
+  Move-Item -Force -Path $SCHEMA_FILE -Destination $BACKUP_SCHEMA_FILE
+}
+
+if (Test-Path $UISCHEMA_FILE -PathType leaf)
+{
+  Move-Item -Force -Path $UISCHEMA_FILE -Destination $BACKUP_UISCHEMA_FILE
+}
 
 bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/$runtime/*.csproj" -o $SCHEMA_FILE
 
@@ -30,6 +37,12 @@ if (Test-Path $SCHEMA_FILE -PathType leaf)
 else
 {
   Write-Host "Schema merge failed. Restoring previous versions."
-  Move-Item -Force -Path $BACKUP_SCHEMA_FILE -Destination $SCHEMA_FILE
-  Move-Item -Force -Path $BACKUP_UISCHEMA_FILE -Destination $UISCHEMA_FILE
+  if (Test-Path $BACKUP_SCHEMA_FILE -PathType leaf)
+  {
+    Move-Item -Force -Path $BACKUP_SCHEMA_FILE -Destination $SCHEMA_FILE
+  }
+  if (Test-Path $BACKUP_UISCHEMA_FILE -PathType leaf)
+  {
+    Move-Item -Force -Path $BACKUP_UISCHEMA_FILE -Destination $UISCHEMA_FILE
+  }
 }
