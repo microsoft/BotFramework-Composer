@@ -11,8 +11,9 @@ import { Fragment, useState, useMemo } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
+import { PublishTarget } from '@bfc/shared';
 
-import { PublishTarget, PublishType } from '../../recoilModel/types';
+import { PublishType } from '../../recoilModel/types';
 import { userSettingsState } from '../../recoilModel';
 
 import { label } from './styles';
