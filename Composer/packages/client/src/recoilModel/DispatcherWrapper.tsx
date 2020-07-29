@@ -6,20 +6,20 @@ import { useRef, useEffect, useState, Fragment } from 'react';
 import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
 import React from 'react';
+import { BotAssets } from '@bfc/shared';
 
 import { prepareAxios } from './../utils/auth';
 import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
   dialogsState,
+  dialogSchemasState,
   projectIdState,
   luFilesState,
   skillManifestsState,
   settingsState,
   lgFilesState,
-  dialogSchemasState,
 } from './atoms';
-import { BotAssets } from './types';
 
 const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([

@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { DialogInfo, LgFile, LuFile, DialogSchemaFile } from '@bfc/shared';
+import { DialogInfo, DialogSchemaFile, LgFile, LuFile, BotAssets } from '@bfc/shared';
 
-import { BotAssets } from '../../types';
 import filePersistence from '../FilePersistence';
 
 jest.mock('axios', () => {

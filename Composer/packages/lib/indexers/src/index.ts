@@ -55,6 +55,7 @@ class Indexer {
 
 export const indexer = new Indexer();
 
+export * from './botIndexer';
 export * from './dialogIndexer';
 export * from './dialogSchemaIndexer';
 export * from './lgIndexer';
