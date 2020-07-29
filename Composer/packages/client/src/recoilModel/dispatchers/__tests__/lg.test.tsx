@@ -16,6 +16,7 @@ jest.mock('../../parsers/lgWorker', () => {
   return {
     parse: (id, content) => ({ id, content }),
     addTemplate: require('../../../utils/lgUtil').addTemplate,
+    addTemplates: require('../../../utils/lgUtil').addTemplates,
     updateTemplate: require('../../../utils/lgUtil').updateTemplate,
     removeTemplate: require('../../../utils/lgUtil').removeTemplate,
     removeAllTemplates: require('../../../utils/lgUtil').removeTemplates,

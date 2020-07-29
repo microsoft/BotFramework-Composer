@@ -12,6 +12,7 @@ import {
   luFilesState,
   lgFilesState,
   BotDiagnosticsState,
+  settingsState,
 } from '../../../src/recoilModel';
 
 const state = {
@@ -30,6 +31,7 @@ const state = {
           source: 'test',
         },
       ],
+      skills: ['https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json'],
     },
   ],
   luFiles: [
@@ -91,6 +93,14 @@ const state = {
       source: 'server',
     },
   ],
+  settings: {
+    skill: [
+      {
+        manifestUrl: 'https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json',
+        name: 'Email Skill',
+      },
+    ],
+  },
 };
 
 const initRecoilState = ({ set }) => {
@@ -99,6 +109,7 @@ const initRecoilState = ({ set }) => {
   set(luFilesState, state.luFiles);
   set(lgFilesState, state.lgFiles);
   set(BotDiagnosticsState, state.diagnostics);
+  set(settingsState, state.settings);
 };
 
 describe('useNotification hooks', () => {
@@ -116,7 +127,7 @@ describe('useNotification hooks', () => {
   });
 
   it('should return notifications', () => {
-    expect(renderedResult.current.length).toBe(4);
+    expect(renderedResult.current.length).toBe(5);
   });
 
   it('should return filtered notifications', () => {

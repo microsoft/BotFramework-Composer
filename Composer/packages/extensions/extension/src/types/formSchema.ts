@@ -50,7 +50,7 @@ export interface UIOptions {
 }
 
 export type RoleSchema = { [key in SDKRoles]?: Omit<UIOptions, 'properties'> };
-export type UISchema = { [key in SDKKinds]?: UIOptions };
+export type FormUISchema = { [key in SDKKinds]?: UIOptions };
 export type RecognizerSchema = {
   /** Unique id to identify recognizer (SDK $kind) */
   id: string;

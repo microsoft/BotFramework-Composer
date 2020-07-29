@@ -14,10 +14,10 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
+import { ILuisConfig } from '@bfc/shared';
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { ILuisConfig } from '../../recoilModel/types';
 
 // -------------------- Styles -------------------- //
 const textFieldLabel = css`

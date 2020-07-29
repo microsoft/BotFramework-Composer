@@ -16,8 +16,10 @@ jest.mock('../../parsers/luWorker', () => {
   return {
     parse: (id, content) => ({ id, content }),
     addIntent: require('@bfc/indexers/lib/utils/luUtil').addIntent,
+    addIntents: require('@bfc/indexers/lib/utils/luUtil').addIntents,
     updateIntent: require('@bfc/indexers/lib/utils/luUtil').updateIntent,
     removeIntent: require('@bfc/indexers/lib/utils/luUtil').removeIntent,
+    removeIntents: require('@bfc/indexers/lib/utils/luUtil').removeIntents,
   };
 });
 const luFiles = [

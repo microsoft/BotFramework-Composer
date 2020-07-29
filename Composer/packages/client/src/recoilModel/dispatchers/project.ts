@@ -2,7 +2,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties } from '@bfc/shared';
+import { dereferenceDefinitions, LuFile, DialogInfo, SensitiveProperties, DialogSetting } from '@bfc/shared';
 import { indexer, validateDialog } from '@bfc/indexers';
 import objectGet from 'lodash/get';
 import objectSet from 'lodash/set';
@@ -15,10 +15,10 @@ import httpClient from '../../utils/httpUtil';
 import { BotStatus } from '../../constants';
 import { getReferredFiles } from '../../utils/luUtil';
 import luFileStatusStorage from '../../utils/luFileStatusStorage';
-import { DialogSetting } from '../../recoilModel/types';
 import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
+import languageStorage from '../../utils/languageStorage';
 import { designPageLocationState } from '../atoms/botState';
 
 import {
@@ -113,18 +113,10 @@ export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
     const { snapshot, gotoSnapshot } = callbackHelpers;
     const curLocation = await snapshot.getPromise(locationState);
-    const {
-      files,
-      botName,
-      botEnvironment,
-      location,
-      schemas,
-      settings,
-      id: projectId,
-      locale,
-      diagnostics,
-      skills,
-    } = data;
+    const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
+    const storedLocale = languageStorage.get(botName)?.locale;
+    const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
+
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
     } catch (err) {

@@ -79,3 +79,29 @@ export const tableCell = css`
 export const content = css`
   outline: none;
 `;
+
+export const diffEditorContainer = css`
+  min-width: 400px;
+  height: 100%;
+  > div {
+    width: calc(50% - 10px);
+    height: 100%;
+    float: left;
+  }
+`;
+
+export const editorToolbar = css`
+  height: 50px;
+`;
+
+export const diffEditorRight = css`
+  margin-left: 20px;
+`;
+
+export const diffEditorContent = css`
+  height: calc(100% - 50px);
+`;
+
+export const dropdown = {
+  dropdown: { width: '50%', maxWidth: 300, minWidth: 100 },
+};
