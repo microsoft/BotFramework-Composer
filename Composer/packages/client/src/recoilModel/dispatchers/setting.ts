@@ -9,6 +9,7 @@ import has from 'lodash/has';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
+
 export const settingsDispatcher = () => {
   const setSettings = useRecoilCallback<[string, DialogSetting], Promise<void>>(
     ({ set }: CallbackInterface) => async (projectId: string, settings: DialogSetting) => {
