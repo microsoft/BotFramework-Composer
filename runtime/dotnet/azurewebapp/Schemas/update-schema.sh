@@ -17,14 +17,14 @@ echo "Running schema merge on $runtime runtime."
 [ -f "$SCHEMA_FILE" ] && mv "./$SCHEMA_FILE" "./$BACKUP_SCHEMA_FILE"
 [ -f "$UISCHEMA_FILE" ] && mv "./$UISCHEMA_FILE" "./$BACKUP_UISCHEMA_FILE"
 
-bf dialog:merge "*.schema" "*.uischema" "../runtime/$runtime/*.csproj" -o $SCHEMA_FILE
+bf dialog:merge "*.schema" "!sdk-backup.schema" "*.uischema" "!sdk-backup.uischema" "!sdk.override.uischema" "../runtime/$runtime/*.csproj" -o $SCHEMA_FILE
 
 if [ -f "$SCHEMA_FILE" ]; then
   rm -rf "./$BACKUP_SCHEMA_FILE"
   rm -rf "./$BACKUP_UISCHEMA_FILE"
   echo "Schema merged succesfully."
-  echo "  Schema:    $SCHEMA_FILE"
-  echo "  UI Schema: $UISCHEMA_FILE"
+  [ -f "$SCHEMA_FILE" ] && echo "  Schema:    $SCHEMA_FILE"
+  [ -f "$UISCHEMA_FILE" ] && echo "  UI Schema: $UISCHEMA_FILE"
 else
   echo "Schema merge failed.  Restoring previous versions."
   [ -f "$BACKUP_SCHEMA_FILE" ] && mv "./$BACKUP_SCHEMA_FILE" "./$SCHEMA_FILE"
