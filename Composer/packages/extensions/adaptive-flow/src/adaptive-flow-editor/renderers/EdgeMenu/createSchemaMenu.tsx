@@ -16,6 +16,8 @@ import set from 'lodash/set';
 
 import { MenuEventTypes } from '../../constants/MenuTypes';
 
+import { menuOrderMap } from './defaultMenuOrder';
+
 type ActionMenuItemClickHandler = (item?: IContextualMenuItem) => any;
 type ActionKindFilter = ($kind: SDKKinds) => boolean;
 
@@ -54,17 +56,18 @@ const createBaseActionMenu = (
         onClick: (e, itemData) => onClick(itemData),
       };
     } else {
-      const subMenuItems: IContextualMenuItem[] = Object.entries(labelData).map(([sublabelName, sublabelData]) =>
-        buildMenuItemFromMenuTree(sublabelName, sublabelData)
-      );
+      const subMenuItems: IContextualMenuItem[] = Object.keys(labelData)
+        .sort((label1, label2) => {
+          const order1 = menuOrderMap[label1] ?? Number.MAX_VALUE;
+          const order2 = menuOrderMap[label2] ?? Number.MAX_VALUE;
+          return order1 - order2;
+        })
+        .map((sublabelName) => buildMenuItemFromMenuTree(sublabelName, labelData[sublabelName]));
       return createSubMenu(labelName, onClick, subMenuItems);
     }
   };
 
-  const stepMenuItems = Object.entries(menuTree).map(([labelName, labelData]) =>
-    buildMenuItemFromMenuTree(labelName, labelData)
-  );
-
+  const stepMenuItems = buildMenuItemFromMenuTree('root', menuTree).subMenuProps?.items || [];
   return stepMenuItems;
 };
 
