@@ -14,96 +14,138 @@ const getFullyQualifiedKey = (value: string) => {
 };
 
 export const dialogsState = atomFamily<DialogInfo[], string>({
-  key: 'dialogsNew',
+  key: getFullyQualifiedKey('dialogs'),
   default: (id) => {
     return [];
   },
 });
 
-export const botNameState = atom<string>({
-  key: getFullyQualifiedKey('botName'),
-  default: '',
-});
-
-export const locationState = atom<string>({
-  key: getFullyQualifiedKey('location'),
-  default: '',
-});
-
-export const botEnvironmentState = atom<string>({
-  key: getFullyQualifiedKey('botEnvironment'),
-  default: 'production',
-});
-
-// current bot authoring language
-export const localeState = atom<string>({
-  key: getFullyQualifiedKey('locale'),
-  default: 'en-us',
-});
-
-export const BotDiagnosticsState = atom<Diagnostic[]>({
-  key: getFullyQualifiedKey('botDiagnostics'),
-  default: [],
-});
-
-export const botStatusState = atom<BotStatus>({
-  key: getFullyQualifiedKey('botStatus'),
-  default: BotStatus.unConnected,
-});
-
-export const botLoadErrorState = atom<BotLoadError>({
-  key: getFullyQualifiedKey('botLoadErrorMsg'),
-  default: { title: '', message: '' },
-});
-
-export const lgFilesState = atom<LgFile[]>({
-  key: getFullyQualifiedKey('lgFiles'),
-  default: [],
-});
-
-export const luFilesState = atom<LuFile[]>({
-  key: getFullyQualifiedKey('luFiles'),
-  default: [],
-});
-
-export const schemasState = atom<BotSchemas>({
+export const schemasState = atomFamily<BotSchemas, string>({
   key: getFullyQualifiedKey('schemas'),
-  default: {},
-});
-
-export const skillsState = atom<Skill[]>({
-  key: getFullyQualifiedKey('skills'),
-  default: [],
-});
-
-export const actionsSeedState = atom<any>({
-  key: getFullyQualifiedKey('actionsSeed'),
-  default: [],
-});
-
-export const skillManifestsState = atom<any[]>({
-  key: getFullyQualifiedKey('skillManifests'),
-  default: [],
-});
-
-export const designPageLocationState = atom<DesignPageLocation>({
-  key: getFullyQualifiedKey('designPageLocation'),
-  default: {
-    projectId: '',
-    dialogId: '',
-    focused: '',
-    selected: '',
+  default: (id) => {
+    return {};
   },
 });
 
-export const breadcrumbState = atom<BreadcrumbItem[]>({
-  key: getFullyQualifiedKey('breadcrumb'),
+export const currentProjectIdState = atom<string>({
+  key: getFullyQualifiedKey('currentProjectId'),
+  default: '',
+});
+
+export const botProjectsState = atom<string[]>({
+  key: getFullyQualifiedKey('botProjects'),
   default: [],
 });
 
-export const showCreateDialogModalState = atom<boolean>({
+export const botNameState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botName'),
+  default: (id) => {
+    return '';
+  },
+});
+
+export const locationState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('location'),
+  default: (id) => {
+    return '';
+  },
+});
+
+export const botEnvironmentState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('botEnvironment'),
+  default: (id) => {
+    return 'production';
+  },
+});
+
+// current bot authoring language
+export const localeState = atomFamily<string, string>({
+  key: getFullyQualifiedKey('locale'),
+  default: (id) => {
+    return 'en-us';
+  },
+});
+
+export const botStatusState = atomFamily<BotStatus, string>({
+  key: getFullyQualifiedKey('botStatus'),
+  default: (id) => {
+    return BotStatus.unConnected;
+  },
+});
+
+export const botDiagnosticsState = atomFamily<Diagnostic[], string>({
+  key: getFullyQualifiedKey('botDiagnostics'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const botLoadErrorState = atomFamily<BotLoadError, string>({
+  key: getFullyQualifiedKey('botLoadErrorMsg'),
+  default: (id) => {
+    return { title: '', message: '' };
+  },
+});
+
+export const lgFilesState = atomFamily<LgFile[], string>({
+  key: getFullyQualifiedKey('lgFiles'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const luFilesState = atomFamily<LuFile[], string>({
+  key: getFullyQualifiedKey('luFiles'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const skillsState = atomFamily<Skill[], string>({
+  key: getFullyQualifiedKey('skills'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const actionsSeedState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('actionsSeed'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const skillManifestsState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('skillManifests'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const designPageLocationState = atomFamily<DesignPageLocation, string>({
+  key: getFullyQualifiedKey('designPageLocation'),
+  default: (id) => {
+    return {
+      projectId: '',
+      dialogId: '',
+      focused: '',
+      selected: '',
+    };
+  },
+});
+
+export const breadcrumbState = atomFamily<BreadcrumbItem[], string>({
+  key: getFullyQualifiedKey('breadcrumb'),
+  default: (id) => {
+    return [];
+  },
+});
+
+export const showCreateDialogModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showCreateDialogModal'),
-  default: false,
+  default: (id) => {
+    return false;
+  },
 });
 
 export const showAddSkillDialogModalState = atom<boolean>({
@@ -186,14 +228,4 @@ export const onAddLanguageDialogCompleteState = atom<any>({
 export const onDelLanguageDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
-});
-
-export const currentProjectIdState = atom<string>({
-  key: getFullyQualifiedKey('currentProjectId'),
-  default: '',
-});
-
-export const botProjectsState = atom<string[]>({
-  key: getFullyQualifiedKey('botProjects'),
-  default: [],
 });
