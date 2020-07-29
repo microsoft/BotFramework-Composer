@@ -10,10 +10,11 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { JSONSchema7 } from '@bfc/extension';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
+import { SkillManifest } from '@bfc/shared';
 
 import { skillManifestsState, dispatcherState } from '../../../recoilModel';
 
-import { editorSteps, ManifestEditorSteps, order, SkillManifest } from './constants';
+import { editorSteps, ManifestEditorSteps, order } from './constants';
 import { styles } from './styles';
 
 interface ExportSkillModalProps {
