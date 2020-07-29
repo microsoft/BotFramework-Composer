@@ -10,7 +10,7 @@ const BotStructureTemplate = {
   entry: '${BOTNAME}.dialog',
   lg: 'language-generation/${LOCALE}/${BOTNAME}.${LOCALE}.lg',
   lu: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.lu',
-  qna: 'language-understanding/${LOCALE}/${BOTNAME}.${LOCALE}.qna',
+  qna: 'knowledge-base/en-us/${BOTNAME}.en-us.qna',
   schema: '${FILENAME}',
   settings: 'settings/${FILENAME}',
   common: {
@@ -20,7 +20,7 @@ const BotStructureTemplate = {
     entry: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog',
     lg: 'dialogs/${DIALOGNAME}/language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
-    qna: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.qna',
+    qna: 'dialogs/${DIALOGNAME}/knowledge-base/en-us/${DIALOGNAME}.en-us.qna',
   },
   skillManifests: 'manifests/${MANIFESTFILENAME}',
 };
