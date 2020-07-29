@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { buildInfunctionsMap } from '@bfc/lg-languageserver/src/builtinFunctionsMap';
+import { buildInfunctionsMap } from '@bfc/lg-languageserver';
 import { CompletionItem, CompletionItemKind } from 'vscode-languageserver';
 
 export const expressionsResolver = (): CompletionItem[] => {
