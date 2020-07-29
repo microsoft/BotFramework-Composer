@@ -161,7 +161,7 @@ export class LGServer {
     const index = (): LgFile => {
       let content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
-      const lgTextFiles = this.getLgResources(projectId);
+      const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
       if (fileId && templateId) {
         const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
         if (lgTextFile) {
@@ -725,7 +725,11 @@ export class LGServer {
     }
     let lgDiagnostics: any[] = [];
     try {
-      const payload = await this._lgParser.parseText(text, fileId || uri, this.getLgResources(projectId));
+      const payload = await this._lgParser.parseText(
+        text,
+        fileId || uri,
+        projectId ? this.getLgResources(projectId) : []
+      );
       lgDiagnostics = payload.diagnostics;
     } catch (error) {
       lgDiagnostics.push(generageDiagnostic(error.message, DiagnosticSeverity.Error, document));
