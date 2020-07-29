@@ -159,7 +159,7 @@ export class LGServer {
     const { uri } = document;
     const { fileId, templateId, projectId } = lgOption || {};
     const index = (): LgFile => {
-      let content = this.documents.get(uri)?.getText() || '';
+      const content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
       const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
       if (fileId && templateId) {

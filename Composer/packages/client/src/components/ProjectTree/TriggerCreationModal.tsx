@@ -34,7 +34,6 @@ import {
   getActivityTypes,
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
-
 import { dialogsState, projectIdState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { nameRegex } from '../../constants';

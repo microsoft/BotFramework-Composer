@@ -5,13 +5,13 @@ import { useRecoilState } from 'recoil';
 import { LuIntentSection, LuFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { act } from '@bfc/test-utils/lib/hooks';
+import { luUtil } from '@bfc/indexers';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { luFilesState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { luDispatcher } from '../lu';
-import { luUtil } from '@bfc/indexers';
 
 jest.mock('../../parsers/luWorker', () => {
   return {
