@@ -5,6 +5,7 @@ import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps } from '@bfc/extension';
+import startCase from 'lodash/startCase';
 
 import { useDialogSchemaContext } from './DialogSchemaContext';
 
@@ -21,9 +22,9 @@ export const RefField: React.FC<FieldProps> = ({ description, id, label, value, 
   );
 
   const options = useMemo<IDropdownOption[]>(() => {
-    return Object.entries(expressions || {}).map(([key, { title }]: [string, any]) => ({
+    return Object.keys(expressions || {}).map((key) => ({
       key: `#/definitions/${key}`,
-      text: title as string,
+      text: startCase(key),
     }));
   }, [expressions]);
 

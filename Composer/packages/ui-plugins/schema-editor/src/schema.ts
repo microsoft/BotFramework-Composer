@@ -2,22 +2,24 @@
 // Licensed under the MIT License.
 
 import { JSONSchema7 } from '@bfc/extension';
+import formatMessage from 'format-message';
 
-export const schema: JSONSchema7 = {
+export const schema = (): JSONSchema7 => ({
+  title: formatMessage('Dialog Schema'),
   type: 'object',
   properties: {
     dialogValue: {
       type: 'object',
-      title: 'Dialog Value Schema',
-      description: 'Dialog value schema.',
+      title: formatMessage('Input'),
+      description: formatMessage('Dialog input schema.'),
       additionalProperties: {
         $ref: '#/definitions/dialogProperties',
       },
     },
     resultValue: {
       type: 'object',
-      title: 'Dialog Result Schema',
-      description: 'Dialog Result schema.',
+      title: formatMessage('Output'),
+      description: formatMessage('Dialog output schema.'),
       additionalProperties: {
         $ref: '#/definitions/dialogProperties',
       },
@@ -30,20 +32,20 @@ export const schema: JSONSchema7 = {
       properties: {
         title: {
           type: 'string',
-          title: 'Title',
-          description: 'Property title',
+          title: formatMessage('Title'),
+          description: formatMessage('Property title'),
         },
         description: {
           type: 'string',
-          title: 'Description',
-          description: 'Property description.',
+          title: formatMessage('Description'),
+          description: formatMessage('Property description.'),
         },
         ref: {
           type: 'string',
-          title: 'Type',
-          description: 'Property description.',
+          title: formatMessage('Type'),
+          description: formatMessage('Property description.'),
         },
       },
     },
   },
-};
+});
