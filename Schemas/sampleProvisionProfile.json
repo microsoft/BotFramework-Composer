@@ -5,8 +5,7 @@
   "MicrosoftAppId": "fd38ebff-02e2-427c-234234-234234",
   "MicrosoftAppPassword": "XYZSASJDLKASjksdhfks!sfs",
   "blobStorage": {
-    "connectionString": "DefaultEndpointsProtocol=https;AccountName=SampleSkill",
-    "container": "transcripts"
+    "connectionString": "DefaultEndpointsProtocol=https;AccountName=SampleSkill"
   },
   "cosmosDb": {
     "endpoint": "https://todoluissample2-dev.documents.azure.com:443/",

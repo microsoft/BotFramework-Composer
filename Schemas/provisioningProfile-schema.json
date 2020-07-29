@@ -36,7 +36,7 @@
     },
     "applicationInsights": {
       "type": "object",
-      "description": "Application Insights resourcing",
+      "description": "Application Insights provisioning",
       "properties": {
         "endpointKey": {
           "type": "string",
@@ -51,10 +51,6 @@
         "connectionString": {
           "type": "string",
           "description": "Connection string for blob storage"
-        },
-        "container": {
-          "type": "string",
-          "description": "Container name for the blob storage"
         }
       }
     },

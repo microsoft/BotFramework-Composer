@@ -47,7 +47,7 @@
         },
         "workspace": {
           "type": "string",
-          "description": "Path to the local skill project."
+          "description": "Path to the local skill project. If the workspace is local we use the file protocol as opposed to http/https for remote workspaces."
         },
         "remote": {
           "type": "string",
