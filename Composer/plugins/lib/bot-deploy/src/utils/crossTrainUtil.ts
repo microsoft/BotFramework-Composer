@@ -174,26 +174,28 @@ export function createCrossTrainConfig(dialogs: any[], luFiles: string[]): ICros
       botName = dialog.content.$designer.name;
     }
 
-    const { intentTriggers } = dialog;
-    const fileId = dialog.id;
-    //find the trigger's dialog that use a recognizer
-    intentTriggers.forEach((item) => {
-      //find all dialogs in trigger that has a luis recognizer
-      const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
+    if (luFiles.find((luFile) => getBaseName(luFile) === dialog.luFile)) {
+      const { intentTriggers } = dialog;
+      const fileId = dialog.id;
+      //find the trigger's dialog that use a recognizer
+      intentTriggers.forEach((item) => {
+        //find all dialogs in trigger that has a luis recognizer
+        const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
 
-      const deduped = Array.from(new Set<string>(used));
+        const deduped = Array.from(new Set<string>(used));
 
-      const result = {};
-      if (deduped.length === 1) {
-        result[item.intent] = deduped[0];
-      } else if (deduped.length) {
-        result[item.intent] = deduped;
-      } else {
-        result[item.intent] = '';
-      }
+        const result = {};
+        if (deduped.length === 1) {
+          result[item.intent] = deduped[0];
+        } else if (deduped.length) {
+          result[item.intent] = deduped;
+        } else {
+          result[item.intent] = '';
+        }
 
-      triggerRules[fileId] = { ...triggerRules[fileId], ...result };
-    });
+        triggerRules[fileId] = { ...triggerRules[fileId], ...result };
+      });
+    }
   });
 
   const crossTrainConfig: ICrossTrainConfig = {
@@ -203,7 +205,9 @@ export function createCrossTrainConfig(dialogs: any[], luFiles: string[]): ICros
     intentName: '_Interruption',
     verbose: true,
   };
-  crossTrainConfig.rootIds = keys(countMap).filter((key) => countMap[key] === 0 || key === rootId);
+  crossTrainConfig.rootIds = keys(countMap).filter(
+    (key) => (countMap[key] === 0 || key === rootId) && triggerRules[key]
+  );
   crossTrainConfig.triggerRules = triggerRules;
   return addLocaleToConfig(crossTrainConfig, luFiles);
 }
