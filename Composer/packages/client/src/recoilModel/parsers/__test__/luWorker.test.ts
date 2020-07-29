@@ -49,41 +49,4 @@ hi
     expect(diagnostics[0].range.end.line).toEqual(2);
     expect(diagnostics[0].range.end.character).toEqual(2);
   });
-
-  it('should add an intent', async () => {
-    const content = `# Greeting
-	hi
-	- hello
-
-	@ simple friendsName
-
-	`;
-    const result: any = await luWorker.addIntent(content, getLuIntent('Hello', '-IntentValue'));
-    expect(result).toContain('-IntentValue');
-  });
-
-  it('should remove an intent', async () => {
-    const content = `# Greeting
-	hi
-	- hello
-
-	@ simple friendsName
-
-	`;
-    const result: any = await luWorker.removeIntent(content, 'Greeting');
-    expect(result).not.toContain('- hello');
-  });
-
-  it('should update an intent', async () => {
-    const content = `# Greeting
-	hi
-	- hello
-
-	@ simple friendsName
-
-	`;
-    const result: any = await luWorker.updateIntent(content, 'Greeting', getLuIntent('Greeting', '-IntentValue'));
-    expect(result).not.toContain('- hello');
-    expect(result).toContain('-IntentValue');
-  });
 });
