@@ -12,6 +12,7 @@ import {
   luFilesState,
   lgFilesState,
   BotDiagnosticsState,
+  settingsState,
 } from '../../../src/recoilModel';
 
 const state = {
@@ -108,6 +109,7 @@ const initRecoilState = ({ set }) => {
   set(luFilesState, state.luFiles);
   set(lgFilesState, state.lgFiles);
   set(BotDiagnosticsState, state.diagnostics);
+  set(settingsState, state.settings);
 };
 
 describe('useNotification hooks', () => {
