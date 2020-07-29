@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.botframework.com/schemas/botprojects/v0.1/provisioningProfile-schema.json",
+  "accessToken": "SDFSDFSDFSDBNASKDJASDJJLKJSADJLKMXRNZW",
+  "environment": "dev",
+  "MicrosoftAppId": "fd38ebff-02e2-427c-234234-234234",
+  "MicrosoftAppPassword": "XYZSASJDLKASjksdhfks!sfs",
+  "blobStorage": {
+    "connectionString": "DefaultEndpointsProtocol=https;AccountName=SampleSkill"
+  },
+  "cosmosDb": {
+    "endpoint": "https://todoluissample2-dev.documents.azure.com:443/",
+    "authKey": "XSFDDSFOHOI"
+  },
+  "qna": {
+    "knowledgebaseId": "6ea9080e0dsfsdfsdfb4c44",
+    "endpoint": "https://composerdemovenky.cognitiveservices.azure.com/qnamaker/v4.0/knowledgebases/89366431-a501-324324-asdhas"
+  },
+  "luis": {
+    "endpointKey": "234kj23h4asdjajdkjashdkjAAsad",
+    "authoringKey": "234kjh890aasdhakjs",
+    "region": "westus",
+    "endpoint": "https://westus.api.cognitive.microsoft.com/",
+    "authoringEndpoint": "https://westus.api.cognitive.microsoft.com/"
+  },
+  "applicationInsights": {
+    "endpointKey": "Asdfsdfa23432adsfsdf!sdsad"
+  }
+}
