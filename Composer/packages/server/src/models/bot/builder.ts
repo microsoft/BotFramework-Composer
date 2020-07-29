@@ -114,12 +114,7 @@ export class Builder {
     await this.storage.mkDir(this.generatedFolderPath);
   }
 
-  private needCrossTrain() {
-    return this.crossTrainConfig.rootIds.length > 0;
-  }
-
   private async crossTrain(luFiles: FileInfo[], qnaFiles: FileInfo[]) {
-    if (!this.needCrossTrain()) return;
     const luContents = luFiles.map((file) => {
       return { content: file.content, id: file.name };
     });
@@ -300,10 +295,8 @@ export class Builder {
 
     //add all file after cross train
     let paths: string[] = [];
-    if (this.needCrossTrain()) {
-      paths = await this.storage.glob('**/*.' + fileSuffix, this.interruptionFolderPath);
-      config.models = paths.map((filePath) => Path.join(this.interruptionFolderPath, filePath));
-    }
+    paths = await this.storage.glob('**/*.' + fileSuffix, this.interruptionFolderPath);
+    config.models = paths.map((filePath) => Path.join(this.interruptionFolderPath, filePath));
 
     const pathSet = new Set(paths);
 
@@ -317,7 +310,6 @@ export class Builder {
   };
 
   private async cleanCrossTrain() {
-    if (!this.needCrossTrain()) return;
     await this.deleteDir(this.interruptionFolderPath);
   }
 }

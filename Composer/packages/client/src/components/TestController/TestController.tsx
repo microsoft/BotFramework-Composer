@@ -163,7 +163,7 @@ export const TestController: React.FC = () => {
   function isDialogDefaultRecognizer(dialogs) {
     let isDefaultRecognizer = false;
     dialogs.map((dialog) => {
-      if (typeof dialog.recognizer === 'string') {
+      if (typeof dialog.content.recognizer === 'string') {
         isDefaultRecognizer = true;
         return;
       }
@@ -174,12 +174,12 @@ export const TestController: React.FC = () => {
   async function handleStart() {
     dismissCallout();
     const config = Object.assign({}, settings.luis, { subscriptionKey: Object(settings.qna).subscriptionKey });
-    if (!isAbsHosted()) {
-      if (
-        botStatus === BotStatus.failed ||
-        botStatus === BotStatus.pending ||
-        (isDialogDefaultRecognizer(dialogs) && !isConfigComplete(config))
-      ) {
+    if (
+      !isAbsHosted() &&
+      isDialogDefaultRecognizer(dialogs) &&
+      (getReferredLuFiles(luFiles, dialogs).length > 0 || getReferredQnaFiles(qnaFiles, dialogs).length > 0)
+    ) {
+      if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
         openDialog();
       } else {
         await handlePublish(config);

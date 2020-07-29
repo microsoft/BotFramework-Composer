@@ -188,7 +188,7 @@ function parse(id: string, content: any) {
     lgTemplates: extractLgTemplates(id, content),
     referredLuIntents: extractLuIntents(content, id),
     luFile: getBaseName(luFile, '.lu'),
-    qnaFile: getBaseName(qnaFile, '.qna'),
+    qnaFile: getBaseName(qnaFile, '.lu.qna') || getBaseName(qnaFile, '.lu'),
     lgFile: getBaseName(lgFile, '.lg'),
     triggers: extractTriggers(content),
     intentTriggers: extractIntentTriggers(content),
