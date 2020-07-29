@@ -180,13 +180,6 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
             onClick: openDeleteBotModal,
           },
           {
-            key: 'edit.addLanguage',
-            text: formatMessage('Add language'),
-            onClick: () => {
-              addLanguageDialogBegin(() => {});
-            },
-          },
-          {
             key: 'edit.deleteLanguage',
             text: formatMessage('Delete language'),
             onClick: () => {
@@ -195,6 +188,22 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
           },
         ],
       },
+    },
+
+    {
+      type: 'action',
+      text: formatMessage('Add language'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'CirclePlus',
+        },
+        onClick: () => {
+          addLanguageDialogBegin(() => {});
+        },
+      },
+      align: 'left',
+      dataTestid: 'AddLanguageFlyout',
+      disabled: false,
     },
 
     {
