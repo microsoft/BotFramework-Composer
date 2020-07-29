@@ -242,7 +242,7 @@ Publishing plugins support the following features:
 
 ##### publish(config, project, metadata, user)
 
-This method is responsible for publishing the `project` using the provided `config` using whatever method the plugin is implementing - for example, publish to Azure.
+This method is responsible for publishing the `project` using the provided `config` using whatever method the plugin is implementing - for example, publish to Azure. This method is *required* for all publishing plugins.
 
 In order to publish a project, this method must perform any necessary actions such as:
 
@@ -302,13 +302,99 @@ const publish = async(config, project, metadata, user) => {
 }
 ```
 
-
-
 ##### getStatus(config, project, user)
+
+This method is used to check for the status of the most recent publish of `project`  to a given publishing profile defined by the `config` field. This method is *required* for all publishing plugins.
+
+This endpoint uses a subset of HTTP status codes to report the status of the deploy:
+
+| Status | Meaning
+|-- |--
+| 200 | Publish completed successfully
+| 202 | Publish is underway
+| 404 | No publish found
+| 500 | Publish failed
+
+`config` will be in the form below. `config.profileName` can be used to identify the publishing profile being queried.
+
+```ts
+{
+  profileName: `name of the publishing profile`,
+  ... // all fields from the publishing profile
+}
+```
+
+Should return an object in the form:
+
+```ts
+{
+  status: [200|202|404|500],
+  result: {
+    message: 'Status message to be displayed in publishing UI',
+    log: 'any log output from the process so far',
+    comment: 'the user specified comment associated with the publish',
+    endpointURL: 'URL to running bot for use with Emulator as appropriate',
+    id: 'a unique identifier of this published version',
+  }
+}
+```
 
 ##### getHistory(config, project, user)
 
+This method is used to request a history of publish actions from a given `project` to a given publishing profile defined by the `config` field. This is an *optional* feature - publishing plugins may exclude this functionality if it is not supported.
+
+`config` will be in the form below. `config.profileName` can be used to identify the publishing profile being queried.
+
+```ts
+{
+  profileName: `name of the publishing profile`,
+  ... // all fields from the publishing profile
+}
+```
+
+Should return in array containing recent publish actions along with their status and log output.
+
+```ts
+[{
+  status: [200|202|404|500],
+  result: {
+    message: 'Status message to be displayed in publishing UI',
+    log: 'any log output from the process so far',
+    comment: 'the user specified comment associated with the publish',
+    id: 'a unique identifier of this published version',
+  }
+}]
+```
+
 ##### rollback(config, project, rollbackToVersion, user)
+
+This method is used to request a rollback _in the deployed environment_ to a previously published version. This DOES NOT affect the local version of the project. This is an *optional* feature - publishing plugins may exclude this functionality if it is not supported.
+
+`config` will be in the form below. `config.profileName` can be used to identify the publishing profile being queried.
+
+```ts
+{
+  profileName: `name of the publishing profile`,
+  ... // all fields from the publishing profile
+}
+```
+
+`rollbackToVersion` will contain a version ID as found in the results from `getHistory`.
+
+Rollback should respond using the same format as `publish` or `getStatus` and should result in a new publishing task:
+
+```ts
+{
+  status: [200|202|404|500],
+  result: {
+    message: 'Status message to be displayed in publishing UI',
+    log: 'any log output from the process so far',
+    comment: 'the user specified comment associated with the publish',
+    endpointURL: 'URL to running bot for use with Emulator as appropriate',
+    id: 'a unique identifier of this published version',
+  }
+}
+```
 
 ### Runtime Templates
 
@@ -335,6 +421,28 @@ await composer.addRuntimeTemplate({
   },
 });
 ```
+
+##### build(runtimePath, project)
+
+Perform any necessary steps required before the runtime can be executed from inside Composer when a user clicks the "Start Bot" button. Note this method *should not* actually start the runtime directly - only perform the build steps.
+
+For example, this would be used to call `dotnet build` in the runtime folder in order to build the application.
+
+##### buildDeploy (runtimePath, project, settings, publishProfileName)
+
+| parameter | description
+|-- |--
+| runtimePath | the path to the runtime that needs to be built
+| project | a bot project record
+| settings | a full set of settings to be used by the built runtime
+| publishProfileName | the name of the publishing profile that is the target of this build
+
+Perform any necessary steps required to prepare the runtime code to be deployed. This method should return a path to the build artifacts with the expectation that the publisher can perform a deploy of those artifacts "as is" and have them run successfully. To do this it should:
+
+* Perform any necessary build steps
+* Install dependencies
+* Write `settings` to the appropriate location and format
+
 
 #### `composer.getRuntimeByProject(project)`
 
