@@ -25,7 +25,7 @@ import {
   addSection,
   removeSection,
 } from '../../utils/qnaUtil';
-import { dialogsState, qnaFilesState, projectIdState, localeState } from '../../recoilModel/atoms/botState';
+import { dialogsState, qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 
 import { formCell, content, textField, bold, link, actionButton } from './styles';
@@ -45,7 +45,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const dialogs = useRecoilValue(dialogsState);
   const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
+  //To do: support other languages
+  const locale = 'en-us';
+  //const locale = useRecoilValue(localeState);
   const { dialogId } = props;
   const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const limitedNumber = useRef(5).current;
@@ -477,9 +479,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           className="table-view-list"
           columns={getTableColums()}
           getKey={getKeyCallback}
-          //initialFocusedIndex={0}
           items={qnaSections}
-          //getKey={item => item.Body}
           layoutMode={DetailsListLayoutMode.justified}
           selectionMode={SelectionMode.none}
           styles={{

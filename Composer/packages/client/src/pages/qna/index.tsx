@@ -18,9 +18,9 @@ import { Page } from '../../components/Page';
 import {
   dialogsState,
   qnaFilesState,
-  localeState,
   projectIdState,
   qnaAllUpViewStatusState,
+  settingsState,
 } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
@@ -39,7 +39,10 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const dialogs = useRecoilValue(dialogsState);
   const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
+  const settings = useRecoilValue(settingsState);
+  //To do: support other languages
+  const locale = 'en-us';
+  //const locale = useRecoilValue(localeState);
   const qnaAllUpViewStatus = useRecoilValue(qnaAllUpViewStatusState);
   const [importQnAFromUrlModalVisiability, setImportQnAFromUrlModalVisiability] = useState(false);
 
@@ -139,7 +142,11 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     setImportQnAFromUrlModalVisiability(false);
   };
 
-  const onSubmit = (location: string, subscriptionKey: string, region: string) => {
+  const onSubmit = async (location: string, subscriptionKey: string, region: string) => {
+    await actions.setSettings(projectId, {
+      ...settings,
+      qna: { subscriptionKey, endpointKey: settings.qna.endpointKey },
+    });
     actions.importQnAFromUrl({
       id: `${dialogId}.${locale}`,
       qnaFileContent,
@@ -170,6 +177,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           <ImportQnAFromUrlModal
             dialogId={dialogId}
             isOpen={importQnAFromUrlModalVisiability}
+            subscriptionKey={settings.qna.subscriptionKey}
             onDismiss={onDismiss}
             onSubmit={onSubmit}
           />

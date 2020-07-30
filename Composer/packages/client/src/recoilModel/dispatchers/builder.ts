@@ -23,6 +23,27 @@ export const builderDispatcher = () => {
         const luFiles = await snapshot.getPromise(luFilesState);
         const qnaFiles = await snapshot.getPromise(qnaFilesState);
         const referredLuFiles = luUtil.checkLuisBuild(luFiles, dialogs);
+
+        if (qnaFiles && qnaFiles.length > 0) {
+          const errorMsg = qnaFiles.reduce(
+            (result, file) => {
+              if (file.qnaSections && file.qnaSections.length > 0) {
+                if (file.qnaSections.some((s) => !s.Answer || s.Questions.some((q) => !q.content))) {
+                  result.message = result.message + `${file.id}.qna file contains empty answer or questions`;
+                }
+                return result;
+              }
+              return result;
+            },
+            { title: Text.LUISDEPLOYFAILURE, message: '' }
+          );
+          console.log(errorMsg);
+          if (errorMsg.message) {
+            set(botLoadErrorState, errorMsg);
+            set(botStatusState, BotStatus.failed);
+            return;
+          }
+        }
         //TODO crosstrain should add locale
         const crossTrainConfig = luUtil.createCrossTrainConfig(dialogs, referredLuFiles);
         await httpClient.post(`/projects/${projectId}/build`, {

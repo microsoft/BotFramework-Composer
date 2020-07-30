@@ -35,7 +35,7 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
     },
     {
       to: `/bot/${projectId}/qna`,
-      iconName: 'SkypeMessage',
+      iconName: 'QnAIcon',
       labelName: formatMessage('QnA'),
       exact: true,
       disabled: !botLoaded,

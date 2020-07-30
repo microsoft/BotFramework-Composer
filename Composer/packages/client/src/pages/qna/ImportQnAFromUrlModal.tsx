@@ -54,6 +54,7 @@ const warning = {
 interface ImportQnAFromUrlModalProps {
   isOpen: boolean;
   dialogId: string;
+  subscriptionKey: string;
   onDismiss: () => void;
   onSubmit: (location: string, subscriptionKey: string, endpoint: string) => void;
 }
@@ -65,7 +66,7 @@ interface ImportQnAFromUrlModalFormData {
 }
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
-  const { isOpen, onDismiss, onSubmit, dialogId } = props;
+  const { isOpen, onDismiss, onSubmit, dialogId, subscriptionKey } = props;
   const formConfig: FieldConfig<ImportQnAFromUrlModalFormData> = {
     location: {
       required: true,
@@ -73,15 +74,16 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     },
     subscriptionKey: {
       required: true,
-      defaultValue: '',
+      defaultValue: subscriptionKey,
     },
     region: {
       required: true,
       defaultValue: 'westus',
     },
   };
-  const { formData, updateField } = useForm(formConfig);
-  const disabled = dialogId === 'all';
+  const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
+  const isQnAFileselected = !(dialogId === 'all');
+  const disabled = !isQnAFileselected || hasErrors;
   return (
     <Dialog
       dialogContentProps={{
@@ -102,27 +104,35 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
       <div css={dialogWindow}>
         <Stack>
           <TextField
-            data-testid="knowledge location"
+            required
+            data-testid="knowledgeLocationTextField"
+            errorMessage={formErrors.location}
             label={formatMessage('knowledge location(URL name)')}
             styles={textField}
             value={formData.location}
             onChange={(e, location) => updateField('location', location)}
           />
           <TextField
+            required
             data-testid="subscriptionKey"
-            label={formatMessage('subscription key')}
+            errorMessage={formErrors.subscriptionKey}
+            label={formatMessage('Subscription key')}
             styles={textField}
             value={formData.subscriptionKey}
             onChange={(e, subscriptionKey) => updateField('subscriptionKey', subscriptionKey)}
           />
           <TextField
+            required
             data-testid="region"
+            errorMessage={formErrors.region}
             label={formatMessage('Region')}
             styles={textField}
             value={formData.region}
             onChange={(e, region) => updateField('region', region)}
           />
-          {disabled && <div css={warning}> {formatMessage('please select a specific qna file to import QnA')} </div>}
+          {!isQnAFileselected && (
+            <div css={warning}> {formatMessage('please select a specific qna file to import QnA')}</div>
+          )}
         </Stack>
       </div>
       <DialogFooter>
@@ -130,8 +140,13 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
-          text={formatMessage('create knowledge base')}
-          onClick={() => onSubmit(formData.location, formData.subscriptionKey, formData.region)}
+          text={formatMessage('Create Knowledge Base')}
+          onClick={() => {
+            if (hasErrors) {
+              return;
+            }
+            onSubmit(formData.location, formData.subscriptionKey, formData.region);
+          }}
         />
       </DialogFooter>
     </Dialog>

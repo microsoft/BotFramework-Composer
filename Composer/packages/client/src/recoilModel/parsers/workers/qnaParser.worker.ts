@@ -29,7 +29,7 @@ ctx.onmessage = function (msg) {
         break;
       }
       case QnAActionType.RemoveSection: {
-        result = qnaUtil.removeSection(file.content, indexId);
+        result = qnaUtil.removeSection(indexId, file.content);
         break;
       }
     }
