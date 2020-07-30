@@ -14,7 +14,9 @@ import { useRecoilValue } from 'recoil';
 
 import { useLocation, useRouterCache } from '../utils/hooks';
 import { dispatcherState } from '../recoilModel';
-
+import QnAIcon000 from '../images/QnAIcon000.svg';
+import QnAIcon999 from '../images/QnAIcon999.svg';
+import QnAIcon4f4f4f from '../images/QnAIcon4f4f4f.svg';
 // -------------------- Styles -------------------- //
 
 const link = (active: boolean, disabled: boolean) => css`
@@ -67,6 +69,20 @@ const icon = (active: boolean, disabled: boolean) =>
     },
   } as IButtonStyles);
 
+const QnAIconStyle = (active: boolean, disabled: boolean) =>
+  ({
+    root: {
+      color: active ? '#000' : disabled ? '#999' : '#4f4f4f',
+      padding: '8px 12px',
+      marginLeft: active ? '1px' : '4px',
+      marginRight: '12px',
+      boxSizing: 'border-box',
+      fontSize: `${FontSizes.size16}`,
+      width: '40px',
+      height: '32px',
+    },
+  } as IButtonStyles);
+
 // -------------------- NavItem -------------------- //
 
 /**
@@ -98,9 +114,17 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
   const active = pathname.startsWith(to);
 
   const addRef = useCallback((ref) => onboardingAddCoachMarkRef({ [`nav${labelName.replace(' ', '')}`]: ref }), []);
-
-  const iconElement = <Icon iconName={iconName} styles={icon(active, disabled)} />;
-
+  const iconElement =
+    iconName === 'QnAIcon' ? (
+      <Icon
+        imageProps={{
+          src: active ? QnAIcon000 : disabled ? QnAIcon999 : QnAIcon4f4f4f,
+        }}
+        styles={QnAIconStyle(active, disabled)}
+      />
+    ) : (
+      <Icon iconName={iconName} styles={icon(active, disabled)} />
+    );
   const activeArea = (
     <div
       aria-disabled={disabled}
@@ -110,7 +134,11 @@ export const NavItem: React.FC<INavItemProps> = (props) => {
       tabIndex={-1}
     >
       {showTooltip ? (
-        <TooltipHost content={labelName} directionalHint={DirectionalHint.rightCenter}>
+        <TooltipHost
+          content={labelName}
+          directionalHint={DirectionalHint.rightCenter}
+          styles={{ root: { height: 32 } }}
+        >
           {iconElement}
         </TooltipHost>
       ) : (

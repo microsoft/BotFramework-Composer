@@ -13,7 +13,7 @@ import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
 import { QNA_HELP } from '@bfc/code-editor/lib/constants';
 
-import { localeState, qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
+import { qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { userSettingsState } from '../../recoilModel';
 interface CodeEditorProps extends RouteComponentProps<{}> {
@@ -24,7 +24,9 @@ const lspServerPath = '/lu-language-server';
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   const actions = useRecoilValue(dispatcherState);
   const qnaFiles = useRecoilValue(qnaFilesState);
-  const locale = useRecoilValue(localeState);
+  //To do: support other languages
+  const locale = 'en-us';
+  //const locale = useRecoilValue(localeState);
   const projectId = useRecoilValue(projectIdState);
   const userSettings = useRecoilValue(userSettingsState);
   const { dialogId } = props;

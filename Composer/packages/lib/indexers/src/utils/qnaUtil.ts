@@ -22,9 +22,9 @@ export function checkIsSingleSection(content: string) {
 
 export function generateQnAPair() {
   let result = '';
-  result += `\n# ? newQuestion`;
+  result += `\n# ?`;
   result += '\n```';
-  result += `\nnewAnswer`;
+  result += `\n`;
   result += '\n```';
   return result;
 }
