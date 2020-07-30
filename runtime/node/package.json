@@ -13,10 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "botbuilder": "4.10.0-preview-143946",
-    "botbuilder-dialogs": "4.10.0-preview-143946",
-    "botbuilder-dialogs-adaptive": "4.10.0-preview-143946",
-    "botbuilder-dialogs-declarative": "4.10.0-preview-143946",
+    "botbuilder": "4.10.0-preview-151936",
+    "botbuilder-dialogs": "4.10.0-preview-151936",
+    "botbuilder-dialogs-adaptive": "4.10.0-preview-151936",
+    "botbuilder-dialogs-declarative": "4.10.0-preview-151936",
     "restify": "7.7.0",
     "minimist": "1.2.5"
   },
