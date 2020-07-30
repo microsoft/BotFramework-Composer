@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { app, dialog, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import { app, dialog, Menu, MenuItemConstructorOptions, shell, ipcMain } from 'electron';
 
 import { isMac } from './utility/platform';
 import { AppUpdater } from './appUpdater';
@@ -67,12 +67,24 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
       label: 'Edit',
       submenu: [
         // NOTE: Avoid using builtin `role`, it won't override the click handler.
-        { label: 'Undo', accelerator: 'CmdOrCtrl+Z', click: () => handleMenuEvents('undo') },
-        { label: 'Redo', accelerator: 'CmdOrCtrl+Shift+Z', click: () => handleMenuEvents('redo') },
+        { id: 'Undo', label: 'Undo', accelerator: 'CmdOrCtrl+Z', click: () => handleMenuEvents('undo') },
+        { id: 'Redo', label: 'Redo', accelerator: 'CmdOrCtrl+Shift+Z', click: () => handleMenuEvents('redo') },
         { type: 'separator' },
-        { label: 'Cut', accelerator: 'CmdOrCtrl+X', click: () => handleMenuEvents('cut') },
-        { label: 'Copy', accelerator: 'CmdOrCtrl+C', click: () => handleMenuEvents('copy') },
-        { label: 'Delete', accelerator: 'Delete', click: () => handleMenuEvents('delete') },
+        { id: 'Cut', label: 'Cut', enabled: false, accelerator: 'CmdOrCtrl+X', click: () => handleMenuEvents('cut') },
+        {
+          id: 'Copy',
+          label: 'Copy',
+          enabled: false,
+          accelerator: 'CmdOrCtrl+C',
+          click: () => handleMenuEvents('copy'),
+        },
+        {
+          id: 'Delete',
+          label: 'Delete',
+          enabled: false,
+          accelerator: 'Delete',
+          click: () => handleMenuEvents('delete'),
+        },
         ...getRestOfEditMenu(),
       ],
     },
@@ -168,4 +180,13 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
+
+  // Let menu enable/disable status reflect action selection states.
+  ipcMain.on('composer-state-change', (e, state) => {
+    const actionSelected = !!state.actionSelected;
+    ['Cut', 'Copy', 'Delete'].forEach((id) => {
+      menu.getMenuItemById(id).enabled = actionSelected;
+    });
+    Menu.setApplicationMenu(menu);
+  });
 }

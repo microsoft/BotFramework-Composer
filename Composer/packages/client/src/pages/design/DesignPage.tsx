@@ -181,29 +181,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }, [location]);
 
-  const EditorAPI = getEditorAPI();
-  // Subscribe Electron app menu events (copy/cut/del/undo/redo)
-  useEffect(() => {
-    if (!window.__IS_ELECTRON__) return;
-    if (!window.ipcRenderer || typeof window.ipcRenderer.on !== 'function') return;
-
-    window.ipcRenderer.on('electron-menu-clicked', (e, data) => {
-      const label = get(data, 'label', '');
-      switch (label) {
-        case 'undo':
-          return EditorAPI.Editing.Undo();
-        case 'redo':
-          return EditorAPI.Editing.Redo();
-        case 'cut':
-          return EditorAPI.Actions.CutSelection();
-        case 'copy':
-          return EditorAPI.Actions.CopySelection();
-        case 'delete':
-          return EditorAPI.Actions.DeleteSelection();
-      }
-    });
-  }, []);
-
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
   };
@@ -256,6 +233,37 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const showEnableBtn = selectedActions.some((x) => get(x, 'disabled') === true);
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
+
+  // Sync selection state to Electron main process
+  useEffect(() => {
+    if (!window.__IS_ELECTRON__) return;
+    if (!window.ipcRenderer || typeof window.ipcRenderer.send !== 'function') return;
+
+    window.ipcRenderer.send('composer-state-change', { actionSelected });
+  }, [actionSelected]);
+
+  const EditorAPI = getEditorAPI();
+  // Subscribe Electron app menu events (copy/cut/del/undo/redo)
+  useEffect(() => {
+    if (!window.__IS_ELECTRON__) return;
+    if (!window.ipcRenderer || typeof window.ipcRenderer.on !== 'function') return;
+
+    window.ipcRenderer.on('electron-menu-clicked', (e, data) => {
+      const label = get(data, 'label', '');
+      switch (label) {
+        case 'undo':
+          return EditorAPI.Editing.Undo();
+        case 'redo':
+          return EditorAPI.Editing.Redo();
+        case 'cut':
+          return EditorAPI.Actions.CutSelection();
+        case 'copy':
+          return EditorAPI.Actions.CopySelection();
+        case 'delete':
+          return EditorAPI.Actions.DeleteSelection();
+      }
+    });
+  }, []);
 
   const toolbarItems: IToolbarItem[] = [
     {
