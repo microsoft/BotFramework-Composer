@@ -4,6 +4,7 @@
 import { LgTemplate, LgFile, importResolverGenerator } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
+import formatMessage from 'format-message';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
 
@@ -35,7 +36,7 @@ export const updateLgFileState = async (
   });
 
   if (!originLgFile) {
-    throw new Error('origin lg file not found in store');
+    throw new Error(formatMessage('origin lg file not found in store'));
   }
 
   const changes: LgFile[] = [updatedLgFile];
@@ -91,7 +92,7 @@ export const createLgFileState = async (
   const { languages } = await snapshot.getPromise(settingsState);
   const createdLgId = `${id}.${locale}`;
   if (lgFiles.find((lg) => lg.id === createdLgId)) {
-    throw new Error('lg file already exist');
+    throw new Error(formatMessage('lg file already exist'));
   }
   // slot with common.lg import
   let lgInitialContent = '';

@@ -4,6 +4,7 @@
 import { LuFile, LuIntentSection } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
+import formatMessage from 'format-message';
 
 import luWorker from '../parsers/luWorker';
 import { getBaseName, getExtension } from '../../utils/fileUtil';
@@ -47,7 +48,7 @@ export const updateLuFileState = async (
   });
 
   if (!originLuFile) {
-    throw new Error('origin lu file not found in store');
+    throw new Error(formatMessage('origin lu file not found in store'));
   }
 
   const changes: LuFile[] = [updatedLuFile];
