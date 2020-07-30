@@ -43,9 +43,11 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
           return formatMessage('Duplicate dialog name');
         }
       },
+      defaultValue: '',
     },
     description: {
       required: false,
+      defaultValue: '',
     },
   };
 
@@ -103,7 +105,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="SubmitNewDialogBtn"
-            disabled={hasErrors}
+            disabled={hasErrors || formData.name === ''}
             text={formatMessage('OK')}
             onClick={handleSubmit}
           />

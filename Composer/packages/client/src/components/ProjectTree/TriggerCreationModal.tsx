@@ -123,7 +123,7 @@ const validateDupRegExIntent = (
   regExIntents: [{ intent: string; pattern: string }]
 ): string | undefined => {
   if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
-    return `regEx ${intent} is already defined`;
+    return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
 };
@@ -413,7 +413,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <TextField
               data-testid="RegExField"
               errorMessage={formData.errors.regEx}
-              label={formatMessage('Please input regex pattern')}
+              label={formatMessage('Please input regEx pattern')}
               onChange={onChangeRegEx}
             />
           )}

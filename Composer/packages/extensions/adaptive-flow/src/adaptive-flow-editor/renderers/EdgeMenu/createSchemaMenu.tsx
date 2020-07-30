@@ -125,8 +125,8 @@ const createPasteButtonItem = (
 ): IContextualMenuItem => {
   return {
     key: 'Paste',
-    name: 'Paste',
-    ariaLabel: 'Paste',
+    name: formatMessage('Paste'),
+    ariaLabel: formatMessage('Paste'),
     disabled: disabled,
     onRender: () => {
       return (
@@ -148,7 +148,7 @@ const createPasteButtonItem = (
             }
           `}
           disabled={disabled}
-          name="Paste"
+          name={formatMessage('Paste')}
           role="menuitem"
           onClick={() => onClick({ key: MenuEventTypes.Paste })}
         >
@@ -159,7 +159,7 @@ const createPasteButtonItem = (
               `}
               iconName="Paste"
             />
-            <span>Paste</span>
+            <span>{formatMessage('Paste')}</span>
           </div>
         </button>
       );
