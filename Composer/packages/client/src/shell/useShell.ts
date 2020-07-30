@@ -5,6 +5,7 @@ import { useMemo, useRef } from 'react';
 import { ShellApi, ShellData } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
+import formatMessage from 'format-message';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
@@ -77,7 +78,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
 
   async function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
-    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
     return await updateDialog({ id, content: newDialog.content });
   }

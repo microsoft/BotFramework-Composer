@@ -6,28 +6,33 @@ import { jsx, css } from '@emotion/core';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import ReactDOM from 'react-dom';
+import formatMessage from 'format-message';
 
 import { dialogStyle } from './dialogStyle';
 
 // -------------------- Styles -------------------- //
 
+const normalStyle = css`
+  padding: 15px;
+  margin-bottom: 20px;
+  white-space: pre-line;
+`;
+
+const consoleStyle = css`
+  background: #000;
+  max-height: 90px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 23px;
+  color: #fff;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  white-space: pre-line;
+`;
+
 export const builtInStyles = {
-  [dialogStyle.normal]: css`
-    padding: 15px;
-    margin-bottom: 20px;
-    white-space: pre-line;
-  `,
-  [dialogStyle.console]: css`
-    background: #000;
-    max-height: 90px;
-    overflow-y: auto;
-    font-size: 16px;
-    line-height: 23px;
-    color: #fff;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    white-space: pre-line;
-  `,
+  [dialogStyle.normal]: normalStyle,
+  [dialogStyle.console]: consoleStyle,
 };
 
 // -------------------- AlertDialog -------------------- //
@@ -45,9 +50,9 @@ type Props = {
 
 const AlertDialog = (props: Props) => {
   const { setting, onCancel, onConfirm } = props;
-  const { title, subtitle = '', confirmText = 'Ok', style = dialogStyle.normal } = setting;
+  const { title, subtitle = '', confirmText = formatMessage('Ok'), style = dialogStyle.normal } = setting;
   if (!title) {
-    throw new Error('Confirmation modal must have a title');
+    throw new Error(formatMessage('Confirmation modal must have a title.'));
   }
 
   return (
