@@ -46,8 +46,12 @@ const WelcomeModal = () => {
         <div css={topBarStyle}>
           <div css={titleStyle}>{formatMessage('Welcome!')}</div>
           <div css={buttonStyle}>
-            <IconButton iconProps={{ iconName: 'ChromeMinimize' }} title="Collapse" onClick={toggleMinimized} />
-            <IconButton iconProps={{ iconName: 'ChromeClose' }} title="Close" onClick={exit} />
+            <IconButton
+              iconProps={{ iconName: 'ChromeMinimize' }}
+              title={formatMessage('Collapse')}
+              onClick={toggleMinimized}
+            />
+            <IconButton iconProps={{ iconName: 'ChromeClose' }} title={formatMessage('Close')} onClick={exit} />
           </div>
         </div>
         <img alt="Welcome" src={welcomeImage} />

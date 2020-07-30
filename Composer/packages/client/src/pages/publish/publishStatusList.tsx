@@ -18,6 +18,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import moment from 'moment';
 import { useMemo, useState, useEffect } from 'react';
+import formatMessage from 'format-message';
 
 import { listRoot, tableView, detailList } from './styles';
 
@@ -64,7 +65,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
   const columns = [
     {
       key: 'PublishTime',
-      name: 'Time',
+      name: formatMessage('Time'),
       className: 'publishtime',
       fieldName: 'time',
       minWidth: 70,
@@ -79,7 +80,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     },
     {
       key: 'PublishDate',
-      name: 'Date',
+      name: formatMessage('Date'),
       className: 'publishdate',
       fieldName: 'date',
       minWidth: 70,
@@ -95,7 +96,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     },
     {
       key: 'PublishStatus',
-      name: 'Status',
+      name: formatMessage('Status'),
       className: 'publishstatus',
       fieldName: 'status',
       minWidth: 70,
@@ -119,7 +120,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     },
     {
       key: 'PublishMessage',
-      name: 'Message',
+      name: formatMessage('Message'),
       className: 'publishmessage',
       fieldName: 'message',
       minWidth: 70,
@@ -135,7 +136,7 @@ export const PublishStatusList: React.FC<IStatusListProps> = (props) => {
     },
     {
       key: 'PublishComment',
-      name: 'Comment',
+      name: formatMessage('Comment'),
       className: 'comment',
       fieldName: 'comment',
       minWidth: 70,

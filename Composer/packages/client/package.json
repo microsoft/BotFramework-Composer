@@ -14,7 +14,8 @@
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json src/**/*.ts src/**/*.tsx"
   },
   "proxy": "http://localhost:5000",
   "dependencies": {
@@ -30,7 +31,7 @@
     "@bfc/ui-plugin-prompts": "*",
     "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/ui-plugin-select-skill-dialog": "*",
-    "@emotion/core": "^10.0.7",
+    "@emotion/core": "^10.0.27",
     "@microsoft/bf-lu": "^4.10.0-preview.141651",
     "@reach/router": "^1.2.1",
     "@uifabric/fluent-theme": "^7.1.107",
@@ -38,6 +39,7 @@
     "@uifabric/react-hooks": "^7.4.12",
     "@uifabric/styling": "^7.13.7",
     "axios": "^0.19.2",
+    "babel-plugin-extract-format-message": "^6.2.3",
     "botbuilder-lg": "4.10.0-preview-147186",
     "format-message": "^6.2.3",
     "immer": "^5.2.0",
@@ -92,6 +94,7 @@
     "eslint-config-react-app": "5.2.1",
     "eslint-loader": "4.0.0",
     "file-loader": "4.2.0",
+    "format-message-cli": "^6.2.3",
     "fs-extra": "7.0.1",
     "html-webpack-plugin": "4.0.0-beta.8",
     "mini-css-extract-plugin": "0.8.0",

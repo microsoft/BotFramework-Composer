@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+import formatMessage from 'format-message';
 
 import { consoleStyle, dialog } from './styles';
 
@@ -47,7 +48,7 @@ export const ErrorPopup = (props: ErrorPopupProps) => {
     >
       <div css={consoleStyle}>{props.error}</div>
       <DialogFooter>
-        <PrimaryButton text="Ok" onClick={closeDialog} />
+        <PrimaryButton text={formatMessage('Ok')} onClick={closeDialog} />
       </DialogFooter>
     </Dialog>
   );

@@ -71,9 +71,18 @@ export const Pagination: React.FC<IPaginationProps> = (props) => {
     changePage(index + 1);
   };
 
+  // Note: the labels will need to be made RTL-aware at some point
   return (
     <div aria-label={formatMessage('navigation control')} css={container} role="region">
-      <DefaultButton allowDisabledFocus disabled={index === 0} text="< Previous" onClick={handlePreviousClick} />
+      <DefaultButton
+        allowDisabledFocus
+        disabled={index === 0}
+        iconProps={{
+          iconName: 'ChevronLeft',
+        }}
+        text={formatMessage('Previous')}
+        onClick={handlePreviousClick}
+      />
       <span css={text}>Page</span>
       <Dropdown
         ariaLabel={formatMessage('Page number')}
@@ -84,7 +93,15 @@ export const Pagination: React.FC<IPaginationProps> = (props) => {
         onChange={handlePageSelected}
       />
       <span css={text}>of {pageCount}</span>
-      <DefaultButton allowDisabledFocus disabled={index === pageCount - 1} text="Next >" onClick={handleNextClick} />
+      <DefaultButton
+        allowDisabledFocus
+        disabled={index === pageCount - 1}
+        iconProps={{
+          iconName: 'ChevronRight',
+        }}
+        text={formatMessage('Next')}
+        onClick={handleNextClick}
+      />
     </div>
   );
 };
