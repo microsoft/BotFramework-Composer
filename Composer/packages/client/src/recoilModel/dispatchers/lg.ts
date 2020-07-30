@@ -218,7 +218,7 @@ export const lgDispatcher = () => {
       const lgFiles = await snapshot.getPromise(lgFilesState);
       const lgFile = lgFiles.find((file) => file.id === id);
       if (!lgFile) {
-        throw new Error(`lg file ${id} not exist`);
+        throw new Error(formatMessage('lg file {id} does not exist.', { id }));
       }
       const updatedFile = lgUtil.copyTemplate(lgFile, fromTemplateName, toTemplateName, lgFileResolver(lgFiles));
       await updateLgFileState(callbackHelpers, { id, updatedFile, content: updatedFile.content });
