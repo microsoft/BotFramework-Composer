@@ -4,13 +4,7 @@
 /** @jsx jsx */
 import React, { useCallback, useMemo, useState } from 'react';
 import { jsx, css } from '@emotion/core';
-import {
-  GroupedList,
-  IGroup,
-  IGroupHeaderProps,
-  IGroupRenderProps,
-  IGroupedList,
-} from 'office-ui-fabric-react/lib/GroupedList';
+import { IGroupHeaderProps } from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
@@ -71,12 +65,8 @@ function createGroupItem(dialog: DialogInfo, position: number) {
   };
 }
 
-function createItem(trigger: ITrigger, index: number) {
-  return {
-    ...trigger,
-    index,
-    displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
-  };
+function getTriggerName(trigger: ITrigger) {
+  return trigger.displayName || getFriendlyName({ $kind: trigger.type });
 }
 
 function sortDialog(dialogs: DialogInfo[]) {
@@ -177,7 +167,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
           });
 
     return dialogs.map((dialog) => {
-      const triggerList = dialog.triggers.map((tr) => <li key={tr.id}>{tr.displayName || tr.type}</li>);
+      const triggerList = dialog.triggers.map((tr) => <li key={tr.id}>{getTriggerName(tr)}</li>);
       return (
         <details key={dialog.id}>
           <summary>{dialog.displayName}</summary>
