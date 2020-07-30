@@ -305,6 +305,16 @@ export class AzureResourceMananger {
     }
 
     if (this.config.createOrNot.deployments) {
+      if (!this.config.deployments) {
+        this.config.deployments = {
+          resourceGroupName: this.config.resourceGroup.name,
+          name: '1d41002f-62a1-49f3-bd43-2f3f32a19cbb',
+        };
+      }
+
+      if (!this.config.deployments.resourceGroupName) {
+        this.config.deployments.resourceGroupName = this.config.resourceGroup.name;
+      }
       if (!this.config.deployments.name) {
         this.config.deployments.name = '1d41002f-62a1-49f3-bd43-2f3f32a19cbb';
       }
