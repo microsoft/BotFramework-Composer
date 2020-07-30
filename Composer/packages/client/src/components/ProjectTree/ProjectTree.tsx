@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { jsx, css } from '@emotion/core';
 import {
   GroupedList,
@@ -26,7 +26,6 @@ import { dispatcherState, userSettingsState } from '../../recoilModel';
 import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 
 import { TreeItem } from './treeItem';
-import { RevealDropdown } from './RevealDropdown';
 
 // -------------------- Styles -------------------- //
 
@@ -93,43 +92,6 @@ function sortDialog(dialogs: DialogInfo[]) {
   });
 }
 
-function createItemsAndGroups(dialogs: DialogInfo[], filter: string): { items: any[]; groups: IGroup[] } {
-  let position = 0;
-  const result = dialogs
-    .filter((dialog) => {
-      return dialog.displayName.toLowerCase().includes(filter.toLowerCase());
-    })
-    .reduce(
-      (result: { items: any[]; groups: IGroup[] }, dialog) => {
-        result.groups.push(createGroupItem(dialog, position));
-        position += dialog.triggers.length;
-        dialog.triggers.forEach((item, index) => {
-          result.items.push(createItem(item, index));
-        });
-        return result;
-      },
-      { items: [], groups: [] }
-    );
-
-  return {
-    items: result.items,
-    groups: [
-      {
-        level: 0,
-        startIndex: 0,
-        count: position,
-        key: 'all',
-        name: 'bot name',
-        children: result.groups,
-        data: {
-          displayName: formatMessage('{botName} (Core Bot)', { botName: dialogs[0].displayName }),
-          isRoot: true,
-        },
-      },
-    ],
-  };
-}
-
 interface IProjectTreeProps {
   dialogs: DialogInfo[];
   dialogId: string;
@@ -147,7 +109,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
-  const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
@@ -206,7 +167,29 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
 
-  const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, filter);
+  function createDetailsTree(dialogs: DialogInfo[], filter: string) {
+    const filteredDialogs =
+      filter == null || filter.length === 0
+        ? dialogs
+        : dialogs.filter((dialog) => {
+            dialog.displayName.includes(filter) ||
+              dialog.triggers.some((trigger) => trigger.displayName.includes(filter));
+          });
+
+    return dialogs.map((dialog) => {
+      const triggerList = dialog.triggers.map((tr) => <li key={tr.id}>{tr.displayName || tr.type}</li>);
+      return (
+        <details key={dialog.id}>
+          <summary>{dialog.displayName}</summary>
+          <div>
+            <ul>{triggerList}</ul>
+          </div>
+        </details>
+      );
+    });
+  }
+
+  const detailsTree = createDetailsTree(sortedDialogs, filter);
 
   return (
     <Resizable
@@ -247,28 +230,11 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
                   0 {}
                 other {Press down arrow key to navigate the search results}
             }`,
-              { dialogNum: itemsAndGroups.groups.length }
+              { dialogNum: dialogs.length }
             )}
             aria-live={'polite'}
           />
-          <RevealDropdown title={formatMessage('Bot Project')}>
-            <GroupedList
-              {...itemsAndGroups}
-              componentRef={groupRef}
-              groupProps={
-                {
-                  onRenderHeader: onRenderHeader,
-                  onRenderShowAll: onRenderShowAll,
-                  showEmptyGroups: true,
-                  showAllProps: false,
-                  isAllGroupsCollapsed: false,
-                } as Partial<IGroupRenderProps>
-              }
-              styles={groupListStyle}
-              onRenderCell={onRenderCell}
-            />
-          </RevealDropdown>
-          <RevealDropdown title={formatMessage('Asset Library')}></RevealDropdown>
+          {detailsTree}
         </FocusZone>
       </div>
     </Resizable>
