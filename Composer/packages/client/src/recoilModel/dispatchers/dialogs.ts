@@ -12,7 +12,6 @@ import {
   onCreateDialogCompleteState,
   actionsSeedState,
   showCreateDialogModalState,
-  isRecognizerDropdownOpen,
 } from '../atoms/botState';
 
 import { createLgFileState, removeLgFileState } from './lg';
@@ -92,23 +91,11 @@ export const dialogsDispatcher = () => {
     set(onCreateDialogCompleteState, { func: undefined });
   });
 
-  const openRecognizerDropdown = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    const { set } = callbackHelpers;
-    set(isRecognizerDropdownOpen, true);
-  });
-
-  const closeRecognizerDropdown = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    const { set } = callbackHelpers;
-    set(isRecognizerDropdownOpen, false);
-  });
-
   return {
     removeDialog,
     createDialog,
     createDialogCancel,
     createDialogBegin,
     updateDialog,
-    openRecognizerDropdown,
-    closeRecognizerDropdown,
   };
 };

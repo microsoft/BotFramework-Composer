@@ -200,8 +200,3 @@ export const qnaAllUpViewStatusState = atom<any>({
   key: getFullyQualifiedKey('qnaAllUpViewStatusState'),
   default: QnAAllUpViewStatus.Success,
 });
-
-export const isRecognizerDropdownOpen = atom<boolean>({
-  key: getFullyQualifiedKey('isRecognizerDropdownOpen'),
-  default: false,
-});

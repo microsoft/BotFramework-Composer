@@ -246,7 +246,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const recognizer = get(dialogFile, 'content.recognizer', '');
-  const isLUISnQnA = typeof recognizer === 'string' && recognizer.endsWith('.qna');
+  const isLUISnQnA = typeof recognizer === 'string' && recognizer.endsWith('.lu.qna');
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,

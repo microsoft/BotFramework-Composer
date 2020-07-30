@@ -20,7 +20,7 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
-import { LuFilePayload, LgFilePayload, QnAFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
+import { LuFilePayload, LgFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -133,7 +133,6 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
@@ -163,7 +162,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateLuFile,
     updateLgFile,
     createQnAFile,
-    updateQnAFile,
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
@@ -256,7 +254,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           styles={changeRecognizerButton}
           text={formatMessage('Change Recognizer')}
           onClick={() => {
-            actions.openRecognizerDropdown();
+            navigateTo(`/bot/${projectId}/qna/all`);
           }}
         />
         <Icon iconName={'Cancel'} style={warningIcon} onClick={() => setShowWarning(false)} />
@@ -272,12 +270,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = async (
-    dialog: DialogInfo,
-    luFile?: LuFilePayload,
-    lgFile?: LgFilePayload,
-    qnaFile?: QnAFilePayload
-  ) => {
+  const onTriggerCreationSubmit = async (dialog: DialogInfo, luFile?: LuFilePayload, lgFile?: LgFilePayload) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
@@ -299,15 +292,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
         projectId,
       };
       await updateLgFile(lgFilePayload);
-    }
-
-    if (qnaFile) {
-      const qnaFilePayload = {
-        id: qnaFile.id,
-        content: qnaFile.content,
-        projectId,
-      };
-      await updateQnAFile(qnaFilePayload);
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
