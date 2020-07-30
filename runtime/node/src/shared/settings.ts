@@ -6,9 +6,9 @@ export interface BotSettings {
   blobStorage: BlobStorageConfiguration;
   MicrosoftAppId: string;
   MicrosoftAppPassword: string;
-  cosmosDb: CosmosDb;
-  applicationInsights: { InstrumentationKey: string };
-  luis: LuisSettings;
+  cosmosDb: CosmosDbConfiguration;
+  applicationInsights: ApplicationInsightsConfiguration;
+  luis: LuisConfiguration;
   telemetry: TelemetryConfiguration;
   [key: string]: any;
 }
@@ -19,19 +19,23 @@ export interface BotFeatureSettings {
   removeRecipientMention: boolean;
 }
 
-export interface CosmosDb {
+export interface BlobStorageConfiguration {
+  connectionString: string;
+  container: string;
+}
+
+export interface CosmosDbConfiguration {
   authKey: string;
   collectionId: string;
   cosmosDBEndpoint: string;
   databaseId: string;
 }
 
-export interface BlobStorageConfiguration {
-  connectionString: string;
-  container: string;
+export interface ApplicationInsightsConfiguration {
+  InstrumentationKey: string;
 }
 
-export interface LuisSettings {
+export interface LuisConfiguration {
   name: string;
   authoringKey: string;
   endpointKey: string;

@@ -1,10 +1,6 @@
-import { BotFrameworkAdapter } from "botbuilder";
-import { ComposerBot } from "./shared/composerBot";
+import { BotFrameworkAdapter, ConversationState, UserState } from "botbuilder";
 import { BotSettings } from "./shared/settings";
 export declare const getProjectRoot: () => string;
-export declare const getRootDialog: (projRoot: string) => string;
-export declare const Configure: (projRoot: string) => {
-    adapter: BotFrameworkAdapter;
-    bot: ComposerBot;
-};
+export declare const getRootDialog: (folderPath: string) => string;
+export declare const getBotAdapter: (settings: BotSettings, userState: UserState, conversationState: ConversationState) => BotFrameworkAdapter;
 export declare const getSettings: (projectRoot: string) => BotSettings;
