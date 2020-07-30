@@ -132,8 +132,9 @@ export class BotProjectDeploy {
    * Azure API accessors
    **********************************************************************************************/
 
-  private async createApp(graphClient: GraphRbacManagementClient, displayName: string, appPassword: string) {
-    const createRes = await graphClient.applications.create({
+  private async createApp(displayName: string, appPassword: string) {
+    const applicationUri = 'https://graph.microsoft.com/v1.0/applications';
+    const requestBody = {
       displayName: displayName,
       passwordCredentials: [
         {
@@ -143,9 +144,15 @@ export class BotProjectDeploy {
         },
       ],
       availableToOtherTenants: true,
-      replyUrls: ['https://token.botframework.com/.auth/web/redirect'],
-    });
-    return createRes;
+      replyUrls: ['https://token.botframework.com/.auth/web/redirect']
+    }
+    const options = {
+      body: requestBody,
+      json: true,
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+    } as rp.RequestPromiseOptions;
+    const response = await rp.post(applicationUri, options);
+    return response;
   }
 
 
@@ -540,7 +547,7 @@ export class BotProjectDeploy {
         });
 
         // create the app registration
-        const appCreated = await this.createApp(graphClient, name, appPassword);
+        const appCreated = await this.createApp(name, appPassword);
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
           message: JSON.stringify(appCreated, null, 4),
@@ -565,7 +572,7 @@ export class BotProjectDeploy {
         createOrNot: {
           appInsights: createAppInsights,
           cosmosDB: createCosmosDb,
-          blobStorage: createCosmosDb,
+          blobStorage: createStorage,
           luisResource: createLuisResource,
           luisAuthoringResource: createLuisAuthoringResource,
           webApp: true,
@@ -661,6 +668,11 @@ export class BotProjectDeploy {
         }
       }
       const output = armInstance.getOutput();
+      const applicationOutput = {
+        MicrosoftAppId: appId,
+        MicrosoftAppPassword: appPassword
+      };
+      Object.assign(output, applicationOutput);
 
       let provisionResult = {};
 
