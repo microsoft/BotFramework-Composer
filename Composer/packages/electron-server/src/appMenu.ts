@@ -68,7 +68,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
       submenu: [
         // NOTE: Avoid using builtin `role`, it won't override the click handler.
         { label: 'Undo', accelerator: 'CmdOrCtrl+Z', click: () => handleMenuEvents('undo') },
-        { label: 'Redo', accelerator: 'CmdOrCtrl+Y', click: () => handleMenuEvents('redo') },
+        { label: 'Redo', accelerator: 'CmdOrCtrl+Shift+Z', click: () => handleMenuEvents('redo') },
         { type: 'separator' },
         { label: 'Cut', accelerator: 'CmdOrCtrl+X', click: () => handleMenuEvents('cut') },
         { label: 'Copy', accelerator: 'CmdOrCtrl+C', click: () => handleMenuEvents('copy') },
