@@ -166,6 +166,7 @@ export type BotAssets = {
   lgFiles: LgFile[];
   skillManifests: SkillManifest[];
   setting: DialogSetting;
+  dialogSchemas: DialogSchemaFile[];
 };
 
 export interface BotInfo {
