@@ -11,6 +11,7 @@ import {
   WebAppConfig,
   BotConfig,
   ResourceGroupConfig,
+  DeploymentsConfig,
 } from './azureResourceManagerConfig';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { StorageManagementClient } from '@azure/arm-storage';
@@ -31,6 +32,7 @@ export class AzureResourceDeploymentStatus {
   public blobStorageStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
   public webAppStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
   public botStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
+  public counterStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
 }
 
 export enum DeploymentStatus {
@@ -299,6 +301,20 @@ export class AzureResourceMananger {
           message: 'Create Bot Failed.',
         });
         return;
+      }
+    }
+
+    if (this.config.createOrNot.deployments) {
+      if (!this.config.deployments.name) {
+        this.config.deployments.name = '1d41002f-62a1-49f3-bd43-2f3f32a19cbb';
+      }
+
+      await this.deployDeploymentCounter(this.config.deployments);
+      if (this.deployStatus.counterStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: 'Create Deployment Counter Failed.',
+        });
       }
     }
   }
@@ -818,5 +834,46 @@ export class AzureResourceMananger {
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
     }
+  }
+
+  private async deployDeploymentCounter(config: DeploymentsConfig) {
+    try {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: 'Deploying Deployments Counter ...',
+      });
+      this.deployStatus.counterStatus = DeploymentStatus.DEPLOYING;
+
+      const resourceClient = new ResourceManagementClient(this.creds, this.subId);
+
+      const counterResult = await resourceClient.deployments.createOrUpdate(config.resourceGroupName, config.name, {
+        properties: {
+          mode: 'Incremental',
+          template: {
+            $schema: "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+            contentVersion: "1.0.0.0",
+            resources: []
+          }
+        }
+      });
+
+      if (counterResult._response.status >= 300) {
+        this.deployStatus.counterStatus = DeploymentStatus.DEPLOY_FAIL;
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: counterResult._response.bodyAsText,
+        });
+        return;
+      }
+
+      this.deployStatus.counterStatus = DeploymentStatus.DEPLOY_SUCCESS;
+    } catch (err) {
+      this.deployStatus.counterStatus = DeploymentStatus.DEPLOY_FAIL;
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+      });
+    }
+
   }
 }
