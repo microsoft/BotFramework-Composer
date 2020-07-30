@@ -6,8 +6,6 @@ import * as util from 'util';
 
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { AzureBotService } from '@azure/arm-botservice';
-import { GraphRbacManagementClient } from '@azure/graph';
-import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
@@ -509,17 +507,6 @@ export class BotProjectDeploy {
       if (!this.tenantId) {
         this.tenantId = await this.getTenantId();
       }
-      const graphCreds = new DeviceTokenCredentials(
-        this.creds.clientId,
-        this.tenantId,
-        this.creds.username,
-        'graph',
-        this.creds.environment,
-        this.creds.tokenCache
-      );
-      const graphClient = new GraphRbacManagementClient(graphCreds, this.tenantId, {
-        baseUri: 'https://graph.windows.net',
-      });
 
       let settings: any = {};
       if (fs.existsSync(this.settingsPath)) {
@@ -576,7 +563,8 @@ export class BotProjectDeploy {
           luisResource: createLuisResource,
           luisAuthoringResource: createLuisAuthoringResource,
           webApp: true,
-          bot: true
+          bot: true,
+          deployments: true
         },
         bot: {
           appId: appId ?? undefined
