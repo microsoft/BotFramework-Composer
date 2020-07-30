@@ -212,3 +212,7 @@ export const setAccessToken = (value: any) => {
 export const setGraphToken = (value: any) => {
   window.localStorage.setItem('graph_token', value);
 };
+
+export const getGraphTokenInCache = () => {
+  return window.localStorage.getItem('graph_token');
+};

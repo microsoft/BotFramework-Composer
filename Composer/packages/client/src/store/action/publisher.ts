@@ -4,11 +4,12 @@
 import formatMessage from 'format-message';
 
 import { ActionCreator } from '../types';
-import { getAccessTokenInCache, loginPopup } from '../../utils/auth';
+import { getAccessTokenInCache, loginPopup, getGraphTokenInCache } from '../../utils/auth';
 import filePersistence from '../persistence/FilePersistence';
 import { ActionTypes } from '../../constants';
 
 import httpClient from './../../utils/httpUtil';
+
 export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
   try {
     const response = await httpClient.get(`/publish/types`);
@@ -218,9 +219,13 @@ export const getDeployLocations: ActionCreator = async ({ dispatch }, subscripti
 export const provision: ActionCreator = async ({ dispatch }, config, type, projectId) => {
   try {
     const token = getAccessTokenInCache();
-    const result = await httpClient.post(`/publish/${projectId}/provision/${type}`, config, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const result = await httpClient.post(
+      `/publish/${projectId}/provision/${type}`,
+      { ...config, graphToken: getGraphTokenInCache() },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     console.log(result.data);
     // dispatch({
     //   type: ActionTypes.PROVISION_SUCCESS,
@@ -234,30 +239,47 @@ export const provision: ActionCreator = async ({ dispatch }, config, type, proje
 };
 
 // get bot status from target publisher
-export const getProvisionStatus: ActionCreator = async ({ dispatch }, projectId, target) => {
+export const getProvisionStatus: ActionCreator = async (store, projectId, target) => {
+  let timer;
   try {
-    const timer = setInterval(async () => {
+    timer = setInterval(async () => {
       const response = await httpClient.get(`/publish/${projectId}/provisionStatus/${target.name}`);
       console.log(response.data);
       if (response.data.config && response.data.config != {}) {
         clearInterval(timer);
+        // update publishConfig
+        const targets = store.getState().settings.publishTargets;
+        const newTargets = targets?.map((item) => {
+          if (item.name === target.name) {
+            return { ...item, configuration: JSON.stringify(response.data.config) };
+          } else {
+            return item;
+          }
+        });
+        console.log(newTargets);
+        store.dispatch({
+          type: ActionTypes.SET_PUBLISH_TARGETS,
+          payload: {
+            publishTarget: newTargets,
+          },
+        });
       }
     }, 10000);
-
-    // dispatch({
-    //   type: ActionTypes.GET_PUBLISH_STATUS,
-    //   payload: {
-    //     ...response.data,
-    //     target: target,
-    //   },
-    // });
   } catch (err) {
-    // dispatch({
-    //   type: ActionTypes.GET_PUBLISH_STATUS_FAILED,
-    //   payload: {
-    //     ...err.response.data,
-    //     target: target,
-    //   },
-    // });
+    console.log(err);
+    // remove that publishTarget
+    const targets = store.getState().settings.publishTargets;
+    const newTargets = targets?.map((item) => {
+      if (item.name !== target.name) {
+        return item;
+      }
+    });
+    store.dispatch({
+      type: ActionTypes.SET_PUBLISH_TARGETS,
+      payload: {
+        publishTarget: newTargets,
+      },
+    });
+    clearInterval(timer);
   }
 };

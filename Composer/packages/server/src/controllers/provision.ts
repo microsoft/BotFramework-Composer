@@ -2,13 +2,13 @@
 // Licensed under the MIT License.
 import axios from 'axios';
 import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
-// import { ProvisionType } from '@bfc/shared';
 
 import { BotProjectService } from '../services/project';
 
 const defaultPublishConfig = {
   name: 'default',
   type: 'localpublish',
+  provisionConfig: '',
   configuration: JSON.stringify({}),
 };
 
@@ -64,37 +64,32 @@ export const ProvisionController = {
     res.status(200).json(result.data);
   },
   provision: async (req, res) => {
-    if (!req.body || !req.body.accessToken) {
+    if (!req.body || !req.body.accessToken || !req.body.graphToken) {
       res.status(401).json({ message: 'Unauthorized' });
       return;
     }
-    const user = await PluginLoader.getUserFromRequest(req);
+    // const user = await PluginLoader.getUserFromRequest(req);
     const { type } = req.body; // type is webapp or functions
-    // const provisionType = req.params.type;
-    const projectId = req.params.projectId;
-    const currentProject = await BotProjectService.getProjectById(projectId, user);
+    // const projectId = req.params.projectId;
+    // const currentProject = await BotProjectService.getProjectById(projectId, user);
     // deal with publishTargets not exist in settings
     // const publishTargets = currentProject.settings?.publishTargets || [];
 
     if (pluginLoader?.extensions?.publish[type]?.methods?.provision) {
       // get the externally provision method
-      const pluginMethod = pluginLoader.extensions.publish[type].methods.provision;
+      // const pluginMethod = pluginLoader.extensions.publish[type].methods.provision;
 
       try {
-        // call the method
-        const result = await pluginMethod.call(
-          null,
-          {
-            ...req.body,
-            graphToken: process.env.graphToken,
-          },
-          currentProject,
-          user
-        );
-        // set status and return value as json
-        res.status(result.status).json({
-          config: result.config,
-          details: result.details,
+        // // call the method
+        // const result = await pluginMethod.call(null, req.body, currentProject, user);
+        // // set status and return value as json
+        // res.status(result.status).json({
+        //   config: result.config,
+        //   details: result.details,
+        // });
+        res.status(202).json({
+          config: null,
+          details: {},
         });
       } catch (err) {
         console.log(err);
@@ -121,15 +116,32 @@ export const ProvisionController = {
 
     if (pluginLoader?.extensions?.publish[method]?.methods?.getProvisionStatus) {
       // get the externally defined method
-      const pluginMethod = pluginLoader.extensions.publish[method].methods.getProvisionStatus;
-
+      // const pluginMethod = pluginLoader.extensions.publish[method].methods.getProvisionStatus;
+      // const provisionConfig = profile.provisionConfig || '{}';
       try {
         // call the method
-        const result = await pluginMethod.call(null, JSON.parse(profile.configuration), currentProject, user);
-        // set status and return value as json
-        res.status(result.status).json({
-          config: result.config || null,
-          details: result.details || {},
+        // const result = await pluginMethod.call(null, JSON.parse(provisionConfig), currentProject, user);
+        // // set status and return value as json
+        // res.status(result.status).json({
+        //   config: result.config || null,
+        //   details: result.details || {},
+        // });
+        res.status(200).json({
+          config: {
+            settings: { applicationInsights: {}, cosmosDb: {}, blobStorage: {}, luis: {} },
+            name: 'testprovisionss',
+            luisResource: '',
+          },
+          details: {
+            resourceGroupStatus: 'DEPLOY_SUCCESS',
+            luisAuthoringStatus: 'NOT_DEPLOYMENT',
+            luisStatus: 'NOT_DEPLOYMENT',
+            appInsightsStatus: 'NOT_DEPLOYMENT',
+            cosmosDBStatus: 'NOT_DEPLOYMENT',
+            blobStorageStatus: 'NOT_DEPLOYMENT',
+            webAppStatus: 'DEPLOY_SUCCESS',
+            botStatus: 'DEPLOY_SUCCESS',
+          },
         });
       } catch (err) {
         console.log(err);

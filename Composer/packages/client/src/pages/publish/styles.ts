@@ -95,6 +95,7 @@ export const overflowSet = css`
   justify-content: space-between;
   line-height: 36px;
   padding-left: 16px;
+  padding-right: 5px;
   background: ${NeutralColors.white};
   font-weight: ${FontWeights.semibold};
   font-size: ${FontSizes.small};
@@ -114,6 +115,7 @@ export const targetSelected = css`
   background: ${NeutralColors.gray20};
   font-weight: ${FontWeights.bold};
   font-size: ${FontSizes.small};
+  padding-right: 5px;
 `;
 
 export const resourcesListContainer = css`

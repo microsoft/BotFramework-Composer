@@ -67,12 +67,14 @@ export interface PublishType {
     publish: boolean;
     rollback: boolean;
     status: boolean;
+    provision: boolean;
   };
 }
 
 export interface PublishTarget {
   name: string;
   type: string;
+  provisionConfig: string;
   configuration: string;
   lastPublished?: Date;
 }

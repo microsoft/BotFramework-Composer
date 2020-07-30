@@ -280,12 +280,13 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   );
 
   const savePublishTarget = useCallback(
-    async (name: string, type: string, configuration: string) => {
+    async (name: string, type: string, provisionConfig: string) => {
       const targets = (settings.publishTargets || []).concat([
         {
           name,
           type,
-          configuration,
+          provisionConfig,
+          configuration: '{}',
         },
       ]);
       await actions.setPublishTargets(targets);
