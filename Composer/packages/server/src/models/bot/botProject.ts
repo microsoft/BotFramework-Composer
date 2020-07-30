@@ -22,7 +22,7 @@ import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
 import { extractSkillManifestUrl } from './skillManager';
-import { defaultFilePath, serializeFiles } from './botStructure';
+import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -341,8 +341,27 @@ export class BotProject implements IBotProject {
     }
   };
 
+  public validateFileName = (name: string) => {
+    const nameRegex = /^[a-zA-Z0-9-_]+$/;
+    const { fileId, fileType } = parseFileName(name, '');
+
+    let fileName = fileId;
+    if (fileType === '.dialog') {
+      fileName = Path.basename(name, fileType);
+    }
+
+    if (!fileName) {
+      throw new Error('The file name can not be empty');
+    }
+
+    if (!nameRegex.test(fileName)) {
+      throw new Error('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+    }
+  };
+
   public createFile = async (name: string, content = '') => {
     const filename = name.trim();
+    this.validateFileName(filename);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(botName, defaultLocale, filename);
