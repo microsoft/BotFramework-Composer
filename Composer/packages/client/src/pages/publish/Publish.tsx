@@ -23,6 +23,7 @@ import { PublishDialog } from './publishDialog';
 import { ContentHeaderStyle, HeaderText, ContentStyle, contentEditor, overflowSet, targetSelected } from './styles';
 import { PublishStatusList, IStatus } from './publishStatusList';
 import { ProvisionDialog } from './provisionDialog';
+import { ProvisionDetailPanel } from './provisionDetail';
 
 interface PublishPageProps extends RouteComponentProps<{}> {
   targetName?: string;
@@ -46,6 +47,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [editTarget, setEditTarget] = useState<{ index: number; item: PublishTarget } | null>(null);
+  const [showProvisionDetail, setShowProvisionDetail] = useState(false);
 
   const isRollbackSupported = useMemo(
     () => (target, version): boolean => {
@@ -110,6 +112,19 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       },
       align: 'left',
       disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
+      dataTestid: 'publishPage-ToolBar-Log',
+    },
+    {
+      type: 'action',
+      text: formatMessage('Provision Detail'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'ClipboardList',
+        },
+        onClick: () => setShowProvisionDetail(true),
+      },
+      align: 'left',
+      // disabled: selectedVersion ? false : true,
       dataTestid: 'publishPage-ToolBar-Log',
     },
   ];
@@ -324,6 +339,9 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
+      {showProvisionDetail && (
+        <ProvisionDetailPanel target={settings.publishTargets} onDismiss={() => setShowProvisionDetail(false)} />
+      )}
       <ToolBar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>

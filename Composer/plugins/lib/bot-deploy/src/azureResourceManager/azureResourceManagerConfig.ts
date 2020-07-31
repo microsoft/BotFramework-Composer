@@ -37,6 +37,9 @@ export interface AzureResourceManangerConfig {
   // Create web app
   webApp: WebAppConfig;
 
+  // Deployments counter
+  deployments: DeploymentsConfig;
+
   // Use this to handle the create or not of a resource
   createOrNot: CreateResouces;
 }
@@ -62,6 +65,9 @@ export interface CreateResouces {
 
   // Create web app or not
   webApp: boolean;
+
+  // Create Deployment UUID counter or not
+  deployments: boolean;
 }
 
 export interface ResourceGroupConfig {
@@ -127,6 +133,11 @@ export interface WebAppConfig {
   sku?: string;
   appId?: string;
   appPwd?: string;
+}
+
+export interface DeploymentsConfig {
+  resourceGroupName: string;
+  name: string;
 }
 
 export type ApplicationType = 'web' | 'other';

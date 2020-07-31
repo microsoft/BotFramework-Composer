@@ -7,15 +7,14 @@ import * as util from 'util';
 import { TokenCredentials } from '@azure/ms-rest-js';
 import { ApplicationInsightsManagementClient } from '@azure/arm-appinsights';
 import { AzureBotService } from '@azure/arm-botservice';
-import { GraphRbacManagementClient } from '@azure/graph';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
+import archiver from 'archiver';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { AzureResourceManangerConfig } from './azureResourceManager/azureResourceManagerConfig';
-import { AzureResourceMananger } from './azureResourceManager/azureResourceManager';
-import archiver = require('archiver');
+import { AzureResourceMananger, AzureResourceDeploymentStatus } from './azureResourceManager/azureResourceManager';
 
 const exec = util.promisify(require('child_process').exec);
 const { promisify } = require('util');
@@ -36,10 +35,8 @@ export class BotProjectDeploy {
   private dotnetProjectPath: string;
   private generatedFolder: string;
   private remoteBotPath: string;
+  private azureResourceManagementClient?: AzureResourceMananger;
   private logger: (string) => any;
-
-  private provisionStatus: any;
-  private armInstance: any;
 
   // Will be assigned by create or deploy
   private tenantId = '';
@@ -51,7 +48,6 @@ export class BotProjectDeploy {
     this.graphToken = config.graphToken;
     this.projPath = config.projPath;
     this.tenantId = config.tenantId;
-    this.provisionStatus = {};
 
     // set path to .deployment file which points at the BotProject.csproj
     this.deployFilePath = config.deployFilePath ?? path.join(this.projPath ?? '.', '.deployment');
@@ -135,8 +131,9 @@ export class BotProjectDeploy {
    * Azure API accessors
    **********************************************************************************************/
 
-  private async createApp(graphClient: GraphRbacManagementClient, displayName: string, appPassword: string) {
-    const createRes = await graphClient.applications.create({
+  private async createApp(displayName: string, appPassword: string) {
+    const applicationUri = 'https://graph.microsoft.com/v1.0/applications';
+    const requestBody = {
       displayName: displayName,
       passwordCredentials: [
         {
@@ -147,8 +144,14 @@ export class BotProjectDeploy {
       ],
       availableToOtherTenants: true,
       replyUrls: ['https://token.botframework.com/.auth/web/redirect'],
-    });
-    return createRes;
+    };
+    const options = {
+      body: requestBody,
+      json: true,
+      headers: { Authorization: `Bearer ${this.graphToken}` },
+    } as rp.RequestPromiseOptions;
+    const response = await rp.post(applicationUri, options);
+    return response;
   }
 
   private async getFiles(dir: string): Promise<string[]> {
@@ -481,14 +484,6 @@ export class BotProjectDeploy {
     }
   }
 
-  public getProvisionStatus() {
-    if (this.armInstance) {
-      return this.armInstance.getStatus();
-    } else {
-      return this.provisionStatus;
-    }
-  }
-
   /**
    * Provision a set of Azure resources for use with a bot
    */
@@ -504,17 +499,10 @@ export class BotProjectDeploy {
     createAppInsights = false
   ) {
     try {
-      // clear previous provisionStatus
-      this.provisionStatus = null;
-
       if (!this.tenantId) {
         this.tenantId = await this.getTenantId();
       }
       const tokenCredentials = new TokenCredentials(this.accessToken);
-      const graphCreds = new TokenCredentials(this.graphToken);
-      const graphClient = new GraphRbacManagementClient(graphCreds, this.tenantId, {
-        baseUri: 'https://graph.windows.net',
-      });
 
       let settings: any = {};
       if (fs.existsSync(this.settingsPath)) {
@@ -542,7 +530,7 @@ export class BotProjectDeploy {
         });
 
         // create the app registration
-        const appCreated = await this.createApp(graphClient, name, appPassword);
+        const appCreated = await this.createApp(name, appPassword);
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
           message: JSON.stringify(appCreated, null, 4),
@@ -567,11 +555,12 @@ export class BotProjectDeploy {
         createOrNot: {
           appInsights: createAppInsights,
           cosmosDB: createCosmosDb,
-          blobStorage: createCosmosDb,
+          blobStorage: createStorage,
           luisResource: createLuisResource,
           luisAuthoringResource: createLuisAuthoringResource,
           webApp: true,
           bot: true,
+          deployments: true,
         },
         bot: {
           appId: appId ?? undefined,
@@ -585,7 +574,9 @@ export class BotProjectDeploy {
         logger: this.logger,
       } as AzureResourceManangerConfig;
       const armInstance = new AzureResourceMananger(armConfig);
-      this.armInstance = armInstance;
+      if (!this.azureResourceManagementClient) {
+        this.azureResourceManagementClient = armInstance;
+      }
 
       await armInstance.deployResources();
       // If application insights created, update the application insights settings in azure bot service
@@ -660,14 +651,16 @@ export class BotProjectDeploy {
         }
       }
       const output = armInstance.getOutput();
+      const applicationOutput = {
+        MicrosoftAppId: appId,
+        MicrosoftAppPassword: appPassword,
+      };
+      Object.assign(output, applicationOutput);
 
       this.logger({
         status: BotProjectDeployLoggerType.PROVISION_INFO,
         message: output,
       });
-      // update provisionStatus
-      this.provisionStatus = armInstance.getStatus();
-      this.armInstance = null;
 
       const provisionResult = {} as any;
 
@@ -686,6 +679,14 @@ export class BotProjectDeploy {
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
     }
+  }
+
+  public getProvisionStatus() {
+    if (!this.azureResourceManagementClient) {
+      return new AzureResourceDeploymentStatus();
+    }
+
+    return this.azureResourceManagementClient.getStatus();
   }
 
   /**
