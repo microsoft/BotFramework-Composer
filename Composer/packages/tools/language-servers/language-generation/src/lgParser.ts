@@ -25,15 +25,12 @@ class LgParserWithoutWorker {
 }
 
 class LgParserWithWorker {
-  private worker: ChildProcess;
+  private static _worker: ChildProcess;
   private resolves = {};
   private rejects = {};
 
   constructor() {
-    const workerScriptPath = path.join(__dirname, 'lgWorker.js');
-    // set exec arguments to empty, avoid fork nodemon `--inspect` error
-    this.worker = fork(workerScriptPath, [], { execArgv: [] });
-    this.worker.on('message', this.handleMsg.bind(this));
+    LgParserWithWorker.worker.on('message', this.handleMsg.bind(this));
   }
 
   public async parseText(content: string, id: string, resources: ResolverResource[]): Promise<any> {
@@ -42,7 +39,7 @@ class LgParserWithWorker {
     return new Promise((resolve, reject) => {
       this.resolves[msgId] = resolve;
       this.rejects[msgId] = reject;
-      this.worker.send(msg);
+      LgParserWithWorker.worker.send(msg);
     });
   }
 
@@ -60,6 +57,17 @@ class LgParserWithWorker {
     // purge used callbacks
     delete this.resolves[id];
     delete this.rejects[id];
+  }
+
+  static get worker() {
+    if (this._worker && !this._worker.killed) {
+      return this._worker;
+    }
+
+    const workerScriptPath = path.join(__dirname, 'lgWorker.js');
+    // set exec arguments to empty, avoid fork nodemon `--inspect` error
+    this._worker = fork(workerScriptPath, [], { execArgv: [] });
+    return this._worker;
   }
 }
 

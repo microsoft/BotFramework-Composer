@@ -215,7 +215,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
         overflowItems={[
           {
             key: 'delete',
-            name: 'Delete',
+            name: formatMessage('Delete'),
             onClick: () => onDelete(link.id),
           },
         ]}

@@ -3,6 +3,7 @@
 
 import { JSONSchema7 } from 'json-schema';
 import merge from 'lodash/merge';
+import formatMessage from 'format-message';
 
 import { DesignerData } from './types/sdk';
 import { copyAdaptiveAction } from './copyUtils';
@@ -41,7 +42,7 @@ const initialDialogShape = () => ({
     triggers: [
       {
         $kind: SDKKinds.OnBeginDialog,
-        ...getNewDesigner('BeginDialog', ''),
+        ...getNewDesigner(formatMessage('BeginDialog'), ''),
       },
     ],
   },
@@ -50,17 +51,17 @@ const initialDialogShape = () => ({
     actions: [
       {
         $kind: SDKKinds.Foreach,
-        ...getNewDesigner('Loop: for each item', ''),
+        ...getNewDesigner(formatMessage('Loop: for each item'), ''),
         itemsProperty: 'turn.Activity.membersAdded',
         actions: [
           {
             $kind: SDKKinds.IfCondition,
-            ...getNewDesigner('Branch: if/else', ''),
+            ...getNewDesigner(formatMessage('Branch: if/else'), ''),
             condition: 'string(dialog.foreach.value.id) != string(turn.Activity.Recipient.id)',
             actions: [
               {
                 $kind: SDKKinds.SendActivity,
-                ...getNewDesigner('Send a response', ''),
+                ...getNewDesigner(formatMessage('Send a response'), ''),
                 activity: '',
               },
             ],
@@ -165,7 +166,7 @@ class DialogFactory {
     } = {}
   ) {
     if (!this.schema) {
-      throw new Error('DialogFactory missing schema.');
+      throw new Error(formatMessage('DialogFactory missing schema.'));
     }
 
     const { $designer, ...propertyOverrides } = overrides;
