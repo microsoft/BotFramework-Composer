@@ -5,7 +5,9 @@
 import { FieldProps, UIOptions } from '@bfc/extension';
 import { css, jsx } from '@emotion/core';
 import React from 'react';
+
 import { resolvePropSchema } from '../utils';
+
 import { SchemaField } from './SchemaField';
 
 export interface FormRowProps extends Omit<FieldProps, 'onChange'> {
@@ -33,7 +35,7 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
   const { required = [] } = schema;
   const fieldSchema = resolvePropSchema(schema, field, definitions);
 
-  let intellisenseScopes: string[] = [];
+  const intellisenseScopes: string[] = [];
   if (field === 'property') {
     intellisenseScopes.push('variable-scopes');
   }

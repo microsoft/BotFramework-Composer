@@ -16,18 +16,18 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
 
   return (
     <IntellisenseTextField
-      url={intellisenseWsUrl}
-      scopes={['expressions', 'user-variables']}
-      projectId={projectId}
       disabled={disabled}
       errorMessage={error}
       id={id}
       placeholder={placeholder}
+      projectId={projectId}
       readOnly={readonly}
+      scopes={['expressions', 'user-variables']}
       styles={{
         root: { width: '100%' },
         errorMessage: { display: 'none' },
       }}
+      url={intellisenseWsUrl}
       value={value}
       onChange={onChange}
       onRenderPrefix={() => {

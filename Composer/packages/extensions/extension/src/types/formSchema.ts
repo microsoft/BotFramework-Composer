@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { SDKKinds, SDKRoles, ShellApi, ShellData } from '@bfc/shared';
+
 import { FieldProps, FieldWidget } from './form';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

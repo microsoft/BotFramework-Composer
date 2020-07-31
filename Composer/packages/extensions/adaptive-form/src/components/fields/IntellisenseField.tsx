@@ -4,6 +4,7 @@
 import { FieldProps } from '@bfc/extension';
 import { IntellisenseTextField } from '@bfc/intellisense';
 import React from 'react';
+
 import { FieldLabel } from '../FieldLabel';
 
 let intellisenseWsUrl = window.location.origin.replace(/^https/, 'wss').replace(/^http/, 'ws');
@@ -17,11 +18,11 @@ export const IntellisenseField: React.FC<FieldProps<string>> = function Intellis
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
 
       <IntellisenseTextField
+        id={id}
+        scopes={uiOptions.intellisenseScopes || []}
+        url={intellisenseWsUrl}
         value={value}
         onChange={onChange}
-        url={intellisenseWsUrl}
-        scopes={uiOptions.intellisenseScopes || []}
-        id={id}
       />
     </>
   );
