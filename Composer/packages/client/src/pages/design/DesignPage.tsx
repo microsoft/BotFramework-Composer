@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
@@ -45,8 +45,8 @@ import {
   luFilesState,
   localeState,
 } from '../../recoilModel';
+import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 
-import { VisualEditorAPI } from './FrameAPI';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -227,7 +227,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
-      return {};
+      return { actionSelected: false, showDisableBtn: false, showEnableBtn: false };
     }
     const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
@@ -235,6 +235,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
+  useElectronFeatures(actionSelected);
+
+  const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
@@ -282,6 +285,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Undo'),
             disabled: !undoHistory.canUndo(),
             onClick: () => {
+              // TODO: register EditorAPI.Editing.Undo()
               //ToDo undo
             },
           },
@@ -290,6 +294,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Redo'),
             disabled: !undoHistory.canRedo(),
             onClick: () => {
+              // TODO: register EditorAPI.Editing.Redo()
               //ToDo redo
             },
           },
@@ -298,7 +303,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Cut'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.cutSelection();
+              EditorAPI.Actions.CutSelection();
             },
           },
           {
@@ -306,7 +311,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Copy'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.copySelection();
+              EditorAPI.Actions.CopySelection();
             },
           },
           {
@@ -314,7 +319,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Move'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.moveSelection();
+              EditorAPI.Actions.MoveSelection();
             },
           },
           {
@@ -322,7 +327,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Delete'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.deleteSelection();
+              EditorAPI.Actions.DeleteSelection();
             },
           },
         ],
@@ -343,7 +348,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Disable'),
             disabled: !showDisableBtn,
             onClick: () => {
-              VisualEditorAPI.disableSelection();
+              EditorAPI.Actions.DisableSelection();
             },
           },
           {
@@ -351,7 +356,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Enable'),
             disabled: !showEnableBtn,
             onClick: () => {
-              VisualEditorAPI.enableSelection();
+              EditorAPI.Actions.EnableSelection();
             },
           },
         ],
