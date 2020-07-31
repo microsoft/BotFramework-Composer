@@ -22,9 +22,9 @@ export const getServerPort = () => {
 export const getProjectRoot = (): string => {
     // get the root folder according to environment
     if (process.env.node_environment === "production") {
-        return path.join(__dirname, "../azurewebapp/ComposerDialogs");
+        return path.join(__dirname, "../../azurewebapp/ComposerDialogs");
     } else {
-        return path.join(__dirname, "../../");
+        return path.join(__dirname, "../../../");
     }
 };
 
