@@ -182,11 +182,13 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
   Menu.setApplicationMenu(menu);
 
   // Let menu enable/disable status reflect action selection states.
-  ipcMain.on('composer-state-change', (e, state) => {
-    const actionSelected = !!state.actionSelected;
-    ['Cut', 'Copy', 'Delete'].forEach((id) => {
-      menu.getMenuItemById(id).enabled = actionSelected;
+  ipcMain &&
+    ipcMain.on &&
+    ipcMain.on('composer-state-change', (e, state) => {
+      const actionSelected = !!state.actionSelected;
+      ['Cut', 'Copy', 'Delete'].forEach((id) => {
+        menu.getMenuItemById(id).enabled = actionSelected;
+      });
+      Menu.setApplicationMenu(menu);
     });
-    Menu.setApplicationMenu(menu);
-  });
 }
