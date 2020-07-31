@@ -3,11 +3,9 @@
 import keys from 'lodash/keys';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import { DialogInfo, DialogSetting } from '@bfc/shared';
+import { DialogInfo, DialogSetting, SkillManifest, BotAssets } from '@bfc/shared';
 
-import { SkillManifest } from './../../pages/design/exportSkillModal/constants';
 import { LuFile, LgFile } from './../../../../lib/shared/src/types/indexers';
-import { BotAssets } from './../types';
 import * as client from './http';
 import { IFileChange, ChangeType, FileExtensions } from './types';
 
