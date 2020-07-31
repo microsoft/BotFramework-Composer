@@ -9,6 +9,7 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Separator } from 'office-ui-fabric-react/lib/Separator';
 import { NeutralColors } from '@uifabric/fluent-theme';
+import formatMessage from 'format-message';
 
 const styles = {
   transition: css`
@@ -33,7 +34,11 @@ export const CollapseField: React.FC<CollapseField> = ({ children, defaultCollap
   return (
     <Fragment>
       <div
+        data-is-focusable
         css={styles.header}
+        aria-expanded={isOpen}
+        aria-label={typeof label === 'string' ? label : formatMessage('Field Set')}
+        role="presentation"
         onClick={() => {
           setIsOpen(!isOpen);
         }}
