@@ -89,7 +89,7 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
             <React.Fragment>
               {!!subText && <React.Fragment>&nbsp;</React.Fragment>}
               <Link href={helpLink} rel="noopener noreferrer" target="_blank">
-                {formatMessage('Learn More')}
+                {formatMessage('Learn more')}
               </Link>
             </React.Fragment>
           )}

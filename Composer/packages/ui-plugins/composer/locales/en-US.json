@@ -1,0 +1,137 @@
+{
+  "adaptive_dialog_61a05dde": {
+    "message": "Adaptive dialog"
+  },
+  "attachment_input_e0ece49c": {
+    "message": "Attachment Input"
+  },
+  "begin_a_new_dialog_60249bd8": {
+    "message": "Begin a new dialog"
+  },
+  "begin_dialog_12e2becf": {
+    "message": "Begin Dialog"
+  },
+  "branch_if_else_992cf9bf": {
+    "message": "Branch: If/Else"
+  },
+  "break_out_of_loop_ab30157c": {
+    "message": "Break out of loop"
+  },
+  "cancel_all_active_dialogs_335b1623": {
+    "message": "Cancel all active dialogs"
+  },
+  "cancel_all_dialogs_32144c45": {
+    "message": "Cancel All Dialogs"
+  },
+  "cancel_dialog_event_cc671dee": {
+    "message": "Cancel dialog event"
+  },
+  "choice_input_f75a2353": {
+    "message": "Choice Input"
+  },
+  "confirm_input_bf996e7a": {
+    "message": "Confirm Input"
+  },
+  "continue_loop_22635585": {
+    "message": "Continue loop"
+  },
+  "date_time_input_2416ffc1": {
+    "message": "Date Time Input"
+  },
+  "debug_break_46cb5adb": {
+    "message": "Debug Break"
+  },
+  "delete_a_property_f2d70f79": {
+    "message": "Delete a property"
+  },
+  "delete_properties_8bc77b42": {
+    "message": "Delete Properties"
+  },
+  "delete_properties_c49a7892": {
+    "message": "Delete properties"
+  },
+  "delete_property_b3786fa0": {
+    "message": "Delete Property"
+  },
+  "dialog_cancelled_767b512a": {
+    "message": "Dialog cancelled"
+  },
+  "edit_actions_b38e9fac": {
+    "message": "Edit Actions"
+  },
+  "edit_an_array_property_5d886011": {
+    "message": "Edit an array property"
+  },
+  "edit_array_4ab37c8": {
+    "message": "Edit Array"
+  },
+  "emit_a_custom_event_78cf318b": {
+    "message": "Emit a custom event"
+  },
+  "emit_event_32aa6583": {
+    "message": "Emit Event"
+  },
+  "end_dialog_8f562a4c": {
+    "message": "End Dialog"
+  },
+  "end_this_dialog_3ed0d50b": {
+    "message": "End this dialog"
+  },
+  "end_turn_6ab71cea": {
+    "message": "End Turn"
+  },
+  "end_turn_ca85b3d4": {
+    "message": "End turn"
+  },
+  "for_each_def04c48": {
+    "message": "For Each"
+  },
+  "for_each_page_3b4d4b69": {
+    "message": "For Each Page"
+  },
+  "http_request_79847109": {
+    "message": "HTTP Request"
+  },
+  "if_condition_56c9be4a": {
+    "message": "If Condition"
+  },
+  "language_understanding_9ae3f1f6": {
+    "message": "Language Understanding"
+  },
+  "loop_for_each_item_e09537ae": {
+    "message": "Loop: For each item"
+  },
+  "loop_for_each_page_multiple_items_733e7f41": {
+    "message": "Loop: For each page (multiple items)"
+  },
+  "modify_active_dialog_edcf4a45": {
+    "message": "Modify active dialog"
+  },
+  "none_3b5e34d2": {
+    "message": "None"
+  },
+  "prompt_for_a_date_or_a_time_d2df7f90": {
+    "message": "Prompt for a date or a time"
+  },
+  "prompt_for_a_file_or_an_attachment_1bf18e7e": {
+    "message": "Prompt for a file or an attachment"
+  },
+  "prompt_for_confirmation_dc85565c": {
+    "message": "Prompt for confirmation"
+  },
+  "prompt_with_multi_choice_f428542f": {
+    "message": "Prompt with multi-choice"
+  },
+  "regular_expression_855557bf": {
+    "message": "Regular Expression"
+  },
+  "send_an_http_request_aa32fd2": {
+    "message": "Send an HTTP request"
+  },
+  "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
+    "message": "This configures a data driven dialog via a collection of events and actions."
+  },
+  "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
+    "message": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use."
+  }
+}

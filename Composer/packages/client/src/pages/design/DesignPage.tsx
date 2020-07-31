@@ -8,7 +8,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
@@ -18,7 +18,6 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
-import { LuFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -43,6 +42,8 @@ import {
   skillsState,
   actionsSeedState,
   userSettingsState,
+  luFilesState,
+  localeState,
 } from '../../recoilModel';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 
@@ -112,6 +113,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
+  const luFiles = useRecoilValue(luFilesState);
+  const locale = useRecoilValue(localeState);
+
   const {
     removeDialog,
     updateDialog,
@@ -124,13 +128,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    updateLuFile,
+    createLuIntent,
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
+  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
@@ -190,19 +195,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = (dialog: DialogInfo, luFile?: LuFilePayload) => {
+  const onTriggerCreationSubmit = (dialog: DialogInfo, intent?: LuIntentSection) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
       content: dialog.content,
     };
-    if (luFile) {
-      const luFilePayload = {
-        id: luFile.id,
-        content: luFile.content,
-        projectId,
-      };
-      updateLuFile(luFilePayload);
+    if (luFile && intent) {
+      createLuIntent({ id: luFile.id, intent });
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
