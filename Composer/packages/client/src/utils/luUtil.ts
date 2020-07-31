@@ -109,9 +109,13 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
   let rootId = '';
   dialogs.forEach((dialog) => {
     if (dialog.isRoot) rootId = dialog.id;
-
-    if (luFiles.find((luFile) => getBaseName(luFile.id) === dialog.luFile)) {
-      const { intentTriggers } = dialog;
+    const luFile = luFiles.find((luFile) => getBaseName(luFile.id) === dialog.luFile);
+    if (luFile) {
+      let { intentTriggers } = dialog;
+      // filter intenttrigger which be involved in lu file
+      intentTriggers = intentTriggers.filter((intentTrigger) =>
+        luFile.intents.find((intent) => intent.Name === intentTrigger.intent)
+      );
       const fileId = dialog.id;
       //find the trigger's dialog that use a recognizer
       intentTriggers.forEach((item) => {
