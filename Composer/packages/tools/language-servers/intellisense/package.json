@@ -16,6 +16,6 @@
     "start": "ts-node lib/server.js",
     "build": "rimraf ./lib && tsc --build tsconfig.build.json"
   },
-  "author": "Louis Eugene",
+  "author": "Microsoft",
   "license": "MIT"
 }

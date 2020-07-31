@@ -7,8 +7,8 @@ import React from 'react';
 
 import { FieldLabel } from '../FieldLabel';
 
-let intellisenseWsUrl = window.location.origin.replace(/^https/, 'wss').replace(/^http/, 'ws');
-intellisenseWsUrl = `${intellisenseWsUrl}/intellisense-language-server`;
+let intellisenseWebSocketUrl = window.location.origin.replace(/^https/, 'wss').replace(/^http/, 'ws');
+intellisenseWebSocketUrl = `${intellisenseWebSocketUrl}/intellisense-language-server`;
 
 export const IntellisenseField: React.FC<FieldProps<string>> = function IntellisenseField(props) {
   const { id, value = '', onChange, label, description, uiOptions, required } = props;
@@ -20,7 +20,7 @@ export const IntellisenseField: React.FC<FieldProps<string>> = function Intellis
       <IntellisenseTextField
         id={id}
         scopes={uiOptions.intellisenseScopes || []}
-        url={intellisenseWsUrl}
+        url={intellisenseWebSocketUrl}
         value={value}
         onChange={onChange}
       />

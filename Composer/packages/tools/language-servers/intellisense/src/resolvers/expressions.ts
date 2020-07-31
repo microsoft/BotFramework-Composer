@@ -9,7 +9,7 @@ export const expressionsResolver = (): CompletionItem[] => {
     return {
       label: key,
       kind: CompletionItemKind.Function,
-      insertText: key + '(' + removeParamFormat(value.Params.toString()) + ')',
+      insertText: `${key}(${removeParamFormat(value.Params.toString())})`,
       documentation: value.Introduction,
     };
   });

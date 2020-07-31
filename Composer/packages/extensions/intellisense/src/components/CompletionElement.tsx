@@ -23,47 +23,42 @@ const styles: Record<string, CSSProperties> = {
   icon: { marginRight: '5px' },
 };
 
-const renderIcon = (kind: CompletionItemKind | undefined): JSX.Element => {
-  let icon: JSX.Element = <> </>;
-
+const getIconName = (kind: CompletionItemKind | undefined): string => {
   switch (kind) {
     case CompletionItemKind.Function:
-      icon = <FontIcon iconName="Variable" style={styles.icon} />;
-      break;
+      return 'Variable';
     case CompletionItemKind.Variable:
-      icon = <FontIcon iconName="VariableGroup" style={styles.icon} />;
-      break;
+      return 'VariableGroup';
     case CompletionItemKind.Enum:
-      icon = <FontIcon iconName="BulletedList" style={styles.icon} />;
-      break;
+      return 'BulletedList';
+    default:
+      return '';
   }
+};
 
-  return icon;
+const renderMatch = (match: FuseJsMatch, segmentIndex: number): JSX.Element => {
+  let firstIndex = 0;
+  const lastIndex = match.value.length;
+
+  const items = match.indices.map((m, spanIndex) => {
+    const firstSpan = <span>{match.value.slice(firstIndex, m[0])}</span>;
+    const secondSpan = <span style={{ color: 'blue' }}>{match.value.slice(m[0], m[1] + 1)}</span>;
+
+    firstIndex = m[1] + 1;
+    return (
+      <React.Fragment key={`segment-${segmentIndex}-span-${spanIndex}`}>
+        {firstSpan}
+        {secondSpan}
+      </React.Fragment>
+    );
+  });
+
+  items.push(<span key={`segment-${segmentIndex}-span-final`}>{match.value.slice(firstIndex, lastIndex)}</span>);
+
+  return <React.Fragment key={`segment-${segmentIndex}`}>{items}</React.Fragment>;
 };
 
 const renderLabelWithCharacterHighlights = (matches: FuseJsMatch[]): JSX.Element => {
-  const renderMatch = (match: FuseJsMatch, segmentIndex: number): JSX.Element => {
-    let firstIndex = 0;
-    const lastIndex = match.value.length;
-
-    const items = match.indices.map((m, spanIndex) => {
-      const firstSpan = <span>{match.value.slice(firstIndex, m[0])}</span>;
-      const secondSpan = <span style={{ color: 'blue' }}>{match.value.slice(m[0], m[1] + 1)}</span>;
-
-      firstIndex = m[1] + 1;
-      return (
-        <React.Fragment key={`segment-${segmentIndex}-span-${spanIndex}`}>
-          {firstSpan}
-          {secondSpan}
-        </React.Fragment>
-      );
-    });
-
-    items.push(<span key={`segment-${segmentIndex}-span-final`}>{match.value.slice(firstIndex, lastIndex)}</span>);
-
-    return <React.Fragment key={`segment-${segmentIndex}`}>{items}</React.Fragment>;
-  };
-
   return <> {matches.map(renderMatch)} </>;
 };
 
@@ -92,7 +87,7 @@ const CompletionElement = (props: {
         }}
         onClick={onClickCompletionItem}
       >
-        {renderIcon(completionItem.kind)}
+        <FontIcon iconName={getIconName(completionItem.kind)} style={styles.icon} />
         <div style={styles.text}>
           {completionItem.data.matches
             ? renderLabelWithCharacterHighlights(completionItem.data.matches)

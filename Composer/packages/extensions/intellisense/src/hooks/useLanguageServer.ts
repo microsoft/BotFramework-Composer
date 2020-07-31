@@ -55,14 +55,14 @@ export const useLanguageServer = (
 
   // If scopes change, update backend with info
   React.useEffect(() => {
-    if (ws.current.readyState === WebSocket.OPEN) {
+    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       ws.current.send(JSON.stringify(getConfigurationChangedMessage(scopes, projectId)));
     }
   }, [scopes, projectId]);
 
   // When textField value changes, update backend memory and get latest completion results
   React.useEffect(() => {
-    if (ws.current.readyState === WebSocket.OPEN) {
+    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       updateBackendMemory(textFieldValue);
       getCompletionItems();
     }
@@ -70,7 +70,7 @@ export const useLanguageServer = (
 
   // Get completion results when selection changes
   React.useEffect(() => {
-    if (ws.current.readyState === WebSocket.OPEN) {
+    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       getCompletionItems();
     }
   }, [cursorPosition]);
