@@ -14,8 +14,6 @@ import {
 
 import { AppUpdaterStatus } from '../constants';
 
-import { SkillManifest } from './../pages/design/exportSkillModal/constants';
-
 export interface StateError {
   status?: number;
   summary: string;
@@ -110,16 +108,6 @@ export type UserSettingsPayload = {
   codeEditor: Partial<CodeEditorSettings>;
   propertyEditorWidth: number;
   dialogNavWidth: number;
-};
-
-export type BotAssets = {
-  projectId: string;
-  dialogs: DialogInfo[];
-  luFiles: LuFile[];
-  qnaFiles: QnAFile[];
-  lgFiles: LgFile[];
-  skillManifests: SkillManifest[];
-  setting: DialogSetting;
 };
 
 export type BoilerplateVersion = {

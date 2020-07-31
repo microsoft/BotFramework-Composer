@@ -4,6 +4,8 @@
 import { Diagnostic } from './diagnostic';
 import { IIntentTrigger } from './dialogUtils';
 
+import { DialogSetting } from './index';
+
 export enum FileExtensions {
   Dialog = '.dialog',
   Manifest = '.json',
@@ -157,4 +159,26 @@ export interface SkillManifestInfo {
   content: { [key: string]: any };
   lastModified: string;
   id: string;
+}
+
+export interface SkillManifest {
+  content: any;
+  id: string;
+  path?: string;
+  lastModified?: string;
+}
+
+export type BotAssets = {
+  projectId: string;
+  dialogs: DialogInfo[];
+  luFiles: LuFile[];
+  lgFiles: LgFile[];
+  skillManifests: SkillManifest[];
+  setting: DialogSetting;
+};
+
+export interface BotInfo {
+  assets: BotAssets;
+  diagnostics: Diagnostic[];
+  name: string;
 }

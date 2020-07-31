@@ -53,6 +53,10 @@ const Notifications: React.FC<RouteComponentProps> = () => {
       const { projectId } = item;
       navigateTo(`/bot/${projectId}/skills`);
     },
+    [NotificationType.SETTING]: (item: INotification) => {
+      const { projectId } = item;
+      navigateTo(`/settings/bot/${projectId}/dialog-settings`);
+    },
   };
   const handleItemClick = (item: INotification) => {
     navigations[item.type](item);

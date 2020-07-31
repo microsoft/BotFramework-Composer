@@ -64,12 +64,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
-    title: 'Title',
+    title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
   const [editDialogProps, setEditDialogProps] = useState({
-    title: 'Title',
+    title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
