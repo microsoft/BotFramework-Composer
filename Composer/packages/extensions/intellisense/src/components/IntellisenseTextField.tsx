@@ -94,7 +94,7 @@ export const IntellisenseTextField = (
 
   // Set textField value to completion item value
   const setValueToSelectedCompletionItem = (index: number) => {
-    if (completionItems.length >= index) {
+    if (index < completionItems.length) {
       const selectedSuggestion = completionItems[index].insertText || '';
       const range = completionItems[index].data.range;
 
