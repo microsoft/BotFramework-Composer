@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+/* eslint-disable format-message/literal-pattern */
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
@@ -11,16 +11,28 @@ import { StateError } from '../recoilModel/types';
 import { ErrorPopup } from './ErrorPopup/ErrorPopup';
 
 const githubIssueUrl = `https://github.com/microsoft/BotFramework-Composer/issues`;
-const errorToShow: StateError = {
-  message: formatMessage.rich('If this problem persists, please file an issue on <a>GitHub</a>.', {
-    // eslint-disable-next-line react/display-name
-    a: ({ children }) => (
-      <a key="a" href={githubIssueUrl} rel="noopener noreferrer" style={{ color: `greenyellow` }} target="_blank">
-        {children}
-      </a>
-    ),
-  }),
-  summary: formatMessage('Something went wrong!'),
+const genericErrorTitle = 'Something went wrong!';
+
+const errorToShow = (error: any): StateError => {
+  const msg: string = typeof error === 'string' ? error : error?.message || error?.detail;
+  let messageHtml = 'If this problem persists, please file an issue on <a>GitHub</a>';
+  if (msg) {
+    messageHtml += `<details>${msg}</details>`;
+  }
+  const summary: string = msg ? msg.substring(0, 20) + '...' : genericErrorTitle;
+
+  return {
+    message: formatMessage.rich(messageHtml, {
+      // eslint-disable-next-line react/display-name
+      a: ({ children }) => (
+        <a key="a" href={githubIssueUrl} rel="noopener noreferrer" style={{ color: `greenyellow` }} target="_blank">
+          {children}
+        </a>
+      ),
+      details: ({ children }) => <details style={{ whiteSpace: 'pre-wrap' }}>{children}</details>,
+    }),
+    summary: formatMessage(summary),
+  };
 };
 
 interface ErrorBoundaryProps {
@@ -51,17 +63,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   unhandledrejectionHandler(event) {
     event.preventDefault();
     console.error(event.reason);
-    this.props.setApplicationLevelError(errorToShow);
+    this.props.setApplicationLevelError(errorToShow(event));
   }
 
   eventHandler(error) {
     console.error(error);
-    this.props.setApplicationLevelError(errorToShow);
+    this.props.setApplicationLevelError(errorToShow(error));
   }
 
   onErrorHandler(message, source, lineno, colno, error) {
     console.error({ message, source, lineno, colno, error });
-    this.props.setApplicationLevelError(errorToShow);
+    this.props.setApplicationLevelError(errorToShow(message));
     return true;
   }
 
@@ -72,9 +84,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   // catch all render errors for children components
-  componentDidCatch(error) {
-    console.log(error);
-    this.props.setApplicationLevelError(errorToShow);
+  componentDidCatch(error, errorInfo) {
+    console.error(error);
+    console.error(errorInfo);
+    this.props.setApplicationLevelError(errorToShow(error));
   }
 
   componentWillUnmount() {
