@@ -158,6 +158,7 @@ export const IntellisenseTextField = (
     <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
       <TextField
         {...rest}
+        id={id}
         value={textFieldValue}
         onChange={(_e, newValue) => onValueChanged(newValue || '')}
         onKeyDown={onKeyDownTextField}
