@@ -13,6 +13,7 @@ const DefaultRecognizers: RecognizerSchema[] = [
     displayName: () => formatMessage('None'),
     isSelected: (data) => data === undefined,
     handleRecognizerChange: (props) => props.onChange(undefined),
+    renameIntent: () => {},
   },
   {
     id: SDKKinds.RegexRecognizer,
@@ -23,6 +24,10 @@ const DefaultRecognizers: RecognizerSchema[] = [
     },
     handleRecognizerChange: (props) => {
       props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
+    },
+    renameIntent: async (intentName, newIntentName, shellData, shellApi) => {
+      const { currentDialog } = shellData;
+      await shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
     },
   },
 ];

@@ -97,6 +97,18 @@ function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string):
   return dialogCopy;
 }
 
+export function renameRegExIntent(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const targetIntent = regexIntents.find((ri) => ri.intent === intentName);
+  if (!targetIntent) {
+    return dialogCopy;
+  }
+
+  targetIntent.intent = newIntentName;
+  return dialogCopy;
+}
+
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   let dialogCopy = cloneDeep(dialog);
   const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);

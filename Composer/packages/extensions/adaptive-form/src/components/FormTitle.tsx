@@ -3,12 +3,13 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { UIOptions, JSONSchema7 } from '@bfc/extension';
+import { UIOptions, JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension';
 import { css } from '@emotion/core';
+import { SDKKinds } from '@bfc/shared';
 
 import { EditableField } from './fields/EditableField';
 import { Link } from './Link';
@@ -49,11 +50,40 @@ interface FormTitleProps {
 
 const FormTitle: React.FC<FormTitleProps> = (props) => {
   const { description, schema, formData, uiOptions = {} } = props;
+  const { shellApi, ...shellData } = useShellApi();
+  const { currentDialog } = shellData;
+  const recognizers = useRecognizerConfig();
+  const selectedRecognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
+
+  useEffect(() => {
+    const timeoutId = setTimeout(async () => {
+      // need to validate name
+      const intentName = formData?.$designer?.name;
+      if (formData.$kind === SDKKinds.OnIntent && intentName && selectedRecognizer) {
+        console.log(`[BFC] name changed: ${intentName}`);
+        // update formdata.intent
+        // update lu intent name
+
+        await selectedRecognizer.renameIntent(formData.intent, intentName, shellData, shellApi);
+        console.log(`[BFC] Renamed LU Intent from ${formData.intent} to ${intentName}`);
+        props.onChange({
+          intent: intentName,
+        });
+      }
+    }, 300);
+
+    return () => {
+      console.log('[BFC] cancelling intent update.');
+      clearTimeout(timeoutId);
+    };
+  }, [formData?.$designer?.name]);
 
   const handleTitleChange = (newTitle?: string): void => {
     props.onChange({
-      ...formData.$designer,
-      name: newTitle,
+      $designer: {
+        ...formData.$designer,
+        name: newTitle,
+      },
     });
   };
 

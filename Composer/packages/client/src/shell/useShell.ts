@@ -7,7 +7,7 @@ import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { updateRegExIntent } from '../utils/dialogUtil';
+import { updateRegExIntent, renameRegExIntent } from '../utils/dialogUtil';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
@@ -80,6 +80,13 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
+    return await updateDialog({ id, content: newDialog.content });
+  }
+
+  async function renameRegExIntentHandler(id, intentName, newIntentName) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = renameRegExIntent(dialog, intentName, newIntentName);
     return await updateDialog({ id, content: newDialog.content });
   }
 
@@ -162,6 +169,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     ...lgApi,
     ...luApi,
     updateRegExIntent: updateRegExIntentHandler,
+    renameRegExIntent: renameRegExIntentHandler,
     navTo: navigationTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
