@@ -107,7 +107,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const buttons = [
       {
         key: 'edit',
-        name: 'Edit',
+        name: formatMessage('Edit'),
         onClick: () => {
           const { name, dialogId } = intents[index];
           navigateTo(`/bot/${projectId}/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
@@ -232,7 +232,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <div
               key={id}
               data-is-focusable
-              aria-label={formatMessage(`link to where this luis intent defined`)}
+              aria-label={formatMessage(`link to where this LUIS intent is defined`)}
               onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
             >
               <Link>{id}</Link>

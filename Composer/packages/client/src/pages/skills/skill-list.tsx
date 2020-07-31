@@ -110,28 +110,28 @@ const SkillList: React.FC<ISkillListProps> = (props) => {
           <div>
             <Stack horizontal tokens={{ childrenGap: 8 }}>
               <IconButton
-                ariaLabel="Edit"
+                ariaLabel={formatMessage('Edit')}
                 data-testid="EditSkill"
                 iconProps={{
                   iconName: 'Edit',
                 }}
-                title="Edit"
+                title={formatMessage('Edit')}
                 onClick={() => onEdit(index)}
               />
               <IconButton
-                ariaLabel="Delete"
+                ariaLabel={formatMessage('Delete')}
                 data-testid="DeleteSkill"
                 iconProps={{
                   iconName: 'Delete',
                 }}
-                title="Delete"
+                title={formatMessage('Delete')}
                 onClick={() => onDelete(index)}
               />
               <IconButton
-                ariaLabel="View"
+                ariaLabel={formatMessage('View')}
                 data-testid="ViewManifest"
                 iconProps={{ iconName: 'ContextMenu' }}
-                title="View"
+                title={formatMessage('View')}
                 onClick={() => onViewManifest(item)}
               />
             </Stack>

@@ -1,22 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-export enum ScreenReaderMessage {
-  EventFocused = 'Event focused',
-  ActionFocused = 'Action focused',
-  ActionUnfocused = 'Action unfocused',
-  RangeSelection = 'Range Selection',
-  DialogOpened = 'Dialog opened',
-  ActionDeleted = 'Action deleted',
-  ActionsDeleted = 'Actions deleted',
-  ActionsDisabled = 'Actions disabled',
-  ActionsEnabled = 'Actions enabled',
-  ActionCreated = 'Action created',
-  ActionsCreated = 'Actions created',
-  EventCreated = 'Event created',
-  ActionsCopied = 'Actions copied',
-  ActionsCut = 'Actions cut',
-  ActionsMoved = 'Actions moved',
-  ActionUndo = 'Undo',
-  ActionRedo = 'Redo',
-}
+import formatMessage from 'format-message';
+
+export const ScreenReaderMessage = {
+  EventFocused: formatMessage('Event focused'),
+  ActionFocused: formatMessage('Action focused'),
+  ActionUnfocused: formatMessage('Action unfocused'),
+  RangeSelection: formatMessage('Range Selection'),
+  DialogOpened: formatMessage('Dialog opened'),
+  ActionDeleted: formatMessage('Action deleted'),
+  ActionsDeleted: formatMessage('Actions deleted'),
+  ActionsDisabled: formatMessage('Actions disabled'),
+  ActionsEnabled: formatMessage('Actions enabled'),
+  ActionCreated: formatMessage('Action created'),
+  ActionsCreated: formatMessage('Actions created'),
+  EventCreated: formatMessage('Event created'),
+  ActionsCopied: formatMessage('Actions copied'),
+  ActionsCut: formatMessage('Actions cut'),
+  ActionsMoved: formatMessage('Actions moved'),
+  ActionUndo: formatMessage('Undo'),
+  ActionRedo: formatMessage('Redo'),
+};

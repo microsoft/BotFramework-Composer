@@ -91,7 +91,7 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
         </div>
       )}
       {storageFileLoadingStatus === 'failure' && (
-        <div css={loading}>{formatMessage('Can not connect the storage.')}</div>
+        <div css={loading}>{formatMessage('Could not connect to storage.')}</div>
       )}
     </div>
   );

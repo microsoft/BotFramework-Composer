@@ -58,7 +58,7 @@ const LGPage: React.FC<LGPageProps> = (props) => {
 
     newDialogLinks.splice(0, 0, {
       id: 'common',
-      name: 'All',
+      name: formatMessage('All'),
       ariaLabel: formatMessage('all language generation files'),
       url: commonUrl,
     });

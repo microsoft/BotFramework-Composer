@@ -14,6 +14,7 @@ export enum NotificationType {
   LU,
   QNA,
   SKILL,
+  SETTING,
   GENERAL,
 }
 
@@ -68,6 +69,15 @@ export class DialogNotification extends Notification {
 
 export class SkillNotification extends Notification {
   type = NotificationType.SKILL;
+  constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
+    super(projectId, id, location, diagnostic);
+    this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
+    this.dialogPath = diagnostic.path;
+  }
+}
+
+export class SettingNotification extends Notification {
+  type = NotificationType.SETTING;
   constructor(projectId: string, id: string, location: string, diagnostic: Diagnostic) {
     super(projectId, id, location, diagnostic);
     this.message = `${replaceDialogDiagnosticLabel(diagnostic.path)} ${diagnostic.message}`;
