@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import formatMessage from 'format-message';
+
 export declare type ResolverResource = { content: string; id: string };
 export declare type ImportResolverDelegate = (source: string, resourceId: string) => ResolverResource;
 
@@ -42,7 +44,7 @@ export function importResolverGenerator(
     const targetFile =
       resources.find(({ id }) => id === `${targetId}.${locale}`) || resources.find(({ id }) => id === targetId);
 
-    if (!targetFile) throw new Error(`file not found`);
+    if (!targetFile) throw new Error(formatMessage(`File not found`));
     return {
       id: resourceId,
       content: targetFile.content,

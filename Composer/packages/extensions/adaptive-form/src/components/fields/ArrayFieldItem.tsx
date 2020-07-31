@@ -8,6 +8,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FontSizes } from '@uifabric/styling';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
+import formatMessage from 'format-message';
 
 import SchemaField from '../SchemaField';
 
@@ -52,21 +53,21 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
   const contextItems: IContextualMenuItem[] = [
     {
       key: 'moveUp',
-      text: 'Move Up',
+      text: formatMessage('Move Up'),
       iconProps: { iconName: 'CaretSolidUp' },
       disabled: !canMoveUp,
       onClick: fabricMenuItemClickHandler(() => onReorder(index - 1)),
     },
     {
       key: 'moveDown',
-      text: 'Move Down',
+      text: formatMessage('Move Down'),
       iconProps: { iconName: 'CaretSolidDown' },
       disabled: !canMoveDown,
       onClick: fabricMenuItemClickHandler(() => onReorder(index + 1)),
     },
     {
       key: 'remove',
-      text: 'Remove',
+      text: formatMessage('Remove'),
       iconProps: { iconName: 'Cancel' },
       disabled: !canRemove,
       onClick: fabricMenuItemClickHandler(onRemove),
@@ -99,7 +100,7 @@ const ArrayFieldItem: React.FC<ArrayFieldItemProps> = (props) => {
         />
       </div>
       <IconButton
-        ariaLabel="Item Actions"
+        ariaLabel={formatMessage('Item Actions')}
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: contextItems }}
         styles={{

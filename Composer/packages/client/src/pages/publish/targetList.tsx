@@ -6,6 +6,7 @@ import { jsx } from '@emotion/core';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Fragment } from 'react';
 import { OverflowSet, IOverflowSetItemProps } from 'office-ui-fabric-react/lib/OverflowSet';
+import formatMessage from 'format-message';
 
 import { overflowSet, targetSelected } from './styles';
 
@@ -16,7 +17,7 @@ export const TargetList = (props) => {
         menuIconProps={{ iconName: 'MoreVertical' }}
         menuProps={{ items: overflowItems! }}
         role="menuitem"
-        title="More options"
+        title={formatMessage('More options')}
       />
     );
   };
@@ -41,12 +42,12 @@ export const TargetList = (props) => {
               overflowItems={[
                 {
                   key: 'delete',
-                  name: 'Delete',
+                  name: formatMessage('Delete'),
                   onClick: () => props.onDelete(index, target),
                 },
                 {
                   key: 'edit',
-                  name: 'Edit',
+                  name: formatMessage('Edit'),
                   onClick: () => props.onEdit(index, target),
                 },
               ]}

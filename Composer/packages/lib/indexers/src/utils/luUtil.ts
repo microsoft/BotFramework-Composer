@@ -11,6 +11,7 @@ import { sectionHandler } from '@microsoft/bf-lu/lib/parser/composerindex';
 import isEmpty from 'lodash/isEmpty';
 import get from 'lodash/get';
 import { LuFile, LuSectionTypes, LuIntentSection, Diagnostic, Position, Range, DiagnosticSeverity } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 import { buildNewlineText, splitNewlineText } from './help';
 
@@ -19,7 +20,7 @@ const { luParser, sectionOperator } = sectionHandler;
 const NEWLINE = '\r\n';
 
 // when new add a section in inline editor, the section haven't exist on file context, to make suggestion/validation possiable here mock one.
-export const PlaceHolderSectionName = `_NewSectionPlaceHolderSectionName`;
+export const PlaceHolderSectionName = formatMessage(`_NewSectionPlaceHolderSectionName`);
 
 export function convertLuDiagnostic(d: any, source: string): Diagnostic {
   const severityMap = {
