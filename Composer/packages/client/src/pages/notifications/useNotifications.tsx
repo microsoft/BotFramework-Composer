@@ -3,6 +3,7 @@
 
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
+import get from 'lodash/get';
 import { BotIndexer } from '@bfc/indexers';
 
 import {
@@ -41,6 +42,7 @@ export default function useNotifications(filter?: string) {
     projectId,
     dialogs,
     luFiles,
+    qnaFiles,
     lgFiles,
     skillManifests,
     setting,
@@ -53,15 +55,15 @@ export default function useNotifications(filter?: string) {
     const skillDiagnostics = BotIndexer.checkSkillSetting(botAssets);
     skillDiagnostics.forEach((item) => {
       if (item.source.endsWith('.json')) {
-        notifactions.push(new SkillNotification(projectId, item.source, item.source, item));
+        notifications.push(new SkillNotification(projectId, item.source, item.source, item));
       } else {
-        notifactions.push(new DialogNotification(projectId, item.source, item.source, item));
+        notifications.push(new DialogNotification(projectId, item.source, item.source, item));
       }
     });
     const luisLocaleDiagnostics = BotIndexer.checkLUISLocales(botAssets);
 
     luisLocaleDiagnostics.forEach((item) => {
-      notifactions.push(new SettingNotification(projectId, item.source, item.source, item));
+      notifications.push(new SettingNotification(projectId, item.source, item.source, item));
     });
 
     dialogs.forEach((dialog) => {
@@ -88,7 +90,7 @@ export default function useNotifications(filter?: string) {
         notifications.push(new QnANotification(projectId, qnaFile.id, location, diagnostic));
       });
     });
-    return notifactions;
+    return notifications;
   }, [botAssets, diagnostics]);
 
   const notifications: Notification[] = filter ? memoized.filter((x) => x.severity === filter) : memoized;
