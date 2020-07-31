@@ -35,9 +35,9 @@ export const CollapseField: React.FC<CollapseField> = ({ children, defaultCollap
     <Fragment>
       <div
         data-is-focusable
-        css={styles.header}
         aria-expanded={isOpen}
         aria-label={typeof label === 'string' ? label : formatMessage('Field Set')}
+        css={styles.header}
         role="presentation"
         onClick={() => {
           setIsOpen(!isOpen);
