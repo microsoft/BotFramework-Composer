@@ -23,6 +23,7 @@ const readdir = promisify(fs.readdir);
 export class BotProjectDeploy {
   private subId: string;
   private accessToken: string;
+  private graphToken: string;
   private creds: any; // credential from interactive login
   private projPath: string;
   private deploymentSettingsPath: string;
@@ -43,6 +44,7 @@ export class BotProjectDeploy {
     this.subId = config.subId;
     this.logger = config.logger;
     this.accessToken = config.accessToken;
+    this.graphToken = config.graphToken;
     this.creds = config.creds;
     this.projPath = config.projPath;
 
@@ -130,29 +132,35 @@ export class BotProjectDeploy {
    * Azure API accessors
    **********************************************************************************************/
 
-  private async createApp(displayName: string, appPassword: string) {
+  private async createApp(displayName: string) {
     const applicationUri = 'https://graph.microsoft.com/v1.0/applications';
     const requestBody = {
-      displayName: displayName,
-      passwordCredentials: [
-        {
-          value: appPassword,
-          startDate: new Date(),
-          endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 2)),
-        },
-      ],
-      availableToOtherTenants: true,
-      replyUrls: ['https://token.botframework.com/.auth/web/redirect']
+      displayName: displayName
     }
     const options = {
       body: requestBody,
       json: true,
-      headers: { Authorization: `Bearer ${this.accessToken}` },
+      headers: { Authorization: `Bearer ${this.graphToken}` },
     } as rp.RequestPromiseOptions;
     const response = await rp.post(applicationUri, options);
     return response;
   }
 
+  private async addPassword(displayName: string, id: string) {
+    const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${id}/addPassword`;
+    const requestBody = {
+      passwordCredential: {
+        displayName: `${displayName}-pwd`
+      }
+    };
+    const options = {
+      body: requestBody,
+      json: true,
+      headers: { Authorization: `Bearer ${this.graphToken}` },
+    } as rp.RequestPromiseOptions;
+    const response = await rp.post(addPasswordUri, options);
+    return response;
+  }
 
   private async getFiles(dir: string): Promise<string[]> {
     const dirents = await readdir(dir, { withFileTypes: true });
@@ -520,21 +528,13 @@ export class BotProjectDeploy {
 
       // If the appId is not specified, create one
       if (!appId) {
-        // this requires an app password. if one not specified, fail.
-        if (!appPassword) {
-          this.logger({
-            status: BotProjectDeployLoggerType.PROVISION_INFO,
-            message: `App password is required`,
-          });
-          throw new Error(`App password is required`);
-        }
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
           message: '> Creating App Registration ...',
         });
 
-        // create the app registration
-        const appCreated = await this.createApp(name, appPassword);
+        // create the app registration based on the display name
+        const appCreated = await this.createApp(name);
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
           message: JSON.stringify(appCreated, null, 4),
@@ -542,6 +542,26 @@ export class BotProjectDeploy {
 
         // use the newly created app
         appId = appCreated.appId ?? '';
+        const id = appCreated.id ?? '';
+        if (!id) {
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_ERROR,
+            message: `App create failed: ${JSON.stringify(appCreated, null, 4)}`
+          })
+          throw new Error('App create failed!')
+        }
+
+        // use id to add new password and save the password as configuration
+        const addPasswordResult = await this.addPassword(name, id);
+        appPassword = addPasswordResult.secretText;
+        if (!appPassword) {
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_ERROR,
+            message: `Add application password failed: ${JSON.stringify(addPasswordResult, null, 4)}`
+          })
+          throw new Error('Add application password failed!')
+        }
+
       }
 
       this.logger({
@@ -682,7 +702,7 @@ export class BotProjectDeploy {
     }
   }
 
-  public getProvisionStatus(){
+  public getProvisionStatus() {
     if (!this.azureResourceManagementClient) {
       return new AzureResourceDeploymentStatus();
     }
