@@ -10,14 +10,16 @@ export const BASEURL = `${process.env.PUBLIC_URL || ''}/api`;
 export const UNDO_LIMIT = 10;
 
 export const Tips = {
-  PROJECT_NAME: formatMessage(`Create a name for the project which will be used to name the application:
-    (projectname-environment-LUfilename)`),
-  ENVIRONMENT: formatMessage(`When multiple people are working with models you want to be able to work with
-    models independently from each other tied to the source control.`),
+  PROJECT_NAME: formatMessage(
+    `Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)`
+  ),
+  ENVIRONMENT: formatMessage(
+    `When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.`
+  ),
   AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
-  AUTHORING_REGION: formatMessage('Authoring region to use [westus,westeurope,australiaeast]'),
+  AUTHORING_REGION: formatMessage('Authoring region to use (e.g. westus, westeurope, australiaeast)'),
   DEFAULT_LANGUAGE: formatMessage(
-    `Configures default language model to use if there is no culture code in the file name (Default:en-us)`
+    `Configures default language model to use if there is no culture code in the file name (Default: en-us)`
   ),
 };
 
@@ -131,7 +133,7 @@ export const MultiLanguagesDialog = {
   DELETE_DIALOG: {
     title: formatMessage('Select language to delete'),
     subText: formatMessage(
-      `When deleting a lanuage, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
+      `When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional.`
     ),
   },
 };

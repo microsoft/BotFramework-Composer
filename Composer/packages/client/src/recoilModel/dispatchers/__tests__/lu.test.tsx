@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { LuIntentSection, LuFile } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { act } from '@bfc/test-utils/lib/hooks';
+import { luUtil } from '@bfc/indexers';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
 import { luFilesState } from '../../atoms';
@@ -22,12 +23,13 @@ jest.mock('../../parsers/luWorker', () => {
     removeIntents: require('@bfc/indexers/lib/utils/luUtil').removeIntents,
   };
 });
-const luFiles = [
-  {
-    id: 'common.en-us',
-    content: `\r\n# Hello\r\n-hi`,
-  },
-] as LuFile[];
+
+const file1 = {
+  id: 'common.en-us',
+  content: `\r\n# Hello\r\n-hi`,
+};
+
+const luFiles = [luUtil.parse(file1.id, file1.content)] as LuFile[];
 
 const getLuIntent = (Name, Body): LuIntentSection =>
   ({
@@ -96,7 +98,7 @@ describe('Lu dispatcher', () => {
     expect(renderedComponent.current.luFiles[0].content).toMatch(/-IntentValue/);
   });
 
-  it('should remove a lg template', async () => {
+  it('should remove a lu intent', async () => {
     await act(async () => {
       await dispatcher.removeLuIntent({
         id: luFiles[0].id,
