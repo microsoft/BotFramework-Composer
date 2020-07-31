@@ -85,7 +85,7 @@ const CollapseContent: React.FC<CollapseContentProps> = ({
   onInit,
   ...attrs
 }) => {
-  const contentRef = useRef<any>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [collapseState, setCollapseState] = useState(isOpen ? EXPANDED : COLLAPSED);
   const [collapseStyle, setCollapseStyle] = useState({
     height: isOpen ? null : getCollapseHeight(),
