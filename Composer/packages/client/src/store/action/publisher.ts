@@ -29,10 +29,18 @@ export const getPublishTargetTypes: ActionCreator = async ({ dispatch }) => {
 
 export const publishToTarget: ActionCreator = async ({ dispatch }, projectId, target, metadata, sensitiveSettings) => {
   try {
-    const response = await httpClient.post(`/publish/${projectId}/publish/${target.name}`, {
-      metadata,
-      sensitiveSettings,
-    });
+    const token = getAccessTokenInCache();
+
+    const response = await httpClient.post(
+      `/publish/${projectId}/publish/${target.name}`,
+      {
+        metadata,
+        sensitiveSettings,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     dispatch({
       type: ActionTypes.PUBLISH_SUCCESS,
       payload: {
@@ -251,7 +259,31 @@ export const getProvisionStatus: ActionCreator = async (store, projectId, target
         const targets = store.getState().settings.publishTargets;
         const newTargets = targets?.map((item) => {
           if (item.name === target.name) {
-            return { ...item, configuration: JSON.stringify(response.data.config) };
+            return {
+              ...item,
+              configuration: JSON.stringify(response.data.config),
+              provisionStatus: JSON.stringify(response.data.details),
+            };
+          } else {
+            return item;
+          }
+        });
+        console.log(newTargets);
+        store.dispatch({
+          type: ActionTypes.SET_PUBLISH_TARGETS,
+          payload: {
+            publishTarget: newTargets,
+          },
+        });
+      } else {
+        // update provision status
+        const targets = store.getState().settings.publishTargets;
+        const newTargets = targets?.map((item) => {
+          if (item.name === target.name) {
+            return {
+              ...item,
+              provisionStatus: JSON.stringify(response.data.details),
+            };
           } else {
             return item;
           }

@@ -131,19 +131,10 @@ export class BotProjectDeploy {
    * Azure API accessors
    **********************************************************************************************/
 
-  private async createApp(displayName: string, appPassword: string) {
+  private async createApp(displayName: string) {
     const applicationUri = 'https://graph.microsoft.com/v1.0/applications';
     const requestBody = {
       displayName: displayName,
-      passwordCredentials: [
-        {
-          value: appPassword,
-          startDate: new Date(),
-          endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 2)),
-        },
-      ],
-      availableToOtherTenants: true,
-      replyUrls: ['https://token.botframework.com/.auth/web/redirect'],
     };
     const options = {
       body: requestBody,
@@ -151,6 +142,22 @@ export class BotProjectDeploy {
       headers: { Authorization: `Bearer ${this.graphToken}` },
     } as rp.RequestPromiseOptions;
     const response = await rp.post(applicationUri, options);
+    return response;
+  }
+
+  private async addPassword(displayName: string, id: string) {
+    const addPasswordUri = `https://graph.microsoft.com/v1.0/applications/${id}/addPassword`;
+    const requestBody = {
+      passwordCredential: {
+        displayName: `${displayName}-pwd`,
+      },
+    };
+    const options = {
+      body: requestBody,
+      json: true,
+      headers: { Authorization: `Bearer ${this.graphToken}` },
+    } as rp.RequestPromiseOptions;
+    const response = await rp.post(addPasswordUri, options);
     return response;
   }
 
@@ -357,12 +364,11 @@ export class BotProjectDeploy {
    * Deploy a bot to a location
    */
   public async deploy(
-    name: string,
+    hostname: string,
     luisAuthoringKey?: string,
     luisAuthoringRegion?: string,
     botPath?: string,
     language?: string,
-    hostname?: string,
     luisResource?: string
   ) {
     try {
@@ -400,7 +406,7 @@ export class BotProjectDeploy {
       }
 
       await this.publishLuis(
-        name,
+        hostname,
         language,
         luisEndpoint,
         luisAuthoringEndpoint,
@@ -427,7 +433,7 @@ export class BotProjectDeploy {
         message: 'Publishing to Azure ...',
       });
 
-      await this.deployZip(this.accessToken, this.zipPath, name, hostname);
+      await this.deployZip(this.accessToken, this.zipPath, hostname);
       this.logger({
         status: BotProjectDeployLoggerType.DEPLOY_SUCCESS,
         message: 'Publish To Azure Success!',
@@ -450,7 +456,7 @@ export class BotProjectDeploy {
   }
 
   // Upload the zip file to Azure
-  private async deployZip(token: string, zipPath: string, name: string, hostname?: string) {
+  private async deployZip(token: string, zipPath: string, hostname: string) {
     this.logger({
       status: BotProjectDeployLoggerType.DEPLOY_INFO,
       message: 'Retrieve publishing details ...',
@@ -488,7 +494,7 @@ export class BotProjectDeploy {
    * Provision a set of Azure resources for use with a bot
    */
   public async create(
-    name: string,
+    hostname: string,
     location: string,
     appId: string,
     appPassword?: string,
@@ -516,21 +522,13 @@ export class BotProjectDeploy {
 
       // If the appId is not specified, create one
       if (!appId) {
-        // this requires an app password. if one not specified, fail.
-        if (!appPassword) {
-          this.logger({
-            status: BotProjectDeployLoggerType.PROVISION_INFO,
-            message: `App password is required`,
-          });
-          throw new Error(`App password is required`);
-        }
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
           message: '> Creating App Registration ...',
         });
 
-        // create the app registration
-        const appCreated = await this.createApp(name, appPassword);
+        // create the app registration based on the display name
+        const appCreated = await this.createApp(hostname);
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_INFO,
           message: JSON.stringify(appCreated, null, 4),
@@ -538,6 +536,25 @@ export class BotProjectDeploy {
 
         // use the newly created app
         appId = appCreated.appId ?? '';
+        const id = appCreated.id ?? '';
+        if (!id) {
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_ERROR,
+            message: `App create failed: ${JSON.stringify(appCreated, null, 4)}`,
+          });
+          throw new Error('App create failed!');
+        }
+
+        // use id to add new password and save the password as configuration
+        const addPasswordResult = await this.addPassword(hostname, id);
+        appPassword = addPasswordResult.secretText;
+        if (!appPassword) {
+          this.logger({
+            status: BotProjectDeployLoggerType.PROVISION_ERROR,
+            message: `Add application password failed: ${JSON.stringify(addPasswordResult, null, 4)}`,
+          });
+          throw new Error('Add application password failed!');
+        }
       }
 
       this.logger({
@@ -545,7 +562,7 @@ export class BotProjectDeploy {
         message: `> Create App Id Success! ID: ${appId}`,
       });
 
-      const resourceGroupName = `${name}`;
+      const resourceGroupName = `${hostname}`;
 
       // timestamp will be used as deployment name
       const timeStamp = new Date().getTime().toString();
@@ -622,12 +639,12 @@ export class BotProjectDeploy {
 
         if (appinsightsId && appinsightsInstrumentationKey && appinsightsApiKey) {
           const botServiceClient = new AzureBotService(tokenCredentials, this.subId);
-          const botCreated = await botServiceClient.bots.get(resourceGroupName, name);
+          const botCreated = await botServiceClient.bots.get(resourceGroupName, hostname);
           if (botCreated.properties) {
             botCreated.properties.developerAppInsightKey = appinsightsInstrumentationKey;
             botCreated.properties.developerAppInsightsApiKey = appinsightsApiKey;
             botCreated.properties.developerAppInsightsApplicationId = appinsightsId;
-            const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, name, botCreated);
+            const botUpdateResult = await botServiceClient.bots.update(resourceGroupName, hostname, botCreated);
 
             if (botUpdateResult._response.status != 200) {
               this.logger({
@@ -665,9 +682,9 @@ export class BotProjectDeploy {
       const provisionResult = {} as any;
 
       provisionResult.settings = output;
-      provisionResult.name = name;
+      provisionResult.hostname = hostname;
       if (createLuisResource) {
-        provisionResult.luisResource = `${name}-luis`;
+        provisionResult.luisResource = `${hostname}-luis`;
       } else {
         provisionResult.luisResource = '';
       }

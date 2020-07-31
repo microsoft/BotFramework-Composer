@@ -5,11 +5,11 @@ export interface BotProjectDeployConfig {
   // Subscription Id of Azure Account
   subId: string;
 
-  // credential
-  creds?: any;
-
   // access token to access azure
   accessToken: string;
+
+  // msgraph token
+  graphToken: string;
 
   // The project path to deploy
   projPath: string;

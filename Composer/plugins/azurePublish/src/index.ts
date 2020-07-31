@@ -39,7 +39,6 @@ interface ProvisionConfig {
   type: string; // webapp or function
   subscription: { subscriptionId: string; tenantId: string; displayName: string };
   hostname: string;
-  password: string;
   location: { id: string; name: string; displayName: string };
   externalResources: string[];
   choice: string;
@@ -200,10 +199,10 @@ class AzurePublisher {
     resourcekey: string,
     customizeConfiguration: CreateAndDeployResources
   ) => {
-    const { name, environment, hostname, luisResource, language } = customizeConfiguration;
+    const { hostname, luisResource, language } = customizeConfiguration;
     try {
       // Perform the deploy
-      await this.azDeployer.deploy(name, null, null, null, language, hostname, luisResource);
+      await this.azDeployer.deploy(hostname, null, null, null, language, luisResource);
 
       // update status and history
       const status = this.getLoadingStatus(botId, profileName, jobId);
@@ -328,6 +327,7 @@ class AzurePublisher {
           this.logMessages.push(JSON.stringify(msg, null, 2));
         },
         accessToken: accessToken,
+        graphToken: '',
         projPath: this.getProjectFolder(resourcekey, 'azurewebapp'),
       });
 

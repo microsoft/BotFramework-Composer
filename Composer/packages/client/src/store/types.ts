@@ -76,6 +76,7 @@ export interface PublishTarget {
   type: string;
   provisionConfig: string;
   configuration: string;
+  provisionStatus: string;
   lastPublished?: Date;
 }
 

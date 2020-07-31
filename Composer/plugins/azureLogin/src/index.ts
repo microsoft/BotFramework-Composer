@@ -83,4 +83,6 @@ export default async (composer: any): Promise<void> => {
   composer.addWebRoute('get', '/api/publish/resources/:subscriptionId/:resourceGroup', authorize);
   composer.addWebRoute('get', '/api/publish/:subscriptionId/locations', authorize);
   composer.addWebRoute('post', '/api/publish/:projectId/provision/:type', authorize);
+
+  composer.addWebRoute('post', '/api/publish/:projectId/publish/:target', authorize);
 };

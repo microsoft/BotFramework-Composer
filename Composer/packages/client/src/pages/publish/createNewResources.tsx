@@ -30,9 +30,9 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
   const { subscriptions, resourceGroups, deployLocations } = state;
   const [currentSubscription, setSubscription] = useState<Subscription>();
   const [currentHostName, setHostName] = useState('');
-  const [password, setPassword] = useState('');
+  // const [password, setPassword] = useState('');
   const [errorHostName, setErrorHostName] = useState('');
-  const [errorPassword, setErrorPassword] = useState('');
+  // const [errorPassword, setErrorPassword] = useState('');
   const [currentLocation, setLocation] = useState<DeployLocation>();
   const [selectedResources, setExternalResources] = useState<string[]>([]);
 
@@ -80,19 +80,19 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
     [resourceGroups]
   );
 
-  const updatePassword = useMemo(
-    () => (e, newValue) => {
-      const patt = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![a-zA-Z0-9]+$)[\w$&~!*@#%^{}|]{16,}$/;
-      if (newValue.length <= 16 && !patt.test(newValue)) {
-        setPassword(newValue);
-        setErrorPassword('Password need to include characters, number and special-characters, 16 characters length');
-      } else if (newValue.length === 16) {
-        setErrorPassword('');
-        setPassword(newValue);
-      }
-    },
-    []
-  );
+  // const updatePassword = useMemo(
+  //   () => (e, newValue) => {
+  //     const patt = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![a-zA-Z0-9]+$)[\w$&~!*@#%^{}|]{16,}$/;
+  //     if (newValue.length <= 16 && !patt.test(newValue)) {
+  //       setPassword(newValue);
+  //       setErrorPassword('Password need to include characters, number and special-characters, 16 characters length');
+  //     } else if (newValue.length === 16) {
+  //       setErrorPassword('');
+  //       setPassword(newValue);
+  //     }
+  //   },
+  //   []
+  // );
 
   const updateCurrentLocation = useMemo(
     () => (_e, option?: IDropdownOption) => {
@@ -143,14 +143,14 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
           placeholder={formatMessage('Name of your new resource group')}
           onChange={newResourceGroup}
         />
-        <TextField
+        {/* <TextField
           required
           errorMessage={errorPassword}
           label={formatMessage('Password')}
           placeholder={formatMessage('Password to assess resources')}
           value={password}
           onChange={updatePassword}
-        />
+        /> */}
         <Dropdown
           required
           label={formatMessage('Locations')}
@@ -170,15 +170,12 @@ export const CreateNewResource: React.FC<CreateNewResourceProps> = (props) => {
       <DialogFooter>
         <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
         <PrimaryButton
-          disabled={
-            !currentSubscription || !currentHostName || !password || errorPassword !== '' || errorHostName !== ''
-          }
+          disabled={!currentSubscription || !currentHostName || errorHostName !== ''}
           text={formatMessage('Ok')}
           onClick={async () => {
             await props.onSubmit({
               subscription: currentSubscription,
               hostname: currentHostName,
-              password: password,
               location: currentLocation,
               externalResources: selectedResources,
             });
