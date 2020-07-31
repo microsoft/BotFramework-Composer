@@ -1,26 +1,34 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
 import { CompletionItemKind } from 'monaco-languageclient';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { CompletionItem, MarkupContent } from 'vscode-languageserver-types';
+import { css, jsx } from '@emotion/core';
 
 type FuseJsMatch = { indices: number[][]; value: string; key: string };
 
-const styles: Record<string, CSSProperties> = {
-  completionElement: {
-    height: '32px',
-    cursor: 'pointer',
-    padding: '0 4px',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  selectedElement: { backgroundColor: '#ddd' },
-  text: { fontSize: '15px' },
-  icon: { marginRight: '5px' },
+const styles = {
+  completionElement: css`
+    height: 32px;
+    cursor: pointer;
+    padding: 0 4px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  `,
+  selectedElement: css`
+    background-color: #ddd;
+  `,
+  text: css`
+    font-size: 15px;
+  `,
+  icon: css`
+    margin-right: 5px;
+  `,
 };
 
 const getIconName = (kind: CompletionItemKind | undefined): string => {
@@ -36,6 +44,8 @@ const getIconName = (kind: CompletionItemKind | undefined): string => {
   }
 };
 
+// You can check out Fuse.js documentation to understand the types: https://fusejs.io/api/options.html.
+// Matches is an array of "match" (m). Each match has a start index and end index.
 const renderMatch = (match: FuseJsMatch, segmentIndex: number): JSX.Element => {
   let firstIndex = 0;
   const lastIndex = match.value.length;
@@ -59,14 +69,14 @@ const renderMatch = (match: FuseJsMatch, segmentIndex: number): JSX.Element => {
 };
 
 const renderLabelWithCharacterHighlights = (matches: FuseJsMatch[]): JSX.Element => {
-  return <> {matches.map(renderMatch)} </>;
+  return <React.Fragment> {matches.map(renderMatch)} </React.Fragment>;
 };
 
 const renderDocumentation = (documentation: string | MarkupContent | undefined) => {
   return <span>{documentation}</span>;
 };
 
-const CompletionElement = (props: {
+export const CompletionElement = (props: {
   completionItem: CompletionItem;
   isSelected: boolean;
   onClickCompletionItem: () => void;
@@ -81,14 +91,14 @@ const CompletionElement = (props: {
       directionalHint={DirectionalHint.rightCenter}
     >
       <div
-        style={{
+        css={{
           ...styles.completionElement,
           ...additionalStyles,
         }}
         onClick={onClickCompletionItem}
       >
-        <FontIcon iconName={getIconName(completionItem.kind)} style={styles.icon} />
-        <div style={styles.text}>
+        <FontIcon iconName={getIconName(completionItem.kind)} css={styles.icon} />
+        <div css={styles.text}>
           {completionItem.data.matches
             ? renderLabelWithCharacterHighlights(completionItem.data.matches)
             : completionItem.label}
@@ -97,5 +107,3 @@ const CompletionElement = (props: {
     </TooltipHost>
   );
 };
-
-export default CompletionElement;

@@ -14,7 +14,8 @@
     "react-dom": "16.13.0"
   },
   "dependencies": {
-    "websocket": "^1.0.31"
+    "websocket": "^1.0.31",
+    "@emotion/core": "^10.0.27"
   },
   "devDependencies": {
     "monaco-languageclient": "^0.10.0",

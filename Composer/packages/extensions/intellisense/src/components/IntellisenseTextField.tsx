@@ -1,11 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/** @jsx jsx */
 import { ITextFieldProps, TextField } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
+import { css, jsx } from '@emotion/core';
+
 import { useLanguageServer } from '../hooks/useLanguageServer';
 import { checkIsOutside } from '../utils/uiUtils';
-import CompletionList from './CompletionList';
+
+import { CompletionList } from './CompletionList';
+
+const styles = {
+  textField: css`
+    width: 300px;
+  `,
+};
 
 export const IntellisenseTextField = (
   props: {
@@ -82,6 +92,28 @@ export const IntellisenseTextField = (
     onChange(newValue);
   };
 
+  // Set textField value to completion item value
+  const setValueToSelectedCompletionItem = (index: number) => {
+    if (completionItems.length >= index) {
+      const selectedSuggestion = completionItems[index].insertText || '';
+      const range = completionItems[index].data.range;
+
+      if (range) {
+        const newValue =
+          textFieldValue.substr(0, range.start.character) +
+          selectedSuggestion +
+          textFieldValue.substr(range.end.character);
+        onValueChanged(newValue);
+      } else {
+        onValueChanged(selectedSuggestion);
+      }
+
+      // This makes sure we do not show the completion items after a value is picked from the list
+      didComplete.current = true;
+      setShowCompletionList(false);
+    }
+  };
+
   // Handles selection of completion items and validation through keyboard (Up Down to navigate and Enter to validate)
   const onKeyUpMainComponent = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
@@ -122,28 +154,6 @@ export const IntellisenseTextField = (
     setCursorPosition((event.target as HTMLInputElement).selectionStart || 0);
   };
 
-  // Set textField value to completion item value
-  const setValueToSelectedCompletionItem = (index: number) => {
-    if (completionItems.length >= index) {
-      const selectedSuggestion = completionItems[index].insertText || '';
-      const range = completionItems[index].data.range;
-
-      if (range) {
-        const newValue =
-          textFieldValue.substr(0, range.start.character) +
-          selectedSuggestion +
-          textFieldValue.substr(range.end.character);
-        onValueChanged(newValue);
-      } else {
-        onValueChanged(selectedSuggestion);
-      }
-
-      // This makes sure we do not show the completion items after a value is picked from the list
-      didComplete.current = true;
-      setShowCompletionList(false);
-    }
-  };
-
   return (
     <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
       <TextField
@@ -152,7 +162,7 @@ export const IntellisenseTextField = (
         onChange={(_e, newValue) => onValueChanged(newValue || '')}
         onKeyDown={onKeyDownTextField}
         onClick={onClickTextField}
-        style={{ width: '300px' }}
+        css={styles.textField}
       />
 
       {showCompletionList && (
@@ -166,5 +176,3 @@ export const IntellisenseTextField = (
     </div>
   );
 };
-
-export default IntellisenseTextField;

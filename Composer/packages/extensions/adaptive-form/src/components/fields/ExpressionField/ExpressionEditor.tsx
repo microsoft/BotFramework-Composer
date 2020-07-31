@@ -6,8 +6,7 @@ import { IntellisenseTextField } from '@bfc/intellisense';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import React from 'react';
 
-let intellisenseWsUrl = window.location.origin.replace(/^https/, 'wss').replace(/^http/, 'ws');
-intellisenseWsUrl = `${intellisenseWsUrl}/intellisense-language-server`;
+import { getIntellisenseUrl } from '../../../utils/getIntellisenseUrl';
 
 const ExpressionEditor: React.FC<FieldProps> = (props) => {
   const { id, value = '', onChange, disabled, placeholder, readonly, error } = props;
@@ -27,7 +26,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
         root: { width: '100%' },
         errorMessage: { display: 'none' },
       }}
-      url={intellisenseWsUrl}
+      url={getIntellisenseUrl()}
       value={value}
       onChange={onChange}
       onRenderPrefix={() => {

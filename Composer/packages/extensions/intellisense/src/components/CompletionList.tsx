@@ -1,26 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React, { CSSProperties } from 'react';
+/** @jsx jsx */
+import React from 'react';
 import { CompletionItem } from 'vscode-languageserver-types';
-import CompletionElement from './CompletionElement';
+import { css, jsx } from '@emotion/core';
 
-const styles: Record<string, CSSProperties> = {
-  completionList: {
-    position: 'absolute',
-    top: 32,
-    left: 0,
-    maxHeight: '300px',
-    width: '100%',
-    backgroundColor: 'white',
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-    zIndex: 2000,
-  },
+import { CompletionElement } from './CompletionElement';
+
+const styles = {
+  completionList: css`
+    position: absolute;
+    top: 32;
+    left: 0;
+    max-height: 300px;
+    width: 100%;
+    background-color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    z-index: 2000;
+  `,
 };
 
-const CompletionList = React.forwardRef<
+export const CompletionList = React.forwardRef<
   HTMLDivElement,
   {
     completionItems: CompletionItem[];
@@ -31,7 +34,7 @@ const CompletionList = React.forwardRef<
   const { completionItems, selectedItem, onClickCompletionItem } = props;
 
   return (
-    <div ref={ref} style={styles.completionList}>
+    <div ref={ref} css={styles.completionList}>
       {completionItems.map((completionItem, index) => (
         <CompletionElement
           key={index}
@@ -43,5 +46,3 @@ const CompletionList = React.forwardRef<
     </div>
   );
 });
-
-export default CompletionList;
