@@ -1,16 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema7 } from '@bfc/extension';
-import {
-  AppUpdaterSettings,
-  CodeEditorSettings,
-  DialogInfo,
-  LuFile,
-  LgFile,
-  QnAFile,
-  PromptTab,
-  DialogSetting,
-} from '@bfc/shared';
+import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
 

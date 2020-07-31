@@ -173,6 +173,7 @@ export type BotAssets = {
   dialogs: DialogInfo[];
   luFiles: LuFile[];
   lgFiles: LgFile[];
+  qnaFiles: QnAFile[];
   skillManifests: SkillManifest[];
   setting: DialogSetting;
 };
