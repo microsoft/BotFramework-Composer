@@ -11,6 +11,9 @@ export interface BotProjectDeployConfig {
   // access token to access azure
   accessToken: string;
 
+  // msgraph token
+  graphToken: string;
+  
   // The project path to deploy
   projPath: string;
 
