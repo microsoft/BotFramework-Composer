@@ -10,6 +10,7 @@ import { updateRegExIntent } from '../utils/dialogUtil';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
+import { undoFunctionState } from '../recoilModel/undo/history';
 import {
   botNameState,
   schemasState,
@@ -49,6 +50,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const focusPath = useRecoilValue(focusPathState);
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
+  const { undo, redo, startBatch, endBatch } = useRecoilValue(undoFunctionState);
   const {
     updateDialog,
     createDialogBegin,
@@ -180,8 +182,10 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         });
       });
     },
-    undo: () => {}, //TODO
-    redo: () => {}, //TODO
+    undo,
+    redo,
+    startBatch,
+    endBatch,
     addCoachMarkRef: onboardingAddCoachMarkRef,
     updateUserSettings: updateUserSettings,
     announce: setMessage,

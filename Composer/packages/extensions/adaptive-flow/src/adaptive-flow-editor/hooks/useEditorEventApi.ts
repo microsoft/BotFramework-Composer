@@ -48,6 +48,8 @@ export const useEditorEventApi = (
     saveData: onChange,
     undo,
     redo,
+    startBatch,
+    endBatch,
     announce,
   } = shellApi;
 
@@ -308,7 +310,10 @@ export const useEditorEventApi = (
         handler = onFocusSteps;
         break;
     }
-    return handler(eventData);
+    startBatch();
+    const result = handler(eventData);
+    endBatch();
+    return result;
   };
 
   // HACK: use global handler before we solve iframe state sync problem

@@ -32,8 +32,8 @@ export const useActionApi = (shellApi: ShellApi) => {
 
   async function constructActions(dialogId: string, actions: BaseSchema[]) {
     // '- hi' -> 'SendActivity_1234'
-    const referenceLgText: FieldProcessorAsync<string> = (fromId, fromAction, toId, toAction, lgFieldName) =>
-      createLgTemplate(dialogId, fromAction[lgFieldName], toId, toAction, lgFieldName);
+    const referenceLgText: FieldProcessorAsync<string> = async (fromId, fromAction, toId, toAction, lgFieldName) =>
+      await createLgTemplate(dialogId, fromAction[lgFieldName], toId, toAction, lgFieldName);
 
     // LuIntentSection -> 'TextInput_Response_1234'
     const referenceLuIntent: FieldProcessorAsync<any> = async (fromId, fromAction, toId, toAction) => {
