@@ -12,6 +12,7 @@ import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import { dialogsState, projectIdState, luFilesState, skillManifestsState, settingsState, lgFilesState } from './atoms';
 import { BotAssets } from './types';
+import { UndoRoot } from './undo/history';
 
 const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -77,6 +78,7 @@ export const DispatcherWrapper = ({ children }) => {
 
   return (
     <Fragment>
+      <UndoRoot />
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>

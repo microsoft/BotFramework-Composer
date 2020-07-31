@@ -13,6 +13,7 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
 import { useRecoilValue } from 'recoil';
+import { CommunicationColors } from '@uifabric/fluent-theme';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
@@ -23,11 +24,11 @@ import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
-import { undoHistory } from '../../recoilModel/undo';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
+import { undoFunctionState } from '../../recoilModel/undo/history';
 import {
   dialogsState,
   projectIdState,
@@ -109,6 +110,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const designPageLocation = useRecoilValue(designPageLocationState);
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
+  const { undo, redo, canRedo, canUndo } = useRecoilValue(undoFunctionState);
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
@@ -280,18 +282,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
-            disabled: !undoHistory.canUndo(),
-            onClick: () => {
-              //ToDo undo
-            },
+            disabled: !canUndo(),
+            onClick: undo,
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
-            disabled: !undoHistory.canRedo(),
-            onClick: () => {
-              //ToDo redo
-            },
+            disabled: !canRedo(),
+            onClick: redo,
           },
           {
             key: 'edit.cut',

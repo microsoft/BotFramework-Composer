@@ -85,6 +85,8 @@ export interface ShellApi {
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;
   redo: () => void;
+  startBatch: () => void;
+  endBatch: () => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
   announce: (message: string) => void;
