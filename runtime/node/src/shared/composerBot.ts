@@ -1,50 +1,41 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ActivityHandler, ActivityTypes, BotFrameworkClient, BotTelemetryClient, ConversationState, SkillConversationIdFactoryBase, StatePropertyAccessor, TurnContext, UserState } from "botbuilder";
-import { DialogManager, DialogState } from "botbuilder-dialogs";
-import { AdaptiveDialog, LanguageGeneratorExtensions, LanguagePolicy, ResourceExtensions, SkillExtensions } from "botbuilder-dialogs-adaptive";
+import { ActivityHandler, ActivityTypes, ConversationState, SkillHttpClient, TurnContext, UserState } from "botbuilder";
+import { DialogManager } from "botbuilder-dialogs";
+import { AdaptiveDialog, AdaptiveDialogComponentRegistration, LanguageGeneratorExtensions, LanguagePolicy, ResourceExtensions, SkillExtensions } from "botbuilder-dialogs-adaptive";
 import { ResourceExplorer } from "botbuilder-dialogs-declarative";
-import { SkillValidation } from 'botframework-connector';
+import { SimpleCredentialProvider, SkillValidation } from 'botframework-connector';
+import { BotSettings } from './settings';
+import { SkillConversationIdFactory } from './skillConversationIdFactory';
+import { getSettings, getProjectRoot, getRootDialog } from './helpers';
 
 export class ComposerBot extends ActivityHandler {
-  private readonly conversationState: ConversationState;
   private readonly userState: UserState;
+  private readonly conversationState: ConversationState;
+  private readonly projectRoot: string;
+  private readonly settings: BotSettings;
   private readonly resourceExplorer: ResourceExplorer;
-  private readonly dialogState: StatePropertyAccessor<DialogState>;
-  private readonly rootDialogFile: string;
-  private readonly telemetryClient: BotTelemetryClient;
-  private readonly defaultLocale: string;
-  private readonly removeRecipientMention: boolean;
   private dialogManager: DialogManager;
 
   public constructor(
-    conversationState: ConversationState,
     userState: UserState,
-    resourceExplorer: ResourceExplorer,
-    skillClient: BotFrameworkClient,
-    conversationIdFactory: SkillConversationIdFactoryBase,
-    telemetryClient: BotTelemetryClient,
-    rootDialog: string,
-    defaultLocale: string,
-    removeRecipientMention = false
+    conversationState: ConversationState
   ) {
     super();
-    this.conversationState = conversationState;
     this.userState = userState;
-    this.dialogState = conversationState.createProperty('DialogState');
-    this.resourceExplorer = resourceExplorer;
-    this.rootDialogFile = rootDialog;
-    this.defaultLocale = defaultLocale;
-    this.telemetryClient = telemetryClient;
-    this.removeRecipientMention = removeRecipientMention;
+    this.conversationState = conversationState;
+    this.projectRoot = getProjectRoot();
+    this.settings = getSettings(this.projectRoot);
 
+    // Create and configure resource explorer.
+    this.resourceExplorer = new ResourceExplorer();
+    this.resourceExplorer.addFolders(this.projectRoot, ["runtime"], false);
+    this.resourceExplorer.addComponent(new AdaptiveDialogComponentRegistration(this.resourceExplorer));
 
     this.loadRootDialog();
-
-    // this.dialogManager.initialTurnState.set("settings", settings);
-    SkillExtensions.useSkillClient(this.dialogManager, skillClient);
-    SkillExtensions.useSkillConversationIdFactory(this.dialogManager, conversationIdFactory);
+    this.configureLanguageGeneration();
+    this.configureSkills();
   }
 
   public async onTurnActivity(turnContext: TurnContext): Promise<void> {
@@ -56,7 +47,8 @@ export class ComposerBot extends ActivityHandler {
       rootDialog.autoEndDialog = false;
     }
 
-    if (this.removeRecipientMention && turnContext.activity.type == ActivityTypes.Message) {
+    const removeRecipientMention = this.settings.feature && this.settings.feature.removeRecipientMention || false
+    if (removeRecipientMention && turnContext.activity.type == ActivityTypes.Message) {
       TurnContext.removeRecipientMention(turnContext.activity);
     }
 
@@ -66,13 +58,27 @@ export class ComposerBot extends ActivityHandler {
   }
 
   private loadRootDialog() {
-    const rootDialog = this.resourceExplorer.loadType(this.rootDialogFile) as AdaptiveDialog;
+    const rootDialogFile = getRootDialog(this.projectRoot);
+    const rootDialog = this.resourceExplorer.loadType(rootDialogFile) as AdaptiveDialog;
     this.dialogManager = new DialogManager(rootDialog);
+    ResourceExtensions.useResourceExplorer(this.dialogManager, this.resourceExplorer);
+    this.dialogManager.initialTurnState.set("settings", this.settings);
     this.dialogManager.conversationState = this.conversationState;
     this.dialogManager.userState = this.userState;
-    ResourceExtensions.useResourceExplorer(this.dialogManager, this.resourceExplorer);
-    LanguageGeneratorExtensions.useLanguageGeneration(this.dialogManager);
-    LanguageGeneratorExtensions.useLanguagePolicy(this.dialogManager, new LanguagePolicy(this.defaultLocale));
   }
 
+  private configureLanguageGeneration() {
+    const defaultLocale = this.settings.defaultLocale || 'en-us';
+    const languagePolicy = new LanguagePolicy(defaultLocale);
+    LanguageGeneratorExtensions.useLanguageGeneration(this.dialogManager);
+    LanguageGeneratorExtensions.useLanguagePolicy(this.dialogManager, languagePolicy);
+  }
+
+  private configureSkills() {
+    const conversationIdFactory = new SkillConversationIdFactory();
+    const credentialProvider = new SimpleCredentialProvider(this.settings.microsoftAppId, this.settings.microsoftAppPassword);
+    const skillClient = new SkillHttpClient(credentialProvider, conversationIdFactory);
+    SkillExtensions.useSkillClient(this.dialogManager, skillClient);
+    SkillExtensions.useSkillConversationIdFactory(this.dialogManager, conversationIdFactory);
+  }
 }
