@@ -18,6 +18,7 @@ import { GraphRbacManagementClient } from '@azure/graph';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
+import { FileInfo } from '@bfc/shared';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
@@ -424,8 +425,17 @@ export class BotProjectDeploy {
         content: fs.readJSONSync(dialog),
       });
     }
-    luFiles = luFiles.map((luFile) => luFile.substring(luFile.lastIndexOf('\\') + 1));
-    this.crossTrainConfig = createCrossTrainConfig(dialogs, luFiles);
+    const luFileInfos: FileInfo[] = luFiles.map((luFile) => {
+      const fileStats = fs.statSync(luFile);
+      return {
+        name: luFile.substring(luFile.lastIndexOf('\\') + 1),
+        content: fs.readFileSync(luFile, 'utf-8'),
+        lastModified: fileStats.mtime.toString(),
+        path: luFile,
+        relativePath: luFile.substring(this.remoteBotPath + 1),
+      };
+    });
+    this.crossTrainConfig = createCrossTrainConfig(dialogs, luFileInfos);
   }
   private needCrossTrain() {
     return this.crossTrainConfig.rootIds.length > 0;
