@@ -8,12 +8,9 @@ import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import get from 'lodash/get';
 import VisualDesigner from '@bfc/adaptive-flow';
-import Extension from '@bfc/extension';
 import { useRecoilValue } from 'recoil';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
-import { useShell } from '../../shell';
-import plugins from '../../plugins';
 import { schemasState, dialogsState, designPageLocationState, dispatcherState } from '../../recoilModel';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
@@ -55,7 +52,6 @@ interface VisualEditorProps {
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
-  const { api: shellApi, data: shellData } = useShell('VisualEditor');
   const { openNewTriggerModal } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const designPageLocation = useRecoilValue(designPageLocationState);
@@ -80,9 +76,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >
-        <Extension plugins={plugins} shell={shellApi} shellData={shellData}>
-          <VisualDesigner schema={schemas.sdk?.content} />
-        </Extension>
+        <VisualDesigner schema={schemas.sdk?.content} />
       </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
     </React.Fragment>
