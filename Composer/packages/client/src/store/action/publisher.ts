@@ -261,8 +261,8 @@ export const getProvisionStatus: ActionCreator = async (store, projectId, target
           if (item.name === target.name) {
             return {
               ...item,
-              configuration: JSON.stringify(response.data.config),
-              provisionStatus: JSON.stringify(response.data.details),
+              configuration: JSON.stringify(response.data.config, null, 2),
+              provisionStatus: JSON.stringify(response.data.details, null, 2),
             };
           } else {
             return item;
@@ -282,7 +282,7 @@ export const getProvisionStatus: ActionCreator = async (store, projectId, target
           if (item.name === target.name) {
             return {
               ...item,
-              provisionStatus: JSON.stringify(response.data.details),
+              provisionStatus: JSON.stringify(response.data.details, null, 2),
             };
           } else {
             return item;

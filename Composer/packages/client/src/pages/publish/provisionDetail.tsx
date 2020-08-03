@@ -18,14 +18,14 @@ export const ProvisionDetailPanel: React.FC<ProvisionDetailProps> = (props) => {
     <Panel isLightDismiss isOpen closeButtonAriaLabel="Close" headerText="Provision Detail" onDismiss={props.onDismiss}>
       {props.target &&
         props.target.map((item, index) => {
-          return (
+          return item.configuration === '{}' ? (
             <ProgressIndicator
               key={index}
               description={item.provisionStatus}
               label={item.name}
               // percentComplete={percentComplete}
             />
-          );
+          ) : null;
         })}
     </Panel>
   );

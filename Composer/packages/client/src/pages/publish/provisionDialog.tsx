@@ -10,6 +10,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import formatMessage from 'format-message';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { JsonEditor } from '@bfc/code-editor';
 
 import { PublishTarget, PublishType } from '../../store/types';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
@@ -35,13 +36,16 @@ const choiceOptions: IChoiceGroupOption[] = [
 ];
 
 export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
-  const { actions } = useContext(StoreContext);
+  const { state, actions } = useContext(StoreContext);
 
-  const [name, setName] = useState('');
+  const [name, setName] = useState(props.current?.name || '');
   const [targetType, setTargetType] = useState<string | undefined>(props.current?.type);
   const [errorMessage, setErrorMsg] = useState('');
   const [choice, setChoice] = useState(choiceOptions[0].key);
   const [currentStep, setCurrentStep] = useState(0);
+  const [editInJson, setEditInJson] = useState(false);
+  const [config, setConfig] = useState(props.current ? JSON.parse(props.current.configuration) : undefined);
+
   const targetTypes = useMemo(() => {
     return props.types.map((t) => ({ key: t.name, text: t.description }));
   }, [props.targets]);
@@ -98,6 +102,10 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
     []
   );
 
+  const updateConfig = (newConfig) => {
+    setConfig(newConfig);
+  };
+
   const steps = [
     {
       children: (
@@ -117,29 +125,66 @@ export const ProvisionDialog: React.FC<ProvisionDialogProps> = (props) => {
               placeholder={formatMessage('Choose One')}
               onChange={updateType}
             />
-            <ChoiceGroup
-              required
-              defaultSelectedKey={choiceOptions[0].key}
-              label={formatMessage('Create from')}
-              options={choiceOptions}
-              onChange={choiceChanged}
-            />
+            {editInJson ? (
+              <JsonEditor
+                key={targetType}
+                editorSettings={state.userSettings.codeEditor}
+                height={200}
+                value={config}
+                onChange={updateConfig}
+              />
+            ) : (
+              <ChoiceGroup
+                required
+                defaultSelectedKey={choiceOptions[0].key}
+                label={formatMessage('Create from')}
+                options={choiceOptions}
+                onChange={choiceChanged}
+              />
+            )}
           </form>
           <DialogFooter>
-            <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
-            <PrimaryButton
-              disabled={isDisable()}
-              text={formatMessage('Next')}
-              onClick={async () => {
-                if (choice === choiceOptions[0].key) {
-                  setCurrentStep(1);
-                } else if (choice === choiceOptions[1].key) {
-                  setCurrentStep(2);
-                }
-                await actions.getSubscriptions();
-                // await props.onSubmit({ name: name, type: targetType, choice: choice });
-              }}
-            />
+            {!editInJson ? (
+              <Fragment>
+                <DefaultButton text="edit in JSON" onClick={() => setEditInJson(true)} />
+                <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+                <PrimaryButton
+                  disabled={isDisable()}
+                  text={formatMessage('Next')}
+                  onClick={async () => {
+                    if (choice === choiceOptions[0].key) {
+                      setCurrentStep(1);
+                    } else if (choice === choiceOptions[1].key) {
+                      setCurrentStep(2);
+                    }
+                    await actions.getSubscriptions();
+                    // await props.onSubmit({ name: name, type: targetType, choice: choice });
+                  }}
+                />
+              </Fragment>
+            ) : (
+              <Fragment>
+                <DefaultButton text={formatMessage('Cancel')} onClick={props.onDismiss} />
+                <PrimaryButton
+                  disabled={isDisable()}
+                  text={formatMessage('Submit')}
+                  onClick={() => {
+                    const newTargets = state.settings.publishTargets?.map((item) => {
+                      if (item.name === props.current?.name) {
+                        return {
+                          ...item,
+                          configuration: JSON.stringify(config, null, 2),
+                        };
+                      } else {
+                        return item;
+                      }
+                    });
+                    actions.setPublishTargets(newTargets);
+                    props.onDismiss();
+                  }}
+                />
+              </Fragment>
+            )}
           </DialogFooter>
         </Fragment>
       ),
