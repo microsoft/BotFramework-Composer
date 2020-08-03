@@ -162,3 +162,19 @@ export const configureSkillEndpoint = (server: Server, adapter: BotFrameworkAdap
     const skillEndpoint = new ChannelServiceRoutes(handler);
     skillEndpoint.register(server, '/api/skills');
 };
+
+export const configureManifestsEndpoint = (server: Server) => {
+    const projectRoot = getProjectRoot();
+    const manifestsPath= path.join(projectRoot, 'manifests');
+    if (fs.existsSync(manifestsPath)) {
+        const manifestFiles = fs.readdirSync(manifestsPath);
+        for (let file of manifestFiles) {
+            if (file.endsWith(".json")) {
+                server.get(`/${ file }`, (_req, res): void => {
+                    const manifest = require(path.join(manifestsPath, file));
+                    res.send(manifest);
+                });
+            }
+        }
+    }
+};
