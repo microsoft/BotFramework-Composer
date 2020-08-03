@@ -589,6 +589,10 @@ export class BotProjectDeploy {
         bot: {
           appId: appId ?? undefined
         },
+        webApp: {
+          appId: appId ?? '',
+          appPwd: appPassword ?? ''
+        },
         resourceGroup: {
           name: resourceGroupName,
           location: location
