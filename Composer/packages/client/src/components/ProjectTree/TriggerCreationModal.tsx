@@ -530,8 +530,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
                 isRegEx
                   ? formatMessage('What is the name of this trigger (RegEx)')
                   : isLUISnQnA
-                    ? formatMessage('What is the name of this trigger (LUIS)')
-                    : formatMessage('What is the name of this trigger')
+                  ? formatMessage('What is the name of this trigger (LUIS)')
+                  : formatMessage('What is the name of this trigger')
               }
               styles={intent}
               onChange={onNameChange}
