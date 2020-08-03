@@ -69,8 +69,8 @@ function createConfigId(fileId) {
   return `${fileId}.lu`;
 }
 
-function getLuFilesByDialogId(dialogId: string, luFiles: string[]) {
-  return luFiles.filter((lu) => getBaseName(lu) === dialogId).map((lu) => createConfigId(lu));
+function getLuFilesByDialogId(dialogId: string, luFiles: LuFile[]) {
+  return luFiles.filter((lu) => getBaseName(lu.id) === dialogId).map((lu) => createConfigId(lu.id));
 }
 
 function getFileLocale(fileName: string) {
@@ -79,7 +79,7 @@ function getFileLocale(fileName: string) {
 }
 
 //replace the dialogId with luFile's name
-function addLocaleToConfig(config: ICrossTrainConfig, luFiles: string[]) {
+function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
   const { rootIds, triggerRules } = config;
   config.rootIds = rootIds.reduce((result: string[], id: string) => {
     return [...result, ...getLuFilesByDialogId(id, luFiles)];

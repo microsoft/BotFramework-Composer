@@ -432,15 +432,11 @@ export class BotProjectDeploy {
         content: fs.readFileSync(luFile, 'utf-8'),
         lastModified: fileStats.mtime.toString(),
         path: luFile,
-        relativePath: luFile.substring(this.remoteBotPath + 1),
+        relativePath: luFile.substring(luFile.lastIndexOf(this.remoteBotPath) + 1),
       };
     });
     this.crossTrainConfig = createCrossTrainConfig(dialogs, luFileInfos);
   }
-  private needCrossTrain() {
-    return this.crossTrainConfig.rootIds.length > 0;
-  }
-
   private async writeCrossTrainFiles(crossTrainResult) {
     if (!(await fs.pathExists(this.interruptionFolderPath))) {
       await fs.mkdir(this.interruptionFolderPath);
@@ -453,7 +449,6 @@ export class BotProjectDeploy {
   }
 
   private async crossTrain(luFiles: string[], qnaFiles: string[]) {
-    if (!this.needCrossTrain()) return;
     const luContents: { [key: string]: any }[] = [];
     const qnaContents: { [key: string]: any }[] = [];
     for (const luFile of luFiles) {
@@ -475,7 +470,6 @@ export class BotProjectDeploy {
   }
 
   private async cleanCrossTrain() {
-    if (!this.needCrossTrain()) return;
     fs.rmdirSync(this.interruptionFolderPath, { recursive: true });
   }
   private async getInterruptionFiles() {
