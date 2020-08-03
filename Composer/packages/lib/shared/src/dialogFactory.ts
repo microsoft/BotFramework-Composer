@@ -75,13 +75,87 @@ const initialDialogShape = () => ({
   },
   [SDKKinds.OnQnAMatch]: {
     $kind: SDKKinds.OnQnAMatch,
+    $designer: {
+      id: generateDesignerId(),
+    },
     actions: [
       {
-        $kind: SDKKinds.SendActivity,
+        $kind: SDKKinds.IfCondition,
         $designer: {
           id: generateDesignerId(),
         },
-        activity: '',
+        condition: 'count(turn.recognized.answers[0].context.prompts) > 0',
+        actions: [
+          {
+            $kind: SDKKinds.SetProperties,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            property: 'dialog.qnaContext',
+            value: '=turn.recognized.answers[0].context.prompts',
+          },
+          {
+            $kind: SDKKinds.TextInput,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            disabled: false,
+            maxTurnCount: 3,
+            alwaysPrompt: true,
+            allowInterruptions: false,
+            prompt: '',
+            property: 'turn.qnaMultiTurnResponse',
+          },
+          {
+            $kind: SDKKinds.SetProperties,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            property: 'turn.qnaMatchFromContext',
+            value: '=where(dialog.qnaContext, item, item.displayText == turn.qnaMultiTurnResponse)',
+          },
+          {
+            $kind: SDKKinds.DeleteProperty,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            property: 'dialog.qnaContext',
+          },
+          {
+            $kind: SDKKinds.IfCondition,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            condition: 'turn.qnaMatchFromContext && count(turn.qnaMatchFromContext) > 0',
+            actions: [
+              {
+                $kind: SDKKinds.SetProperty,
+                $designer: {
+                  id: generateDesignerId(),
+                },
+                property: 'turn.qnaIdFromPrompt',
+                value: '=turn.qnaMatchFromContext[0].qnaId',
+              },
+            ],
+          },
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'activityReceived',
+            eventValue: '=turn.activity',
+          },
+        ],
+        elseActions: [
+          {
+            $kind: SDKKinds.SendActivity,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            activity: '',
+          },
+        ],
       },
     ],
   },

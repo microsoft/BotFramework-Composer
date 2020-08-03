@@ -67,15 +67,14 @@ function insert(content, path: string, position: number | undefined, data: any) 
 
 function updateTriggerActionsAttributes(trigger, extraTriggerAttributes) {
   const t = cloneDeep(trigger);
-  const { lgTemplateId } = extraTriggerAttributes;
   if (t.$kind === SDKKinds.OnQnAMatch) {
-    t.actions[0].activity = `$\{SendActivity_${lgTemplateId}()}`;
-  }
-  if (t.$kind === SDKKinds.OnChooseIntent) {
-    //t.actions[1].prompt = `$\{ChoiceInput_Prompt_${lgTemplateId}}`;
     for (const key in extraTriggerAttributes) {
       set(t, key, extraTriggerAttributes[key]);
-      console.log(get(t, key, ''));
+    }
+  }
+  if (t.$kind === SDKKinds.OnChooseIntent) {
+    for (const key in extraTriggerAttributes) {
+      set(t, key, extraTriggerAttributes[key]);
     }
   }
   return t;

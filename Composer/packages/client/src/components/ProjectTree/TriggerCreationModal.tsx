@@ -38,9 +38,22 @@ import {
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
-import { dialogsState, projectIdState, schemasState } from '../../recoilModel/atoms/botState';
+import {
+  dialogsState,
+  projectIdState,
+  schemasState,
+  localeState,
+  lgFilesState,
+} from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
-import { nameRegex } from '../../constants';
+import {
+  nameRegex,
+  adaptiveCardJsonBody,
+  whichOneDidYouMeanBody,
+  pickOne,
+  getAnswerReadBack,
+  getIntentReadBack,
+} from '../../constants';
 
 // -------------------- Styles -------------------- //
 
@@ -201,7 +214,7 @@ export interface LuFilePayload {
 
 export interface LgFilePayload {
   id: string;
-  content: string;
+  lgTemplates: LgTemplate[];
 }
 
 export interface QnAFilePayload {
@@ -215,7 +228,7 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, intent?: LuIntentSection, lgTemplate?: LgTemplate[]) => void;
+  onSubmit: (dialog: DialogInfo, intent?: LuIntentSection, lgFilePayload?: { [key: string]: LgTemplate[] }) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
@@ -223,6 +236,9 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const dialogs = useRecoilValue(dialogsState);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
+  const locale = useRecoilValue(localeState);
+  const lgFiles = useRecoilValue(lgFilesState);
+  const commonlgFile = lgFiles.find(({ id }) => id === `common.${locale}`);
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
@@ -290,25 +306,78 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       const lgTemplateId1 = generateDesignerId();
       const lgTemplateId2 = generateDesignerId();
       const extraTriggerAttributes = {};
-      let lgTemplates: LgTemplate[] = [];
       if (formData.$kind === onChooseIntentKey) {
         extraTriggerAttributes['actions[4].prompt'] = `\${TextInput_Prompt_${lgTemplateId1}()}`;
         extraTriggerAttributes['actions[5].elseActions[0].activity'] = `\${SendActivity_${lgTemplateId2}()}`;
-        lgTemplates = [
+        const lgTemplates1: LgTemplate[] = [
           {
             name: `TextInput_Prompt_${lgTemplateId1}`,
-            body: `[Activity\n
-            Attachments = \${json(AdaptiveCardJson())}\n
-        ]\n`,
+            body: '[Activity\n\
+    Attachments = ${json(AdaptiveCardJson())}\n\
+]\n',
           } as LgTemplate,
           {
             name: `SendActivity_${lgTemplateId2}`,
             body: '- Sure, no worries.',
           } as LgTemplate,
         ];
+
+        let lgTemplates2: LgTemplate[] = [
+          {
+            name: 'AdaptiveCardJson',
+            body: adaptiveCardJsonBody,
+          } as LgTemplate,
+          {
+            name: `whichOneDidYouMean`,
+            body: whichOneDidYouMeanBody,
+          } as LgTemplate,
+          {
+            name: 'pickOne',
+            body: pickOne,
+          } as LgTemplate,
+          {
+            name: 'getAnswerReadBack',
+            body: getAnswerReadBack,
+          } as LgTemplate,
+          {
+            name: 'getIntentReadBack',
+            body: getIntentReadBack,
+          } as LgTemplate,
+        ];
+
+        lgTemplates2 = lgTemplates2.filter(
+          (t) => commonlgFile?.templates.findIndex((clft) => clft.name === t.name) === -1
+        );
+
+        const lgFilePayload = {
+          [`${dialogId}.${locale}`]: lgTemplates1,
+          [`common.${locale}`]: lgTemplates2,
+        };
+        const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
+        onSubmit(newDialog, undefined, lgFilePayload);
+      } else if (formData.$kind === qnaMatcherKey) {
+        extraTriggerAttributes['actions[0].actions[1].prompt'] = `\${TextInput_Prompt_${lgTemplateId1}()}`;
+        extraTriggerAttributes['actions[0].elseActions[0].activity'] = `\${SendActivity_${lgTemplateId2}()}`;
+        const lgTemplates: LgTemplate[] = [
+          {
+            name: `TextInput_Prompt_${lgTemplateId1}`,
+            body:
+              '[Activity\n\
+    Text = ${expandText(@answer)}\n\
+    SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}\n\
+]',
+          } as LgTemplate,
+          {
+            name: `SendActivity_${lgTemplateId2}`,
+            body: '- ${expandText(@answer)}',
+          } as LgTemplate,
+        ];
+        const lgFilePayload = {
+          [`${dialogId}.${locale}`]: lgTemplates,
+        };
+        const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
+        onSubmit(newDialog, undefined, lgFilePayload);
       }
-      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
-      onSubmit(newDialog, undefined, lgTemplates);
     } else {
       const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, {});
       onSubmit(newDialog);
