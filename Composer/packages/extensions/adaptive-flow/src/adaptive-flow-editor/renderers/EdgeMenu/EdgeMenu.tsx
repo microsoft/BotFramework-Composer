@@ -7,9 +7,9 @@ import { useContext, useState } from 'react';
 import formatMessage from 'format-message';
 import { DefinitionSummary } from '@bfc/shared';
 import { TooltipHost, DirectionalHint } from 'office-ui-fabric-react/lib/Tooltip';
-import ExtensionContext from '@bfc/extension/lib/extensionContext';
-
 // TODO: leak of visual-sdk domain (EdgeAddButtonSize)
+import { useMenuConfig, MenuUISchema } from '@bfc/extension';
+
 import { EdgeAddButtonSize } from '../../../adaptive-flow-renderer/constants/ElementSizes';
 import { NodeRendererContext } from '../../contexts/NodeRendererContext';
 import { SelectionContext } from '../../contexts/SelectionContext';
@@ -51,10 +51,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
     setMenuSelected(menuSelected);
   };
 
-  const {
-    plugins: { uiSchema },
-  } = useContext(ExtensionContext);
-
+  const menuSchema: MenuUISchema = useMenuConfig();
   const menuItems = createActionMenu(
     (item) => {
       if (!item) return;
@@ -64,7 +61,7 @@ export const EdgeMenu: React.FC<EdgeMenuProps> = ({ id, onClick }) => {
       isSelfHosted: selfHosted,
       enablePaste: Array.isArray(clipboardActions) && !!clipboardActions.length,
     },
-    uiSchema,
+    menuSchema,
     // Custom Action 'oneOf' arrays from schema file
     customSchemas.map((x) => x.oneOf).filter((oneOf) => Array.isArray(oneOf) && oneOf.length) as DefinitionSummary[][]
   );

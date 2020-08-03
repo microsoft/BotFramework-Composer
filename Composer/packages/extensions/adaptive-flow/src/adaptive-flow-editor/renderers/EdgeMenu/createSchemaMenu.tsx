@@ -10,8 +10,7 @@ import {
 import { SDKKinds, DefinitionSummary } from '@bfc/shared';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import formatMessage from 'format-message';
-import { UISchema, MenuUISchema, MenuOptions } from '@bfc/extension';
-import mapValues from 'lodash/mapValues';
+import { MenuUISchema, MenuOptions } from '@bfc/extension';
 import set from 'lodash/set';
 
 import { MenuEventTypes } from '../../constants/MenuTypes';
@@ -190,12 +189,11 @@ const createSubMenu = (
 export const createActionMenu = (
   onClick: ActionMenuItemClickHandler,
   options: ActionMenuOptions,
-  uiOptions?: UISchema,
+  menuSchema?: MenuUISchema,
   customActionGroups?: DefinitionSummary[][]
 ) => {
   const resultItems: IContextualMenuItem[] = [];
-
-  const menuOptions: MenuUISchema = mapValues(uiOptions, (x) => x?.menu);
+  const menuOptions = menuSchema || {};
 
   // base SDK menu
   const baseMenuItems = createBaseActionMenu(
