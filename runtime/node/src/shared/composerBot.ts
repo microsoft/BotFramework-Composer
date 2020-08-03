@@ -10,6 +10,9 @@ import { BotSettings } from './settings';
 import { SkillConversationIdFactory } from './skillConversationIdFactory';
 import { getSettings, getProjectRoot, getRootDialog } from './helpers';
 
+/**
+ * A composer bot to handle botframework activity requests.
+ */
 export class ComposerBot extends ActivityHandler {
   private readonly userState: UserState;
   private readonly conversationState: ConversationState;
