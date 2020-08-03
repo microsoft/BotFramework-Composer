@@ -135,12 +135,13 @@ export class LUServer {
     if (this.importResolver && fileId && projectId) {
       const resolver = this.importResolver;
       return (source: string, id: string) => {
-        const luFile = resolver(source, id, projectId);
-        if (!luFile) {
+        const plainLuFile = resolver(source, id, projectId);
+        if (!plainLuFile) {
           this.sendDiagnostics(document, [
             generageDiagnostic(`lu file: ${fileId}.lu not exist on server`, DiagnosticSeverity.Error, document),
           ]);
         }
+        const luFile = luIndexer.parse(plainLuFile.content, plainLuFile.id);
         let { content } = luFile;
         /**
          * source is . means use as file resolver, not import resolver
@@ -148,7 +149,7 @@ export class LUServer {
          * so here build the full content from server file content and editor content
          */
         if (source === '.' && sectionId) {
-          content = updateIntent(luFile.content, sectionId, { Name: sectionId, Body: editorContent });
+          content = updateIntent(luFile, sectionId, { Name: sectionId, Body: editorContent }).content;
         }
         return { id, content };
       };
