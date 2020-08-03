@@ -7,7 +7,7 @@ import { schemas, expandPropertyDefinition } from '@microsoft/bf-generate-librar
 
 import { BotProjectService } from '../services/project';
 
-async function expandProperty(req: Request, res: Response) {
+const expandJsonSchemaProperty = async (req: Request, res: Response) => {
   const { propertyName, schema } = req.body;
   const result = await expandPropertyDefinition(propertyName, schema);
 
@@ -18,10 +18,10 @@ async function expandProperty(req: Request, res: Response) {
       message: 'Failed to get form dialog schema/property.',
     });
   }
-}
+};
 
-async function getSchemas(req: Request, res: Response) {
-  const result = await schemas([]);
+const getTemplateSchemas = async (req: Request, res: Response) => {
+  const result = await schemas();
 
   if (result !== undefined) {
     res.status(200).json(result);
@@ -30,9 +30,9 @@ async function getSchemas(req: Request, res: Response) {
       message: 'Failed to get form dialog schemas.',
     });
   }
-}
+};
 
-async function generate(req: Request, res: Response) {
+const generate = async (req: Request, res: Response) => {
   const projectId = req.params.projectId;
   const user = await PluginLoader.getUserFromRequest(req);
 
@@ -48,10 +48,10 @@ async function generate(req: Request, res: Response) {
       message: 'No such bot project opened',
     });
   }
-}
+};
 
 export const FormDialogController = {
-  getSchemas,
+  getTemplateSchemas,
   generate,
-  expandProperty,
+  expandJsonSchemaProperty,
 };

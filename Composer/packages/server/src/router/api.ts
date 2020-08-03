@@ -28,8 +28,8 @@ router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLui
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 
-router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandProperty);
-router.get('/formDialogs/templateSchemas', FormDialogController.getSchemas);
+router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
+router.get('/formDialogs/templateSchemas', FormDialogController.getTemplateSchemas);
 router.post('/formDialogs/:projectId/generate', FormDialogController.generate);
 
 // storages
