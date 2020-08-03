@@ -3,16 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AdaptiveForm, { resolveRef, getUIOptions } from '@bfc/adaptive-form';
-import { FormErrors, JSONSchema7 } from '@bfc/extension';
+import { FormErrors, JSONSchema7, useFormConfig } from '@bfc/extension';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
-import mapValues from 'lodash/mapValues';
 import { Resizable, ResizeCallback } from 're-resizable';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
-import ExtensionContext from '@bfc/extension/lib/extensionContext';
 
 import { useShell } from '../../shell';
 
@@ -57,7 +55,7 @@ const PropertyEditor: React.FC = () => {
     };
   }, [formData]);
 
-  const { plugins: pluginConfig } = useContext(ExtensionContext);
+  const formUIOptions = useFormConfig();
 
   const $schema = useMemo(() => {
     if (schemas?.sdk?.content && localData) {
@@ -66,8 +64,8 @@ const PropertyEditor: React.FC = () => {
   }, [schemas?.sdk?.content, localData.$kind]);
 
   const $uiOptions = useMemo(() => {
-    return getUIOptions($schema, mapValues(pluginConfig.uiSchema, 'form'));
-  }, [$schema, pluginConfig]);
+    return getUIOptions($schema, formUIOptions);
+  }, [$schema, formUIOptions]);
 
   const errors = useMemo(() => {
     const diagnostics = currentDialog?.diagnostics;
