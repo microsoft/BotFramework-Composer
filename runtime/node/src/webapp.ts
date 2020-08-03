@@ -4,7 +4,7 @@
 import * as restify from 'restify';
 import { ConversationState, MemoryStorage, UserState } from "botbuilder";
 import { ComposerBot } from "./shared/composerBot";
-import { getBotAdapter, configureSkillEndpoint, configureMessageEndpoint, getServerPort } from './shared/helpers';
+import { getBotAdapter, configureSkillEndpoint, configureMessageEndpoint, getServerPort, configureManifestsEndpoint } from './shared/helpers';
 
 // Create shared user state and conversation state instances.
 const memoryStorage = new MemoryStorage();
@@ -25,6 +25,9 @@ configureMessageEndpoint(server, adapter, bot);
 
 // Configure skill endpoint.
 configureSkillEndpoint(server, adapter, bot);
+
+// Configure manifests endpoint.
+configureManifestsEndpoint(server);
 
 // Get port and listen.
 const port = getServerPort();

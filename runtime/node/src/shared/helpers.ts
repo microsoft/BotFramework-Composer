@@ -12,6 +12,9 @@ import { BotSettings } from "./settings";
 import { SkillsConfiguration } from './skillsConfiguration';
 import { SkillConversationIdFactory } from './skillConversationIdFactory';
 
+/**
+ * Get listening port for listening from environment variables or arguments.
+ */
 export const getServerPort = () => {
     const argv = minimist(process.argv.slice(2));
     // prefer the argv port --port=XXXX over process.env because the parent Composer app uses that.
@@ -19,6 +22,9 @@ export const getServerPort = () => {
     return port;
 };
 
+/**
+ * Get path of bot project.
+ */
 export const getProjectRoot = (): string => {
     // get the root folder according to environment
     if (process.env.node_environment === "production") {
@@ -28,6 +34,10 @@ export const getProjectRoot = (): string => {
     }
 };
 
+/**
+ * Get bot settings from configuration file, generated luis configuration or arguments.
+ * @param projectRoot Root path of bot project.
+ */
 export const getSettings = (projectRoot?: string): BotSettings => {
     if (!projectRoot) {
         projectRoot = getProjectRoot();
@@ -76,6 +86,10 @@ export const getSettings = (projectRoot?: string): BotSettings => {
     return settings;
 };
 
+/**
+ * Get root dialog of the bot project.
+ * @param folderPath Path of bot project.
+ */
 export const getRootDialog = (folderPath: string): string => {
     // Find entry dialog file
     let rootDialog = "main.dialog";
@@ -89,6 +103,11 @@ export const getRootDialog = (folderPath: string): string => {
     return rootDialog;
 };
 
+/**
+ * Get botframework adapter with user state and conversation state.
+ * @param userState User state required by a botframework adapter.
+ * @param conversationState Conversation state required by a botframework adapter.
+ */
 export const getBotAdapter = (userState: UserState, conversationState: ConversationState): BotFrameworkAdapter => {
     const settings = getSettings();
     const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
@@ -121,6 +140,10 @@ export const getBotAdapter = (userState: UserState, conversationState: Conversat
     return adapter;
 };
 
+/**
+ * Validation function to validate skill claims.
+ * @param claims Skill claims to be validated.
+ */
 export const allowedSkillsClaimsValidator = async (claims: Claim[]) => {
     const settings = getSettings();
     // Create and initialize the skill classes
@@ -140,6 +163,12 @@ export const allowedSkillsClaimsValidator = async (claims: Claim[]) => {
     }
 };
 
+/**
+ * Configure a server to work with botframework message requests.
+ * @param server Web server to be configured.
+ * @param adapter Botframework adapter to handle message requests.
+ * @param bot Composer bot to process message requests.
+ */
 export const configureMessageEndpoint = (server: Server, adapter: BotFrameworkAdapter, bot: ComposerBot) => {
     server.post("/api/messages", (req: WebRequest, res: WebResponse): void => {
         adapter.processActivity(
@@ -153,6 +182,12 @@ export const configureMessageEndpoint = (server: Server, adapter: BotFrameworkAd
     });
 };
 
+/**
+ * Configure a server to work with botframework skill requests.
+ * @param server Web server to be configured.
+ * @param adapter Botframework adapter to handle skill requests.
+ * @param bot Composer bot to process skill requests.
+ */
 export const configureSkillEndpoint = (server: Server, adapter: BotFrameworkAdapter, bot: ComposerBot) => {
     const settings = getSettings();
     const conversationIdFactory = new SkillConversationIdFactory();
@@ -161,4 +196,24 @@ export const configureSkillEndpoint = (server: Server, adapter: BotFrameworkAdap
     const handler = new SkillHandler(adapter, bot, conversationIdFactory, credentialProvider, authConfig);
     const skillEndpoint = new ChannelServiceRoutes(handler);
     skillEndpoint.register(server, '/api/skills');
+};
+
+/**
+ * Configure a server to serve manifest files.
+ * @param server Web server to be configured.
+ */
+export const configureManifestsEndpoint = (server: Server) => {
+    const projectRoot = getProjectRoot();
+    const manifestsPath= path.join(projectRoot, 'manifests');
+    if (fs.existsSync(manifestsPath)) {
+        const manifestFiles = fs.readdirSync(manifestsPath);
+        for (let file of manifestFiles) {
+            if (file.endsWith(".json")) {
+                server.get(`/${ file }`, (_req, res): void => {
+                    const manifest = require(path.join(manifestsPath, file));
+                    res.send(manifest);
+                });
+            }
+        }
+    }
 };
