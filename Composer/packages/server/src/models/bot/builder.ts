@@ -216,7 +216,6 @@ export class Builder {
       config.fallbackLocal,
       true,
       false,
-      false,
       loadResult.multiRecognizers,
       loadResult.settings,
       loadResult.crosstrainedRecognizers,
