@@ -8,6 +8,7 @@ import { StorageController } from '../controllers/storage';
 import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
+import { FormDialogController } from '../controllers/formDialog';
 
 const router: Router = express.Router({});
 
@@ -26,7 +27,10 @@ router.post('/projects/:projectId/skill/check', ProjectController.getSkill);
 router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLuis);
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
-router.post('/projects/:projectId/generateDialog', ProjectController.generateDialog);
+
+router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
+router.get('/formDialogs/templateSchemas', FormDialogController.getTemplateSchemas);
+router.post('/formDialogs/:projectId/generate', FormDialogController.generate);
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
