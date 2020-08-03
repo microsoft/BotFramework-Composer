@@ -107,10 +107,10 @@ const navItem = (isActive: boolean) => css`
   }
 `;
 
-export const overflowSet = css`
+export const overflowSet = (depth: number) => css`
   width: 100%;
   height: 100%;
-  padding-left: 12px;
+  padding-left: ${depth * 12}px;
   padding-right: 12px;
   box-sizing: border-box;
   line-height: 24px;
@@ -206,7 +206,7 @@ export const TreeItem: React.FC<ITreeItemProps> = (props) => {
         //In 8.0 the OverflowSet will no longer be wrapped in a FocusZone
         //remove this at that time
         doNotContainWithinFocusZone
-        css={overflowSet}
+        css={overflowSet(depth ?? 0)}
         data-testid={`DialogTreeItem${link.id}`}
         items={[
           {

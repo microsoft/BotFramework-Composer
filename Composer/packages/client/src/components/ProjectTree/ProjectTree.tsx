@@ -4,7 +4,6 @@
 /** @jsx jsx */
 import React, { useCallback, useMemo, useState } from 'react';
 import { jsx, css } from '@emotion/core';
-import { IGroupHeaderProps } from 'office-ui-fabric-react/lib/GroupedList';
 import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import cloneDeep from 'lodash/cloneDeep';
@@ -13,7 +12,6 @@ import { DialogInfo, ITrigger } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
-import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
 import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
 import { dispatcherState, userSettingsState } from '../../recoilModel';
@@ -22,13 +20,6 @@ import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 import { TreeItem } from './treeItem';
 
 // -------------------- Styles -------------------- //
-
-const groupListStyle: Partial<IGroupedListStyles> = {
-  root: {
-    width: '100%',
-    boxSizing: 'border-box',
-  },
-};
 
 const searchBox: ISearchBoxStyles = {
   root: {
@@ -108,32 +99,31 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return sortDialog(dialogs);
   }, [dialogs]);
 
-  const onRenderHeader = (props: IGroupHeaderProps) => {
-    const toggleCollapse = () => {
-      if (props.group != null) {
-        props.onToggleCollapse?.(props.group);
-        onSelect(props.group.key);
-      }
-    };
-    const level = props.group?.level;
+  const renderHeader = (dialog) => {
     return (
-      <span ref={props.group?.data.isRoot && addMainDialogRef} role="grid">
+      <span
+        ref={dialog.isRoot && addMainDialogRef}
+        css={css`
+          margin-top: -6px;
+        `}
+        role="grid"
+      >
         <TreeItem
-          depth={level ?? 0}
-          icon={level === 1 ? 'CannedChat' : undefined}
+          depth={0}
+          icon={'CannedChat'}
           isSubItemActive={!!selected}
-          link={props.group?.data}
+          link={dialog.data}
           onDelete={onDeleteDialog}
-          onSelect={toggleCollapse}
+          onSelect={() => {}}
         />
       </span>
     );
   };
 
-  function onRenderCell(nestingDepth?: number, item?: any): React.ReactNode {
+  function renderCell(item: any, depth: number): React.ReactNode {
     return (
       <TreeItem
-        depth={nestingDepth}
+        depth={depth}
         icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
         isActive={createSelectedPath(item.index) === selected}
         link={item}
@@ -142,10 +132,6 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
       />
     );
   }
-
-  const onRenderShowAll = () => {
-    return null;
-  };
 
   const onFilter = (_e?: any, newValue?: string): void => {
     if (typeof newValue === 'string') {
@@ -161,19 +147,28 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     const filteredDialogs =
       filter == null || filter.length === 0
         ? dialogs
-        : dialogs.filter((dialog) => {
-            dialog.displayName.includes(filter) ||
-              dialog.triggers.some((trigger) => trigger.displayName.includes(filter));
-          });
+        : dialogs.filter(
+            (dialog) =>
+              dialog.displayName.includes(filter) ||
+              dialog.triggers.some((trigger) => getTriggerName(trigger).includes(filter))
+          );
 
-    return dialogs.map((dialog) => {
-      const triggerList = dialog.triggers.map((tr) => <li key={tr.id}>{getTriggerName(tr)}</li>);
+    return filteredDialogs.map((dialog: DialogInfo, dialogIndex) => {
+      const triggerList = dialog.triggers
+        .filter((tr) => dialog.displayName.includes(filter) || getTriggerName(tr).includes(filter))
+        .map((tr, index) => renderCell({ ...tr, index, displayName: getTriggerName(tr) }, 1));
       return (
-        <details key={dialog.id}>
-          <summary>{dialog.displayName}</summary>
-          <div>
-            <ul>{triggerList}</ul>
-          </div>
+        <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
+          <summary
+            css={css`
+              display: flex;
+              padding-left: 12px;
+              padding-top: 12px;
+            `}
+          >
+            {renderHeader(createGroupItem(dialog, dialogIndex))}
+          </summary>
+          {triggerList}
         </details>
       );
     });
