@@ -6,8 +6,9 @@ import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldProps } from '@bfc/extension';
 import startCase from 'lodash/startCase';
 
-import { RefField } from './RefField';
 import { resultTypeDefinitions } from '../schema';
+
+import { RefField } from './RefField';
 
 export const ResultRefField: React.FC<FieldProps> = (props) => {
   const options = useMemo<IDropdownOption[]>(() => {
