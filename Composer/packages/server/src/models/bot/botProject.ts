@@ -355,9 +355,6 @@ export class BotProject {
     const schemaPath = Path.join(outDir, `${name}.schema`);
     await this.fileStorage.writeFile(schemaPath, content);
 
-    const rootDir = Path.join(this.dir, '../');
-    const templateDirs = [Path.join(rootDir, 'templates/standard')];
-
     const feedback = (type: FeedbackType, message: string): void => {
       // eslint-disable-next-line no-console
       console.log(`${type} - ${message}`);
@@ -369,15 +366,12 @@ export class BotProject {
       outDir,
       metaSchema: undefined,
       allLocales: undefined,
-      templateDirs,
+      templateDirs: [],
       force: false,
       merge: false,
       singleton: false,
       feedback,
     };
-
-    const cwd = process.cwd();
-    process.chdir(rootDir);
 
     await generate(
       generateParams.schemaPath,
@@ -391,8 +385,6 @@ export class BotProject {
       generateParams.singleton,
       generateParams.feedback
     );
-
-    process.chdir(cwd);
   };
 
   private async removeLocalRuntimeData(projectId) {

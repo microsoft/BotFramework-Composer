@@ -346,24 +346,6 @@ async function getAllProjects(req: Request, res: Response) {
   }
 }
 
-async function generateDialog(req: Request, res: Response) {
-  const projectId = req.params.projectId;
-  const user = await PluginLoader.getUserFromRequest(req);
-
-  const currentProject = await BotProjectService.getProjectById(projectId, user);
-  if (currentProject !== undefined) {
-    const { name, schema } = req.body;
-
-    await currentProject.generateDialog(name, JSON.stringify(schema));
-    const updatedProject = await BotProjectService.getProjectById(projectId, user);
-    res.status(200).json(updatedProject);
-  } else {
-    res.status(404).json({
-      message: 'No such bot project opened',
-    });
-  }
-}
-
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -379,5 +361,4 @@ export const ProjectController = {
   createProject,
   getAllProjects,
   getRecentProjects,
-  generateDialog,
 };
