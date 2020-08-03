@@ -167,7 +167,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     addSkillDialogCancel,
     createQnAFile,
     createLuIntent,
-    createLgTemplate,
+    createLgTemplates,
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
@@ -278,7 +278,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = async (dialog: DialogInfo, intent?: LuIntentSection, lgTemplates?: LgTemplate[]) => {
+  const onTriggerCreationSubmit = async (
+    dialog: DialogInfo,
+    intent?: LuIntentSection,
+    lgFilePayload?: { [key: string]: LgTemplate[] }
+  ) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
@@ -288,14 +292,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       createLuIntent({ id: luFile.id, intent });
     }
 
-    if (lgFile && lgTemplates) {
-      lgTemplates.forEach(async (t) => {
-        const lgPayload = {
-          id: lgFile.id,
-          template: t as LgTemplate,
-        };
-        await createLgTemplate(lgPayload);
-      });
+    if (lgFile && lgFilePayload) {
+      for (const key in lgFilePayload) {
+        await createLgTemplates({ id: key, templates: lgFilePayload[key] });
+      }
+      // lgFilePayload.forEach(async (t) => {
+      //   const lgPayload = {
+      //     id: t.id,
+      //     template: t.lgTemplate as LgTemplate,
+      //   };
+      //   await createLgTemplate(lgPayload);
+      // });
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;

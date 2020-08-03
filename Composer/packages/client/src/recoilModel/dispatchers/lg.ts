@@ -178,6 +178,20 @@ export const lgDispatcher = () => {
     }
   );
 
+  const createLgTemplates = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ id, templates }: { id: string; templates: LgTemplate[] }) => {
+      const { snapshot } = callbackHelpers;
+      const lgFiles = await snapshot.getPromise(lgFilesState);
+      const lgFile = lgFiles.find((file) => file.id === id);
+      if (!lgFile) {
+        throw new Error(formatMessage('lg file {id} does not exist.', { id }));
+      }
+
+      const updatedFile = lgUtil.addTemplates(lgFile, templates, lgFileResolver(lgFiles));
+      await updateLgFileState(callbackHelpers, { id, updatedFile, content: updatedFile.content });
+    }
+  );
+
   const removeLgTemplate = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, templateName }: { id: string; templateName: string }) => {
       const { snapshot } = callbackHelpers;
@@ -232,6 +246,7 @@ export const lgDispatcher = () => {
     removeLgFile,
     updateLgTemplate,
     createLgTemplate,
+    createLgTemplates,
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
