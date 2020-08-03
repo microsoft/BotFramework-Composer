@@ -76,37 +76,6 @@ export const handleMessage = (msg: LgMessageEvent) => {
       payload = { id, content, templates, diagnostics };
       break;
     }
-    case LgActionType.AddTemplate: {
-      const { id, content, template } = msg.payload;
-      payload = lgUtil.addTemplate(id, content, template);
-      break;
-    }
-    case LgActionType.AddTemplates: {
-      const { id, content, templates } = msg.payload;
-      payload = lgUtil.addTemplates(id, content, templates);
-      break;
-    }
-    case LgActionType.UpdateTemplate: {
-      const { id, content, templateName, template } = msg.payload;
-      lgUtil.checkSingleLgTemplate(template);
-      payload = lgUtil.updateTemplate(id, content, templateName, template);
-      break;
-    }
-    case LgActionType.RemoveTemplate: {
-      const { id, content, templateName } = msg.payload;
-      payload = lgUtil.removeTemplate(id, content, templateName);
-      break;
-    }
-    case LgActionType.RemoveAllTemplates: {
-      const { id, content, templateNames } = msg.payload;
-      payload = lgUtil.removeTemplates(id, content, templateNames);
-      break;
-    }
-    case LgActionType.CopyTemplate: {
-      const { id, content, toTemplateName, fromTemplateName } = msg.payload;
-      payload = lgUtil.copyTemplate(id, content, fromTemplateName, toTemplateName);
-      break;
-    }
   }
   return payload;
 };

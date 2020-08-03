@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { UIOptions, JSONSchema7 } from '@bfc/extension';
 import cloneDeep from 'lodash/cloneDeep';
+import formatMessage from 'format-message';
 
 const globalHiddenProperties = ['$kind', '$id', '$copy', '$designer', 'id', 'disabled'];
 
@@ -60,13 +61,19 @@ export function getOrderedProperties(
   if (allProperties.some((p) => !orderedFieldSet.has(p))) {
     let errorMsg = '';
     if (restIdx === -1) {
-      errorMsg = 'no wildcard';
+      errorMsg = formatMessage('no wildcard');
     } else if (restIdx !== orderedFields.lastIndexOf('*')) {
-      errorMsg = 'multiple wildcards';
+      errorMsg = formatMessage('multiple wildcards');
     }
 
     if (errorMsg) {
-      throw new Error(`Error in ui schema for ${schema.title}: ${errorMsg}\n${JSON.stringify(uiOptions, null, 2)}`);
+      throw new Error(
+        formatMessage('Error in UI schema for {title}: {errorMsg}\n{options}', {
+          title: schema.title,
+          errorMsg,
+          options: JSON.stringify(uiOptions, null, 2),
+        })
+      );
     }
 
     const restFields = Object.keys(schema.properties || {}).filter((p) => {

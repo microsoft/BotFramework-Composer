@@ -20,11 +20,11 @@ const BooleanField: React.FC<FieldProps> = function CheckboxWidget(props) {
     },
     {
       key: 'true',
-      text: 'true',
+      text: formatMessage('true'),
     },
     {
       key: 'false',
-      text: 'false',
+      text: formatMessage('false'),
     },
   ];
 

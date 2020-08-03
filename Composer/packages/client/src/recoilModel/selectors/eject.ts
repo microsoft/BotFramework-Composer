@@ -27,9 +27,9 @@ const ejectRuntimeAction = (dispatcher: Dispatcher) => {
         dispatcher.setRuntimeSettings(projectId, path, command, key, runtimename);
       } catch (ex) {
         const errorToShow: StateError = {
-          message: ex.response.data.message,
+          message: ex.response?.data?.message || ex.message,
           summary: formatMessage('Error occured ejecting runtime!'),
-          status: ex.response.data.status,
+          status: ex.response?.data?.status || ex.status,
         };
         dispatcher.setApplicationLevelError(errorToShow);
       }

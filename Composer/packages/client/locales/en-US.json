@@ -1,0 +1,1256 @@
+{
+  "0_bytes_a1e1cdb3": {
+    "message": "0 Bytes"
+  },
+  "5_minute_intro_7ea06d2b": {
+    "message": "5 Minute Intro"
+  },
+  "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
+    "message": "A minimap gives an overview of your source code for quick navigation and code understanding."
+  },
+  "a_newer_version_of_the_provisioning_scripts_has_be_85d3ad94": {
+    "message": "A newer version of the provisioning scripts has been found, and this project can be updated to the latest."
+  },
+  "a_profile_with_that_name_already_exists_7c559958": {
+    "message": "A profile with that name already exists."
+  },
+  "about_70c18bba": {
+    "message": "About"
+  },
+  "actions_define_b_how_the_bot_responds_b_to_a_certa_890a71f4": {
+    "message": "Actions define <b>how the bot responds</b> to a certain trigger."
+  },
+  "actions_efcde10d": {
+    "message": "Actions"
+  },
+  "activity_13915493": {
+    "message": "Activity"
+  },
+  "add_8523c19b": {
+    "message": "Add"
+  },
+  "add_a_new_trigger_a82d3db8": {
+    "message": "Add a new trigger"
+  },
+  "add_a_publish_profile_fca2263a": {
+    "message": "Add a publish profile"
+  },
+  "add_a_skill_46d2b71c": {
+    "message": "Add a skill"
+  },
+  "add_a_welcome_message_9e1480b2": {
+    "message": "Add a welcome message"
+  },
+  "add_an_intent_trigger_a9acc149": {
+    "message": "Add an intent trigger"
+  },
+  "add_custom_runtime_6b73dc44": {
+    "message": "Add custom runtime"
+  },
+  "add_language_75dee49e": {
+    "message": "Add language"
+  },
+  "add_new_dialog_25f12c9": {
+    "message": "Add new dialog"
+  },
+  "add_new_profile_47b225e6": {
+    "message": "Add new profile"
+  },
+  "add_new_trigger_on_displayname_2aaf6e4c": {
+    "message": "Add new trigger on { displayName }"
+  },
+  "add_welcome_message_49d9ded9": {
+    "message": "Add welcome message"
+  },
+  "all_4321c3a1": {
+    "message": "All"
+  },
+  "all_language_generation_files_ef778f24": {
+    "message": "all language generation files"
+  },
+  "all_language_understanding_files_714b33eb": {
+    "message": "all language understanding files"
+  },
+  "all_profiles_8321b1aa": {
+    "message": "All profiles"
+  },
+  "an_authoring_key_is_created_automatically_when_you_21cf77aa": {
+    "message": "An authoring key is created automatically when you create a LUIS account."
+  },
+  "app_id_2f53f1f8": {
+    "message": "App Id"
+  },
+  "application_settings_39e840c6": {
+    "message": "Application Settings"
+  },
+  "application_updates_bdf5f8b6": {
+    "message": "Application Updates"
+  },
+  "apr_9_2020_3c8b47d7": {
+    "message": "Apr 9, 2020"
+  },
+  "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
+    "message": "Are you sure you want to exit the Onboarding Product Tour? You can restart the tour in the onboarding settings."
+  },
+  "authoring_canvas_18802e39": {
+    "message": "Authoring canvas"
+  },
+  "authoring_region_b5d1b661": {
+    "message": "Authoring Region"
+  },
+  "authoring_region_to_use_e_g_westus_westeurope_aust_d43d5245": {
+    "message": "Authoring region to use (e.g. westus, westeurope, australiaeast)"
+  },
+  "auto_update_86eb33b0": {
+    "message": "Auto update"
+  },
+  "available_skills_95c114ac": {
+    "message": "Available Skills"
+  },
+  "been_used_5daccdb2": {
+    "message": "Been used"
+  },
+  "ben_brown_99c12d19": {
+    "message": "Ben Brown"
+  },
+  "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
+    "message": "Bot Framework Composer enables developers and multi-disciplinary teams to build all kinds of conversational experiences, using the latest components from the Bot Framework: SDK, LG, LU, and declarative file formats, all without writing code."
+  },
+  "bot_framework_composer_fae721be": {
+    "message": "Bot Framework Composer"
+  },
+  "bot_framework_composer_icon_gray_fa72d3d6": {
+    "message": "bot framework composer icon gray"
+  },
+  "bot_framework_composer_is_a_visual_authoring_canva_c3947d91": {
+    "message": "Bot Framework Composer is a visual authoring canvas for building bots and other types of conversational application with the Microsoft Bot Framework technology stack. With Composer you will find everything you need to build a modern, state-of-the-art conversational experience."
+  },
+  "bot_framework_composer_is_an_open_source_visual_au_2be2e02b": {
+    "message": "Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation."
+  },
+  "bot_framework_provides_the_most_comprehensive_expe_e34a7f5d": {
+    "message": "Bot Framework provides the most comprehensive experience for building conversational applications."
+  },
+  "bot_language_6cf30c2": {
+    "message": "Bot language"
+  },
+  "bot_language_active_7cf9dc78": {
+    "message": "Bot language (active)"
+  },
+  "bot_name_is_botname_a28c2d05": {
+    "message": "Bot name is { botName }"
+  },
+  "bot_responses_4617b4a2": {
+    "message": "Bot responses"
+  },
+  "bot_responses_c4e63601": {
+    "message": "Bot Responses"
+  },
+  "bot_settings_3751e1b2": {
+    "message": "Bot settings"
+  },
+  "bot_settings_ce2783e4": {
+    "message": "Bot Settings"
+  },
+  "build_your_first_bot_f9c3e427": {
+    "message": "Build your first bot"
+  },
+  "bytes_74acea97": {
+    "message": "Bytes"
+  },
+  "calculating_17b21be7": {
+    "message": "Calculating..."
+  },
+  "cancel_caeb1e68": {
+    "message": "Cancel"
+  },
+  "check_for_updates_and_install_them_automatically_50337340": {
+    "message": "Check for updates and install them automatically."
+  },
+  "choose_a_location_for_your_new_bot_project_e979f2d5": {
+    "message": "Choose a location for your new bot project."
+  },
+  "choose_how_to_create_your_bot_a97f7b3e": {
+    "message": "Choose how to create your bot"
+  },
+  "choose_one_2c4277df": {
+    "message": "Choose One"
+  },
+  "chris_whitten_11df1f35": {
+    "message": "Chris Whitten"
+  },
+  "click_on_the_b_add_b_button_in_the_toolbar_and_sel_4daf351a": {
+    "message": "Click on the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b>. In the <b>Create a trigger</b> wizard, set the <b>Trigger Type</b> to <i>Intent recognized</i> and configure the <b>Trigger Name</b> and <b>Trigger Phrases</b>. Then add actions in the Visual Editor."
+  },
+  "click_the_b_add_b_button_in_the_toolbar_and_select_79001156": {
+    "message": "Click the <b>Add</b> button in the toolbar, and select <b>Add a new trigger</b> from the dropdown menu."
+  },
+  "click_to_sort_by_file_type_1b0c9bd": {
+    "message": "Click to sort by file type"
+  },
+  "close_d634289d": {
+    "message": "Close"
+  },
+  "collapse_34080b4d": {
+    "message": "Collapse"
+  },
+  "collapse_navigation_17228b95": {
+    "message": "Collapse Navigation"
+  },
+  "comment_7ef1428e": {
+    "message": "Comment"
+  },
+  "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
+    "message": "Composer cannot yet translate your bot automatically.\nTo create a translation manually, Composer will create a copy of your bot’s content with the name of the additional language. This content can then be translated without affecting the original bot logic or flow and you can switch between languages to ensure the responses are correctly and appropriately translated."
+  },
+  "composer_introduction_98a93701": {
+    "message": "Composer introduction"
+  },
+  "composer_is_up_to_date_9118257d": {
+    "message": "Composer is up to date."
+  },
+  "composer_logo_ba2048a0": {
+    "message": "Composer Logo"
+  },
+  "composer_needs_net_core_sdk_46e2a8ae": {
+    "message": "Composer needs .NET Core SDK"
+  },
+  "composer_will_restart_88ee8dc3": {
+    "message": "Composer will restart."
+  },
+  "composer_will_update_the_next_time_you_close_the_a_d74264a1": {
+    "message": "Composer will update the next time you close the app."
+  },
+  "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
+    "message": "Configure Composer to start your bot using runtime code you can customize and control."
+  },
+  "configures_default_language_model_to_use_if_there__f09f1acd": {
+    "message": "Configures default language model to use if there is no culture code in the file name (Default: en-us)"
+  },
+  "confirm_6556b3a6": {
+    "message": "Confirm"
+  },
+  "confirmation_modal_must_have_a_title_b0816e0b": {
+    "message": "Confirmation modal must have a title."
+  },
+  "congratulations_your_model_is_successfully_publish_52ebc297": {
+    "message": "Congratulations! Your model is successfully published."
+  },
+  "connect_to_a_new_skill_34d582ab": {
+    "message": "Connect to a new skill"
+  },
+  "copy_9748f9f": {
+    "message": "Copy"
+  },
+  "copy_content_for_translation_7affbcbb": {
+    "message": "Copy content for translation"
+  },
+  "could_not_connect_to_storage_50411de0": {
+    "message": "Could not connect to storage."
+  },
+  "couldn_t_complete_the_update_a337a359": {
+    "message": "Couldn''t complete the update:"
+  },
+  "create_132b3be1": {
+    "message": "Create"
+  },
+  "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
+    "message": "Create a name for the project which will be used to name the application: (projectname-environment-LUfilename)"
+  },
+  "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
+    "message": "Create a new skill manifest or select which one you want to edit"
+  },
+  "create_a_trigger_40e74743": {
+    "message": "Create a trigger"
+  },
+  "create_bot_from_template_or_scratch_92f0fefa": {
+    "message": "Create bot from template or scratch?"
+  },
+  "create_copy_to_translate_bot_content_efc872c": {
+    "message": "Create copy to translate bot content"
+  },
+  "create_folder_error_38aa86f5": {
+    "message": "Create Folder Error"
+  },
+  "create_from_scratch_485c3045": {
+    "message": "Create from scratch"
+  },
+  "create_from_template_87e12c94": {
+    "message": "Create from template"
+  },
+  "create_new_empty_bot_21cf0ea3": {
+    "message": "Create new empty bot"
+  },
+  "create_new_folder_3770c85e": {
+    "message": "create new folder"
+  },
+  "create_or_edit_skill_manifest_8ad98da9": {
+    "message": "Create or edit skill manifest"
+  },
+  "current_40c0812f": {
+    "message": " - Current"
+  },
+  "custom_events_d6f0e45b": {
+    "message": "Custom events"
+  },
+  "custom_name_optional_60ee6a1a": {
+    "message": "Custom name (optional)"
+  },
+  "cut_c8c92681": {
+    "message": "Cut"
+  },
+  "data_loading_4c9bb9f6": {
+    "message": "Data loading..."
+  },
+  "date_ee500367": {
+    "message": "Date"
+  },
+  "date_modified_18beced9": {
+    "message": "Date modified"
+  },
+  "date_modified_e1c8ac8f": {
+    "message": "Date Modified"
+  },
+  "default_language_486a558d": {
+    "message": "Default language"
+  },
+  "default_language_b11c37db": {
+    "message": "Default Language"
+  },
+  "define_conversation_objective_146d1cc6": {
+    "message": "Define conversation objective"
+  },
+  "defined_in_475568fb": {
+    "message": "Defined in:"
+  },
+  "delete_a6efa79d": {
+    "message": "Delete"
+  },
+  "delete_bot_73586104": {
+    "message": "Delete Bot"
+  },
+  "delete_language_1527609d": {
+    "message": "Delete language"
+  },
+  "describe_your_skill_88554792": {
+    "message": "Describe your skill"
+  },
+  "description_436c48d7": {
+    "message": "Description"
+  },
+  "design_51b2812a": {
+    "message": "Design"
+  },
+  "dialog_dialogid_not_found_5e8214c3": {
+    "message": "dialog { dialogId } not found"
+  },
+  "dialognum_plural_0_no_dialogs_1_one_dialog_other_d_1b86909b": {
+    "message": "{ dialogNum, plural,\n     =0 {No dialogs}\n     =1 {One dialog}\n  other {# dialogs}\n} have been found.\n            { dialogNum, select,\n      0 {}\n  other {Press down arrow key to navigate the search results}\n}"
+  },
+  "disable_a5c05db3": {
+    "message": "Disable"
+  },
+  "display_lines_that_extends_beyond_the_width_of_the_9e500f3c": {
+    "message": "Display lines that extends beyond the width of the editor on the next line."
+  },
+  "do_you_wish_to_continue_96469eaf": {
+    "message": "Do you wish to continue?"
+  },
+  "done_1a4a010a": {
+    "message": "Done!"
+  },
+  "done_54e3d4b6": {
+    "message": "Done"
+  },
+  "download_now_and_install_when_you_close_composer_e241ed74": {
+    "message": "Download now and install when you close Composer."
+  },
+  "downloading_bb6fb34b": {
+    "message": "Downloading..."
+  },
+  "duplicate_dialog_name_824f9fce": {
+    "message": "Duplicate dialog name"
+  },
+  "duplicate_name_d295a09d": {
+    "message": "Duplicate name"
+  },
+  "duplicate_skill_manifest_url_74d85839": {
+    "message": "Duplicate skill manifest Url"
+  },
+  "duplicate_skill_name_d9f6eb8d": {
+    "message": "Duplicate skill name"
+  },
+  "early_adopters_e8db7999": {
+    "message": "Early adopters"
+  },
+  "edit_a_publish_profile_30ebab3e": {
+    "message": "Edit a publish profile"
+  },
+  "edit_a_skill_5665d9ac": {
+    "message": "Edit a skill"
+  },
+  "edit_c5fbea07": {
+    "message": "Edit"
+  },
+  "edit_in_json_75d0d754": {
+    "message": "Edit in JSON"
+  },
+  "edit_mode_7e07cfdf": {
+    "message": "Edit mode"
+  },
+  "ejecting_runtime_f6c90614": {
+    "message": "Ejecting runtime..."
+  },
+  "enable_6f5d1328": {
+    "message": "Enable"
+  },
+  "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
+    "message": "Enable line numbers to refer to code lines by number."
+  },
+  "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
+    "message": "Enter a manifest url to add a new skill to your bot."
+  },
+  "environment_68aed6d3": {
+    "message": "Environment"
+  },
+  "error_98e81528": {
+    "message": "Error"
+  },
+  "error_occured_ejecting_runtime_76bb48e7": {
+    "message": "Error occured ejecting runtime!"
+  },
+  "error_processing_schema_2c707cf3": {
+    "message": "Error Processing Schema"
+  },
+  "example_bot_list_9be1d563": {
+    "message": "Example bot list"
+  },
+  "examples_c435f08c": {
+    "message": "Examples"
+  },
+  "existing_files_in_scripts_folder_will_be_overwritt_afa8d787": {
+    "message": "Existing files in scripts/folder will be overwritten. Are you sure you want to continue?"
+  },
+  "expand_2f2fadbd": {
+    "message": "Expand"
+  },
+  "expand_navigation_20330d1d": {
+    "message": "Expand Navigation"
+  },
+  "export_as_skill_764cf284": {
+    "message": "Export as skill"
+  },
+  "export_assets_to_zip_d2d798ab": {
+    "message": "Export assets to .zip"
+  },
+  "export_de71cd8e": {
+    "message": "Export"
+  },
+  "external_resources_will_not_be_changed_c08b0009": {
+    "message": "External resources will not be changed."
+  },
+  "file_type_fd1ba7ee": {
+    "message": "File Type"
+  },
+  "filename_already_exists_5da33b5f": {
+    "message": "{ fileName } already exists"
+  },
+  "filter_dialog_de3ce43f": {
+    "message": "Filter Dialog"
+  },
+  "folder_foldername_already_exists_4a2260e9": {
+    "message": "folder { folderName } already exists"
+  },
+  "form_editor_7c2b02f0": {
+    "message": "form editor"
+  },
+  "gb_7570760e": {
+    "message": "GB"
+  },
+  "general_24ac26a8": {
+    "message": "General"
+  },
+  "get_a_new_copy_of_the_runtime_code_84970bf": {
+    "message": "Get a new copy of the runtime code"
+  },
+  "get_started_50c13c6c": {
+    "message": "Get started!"
+  },
+  "getting_help_ab6811b0": {
+    "message": "Getting Help"
+  },
+  "getting_started_f45a7e87": {
+    "message": "Getting Started"
+  },
+  "got_it_2c06b54a": {
+    "message": "Got it!"
+  },
+  "hide_code_5dcffa94": {
+    "message": "Hide code"
+  },
+  "home_351838cd": {
+    "message": "Home"
+  },
+  "i_want_to_delete_this_bot_f81a4735": {
+    "message": "I want to delete this bot"
+  },
+  "icon_name_is_file_c80dacae": {
+    "message": "{ icon } name is { file }"
+  },
+  "iconname_file_icon_29976c8e": {
+    "message": "{ iconName } file icon"
+  },
+  "if_this_problem_persists_please_file_an_issue_on_a_e9b079b1": {
+    "message": "If this problem persists, please file an issue on <a>GitHub</a>."
+  },
+  "in_production_5a70b8b4": {
+    "message": "In production"
+  },
+  "in_test_63c32694": {
+    "message": "In test"
+  },
+  "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
+    "message": "In the <b>Create a trigger</b> wizard, set the trigger type to <i>Activities</i> in the dropdown. Then set the <b>Activity Type</b> to <i>Greeting (ConversationUpdate activity)</i>, and click the <b>Submit</b> button."
+  },
+  "install_microsoft_net_core_sdk_2de509f0": {
+    "message": "Install Microsoft .NET Core SDK"
+  },
+  "install_pre_release_versions_of_composer_daily_to__ceb41b54": {
+    "message": "Install pre-release versions of Composer, daily, to access and test the latest features. <a>Learn more</a>."
+  },
+  "install_the_update_and_restart_composer_fac30a61": {
+    "message": "Install the update and restart Composer."
+  },
+  "intent_2291200b": {
+    "message": "Intent"
+  },
+  "intentname_is_missing_or_empty_e49db2f8": {
+    "message": "intentName is missing or empty"
+  },
+  "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
+    "message": "Introduction of key concepts and user experience elements for Composer."
+  },
+  "item_added_f3910bed": {
+    "message": "item added"
+  },
+  "jan_28_2020_8beb36dc": {
+    "message": "Jan 28, 2020"
+  },
+  "kb_d9c53902": {
+    "message": "KB"
+  },
+  "language_generation_file_80c08efe": {
+    "message": "language generation file"
+  },
+  "language_understanding_file_a65abc2c": {
+    "message": "language understanding file"
+  },
+  "last_modified_time_is_time_b1497d3": {
+    "message": "Last modified time is { time }"
+  },
+  "learn_more_a79a7918": {
+    "message": "Learn more"
+  },
+  "learn_more_c08939e8": {
+    "message": "Learn more."
+  },
+  "learn_the_basics_2d9ae7df": {
+    "message": "Learn the basics"
+  },
+  "leave_product_tour_49585718": {
+    "message": "Leave Product Tour?"
+  },
+  "lg_editor_ee0184e6": {
+    "message": "LG editor"
+  },
+  "lg_file_id_not_found_6bd6869b": {
+    "message": "LG file { id } not found"
+  },
+  "lg_navigation_pane_97b15c3d": {
+    "message": "LG Navigation Pane"
+  },
+  "line_numbers_1bfa7fb": {
+    "message": "Line numbers"
+  },
+  "link_to_where_this_luis_intent_is_defined_9be25fb7": {
+    "message": "link to where this LUIS intent is defined"
+  },
+  "list_view_e33843f0": {
+    "message": "List view"
+  },
+  "loading_25990131": {
+    "message": "Loading..."
+  },
+  "loading_bde52856": {
+    "message": "Loading"
+  },
+  "location_e17bd402": {
+    "message": "Location"
+  },
+  "location_is_location_8c17b5de": {
+    "message": "location is { location }"
+  },
+  "login_6f3d6249": {
+    "message": "Login"
+  },
+  "login_to_composer_eb42b41": {
+    "message": "Login to Composer"
+  },
+  "lu_editor_d09fb2b0": {
+    "message": "LU editor"
+  },
+  "lu_file_id_not_found_8732d33e": {
+    "message": "LU file { id } not found"
+  },
+  "lu_navigation_pane_54dc5587": {
+    "message": "LU Navigation Pane"
+  },
+  "luis_authoring_key_cfaba7dd": {
+    "message": "LUIS Authoring key:"
+  },
+  "main_dialog_eed5c847": {
+    "message": "Main dialog"
+  },
+  "make_a_copy_77d1233": {
+    "message": "Make a copy"
+  },
+  "manifest_url_30824e88": {
+    "message": "Manifest url"
+  },
+  "manifest_version_1edc004a": {
+    "message": "Manifest Version"
+  },
+  "mb_8f9f9e84": {
+    "message": "MB"
+  },
+  "message_5c38209d": {
+    "message": "Message"
+  },
+  "microsoft_app_id_a7f3e591": {
+    "message": "Microsoft App Id"
+  },
+  "minimap_beb3be27": {
+    "message": "Minimap"
+  },
+  "modification_rejected_6a6e8322": {
+    "message": "Modification Rejected"
+  },
+  "more_options_e89670cf": {
+    "message": "More options"
+  },
+  "move_abf00365": {
+    "message": "Move"
+  },
+  "msft_ignite_ai_show_e131edef": {
+    "message": "MSFT Ignite AI Show"
+  },
+  "must_have_a_name_d5c5c464": {
+    "message": "Must have a name"
+  },
+  "my_publish_profile_2ed56828": {
+    "message": "My Publish Profile"
+  },
+  "name_1aed4a1b": {
+    "message": "Name"
+  },
+  "name_contains_invalid_charactors_d1780987": {
+    "message": "Name contains invalid charactors"
+  },
+  "name_is_name_abc564f9": {
+    "message": "Name is { name }"
+  },
+  "name_is_required_29d28f8d": {
+    "message": "{ name } is required"
+  },
+  "navigation_control_94f2649e": {
+    "message": "navigation control"
+  },
+  "navigation_pane_e587b73c": {
+    "message": "Navigation pane"
+  },
+  "navigation_panel_530ae4ac": {
+    "message": "Navigation panel"
+  },
+  "navigation_path_8b299e64": {
+    "message": "Navigation Path"
+  },
+  "navigation_to_see_actions_3be545c9": {
+    "message": "navigation to see actions"
+  },
+  "new_13daf639": {
+    "message": "New"
+  },
+  "new_template_49e6f0f2": {
+    "message": "New template"
+  },
+  "new_trigger_331c811b": {
+    "message": "New Trigger .."
+  },
+  "new_update_available_30534ea5": {
+    "message": "New update available"
+  },
+  "next_40e12421": {
+    "message": "Next"
+  },
+  "no_updates_available_cecd904d": {
+    "message": "No updates available"
+  },
+  "not_yet_published_669e37b3": {
+    "message": "Not yet published"
+  },
+  "notification_list_ee2abb6c": {
+    "message": "Notification list"
+  },
+  "notification_message_msg_7d55d08e": {
+    "message": "Notification Message { msg }"
+  },
+  "notification_type_263c145d": {
+    "message": "Notification type"
+  },
+  "notifications_cbfa7704": {
+    "message": "Notifications"
+  },
+  "nov_12_2019_96ec5473": {
+    "message": "Nov 12, 2019"
+  },
+  "off_5385ef3f": {
+    "message": "Off"
+  },
+  "ok_c47544a2": {
+    "message": "OK"
+  },
+  "ok_ff1b646a": {
+    "message": "Ok"
+  },
+  "okay_1772bbeb": {
+    "message": "Okay"
+  },
+  "on_8f7190e5": {
+    "message": "On"
+  },
+  "onboarding_8407871c": {
+    "message": "Onboarding"
+  },
+  "open_e0beb7b9": {
+    "message": "Open"
+  },
+  "open_inline_editor_a5aabcfa": {
+    "message": "Open inline editor"
+  },
+  "or_4f7d4edb": {
+    "message": "Or: "
+  },
+  "original_ce7b7e64": {
+    "message": " - Original"
+  },
+  "page_number_cdee4179": {
+    "message": "Page number"
+  },
+  "please_enter_a_value_for_key_77cfc097": {
+    "message": "Please enter a value for { key }"
+  },
+  "please_enter_an_event_name_a148275a": {
+    "message": "Please enter an event name"
+  },
+  "please_input_a_manifest_url_ef6bab5f": {
+    "message": "Please input a manifest url"
+  },
+  "please_input_regex_pattern_5cd659a2": {
+    "message": "Please input regEx pattern"
+  },
+  "please_input_trigger_phrases_a11eae1": {
+    "message": "Please input trigger phrases"
+  },
+  "please_log_in_before_continuing_b6eace13": {
+    "message": "Please log in before continuing."
+  },
+  "please_return_to_design_view_to_start_the_onboardi_a561af9d": {
+    "message": "Please return to Design View to start the Onboarding tutorial."
+  },
+  "please_select_a_event_type_200c4c9f": {
+    "message": "Please select a event type"
+  },
+  "please_select_a_trigger_type_67417abb": {
+    "message": "Please select a trigger type"
+  },
+  "please_select_a_version_of_the_manifest_schema_4a3efbb1": {
+    "message": "Please select a version of the manifest schema"
+  },
+  "please_select_an_activity_type_92f4a8a1": {
+    "message": "Please select an activity type"
+  },
+  "previous_bd2ac015": {
+    "message": "Previous"
+  },
+  "previous_folder_e7eeb306": {
+    "message": "previous folder"
+  },
+  "privacy_290109ea": {
+    "message": "Privacy"
+  },
+  "privacy_button_b58e437": {
+    "message": "Privacy button"
+  },
+  "progress_of_total_87de8616": {
+    "message": "{ progress }% of { total }"
+  },
+  "property_editor_preferences_ad7a4b62": {
+    "message": "Property editor preferences"
+  },
+  "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
+    "message": "Provide a brief description. It will appear on the publish history list."
+  },
+  "publish_5211dca3": {
+    "message": "Publish"
+  },
+  "publish_configuration_d759a4e3": {
+    "message": "Publish Configuration"
+  },
+  "publish_destination_type_5f8c200a": {
+    "message": "Publish Destination Type"
+  },
+  "publish_luis_models_41fd69d7": {
+    "message": "Publish LUIS models"
+  },
+  "publish_profiles_cf8d307b": {
+    "message": "Publish Profiles"
+  },
+  "publish_to_selected_profile_c0998a2": {
+    "message": "Publish to selected profile"
+  },
+  "published_4bb5209e": {
+    "message": "Published"
+  },
+  "publishing_d63a8f2d": {
+    "message": "Publishing"
+  },
+  "recent_bots_53585911": {
+    "message": "Recent Bots"
+  },
+  "redo_363c58b7": {
+    "message": "Redo"
+  },
+  "regex_intent_is_already_defined_df095c1f": {
+    "message": "RegEx { intent } is already defined"
+  },
+  "release_1af20f26": {
+    "message": "Release: "
+  },
+  "reloading_49d2f661": {
+    "message": "Reloading"
+  },
+  "response_is_response_3cd62f8f": {
+    "message": "Response is { response }"
+  },
+  "responses_12d6df1d": {
+    "message": "Responses"
+  },
+  "restart_bot_34e36428": {
+    "message": "Restart Bot"
+  },
+  "review_and_generate_63dec712": {
+    "message": "Review and generate"
+  },
+  "rollback_26326307": {
+    "message": "Rollback"
+  },
+  "runtime_code_location_4e94ee12": {
+    "message": "Runtime code location"
+  },
+  "runtime_config_a2904ff9": {
+    "message": "Runtime Config"
+  },
+  "sample_phrases_5d78fa35": {
+    "message": "Sample Phrases"
+  },
+  "sample_phrases_are_phrases_a966b47f": {
+    "message": "Sample Phrases are { phrases }"
+  },
+  "save_11a80ec3": {
+    "message": "Save"
+  },
+  "save_as_9e0cf70b": {
+    "message": "Save as"
+  },
+  "scripts_successfully_updated_3a75d57f": {
+    "message": "Scripts successfully updated."
+  },
+  "sdk_runtime_packages_22d8ed1a": {
+    "message": "SDK runtime packages"
+  },
+  "see_log_4b833bf7": {
+    "message": "See Log"
+  },
+  "select_a_bot_e1c4dc2b": {
+    "message": "Select a Bot"
+  },
+  "select_a_trigger_on_the_left_a4b41558": {
+    "message": "Select a trigger on the left"
+  },
+  "select_an_activity_type_c982fcbe": {
+    "message": "Select an activity type"
+  },
+  "select_an_event_type_3d7108f1": {
+    "message": "Select an event type"
+  },
+  "select_language_to_delete_d1662d3d": {
+    "message": "Select language to delete"
+  },
+  "select_manifest_version_4f5b1230": {
+    "message": "Select manifest version"
+  },
+  "select_options_9ee7b227": {
+    "message": "Select options"
+  },
+  "select_runtime_version_to_add_d63d383b": {
+    "message": "Select runtime version to add"
+  },
+  "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
+    "message": "Select the language that bot will be able to understand (User input) and respond to (Bot responses).\n    To make this bot available in other languages, click “Add’ to create a copy of the default language, and translate the content into the new language."
+  },
+  "sentence_wrap_930c8ced": {
+    "message": "Sentence wrap"
+  },
+  "session_expired_12aaf414": {
+    "message": "Session expired"
+  },
+  "set_destination_folder_f76e0259": {
+    "message": "Set destination folder"
+  },
+  "set_up_your_bot_75009578": {
+    "message": "Set up your bot"
+  },
+  "settings_5aa0fd0c": {
+    "message": "Settings"
+  },
+  "settings_contains_detailed_information_about_your__54aa601d": {
+    "message": "Settings contains detailed information about your bot. For security reasons, they are hidden by default. To test your bot or publish to Azure, you may need to provide these settings."
+  },
+  "settings_editor_b5246933": {
+    "message": "Settings editor"
+  },
+  "settings_menu_c99ecc6d": {
+    "message": "Settings menu"
+  },
+  "show_all_notifications_55bf7858": {
+    "message": "Show All Notifications"
+  },
+  "show_code_f3e9d1cc": {
+    "message": "Show code"
+  },
+  "show_keys_3072a5b8": {
+    "message": "Show keys"
+  },
+  "skill_endpoint_b563491e": {
+    "message": "Skill Endpoint"
+  },
+  "skill_host_endpoint_b1088d0": {
+    "message": "Skill Host Endpoint"
+  },
+  "skillname_manifest_ef3d9fed": {
+    "message": "{ skillName } Manifest"
+  },
+  "skills_49cccd6a": {
+    "message": "Skills"
+  },
+  "something_went_wrong_19a64ca0": {
+    "message": "Something went wrong!"
+  },
+  "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
+    "message": "Sorry, something went wrong with connecting bot runtime"
+  },
+  "sorry_something_went_wrong_with_publishing_try_aga_306a48f5": {
+    "message": "Sorry, something went wrong with publishing. Try again or exit out of this task."
+  },
+  "sorted_a_to_z_915b2ed3": {
+    "message": "Sorted A to Z"
+  },
+  "sorted_z_to_a_722f1567": {
+    "message": "Sorted Z to A"
+  },
+  "spaces_and_special_characters_are_not_allowed_20d47684": {
+    "message": "Spaces and special characters are not allowed."
+  },
+  "spaces_and_special_characters_are_not_allowed_use__48acec3c": {
+    "message": "Spaces and special characters are not allowed. Use letters, numbers, -, or _."
+  },
+  "start_bot_25ecad14": {
+    "message": "Start Bot"
+  },
+  "start_command_a085f2ec": {
+    "message": "Start command"
+  },
+  "state_is_state_a2b8943": {
+    "message": "State is { state }"
+  },
+  "status_e7fdbe06": {
+    "message": "Status"
+  },
+  "step_of_setlength_43c73821": {
+    "message": "{ step } of { setLength }"
+  },
+  "submit_a3cc6859": {
+    "message": "Submit"
+  },
+  "tb_149f379c": {
+    "message": "TB"
+  },
+  "templatename_is_missing_or_empty_23e6b06e": {
+    "message": "templateName is missing or empty"
+  },
+  "terms_of_use_6542769b": {
+    "message": "Terms of Use"
+  },
+  "test_in_emulator_b1b3c278": {
+    "message": "Test in Emulator"
+  },
+  "test_your_bot_3cd1f4bb": {
+    "message": "Test your bot"
+  },
+  "the_callback_url_for_the_skill_host_e20e1012": {
+    "message": "The callback url for the skill host."
+  },
+  "the_dialog_you_have_tried_to_delete_is_currently_u_a37c7a02": {
+    "message": "The dialog you have tried to delete is currently used in the below dialog(s). Removing this dialog will cause your Bot to malfunction without additional action."
+  },
+  "the_following_lufile_s_are_invalid_c61ea748": {
+    "message": "The Following LuFile(s) are invalid: \n"
+  },
+  "the_main_dialog_is_named_after_your_bot_it_is_the__3d9864f": {
+    "message": "The main dialog is named after your bot. It is the root and entry point of a bot."
+  },
+  "the_manifest_can_be_edited_and_refined_manually_if_9269e3f2": {
+    "message": "The manifest can be edited and refined manually if and where needed."
+  },
+  "the_microsoft_app_id_that_will_be_calling_the_skil_955424de": {
+    "message": "The Microsoft App Id that will be calling the skill."
+  },
+  "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
+    "message": "The welcome message is triggered by the <i>ConversationUpdate</i> event. To add a new <i>ConversationUpdate</i> trigger:"
+  },
+  "there_was_an_error_74ed3c58": {
+    "message": "There was an error"
+  },
+  "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
+    "message": "These examples bring together all of the best practices and supporting components we''ve identified through building of conversational experiences."
+  },
+  "this_dialog_has_no_trigger_yet_d1f1d173": {
+    "message": "This dialog has no trigger yet."
+  },
+  "this_is_a_required_field_acb9837e": {
+    "message": "This is a required field."
+  },
+  "this_is_a_severity_notification_9beabb58": {
+    "message": "This is a { severity } notification"
+  },
+  "this_language_will_be_copied_and_used_as_the_basis_573515e4": {
+    "message": "This language will be copied and used as the basis (and fallback language) for the translation."
+  },
+  "this_version_of_the_content_is_out_of_date_and_you_5e878f29": {
+    "message": "This version of the content is out of date, and your last change was rejected. The content will be automatically refreshed."
+  },
+  "this_will_delete_the_dialog_and_its_contents_do_yo_9b48fa3c": {
+    "message": "This will delete the Dialog and its contents. Do you wish to continue?"
+  },
+  "this_will_delete_the_profile_do_you_wish_to_contin_61b54894": {
+    "message": "This will delete the profile. Do you wish to continue?"
+  },
+  "this_will_open_your_emulator_application_if_you_do_ba277151": {
+    "message": "This will open your Emulator application. If you don''t yet have the Bot Framework Emulator installed, you can download it <a>here</a>."
+  },
+  "time_2b5aac58": {
+    "message": "Time"
+  },
+  "tip_8f74cd0": {
+    "message": "tip"
+  },
+  "tips_80d0da2b": {
+    "message": "tips"
+  },
+  "title_ee03d132": {
+    "message": "Title"
+  },
+  "title_msg_ee91458d": {
+    "message": "{ title }. { msg }"
+  },
+  "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
+    "message": "To customize the welcome message, select the <i>Send a response</i> action in the Visual Editor. Then in the Form Editor on the right, you can edit the bot''s welcome message in the <b>Language Generation</b> field."
+  },
+  "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
+    "message": "To make your bot available for others as a skill, we need to generate a manifest."
+  },
+  "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
+    "message": "To run this bot, Composer needs .NET Core SDK."
+  },
+  "to_which_language_will_you_be_translating_your_bot_77219d69": {
+    "message": "To which language will you be translating your bot?"
+  },
+  "toolbar_bafd4228": {
+    "message": "toolbar"
+  },
+  "total_mb_531a3721": {
+    "message": "{ total }MB"
+  },
+  "trigger_phrases_f6754fa": {
+    "message": "Trigger phrases"
+  },
+  "triggers_connect_intents_with_bot_responses_think__fdfc97ea": {
+    "message": "Triggers connect intents with bot responses. Think of a trigger as one capability of your bot. So your bot is a collection of triggers. To add a new trigger, click the <b>Add</b> button in the toolbar, and then select the <b>Add a new trigger</b> option from the dropdown menu."
+  },
+  "try_again_ad656c3c": {
+    "message": "Try again"
+  },
+  "type_c8106334": {
+    "message": "Type"
+  },
+  "type_dialog_name_14a50769": {
+    "message": "Type dialog name"
+  },
+  "undo_a7be8fef": {
+    "message": "Undo"
+  },
+  "unknown_state_23f73afb": {
+    "message": "Unknown State"
+  },
+  "unused_8d193e3": {
+    "message": "Unused"
+  },
+  "update_available_b637d767": {
+    "message": "Update available"
+  },
+  "update_complete_c5163fbf": {
+    "message": "Update complete"
+  },
+  "update_failed_2c87428c": {
+    "message": "Update failed"
+  },
+  "update_folder_name_error_24563bf6": {
+    "message": "Update Folder Name Error"
+  },
+  "update_in_progress_f65e6b29": {
+    "message": "Update in progress"
+  },
+  "update_scripts_a3a483e": {
+    "message": "Update scripts"
+  },
+  "update_scripts_c58771a2": {
+    "message": "Update Scripts"
+  },
+  "updating_scripts_e17a5722": {
+    "message": "Updating scripts... "
+  },
+  "url_should_start_with_http_s_9ca55d94": {
+    "message": "Url should start with http[s]://"
+  },
+  "use_custom_runtime_d7d323fd": {
+    "message": "Use custom runtime"
+  },
+  "used_3d895705": {
+    "message": "Used"
+  },
+  "user_input_673e4a89": {
+    "message": "User input"
+  },
+  "user_input_a6ff658d": {
+    "message": "User Input"
+  },
+  "validating_35b79a96": {
+    "message": "Validating..."
+  },
+  "version_version_a051e218": {
+    "message": "Version { version }"
+  },
+  "video_tutorials_79eb26ca": {
+    "message": "Video tutorials:"
+  },
+  "view_ba339f93": {
+    "message": "View"
+  },
+  "vishwac_sena_45910bf0": {
+    "message": "Vishwac Sena"
+  },
+  "visual_editor_216472d": {
+    "message": "Visual editor"
+  },
+  "warning_53c98b03": {
+    "message": "Warning!"
+  },
+  "warning_the_action_you_are_about_to_take_cannot_be_1071a3c3": {
+    "message": "Warning: the action you are about to take cannot be undone. Going further will delete this bot and any related files in the bot project folder."
+  },
+  "we_have_created_a_sample_bot_to_help_you_get_start_95a58922": {
+    "message": "We have created a sample bot to help you get started with Composer. Click here to open the bot."
+  },
+  "weather_bot_c38920cd": {
+    "message": "Weather Bot"
+  },
+  "welcome_73d18b4d": {
+    "message": "Welcome!"
+  },
+  "welcome_dd4e7151": {
+    "message": "Welcome"
+  },
+  "what_can_the_user_accomplish_through_this_conversa_7ddb03a1": {
+    "message": "What can the user accomplish through this conversation? For example, BookATable, OrderACoffee etc."
+  },
+  "what_is_the_name_of_the_custom_event_b28a7b3": {
+    "message": "What is the name of the custom event?"
+  },
+  "what_is_the_name_of_this_trigger_luis_17b60a23": {
+    "message": "What is the name of this trigger (LUIS)"
+  },
+  "what_is_the_name_of_this_trigger_regex_f77376d7": {
+    "message": "What is the name of this trigger (RegEx)"
+  },
+  "what_is_the_name_of_your_bot_a571c565": {
+    "message": "What is the name of your bot?"
+  },
+  "what_is_the_type_of_this_trigger_d2701744": {
+    "message": "What is the type of this trigger?"
+  },
+  "when_deleting_a_language_only_the_content_will_be__8f7f8dee": {
+    "message": "When deleting a language, only the content will be removed. The flow and logic of the conversation and dialog will remain functional."
+  },
+  "when_done_switch_to_the_newly_created_language_and_862b7dd9": {
+    "message": "When done, switch to the newly created language and start the (manual) translation process."
+  },
+  "when_multiple_people_are_working_with_models_you_w_32b48099": {
+    "message": "When multiple people are working with models you want to be able to work with models independently from each other tied to the source control."
+  },
+  "which_activity_type_18333457": {
+    "message": "Which activity type?"
+  },
+  "which_bot_do_you_want_to_open_974bb1e5": {
+    "message": "Which bot do you want to open?"
+  },
+  "which_event_6e655d2b": {
+    "message": "Which event?"
+  },
+  "yes_dde87d5": {
+    "message": "Yes"
+  },
+  "you_are_about_to_publish_your_bot_to_the_profile_b_79a6a226": {
+    "message": "You are about to publish your bot to the profile below. Do you want to proceed?"
+  },
+  "you_can_create_a_new_bot_from_scratch_with_compose_1486288c": {
+    "message": "You can create a new bot from scratch with Composer, or start with a template."
+  },
+  "you_can_define_and_manage_b_intents_b_here_each_in_721b8a0c": {
+    "message": "You can define and manage <b>intents</b> here. Each intent describes a particular user intention through utterances (i.e. user says). <b>Intents are often triggers of your bot.</b>"
+  },
+  "you_can_manage_all_bot_responses_here_make_good_us_5e6e1953": {
+    "message": "You can manage all bot responses here. Make good use of the templates to create sophisticated response logic based on your own needs."
+  },
+  "you_do_not_have_permission_to_save_bots_here_56cc10c7": {
+    "message": "You do not have permission to save bots here"
+  },
+  "you_have_the_following_empty_lufile_s_5a022b8a": {
+    "message": "You have the following empty LuFile(s): "
+  },
+  "your_bot_creation_journey_on_composer_131c1a8b": {
+    "message": "Your bot creation journey on Composer"
+  },
+  "your_bot_is_using_luis_for_natural_language_unders_5c516690": {
+    "message": "Your bot is using LUIS for natural language understanding. If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first."
+  }
+}

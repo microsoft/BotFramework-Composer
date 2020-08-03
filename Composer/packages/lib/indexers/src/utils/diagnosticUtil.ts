@@ -2,12 +2,18 @@
 // Licensed under the MIT License.
 
 import { Diagnostic, DiagnosticSeverity, Range, Position, CodeRange, LgFile, LuFile } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 export function createSingleMessage(d: Diagnostic): string {
   let msg = `${d.message}\n`;
   if (d.range) {
     const { start, end } = d.range;
-    const position = `line ${start.line}:${start.character} - line ${end.line}:${end.character}`;
+    const position = formatMessage(`line {startLine}:{startCharacter} - line {endLine}:{endCharacter}`, {
+      startLine: start.line,
+      startCharacter: start.character,
+      endLine: end.line,
+      endCharacter: end.character,
+    });
     msg = `${position} \n ${msg}`;
   }
   return msg;
@@ -26,7 +32,12 @@ export function combineSimpleMessage(diagnostics: Diagnostic[]): string {
     let msg = '';
     if (diagnostic.range) {
       const { start, end } = diagnostic.range;
-      const position = `L${start.line}:${start.character} - L${end.line}:${end.character} `;
+      const position = formatMessage(`L{startLine}:{startCharacter} - L{endLine}:{endCharacter} `, {
+        startLine: start.line,
+        startCharacter: start.character,
+        endLine: end.line,
+        endCharacter: end.character,
+      });
       msg += position;
     }
     const [, errorInfo] = diagnostic.message.split('error message: ');
