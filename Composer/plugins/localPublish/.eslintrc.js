@@ -4,7 +4,4 @@ module.exports = {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
   },
-  rules: {
-    // 'security/detect-non-literal-fs-filename': 'off',
-  },
 };

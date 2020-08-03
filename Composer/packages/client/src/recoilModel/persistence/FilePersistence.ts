@@ -76,7 +76,7 @@ class FilePersistence {
               clearInterval(timer);
               resolve(true);
             }
-          }, 500);
+          }, 100);
         });
       }
 

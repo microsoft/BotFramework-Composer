@@ -22,7 +22,6 @@ export interface EjectModalProps {
 
 export const EjectModal: React.FC<EjectModalProps> = (props) => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | undefined>();
-  // const [copying, setCopying] = useState(false);
 
   const runtimeTemplates = useRecoilValue(runtimeTemplatesState);
   const { fetchRuntimeTemplates } = useRecoilValue(dispatcherState);
@@ -48,9 +47,7 @@ export const EjectModal: React.FC<EjectModalProps> = (props) => {
 
   const doEject = async () => {
     if (selectedTemplate) {
-      // setCopying(true);
       await props.ejectRuntime(selectedTemplate);
-      // setCopying(false);
     }
   };
 
