@@ -21,7 +21,7 @@ import { useRecoilValue } from 'recoil';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import get from 'lodash/get';
-import { generateUniqueId } from '@bfc/shared';
+import { generateDesignerId, LgTemplate } from '@bfc/shared';
 
 import {
   generateNewDialog,
@@ -38,16 +38,8 @@ import {
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
-import { addIntent } from '../../utils/luUtil';
-import { addTemplate } from '../../utils/lgUtil';
-import {
-  dialogsState,
-  luFilesState,
-  lgFilesState,
-  localeState,
-  projectIdState,
-  schemasState,
-} from '../../recoilModel/atoms/botState';
+
+import { dialogsState, projectIdState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { nameRegex } from '../../constants';
 
@@ -224,20 +216,15 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, intent?: LuIntentSection, lgFilePayload?: LgFilePayload) => void;
+  onSubmit: (dialog: DialogInfo, intent?: LuIntentSection, lgTemplate?: LgTemplate[]) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
   const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const locale = useRecoilValue(localeState);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const userSettings = useRecoilValue(userSettingsState);
-  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const lgFile = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const recognizer = get(dialogFile, 'content.recognizer', '');
@@ -298,36 +285,31 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
     if (formData.$kind === intentTypeKey && isLUISnQnA && formData.triggerPhrases) {
       const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, {});
-      const newIntent = {
-        Name: formData.intent,
-        Body: formData.triggerPhrases,
-      };
+      const newIntent = { Name: formData.intent, Body: formData.triggerPhrases };
       onSubmit(newDialog, newIntent);
     } else if (formData.$kind === qnaMatcherKey || formData.$kind === onChooseIntentKey) {
-      const lgTemplateId = generateUniqueId(6);
-      const extraTriggerAttributes = { lgTemplateId };
-      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
-      const content = lgFile?.content ?? '';
-      const lgFileId = lgFile?.id || `common.${locale}`;
-      let body = '';
-      let name = '';
-      if (formData.$kind === qnaMatcherKey) {
-        name = `SendActivity_${lgTemplateId}`;
-        body = '- ${@answer}';
-      } else if (formData.$kind === onChooseIntentKey) {
-        name = `ChoiceInput_Prompt_${lgTemplateId}`;
-        body = '- Multiple intents detected, please choose which intent do you want to trigger?';
+      const lgTemplateId1 = generateDesignerId();
+      const lgTemplateId2 = generateDesignerId();
+      let extraTriggerAttributes = {};
+      let lgTemplates: LgTemplate[] = [];
+      if (formData.$kind === onChooseIntentKey) {
+        extraTriggerAttributes['actions[4].prompt'] = `\${TextInput_Prompt_${lgTemplateId1}()}`;
+        extraTriggerAttributes['actions[5].elseActions[0].activity'] = `\${SendActivity_${lgTemplateId2}()}`;
+        lgTemplates = [
+          {
+            name: `TextInput_Prompt_${lgTemplateId1}`,
+            body: `[Activity\n
+            Attachments = \${json(AdaptiveCardJson())}\n
+        ]\n`,
+          } as LgTemplate,
+          {
+            name: `SendActivity_${lgTemplateId2}`,
+            body: '- Sure, no worries.',
+          } as LgTemplate,
+        ];
       }
-      const newLgFile = addTemplate(lgFileId, content, {
-        name,
-        parameters: [],
-        body,
-      });
-      const updateLgFile = {
-        id: newLgFile.id,
-        content: newLgFile.content,
-      };
-      onSubmit(newDialog, undefined, updateLgFile);
+      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
+      onSubmit(newDialog, undefined, lgTemplates);
     } else {
       const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, {});
       onSubmit(newDialog);
