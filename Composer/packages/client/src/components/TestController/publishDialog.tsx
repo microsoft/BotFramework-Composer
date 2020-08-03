@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useCallback } from 'react';
+import React, { useCallback, Fragment } from 'react';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { FontWeights, FontSizes } from 'office-ui-fabric-react/lib/Styling';
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
@@ -16,6 +16,7 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 import { IConfig } from '@bfc/shared';
+import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
@@ -53,6 +54,7 @@ interface FormData {
   name: string;
   authoringKey: string;
   subscriptionKey: string;
+  qnaRegion: string;
   endpointKey: string;
   authoringRegion: string;
   defaultLanguage: string;
@@ -90,6 +92,8 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
   const dialogs = useRecoilValue(dialogsState);
   const luFiles = useRecoilValue(luFilesState);
   const qnaFiles = useRecoilValue(qnaFilesState);
+  const qnaConfigShow = getReferredQnaFiles(qnaFiles, dialogs).length > 0;
+  const luConfigShow = getReferredLuFiles(luFiles, dialogs).length > 0;
 
   const formConfig: FieldConfig<FormData> = {
     name: {
@@ -98,14 +102,18 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
       defaultValue: config.name || botName,
     },
     authoringKey: {
-      required: getReferredLuFiles(luFiles, dialogs).length > 0,
+      required: luConfigShow,
       validate: validate,
       defaultValue: config.authoringKey,
     },
     subscriptionKey: {
-      required: getReferredQnaFiles(qnaFiles, dialogs).length > 0,
+      required: qnaConfigShow,
       validate: validate,
       defaultValue: config.subscriptionKey,
+    },
+    qnaRegion: {
+      required: true,
+      defaultValue: config.qnaRegion || 'westus',
     },
     endpointKey: {
       required: false,
@@ -134,6 +142,20 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
     },
   };
 
+  const regionOptions: IDropdownOption[] = [
+    {
+      key: 'westus',
+      text: formatMessage('westus'),
+    },
+    {
+      key: 'westeurope',
+      text: formatMessage('westeurope'),
+    },
+    {
+      key: 'australia',
+      text: formatMessage('australia'),
+    },
+  ];
   const { formData, formErrors, hasErrors, updateField } = useForm(formConfig, { validateOnMount: true });
 
   const handlePublish = useCallback(
@@ -187,29 +209,49 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
             onChange={(_e, val) => updateField('environment', val)}
             onRenderLabel={onRenderLabel(Tips.ENVIRONMENT)}
           />
-          <TextField
-            data-testid="AuthoringKeyInput"
-            errorMessage={formErrors.authoringKey}
-            label={formatMessage('LUIS Authoring key:')}
-            value={formData.authoringKey}
-            onChange={(_e, val) => updateField('authoringKey', val)}
-            onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
-          />
-          <TextField
-            data-testid="SubscriptionKeyInput"
-            errorMessage={formErrors.subscriptionKey}
-            label={formatMessage('QNA Subscription key:')}
-            value={formData.subscriptionKey}
-            onChange={(_e, val) => updateField('subscriptionKey', val)}
-            onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
-          />
-          <TextField
-            disabled
-            errorMessage={formErrors.authoringRegion}
-            label={formatMessage('Authoring Region')}
-            value={formData.authoringRegion}
-            onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
-          />
+          {luConfigShow && (
+            <Fragment>
+              <TextField
+                data-testid="AuthoringKeyInput"
+                errorMessage={formErrors.authoringKey}
+                label={formatMessage('LUIS Authoring key:')}
+                value={formData.authoringKey}
+                onChange={(_e, val) => updateField('authoringKey', val)}
+                onRenderLabel={onRenderLabel(Tips.AUTHORING_KEY)}
+              />
+              <Dropdown
+                data-testid="regionDropdown"
+                label={formatMessage('Luis Authoring Region')}
+                options={regionOptions}
+                responsiveMode={ResponsiveMode.large}
+                selectedKey={formData.authoringRegion}
+                onChange={(_e, option) => {
+                  if (option) {
+                    updateField('authoringRegion', option.key.toString());
+                  }
+                }}
+              />
+            </Fragment>
+          )}
+          {qnaConfigShow && (
+            <Fragment>
+              <TextField
+                data-testid="SubscriptionKeyInput"
+                errorMessage={formErrors.subscriptionKey}
+                label={formatMessage('QNA Subscription key:')}
+                value={formData.subscriptionKey}
+                onChange={(_e, val) => updateField('subscriptionKey', val)}
+                onRenderLabel={onRenderLabel(Tips.SUBSCRIPTION_KEY)}
+              />
+              <TextField
+                disabled
+                errorMessage={formErrors.qnaRegion}
+                label={formatMessage('QnA Region')}
+                value={formData.qnaRegion}
+                onRenderLabel={onRenderLabel(Tips.AUTHORING_REGION)}
+              />
+            </Fragment>
+          )}
           <TextField
             disabled
             errorMessage={formErrors.defaultLanguage}

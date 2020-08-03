@@ -16,6 +16,7 @@ export const builderDispatcher = () => {
     ({ set, snapshot }: CallbackInterface) => async (
       authoringKey: string,
       subscriptionKey: string,
+      qnaRegion: string,
       projectId: string
     ) => {
       try {
@@ -49,6 +50,7 @@ export const builderDispatcher = () => {
         await httpClient.post(`/projects/${projectId}/build`, {
           authoringKey,
           subscriptionKey,
+          qnaRegion,
           projectId,
           crossTrainConfig,
           luFiles: referredLuFiles.map((file) => file.id),

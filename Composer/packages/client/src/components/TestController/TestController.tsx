@@ -125,9 +125,15 @@ export const TestController: React.FC = () => {
     // save the settings change to store and persist to server
     const newValue = config;
     const subscriptionKey = newValue.subscriptionKey;
+    const qnaRegion = newValue.qnaRegion;
     delete newValue.subscriptionKey;
-    await setSettings(projectId, { ...settings, luis: newValue, qna: { subscriptionKey, endpointKey: '' } });
-    await build(newValue.authoringKey, subscriptionKey, projectId);
+    delete newValue.qnaRegion;
+    await setSettings(projectId, {
+      ...settings,
+      luis: newValue,
+      qna: { ...settings.qna, subscriptionKey, region: qnaRegion, endpointKey: '' },
+    });
+    await build(newValue.authoringKey, subscriptionKey, qnaRegion, projectId);
   }
 
   async function handleLoadBot() {
@@ -173,7 +179,10 @@ export const TestController: React.FC = () => {
 
   async function handleStart() {
     dismissCallout();
-    const config = Object.assign({}, settings.luis, { subscriptionKey: Object(settings.qna).subscriptionKey });
+    const config = Object.assign({}, settings.luis, {
+      subscriptionKey: Object(settings.qna).subscriptionKey,
+      qnaRegion: Object(settings.qna).qnaRegion,
+    });
     if (!isAbsHosted() && isDialogDefaultRecognizer(dialogs)) {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
         openDialog();

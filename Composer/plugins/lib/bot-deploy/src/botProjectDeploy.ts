@@ -743,6 +743,7 @@ export class BotProjectDeploy {
       let luisEndpointKey = '';
       let luisEndpoint = '';
       let luisAuthoringEndpoint = '';
+      let qnaRegion = '';
 
       if (luisSettings) {
         // if luisAuthoringKey is not set, use the one from the luis settings
@@ -754,6 +755,7 @@ export class BotProjectDeploy {
       }
       if (qnaSettings) {
         qnaSubscriptionKey = qnaSubscriptionKey || qnaSettings.subscriptionKey;
+        qnaRegion = qnaSettings.qnaRegion || luisAuthoringRegion;
       }
       if (!language) {
         language = 'en-us';
@@ -769,7 +771,7 @@ export class BotProjectDeploy {
       };
       const qnaProperty = {
         subscriptionKey: qnaSubscriptionKey || '',
-        authoringRegion: luisAuthoringRegion,
+        authoringRegion: qnaRegion,
       };
       await this.publishLuisAndQna(name, environment, language, luisProperty, qnaProperty);
 

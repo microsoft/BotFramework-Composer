@@ -199,8 +199,8 @@ const DefaultFormSchema: FormUISchema = {
   [SDKKinds.OnQnAMatch]: {
     label: () => formatMessage('QnA Intent recognized'),
     subtitle: () => formatMessage('QnA Intent recognized'),
-    order: ['actions', '*'],
-    hidden: ['condition', 'entities'],
+    order: ['actions', 'condition', '*'],
+    hidden: ['entities'],
     properties: {
       actions: {
         field: QnAActionsField,

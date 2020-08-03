@@ -234,12 +234,12 @@ export class Builder {
       config.models,
       config.botName,
       config.suffix,
-      config.region,
+      config.qnaRegion,
       config.fallbackLocal
     );
     if (loadResult.qnaContents) {
       const subscriptionKeyEndpoint =
-        config.endpoint ?? `https://${config.region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+        config.endpoint ?? `https://${config.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
 
       const buildResult = await this.qnaBuilder.build(
         loadResult.qnaContents,
@@ -285,6 +285,7 @@ export class Builder {
       authoringKey: this.config.authoringKey || '',
       subscriptionKey: this.config.subscriptionKey || '',
       region: this.config.authoringRegion || '',
+      qnaRegion: this.config.qnaRegion || this.config.authoringRegion || '',
       botName: this.config.name || '',
       suffix: this.config.environment || '',
       fallbackLocal: this.config.defaultLanguage || 'en-us',

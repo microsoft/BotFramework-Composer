@@ -55,10 +55,12 @@ export interface ILuisConfig {
 export interface IQnAConfig {
   subscriptionKey: string;
   endpointKey: string;
+  [key: string]: string;
 }
 
 export interface IConfig extends ILuisConfig {
   subscriptionKey: string;
+  qnaRegion: string | 'westus';
 }
 
 export interface PublishTarget {
