@@ -18,6 +18,8 @@ const luisConfig = {
   defaultLanguage: 'en-us',
   environment: 'composer',
 };
+const config = { subscriptionKey: '12345', ...luisConfig };
+const qnaConfig = { subscriptionKey: '12345', endpointKey: '12345' };
 describe('<PublishDialog />', () => {
   it('should render the <PublishDialog />', () => {
     const onDismiss = jest.fn(() => {});
@@ -31,10 +33,11 @@ describe('<PublishDialog />', () => {
       set(botNameState, 'sampleBot0');
       set(settingsState, {
         luis: luisConfig,
+        qna: qnaConfig,
       });
     };
     const { getByText } = renderWithRecoil(
-      <PublishDialog isOpen botName={'sampleBot0'} config={luisConfig} onDismiss={onDismiss} onPublish={onPublish} />,
+      <PublishDialog isOpen botName={'sampleBot0'} config={config} onDismiss={onDismiss} onPublish={onPublish} />,
       recoilInitState
     );
 

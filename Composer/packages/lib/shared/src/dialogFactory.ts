@@ -87,45 +87,154 @@ const initialDialogShape = () => ({
   },
   [SDKKinds.OnChooseIntent]: {
     $kind: SDKKinds.OnChooseIntent,
+    $designer: {
+      id: generateDesignerId(),
+    },
     actions: [
       {
         $kind: SDKKinds.SetProperty,
         $designer: {
           id: generateDesignerId(),
         },
-        property: 'dialog.recognized',
-        value: '=turn.recognized',
+        assignments: [
+          {
+            value: '=turn.recognized.candidates[0]',
+            property: 'dialog.luisResult',
+          },
+          {
+            property: 'dialog.qnaResult',
+            value: '=turn.recognized.candidates[1]',
+          },
+        ],
       },
       {
-        $kind: SDKKinds.ChoiceInput,
+        $kind: SDKKinds.IfCondition,
         $designer: {
           id: generateDesignerId(),
         },
-        defaultLocale: 'en-us',
+        condition: 'dialog.luisResult.score >= 0.9 && dialog.qnaResult.score <= 0.5',
+        actions: [
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'recognizedIntent',
+            eventValue: '=dialog.luisResult.result',
+            disabled: true,
+          },
+          {
+            $kind: SDKKinds.BreakLoop,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            disabled: true,
+          },
+        ],
+        disabled: true,
+      },
+      {
+        $kind: SDKKinds.IfCondition,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        condition: 'dialog.luisResult.score <= 0.5 && dialog.qnaResult.score >= 0.9',
+        actions: [
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'recognizedIntent',
+            eventValue: '=dialog.qnaResult.result',
+            disabled: true,
+          },
+          {
+            $kind: SDKKinds.BreakLoop,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            disabled: true,
+          },
+        ],
+        disabled: true,
+      },
+      {
+        $kind: SDKKinds.IfCondition,
+        $designer: {
+          id: generateDesignerId(),
+        },
+        condition: 'dialog.qnaResult.score <= 0.05',
+        actions: [
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'recognizedIntent',
+            eventValue: '=dialog.luisResult.result',
+            disabled: true,
+          },
+          {
+            $kind: SDKKinds.BreakLoop,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            disabled: true,
+          },
+        ],
+        top: 3,
+        disabled: true,
+        cardNoMatchResponse: 'Thanks for the feedback.',
+        cardNoMatchText: 'None of the above.',
+      },
+      {
+        $kind: SDKKinds.TextInput,
+        $designer: {
+          id: generateDesignerId(),
+        },
         disabled: false,
         maxTurnCount: 3,
-        alwaysPrompt: false,
+        alwaysPrompt: true,
         allowInterruptions: false,
         prompt: '',
-        choiceOptions: {
-          includeNumbers: true,
-          inlineOrMore: ', or ',
-          inlineOr: ' or ',
-          inlineSeparator: ', ',
-        },
-        property: 'dialog.choice',
-        choices: '=foreach(dialog.recognized.candidates, x, x.intent)',
-        outputFormat: 'index',
+        property: 'turn.intentChoice',
+        value: '=@userChosenIntent',
         top: 3,
         cardNoMatchResponse: 'Thanks for the feedback.',
+        cardNoMatchText: 'None of the above.',
+        activeLearningCardTitle: 'Did you mean:',
+        threshold: 0.3,
+        noAnswer: 'Sorry, I did not find an answer.',
+        hostname: '=settings.qna.hostname',
+        endpointKey: '=settings.qna.endpointkey',
+        knowledgeBaseId: '=settings.qna.knowledgebaseid',
       },
       {
-        $kind: SDKKinds.EmitEvent,
+        $kind: SDKKinds.IfCondition,
         $designer: {
           id: generateDesignerId(),
         },
-        eventValue: '=dialog.recognized.candidates[dialog.choice].result',
-        eventName: 'recognizedIntent',
+        condition: "turn.intentChoice != 'none'",
+        actions: [
+          {
+            $kind: SDKKinds.EmitEvent,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            eventName: 'recognizedIntent',
+            eventValue: '=dialog[turn.intentChoice].result',
+          },
+        ],
+        elseActions: [
+          {
+            $kind: SDKKinds.SendActivity,
+            $designer: {
+              id: generateDesignerId(),
+            },
+            activity: '',
+          },
+        ],
         top: 3,
         cardNoMatchResponse: 'Thanks for the feedback.',
         cardNoMatchText: 'None of the above.',

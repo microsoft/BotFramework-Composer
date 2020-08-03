@@ -7,7 +7,8 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 import keys from 'lodash/keys';
-import { LuFile, DialogInfo, IIntentTrigger, FieldNames, SDKKinds } from '@bfc/shared';
+import { LuFile, DialogInfo, IIntentTrigger, FieldNames, SDKKinds, FileInfo } from '@bfc/shared';
+import { luIndexer } from '@bfc/indexers';
 
 import { getBaseName, getExtension } from './fileUtil';
 import { VisitorFunc, JsonWalk } from './jsonWalk';
@@ -68,8 +69,8 @@ function createConfigId(fileId) {
   return `${fileId}.lu`;
 }
 
-function getLuFilesByDialogId(dialogId: string, luFiles: string[]) {
-  return luFiles.filter((lu) => getBaseName(lu) === dialogId).map((lu) => createConfigId(lu));
+function getLuFilesByDialogId(dialogId: string, luFiles: LuFile[]) {
+  return luFiles.filter((lu) => getBaseName(lu.id) === dialogId).map((lu) => createConfigId(lu.id));
 }
 
 function getFileLocale(fileName: string) {
@@ -78,7 +79,7 @@ function getFileLocale(fileName: string) {
 }
 
 //replace the dialogId with luFile's name
-function addLocaleToConfig(config: ICrossTrainConfig, luFiles: string[]) {
+function addLocaleToConfig(config: ICrossTrainConfig, luFiles: LuFile[]) {
   const { rootIds, triggerRules } = config;
   config.rootIds = rootIds.reduce((result: string[], id: string) => {
     return [...result, ...getLuFilesByDialogId(id, luFiles)];
@@ -152,7 +153,7 @@ export interface ICrossTrainConfig {
       verbose: true
     }
   */
-export function createCrossTrainConfig(dialogs: any[], luFiles: string[]): ICrossTrainConfig {
+export function createCrossTrainConfig(dialogs: any[], luFilesInfo: FileInfo[]): ICrossTrainConfig {
   const triggerRules = {};
   const countMap = {};
   const wrapDialogs: { [key: string]: any }[] = [];
@@ -160,10 +161,11 @@ export function createCrossTrainConfig(dialogs: any[], luFiles: string[]): ICros
     wrapDialogs.push(parse(dialog));
   }
 
-  luFiles = luFiles.map((luFile) => getBaseName(luFile));
+  const luFiles = luIndexer.index(luFilesInfo);
+
   //map all referred lu files
   luFiles.forEach((file) => {
-    countMap[getBaseName(file)] = 1;
+    countMap[getBaseName(file.id)] = 1;
   });
 
   let rootId = '';
@@ -174,7 +176,7 @@ export function createCrossTrainConfig(dialogs: any[], luFiles: string[]): ICros
       botName = dialog.content.$designer.name;
     }
 
-    if (luFiles.find((luFile) => getBaseName(luFile) === dialog.luFile)) {
+    if (luFiles.find((luFile) => getBaseName(luFile.id) === dialog.luFile)) {
       const { intentTriggers } = dialog;
       const fileId = dialog.id;
       //find the trigger's dialog that use a recognizer

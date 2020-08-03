@@ -18,6 +18,7 @@ import { GraphRbacManagementClient } from '@azure/graph';
 import { DeviceTokenCredentials } from '@azure/ms-rest-nodeauth';
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
+import { FileInfo } from '@bfc/shared';
 
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
@@ -424,13 +425,18 @@ export class BotProjectDeploy {
         content: fs.readJSONSync(dialog),
       });
     }
-    luFiles = luFiles.map((luFile) => luFile.substring(luFile.lastIndexOf('\\') + 1));
-    this.crossTrainConfig = createCrossTrainConfig(dialogs, luFiles);
+    const luFileInfos: FileInfo[] = luFiles.map((luFile) => {
+      const fileStats = fs.statSync(luFile);
+      return {
+        name: luFile.substring(luFile.lastIndexOf('\\') + 1),
+        content: fs.readFileSync(luFile, 'utf-8'),
+        lastModified: fileStats.mtime.toString(),
+        path: luFile,
+        relativePath: luFile.substring(luFile.lastIndexOf(this.remoteBotPath) + 1),
+      };
+    });
+    this.crossTrainConfig = createCrossTrainConfig(dialogs, luFileInfos);
   }
-  private needCrossTrain() {
-    return this.crossTrainConfig.rootIds.length > 0;
-  }
-
   private async writeCrossTrainFiles(crossTrainResult) {
     if (!(await fs.pathExists(this.interruptionFolderPath))) {
       await fs.mkdir(this.interruptionFolderPath);
@@ -443,7 +449,6 @@ export class BotProjectDeploy {
   }
 
   private async crossTrain(luFiles: string[], qnaFiles: string[]) {
-    if (!this.needCrossTrain()) return;
     const luContents: { [key: string]: any }[] = [];
     const qnaContents: { [key: string]: any }[] = [];
     for (const luFile of luFiles) {
@@ -465,7 +470,6 @@ export class BotProjectDeploy {
   }
 
   private async cleanCrossTrain() {
-    if (!this.needCrossTrain()) return;
     fs.rmdirSync(this.interruptionFolderPath, { recursive: true });
   }
   private async getInterruptionFiles() {

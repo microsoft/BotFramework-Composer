@@ -10,7 +10,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI, LgTemplate } from '@bfc/shared';
 import { ActionButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
@@ -20,7 +20,6 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
-import { LuFilePayload, LgFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -46,11 +45,14 @@ import {
   skillsState,
   actionsSeedState,
   userSettingsState,
+  luFilesState,
+  localeState,
   qnaFilesState,
+  lgFilesState,
 } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
+import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 
-import { VisualEditorAPI } from './FrameAPI';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -147,6 +149,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
   const qnaFiles = useRecoilValue(qnaFilesState);
+  const luFiles = useRecoilValue(luFilesState);
+  const lgFiles = useRecoilValue(lgFilesState);
+  const locale = useRecoilValue(localeState);
+
   const {
     removeDialog,
     updateDialog,
@@ -159,15 +165,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    updateLuFile,
-    updateLgFile,
     createQnAFile,
+    createLuIntent,
+    createLgTemplate,
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
+  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const lgFile = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
@@ -270,28 +278,24 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = async (dialog: DialogInfo, luFile?: LuFilePayload, lgFile?: LgFilePayload) => {
+  const onTriggerCreationSubmit = async (dialog: DialogInfo, intent?: LuIntentSection, lgTemplates?: LgTemplate[]) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
       content: dialog.content,
     };
-    if (luFile) {
-      const luFilePayload = {
-        id: luFile.id,
-        content: luFile.content,
-        projectId,
-      };
-      updateLuFile(luFilePayload);
+    if (luFile && intent) {
+      createLuIntent({ id: luFile.id, intent });
     }
 
-    if (lgFile) {
-      const lgFilePayload = {
-        id: lgFile.id,
-        content: lgFile.content,
-        projectId,
-      };
-      await updateLgFile(lgFilePayload);
+    if (lgFile && lgTemplates) {
+      lgTemplates.forEach(async (t) => {
+        const lgPayload = {
+          id: lgFile.id,
+          template: t as LgTemplate,
+        };
+        await createLgTemplate(lgPayload);
+      });
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
@@ -316,7 +320,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
-      return {};
+      return { actionSelected: false, showDisableBtn: false, showEnableBtn: false };
     }
     const selectedActions = visualEditorSelection.map((id) => get(currentDialog?.content, id));
     const showDisableBtn = selectedActions.some((x) => get(x, 'disabled') !== true);
@@ -324,6 +328,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
+  useElectronFeatures(actionSelected);
+
+  const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
@@ -371,6 +378,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Undo'),
             disabled: !undoHistory.canUndo(),
             onClick: () => {
+              // TODO: register EditorAPI.Editing.Undo()
               //ToDo undo
             },
           },
@@ -379,6 +387,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Redo'),
             disabled: !undoHistory.canRedo(),
             onClick: () => {
+              // TODO: register EditorAPI.Editing.Redo()
               //ToDo redo
             },
           },
@@ -387,7 +396,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Cut'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.cutSelection();
+              EditorAPI.Actions.CutSelection();
             },
           },
           {
@@ -395,7 +404,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Copy'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.copySelection();
+              EditorAPI.Actions.CopySelection();
             },
           },
           {
@@ -403,7 +412,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Move'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.moveSelection();
+              EditorAPI.Actions.MoveSelection();
             },
           },
           {
@@ -411,7 +420,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Delete'),
             disabled: !actionSelected,
             onClick: () => {
-              VisualEditorAPI.deleteSelection();
+              EditorAPI.Actions.DeleteSelection();
             },
           },
         ],
@@ -432,7 +441,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Disable'),
             disabled: !showDisableBtn,
             onClick: () => {
-              VisualEditorAPI.disableSelection();
+              EditorAPI.Actions.DisableSelection();
             },
           },
           {
@@ -440,7 +449,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             text: formatMessage('Enable'),
             disabled: !showEnableBtn,
             onClick: () => {
-              VisualEditorAPI.enableSelection();
+              EditorAPI.Actions.EnableSelection();
             },
           },
         ],
