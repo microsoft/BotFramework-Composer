@@ -9,16 +9,13 @@ import {
   TextDocuments,
 } from 'vscode-languageserver';
 import { CompletionItem, CompletionList } from 'vscode-languageserver-types';
+import Fuse from 'fuse.js';
+
 import { expressionsResolver } from './resolvers/expressions';
 import { userVariablesResolver } from './resolvers/userVariables';
 import { variableScopesResolver } from './resolvers/variableScopes';
 import { getCompletionString, getRangeAtPosition } from './utils/intellisenseServerUtils';
-const Fuse = require('fuse.js');
 
-type FuseResult<T> = {
-  item: T;
-  matches: { indices: number[][]; value: string; key: string }[];
-};
 const fuseOptions = {
   includeScore: true,
   threshold: 0.2,
@@ -80,7 +77,7 @@ export class IntellisenseServer {
         const fuse = new Fuse(completionItems, fuseOptions);
         const fuseSearchResults = fuse.search(wordAtCurRange);
 
-        const results: CompletionItem[] = fuseSearchResults.map((result: FuseResult<CompletionItem>) => {
+        const results: CompletionItem[] = fuseSearchResults.map((result: Fuse.FuseResult<CompletionItem>) => {
           const completionString = getCompletionString(wordAtCurRange, result.item.label);
 
           // "matches" are used to know what to highlight
