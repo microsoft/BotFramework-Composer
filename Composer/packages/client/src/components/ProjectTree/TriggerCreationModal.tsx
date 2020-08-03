@@ -14,7 +14,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { DialogInfo, SDKKinds } from '@bfc/shared';
+import { DialogInfo, SDKKinds, LuIntentSection } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
@@ -224,12 +224,7 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (
-    dialog: DialogInfo,
-    luFilePayload?: LuFilePayload,
-    lgFilePayload?: LgFilePayload,
-    QnAFilePayload?: QnAFilePayload
-  ) => void;
+  onSubmit: (dialog: DialogInfo, intent?: LuIntentSection, lgFilePayload?: LgFilePayload) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
@@ -303,14 +298,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
     if (formData.$kind === intentTypeKey && isLUISnQnA && formData.triggerPhrases) {
       const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, {});
-      const content = luFile?.content ?? '';
-      const luFileId = luFile?.id || `${dialogId}.${locale}`;
-      const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
-      const updateLuFile = {
-        id: luFileId,
-        content: newContent,
+      const newIntent = {
+        Name: formData.intent,
+        Body: formData.triggerPhrases,
       };
-      onSubmit(newDialog, updateLuFile);
+      onSubmit(newDialog, newIntent);
     } else if (formData.$kind === qnaMatcherKey || formData.$kind === onChooseIntentKey) {
       const lgTemplateId = generateUniqueId(6);
       const extraTriggerAttributes = { lgTemplateId };
@@ -351,7 +343,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     if (isCompound) {
       newFormData = { ...newFormData, $kind: '' };
     } else {
-      newFormData = { ...newFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key };
+      newFormData = {
+        ...newFormData,
+        $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key,
+      };
     }
     setFormData({ ...newFormData, errors: initialFormDataErrors });
   };
@@ -371,7 +366,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     if (option) {
       const errors: TriggerFormDataErrors = {};
       errors.event = validateEventKind(selectedType, option.key as string);
-      setFormData({ ...formData, $kind: option.key as string, errors: { ...formData.errors, ...errors } });
+      setFormData({
+        ...formData,
+        $kind: option.key as string,
+        errors: { ...formData.errors, ...errors },
+      });
     }
   };
 
@@ -381,13 +380,21 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     if (showTriggerPhrase && formData.triggerPhrases) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
     }
-    setFormData({ ...formData, intent: name, errors: { ...formData.errors, ...errors } });
+    setFormData({
+      ...formData,
+      intent: name,
+      errors: { ...formData.errors, ...errors },
+    });
   };
 
   const onChangeRegEx = (e, pattern) => {
     const errors: TriggerFormDataErrors = {};
     errors.regEx = validateRegExPattern(selectedType, isRegEx, pattern);
-    setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
+    setFormData({
+      ...formData,
+      regEx: pattern,
+      errors: { ...formData.errors, ...errors },
+    });
   };
 
   //Trigger phrase is optional
@@ -398,7 +405,11 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     } else {
       errors.triggerPhrases = '';
     }
-    setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
+    setFormData({
+      ...formData,
+      triggerPhrases: body,
+      errors: { ...formData.errors, ...errors },
+    });
   };
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
   const disable = shouldDisable(errors);
