@@ -72,7 +72,11 @@ function updateTriggerActionsAttributes(trigger, extraTriggerAttributes) {
     t.actions[0].activity = `$\{SendActivity_${lgTemplateId}()}`;
   }
   if (t.$kind === SDKKinds.OnChooseIntent) {
-    t.actions[1].prompt = `$\{ChoiceInput_Prompt_${lgTemplateId}}`;
+    //t.actions[1].prompt = `$\{ChoiceInput_Prompt_${lgTemplateId}}`;
+    for (const key in extraTriggerAttributes) {
+      set(t, key, extraTriggerAttributes[key]);
+      console.log(get(t, key, ''));
+    }
   }
   return t;
 }

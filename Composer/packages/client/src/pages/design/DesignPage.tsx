@@ -10,7 +10,7 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI } from '@bfc/shared';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI, LgTemplate } from '@bfc/shared';
 import { ActionButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
@@ -20,7 +20,6 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
-import { LgFilePayload } from '../../components/ProjectTree/TriggerCreationModal';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -49,6 +48,7 @@ import {
   luFilesState,
   localeState,
   qnaFilesState,
+  lgFilesState,
 } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
@@ -150,6 +150,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const userSettings = useRecoilValue(userSettingsState);
   const qnaFiles = useRecoilValue(qnaFilesState);
   const luFiles = useRecoilValue(luFilesState);
+  const lgFiles = useRecoilValue(lgFilesState);
   const locale = useRecoilValue(localeState);
 
   const {
@@ -164,9 +165,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectTo,
     selectAndFocus,
     addSkillDialogCancel,
-    updateLgFile,
     createQnAFile,
     createLuIntent,
+    createLgTemplate,
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
@@ -174,6 +175,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
 
   const { location, dialogId } = props;
   const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const lgFile = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
@@ -276,7 +278,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = async (dialog: DialogInfo, intent?: LuIntentSection, lgFile?: LgFilePayload) => {
+  const onTriggerCreationSubmit = async (dialog: DialogInfo, intent?: LuIntentSection, lgTemplates?: LgTemplate[]) => {
     const dialogPayload = {
       id: dialog.id,
       projectId,
@@ -286,13 +288,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       createLuIntent({ id: luFile.id, intent });
     }
 
-    if (lgFile) {
-      const lgFilePayload = {
-        id: lgFile.id,
-        content: lgFile.content,
-        projectId,
-      };
-      await updateLgFile(lgFilePayload);
+    if (lgFile && lgTemplates) {
+      lgTemplates.forEach(async (t) => {
+        const lgPayload = {
+          id: lgFile.id,
+          template: t as LgTemplate,
+        };
+        await createLgTemplate(lgPayload);
+      });
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
