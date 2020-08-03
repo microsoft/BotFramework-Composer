@@ -16,13 +16,6 @@ import { userVariablesResolver } from './resolvers/userVariables';
 import { variableScopesResolver } from './resolvers/variableScopes';
 import { getCompletionString, getRangeAtPosition } from './utils/intellisenseServerUtils';
 
-const fuseOptions = {
-  includeScore: true,
-  threshold: 0.2,
-  includeMatches: true,
-  keys: ['label'],
-};
-
 type IntellisenseScope = 'expressions' | 'user-variables' | 'variable-scopes';
 
 export class IntellisenseServer {
@@ -74,7 +67,12 @@ export class IntellisenseServer {
       if (wordAtCurRange && wordAtCurRange !== '') {
         const completionItems = this.getCompletionItems();
 
-        const fuse = new Fuse(completionItems, fuseOptions);
+        const fuse: Fuse<CompletionItem, Fuse.IFuseOptions<CompletionItem>> = new Fuse(completionItems, {
+          includeScore: true,
+          threshold: 0.2,
+          includeMatches: true,
+          keys: ['label'],
+        });
         const fuseSearchResults = fuse.search(wordAtCurRange);
 
         const results: CompletionItem[] = fuseSearchResults.map((result: Fuse.FuseResult<CompletionItem>) => {

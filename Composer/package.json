@@ -25,6 +25,7 @@
     "packages/server",
     "packages/test-utils",
     "packages/tools",
+    "packages/tools/built-in-functions",
     "packages/tools/language-servers",
     "packages/tools/language-servers/*",
     "packages/ui-plugins/*"
