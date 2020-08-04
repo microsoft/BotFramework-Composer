@@ -5,7 +5,7 @@ import { SDKKinds } from '@bfc/shared';
 
 import { RecognizerSchema, UIOptions } from './formSchema';
 import { FlowEditorWidgetMap, FlowWidget } from './flowSchema';
-import { MenuSchema } from './menu';
+import { MenuOptions } from './menuSchema';
 
 export interface PluginConfig {
   recognizers?: RecognizerSchema[];
@@ -17,6 +17,6 @@ export type UISchema = {
   [key in SDKKinds]?: {
     flow?: FlowWidget;
     form?: UIOptions;
-    menu?: MenuSchema;
+    menu?: MenuOptions;
   };
 };

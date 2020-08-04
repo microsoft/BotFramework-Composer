@@ -13,7 +13,7 @@ import get from 'lodash/get';
 import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI, LgTemplate } from '@bfc/shared';
 import { ActionButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import { useTriggerApi } from '@bfc/extension';
+import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -51,6 +51,7 @@ import {
   lgFilesState,
 } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
+import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 
 import {
@@ -606,6 +607,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = schemas?.ui?.content ?? {};
+    const userUISchema = schemas?.uiOverrides?.content ?? {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
+
   if (!dialogId) {
     return <LoadingSpinner />;
   }
@@ -635,30 +642,32 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             />
             <Toolbar toolbarItems={toolbarItems} />
           </div>
-          <Conversation css={editorContainer}>
-            <div css={editorWrapper}>
-              <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                {breadcrumbItems}
-                {dialogJsonVisible ? (
-                  <JsonEditor
-                    key="dialogjson"
-                    editorSettings={userSettings.codeEditor}
-                    id={currentDialog.id}
-                    schema={schemas.sdk.content}
-                    value={currentDialog.content || undefined}
-                    onChange={(data) => {
-                      updateDialog({ id: currentDialog.id, content: data });
-                    }}
-                  />
-                ) : isNotSupported ? (
-                  showWarning && changeRecognizerComponent
-                ) : (
-                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                )}
+          <Extension plugins={pluginConfig} shell={shell.api} shellData={shell.data}>
+            <Conversation css={editorContainer}>
+              <div css={editorWrapper}>
+                <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
+                  {breadcrumbItems}
+                  {dialogJsonVisible ? (
+                    <JsonEditor
+                      key="dialogjson"
+                      editorSettings={userSettings.codeEditor}
+                      id={currentDialog.id}
+                      schema={schemas.sdk.content}
+                      value={currentDialog.content || undefined}
+                      onChange={(data) => {
+                        updateDialog({ id: currentDialog.id, content: data });
+                      }}
+                    />
+                  ) : isNotSupported ? (
+                    showWarning && changeRecognizerComponent
+                  ) : (
+                    <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                  )}
+                </div>
+                <PropertyEditor key={focusPath} />
               </div>
-              <PropertyEditor key={focusPath} />
-            </div>
-          </Conversation>
+            </Conversation>
+          </Extension>
         </div>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
