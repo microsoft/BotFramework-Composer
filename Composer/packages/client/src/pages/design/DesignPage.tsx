@@ -13,7 +13,6 @@ import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import { useTriggerApi } from '@bfc/extension';
 import { useRecoilValue } from 'recoil';
-import { CommunicationColors } from '@uifabric/fluent-theme';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
@@ -29,7 +28,6 @@ import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
 import { undoFunctionState } from '../../recoilModel/undo/history';
 import {
-  dialogsState,
   projectIdState,
   schemasState,
   showCreateDialogModalState,
@@ -46,6 +44,7 @@ import {
   luFilesState,
   localeState,
 } from '../../recoilModel';
+import { validatedDialogs } from '../../recoilModel/selectors/validatedDialogs';
 
 import { VisualEditorAPI } from './FrameAPI';
 import {
@@ -101,7 +100,7 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogs);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const displaySkillManifest = useRecoilValue(displaySkillManifestState);
@@ -111,7 +110,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const designPageLocation = useRecoilValue(designPageLocationState);
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
-  const { undo, redo, canRedo, canUndo } = useRecoilValue(undoFunctionState);
+  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
@@ -183,11 +182,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       // @ts-ignore
       globalHistory._onTransitionComplete();
       /* eslint-enable */
-    } else {
-      //leave design page should clear the history
-      // clearUndoHistory(); //TODO: undo/redo
     }
   }, [location]);
+
+  useEffect(() => {
+    //leave design page should clear the history
+    return clearUndo;
+  }, []);
 
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
@@ -204,7 +205,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       content: dialog.content,
     };
     if (luFile && intent) {
-      createLuIntent({ id: luFile.id, intent });
+      createLuIntent({ id: luFile.id, intent, projectId });
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
@@ -442,7 +443,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateSkill({ projectId, targetId: -1, skillData });
   }
 
-  function handleCreateDialogSubmit(data: { name: string; description: string }) {
+  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
@@ -450,7 +451,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (seededContent.triggers?.[0]) {
       seededContent.triggers[0].actions = actionsSeed;
     }
-    createDialog({ id: data.name, content: seededContent });
+    await createDialog({ id: data.name, content: seededContent });
+    commitChanges();
   }
 
   async function handleDeleteDialog(id) {
@@ -474,7 +476,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      removeDialog(id);
+      await removeDialog(id);
+      commitChanges();
     }
   }
 
@@ -482,7 +485,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
 
     if (content) {
-      await updateDialog({ id, content });
+      updateDialog({ id, content });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;

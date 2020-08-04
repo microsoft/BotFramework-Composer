@@ -17,7 +17,6 @@ import {
   schemasState,
   skillsState,
   lgFilesState,
-  dialogsState,
   projectIdState,
   localeState,
   luFilesState,
@@ -28,6 +27,7 @@ import {
   userSettingsState,
   clipboardActionsState,
 } from '../recoilModel';
+import { validatedDialogs } from '../recoilModel/selectors/validatedDialogs';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -39,7 +39,7 @@ type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const dialogMapRef = useRef({});
   const botName = useRecoilValue(botNameState);
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogs);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
@@ -51,7 +51,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
   const focusPath = useRecoilValue(focusPathState);
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
-  const { undo, redo, startBatch, endBatch } = useRecoilValue(undoFunctionState);
+  const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
   const {
     updateDialog,
     createDialogBegin,
@@ -78,11 +78,11 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     }, {});
   }, [dialogs]);
 
-  async function updateRegExIntentHandler(id, intentName, pattern) {
+  function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return await updateDialog({ id, content: newDialog.content });
+    return updateDialog({ id, content: newDialog.content });
   }
 
   function cleanData() {
@@ -160,6 +160,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
          */
         navTo(dialogId, []);
       }
+      commitChanges();
     },
     ...lgApi,
     ...luApi,
@@ -185,8 +186,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     },
     undo,
     redo,
-    startBatch,
-    endBatch,
+    commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
     updateUserSettings: updateUserSettings,
     announce: setMessage,

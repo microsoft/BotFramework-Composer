@@ -18,18 +18,18 @@ const { appendNodesAfter, queryNodes, insertNodes, deleteNode, deleteNodes } = D
 export function useDialogEditApi(shellApi: ShellApi) {
   const { constructActions, copyActions, deleteAction, deleteActions } = useActionApi(shellApi);
 
-  async function insertActions(
+  function insertActions(
     dialogId: string,
     dialogData,
     targetArrayPath: string,
     targetArrayPosition: number,
     actionsToInsert: BaseSchema[]
   ) {
-    const newNodes = await constructActions(dialogId, actionsToInsert);
+    const newNodes = constructActions(dialogId, actionsToInsert);
     return insertNodes(dialogData, targetArrayPath, targetArrayPosition, newNodes);
   }
 
-  async function insertAction(
+  function insertAction(
     dialogId: string,
     dialogData,
     targetArrayPath: string,
@@ -39,8 +39,8 @@ export function useDialogEditApi(shellApi: ShellApi) {
     return insertActions(dialogId, dialogData, targetArrayPath, targetArrayPosition, [actionToInsert]);
   }
 
-  async function insertActionsAfter(dialogId: string, dialogData, targetId: string, actionsToInsert: BaseSchema[]) {
-    const newNodes = await constructActions(dialogId, actionsToInsert);
+  function insertActionsAfter(dialogId: string, dialogData, targetId: string, actionsToInsert: BaseSchema[]) {
+    const newNodes = constructActions(dialogId, actionsToInsert);
     return appendNodesAfter(dialogData, targetId, newNodes);
   }
 
@@ -61,13 +61,13 @@ export function useDialogEditApi(shellApi: ShellApi) {
   function enableSelectedActions(dialogId: string, dialogData, actionIds: string[]) {
     return enableNodes(dialogData, actionIds);
   }
-  async function copySelectedActions(dialogId, dialogData, actionIds: string[]) {
+  function copySelectedActions(dialogId, dialogData, actionIds: string[]) {
     const actions = queryNodes(dialogData, actionIds);
     return copyActions(dialogId, actions);
   }
 
-  async function cutSelectedActions(dialogId, dialogData, actionIds: string[]) {
-    const cutActions = await copySelectedActions(dialogId, dialogData, actionIds);
+  function cutSelectedActions(dialogId, dialogData, actionIds: string[]) {
+    const cutActions = copySelectedActions(dialogId, dialogData, actionIds);
     const newDialog = deleteSelectedActions(dialogId, dialogData, actionIds);
     return { dialog: newDialog, cutActions };
   }
