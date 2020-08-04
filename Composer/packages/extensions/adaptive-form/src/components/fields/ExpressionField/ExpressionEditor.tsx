@@ -5,6 +5,7 @@ import { FieldProps, useShellApi } from '@bfc/extension';
 import { IntellisenseTextField } from '@bfc/intellisense';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import React from 'react';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
 
 import { getIntellisenseUrl } from '../../../utils/getIntellisenseUrl';
 
@@ -15,24 +16,34 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
 
   return (
     <IntellisenseTextField
-      disabled={disabled}
-      errorMessage={error}
       id={id}
-      placeholder={placeholder}
       projectId={projectId}
-      readOnly={readonly}
       scopes={['expressions', 'user-variables']}
-      styles={{
-        root: { width: '100%' },
-        errorMessage: { display: 'none' },
-      }}
       url={getIntellisenseUrl()}
       value={value}
       onChange={onChange}
-      onRenderPrefix={() => {
-        return <Icon iconName="Variable" />;
-      }}
-    />
+    >
+      {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
+        <TextField
+          disabled={disabled}
+          errorMessage={error}
+          placeholder={placeholder}
+          readOnly={readonly}
+          styles={{
+            root: { width: '100%' },
+            errorMessage: { display: 'none' },
+          }}
+          value={textFieldValue}
+          onChange={(_e, newValue) => onValueChanged(newValue || '')}
+          onClick={onClickTextField}
+          onKeyDown={onKeyDownTextField}
+          onKeyUp={onKeyUpTextField}
+          onRenderPrefix={() => {
+            return <Icon iconName="Variable" />;
+          }}
+        />
+      )}
+    </IntellisenseTextField>
   );
 };
 

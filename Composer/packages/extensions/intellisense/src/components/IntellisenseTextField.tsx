@@ -1,34 +1,30 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-/** @jsx jsx */
-import { ITextFieldProps, TextField } from 'office-ui-fabric-react/lib/TextField';
 import React from 'react';
-import { css, jsx } from '@emotion/core';
 
 import { useLanguageServer } from '../hooks/useLanguageServer';
 import { checkIsOutside } from '../utils/uiUtils';
 
 import { CompletionList } from './CompletionList';
 
-const styles = {
-  textField: css`
-    width: 300px;
-  `,
-};
-
 export const IntellisenseTextField = React.memo(
-  (
-    props: {
-      url: string;
-      scopes: string[];
-      projectId?: string;
-      id: string;
-      value?: string;
-      onChange: (newValue: string) => void;
-    } & Omit<Partial<ITextFieldProps>, 'onChange'>
-  ) => {
-    const { url, scopes, projectId, id, value, onChange, ...rest } = props;
+  (props: {
+    url: string;
+    scopes: string[];
+    projectId?: string;
+    id: string;
+    value?: string;
+    onChange: (newValue: string) => void;
+    children: (
+      textFieldValue: string,
+      onValueChanged: (newValue: string) => void,
+      onKeyDownTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void,
+      onKeyUpTextField: (event: React.KeyboardEvent<HTMLInputElement>) => void,
+      onClickTextField: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void
+    ) => JSX.Element;
+  }) => {
+    const { url, scopes, projectId, id, value, onChange, children } = props;
 
     const [textFieldValue, setTextFieldValue] = React.useState('');
     const [showCompletionList, setShowCompletionList] = React.useState(false);
@@ -165,16 +161,7 @@ export const IntellisenseTextField = React.memo(
 
     return (
       <div onKeyUp={onKeyUpMainComponent} ref={mainContainerRef} style={{ position: 'relative' }}>
-        <TextField
-          {...rest}
-          id={id}
-          value={textFieldValue}
-          onChange={(_e, newValue) => onValueChanged(newValue || '')}
-          onKeyDown={onKeyDownTextField}
-          onKeyUp={onKeyUpTextField}
-          onClick={onClickTextField}
-          css={styles.textField}
-        />
+        {children(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField)}
 
         {showCompletionList && (
           <CompletionList
