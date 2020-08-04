@@ -11,17 +11,20 @@ describe('getDefinitions', () => {
   });
 
   it('returns definitions', () => {
-    const definitions = getDefinitions([{ type: 'integer' }, { $ref: 'booleanExpression' }], valueTypeDefinitions);
+    const definitions = getDefinitions(
+      [{ type: 'integer' }, { $ref: '#/definitions/booleanExpression' }],
+      valueTypeDefinitions
+    );
 
     expect(definitions).toEqual(
       expect.objectContaining({
-        boolean: expect.any(Object),
+        booleanExpression: expect.any(Object),
       })
     );
   });
 
   it('returns nested definitions', () => {
-    const definitions = getDefinitions([], valueTypeDefinitions);
+    const definitions = getDefinitions([{ $ref: '#/definitions/valueExpression' }], valueTypeDefinitions);
 
     expect(definitions).toEqual(
       expect.objectContaining({
