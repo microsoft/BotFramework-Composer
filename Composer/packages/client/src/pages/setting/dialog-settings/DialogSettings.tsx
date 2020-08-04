@@ -25,7 +25,7 @@ import {
 import { languageListTemplates } from '../../../components/MultiLanguage';
 import { navigateTo } from '../../../utils/navigation';
 
-import { hostedControls, settingsEditor, toolbar } from './style';
+import { settingsEditor, toolbar } from './style';
 import { BotSettings } from './constants';
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
@@ -96,22 +96,20 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const editorId = [defaultLanguage, ...languages].join('-');
 
   return botName ? (
-    <Stack tokens={{ childrenGap: '3rem' }}>
+    <Stack tokens={{ childrenGap: '1rem' }}>
       <StackItem grow={0}>
-        <div css={hostedControls}>
-          <Label>{BotSettings.generalTitle}</Label>
-          <p>
-            {BotSettings.botSettingDescription}
-            &nbsp;
-            <Link href={'https://aka.ms/bf-composer-docs-publish-bot'} target="_blank">
-              {BotSettings.learnMore}
-            </Link>
-          </p>
-        </div>
+        <Label>{BotSettings.generalTitle}</Label>
+        <section>
+          {BotSettings.botSettingDescription}
+          &nbsp;
+          <Link href={'https://aka.ms/bf-composer-docs-publish-bot'} target="_blank">
+            {BotSettings.learnMore}
+          </Link>
+        </section>
       </StackItem>
       <StackItem>
         <Label>{BotSettings.languageTitle}</Label>
-        <p>{BotSettings.languagesubTitle}</p>
+        <section>{BotSettings.languagesubTitle}</section>
         <section style={{ padding: '0 50px' }}>
           <div css={toolbar}>
             <Dropdown
