@@ -6,10 +6,9 @@ import * as minimist from 'minimist';
 import * as path from "path";
 import { Server } from 'restify';
 import { BotFrameworkAdapter, BotFrameworkAdapterSettings, ChannelServiceRoutes, ConversationState, InputHints, SkillHandler, TurnContext, UserState, WebRequest, WebResponse } from "botbuilder";
-import { AuthenticationConfiguration, Claim, JwtTokenValidation, SimpleCredentialProvider, SkillValidation } from 'botframework-connector';
+import { AuthenticationConfiguration, SimpleCredentialProvider } from 'botframework-connector';
 import { ComposerBot } from './composerBot';
 import { BotSettings } from "./settings";
-import { SkillsConfiguration } from './skillsConfiguration';
 import { SkillConversationIdFactory } from './skillConversationIdFactory';
 
 /**
@@ -141,29 +140,6 @@ export const getBotAdapter = (userState: UserState, conversationState: Conversat
 };
 
 /**
- * Validation function to validate skill claims.
- * @param claims Skill claims to be validated.
- */
-export const allowedSkillsClaimsValidator = async (claims: Claim[]) => {
-    const settings = getSettings();
-    // Create and initialize the skill classes
-    const skillsConfig = new SkillsConfiguration(settings);
-    // Load the appIds for the configured skills (we will only allow responses from skills we have configured).
-    const allowedSkills = Object.values(skillsConfig.skills).map(skill => skill.appId);
-    // For security, developer must specify allowedSkills.
-    if (!allowedSkills || allowedSkills.length === 0) {
-        throw new Error('Allowed skills not specified');
-    }
-    if (!allowedSkills.includes('*') && SkillValidation.isSkillClaim(claims)) {
-        // Check that the appId claim in the skill request is in the list of skills configured for this bot.
-        const appId = JwtTokenValidation.getAppIdFromClaims(claims);
-        if (!allowedSkills.includes(appId)) {
-            throw new Error(`Received a request from an application with an appID of "${ appId }". To enable requests from this skill, add the skill to your configuration file.`);
-        }
-    }
-};
-
-/**
  * Configure a server to work with botframework message requests.
  * @param server Web server to be configured.
  * @param adapter Botframework adapter to handle message requests.
@@ -192,7 +168,7 @@ export const configureSkillEndpoint = (server: Server, adapter: BotFrameworkAdap
     const settings = getSettings();
     const conversationIdFactory = new SkillConversationIdFactory();
     const credentialProvider = new SimpleCredentialProvider(settings.microsoftAppId, settings.microsoftAppPassword);
-    const authConfig = new AuthenticationConfiguration([], allowedSkillsClaimsValidator);
+    const authConfig = new AuthenticationConfiguration([]);
     const handler = new SkillHandler(adapter, bot, conversationIdFactory, credentialProvider, authConfig);
     const skillEndpoint = new ChannelServiceRoutes(handler);
     skillEndpoint.register(server, '/api/skills');
