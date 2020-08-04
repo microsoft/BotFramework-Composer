@@ -36,9 +36,10 @@ export const dialogsDispatcher = () => {
     const luFiles = await snapshot.getPromise(luFilesState);
     dialogs = dialogs.map((dialog) => {
       if (dialog.id === id) {
+        const fixedContent = autofixReferInDialog(id, content);
         dialog = {
           ...dialog,
-          ...dialogIndexer.parse(dialog.id, content),
+          ...dialogIndexer.parse(dialog.id, fixedContent),
         };
         dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
         return dialog;

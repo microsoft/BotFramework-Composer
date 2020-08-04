@@ -11,9 +11,9 @@ import { VisitorFunc, JsonWalk } from './jsonWalk';
  * - "dialog": 'AddTodos'
  * + "dialog": 'addtodos'
  */
-export function autofixReferInDialog(dialogId: string, content: string): string {
+export function autofixReferInDialog(dialogId: string, content: string | object): any {
   try {
-    const dialogJson = JSON.parse(content);
+    const dialogJson = typeof content === 'string' ? JSON.parse(content) : content;
 
     // fix dialog referrence
     const visitor: VisitorFunc = (_path: string, value: any) => {
@@ -27,14 +27,14 @@ export function autofixReferInDialog(dialogId: string, content: string): string 
     JsonWalk('/', dialogJson, visitor);
 
     // fix lg referrence
-    dialogJson.generator = `${dialogId}.lg`;
+    dialogJson.generator = `${dialogId.toLowerCase()}.lg`;
 
     // fix lu referrence
     if (typeof dialogJson.recognizer === 'string') {
-      dialogJson.recognizer = `${dialogId}.lu`;
+      dialogJson.recognizer = `${dialogId.toLowerCase()}.lu`;
     }
 
-    return JSON.stringify(dialogJson, null, 2);
+    return dialogJson;
   } catch (_error) {
     // pass, content may be empty
     return content;
