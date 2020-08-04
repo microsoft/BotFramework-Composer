@@ -89,9 +89,6 @@ export default async (composer: any): Promise<void> => {
 
       // write settings to disk in the appropriate location
       const settingsPath = path.join(publishFolder, 'ComposerDialogs', 'settings', 'appsettings.json');
-      // Set the bot and root fields to `ComposerDialogs` - this points the runtime to the appropriate deployed location
-      // root parameter is read by botbuilder SDK, bot parameter is read by dotnet runtime.
-      Object.assign(settings, { bot: 'ComposerDialogs', root: 'ComposerDialogs' });
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
         fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
       }
@@ -160,9 +157,6 @@ export default async (composer: any): Promise<void> => {
 
       // write settings to disk in the appropriate location
       const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
-      // Set the bot and root fields to `ComposerDialogs` - this points the runtime to the appropriate deployed location
-      // todo: are both necessary?
-      Object.assign(settings, { bot: 'ComposerDialogs', root: 'ComposerDialogs' });
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
         fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
       }

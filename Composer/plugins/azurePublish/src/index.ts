@@ -390,7 +390,7 @@ export default async (composer: any): Promise<void> => {
       const jobId = uuid();
 
       // resource key to map to one provision resource
-      const resourcekey = md5([project.name, name, environment, settings?.MicrosoftAppPassword].join());
+      const resourcekey = md5([project.name, name, environment].join());
 
       // Initialize the output logs...
       this.logMessages = ['Publish starting...'];

@@ -44,7 +44,6 @@ namespace Microsoft.BotFramework.Composer.Functions
 
             // Config precedence 1: root app.settings
             config.SetBasePath(rootDirectory);
-            config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
             // Config precedence 2: ComposerDialogs/settings settings which are injected by the composer publish
             // Hard code the settings path to 'ComposerDialogs' for deployment

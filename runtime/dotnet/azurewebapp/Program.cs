@@ -26,7 +26,6 @@ namespace Microsoft.BotFramework.Composer.WebAppTemplates
                 builder.UseBotPathConverter(env.IsDevelopment());
 
                 var configuration = builder.Build();
-                builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
                 // Hard code the settings path to 'ComposerDialogs' while deployment
                 var botRoot = configuration.GetValue<string>("bot") ?? "ComposerDialogs";
