@@ -28,7 +28,7 @@ export const schema = (): JSONSchema7 => ({
   definitions: {
     dialogProperties: {
       type: 'object',
-      required: ['ref'],
+      required: ['ref', 'type'],
       properties: {
         title: {
           type: 'string',
@@ -40,17 +40,18 @@ export const schema = (): JSONSchema7 => ({
           title: formatMessage('Description'),
           description: formatMessage('Property description.'),
         },
-        ref: {
+        type: {
           type: 'string',
           title: formatMessage('Type'),
-          description: formatMessage('Property description.'),
+          description: formatMessage('Property type.'),
+          enum: ['array', 'boolean', 'integer', 'number', 'object', 'string'],
         },
       },
     },
   },
 });
 
-export const valueTypeDefinitions = {
+export const valueTypeDefinitions: { [key: string]: JSONSchema7 } = {
   expression: {
     $role: 'expression',
     type: 'string',
@@ -62,7 +63,7 @@ export const valueTypeDefinitions = {
   equalsExpression: {
     $role: 'expression',
     type: 'string',
-    title: 'Expression',
+    title: 'Equals Expression',
     description: 'Expression starting with =.',
     pattern: '^=.*\\S.*',
     examples: ['=user.name'],
@@ -223,82 +224,6 @@ export const valueTypeDefinitions = {
       {
         $ref: '#/definitions/equalsExpression',
         examples: ['=...'],
-      },
-    ],
-  },
-};
-
-export const resultTypeDefinitions = {
-  boolean: {
-    title: 'Boolean',
-    description: 'Boolean constant.',
-    type: 'boolean',
-    default: false,
-    examples: [false],
-  },
-  number: {
-    type: 'number',
-    description: 'Number constant.',
-    title: 'Number',
-    default: 0,
-    examples: [15.5],
-  },
-  integer: {
-    title: 'Integer',
-    description: 'Integer constant.',
-    type: 'integer',
-    default: 0,
-    examples: [15],
-  },
-  string: {
-    title: 'String',
-    description: 'Interpolated string',
-    type: 'string',
-    pattern: '^(?!(=)).*',
-    examples: ['Hello ${user.name}'],
-  },
-  array: {
-    title: 'Array',
-    description: 'Array constant.',
-    type: 'array',
-  },
-  object: {
-    title: 'Object',
-    description: 'Object constant.',
-    type: 'object',
-  },
-  value: {
-    title: 'Any',
-    description: 'Any constant.',
-    oneOf: [
-      {
-        type: 'object',
-        title: 'Object',
-        description: 'Object constant.',
-      },
-      {
-        type: 'array',
-        title: 'Array',
-        description: 'Array constant.',
-      },
-      {
-        type: 'string',
-        title: 'String',
-        description: 'Interpolated string.',
-        pattern: '^(?!(=)).*',
-        examples: ['Hello ${user.name}'],
-      },
-      {
-        type: 'boolean',
-        title: 'Boolean',
-        description: 'Boolean constant',
-        examples: [false],
-      },
-      {
-        type: 'number',
-        title: 'Number',
-        description: 'Number constant.',
-        examples: [15.5],
       },
     ],
   },

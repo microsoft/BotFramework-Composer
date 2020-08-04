@@ -4,7 +4,7 @@
 import { UISchema } from '@bfc/extension';
 import { SDKKinds } from '@bfc/shared';
 
-import { AdaptiveDialogField } from './AdaptiveDialogField';
+import { AdaptiveDialogField } from './Fields/AdaptiveDialogField';
 
 const uiSchema: UISchema = {
   [SDKKinds.AdaptiveDialog]: {

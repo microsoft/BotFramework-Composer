@@ -1,16 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
 import { FieldLabel } from '@bfc/adaptive-form';
 import { FieldProps } from '@bfc/extension';
+import startCase from 'lodash/startCase';
 
-interface RefFieldProps extends FieldProps {
-  options: IDropdownOption[];
-}
+import { valueTypeDefinitions } from '../schema';
 
-export const RefField: React.FC<RefFieldProps> = ({ description, id, label, value, options, required, onChange }) => {
+export const ValueRefField: React.FC<FieldProps> = ({ description, id, label, value, required, onChange }) => {
+  const options = useMemo<IDropdownOption[]>(() => {
+    return Object.entries(valueTypeDefinitions || {}).map(([key, value]) => ({
+      key: `#/definitions/${key}`,
+      text: value?.title || startCase(key),
+    }));
+  }, []);
+
   const handleChange = (_: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
     if (option) {
       onChange(option.key);

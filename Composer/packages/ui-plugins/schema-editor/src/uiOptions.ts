@@ -4,13 +4,8 @@
 import { UIOptions } from '@bfc/extension';
 import startCase from 'lodash/startCase';
 
-import { CollapsedField } from './CollapsedField';
-import { ResultRefField, ValueRefField } from './RefFields';
-
-const propertySerializer = {
-  get: ({ $ref, ...rest }: any = {}) => ($ref ? { ...rest, ref: $ref } : rest),
-  set: ({ ref, ...rest }: any = {}) => (ref ? { ...rest, $ref: ref } : rest),
-};
+import { CollapsedField } from './Fields/CollapsedField';
+import { ValueRefField } from './Fields/ValueRefField';
 
 const objectSerializer = {
   get: (value) => value,
@@ -29,10 +24,13 @@ export const uiOptions: UIOptions = {
       properties: {
         additionalProperties: {
           hidden: ['title'],
-          order: ['ref', 'description', '*'],
-          serializer: propertySerializer,
+          order: ['type', 'description', '*'],
+          serializer: {
+            get: ({ $ref, ...rest }: any = {}) => ($ref ? { ...rest, type: $ref } : rest),
+            set: ({ type, ...rest }: any = {}) => (type ? { ...rest, $ref: type } : rest),
+          },
           properties: {
-            ref: {
+            type: {
               field: ValueRefField,
             },
           },
@@ -44,13 +42,7 @@ export const uiOptions: UIOptions = {
       properties: {
         additionalProperties: {
           hidden: ['title'],
-          order: ['ref', 'description', '*'],
-          serializer: propertySerializer,
-          properties: {
-            ref: {
-              field: ResultRefField,
-            },
-          },
+          order: ['type', 'description', '*'],
         },
       },
     },
