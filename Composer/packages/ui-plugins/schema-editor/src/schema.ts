@@ -5,7 +5,7 @@ import { JSONSchema7 } from '@bfc/extension';
 import formatMessage from 'format-message';
 
 export const schema = (): JSONSchema7 => ({
-  title: formatMessage('Dialog Schema'),
+  title: formatMessage('Dialog Interface'),
   type: 'object',
   properties: {
     dialogValue: {
