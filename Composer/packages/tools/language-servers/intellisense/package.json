@@ -14,7 +14,8 @@
   "scripts": {
     "dev": "ts-node src/server.ts",
     "start": "ts-node lib/server.js",
-    "build": "rimraf ./lib && tsc --build tsconfig.build.json"
+    "build": "rimraf ./lib && tsc --build tsconfig.build.json",
+    "test": "jest"
   },
   "author": "Microsoft",
   "license": "MIT"
