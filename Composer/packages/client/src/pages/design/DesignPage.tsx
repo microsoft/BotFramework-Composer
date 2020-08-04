@@ -210,11 +210,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateDialog(dialogPayload);
   };
 
-  function handleSelect(id, selected = '') {
+  function handleSelect(dialogId, selected = '') {
     if (selected) {
-      selectTo(selected);
+      selectTo(selected, dialogId);
     } else {
-      navTo(id, []);
+      navTo(dialogId, []);
     }
   }
 

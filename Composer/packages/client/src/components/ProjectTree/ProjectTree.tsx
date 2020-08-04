@@ -43,12 +43,11 @@ const root = css`
 
 // -------------------- ProjectTree -------------------- //
 
-function createGroupItem(dialog: DialogInfo, position: number) {
+function createGroupItem(dialog: DialogInfo) {
   return {
     key: dialog.id,
     name: dialog.displayName,
     level: 1,
-    startIndex: position,
     count: dialog.triggers.length,
     hasMoreData: true,
     isCollapsed: false,
@@ -120,12 +119,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     );
   };
 
-  function renderCell(item: any, depth: number): React.ReactNode {
+  function renderCell(item: any, depth: number, dialogId: string): React.ReactNode {
     return (
       <TreeItem
         depth={depth}
         icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
-        isActive={createSelectedPath(item.index) === selected}
+        isActive={dialogId === props.dialogId && createSelectedPath(item.index) === selected}
         link={item}
         onDelete={() => onDeleteTrigger(dialogId, item.index)}
         onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
@@ -153,10 +152,10 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               dialog.triggers.some((trigger) => getTriggerName(trigger).includes(filter))
           );
 
-    return filteredDialogs.map((dialog: DialogInfo, dialogIndex) => {
+    return filteredDialogs.map((dialog: DialogInfo) => {
       const triggerList = dialog.triggers
         .filter((tr) => dialog.displayName.includes(filter) || getTriggerName(tr).includes(filter))
-        .map((tr, index) => renderCell({ ...tr, index, displayName: getTriggerName(tr) }, 1));
+        .map((tr, index) => renderCell({ ...tr, index, displayName: getTriggerName(tr) }, 1, dialog.id));
       return (
         <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
           <summary
@@ -166,7 +165,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
               padding-top: 12px;
             `}
           >
-            {renderHeader(createGroupItem(dialog, dialogIndex))}
+            {renderHeader(createGroupItem(dialog))}
           </summary>
           {triggerList}
         </details>
