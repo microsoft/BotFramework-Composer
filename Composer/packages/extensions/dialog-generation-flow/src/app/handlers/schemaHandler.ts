@@ -32,7 +32,7 @@ const getDefaultPayload = (kind: SchemaPropertyKind) => {
   }
 };
 
-export type TodoAction = ReturnType<typeof createSchemaHandler>;
+export type SchemaAction = ReturnType<typeof createSchemaHandler>;
 
 export const createSchemaHandler = ({ dataStore }: HandlerDependencies) => {
   const importSchemaString = ({ id, content }: { id: string; content: string }) => {

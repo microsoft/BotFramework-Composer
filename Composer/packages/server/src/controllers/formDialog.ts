@@ -42,7 +42,7 @@ const generate = async (req: Request, res: Response) => {
 
     await currentProject.generateDialog(name, JSON.stringify(schema));
     const updatedProject = await BotProjectService.getProjectById(projectId, user);
-    res.status(200).json(updatedProject);
+    res.status(200).json({ id: projectId, ...updatedProject.getProject() });
   } else {
     res.status(404).json({
       message: 'No such bot project opened',

@@ -59,7 +59,6 @@ const getUserSettings = (): UserSettings => {
 
 export const initialBotState: BotState = {
   dialogs: [],
-  dialogSchemas: [],
   projectId: '',
   botName: '',
   location: '', // the path to the bot project
@@ -90,6 +89,9 @@ export const initialBotState: BotState = {
   publishTypes: [],
   publishHistory: {},
   botOpening: false,
+  formDialogSchemas: [],
+  formDialogTemplateSchemas: [],
+  formDialogGenerationProgressing: false,
 };
 
 const initialAppState: AppState = {

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { MutableDataStore } from 'src/app/stores/dataStore';
-import { TodoAction } from 'src/app/handlers/schemaHandler';
+import { SchemaAction } from 'src/app/handlers/schemaHandler';
 import { MutableSettingsStore } from 'src/app/stores/settingsStore';
 import { SettingsAction } from 'src/app/handlers/settingsHandler';
 import { UndoAction } from 'src/app/handlers/undoHandler';
@@ -12,4 +12,4 @@ export type HandlerDependencies = {
   settingsStore: MutableSettingsStore;
 };
 
-export type Action = TodoAction & SettingsAction & UndoAction;
+export type Action = SchemaAction & SettingsAction & UndoAction;

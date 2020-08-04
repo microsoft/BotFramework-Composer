@@ -12,29 +12,29 @@ import { nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { StoreContext } from '../../store';
 
-type SchemaDialogFormData = {
+type FormDialogDialogSchemaFormData = {
   name: string;
 };
 
-type CreateSchemaDialogModalProps = {
-  onSubmit: (dialogSchemaFormData: SchemaDialogFormData) => void;
+type CreateFormDialogSchemaModalProps = {
+  onSubmit: (dialogSchemaFormData: FormDialogDialogSchemaFormData) => void;
   onDismiss: () => void;
   isOpen: boolean;
 };
 
-export const CreateSchemaDialogModal: React.FC<CreateSchemaDialogModalProps> = (props) => {
+export const CreateFormDialogSchemaModal: React.FC<CreateFormDialogSchemaModalProps> = (props) => {
   const { state } = useContext(StoreContext);
-  const { dialogSchemas } = state;
+  const { formDialogSchemas } = state;
   const { onSubmit, onDismiss, isOpen } = props;
 
-  const formConfig: FieldConfig<SchemaDialogFormData> = {
+  const formConfig: FieldConfig<FormDialogDialogSchemaFormData> = {
     name: {
       required: true,
       validate: (value) => {
         if (!nameRegex.test(value)) {
           return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
         }
-        if (dialogSchemas.some((dialog) => dialog.id === value)) {
+        if (formDialogSchemas.some((dialog) => dialog.id === value)) {
           return formatMessage('Duplicate dialog schema name');
         }
       },
@@ -84,7 +84,7 @@ export const CreateSchemaDialogModal: React.FC<CreateSchemaDialogModalProps> = (
           <PrimaryButton
             data-testid="SubmitNewDialogBtn"
             disabled={hasErrors}
-            text={formatMessage('OK')}
+            text={formatMessage('Create')}
             onClick={handleSubmit}
           />
         </DialogFooter>

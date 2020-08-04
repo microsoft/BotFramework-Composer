@@ -11,7 +11,6 @@ const htmlEntityMap: Record<string, string> = {
   '<': '<',
   '>': '>',
   '"': '"',
-  // tslint:disable-next-line: quotemark
   "'": "'",
   '/': '/',
   '`': '`',

@@ -4,28 +4,7 @@
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import * as React from 'react';
 import { RefPropertyPayload } from 'src/app/stores/schemaPropertyStore';
-
-const availableTemplates: Record<string, string[]> = {
-  age: ['age'],
-  datetime: ['datetime'],
-  dimension: ['dimension'],
-  geography: ['geographyV2'],
-  money: ['money'],
-  ordinal: ['ordinalV2'],
-  temperature: ['temperature'],
-};
-
-const templateOptions = Object.keys(availableTemplates).reduce<IDropdownOption[]>((acc, key) => {
-  acc.push(
-    ...availableTemplates[key].map<IDropdownOption>((item) => ({
-      key: `${key}:${item}`,
-      text: `${key}:${item}`,
-      data: { key, item },
-    }))
-  );
-
-  return acc;
-}, [] as IDropdownOption[]);
+import { Context } from 'src/app/context/Context';
 
 type Props = {
   payload: RefPropertyPayload;
@@ -35,19 +14,17 @@ type Props = {
 export const RefPropertyContent = React.memo((props: Props) => {
   const { payload, onChangePayload } = props;
 
-  let selectedKey = '';
-  if (payload.ref) {
-    const [key, item] = payload.ref.split(':');
-    if (key && item) {
-      selectedKey = `${key}:${item}`;
-    }
-  }
+  const { templates } = React.useContext(Context);
+  const options = React.useMemo(
+    () => templates.map<IDropdownOption>((t) => ({ key: t, text: t })),
+    [templates]
+  );
 
   return (
     <Dropdown
       label="Select from templates"
-      options={templateOptions}
-      selectedKey={selectedKey}
+      options={options}
+      selectedKey={payload.ref}
       onChange={(_e, option) => onChangePayload({ kind: 'ref', ref: option.key } as RefPropertyPayload)}
     />
   );

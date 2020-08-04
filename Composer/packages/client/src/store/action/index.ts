@@ -3,6 +3,7 @@
 
 export * from './appUpdate';
 export * from './dialog';
+export * from './formDialog';
 export * from './editors';
 export * from './error';
 export * from './lg';
