@@ -79,7 +79,7 @@ export class ComposerBot extends ActivityHandler {
 
   private configureSkills() {
     const conversationIdFactory = new SkillConversationIdFactory();
-    const credentialProvider = new SimpleCredentialProvider(this.settings.microsoftAppId, this.settings.microsoftAppPassword);
+    const credentialProvider = new SimpleCredentialProvider(this.settings.MicrosoftAppId, this.settings.MicrosoftAppPassword);
     const skillClient = new SkillHttpClient(credentialProvider, conversationIdFactory);
     SkillExtensions.useSkillClient(this.dialogManager, skillClient);
     SkillExtensions.useSkillConversationIdFactory(this.dialogManager, conversationIdFactory);

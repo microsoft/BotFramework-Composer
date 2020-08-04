@@ -167,7 +167,7 @@ export const configureMessageEndpoint = (server: Server, adapter: BotFrameworkAd
 export const configureSkillEndpoint = (server: Server, adapter: BotFrameworkAdapter, bot: ComposerBot) => {
     const settings = getSettings();
     const conversationIdFactory = new SkillConversationIdFactory();
-    const credentialProvider = new SimpleCredentialProvider(settings.microsoftAppId, settings.microsoftAppPassword);
+    const credentialProvider = new SimpleCredentialProvider(settings.MicrosoftAppId, settings.MicrosoftAppPassword);
     const authConfig = new AuthenticationConfiguration([]);
     const handler = new SkillHandler(adapter, bot, conversationIdFactory, credentialProvider, authConfig);
     const skillEndpoint = new ChannelServiceRoutes(handler);
