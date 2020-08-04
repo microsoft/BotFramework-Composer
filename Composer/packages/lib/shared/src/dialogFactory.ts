@@ -87,7 +87,7 @@ const initialDialogShape = () => ({
         condition: 'count(turn.recognized.answers[0].context.prompts) > 0',
         actions: [
           {
-            $kind: SDKKinds.SetProperties,
+            $kind: SDKKinds.SetProperty,
             $designer: {
               id: generateDesignerId(),
             },
@@ -99,7 +99,6 @@ const initialDialogShape = () => ({
             $designer: {
               id: generateDesignerId(),
             },
-            disabled: false,
             maxTurnCount: 3,
             alwaysPrompt: true,
             allowInterruptions: false,
@@ -107,7 +106,7 @@ const initialDialogShape = () => ({
             property: 'turn.qnaMultiTurnResponse',
           },
           {
-            $kind: SDKKinds.SetProperties,
+            $kind: SDKKinds.SetProperty,
             $designer: {
               id: generateDesignerId(),
             },
@@ -166,7 +165,7 @@ const initialDialogShape = () => ({
     },
     actions: [
       {
-        $kind: SDKKinds.SetProperty,
+        $kind: SDKKinds.SetProperties,
         $designer: {
           id: generateDesignerId(),
         },
@@ -195,17 +194,14 @@ const initialDialogShape = () => ({
             },
             eventName: 'recognizedIntent',
             eventValue: '=dialog.luisResult.result',
-            disabled: true,
           },
           {
             $kind: SDKKinds.BreakLoop,
             $designer: {
               id: generateDesignerId(),
             },
-            disabled: true,
           },
         ],
-        disabled: true,
       },
       {
         $kind: SDKKinds.IfCondition,
@@ -221,17 +217,14 @@ const initialDialogShape = () => ({
             },
             eventName: 'recognizedIntent',
             eventValue: '=dialog.qnaResult.result',
-            disabled: true,
           },
           {
             $kind: SDKKinds.BreakLoop,
             $designer: {
               id: generateDesignerId(),
             },
-            disabled: true,
           },
         ],
-        disabled: true,
       },
       {
         $kind: SDKKinds.IfCondition,
@@ -247,18 +240,15 @@ const initialDialogShape = () => ({
             },
             eventName: 'recognizedIntent',
             eventValue: '=dialog.luisResult.result',
-            disabled: true,
           },
           {
             $kind: SDKKinds.BreakLoop,
             $designer: {
               id: generateDesignerId(),
             },
-            disabled: true,
           },
         ],
         top: 3,
-        disabled: true,
         cardNoMatchResponse: 'Thanks for the feedback.',
         cardNoMatchText: 'None of the above.',
       },
@@ -267,7 +257,6 @@ const initialDialogShape = () => ({
         $designer: {
           id: generateDesignerId(),
         },
-        disabled: false,
         maxTurnCount: 3,
         alwaysPrompt: true,
         allowInterruptions: false,
