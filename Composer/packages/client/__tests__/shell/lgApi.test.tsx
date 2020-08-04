@@ -73,7 +73,6 @@ describe('use lgApi hooks', () => {
 
   it('should call update lg template action', () => {
     result.current.updateLgTemplate('test.en-us', 'bar', 'update');
-    result.current.updateLgTemplate.flush();
     expect(updateLgTemplateMock).toBeCalledTimes(1);
     const arg = {
       id: 'test.en-us',
