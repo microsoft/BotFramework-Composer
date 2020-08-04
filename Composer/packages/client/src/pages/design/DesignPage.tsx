@@ -296,13 +296,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       for (const key in lgFilePayload) {
         await createLgTemplates({ id: key, templates: lgFilePayload[key] });
       }
-      // lgFilePayload.forEach(async (t) => {
-      //   const lgPayload = {
-      //     id: t.id,
-      //     template: t.lgTemplate as LgTemplate,
-      //   };
-      //   await createLgTemplate(lgPayload);
-      // });
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
