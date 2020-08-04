@@ -3,8 +3,6 @@
 
 import { Position, Range, TextDocument } from 'vscode-languageserver';
 
-const wordDefinition = /[a-zA-Z0-9_/.-]+/g;
-
 export const getRangeAtPosition = (document: TextDocument, position: Position): Range | undefined => {
   const text = document.getText();
   const line = position.line;
@@ -16,6 +14,7 @@ export const getRangeAtPosition = (document: TextDocument, position: Position): 
   const lineText = text.split('\n')[line];
   let match: RegExpMatchArray | null;
 
+  const wordDefinition = /[a-zA-Z0-9_/.-]+/g;
   while ((match = wordDefinition.exec(lineText))) {
     const matchIndex = match.index || 0;
     if (matchIndex > pos) {

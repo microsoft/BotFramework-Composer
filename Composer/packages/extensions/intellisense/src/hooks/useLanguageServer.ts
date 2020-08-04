@@ -4,6 +4,7 @@
 import React from 'react';
 import { CompletionItem } from 'vscode-languageserver-types';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
+
 import {
   getCompletionRequestMessage,
   getConfigurationChangedMessage,
@@ -64,7 +65,6 @@ export const useLanguageServer = (
   React.useEffect(() => {
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       updateBackendMemory(textFieldValue);
-      getCompletionItems();
     }
   }, [textFieldValue]);
 

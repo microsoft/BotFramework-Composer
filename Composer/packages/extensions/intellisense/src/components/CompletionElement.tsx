@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import { CompletionItemKind } from 'monaco-languageclient';
 import { FontIcon } from 'office-ui-fabric-react/lib/Icon';
 import { DirectionalHint, TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import React from 'react';
 import { CompletionItem, MarkupContent } from 'vscode-languageserver-types';
-import { css, jsx } from '@emotion/core';
 
 type FuseJsMatch = { indices: number[][]; value: string; key: string };
 
@@ -85,18 +85,9 @@ export const CompletionElement = (props: {
 
   const additionalStyles = isSelected ? styles.selectedElement : {};
 
-  return (
-    <TooltipHost
-      content={renderDocumentation(completionItem.documentation)}
-      directionalHint={DirectionalHint.rightCenter}
-    >
-      <div
-        css={{
-          ...styles.completionElement,
-          ...additionalStyles,
-        }}
-        onClick={onClickCompletionItem}
-      >
+  const renderItem = () => {
+    return (
+      <div css={[styles.completionElement, additionalStyles]} onClick={onClickCompletionItem}>
         <FontIcon iconName={getIconName(completionItem.kind)} css={styles.icon} />
         <div css={styles.text}>
           {completionItem.data.matches
@@ -104,6 +95,17 @@ export const CompletionElement = (props: {
             : completionItem.label}
         </div>
       </div>
+    );
+  };
+
+  return completionItem.documentation ? (
+    <TooltipHost
+      content={renderDocumentation(completionItem.documentation)}
+      directionalHint={DirectionalHint.rightCenter}
+    >
+      {renderItem()}
     </TooltipHost>
+  ) : (
+    renderItem()
   );
 };
