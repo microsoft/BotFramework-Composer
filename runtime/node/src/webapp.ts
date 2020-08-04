@@ -12,7 +12,7 @@ const userState = new UserState(memoryStorage);
 const conversationState = new ConversationState(memoryStorage);
 
 // Create HTTP server.
-const server = restify.createServer();
+const server = restify.createServer({ maxParamLength: 1000 });
 
 // Get botframework adapter.
 const adapter = getBotAdapter(userState, conversationState);
