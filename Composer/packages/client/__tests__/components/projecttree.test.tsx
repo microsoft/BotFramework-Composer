@@ -25,7 +25,7 @@ describe('<ProjectTree/>', () => {
   });
 
   it('should handle project tree item click', async () => {
-    const mockFileSelect = jest.fn(() => null);
+    const mockTreeItemSelect = jest.fn(() => null);
     const { findByText } = renderWithRecoil(
       <ProjectTree
         dialogId="ToDoBot"
@@ -33,12 +33,15 @@ describe('<ProjectTree/>', () => {
         selected=""
         onDeleteDialog={() => {}}
         onDeleteTrigger={() => {}}
-        onSelect={mockFileSelect}
+        onSelect={mockTreeItemSelect}
       />
     );
 
-    const node = await findByText('addtodo');
+    const dialogNode = await findByText('addtodo');
+    fireEvent.click(dialogNode);
+
+    const node = await findByText('Greeting');
     fireEvent.click(node);
-    expect(mockFileSelect).toHaveBeenCalledTimes(1);
+    expect(mockTreeItemSelect).toHaveBeenCalledTimes(1);
   });
 });

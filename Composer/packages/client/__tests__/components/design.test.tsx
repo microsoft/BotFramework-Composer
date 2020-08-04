@@ -34,7 +34,10 @@ describe('<ProjectTree/>', () => {
         onSelect={handleSelect}
       />
     );
-    const node = await findByText('addtodo');
+    const dialogNode = await findByText('addtodo');
+    fireEvent.click(dialogNode);
+
+    const node = await findByText('Greeting');
     fireEvent.click(node);
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });
