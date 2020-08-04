@@ -7,17 +7,18 @@ import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
+import { importResolverGenerator } from './luResolver';
 import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
+const crossTrainer = require('@bfcomposer/bf-lu/lib/parser/cross-train/crossTrainer.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
+const luBuild = require('@bfcomposer/bf-lu/lib/parser/lubuild/builder.js');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const LuisBuilder = require('@microsoft/bf-lu/lib/parser/luis/luisBuilder');
+const LuisBuilder = require('@bfcomposer/bf-lu/lib/parser/luis/luisBuilder');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const luisToLuContent = require('@microsoft/bf-lu/lib/parser/luis/luConverter');
+const luisToLuContent = require('@bfcomposer/bf-lu/lib/parser/luis/luConverter');
 
 const GENERATEDFOLDER = 'generated';
 const INTERUPTION = 'interuption';
@@ -113,7 +114,8 @@ export class LuPublisher {
       return { content: file.content, id: file.name };
     });
 
-    const result = await crossTrainer.crossTrain(luContents, [], this.crossTrainConfig);
+    const resolver = importResolverGenerator(files);
+    const result = await crossTrainer.crossTrain(luContents, [], this.crossTrainConfig, resolver);
 
     await this.writeFiles(result.luResult);
   }
@@ -162,7 +164,8 @@ export class LuPublisher {
       throw new Error('No LUIS files exist');
     }
 
-    const loadResult = await this._loadLuContents(config.models);
+    const resolver = importResolverGenerator(files);
+    const loadResult = await this._loadLuContents(config.models, resolver);
     loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
     const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;
 
@@ -174,6 +177,7 @@ export class LuPublisher {
       config.botName,
       config.suffix,
       config.fallbackLocal,
+      true,
       false,
       loadResult.multiRecognizers,
       loadResult.settings
@@ -231,12 +235,14 @@ export class LuPublisher {
     return luConfig;
   };
 
-  private _loadLuContents = async (paths: string[]) => {
+  private _loadLuContents = async (paths: string[], resolver) => {
     return await this.builder.loadContents(
       paths,
       this._locale,
       this.config?.environment || '',
-      this.config?.authoringRegion || ''
+      this.config?.authoringRegion || '',
+      null,
+      resolver
     );
   };
 
