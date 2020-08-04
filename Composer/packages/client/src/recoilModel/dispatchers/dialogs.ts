@@ -36,7 +36,7 @@ export const dialogsDispatcher = () => {
     const luFiles = await snapshot.getPromise(luFilesState);
     dialogs = dialogs.map((dialog) => {
       if (dialog.id === id) {
-        const fixedContent = autofixReferInDialog(id, content);
+        const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
         dialog = {
           ...dialog,
           ...dialogIndexer.parse(dialog.id, fixedContent),
@@ -65,7 +65,7 @@ export const dialogsDispatcher = () => {
 
   const createDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id, content }) => {
     const { set, snapshot } = callbackHelpers;
-    const fixedContent = autofixReferInDialog(id, content);
+    const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
     const schemas = await snapshot.getPromise(schemasState);
     const lgFiles = await snapshot.getPromise(lgFilesState);
     const luFiles = await snapshot.getPromise(luFilesState);
