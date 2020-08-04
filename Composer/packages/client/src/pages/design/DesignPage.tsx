@@ -394,7 +394,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }
 
   const breadcrumbItems = useMemo(() => {
-    console.log(breadcrumb);
     const items =
       dialogs.length > 0
         ? breadcrumb.reduce((result, item, index) => {
