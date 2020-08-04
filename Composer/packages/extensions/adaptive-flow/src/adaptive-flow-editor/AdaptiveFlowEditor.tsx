@@ -89,7 +89,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // Compute schema diff
-  const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
+  const customActionSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content).actions, [
     schemas?.sdk?.content,
     schemas?.default,
   ]);
@@ -100,7 +100,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     focusedTab,
     clipboardActions: clipboardActions || [],
     dialogFactory: new DialogFactory(schema),
-    customSchemas: customSchema ? [customSchema] : [],
+    customSchemas: customActionSchema ? [customActionSchema] : [],
   };
 
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
