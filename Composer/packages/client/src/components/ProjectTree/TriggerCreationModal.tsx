@@ -34,9 +34,10 @@ import {
   getActivityTypes,
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
-import { dialogsState, projectIdState, schemasState } from '../../recoilModel/atoms/botState';
+import { projectIdState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { nameRegex } from '../../constants';
+import { validatedDialogs } from '../../recoilModel/selectors/validatedDialogs';
 
 // -------------------- Styles -------------------- //
 
@@ -204,7 +205,7 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogs);
 
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);

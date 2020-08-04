@@ -28,24 +28,12 @@ export const dialogsDispatcher = () => {
     await removeLuFileState(callbackHelpers, { id });
   });
 
-  const updateDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id, content }) => {
-    const { set, snapshot } = callbackHelpers;
-    let dialogs = await snapshot.getPromise(dialogsState);
-    const schemas = await snapshot.getPromise(schemasState);
-    const lgFiles = await snapshot.getPromise(lgFilesState);
-    const luFiles = await snapshot.getPromise(luFilesState);
-    dialogs = dialogs.map((dialog) => {
-      if (dialog.id === id) {
-        dialog = {
-          ...dialog,
-          ...dialogIndexer.parse(dialog.id, content),
-        };
-        dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-        return dialog;
-      }
-      return dialog;
+  const updateDialog = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content }) => {
+    set(dialogsState, (dialogs) => {
+      return dialogs.map((dialog) => {
+        return dialog.id === id ? { ...dialog, ...dialogIndexer.parse(dialog.id, content) } : dialog;
+      });
     });
-    set(dialogsState, dialogs);
   });
 
   const createDialogBegin = useRecoilCallback((callbackHelpers: CallbackInterface) => (actions, onComplete) => {
