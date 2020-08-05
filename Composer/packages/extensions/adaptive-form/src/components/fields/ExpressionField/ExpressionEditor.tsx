@@ -16,7 +16,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
 
   return (
     <IntellisenseTextField
-      id={id}
+      id={`intellisense-${id}`}
       projectId={projectId}
       scopes={['expressions', 'user-variables']}
       url={getIntellisenseUrl()}
@@ -25,6 +25,7 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
     >
       {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
         <TextField
+          id={id}
           disabled={disabled}
           errorMessage={error}
           placeholder={placeholder}

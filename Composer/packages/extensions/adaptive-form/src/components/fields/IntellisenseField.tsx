@@ -17,7 +17,7 @@ export const IntellisenseField: React.FC<FieldProps<string>> = function Intellis
       <FieldLabel description={description} helpLink={uiOptions?.helpLink} id={id} label={label} required={required} />
 
       <IntellisenseTextField
-        id={id}
+        id={`intellisense-${id}`}
         scopes={uiOptions.intellisenseScopes || []}
         url={getIntellisenseUrl()}
         value={value}
@@ -25,6 +25,7 @@ export const IntellisenseField: React.FC<FieldProps<string>> = function Intellis
       >
         {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
           <TextField
+            id={id}
             value={textFieldValue}
             onChange={(_e, newValue) => onValueChanged(newValue || '')}
             onClick={onClickTextField}
