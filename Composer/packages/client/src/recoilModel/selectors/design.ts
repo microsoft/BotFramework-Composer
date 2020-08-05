@@ -19,6 +19,24 @@ import {
   actionsSeedState,
   skillManifestsState,
   designPageLocationState,
+  breadcrumbState,
+  showCreateDialogModalState,
+  showAddSkillDialogModalState,
+  settingsState,
+  publishVersionsState,
+  publishStatusState,
+  lastPublishChangeState,
+  publishTypesState,
+  botOpeningState,
+  publishHistoryState,
+  onCreateDialogCompleteState,
+  focusPathState,
+  onAddSkillDialogCompleteState,
+  displaySkillManifestState,
+  showAddLanguageModalState,
+  showDelLanguageModalState,
+  onAddLanguageDialogCompleteState,
+  onDelLanguageDialogCompleteState,
 } from '../atoms';
 
 export const botStateByProjectIdSelector = selector({
@@ -40,6 +58,24 @@ export const botStateByProjectIdSelector = selector({
     const actionsSeed = get(actionsSeedState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
     const designPageLocation = get(designPageLocationState(projectId));
+    const breadcrumb = get(breadcrumbState(projectId));
+    const showCreateDialogModal = get(showCreateDialogModalState(projectId));
+    const showAddSkillDialogModal = get(showAddSkillDialogModalState(projectId));
+    const settings = get(settingsState(projectId));
+    const publishVersions = get(publishVersionsState(projectId));
+    const publishStatus = get(publishStatusState(projectId));
+    const lastPublishChange = get(lastPublishChangeState(projectId));
+    const publishTypes = get(publishTypesState(projectId));
+    const botOpening = get(botOpeningState(projectId));
+    const publishHistory = get(publishHistoryState(projectId));
+    const onCreateDialogComplete = get(onCreateDialogCompleteState(projectId));
+    const focusPath = get(focusPathState(projectId));
+    const onAddSkillDialogComplete = get(onAddSkillDialogCompleteState(projectId));
+    const displaySkillManifest = get(displaySkillManifestState(projectId));
+    const showAddLanguageModal = get(showAddLanguageModalState(projectId));
+    const showDelLanguageModal = get(showDelLanguageModalState(projectId));
+    const onAddLanguageDialogComplete = get(onAddLanguageDialogCompleteState(projectId));
+    const onDelLanguageDialogComplete = get(onDelLanguageDialogCompleteState(projectId));
 
     return {
       dialogs,
@@ -54,6 +90,27 @@ export const botStateByProjectIdSelector = selector({
       lgFiles,
       skills,
       botLoadError,
+      actionsSeed,
+      skillManifests,
+      designPageLocation,
+      breadcrumb,
+      showCreateDialogModal,
+      showAddSkillDialogModal,
+      settings,
+      publishVersions,
+      publishStatus,
+      lastPublishChange,
+      publishTypes,
+      botOpening,
+      publishHistory,
+      onCreateDialogComplete,
+      focusPath,
+      onAddSkillDialogComplete,
+      displaySkillManifest,
+      showAddLanguageModal,
+      showDelLanguageModal,
+      onAddLanguageDialogComplete,
+      onDelLanguageDialogComplete,
     };
   },
 });

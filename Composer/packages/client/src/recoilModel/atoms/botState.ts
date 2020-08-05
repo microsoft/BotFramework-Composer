@@ -148,84 +148,84 @@ export const showCreateDialogModalState = atomFamily<boolean, string>({
   },
 });
 
-export const showAddSkillDialogModalState = atom<boolean>({
+export const showAddSkillDialogModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showAddSkillDialogModal'),
   default: false,
 });
 
-export const settingsState = atom<DialogSetting>({
+export const settingsState = atomFamily<DialogSetting, string>({
   key: getFullyQualifiedKey('settings'),
   default: { defaultLanguage: 'en-us', languages: ['en-us'], luis: {} } as DialogSetting,
 });
 
-export const publishVersionsState = atom<any>({
+export const publishVersionsState = atomFamily<any, string>({
   key: getFullyQualifiedKey('publishVersions'),
   default: {},
 });
 
-export const publishStatusState = atom<any>({
+export const publishStatusState = atomFamily<any, string>({
   key: getFullyQualifiedKey('publishStatus'),
   default: 'inactive',
 });
 
-export const lastPublishChangeState = atom<any>({
+export const lastPublishChangeState = atomFamily<any, string>({
   key: getFullyQualifiedKey('lastPublishChange'),
   default: null,
 });
 
-export const publishTypesState = atom<PublishType[]>({
+export const publishTypesState = atomFamily<PublishType[], string>({
   key: getFullyQualifiedKey('publishTypes'),
   default: [],
 });
 
-export const botOpeningState = atom<boolean>({
+export const botOpeningState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('botOpening'),
   default: false,
 });
 
-export const publishHistoryState = atom<any>({
+export const publishHistoryState = atomFamily<any, string>({
   key: getFullyQualifiedKey('publishHistory'),
   default: {},
 });
 
-export const onCreateDialogCompleteState = atom<any>({
+export const onCreateDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onCreateDialogComplete'),
   default: {
     func: undefined,
   },
 });
 
-export const focusPathState = atom<string>({
+export const focusPathState = atomFamily<string, string>({
   key: getFullyQualifiedKey('focusPath'),
   default: '',
 });
 
-export const onAddSkillDialogCompleteState = atom<any>({
+export const onAddSkillDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onAddSkillDialogComplete'),
   default: { func: undefined },
 });
 
-export const displaySkillManifestState = atom<any>({
+export const displaySkillManifestState = atomFamily<any, string>({
   key: getFullyQualifiedKey('displaySkillManifest'),
   default: undefined,
 });
 
-export const showAddLanguageModalState = atom<boolean>({
+export const showAddLanguageModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showAddLanguageModal'),
   default: false,
 });
 
-export const showDelLanguageModalState = atom<boolean>({
+export const showDelLanguageModalState = atomFamily<boolean, string>({
   key: getFullyQualifiedKey('showDelLanguageModal'),
   default: false,
 });
 
-export const onAddLanguageDialogCompleteState = atom<any>({
+export const onAddLanguageDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onAddLanguageDialogComplete'),
   default: { func: undefined },
 });
 
-export const onDelLanguageDialogCompleteState = atom<any>({
+export const onDelLanguageDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
 });
