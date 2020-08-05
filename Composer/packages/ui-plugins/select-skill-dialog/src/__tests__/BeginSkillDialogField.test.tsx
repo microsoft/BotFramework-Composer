@@ -35,7 +35,7 @@ const renderBeginSkillDialog = ({ value = {}, onChange = jest.fn() } = {}) => {
   };
 
   return render(
-    <Extension plugins={{}} shell={shell} shellData={shellData}>
+    <Extension plugins={{}} shell={{ api: shell, data: shellData }}>
       <BeginSkillDialogField {...props} />
     </Extension>
   );
