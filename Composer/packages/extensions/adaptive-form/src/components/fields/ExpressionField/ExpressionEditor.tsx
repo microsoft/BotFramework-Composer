@@ -25,9 +25,9 @@ const ExpressionEditor: React.FC<FieldProps> = (props) => {
     >
       {(textFieldValue, onValueChanged, onKeyDownTextField, onKeyUpTextField, onClickTextField) => (
         <TextField
-          id={id}
           disabled={disabled}
           errorMessage={error}
+          id={id}
           placeholder={placeholder}
           readOnly={readonly}
           styles={{
