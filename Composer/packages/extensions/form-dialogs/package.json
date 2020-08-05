@@ -1,7 +1,9 @@
 {
-    "name": "@bfc/dialog-generation-flow",
+    "name": "@bfc/form-dialogs",
     "version": "1.0.0",
-    "description": "",
+    "license": "MIT",
+    "author": "Microsoft",
+    "description": "Botframework Composer dialog form components.",
     "main": "./lib/index.js",
     "typings": "./lib/VisualSchemaEditor.d.ts",
     "files": [
@@ -59,10 +61,5 @@
         "webpack-dev-middleware": "^3.7.0",
         "webpack-hot-middleware": "^2.25.0",
         "webpack-notifier": "^1.7.0"
-    },
-    "license": "MIT",
-    "author": {
-        "name": "Soroush",
-        "email": "sorgh@microsoft.com"
     }
 }

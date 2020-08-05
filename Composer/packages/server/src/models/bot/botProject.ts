@@ -368,8 +368,8 @@ export class BotProject {
       allLocales: undefined,
       templateDirs: [],
       force: false,
-      merge: false,
-      singleton: false,
+      merge: true,
+      singleton: true,
       feedback,
     };
 

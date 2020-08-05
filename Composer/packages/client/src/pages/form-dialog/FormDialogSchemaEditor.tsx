@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { JsonEditor } from '@bfc/code-editor';
-import { VisualSchemaEditor } from '@bfc/dialog-generation-flow';
+import { VisualSchemaEditor } from '@bfc/form-dialogs';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
