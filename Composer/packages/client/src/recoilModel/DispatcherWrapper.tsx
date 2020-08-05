@@ -11,7 +11,15 @@ import { BotAssets } from '@bfc/shared';
 import { prepareAxios } from './../utils/auth';
 import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
-import { dialogsState, projectIdState, luFilesState, skillManifestsState, settingsState, lgFilesState } from './atoms';
+import {
+  dialogsState,
+  dialogSchemasState,
+  projectIdState,
+  luFilesState,
+  skillManifestsState,
+  settingsState,
+  lgFilesState,
+} from './atoms';
 
 const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -21,6 +29,7 @@ const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
     snapshot.getPromise(lgFilesState),
     snapshot.getPromise(skillManifestsState),
     snapshot.getPromise(settingsState),
+    snapshot.getPromise(dialogSchemasState),
   ]);
   return {
     projectId: result[0],
@@ -29,6 +38,7 @@ const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
     lgFiles: result[3],
     skillManifests: result[4],
     setting: result[5],
+    dialogSchemas: result[6],
   };
 };
 
