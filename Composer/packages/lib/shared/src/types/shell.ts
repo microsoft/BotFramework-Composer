@@ -92,3 +92,8 @@ export interface ShellApi {
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
 }
+
+export interface Shell {
+  api: ShellApi;
+  data: ShellData;
+}
