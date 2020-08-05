@@ -9,8 +9,7 @@ import { projectIdState } from '../atoms';
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 
 import { designPageLocationState } from './../atoms/botState';
-import { UndoHistory } from './undoHistory';
-import undoHistory from './undoHistory';
+import undoHistory, { UndoHistory } from './undoHistory';
 import { trackedAtoms } from './trackedAtoms';
 
 export const undoFunctionState = atom({
@@ -81,6 +80,8 @@ export const UndoRoot = React.memo(() => {
   const history = useRef(undoHistory).current;
   const setUndoFunction = useSetRecoilState(undoFunctionState);
   const [, forceUpdate] = useState([]);
+  //use to record the first time change, this will help to get the init location
+  //init location is used to undo navigate
   const assetsChanged = useRef(false);
 
   useRecoilTransactionObserver(({ snapshot, previousSnapshot }) => {
@@ -127,12 +128,14 @@ export const UndoRoot = React.memo(() => {
 
   const commit = useRecoilCallback(({ snapshot }) => () => {
     const previousSnapshot = history.getPresentSnapshot();
+    //filter some invalid changes
     if (previousSnapshot && checkAtomsChanged(snapshot, previousSnapshot, trackedAtoms)) {
       history.add(snapshot);
     }
   });
 
   const commitChanges = useCallback(() => {
+    //gurarantee the snapshot get the latset state
     forceUpdate([]);
     commit();
   }, [commit]);
