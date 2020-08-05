@@ -7,7 +7,8 @@
   "main": "index.js",
   "scripts": {
     "build:language-servers": "cd language-servers && yarn build",
-    "build:all": "concurrently --kill-others-on-fail \"yarn:build:language-servers\""
+    "build:built-in-functions": "cd built-in-functions && yarn build",
+    "build:all": "yarn build:built-in-functions && concurrently --kill-others-on-fail \"yarn:build:language-servers\""
   },
   "author": ""
 }
