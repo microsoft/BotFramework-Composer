@@ -340,8 +340,8 @@ export const adaptiveCardJsonBody =
 \n                               "value": "none"\
 \n                           }\
 \n             ],\
-\n              "style": "expanded",\
-\n              "value": "luis"\
+\n             "style": "expanded",\
+\n             "value": "luis"\
 \n         },\
 \n         {\
 \n             "type": "ActionSet",\
