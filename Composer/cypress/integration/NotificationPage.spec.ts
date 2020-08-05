@@ -45,6 +45,7 @@ context('Notification Page', () => {
     cy.visitPage('Design');
 
     cy.findByTestId('ProjectTree').within(() => {
+      cy.findAllByText('__TestToDoBotWithLuisSample').first().click();
       cy.findByText('WelcomeUser').click();
     });
 
