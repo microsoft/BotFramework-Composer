@@ -43,10 +43,17 @@ export const navigationDispatcher = () => {
   );
 
   const navTo = useRecoilCallback(
-    ({ snapshot }: CallbackInterface) => async (dialogId: string, breadcrumb: BreadcrumbItem[] = []) => {
+    ({ snapshot }: CallbackInterface) => async (
+      dialogId: string,
+      breadcrumb: BreadcrumbItem[] = [],
+      selectPath?: string
+    ) => {
       const projectId = await snapshot.getPromise(projectIdState);
       const designPageLocation = await snapshot.getPromise(designPageLocationState);
-      const currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
+      let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
+      if (selectPath != null) {
+        currentUri += `?selected=${selectPath}`;
+      }
       if (checkUrl(currentUri, designPageLocation)) return;
       //if dialog change we should flush some debounced functions
 

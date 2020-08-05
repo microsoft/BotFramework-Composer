@@ -30,21 +30,22 @@ context('breadcrumb', () => {
     // Click on AddToDo dialog
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('addtodo').click();
+      cy.findAllByText('Dialog started').first().click();
     });
     hasBreadcrumbItems(cy, ['Addtodo']);
 
     // Return to Main.dialog
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('__TestTodoSample').click();
+      cy.findAllByText('Greeting').first().click();
     });
 
     hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
-  it('can show event name in breadcrumb', () => {
+  it.only('can show event name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('addtodo').click();
-      cy.findByText('Dialog started').click();
+      cy.findAllByText('Dialog started').first().click();
     });
 
     hasBreadcrumbItems(cy, ['Addtodo', 'Dialog started']);
@@ -52,13 +53,13 @@ context('breadcrumb', () => {
 
   it('can show action name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
-      cy.findByText('Greeting').click();
+      cy.findAllByText('Greeting').first().click();
     });
 
     // Click on an action
     cy.withinEditor('VisualEditor', () => {
       cy.findByTestId('RuleEditor').within(() => {
-        cy.findByText('Send a response').click();
+        cy.findAllByText('Send a response').first().click();
       });
     });
 

@@ -211,7 +211,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   };
 
   function handleSelect(dialogId, selected = '') {
-    selectTo(selected, dialogId);
+    navTo(dialogId, [{ dialogId, selected: '', focused: '' }], selected);
   }
 
   const onCreateDialogComplete = (newDialog) => {
