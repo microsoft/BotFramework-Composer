@@ -129,6 +129,7 @@ interface ITreeItemProps {
   onDelete: (id: string) => void;
   onSelect: (id: string) => void;
   icon?: string;
+  dialogName?: string;
 }
 
 const onRenderItem = (item: IOverflowSetItemProps) => {
@@ -187,11 +188,12 @@ const onRenderOverflowButton = (isRoot: boolean, isActive: boolean) => {
 };
 
 export const TreeItem: React.FC<ITreeItemProps> = (props) => {
-  const { link, isActive, depth, onDelete, onSelect, icon } = props;
+  const { link, isActive, depth, onDelete, onSelect, icon, dialogName } = props;
 
   return (
     <div
       css={navItem(!!isActive)}
+      data-testid={`${dialogName ?? '$Root'}_${link.displayName}`}
       role="presentation"
       onClick={() => {
         onSelect(link.id);

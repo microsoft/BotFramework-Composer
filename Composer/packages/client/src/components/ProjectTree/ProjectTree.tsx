@@ -119,15 +119,16 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     );
   };
 
-  function renderCell(item: any, depth: number, dialogId: string): React.ReactNode {
+  function renderCell(item: any, depth: number, dialog: DialogInfo): React.ReactNode {
     return (
       <TreeItem
         depth={depth}
+        dialogName={dialog.displayName}
         icon={TYPE_TO_ICON_MAP[item.type] || 'Flow'}
-        isActive={dialogId === props.dialogId && createSelectedPath(item.index) === selected}
+        isActive={dialog.id === props.dialogId && createSelectedPath(item.index) === selected}
         link={item}
-        onDelete={() => onDeleteTrigger(dialogId, item.index)}
-        onSelect={() => onSelect(dialogId, createSelectedPath(item.index))}
+        onDelete={() => onDeleteTrigger(dialog.id, item.index)}
+        onSelect={() => onSelect(dialog.id, createSelectedPath(item.index))}
       />
     );
   }
@@ -155,7 +156,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     return filteredDialogs.map((dialog: DialogInfo) => {
       const triggerList = dialog.triggers
         .filter((tr) => dialog.displayName.includes(filter) || getTriggerName(tr).includes(filter))
-        .map((tr, index) => renderCell({ ...tr, index, displayName: getTriggerName(tr) }, 1, dialog.id));
+        .map((tr, index) => renderCell({ ...tr, index, displayName: getTriggerName(tr) }, 1, dialog));
       return (
         <details key={dialog.id} ref={dialog.isRoot ? addMainDialogRef : undefined}>
           <summary

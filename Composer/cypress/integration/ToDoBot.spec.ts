@@ -19,7 +19,7 @@ context('ToDo Bot', () => {
   it('can open the AddToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('addtodo').click();
-      cy.findByText('addtodo').click();
+      cy.findByTestId('addtodo_Dialog started').click();
     });
 
     cy.url().should('contain', 'addtodo');
@@ -28,7 +28,7 @@ context('ToDo Bot', () => {
   it('can open the ClearToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('cleartodos').click();
-      cy.findByText('cleartodos').click();
+      cy.findByTestId('cleartodos_Dialog started').click();
     });
 
     cy.url().should('contain', 'cleartodos');
@@ -37,7 +37,7 @@ context('ToDo Bot', () => {
   it('can open the DeleteToDo dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('deletetodo').click();
-      cy.findByText('deletetodo').click();
+      cy.findByTestId('deletetodo_Dialog started').click();
     });
 
     cy.url().should('contain', 'deletetodo');
@@ -46,7 +46,7 @@ context('ToDo Bot', () => {
   it('can open the ShowToDos dialog', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('showtodos').click();
-      cy.findByText('showtodos').click();
+      cy.findByTestId('showtodos_Dialog started').click();
     });
 
     cy.url().should('contain', 'showtodos');
