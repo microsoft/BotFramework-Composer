@@ -8,31 +8,11 @@ const ctx: Worker = self as any;
 
 export const handleMessage = (msg) => {
   const { type, payload } = msg.data;
-  const { content, id, intentName, intentNames, intent, intents } = payload;
+  const { content, id } = payload;
   let result: any = null;
   switch (type) {
     case LuActionType.Parse: {
       result = luUtil.parse(id, content);
-      break;
-    }
-    case LuActionType.AddIntent: {
-      result = luUtil.addIntent(content, intent);
-      break;
-    }
-    case LuActionType.AddIntents: {
-      result = luUtil.addIntents(content, intents);
-      break;
-    }
-    case LuActionType.UpdateIntent: {
-      result = luUtil.updateIntent(content, intentName, intent || null);
-      break;
-    }
-    case LuActionType.RemoveIntent: {
-      result = luUtil.removeIntent(content, intentName);
-      break;
-    }
-    case LuActionType.RemoveIntents: {
-      result = luUtil.removeIntents(content, intentNames);
       break;
     }
   }

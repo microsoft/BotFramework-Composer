@@ -52,6 +52,7 @@ module.exports = {
     '<rootDir>/packages/ui-plugins/lg',
     '<rootDir>/packages/ui-plugins/luis',
     '<rootDir>/packages/ui-plugins/prompts',
+    '<rootDir>/packages/ui-plugins/schema-editor',
     '<rootDir>/packages/ui-plugins/select-dialog',
     '<rootDir>/packages/ui-plugins/select-skill-dialog',
   ],

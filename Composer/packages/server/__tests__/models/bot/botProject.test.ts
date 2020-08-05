@@ -254,6 +254,66 @@ describe('dialog operations', () => {
   });
 });
 
+describe('dialog schema operations', () => {
+  it('should create dialog schema', async () => {
+    const dialogsSchemaFilesCount = proj.dialogSchemaFiles.length;
+
+    const id = 'bot1.dialog.schema';
+    const content = '{}';
+    const { relativePath } = await proj.createFile(id, content);
+
+    expect(relativePath).toEqual(id);
+    expect(proj.dialogSchemaFiles).toHaveLength(dialogsSchemaFilesCount + 1);
+  });
+
+  it('should delete dialog schema', async () => {
+    const id = 'bot1.dialog.schema';
+    const dialogsSchemaFilesCount = proj.dialogSchemaFiles.length;
+
+    await proj.deleteFile(id);
+
+    expect(proj.dialogSchemaFiles).toHaveLength(dialogsSchemaFilesCount - 1);
+  });
+});
+
+describe('should validate the file name when create a new one', () => {
+  it('validate the empty dialog name', () => {
+    expect(() => {
+      proj.validateFileName('.dialog');
+    }).toThrowError('The file name can not be empty');
+  });
+
+  it('validate the illegal dialog name', async () => {
+    expect(() => {
+      proj.validateFileName('a.b.dialog');
+    }).toThrowError('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+  });
+
+  it('validate the empty lu file name', () => {
+    expect(() => {
+      proj.validateFileName('.en-us.lu');
+    }).toThrowError('The file name can not be empty');
+  });
+
+  it('validate the illegal lu file name', async () => {
+    expect(() => {
+      proj.validateFileName('a.b.en-us.lu');
+    }).toThrowError('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+  });
+
+  it('validate the empty lg file name', () => {
+    expect(() => {
+      proj.validateFileName('.en-us.lg');
+    }).toThrowError('The file name can not be empty');
+  });
+
+  it('validate the illegal lu file name', async () => {
+    expect(() => {
+      proj.validateFileName('a.b.en-us.lg');
+    }).toThrowError('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+  });
+});
+
 describe('deleteAllFiles', () => {
   const locationRef: LocationRef = {
     storageId: 'default',

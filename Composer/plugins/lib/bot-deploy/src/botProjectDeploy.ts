@@ -430,6 +430,7 @@ export class BotProjectDeploy {
         name,
         environment,
         language,
+        true,
         false,
         loadResult.multiRecognizers,
         loadResult.settings

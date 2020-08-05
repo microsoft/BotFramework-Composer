@@ -67,7 +67,7 @@ export class IntellisenseServer {
       if (wordAtCurRange && wordAtCurRange !== '') {
         const completionItems = this.getCompletionItems();
 
-        const fuse: Fuse<CompletionItem, Fuse.IFuseOptions<CompletionItem>> = new Fuse(completionItems, {
+        const fuse = new Fuse(completionItems, {
           includeScore: true,
           threshold: 0.2,
           includeMatches: true,

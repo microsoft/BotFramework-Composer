@@ -24,6 +24,12 @@ Botframework CLI > 4.10
 npm i -g @microsoft/botframework-cli
 ```
 
+> NOTE: Previous versions of botframework-cli required you to install @microsoft/bf-plugin. You will need to uninstall for 4.10 and above.
+>
+> ```
+> bf plugins:uninstall @microsoft/bf-dialog
+> ```
+
 ## Adding Custom Actions to your Composer bot
 
 **NOTE: These steps assume you are using azurewebapp as your deployment solution. Replicating it on azurefunctions would be similar
@@ -36,9 +42,11 @@ npm i -g @microsoft/botframework-cli
 - Then Uncomment line 28 and 139 in azurewebapp/Startup.cs file so as to register this action.
 
 ```
+
 using Microsoft.BotFramework.Composer.CustomAction;
 // This is for custom action component registration.
 ComponentRegistration.Add(new CustomActionComponentRegistration());
+
 ```
 
 - Run the command `dotnet build` on the azurewebapp project to verify if it passes build after adding custom actions to it.
