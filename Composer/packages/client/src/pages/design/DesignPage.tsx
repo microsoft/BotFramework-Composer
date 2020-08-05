@@ -11,7 +11,7 @@ import get from 'lodash/get';
 import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI } from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import { useTriggerApi } from '@bfc/extension';
+import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
 import { useRecoilValue } from 'recoil';
 
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -45,6 +45,7 @@ import {
   luFilesState,
   localeState,
 } from '../../recoilModel';
+import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 
 import {
@@ -142,7 +143,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
-  const shell = useShell('ProjectTree');
+  const shell = useShell('DesignPage');
+  const shellForFlowEditor = useShell('FlowEditor');
+  const shellForPropertyEditor = useShell('PropertyEditor');
   const triggerApi = useTriggerApi(shell.api);
 
   useEffect(() => {
@@ -512,6 +515,12 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
+  const pluginConfig: PluginConfig = useMemo(() => {
+    const sdkUISchema = schemas?.ui?.content ?? {};
+    const userUISchema = schemas?.uiOverrides?.content ?? {};
+    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
+
   if (!dialogId) {
     return <LoadingSpinner />;
   }
@@ -552,10 +561,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     }}
                   />
                 ) : (
-                  <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                  <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
+                    <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                  </Extension>
                 )}
               </div>
-              <PropertyEditor key={focusPath} />
+              <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
+                <PropertyEditor key={focusPath} />
+              </Extension>
             </div>
           </Conversation>
         </div>

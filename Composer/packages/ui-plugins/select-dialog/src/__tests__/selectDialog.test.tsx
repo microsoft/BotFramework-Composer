@@ -33,7 +33,7 @@ const renderSelectDialog = ({ createDialog, navTo, onChange } = {}) => {
     ],
   };
   return render(
-    <Extension shell={shell} shellData={shellData}>
+    <Extension shell={{ api: shell, data: shellData }}>
       <SelectDialog {...props} />
     </Extension>
   );

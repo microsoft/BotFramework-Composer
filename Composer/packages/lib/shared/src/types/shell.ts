@@ -92,3 +92,8 @@ export interface ShellApi {
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
 }
+
+export interface Shell {
+  api: ShellApi;
+  data: ShellData;
+}
