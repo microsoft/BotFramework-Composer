@@ -27,13 +27,12 @@ export function autofixReferInDialog(dialogId: string, content: string): string 
     JsonWalk('/', dialogJson, visitor);
 
     // fix lg referrence
-    dialogJson.generator = `${dialogId}.lg`;
+    dialogJson.generator = `${dialogId.toLowerCase()}.lg`;
 
     // fix lu referrence
     if (typeof dialogJson.recognizer === 'string') {
-      dialogJson.recognizer = `${dialogId}.lu.qna`;
+      dialogJson.recognizer = `${dialogId.toLowerCase()}.lu.qna`;
     }
-
     return JSON.stringify(dialogJson, null, 2);
   } catch (_error) {
     // pass, content may be empty
