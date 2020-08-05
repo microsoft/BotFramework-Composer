@@ -296,8 +296,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
 
     if (lgFile && lgFilePayload) {
+      if (lgFilePayload[`common.${locale}`] && lgFilePayload[`common.${locale}`].length > 0) {
+        await createLgTemplates({ id: `common.${locale}`, templates: lgFilePayload[`common.${locale}`] });
+      }
       for (const key in lgFilePayload) {
-        await createLgTemplates({ id: key, templates: lgFilePayload[key] });
+        if (key !== `common.${locale}`) {
+          await createLgTemplates({ id: key, templates: lgFilePayload[key] });
+        }
       }
     }
 

@@ -307,65 +307,65 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 export const adaptiveCardJsonBody =
   '-```\
 \n{\
-  \n    $schema: http://adaptivecards.io/schemas/adaptive-card.json,\
-  \n    version: 1.0,\
-  \n    type: AdaptiveCard,\
-  \n    speak: "",\
-  \n    body: [\
-    \n      {\
-      \n        type: TextBlock,\
-      \n        text: ${whichOneDidYouMean()},\
-      \n        weight: Bolder\
-    \n      },\
-    \n      {\
-      \n        type: TextBlock,\
-      \n        text: ${pickOne()},\
-      \n        separator: true\
-    \n      },\
-    \n      {\
-      \n        type: Input.ChoiceSet,\
-      \n        placeholder: Placeholder text,\
-      \n        id: userChosenIntent,\
-      \n        choices: [\
-        \n                   {\
-          \n                     title: ${getIntentReadBack()},\
-          \n                     value: luisResult\
-        \n                   },\
-        \n                   {\
-          \n                     title: ${getAnswerReadBack()},\
-          \n                     value: qnaResult\
-        \n                   },\
-        \n                   {\
-          \n                     title: None of the above,\
-          \n                     value: none\
-        \n                   }\
-      \n        ],\
-      \n       style: expanded,\
-      \n       value: luis\
-    \n     },\
-    \n     {\
-      \n       type: ActionSet,\
-      \n       actions: [\
-        \n         {\
-          \n           type: Action.Submit,\
-          \n           title: Submit,\
-          \n           data: {\
-            \n                   intent: chooseIntentCardResponse\
-          \n           }\
-        \n         }\
-      \n       ]\
-    \n     }\
-  \n    ]\
+\n      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",\
+\n      "version": "1.0",\
+\n      "type": "AdaptiveCard",\
+\n      "speak": "",\
+\n      "body": [\
+\n          {\
+\n              "type": "TextBlock",\
+\n              "text": "${whichOneDidYouMean()}",\
+\n              "weight": "Bolder"\
+\n          },\
+\n          {\
+\n              "type": "TextBlock",\
+\n              "text": "${pickOne()}",\
+\n              "separator": "true"\
+\n          },\
+\n          {\
+\n              "type": "Input.ChoiceSet",\
+\n              "placeholder": "Placeholder text",\
+\n              "id": "userChosenIntent",\
+\n              "choices": [\
+\n                           {\
+\n                               "title": "${getIntentReadBack()}",\
+\n                               "value": "luisResult"\
+\n                           },\
+\n                           {\
+\n                               "title": "${getAnswerReadBack()}",\
+\n                               "value": "qnaResult"\
+\n                           },\
+\n                           {\
+\n                               "title": "None of the above",\
+\n                               "value": "none"\
+\n                           }\
+\n             ],\
+\n             "style": "expanded",\
+\n             "value": "luis"\
+\n         },\
+\n         {\
+\n             "type": "ActionSet",\
+\n             "actions": [\
+\n                {\
+\n                     "type": "Action.Submit",\
+\n                     "title": "Submit",\
+\n                     "data": {\
+\n                   "intent": "chooseIntentCardResponse"\
+\n                }\
+\n         }\
+\n       ]\
+\n     }\
+\n    ]\
 \n}\
 ```';
 
 export const whichOneDidYouMeanBody = "\
-- I'm not sure which one you mean.\
+- I'm not sure which one you mean.\n\
 - Hmmm, I find that to be ambiguous.\
 ";
 
 export const pickOne = `
-- Can you pick one ?\
+- Can you pick one ?\n\
 - Can you help clarify by choosing one ?\
 `;
 
