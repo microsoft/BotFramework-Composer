@@ -14,7 +14,7 @@ import { TestController } from '../../components/TestController/TestController';
 import { projectIdState } from '../../recoilModel/atoms/botState';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { validatedDialogs } from '../../recoilModel/selectors/validatedDialogs';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import TableView from './table-view';
 import { actionButton } from './styles';
@@ -26,7 +26,7 @@ interface LUPageProps extends RouteComponentProps<{}> {
 }
 
 const LUPage: React.FC<LUPageProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogs);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const projectId = useRecoilValue(projectIdState);
 
   const path = props.location?.pathname ?? '';

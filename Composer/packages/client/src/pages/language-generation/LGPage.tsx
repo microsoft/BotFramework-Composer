@@ -16,7 +16,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { validatedDialogs } from '../../recoilModel/selectors/validatedDialogs';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -26,7 +26,7 @@ interface LGPageProps extends RouteComponentProps<{}> {
 }
 
 const LGPage: React.FC<LGPageProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogs);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const projectId = useRecoilValue(projectIdState);
 
   const path = props.location?.pathname ?? '';

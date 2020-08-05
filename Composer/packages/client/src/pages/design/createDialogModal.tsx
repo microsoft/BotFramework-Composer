@@ -12,7 +12,7 @@ import { DialogCreationCopy, nameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { validatedDialogs } from '../../recoilModel/selectors/validatedDialogs';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -30,7 +30,7 @@ interface CreateDialogModalProps {
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogs);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const { onSubmit, onDismiss, isOpen } = props;
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
