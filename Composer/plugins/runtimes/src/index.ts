@@ -120,6 +120,26 @@ export default async (composer: any): Promise<void> => {
       }
       throw new Error(`Runtime already exists at ${destPath}`);
     },
+    setSkillManifest: async (
+      dstRuntimePath: string,
+      dstStorage: IFileStorage,
+      srcManifestDir: string,
+      srcStorage: IFileStorage,
+      mode = 'azurewebapp' // set default as azurewebapp
+    ) => {
+      // update manifst into runtime wwwroot
+      if (mode === 'azurewebapp') {
+        const manifestDstDir = path.resolve(dstRuntimePath, 'azurewebapp', 'wwwroot', 'manifests');
+
+        if (await fs.pathExists(manifestDstDir)) {
+          await removeDirAndFiles(manifestDstDir);
+        }
+
+        if (await fs.pathExists(srcManifestDir)) {
+          copyDir(srcManifestDir, srcStorage, manifestDstDir, dstStorage);
+        }
+      }
+    },
   });
 
   composer.addRuntimeTemplate({
@@ -134,7 +154,7 @@ export default async (composer: any): Promise<void> => {
         cwd: runtimePath,
         stdio: 'pipe',
       });
-      const { install2Out, install2Err } = await exec('npm build', {
+      const { install2Out, install2Err } = await exec('npm run build', {
         cwd: runtimePath,
         stdio: 'pipe',
       });
@@ -150,7 +170,7 @@ export default async (composer: any): Promise<void> => {
         cwd: path.resolve(runtimePath, '../'),
         stdio: 'pipe',
       });
-      const { install2Out, install2Err } = await exec('npm build', {
+      const { install2Out, install2Err } = await exec('npm run build', {
         cwd: path.resolve(runtimePath, '../'),
         stdio: 'pipe',
       });
@@ -185,5 +205,12 @@ export default async (composer: any): Promise<void> => {
         throw new Error(`Runtime already exists at ${destPath}`);
       }
     },
+    setSkillManifest: async (
+      dstRuntimePath: string,
+      dstStorage: IFileStorage,
+      srcManifestDir: string,
+      srcStorage: IFileStorage,
+      mode = 'azurewebapp'
+    ) => {},
   });
 };

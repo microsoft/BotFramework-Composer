@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { ChildProcess, spawn, execSync } from 'child_process';
+import { ChildProcess, spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
@@ -11,7 +11,6 @@ import archiver from 'archiver';
 import { v4 as uuid } from 'uuid';
 import AdmZip from 'adm-zip';
 import portfinder from 'portfinder';
-// import { ComposerPluginRegistration, PublishResponse, PublishPlugin } from '@bfc/plugin-loader';
 
 const stat = promisify(fs.stat);
 const readDir = promisify(fs.readdir);
@@ -65,16 +64,25 @@ class LocalPublisher {
     try {
       // if enableCustomRuntime is not true, initialize the runtime code in a tmp folder
       // and export the content into that folder as well.
-      const runtimeType = project.settings.runtime?.name || 'C#';
+      const runtime = this.composer.getRuntimeByProject(project);
       if (!project.settings.runtime || project.settings.runtime.customRuntime !== true) {
         this.composer.log('Using managed runtime');
 
         await this.initBot(project);
         await this.saveContent(botId, version, project.dataDir, user);
-        await this.saveSkillManifests(this.getBotRuntimeDir(botId), project.dataDir, runtimeType);
+        await runtime.setSkillManifest(
+          this.getBotRuntimeDir(botId),
+          project.fileStorage,
+          this.getManifestSrcDir(project.dataDir),
+          project.fileStorage
+        );
       } else if (project.settings.runtime.path && project.settings.runtime.command) {
-        // update manifst into runtime wwwroot
-        await this.saveSkillManifests(project.settings.runtime.path, project.dataDir, runtimeType);
+        await runtime.setSkillManifest(
+          project.settings.runtime.path,
+          project.fileStorage,
+          this.getManifestSrcDir(project.dataDir),
+          project.fileStorage
+        );
       } else {
         throw {
           status: 500,
@@ -186,8 +194,6 @@ class LocalPublisher {
 
   private getManifestSrcDir = (srcDir: string) => path.resolve(srcDir, 'manifests');
 
-  private getManifestDstDir = (baseDir: string) => path.resolve(baseDir, 'azurewebapp', 'wwwroot', 'manifests');
-
   private getDownloadPath = (botId: string, version: string) =>
     path.resolve(this.getHistoryDir(botId), `${version}.zip`);
 
@@ -262,21 +268,6 @@ class LocalPublisher {
     await this.zipBot(dstPath, srcDir);
   };
 
-  private saveSkillManifests = async (dstPath: string, srcDir: string, runtimeType: string) => {
-    if (runtimeType === 'C#') {
-      const manifestSrcDir = this.getManifestSrcDir(srcDir);
-      const manifestDstDir = this.getManifestDstDir(dstPath);
-
-      if (await this.dirExist(manifestDstDir)) {
-        await removeDirAndFiles(manifestDstDir);
-      }
-
-      if (await this.dirExist(manifestSrcDir)) {
-        this.copyDir(manifestSrcDir, manifestDstDir);
-      }
-    }
-  };
-
   // start bot in current version
   private setBot = async (botId: string, version: string, settings: any, project: any) => {
     // get port, and stop previous bot if exist
@@ -325,13 +316,12 @@ class LocalPublisher {
         reject(`Runtime path ${botDir} does not exist.`);
         return;
       }
-
       // take the 0th item off the array, leaving just the args
       this.composer.log('Starting bot on port %d. (%s)', port, commandAndArgs.join(' '));
       const startCommand = commandAndArgs.shift();
-      let process;
+      let spawnProcess;
       try {
-        process = spawn(
+        spawnProcess = spawn(
           startCommand,
           [...commandAndArgs, '--port', port, `--urls`, `http://0.0.0.0:${port}`, ...this.getConfig(settings)],
           {
@@ -340,18 +330,18 @@ class LocalPublisher {
             detached: !isWin, // detach in non-windows
           }
         );
-        this.composer.log('Started process %d', process.pid);
+        this.composer.log('Started process %d', spawnProcess.pid);
       } catch (err) {
         return reject(err);
       }
       this.setBotStatus(botId, {
-        process: process,
+        process: spawnProcess,
         port: port,
         status: 200,
         result: { message: 'Runtime started' },
       });
-      const processLog = this.composer.log.extend(process.pid);
-      this.addListeners(process, botId, processLog); //  resolve, reject);
+      const processLog = this.composer.log.extend(spawnProcess.pid);
+      this.addListeners(spawnProcess, botId, processLog);
       resolve();
     });
   };
@@ -367,6 +357,15 @@ class LocalPublisher {
       configList.push(config.luis.endpointKey || config.luis.authoringKey);
     }
     return configList;
+  };
+
+  private removeListener = (child: ChildProcess) => {
+    child.stdout.removeAllListeners('data');
+    child.stderr.removeAllListeners('data');
+
+    child.removeAllListeners('message');
+    child.removeAllListeners('error');
+    child.removeAllListeners('exit');
   };
 
   private addListeners = (
@@ -388,15 +387,14 @@ class LocalPublisher {
 
     child.on('exit', (code) => {
       if (code !== 0) {
-        // this.setBotStatus(botId, { status: 500, result: { message: erroutput } });
+        logger('error on exit: %s, exit code %d', erroutput, code);
+        this.setBotStatus(botId, { status: 500, result: { message: erroutput } });
       }
     });
 
     child.on('error', (err) => {
       logger('error: %s', err.message);
-      console.log(err.message);
       this.setBotStatus(botId, { status: 500, result: { message: err.message } });
-      // reject(`Could not launch bot runtime process: ${err.message}`);
     });
 
     child.on('message', (msg) => {
@@ -447,6 +445,7 @@ class LocalPublisher {
       this.composer.log('Killing process %d', -proc.pid);
       // Kill the bot process AND all child processes
       try {
+        this.removeListener(proc);
         process.kill(isWin ? proc.pid : -proc.pid);
       } catch (err) {
         // ESRCH means pid not found

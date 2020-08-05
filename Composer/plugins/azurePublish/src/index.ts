@@ -75,10 +75,6 @@ export default async (composer: any): Promise<void> => {
     private getBotFolder = (key: string, template: string) =>
       path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
 
-    // path where manifest files will be written
-    private getManifestDstDir = (key: string, template: string) =>
-      path.resolve(this.getProjectFolder(key, template), 'wwwroot');
-
     /*******************************************************************************************************************************/
     /* These methods deal with the publishing history displayed in the Composer UI */
     /*******************************************************************************************************************************/
@@ -113,15 +109,16 @@ export default async (composer: any): Promise<void> => {
     /*******************************************************************************************************************************/
     /**
      * Prepare a bot to be built and deployed by copying the runtime and declarative assets into a temporary folder
-     * @param botFiles
+     * @param project
      * @param settings
      * @param srcTemplate
      * @param resourcekey
      */
-    private init = async (botFiles: any, srcTemplate: string, resourcekey: string) => {
+    private init = async (project: any, srcTemplate: string, resourcekey: string, runtime: any) => {
+      // point to the declarative assets (possibly in remote storage)
+      const botFiles = project.getProject().files;
       const botFolder = this.getBotFolder(resourcekey, this.mode);
       const runtimeFolder = this.getRuntimeFolder(resourcekey);
-      const manifestPath = this.getManifestDstDir(resourcekey, this.mode);
 
       // clean up from any previous deploys
       await this.cleanup(resourcekey);
@@ -132,22 +129,22 @@ export default async (composer: any): Promise<void> => {
       // create the ComposerDialogs/ folder
       mkdirSync(botFolder, { recursive: true });
 
-      // save bot files and manifest files into wwwroot/
+      let manifestPath;
       for (const file of botFiles) {
         const pattern = /manifests\/[0-9A-z-]*.json/;
-        let filePath;
         if (file.relativePath.match(pattern)) {
-          // save manifest files into wwwroot
-          filePath = path.resolve(manifestPath, file.relativePath);
-        } else {
-          // save bot files
-          filePath = path.resolve(botFolder, file.relativePath);
+          manifestPath = path.dirname(file.path);
         }
+        // save bot files
+        const filePath = path.resolve(botFolder, file.relativePath);
         if (!(await pathExists(path.dirname(filePath)))) {
           mkdirSync(path.dirname(filePath), { recursive: true });
         }
         writeFileSync(filePath, file.content);
       }
+
+      // save manifest
+      runtime.setSkillManifest(runtimeFolder, project.fileStorage, manifestPath, project.fileStorage, this.mode);
 
       // copy bot and runtime into projFolder
       await copy(srcTemplate, runtimeFolder);
@@ -322,9 +319,6 @@ export default async (composer: any): Promise<void> => {
       // get the appropriate runtime template which contains methods to build and configure the runtime
       const runtime = composer.getRuntimeByProject(project);
 
-      // point to the declarative assets (possibly in remote storage)
-      const botFiles = project.getProject().files;
-
       // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
       // TODO: this templatePath should come from the runtime instead of this magic parameter
       let runtimeCodePath = templatePath;
@@ -339,7 +333,7 @@ export default async (composer: any): Promise<void> => {
 
       // Prepare the temporary project
       // this writes all the settings to the root settings/appsettings.json file
-      await this.init(botFiles, runtimeCodePath, resourcekey);
+      await this.init(project, runtimeCodePath, resourcekey, runtime);
 
       // Merge all the settings
       // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
