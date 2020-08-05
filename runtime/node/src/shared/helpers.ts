@@ -164,12 +164,11 @@ export const configureMessageEndpoint = (server: Server, adapter: BotFrameworkAd
  * @param adapter Botframework adapter to handle skill requests.
  * @param bot Composer bot to process skill requests.
  */
-export const configureSkillEndpoint = (server: Server, adapter: BotFrameworkAdapter, bot: ComposerBot) => {
+export const configureSkillEndpoint = (server: Server, adapter: BotFrameworkAdapter, bot: ComposerBot, skillConversationIdFactory: SkillConversationIdFactory) => {
     const settings = getSettings();
-    const conversationIdFactory = new SkillConversationIdFactory();
     const credentialProvider = new SimpleCredentialProvider(settings.MicrosoftAppId, settings.MicrosoftAppPassword);
     const authConfig = new AuthenticationConfiguration([]);
-    const handler = new SkillHandler(adapter, bot, conversationIdFactory, credentialProvider, authConfig);
+    const handler = new SkillHandler(adapter, bot, skillConversationIdFactory, credentialProvider, authConfig);
     const skillEndpoint = new ChannelServiceRoutes(handler);
     skillEndpoint.register(server, '/api/skills');
 };

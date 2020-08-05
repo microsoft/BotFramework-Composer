@@ -16,6 +16,7 @@ import { getSettings, getProjectRoot, getRootDialog } from './helpers';
 export class ComposerBot extends ActivityHandler {
   private readonly userState: UserState;
   private readonly conversationState: ConversationState;
+  private readonly skillConversationIdFactory: SkillConversationIdFactory;
   private readonly projectRoot: string;
   private readonly settings: BotSettings;
   private readonly resourceExplorer: ResourceExplorer;
@@ -23,11 +24,13 @@ export class ComposerBot extends ActivityHandler {
 
   public constructor(
     userState: UserState,
-    conversationState: ConversationState
+    conversationState: ConversationState,
+    skillConversationIdFactory: SkillConversationIdFactory
   ) {
     super();
     this.userState = userState;
     this.conversationState = conversationState;
+    this.skillConversationIdFactory = skillConversationIdFactory;
     this.projectRoot = getProjectRoot();
     this.settings = getSettings(this.projectRoot);
 
@@ -78,10 +81,9 @@ export class ComposerBot extends ActivityHandler {
   }
 
   private configureSkills() {
-    const conversationIdFactory = new SkillConversationIdFactory();
     const credentialProvider = new SimpleCredentialProvider(this.settings.MicrosoftAppId, this.settings.MicrosoftAppPassword);
-    const skillClient = new SkillHttpClient(credentialProvider, conversationIdFactory);
+    const skillClient = new SkillHttpClient(credentialProvider, this.skillConversationIdFactory);
     SkillExtensions.useSkillClient(this.dialogManager, skillClient);
-    SkillExtensions.useSkillConversationIdFactory(this.dialogManager, conversationIdFactory);
+    SkillExtensions.useSkillConversationIdFactory(this.dialogManager, this.skillConversationIdFactory);
   }
 }
