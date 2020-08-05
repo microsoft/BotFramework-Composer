@@ -341,7 +341,7 @@ describe('publish luis files', () => {
     projectId = await BotProjectService.openProject(location1);
   });
 
-  it('should publish all luis files', async () => {
+  it('should publish all luis & qna files', async () => {
     const mockReq = {
       params: { projectId },
       query: {},
@@ -357,7 +357,7 @@ describe('publish luis files', () => {
         luFiles: [],
       },
     } as Request;
-    await ProjectController.publishLuis(mockReq, mockRes);
+    await ProjectController.build(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(200);
   });
 });
