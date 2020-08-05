@@ -6,6 +6,7 @@ export interface AzureDeploymentOutput {
   cosmosDb: CosmosDbOutput;
   blobStorage: BlobStorageOutput;
   luis: LuisOutput;
+  qna: QnAOutput;
 }
 
 export interface ApplicationInsightsOutput {
@@ -35,4 +36,9 @@ export interface LuisOutput {
 
 export interface WebAppOutput {
   endpoint: string;
+}
+
+export interface QnAOutput {
+  endpoint?: string;
+  subscriptionKey?: string;
 }

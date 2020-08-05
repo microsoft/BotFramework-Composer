@@ -12,6 +12,7 @@ import {
   BotConfig,
   ResourceGroupConfig,
   DeploymentsConfig,
+  QnAResourceConfig,
 } from './azureResourceManagerConfig';
 import { CognitiveServicesManagementClient } from '@azure/arm-cognitiveservices';
 import { StorageManagementClient } from '@azure/arm-storage';
@@ -22,6 +23,7 @@ import { WebSiteManagementClient } from '@azure/arm-appservice';
 import { AzureBotService } from '@azure/arm-botservice';
 import { ResourceManagementClient } from '@azure/arm-resources';
 import { CosmosDBManagementClient } from '@azure/arm-cosmosdb';
+import { SearchManagementClient } from '@azure/arm-search';
 
 export class AzureResourceDeploymentStatus {
   public resourceGroupStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
@@ -33,6 +35,7 @@ export class AzureResourceDeploymentStatus {
   public webAppStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
   public botStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
   public counterStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
+  public qnaStatus: DeploymentStatus = DeploymentStatus.NOT_DEPLOY;
 }
 
 export enum DeploymentStatus {
@@ -71,6 +74,7 @@ export class AzureResourceMananger {
       cosmosDb: {},
       blobStorage: {},
       luis: {},
+      qna: {}
     };
   }
 
@@ -207,6 +211,34 @@ export class AzureResourceMananger {
         this.logger({
           status: BotProjectDeployLoggerType.PROVISION_ERROR,
           message: 'Create Luis Authoring Resource Failed.',
+        });
+        return;
+      }
+    }
+
+    if (this.config.createOrNot.qnaResource) {
+      if (!this.config.qnaResource) {
+        this.config.qnaResource = {
+          location: this.config.resourceGroup.location,
+          accountName: this.config.resourceGroup.name,
+          resourceGroupName: this.config.resourceGroup.name
+        };
+      }
+      if (!this.config.qnaResource.resourceGroupName) {
+        this.config.qnaResource.resourceGroupName = this.config.resourceGroup.name;
+      }
+      if (!this.config.qnaResource.location) {
+        this.config.qnaResource.location = this.config.resourceGroup.location;
+      }
+      if (!this.config.qnaResource.accountName) {
+        this.config.qnaResource.accountName = this.config.resourceGroup.name;
+      }
+
+      await this.deployQnAReource(this.config.qnaResource);
+      if (this.deployStatus.qnaStatus != DeploymentStatus.DEPLOY_SUCCESS) {
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: 'Create QnA Maker Resource Failed.',
         });
         return;
       }
@@ -846,6 +878,217 @@ export class AzureResourceMananger {
     }
   }
 
+  // QnA Resource depends on serveral components, including appinights and web config
+  private async deployQnAReource(config: QnAResourceConfig) {
+    try {
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_INFO,
+        message: 'Deploying QnA Resource ...',
+      });
+      this.deployStatus.qnaStatus = DeploymentStatus.DEPLOYING;
+
+      // initialize the name
+      const qnaMakerSearchName = `${config.accountName}-search`.toLowerCase().replace('_', '');
+      const qnaMakerWebAppName = `${config.accountName}-qnahost`.toLowerCase().replace('_', '');
+      const qnaMakerServiceName = `${config.accountName}-qna`;
+      // deploy search service
+      const searchManagementClient = new SearchManagementClient(this.creds, this.subId);
+      const searchServiceDeployResult = await searchManagementClient.services.createOrUpdate(config.resourceGroupName, qnaMakerSearchName, {
+        location: config.location,
+        sku: {
+          name: 'standard'
+        },
+        replicaCount: 1,
+        partitionCount: 1,
+        hostingMode: 'default'
+      });
+
+      if (searchServiceDeployResult._response.status >= 300) {
+        this.deployStatus.qnaStatus = DeploymentStatus.DEPLOY_FAIL;
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: searchServiceDeployResult._response.bodyAsText,
+        });
+        return;
+      }
+
+      // deploy websites
+      // Create new Service Plan or update the exisiting service plan created before
+      const webSiteManagementClient = new WebSiteManagementClient(this.creds, this.subId);
+      const servicePlanName = config.resourceGroupName;
+      const servicePlanResult = await webSiteManagementClient.appServicePlans.createOrUpdate(
+        config.resourceGroupName,
+        servicePlanName,
+        {
+          location: config.location,
+          sku: {
+            name: 'S1',
+            tier: 'Standard',
+            size: 'S1',
+            family: 'S',
+            capacity: 1,
+          },
+        }
+      );
+
+      if (servicePlanResult._response.status >= 300) {
+        this.deployStatus.qnaStatus = DeploymentStatus.DEPLOY_FAIL;
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: servicePlanResult._response.bodyAsText,
+        });
+        return;
+      }
+
+      // deploy or update exisiting app insights component
+      const applicationInsightsManagementClient = new ApplicationInsightsManagementClient(this.creds, this.subId);
+      const appinsightsName = config.resourceGroupName;
+      const appinsightsDeployResult = await applicationInsightsManagementClient.components.createOrUpdate(
+        config.resourceGroupName,
+        appinsightsName,
+        {
+          location: config.location,
+          applicationType: 'web',
+          kind: 'web',
+        }
+      );
+      if (appinsightsDeployResult._response.status >= 300 || appinsightsDeployResult.provisioningState != 'Succeeded') {
+        this.deployStatus.qnaStatus = DeploymentStatus.DEPLOY_FAIL;
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: appinsightsDeployResult._response.bodyAsText,
+        });
+        return;
+      }
+
+      // deploy qna host webapp
+      const webAppResult = await webSiteManagementClient.webApps.createOrUpdate(config.resourceGroupName, qnaMakerWebAppName, {
+        name: qnaMakerWebAppName,
+        serverFarmId: servicePlanResult.name,
+        location: config.location,
+        siteConfig: {
+          cors: {
+            allowedOrigins: ['*'],
+          },
+        },
+        enabled: true,
+      });
+
+      if (webAppResult._response.status >= 300) {
+        this.deployStatus.qnaStatus = DeploymentStatus.DEPLOY_FAIL;
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: webAppResult._response.bodyAsText,
+        });
+        return;
+      }
+
+      // add web config for websites
+      const azureSearchAdminKey = (await searchManagementClient.adminKeys.get(config.resourceGroupName, qnaMakerSearchName)).primaryKey;
+      const appInsightsComponent = await applicationInsightsManagementClient.components.get(config.resourceGroupName, appinsightsName);
+      const userAppInsightsKey = appInsightsComponent.instrumentationKey;
+      const userAppInsightsName = appinsightsName;
+      const userAppInsightsAppId = appInsightsComponent.appId;
+      const primaryEndpointKey = `${qnaMakerWebAppName}-PrimaryEndpointKey`;
+      const secondaryEndpointKey = `${qnaMakerWebAppName}-SecondaryEndpointKey`;
+      const defaultAnswer = 'No good match found in KB.';
+      const QNAMAKER_EXTENSION_VERSION = 'latest';
+
+      const webAppConfigUpdateResult = await webSiteManagementClient.webApps.createOrUpdateConfiguration(config.resourceGroupName, qnaMakerWebAppName, {
+        appSettings: [
+          {
+            name: 'AzureSearchName',
+            value: qnaMakerSearchName
+          },
+          {
+            name: 'AzureSearchAdminKey',
+            value: azureSearchAdminKey,
+          },
+          {
+            name: 'UserAppInsightsKey',
+            value: userAppInsightsKey,
+          },
+          {
+            name: 'UserAppInsightsName',
+            value: userAppInsightsName,
+          },
+          {
+            name: 'UserAppInsightsAppId',
+            value: userAppInsightsAppId,
+          },
+          {
+            name: 'PrimaryEndpointKey',
+            value: primaryEndpointKey,
+          },
+          {
+            name: 'SecondaryEndpointKey',
+            value: secondaryEndpointKey,
+          },
+          {
+            name: 'DefaultAnswer',
+            value: defaultAnswer,
+          },
+          {
+            name: 'QNAMAKER_EXTENSION_VERSION',
+            value: QNAMAKER_EXTENSION_VERSION
+          }
+        ]
+      });
+      if (webAppConfigUpdateResult._response.status >= 300) {
+        this.deployStatus.qnaStatus = DeploymentStatus.DEPLOY_FAIL;
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: webAppConfigUpdateResult._response.bodyAsText,
+        });
+        return;
+      }
+
+      // Create qna account
+      const cognitiveServicesManagementClient = new CognitiveServicesManagementClient(this.creds, this.subId);
+      const deployResult = await cognitiveServicesManagementClient.accounts.create(
+        config.resourceGroupName,
+        qnaMakerServiceName,
+        {
+          kind: 'QnAMaker',
+          sku: {
+            name: config.sku ?? 'S0',
+          },
+          location: config.location ?? this.config.resourceGroup.location,
+          properties: {
+            apiProperties: {
+              'qnaRuntimeEndpoint': `https://${webAppResult.hostNames?.[0]}`
+            }
+          }
+        },
+      );
+      if (deployResult._response.status >= 300) {
+        this.deployStatus.qnaStatus = DeploymentStatus.DEPLOY_FAIL;
+        this.logger({
+          status: BotProjectDeployLoggerType.PROVISION_ERROR,
+          message: deployResult._response.bodyAsText,
+        });
+        return;
+      }
+
+      const endpoint = webAppResult.hostNames?.[0];
+      const keys = await cognitiveServicesManagementClient.accounts.listKeys(
+        config.resourceGroupName,
+        qnaMakerServiceName
+      );
+      const subscriptionKey = keys?.key1 ?? '';
+      this.deploymentOutput.qna.endpoint = endpoint;
+      this.deploymentOutput.qna.subscriptionKey = subscriptionKey;
+
+      this.deployStatus.qnaStatus = DeploymentStatus.DEPLOY_SUCCESS;
+    } catch (err) {
+      this.deployStatus.qnaStatus = DeploymentStatus.DEPLOY_FAIL;
+      this.logger({
+        status: BotProjectDeployLoggerType.PROVISION_ERROR,
+        message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
+      });
+    }
+  }
+
   private async deployDeploymentCounter(config: DeploymentsConfig) {
     try {
       this.logger({
@@ -884,6 +1127,5 @@ export class AzureResourceMananger {
         message: JSON.stringify(err, Object.getOwnPropertyNames(err)),
       });
     }
-
   }
 }
