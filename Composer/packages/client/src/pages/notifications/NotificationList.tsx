@@ -45,7 +45,7 @@ const columns: IColumn[] = [
   },
   {
     key: 'NotificationType',
-    name: 'Type',
+    name: formatMessage('Type'),
     className: notification.columnCell,
     fieldName: 'type',
     minWidth: 70,
@@ -70,7 +70,7 @@ const columns: IColumn[] = [
   },
   {
     key: 'NotificationLocation',
-    name: 'Location',
+    name: formatMessage('Location'),
     className: notification.columnCell,
     fieldName: 'location',
     minWidth: 70,
@@ -81,7 +81,7 @@ const columns: IColumn[] = [
       return (
         <div data-is-focusable css={tableCell}>
           <div
-            aria-label={formatMessage(`Location is {location}`, { location: item.location })}
+            aria-label={formatMessage(`location is {location}`, { location: item.location })}
             css={content}
             tabIndex={-1}
           >
@@ -94,7 +94,7 @@ const columns: IColumn[] = [
   },
   {
     key: 'NotificationDetail',
-    name: 'Message',
+    name: formatMessage('Message'),
     className: notification.columnCell,
     fieldName: 'message',
     minWidth: 70,

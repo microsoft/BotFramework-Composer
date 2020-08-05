@@ -24,7 +24,7 @@ import { navigateTo } from '../../utils/navigation';
 import { Page } from '../../components/Page';
 import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
-import { IToolBarItem } from '../../components/ToolBar';
+import { IToolbarItem } from '../../components/Toolbar';
 import { AddLanguageModal, DeleteLanguageModal } from '../../components/MultiLanguage/index';
 
 import { SettingsRoutes } from './router';
@@ -163,7 +163,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     });
   };
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'dropdown',
       text: formatMessage('Edit'),
@@ -180,13 +180,6 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
             onClick: openDeleteBotModal,
           },
           {
-            key: 'edit.addLanguage',
-            text: formatMessage('Add language'),
-            onClick: () => {
-              addLanguageDialogBegin(() => {});
-            },
-          },
-          {
             key: 'edit.deleteLanguage',
             text: formatMessage('Delete language'),
             onClick: () => {
@@ -195,6 +188,22 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
           },
         ],
       },
+    },
+
+    {
+      type: 'action',
+      text: formatMessage('Add language'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'CirclePlus',
+        },
+        onClick: () => {
+          addLanguageDialogBegin(() => {});
+        },
+      },
+      align: 'left',
+      dataTestid: 'AddLanguageFlyout',
+      disabled: false,
     },
 
     {

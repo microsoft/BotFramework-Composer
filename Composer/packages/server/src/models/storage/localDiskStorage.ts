@@ -25,9 +25,17 @@ const rename = promisify(fs.rename);
 export class LocalDiskStorage implements IFileStorage {
   async stat(path: string): Promise<Stat> {
     const fstat = await stat(path);
+    // test to see if this file is writable
+    let writable = true;
+    try {
+      fs.accessSync(path, fs.constants.W_OK);
+    } catch (err) {
+      writable = false;
+    }
     return {
       isDir: fstat.isDirectory(),
       isFile: fstat.isFile(),
+      isWritable: writable,
       lastModified: fstat.mtime.toString(),
       size: fstat.isFile() ? fstat.size.toString() : '',
     };

@@ -1,11 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema7 } from '@bfc/extension';
-import { AppUpdaterSettings, CodeEditorSettings, DialogInfo, LuFile, LgFile, PromptTab } from '@bfc/shared';
+import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus } from '../constants';
-
-import { SkillManifest } from './../pages/design/exportSkillModal/constants';
 
 export interface StateError {
   status?: number;
@@ -58,17 +56,6 @@ export interface BotLoadError {
   link?: { url: string; text: string };
 }
 
-export interface ILuisConfig {
-  name: string;
-  authoringKey: string;
-  endpointKey: string;
-  endpoint: string;
-  authoringEndpoint: string;
-  authoringRegion: string | 'westus';
-  defaultLanguage: string | 'en-us';
-  environment: string | 'composer';
-}
-
 export interface DesignPageLocation {
   projectId: string;
   dialogId: string;
@@ -86,38 +73,10 @@ export interface AppUpdateState {
   version?: string;
 }
 
-export interface PublishTarget {
-  name: string;
-  type: string;
-  configuration: string;
-  lastPublished?: Date;
-}
-
 export interface BreadcrumbItem {
   dialogId: string;
   selected: string;
   focused: string;
-}
-
-export interface DialogSetting {
-  MicrosoftAppId?: string;
-  MicrosoftAppPassword?: string;
-  luis: ILuisConfig;
-  publishTargets?: PublishTarget[];
-  runtime: {
-    customRuntime: boolean;
-    path: string;
-    command: string;
-  };
-  defaultLanguage: string;
-  languages: string[];
-  skill?: {
-    name: string;
-    manifestUrl: string;
-  }[];
-  botId?: string;
-  skillHostEndpoint?: string;
-  [key: string]: unknown;
 }
 
 export type dialogPayload = {
@@ -140,15 +99,6 @@ export type UserSettingsPayload = {
   codeEditor: Partial<CodeEditorSettings>;
   propertyEditorWidth: number;
   dialogNavWidth: number;
-};
-
-export type BotAssets = {
-  projectId: string;
-  dialogs: DialogInfo[];
-  luFiles: LuFile[];
-  lgFiles: LgFile[];
-  skillManifests: SkillManifest[];
-  setting: DialogSetting;
 };
 
 export type BoilerplateVersion = {

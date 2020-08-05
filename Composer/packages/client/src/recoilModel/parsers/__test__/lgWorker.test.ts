@@ -28,7 +28,7 @@ const lgFiles = [
 describe('test lg worker', () => {
   it('get expected parse result', async () => {
     const result: any = await lgWorker.parse('common.en-us', `\r\n# Hello\r\n-hi`, lgFiles);
-    const expected = [{ body: '-hi', name: 'Hello', parameters: [], range: { endLineNumber: 0, startLineNumber: 0 } }];
+    const expected = [{ body: '-hi', name: 'Hello', parameters: [], range: { endLineNumber: 3, startLineNumber: 2 } }];
     expect(result.templates).toMatchObject(expected);
   });
 });

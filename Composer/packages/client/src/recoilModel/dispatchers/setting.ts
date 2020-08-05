@@ -3,13 +3,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
-import { SensitiveProperties } from '@bfc/shared';
+import { SensitiveProperties, DialogSetting, PublishTarget } from '@bfc/shared';
 import get from 'lodash/get';
 import has from 'lodash/has';
 
 import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
-import { DialogSetting, PublishTarget } from '../../recoilModel/types';
 
 export const settingsDispatcher = () => {
   const setSettings = useRecoilCallback<[string, DialogSetting], Promise<void>>(

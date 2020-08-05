@@ -4,6 +4,7 @@
 import formatMessage from 'format-message';
 import { JSONSchema7 } from '@bfc/extension';
 import startCase from 'lodash/startCase';
+import { SkillManifest } from '@bfc/shared';
 
 import { Description, FetchManifestSchema, ReviewManifest, SelectManifest } from './content';
 
@@ -13,13 +14,6 @@ export const SCHEMA_URIS = [
   'https://schemas.botframework.com/schemas/skills/skill-manifest-2.1.preview-1.json',
   'https://schemas.botframework.com/schemas/skills/skill-manifest-2.0.0.json',
 ];
-
-export interface SkillManifest {
-  content: any;
-  id: string;
-  path?: string;
-  lastModified?: string;
-}
 
 export interface ContentProps {
   completeStep: () => void;

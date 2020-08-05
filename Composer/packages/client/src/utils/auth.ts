@@ -5,6 +5,7 @@
 import querystring from 'query-string';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import formatMessage from 'format-message';
 
 import { USER_TOKEN_STORAGE_KEY, BASEURL } from '../constants';
 import { Dispatcher } from '../recoilModel/dispatchers';
@@ -112,7 +113,11 @@ export async function loginPopup(): Promise<string | null> {
 
     // loginUrl is not user-generated
     // eslint-disable-next-line security/detect-non-literal-fs-filename
-    const popup = window.open(loginUrl, 'Login to Composer', `width=483, height=600, top=${top}, left=${left}`);
+    const popup = window.open(
+      loginUrl,
+      formatMessage('Login to Composer'),
+      `width=483, height=600, top=${top}, left=${left}`
+    );
 
     // if popups are blocked, use a redirect flow
     if (!popup || popup.closed || typeof popup.closed === 'undefined') {

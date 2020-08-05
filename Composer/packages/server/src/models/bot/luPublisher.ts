@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo } from '@bfc/shared';
+import { FileInfo, ILuisConfig } from '@bfc/shared';
 
 import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
@@ -9,7 +9,6 @@ import log from '../../logger';
 
 import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
-import { ILuisConfig } from './interface';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const crossTrainer = require('@microsoft/bf-lu/lib/parser/cross-train/crossTrainer.js');
@@ -175,6 +174,7 @@ export class LuPublisher {
       config.botName,
       config.suffix,
       config.fallbackLocal,
+      true,
       false,
       loadResult.multiRecognizers,
       loadResult.settings

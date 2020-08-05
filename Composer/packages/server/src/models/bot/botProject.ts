@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic } from '@bfc/shared';
+import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, ILuisConfig } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -17,14 +17,12 @@ import { DefaultSettingManager } from '../settings/defaultSettingManager';
 import log from '../../logger';
 import { BotProjectService } from '../../services/project';
 
-import { ILuisConfig } from './interface';
 import { ICrossTrainConfig } from './luPublisher';
 import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
 import { extractSkillManifestUrl } from './skillManager';
-import { DialogSetting } from './interface';
-import { defaultFilePath, serializeFiles } from './botStructure';
+import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -36,7 +34,7 @@ const oauthInput = () => ({
 
 const defaultLanguage = 'en-us'; // default value for settings.defaultLanguage
 
-export class BotProject {
+export class BotProject implements IBotProject {
   public ref: LocationRef;
   // TODO: address need to instantiate id - perhaps do so in constructor based on Store.get(projectLocationMap)
   public id: string | undefined;
@@ -343,8 +341,27 @@ export class BotProject {
     }
   };
 
+  public validateFileName = (name: string) => {
+    const nameRegex = /^[a-zA-Z0-9-_]+$/;
+    const { fileId, fileType } = parseFileName(name, '');
+
+    let fileName = fileId;
+    if (fileType === '.dialog') {
+      fileName = Path.basename(name, fileType);
+    }
+
+    if (!fileName) {
+      throw new Error('The file name can not be empty');
+    }
+
+    if (!nameRegex.test(fileName)) {
+      throw new Error('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
+    }
+  };
+
   public createFile = async (name: string, content = '') => {
     const filename = name.trim();
+    this.validateFileName(filename);
     const botName = this.name;
     const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
     const relativePath = defaultFilePath(botName, defaultLocale, filename);

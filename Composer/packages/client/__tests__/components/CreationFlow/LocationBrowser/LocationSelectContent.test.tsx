@@ -79,7 +79,7 @@ describe('<LocationSelectContent/>', () => {
       set(creationFlowStatusState, CreationFlowStatus.OPEN);
       set(storagesState, storages);
     });
-    expect(await component.findByText('Can not connect the storage.')).toBeInTheDocument();
+    expect(await component.findByText('Could not connect to storage.')).toBeInTheDocument();
   });
 
   it('should open folder', async () => {
