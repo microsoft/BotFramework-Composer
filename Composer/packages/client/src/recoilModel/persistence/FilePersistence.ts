@@ -3,7 +3,7 @@
 import keys from 'lodash/keys';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
-import { DialogInfo, DialogSetting, SkillManifest, BotAssets } from '@bfc/shared';
+import { DialogInfo, DialogSchemaFile, DialogSetting, SkillManifest, BotAssets } from '@bfc/shared';
 
 import { LuFile, LgFile } from './../../../../lib/shared/src/types/indexers';
 import * as client from './http';
@@ -130,7 +130,12 @@ class FilePersistence {
 
   private createChange(file: any, fileExtension: FileExtensions, changeType: ChangeType): IFileChange {
     let content = file.content;
-    const isJson = [FileExtensions.Dialog, FileExtensions.Manifest, FileExtensions.Setting].includes(fileExtension);
+    const isJson = [
+      FileExtensions.Dialog,
+      FileExtensions.DialogSchema,
+      FileExtensions.Manifest,
+      FileExtensions.Setting,
+    ].includes(fileExtension);
     if (isJson) {
       content = JSON.stringify(content, null, 2) + '\n';
     }
@@ -171,6 +176,11 @@ class FilePersistence {
     return changes;
   }
 
+  private getDialogSchemaChanges(current: DialogSchemaFile[], previous: DialogSchemaFile[]) {
+    const changeItems = this.getDifferenceItems(current, previous);
+    return this.getFileChanges(FileExtensions.DialogSchema, changeItems);
+  }
+
   private getLuChanges(current: LuFile[], previous: LuFile[]) {
     const changeItems = this.getDifferenceItems(current, previous);
     const changes = this.getFileChanges(FileExtensions.Lu, changeItems);
@@ -205,6 +215,7 @@ class FilePersistence {
 
   private getAssetsChanges(currentAssets: BotAssets, previousAssets: BotAssets): IFileChange[] {
     const dialogChanges = this.getDialogChanges(currentAssets.dialogs, previousAssets.dialogs);
+    const dialogSchemaChanges = this.getDialogSchemaChanges(currentAssets.dialogSchemas, previousAssets.dialogSchemas);
     const luChanges = this.getLuChanges(currentAssets.luFiles, previousAssets.luFiles);
     const lgChanges = this.getLgChanges(currentAssets.lgFiles, previousAssets.lgFiles);
     const skillManifestChanges = this.getSkillManifestsChanges(
@@ -214,6 +225,7 @@ class FilePersistence {
     const settingChanges = this.getSettingsChanges(currentAssets.setting, previousAssets.setting);
     const fileChanges: IFileChange[] = [
       ...dialogChanges,
+      ...dialogSchemaChanges,
       ...luChanges,
       ...lgChanges,
       ...skillManifestChanges,
