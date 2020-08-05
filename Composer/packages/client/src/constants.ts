@@ -307,50 +307,50 @@ export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 export const adaptiveCardJsonBody =
   '-```\
 \n{\
-  \n    $schema: http://adaptivecards.io/schemas/adaptive-card.json,\
-  \n    version: 1.0,\
-  \n    type: AdaptiveCard,\
-  \n    speak: "",\
-  \n    body: [\
+  \n    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",\
+  \n    "version": "1.0",\
+  \n    "type": "AdaptiveCard",\
+  \n    "speak": "",\
+  \n    "body": [\
     \n      {\
-      \n        type: TextBlock,\
-      \n        text: ${whichOneDidYouMean()},\
-      \n        weight: Bolder\
+      \n        "type": "TextBlock",\
+      \n        "text": "${whichOneDidYouMean()}",\
+      \n        "weight": "Bolder"\
     \n      },\
     \n      {\
-      \n        type: TextBlock,\
-      \n        text: ${pickOne()},\
-      \n        separator: true\
+      \n        "type": "TextBlock",\
+      \n        "text": "${pickOne()}",\
+      \n        "separator": "true"\
     \n      },\
     \n      {\
-      \n        type: Input.ChoiceSet,\
-      \n        placeholder: Placeholder text,\
-      \n        id: userChosenIntent,\
-      \n        choices: [\
+      \n        "type": "Input.ChoiceSet",\
+      \n        "placeholder": "Placeholder text",\
+      \n        "id": "userChosenIntent",\
+      \n        "choices": [\
         \n                   {\
-          \n                     title: ${getIntentReadBack()},\
-          \n                     value: luisResult\
+          \n                     "title": "${getIntentReadBack()}",\
+          \n                     "value: "luisResult"\
         \n                   },\
         \n                   {\
-          \n                     title: ${getAnswerReadBack()},\
-          \n                     value: qnaResult\
+          \n                     "title": "${getAnswerReadBack()}",\
+          \n                     "value": "qnaResult"\
         \n                   },\
         \n                   {\
-          \n                     title: None of the above,\
-          \n                     value: none\
+          \n                     "title": "None of the above",\
+          \n                     "value": "none"\
         \n                   }\
       \n        ],\
-      \n       style: expanded,\
-      \n       value: luis\
+      \n       "style": "expanded",\
+      \n       "value": "luis"\
     \n     },\
     \n     {\
-      \n       type: ActionSet,\
-      \n       actions: [\
+      \n       "type": "ActionSet",\
+      \n       "actions": [\
         \n         {\
-          \n           type: Action.Submit,\
-          \n           title: Submit,\
-          \n           data: {\
-            \n                   intent: chooseIntentCardResponse\
+          \n           "type": "Action.Submit",\
+          \n           "title": "Submit",\
+          \n           "data": {\
+            \n                   "intent": "chooseIntentCardResponse"\
           \n           }\
         \n         }\
       \n       ]\
