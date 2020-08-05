@@ -12,7 +12,7 @@ import { useRecoilValue } from 'recoil';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { schemasState, designPageLocationState, dispatcherState } from '../../recoilModel';
-import { validatedDialogs } from '../../recoilModel/selectors/validatedDialogs';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
 
@@ -57,7 +57,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const designPageLocation = useRecoilValue(designPageLocationState);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
-  const dialogs = useRecoilValue(validatedDialogs);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const schemas = useRecoilValue(schemasState);
   const { dialogId, selected } = designPageLocation;
 

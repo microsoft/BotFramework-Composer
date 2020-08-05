@@ -27,7 +27,7 @@ import {
   userSettingsState,
   clipboardActionsState,
 } from '../recoilModel';
-import { validatedDialogs } from '../recoilModel/selectors/validatedDialogs';
+import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -39,7 +39,7 @@ type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const dialogMapRef = useRef({});
   const botName = useRecoilValue(botNameState);
-  const dialogs = useRecoilValue(validatedDialogs);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);

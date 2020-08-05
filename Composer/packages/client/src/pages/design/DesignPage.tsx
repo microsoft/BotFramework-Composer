@@ -44,7 +44,7 @@ import {
   luFilesState,
   localeState,
 } from '../../recoilModel';
-import { validatedDialogs } from '../../recoilModel/selectors/validatedDialogs';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 
@@ -101,7 +101,7 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogs);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const displaySkillManifest = useRecoilValue(displaySkillManifestState);

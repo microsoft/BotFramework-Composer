@@ -10,7 +10,7 @@ import onboardingStorage from '../utils/onboardingStorage';
 import { OpenConfirmModal } from '../components/Modal/ConfirmDialog';
 import { useLocation } from '../utils/hooks';
 import { projectIdState, dispatcherState, onboardingState } from '../recoilModel';
-import { validatedDialogs } from '../recoilModel/selectors/validatedDialogs';
+import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
 
 import OnboardingContext from './OnboardingContext';
 import TeachingBubbles from './TeachingBubbles/TeachingBubbles';
@@ -25,7 +25,7 @@ const Onboarding: React.FC = () => {
   const onboarding = useRecoilValue(onboardingState);
   const complete = onboarding.complete;
 
-  const dialogs = useRecoilValue(validatedDialogs);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const projectId = useRecoilValue(projectIdState);
   const rootDialogId = dialogs.find(({ isRoot }) => isRoot === true)?.id || 'Main';
 
