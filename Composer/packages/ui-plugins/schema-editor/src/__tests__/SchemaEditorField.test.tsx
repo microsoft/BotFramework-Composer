@@ -9,18 +9,23 @@ import { render, fireEvent, findAllByRole } from '@bfc/test-utils';
 import { SchemaEditorField } from '../Fields/SchemaEditorField';
 
 const renderSchemaEditor = ({ updateDialogSchema = jest.fn() } = {}) => {
-  const shell: any = {
+  const api: any = {
     updateDialogSchema,
   };
 
-  const shellData: any = {
+  const data: any = {
     dialogs: [{ displayName: 'test', id: 'test_id' }],
     dialogSchemas: [],
     dialogId: 'test_id',
   };
 
+  const shell: any = {
+    api,
+    data,
+  };
+
   return render(
-    <Extension plugins={{}} shell={shell} shellData={shellData}>
+    <Extension plugins={{}} shell={shell}>
       <SchemaEditorField />
     </Extension>
   );
