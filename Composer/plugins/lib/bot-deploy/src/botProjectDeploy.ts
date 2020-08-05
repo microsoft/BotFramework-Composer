@@ -509,7 +509,8 @@ export class BotProjectDeploy {
     createLuisAuthoringResource = true,
     createCosmosDb = true,
     createStorage = true,
-    createAppInsights = true
+    createAppInsights = true,
+    createQnAResource = true,
   ) {
     try {
       if (!this.tenantId) {
@@ -577,11 +578,12 @@ export class BotProjectDeploy {
       // azure resource manager class config
       const armConfig = {
         createOrNot: {
-          appInsights: createAppInsights,
+          appInsights: createAppInsights || createQnAResource,
           cosmosDB: createCosmosDb,
           blobStorage: createStorage,
           luisResource: createLuisResource,
           luisAuthoringResource: createLuisAuthoringResource,
+          qnaResource: createQnAResource,
           webApp: true,
           bot: true,
           deployments: true
@@ -596,6 +598,11 @@ export class BotProjectDeploy {
         resourceGroup: {
           name: resourceGroupName,
           location: location
+        },
+        qnaResource: {
+          resourceGroupName: resourceGroupName,
+          location: location,
+          accountName: resourceGroupName
         },
         subId: this.subId,
         creds: this.creds,

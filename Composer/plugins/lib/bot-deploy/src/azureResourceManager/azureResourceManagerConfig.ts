@@ -37,6 +37,9 @@ export interface AzureResourceManangerConfig {
   // Create web app
   webApp: WebAppConfig;
 
+  // Create qna resource
+  qnaResource: QnAResourceConfig;
+
   // Deployments counter
   deployments: DeploymentsConfig;
 
@@ -65,6 +68,9 @@ export interface CreateResouces {
 
   // Create web app or not
   webApp: boolean;
+
+  // Create qna resource
+  qnaResource: boolean;
 
   // Create Deployment UUID counter or not
   deployments: boolean;
@@ -138,6 +144,13 @@ export interface WebAppConfig {
 export interface DeploymentsConfig {
   resourceGroupName: string;
   name: string;
+}
+
+export interface QnAResourceConfig {
+  resourceGroupName: string;
+  accountName: string;
+  location: string;
+  sku?: string;
 }
 
 export type ApplicationType = 'web' | 'other';
