@@ -184,7 +184,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [showWarning, setShowWarning] = useState(true);
-  const shell = useShell('ProjectTree');
+  const shell = useShell('DesignPage');
+  const shellForFlowEditor = useShell('FlowEditor');
+  const shellForPropertyEditor = useShell('PropertyEditor');
   const triggerApi = useTriggerApi(shell.api);
 
   useEffect(() => {
@@ -642,32 +644,34 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             />
             <Toolbar toolbarItems={toolbarItems} />
           </div>
-          <Extension plugins={pluginConfig} shell={shell.api} shellData={shell.data}>
-            <Conversation css={editorContainer}>
-              <div css={editorWrapper}>
-                <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                  {breadcrumbItems}
-                  {dialogJsonVisible ? (
-                    <JsonEditor
-                      key="dialogjson"
-                      editorSettings={userSettings.codeEditor}
-                      id={currentDialog.id}
-                      schema={schemas.sdk.content}
-                      value={currentDialog.content || undefined}
-                      onChange={(data) => {
-                        updateDialog({ id: currentDialog.id, content: data });
-                      }}
-                    />
-                  ) : isNotSupported ? (
-                    showWarning && changeRecognizerComponent
-                  ) : (
+          <Conversation css={editorContainer}>
+            <div css={editorWrapper}>
+              <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
+                {breadcrumbItems}
+                {dialogJsonVisible ? (
+                  <JsonEditor
+                    key="dialogjson"
+                    editorSettings={userSettings.codeEditor}
+                    id={currentDialog.id}
+                    schema={schemas.sdk.content}
+                    value={currentDialog.content || undefined}
+                    onChange={(data) => {
+                      updateDialog({ id: currentDialog.id, content: data });
+                    }}
+                  />
+                ) : isNotSupported ? (
+                  showWarning && changeRecognizerComponent
+                ) : (
+                  <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
                     <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                  )}
-                </div>
-                <PropertyEditor key={focusPath} />
+                  </Extension>
+                )}
               </div>
-            </Conversation>
-          </Extension>
+              <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
+                <PropertyEditor key={focusPath} />
+              </Extension>
+            </div>
+          </Conversation>
         </div>
       </div>
       <Suspense fallback={<LoadingSpinner />}>
