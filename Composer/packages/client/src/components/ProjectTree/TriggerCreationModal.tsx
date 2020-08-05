@@ -363,13 +363,13 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             name: `TextInput_Prompt_${lgTemplateId1}`,
             body:
               '[Activity\n\
-    Text = ${expandText(@answer)}\n\
+    Text = ${@answer}\n\
     SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}\n\
 ]',
           } as LgTemplate,
           {
             name: `SendActivity_${lgTemplateId2}`,
-            body: '- ${expandText(@answer)}',
+            body: '- ${@answer}',
           } as LgTemplate,
         ];
         const lgFilePayload = {
