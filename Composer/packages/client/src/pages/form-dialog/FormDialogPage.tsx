@@ -86,7 +86,7 @@ const FormDialogPage: React.FC<Props> = (props: Props) => {
     <>
       <Stack horizontal verticalFill>
         <FormDialogSchemaList
-          items={formDialogSchemas.sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))}
+          items={formDialogSchemas.slice().sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))}
           loading={formDialogGenerationProgressing}
           selectedId={dialogSchema?.id}
           onCreateItem={() => setCreateSchemaDialogOpen(true)}
