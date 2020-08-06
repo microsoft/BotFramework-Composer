@@ -39,6 +39,19 @@ function createLuApi(
     return await dispatchers.updateLuIntent({ id: file.id, intentName, intent });
   };
 
+  const renameLuIntent = async (id: string, intentName: string, newIntentName: string) => {
+    const file = luFileResolver(id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const oldIntent = file.intents.find((i) => i.Name === intentName);
+    if (!oldIntent) throw new Error(`intent not found with id ${intentName}`);
+
+    const newIntent = { ...oldIntent, Name: newIntentName };
+
+    return await dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent });
+  };
+
   const removeLuIntent = async (id: string, intentName: string) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
@@ -66,6 +79,7 @@ function createLuApi(
     getLuIntents,
     getLuIntent,
     updateLuIntent: createThrottledFunc(updateLuIntent),
+    renameLuIntent: createThrottledFunc(renameLuIntent),
     removeLuIntent,
   };
 }
