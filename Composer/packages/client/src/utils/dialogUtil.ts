@@ -73,6 +73,7 @@ function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
 
   if (data.intent) {
     optionalAttributes.intent = data.intent;
+    optionalAttributes.$designer.name = data.intent;
   }
 
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
