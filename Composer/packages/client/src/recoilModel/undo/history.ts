@@ -3,14 +3,14 @@
 
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { useRecoilTransactionObserver_UNSTABLE as useRecoilTransactionObserver, RecoilState } from 'recoil';
-import { atom, Snapshot, useRecoilCallback, CallbackInterface, Loadable, useSetRecoilState } from 'recoil';
+import { atom, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
 
 import { projectIdState } from '../atoms';
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 
 import { designPageLocationState } from './../atoms/botState';
 import undoHistory, { UndoHistory } from './undoHistory';
-import { trackedAtoms } from './trackedAtoms';
+import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 
 export const undoFunctionState = atom({
   key: 'undoFunction',
@@ -24,46 +24,54 @@ export const undoFunctionState = atom({
   },
 });
 
-const isUndoingState = atom({
-  key: 'isUndoing',
-  default: false,
-});
+const getAtomAssetsMap = (snap: Snapshot): AtomAssetsMap => {
+  const atomMap = new Map<RecoilState<any>, any>();
+  trackedAtoms.forEach((atom) => {
+    const loadable = snap.getLoadable(atom);
+    atomMap.set(atom, loadable.state === 'hasValue' ? loadable.contents : null);
+  });
 
-const getAssets = (snap: Snapshot): Loadable<any>[] => {
-  return trackedAtoms.map((state) => snap.getLoadable(state));
+  //should record the location state
+  atomMap.set(designPageLocationState, snap.getLoadable(designPageLocationState).contents);
+  atomMap.set(projectIdState, snap.getLoadable(projectIdState).contents);
+  return atomMap;
 };
 
-const checkAtomChanged = (snapshot: Snapshot, previousSnapshot: Snapshot, atom: RecoilState<any>) => {
-  const currVal = snapshot.getLoadable(atom);
-  const prevVal = previousSnapshot.getLoadable(atom);
+const checkAtomChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom: RecoilState<any>) => {
+  const currVal = current.get(atom);
+  const prevVal = previous.get(atom);
 
-  if (prevVal.state === 'hasValue' && currVal.state === 'hasValue' && prevVal.contents !== currVal.contents) {
+  if (prevVal !== currVal) {
     return true;
   }
 
   return false;
 };
 
-const checkAtomsChanged = (snapshot: Snapshot, previousSnapshot: Snapshot, atoms: RecoilState<any>[]) => {
-  return atoms.some((atom) => checkAtomChanged(snapshot, previousSnapshot, atom));
+const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atoms: RecoilState<any>[]) => {
+  return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
 
-function navigate(current: Snapshot, undoHistory: UndoHistory) {
-  const location = current.getLoadable(designPageLocationState);
-  const projectId = current.getLoadable(projectIdState);
-  if (location.state === 'hasValue' && projectId.state === 'hasValue') {
-    const { dialogId, selected, focused } = undoHistory.present === 0 ? undoHistory.initialLocation : location.contents;
-    const currentUri = `/bot/${projectId.contents}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+function navigate(next: AtomAssetsMap, undoHistory: UndoHistory) {
+  const location = next.get(designPageLocationState);
+  if (location) {
+    const { dialogId, selected, focused, projectId } =
+      undoHistory.present === 0 ? undoHistory.initialLocation : location;
+    const currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
     navigateTo(currentUri);
   }
 }
 
-function mapTrackedAtomsOntoSnapshot(current: Snapshot, target: Snapshot): Snapshot {
-  const assets = getAssets(current);
-  trackedAtoms.forEach((atom, index) => {
-    const loadable = assets[index];
-    if (loadable.state === 'hasValue') {
-      target = target.map(({ set }) => set(atom, loadable.contents));
+function mapTrackedAtomsOntoSnapshot(
+  target: Snapshot,
+  currentAssets: AtomAssetsMap,
+  nextAssets: AtomAssetsMap
+): Snapshot {
+  trackedAtoms.forEach((atom) => {
+    const current = currentAssets.get(atom);
+    const next = nextAssets.get(atom);
+    if (current !== next) {
+      target = target.map(({ set }) => set(atom, next));
     }
   });
   return target;
@@ -85,36 +93,44 @@ export const UndoRoot = React.memo(() => {
   const assetsChanged = useRef(false);
 
   useRecoilTransactionObserver(({ snapshot, previousSnapshot }) => {
-    if (checkAtomChanged(snapshot, previousSnapshot, projectIdState)) {
+    const currentAssets = getAtomAssetsMap(snapshot);
+    const previousAssets = getAtomAssetsMap(previousSnapshot);
+    if (checkAtomChanged(currentAssets, previousAssets, projectIdState)) {
       //switch project should clean the undo history
       undoHistory.clear();
-      undoHistory.add(snapshot);
+      undoHistory.add(getAtomAssetsMap(snapshot));
     } else if (!assetsChanged.current) {
-      if (checkAtomsChanged(snapshot, previousSnapshot, trackedAtoms)) {
+      if (checkAtomsChanged(currentAssets, previousAssets, trackedAtoms)) {
         assetsChanged.current = true;
       }
       setInitialLocation(snapshot, history);
     }
   });
 
-  const undoAssets = (target: Snapshot, current: Snapshot, gotoSnapshot: (snapshot: Snapshot) => void) => {
-    target = target.map(({ set }) => set(isUndoingState, true));
-    target = mapTrackedAtomsOntoSnapshot(current, target);
+  const undoAssets = (
+    target: Snapshot,
+    current: AtomAssetsMap,
+    next: AtomAssetsMap,
+    gotoSnapshot: (snapshot: Snapshot) => void
+  ) => {
+    target = mapTrackedAtomsOntoSnapshot(target, current, next);
     gotoSnapshot(target);
-    navigate(current, history);
+    navigate(next, history);
   };
 
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
     if (history.canUndo()) {
-      const current = history.undo();
-      undoAssets(snapshot, current, gotoSnapshot);
+      const present = history.getPresentAssets();
+      const next = history.undo();
+      if (present) undoAssets(snapshot, present, next, gotoSnapshot);
     }
   });
 
   const redo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
     if (history.canRedo()) {
-      const current = history.redo();
-      undoAssets(snapshot, current, gotoSnapshot);
+      const present = history.getPresentAssets();
+      const next = history.redo();
+      if (present) undoAssets(snapshot, present, next, gotoSnapshot);
     }
   });
 
@@ -127,10 +143,11 @@ export const UndoRoot = React.memo(() => {
   };
 
   const commit = useRecoilCallback(({ snapshot }) => () => {
-    const previousSnapshot = history.getPresentSnapshot();
+    const currentAssets = getAtomAssetsMap(snapshot);
+    const previousAssets = history.getPresentAssets();
     //filter some invalid changes
-    if (previousSnapshot && checkAtomsChanged(snapshot, previousSnapshot, trackedAtoms)) {
-      history.add(snapshot);
+    if (previousAssets && checkAtomsChanged(currentAssets, previousAssets, trackedAtoms)) {
+      history.add(getAtomAssetsMap(snapshot));
     }
   });
 
@@ -142,7 +159,7 @@ export const UndoRoot = React.memo(() => {
 
   const clearUndo = useRecoilCallback(({ snapshot }) => () => {
     history.clear();
-    history.add(snapshot);
+    history.add(getAtomAssetsMap(snapshot));
     assetsChanged.current = false;
   });
 
