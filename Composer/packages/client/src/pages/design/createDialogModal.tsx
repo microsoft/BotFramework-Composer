@@ -13,6 +13,7 @@ import { StorageFolder } from '../../recoilModel/types';
 import { dialogsState, currentProjectIdState } from '../../recoilModel/atoms/botState';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
+import { botStateByProjectIdSelector } from '../../recoilModel';
 
 import { name, description, styles as wizardStyles } from './styles';
 
@@ -30,8 +31,7 @@ interface CreateDialogModalProps {
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const projectId = useRecoilValue(currentProjectIdState);
-  const dialogs = useRecoilValue(dialogsState(projectId));
+  const { dialogs } = useRecoilValue(botStateByProjectIdSelector);
   const { onSubmit, onDismiss, isOpen } = props;
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
