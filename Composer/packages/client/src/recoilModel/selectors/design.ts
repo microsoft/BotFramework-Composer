@@ -37,6 +37,7 @@ import {
   showDelLanguageModalState,
   onAddLanguageDialogCompleteState,
   onDelLanguageDialogCompleteState,
+  botNameState,
 } from '../atoms';
 
 export const botStateByProjectIdSelector = selector({
@@ -45,7 +46,7 @@ export const botStateByProjectIdSelector = selector({
     const projectId = get(currentProjectIdState);
     const dialogs = get(dialogsState(projectId));
     const schemas = get(schemasState(projectId));
-    const botName = get(schemasState(projectId));
+    const botName = get(botNameState(projectId));
     const location = get(locationState(projectId));
     const botStatus = get(botStatusState(projectId));
     const botDiagnostics = get(botDiagnosticsState(projectId));
@@ -76,8 +77,10 @@ export const botStateByProjectIdSelector = selector({
     const showDelLanguageModal = get(showDelLanguageModalState(projectId));
     const onAddLanguageDialogComplete = get(onAddLanguageDialogCompleteState(projectId));
     const onDelLanguageDialogComplete = get(onDelLanguageDialogCompleteState(projectId));
+    const botLoadErrorMsg = get(botLoadErrorState(projectId));
 
     return {
+      botLoadErrorMsg,
       dialogs,
       schemas,
       botName,

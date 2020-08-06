@@ -20,6 +20,7 @@ import {
   botEndpointsState,
   dispatcherState,
   currentProjectIdState,
+  botStateByProjectIdSelector,
 } from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { BotStatus, LuisConfig } from '../../constants';
@@ -55,14 +56,11 @@ export const TestController: React.FC = () => {
   const [calloutVisible, setCalloutVisible] = useState(false);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const botName = useRecoilValue(botNameState);
-  const botStatus = useRecoilValue(botStatusState);
-  const projectId = useRecoilValue(currentProjectIdState);
-  const dialogs = useRecoilValue(dialogsState(projectId));
-  const luFiles = useRecoilValue(luFilesState);
-  const settings = useRecoilValue(settingsState);
-  const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
-  const botEndpoints = useRecoilValue(botEndpointsState);
+  const { botName, botStatus, dialogs, luFiles, settings, botLoadErrorMsg } = useRecoilValue(
+    botStateByProjectIdSelector
+  );
+  const { botEndpoints } = useRecoilValue(botEndpointsState);
+
   const {
     publishToTarget,
     onboardingAddCoachMarkRef,
@@ -71,6 +69,7 @@ export const TestController: React.FC = () => {
     setBotStatus,
     setSettings,
   } = useRecoilValue(dispatcherState);
+  const projectId = useRecoilValue(currentProjectIdState);
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
