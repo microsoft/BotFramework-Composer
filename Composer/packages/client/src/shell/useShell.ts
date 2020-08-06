@@ -3,12 +3,11 @@
 
 import { useMemo, useRef } from 'react';
 import { ShellApi, ShellData, Shell } from '@bfc/shared';
-import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
-import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
+import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 import {
@@ -86,29 +85,15 @@ export function useShell(source: EventSource): Shell {
     return await updateDialog({ id, content: newDialog.content });
   }
 
-  function cleanData() {
-    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
-    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
-      const payload = {
-        id: dialogId,
-        content: cleanedData,
-      };
-      updateDialog(payload);
-    }
-  }
-
   function navigationTo(path) {
-    cleanData();
     navTo(path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    cleanData();
     selectTo(subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
-    cleanData();
     let dataPath: string = subPaths[0];
 
     if (source === FORM_EDITOR) {
