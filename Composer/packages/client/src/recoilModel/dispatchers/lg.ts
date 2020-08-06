@@ -118,9 +118,10 @@ export const createLgFileState = async (
 
 export const removeLgFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {
   const { set, snapshot } = callbackHelpers;
-  let lgFiles = await snapshot.getPromise(lgFilesState);
+  let { lgFiles } = await snapshot.getPromise(botStateByProjectIdSelector);
   lgFiles = lgFiles.filter((file) => getBaseName(file.id) !== id);
-  set(lgFilesState, lgFiles);
+  const projectId = await snapshot.getPromise(currentProjectIdState);
+  set(lgFilesState(projectId), lgFiles);
 };
 
 export const lgDispatcher = () => {
