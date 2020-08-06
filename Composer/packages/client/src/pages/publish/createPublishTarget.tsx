@@ -53,7 +53,7 @@ const CreatePublishTarget: React.FC<CreatePublishTargetProps> = (props) => {
     if (!newName || newName.trim() === '') {
       setErrorMsg(formatMessage('Must have a name'));
     } else {
-      const exists = props.targets?.find((t) => t.name.toLowerCase() === newName?.toLowerCase());
+      const exists = !!props.targets?.find((t) => t.name.toLowerCase() === newName?.toLowerCase());
 
       if (exists) {
         setErrorMsg(formatMessage('A profile with that name already exists.'));
