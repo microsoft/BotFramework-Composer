@@ -3,7 +3,6 @@
 
 import { CommandBar, ICommandBarItemProps } from '@fluentui/react/lib/CommandBar';
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
-import { Stack } from '@fluentui/react/lib/Stack';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { CommandBarUploadButton } from 'src/app/components/common/CommandBarUpload';
@@ -24,11 +23,14 @@ const downloadFile = async (fileName: string, content: string) => {
   document.body.removeChild(link);
 };
 
-const { styleComponent } = getStylistV2('VisualEditor');
+const { styleDiv } = getStylistV2('VisualEditor');
 const theme = getScopedTheme('VisualEditor');
 
-const EditorRoot = styleComponent(Stack)('EditorRoot', {
-  alignItems: 'center',
+const EditorRoot = styleDiv('EditorRoot', {
+  display: 'flex',
+  flex: 1,
+  justifyContent: 'center',
+  overflowY: 'auto',
 });
 
 type Props = {
@@ -42,7 +44,15 @@ export const VisualEditor = observer((props: Props) => {
   const { dispatcher, settingsStore, dataStore } = React.useContext(Context);
   const { schema, history } = dataStore;
 
+  const propertyLengthRef = React.useRef(schema?.properties?.length || 0);
+  const containerRef = React.useRef<HTMLDivElement>();
   useUndoKeyBinding();
+
+  React.useEffect(() => {
+    if (containerRef.current && (schema?.properties?.length || 0) > propertyLengthRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight - containerRef.current.clientHeight;
+    }
+  }, [schema?.properties?.length]);
 
   const importSchema = (file: File) => {
     dispatcher.dispatch('importSchema', { id: schema.name, file });
@@ -140,7 +150,7 @@ export const VisualEditor = observer((props: Props) => {
           },
         }}
       />
-      <EditorRoot styles={{ root: { flex: 1, overflowY: 'auto' } }}>
+      <EditorRoot originalRef={containerRef}>
         <PropertyBuilder schema={schema} />
       </EditorRoot>
     </>
