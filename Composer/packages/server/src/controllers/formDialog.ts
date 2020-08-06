@@ -38,9 +38,9 @@ const generate = async (req: Request, res: Response) => {
 
   const currentProject = await BotProjectService.getProjectById(projectId, user);
   if (currentProject !== undefined) {
-    const { name, schema } = req.body;
+    const { name } = req.body;
 
-    await currentProject.generateDialog(name, JSON.stringify(schema));
+    await currentProject.generateDialog(name);
     const updatedProject = await BotProjectService.getProjectById(projectId, user);
     res.status(200).json({ id: projectId, ...updatedProject.getProject() });
   } else {

@@ -48,8 +48,8 @@ const BotStructureTemplate = {
     lg: 'language-generation/${LOCALE}/${DIALOGNAME}.${LOCALE}.lg',
     lu: 'language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
   },
-  dialogSchemas: {
-    folder: 'dialog-schemas',
+  formDialogs: {
+    folder: 'form-dialogs',
   },
   skillManifests: 'manifests/${MANIFESTNAME}.json',
 };
@@ -349,11 +349,10 @@ export class BotProject {
     return true;
   }
 
-  public generateDialog = async (name: string, content = '') => {
+  public async generateDialog(name: string) {
+    const schemaPath = this.getFormDialogSchemaPath(name);
+
     const outDir = Path.resolve(this.dir, `dialogs/${name}`);
-    await this.ensureDirExists(outDir);
-    const schemaPath = Path.join(outDir, `${name}.schema`);
-    await this.fileStorage.writeFile(schemaPath, content);
 
     const feedback = (type: FeedbackType, message: string): void => {
       // eslint-disable-next-line no-console
@@ -362,7 +361,7 @@ export class BotProject {
 
     const generateParams = {
       schemaPath,
-      prefix: undefined,
+      prefix: name,
       outDir,
       metaSchema: undefined,
       allLocales: undefined,
@@ -385,7 +384,11 @@ export class BotProject {
       generateParams.singleton,
       generateParams.feedback
     );
-  };
+  }
+
+  private getFormDialogSchemaPath(name: string) {
+    return Path.join(this.dir, `${BotStructureTemplate.formDialogs.folder}/${name}.form-dialog`);
+  }
 
   private async removeLocalRuntimeData(projectId) {
     const method = 'localpublish';
@@ -465,8 +468,8 @@ export class BotProject {
           MANIFESTNAME: id,
         }
       );
-    } else if (fileType === '.dialog-schema') {
-      dir = BotStructureTemplate.dialogSchemas.folder;
+    } else if (fileType === '.form-dialog') {
+      dir = BotStructureTemplate.formDialogs.folder;
     }
     return dir;
   };
@@ -549,7 +552,7 @@ export class BotProject {
     }
 
     const fileList: FileInfo[] = [];
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json', '**/*.dialog-schema'];
+    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', 'manifests/*.json', '**/*.form-dialog'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

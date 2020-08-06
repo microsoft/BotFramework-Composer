@@ -6,13 +6,17 @@ import { CommandBarButton } from '@fluentui/react/lib/Button';
 
 type Props = {
   /**
+   * Allowed files extension.
+   */
+  accept: string;
+  /**
    * Callback for when a file is selected.
    */
   onUpload: (file: File) => void;
 };
 
 export const CommandBarUploadButton = (props: Props) => {
-  const { onUpload } = props;
+  const { onUpload, accept } = props;
 
   const inputFileRef = React.useRef<HTMLInputElement>();
   const onClickImport = () => {
@@ -35,7 +39,7 @@ export const CommandBarUploadButton = (props: Props) => {
       >
         Import
       </CommandBarButton>
-      <input ref={inputFileRef} accept=".dialog-schema" style={{ display: 'none' }} type="file" onChange={onChange} />
+      <input ref={inputFileRef} accept={accept} style={{ display: 'none' }} type="file" onChange={onChange} />
     </>
   );
 };

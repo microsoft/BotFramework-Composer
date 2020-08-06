@@ -115,7 +115,7 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.botOpening = false;
   state.formDialogGenerationProgressing = false;
   state.formDialogSchemas = files
-    .filter((f: FileInfo) => f.name.endsWith(FileExtensions.DialogSchema))
+    .filter((f: FileInfo) => f.name.endsWith(FileExtensions.FormDialogSchema))
     .map((f: FileInfo) => ({ id: f.name.split('.')[0], content: f.content }));
   refreshLocalStorage(id, state.settings);
   mergeLocalStorage(id, state.settings);

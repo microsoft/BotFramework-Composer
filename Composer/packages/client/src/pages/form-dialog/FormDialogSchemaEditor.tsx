@@ -63,7 +63,7 @@ const editorTopBarStyles = classNamesFunction<IStackProps, IStackStyles>()({
   root: { backgroundColor: '#fff', height: '45px' },
 });
 
-const validateSchemaFileName = (file: File) => file.name.endsWith(FileExtensions.DialogSchema);
+const validateSchemaFileName = (file: File) => file.name.endsWith(FileExtensions.FormDialogSchema);
 
 type Props = {
   projectId?: string;

@@ -34,12 +34,13 @@ const EditorRoot = styleDiv('EditorRoot', {
 });
 
 type Props = {
-  onReset: () => void;
+  schemaExtension: string;
   showThemePicker?: boolean;
+  onReset: () => void;
 };
 
 export const VisualEditor = observer((props: Props) => {
-  const { onReset, showThemePicker = false } = props;
+  const { onReset, showThemePicker = false, schemaExtension } = props;
 
   const { dispatcher, settingsStore, dataStore } = React.useContext(Context);
   const { schema, history } = dataStore;
@@ -109,7 +110,7 @@ export const VisualEditor = observer((props: Props) => {
   const farMenuItems = [
     {
       key: 'import',
-      onRender: () => <CommandBarUploadButton onUpload={importSchema} />,
+      onRender: () => <CommandBarUploadButton accept={schemaExtension} onUpload={importSchema} />,
     },
     {
       key: 'download',

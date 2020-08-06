@@ -29,6 +29,10 @@ export type VisualSchemaEditorProps = {
    */
   schema: { id: string; content: string };
   /**
+   * Form dialog schema file extension.
+   */
+  schemaExtension?: string;
+  /**
    * Record of available schema templates.
    */
   templates?: string[];
@@ -47,7 +51,14 @@ export type VisualSchemaEditorRef = {
 
 export const VisualSchemaEditor = React.forwardRef(
   (props: VisualSchemaEditorProps, ref: React.Ref<VisualSchemaEditorRef>) => {
-    const { editorId, onSchemaUpdated, schema, showThemePicker = false, templates = [] } = props;
+    const {
+      editorId,
+      onSchemaUpdated,
+      schema,
+      showThemePicker = false,
+      templates = [],
+      schemaExtension = '.schema',
+    } = props;
     const getSchema = () => props.schema;
 
     const uniqueId = React.useRef(editorId || generateId());
@@ -83,7 +94,7 @@ export const VisualSchemaEditor = React.forwardRef(
 
     return appProps ? (
       <ContextProvider {...appProps}>
-        <VisualEditor showThemePicker={showThemePicker} onReset={startOver} />
+        <VisualEditor schemaExtension={schemaExtension} showThemePicker={showThemePicker} onReset={startOver} />
       </ContextProvider>
     ) : null;
   }
