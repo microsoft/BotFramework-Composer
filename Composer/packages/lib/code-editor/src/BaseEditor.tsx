@@ -144,7 +144,6 @@ const BaseEditor: React.FC<BaseEditorProps> = (props) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     debounce((shellData: any, localData: any) => {
       if (!isEqual(shellData, localData)) {
-        console.log('update');
         setEditorValue(shellData);
       }
     }, 300)

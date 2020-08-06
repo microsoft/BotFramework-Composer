@@ -1,40 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Snapshot } from 'recoil';
+import formatMessage from 'format-message';
+
+import { AtomAssetsMap } from './trackedAtoms';
 
 export class UndoHistory {
-  public stack: Snapshot[] = [];
+  public stack: AtomAssetsMap[] = [];
   public present = -1;
-  public initialLocation = { dialogId: '', selected: '', focused: '' };
+  public initialLocation = { dialogId: '', selected: '', focused: '', projectId: '' };
 
   public undo() {
-    if (!this.canUndo()) throw new Error('Undo is not support');
+    if (!this.canUndo()) throw new Error(formatMessage('Undo is not support'));
 
     this.present = this.present - 1;
     return this.stack[this.present];
   }
 
   public redo() {
-    if (!this.canRedo()) throw new Error('Redo is not support');
+    if (!this.canRedo()) throw new Error(formatMessage('Redo is not support'));
 
     this.present = this.present + 1;
     return this.stack[this.present];
   }
 
-  public add(snap: Snapshot) {
+  public add(assets: AtomAssetsMap) {
     if (this.present !== -1 && this.canRedo()) {
       this.stack.splice(this.present + 1, this.stack.length - this.present - 1);
     }
-    this.stack.push(snap);
+    this.stack.push(assets);
     this.present++;
   }
 
-  public replace(snap: Snapshot) {
+  public replace(assets: AtomAssetsMap) {
     if (this.present !== -1 && this.canRedo()) {
       this.stack.splice(this.present, this.stack.length - this.present - 1);
     }
-    this.stack[this.present] = snap;
+    this.stack[this.present] = assets;
   }
 
   public clear() {
@@ -42,7 +44,7 @@ export class UndoHistory {
     this.stack = [];
   }
 
-  public setInitialLocation(v: { dialogId: string; selected: string; focused: string }) {
+  public setInitialLocation(v: { dialogId: string; selected: string; focused: string; projectId: string }) {
     if (this.stack.length === 1) {
       this.initialLocation = v;
     }
@@ -51,7 +53,7 @@ export class UndoHistory {
   public canUndo = () => this.stack.length > 0 && this.present > 0;
   public canRedo = () => this.stack.length > 0 && this.present < this.stack.length - 1;
   public isEmpty = () => this.stack.length === 0;
-  public getPresentSnapshot = () => (this.present > -1 ? this.stack[this.present] : null);
+  public getPresentAssets = () => (this.present > -1 ? this.stack[this.present] : null);
 }
 
 const undoHistory = new UndoHistory();
