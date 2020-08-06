@@ -104,6 +104,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
         ref={dialog.isRoot && addMainDialogRef}
         css={css`
           margin-top: -6px;
+          width: 100%;
         `}
         role="grid"
       >
