@@ -17,9 +17,9 @@ import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vsco
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
 import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
+import { buildInFunctionsMap } from '@bfc/built-in-functions';
 
 import { LgParser } from './lgParser';
-import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   LGDocument,
@@ -210,8 +210,8 @@ export class LGServer {
       word = word.substring(8);
     }
 
-    if (buildInfunctionsMap.has(word)) {
-      const functionEntity = buildInfunctionsMap.get(word);
+    if (buildInFunctionsMap.has(word)) {
+      const functionEntity = buildInFunctionsMap.get(word);
       if (!functionEntity) {
         return Promise.resolve(null);
       }
@@ -485,7 +485,7 @@ export class LGServer {
       };
     });
 
-    const completionFunctionList: CompletionItem[] = Array.from(buildInfunctionsMap).map((item) => {
+    const completionFunctionList: CompletionItem[] = Array.from(buildInFunctionsMap).map((item) => {
       const [key, value] = item;
       return {
         label: key,

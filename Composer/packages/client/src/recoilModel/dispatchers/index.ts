@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { dialogsDispatcher } from './dialogs';
+import { dialogSchemaDispatcher } from './dialogSchema';
 import { projectDispatcher } from './project';
 import { applicationDispatcher } from './application';
 import { editorDispatcher } from './editor';
@@ -20,6 +21,7 @@ const createDispatchers = () => {
   return {
     ...editorDispatcher(),
     ...dialogsDispatcher(),
+    ...dialogSchemaDispatcher(),
     ...projectDispatcher(),
     ...applicationDispatcher(),
     ...storageDispatcher(),
