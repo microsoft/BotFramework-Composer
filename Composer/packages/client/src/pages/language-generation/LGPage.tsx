@@ -9,13 +9,14 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { dialogsState, projectIdState } from '../../recoilModel/atoms/botState';
+import { dialogsState, currentProjectIdState } from '../../recoilModel/atoms/botState';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
+import { botStateByProjectIdSelector } from '../../recoilModel';
 
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
@@ -25,8 +26,8 @@ interface LGPageProps extends RouteComponentProps<{}> {
 }
 
 const LGPage: React.FC<LGPageProps> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
-  const projectId = useRecoilValue(projectIdState);
+  const { dialogs } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
 
   const path = props.location?.pathname ?? '';
   const { dialogId = '' } = props;

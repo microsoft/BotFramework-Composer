@@ -12,7 +12,7 @@ import { resolveToBasePath } from './utils/fileUtil';
 import { data } from './styles';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
-import { botOpeningState, projectIdState, dispatcherState, schemasState } from './recoilModel';
+import { botOpeningState, dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from './recoilModel';
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
@@ -81,9 +81,9 @@ const projectStyle = css`
 `;
 
 const ProjectRouter: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
+  const { schemas } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
   const botOpening = useRecoilValue(botOpeningState);
-  const projectId = useRecoilValue(projectIdState);
-  const schemas = useRecoilValue(schemasState);
   const { fetchProjectById } = useRecoilValue(dispatcherState);
 
   useEffect(() => {

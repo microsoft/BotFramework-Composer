@@ -11,20 +11,11 @@ import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialo
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 import {
-  botNameState,
-  schemasState,
-  skillsState,
-  lgFilesState,
-  dialogsState,
-  projectIdState,
-  localeState,
-  luFilesState,
   dispatcherState,
-  breadcrumbState,
-  designPageLocationState,
-  focusPathState,
   userSettingsState,
   clipboardActionsState,
+  botStateByProjectIdSelector,
+  currentProjectIdState,
 } from '../recoilModel';
 
 import { useLgApi } from './lgApi';
@@ -36,17 +27,20 @@ type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
 
 export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
   const dialogMapRef = useRef({});
-  const botName = useRecoilValue(botNameState);
-  const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const skills = useRecoilValue(skillsState);
-  const schemas = useRecoilValue(schemasState);
-  const breadcrumb = useRecoilValue(breadcrumbState);
-  const designPageLocation = useRecoilValue(designPageLocationState);
-  const focusPath = useRecoilValue(focusPathState);
+  const {
+    focusPath,
+    designPageLocation,
+    breadcrumb,
+    schemas,
+    skills,
+    botName,
+    dialogs,
+    luFiles,
+    locale,
+    lgFiles,
+  } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
+
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
   const {

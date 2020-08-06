@@ -14,14 +14,7 @@ import { useRecoilValue } from 'recoil';
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
 import { useShell } from '../../shell';
 import plugins from '../../plugins';
-import {
-  schemasState,
-  dialogsState,
-  designPageLocationState,
-  dispatcherState,
-  currentProjectIdState,
-  botStateByProjectIdSelector,
-} from '../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector } from '../../recoilModel';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
 
@@ -65,7 +58,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { api: shellApi, data: shellData } = useShell('VisualEditor');
   const { openNewTriggerModal } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
-  const designPageLocation = useRecoilValue(designPageLocationState);
+  const { designPageLocation } = useRecoilValue(botStateByProjectIdSelector);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const { dialogs, schemas } = useRecoilValue(botStateByProjectIdSelector);
   const { dialogId, selected } = designPageLocation;

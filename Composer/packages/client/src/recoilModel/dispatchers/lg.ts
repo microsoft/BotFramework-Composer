@@ -6,9 +6,10 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
+import { botStateByProjectIdSelector } from '../selectors';
 
 import LgWorker from './../parsers/lgWorker';
-import { lgFilesState, localeState, settingsState } from './../atoms/botState';
+import { lgFilesState, currentProjectIdState } from './../atoms/botState';
 import * as lgUtil from './../../utils/lgUtil';
 
 const templateIsNotEmpty = ({ name, body }) => {
@@ -23,7 +24,7 @@ export const updateLgFileState = async (
   { id, content }: { id: string; content: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const lgFiles = await snapshot.getPromise(lgFilesState);
+  const { lgFiles } = await snapshot.getPromise(botStateByProjectIdSelector);
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
   const updatedLgFile = (await LgWorker.parse(id, content, lgFiles)) as LgFile;
@@ -87,9 +88,9 @@ export const createLgFileState = async (
   { id, content }: { id: string; content: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const lgFiles = await snapshot.getPromise(lgFilesState);
-  const locale = await snapshot.getPromise(localeState);
-  const { languages } = await snapshot.getPromise(settingsState);
+  const { lgFiles, locale, settings } = await snapshot.getPromise(botStateByProjectIdSelector);
+  const projectId = await snapshot.getPromise(currentProjectIdState);
+  const { languages } = settings;
   const createdLgId = `${id}.${locale}`;
   if (lgFiles.find((lg) => lg.id === createdLgId)) {
     throw new Error('lg file already exist');
@@ -112,7 +113,7 @@ export const createLgFileState = async (
     });
   });
 
-  set(lgFilesState, [...lgFiles, ...changes]);
+  set(lgFilesState(projectId), [...lgFiles, ...changes]);
 };
 
 export const removeLgFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {

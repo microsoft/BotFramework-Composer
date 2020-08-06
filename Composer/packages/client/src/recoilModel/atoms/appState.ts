@@ -150,3 +150,8 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
     updateRequired: false,
   },
 });
+
+export const botOpeningState = atom<boolean>({
+  key: getFullyQualifiedKey('botOpening'),
+  default: false,
+});
