@@ -1,0 +1,11 @@
+{
+  "name": "@bfc/built-in-functions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rimraf ./lib && tsc --build tsconfig.build.json"
+  },
+  "author": "Microsoft",
+  "license": "MIT"
+}

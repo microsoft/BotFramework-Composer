@@ -132,6 +132,7 @@ export class LuisPublish {
         name,
         environment,
         language,
+        true,
         false,
         loadResult.multiRecognizers,
         loadResult.settings

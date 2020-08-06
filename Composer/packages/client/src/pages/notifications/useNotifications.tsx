@@ -13,6 +13,7 @@ import {
   BotDiagnosticsState,
   settingsState,
   skillManifestsState,
+  dialogSchemasState,
 } from '../../recoilModel/atoms/botState';
 
 import {
@@ -33,6 +34,7 @@ export default function useNotifications(filter?: string) {
   const diagnostics = useRecoilValue(BotDiagnosticsState);
   const setting = useRecoilValue(settingsState);
   const skillManifests = useRecoilValue(skillManifestsState);
+  const dialogSchemas = useRecoilValue(dialogSchemasState);
   const botAssets = {
     projectId,
     dialogs,
@@ -40,6 +42,7 @@ export default function useNotifications(filter?: string) {
     lgFiles,
     skillManifests,
     setting,
+    dialogSchemas,
   };
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];
