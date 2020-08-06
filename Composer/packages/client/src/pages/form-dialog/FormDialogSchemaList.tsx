@@ -9,25 +9,49 @@ import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { FocusZone, FocusZoneDirection } from 'office-ui-fabric-react/lib/FocusZone';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { List } from 'office-ui-fabric-react/lib/List';
-import { ISearchBoxProps, ISearchBoxStyles, SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
 import { IStackItemProps, IStackItemStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { Resizable, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 
 import { useStoreContext } from '../../hooks/useStoreContext';
+import { FormDialogSchema } from '../../store/types';
 
-const Root = styled.div`
-  width: 100%;
-  height: 100%;
-  border-right: 1px solid #c4c4c4;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
-  .ms-List-cell {
-    min-height: 36px;
-  }
-`;
+import { FormDialogSchemaListHeader } from './FormDialogSchemaListHeader';
+
+const isEmptyObject = (objStr: string) => objStr === '{}';
+
+const Root = styled(Stack)<{
+  loading: boolean;
+}>(
+  {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    borderRight: '1px solid #c4c4c4',
+    boxSizing: 'border-box',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    '& .ms-List-cell': {
+      minHeight: '36px',
+    },
+  },
+  (props) =>
+    props.loading
+      ? {
+          '&:after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(255,255,255, 0.6)',
+            zIndex: 1,
+          },
+        }
+      : null
+);
 
 const oneLinerStyles = classNamesFunction<IStackItemProps, IStackItemStyles>()({
   root: {
@@ -37,26 +61,23 @@ const oneLinerStyles = classNamesFunction<IStackItemProps, IStackItemStyles>()({
   },
 });
 
-const searchBoxStyles = classNamesFunction<ISearchBoxProps, ISearchBoxStyles>()({
-  root: {
-    flex: 1,
-    borderBottom: '1px solid #edebe9',
-    height: '45px',
-    borderRadius: '0px',
-    minWidth: 0,
-  },
+const EmptyView = styled(Stack)({
+  opacity: 0.5,
+  padding: 8,
+  textAlign: 'center',
 });
 
-type SchemaItem = { id: string };
-
-type SchemaItemProps = SchemaItem & {
+type SchemaItemProps = {
+  id: string;
   selected: boolean;
+  isEmpty?: boolean;
   onClick: (name: string) => void;
   onDelete: (name: string) => void;
+  onGenerate: (name: string) => void;
 };
 
-const SchemaItem = React.memo((props: SchemaItemProps) => {
-  const { id, onClick, onDelete, selected = false } = props;
+const FormDialogSchemaItem = React.memo((props: SchemaItemProps) => {
+  const { id, onClick, onDelete, onGenerate, selected = false, isEmpty = false } = props;
 
   const clickHandler = React.useCallback(() => {
     onClick(id);
@@ -72,8 +93,19 @@ const SchemaItem = React.memo((props: SchemaItemProps) => {
     [id, onDelete]
   );
 
+  const runHandler = React.useCallback(
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onGenerate(id);
+    },
+    [id, onGenerate]
+  );
+
   return (
     <Stack
+      data-is-focusable
       horizontal
       styles={{
         root: {
@@ -90,21 +122,31 @@ const SchemaItem = React.memo((props: SchemaItemProps) => {
       <Stack.Item grow styles={oneLinerStyles}>
         {id}
       </Stack.Item>
-      <IconButton iconProps={{ iconName: 'Delete' }} onClick={deleteHandler} />
+      <Stack horizontal tokens={{ childrenGap: 8 }} verticalAlign="center">
+        <IconButton
+          disabled={isEmpty}
+          iconProps={{ iconName: 'Rerun' }}
+          title={formatMessage('Generate')}
+          onClick={runHandler}
+        />
+        <IconButton iconProps={{ iconName: 'Delete' }} title={formatMessage('Delete')} onClick={deleteHandler} />
+      </Stack>
     </Stack>
   );
 });
 
-type SchemaListProps = {
-  items: readonly SchemaItem[];
+type FormDialogSchemaListProps = {
+  items: readonly FormDialogSchema[];
   selectedId: string | undefined;
   onSelectItem: (schemaId: string) => void;
   onDeleteItem: (schemaId: string) => void;
+  onGenerateFormDialogs: (schemaId: string) => void;
   onCreateItem: () => void;
+  loading?: boolean;
 };
 
-export const SchemaList: React.FC<SchemaListProps> = (props) => {
-  const { selectedId, items, onDeleteItem, onSelectItem, onCreateItem } = props;
+export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props) => {
+  const { selectedId, items, onDeleteItem, onSelectItem, onCreateItem, onGenerateFormDialogs, loading = false } = props;
 
   const { 0: query, 1: setQuery } = React.useState('');
   const delayedSetQuery = debounce((newValue) => setQuery(newValue), 300);
@@ -140,20 +182,14 @@ export const SchemaList: React.FC<SchemaListProps> = (props) => {
       size={{ width: currentWidth, height: 'auto' }}
       onResizeStop={handleResize}
     >
-      <Root aria-label={formatMessage('Navigation pane')} role="region">
+      <Root aria-label={formatMessage('Navigation pane')} loading={loading} role="region" tokens={{ childrenGap: 8 }}>
+        <FormDialogSchemaListHeader
+          loading={loading}
+          searchDisabled={!items.length}
+          onChangeQuery={onFilter}
+          onCreateItem={onCreateItem}
+        />
         <FocusZone isCircularNavigation direction={FocusZoneDirection.vertical}>
-          <Stack horizontal tokens={{ childrenGap: 8 }} verticalAlign="center">
-            <SearchBox
-              underlined
-              ariaLabel={formatMessage('Type schema name')}
-              disabled={!items.length}
-              iconProps={{ iconName: 'Filter' }}
-              placeholder={formatMessage('Filter Schema')}
-              styles={searchBoxStyles}
-              onChange={onFilter}
-            />
-            <IconButton iconProps={{ iconName: 'Add' }} onClick={onCreateItem} />
-          </Stack>
           <div
             aria-label={formatMessage(
               `{
@@ -171,21 +207,30 @@ export const SchemaList: React.FC<SchemaListProps> = (props) => {
             )}
             aria-live={'polite'}
           />
-          <List<SchemaItem>
-            items={filteredItems}
-            onRenderCell={(item) =>
-              item && (
-                <SchemaItem
-                  key={item.id}
-                  data-is-focusable="true"
-                  id={item.id}
-                  selected={selectedId === item.id}
-                  onClick={onSelectItem}
-                  onDelete={onDeleteItem}
-                />
-              )
-            }
-          />
+          {filteredItems.length ? (
+            <List<FormDialogSchema>
+              items={filteredItems}
+              onRenderCell={(item) =>
+                item && (
+                  <FormDialogSchemaItem
+                    key={item.id}
+                    id={item.id}
+                    isEmpty={isEmptyObject(item.content)}
+                    selected={selectedId === item.id}
+                    onClick={onSelectItem}
+                    onDelete={onDeleteItem}
+                    onGenerate={onGenerateFormDialogs}
+                  />
+                )
+              }
+            />
+          ) : (
+            <EmptyView verticalFill horizontalAlign="center" verticalAlign="center">
+              {query
+                ? formatMessage('No form dialog schema matches your filtering criteria!')
+                : formatMessage('Create a new form dialog schema by clicking + above.')}
+            </EmptyView>
+          )}
         </FocusZone>
       </Root>
     </Resizable>

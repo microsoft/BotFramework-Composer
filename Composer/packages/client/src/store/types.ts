@@ -88,7 +88,7 @@ export interface RuntimeTemplate {
   startCommand: string;
 }
 
-export type DialogSchema = {
+export type FormDialogSchema = {
   id: string;
   content: string;
 };
@@ -144,7 +144,11 @@ export interface BotState {
   // If a bot is opening, we should show a Loading spinner
   botOpening: boolean;
 
-  dialogSchemas: DialogSchema[];
+  // List of for dialog schemas that the user has created.
+  formDialogSchemas: FormDialogSchema[];
+  // List of available (prebuilt) form dialog schema templates that can be used.
+  formDialogTemplateSchemas: { name: string; isGlobal: boolean }[];
+  formDialogGenerationProgressing: boolean;
 }
 
 export type AppState = {

@@ -15,11 +15,11 @@ import {
 import { createSchemaStore } from 'src/app/stores/schemaStore';
 
 const $refToRef = ($ref: string) => {
-  const [, key, item] = $ref.match('template:(.*).schema#/(.*)');
-  return `${key}:${item}`;
+  const [, ref] = $ref.match('template:(.*)');
+  return ref;
 };
 
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const retrievePayload = (kind: SchemaPropertyKind, payloadData: any): PropertyPayload => {
   switch (kind) {
     case 'ref':

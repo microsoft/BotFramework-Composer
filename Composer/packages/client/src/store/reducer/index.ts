@@ -113,7 +113,8 @@ const getProjectSuccess: ReducerFunc = (state, { response }) => {
   state.diagnostics = diagnostics;
   state.skillManifests = skillManifestFiles;
   state.botOpening = false;
-  state.dialogSchemas = files
+  state.formDialogGenerationProgressing = false;
+  state.formDialogSchemas = files
     .filter((f: FileInfo) => f.name.endsWith(FileExtensions.DialogSchema))
     .map((f: FileInfo) => ({ id: f.name.split('.')[0], content: f.content }));
   refreshLocalStorage(id, state.settings);
@@ -135,6 +136,7 @@ const resetProjectState: ReducerFunc = (state) => {
   state.settings = initialState.settings;
   state.locale = initialState.locale;
   state.skillManifests = initialState.skillManifests;
+
   return state;
 };
 
@@ -293,8 +295,8 @@ const createDialog: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const createDialogSchema: ReducerFunc = (state, { id, content }) => {
-  if (state.dialogSchemas.find((ds) => ds.id === id)) {
+const createFormDialogSchema: ReducerFunc = (state, { id, content }) => {
+  if (state.formDialogSchemas.find((ds) => ds.id === id)) {
     state.error = {
       message: `${id} ${formatMessage(`dialog schema file already exist`)}`,
       summary: formatMessage('Creation Rejected'),
@@ -302,13 +304,13 @@ const createDialogSchema: ReducerFunc = (state, { id, content }) => {
     return state;
   }
 
-  state.dialogSchemas.push({ id, content });
+  state.formDialogSchemas.push({ id, content });
 
   return state;
 };
 
-const updateDialogSchema: ReducerFunc = (state, { id, content }) => {
-  const dialogSchema = state.dialogSchemas.find((ds) => ds.id === id);
+const updateFormDialogSchema: ReducerFunc = (state, { id, content }) => {
+  const dialogSchema = state.formDialogSchemas.find((ds) => ds.id === id);
   if (dialogSchema) {
     dialogSchema.content = content;
   }
@@ -316,8 +318,23 @@ const updateDialogSchema: ReducerFunc = (state, { id, content }) => {
   return state;
 };
 
-const removeDialogSchema: ReducerFunc = (state, { id }) => {
-  state.dialogSchemas = state.dialogSchemas.filter((ds) => ds.id !== id);
+const removeFormDialogSchema: ReducerFunc = (state, { id }) => {
+  state.formDialogSchemas = state.formDialogSchemas.filter((ds) => ds.id !== id);
+
+  return state;
+};
+
+const loadFormDialogSchemaTemplates: ReducerFunc = (state, { templates }) => {
+  state.formDialogTemplateSchemas = Object.keys(templates).map((key) => ({
+    name: key,
+    isGlobal: templates[key].$global,
+  }));
+
+  return state;
+};
+
+const generateFormDialogPending: ReducerFunc = (state) => {
+  state.formDialogGenerationProgressing = true;
 
   return state;
 };
@@ -714,9 +731,11 @@ export const reducer = createReducer({
   [ActionTypes.CREATE_DIALOG]: createDialog,
   [ActionTypes.UPDATE_DIALOG]: updateDialog,
   [ActionTypes.REMOVE_DIALOG]: removeDialog,
-  [ActionTypes.CREATE_SCHEMA]: createDialogSchema,
-  [ActionTypes.UPDATE_SCHEMA]: updateDialogSchema,
-  [ActionTypes.REMOVE_SCHEMA]: removeDialogSchema,
+  [ActionTypes.CREATE_FORM_DIALOG_SCHEMA]: createFormDialogSchema,
+  [ActionTypes.UPDATE_FORM_DIALOG_SCHEMA]: updateFormDialogSchema,
+  [ActionTypes.REMOVE_FORM_DIALOG_SCHEMA]: removeFormDialogSchema,
+  [ActionTypes.LOAD_FORM_DIALOG_SCHEMA_TEMPLATE_SUCCESS]: loadFormDialogSchemaTemplates,
+  [ActionTypes.GENERATE_FORM_DIALOG_PENDING]: generateFormDialogPending,
   [ActionTypes.GET_STORAGE_SUCCESS]: getStoragesSuccess,
   [ActionTypes.GET_STORAGE_FAILURE]: noOp,
   [ActionTypes.SET_STORAGEFILE_FETCHING_STATUS]: setStorageFileFetchingStatus,

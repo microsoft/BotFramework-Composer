@@ -8,9 +8,9 @@ import * as React from 'react';
 
 import { useStoreContext } from '../../hooks/useStoreContext';
 
-import { CreateSchemaDialogModal } from './CreateDialogSchemaModal';
-import { SchemaEditor } from './SchemaEditor';
-import { SchemaList } from './SchemaList';
+import { CreateFormDialogSchemaModal } from './CreateFormDialogSchemaModal';
+import { FormDialogSchemaEditor } from './FormDialogSchemaEditor';
+import { FormDialogSchemaList } from './FormDialogSchemaList';
 
 const EmptyView = styled(Stack)({
   position: 'relative',
@@ -29,27 +29,33 @@ const EmptyView = styled(Stack)({
 
 type Props = RouteComponentProps<{ projectId: string }>;
 
-const DialogGenerationPage: React.FC<Props> = (props: Props) => {
+const FormDialogPage: React.FC<Props> = (props: Props) => {
   const { projectId } = props;
   const {
     actions,
-    state: { dialogSchemas },
+    state: { formDialogSchemas, formDialogTemplateSchemas, formDialogGenerationProgressing },
   } = useStoreContext();
+
+  React.useEffect(() => {
+    (async () => {
+      await actions.loadFormDialogSchemaTemplates();
+    })();
+  }, []);
 
   const { 0: createSchemaDialogOpen, 1: setCreateSchemaDialogOpen } = React.useState(false);
   const { 0: dialogSchema, 1: setDialogSchema } = React.useState<{ id: string; content: string }>();
 
   const selectItem = React.useCallback(
     (id: string) => {
-      const selected = dialogSchemas.find((ds) => ds.id === id);
+      const selected = formDialogSchemas.find((ds) => ds.id === id);
       setDialogSchema(selected);
     },
-    [dialogSchemas]
+    [formDialogSchemas]
   );
 
   const deleteItem = React.useCallback(
     (id: string) => {
-      actions.removeDialogSchema({ id });
+      actions.removeFormDialogSchema({ id });
       if (dialogSchema?.id === id) {
         selectItem('');
       }
@@ -57,38 +63,51 @@ const DialogGenerationPage: React.FC<Props> = (props: Props) => {
     [dialogSchema]
   );
 
-  const updateItem = (id: string, content: string) => {
-    if (id === dialogSchema?.id) {
-      actions.updateDialogSchema({ id, content });
-      setDialogSchema({ ...dialogSchema, content });
-    }
-  };
+  const generateFormDialogs = React.useCallback((schemaName: string) => {
+    actions.generateFormDialog({ schemaName });
+  }, []);
+
+  const updateItem = React.useCallback(
+    (id: string, content: string) => {
+      if (id === dialogSchema?.id) {
+        actions.updateFormDialogSchema({ id, content });
+        setDialogSchema({ ...dialogSchema, content });
+      }
+    },
+    [dialogSchema, setDialogSchema]
+  );
 
   const createItem = React.useCallback(({ name }: { name: string }) => {
-    actions.createDialogSchema({ id: name, content: JSON.stringify({}, null, 2) });
+    actions.createFormDialogSchema({ id: name, content: JSON.stringify({}, null, 2) });
     setCreateSchemaDialogOpen(false);
   }, []);
 
   return (
     <>
       <Stack horizontal verticalFill>
-        <SchemaList
-          items={dialogSchemas
-            .map((ds) => ({ id: ds.id }))
-            .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))}
+        <FormDialogSchemaList
+          items={formDialogSchemas.slice().sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))}
+          loading={formDialogGenerationProgressing}
           selectedId={dialogSchema?.id}
           onCreateItem={() => setCreateSchemaDialogOpen(true)}
           onDeleteItem={deleteItem}
+          onGenerateFormDialogs={generateFormDialogs}
           onSelectItem={selectItem}
         />
         {dialogSchema ? (
-          <SchemaEditor projectId={projectId} schema={dialogSchema} onChange={updateItem} />
+          <FormDialogSchemaEditor
+            loading={formDialogGenerationProgressing}
+            projectId={projectId}
+            schema={dialogSchema}
+            templates={formDialogTemplateSchemas.filter((t) => !t.isGlobal).map((t) => t.name)}
+            onChange={updateItem}
+          />
         ) : (
           <EmptyView />
         )}
       </Stack>
       {createSchemaDialogOpen ? (
-        <CreateSchemaDialogModal
+        <CreateFormDialogSchemaModal
           isOpen={createSchemaDialogOpen}
           onDismiss={() => setCreateSchemaDialogOpen(false)}
           onSubmit={createItem}
@@ -98,4 +117,4 @@ const DialogGenerationPage: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default DialogGenerationPage;
+export default FormDialogPage;

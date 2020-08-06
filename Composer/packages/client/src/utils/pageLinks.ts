@@ -55,9 +55,9 @@ export const topLinks = (projectId: string, openedDialogId: string) => {
       disabled: !botLoaded,
     },
     {
-      to: `/bot/${projectId}/dialog-generation`,
+      to: `/bot/${projectId}/form-dialogs`,
       iconName: 'OfficeChat',
-      labelName: formatMessage('Dialogs'),
+      labelName: formatMessage('Form Dialogs'),
       exact: true,
       disabled: !botLoaded,
     },

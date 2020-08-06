@@ -15,9 +15,18 @@ const actionType2ChangeType = {
   [ActionTypes.CREATE_DIALOG]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Dialog },
   [ActionTypes.UPDATE_DIALOG]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Dialog },
   [ActionTypes.REMOVE_DIALOG]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Dialog },
-  [ActionTypes.CREATE_SCHEMA]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.DialogSchema },
-  [ActionTypes.UPDATE_SCHEMA]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.DialogSchema },
-  [ActionTypes.REMOVE_SCHEMA]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.DialogSchema },
+  [ActionTypes.CREATE_FORM_DIALOG_SCHEMA]: {
+    changeType: ChangeType.CREATE,
+    fileExtension: FileExtensions.DialogSchema,
+  },
+  [ActionTypes.UPDATE_FORM_DIALOG_SCHEMA]: {
+    changeType: ChangeType.UPDATE,
+    fileExtension: FileExtensions.DialogSchema,
+  },
+  [ActionTypes.REMOVE_FORM_DIALOG_SCHEMA]: {
+    changeType: ChangeType.DELETE,
+    fileExtension: FileExtensions.DialogSchema,
+  },
   [ActionTypes.UPDATE_LG]: { changeType: ChangeType.UPDATE, fileExtension: FileExtensions.Lg },
   [ActionTypes.CREATE_LG]: { changeType: ChangeType.CREATE, fileExtension: FileExtensions.Lg },
   [ActionTypes.REMOVE_LG]: { changeType: ChangeType.DELETE, fileExtension: FileExtensions.Lg },
@@ -254,16 +263,21 @@ class FilePersistence {
     ];
   }
 
-  private getDialogSchemaFileChanges(id: string, previousState: State, currentState: State, changeType: ChangeType) {
+  private getFormDialogSchemaFileChanges(
+    id: string,
+    previousState: State,
+    currentState: State,
+    changeType: ChangeType
+  ) {
     const fileChanges: IFileChange[] = [];
-    let { dialogSchemas } = currentState;
+    let { formDialogSchemas } = currentState;
 
     //if delete dialog the change need to get changes from previousState
     if (changeType === ChangeType.DELETE) {
-      dialogSchemas = previousState.dialogSchemas;
+      formDialogSchemas = previousState.formDialogSchemas;
     }
 
-    const dialogSchema = dialogSchemas.find((ds) => ds.id === id);
+    const dialogSchema = formDialogSchemas.find((ds) => ds.id === id);
 
     fileChanges.push(this.createChange(dialogSchema, FileExtensions.DialogSchema, changeType, currentState.projectId));
     return fileChanges;
@@ -312,7 +326,7 @@ class FilePersistence {
         break;
       }
       case FileExtensions.DialogSchema: {
-        fileChanges = this.getDialogSchemaFileChanges(targetId, previousState, currentState, changeType);
+        fileChanges = this.getFormDialogSchemaFileChanges(targetId, previousState, currentState, changeType);
       }
     }
     return fileChanges;

@@ -9,19 +9,16 @@ import { SettingsStore } from 'src/app/stores/settingsStore';
 export type ContextValue = {
   dataStore: DataStore;
   settingsStore: SettingsStore;
+  templates: string[];
   dispatcher: Dispatcher;
 };
 
 export const Context = React.createContext<ContextValue>(null);
 
-type Props = React.PropsWithChildren<{
-  dataStore: DataStore;
-  dispatcher: Dispatcher;
-  settingsStore: SettingsStore;
-}>;
+type Props = React.PropsWithChildren<ContextValue>;
 
 export const ContextProvider = (props: Props) => {
-  const { children, dataStore, settingsStore, ...value } = props;
+  const { children, ...contextValue } = props;
 
-  return <Context.Provider value={{ ...value, dataStore, settingsStore }}>{children}</Context.Provider>;
+  return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 };

@@ -2,16 +2,42 @@
 // Licensed under the MIT License.
 
 import { JsonEditor } from '@bfc/code-editor';
-import { VisualSchemaEditor } from '@bfc/dialog-generation-flow';
+import { VisualSchemaEditor } from '@bfc/form-dialogs';
 import formatMessage from 'format-message';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { IStackProps, IStackStyles, Stack } from 'office-ui-fabric-react/lib/Stack';
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import * as React from 'react';
+import styled from '@emotion/styled';
 
 import { DropZone } from '../../components/DropZone';
 import { FileExtensions } from '../../store/persistence/types';
+
+const Root = styled(Stack)<{
+  loading: boolean;
+}>(
+  {
+    position: 'relative',
+    width: '100%',
+    backgroundColor: '#c8c6c4',
+  },
+  (props) =>
+    props.loading
+      ? {
+          '&:after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(255,255,255, 0.6)',
+            zIndex: 1,
+          },
+        }
+      : null
+);
 
 /**
  * @description
@@ -41,12 +67,14 @@ const validateSchemaFileName = (file: File) => file.name.endsWith(FileExtensions
 
 type Props = {
   projectId?: string;
+  loading?: boolean;
   schema: { id: string; content: string };
+  templates: string[];
   onChange: (id: string, content: string) => void;
 };
 
-export const SchemaEditor = (props: Props) => {
-  const { projectId, schema, onChange } = props;
+export const FormDialogSchemaEditor = React.memo((props: Props) => {
+  const { projectId, schema, templates, onChange, loading = false } = props;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const editorRef = React.useRef<any>();
@@ -87,7 +115,7 @@ export const SchemaEditor = (props: Props) => {
   };
 
   return (
-    <Stack styles={{ root: { width: '100%', backgroundColor: '#c8c6c4' } }}>
+    <Root loading={loading}>
       <Stack horizontal horizontalAlign="end" styles={editorTopBarStyles} verticalAlign="center">
         <ActionButton onClick={() => setShowEditor(!showEditor)}>
           {showEditor ? formatMessage('Hide code') : formatMessage('Show code')}
@@ -114,6 +142,7 @@ export const SchemaEditor = (props: Props) => {
             <VisualSchemaEditor
               editorId={`${projectId}:${schema.id}`}
               schema={schema}
+              templates={templates}
               onSchemaUpdated={onSchemaUpdated}
             />
           </DropZone>
@@ -129,6 +158,6 @@ export const SchemaEditor = (props: Props) => {
           />
         )}
       </Stack>
-    </Stack>
+    </Root>
   );
-};
+});

@@ -52,10 +52,7 @@ const spreadNumberSchemaProperty = (payload: NumberPropertyPayload) => {
   return { minimum: payload.minimum, maximum: payload.maximum };
 };
 
-const spreadRefSchemaProperty = (payload: RefPropertyPayload) => {
-  const [key, item] = payload.ref.split(':');
-  return { $ref: `template:${key}.schema#/${item}` };
-};
+const spreadRefSchemaProperty = (payload: RefPropertyPayload) => ({ $ref: `template:${payload.ref}` });
 
 const spreadArraySchemaProperty = (payload: ArrayPropertyPayload) => {
   const helper = () => {

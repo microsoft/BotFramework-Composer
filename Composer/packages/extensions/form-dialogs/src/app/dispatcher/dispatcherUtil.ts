@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Lifetime, ILifetime } from 'src/app/utils/base';
 
@@ -11,7 +12,7 @@ export type HandlerCreator<TD = {}> = (dependencies: TD) => Record<string, Handl
 
 export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependencies: (lifetime: ILifetime) => TD) => {
   const handlerMap = new Map<string, Handler>();
-  const handlerLifetimeMap = new WeakMap<HandlerCreator, Lifetime>();
+  const handlerLifetimeMap = new WeakMap<HandlerCreator<TD>, Lifetime>();
 
   // ------------ handler ------------
 

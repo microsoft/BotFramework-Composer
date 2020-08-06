@@ -2,19 +2,19 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import React, { useContext, useEffect, Suspense } from 'react';
-import { Router, Redirect, RouteComponentProps } from '@reach/router';
+import { css, jsx } from '@emotion/core';
+import { Redirect, RouteComponentProps, Router } from '@reach/router';
 import formatMessage from 'format-message';
+import React, { Suspense, useContext, useEffect } from 'react';
 
-import { resolveToBasePath } from './utils/fileUtil';
-import { data } from './styles';
+import { LoadingSpinner } from './components/LoadingSpinner';
+import { openAlertModal } from './components/Modal/AlertDialog';
+import { dialogStyle } from './components/Modal/dialogStyle';
 import { NotFound } from './components/NotFound';
 import { BASEPATH } from './constants';
 import { StoreContext } from './store';
-import { openAlertModal } from './components/Modal/AlertDialog';
-import { dialogStyle } from './components/Modal/dialogStyle';
-import { LoadingSpinner } from './components/LoadingSpinner';
+import { data } from './styles';
+import { resolveToBasePath } from './utils/fileUtil';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -24,7 +24,7 @@ const Notifications = React.lazy(() => import('./pages/notifications/Notificatio
 const Publish = React.lazy(() => import('./pages/publish/Publish'));
 const Skills = React.lazy(() => import('./pages/skills'));
 const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow/CreationFlow'));
-const DialogGenerationPage = React.lazy(() => import('./pages/dialog-generation/DialogGenerationPage'));
+const FormDialogPage = React.lazy(() => import('./pages/form-dialog/FormDialogPage'));
 
 const Routes = (props) => {
   const { state } = useContext(StoreContext);
@@ -53,7 +53,7 @@ const Routes = (props) => {
             <Notifications path="notifications" />
             <Publish path="publish/:targetName" />
             <Skills path="skills/*" />
-            <DialogGenerationPage path="dialog-generation" />
+            <FormDialogPage path="form-dialogs" />
             <DesignPage path="*" />
           </ProjectRouter>
           <SettingPage path="settings/*" />

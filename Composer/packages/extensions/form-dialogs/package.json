@@ -1,7 +1,9 @@
 {
-    "name": "@bfc/dialog-generation-flow",
+    "name": "@bfc/form-dialogs",
     "version": "1.0.0",
-    "description": "",
+    "license": "MIT",
+    "author": "Microsoft",
+    "description": "Botframework Composer dialog form components.",
     "main": "./lib/index.js",
     "typings": "./lib/VisualSchemaEditor.d.ts",
     "files": [
@@ -30,13 +32,15 @@
     },
     "peerDependencies": {
         "react": "16.13.0",
-        "react-dom": "16.13.0"
+        "react-dom": "16.13.0",
+        "lodash": "^4.17.15"
     },
     "devDependencies": {
         "@types/react": "^16.8.18",
         "@types/react-beautiful-dnd": "^13.0.0",
         "@types/react-dom": "^16.8.4",
         "@types/react-virtualized-auto-sizer": "^1.0.0",
+        "@types/lodash": "^4.14.146",
         "cross-env": "^5.2.0",
         "css-loader": "^2.1.1",
         "eslint": "^7.5.0",
@@ -57,10 +61,5 @@
         "webpack-dev-middleware": "^3.7.0",
         "webpack-hot-middleware": "^2.25.0",
         "webpack-notifier": "^1.7.0"
-    },
-    "license": "MIT",
-    "author": {
-        "name": "Soroush",
-        "email": "sorgh@microsoft.com"
     }
 }

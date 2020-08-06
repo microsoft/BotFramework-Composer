@@ -1,14 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 type ThemeName = 'light' | 'dark';
 
 interface NodeRequire {
   <T>(path: string): T;
-}
-
-interface NodeModule {
-  hot: any;
 }
 
 interface Function {
