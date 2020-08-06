@@ -42,7 +42,7 @@ context('breadcrumb', () => {
     hasBreadcrumbItems(cy, ['__TestTodoSample']);
   });
 
-  it.only('can show event name in breadcrumb', () => {
+  it('can show event name in breadcrumb', () => {
     cy.findByTestId('ProjectTree').within(() => {
       cy.findByText('addtodo').click();
       cy.findAllByText('Dialog started').first().click();
