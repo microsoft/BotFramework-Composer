@@ -178,11 +178,6 @@ export const publishTypesState = atomFamily<PublishType[], string>({
   default: [],
 });
 
-export const botOpeningState = atomFamily<boolean, string>({
-  key: getFullyQualifiedKey('botOpening'),
-  default: false,
-});
-
 export const publishHistoryState = atomFamily<any, string>({
   key: getFullyQualifiedKey('publishHistory'),
   default: {},

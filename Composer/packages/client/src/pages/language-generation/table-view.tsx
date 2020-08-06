@@ -28,6 +28,8 @@ import {
   projectIdState,
   localeState,
   settingsState,
+  botStateByProjectIdSelector,
+  currentProjectIdState,
 } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 
@@ -36,11 +38,8 @@ interface TableViewProps extends RouteComponentProps<{}> {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
+  const { dialogs, lgFiles, settings, locale } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage } = useRecoilValue(dispatcherState);
 
   const { languages, defaultLanguage } = settings;

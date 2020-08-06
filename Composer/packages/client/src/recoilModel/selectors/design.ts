@@ -27,7 +27,6 @@ import {
   publishStatusState,
   lastPublishChangeState,
   publishTypesState,
-  botOpeningState,
   publishHistoryState,
   onCreateDialogCompleteState,
   focusPathState,
@@ -49,7 +48,7 @@ export const botStateByProjectIdSelector = selector({
     const botName = get(botNameState(projectId));
     const location = get(locationState(projectId));
     const botStatus = get(botStatusState(projectId));
-    const botDiagnostics = get(botDiagnosticsState(projectId));
+    const diagnostics = get(botDiagnosticsState(projectId));
     const botEnvironment = get(botEnvironmentState(projectId));
     const locale = get(localeState(projectId));
     const lgFiles = get(lgFilesState(projectId));
@@ -67,7 +66,6 @@ export const botStateByProjectIdSelector = selector({
     const publishStatus = get(publishStatusState(projectId));
     const lastPublishChange = get(lastPublishChangeState(projectId));
     const publishTypes = get(publishTypesState(projectId));
-    const botOpening = get(botOpeningState(projectId));
     const publishHistory = get(publishHistoryState(projectId));
     const onCreateDialogComplete = get(onCreateDialogCompleteState(projectId));
     const focusPath = get(focusPathState(projectId));
@@ -86,7 +84,7 @@ export const botStateByProjectIdSelector = selector({
       botName,
       location,
       botStatus,
-      botDiagnostics,
+      diagnostics,
       botEnvironment,
       locale,
       luFiles,
@@ -104,7 +102,6 @@ export const botStateByProjectIdSelector = selector({
       publishStatus,
       lastPublishChange,
       publishTypes,
-      botOpening,
       publishHistory,
       onCreateDialogComplete,
       focusPath,

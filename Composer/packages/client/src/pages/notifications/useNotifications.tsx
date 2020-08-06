@@ -5,14 +5,8 @@ import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Diagnostic, DiagnosticSeverity } from '@bfc/shared';
 
-import {
-  dialogsState,
-  luFilesState,
-  lgFilesState,
-  projectIdState,
-  BotDiagnosticsState,
-  settingsState,
-} from '../../recoilModel/atoms/botState';
+import { currentProjectIdState } from '../../recoilModel/atoms/botState';
+import { botStateByProjectIdSelector } from '../../recoilModel';
 
 import {
   Notification,
@@ -24,12 +18,9 @@ import {
 } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
-  const dialogs = useRecoilValue(dialogsState);
-  const luFiles = useRecoilValue(luFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const diagnostics = useRecoilValue(BotDiagnosticsState);
-  const settings = useRecoilValue(settingsState);
+  const { dialogs, luFiles, lgFiles, diagnostics, settings } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
+
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];
     diagnostics.forEach((d) => {

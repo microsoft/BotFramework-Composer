@@ -6,11 +6,11 @@ import { LuFile, LuIntentSection } from '@bfc/shared';
 import throttle from 'lodash/throttle';
 import { useRecoilValue } from 'recoil';
 
-import { projectIdState } from '../recoilModel/atoms/botState';
 import { useResolvers } from '../hooks/useResolver';
+import { botStateByProjectIdSelector } from '../recoilModel';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
-import { focusPathState } from './../recoilModel/atoms/botState';
+import { currentProjectIdState } from './../recoilModel/atoms/botState';
 
 const createThrottledFunc = (fn) => throttle(fn, 1000, { leading: true, trailing: true });
 
@@ -67,8 +67,8 @@ function createLuApi(
 }
 
 export function useLuApi() {
-  const focusPath = useRecoilValue(focusPathState);
-  const projectId = useRecoilValue(projectIdState);
+  const { focusPath } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
   const dispatchers = useRecoilValue(dispatcherState);
   const { luFileResolver } = useResolvers();
   const [api, setApi] = useState(createLuApi({ focusPath, projectId }, dispatchers, luFileResolver));

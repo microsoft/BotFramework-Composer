@@ -8,7 +8,7 @@ import { useRecoilValue } from 'recoil';
 
 import { useResolvers } from '../hooks/useResolver';
 
-import { projectIdState, focusPathState } from './../recoilModel';
+import { botStateByProjectIdSelector, currentProjectIdState } from './../recoilModel';
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
 function createLgApi(
@@ -82,8 +82,8 @@ function createLgApi(
 }
 
 export function useLgApi() {
-  const focusPath = useRecoilValue(focusPathState);
-  const projectId = useRecoilValue(projectIdState);
+  const { focusPath } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
   const actions = useRecoilValue(dispatcherState);
   const { lgFileResolver } = useResolvers();
   const [api, setApi] = useState(createLgApi(focusPath, actions, lgFileResolver));
