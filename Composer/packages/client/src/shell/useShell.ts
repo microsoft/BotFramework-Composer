@@ -6,7 +6,7 @@ import { ShellApi, ShellData, Shell } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { updateRegExIntent } from '../utils/dialogUtil';
+import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
@@ -85,6 +85,31 @@ export function useShell(source: EventSource): Shell {
     return await updateDialog({ id, content: newDialog.content });
   }
 
+  async function renameRegExIntentHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = renameRegExIntent(dialog, intentName, newIntentName);
+    await updateDialog({ id, content: newDialog.content });
+  }
+
+  async function updateIntentTriggerHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = updateIntentTrigger(dialog, intentName, newIntentName);
+    await updateDialog({ id, content: newDialog.content });
+  }
+
+  function cleanData() {
+    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
+    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
+      const payload = {
+        id: dialogId,
+        content: cleanedData,
+      };
+      updateDialog(payload);
+    }
+  }
+
   function navigationTo(path) {
     navTo(path, breadcrumb);
   }
@@ -150,6 +175,8 @@ export function useShell(source: EventSource): Shell {
     ...lgApi,
     ...luApi,
     updateRegExIntent: updateRegExIntentHandler,
+    renameRegExIntent: renameRegExIntentHandler,
+    updateIntentTrigger: updateIntentTriggerHandler,
     navTo: navigationTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
