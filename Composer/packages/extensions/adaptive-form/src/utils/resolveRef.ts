@@ -22,6 +22,14 @@ export function resolveRef(
     delete resolvedSchema.$ref;
 
     return resolvedSchema;
+  } else if (typeof schema.additionalProperties === 'object' && typeof schema.additionalProperties.$ref === 'string') {
+    const additionalProperties = resolveRef(schema.additionalProperties, definitions);
+    const resolvedSchema = {
+      ...schema,
+      additionalProperties,
+    } as JSONSchema7;
+
+    return resolvedSchema;
   }
 
   return schema;

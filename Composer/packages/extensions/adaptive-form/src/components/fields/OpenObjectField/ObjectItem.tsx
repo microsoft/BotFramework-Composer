@@ -6,33 +6,38 @@ import { jsx } from '@emotion/core';
 import React, { useState, useCallback, useMemo } from 'react';
 import { FontSizes, NeutralColors } from '@uifabric/fluent-theme';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
+import { FieldProps } from '@bfc/extension';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 
-import { EditableField } from '../EditableField';
+import { StringField } from '../StringField';
+import SchemaField from '../../SchemaField';
 
-import { container, item } from './styles';
+import { container, item, itemContainer } from './styles';
 
-interface ObjectItemProps {
+interface ObjectItemProps extends FieldProps {
   name: string;
   formData: object;
-  value: unknown;
+  stackedLayout?: boolean;
   onNameChange: (name: string) => void;
-  onValueChange: (value?: string) => void;
   onDelete: () => void;
 }
 
 const ObjectItem: React.FC<ObjectItemProps> = ({
+  definitions,
   name: originalName,
   formData,
   value,
+  stackedLayout,
+  schema,
+  onChange,
   onNameChange,
-  onValueChange,
   onDelete,
+  ...rest
 }) => {
   const initialName = useMemo(() => originalName, []);
-  const initialValue = useMemo(() => value as string, []);
+  const initialValue = useMemo(() => value, []);
   const [name, setName] = useState<string>(originalName);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -58,44 +63,42 @@ const ObjectItem: React.FC<ObjectItemProps> = ({
     }
   }, [name, formData]);
 
+  const placeholder =
+    schema.type === 'string' || !schema.type ? initialValue || formatMessage('Add a new value') : undefined;
+
   return (
     <div css={container} data-testid="ObjectItem">
-      <div css={item}>
-        <EditableField
-          transparentBorder
-          ariaLabel={formatMessage('key')}
-          depth={0}
-          error={errorMessage}
-          id={`${name}.key`}
-          name="key"
-          placeholder={initialName || formatMessage('Add a new key')}
-          schema={{}}
-          styles={{
-            errorMessage: { display: 'block', paddingTop: 0 },
-            root: { margin: '7px 0' },
-          }}
-          uiOptions={{}}
-          value={name}
-          onBlur={handleBlur}
-          onChange={(newValue) => setName(newValue || '')}
-        />
-      </div>
-      <div css={item}>
-        <EditableField
-          transparentBorder
-          ariaLabel={formatMessage('value')}
-          depth={0}
-          id={`${name}.value`}
-          name="value"
-          placeholder={initialValue || formatMessage('Add a new value')}
-          schema={{}}
-          styles={{
-            root: { margin: '7px 0' },
-          }}
-          uiOptions={{}}
-          value={value}
-          onChange={onValueChange}
-        />
+      <div css={itemContainer(stackedLayout)}>
+        <div css={item}>
+          <StringField
+            definitions={definitions}
+            depth={0}
+            error={errorMessage}
+            id={`${name}.key`}
+            label={stackedLayout ? formatMessage('Key') : false}
+            name="key"
+            placeholder={initialName || formatMessage('Add a new key')}
+            schema={{}}
+            transparentBorder={!stackedLayout}
+            uiOptions={{}}
+            value={name}
+            onBlur={handleBlur}
+            onChange={(newValue) => setName(newValue || '')}
+          />
+        </div>
+        <div css={item}>
+          <SchemaField
+            {...rest}
+            definitions={definitions}
+            id={`${name}.value`}
+            name="value"
+            placeholder={placeholder}
+            schema={schema}
+            transparentBorder={!stackedLayout}
+            value={value}
+            onChange={onChange}
+          />
+        </div>
       </div>
       <TooltipHost content={moreLabel}>
         <IconButton

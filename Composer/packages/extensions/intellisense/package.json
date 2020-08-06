@@ -1,0 +1,27 @@
+{
+  "name": "@bfc/intellisense",
+  "version": "0.1.0",
+  "private": true,
+  "main": "lib/components/index.js",
+  "scripts": {
+    "build": "yarn clean && yarn build:ts",
+    "build:ts": "tsc --build ./tsconfig.build.json",
+    "clean": "rimraf lib demo/dist"
+  },
+  "peerDependencies": {
+    "office-ui-fabric-react": "^7.71.0",
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  },
+  "dependencies": {
+    "websocket": "^1.0.31",
+    "@emotion/core": "^10.0.27"
+  },
+  "devDependencies": {
+    "monaco-languageclient": "^0.10.0",
+    "@types/vscode": "^1.46.0",
+    "@types/ws": "^7.2.6",
+    "@types/node": "^12.0.0",
+    "@bfc/test-utils": "*"
+  }
+}

@@ -17,6 +17,7 @@ import {
   skillsState,
   lgFilesState,
   dialogsState,
+  dialogSchemasState,
   projectIdState,
   localeState,
   luFilesState,
@@ -39,6 +40,7 @@ export function useShell(source: EventSource): Shell {
   const dialogMapRef = useRef({});
   const botName = useRecoilValue(botNameState);
   const dialogs = useRecoilValue(dialogsState);
+  const dialogSchemas = useRecoilValue(dialogSchemasState);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
@@ -52,6 +54,7 @@ export function useShell(source: EventSource): Shell {
   const clipboardActions = useRecoilValue(clipboardActionsState);
   const {
     updateDialog,
+    updateDialogSchema,
     createDialogBegin,
     navTo,
     focusTo,
@@ -167,7 +170,7 @@ export function useShell(source: EventSource): Shell {
         /**
          * It's improper to fallback to `dialogId` directly:
          *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exisits at `selected` path, fallback to dialog Id;
+         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         navTo(dialogId, []);
@@ -203,6 +206,7 @@ export function useShell(source: EventSource): Shell {
     updateUserSettings: updateUserSettings,
     announce: setMessage,
     displayManifestModal: displayManifestModal,
+    updateDialogSchema,
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
@@ -219,6 +223,7 @@ export function useShell(source: EventSource): Shell {
         botName,
         projectId,
         dialogs,
+        dialogSchemas,
         dialogId,
         focusPath,
         schemas,
