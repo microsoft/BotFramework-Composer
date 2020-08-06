@@ -3,13 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { UIOptions, JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension';
 import { css } from '@emotion/core';
 import { SDKKinds } from '@bfc/shared';
+import debounce from 'lodash/debounce';
 
 import { EditableField } from './fields/EditableField';
 import { Link } from './Link';
@@ -54,31 +55,36 @@ const FormTitle: React.FC<FormTitleProps> = (props) => {
   const { currentDialog } = shellData;
   const recognizers = useRecognizerConfig();
   const selectedRecognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
-
-  useEffect(() => {
-    const timeoutId = setTimeout(async () => {
-      // need to validate name
-      const intentName = formData?.$designer?.name;
-      if (formData.$kind === SDKKinds.OnIntent && intentName && selectedRecognizer) {
-        console.log(`[BFC] name changed: ${intentName}`);
-        // update formdata.intent
-        // update lu intent name
-
-        await selectedRecognizer.renameIntent(formData.intent, intentName, shellData, shellApi);
-        console.log(`[BFC] Renamed LU Intent from ${formData.intent} to ${intentName}`);
-        props.onChange({
-          intent: intentName,
-        });
-      }
-    }, 300);
-
-    return () => {
-      console.log('[BFC] cancelling intent update.');
-      clearTimeout(timeoutId);
-    };
-  }, [formData?.$designer?.name]);
+  // use a ref because the syncIntentName is debounced and we need the most current version to invoke the api
+  const shell = useRef({
+    data: shellData,
+    api: shellApi,
+  });
+  shell.current = {
+    data: shellData,
+    api: shellApi,
+  };
+  const syncIntentName = useMemo(
+    () =>
+      debounce(async (newIntentName?: string, data?: any) => {
+        if (newIntentName && selectedRecognizer) {
+          const normalizedIntentName = newIntentName?.replace(/[^a-zA-Z0-9-_]+/g, '');
+          await selectedRecognizer.renameIntent(
+            data?.intent,
+            normalizedIntentName,
+            shell.current.data,
+            shell.current.api
+          );
+        }
+      }, 400),
+    []
+  );
 
   const handleTitleChange = (newTitle?: string): void => {
+    if (formData.$kind === SDKKinds.OnIntent) {
+      syncIntentName(newTitle, formData);
+    }
+
     props.onChange({
       $designer: {
         ...formData.$designer,

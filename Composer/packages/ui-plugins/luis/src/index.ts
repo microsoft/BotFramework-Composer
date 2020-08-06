@@ -29,6 +29,7 @@ const config: PluginConfig = {
       },
       renameIntent: async (intentName, newIntentName, shellData, shellApi) => {
         const { currentDialog, locale } = shellData;
+        await shellApi.updateIntentTrigger(currentDialog.id, intentName, newIntentName);
         await shellApi.renameLuIntent(`${currentDialog.id}.${locale}`, intentName, newIntentName);
       },
     },

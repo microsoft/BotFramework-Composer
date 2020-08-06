@@ -82,6 +82,7 @@ export interface ShellApi {
   removeLuIntent: (id: string, intentName: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
   renameRegExIntent: (id: string, intentName: string, newIntentName: string) => Promise<void>;
+  updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => Promise<void>;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;

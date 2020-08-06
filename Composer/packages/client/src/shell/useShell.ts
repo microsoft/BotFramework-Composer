@@ -7,7 +7,7 @@ import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { updateRegExIntent, renameRegExIntent } from '../utils/dialogUtil';
+import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
@@ -83,11 +83,18 @@ export function useShell(source: EventSource): Shell {
     return await updateDialog({ id, content: newDialog.content });
   }
 
-  async function renameRegExIntentHandler(id, intentName, newIntentName) {
+  async function renameRegExIntentHandler(id: string, intentName: string, newIntentName: string) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(`dialog ${dialogId} not found`);
     const newDialog = renameRegExIntent(dialog, intentName, newIntentName);
-    return await updateDialog({ id, content: newDialog.content });
+    await updateDialog({ id, content: newDialog.content });
+  }
+
+  async function updateIntentTriggerHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = updateIntentTrigger(dialog, intentName, newIntentName);
+    await updateDialog({ id, content: newDialog.content });
   }
 
   function cleanData() {
@@ -170,6 +177,7 @@ export function useShell(source: EventSource): Shell {
     ...luApi,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
+    updateIntentTrigger: updateIntentTriggerHandler,
     navTo: navigationTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
