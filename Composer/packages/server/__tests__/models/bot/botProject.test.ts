@@ -254,6 +254,28 @@ describe('dialog operations', () => {
   });
 });
 
+describe('dialog schema operations', () => {
+  it('should create dialog schema', async () => {
+    const dialogsSchemaFilesCount = proj.dialogSchemaFiles.length;
+
+    const id = 'bot1.dialog.schema';
+    const content = '{}';
+    const { relativePath } = await proj.createFile(id, content);
+
+    expect(relativePath).toEqual(id);
+    expect(proj.dialogSchemaFiles).toHaveLength(dialogsSchemaFilesCount + 1);
+  });
+
+  it('should delete dialog schema', async () => {
+    const id = 'bot1.dialog.schema';
+    const dialogsSchemaFilesCount = proj.dialogSchemaFiles.length;
+
+    await proj.deleteFile(id);
+
+    expect(proj.dialogSchemaFiles).toHaveLength(dialogsSchemaFilesCount - 1);
+  });
+});
+
 describe('should validate the file name when create a new one', () => {
   it('validate the empty dialog name', () => {
     expect(() => {

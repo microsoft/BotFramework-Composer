@@ -19,7 +19,7 @@ export class FunctionEntity {
 }
 
 // https://github.com/microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md
-export const buildInfunctionsMap: Map<string, FunctionEntity> = new Map<string, FunctionEntity>([
+export const buildInFunctionsMap: Map<string, FunctionEntity> = new Map<string, FunctionEntity>([
   [
     'add',
     new FunctionEntity(

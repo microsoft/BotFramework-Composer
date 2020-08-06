@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
+import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -45,6 +45,7 @@ export interface ShellData {
   designerId: string;
   dialogId: string;
   dialogs: DialogInfo[];
+  dialogSchemas: DialogSchemaFile[];
   focusedEvent: string;
   focusedActions: string[];
   focusedSteps: string[];
@@ -90,4 +91,10 @@ export interface ShellApi {
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
+  updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
+}
+
+export interface Shell {
+  api: ShellApi;
+  data: ShellData;
 }
