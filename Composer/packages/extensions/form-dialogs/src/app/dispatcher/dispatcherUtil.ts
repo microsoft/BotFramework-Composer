@@ -6,7 +6,7 @@
 
 import { Lifetime } from 'src/app/utils/base';
 
-export type Handler = (params: any) => void;
+export type Handler = (params: {}) => void;
 
 export type HandlerCreator<TD = {}> = (dependencies: TD) => Record<string, Handler>;
 

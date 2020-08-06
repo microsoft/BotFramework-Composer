@@ -7,7 +7,7 @@ import { MutableDataStore } from 'src/app/stores/dataStore';
 import { MutableSettingsStore } from 'src/app/stores/settingsStore';
 
 export const getDispatcher = (dataStore: MutableDataStore, settingsStore: MutableSettingsStore) => {
-  return getDispatcherUtil<Omit<HandlerDependencies, 'lifetime'>, Action>(() => ({
+  return getDispatcherUtil<HandlerDependencies, Action>(() => ({
     dataStore,
     settingsStore,
   }));
