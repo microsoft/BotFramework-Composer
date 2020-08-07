@@ -8,7 +8,15 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI } from '@bfc/shared';
+import {
+  DialogFactory,
+  SDKKinds,
+  DialogInfo,
+  PromptTab,
+  LuIntentSection,
+  getEditorAPI,
+  registerEditorAPI,
+} from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
@@ -189,6 +197,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [location]);
 
   useEffect(() => {
+    registerEditorAPI('Editing', {
+      Undo: () => undo(),
+      Redo: () => redo(),
+    });
     //leave design page should clear the history
     return clearUndo;
   }, []);
@@ -241,7 +253,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  useElectronFeatures(actionSelected);
+  useElectronFeatures(actionSelected, canUndo(), canRedo());
 
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
