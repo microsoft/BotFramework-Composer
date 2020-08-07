@@ -102,6 +102,8 @@ const PropertyEditor: React.FC = () => {
     const id = setTimeout(() => {
       if (!isEqual(formData, localData)) {
         shellApi.saveData(localData, focusedSteps[0]);
+      } else {
+        shellApi.commitChanges();
       }
     }, 300);
 

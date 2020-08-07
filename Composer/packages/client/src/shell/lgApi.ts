@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
-import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
@@ -28,7 +27,7 @@ function createLgApi(
     return file.templates;
   };
 
-  const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
+  const updateLgTemplate = (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!templateName) throw new Error(TEMPLATE_ERROR);
@@ -41,7 +40,7 @@ function createLgApi(
     });
   };
 
-  const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
+  const copyLgTemplate = (id, fromTemplateName, toTemplateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!fromTemplateName || !toTemplateName) throw new Error(TEMPLATE_ERROR);
@@ -53,7 +52,7 @@ function createLgApi(
     });
   };
 
-  const removeLgTemplate = async (id, templateName) => {
+  const removeLgTemplate = (id, templateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!templateName) throw new Error(TEMPLATE_ERROR);
@@ -64,7 +63,7 @@ function createLgApi(
     });
   };
 
-  const removeLgTemplates = async (id, templateNames) => {
+  const removeLgTemplates = (id, templateNames) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
     if (!templateNames) throw new Error(TEMPLATE_ERROR);
@@ -78,7 +77,7 @@ function createLgApi(
   return {
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
-    updateLgTemplate: debounce(updateLgTemplate, 250),
+    updateLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
