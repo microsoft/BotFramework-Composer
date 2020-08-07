@@ -4,19 +4,19 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Lifetime, ILifetime } from 'src/app/utils/base';
+import { Lifetime } from 'src/app/utils/base';
 
 export type Handler = (params: {}) => void;
 
 export type HandlerCreator<TD = {}> = (dependencies: TD) => Record<string, Handler>;
 
-export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependencies: (lifetime: ILifetime) => TD) => {
+export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependencies: () => TD) => {
   const handlerMap = new Map<string, Handler>();
   const handlerLifetimeMap = new WeakMap<HandlerCreator<TD>, Lifetime>();
 
   // ------------ handler ------------
 
-  const installHandler = (handlerCreator: HandlerCreator<TD & { lifetime: ILifetime }>) => {
+  const installHandler = (handlerCreator: HandlerCreator<TD>) => {
     const lifetime = new Lifetime();
 
     if (handlerLifetimeMap.get(handlerCreator)) {
@@ -25,7 +25,7 @@ export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependenci
 
     handlerLifetimeMap.set(handlerCreator, lifetime);
 
-    const handler = handlerCreator({ ...dependencies(lifetime), lifetime });
+    const handler = handlerCreator(dependencies());
 
     Object.keys(handler).forEach((name) => {
       if (!module.hot && handlerMap.get(name)) {

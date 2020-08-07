@@ -2846,10 +2846,10 @@
     argparse "~1.0.10"
     tslib "^1.10.0"
 
-"@microsoft/bf-generate-library@^4.10.0-daily.20200804.153968":
-  version "4.10.0-daily.20200804.153968"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20200804.153968.tgz#64891013dc4e062443ab2deda29bdcbaba2ea8f0"
-  integrity sha1-ZIkQE9xOBiRDqy3topvcurouqPA=
+"@microsoft/bf-generate-library@^4.10.0-daily.20200806.154769":
+  version "4.10.0-daily.20200806.154769"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-generate-library/-/@microsoft/bf-generate-library-4.10.0-daily.20200806.154769.tgz#1866abdbb1b46bec4a1da0837f7f61a5ab2a5c7c"
+  integrity sha1-GGar27G0a+xKHaCDf39hpasqXHw=
   dependencies:
     "@microsoft/bf-lu" "^4.10.0-preview.148066"
     adaptive-expressions "^4.10.0-preview-150886"

@@ -7,12 +7,10 @@ import { MutableDataStore } from 'src/app/stores/dataStore';
 import { MutableSettingsStore } from 'src/app/stores/settingsStore';
 
 export const getDispatcher = (dataStore: MutableDataStore, settingsStore: MutableSettingsStore) => {
-  return getDispatcherUtil<HandlerDependencies, Action>(() => {
-    return {
-      dataStore,
-      settingsStore,
-    };
-  });
+  return getDispatcherUtil<HandlerDependencies, Action>(() => ({
+    dataStore,
+    settingsStore,
+  }));
 };
 
 export type Dispatcher = ReturnType<typeof getDispatcher>;

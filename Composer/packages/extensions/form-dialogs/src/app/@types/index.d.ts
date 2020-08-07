@@ -5,14 +5,6 @@
 
 type ThemeName = 'light' | 'dark';
 
-interface NodeRequire {
-  <T>(path: string): T;
-}
-
-interface Function {
-  displayName?: string;
-}
-
 type DeepNoFunction<T> = T extends Function
   ? unknown
   : T extends readonly any[]
@@ -40,6 +32,3 @@ type DeepNoFunctionMap<U> = {
   values: () => IterableIterator<DeepNoFunction<U>>;
   entries: () => IterableIterator<[string, DeepNoFunction<U>]>;
 };
-
-declare let module: NodeModule;
-declare let require: NodeRequire;

@@ -58,7 +58,6 @@ export const generateFormDialog: ActionCreator = async (store, { schemaName }) =
     store.dispatch({ type: ActionTypes.GENERATE_FORM_DIALOG_PENDING });
     const response = await httpClient.post(`/formDialogs/${projectId}/generate`, {
       name: schemaName,
-      schema: JSON.parse(formDialogSchema.content),
     });
     store.dispatch({ type: ActionTypes.GET_PROJECT_SUCCESS, payload: { response } });
   } catch (error) {

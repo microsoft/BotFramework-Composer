@@ -3,32 +3,28 @@
 
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 
-interface IDisposable {
-  dispose: () => void;
-}
-
-type DisposableAdditionOptions = Partial<{
-  ignoreAfterDisposal: boolean;
-}>;
-
 export function generateId() {
   const arr = crypto.getRandomValues(new Uint32Array(1));
   return `${arr[0]}`;
 }
 
-export interface ILifetime {
-  add: (disposable: IDisposable | (() => void), options?: DisposableAdditionOptions) => ILifetime;
-}
+type Disposable = {
+  dispose: () => void;
+};
 
-export class Lifetime implements ILifetime, IDisposable {
-  private _disposables: IDisposable[];
+type DisposableAdditionOptions = Partial<{
+  ignoreAfterDisposal: boolean;
+}>;
+
+export class Lifetime implements Disposable {
+  private _disposables: Disposable[];
   private _isDisposed = false;
 
   constructor() {
     this._disposables = [];
   }
 
-  public add(disposable: IDisposable | Function, options?: DisposableAdditionOptions): ILifetime {
+  public add(disposable: Disposable | Function, options?: DisposableAdditionOptions) {
     const { ignoreAfterDisposal } = options || { ignoreAfterDisposal: false };
 
     if (this._isDisposed) {
@@ -40,7 +36,7 @@ export class Lifetime implements ILifetime, IDisposable {
     }
 
     // tslint:disable-next-line: no-object-literal-type-assertion
-    const d = typeof disposable === 'function' ? <IDisposable>{ dispose: disposable } : disposable;
+    const d = typeof disposable === 'function' ? <Disposable>{ dispose: disposable } : disposable;
 
     this._disposables.push(d);
 
