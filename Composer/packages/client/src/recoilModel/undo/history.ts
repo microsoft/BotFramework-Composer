@@ -4,6 +4,7 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { useRecoilTransactionObserver_UNSTABLE as useRecoilTransactionObserver, RecoilState } from 'recoil';
 import { atom, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
+import uniqueId from 'lodash/uniqueId';
 
 import { projectIdState } from '../atoms';
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
@@ -130,7 +131,7 @@ export const UndoRoot = React.memo(() => {
       const present = history.getPresentAssets();
       const next = history.undo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot);
-      setVersion(history.getPresentVersion());
+      setVersion(uniqueId());
     }
   });
 
@@ -139,7 +140,7 @@ export const UndoRoot = React.memo(() => {
       const present = history.getPresentAssets();
       const next = history.redo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot);
-      setVersion(history.getPresentVersion());
+      setVersion(uniqueId());
     }
   });
 
