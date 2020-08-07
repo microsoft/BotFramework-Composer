@@ -27,10 +27,10 @@ const config: PluginConfig = {
           alert(`NO LU FILE WITH NAME ${currentDialog.id}`);
         }
       },
-      renameIntent: async (intentName, newIntentName, shellData, shellApi) => {
+      renameIntent: (intentName, newIntentName, shellData, shellApi) => {
         const { currentDialog, locale } = shellData;
-        await shellApi.updateIntentTrigger(currentDialog.id, intentName, newIntentName);
-        await shellApi.renameLuIntent(`${currentDialog.id}.${locale}`, intentName, newIntentName);
+        shellApi.updateIntentTrigger(currentDialog.id, intentName, newIntentName);
+        shellApi.renameLuIntent(`${currentDialog.id}.${locale}`, intentName, newIntentName);
       },
     },
   ],

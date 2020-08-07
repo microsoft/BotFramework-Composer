@@ -6,7 +6,6 @@ import { useRecoilValue } from 'recoil';
 import { BotIndexer } from '@bfc/indexers';
 
 import {
-  dialogsState,
   luFilesState,
   lgFilesState,
   projectIdState,
@@ -15,6 +14,7 @@ import {
   skillManifestsState,
   dialogSchemasState,
 } from '../../recoilModel/atoms/botState';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import {
   Notification,
@@ -27,7 +27,7 @@ import {
 } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const lgFiles = useRecoilValue(lgFilesState);

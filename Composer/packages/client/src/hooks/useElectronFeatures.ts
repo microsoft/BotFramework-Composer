@@ -5,14 +5,14 @@ import { useEffect } from 'react';
 import get from 'lodash/get';
 import { getEditorAPI } from '@bfc/shared';
 
-export const useElectronFeatures = (actionSelected: boolean) => {
+export const useElectronFeatures = (actionSelected: boolean, canUndo: boolean, canRedo: boolean) => {
   // Sync selection state to Electron main process
   useEffect(() => {
     if (!window.__IS_ELECTRON__) return;
     if (!window.ipcRenderer || typeof window.ipcRenderer.send !== 'function') return;
 
-    window.ipcRenderer.send('composer-state-change', { actionSelected });
-  }, [actionSelected]);
+    window.ipcRenderer.send('composer-state-change', { actionSelected, canUndo, canRedo });
+  }, [actionSelected, canUndo, canRedo]);
 
   // Subscribe Electron app menu events (copy/cut/del/undo/redo)
   useEffect(() => {
