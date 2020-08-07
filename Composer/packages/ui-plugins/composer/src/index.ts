@@ -61,6 +61,7 @@ const DefaultRecognizers: RecognizerSchema[] = [
           },
         },
       }),
+    renameIntent: () => {},
   },
 ];
 
