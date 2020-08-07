@@ -3,12 +3,14 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
-import { UIOptions, JSONSchema7 } from '@bfc/extension';
+import { UIOptions, JSONSchema7, useShellApi, useRecognizerConfig } from '@bfc/extension';
 import { css } from '@emotion/core';
+import { SDKKinds } from '@bfc/shared';
+import debounce from 'lodash/debounce';
 
 import { EditableField } from './fields/EditableField';
 import { Link } from './Link';
@@ -49,11 +51,45 @@ interface FormTitleProps {
 
 const FormTitle: React.FC<FormTitleProps> = (props) => {
   const { description, schema, formData, uiOptions = {} } = props;
+  const { shellApi, ...shellData } = useShellApi();
+  const { currentDialog } = shellData;
+  const recognizers = useRecognizerConfig();
+  const selectedRecognizer = recognizers.find((r) => r.isSelected(currentDialog?.content?.recognizer));
+  // use a ref because the syncIntentName is debounced and we need the most current version to invoke the api
+  const shell = useRef({
+    data: shellData,
+    api: shellApi,
+  });
+  shell.current = {
+    data: shellData,
+    api: shellApi,
+  };
+  const syncIntentName = useMemo(
+    () =>
+      debounce(async (newIntentName?: string, data?: any) => {
+        if (newIntentName && selectedRecognizer) {
+          const normalizedIntentName = newIntentName?.replace(/[^a-zA-Z0-9-_]+/g, '');
+          await selectedRecognizer.renameIntent(
+            data?.intent,
+            normalizedIntentName,
+            shell.current.data,
+            shell.current.api
+          );
+        }
+      }, 400),
+    []
+  );
 
   const handleTitleChange = (newTitle?: string): void => {
+    if (formData.$kind === SDKKinds.OnIntent) {
+      syncIntentName(newTitle, formData);
+    }
+
     props.onChange({
-      ...formData.$designer,
-      name: newTitle,
+      $designer: {
+        ...formData.$designer,
+        name: newTitle,
+      },
     });
   };
 
