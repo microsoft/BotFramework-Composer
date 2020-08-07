@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
 import formatMessage from 'format-message';
 
+import { DesignPageLocation } from './../types';
 import { AtomAssetsMap } from './trackedAtoms';
 
 // use number to limit the stack size first
@@ -53,7 +53,7 @@ export class UndoHistory {
     this.stack = [];
   }
 
-  public setInitialLocation(v: { dialogId: string; selected: string; focused: string; projectId: string }) {
+  public setInitialLocation(v: DesignPageLocation) {
     if (this.stack.length === 1) {
       this.initialLocation = v;
     }

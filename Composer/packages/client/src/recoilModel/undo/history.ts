@@ -61,9 +61,12 @@ const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom
 function navigate(next: AtomAssetsMap, undoHistory: UndoHistory) {
   const location = next.get(designPageLocationState);
   if (location) {
-    const { dialogId, selected, focused, projectId } =
+    const { dialogId, selected, focused, projectId, promptTab } =
       undoHistory.present === 0 ? undoHistory.initialLocation : location;
-    const currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+    let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+    if (promptTab) {
+      currentUri += `#${promptTab}`;
+    }
     navigateTo(currentUri);
   }
 }
