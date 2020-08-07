@@ -24,6 +24,11 @@ export const undoFunctionState = atom({
   },
 });
 
+export const undoVersionState = atom({
+  key: 'version',
+  default: '',
+});
+
 const getAtomAssetsMap = (snap: Snapshot): AtomAssetsMap => {
   const atomMap = new Map<RecoilState<any>, any>();
   trackedAtoms.forEach((atom) => {
@@ -88,6 +93,8 @@ export const UndoRoot = React.memo(() => {
   const history = useRef(undoHistory).current;
   const setUndoFunction = useSetRecoilState(undoFunctionState);
   const [, forceUpdate] = useState([]);
+  const setVersion = useSetRecoilState(undoVersionState);
+
   //use to record the first time change, this will help to get the init location
   //init location is used to undo navigate
   const assetsChanged = useRef(false);
@@ -123,6 +130,7 @@ export const UndoRoot = React.memo(() => {
       const present = history.getPresentAssets();
       const next = history.undo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot);
+      setVersion(history.getPresentVersion());
     }
   });
 
@@ -131,6 +139,7 @@ export const UndoRoot = React.memo(() => {
       const present = history.getPresentAssets();
       const next = history.redo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot);
+      setVersion(history.getPresentVersion());
     }
   });
 

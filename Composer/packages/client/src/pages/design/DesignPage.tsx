@@ -34,7 +34,7 @@ import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
-import { undoFunctionState } from '../../recoilModel/undo/history';
+import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import {
   projectIdState,
   schemasState,
@@ -125,7 +125,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const userSettings = useRecoilValue(userSettingsState);
   const luFiles = useRecoilValue(luFilesState);
   const locale = useRecoilValue(localeState);
-
+  const undoVersion = useRecoilValue(undoVersionState);
   const {
     removeDialog,
     updateDialog,
@@ -562,7 +562,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    key="dialogjson"
+                    key={'dialogjson'}
                     editorSettings={userSettings.codeEditor}
                     id={currentDialog.id}
                     schema={schemas.sdk.content}
@@ -578,7 +578,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 )}
               </div>
               <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
-                <PropertyEditor key={focusPath} />
+                <PropertyEditor key={focusPath + undoVersion} />
               </Extension>
             </div>
           </Conversation>
