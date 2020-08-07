@@ -101,17 +101,6 @@ export function useShell(source: EventSource): Shell {
     updateDialog({ id, content: newDialog.content });
   }
 
-  function cleanData() {
-    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
-    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
-      const payload = {
-        id: dialogId,
-        content: cleanedData,
-      };
-      updateDialog(payload);
-    }
-  }
-
   function navigationTo(path) {
     navTo(path, breadcrumb);
   }
