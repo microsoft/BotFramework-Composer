@@ -6,16 +6,16 @@ import { ShellApi, ShellData, Shell } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { updateRegExIntent } from '../utils/dialogUtil';
+import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
 import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
+import { undoFunctionState } from '../recoilModel/undo/history';
 import {
   botNameState,
   schemasState,
   skillsState,
   lgFilesState,
-  dialogsState,
   dialogSchemasState,
   projectIdState,
   localeState,
@@ -27,6 +27,7 @@ import {
   userSettingsState,
   clipboardActionsState,
 } from '../recoilModel';
+import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDialogs';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -38,7 +39,7 @@ type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
 export function useShell(source: EventSource): Shell {
   const dialogMapRef = useRef({});
   const botName = useRecoilValue(botNameState);
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const dialogSchemas = useRecoilValue(dialogSchemasState);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
@@ -51,6 +52,7 @@ export function useShell(source: EventSource): Shell {
   const focusPath = useRecoilValue(focusPathState);
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
+  const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
   const {
     updateDialog,
     updateDialogSchema,
@@ -78,11 +80,36 @@ export function useShell(source: EventSource): Shell {
     }, {});
   }, [dialogs]);
 
-  async function updateRegExIntentHandler(id, intentName, pattern) {
+  function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return await updateDialog({ id, content: newDialog.content });
+    return updateDialog({ id, content: newDialog.content });
+  }
+
+  function renameRegExIntentHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = renameRegExIntent(dialog, intentName, newIntentName);
+    updateDialog({ id, content: newDialog.content });
+  }
+
+  function updateIntentTriggerHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = updateIntentTrigger(dialog, intentName, newIntentName);
+    updateDialog({ id, content: newDialog.content });
+  }
+
+  function cleanData() {
+    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
+    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
+      const payload = {
+        id: dialogId,
+        content: cleanedData,
+      };
+      updateDialog(payload);
+    }
   }
 
   function navigationTo(path) {
@@ -146,10 +173,13 @@ export function useShell(source: EventSource): Shell {
          */
         navTo(dialogId, []);
       }
+      commitChanges();
     },
     ...lgApi,
     ...luApi,
     updateRegExIntent: updateRegExIntentHandler,
+    renameRegExIntent: renameRegExIntentHandler,
+    updateIntentTrigger: updateIntentTriggerHandler,
     navTo: navigationTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,
@@ -169,8 +199,9 @@ export function useShell(source: EventSource): Shell {
         });
       });
     },
-    undo: () => {}, //TODO
-    redo: () => {}, //TODO
+    undo,
+    redo,
+    commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
     updateUserSettings: updateUserSettings,
     announce: setMessage,
