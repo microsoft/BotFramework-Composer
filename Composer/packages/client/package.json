@@ -30,6 +30,7 @@
     "@bfc/ui-plugin-luis": "*",
     "@bfc/ui-plugin-cross-trained": "*",
     "@bfc/ui-plugin-prompts": "*",
+    "@bfc/ui-plugin-dialog-schema-editor": "*",
     "@bfc/ui-plugin-select-dialog": "*",
     "@bfc/ui-plugin-select-skill-dialog": "*",
     "@emotion/core": "^10.0.27",

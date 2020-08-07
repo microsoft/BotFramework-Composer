@@ -20,6 +20,10 @@ const DefaultRecognizers: RecognizerSchema[] = [
     handleRecognizerChange: (props) => {
       props.onChange({ $kind: SDKKinds.RegexRecognizer, intents: [] });
     },
+    renameIntent: async (intentName, newIntentName, shellData, shellApi) => {
+      const { currentDialog } = shellData;
+      await shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
+    },
   },
   {
     id: 'Custom',

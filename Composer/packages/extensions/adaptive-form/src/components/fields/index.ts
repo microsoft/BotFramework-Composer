@@ -17,3 +17,4 @@ export * from './QnAActionsField';
 export * from './SelectField';
 export * from './StringField';
 export * from './UnsupportedField';
+export * from './IntellisenseField';

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate } from './indexers';
+import { DialogInfo, LuFile, LgFile, QnAFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -45,6 +45,7 @@ export interface ShellData {
   designerId: string;
   dialogId: string;
   dialogs: DialogInfo[];
+  dialogSchemas: DialogSchemaFile[];
   focusedEvent: string;
   focusedActions: string[];
   focusedSteps: string[];
@@ -79,9 +80,12 @@ export interface ShellApi {
   getLuIntents: (id: string) => LuIntentSection[];
   addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
   updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
+  renameLuIntent: (id: string, intentName: string, newIntentName: string) => Promise<void>;
   removeLuIntent: (id: string, intentName: string) => void;
   updateQnaContent: (id: string, content: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
+  renameRegExIntent: (id: string, intentName: string, newIntentName: string) => Promise<void>;
+  updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => Promise<void>;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;
@@ -91,6 +95,12 @@ export interface ShellApi {
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
+  updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
+}
+
+export interface Shell {
+  api: ShellApi;
+  data: ShellData;
 }
 
 export interface Shell {

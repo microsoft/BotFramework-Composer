@@ -13,6 +13,7 @@ import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
 import {
   dialogsState,
+  dialogSchemasState,
   projectIdState,
   luFilesState,
   qnaFilesState,
@@ -30,6 +31,7 @@ const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
     snapshot.getPromise(lgFilesState),
     snapshot.getPromise(skillManifestsState),
     snapshot.getPromise(settingsState),
+    snapshot.getPromise(dialogSchemasState),
   ]);
   return {
     projectId: result[0],
@@ -39,6 +41,7 @@ const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
     lgFiles: result[4],
     skillManifests: result[5],
     setting: result[6],
+    dialogSchemas: result[7],
   };
 };
 

@@ -96,6 +96,7 @@ function generateNewTrigger(
 
   if (data.intent) {
     optionalAttributes.intent = data.intent;
+    optionalAttributes.$designer.name = data.intent;
   }
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
   const updatedStep = updateTriggerActionsAttributes(newStep, extraTriggerAttributes);
@@ -118,11 +119,37 @@ function createTrigger(
   return dialogCopy;
 }
 
+export function updateIntentTrigger(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const trigger = (dialogCopy.content?.triggers ?? []).find(
+    (t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName
+  );
+
+  if (trigger) {
+    trigger.intent = newIntentName;
+  }
+
+  return dialogCopy;
+}
+
 function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   const regex = generateRegexExpression(intent, pattern);
   const dialogCopy = cloneDeep(dialog);
   insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
   return dialogCopy;
+}
+
+export function renameRegExIntent(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const targetIntent = regexIntents.find((ri) => ri.intent === intentName);
+  if (!targetIntent || !newIntentName) {
+    return dialogCopy;
+  }
+
+  targetIntent.intent = newIntentName;
+
+  return updateIntentTrigger(dialogCopy, intentName, newIntentName);
 }
 
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {

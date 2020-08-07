@@ -3,6 +3,7 @@
 import { FileInfo, importResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
+import { dialogSchemaIndexer } from './dialogSchemaIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
 import { qnaIndexer } from './qnaIndexer';
@@ -25,6 +26,7 @@ class Indexer {
         [FileExtensions.Lu]: [],
         [FileExtensions.QnA]: [],
         [FileExtensions.Dialog]: [],
+        [FileExtensions.DialogSchema]: [],
         [FileExtensions.Manifest]: [],
       }
     );
@@ -45,6 +47,7 @@ class Indexer {
     const result = this.classifyFile(files);
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
+      dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
       qnaFiles: qnaIndexer.index(result[FileExtensions.QnA]),
@@ -57,6 +60,7 @@ export const indexer = new Indexer();
 
 export * from './botIndexer';
 export * from './dialogIndexer';
+export * from './dialogSchemaIndexer';
 export * from './lgIndexer';
 export * from './luIndexer';
 export * from './qnaIndexer';

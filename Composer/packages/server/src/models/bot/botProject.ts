@@ -80,6 +80,17 @@ export class BotProject implements IBotProject {
     return files;
   }
 
+  public get dialogSchemaFiles() {
+    const files: FileInfo[] = [];
+    this.files.forEach((file) => {
+      if (file.name.endsWith('.dialog.schema')) {
+        files.push(file);
+      }
+    });
+
+    return files;
+  }
+
   public get lgFiles() {
     const files: FileInfo[] = [];
     this.files.forEach((file) => {
@@ -581,7 +592,7 @@ export class BotProject implements IBotProject {
     }
 
     const fileList = new Map<string, FileInfo>();
-    const patterns = ['**/*.dialog', '**/*.lg', '**/*.lu', '**/*.qna', 'manifests/*.json'];
+    const patterns = ['**/*.dialog', '**/*.dialog.schema', '**/*.lg', '**/*.lu', '**/*.qna', 'manifests/*.json'];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process

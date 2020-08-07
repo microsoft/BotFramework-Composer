@@ -2,7 +2,17 @@
 // Licensed under the MIT License.
 
 import { atom } from 'recoil';
-import { DialogInfo, Diagnostic, LgFile, LuFile, QnAFile, BotSchemas, Skill, DialogSetting } from '@bfc/shared';
+import {
+  DialogInfo,
+  DialogSchemaFile,
+  Diagnostic,
+  LgFile,
+  LuFile,
+  QnAFile,
+  BotSchemas,
+  Skill,
+  DialogSetting,
+} from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation, QnAAllUpViewStatus } from '../../recoilModel/types';
 
@@ -15,6 +25,11 @@ const getFullyQualifiedKey = (value: string) => {
 
 export const dialogsState = atom<DialogInfo[]>({
   key: getFullyQualifiedKey('dialogs'),
+  default: [],
+});
+
+export const dialogSchemasState = atom<DialogSchemaFile[]>({
+  key: getFullyQualifiedKey('dialogSchema'),
   default: [],
 });
 

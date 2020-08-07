@@ -48,6 +48,7 @@ import {
   templateIdState,
   announcementState,
   boilerplateVersionState,
+  dialogSchemasState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 
@@ -148,7 +149,11 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+      const { dialogs, dialogSchemas, luFiles, lgFiles, qnaFiles, skillManifestFiles } = indexer.index(
+        files,
+        botName,
+        locale
+      );
 
       let mainDialog = '';
       const verifiedDialogs = dialogs.map((dialog) => {
@@ -165,6 +170,7 @@ export const projectDispatcher = () => {
         set(qnaFilesState, initQnaFilesStatus(botName, qnaFiles, dialogs));
         set(lgFilesState, lgFiles);
         set(dialogsState, verifiedDialogs);
+        set(dialogSchemasState, dialogSchemas);
         set(botEnvironmentState, botEnvironment);
         set(botNameState, botName);
         if (location !== curLocation) {
