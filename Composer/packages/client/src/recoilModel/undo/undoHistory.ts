@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import formatMessage from 'format-message';
+import { RecoilState } from 'recoil';
 
-import { DesignPageLocation } from './../types';
 import { AtomAssetsMap } from './trackedAtoms';
 
 // use number to limit the stack size first
@@ -11,7 +11,6 @@ const MAX_STACK_LENGTH = 30;
 export class UndoHistory {
   public stack: AtomAssetsMap[] = [];
   public present = -1;
-  public initialLocation = { dialogId: '', selected: '', focused: '', projectId: '' };
 
   public undo() {
     if (!this.canUndo()) throw new Error(formatMessage('Undo is not support'));
@@ -53,9 +52,9 @@ export class UndoHistory {
     this.stack = [];
   }
 
-  public setInitialLocation(v: DesignPageLocation) {
+  public setInitialValue(atom: RecoilState<any>, v: any) {
     if (this.stack.length === 1) {
-      this.initialLocation = v;
+      this.stack[0].set(atom, v);
     }
   }
 

@@ -9,6 +9,7 @@ import uniqueId from 'lodash/uniqueId';
 import { projectIdState } from '../atoms';
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 
+import { breadcrumbState } from './../atoms/botState';
 import { designPageLocationState } from './../atoms/botState';
 import undoHistory, { UndoHistory } from './undoHistory';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
@@ -40,6 +41,7 @@ const getAtomAssetsMap = (snap: Snapshot): AtomAssetsMap => {
   //should record the location state
   atomMap.set(designPageLocationState, snap.getLoadable(designPageLocationState).contents);
   atomMap.set(projectIdState, snap.getLoadable(projectIdState).contents);
+  atomMap.set(breadcrumbState, snap.getLoadable(breadcrumbState).contents);
   return atomMap;
 };
 
@@ -58,16 +60,17 @@ const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom
   return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
 
-function navigate(next: AtomAssetsMap, undoHistory: UndoHistory) {
+function navigate(next: AtomAssetsMap) {
   const location = next.get(designPageLocationState);
+  const breadcrumb = [...next.get(breadcrumbState)];
   if (location) {
-    const { dialogId, selected, focused, projectId, promptTab } =
-      undoHistory.present === 0 ? undoHistory.initialLocation : location;
+    const { dialogId, selected, focused, projectId, promptTab } = location;
     let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
     if (promptTab) {
       currentUri += `#${promptTab}`;
     }
-    navigateTo(currentUri);
+    breadcrumb.pop();
+    navigateTo(currentUri, { state: { breadcrumb } });
   }
 }
 
@@ -88,8 +91,10 @@ function mapTrackedAtomsOntoSnapshot(
 
 function setInitialLocation(snapshot: Snapshot, undoHistory: UndoHistory) {
   const location = snapshot.getLoadable(designPageLocationState);
+  const breadcrumb = snapshot.getLoadable(breadcrumbState);
   if (location.state === 'hasValue') {
-    undoHistory.setInitialLocation({ ...location.contents });
+    undoHistory.setInitialValue(designPageLocationState, location.contents);
+    undoHistory.setInitialValue(breadcrumbState, breadcrumb.contents);
   }
 }
 
@@ -126,7 +131,7 @@ export const UndoRoot = React.memo(() => {
   ) => {
     target = mapTrackedAtomsOntoSnapshot(target, current, next);
     gotoSnapshot(target);
-    navigate(next, history);
+    navigate(next);
   };
 
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
