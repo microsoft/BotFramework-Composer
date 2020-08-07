@@ -18,11 +18,7 @@ const ObjectField: React.FC<FieldProps<object>> = function ObjectField(props) {
   const handleChange = (field: string) => (data: any) => {
     const newData = { ...value };
 
-    if (
-      typeof data === 'undefined' ||
-      (Array.isArray(data) && data.length === 0) ||
-      (typeof data === 'string' && data.length === 0)
-    ) {
+    if (typeof data === 'undefined' || (typeof data === 'string' && data.length === 0)) {
       delete newData[field];
     } else {
       newData[field] = data;
