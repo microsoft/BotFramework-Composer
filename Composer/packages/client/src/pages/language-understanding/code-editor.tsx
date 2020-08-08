@@ -7,7 +7,7 @@ import { LuEditor, EditorDidMount } from '@bfc/code-editor';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
-import { filterTemplateDiagnostics } from '@bfc/indexers';
+import { filterSectionDiagnostics } from '@bfc/indexers';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
@@ -51,7 +51,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     setContent(value);
   }, [file, sectionId, projectId]);
 
-  const currentDiagnostics = inlineMode && intent ? filterTemplateDiagnostics(diagnostics, intent) : diagnostics;
+  const currentDiagnostics = inlineMode && file && sectionId ? filterSectionDiagnostics(file, sectionId) : diagnostics;
 
   const editorDidMount: EditorDidMount = (_getValue, luEditor) => {
     setLuEditor(luEditor);

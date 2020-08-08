@@ -2,15 +2,67 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import * as React from 'react';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
 import ReactDOM from 'react-dom';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { SharedColors } from '@uifabric/fluent-theme';
 
-import { builtInStyles, dialog, dialogModal, confirmationContainer } from './styles';
 import { dialogStyle } from './dialogStyle';
+
+// -------------------- Styles -------------------- //
+
+const builtInStyles = {
+  [dialogStyle.normal]: css`
+    padding: 15px;
+    margin-bottom: 20px;
+    white-space: pre-line;
+  `,
+  [dialogStyle.console]: css`
+    background: #000;
+    max-height: 90px;
+    overflow-y: auto;
+    font-size: 16px;
+    line-height: 23px;
+    color: #fff;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    white-space: pre-line;
+  `,
+};
+
+export const dialog = {
+  title: {
+    fontWeight: FontWeights.bold,
+  },
+};
+
+export const dialogModal = {
+  main: {
+    maxWidth: '600px !important',
+  },
+};
+
+export const confirmationContainer = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const confirmation = css`
+  padding: 15px;
+  margin-bottom: 20px;
+  white-space: pre-line;
+  background: ${SharedColors.red10};
+`;
+
+export const confirmationContent = css`
+  width: 500px;
+`;
+
+// -------------------- ConfirmDialog -------------------- //
 
 interface ConfirmDialogProps {
   onCancel: () => void;
