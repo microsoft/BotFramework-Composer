@@ -1,0 +1,46 @@
+{
+  "name": "@bfc/ui-plugin-composer",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "tsc --watch --preserveWatchOutput",
+    "build": "tsc --build ./tsconfig.build.json",
+    "lint": "eslint --quiet src",
+    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json src/**/*.ts src/**/*.tsx"
+  },
+  "keywords": [
+    "botframework",
+    "composer"
+  ],
+  "author": "andy.brown@microsoft.com",
+  "license": "MIT",
+  "peerDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "@bfc/intellisense": "*",
+    "@emotion/core": "^10.0.27",
+    "@uifabric/fluent-theme": "^7.1.4",
+    "@uifabric/icons": "^7.3.0",
+    "@uifabric/styling": "^7.7.4",
+    "office-ui-fabric-react": "^7.71.0",
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  },
+  "devDependencies": {
+    "@bfc/adaptive-form": "*",
+    "@bfc/extension": "*",
+    "@bfc/intellisense": "*",
+    "@bfc/test-utils": "*",
+    "@emotion/core": "^10.0.27",
+    "@types/react": "16.9.23",
+    "@types/react-dom": "16.9.5",
+    "format-message-cli": "^6.2.3",
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.19"
+  }
+}

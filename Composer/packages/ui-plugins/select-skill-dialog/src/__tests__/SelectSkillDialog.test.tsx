@@ -55,7 +55,7 @@ const renderSelectSkillDialog = ({ addSkillDialog, onChange } = {}) => {
   };
 
   return render(
-    <Extension shell={shell} shellData={shellData}>
+    <Extension shell={{ api: shell, data: shellData }}>
       <SelectSkillDialog {...props} />
     </Extension>
   );

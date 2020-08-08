@@ -331,7 +331,7 @@ of accessibility compliance.
 - docs: update docs in readme to point to docs site ([#2454](https://github.com/microsoft/BotFramework-Composer/pull/2454)) ([@zxyanliu](https://github.com/zxyanliu))
 - chore: remove duplicate file ([#2438](https://github.com/microsoft/BotFramework-Composer/pull/2438)) ([@Mike Chelen](https://github.com/mchelen))
 - docs: fix broken link for getting started docs ([#2431](https://github.com/microsoft/BotFramework-Composer/pull/2431)) ([@Mike Chelen](https://github.com/mchelen))
-- chore: merge stable into master ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
+- chore: merge stable into main ([@a-b-r-o-w-n](https://github.com/a-b-r-o-w-n))
 - chore: clean SDKTypes leak in indexer, dialogFactory ([#2313](https://github.com/microsoft/BotFramework-Composer/pull/2313)) ([@yeze322](https://github.com/yeze322))
 - build: Changed mac build script to target .zip artifact. ([#3013](https://github.com/microsoft/BotFramework-Composer/pull/3013)) ([@tonyanziano](https://github.com/tonyanziano))
 - perf: lg/lu editor performance enhancements ([#3002](https://github.com/microsoft/BotFramework-Composer/pull/3002)) ([@zhixzhan](https://github.com/zhixzhan))

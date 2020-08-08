@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogUtils, SDKKinds, ShellApi } from '@bfc/shared';
+import { DialogUtils, SDKKinds, ShellApi, registerEditorAPI } from '@bfc/shared';
 import get from 'lodash/get';
 import { useDialogEditApi, useDialogApi, useActionApi } from '@bfc/extension';
 
@@ -30,6 +30,8 @@ export const useEditorEventApi = (
     cutSelectedActions,
     deleteSelectedAction,
     deleteSelectedActions,
+    disableSelectedActions,
+    enableSelectedActions,
     updateRecognizer,
   } = useDialogEditApi(shellApi);
   const { createDialog, readDialog, updateDialog } = useDialogApi(shellApi);
@@ -164,27 +166,27 @@ export const useEditorEventApi = (
         trackActionChange(eventData.id);
         if (eventData.$kind === MenuEventTypes.Paste) {
           handler = (e) => {
-            insertActions(path, data, e.id, e.position, clipboardActions).then((dialog) => {
-              onChange(dialog);
-              onFocusSteps([`${e.id}[${e.position || 0}]`]);
-            });
+            const dialog = insertActions(path, data, e.id, e.position, clipboardActions);
+            onChange(dialog);
+            onFocusSteps([`${e.id}[${e.position || 0}]`]);
+
             announce(ScreenReaderMessage.ActionCreated);
           };
         } else {
           handler = (e) => {
             const newAction = dialogFactory.create(e.$kind);
-            insertAction(path, data, e.id, e.position, newAction).then((dialog) => {
-              onChange(dialog);
-              onFocusSteps([`${e.id}[${e.position || 0}]`]);
-              announce(ScreenReaderMessage.ActionCreated);
-            });
+            const dialog = insertAction(path, data, e.id, e.position, newAction);
+            onChange(dialog);
+            onFocusSteps([`${e.id}[${e.position || 0}]`]);
+            announce(ScreenReaderMessage.ActionCreated);
           };
         }
         break;
       case NodeEventTypes.CopySelection:
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
-          copySelectedActions(path, data, actionIds).then((copiedNodes) => onClipboardChange(copiedNodes));
+          const copiedNodes = copySelectedActions(path, data, actionIds);
+          onClipboardChange(copiedNodes);
           announce(ScreenReaderMessage.ActionsCopied);
         };
         break;
@@ -192,11 +194,10 @@ export const useEditorEventApi = (
         handler = () => {
           const actionIds = getClipboardTargetsFromContext();
           trackActionListChange(actionIds);
-          cutSelectedActions(path, data, actionIds).then(({ dialog, cutActions }) => {
-            onChange(dialog);
-            onFocusSteps([]);
-            onClipboardChange(cutActions);
-          });
+          const { dialog, cutActions } = cutSelectedActions(path, data, actionIds);
+          onChange(dialog);
+          onFocusSteps([]);
+          onClipboardChange(cutActions);
           announce(ScreenReaderMessage.ActionsCut);
         };
         break;
@@ -224,8 +225,8 @@ export const useEditorEventApi = (
           let newDialogData = readDialog(newDialogId);
 
           // Using copy->paste->delete pattern is safer than using cut->paste
-          const actionsToBeMoved = await copySelectedActions(path, data, actionIds);
-          newDialogData = await insertActions(
+          const actionsToBeMoved = copySelectedActions(path, data, actionIds);
+          newDialogData = insertActions(
             newDialogId,
             newDialogData,
             `${'triggers'}[0].${'actions'}`,
@@ -246,7 +247,7 @@ export const useEditorEventApi = (
           if (!placeholderPosition) return;
 
           const placeholderAction = dialogFactory.create(SDKKinds.BeginDialog, { dialog: newDialogId });
-          const insertResult = await insertAction(
+          const insertResult = insertAction(
             path,
             deleteResult,
             placeholderPosition.arrayPath,
@@ -265,6 +266,20 @@ export const useEditorEventApi = (
           onChange(deleteSelectedActions(path, data, actionIds));
           onFocusSteps([]);
           announce(ScreenReaderMessage.ActionsDeleted);
+        };
+        break;
+      case NodeEventTypes.DisableSelection:
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          onChange(disableSelectedActions(path, data, actionIds));
+          announce(ScreenReaderMessage.ActionsDisabled);
+        };
+        break;
+      case NodeEventTypes.EnableSelection:
+        handler = () => {
+          const actionIds = getClipboardTargetsFromContext();
+          onChange(enableSelectedActions(path, data, actionIds));
+          announce(ScreenReaderMessage.ActionsEnabled);
         };
         break;
       case NodeEventTypes.AppendSelection:
@@ -295,11 +310,14 @@ export const useEditorEventApi = (
     return handler(eventData);
   };
 
-  // HACK: use global handler before we solve iframe state sync problem
-  (window as any).copySelection = () => handleEditorEvent(NodeEventTypes.CopySelection);
-  (window as any).cutSelection = () => handleEditorEvent(NodeEventTypes.CutSelection);
-  (window as any).moveSelection = () => handleEditorEvent(NodeEventTypes.MoveSelection);
-  (window as any).deleteSelection = () => handleEditorEvent(NodeEventTypes.DeleteSelection);
+  registerEditorAPI('Actions', {
+    CopySelection: () => handleEditorEvent(NodeEventTypes.CopySelection),
+    CutSelection: () => handleEditorEvent(NodeEventTypes.CutSelection),
+    MoveSelection: () => handleEditorEvent(NodeEventTypes.MoveSelection),
+    DeleteSelection: () => handleEditorEvent(NodeEventTypes.DeleteSelection),
+    DisableSelection: () => handleEditorEvent(NodeEventTypes.DisableSelection),
+    EnableSelection: () => handleEditorEvent(NodeEventTypes.EnableSelection),
+  });
 
   return {
     handleEditorEvent,

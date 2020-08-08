@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { jsx, css } from '@emotion/core';
 import {
   GroupedList,
   IGroup,
@@ -18,12 +18,45 @@ import formatMessage from 'format-message';
 import { DialogInfo, ITrigger } from '@bfc/shared';
 import { Resizable, ResizeCallback } from 're-resizable';
 import debounce from 'lodash/debounce';
+import { useRecoilValue } from 'recoil';
+import { IGroupedListStyles } from 'office-ui-fabric-react/lib/GroupedList';
+import { ISearchBoxStyles } from 'office-ui-fabric-react/lib/SearchBox';
 
-import { StoreContext } from '../../store';
-import { createSelectedPath, getFriendlyName } from '../../utils';
+import { dispatcherState, userSettingsState } from '../../recoilModel';
+import { createSelectedPath, getFriendlyName } from '../../utils/dialogUtil';
 
-import { groupListStyle, root, searchBox } from './styles';
 import { TreeItem } from './treeItem';
+
+// -------------------- Styles -------------------- //
+
+const groupListStyle: Partial<IGroupedListStyles> = {
+  root: {
+    width: '100%',
+    boxSizing: 'border-box',
+  },
+};
+
+const searchBox: ISearchBoxStyles = {
+  root: {
+    borderBottom: '1px solid #edebe9',
+    height: '45px',
+    borderRadius: '0px',
+  },
+};
+
+const root = css`
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid #c4c4c4;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  .ms-List-cell {
+    min-height: 36px;
+  }
+`;
+
+// -------------------- ProjectTree -------------------- //
 
 function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
   return {
@@ -93,12 +126,9 @@ interface IProjectTreeProps {
 }
 
 export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
-  const {
-    actions: { onboardingAddCoachMarkRef, updateUserSettings },
-    state: {
-      userSettings: { dialogNavWidth: currentWidth },
-    },
-  } = useContext(StoreContext);
+  const { onboardingAddCoachMarkRef, updateUserSettings } = useRecoilValue(dispatcherState);
+  const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
+
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
   const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');

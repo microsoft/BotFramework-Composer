@@ -2,18 +2,47 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { useContext, useEffect, useMemo } from 'react';
+import { jsx, css } from '@emotion/core';
+import { useEffect, useMemo } from 'react';
 import { ContextualMenu } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { Dialog, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/components/Dialog';
 import { IDragOptions } from 'office-ui-fabric-react/lib/Modal';
 import { JsonEditor } from '@bfc/code-editor';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { FontSizes } from '@uifabric/fluent-theme';
+import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
+import { IDialogContentStyles } from 'office-ui-fabric-react/lib/Dialog';
+import { IModalStyles } from 'office-ui-fabric-react/lib/Modal';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
+import { skillsState, userSettingsState } from '../../recoilModel';
 
-import { displayManifest as styles } from './styles';
+// -------------------- Styles -------------------- //
+
+const styles: { content: any; dialog: Partial<IDialogContentStyles>; modal: Partial<IModalStyles> } = {
+  content: css`
+    height: 675px;
+    padding-bottom: 4px;
+  `,
+  dialog: {
+    title: {
+      fontSize: FontSizes.size20,
+      fontWeight: FontWeights.bold,
+      paddingBottom: '11px',
+      paddingTop: '14px',
+    },
+  },
+  modal: {
+    main: {
+      height: '800px !important',
+      maxWidth: '80% !important',
+      width: '600px !important',
+    },
+  },
+};
+
+// -------------------- DisplayManifestModal -------------------- //
 
 const dragOptions: IDragOptions = {
   moveMenuItemText: formatMessage('Move'),
@@ -34,8 +63,8 @@ export const DisplayManifestModal: React.FC<DisplayManifestModalProps> = ({
   manifestId,
   onDismiss,
 }) => {
-  const { state } = useContext(StoreContext);
-  const { skills, userSettings } = state;
+  const skills = useRecoilValue(skillsState);
+  const userSettings = useRecoilValue(userSettingsState);
 
   useEffect(() => onDismiss, []);
 

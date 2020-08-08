@@ -11,17 +11,30 @@ export const container = css`
   label: OpenObjectFieldContainer;
 `;
 
+export const itemContainer = (stackedLayout?: boolean) => css`
+  display: flex;
+  flex: 1;
+  flex-direction: ${stackedLayout ? 'column' : 'row'};
+
+  label: OpenObjectFieldItemContainer;
+`;
+
+export const addButtonContainer = css`
+  border-top: 1px solid ${NeutralColors.gray30};
+  padding: 8px 0;
+`;
+
 export const filler = css`
   width: 32px;
 
   label: OpenObjectFieldFiller;
 `;
 
-export const item = css`
+export const item = (stackedLayout?: boolean) => css`
   flex: 1;
 
   & + & {
-    margin-left: 16px;
+    margin-left: ${!stackedLayout ? '16px' : '0'};
   }
 
   label: OpenObjectFieldItem;

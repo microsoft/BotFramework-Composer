@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { app, dialog, Menu, MenuItemConstructorOptions, shell } from 'electron';
+import { app, dialog, Menu, MenuItemConstructorOptions, shell, ipcMain } from 'electron';
 
 import { isMac } from './utility/platform';
 import { AppUpdater } from './appUpdater';
@@ -29,7 +29,6 @@ function getAppMenu(): MenuItemConstructorOptions[] {
 function getRestOfEditMenu(): MenuItemConstructorOptions[] {
   if (isMac()) {
     return [
-      { role: 'delete' },
       { type: 'separator' },
       {
         label: 'Speech',
@@ -37,7 +36,7 @@ function getRestOfEditMenu(): MenuItemConstructorOptions[] {
       },
     ];
   }
-  return [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }];
+  return [{ type: 'separator' }, { role: 'selectAll' }];
 }
 
 function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
@@ -47,7 +46,14 @@ function getRestOfWindowMenu(): MenuItemConstructorOptions[] {
   return [{ role: 'close' }];
 }
 
-export function initAppMenu() {
+export function initAppMenu(win?: Electron.BrowserWindow) {
+  // delegate menu events to Renderer process (Composer web app)
+  const handleMenuEvents = (menuEventName: string) => {
+    if (win) {
+      win.webContents.send('electron-menu-clicked', { label: menuEventName });
+    }
+  };
+
   const template: MenuItemConstructorOptions[] = [
     // App (Mac)
     ...getAppMenu(),
@@ -60,12 +66,37 @@ export function initAppMenu() {
     {
       label: 'Edit',
       submenu: [
-        { role: 'undo' },
-        { role: 'redo' },
+        // NOTE: Avoid using builtin `role`, it won't override the click handler.
+        {
+          id: 'Undo',
+          label: 'Undo',
+          enabled: false,
+          accelerator: 'CmdOrCtrl+Z',
+          click: () => handleMenuEvents('undo'),
+        },
+        {
+          id: 'Redo',
+          label: 'Redo',
+          enabled: false,
+          accelerator: 'CmdOrCtrl+Shift+Z',
+          click: () => handleMenuEvents('redo'),
+        },
         { type: 'separator' },
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' },
+        { id: 'Cut', label: 'Cut', enabled: false, accelerator: 'CmdOrCtrl+X', click: () => handleMenuEvents('cut') },
+        {
+          id: 'Copy',
+          label: 'Copy',
+          enabled: false,
+          accelerator: 'CmdOrCtrl+C',
+          click: () => handleMenuEvents('copy'),
+        },
+        {
+          id: 'Delete',
+          label: 'Delete',
+          enabled: false,
+          accelerator: 'Delete',
+          click: () => handleMenuEvents('delete'),
+        },
         ...getRestOfEditMenu(),
       ],
     },
@@ -99,7 +130,7 @@ export function initAppMenu() {
         {
           label: 'Composer on GitHub',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/tree/master');
+            await shell.openExternal('https://aka.ms/BotFrameworkComposer');
           },
         },
         {
@@ -119,13 +150,13 @@ export function initAppMenu() {
         {
           label: 'View License',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/master/LICENSE.md');
+            await shell.openExternal('https://aka.ms/bfcomposer-license');
           },
         },
         {
           label: 'Privacy Statement',
           click: async () => {
-            await shell.openExternal('https://github.com/microsoft/BotFramework-Composer/blob/master/PRIVACY.md');
+            await shell.openExternal('https://aka.ms/bfcomposer-privacy');
           },
         },
         { type: 'separator' },
@@ -144,7 +175,7 @@ export function initAppMenu() {
               title: 'Bot Framework Composer',
               message: `
                 Bot Framework Composer
-                
+
                 Version:  ${app.getVersion()}
                 Electron: ${process.versions.electron}
                 Chrome: ${process.versions.chrome}
@@ -161,4 +192,22 @@ export function initAppMenu() {
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
+
+  if (ipcMain && ipcMain.on) {
+    ipcMain.on('composer-state-change', (e, state) => {
+      // Let menu enable/disable status reflects action selection states.
+      const actionSelected = !!state.actionSelected;
+      ['Cut', 'Copy', 'Delete'].forEach((id) => {
+        menu.getMenuItemById(id).enabled = actionSelected;
+      });
+
+      // Let menu undo/redo status reflects history status
+      const canUndo = !!state.canUndo;
+      menu.getMenuItemById('Undo').enabled = canUndo;
+      const canRedo = !!state.canRedo;
+      menu.getMenuItemById('Redo').enabled = canRedo;
+
+      Menu.setApplicationMenu(menu);
+    });
+  }
 }

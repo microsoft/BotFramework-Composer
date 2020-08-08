@@ -8,7 +8,9 @@ context('Onboarding', () => {
 
     //enable onboarding setting
     cy.visitPage('Settings');
-    cy.findByText('Application Settings').click();
+    cy.findByTestId('ProjectTree').within(() => {
+      cy.findByText('Application Settings').click();
+    });
     cy.findByLabelText('Onboarding').click();
     cy.visitPage('Design');
   });

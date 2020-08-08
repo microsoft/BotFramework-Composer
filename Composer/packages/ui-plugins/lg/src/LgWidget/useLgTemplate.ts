@@ -1,28 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { Template } from 'botbuilder-lg';
-import { LgTemplateRef } from '@bfc/shared';
-import get from 'lodash/get';
+import { LgTemplateRef, LgFile, LgTemplate } from '@bfc/shared';
 import { useShellApi } from '@bfc/extension';
 
-export const queryLgTemplateFromFiles = (lgTemplateName: string, lgFiles: any): Template | undefined => {
-  if (!Array.isArray(lgFiles)) return;
-
-  const allTemplates: Template[] = [];
-  for (const file of lgFiles) {
-    const templates = get(file, 'templates');
-    if (Array.isArray(templates)) {
-      allTemplates.push(...templates);
-    }
-  }
-
-  const result = allTemplates.find((x) => get(x, 'name') === lgTemplateName);
-  return result;
+export const queryLgTemplate = (templateId: string, lgFileId: string, lgFiles: LgFile[]): LgTemplate | undefined => {
+  return lgFiles.find(({ id }) => id === lgFileId)?.templates?.find(({ name }) => name === templateId);
 };
 
 export const useLgTemplate = (str?: string) => {
-  const { lgFiles } = useShellApi();
+  const { currentDialog, lgFiles, locale } = useShellApi();
+  const lgFileId = `${currentDialog.lgFile}.${locale}`;
 
   const lgTemplateRef = LgTemplateRef.parse(str || '');
   const templateId = lgTemplateRef ? lgTemplateRef.name : '';
@@ -30,6 +18,6 @@ export const useLgTemplate = (str?: string) => {
   // fallback to input string
   if (!templateId) return str || '';
 
-  const lgTemplate = queryLgTemplateFromFiles(templateId, lgFiles);
+  const lgTemplate = queryLgTemplate(templateId, lgFileId, lgFiles);
   return lgTemplate ? lgTemplate.body : '';
 };
