@@ -21,7 +21,6 @@ export const updateQnAFileState = async (
   const { set, snapshot } = callbackHelpers;
   const qnaFiles = await snapshot.getPromise(qnaFilesState);
   const updatedQnAFile = (await qnaWorker.parse(id, content)) as QnAFile;
-
   const newQnAFiles = qnaFiles.map((file) => {
     if (file.id === id) {
       return updatedQnAFile;
@@ -95,17 +94,22 @@ export const qnaDispatcher = () => {
       subscriptionKey,
       url,
       region,
+      isCreatingBot,
     }: {
       id: string;
       qnaFileContent: string;
       subscriptionKey: string;
       url: string;
       region: string;
+      isCreatingBot: boolean;
     }) => {
       const { set } = callbackHelpers;
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
       try {
-        const response = await httpClient.get(`/qnaContent`, { params: { subscriptionKey, url, region } });
+        const response = await httpClient.get(`/qnaContent`, {
+          params: { subscriptionKey, url, region, isCreatingBot },
+        });
+        console.log(response);
         const content = qnaFileContent ? qnaFileContent + '\n' + response.data : response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content });

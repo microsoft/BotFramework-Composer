@@ -11,7 +11,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
-
+import { RouteComponentProps } from '@reach/router';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 const styles = {
   dialog: {
@@ -51,36 +51,55 @@ const warning = {
   fontSize: FontSizes.size10,
 };
 
-interface ImportQnAFromUrlModalProps {
+interface ImportQnAFromUrlModalProps
+  extends RouteComponentProps<{
+    location: string;
+  }> {
   isOpen: boolean;
   dialogId: string;
-  subscriptionKey: string;
+  isSubscriptionKeyNeeded: boolean;
+  isRegionNeeded: boolean;
+  subscriptionKey?: string;
   onDismiss: () => void;
   onSubmit: (location: string, subscriptionKey: string, endpoint: string) => void;
 }
 
 interface ImportQnAFromUrlModalFormData {
   location: string;
-  subscriptionKey: string;
-  region: string;
+  subscriptionKey?: string;
+  region?: string;
 }
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
-  const { isOpen, onDismiss, onSubmit, dialogId, subscriptionKey } = props;
-  const formConfig: FieldConfig<ImportQnAFromUrlModalFormData> = {
+  const {
+    isOpen,
+    onDismiss,
+    onSubmit,
+    dialogId,
+    subscriptionKey = '',
+    isSubscriptionKeyNeeded = true,
+    isRegionNeeded = true,
+  } = props;
+  let formConfig: FieldConfig<ImportQnAFromUrlModalFormData> = {
     location: {
       required: true,
       defaultValue: '',
     },
-    subscriptionKey: {
+  };
+  if (isSubscriptionKeyNeeded) {
+    formConfig.subscriptionKey = {
       required: true,
       defaultValue: subscriptionKey,
-    },
-    region: {
+    };
+  }
+
+  if (isRegionNeeded) {
+    formConfig.region = {
       required: true,
       defaultValue: 'westus',
-    },
-  };
+    };
+  }
+
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = !isQnAFileselected || hasErrors;
@@ -112,24 +131,29 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
             value={formData.location}
             onChange={(e, location) => updateField('location', location)}
           />
-          <TextField
-            required
-            data-testid="subscriptionKey"
-            errorMessage={formErrors.subscriptionKey}
-            label={formatMessage('Subscription key')}
-            styles={textField}
-            value={formData.subscriptionKey}
-            onChange={(e, subscriptionKey) => updateField('subscriptionKey', subscriptionKey)}
-          />
-          <TextField
-            required
-            data-testid="region"
-            errorMessage={formErrors.region}
-            label={formatMessage('Region')}
-            styles={textField}
-            value={formData.region}
-            onChange={(e, region) => updateField('region', region)}
-          />
+          {isSubscriptionKeyNeeded && (
+            <TextField
+              required
+              data-testid="subscriptionKey"
+              errorMessage={formErrors.subscriptionKey}
+              label={formatMessage('Subscription key')}
+              styles={textField}
+              value={formData.subscriptionKey}
+              onChange={(e, subscriptionKey) => updateField('subscriptionKey', subscriptionKey)}
+            />
+          )}
+          {isRegionNeeded && (
+            <TextField
+              required
+              data-testid="region"
+              disabled
+              errorMessage={formErrors.region}
+              label={formatMessage('Region')}
+              styles={textField}
+              value={formData.region}
+              onChange={(e, region) => updateField('region', region)}
+            />
+          )}
           {!isQnAFileselected && (
             <div css={warning}> {formatMessage('please select a specific qna file to import QnA')}</div>
           )}
@@ -145,7 +169,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
             if (hasErrors) {
               return;
             }
-            onSubmit(formData.location, formData.subscriptionKey, formData.region);
+            onSubmit(formData.location, formData.subscriptionKey ? formData.subscriptionKey : '', formData.region);
           }}
         />
       </DialogFooter>

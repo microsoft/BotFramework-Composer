@@ -153,6 +153,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       subscriptionKey,
       url: location,
       region,
+      isCreatingBot: false,
     });
     setImportQnAFromUrlModalVisiability(false);
   };
@@ -177,6 +178,8 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           <ImportQnAFromUrlModal
             dialogId={dialogId}
             isOpen={importQnAFromUrlModalVisiability}
+            isSubscriptionKeyNeeded
+            isRegionNeeded
             subscriptionKey={settings.qna.subscriptionKey}
             onDismiss={onDismiss}
             onSubmit={onSubmit}
