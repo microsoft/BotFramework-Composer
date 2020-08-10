@@ -38,13 +38,7 @@ import {
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
-import {
-  dialogsState,
-  projectIdState,
-  schemasState,
-  localeState,
-  lgFilesState,
-} from '../../recoilModel/atoms/botState';
+import { projectIdState, schemasState, localeState, lgFilesState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import {
   nameRegex,
