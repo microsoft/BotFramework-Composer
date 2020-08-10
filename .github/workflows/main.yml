@@ -49,7 +49,7 @@ jobs:
           base-path: ./Composer
 
   botproject:
-    name: BotProject
+    name: BotProject-dotnet
     runs-on: windows-latest
     timeout-minutes: 20
 
@@ -67,11 +67,30 @@ jobs:
         run: dotnet test
         working-directory: runtime/dotnet/tests
 
+  nodejs:
+    name: BotProject-nodejs
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set Node Version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.13.0
+      - name: npm install
+        run: npm install
+      - name: npm build
+        run: npm run build
+        working-directory: runtime/node
+      - name: npm test
+        run: npm run test
+        working-directory: runtime/node
   # docker-build:
   #   name: Docker Build
   #   timeout-minutes: 20
   #   runs-on: ubuntu-latest
-
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@v2

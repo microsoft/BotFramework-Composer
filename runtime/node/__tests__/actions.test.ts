@@ -1,11 +1,15 @@
 import * as path from "path";
 import { ResourceExplorer } from "botbuilder-dialogs-declarative";
+import { AdaptiveDialogComponentRegistration } from "botbuilder-dialogs-adaptive";
 import {
-  AdaptiveDialogComponentRegistration,
-  LanguageGeneratorMiddleWare,
-} from "botbuilder-dialogs-adaptive";
-import { TestAdapter } from "botbuilder";
+  TestAdapter,
+  ConversationState,
+  MemoryStorage,
+  UserState,
+} from "botbuilder";
 import { ComposerBot } from "../src/shared/composerBot";
+import { SkillConversationIdFactory } from "../src/shared/skillConversationIdFactory";
+import * as helpers from "../src/shared/helpers";
 import { ActivityTypes, Activity, ChannelAccount } from "botframework-schema";
 import { TurnContext } from "botbuilder-core";
 
@@ -40,6 +44,16 @@ const conversationUpdateActivity = {
 
 let bot: ComposerBot;
 let adapter: TestAdapter;
+
+const getProjectRoot = jest
+  .spyOn(helpers, "getProjectRoot")
+  .mockImplementation(() => samplesDirectory);
+const getSettings = jest
+  .spyOn(helpers, "getSettings")
+  .mockImplementation((root: string) => {
+    return { defaultLocale: "en-us" };
+  });
+
 beforeAll(() => {
   resourceExplorer.addFolders(samplesDirectory, ["runtime"], false);
   resourceExplorer.addComponent(
@@ -48,16 +62,26 @@ beforeAll(() => {
   adapter = new TestAdapter(
     async (context: TurnContext): Promise<any> => {
       // Route activity to bot.
-      return await bot.onTurn(context);
+      return await bot.onTurnActivity(context);
     },
     basicActiivty,
     false
   );
-  adapter.use(new LanguageGeneratorMiddleWare(resourceExplorer));
 });
 
 beforeEach(() => {
-  bot = new ComposerBot(resourceExplorer, "actionssample.dialog", {});
+  const memoryStorage = new MemoryStorage();
+
+  // Create shared user state and conversation state instances.
+  const userState = new UserState(memoryStorage);
+  const conversationState = new ConversationState(memoryStorage);
+  // Create shared skill conversation id factory instance.
+  const skillConversationIdFactory = new SkillConversationIdFactory();
+  bot = new ComposerBot(
+    userState,
+    conversationState,
+    skillConversationIdFactory
+  );
 });
 
 afterEach(() => {
@@ -230,12 +254,11 @@ describe("test runtime used ActionsSample", () => {
     adapter = new TestAdapter(
       async (context: TurnContext): Promise<any> => {
         // Route activity to bot.
-        return await bot.onTurn(context);
+        return await bot.onTurnActivity(context);
       },
       basicActiivty,
       true
     );
-    adapter.use(new LanguageGeneratorMiddleWare(resourceExplorer));
     await adapter
       .send(conversationUpdateActivity)
       .assertReply(
