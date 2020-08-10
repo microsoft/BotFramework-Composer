@@ -190,6 +190,8 @@ export const DefaultPublishConfig = {
 
 export const EmptyBotTemplateId = 'EmptyBot';
 
+export const QnABotTemplateId = 'QnASample';
+
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
 export const adaptiveCardJsonBody =

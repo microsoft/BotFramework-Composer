@@ -15,13 +15,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import {
-  dialogsState,
-  qnaFilesState,
-  projectIdState,
-  qnaAllUpViewStatusState,
-  settingsState,
-} from '../../recoilModel/atoms/botState';
+import { dialogsState, projectIdState, qnaAllUpViewStatusState, settingsState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
 
@@ -37,7 +31,6 @@ interface QnAPageProps extends RouteComponentProps<{}> {
 const QnAPage: React.FC<QnAPageProps> = (props) => {
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState);
-  const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);
   const settings = useRecoilValue(settingsState);
   //To do: support other languages
@@ -50,8 +43,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const { dialogId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
-  const qnaFile = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const qnaFileContent = qnaFile ? qnaFile.content : '';
   const navLinks: INavTreeItem[] = useMemo(() => {
     const newDialogLinks: INavTreeItem[] = dialogs.map((dialog) => {
       return {
@@ -142,19 +133,23 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     setImportQnAFromUrlModalVisiability(false);
   };
 
-  const onSubmit = async (location: string, subscriptionKey: string, region: string) => {
+  const onSubmit = async (urls: string[], knowledgeBaseName: string, subscriptionKey: string, region: string) => {
     await actions.setSettings(projectId, {
       ...settings,
       qna: { subscriptionKey, endpointKey: settings.qna.endpointKey },
     });
-    actions.importQnAFromUrl({
-      id: `${dialogId}.${locale}`,
-      qnaFileContent,
-      subscriptionKey,
-      url: location,
-      region,
-    });
-    setImportQnAFromUrlModalVisiability(false);
+    onDismiss();
+    for (let i = 0; i < urls.length; i++) {
+      if (!urls[i]) continue;
+      await actions.importQnAFromUrl({
+        id: `${dialogId}.${locale}`,
+        knowledgeBaseName,
+        subscriptionKey: '',
+        url: urls[i],
+        region,
+        isCreatingBot: true,
+      });
+    }
   };
 
   return (
@@ -175,7 +170,11 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && <LoadingSpinner />}
         {setImportQnAFromUrlModalVisiability && (
           <ImportQnAFromUrlModal
+            isRegionNeeded
+            isSubscriptionKeyNeeded
             dialogId={dialogId}
+            isCreatingBot={false}
+            isMultipleUrlAllowed={false}
             isOpen={importQnAFromUrlModalVisiability}
             subscriptionKey={settings.qna.subscriptionKey}
             onDismiss={onDismiss}

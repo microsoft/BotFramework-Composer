@@ -419,7 +419,9 @@ async function updateBoilerplate(req: Request, res: Response) {
 }
 
 async function parseQnAContent(req: Request, res: Response) {
-  const subscriptionKey = req.query.subscriptionKey.trim();
+  const subscriptionKey = req.query.isCreatingBot
+    ? '77957a4340e7472a8dea4948223893be'
+    : req.query.subscriptionKey.trim();
   const url = req.query.url.trim() as string;
   const region = req.query.region.trim();
   const subscriptionKeyEndpoint = `https://${region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
@@ -430,8 +432,10 @@ async function parseQnAContent(req: Request, res: Response) {
     });
     let qnaContent = '';
     if (extension.some((e) => url.endsWith(e))) {
+      const index = url.lastIndexOf('.');
+      const extension = url.substring(index);
       qnaContent = await builder.importFileReference(
-        'onlineFile',
+        `onlineFile${extension}`,
         url,
         subscriptionKey,
         subscriptionKeyEndpoint,

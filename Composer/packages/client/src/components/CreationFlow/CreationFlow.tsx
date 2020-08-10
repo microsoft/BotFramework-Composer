@@ -4,7 +4,7 @@
 // TODO: Remove path module
 import Path from 'path';
 
-import React, { useEffect, useRef, Fragment } from 'react';
+import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { RouteComponentProps, Router, navigate } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
@@ -16,8 +16,10 @@ import {
   templateProjectsState,
   storagesState,
   focusedStorageFolderState,
+  localeState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
+import ImportQnAFromUrlModal from '../../pages/qna/ImportQnAFromUrlModal';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -38,15 +40,18 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
+    importQnAFromUrl,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
+  const locale = useRecoilValue(localeState);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
+  const [formData, setFormData] = useState({ name: '' });
 
   useEffect(() => {
     if (storages && storages.length) {
@@ -83,11 +88,35 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateNew = async (formData, templateId: string) => {
-    createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
+    await createProject(templateId || '', formData.name, formData.description, formData.location, formData.schemaUrl);
   };
 
   const handleSaveAs = (formData) => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
+  };
+
+  const handleCreateQnA = async (urls: string[], knowledgeBaseName: string) => {
+    await handleSubmit(formData, 'QnASample');
+    for (let i = 0; i < urls.length; i++) {
+      if (!urls[i]) continue;
+      await importQnAFromUrl({
+        id: `${formData.name.toLocaleLowerCase()}.${locale}`,
+        knowledgeBaseName,
+        subscriptionKey: '',
+        url: urls[i],
+        region: 'westus',
+        isCreatingBot: true,
+      });
+    }
+  };
+
+  const handleSubmitOrImportQnA = async (formData, templateId: string) => {
+    if (templateId === 'QnASample') {
+      setFormData(formData);
+      navigate(`./QnASample/importQnA`);
+      return;
+    }
+    handleSubmit(formData, templateId);
   };
 
   const handleSubmit = async (formData, templateId: string) => {
@@ -99,7 +128,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
       default:
         saveTemplateId(templateId);
-        handleCreateNew(formData, templateId);
+        await handleCreateNew(formData, templateId);
     }
   };
 
@@ -119,7 +148,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitOrImportQnA}
         />
         <CreateOptions path="create" templates={templateProjects} onDismiss={handleDismiss} onNext={handleCreateNext} />
         <DefineConversation
@@ -129,7 +158,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           updateFolder={updateFolder}
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmitOrImportQnA}
         />
         <OpenProject
           focusedStorageFolder={focusedStorageFolder}
@@ -137,6 +166,17 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onCurrentPathUpdate={updateCurrentPath}
           onDismiss={handleDismiss}
           onOpen={openBot}
+        />
+        <ImportQnAFromUrlModal
+          isCreatingBot
+          isMultipleUrlAllowed
+          isOpen
+          dialogId={formData.name.toLowerCase()}
+          isRegionNeeded={false}
+          isSubscriptionKeyNeeded={false}
+          path="create/QnASample/importQnA"
+          onDismiss={handleDismiss}
+          onSubmit={handleCreateQnA}
         />
       </Router>
     </Fragment>
