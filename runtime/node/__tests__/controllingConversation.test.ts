@@ -1,13 +1,17 @@
 import * as path from "path";
 import { ResourceExplorer } from "botbuilder-dialogs-declarative";
+import { AdaptiveDialogComponentRegistration } from "botbuilder-dialogs-adaptive";
 import {
-  AdaptiveDialogComponentRegistration,
-  LanguageGeneratorMiddleWare,
-} from "botbuilder-dialogs-adaptive";
-import { TestAdapter } from "botbuilder";
+  TestAdapter,
+  ConversationState,
+  MemoryStorage,
+  UserState,
+} from "botbuilder";
 import { ComposerBot } from "../src/shared/composerBot";
 import { ActivityTypes, Activity, ChannelAccount } from "botframework-schema";
 import { TurnContext } from "botbuilder-core";
+import * as helpers from "../src/shared/helpers";
+import { SkillConversationIdFactory } from "../src/shared/skillConversationIdFactory";
 
 const samplesDirectory = path.resolve(
   __dirname,
@@ -38,8 +42,18 @@ const conversationUpdateActivity = {
   membersRemoved: [],
 } as Activity;
 
+const getProjectRoot = jest
+  .spyOn(helpers, "getProjectRoot")
+  .mockImplementation(() => samplesDirectory);
+const getSettings = jest
+  .spyOn(helpers, "getSettings")
+  .mockImplementation((root: string) => {
+    return { defaultLocale: "en-us" };
+  });
+
 let bot: ComposerBot;
 let adapter: TestAdapter;
+
 beforeAll(() => {
   resourceExplorer.addFolders(samplesDirectory, ["runtime"], false);
   resourceExplorer.addComponent(
@@ -48,16 +62,23 @@ beforeAll(() => {
   adapter = new TestAdapter(
     async (context: TurnContext): Promise<any> => {
       // Route activity to bot.
-      await bot.onTurn(context);
+      return await bot.onTurnActivity(context);
     },
     basicActiivty,
     false
   );
-  adapter.use(new LanguageGeneratorMiddleWare(resourceExplorer));
+
+  const memoryStorage = new MemoryStorage();
+
+  // Create shared user state and conversation state instances.
+  const userState = new UserState(memoryStorage);
+  const conversationState = new ConversationState(memoryStorage);
+  // Create shared skill conversation id factory instance.
+  const skillConversationIdFactory = new SkillConversationIdFactory();
   bot = new ComposerBot(
-    resourceExplorer,
-    "controllingconversationflowsample.dialog",
-    {}
+    userState,
+    conversationState,
+    skillConversationIdFactory
   );
 });
 afterAll(() => {
