@@ -98,6 +98,5 @@
   ],
   "$schema": "https://raw.githubusercontent.com/microsoft/BotFramework-Composer/stable/Composer/packages/server/schemas/sdk.schema",
   "generator": "qnasample.lg",
-  "recognizer": "qnasample.lu.qna",
-  "id": "qnasample"
+  "recognizer": "qnasample.lu.qna"
 }

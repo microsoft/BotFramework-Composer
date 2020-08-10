@@ -20,6 +20,7 @@ import {
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 import ImportQnAFromUrlModal from '../../pages/qna/ImportQnAFromUrlModal';
+import { QnABotTemplateId } from '../../constants';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
@@ -96,7 +97,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   };
 
   const handleCreateQnA = async (urls: string[], knowledgeBaseName: string) => {
-    await handleSubmit(formData, 'QnASample');
+    saveTemplateId(QnABotTemplateId);
+    setCreationFlowStatus(CreationFlowStatus.CLOSE);
+    await handleCreateNew(formData, QnABotTemplateId);
     for (let i = 0; i < urls.length; i++) {
       if (!urls[i]) continue;
       await importQnAFromUrl({
