@@ -54,6 +54,7 @@ import {
   getAnswerReadBack,
   getIntentReadBack,
 } from '../../constants';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 // -------------------- Styles -------------------- //
 
@@ -233,7 +234,8 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
+
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const locale = useRecoilValue(localeState);

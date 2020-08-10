@@ -32,29 +32,20 @@ export const dialogsDispatcher = () => {
     await removeDialogSchema(callbackHelpers, id);
   });
 
-  const updateDialog = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id, content }) => {
-    const { set, snapshot } = callbackHelpers;
-    let dialogs = await snapshot.getPromise(dialogsState);
-    const schemas = await snapshot.getPromise(schemasState);
-    const lgFiles = await snapshot.getPromise(lgFilesState);
-    const luFiles = await snapshot.getPromise(luFilesState);
+  const updateDialog = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content }) => {
     // migration: add id for dialog
     if (!content.id) {
       content.id = id;
     }
-    dialogs = dialogs.map((dialog) => {
-      if (dialog.id === id) {
-        const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
-        dialog = {
-          ...dialog,
-          ...dialogIndexer.parse(dialog.id, fixedContent),
-        };
-        dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
+    set(dialogsState, (dialogs) => {
+      return dialogs.map((dialog) => {
+        if (dialog.id === id) {
+          const fixedContent = JSON.parse(autofixReferInDialog(id, JSON.stringify(content)));
+          return { ...dialog, ...dialogIndexer.parse(dialog.id, fixedContent) };
+        }
         return dialog;
-      }
-      return dialog;
+      });
     });
-    set(dialogsState, dialogs);
   });
 
   const createDialogBegin = useRecoilCallback((callbackHelpers: CallbackInterface) => (actions, onComplete) => {

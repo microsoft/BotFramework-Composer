@@ -22,7 +22,7 @@ const DefaultRecognizers: RecognizerSchema[] = [
     },
     renameIntent: async (intentName, newIntentName, shellData, shellApi) => {
       const { currentDialog } = shellData;
-      await shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
+      shellApi.renameRegExIntent(currentDialog.id, intentName, newIntentName);
     },
   },
   {

@@ -7,7 +7,6 @@ import get from 'lodash/get';
 import { BotIndexer } from '@bfc/indexers';
 
 import {
-  dialogsState,
   luFilesState,
   qnaFilesState,
   lgFilesState,
@@ -17,6 +16,7 @@ import {
   skillManifestsState,
   dialogSchemasState,
 } from '../../recoilModel/atoms/botState';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import {
   Notification,
@@ -31,7 +31,7 @@ import {
 import { getReferredLuFiles } from './../../utils/luUtil';
 
 export default function useNotifications(filter?: string) {
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
   const qnaFiles = useRecoilValue(qnaFilesState);
   const projectId = useRecoilValue(projectIdState);

@@ -13,7 +13,6 @@ import { IConfig } from '@bfc/shared';
 import {
   botNameState,
   botStatusState,
-  dialogsState,
   luFilesState,
   qnaFilesState,
   settingsState,
@@ -28,6 +27,7 @@ import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
 import { getReferredQnaFiles } from '../../utils/qnaUtil';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { getReferredLuFiles } from './../../utils/luUtil';
 import { PublishDialog } from './publishDialog';
@@ -59,7 +59,7 @@ export const TestController: React.FC = () => {
   const notifications = useNotifications();
   const botName = useRecoilValue(botNameState);
   const botStatus = useRecoilValue(botStatusState);
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
   const qnaFiles = useRecoilValue(qnaFilesState);
   const settings = useRecoilValue(settingsState);

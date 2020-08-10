@@ -21,6 +21,7 @@ import {
   settingsState,
   lgFilesState,
 } from './atoms';
+import { UndoRoot } from './undo/history';
 
 const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
@@ -90,6 +91,7 @@ export const DispatcherWrapper = ({ children }) => {
 
   return (
     <Fragment>
+      <UndoRoot />
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>
