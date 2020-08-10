@@ -81,6 +81,7 @@ jobs:
           node-version: 12.13.0
       - name: npm install
         run: npm install
+        working-directory: runtime/node
       - name: npm build
         run: npm run build
         working-directory: runtime/node
