@@ -9,7 +9,7 @@ import { LuIntentSection, BaseSchema, LuMetaData, LuType, ShellApi } from '@bfc/
 export const useLuApi = (shellApi: ShellApi) => {
   const { addLuIntent, removeLuIntent, getLuIntent } = shellApi;
 
-  const createLuIntent = async (
+  const createLuIntent = (
     luFildId: string,
     intent: LuIntentSection | undefined,
     hostResourceId: string,
@@ -20,7 +20,7 @@ export const useLuApi = (shellApi: ShellApi) => {
     const newLuIntentType = new LuType(hostResourceData.$kind).toString();
     const newLuIntentName = new LuMetaData(newLuIntentType, hostResourceId).toString();
     const newLuIntent: LuIntentSection = { ...intent, Name: newLuIntentName };
-    await addLuIntent(luFildId, newLuIntentName, newLuIntent);
+    addLuIntent(luFildId, newLuIntentName, newLuIntent);
     return newLuIntentName;
   };
 
@@ -31,7 +31,7 @@ export const useLuApi = (shellApi: ShellApi) => {
   };
 
   const deleteLuIntents = (luFileId: string, luIntents: string[]) => {
-    return Promise.all(luIntents.map((intent) => removeLuIntent(luFileId, intent)));
+    return luIntents.map((intent) => removeLuIntent(luFileId, intent));
   };
 
   return {

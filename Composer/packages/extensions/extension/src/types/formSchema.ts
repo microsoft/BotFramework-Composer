@@ -63,4 +63,11 @@ export type RecognizerSchema = {
   isSelected: (data: any) => boolean;
   /** Invoked when changing the recognizer type */
   handleRecognizerChange: (fieldProps: FieldProps, shellData: ShellData, shellApi: ShellApi) => void;
+  /** Function to rename an intent */
+  renameIntent: (
+    intentName: string,
+    newIntentName: string,
+    shellData: ShellData,
+    shellApi: ShellApi
+  ) => Promise<void> | void;
 };
