@@ -23,6 +23,7 @@ import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
 import { designPageLocationState } from '../atoms/botState';
+import { QnABotTemplateId } from '../../constants';
 
 import {
   skillManifestsState,
@@ -133,7 +134,7 @@ const initQnaFilesStatus = (projectId: string, qnaFiles: QnAFile[], dialogs: Dia
   return updateQnaFilesStatus(projectId, qnaFiles);
 };
 export const projectDispatcher = () => {
-  const initBotState = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
+  const initBotState = async (callbackHelpers: CallbackInterface, data: any, jump: boolean, templateId: string) => {
     const { snapshot, gotoSnapshot } = callbackHelpers;
     const curLocation = await snapshot.getPromise(locationState);
     const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
@@ -188,9 +189,12 @@ export const projectDispatcher = () => {
         set(settingsState, mergedSettings);
       });
       gotoSnapshot(newSnapshot);
-      if (jumpToMain && projectId) {
-        const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
-        navigateTo(mainUrl);
+      if (jump && projectId) {
+        let url = `/bot/${projectId}/dialogs/${mainDialog}`;
+        if (templateId === QnABotTemplateId) {
+          url = `/bot/${projectId}/qna/${mainDialog}`;
+        }
+        navigateTo(url);
       }
     } catch (err) {
       callbackHelpers.set(botOpeningState, false);
@@ -224,7 +228,7 @@ export const projectDispatcher = () => {
       try {
         await setBotOpeningStatus(callbackHelpers);
         const response = await httpClient.put(`/projects/open`, { path, storageId });
-        await initBotState(callbackHelpers, response.data, true);
+        await initBotState(callbackHelpers, response.data, true, '');
 
         return response.data.id;
       } catch (ex) {
@@ -237,7 +241,7 @@ export const projectDispatcher = () => {
   const fetchProjectById = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
     try {
       const response = await httpClient.get(`/projects/${projectId}`);
-      await initBotState(callbackHelpers, response.data, false);
+      await initBotState(callbackHelpers, response.data, false, '');
     } catch (ex) {
       handleProjectFailure(callbackHelpers, ex);
       navigateTo('/home');
@@ -266,7 +270,7 @@ export const projectDispatcher = () => {
         if (settingStorage.get(projectId)) {
           settingStorage.remove(projectId);
         }
-        await initBotState(callbackHelpers, response.data, true);
+        await initBotState(callbackHelpers, response.data, true, templateId);
         return projectId;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
@@ -310,7 +314,7 @@ export const projectDispatcher = () => {
           description,
           location,
         });
-        await initBotState(callbackHelpers, response.data, true);
+        await initBotState(callbackHelpers, response.data, true, '');
         return response.data.id;
       } catch (ex) {
         handleProjectFailure(callbackHelpers, ex);
