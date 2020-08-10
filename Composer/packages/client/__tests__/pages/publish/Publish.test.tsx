@@ -10,9 +10,11 @@ import {
   projectIdState,
   publishHistoryState,
 } from '../../../src/recoilModel';
-// import { CreatePublishTarget } from '../../../src/pages/publish/createPublishTarget';
+import { CreatePublishTarget } from '../../../src/pages/publish/createPublishTarget';
 import { PublishStatusList } from '../../../src/pages/publish/publishStatusList';
 import { TargetList } from '../../../src/pages/publish/targetList';
+import Publish from '../../../src/pages/publish/Publish';
+import { PublishDialog } from '../../../src/pages/publish/publishDialog';
 
 const state = {
   projectId: 'test',
@@ -28,7 +30,24 @@ const state = {
       },
     ],
   },
-  publishTypes: [],
+  publishTypes: [
+    {
+      name: 'azurePublish',
+      description: 'azure publish',
+      instructions: 'plugin instruction',
+      schema: {
+        default: {
+          test: 'test',
+        },
+      },
+      features: {
+        history: true,
+        publish: true,
+        status: true,
+        rollback: true,
+      },
+    },
+  ],
   publishHistory: {},
 };
 
@@ -63,5 +82,37 @@ describe('publish page', () => {
       initRecoilState
     );
     getByText('profile1');
+  });
+
+  it('should render create profile dialog in publish page', () => {
+    const { getByText } = renderWithRecoil(
+      <CreatePublishTarget
+        closeDialog={jest.fn()}
+        current={null}
+        targets={state.settings.publishTargets}
+        types={state.publishTypes}
+        updateSettings={jest.fn()}
+      />,
+      initRecoilState
+    );
+    getByText('Name');
+    getByText('Publish Destination Type');
+    getByText('Publish Configuration');
+  });
+
+  it('should render publish dialog when click publish', () => {
+    const { getByText } = renderWithRecoil(
+      <PublishDialog target={state.settings.publishTargets[0]} onDismiss={jest.fn()} onSubmit={jest.fn()} />,
+      initRecoilState
+    );
+    getByText('Publish');
+    getByText('You are about to publish your bot to the profile below. Do you want to proceed?');
+    getByText('profile1');
+  });
+
+  it('should include add button and publish button in publish page', () => {
+    const { getByText } = renderWithRecoil(<Publish />, initRecoilState);
+    getByText('Add new profile');
+    getByText('Publish to selected profile');
   });
 });
