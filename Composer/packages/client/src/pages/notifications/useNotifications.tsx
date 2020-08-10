@@ -6,14 +6,15 @@ import { useRecoilValue } from 'recoil';
 import { BotIndexer } from '@bfc/indexers';
 
 import {
-  dialogsState,
   luFilesState,
   lgFilesState,
   projectIdState,
   BotDiagnosticsState,
   settingsState,
   skillManifestsState,
+  dialogSchemasState,
 } from '../../recoilModel/atoms/botState';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import {
   Notification,
@@ -26,13 +27,14 @@ import {
 } from './types';
 import { getReferredFiles } from './../../utils/luUtil';
 export default function useNotifications(filter?: string) {
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const lgFiles = useRecoilValue(lgFilesState);
   const diagnostics = useRecoilValue(BotDiagnosticsState);
   const setting = useRecoilValue(settingsState);
   const skillManifests = useRecoilValue(skillManifestsState);
+  const dialogSchemas = useRecoilValue(dialogSchemasState);
   const botAssets = {
     projectId,
     dialogs,
@@ -40,6 +42,7 @@ export default function useNotifications(filter?: string) {
     lgFiles,
     skillManifests,
     setting,
+    dialogSchemas,
   };
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];

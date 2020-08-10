@@ -13,6 +13,7 @@ import compression from 'compression';
 import * as ws from 'ws';
 import * as rpc from 'vscode-ws-jsonrpc';
 import { IConnection, createConnection } from 'vscode-languageserver';
+import { IntellisenseServer } from '@bfc/intellisense-languageserver';
 import { LGServer } from '@bfc/lg-languageserver';
 import { LUServer } from '@bfc/lu-languageserver';
 import { pluginLoader } from '@bfc/plugin-loader';
@@ -157,6 +158,14 @@ export async function start(pluginDir?: string): Promise<number | string> {
     server.start();
   }
 
+  const launchIntellisenseLanguageServer = (socket: rpc.IWebSocket) => {
+    const reader = new rpc.WebSocketMessageReader(socket);
+    const writer = new rpc.WebSocketMessageWriter(socket);
+    const connection: IConnection = createConnection(reader, writer);
+    const server = new IntellisenseServer(connection, staticMemoryResolver);
+    server.start();
+  };
+
   attachLSPServer(wss, server, '/lg-language-server', (webSocket) => {
     // launch language server when the web socket is opened
     if (webSocket.readyState === webSocket.OPEN) {
@@ -175,6 +184,16 @@ export async function start(pluginDir?: string): Promise<number | string> {
     } else {
       webSocket.on('open', () => {
         launchLuLanguageServer(webSocket);
+      });
+    }
+  });
+
+  attachLSPServer(wss, server, '/intellisense-language-server', (webSocket) => {
+    if (webSocket.readyState === webSocket.OPEN) {
+      launchIntellisenseLanguageServer(webSocket);
+    } else {
+      webSocket.on('open', () => {
+        launchIntellisenseLanguageServer(webSocket);
       });
     }
   });

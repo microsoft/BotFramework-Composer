@@ -31,23 +31,29 @@ function convertLGDiagnostic(d: LGDiagnostic, source: string): Diagnostic {
   return result;
 }
 
-export function convertTemplatesToLgFile(id = '', content: string, templates: Templates): LgFile {
-  const used = templates.toArray().map((t) => {
+function templateToLgTemplate(templates: Template[]): LgTemplate[] {
+  return templates.map((t) => {
     return {
       name: t.name,
       body: t.body,
-      parameters: t.parameters,
+      parameters: t.parameters || [],
       range: {
         startLineNumber: get(t, 'sourceRange.range.start.line', 0),
         endLineNumber: get(t, 'sourceRange.range.end.line', 0),
       },
     };
   });
-  const diagnostics = templates.diagnostics.map((d: LGDiagnostic) => {
+}
+
+export function convertTemplatesToLgFile(id = '', content: string, parseResult: Templates): LgFile {
+  const diagnostics = parseResult.diagnostics.map((d: LGDiagnostic) => {
     return convertLGDiagnostic(d, id);
   });
 
-  return { id, content, templates: used, diagnostics, options: templates.options };
+  const templates = templateToLgTemplate(parseResult.toArray());
+  const allTemplates = templateToLgTemplate(parseResult.allTemplates);
+
+  return { id, content, templates, allTemplates, diagnostics, options: parseResult.options };
 }
 
 export function increaseNameUtilNotExist(templates: LgTemplate[], name: string): string {
@@ -239,6 +245,5 @@ export function extractOptionByKey(nameOfKey: string, options: string[]): string
 export function parse(id: string, content: string, lgFiles: TextFile[]): LgFile {
   const lgImportResolver = importResolverGenerator(lgFiles, '.lg');
 
-  const { templates, diagnostics } = lgIndexer.parse(content, id, lgImportResolver);
-  return { id, content, templates, diagnostics } as LgFile;
+  return lgIndexer.parse(content, id, lgImportResolver);
 }

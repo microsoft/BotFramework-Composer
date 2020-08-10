@@ -8,7 +8,15 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI } from '@bfc/shared';
+import {
+  DialogFactory,
+  SDKKinds,
+  DialogInfo,
+  PromptTab,
+  LuIntentSection,
+  getEditorAPI,
+  registerEditorAPI,
+} from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
@@ -22,13 +30,12 @@ import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 import { ProjectTree } from '../../components/ProjectTree/ProjectTree';
-import { undoHistory } from '../../recoilModel/undo';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
+import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import {
-  dialogsState,
   projectIdState,
   schemasState,
   showCreateDialogModalState,
@@ -45,6 +52,7 @@ import {
   luFilesState,
   localeState,
 } from '../../recoilModel';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 
@@ -101,7 +109,7 @@ const getTabFromFragment = () => {
 };
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const displaySkillManifest = useRecoilValue(displaySkillManifestState);
@@ -111,12 +119,13 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const designPageLocation = useRecoilValue(designPageLocationState);
   const showCreateDialogModal = useRecoilValue(showCreateDialogModalState);
   const showAddSkillDialogModal = useRecoilValue(showAddSkillDialogModalState);
+  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
   const skills = useRecoilValue(skillsState);
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
   const luFiles = useRecoilValue(luFilesState);
   const locale = useRecoilValue(localeState);
-
+  const undoVersion = useRecoilValue(undoVersionState);
   const {
     removeDialog,
     updateDialog,
@@ -143,7 +152,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
-  const shell = useShell('ProjectTree');
+  const shell = useShell('DesignPage');
+  const shellForFlowEditor = useShell('FlowEditor');
+  const shellForPropertyEditor = useShell('PropertyEditor');
   const triggerApi = useTriggerApi(shell.api);
 
   useEffect(() => {
@@ -182,11 +193,17 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       // @ts-ignore
       globalHistory._onTransitionComplete();
       /* eslint-enable */
-    } else {
-      //leave design page should clear the history
-      // clearUndoHistory(); //TODO: undo/redo
     }
   }, [location]);
+
+  useEffect(() => {
+    registerEditorAPI('Editing', {
+      Undo: () => undo(),
+      Redo: () => redo(),
+    });
+    //leave design page should clear the history
+    return clearUndo;
+  }, []);
 
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
@@ -203,7 +220,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       content: dialog.content,
     };
     if (luFile && intent) {
-      createLuIntent({ id: luFile.id, intent });
+      createLuIntent({ id: luFile.id, intent, projectId });
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
@@ -236,7 +253,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  useElectronFeatures(actionSelected);
+  useElectronFeatures(actionSelected, canUndo(), canRedo());
 
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
@@ -284,20 +301,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             key: 'edit.undo',
             text: formatMessage('Undo'),
-            disabled: !undoHistory.canUndo(),
-            onClick: () => {
-              // TODO: register EditorAPI.Editing.Undo()
-              //ToDo undo
-            },
+            disabled: !canUndo(),
+            onClick: undo,
           },
           {
             key: 'edit.redo',
             text: formatMessage('Redo'),
-            disabled: !undoHistory.canRedo(),
-            onClick: () => {
-              // TODO: register EditorAPI.Editing.Redo()
-              //ToDo redo
-            },
+            disabled: !canRedo(),
+            onClick: redo,
           },
           {
             key: 'edit.cut',
@@ -450,7 +461,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateSkill({ projectId, targetId: -1, skillData });
   }
 
-  function handleCreateDialogSubmit(data: { name: string; description: string }) {
+  async function handleCreateDialogSubmit(data: { name: string; description: string }) {
     const seededContent = new DialogFactory(schemas.sdk?.content).create(SDKKinds.AdaptiveDialog, {
       $designer: { name: data.name, description: data.description },
       generator: `${data.name}.lg`,
@@ -458,7 +469,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (seededContent.triggers?.[0]) {
       seededContent.triggers[0].actions = actionsSeed;
     }
-    createDialog({ id: data.name, content: seededContent });
+    await createDialog({ id: data.name, content: seededContent });
+    commitChanges();
   }
 
   async function handleDeleteDialog(id) {
@@ -482,7 +494,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const result = await OpenConfirmModal(title, subTitle, setting);
 
     if (result) {
-      removeDialog(id);
+      await removeDialog(id);
+      commitChanges();
     }
   }
 
@@ -490,7 +503,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     const content = deleteTrigger(dialogs, id, index, (trigger) => triggerApi.deleteTrigger(id, trigger));
 
     if (content) {
-      await updateDialog({ id, content });
+      updateDialog({ id, content });
       const match = /\[(\d+)\]/g.exec(selected);
       const current = match && match[1];
       if (!current) return;
@@ -543,30 +556,32 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             />
             <Toolbar toolbarItems={toolbarItems} />
           </div>
-          <Extension plugins={pluginConfig} shell={shell.api} shellData={shell.data}>
-            <Conversation css={editorContainer}>
-              <div css={editorWrapper}>
-                <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
-                  {breadcrumbItems}
-                  {dialogJsonVisible ? (
-                    <JsonEditor
-                      key="dialogjson"
-                      editorSettings={userSettings.codeEditor}
-                      id={currentDialog.id}
-                      schema={schemas.sdk.content}
-                      value={currentDialog.content || undefined}
-                      onChange={(data) => {
-                        updateDialog({ id: currentDialog.id, content: data });
-                      }}
-                    />
-                  ) : (
+          <Conversation css={editorContainer}>
+            <div css={editorWrapper}>
+              <div aria-label={formatMessage('Authoring canvas')} css={visualPanel} role="region">
+                {breadcrumbItems}
+                {dialogJsonVisible ? (
+                  <JsonEditor
+                    key={'dialogjson'}
+                    editorSettings={userSettings.codeEditor}
+                    id={currentDialog.id}
+                    schema={schemas.sdk.content}
+                    value={currentDialog.content || undefined}
+                    onChange={(data) => {
+                      updateDialog({ id: currentDialog.id, content: data });
+                    }}
+                  />
+                ) : (
+                  <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
                     <VisualEditor openNewTriggerModal={openNewTriggerModal} />
-                  )}
-                </div>
-                <PropertyEditor key={focusPath} />
+                  </Extension>
+                )}
               </div>
-            </Conversation>
-          </Extension>
+              <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
+                <PropertyEditor key={focusPath + undoVersion} />
+              </Extension>
+            </div>
+          </Conversation>
         </div>
       </div>
       <Suspense fallback={<LoadingSpinner />}>

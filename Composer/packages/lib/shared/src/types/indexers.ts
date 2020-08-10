@@ -8,6 +8,7 @@ import { DialogSetting } from './index';
 
 export enum FileExtensions {
   Dialog = '.dialog',
+  DialogSchema = '.schema',
   Manifest = '.json',
   Lu = '.lu',
   Lg = '.lg',
@@ -32,6 +33,11 @@ export interface ITrigger {
 export interface ReferredLuIntents {
   name: string;
   path: string;
+}
+
+export interface DialogSchemaFile {
+  id: string;
+  content: any;
 }
 
 export interface DialogInfo {
@@ -118,6 +124,7 @@ export interface LgFile {
   content: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
+  allTemplates: LgTemplate[];
   options?: string[];
 }
 
@@ -160,6 +167,7 @@ export type BotAssets = {
   lgFiles: LgFile[];
   skillManifests: SkillManifest[];
   setting: DialogSetting;
+  dialogSchemas: DialogSchemaFile[];
 };
 
 export interface BotInfo {

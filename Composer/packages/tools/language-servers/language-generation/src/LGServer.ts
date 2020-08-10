@@ -16,10 +16,10 @@ import {
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
 import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
-import { MemoryResolver, ResolverResource, LgFile } from '@bfc/shared';
+import { MemoryResolver, ResolverResource, LgFile, importResolverGenerator } from '@bfc/shared';
+import { buildInFunctionsMap } from '@bfc/built-in-functions';
 
 import { LgParser } from './lgParser';
-import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   LGDocument,
@@ -166,7 +166,8 @@ export class LGServer {
         const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
         if (lgTextFile) {
           const lgFile = lgUtil.parse(lgTextFile.id, lgTextFile.content, lgTextFiles);
-          return lgUtil.updateTemplate(lgFile, templateId, { body: content });
+          const lgResolver = importResolverGenerator(lgTextFiles, '.lg');
+          return lgUtil.updateTemplate(lgFile, templateId, { body: content }, lgResolver);
         }
       }
 
@@ -195,13 +196,13 @@ export class LGServer {
     if (!lgFile) {
       return Promise.resolve(null);
     }
-    const { templates, diagnostics } = lgFile;
+    const { allTemplates, diagnostics } = lgFile;
     if (diagnostics.length) {
       return Promise.resolve(null);
     }
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
-    const matchItem = templates.find((u) => u.name === word);
+    const matchItem = allTemplates.find((u) => u.name === word);
     if (matchItem) {
       const hoveritem: Hover = { contents: [matchItem.body] };
       return Promise.resolve(hoveritem);
@@ -210,8 +211,8 @@ export class LGServer {
       word = word.substring(8);
     }
 
-    if (buildInfunctionsMap.has(word)) {
-      const functionEntity = buildInfunctionsMap.get(word);
+    if (buildInFunctionsMap.has(word)) {
+      const functionEntity = buildInFunctionsMap.get(word);
       if (!functionEntity) {
         return Promise.resolve(null);
       }
@@ -472,8 +473,8 @@ export class LGServer {
       return Promise.resolve(null);
     }
 
-    const { templates } = lgFile;
-    const completionTemplateList: CompletionItem[] = templates.map((template) => {
+    const { allTemplates } = lgFile;
+    const completionTemplateList: CompletionItem[] = allTemplates.map((template) => {
       return {
         label: template.name,
         kind: CompletionItemKind.Reference,
@@ -485,7 +486,7 @@ export class LGServer {
       };
     });
 
-    const completionFunctionList: CompletionItem[] = Array.from(buildInfunctionsMap).map((item) => {
+    const completionFunctionList: CompletionItem[] = Array.from(buildInFunctionsMap).map((item) => {
       const [key, value] = item;
       return {
         label: key,
