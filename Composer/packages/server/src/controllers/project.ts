@@ -432,8 +432,10 @@ async function parseQnAContent(req: Request, res: Response) {
     });
     let qnaContent = '';
     if (extension.some((e) => url.endsWith(e))) {
+      const index = url.lastIndexOf('.');
+      const extension = url.substring(index);
       qnaContent = await builder.importFileReference(
-        'onlineFile',
+        `onlineFile${extension}`,
         url,
         subscriptionKey,
         subscriptionKeyEndpoint,

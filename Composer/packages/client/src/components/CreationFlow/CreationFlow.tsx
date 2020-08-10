@@ -19,11 +19,11 @@ import {
   localeState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
+import ImportQnAFromUrlModal from '../../pages/qna/ImportQnAFromUrlModal';
 
 import { CreateOptions } from './CreateOptions';
 import { OpenProject } from './OpenProject';
 import DefineConversation from './DefineConversation';
-import ImportQnAFromUrlModal from '../../pages/qna/ImportQnAFromUrlModal';
 
 type CreationFlowProps = RouteComponentProps<{}>;
 
@@ -95,16 +95,19 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async (url: string) => {
+  const handleCreateQnA = async (urls: string[], knowledgeBaseName: string) => {
     await handleSubmit(formData, 'QnASample');
-    await importQnAFromUrl({
-      id: `${formData.name.toLocaleLowerCase()}.${locale}`,
-      qnaFileContent: '',
-      subscriptionKey: '',
-      url,
-      region: 'westus',
-      isCreatingBot: true,
-    });
+    for (let i = 0; i < urls.length; i++) {
+      if (!urls[i]) continue;
+      await importQnAFromUrl({
+        id: `${formData.name.toLocaleLowerCase()}.${locale}`,
+        knowledgeBaseName,
+        subscriptionKey: '',
+        url: urls[i],
+        region: 'westus',
+        isCreatingBot: true,
+      });
+    }
   };
 
   const handleSubmitOrImportQnA = async (formData, templateId: string) => {
@@ -165,11 +168,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
           onOpen={openBot}
         />
         <ImportQnAFromUrlModal
-          dialogId={formData.name.toLowerCase()}
-          path="create/QnASample/importQnA"
+          isCreatingBot
+          isMultipleUrlAllowed
           isOpen
-          isSubscriptionKeyNeeded={false}
+          dialogId={formData.name.toLowerCase()}
           isRegionNeeded={false}
+          isSubscriptionKeyNeeded={false}
+          path="create/QnASample/importQnA"
           onDismiss={handleDismiss}
           onSubmit={handleCreateQnA}
         />

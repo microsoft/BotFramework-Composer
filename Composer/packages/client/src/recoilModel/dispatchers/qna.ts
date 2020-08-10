@@ -90,27 +90,29 @@ export const qnaDispatcher = () => {
   const importQnAFromUrl = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({
       id,
-      qnaFileContent,
+      knowledgeBaseName,
       subscriptionKey,
       url,
       region,
       isCreatingBot,
     }: {
       id: string;
-      qnaFileContent: string;
+      knowledgeBaseName: string;
       subscriptionKey: string;
       url: string;
       region: string;
       isCreatingBot: boolean;
     }) => {
-      const { set } = callbackHelpers;
+      const { set, snapshot } = callbackHelpers;
+      const qnaFiles = await snapshot.getPromise(qnaFilesState);
+      const qnaFile = qnaFiles.find((f) => f.id === id);
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
       try {
         const response = await httpClient.get(`/qnaContent`, {
           params: { subscriptionKey, url, region, isCreatingBot },
         });
-        console.log(response);
-        const content = qnaFileContent ? qnaFileContent + '\n' + response.data : response.data;
+        const appendedContent = `> knowledge base name: ${knowledgeBaseName}\n` + response.data;
+        const content = qnaFile ? qnaFile.content + '\n' + appendedContent : appendedContent;
 
         await updateQnAFileState(callbackHelpers, { id, content });
       } catch (err) {

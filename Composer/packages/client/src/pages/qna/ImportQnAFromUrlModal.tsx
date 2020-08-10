@@ -8,10 +8,14 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
+import cloneDeep from 'lodash/cloneDeep';
+import { PrimaryButton, DefaultButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
+import { nanoid } from 'nanoid';
+
 import { FieldConfig, useForm } from '../../hooks/useForm';
 const styles = {
   dialog: {
@@ -51,6 +55,22 @@ const warning = {
   fontSize: FontSizes.size10,
 };
 
+const actionButton = css`
+  font-size: 16px;
+  padding-left: 0px;
+  margin-left: -5px;
+`;
+
+const urlContainer = css`
+  display: flex;
+  width: 444px;
+`;
+
+const cancel = css`
+  margin-top: -3px;
+  margin-left: 10px;
+`;
+
 interface ImportQnAFromUrlModalProps
   extends RouteComponentProps<{
     location: string;
@@ -59,13 +79,16 @@ interface ImportQnAFromUrlModalProps
   dialogId: string;
   isSubscriptionKeyNeeded: boolean;
   isRegionNeeded: boolean;
+  isMultipleUrlAllowed: boolean;
+  isCreatingBot: boolean;
   subscriptionKey?: string;
   onDismiss: () => void;
-  onSubmit: (location: string, subscriptionKey: string, endpoint: string) => void;
+  onSubmit: (urls: string[], knowledgeBaseName: string, subscriptionKey: string, endpoint: string) => void;
 }
 
 interface ImportQnAFromUrlModalFormData {
-  location: string;
+  urls: string[];
+  knowledgeBaseName: string;
   subscriptionKey?: string;
   region?: string;
 }
@@ -79,9 +102,16 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     subscriptionKey = '',
     isSubscriptionKeyNeeded = true,
     isRegionNeeded = true,
+    isMultipleUrlAllowed = true,
+    isCreatingBot = false,
   } = props;
-  let formConfig: FieldConfig<ImportQnAFromUrlModalFormData> = {
-    location: {
+
+  const formConfig: FieldConfig<ImportQnAFromUrlModalFormData> = {
+    urls: {
+      required: true,
+      defaultValue: [''],
+    },
+    knowledgeBaseName: {
       required: true,
       defaultValue: '',
     },
@@ -103,6 +133,26 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
   const { formData, updateField, hasErrors, formErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = !isQnAFileselected || hasErrors;
+
+  const addNewUrl = () => {
+    const urls = cloneDeep(formData.urls);
+    urls.splice(urls.length, 0, '');
+    updateField('urls', urls);
+  };
+
+  const updateUrl = (index: number, url: string | undefined) => {
+    if (!url) url = '';
+    const urls = cloneDeep(formData.urls);
+    urls[index] = url;
+    updateField('urls', urls);
+  };
+
+  const removeUrl = (index: number) => {
+    const urls = cloneDeep(formData.urls);
+    urls.splice(index, 1);
+    updateField('urls', urls);
+  };
+
   return (
     <Dialog
       dialogContentProps={{
@@ -123,14 +173,45 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
       <div css={dialogWindow}>
         <Stack>
           <TextField
-            required
+            data-testid="knowledgeBaseNameTextField"
+            label={formatMessage('knowledgebase name')}
+            styles={textField}
+            value={formData.knowledgeBaseName}
+            onChange={(e, knowledgeBaseName) => updateField('knowledgeBaseName', knowledgeBaseName)}
+          />
+          <TextField
             data-testid="knowledgeLocationTextField"
-            errorMessage={formErrors.location}
             label={formatMessage('knowledge location(URL name)')}
             styles={textField}
-            value={formData.location}
-            onChange={(e, location) => updateField('location', location)}
+            value={formData.urls ? formData.urls[0] : ''}
+            onChange={(e, url) => updateUrl(0, url)}
           />
+          {formData.urls.map((l, index) => {
+            if (index === 0) return;
+            return (
+              <div key={nanoid(6)} css={urlContainer}>
+                <TextField
+                  data-testid="knowledgeLocationTextField"
+                  label={index === 0 ? formatMessage('knowledge location(URL name)') : ''}
+                  styles={textField}
+                  value={l}
+                  onChange={(e, url) => updateUrl(index, url)}
+                />
+                <ActionButton
+                  css={cancel}
+                  data-testid={'deleteImportQnAUrl'}
+                  iconProps={{ iconName: 'Cancel' }}
+                  onClick={(e) => removeUrl(index)}
+                />
+              </div>
+            );
+          })}
+
+          {isMultipleUrlAllowed && (
+            <ActionButton css={actionButton} data-testid={'addQnAImportUrl'} iconProps={{ iconName: 'Add' }}>
+              {<Link onClick={addNewUrl}>{formatMessage('Add')}</Link>}
+            </ActionButton>
+          )}
           {isSubscriptionKeyNeeded && (
             <TextField
               required
@@ -144,9 +225,9 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
           )}
           {isRegionNeeded && (
             <TextField
+              disabled
               required
               data-testid="region"
-              disabled
               errorMessage={formErrors.region}
               label={formatMessage('Region')}
               styles={textField}
@@ -160,16 +241,40 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
         </Stack>
       </div>
       <DialogFooter>
+        {isCreatingBot && (
+          <DefaultButton
+            data-testid={'createKnowledgeBaseFromScratch'}
+            disabled={disabled}
+            styles={{ root: { marginRight: 155 } }}
+            text={formatMessage('Create knowledge base(KB) from scratch')}
+            onClick={() => {
+              if (hasErrors) {
+                return;
+              }
+              onSubmit(
+                [],
+                formData.knowledgeBaseName,
+                formData.subscriptionKey ? formData.subscriptionKey : '',
+                formData.region ? formData.region : ''
+              );
+            }}
+          />
+        )}
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
           disabled={disabled}
-          text={formatMessage('Create Knowledge Base')}
+          text={formatMessage('Create knowledge base')}
           onClick={() => {
             if (hasErrors) {
               return;
             }
-            onSubmit(formData.location, formData.subscriptionKey ? formData.subscriptionKey : '', formData.region);
+            onSubmit(
+              formData.urls,
+              formData.knowledgeBaseName,
+              formData.subscriptionKey ? formData.subscriptionKey : '',
+              formData.region ? formData.region : ''
+            );
           }}
         />
       </DialogFooter>
