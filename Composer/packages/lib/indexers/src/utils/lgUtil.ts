@@ -245,6 +245,5 @@ export function extractOptionByKey(nameOfKey: string, options: string[]): string
 export function parse(id: string, content: string, lgFiles: TextFile[]): LgFile {
   const lgImportResolver = importResolverGenerator(lgFiles, '.lg');
 
-  const { templates, diagnostics } = lgIndexer.parse(content, id, lgImportResolver);
-  return { id, content, templates, diagnostics } as LgFile;
+  return lgIndexer.parse(content, id, lgImportResolver);
 }
