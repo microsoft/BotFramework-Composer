@@ -17,6 +17,7 @@ import { onboardingState, userSettingsState, dispatcherState } from '../../../re
 
 import { container, section } from './styles';
 import { SettingToggle } from './SettingToggle';
+import { SettingDropdown } from './SettingDropdown';
 import * as images from './images';
 
 const ElectronSettings = lazy(() =>
@@ -43,10 +44,31 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
     updateUserSettings({ codeEditor: { [key]: checked } });
   };
 
+  const onLocaleChange = (appLocale: string) => {
+    updateUserSettings({ appLocale });
+  };
+
   const renderElectronSettings = isElectron();
 
   return (
     <div css={container}>
+      <section css={section}>
+        <h2>{formatMessage('User locale')}</h2>
+        <SettingDropdown
+          description={formatMessage('Language to use within the Composer application itself.')}
+          image={images.minimap}
+          options={[
+            { key: 'en-US', text: formatMessage('US English') },
+            {
+              key: 'en-xtop',
+              text: formatMessage('US English X-on-top'),
+            },
+          ]}
+          selected={userSettings.appLocale}
+          title={formatMessage('Language')}
+          onChange={onLocaleChange}
+        />
+      </section>
       <section css={section}>
         <h2>{formatMessage('Onboarding')}</h2>
         <SettingToggle

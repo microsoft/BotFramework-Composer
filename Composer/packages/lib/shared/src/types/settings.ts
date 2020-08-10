@@ -12,6 +12,7 @@ export interface UserSettings {
   codeEditor: CodeEditorSettings;
   propertyEditorWidth: number;
   dialogNavWidth: number;
+  appLocale: string;
 }
 
 export interface AppUpdaterSettings {
