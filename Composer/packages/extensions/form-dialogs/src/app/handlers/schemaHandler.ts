@@ -34,7 +34,9 @@ const getDefaultPayload = (kind: SchemaPropertyKind) => {
 
 export type SchemaAction = ReturnType<typeof createSchemaHandler>;
 
-export const createSchemaHandler = ({ dataStore }: HandlerDependencies) => {
+export const createSchemaHandler = (dependencies: HandlerDependencies) => {
+  const { dataStore } = dependencies;
+
   const importSchemaString = ({ id, content }: { id: string; content: string }) => {
     const importedSchema = createSchemaStoreFromJson(id, content);
     dataStore.setSchema(importedSchema);
@@ -55,22 +57,22 @@ export const createSchemaHandler = ({ dataStore }: HandlerDependencies) => {
   };
 
   const changePropertyKind = ({ id, kind }: { id: string; kind: SchemaPropertyKind }) => {
-    const property = dataStore.schema.properties.find((p) => p.id === id);
+    const property = dataStore.schema.findPropertyById(id);
     property.update({ kind, examples: [], payload: getDefaultPayload(kind) });
   };
 
   const changePropertyRequired = ({ id, required }: { id: string; required: boolean }) => {
-    const property = dataStore.schema.properties.find((p) => p.id === id);
+    const property = dataStore.schema.findPropertyById(id);
     property.update({ required });
   };
 
   const changePropertyName = ({ id, name }: { id: string; name: string }) => {
-    const property = dataStore.schema.properties.find((p) => p.id === id);
+    const property = dataStore.schema.findPropertyById(id);
     property.update({ name });
   };
 
   const changePropertyPayload = ({ id, payload }: { id: string; payload: PropertyPayload }) => {
-    const property = dataStore.schema.properties.find((p) => p.id === id);
+    const property = dataStore.schema.findPropertyById(id);
     property.update({ payload });
   };
 
@@ -87,12 +89,12 @@ export const createSchemaHandler = ({ dataStore }: HandlerDependencies) => {
   };
 
   const changeRef = ({ id, ref }: { id: string; ref: string }) => {
-    const property = dataStore.schema.properties.find((p) => p.id === id);
+    const property = dataStore.schema.findPropertyById(id);
     property.update({ payload: <RefPropertyPayload>{ ref } });
   };
 
   const changePropertyExamples = ({ id, examples }: { id: string; examples: readonly string[] }) => {
-    const property = dataStore.schema.properties.find((p) => p.id === id);
+    const property = dataStore.schema.findPropertyById(id);
     property.update({ examples: examples.slice() });
   };
 

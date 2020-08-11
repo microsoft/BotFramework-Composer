@@ -5,8 +5,14 @@ import styled from '@emotion/styled';
 import { RouteComponentProps } from '@reach/router';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import * as React from 'react';
+import { useRecoilValue } from 'recoil';
 
-import { useStoreContext } from '../../hooks/useStoreContext';
+import {
+  dispatcherState,
+  formDialogGenerationProgressingState,
+  formDialogSchemasState,
+  formDialogTemplateSchemasState,
+} from '../../recoilModel';
 
 import { CreateFormDialogSchemaModal } from './CreateFormDialogSchemaModal';
 import { FormDialogSchemaEditor } from './FormDialogSchemaEditor';
@@ -31,14 +37,20 @@ type Props = RouteComponentProps<{ projectId: string }>;
 
 const FormDialogPage: React.FC<Props> = (props: Props) => {
   const { projectId } = props;
+  const formDialogSchemas = useRecoilValue(formDialogSchemasState);
+  const formDialogTemplateSchemas = useRecoilValue(formDialogTemplateSchemasState);
+  const formDialogGenerationProgressing = useRecoilValue(formDialogGenerationProgressingState);
   const {
-    actions,
-    state: { formDialogSchemas, formDialogTemplateSchemas, formDialogGenerationProgressing },
-  } = useStoreContext();
+    loadFormDialogSchemaTemplates,
+    removeFormDialogSchema,
+    generateFormDialog,
+    createFormDialogSchema,
+    updateFormDialogSchema,
+  } = useRecoilValue(dispatcherState);
 
   React.useEffect(() => {
     (async () => {
-      await actions.loadFormDialogSchemaTemplates();
+      await loadFormDialogSchemaTemplates();
     })();
   }, []);
 
@@ -55,7 +67,7 @@ const FormDialogPage: React.FC<Props> = (props: Props) => {
 
   const deleteItem = React.useCallback(
     (id: string) => {
-      actions.removeFormDialogSchema({ id });
+      removeFormDialogSchema({ id });
       if (dialogSchema?.id === id) {
         selectItem('');
       }
@@ -64,13 +76,13 @@ const FormDialogPage: React.FC<Props> = (props: Props) => {
   );
 
   const generateFormDialogs = React.useCallback((schemaName: string) => {
-    actions.generateFormDialog({ schemaName });
+    generateFormDialog({ projectId, schemaName });
   }, []);
 
   const updateItem = React.useCallback(
     (id: string, content: string) => {
       if (id === dialogSchema?.id) {
-        actions.updateFormDialogSchema({ id, content });
+        updateFormDialogSchema({ id, content });
         setDialogSchema({ ...dialogSchema, content });
       }
     },
@@ -78,7 +90,7 @@ const FormDialogPage: React.FC<Props> = (props: Props) => {
   );
 
   const createItem = React.useCallback(({ name }: { name: string }) => {
-    actions.createFormDialogSchema({ id: name, content: JSON.stringify({}, null, 2) });
+    createFormDialogSchema({ id: name, content: JSON.stringify({}, null, 2) });
     setCreateSchemaDialogOpen(false);
   }, []);
 

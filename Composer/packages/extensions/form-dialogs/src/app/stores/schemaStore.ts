@@ -39,17 +39,19 @@ export const SchemaStore = types
           ...jsonObject,
           properties: self.properties
             .filter((p) => p.isValid)
-            .reduce<Record<string, object>>((acc, curr) => {
-              acc[curr.name] = curr.spreadSelf;
+            .reduce<Record<string, object>>((acc, _, idx) => {
+              acc[self.properties[idx].name] = self.properties[idx].toJson;
               return acc;
             }, <Record<string, object>>{}),
         };
       }
 
-      const required = self.properties.filter((p) => p.required).map((p) => p.name);
-      const examples = self.properties.reduce<Record<string, string[]>>((acc, curr) => {
-        if (curr.examples?.length) {
-          acc[curr.name] = curr.examples;
+      const required = self.properties
+        .filter((_, idx) => self.properties[idx].required)
+        .map((_, idx) => self.properties[idx].name);
+      const examples = self.properties.reduce<Record<string, string[]>>((acc, _, idx) => {
+        if (self.properties[idx].examples?.length) {
+          acc[self.properties[idx].name] = self.properties[idx].examples;
         }
         return acc;
       }, <Record<string, string[]>>{});
@@ -69,6 +71,10 @@ export const SchemaStore = types
     },
   }))
   .actions((self) => ({
+    findPropertyById: (propId: string) => {
+      const idx = self.properties.findIndex((p) => p.id === propId);
+      return self.properties[idx];
+    },
     update: (props: Partial<Pick<SnapshotIn<typeof self>, 'name' | 'properties'>>) => {
       Object.assign(self, props);
     },
@@ -84,7 +90,8 @@ export const SchemaStore = types
       self.properties.splice(toIdx, 0, f);
     },
     duplicateProperty: (propertyId: string) => {
-      const { kind, ...rest } = self.properties.find((t) => t.id === propertyId);
+      const idx = self.properties.findIndex((t) => t.id === propertyId);
+      const { kind, ...rest } = self.properties[idx];
       const clonedProperty = createSchemaProperty(kind, { ...rest, name: '' });
       self.properties.push(clonedProperty);
     },

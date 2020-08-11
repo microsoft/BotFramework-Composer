@@ -19,6 +19,7 @@ import {
   skillManifestsState,
   settingsState,
   lgFilesState,
+  formDialogSchemasState,
 } from './atoms';
 import { UndoRoot } from './undo/history';
 
@@ -31,6 +32,7 @@ const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
     snapshot.getPromise(skillManifestsState),
     snapshot.getPromise(settingsState),
     snapshot.getPromise(dialogSchemasState),
+    snapshot.getPromise(formDialogSchemasState),
   ]);
   return {
     projectId: result[0],
@@ -40,6 +42,7 @@ const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
     skillManifests: result[4],
     setting: result[5],
     dialogSchemas: result[6],
+    formDialogSchemas: result[7],
   };
 };
 

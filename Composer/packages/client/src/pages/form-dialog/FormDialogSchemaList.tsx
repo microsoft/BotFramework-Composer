@@ -13,9 +13,10 @@ import { IStackItemProps, IStackItemStyles, Stack } from 'office-ui-fabric-react
 import { classNamesFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { Resizable, ResizeCallback } from 're-resizable';
 import * as React from 'react';
+import { FormDialogSchema } from '@bfc/shared';
+import { useRecoilValue } from 'recoil';
 
-import { useStoreContext } from '../../hooks/useStoreContext';
-import { FormDialogSchema } from '../../store/types';
+import { dispatcherState, userSettingsState } from '../../recoilModel';
 
 import { FormDialogSchemaListHeader } from './FormDialogSchemaListHeader';
 
@@ -150,12 +151,8 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props)
 
   const { 0: query, 1: setQuery } = React.useState('');
   const delayedSetQuery = debounce((newValue) => setQuery(newValue), 300);
-  const {
-    actions: { updateUserSettings },
-    state: {
-      userSettings: { dialogNavWidth: currentWidth },
-    },
-  } = useStoreContext();
+  const { updateUserSettings } = useRecoilValue(dispatcherState);
+  const { dialogNavWidth } = useRecoilValue(userSettingsState);
 
   const filteredItems = React.useMemo(
     () => items.filter(({ id }) => id.toLowerCase().indexOf(query.toLowerCase()) !== -1),
@@ -169,7 +166,7 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props)
   };
 
   const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
-    updateUserSettings({ dialogNavWidth: currentWidth + d.width });
+    updateUserSettings({ dialogNavWidth: dialogNavWidth + d.width });
   };
 
   return (
@@ -179,7 +176,7 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props)
       }}
       maxWidth={500}
       minWidth={180}
-      size={{ width: currentWidth, height: 'auto' }}
+      size={{ width: dialogNavWidth, height: 'auto' }}
       onResizeStop={handleResize}
     >
       <Root aria-label={formatMessage('Navigation pane')} loading={loading} role="region" tokens={{ childrenGap: 8 }}>

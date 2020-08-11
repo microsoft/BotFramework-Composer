@@ -22,6 +22,7 @@ const BotStructureTemplate = {
     lu: 'dialogs/${DIALOGNAME}/language-understanding/${LOCALE}/${DIALOGNAME}.${LOCALE}.lu',
     dialogSchema: 'dialogs/${DIALOGNAME}/${DIALOGNAME}.dialog.schema',
   },
+  formDialogs: 'form-dialogs/${FORMDIALOGNAME}',
   skillManifests: 'manifests/${MANIFESTFILENAME}',
 };
 
@@ -57,6 +58,12 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
     });
   }
 
+  if (fileType === FileExtensions.FormDialogSchema) {
+    return templateInterpolate(BotStructureTemplate.formDialogs, {
+      FORMDIALOGNAME: filename,
+    });
+  }
+
   // common.lg
   if (fileId === CommonFileId && fileType === FileExtensions.Lg) {
     return templateInterpolate(BotStructureTemplate.common.lg, {
@@ -68,17 +75,22 @@ export const defaultFilePath = (botName: string, defaultLocale: string, filename
   const isRootFile = BOTNAME === DIALOGNAME.toLowerCase();
 
   let TemplatePath = '';
-  if (fileType === FileExtensions.Dialog) {
-    TemplatePath = isRootFile ? BotStructureTemplate.entry : BotStructureTemplate.dialogs.entry;
-  } else if (fileType === FileExtensions.Lg) {
-    TemplatePath = isRootFile ? BotStructureTemplate.lg : BotStructureTemplate.dialogs.lg;
+
+  switch (fileType) {
+    case FileExtensions.Dialog:
+      TemplatePath = isRootFile ? BotStructureTemplate.entry : BotStructureTemplate.dialogs.entry;
+      break;
+    case FileExtensions.Lg:
+      TemplatePath = isRootFile ? BotStructureTemplate.lg : BotStructureTemplate.dialogs.lg;
+      break;
+    case FileExtensions.Lu:
+      TemplatePath = isRootFile ? BotStructureTemplate.lu : BotStructureTemplate.dialogs.lu;
+      break;
+    case FileExtensions.DialogSchema:
+      TemplatePath = isRootFile ? BotStructureTemplate.dialogSchema : BotStructureTemplate.dialogs.dialogSchema;
+      break;
   }
-  if (fileType === FileExtensions.Lu) {
-    TemplatePath = isRootFile ? BotStructureTemplate.lu : BotStructureTemplate.dialogs.lu;
-  }
-  if (fileType === FileExtensions.DialogSchema) {
-    TemplatePath = isRootFile ? BotStructureTemplate.dialogSchema : BotStructureTemplate.dialogs.dialogSchema;
-  }
+
   return templateInterpolate(TemplatePath, {
     BOTNAME,
     DIALOGNAME,

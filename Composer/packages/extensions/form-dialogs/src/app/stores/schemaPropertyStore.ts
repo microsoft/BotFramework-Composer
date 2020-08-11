@@ -93,7 +93,7 @@ export const SchemaPropertyStore = types
     examples: types.array(types.string),
   })
   .views((self) => ({
-    get spreadSelf(): object {
+    get toJson(): object {
       switch (self.kind) {
         case 'ref':
           return spreadRefSchemaProperty(<RefPropertyPayload>self.payload);

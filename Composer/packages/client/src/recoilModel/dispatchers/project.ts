@@ -19,7 +19,12 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
-import { designPageLocationState } from '../atoms/botState';
+import {
+  designPageLocationState,
+  formDialogSchemasState,
+  formDialogGenerationProgressingState,
+} from '../atoms/botState';
+import { FileExtensions } from '../persistence/types';
 
 import {
   skillManifestsState,
@@ -137,6 +142,10 @@ export const projectDispatcher = () => {
         return dialog;
       });
 
+      const formDialogSchemas = files
+        .filter((f) => f.name.endsWith(FileExtensions.FormDialogSchema))
+        .map((f) => ({ id: f.name.split('.')[0], content: f.content }));
+
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);
         set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
@@ -155,6 +164,8 @@ export const projectDispatcher = () => {
         set(BotDiagnosticsState, diagnostics);
         set(botOpeningState, false);
         set(projectIdState, projectId);
+        set(formDialogSchemasState, formDialogSchemas);
+        set(formDialogGenerationProgressingState, false);
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
         set(settingsState, mergedSettings);
@@ -169,6 +180,10 @@ export const projectDispatcher = () => {
       setError(callbackHelpers, err);
       navigateTo('/home');
     }
+  };
+
+  const reloadProject = async (callbackHelpers: CallbackInterface, data: any) => {
+    await initBotState(callbackHelpers, data, false);
   };
 
   const removeRecentProject = async (callbackHelpers: CallbackInterface, path: string) => {
@@ -393,6 +408,7 @@ export const projectDispatcher = () => {
     openBotProject,
     createProject,
     deleteBotProject,
+    reloadProject,
     saveProjectAs,
     fetchTemplates,
     fetchProjectById,

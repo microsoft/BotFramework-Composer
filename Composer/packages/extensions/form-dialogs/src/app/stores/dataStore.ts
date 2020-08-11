@@ -3,7 +3,7 @@
 
 import { Instance, SnapshotOut, types } from 'mobx-state-tree';
 import { UndoManager } from 'mst-middlewares';
-import { SchemaStore, createSchemaStore, MutableSchemaStore } from 'src/app/stores/schemaStore';
+import { createSchemaStore, MutableSchemaStore, SchemaStore } from 'src/app/stores/schemaStore';
 
 export type MutableDataStore = Instance<typeof DataStore>;
 export type DataStore = DeepNoFunction<MutableDataStore>;

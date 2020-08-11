@@ -55,6 +55,7 @@ import { useShell } from '../../shell';
 import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
 import { clearBreadcrumb, navigateTo } from '../../utils/navigation';
 
+import { PropertyEditor } from './PropertyEditor';
 import {
   breadcrumbClass,
   contentWrapper,

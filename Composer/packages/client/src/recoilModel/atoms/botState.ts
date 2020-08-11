@@ -11,6 +11,8 @@ import {
   BotSchemas,
   Skill,
   DialogSetting,
+  FormDialogSchema,
+  FormDialogSchemaTemplate,
 } from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
@@ -203,4 +205,19 @@ export const onAddLanguageDialogCompleteState = atom<any>({
 export const onDelLanguageDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
+});
+
+export const formDialogSchemasState = atom<FormDialogSchema[]>({
+  key: getFullyQualifiedKey('formDialogSchemasState'),
+  default: [],
+});
+
+export const formDialogTemplateSchemasState = atom<FormDialogSchemaTemplate[]>({
+  key: getFullyQualifiedKey('formDialogTemplateSchemas'),
+  default: [],
+});
+
+export const formDialogGenerationProgressingState = atom<boolean>({
+  key: getFullyQualifiedKey('formDialogGenerationProgressing'),
+  default: false,
 });

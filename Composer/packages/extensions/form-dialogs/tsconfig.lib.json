@@ -3,6 +3,8 @@
   "compilerOptions": {
       "sourceMap": true,
       "noImplicitAny": true,
+      "outDir": "./lib/",
+      "declarationDir": "./lib/",
       "module": "esnext",
       "target": "es6",
       "importHelpers": true,

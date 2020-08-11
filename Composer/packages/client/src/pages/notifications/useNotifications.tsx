@@ -13,6 +13,7 @@ import {
   settingsState,
   skillManifestsState,
   dialogSchemasState,
+  formDialogSchemasState,
 } from '../../recoilModel/atoms/botState';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
@@ -35,6 +36,7 @@ export default function useNotifications(filter?: string) {
   const setting = useRecoilValue(settingsState);
   const skillManifests = useRecoilValue(skillManifestsState);
   const dialogSchemas = useRecoilValue(dialogSchemasState);
+  const formDialogSchemas = useRecoilValue(formDialogSchemasState);
   const botAssets = {
     projectId,
     dialogs,
@@ -43,6 +45,7 @@ export default function useNotifications(filter?: string) {
     skillManifests,
     setting,
     dialogSchemas,
+    formDialogSchemas,
   };
   const memoized = useMemo(() => {
     const notifactions: Notification[] = [];

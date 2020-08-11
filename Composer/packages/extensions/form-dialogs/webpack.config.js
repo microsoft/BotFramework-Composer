@@ -88,19 +88,10 @@ module.exports = {
         exclude: path.resolve(__dirname, 'node_modules'),
       },
       {
-        enforce: 'pre',
-        test: /\.tsx?$/,
-        loader: 'tslint-loader',
-        exclude: [path.resolve(__dirname, 'node_modules')],
-        options: {
-          emitErrors: true,
-          failOnHint: true,
-        },
-      },
-      {
         test: /\.tsx?$/,
         loader: 'ts-loader',
         exclude: path.resolve(__dirname, 'node_modules'),
+        options: { transpileOnly: true },
       },
       cssLoader,
     ],

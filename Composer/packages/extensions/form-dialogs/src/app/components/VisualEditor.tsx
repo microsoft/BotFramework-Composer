@@ -50,7 +50,7 @@ export const VisualEditor = observer((props: Props) => {
   useUndoKeyBinding();
 
   React.useEffect(() => {
-    if (containerRef.current && (schema?.properties?.length || 0) > propertyLengthRef.current) {
+    if (containerRef.current && schema?.properties?.length && schema?.properties?.length > propertyLengthRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight - containerRef.current.clientHeight;
     }
   }, [schema?.properties?.length]);

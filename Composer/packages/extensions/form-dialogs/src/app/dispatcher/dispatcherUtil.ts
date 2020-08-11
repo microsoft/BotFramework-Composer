@@ -10,13 +10,13 @@ export type Handler = (params: {}) => void;
 
 export type HandlerCreator<TD = {}> = (dependencies: TD) => Record<string, Handler>;
 
-export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependencies: () => TD) => {
+export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependencies: (lifetime: Lifetime) => TD) => {
   const handlerMap = new Map<string, Handler>();
-  const handlerLifetimeMap = new WeakMap<HandlerCreator<TD>, Lifetime>();
+  const handlerLifetimeMap = new WeakMap<HandlerCreator, Lifetime>();
 
   // ------------ handler ------------
 
-  const installHandler = (handlerCreator: HandlerCreator<TD>) => {
+  const installHandler = (handlerCreator: HandlerCreator<TD & { lifetime: Lifetime }>) => {
     const lifetime = new Lifetime();
 
     if (handlerLifetimeMap.get(handlerCreator)) {
@@ -25,7 +25,7 @@ export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependenci
 
     handlerLifetimeMap.set(handlerCreator, lifetime);
 
-    const handler = handlerCreator(dependencies());
+    const handler = handlerCreator({ ...dependencies(lifetime), lifetime });
 
     Object.keys(handler).forEach((name) => {
       if (!module.hot && handlerMap.get(name)) {

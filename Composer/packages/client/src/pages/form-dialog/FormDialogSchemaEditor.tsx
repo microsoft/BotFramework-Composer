@@ -12,7 +12,6 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 
 import { DropZone } from '../../components/DropZone';
-import { FileExtensions } from '../../store/persistence/types';
 
 const Root = styled(Stack)<{
   loading: boolean;
@@ -63,7 +62,7 @@ const editorTopBarStyles = classNamesFunction<IStackProps, IStackStyles>()({
   root: { backgroundColor: '#fff', height: '45px' },
 });
 
-const validateSchemaFileName = (file: File) => file.name.endsWith(FileExtensions.FormDialogSchema);
+const validateSchemaFileName = (file: File) => file.name.endsWith('FileExtensions.FormDialogSchema');
 
 type Props = {
   projectId?: string;
@@ -129,6 +128,7 @@ export const FormDialogSchemaEditor = React.memo((props: Props) => {
             flex: 1,
             position: 'relative',
             overflowY: 'auto',
+            backgroundColor: showEditor ? '#fff' : 'transparent',
           },
         }}
       >
@@ -142,6 +142,7 @@ export const FormDialogSchemaEditor = React.memo((props: Props) => {
             <VisualSchemaEditor
               editorId={`${projectId}:${schema.id}`}
               schema={schema}
+              schemaExtension=".form-dialog"
               templates={templates}
               onSchemaUpdated={onSchemaUpdated}
             />

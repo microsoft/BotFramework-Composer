@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -66,15 +65,12 @@ module.exports = {
   externals: {
     react: 'react',
     'react-dom': 'react-dom',
+    lodash: 'lodash',
   },
 
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
-    }),
-    new BundleAnalyzerPlugin({
-      analyzerMode: 'static',
-      openAnalyzer: false,
     }),
   ],
 

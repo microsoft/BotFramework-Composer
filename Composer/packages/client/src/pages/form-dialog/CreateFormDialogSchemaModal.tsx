@@ -5,12 +5,13 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { DialogTypes, DialogWrapper } from '../../components/DialogWrapper';
 import { nameRegex } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
-import { StoreContext } from '../../store';
+import { formDialogSchemasState } from '../../recoilModel';
 
 type FormDialogDialogSchemaFormData = {
   name: string;
@@ -23,8 +24,7 @@ type CreateFormDialogSchemaModalProps = {
 };
 
 export const CreateFormDialogSchemaModal: React.FC<CreateFormDialogSchemaModalProps> = (props) => {
-  const { state } = useContext(StoreContext);
-  const { formDialogSchemas } = state;
+  const formDialogSchemas = useRecoilValue(formDialogSchemasState);
   const { onSubmit, onDismiss, isOpen } = props;
 
   const formConfig: FieldConfig<FormDialogDialogSchemaFormData> = {

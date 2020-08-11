@@ -7,7 +7,16 @@ import fs from 'fs';
 import axios from 'axios';
 import { generate, FeedbackType } from '@microsoft/bf-generate-library';
 import { autofixReferInDialog } from '@bfc/indexers';
-import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, ILuisConfig } from '@bfc/shared';
+import {
+  getNewDesigner,
+  FileInfo,
+  Skill,
+  Diagnostic,
+  IBotProject,
+  DialogSetting,
+  ILuisConfig,
+  FileExtensions,
+} from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
 import { Path } from '../../utility/path';
@@ -23,7 +32,7 @@ import { IFileStorage } from './../storage/interface';
 import { LocationRef } from './interface';
 import { LuPublisher } from './luPublisher';
 import { extractSkillManifestUrl } from './skillManager';
-import { defaultFilePath, serializeFiles, parseFileName, getFormDialogSchemaPath } from './botStructure';
+import { defaultFilePath, serializeFiles, parseFileName } from './botStructure';
 
 const debug = log.extend('bot-project');
 const mkDirAsync = promisify(fs.mkdir);
@@ -449,7 +458,9 @@ export class BotProject implements IBotProject {
   }
 
   public async generateDialog(name: string) {
-    const schemaPath = getFormDialogSchemaPath(this.dir, name);
+    const defaultLocale = this.settings?.defaultLanguage || defaultLanguage;
+    const relativePath = defaultFilePath(this.name, defaultLocale, `${name}${FileExtensions.FormDialogSchema}`);
+    const schemaPath = Path.resolve(this.dir, relativePath);
 
     const outDir = Path.resolve(this.dir, `dialogs/${name}`);
 

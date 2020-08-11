@@ -16,6 +16,7 @@ import { settingsDispatcher } from './setting';
 import { skillDispatcher } from './skill';
 import { userDispatcher } from './user';
 import { multilangDispatcher } from './multilang';
+import { formDialogDispatcher } from './formDialog';
 
 const createDispatchers = () => {
   return {
@@ -34,6 +35,7 @@ const createDispatchers = () => {
     ...skillDispatcher(),
     ...userDispatcher(),
     ...multilangDispatcher(),
+    ...formDialogDispatcher(),
   };
 };
 

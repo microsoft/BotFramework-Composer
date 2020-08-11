@@ -67,7 +67,12 @@ export const DemoApp = () => {
             },
           }}
         >
-          <VisualSchemaEditor editorId={selectedItem.id} schema={selectedItem} onSchemaUpdated={updateItem} />
+          <VisualSchemaEditor
+            editorId={selectedItem.id}
+            schema={selectedItem}
+            templates={[]}
+            onSchemaUpdated={updateItem}
+          />
         </Stack>
       )}
     </Stack>

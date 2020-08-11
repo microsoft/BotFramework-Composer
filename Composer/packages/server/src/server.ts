@@ -112,6 +112,8 @@ export async function start(pluginDir?: string): Promise<number | string> {
   });
 
   app.get('*', (req, res) => {
+    // eslint-disable-next-line no-console
+    console.log(clientDirectory);
     res.render(path.resolve(clientDirectory, 'index.ejs'), { __nonce__: req.__nonce__ });
   });
 

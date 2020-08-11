@@ -20,11 +20,11 @@
         "lint:fix": "yarn lint --fix"
     },
     "dependencies": {
-        "@fluentui/react": "^7.120.1",
+        "@fluentui/react": "^7.121.11",
         "@uifabric/experiments": "^7.27.6",
-        "mobx": "^5.15.4",
-        "mobx-react": "^6.2.2",
-        "mobx-state-tree": "^3.13.0",
+        "mobx": "^5.15.5",
+        "mobx-react": "^6.2.5",
+        "mobx-state-tree": "^3.17.2",
         "mst-middlewares": "^3.16.0",
         "react-beautiful-dnd": "^13.0.0",
         "react-virtualized-auto-sizer": "^1.0.2",
@@ -33,7 +33,7 @@
     "peerDependencies": {
         "react": "16.13.0",
         "react-dom": "16.13.0",
-        "lodash": "^4.17.15"
+        "lodash": "^4.17.19"
     },
     "devDependencies": {
         "@types/react": "^16.8.18",
