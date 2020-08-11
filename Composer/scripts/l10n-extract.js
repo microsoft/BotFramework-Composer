@@ -7,6 +7,7 @@ let schema;
 const fileName = process.argv[2];
 
 try {
+  // eslint-disable-next-line security/detect-non-literal-fs-filename
   schema = JSON.parse(fs.readFileSync(fileName));
 } catch (e) {
   console.error('No valid JSON file found');
@@ -30,4 +31,5 @@ function keep(obj, keptFields) {
   return out;
 }
 
+// eslint-disable-next-line security/detect-non-literal-fs-filename
 fs.writeFileSync(fileName + '.en-US.json', JSON.stringify(keep(schema, L10N_FIELDS), null, 4));
