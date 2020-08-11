@@ -39,7 +39,7 @@ export const IntellisenseTextField = React.memo(
 
     // If value is provided then component becomes controlled
     React.useEffect(() => {
-      if (value && value !== textFieldValue) {
+      if (value !== undefined && value !== textFieldValue) {
         setTextFieldValue(value);
       }
     }, [value]);

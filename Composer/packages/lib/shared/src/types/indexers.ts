@@ -124,6 +124,7 @@ export interface LgFile {
   content: string;
   diagnostics: Diagnostic[];
   templates: LgTemplate[];
+  allTemplates: LgTemplate[];
   options?: string[];
 }
 
