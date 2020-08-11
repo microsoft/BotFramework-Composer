@@ -6,7 +6,7 @@
     "sourceMap": true,
     "outDir": "./lib",
     "rootDir": "./src",
-    "types": ["node", "jest"]
+    "types": ["node"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
