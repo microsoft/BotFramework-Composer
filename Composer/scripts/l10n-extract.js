@@ -42,5 +42,5 @@ for (const file of inFiles) {
   const output = keep(schema, L10N_FIELDS);
 
   // eslint-disable-next-line security/detect-non-literal-fs-filename
-  fs.writeFileSync(outputDir + path.sep + baseName + '.en-US.json', JSON.stringify(output, null, 4));
+  fs.writeFileSync(outputDir + path.sep + baseName, JSON.stringify(output, null, 4));
 }
