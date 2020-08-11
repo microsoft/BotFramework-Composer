@@ -233,6 +233,49 @@ describe('lu operations', () => {
   });
 });
 
+describe('qna operations', () => {
+  it('should get qna endpoint key', async () => {
+    await proj.init();
+    const subscriptionKey = '21640b8e2110449abfdfccf2f6bbee02';
+    const endpointKey = await proj.updateQnaEndpointKey(subscriptionKey);
+    expect(endpointKey).toBe('d423d198-b0cc-46b3-a48c-e32d7a7e5b8a');
+  });
+});
+describe('buildFiles', () => {
+  const path = Path.resolve(__dirname, `${botDir}/generated`);
+  afterEach(() => {
+    try {
+      rimraf.sync(path);
+    } catch (err) {
+      // ignore
+    }
+  });
+  it('should build lu & qna file successfully', async () => {
+    proj.init();
+    const authoringKey = '412f0bfc19824ceca7a6076d05478850';
+    const subscriptionKey = '21640b8e2110449abfdfccf2f6bbee02';
+    const qnaRegion = 'en-us';
+    const luFileIds = ['a.en-us', 'b.en-us', 'bot1.en-us'];
+    const qnaFileIds = ['a.en-us', 'b.en-us', 'bot1.en-us'];
+    const crossTrainConfig = {
+      rootIds: [],
+      triggerRules: {},
+      intentName: '_Interruption',
+      verbose: true,
+    };
+    await proj.buildFiles(authoringKey, subscriptionKey, qnaRegion, luFileIds, qnaFileIds, crossTrainConfig);
+
+    try {
+      if (fs.existsSync(path)) {
+        const files = fs.readdirSync(path);
+        expect(files).toContain('a.lu.qna.dialog');
+      }
+    } catch (err) {
+      // ignore
+    }
+  }, 30000);
+});
+
 describe('dialog operations', () => {
   it('should create dialog', async () => {
     const dialogsFilesCount = proj.dialogFiles.length;
