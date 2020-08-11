@@ -200,6 +200,10 @@ export default async (composer: any): Promise<void> => {
         if (initErr) {
           throw new Error(initErr);
         }
+        const { initErr2 } = await exec('npm run build', { cwd: destPath, stdio: 'pipe' });
+        if (initErr2) {
+          throw new Error(initErr2);
+        }
         return destPath;
       } else {
         throw new Error(`Runtime already exists at ${destPath}`);
