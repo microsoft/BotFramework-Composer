@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Stack } from '@fluentui/react/lib/Stack';
-import { observer, Observer } from 'mobx-react';
+import { Observer } from 'mobx-react';
 import * as React from 'react';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { PropertyItem } from 'src/app/components/property/PropertyItem';
@@ -19,7 +19,7 @@ type Props = {
   schema: SchemaStore;
 };
 
-export const PropertyBuilder = observer((props: Props) => {
+export const PropertyBuilder = (props: Props) => {
   const { dispatcher } = React.useContext(Context);
   const { schema } = props;
 
@@ -136,4 +136,4 @@ export const PropertyBuilder = observer((props: Props) => {
       </DragDropContext>
     </Root>
   );
-});
+};

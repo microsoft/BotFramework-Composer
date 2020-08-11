@@ -17,22 +17,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
-        enforce: 'pre',
-        use: [
-          {
-            options: {
-              formatter: 'react-dev-utils/eslintFormatter',
-              eslintPath: 'eslint',
-              quiet: true,
-            },
-            loader: 'eslint-loader',
-          },
-        ],
-        include: path.resolve(__dirname, 'src'),
-        exclude: path.resolve(__dirname, 'node_modules'),
-      },
-      {
         enforce: 'pre',
         test: /\.js$/,
         loader: 'source-map-loader',
@@ -42,7 +26,6 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          transpileOnly: true,
           configFile: path.join(__dirname, './tsconfig.lib.json'),
         },
         exclude: path.resolve(__dirname, 'node_modules'),

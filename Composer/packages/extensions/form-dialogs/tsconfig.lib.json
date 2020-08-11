@@ -1,8 +1,9 @@
 {
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-      "sourceMap": true,
       "noImplicitAny": true,
+      "declarationMap": true,
+      "declaration": true,
       "outDir": "./lib/",
       "declarationDir": "./lib/",
       "module": "esnext",
@@ -10,8 +11,6 @@
       "importHelpers": true,
       "experimentalDecorators": true,
       "strictNullChecks": false,
-      "noUnusedParameters": true,
-      "keyofStringsOnly": true,
       "baseUrl": ".",
       "paths": {
           "src/*": ["src/*"]

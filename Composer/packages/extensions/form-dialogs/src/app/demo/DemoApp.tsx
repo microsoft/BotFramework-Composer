@@ -7,33 +7,60 @@ import { TextField } from '@fluentui/react/lib/TextField';
 import { initializeIcons } from '@uifabric/icons';
 import * as React from 'react';
 import { VisualSchemaEditor } from 'src/app/VisualSchemaEditor';
+import { useLocalStore, observer } from 'mobx-react';
+import { action } from 'mobx';
 
 initializeIcons();
 
-export const DemoApp = () => {
-  const { 0: name, 1: setName } = React.useState('');
-  const { 0: items, 1: setItems } = React.useState<{ id: string; content: string }[]>([]);
-  const { 0: selectedItem, 1: setSelectedItem } = React.useState<{ id: string; content: string }>();
+type Item = { id: string; content: string };
+type Store = {
+  items: Item[];
+  selectedItemId: string;
+  selectedItem: Item;
+  newItemName: string;
+  setNewItemName: (name: string) => void;
+  selectItem: (id: string) => void;
+  addItem: (content: string) => void;
+  updateItem: (id: string, content: string) => void;
+};
+
+export const DemoApp = observer(() => {
+  const store = useLocalStore<Store>(() => ({
+    items: [],
+    newItemName: '',
+    selectedItemId: '',
+    get selectedItem() {
+      const idx = this.items.findIndex((i) => i.id === this.selectedItemId);
+      return this.items[idx];
+    },
+    setNewItemName: action((name: string) => {
+      store.newItemName = name;
+    }),
+    selectItem: action((id: string) => {
+      store.selectedItemId = id;
+    }),
+    addItem: action((content: string) => {
+      store.items.push({ id: store.newItemName, content });
+    }),
+    updateItem: action((id: string, content: string) => {
+      const idx = store.items.findIndex((i) => i.id === id);
+      store.items[idx].content = content;
+    }),
+  }));
 
   const updateItem = React.useCallback(
     (id: string, content: string) => {
-      if (selectedItem.id !== id) {
+      if (store.selectedItemId !== id) {
         return;
       }
-      const idx = items.findIndex((i) => i.id === id);
-      const newItems = items.slice();
-      newItems[idx] = { id, content };
-      setItems(newItems);
+      store.updateItem(id, content);
     },
-    [selectedItem]
+    [store.selectedItemId]
   );
 
   const addItem = React.useCallback(() => {
-    const newItems = items.slice();
-    newItems.push({ id: name, content: '{}' });
-    setItems(newItems);
-    setName('');
-  }, [name]);
+    store.addItem('{}');
+  }, []);
 
   return (
     <Stack horizontal verticalFill styles={{ root: { height: 'calc(100vh)' } }}>
@@ -41,24 +68,24 @@ export const DemoApp = () => {
         <Stack horizontal tokens={{ childrenGap: 8 }}>
           <TextField
             styles={{ root: { flex: 1 } }}
-            value={name}
-            onChange={(_, newValue) => setName(newValue)}
+            value={store.newItemName}
+            onChange={(_, newValue) => store.setNewItemName(newValue)}
             onKeyUp={(e) => e.key === 'Enter' && addItem()}
           ></TextField>
           <IconButton disabled={!name} iconProps={{ iconName: 'Add' }} onClick={addItem} />
         </Stack>
-        {items.map((i) => (
+        {store.items.map((i) => (
           <Stack
             key={i.id}
             styles={{ root: { cursor: 'pointer', marginBottom: 8, height: 32 } }}
             verticalAlign="center"
-            onClick={() => setSelectedItem(i)}
+            onClick={() => store.selectItem(i.id)}
           >
-            item: {i.id}
+            {i.id}
           </Stack>
         ))}
       </Stack>
-      {selectedItem && (
+      {store.selectedItem && (
         <Stack
           grow
           styles={{
@@ -68,8 +95,8 @@ export const DemoApp = () => {
           }}
         >
           <VisualSchemaEditor
-            editorId={selectedItem.id}
-            schema={selectedItem}
+            editorId={store.selectedItem.id}
+            schema={store.selectedItem}
             templates={[]}
             onSchemaUpdated={updateItem}
           />
@@ -77,4 +104,4 @@ export const DemoApp = () => {
       )}
     </Stack>
   );
-};
+});

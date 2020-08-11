@@ -6,9 +6,9 @@
 
 import { Lifetime } from 'src/app/utils/base';
 
-export type Handler = (params: {}) => void;
+export type Handler = (params: any) => void;
 
-export type HandlerCreator<TD = {}> = (dependencies: TD) => Record<string, Handler>;
+export type HandlerCreator<TD = any> = (dependencies: TD) => Record<string, Handler>;
 
 export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependencies: (lifetime: Lifetime) => TD) => {
   const handlerMap = new Map<string, Handler>();
@@ -50,7 +50,7 @@ export const getDispatcher = <TD, TA extends Record<string, Handler>>(dependenci
   type Params<T> = T extends (...params: infer U) => void ? U : never;
 
   const dispatch = <TN extends keyof TA>(name: TN, ...params: Params<TA[TN]>) => {
-    const handler = handlerMap.get(name);
+    const handler = handlerMap.get(<string>name);
 
     if (!handler) {
       throw new Error(`Action: '${name}' is not found. Please install it first`);

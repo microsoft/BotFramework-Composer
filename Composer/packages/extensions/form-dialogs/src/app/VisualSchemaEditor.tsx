@@ -49,8 +49,8 @@ export type VisualSchemaEditorRef = {
   getEditorId: () => string;
 };
 
-export const VisualSchemaEditor = React.forwardRef(
-  (props: VisualSchemaEditorProps, ref: React.Ref<VisualSchemaEditorRef>) => {
+export const VisualSchemaEditor = React.memo(
+  React.forwardRef((props: VisualSchemaEditorProps, ref: React.Ref<VisualSchemaEditorRef>) => {
     const {
       editorId,
       onSchemaUpdated,
@@ -97,5 +97,5 @@ export const VisualSchemaEditor = React.forwardRef(
         <VisualEditor schemaExtension={schemaExtension} showThemePicker={showThemePicker} onReset={startOver} />
       </ContextProvider>
     ) : null;
-  }
+  })
 );

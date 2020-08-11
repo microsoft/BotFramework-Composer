@@ -8,7 +8,7 @@ import { TextField } from '@fluentui/react/lib/TextField';
 import { Toggle } from '@fluentui/react/lib/Toggle';
 import { DirectionalHint, TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { classNamesFunction } from '@fluentui/react/lib/Utilities';
-import { observer, Observer } from 'mobx-react';
+import { Observer } from 'mobx-react';
 import * as React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { AdvancedOptions } from 'src/app/components/property/AdvancedOptions';
@@ -118,7 +118,7 @@ export type PropertyItemProps = {
   onChangeRef: (id: string, data: { key: string; item: string }) => void;
 };
 
-export const PropertyItem = observer((props: PropertyItemProps) => {
+export const PropertyItem = (props: PropertyItemProps) => {
   const {
     index,
     property,
@@ -247,7 +247,7 @@ export const PropertyItem = observer((props: PropertyItemProps) => {
       )}
     </Draggable>
   );
-});
+};
 
 const renderProperty = (property: SchemaPropertyStore, onChangePayload: (payload: PropertyPayload) => void) => {
   const { kind, payload } = property;
