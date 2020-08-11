@@ -4696,25 +4696,6 @@ acorn@^7.3.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
   integrity sha512-+G7P8jJmCHr+S+cLfQxygbWhXy+8YTVGzAkpEbcLo2mLoL7tij/VG41QSHACSf5QgYRhMZYHuNc6drJaO0Da+w==
 
-adaptive-expressions@4.10.0-dev.20200808.17e26d0, adaptive-expressions@^4.10.0-preview-150886:
-  version "4.10.0-dev.20200808.17e26d0"
-  resolved "https://registry.yarnpkg.com/adaptive-expressions/-/adaptive-expressions-4.10.0-dev.20200808.17e26d0.tgz#73885ea68209a2abd7b5b0010c830b1b7d075239"
-  integrity sha512-U1alF6nF4NfbQm3xInMWjbkW+CLUlFZLUw98nbZwN+hEpWG65EsuMok70OEWGtAFe8+i6vQQXZ5/GLT+UcfoWw==
-  dependencies:
-    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
-    "@types/atob-lite" "^2.0.0"
-    "@types/lru-cache" "^5.1.0"
-    "@types/moment-timezone" "^0.5.13"
-    "@types/xmldom" "^0.1.29"
-    antlr4ts "0.5.0-alpha.3"
-    atob-lite "^2.0.0"
-    big-integer "^1.6.48"
-    jspath "^0.4.0"
-    lodash "^4.17.19"
-    lru-cache "^5.1.1"
-    moment "^2.25.1"
-    moment-timezone "^0.5.28"
-
 adaptive-expressions@4.10.0-preview-147186:
   version "4.10.0-preview-147186"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-147186.tgz#4468fcb00a27d955d4f1fd46566fda5a46baef87"
@@ -4737,6 +4718,25 @@ adaptive-expressions@4.10.0-preview-150886:
   version "4.10.0-preview-150886"
   resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-150886.tgz#27d147b8b9389318e1b608601d83f5003701cf7b"
   integrity sha1-J9FHuLk4kxjhtghgHYP1ADcBz3s=
+  dependencies:
+    "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
+    "@types/atob-lite" "^2.0.0"
+    "@types/lru-cache" "^5.1.0"
+    "@types/moment-timezone" "^0.5.13"
+    "@types/xmldom" "^0.1.29"
+    antlr4ts "0.5.0-alpha.3"
+    atob-lite "^2.0.0"
+    big-integer "^1.6.48"
+    jspath "^0.4.0"
+    lodash "^4.17.19"
+    lru-cache "^5.1.1"
+    moment "^2.25.1"
+    moment-timezone "^0.5.28"
+
+adaptive-expressions@4.10.0-preview-152977, adaptive-expressions@^4.10.0-preview-150886:
+  version "4.10.0-preview-152977"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/adaptive-expressions/-/adaptive-expressions-4.10.0-preview-152977.tgz#b5f30953326e2159da60b646772fdd92103c3500"
+  integrity sha1-tfMJUzJuIVnaYLZGdy/dkhA8NQA=
   dependencies:
     "@microsoft/recognizers-text-data-types-timex-expression" "1.1.4"
     "@types/atob-lite" "^2.0.0"
@@ -5846,11 +5846,11 @@ botbuilder-lg@^4.10.0-preview-150886:
     uuid "^3.4.0"
 
 botbuilder-lg@^4.10.0-preview.150886:
-  version "4.10.0-dev.20200808.17e26d0"
-  resolved "https://registry.yarnpkg.com/botbuilder-lg/-/botbuilder-lg-4.10.0-dev.20200808.17e26d0.tgz#56ad00a7ced6757d6ce5d04f571b9696111588a7"
-  integrity sha512-pCRn2C6xX1xD55Kt3I0epCNTd9LUALw6fcb6gFohHZBK5qu2ddvXFPNo2Lg+Kp/nihH2OyudDOf5NSZEuKMCAg==
+  version "4.10.0-preview-152977"
+  resolved "https://botbuilder.myget.org/F/botbuilder-v4-js-daily/npm/botbuilder-lg/-/botbuilder-lg-4.10.0-preview-152977.tgz#6abd99ee27e7cff4e5f0aa4b54eb59fe5a7a8ebb"
+  integrity sha1-ar2Z7ifnz/Tl8KpLVOtZ/lp6jrs=
   dependencies:
-    adaptive-expressions "4.10.0-dev.20200808.17e26d0"
+    adaptive-expressions "4.10.0-preview-152977"
     antlr4ts "0.5.0-alpha.3"
     lodash "^4.17.19"
     path "^0.12.7"
