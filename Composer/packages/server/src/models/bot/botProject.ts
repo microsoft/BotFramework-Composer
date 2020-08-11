@@ -567,7 +567,15 @@ export class BotProject implements IBotProject {
     }
 
     const fileList = new Map<string, FileInfo>();
-    const patterns = ['**/*.dialog', '**/*.dialog.schema', '**/*.lg', '**/*.lu', 'manifests/*.json'];
+    const patterns = [
+      '**/*.dialog',
+      '**/*.dialog.schema',
+      '**/*.lg',
+      '**/*.lu',
+      'manifests/*.json',
+      'sdk.schema',
+      'sdk.uischema',
+    ];
     for (const pattern of patterns) {
       // load only from the data dir, otherwise may get "build" versions from
       // deployment process
