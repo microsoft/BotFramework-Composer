@@ -2,42 +2,41 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { useRecoilCallback, CallbackInterface } from 'recoil';
-import { FormDialogSchema, FormDialogSchemaTemplate } from '@bfc/shared';
+import { FormDialogSchemaTemplate } from '@bfc/shared';
 import formatMessage from 'format-message';
+import { CallbackInterface, useRecoilCallback } from 'recoil';
 
 import httpClient from '../../utils/httpUtil';
 import {
-  formDialogSchemasState,
-  formDialogTemplateSchemasState,
   applicationErrorState,
   formDialogGenerationProgressingState,
+  formDialogSchemasState,
+  formDialogTemplateSchemasState,
 } from '../atoms';
 import { dispatcherState } from '../DispatcherWrapper';
 
 export const formDialogDispatcher = () => {
-  const createFormDialogSchema = useRecoilCallback((callbackHelpers: CallbackInterface) => ({ id, content }) => {
-    const formDialogSchema: FormDialogSchema = { id, content };
-    const { set } = callbackHelpers;
-    set(formDialogSchemasState, (formDialogSchemas) => [...formDialogSchemas, formDialogSchema]);
+  const createFormDialogSchema = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content }) => {
+    set(formDialogSchemasState, (formDialogSchemas) => {
+      return [{ id, content }, ...formDialogSchemas];
+    });
   });
 
   const updateFormDialogSchema = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content }) => {
     set(formDialogSchemasState, (formDialogSchemas) => {
       return formDialogSchemas.map((fds) => {
         if (fds.id === id) {
-          return { ...fds, content };
+          return { id, content };
         }
         return fds;
       });
     });
   });
 
-  const removeFormDialogSchema = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id }) => {
-    const { set, snapshot } = callbackHelpers;
-    let formDialogSchemas = await snapshot.getPromise(formDialogSchemasState);
-    formDialogSchemas = formDialogSchemas.filter((d) => d.id !== id);
-    set(formDialogSchemasState, formDialogSchemas);
+  const removeFormDialogSchema = useRecoilCallback(({ set }: CallbackInterface) => async ({ id }) => {
+    set(formDialogSchemasState, (formDialogSchemas) => {
+      return formDialogSchemas.filter((fds) => fds.id !== id);
+    });
   });
 
   const loadFormDialogSchemaTemplates = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {

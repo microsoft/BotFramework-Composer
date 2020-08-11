@@ -37,12 +37,10 @@ export const SchemaStore = types
       if (self.properties.length) {
         jsonObject = {
           ...jsonObject,
-          properties: self.properties
-            .filter((p) => p.isValid)
-            .reduce<Record<string, object>>((acc, _, idx) => {
-              acc[self.properties[idx].name] = self.properties[idx].toJson;
-              return acc;
-            }, <Record<string, object>>{}),
+          properties: self.properties.reduce<Record<string, object>>((acc, _, idx) => {
+            acc[self.properties[idx].name] = self.properties[idx].toJson;
+            return acc;
+          }, <Record<string, object>>{}),
         };
       }
 

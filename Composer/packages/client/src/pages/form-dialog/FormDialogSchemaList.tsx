@@ -146,7 +146,7 @@ type FormDialogSchemaListProps = {
   loading?: boolean;
 };
 
-export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props) => {
+export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = React.memo((props) => {
   const { selectedId, items, onDeleteItem, onSelectItem, onCreateItem, onGenerateFormDialogs, loading = false } = props;
 
   const { 0: query, 1: setQuery } = React.useState('');
@@ -154,10 +154,9 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props)
   const { updateUserSettings } = useRecoilValue(dispatcherState);
   const { dialogNavWidth } = useRecoilValue(userSettingsState);
 
-  const filteredItems = React.useMemo(
-    () => items.filter(({ id }) => id.toLowerCase().indexOf(query.toLowerCase()) !== -1),
-    [query, selectedId, items]
-  );
+  const filteredItems = React.useMemo(() => {
+    return items.filter(({ id }) => id.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  }, [query, items, selectedId]);
 
   const onFilter = (_e?: React.ChangeEvent<HTMLInputElement>, newValue?: string): void => {
     if (typeof newValue === 'string') {
@@ -165,9 +164,27 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props)
     }
   };
 
-  const handleResize: ResizeCallback = (_e, _dir, _ref, d) => {
-    updateUserSettings({ dialogNavWidth: dialogNavWidth + d.width });
-  };
+  const handleResize: ResizeCallback = React.useCallback(
+    (_e, _dir, _ref, d) => {
+      updateUserSettings({ dialogNavWidth: dialogNavWidth + d.width });
+    },
+    [updateUserSettings]
+  );
+
+  const renderCell = React.useCallback(
+    (item) => (
+      <FormDialogSchemaItem
+        key={item.id}
+        id={item.id}
+        isEmpty={isEmptyObject(item.content)}
+        selected={selectedId === item.id}
+        onClick={onSelectItem}
+        onDelete={onDeleteItem}
+        onGenerate={onGenerateFormDialogs}
+      />
+    ),
+    [selectedId, onSelectItem, onDeleteItem, onGenerateFormDialogs]
+  );
 
   return (
     <Resizable
@@ -205,22 +222,7 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props)
             aria-live={'polite'}
           />
           {filteredItems.length ? (
-            <List<FormDialogSchema>
-              items={filteredItems}
-              onRenderCell={(item) =>
-                item && (
-                  <FormDialogSchemaItem
-                    key={item.id}
-                    id={item.id}
-                    isEmpty={isEmptyObject(item.content)}
-                    selected={selectedId === item.id}
-                    onClick={onSelectItem}
-                    onDelete={onDeleteItem}
-                    onGenerate={onGenerateFormDialogs}
-                  />
-                )
-              }
-            />
+            <List<FormDialogSchema> items={filteredItems} onRenderCell={renderCell} />
           ) : (
             <EmptyView verticalFill horizontalAlign="center" verticalAlign="center">
               {query
@@ -232,4 +234,4 @@ export const FormDialogSchemaList: React.FC<FormDialogSchemaListProps> = (props)
       </Root>
     </Resizable>
   );
-};
+});
