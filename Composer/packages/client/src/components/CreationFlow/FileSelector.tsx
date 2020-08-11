@@ -4,32 +4,31 @@
 /** @jsx jsx */
 import path from 'path';
 
-import { jsx, css } from '@emotion/core';
-import { useMemo, useState, useRef } from 'react';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { css, jsx } from '@emotion/core';
+import formatMessage from 'format-message';
+import moment from 'moment';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
-import { Link } from 'office-ui-fabric-react/lib/Link';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
+import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import {
+  CheckboxVisibility,
   DetailsList,
   DetailsListLayoutMode,
   Selection,
   SelectionMode,
-  CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import formatMessage from 'format-message';
-import { Fragment } from 'react';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Stack, StackItem } from 'office-ui-fabric-react/lib/Stack';
-import { ComboBox, IComboBox, IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import moment from 'moment';
+import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
+import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 
 import { FileTypes, nameRegex } from '../../constants';
-import { StorageFolder, File } from '../../store/types';
-import { getFileIconName, calculateTimeDiff } from '../../utils/fileUtil';
+import { File, StorageFolder } from '../../recoilModel/types';
+import { calculateTimeDiff, getFileIconName } from '../../utils/fileUtil';
 
 // -------------------- Styles -------------------- //
 
@@ -146,7 +145,9 @@ const renderIcon = (file: File) => {
   }
   // fallback for other possible file types
   const url = `https://static2.sharepointonline.com/files/fabric/assets/brand-icons/document/svg/${iconName}_16x1.svg`;
-  return <img alt={`${iconName} file icon`} className={detailListClass.fileIconImg} src={url} />;
+  return (
+    <img alt={formatMessage(`{iconName} file icon`, { iconName })} className={detailListClass.fileIconImg} src={url} />
+  );
 };
 
 export const FileSelector: React.FC<FileSelectorProps> = (props) => {
@@ -163,7 +164,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   } = props;
   // for detail file list in open panel
   const [currentPath, setCurrentPath] = useState(path.join(focusedStorageFolder.parent, focusedStorageFolder.name));
-  const initialPath = useRef(path.join(focusedStorageFolder.parent, focusedStorageFolder.name)).current;
+  const initialPath = path.join(focusedStorageFolder.parent, focusedStorageFolder.name);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const storageId = storage.id;
@@ -171,6 +172,10 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
   const [folderName, setFolderName] = useState('');
   const [editMode, setEditMode] = useState(EditMode.NONE);
   const [nameError, setNameError] = useState('');
+
+  useEffect(() => {
+    setCurrentPath(initialPath);
+  }, [focusedStorageFolder]);
 
   const createOrUpdateFolder = async (index: number) => {
     const isValid = nameRegex.test(folderName);
@@ -341,7 +346,7 @@ export const FileSelector: React.FC<FileSelectorProps> = (props) => {
           <div data-is-focusable css={tableCell}>
             <div css={content} tabIndex={-1}>
               <IconButton
-                ariaLabel="Edit"
+                ariaLabel={formatMessage('Edit')}
                 iconProps={{ iconName: 'Edit' }}
                 styles={editButton}
                 title="Edit"

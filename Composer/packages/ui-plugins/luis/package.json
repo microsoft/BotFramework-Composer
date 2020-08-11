@@ -11,6 +11,7 @@
     "start": "tsc --watch --preserveWatchOutput",
     "build": "tsc --build ./tsconfig.build.json",
     "lint": "eslint --quiet src",
+    "lint:fix": "yarn lint --fix",
     "prepare": "yarn build"
   },
   "keywords": [

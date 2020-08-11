@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate } from './indexers';
+import { DialogInfo, LuFile, LgFile, LuIntentSection, LgTemplate, DialogSchemaFile } from './indexers';
 import { UserSettings } from './settings';
 import { OBISchema } from './schema';
 
@@ -18,9 +18,18 @@ export interface EditorSchema {
   };
 }
 
+type UISchema = {
+  [key: string]: {
+    form?: any;
+    flow?: any;
+    menu?: any;
+  };
+};
 export interface BotSchemas {
   default?: OBISchema;
   sdk?: any;
+  ui?: { content: UISchema };
+  uiOverrides?: { content: UISchema };
   diagnostics?: any[];
 }
 
@@ -36,6 +45,7 @@ export interface ShellData {
   designerId: string;
   dialogId: string;
   dialogs: DialogInfo[];
+  dialogSchemas: DialogSchemaFile[];
   focusedEvent: string;
   focusedActions: string[];
   focusedSteps: string[];
@@ -60,24 +70,34 @@ export interface ShellApi {
   onFocusEvent: (eventId: string) => void;
   onSelect: (ids: string[]) => void;
   getLgTemplates: (id: string) => LgTemplate[];
-  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => Promise<void>;
-  addLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
-  updateLgTemplate: (id: string, templateName: string, templateStr: string) => Promise<void>;
-  removeLgTemplate: (id: string, templateName: string) => Promise<void>;
-  removeLgTemplates: (id: string, templateNames: string[]) => Promise<void>;
+  copyLgTemplate: (id: string, fromTemplateName: string, toTemplateName?: string) => void;
+  addLgTemplate: (id: string, templateName: string, templateStr: string) => void;
+  updateLgTemplate: (id: string, templateName: string, templateStr: string) => void;
+  removeLgTemplate: (id: string, templateName: string) => void;
+  removeLgTemplates: (id: string, templateNames: string[]) => void;
   getLuIntent: (id: string, intentName: string) => LuIntentSection | undefined;
   getLuIntents: (id: string) => LuIntentSection[];
-  addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
-  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => Promise<void>;
+  addLuIntent: (id: string, intentName: string, intent: LuIntentSection) => void;
+  updateLuIntent: (id: string, intentName: string, intent: LuIntentSection) => void;
+  renameLuIntent: (id: string, intentName: string, newIntentName: string) => void;
   removeLuIntent: (id: string, intentName: string) => void;
   updateRegExIntent: (id: string, intentName: string, pattern: string) => void;
+  renameRegExIntent: (id: string, intentName: string, newIntentName: string) => void;
+  updateIntentTrigger: (id: string, intentName: string, newIntentName: string) => void;
   createDialog: (actions: any) => Promise<string | null>;
   addCoachMarkRef: (ref: { [key: string]: any }) => void;
   onCopy: (clipboardActions: any[]) => void;
   undo: () => void;
   redo: () => void;
+  commitChanges: () => void;
   updateUserSettings: (settings: AllPartial<UserSettings>) => void;
   addSkillDialog: () => Promise<{ manifestUrl: string } | null>;
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
+  updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
+}
+
+export interface Shell {
+  api: ShellApi;
+  data: ShellData;
 }

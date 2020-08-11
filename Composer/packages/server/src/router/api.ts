@@ -28,9 +28,14 @@ router.post('/projects/:projectId/luFiles/publish', ProjectController.publishLui
 router.post('/projects/:projectId/project/saveAs', ProjectController.saveProjectAs);
 router.get('/projects/:projectId/export', ProjectController.exportProject);
 
+// form dialog generation apis
 router.post('/formDialogs/expandJsonSchemaProperty', FormDialogController.expandJsonSchemaProperty);
 router.get('/formDialogs/templateSchemas', FormDialogController.getTemplateSchemas);
 router.post('/formDialogs/:projectId/generate', FormDialogController.generate);
+
+// update the boilerplate content
+router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
+router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBoilerplate);
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);

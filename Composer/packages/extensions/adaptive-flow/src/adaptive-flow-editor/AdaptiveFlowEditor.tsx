@@ -17,10 +17,9 @@ import { AdaptiveDialog } from '../adaptive-flow-renderer/adaptive/AdaptiveDialo
 
 import { NodeRendererContext, NodeRendererContextValue } from './contexts/NodeRendererContext';
 import { SelfHostContext } from './contexts/SelfHostContext';
-import { mergePluginConfig } from './utils/mergePluginConfig';
 import { getCustomSchema } from './utils/getCustomSchema';
 import { SelectionContext } from './contexts/SelectionContext';
-import { KeyboardZone } from './components/KeyboardZone';
+import { enableKeyboardCommandAttributes, KeyboardCommandHandler } from './components/KeyboardZone';
 import { mapKeyboardCommandToEditorEvent } from './utils/mapKeyboardCommandToEditorEvent';
 import { useSelectionEffect } from './hooks/useSelectionEffect';
 import { useEditorEventApi } from './hooks/useEditorEventApi';
@@ -30,6 +29,7 @@ import {
   VisualEditorNodeWrapper,
   VisualEditorElementWrapper,
 } from './renderers';
+import { useFlowUIOptions } from './hooks/useFlowUIOptions';
 
 formatMessage.setup({
   missingTranslation: 'ignore',
@@ -48,13 +48,21 @@ const styles = css`
   right: 0;
 
   overflow: scroll;
+
+  border: 1px solid transparent;
+
+  &:focus {
+    outline: none;
+    border-color: black;
+  }
 `;
 
 export interface VisualDesignerProps {
   schema?: JSONSchema7;
 }
 const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
-  const { shellApi, plugins, ...shellData } = useShellApi();
+  const { shellApi, ...shellData } = useShellApi();
+  const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = useFlowUIOptions();
   const {
     dialogId,
     focusedEvent,
@@ -81,7 +89,7 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   const focusedId = Array.isArray(focusedActions) && focusedActions[0] ? focusedActions[0] : '';
 
   // Compute schema diff
-  const customSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content), [
+  const customActionSchema = useMemo(() => getCustomSchema(schemas?.default, schemas?.sdk?.content).actions, [
     schemas?.sdk?.content,
     schemas?.default,
   ]);
@@ -92,10 +100,9 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
     focusedTab,
     clipboardActions: clipboardActions || [],
     dialogFactory: new DialogFactory(schema),
-    customSchemas: customSchema ? [customSchema] : [],
+    customSchemas: customActionSchema ? [customActionSchema] : [],
   };
 
-  const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = mergePluginConfig(...plugins);
   const customFlowSchema: FlowSchema = nodeContext.customSchemas.reduce((result, s) => {
     const definitionKeys: string[] = Object.keys(s.definitions);
     definitionKeys.forEach(($kind) => {
@@ -117,54 +124,57 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
   const { selection, ...selectionContext } = useSelectionEffect({ data, nodeContext }, shellApi);
   const { handleEditorEvent } = useEditorEventApi({ path: dialogId, data, nodeContext, selectionContext }, shellApi);
 
+  const handleCommand: KeyboardCommandHandler = (command) => {
+    const editorEvent = mapKeyboardCommandToEditorEvent(command);
+    editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
+  };
+
   return (
     <CacheProvider value={emotionCache}>
       <NodeRendererContext.Provider value={nodeContext}>
         <SelfHostContext.Provider value={hosted}>
-          <div css={styles} data-testid="visualdesigner-container">
+          <div
+            ref={divRef}
+            css={styles}
+            tabIndex={0}
+            {...enableKeyboardCommandAttributes(handleCommand)}
+            data-testid="visualdesigner-container"
+          >
             <SelectionContext.Provider value={selectionContext}>
-              <KeyboardZone
-                ref={divRef}
-                onCommand={(command) => {
-                  const editorEvent = mapKeyboardCommandToEditorEvent(command);
-                  editorEvent && handleEditorEvent(editorEvent.type, editorEvent.payload);
-                }}
-              >
-                <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
-                  <div
-                    className="flow-editor-container"
-                    css={{
-                      width: '100%',
-                      height: '100%',
-                      padding: '48px 20px',
-                      boxSizing: 'border-box',
+              <MarqueeSelection css={{ width: '100%', height: '100%' }} selection={selection}>
+                <div
+                  className="flow-editor-container"
+                  css={{
+                    width: '100%',
+                    height: '100%',
+                    padding: '48px 20px',
+                    boxSizing: 'border-box',
+                  }}
+                  data-testid="flow-editor-container"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditorEvent(NodeEventTypes.Focus, { id: '' });
+                  }}
+                >
+                  <AdaptiveDialog
+                    activeTrigger={focusedEvent}
+                    dialogData={data}
+                    dialogId={dialogId}
+                    renderers={{
+                      EdgeMenu: VisualEditorEdgeMenu,
+                      NodeMenu: VisualEditorNodeMenu,
+                      NodeWrapper: VisualEditorNodeWrapper,
+                      ElementWrapper: VisualEditorElementWrapper,
                     }}
-                    data-testid="flow-editor-container"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditorEvent(NodeEventTypes.Focus, { id: '' });
+                    schema={{ ...schemaFromPlugins, ...customFlowSchema }}
+                    widgets={widgetsFromPlugins}
+                    onEvent={(eventName, eventData) => {
+                      divRef.current?.focus({ preventScroll: true });
+                      handleEditorEvent(eventName, eventData);
                     }}
-                  >
-                    <AdaptiveDialog
-                      activeTrigger={focusedEvent}
-                      dialogData={data}
-                      dialogId={dialogId}
-                      renderers={{
-                        EdgeMenu: VisualEditorEdgeMenu,
-                        NodeMenu: VisualEditorNodeMenu,
-                        NodeWrapper: VisualEditorNodeWrapper,
-                        ElementWrapper: VisualEditorElementWrapper,
-                      }}
-                      schema={{ ...schemaFromPlugins, ...customFlowSchema }}
-                      widgets={widgetsFromPlugins}
-                      onEvent={(eventName, eventData) => {
-                        divRef.current?.focus({ preventScroll: true });
-                        handleEditorEvent(eventName, eventData);
-                      }}
-                    />
-                  </div>
-                </MarqueeSelection>
-              </KeyboardZone>
+                  />
+                </div>
+              </MarqueeSelection>
             </SelectionContext.Provider>
           </div>
         </SelfHostContext.Provider>

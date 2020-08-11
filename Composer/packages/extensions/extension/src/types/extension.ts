@@ -1,12 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { UISchema, RoleSchema, RecognizerSchema } from './formSchema';
-import { FlowEditorConfig } from './flowSchema';
+import { SDKKinds } from '@bfc/shared';
+
+import { RecognizerSchema, UIOptions } from './formSchema';
+import { FlowEditorWidgetMap, FlowWidget } from './flowSchema';
+import { MenuOptions } from './menuSchema';
 
 export interface PluginConfig {
-  formSchema?: UISchema;
-  roleSchema?: RoleSchema;
   recognizers?: RecognizerSchema[];
-  visualSchema?: FlowEditorConfig;
+  uiSchema?: UISchema;
+  flowWidgets?: FlowEditorWidgetMap;
 }
+
+export type UISchema = {
+  [key in SDKKinds]?: {
+    flow?: FlowWidget;
+    form?: UIOptions;
+    menu?: MenuOptions;
+  };
+};

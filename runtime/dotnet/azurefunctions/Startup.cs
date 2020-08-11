@@ -177,7 +177,7 @@ namespace Microsoft.BotFramework.Composer.Functions
                 return adapter;
             });
 
-            var defaultLocale = rootConfiguration.GetValue<string>("defaultLocale") ?? "en-us";
+            var defaultLocale = rootConfiguration.GetValue<string>("defaultLanguage") ?? "en-us";
 
             var removeRecipientMention = settings?.Feature?.RemoveRecipientMention ?? false;
 

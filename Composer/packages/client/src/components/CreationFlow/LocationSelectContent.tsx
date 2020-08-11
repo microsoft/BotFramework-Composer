@@ -3,15 +3,16 @@
 
 /** @jsx jsx */
 import formatMessage from 'format-message';
+import { useRef } from 'react';
 import { jsx, css } from '@emotion/core';
-import { useContext, useRef } from 'react';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
+import { useRecoilValue } from 'recoil';
 
-import { CreationFlowStatus } from '../../constants';
-import { File } from '../../store/types';
-import { StoreContext } from '../../store';
+import { File } from '../../recoilModel/types';
 import { FileTypes } from '../../constants';
-import { StorageFolder } from '../../store/types';
+import { StorageFolder } from '../../recoilModel/types';
+import { creationFlowStatusState, storagesState, storageFileLoadingStatusState } from '../../recoilModel';
+import { CreationFlowStatus } from '../../constants';
 
 import { FileSelector } from './FileSelector';
 
@@ -36,16 +37,17 @@ interface LocationSelectContentProps {
     write: boolean;
   };
   createFolder?: (path: string, name: string) => void;
-  updateFolder?: (path: string) => void;
+  updateFolder?: (path: string, oldName: string, newName: string) => void;
   focusedStorageFolder: StorageFolder;
   onOpen?: (path: string, storage: string) => void;
   onCurrentPathUpdate: (newPath: string, storageId?: string) => void;
 }
 
 export const LocationSelectContent: React.FC<LocationSelectContentProps> = (props) => {
-  const { onOpen, onCurrentPathUpdate, operationMode, focusedStorageFolder, createFolder, updateFolder } = props;
-  const { state } = useContext(StoreContext);
-  const { storages, storageFileLoadingStatus, creationFlowStatus } = state;
+  const { onOpen, onCurrentPathUpdate, operationMode, focusedStorageFolder } = props;
+  const storages = useRecoilValue(storagesState);
+  const creationFlowStatus = useRecoilValue(creationFlowStatusState);
+  const storageFileLoadingStatus = useRecoilValue(storageFileLoadingStatusState);
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const isWindows = storage && storage.platform === 'win32';
@@ -73,23 +75,23 @@ export const LocationSelectContent: React.FC<LocationSelectContentProps> = (prop
       {Object.keys(focusedStorageFolder).length > 0 && storageFileLoadingStatus === 'success' && (
         <FileSelector
           checkShowItem={checkShowItem}
-          createFolder={createFolder}
+          createFolder={props.createFolder}
           focusedStorageFolder={focusedStorageFolder}
           isWindows={isWindows}
           operationMode={operationMode}
           storages={storages}
-          updateFolder={updateFolder}
+          updateFolder={props.updateFolder}
           onCurrentPathUpdate={onCurrentPathUpdate}
           onFileChosen={onFileChosen}
         />
       )}
       {storageFileLoadingStatus === 'pending' && (
-        <div data-testId={'locationSelectContentSpinner'}>
+        <div data-testid={'locationSelectContentSpinner'}>
           <Spinner css={loading} size={SpinnerSize.medium} />
         </div>
       )}
       {storageFileLoadingStatus === 'failure' && (
-        <div css={loading}>{formatMessage('Can not connect the storage.')}</div>
+        <div css={loading}>{formatMessage('Could not connect to storage.')}</div>
       )}
     </div>
   );

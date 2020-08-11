@@ -2,25 +2,38 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
+
+import React, { useState, useRef, Fragment, useEffect, useCallback } from 'react';
 import { jsx, css } from '@emotion/core';
-import React, { useState, useRef, Fragment, useContext, useEffect, useCallback } from 'react';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
+import { useRecoilValue } from 'recoil';
 
 import { DefaultPublishConfig } from '../../constants';
+import {
+  botNameState,
+  botStatusState,
+  luFilesState,
+  settingsState,
+  projectIdState,
+  botLoadErrorState,
+  botEndpointsState,
+  dispatcherState,
+} from '../../recoilModel';
 import settingsStorage from '../../utils/dialogSettingStorage';
-import { StoreContext } from '../../store';
 import { BotStatus, LuisConfig } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
-import { getReferredFiles } from '../../utils/luUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
+import { getReferredFiles } from './../../utils/luUtil';
 import { PublishLuisDialog } from './publishDialog';
 import { ErrorCallout } from './errorCallout';
 import { EmulatorOpenButton } from './emulatorOpenButton';
 import { Loading } from './loading';
 import { ErrorInfo } from './errorInfo';
+import { WarningInfo } from './warningInfo';
 
 // -------------------- Styles -------------------- //
 
@@ -38,19 +51,34 @@ export const botButton = css`
 // -------------------- TestController -------------------- //
 
 export const TestController: React.FC = () => {
-  const { state, actions } = useContext(StoreContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const { botEndpoints, botName, botStatus, dialogs, luFiles, settings, projectId, botLoadErrorMsg } = state;
-  const { publishToTarget, onboardingAddCoachMarkRef, publishLuis, getPublishStatus, setBotStatus } = actions;
+  const botName = useRecoilValue(botNameState);
+  const botStatus = useRecoilValue(botStatusState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
+  const luFiles = useRecoilValue(luFilesState);
+  const settings = useRecoilValue(settingsState);
+  const projectId = useRecoilValue(projectIdState);
+  const botLoadErrorMsg = useRecoilValue(botLoadErrorState);
+  const botEndpoints = useRecoilValue(botEndpointsState);
+  const {
+    publishToTarget,
+    onboardingAddCoachMarkRef,
+    publishLuis,
+    getPublishStatus,
+    setBotStatus,
+    setSettings,
+  } = useRecoilValue(dispatcherState);
   const connected = botStatus === BotStatus.connected;
   const publishing = botStatus === BotStatus.publishing;
   const reloading = botStatus === BotStatus.reloading;
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
+  const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
+  const showWarning = !showError && warningLength > 0;
 
   useEffect(() => {
     if (projectId) {
@@ -86,17 +114,17 @@ export const TestController: React.FC = () => {
     setCalloutVisible(true);
   }
 
-  async function handlePublishLuis() {
+  async function handlePublishLuis(luisConfig) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    const luisConfig = settingsStorage.get(projectId) ? settingsStorage.get(projectId).luis : null;
-    await publishLuis(luisConfig.authoringKey, state.projectId);
+    await setSettings(projectId, { ...settings, luis: luisConfig });
+    await publishLuis(luisConfig, projectId);
   }
 
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
     const sensitiveSettings = settingsStorage.get(projectId);
-    await publishToTarget(state.projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
+    await publishToTarget(projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
 
   function isLuisConfigComplete(config) {
@@ -118,7 +146,7 @@ export const TestController: React.FC = () => {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isLuisConfigComplete(config)) {
         openDialog();
       } else {
-        await handlePublishLuis();
+        await handlePublishLuis(config);
       }
     } else {
       await handleLoadBot();
@@ -126,7 +154,7 @@ export const TestController: React.FC = () => {
   }
 
   function handleErrorButtonClick() {
-    navigateTo(`/bot/${state.projectId}/notifications`);
+    navigateTo(`/bot/${projectId}/notifications`);
   }
 
   async function handleOpenEmulator() {
@@ -156,6 +184,7 @@ export const TestController: React.FC = () => {
         <Loading botStatus={botStatus} />
         <div ref={addRef}>
           <ErrorInfo count={errorLength} hidden={!showError} onClick={handleErrorButtonClick} />
+          <WarningInfo count={warningLength} hidden={!showWarning} onClick={handleErrorButtonClick} />
           <PrimaryButton
             css={botButton}
             disabled={showError || publishing || reloading}
@@ -172,7 +201,15 @@ export const TestController: React.FC = () => {
         onDismiss={dismissCallout}
         onTry={handleStart}
       />
-      <PublishLuisDialog botName={botName} isOpen={modalOpen} onDismiss={dismissDialog} onPublish={handlePublishLuis} />
+      {settings.luis && (
+        <PublishLuisDialog
+          botName={botName}
+          config={settings.luis}
+          isOpen={modalOpen}
+          onDismiss={dismissDialog}
+          onPublish={handlePublishLuis}
+        />
+      )}
     </Fragment>
   );
 };

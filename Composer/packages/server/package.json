@@ -22,7 +22,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
     "watch": [
       "src"
     ],
@@ -56,13 +56,14 @@
     "@azure/ms-rest-js": "^2.0.6",
     "@bfc/client": "*",
     "@bfc/indexers": "*",
+    "@bfc/intellisense-languageserver": "*",
     "@bfc/lg-languageserver": "*",
     "@bfc/lu-languageserver": "*",
     "@bfc/plugin-loader": "*",
     "@bfc/shared": "*",
     "@microsoft/bf-dispatcher": "^4.10.0-preview.141651",
     "@microsoft/bf-generate-library": "^4.10.0-daily.20200806.154769",
-    "@microsoft/bf-lu": "^4.10.0-preview.141651",
+    "@microsoft/bf-lu": "^4.10.0-dev.20200728.930f45e",
     "archiver": "^3.0.0",
     "axios": "^0.19.2",
     "azure-storage": "^2.10.3",
@@ -82,7 +83,7 @@
     "immer": "^5.2.0",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.6.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "luis-apis": "2.5.1",
     "minimatch": "^3.0.4",
     "morgan": "^1.9.1",

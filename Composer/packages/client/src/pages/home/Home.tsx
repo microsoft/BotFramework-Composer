@@ -3,16 +3,19 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import formatMessage from 'format-message';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { RouteComponentProps } from '@reach/router';
 import { navigate } from '@reach/router';
+import { useRecoilValue } from 'recoil';
 
-import { StoreContext } from '../../store';
 import { CreationFlowStatus } from '../../constants';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { dispatcherState } from '../../recoilModel';
+import { botNameState, projectIdState } from '../../recoilModel/atoms/botState';
+import { recentProjectsState, templateProjectsState, templateIdState } from '../../recoilModel/atoms/appState';
+import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 
 import * as home from './styles';
 import { ItemContainer } from './ItemContainer';
@@ -54,28 +57,27 @@ const tutorials = [
 ];
 
 const Home: React.FC<RouteComponentProps> = () => {
-  const { state, actions } = useContext(StoreContext);
-  const { botName, recentProjects, templateProjects } = state;
+  const templateProjects = useRecoilValue(templateProjectsState);
+  const botName = useRecoilValue(botNameState);
+  const recentProjects = useRecoilValue(recentProjectsState);
+  const projectId = useRecoilValue(projectIdState);
+  const templateId = useRecoilValue(templateIdState);
   const {
     openBotProject,
-    setCreationFlowStatus,
-    saveTemplateId,
     fetchRecentProjects,
+    setCreationFlowStatus,
     onboardingAddCoachMarkRef,
-  } = actions;
-
-  const onClickRecentBotProject = async (path) => {
-    await openBotProject(path);
-  };
+    saveTemplateId,
+  } = useRecoilValue(dispatcherState);
 
   const onItemChosen = async (item) => {
     if (item && item.path) {
-      await onClickRecentBotProject(item.path);
+      openBotProject(item.path);
     }
   };
 
   const onClickTemplate = async (id: string) => {
-    await saveTemplateId(id);
+    saveTemplateId(id);
     setCreationFlowStatus(CreationFlowStatus.NEW_FROM_TEMPLATE);
     navigate(`projects/create/${id}`);
   };
@@ -84,7 +86,7 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   const addRef = useCallback((project) => onboardingAddCoachMarkRef({ project }), []);
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
       text: formatMessage('New'),
@@ -98,7 +100,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
       },
       align: 'left',
-      dataTestid: 'homePage-ToolBar-New',
+      dataTestid: 'homePage-Toolbar-New',
       disabled: false,
     },
     {
@@ -114,7 +116,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
       },
       align: 'left',
-      dataTestid: 'homePage-ToolBar-Open',
+      dataTestid: 'homePage-Toolbar-Open',
       disabled: false,
     },
     {
@@ -126,7 +128,7 @@ const Home: React.FC<RouteComponentProps> = () => {
         },
         onClick: () => {
           setCreationFlowStatus(CreationFlowStatus.SAVEAS);
-          navigate(`projects/${state.projectId}/${state.templateId}/save`);
+          navigate(`projects/${projectId}/${templateId}/save`);
         },
       },
       align: 'left',
@@ -140,13 +142,13 @@ const Home: React.FC<RouteComponentProps> = () => {
 
   return (
     <div css={home.outline}>
-      <ToolBar toolbarItems={toolbarItems} />
+      <Toolbar toolbarItems={toolbarItems} />
       <div css={home.page}>
         <div css={home.leftPage} role="main">
           <h1 css={home.title}>{formatMessage(`Bot Framework Composer`)}</h1>
           <div aria-label={formatMessage('Composer introduction')} css={home.introduction} role="region">
             {formatMessage(
-              'Bot Framework Composer is an integrated development environment (IDE) for building bots and other types of conversational software with the Microsoft Bot Framework technology stack.'
+              'Bot Framework Composer is an open-source visual authoring canvas for developers and multi-disciplinary teams to build bots. Composer integrates LUIS and QnA Maker, and allows sophisticated composition of bot replies using language generation.'
             )}
           </div>
           <div css={home.newBotContainer}>
@@ -170,7 +172,7 @@ const Home: React.FC<RouteComponentProps> = () => {
                 styles={home.latestBotItem}
                 title={''}
                 onClick={async () => {
-                  await onClickRecentBotProject(recentProjects[0].path);
+                  openBotProject(recentProjects[0].path);
                 }}
               />
             ) : (

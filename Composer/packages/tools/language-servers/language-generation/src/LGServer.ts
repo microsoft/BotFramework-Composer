@@ -15,12 +15,11 @@ import {
 } from 'vscode-languageserver-types';
 import { TextDocumentPositionParams, DocumentOnTypeFormattingParams } from 'vscode-languageserver-protocol';
 import get from 'lodash/get';
-import { filterTemplateDiagnostics, isValid } from '@bfc/indexers';
-import { MemoryResolver, ResolverResource, LgTemplate } from '@bfc/shared';
-import * as lgUtil from '@bfc/indexers/lib/utils/lgUtil';
+import { filterTemplateDiagnostics, isValid, lgUtil } from '@bfc/indexers';
+import { MemoryResolver, ResolverResource, LgFile, importResolverGenerator } from '@bfc/shared';
+import { buildInFunctionsMap } from '@bfc/built-in-functions';
 
 import { LgParser } from './lgParser';
-import { buildInfunctionsMap } from './builtinFunctionsMap';
 import {
   getRangeAtPosition,
   LGDocument,
@@ -159,30 +158,20 @@ export class LGServer {
   protected addLGDocument(document: TextDocument, lgOption?: LGOption) {
     const { uri } = document;
     const { fileId, templateId, projectId } = lgOption || {};
-    const index = async () => {
-      let content = this.documents.get(uri)?.getText() || '';
+    const index = (): LgFile => {
+      const content = this.documents.get(uri)?.getText() || '';
       // if inline mode, composite local with server resolved file.
-      if (this.getLgResources && fileId && templateId) {
-        const resources = this.getLgResources(projectId);
-        const lastContent = resources.find((item) => item.id === fileId)?.content;
-
-        if (lastContent) {
-          const body = content;
-          content = lgUtil.updateTemplate(lastContent, templateId, { body });
+      const lgTextFiles = projectId ? this.getLgResources(projectId) : [];
+      if (fileId && templateId) {
+        const lgTextFile = lgTextFiles.find((item) => item.id === fileId);
+        if (lgTextFile) {
+          const lgFile = lgUtil.parse(lgTextFile.id, lgTextFile.content, lgTextFiles);
+          const lgResolver = importResolverGenerator(lgTextFiles, '.lg');
+          return lgUtil.updateTemplate(lgFile, templateId, { body: content }, lgResolver);
         }
       }
-      const id = fileId || uri;
-      let templates: LgTemplate[] = [];
-      let diagnostics: any[] = [];
-      try {
-        const payload = await this._lgParser.parseText(content, id, this.getLgResources(projectId));
-        templates = payload.templates;
-        diagnostics = payload.diagnostics;
-      } catch (error) {
-        diagnostics.push(generageDiagnostic(error.message, DiagnosticSeverity.Error, document));
-      }
 
-      return { id, content, templates, diagnostics };
+      return lgUtil.parse(fileId || uri, content, lgTextFiles);
     };
     const lgDocument: LGDocument = {
       uri,
@@ -203,17 +192,17 @@ export class LGServer {
     if (!document) {
       return Promise.resolve(null);
     }
-    const lgFile = await this.getLGDocument(document)?.index();
+    const lgFile = this.getLGDocument(document)?.index();
     if (!lgFile) {
       return Promise.resolve(null);
     }
-    const { templates, diagnostics } = lgFile;
+    const { allTemplates, diagnostics } = lgFile;
     if (diagnostics.length) {
       return Promise.resolve(null);
     }
     const wordRange = getRangeAtPosition(document, params.position);
     let word = document.getText(wordRange);
-    const matchItem = templates.find((u) => u.name === word);
+    const matchItem = allTemplates.find((u) => u.name === word);
     if (matchItem) {
       const hoveritem: Hover = { contents: [matchItem.body] };
       return Promise.resolve(hoveritem);
@@ -222,8 +211,8 @@ export class LGServer {
       word = word.substring(8);
     }
 
-    if (buildInfunctionsMap.has(word)) {
-      const functionEntity = buildInfunctionsMap.get(word);
+    if (buildInFunctionsMap.has(word)) {
+      const functionEntity = buildInFunctionsMap.get(word);
       if (!functionEntity) {
         return Promise.resolve(null);
       }
@@ -477,15 +466,15 @@ export class LGServer {
     const wordAtCurRange = document.getText(range);
     const endWithDot = wordAtCurRange.endsWith('.');
     const lgDoc = this.getLGDocument(document);
-    const lgFile = await lgDoc?.index();
+    const lgFile = lgDoc?.index();
     const templateId = lgDoc?.templateId;
     const lines = document.getText(range).split('\n');
     if (!lgFile) {
       return Promise.resolve(null);
     }
 
-    const { templates } = lgFile;
-    const completionTemplateList: CompletionItem[] = templates.map((template) => {
+    const { allTemplates } = lgFile;
+    const completionTemplateList: CompletionItem[] = allTemplates.map((template) => {
       return {
         label: template.name,
         kind: CompletionItemKind.Reference,
@@ -497,7 +486,7 @@ export class LGServer {
       };
     });
 
-    const completionFunctionList: CompletionItem[] = Array.from(buildInfunctionsMap).map((item) => {
+    const completionFunctionList: CompletionItem[] = Array.from(buildInFunctionsMap).map((item) => {
       const [key, value] = item;
       return {
         label: key,
@@ -700,7 +689,7 @@ export class LGServer {
       return;
     }
     const { fileId, templateId, uri, projectId } = lgDoc;
-    const lgFile = await lgDoc.index();
+    const lgFile = lgDoc.index();
     if (!lgFile) {
       return;
     }
@@ -737,7 +726,11 @@ export class LGServer {
     }
     let lgDiagnostics: any[] = [];
     try {
-      const payload = await this._lgParser.parseText(text, fileId || uri, this.getLgResources(projectId));
+      const payload = await this._lgParser.parseText(
+        text,
+        fileId || uri,
+        projectId ? this.getLgResources(projectId) : []
+      );
       lgDiagnostics = payload.diagnostics;
     } catch (error) {
       lgDiagnostics.push(generageDiagnostic(error.message, DiagnosticSeverity.Error, document));

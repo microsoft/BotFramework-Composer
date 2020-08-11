@@ -14,7 +14,6 @@ import {
   getActivityTypes,
   getFriendlyName,
   getbreadcrumbLabel,
-  sanitizeDialogData,
   getSelected,
 } from '../../src/utils/dialogUtil';
 
@@ -237,25 +236,6 @@ describe('getbreadcrumbLabel', () => {
   it('return breadcrumb label', () => {
     const name = getbreadcrumbLabel(dialogs, 'id1', null, null);
     expect(name).toBe('MainDialog');
-  });
-});
-
-describe('sanitizeDialogData', () => {
-  it('return undefined', () => {
-    const res = sanitizeDialogData();
-    expect(res).toEqual(undefined);
-  });
-
-  it('return cleaned data', () => {
-    const res = sanitizeDialogData(dialogs[2].content);
-    expect(res).toEqual({
-      $kind: 'kind3',
-      action: {
-        action: {
-          property: true,
-        },
-      },
-    });
   });
 });
 

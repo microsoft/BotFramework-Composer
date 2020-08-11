@@ -16,8 +16,9 @@
   },
   "dependencies": {
     "@bfc/indexers": "*",
-    "botbuilder-lg": "4.10.0-preview-135858",
-    "vscode-languageserver": "^5.3.0-next"
+    "botbuilder-lg": "^4.10.0-preview-150886",
+    "vscode-languageserver": "^5.3.0-next",
+    "@bfc/built-in-functions": "*"
   },
   "devDependencies": {
     "@bfc/test-utils": "*",

@@ -30,7 +30,7 @@ export const NodeMenu: React.FC<NodeMenuProps> = ({ colors = { color: 'black' },
   const menuItems = [
     {
       key: 'delete',
-      name: 'Delete',
+      name: formatMessage('Delete'),
       iconProps: {
         iconName: 'Delete',
       },

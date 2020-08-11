@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { render, fireEvent } from '@bfc/test-utils';
+import { render, fireEvent, act } from '@bfc/test-utils';
 
-import { StorageFolder } from '../../../../src/store/types';
+import { StorageFolder } from '../../../../src/recoilModel/types';
 import { FileSelector } from '../../../../src/components/CreationFlow/FileSelector';
 
 describe('<FileSelector/>', () => {
@@ -55,7 +55,10 @@ describe('<FileSelector/>', () => {
   it('should open file', async () => {
     const component = renderComponent();
     const bot = await component.findByText('EchoBot-0');
-    fireEvent.click(bot);
+    act(() => {
+      fireEvent.click(bot);
+    });
+
     expect(onFileChosen).toBeCalledWith({
       name: 'EchoBot-0',
       type: 'bot',
@@ -70,7 +73,9 @@ describe('<FileSelector/>', () => {
     const comboBox = await component.findByTestId('FileSelectorComboBox');
     const dropdown = comboBox.querySelector('.ms-ComboBox-CaretDown-button');
     if (dropdown) {
-      fireEvent.click(dropdown);
+      act(() => {
+        fireEvent.click(dropdown);
+      });
     }
     expect(await component.findByText('C:\\test-folder')).toBeInTheDocument();
     expect(await component.findByText('C:\\')).toBeInTheDocument();

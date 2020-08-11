@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import fs from 'fs';
+
 import find from 'lodash/find';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
 
@@ -11,6 +13,7 @@ import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
 import StorageService from '../../services/storage';
 import { IFileStorage } from '../storage/interface';
+import { BotProject } from '../bot/botProject';
 
 export class AssetManager {
   public templateStorage: LocalDiskStorage;
@@ -52,6 +55,49 @@ export class AssetManager {
       if (await this.templateStorage.exists(boilerplatePath)) {
         await copyDir(boilerplatePath, this.templateStorage, dstDir, dstStorage);
       }
+    }
+  }
+
+  // read the version number out of the project folder
+  // this assumes the boilerplate contains a scripts/ folder containing a pacakge file
+  // as of 1.0.1 this is true.
+  public async getBoilerplateVersionFromProject(project: BotProject): Promise<string | undefined> {
+    const location = Path.join(project.dataDir, 'scripts', 'package.json');
+    try {
+      if (await project.fileStorage.exists(location)) {
+        const raw = await project.fileStorage.readFile(location);
+        const json = JSON.parse(raw);
+        if (json && json.version) {
+          return json.version;
+        } else {
+          return undefined;
+        }
+      }
+    } catch (err) {
+      return undefined;
+    }
+  }
+
+  // return the current version of the boilerplate content, if one exists so specified
+  // this is based off of the first boilerplate template added to the app.
+  public getBoilerplateCurrentVersion(): string | undefined {
+    if (!pluginLoader.extensions.baseTemplates.length) {
+      return undefined;
+    }
+    const boilerplate = pluginLoader.extensions.baseTemplates[0];
+    const location = Path.join(boilerplate.path, 'scripts', 'package.json');
+    try {
+      if (fs.existsSync(location)) {
+        const raw = fs.readFileSync(location, 'utf8');
+        const json = JSON.parse(raw);
+        if (json && json.version) {
+          return json.version;
+        } else {
+          return undefined;
+        }
+      }
+    } catch (err) {
+      return undefined;
     }
   }
 }

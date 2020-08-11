@@ -181,10 +181,10 @@
     passport "^0.4.1"
     path-to-regexp "^6.1.0"
 
-"@microsoft/bf-cli-command@4.10.0-preview.141651":
-  version "4.10.0-preview.141651"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-4.10.0-preview.141651.tgz#680875f716285fb8658da8098a0ee524b07c5765"
-  integrity sha1-aAh19xYoX7hljagJig7lJLB8V2U=
+"@microsoft/bf-cli-command@4.10.0-dev.20200721.8bb21ac":
+  version "4.10.0-dev.20200721.8bb21ac"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-cli-command/-/@microsoft/bf-cli-command-4.10.0-dev.20200721.8bb21ac.tgz#9c81b37bc10072ca6beec7d7f68aa309f8a552ec"
+  integrity sha1-nIGze8EAcspr7sfX9oqjCfilUuw=
   dependencies:
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
@@ -196,10 +196,10 @@
     fs-extra "^7.0.1"
     tslib "~1.10.0"
 
-"@microsoft/bf-lu@4.10.0-preview.141651", "@microsoft/bf-lu@^4.10.0-preview.141651":
-  version "4.10.0-preview.141651"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.10.0-preview.141651.tgz#29ed2af803d23ee760354913f5b814873bc1285c"
-  integrity sha1-Ke0q+APSPudgNUkT9bgUhzvBKFw=
+"@microsoft/bf-lu@4.10.0-dev.20200721.8bb21ac":
+  version "4.10.0-dev.20200721.8bb21ac"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.10.0-dev.20200721.8bb21ac.tgz#15c0121fb9e1bf57c18b96de9f4ebcfaeae841fb"
+  integrity sha1-FcASH7nhv1fBi5ben068+uroQfs=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/ms-rest-azure-js" "2.0.1"
@@ -215,21 +215,45 @@
     get-stdin "^6.0.0"
     globby "^10.0.1"
     intercept-stdout "^0.1.2"
-    lodash "^4.17.15"
+    lodash "^4.17.19"
     node-fetch "~2.6.0"
     semver "^5.5.1"
     tslib "^1.10.0"
 
-"@microsoft/bf-luis-cli@^4.10.0-preview.141651":
-  version "4.10.0-preview.141651"
-  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-luis-cli/-/@microsoft/bf-luis-cli-4.10.0-preview.141651.tgz#29ef283f23d9b59841faff4872cb6900b91ec2e8"
-  integrity sha1-Ke8oPyPZtZhB+v9IcstpALkewug=
+"@microsoft/bf-lu@^4.10.0-dev.20200728.930f45e":
+  version "4.10.0-dev.20200728.930f45e"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-lu/-/@microsoft/bf-lu-4.10.0-dev.20200728.930f45e.tgz#d8a5867d1e3028124b9e0171877b1f063b2bd08e"
+  integrity sha1-2KWGfR4wKBJLngFxh3sfBjsr0I4=
+  dependencies:
+    "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
+    "@azure/ms-rest-azure-js" "2.0.1"
+    "@oclif/command" "~1.5.19"
+    "@oclif/errors" "~1.2.2"
+    "@types/node-fetch" "~2.5.5"
+    antlr4 "^4.7.2"
+    chalk "2.4.1"
+    console-stream "^0.1.1"
+    deep-equal "^1.0.1"
+    delay "^4.3.0"
+    fs-extra "^8.1.0"
+    get-stdin "^6.0.0"
+    globby "^10.0.1"
+    intercept-stdout "^0.1.2"
+    lodash "^4.17.19"
+    node-fetch "~2.6.0"
+    semver "^5.5.1"
+    tslib "^1.10.0"
+
+"@microsoft/bf-luis-cli@^4.10.0-dev.20200721.8bb21ac":
+  version "4.10.0-dev.20200721.8bb21ac"
+  resolved "https://botbuilder.myget.org/F/botframework-cli/npm/@microsoft/bf-luis-cli/-/@microsoft/bf-luis-cli-4.10.0-dev.20200721.8bb21ac.tgz#b952806f8093dd1639e1141ede9d27ec74b6d379"
+  integrity sha1-uVKAb4CT3RY54RQe3p0n7HS203k=
   dependencies:
     "@azure/cognitiveservices-luis-authoring" "4.0.0-preview.1"
     "@azure/cognitiveservices-luis-runtime" "5.0.0"
     "@azure/ms-rest-azure-js" "2.0.1"
-    "@microsoft/bf-cli-command" "4.10.0-preview.141651"
-    "@microsoft/bf-lu" "4.10.0-preview.141651"
+    "@microsoft/bf-cli-command" "4.10.0-dev.20200721.8bb21ac"
+    "@microsoft/bf-lu" "4.10.0-dev.20200721.8bb21ac"
     "@oclif/command" "~1.5.19"
     "@oclif/config" "~1.13.3"
     "@oclif/errors" "~1.2.2"
@@ -1754,10 +1778,10 @@ lodash.union@^4.6.0:
   resolved "https://registry.yarnpkg.com/lodash.union/-/lodash.union-4.6.0.tgz#48bb5088409f16f1821666641c44dd1aaae3cd88"
   integrity sha1-SLtQiECfFvGCFmZkHETdGqrjzYg=
 
-lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19:
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 map-age-cleaner@^0.1.1:
   version "0.1.3"

@@ -14,14 +14,13 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { DialogInfo, SDKKinds } from '@bfc/shared';
+import { DialogInfo, SDKKinds, LuIntentSection } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
+import { useRecoilValue } from 'recoil';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 
-import { useStoreContext } from '../../hooks/useStoreContext';
-import { addIntent } from '../../utils/luUtil';
 import {
   generateNewDialog,
   getTriggerTypes,
@@ -35,7 +34,10 @@ import {
   getActivityTypes,
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
+import { projectIdState, schemasState } from '../../recoilModel/atoms/botState';
+import { userSettingsState } from '../../recoilModel';
 import { nameRegex } from '../../constants';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 // -------------------- Styles -------------------- //
 
@@ -115,7 +117,7 @@ const validateDupRegExIntent = (
   regExIntents: [{ intent: string; pattern: string }]
 ): string | undefined => {
   if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
-    return `regEx ${intent} is already defined`;
+    return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
 };
@@ -198,14 +200,17 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
+  onSubmit: (dialog: DialogInfo, intent?: LuIntentSection) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const { state } = useStoreContext();
-  const { dialogs, luFiles, locale, projectId, schemas, userSettings } = state;
-  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
+
+  const projectId = useRecoilValue(projectIdState);
+  const schemas = useRecoilValue(schemasState);
+  const userSettings = useRecoilValue(userSettingsState);
+
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
@@ -256,16 +261,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       });
       return;
     }
-    const content = luFile?.content ?? '';
-    const luFileId = luFile?.id || `${dialogId}.${locale}`;
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
     if (formData.$kind === intentTypeKey && !isRegEx) {
-      const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
-      const updateLuFile = {
-        id: luFileId,
-        content: newContent,
-      };
-      onSubmit(newDialog, updateLuFile);
+      const newIntent = { Name: formData.intent, Body: formData.triggerPhrases };
+      onSubmit(newDialog, newIntent);
     } else {
       onSubmit(newDialog);
     }
@@ -401,7 +400,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <TextField
               data-testid="RegExField"
               errorMessage={formData.errors.regEx}
-              label={formatMessage('Please input regex pattern')}
+              label={formatMessage('Please input regEx pattern')}
               onChange={onChangeRegEx}
             />
           )}

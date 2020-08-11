@@ -1,25 +1,22 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import React, { useMemo } from 'react';
-import { ShellApi, ShellData } from '@bfc/shared';
+import { Shell } from '@bfc/shared';
 
 import ExtensionContext from '../extensionContext';
 import { PluginConfig } from '../types';
 
 interface ExtensionProps {
-  shell: ShellApi;
-  shellData: ShellData;
-  plugins: PluginConfig[];
+  shell: Shell;
+  plugins: PluginConfig;
 }
 
-export const Extension: React.FC<ExtensionProps> = function Extension(props) {
-  const { shell, shellData, plugins } = props;
-
+export const Extension: React.FC<ExtensionProps> = ({ shell, plugins, children }) => {
   const context = useMemo(() => {
-    return { shellApi: shell, shellData, plugins };
-  }, [shell, shellData, plugins]);
+    return { shellApi: shell.api, shellData: shell.data, plugins };
+  }, [shell.api, shell.data, plugins]);
 
-  return <ExtensionContext.Provider value={context}>{props.children}</ExtensionContext.Provider>;
+  return <ExtensionContext.Provider value={context}>{children}</ExtensionContext.Provider>;
 };
 
 export default Extension;

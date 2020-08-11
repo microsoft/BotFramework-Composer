@@ -3,18 +3,26 @@
 
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { useState, useContext, useEffect, Fragment, useCallback, useMemo } from 'react';
+import { useState, useEffect, Fragment, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from '@reach/router';
 import formatMessage from 'format-message';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
+import { useRecoilValue } from 'recoil';
+import { PublishTarget } from '@bfc/shared';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
-import { StoreContext } from '../../store';
+import {
+  settingsState,
+  botNameState,
+  publishTypesState,
+  projectIdState,
+  publishHistoryState,
+  dispatcherState,
+} from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
-import { PublishTarget } from '../../store/types';
-import { ToolBar, IToolBarItem } from '../../components/ToolBar';
+import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
 
 import { TargetList } from './targetList';
@@ -30,8 +38,19 @@ interface PublishPageProps extends RouteComponentProps<{}> {
 const Publish: React.FC<PublishPageProps> = (props) => {
   const selectedTargetName = props.targetName;
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
-  const { state, actions } = useContext(StoreContext);
-  const { settings, botName, publishTypes, projectId, publishHistory } = state;
+  const settings = useRecoilValue(settingsState);
+  const botName = useRecoilValue(botNameState);
+  const publishTypes = useRecoilValue(publishTypesState);
+  const projectId = useRecoilValue(projectIdState);
+  const publishHistory = useRecoilValue(publishHistoryState);
+  const {
+    getPublishStatus,
+    getPublishTargetTypes,
+    getPublishHistory,
+    setPublishTargets,
+    publishToTarget,
+    rollbackToVersion: rollbackToVersionDispatcher,
+  } = useRecoilValue(dispatcherState);
 
   const [addDialogHidden, setAddDialogHidden] = useState(true);
   const [editDialogHidden, setEditDialogHidden] = useState(true);
@@ -44,12 +63,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const [groups, setGroups] = useState<any[]>([]);
   const [selectedVersion, setSelectedVersion] = useState<IStatus | null>(null);
   const [dialogProps, setDialogProps] = useState({
-    title: 'Title',
+    title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
   const [editDialogProps, setEditDialogProps] = useState({
-    title: 'Title',
+    title: formatMessage('Title'),
     type: DialogType.normal,
     children: {},
   });
@@ -68,7 +87,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     [projectId, publishTypes]
   );
 
-  const toolbarItems: IToolBarItem[] = [
+  const toolbarItems: IToolbarItem[] = [
     {
       type: 'action',
       text: formatMessage('Add new profile'),
@@ -79,7 +98,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         onClick: () => setAddDialogHidden(false),
       },
       align: 'left',
-      dataTestid: 'publishPage-ToolBar-Add',
+      dataTestid: 'publishPage-Toolbar-Add',
       disabled: false,
     },
     {
@@ -92,7 +111,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         onClick: () => setPublishDialogHidden(false),
       },
       align: 'left',
-      dataTestid: 'publishPage-ToolBar-Publish',
+      dataTestid: 'publishPage-Toolbar-Publish',
       disabled: selectedTargetName !== 'all' ? false : true,
     },
     {
@@ -106,7 +125,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       },
       align: 'left',
       disabled: selectedVersion ? false : true,
-      dataTestid: 'publishPage-ToolBar-Log',
+      dataTestid: 'publishPage-Toolbar-Log',
     },
     {
       type: 'action',
@@ -119,7 +138,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       },
       align: 'left',
       disabled: selectedTarget && selectedVersion ? !isRollbackSupported(selectedTarget, selectedVersion) : true,
-      dataTestid: 'publishPage-ToolBar-Log',
+      dataTestid: 'publishPage-Toolbar-Log',
     },
   ];
 
@@ -136,7 +155,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       // TODO: this should use a backoff mechanism to not overload the server with requests
       // OR BETTER YET, use a websocket events system to receive updates... (SOON!)
       setTimeout(async () => {
-        await actions.getPublishStatus(projectId, target);
+        getPublishStatus(projectId, target);
       }, 10000);
     }
   };
@@ -151,7 +170,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   useEffect(() => {
     if (projectId) {
-      actions.getPublishTargetTypes();
+      getPublishTargetTypes();
       // init selected status
       setSelectedVersion(null);
     }
@@ -164,10 +183,10 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       // load publish histories
       if (selectedTargetName === 'all') {
         for (const target of settings.publishTargets) {
-          actions.getPublishHistory(projectId, target);
+          getPublishHistory(projectId, target);
         }
       } else if (selected) {
-        actions.getPublishHistory(projectId, selected);
+        getPublishHistory(projectId, selected);
       }
     }
   }, [projectId, selectedTargetName]);
@@ -215,7 +234,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
     } else if (selectedTarget && selectedTarget.lastPublished && thisPublishHistory.length === 0) {
       // if the history is EMPTY, but we think we've done a publish based on lastPublished timestamp,
       // we still poll for the results IF we see that a publish has happened previously
-      actions.getPublishStatus(projectId, selectedTarget);
+      getPublishStatus(projectId, selectedTarget);
     }
   }, [thisPublishHistory, selectedTargetName]);
 
@@ -228,7 +247,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           configuration,
         },
       ]);
-      await actions.setPublishTargets(targets);
+      await setPublishTargets(targets);
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
@@ -248,7 +267,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         configuration,
       };
 
-      await actions.setPublishTargets(targets);
+      await setPublishTargets(targets);
 
       onSelectTarget(name);
     },
@@ -290,7 +309,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
   const rollbackToVersion = useMemo(
     () => async (version) => {
       const sensitiveSettings = settingsStorage.get(projectId);
-      await actions.rollbackToVersion(projectId, selectedTarget, version.id, sensitiveSettings);
+      await rollbackToVersionDispatcher(projectId, selectedTarget, version.id, sensitiveSettings);
     },
     [projectId, selectedTarget]
   );
@@ -300,7 +319,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       // publish to remote
       if (selectedTarget && settings.publishTargets) {
         const sensitiveSettings = settingsStorage.get(projectId);
-        await actions.publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
+        await publishToTarget(projectId, selectedTarget, { comment: comment }, sensitiveSettings);
 
         // update the target with a lastPublished date
         const updatedPublishTargets = settings.publishTargets.map((profile) => {
@@ -314,7 +333,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           }
         });
 
-        await actions.setPublishTargets(updatedPublishTargets);
+        await setPublishTargets(updatedPublishTargets);
       }
     },
     [projectId, selectedTarget, settings.publishTargets]
@@ -340,7 +359,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
           const targets = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await actions.setPublishTargets(targets);
+          await setPublishTargets(targets);
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');
@@ -374,7 +393,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <PublishDialog target={selectedTarget} onDismiss={() => setPublishDialogHidden(true)} onSubmit={publish} />
       )}
       {showLog && <LogDialog version={selectedVersion} onDismiss={() => setShowLog(false)} />}
-      <ToolBar toolbarItems={toolbarItems} />
+      <Toolbar toolbarItems={toolbarItems} />
       <div css={ContentHeaderStyle}>
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>

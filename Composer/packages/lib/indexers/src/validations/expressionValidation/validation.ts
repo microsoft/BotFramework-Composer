@@ -8,7 +8,9 @@ import startsWith from 'lodash/startsWith';
 import { ExpressionType, ExpressionProperty } from './types';
 
 const customFunctionErrorMessage = (func: string) =>
-  `Error: ${func} does not have an evaluator, it's not a built-in function or a custom function`;
+  formatMessage(`Error: {func} does not have an evaluator, it's not a built-in function or a custom function`, {
+    func,
+  });
 
 const ExpressionTypeMapString = {
   [ReturnType.Number]: 'number',
