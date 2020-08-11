@@ -38,7 +38,6 @@ context('Publish Page', () => {
       },
     ]);
     cy.route('GET', '/api/publish/*/history/*', []);
-
     cy.visit('/home');
     cy.createBot('EchoBot');
   });
@@ -69,17 +68,6 @@ context('Publish Page', () => {
     // new profile should exist in target list
     cy.findByTestId('target-list').within(() => {
       cy.findByText('testProfile').should('exist');
-    });
-
-    // publish when selecte a profile
-    // show publish dialog after click publish button
-    cy.findByText('Publish to selected profile').click();
-    cy.findByText('You are about to publish your bot to the profile below. Do you want to proceed?').should('exist');
-
-    // have publish status after click ok
-    cy.findByText('Okay').click();
-    cy.findByTestId('publish-status-list').within(() => {
-      cy.findByText('Accepted for publishing.').should('exist');
     });
   });
 });
