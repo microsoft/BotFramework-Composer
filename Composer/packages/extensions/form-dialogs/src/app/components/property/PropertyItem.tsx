@@ -8,6 +8,7 @@ import { TextField } from '@fluentui/react/lib/TextField';
 import { Toggle } from '@fluentui/react/lib/Toggle';
 import { DirectionalHint, TooltipHost } from '@fluentui/react/lib/Tooltip';
 import { classNamesFunction } from '@fluentui/react/lib/Utilities';
+import formatMessage from 'format-message';
 import { Observer } from 'mobx-react';
 import * as React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
@@ -188,8 +189,8 @@ export const PropertyItem = (props: PropertyItemProps) => {
               <Stack horizontal tokens={{ childrenGap: 8 }}>
                 <TextField
                   required
-                  label="Property name"
-                  placeholder="Name of the property"
+                  label={formatMessage('Property name')}
+                  placeholder={formatMessage('Name of the property')}
                   styles={{ root: { flex: 1 } }}
                   value={property.name}
                   onChange={(_e, value) => onChangeName(propertyId, value)}
@@ -209,7 +210,7 @@ export const PropertyItem = (props: PropertyItemProps) => {
               <Footer horizontal tokens={{ childrenGap: 8 }} verticalAlign="center">
                 {!property.isValid && (
                   <TooltipHost
-                    content="Fix the error(s) for this property in order to add it to your schema."
+                    content={formatMessage('Property has error(s), please fix the error(s) for this property.')}
                     directionalHint={DirectionalHint.bottomCenter}
                     id={tooltipId.current}
                   >
@@ -224,18 +225,18 @@ export const PropertyItem = (props: PropertyItemProps) => {
                 >
                   <IconButton
                     iconProps={{ iconName: 'Copy', style: { fontSize: 20 } }}
-                    title="Duplicate"
+                    title={formatMessage('Duplicate')}
                     onClick={duplicateProperty}
                   />
                   <IconButton
                     iconProps={{ iconName: 'Delete', style: { fontSize: 20 } }}
-                    title="Delete"
+                    title={formatMessage('Delete')}
                     onClick={removeProperty}
                   />
                   <Toggle
                     inlineLabel
                     checked={property.required}
-                    label="Required"
+                    label={formatMessage('Required')}
                     styles={{ root: { margin: '0' } }}
                     onChange={changeRequired}
                   />

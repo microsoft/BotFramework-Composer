@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as React from 'react';
 import { CommandBarButton } from '@fluentui/react/lib/Button';
+import formatMessage from 'format-message';
+import * as React from 'react';
 
 type Props = {
   /**
@@ -29,14 +30,11 @@ export const CommandBarUploadButton = (props: Props) => {
     }
   };
 
+  const title = formatMessage('Import JSON Schema');
+
   return (
     <>
-      <CommandBarButton
-        ariaLabel="Import JSON Schema"
-        iconProps={{ iconName: 'Import' }}
-        title="Import JSON Schema"
-        onClick={onClickImport}
-      >
+      <CommandBarButton ariaLabel={title} iconProps={{ iconName: 'Import' }} title={title} onClick={onClickImport}>
         Import
       </CommandBarButton>
       <input ref={inputFileRef} accept={accept} style={{ display: 'none' }} type="file" onChange={onChange} />

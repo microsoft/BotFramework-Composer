@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import formatMessage from 'format-message';
 import * as React from 'react';
 import { Tag } from 'src/app/components/tags/Tag';
 import { getStylistV2 } from 'src/app/theme/stylist';
@@ -178,7 +179,7 @@ export const TagInput = (props: TagInputProps) => {
       {showInput && (
         <Input
           originalRef={inputRef}
-          placeholder={placeholder || 'Type and press enter'}
+          placeholder={placeholder || formatMessage('Type and press enter')}
           value={input}
           onChange={onInputChange}
           onKeyDown={onInputKeyDown}

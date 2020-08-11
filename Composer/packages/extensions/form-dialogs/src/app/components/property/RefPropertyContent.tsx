@@ -2,9 +2,10 @@
 // Licensed under the MIT License.
 
 import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
+import formatMessage from 'format-message';
 import * as React from 'react';
-import { RefPropertyPayload } from 'src/app/stores/schemaPropertyStore';
 import { Context } from 'src/app/context/Context';
+import { RefPropertyPayload } from 'src/app/stores/schemaPropertyStore';
 
 type Props = {
   payload: RefPropertyPayload;
@@ -22,7 +23,7 @@ export const RefPropertyContent = React.memo((props: Props) => {
 
   return (
     <Dropdown
-      label="Select from templates"
+      label={formatMessage('Select from templates')}
       options={options}
       selectedKey={payload.ref}
       onChange={(_e, option) => onChangePayload({ kind: 'ref', ref: option.key } as RefPropertyPayload)}

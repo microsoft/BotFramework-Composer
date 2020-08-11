@@ -3,6 +3,7 @@
 
 import { Dropdown, DropdownMenuItemType } from '@fluentui/react/lib/Dropdown';
 import { Stack } from '@fluentui/react/lib/Stack';
+import formatMessage from 'format-message';
 import * as React from 'react';
 import { NumberPropertyContent } from 'src/app/components/property/NumberPropertyContent';
 import { RefPropertyContent } from 'src/app/components/property/RefPropertyContent';
@@ -57,7 +58,7 @@ export const ArrayPropertyContent = React.memo((props: Props) => {
   return (
     <Stack tokens={{ childrenGap: 8 }}>
       <Dropdown
-        label="Select array item type"
+        label={formatMessage('Select array item type')}
         options={[
           { key: 'number', text: 'Number' },
           { key: 'string', text: 'String' },

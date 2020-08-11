@@ -3,6 +3,7 @@
 
 import { Stack } from '@fluentui/react/lib/Stack';
 import { CollapsibleSection } from '@uifabric/experiments/lib/CollapsibleSection';
+import formatMessage from 'format-message';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { ValuePicker } from 'src/app/components/common/ValuePicker';
@@ -42,7 +43,7 @@ export const AdvancedOptions = observer((props: Props) => {
     <CollapsibleSection
       defaultCollapsed={defaultCollapsed.current}
       title={{
-        text: 'Show advanced options',
+        text: formatMessage('Show advanced options'),
         styles: {
           root: {
             width: 'fit-content',
@@ -61,7 +62,7 @@ export const AdvancedOptions = observer((props: Props) => {
     >
       <Stack tokens={{ childrenGap: 8 }}>
         <ValuePicker
-          label="Entities"
+          label={formatMessage('Entities')}
           values={(property.payload as TypedPropertyPayload).entities || []}
           onChange={(entities) =>
             onChangePayload({
@@ -70,7 +71,11 @@ export const AdvancedOptions = observer((props: Props) => {
             } as PropertyPayload)
           }
         />
-        <ValuePicker label="Examples" values={property.examples.slice() || []} onChange={onChangeExamples} />
+        <ValuePicker
+          label={formatMessage('Examples')}
+          values={property.examples.slice() || []}
+          onChange={onChangeExamples}
+        />
       </Stack>
     </CollapsibleSection>
   );

@@ -3,6 +3,7 @@
 
 import { Stack } from '@fluentui/react/lib/Stack';
 import { TextField } from '@fluentui/react/lib/TextField';
+import formatMessage from 'format-message';
 import * as React from 'react';
 import { NumberPropertyPayload, PropertyPayload } from 'src/app/stores/schemaPropertyStore';
 
@@ -16,8 +17,8 @@ export const NumberPropertyContent = React.memo((props: Props) => {
       <Stack horizontal tokens={{ childrenGap: 8 }}>
         <TextField
           required
-          label="Minimum"
-          placeholder="Enter a min value"
+          label={formatMessage('Minimum')}
+          placeholder={formatMessage('Enter a min value')}
           styles={{ root: { flex: 1 } }}
           type="number"
           value={`${payload.minimum || ''}`}
@@ -27,8 +28,8 @@ export const NumberPropertyContent = React.memo((props: Props) => {
         />
         <TextField
           required
-          label="Maximum"
-          placeholder="Enter a max value"
+          label={formatMessage('Maximum')}
+          placeholder={formatMessage('Enter a max value')}
           styles={{ root: { flex: 1 } }}
           type="number"
           value={`${payload.maximum || ''}`}

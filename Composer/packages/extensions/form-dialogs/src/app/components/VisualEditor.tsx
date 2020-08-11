@@ -11,13 +11,14 @@ import { Context } from 'src/app/context/Context';
 import { getScopedTheme, getStylistV2 } from 'src/app/theme/stylist';
 import { hexToRBGA } from 'src/app/utils/color';
 import { useUndoKeyBinding } from 'src/app/utils/hooks/useUndoKeyBinding';
+import formatMessage from 'format-message';
 
-const downloadFile = async (fileName: string, content: string) => {
+const downloadFile = async (fileName: string, schemaExtension: string, content: string) => {
   const blob = new Blob([content], { type: 'application/json' });
   const href = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = href;
-  link.download = `${fileName}.schema`;
+  link.download = `${fileName}.${schemaExtension}`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -63,8 +64,8 @@ export const VisualEditor = observer((props: Props) => {
     {
       key: 'add',
       iconProps: { iconName: 'Add' },
-      title: 'Add Property',
-      ariaLabel: 'Add Property',
+      title: formatMessage('Add Property'),
+      ariaLabel: formatMessage('Add Property'),
       onClick: () => {
         dispatcher.dispatch('addProperty');
       },
@@ -72,8 +73,8 @@ export const VisualEditor = observer((props: Props) => {
     {
       key: 'undo',
       iconProps: { iconName: 'Undo' },
-      title: 'Undo',
-      ariaLabel: 'Undo',
+      title: formatMessage('Undo'),
+      ariaLabel: formatMessage('Undo'),
       disabled: !history.canUndo,
       onClick: () => {
         dispatcher.dispatch('undo');
@@ -82,8 +83,8 @@ export const VisualEditor = observer((props: Props) => {
     {
       key: 'redo',
       iconProps: { iconName: 'Redo' },
-      title: 'Redo',
-      ariaLabel: 'Redo',
+      title: formatMessage('Redo'),
+      ariaLabel: formatMessage('Redo'),
       disabled: !history.canRedo,
       onClick: () => {
         dispatcher.dispatch('redo');
@@ -115,22 +116,22 @@ export const VisualEditor = observer((props: Props) => {
     {
       key: 'download',
       iconProps: { iconName: 'Download' },
-      text: 'Download',
-      title: 'Download JSON Schema',
-      ariaLabel: 'Download JSON Schema',
+      text: formatMessage('Download'),
+      title: formatMessage('Download form dialog Schema'),
+      ariaLabel: formatMessage('Download form dialog Schema'),
       disabled: !schema.properties.length || !schema.isValid,
       onClick: () => {
-        downloadFile(schema.name, schema.toJson);
+        downloadFile(schema.name, schemaExtension, schema.toJson);
       },
     },
     {
       key: 'reset',
       iconProps: { iconName: 'Refresh' },
-      text: 'Start Over',
-      title: 'Start Over',
-      ariaLabel: 'Start Over',
+      text: formatMessage('Start Over'),
+      title: formatMessage('Start Over'),
+      ariaLabel: formatMessage('Start Over'),
       onClick: () => {
-        if (confirm('Are you sure you want to start over?')) {
+        if (confirm(formatMessage('Are you sure you want to start over? Your progress will be lost.'))) {
           onReset();
         }
       },

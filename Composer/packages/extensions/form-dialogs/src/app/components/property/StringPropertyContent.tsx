@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import formatMessage from 'format-message';
 import * as React from 'react';
 import { ValuePicker } from 'src/app/components/common/ValuePicker';
 import { StringPropertyPayload } from 'src/app/stores/schemaPropertyStore';
@@ -17,5 +18,5 @@ export const StringPropertyContent = React.memo((props: Props) => {
     onChangePayload({ ...payload, enums });
   };
 
-  return <ValuePicker label="Enums" values={payload.enums || []} onChange={changeEnum} />;
+  return <ValuePicker label={formatMessage('Enums')} values={payload.enums || []} onChange={changeEnum} />;
 });

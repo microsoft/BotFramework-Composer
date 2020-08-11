@@ -17,7 +17,8 @@
         "build:app": "rimraf dist && cross-env NODE_ENV=production BUILD_DEV=false webpack -p",
         "build": "rimraf lib && webpack --config webpack.lib.config.js --mode production",
         "lint": "eslint --quiet ./src",
-        "lint:fix": "yarn lint --fix"
+        "lint:fix": "yarn lint --fix",
+        "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json src/**/*.ts src/**/*.tsx"
     },
     "dependencies": {
         "@fluentui/react": "^7.121.11",
@@ -33,7 +34,8 @@
     "peerDependencies": {
         "react": "16.13.0",
         "react-dom": "16.13.0",
-        "lodash": "^4.17.19"
+        "lodash": "^4.17.19",
+        "format-message": "^6.2.3"
     },
     "devDependencies": {
         "@types/react": "^16.8.18",

@@ -4,6 +4,7 @@
 import { Dropdown, DropdownMenuItemType, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { Stack } from '@fluentui/react/lib/Stack';
+import formatMessage from 'format-message';
 import * as React from 'react';
 import { SchemaPropertyKind } from 'src/app/stores/schemaPropertyStore';
 
@@ -32,13 +33,13 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
 
   const options = React.useMemo(() => {
     return [
-      { key: 'header1', text: 'Manual', itemType: DropdownMenuItemType.Header },
-      { key: 'array', text: 'Array', selected: kind === 'array' },
-      { key: 'number', text: 'Number', selected: kind === 'number' },
-      { key: 'string', text: 'String', selected: kind === 'string' },
+      { key: 'header1', text: formatMessage('Manual'), itemType: DropdownMenuItemType.Header },
+      { key: 'array', text: formatMessage('Array'), selected: kind === 'array' },
+      { key: 'number', text: formatMessage('Number'), selected: kind === 'number' },
+      { key: 'string', text: formatMessage('String'), selected: kind === 'string' },
       { key: 'divider', itemType: DropdownMenuItemType.Divider },
-      { key: 'header2', text: 'Templates', itemType: DropdownMenuItemType.Header },
-      { key: 'ref', text: 'Use Templates', selected: kind === 'ref' },
+      { key: 'header2', text: formatMessage('Templates'), itemType: DropdownMenuItemType.Header },
+      { key: 'ref', text: formatMessage('Use Templates'), selected: kind === 'ref' },
     ] as IDropdownOption[];
   }, [kind]);
 
@@ -68,7 +69,7 @@ export const PropertyTypeSelector = React.memo((props: Props) => {
 
   return (
     <Dropdown
-      label="Select property type"
+      label={formatMessage('Select property type')}
       options={options}
       styles={{ root: { minWidth: 200 } }}
       onChange={change}
