@@ -12,7 +12,6 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { DialogInfo, SDKKinds, LuIntentSection } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
@@ -34,10 +33,17 @@ import {
 } from '../../utils/dialogUtil';
 import { projectIdState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
-import { nameRegex } from '../../constants';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { styles, dialogWindow, dropdownStyles, intent } from './style';
+import {
+  getLuDiagnostics,
+  validateEventName,
+  validateEventKind,
+  validateForm,
+  validateIntentName,
+  validateRegExPattern,
+} from './validators';
 
 const initialFormDataErrors = {
   $kind: '',
@@ -46,98 +52,6 @@ const initialFormDataErrors = {
   triggerPhrases: '',
   regEx: '',
   activity: '',
-};
-
-const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
-  const content = `#${intent}\n${triggerPhrases}`;
-  const { diagnostics } = luIndexer.parse(content);
-  return combineMessage(diagnostics);
-};
-
-const validateIntentName = (selectedType: string, intent: string): string | undefined => {
-  if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
-    return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
-  }
-  return undefined;
-};
-
-const validateDupRegExIntent = (
-  selectedType: string,
-  intent: string,
-  isRegEx: boolean,
-  regExIntents: [{ intent: string; pattern: string }]
-): string | undefined => {
-  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
-    return formatMessage(`RegEx {intent} is already defined`, { intent });
-  }
-  return undefined;
-};
-
-const validateRegExPattern = (selectedType: string, isRegEx: boolean, regEx: string): string | undefined => {
-  if (selectedType === intentTypeKey && isRegEx && !regEx) {
-    return formatMessage('Please input regEx pattern');
-  }
-  return undefined;
-};
-
-const validateEventName = (selectedType: string, $kind: string, eventName: string): string | undefined => {
-  if (selectedType === customEventKey && $kind === eventTypeKey && !eventName) {
-    return formatMessage('Please enter an event name');
-  }
-  return undefined;
-};
-
-const validateEventKind = (selectedType: string, $kind: string): string | undefined => {
-  if (selectedType === eventTypeKey && !$kind) {
-    return formatMessage('Please select a event type');
-  }
-
-  if (selectedType === activityTypeKey && !$kind) {
-    return formatMessage('Please select an activity type');
-  }
-  return undefined;
-};
-
-const validateTriggerKind = (selectedType: string): string | undefined => {
-  if (!selectedType) {
-    return formatMessage('Please select a trigger type');
-  }
-  return undefined;
-};
-
-const validateTriggerPhrases = (
-  selectedType: string,
-  isRegEx: boolean,
-  intent: string,
-  triggerPhrases: string
-): string | undefined => {
-  if (selectedType === intentTypeKey && !isRegEx) {
-    if (triggerPhrases) {
-      return getLuDiagnostics(intent, triggerPhrases);
-    } else {
-      return formatMessage('Please input trigger phrases');
-    }
-  }
-  return undefined;
-};
-
-const validateForm = (
-  selectedType: string,
-  data: TriggerFormData,
-  isRegEx: boolean,
-  regExIntents: [{ intent: string; pattern: string }]
-): TriggerFormDataErrors => {
-  const errors: TriggerFormDataErrors = {};
-  const { $kind, event: eventName, intent, regEx, triggerPhrases } = data;
-
-  errors.event = validateEventName(selectedType, $kind, eventName) ?? validateEventKind(selectedType, $kind);
-  errors.$kind = validateTriggerKind(selectedType);
-  errors.intent = validateIntentName(selectedType, intent);
-  errors.regEx =
-    validateDupRegExIntent(selectedType, intent, isRegEx, regExIntents) ??
-    validateRegExPattern(selectedType, isRegEx, regEx);
-  errors.triggerPhrases = validateTriggerPhrases(selectedType, isRegEx, intent, triggerPhrases);
-  return errors;
 };
 
 export interface LuFilePayload {
