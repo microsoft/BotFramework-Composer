@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { FileInfo } from '@bfc/shared';
+import { FileInfo, ResolverResource } from '@bfc/shared';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const luObject = require('@bfcomposer/bf-lu/lib/parser/lu/lu.js');
@@ -10,6 +10,19 @@ const luOptions = require('@bfcomposer/bf-lu/lib/parser/lu/luOptions.js');
 
 function getFileName(path: string): string {
   return path.split('/').pop() || path;
+}
+function getBaseName(filename?: string): string | any {
+  if (typeof filename !== 'string') return filename;
+  return filename.substring(0, filename.lastIndexOf('.')) || filename;
+}
+
+export function fileInfoToResources(files: FileInfo[]): ResolverResource[] {
+  return files.map((file) => {
+    return {
+      id: getBaseName(file.name),
+      content: file.content,
+    };
+  });
 }
 
 export function importResolverGenerator(files: FileInfo[]) {
@@ -23,7 +36,7 @@ export function importResolverGenerator(files: FileInfo[]) {
    *  would resolve to help.en-us.lu || help.lu
    *
    *  sourceId =  todosample.en-us.lu
-   *  idsToFind =   [help.lu]
+   *  idsToFind =   [{ filePath: help.lu, includeInCollate: true}, ...]
    *
    *  Overlap implemented built-in fs resolver in
    *  botframework-cli/packages/lu/src/parser/lu/luMerger.js#findLuFilesInDir
@@ -46,7 +59,7 @@ export function importResolverGenerator(files: FileInfo[]) {
 
       if (!targetFile) throw new Error(`File not found`);
 
-      const options = new luOptions(targetFile.name, file.includeInCollate, locale, targetFile.path);
+      const options = new luOptions(targetId, file.includeInCollate, locale, targetFile.path);
       return new luObject(targetFile.content, options);
     });
 
