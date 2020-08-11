@@ -15,7 +15,7 @@
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
     "typecheck": "tsc --noEmit",
-    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o locales/en-US.json src/**/*.ts src/**/*.tsx"
+    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o src/locales/en-US.json src/**/*.ts src/**/*.tsx"
   },
   "proxy": "http://localhost:5000",
   "dependencies": {
@@ -41,6 +41,7 @@
     "axios": "^0.19.2",
     "babel-plugin-extract-format-message": "^6.2.3",
     "format-message": "^6.2.3",
+    "format-message-generate-id": "^6.2.3",
     "immer": "^5.2.0",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.19",

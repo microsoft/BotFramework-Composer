@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const { transFn } = require('./l10nUtils');
 
-const inFile = JSON.parse(fs.readFileSync('packages/client/locales/en-US.json'));
+const inFile = JSON.parse(fs.readFileSync('packages/client/src/locales/en-US.json'));
 
 const out = {};
 for (const key of Object.keys(inFile)) {
@@ -14,4 +14,4 @@ for (const key of Object.keys(inFile)) {
   };
 }
 
-fs.writeFileSync('packages/client/locales/en-US-pseudo.json', JSON.stringify(out, null, 4));
+fs.writeFileSync('packages/client/src/locales/en-US-pseudo.json', JSON.stringify(out, null, 4));
