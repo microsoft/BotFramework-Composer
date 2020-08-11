@@ -29,6 +29,7 @@
     "@types/node": "^10.12.18",
     "@types/restify": "^8.4.2",
     "babel-jest": "^26.1.0",
-    "jest": "^26.1.0"
+    "jest": "^26.1.0",
+    "typescript": "^3.9.7"
   }
 }
