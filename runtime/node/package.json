@@ -17,8 +17,8 @@
     "botbuilder-dialogs": "4.10.0-preview-151936",
     "botbuilder-dialogs-adaptive": "4.10.0-preview-151936",
     "botbuilder-dialogs-declarative": "4.10.0-preview-151936",
-    "restify": "7.7.0",
-    "minimist": "1.2.5"
+    "minimist": "1.2.5",
+    "restify": "8.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
@@ -29,7 +29,6 @@
     "@types/node": "^10.12.18",
     "@types/restify": "^8.4.2",
     "babel-jest": "^26.1.0",
-    "jest": "^26.1.0",
-    "mocha": "^8.0.1"
+    "jest": "^26.1.0"
   }
 }

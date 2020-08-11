@@ -144,7 +144,7 @@ export default async (composer: any): Promise<void> => {
 
   composer.addRuntimeTemplate({
     key: 'node-azurewebapp',
-    name: 'JS',
+    name: 'JS (preview)',
     startCommand: 'node ./lib/webapp.js',
     path: path.resolve(__dirname, '../../../../runtime/node'),
     build: async (runtimePath: string, _project: any) => {
