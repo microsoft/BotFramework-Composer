@@ -66,8 +66,24 @@ context('Publish Page', () => {
     // save profile
     cy.findByText('Save').click();
     // new profile should exist in target list
-    cy.findByTestId('target-list').within(() => {
-      cy.findByText('testProfile').should('exist');
-    });
+    cy.findByTestId('Publish')
+      .findByTestId('target-list')
+      .within(() => {
+        cy.findByText('testProfile').should('exist');
+      });
   });
+  // it('can publish when selecte a profile', () => {
+  //   cy.findByTestId('target-list').within(() => {
+  //     cy.findByText('testProfile').click();
+  //   });
+  //   // show publish dialog after click publish button
+  //   cy.findByText('Publish to selected profile').click();
+  //   cy.findByText('You are about to publish your bot to the profile below. Do you want to proceed?').should('exist');
+  //   cy.findByText('Comment').should('exist');
+  //   // have publish status after click ok
+  //   cy.findByText('Okay').click();
+  //   cy.findByTestId('publish-status-list').within(() => {
+  //     cy.findByText('Accepted for publishing.').should('exist');
+  //   });
+  // });
 });
