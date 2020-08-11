@@ -23,13 +23,9 @@ import {
   getTriggerTypes,
   TriggerFormData,
   TriggerFormDataErrors,
-  eventTypeKey,
   customEventKey,
-  intentTypeKey,
-  activityTypeKey,
   getEventTypes,
   getActivityTypes,
-  regexRecognizerKey,
 } from '../../utils/dialogUtil';
 import { projectIdState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
@@ -54,6 +50,15 @@ const initialFormDataErrors = {
   activity: '',
 };
 
+const shouldDisable = (errors: TriggerFormDataErrors) => {
+  for (const key in errors) {
+    if (errors[key]) {
+      return true;
+    }
+  }
+  return false;
+};
+
 interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
@@ -63,55 +68,46 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId } = props;
-  const dialogs = useRecoilValue(validatedDialogsSelector);
 
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const projectId = useRecoilValue(projectIdState);
   const schemas = useRecoilValue(schemasState);
   const userSettings = useRecoilValue(userSettingsState);
 
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
-  const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
+  const isRegexRecognizer = (dialogFile?.content?.recognizer?.$kind ?? '') === SDKKinds.RegexRecognizer;
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
-  const isNone = !dialogFile?.content?.recognizer;
+  const recognizerUnassigned = !dialogFile?.content?.recognizer;
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
-    $kind: isNone ? '' : intentTypeKey,
+    $kind: recognizerUnassigned ? '' : SDKKinds.OnIntent,
     event: '',
     intent: '',
     triggerPhrases: '',
     regEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-  const [selectedType, setSelectedType] = useState(isNone ? '' : intentTypeKey);
-  const showIntentName = selectedType === intentTypeKey;
-  const showRegExDropDown = selectedType === intentTypeKey && isRegEx;
-  const showTriggerPhrase = selectedType === intentTypeKey && !isRegEx;
-  const showEventDropDown = selectedType === eventTypeKey;
-  const showActivityDropDown = selectedType === activityTypeKey;
+  const [selectedType, setSelectedType] = useState(recognizerUnassigned ? '' : SDKKinds.OnIntent);
+  const showIntentName = selectedType === SDKKinds.OnIntent;
+  const showRegExDropDown = selectedType === SDKKinds.OnIntent && isRegexRecognizer;
+  const showTriggerPhrase = selectedType === SDKKinds.OnIntent && !isRegexRecognizer;
+  const showEventDropDown = selectedType === SDKKinds.OnDialogEvent;
+  const showActivityDropDown = selectedType === SDKKinds.OnActivity;
   const showCustomEvent = selectedType === customEventKey;
 
   const eventTypes: IComboBoxOption[] = getEventTypes();
   const activityTypes: IDropdownOption[] = getActivityTypes();
   let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
-  if (isNone) {
-    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== intentTypeKey);
+  if (recognizerUnassigned) {
+    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== SDKKinds.OnIntent);
   }
-
-  const shouldDisable = (errors: TriggerFormDataErrors) => {
-    for (const key in errors) {
-      if (errors[key]) {
-        return true;
-      }
-    }
-    return false;
-  };
 
   const onClickSubmitButton = (e) => {
     e.preventDefault();
 
     //If still have some errors here, it is a bug.
-    const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
+    const errors = validateForm(selectedType, formData, isRegexRecognizer, regexIntents);
     if (shouldDisable(errors)) {
       setFormData({
         ...formData,
@@ -120,7 +116,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       return;
     }
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
-    if (formData.$kind === intentTypeKey && !isRegEx) {
+    if (formData.$kind === SDKKinds.OnIntent && !isRegexRecognizer) {
       const newIntent = { Name: formData.intent, Body: formData.triggerPhrases };
       onSubmit(newDialog, newIntent);
     } else {
@@ -131,7 +127,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const onSelectTriggerType = (e, option) => {
     setSelectedType(option.key || '');
-    const compoundTypes = [activityTypeKey, eventTypeKey];
+    const compoundTypes = [SDKKinds.OnActivity, SDKKinds.OnDialogEvent];
     const isCompound = compoundTypes.some((t) => option.key === t);
     let newFormData: TriggerFormData = initialFormData;
     if (isCompound) {
@@ -172,7 +168,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const onChangeRegEx = (e, pattern) => {
     const errors: TriggerFormDataErrors = {};
-    errors.regEx = validateRegExPattern(selectedType, isRegEx, pattern);
+    errors.regEx = validateRegExPattern(selectedType, isRegexRecognizer, pattern);
     setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
   };
 
@@ -181,8 +177,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     errors.triggerPhrases = getLuDiagnostics(formData.intent, body);
     setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
-  const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
-  const disable = shouldDisable(errors);
+  const errors = validateForm(selectedType, formData, isRegexRecognizer, regexIntents);
+  const preventSubmit = shouldDisable(errors);
 
   return (
     <Dialog
@@ -245,7 +241,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               data-testid="TriggerName"
               errorMessage={formData.errors.intent}
               label={
-                isRegEx
+                isRegexRecognizer
                   ? formatMessage('What is the name of this trigger (RegEx)')
                   : formatMessage('What is the name of this trigger (LUIS)')
               }
@@ -286,7 +282,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         <PrimaryButton
           data-testid={'triggerFormSubmit'}
-          disabled={disable}
+          disabled={preventSubmit}
           text={formatMessage('Submit')}
           onClick={onClickSubmitButton}
         />
