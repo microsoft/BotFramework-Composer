@@ -37,17 +37,20 @@ context('Publish Page', () => {
         },
       },
     ]);
+    cy.route('GET', '/api/publish/*/history/*', []);
 
     cy.visit('/home');
-    cy.createBot('ToDoBotWithLuisSample');
+    cy.createBot('EchoBot');
   });
-  it('can add profile in publish page', () => {
+  it('can add profile and publish in publish page', () => {
     // click left nav button
     cy.findByTestId('LeftNav-CommandBarButtonPublish').click();
     // publish page
     cy.contains('Publish Profiles');
     // target list exist
     cy.contains('All profiles');
+    cy.findByTestId('Publish').findByTestId('target-list').should('exist');
+
     // status list exist
     cy.contains('Time');
     cy.contains('Date');
@@ -61,9 +64,22 @@ context('Publish Page', () => {
     cy.findByText('azure publish').click();
     // show instruction
     cy.findByText('plugin instruction').should('exist');
-
+    // save profile
     cy.findByText('Save').click();
+    // new profile should exist in target list
+    cy.findByTestId('target-list').within(() => {
+      cy.findByText('testProfile').should('exist');
+    });
 
-    cy.findByText('testProfile').should('exist');
+    // publish when selecte a profile
+    // show publish dialog after click publish button
+    cy.findByText('Publish to selected profile').click();
+    cy.findByText('You are about to publish your bot to the profile below. Do you want to proceed?').should('exist');
+
+    // have publish status after click ok
+    cy.findByText('Okay').click();
+    cy.findByTestId('publish-status-list').within(() => {
+      cy.findByText('Accepted for publishing.').should('exist');
+    });
   });
 });
