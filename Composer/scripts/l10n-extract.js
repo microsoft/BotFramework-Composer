@@ -27,7 +27,6 @@ for (const file of inFiles) {
   let schema;
   const baseName = path.basename(file);
   const outputDir = path.join(path.normalize(path.dirname(file)), 'locales', 'en-US');
-  console.log(file);
   // eslint-disable-next-line security/detect-non-literal-fs-filename
   fs.mkdirSync(outputDir, { recursive: true });
 
@@ -40,7 +39,9 @@ for (const file of inFiles) {
   }
 
   const output = keep(schema, L10N_FIELDS);
+  const outputFn = outputDir + path.sep + baseName;
 
+  console.log('writing', outputFn);
   // eslint-disable-next-line security/detect-non-literal-fs-filename
   fs.writeFileSync(outputDir + path.sep + baseName, JSON.stringify(output, null, 4));
 }
