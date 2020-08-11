@@ -16,8 +16,6 @@ import pseudo from './locales/en-US-pseudo.json';
 
 const appHostElm = document.getElementById('root');
 
-console.log(pseudo);
-
 formatMessage.setup({
   locale: 'en-US-pseudo',
   generateId: generate.underscored_crc32,
