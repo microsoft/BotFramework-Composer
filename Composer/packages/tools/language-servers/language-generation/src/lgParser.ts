@@ -19,8 +19,7 @@ export interface WorkerMsg {
 class LgParserWithoutWorker {
   public async parseText(content: string, id: string, resources: ResolverResource[]) {
     const lgImportResolver = importResolverGenerator(resources, '.lg');
-    const { templates, diagnostics } = lgIndexer.parse(content, id, lgImportResolver);
-    return { id, content, templates, diagnostics };
+    return lgIndexer.parse(content, id, lgImportResolver);
   }
 }
 

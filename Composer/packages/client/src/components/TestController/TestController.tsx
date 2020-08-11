@@ -13,7 +13,6 @@ import { DefaultPublishConfig } from '../../constants';
 import {
   botNameState,
   botStatusState,
-  dialogsState,
   luFilesState,
   settingsState,
   projectIdState,
@@ -26,6 +25,7 @@ import { BotStatus, LuisConfig } from '../../constants';
 import { isAbsHosted } from '../../utils/envUtil';
 import useNotifications from '../../pages/notifications/useNotifications';
 import { navigateTo, openInEmulator } from '../../utils/navigation';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { getReferredFiles } from './../../utils/luUtil';
 import { PublishLuisDialog } from './publishDialog';
@@ -57,7 +57,7 @@ export const TestController: React.FC = () => {
   const notifications = useNotifications();
   const botName = useRecoilValue(botNameState);
   const botStatus = useRecoilValue(botStatusState);
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
   const settings = useRecoilValue(settingsState);
   const projectId = useRecoilValue(projectIdState);

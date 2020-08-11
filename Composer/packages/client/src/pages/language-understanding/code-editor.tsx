@@ -87,6 +87,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         const payload = {
           id: file.id,
           intentName: Name,
+          projectId,
           intent: {
             Name,
             Body,

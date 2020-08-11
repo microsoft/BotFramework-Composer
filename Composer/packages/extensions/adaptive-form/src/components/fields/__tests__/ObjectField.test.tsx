@@ -68,16 +68,4 @@ describe.only('<ObjectField />', () => {
     fireEvent.change(input, { target: { value: 'new name' } });
     expect(onChange).toHaveBeenCalledWith({ name: 'new name', age: 21 });
   });
-
-  it.each([[], ''])('removes property if value is %p', (newValue) => {
-    const onChange = jest.fn();
-    const value = {
-      name: 'old name',
-      age: 21,
-    };
-    const { container } = renderSubject({ onChange, schema, value });
-    const input = container.querySelectorAll('input')[0];
-    fireEvent.change(input, { target: { value: JSON.stringify(newValue) } });
-    expect(onChange).toHaveBeenCalledWith({ age: 21 });
-  });
 });
