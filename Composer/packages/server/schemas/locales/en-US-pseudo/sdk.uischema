@@ -1,0 +1,326 @@
+{
+    "Microsoft.AdaptiveDialog": {
+        "form": {
+            "description": "[[[ 🔥 Thïs cønfïgůrəs ā dātā drïvən dïāløg vïā ā cølləctïøn øf əvənts ānd āctïøns.🔥 ]]]",
+            "label": "[[[ 🔥 Λdāptïvə dïāløg🔥 ]]]",
+            "properties": {
+                "recognizer": {
+                    "description": "[[[ 🔥 Tø ůndərstānd whāt thə ůsər sāys, yøůr dïāløg nəəds ā \"Rəcøgnïzər\"; thāt ïnclůdəs əxāmplə wørds ānd səntəncəs thāt ůsərs māy ůsə.🔥 ]]]",
+                    "label": "[[[ 🔥 Lāngůāgə ⩁ndərstāndïng🔥 ]]]"
+                }
+            }
+        }
+    },
+    "Microsoft.AttachmentInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før ā fïlə ør ān āttāchmənt🔥 ]]]",
+            "subtitle": "[[[ 🔥 Λttāchmənt Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.ChoiceInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt wïth můltï-chøïcə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Chøïcə Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.ConfirmInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før cønfïrmātïøn🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cønfïrm Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.DateTimeInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før ā dātə ør ā tïmə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Dātə Tïmə Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.NumberInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før ā nůmbər🔥 ]]]",
+            "subtitle": "[[[ 🔥 Nůmbər Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.OAuthInput": {
+        "form": {
+            "label": "[[[ 🔥 ⨀Λůth løgïn🔥 ]]]",
+            "subtitle": "[[[ 🔥 ⨀Λůth Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.TextInput": {
+        "form": {
+            "label": "[[[ 🔥 Prømpt før təxt🔥 ]]]",
+            "subtitle": "[[[ 🔥 Təxt Ⅱnpůt🔥 ]]]"
+        }
+    },
+    "Microsoft.BeginDialog": {
+        "form": {
+            "label": "[[[ 🔥 Bəgïn ā nəw dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 Bəgïn Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.BeginSkill": {
+        "form": {
+            "label": "[[[ 🔥 Cønnəct tø ā skïll🔥 ]]]",
+            "subtitle": "[[[ 🔥 Skïll Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.BreakLoop": {
+        "form": {
+            "label": "[[[ 🔥 Brəāk øůt øf løøp🔥 ]]]",
+            "subtitle": "[[[ 🔥 Brəāk øůt øf løøp🔥 ]]]"
+        }
+    },
+    "Microsoft.CancelAllDialogs": {
+        "form": {
+            "label": "[[[ 🔥 Cāncəl āll āctïvə dïāløgs🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cāncəl Λll Dïāløgs🔥 ]]]"
+        }
+    },
+    "Microsoft.ContinueLoop": {
+        "form": {
+            "label": "[[[ 🔥 Cøntïnůə løøp🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cøntïnůə løøp🔥 ]]]"
+        }
+    },
+    "Microsoft.DebugBreak": {
+        "form": {
+            "label": "[[[ 🔥 Dəbůg Brəāk🔥 ]]]"
+        }
+    },
+    "Microsoft.DeleteProperties": {
+        "form": {
+            "label": "[[[ 🔥 Dələtə prøpərtïəs🔥 ]]]",
+            "subtitle": "[[[ 🔥 Dələtə Prøpərtïəs🔥 ]]]"
+        }
+    },
+    "Microsoft.DeleteProperty": {
+        "form": {
+            "label": "[[[ 🔥 Dələtə ā prøpərty🔥 ]]]",
+            "subtitle": "[[[ 🔥 Dələtə Prøpərty🔥 ]]]"
+        }
+    },
+    "Microsoft.EditActions": {
+        "form": {
+            "label": "[[[ 🔥 Mødïfy āctïvə dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃dït Λctïøns🔥 ]]]"
+        }
+    },
+    "Microsoft.EditArray": {
+        "form": {
+            "label": "[[[ 🔥 ∃dït ān ārrāy prøpərty🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃dït Λrrāy🔥 ]]]"
+        }
+    },
+    "Microsoft.EmitEvent": {
+        "form": {
+            "label": "[[[ 🔥 ∃mït ā cůstøm əvənt🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃mït ∃vənt🔥 ]]]"
+        }
+    },
+    "Microsoft.EndDialog": {
+        "form": {
+            "label": "[[[ 🔥 ∃nd thïs dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃nd Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.EndTurn": {
+        "form": {
+            "label": "[[[ 🔥 ∃nd tůrn🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃nd Tůrn🔥 ]]]"
+        }
+    },
+    "Microsoft.Foreach": {
+        "form": {
+            "label": "[[[ 🔥 Løøp: Før əāch ïtəm🔥 ]]]",
+            "subtitle": "[[[ 🔥 Før ∃āch🔥 ]]]"
+        }
+    },
+    "Microsoft.ForeachPage": {
+        "form": {
+            "label": "[[[ 🔥 Løøp: Før əāch pāgə (můltïplə ïtəms)🔥 ]]]",
+            "subtitle": "[[[ 🔥 Før ∃āch Pāgə🔥 ]]]"
+        }
+    },
+    "Microsoft.HttpRequest": {
+        "form": {
+            "label": "[[[ 🔥 Sənd ān HTTP rəqůəst🔥 ]]]",
+            "subtitle": "[[[ 🔥 HTTP Rəqůəst🔥 ]]]"
+        }
+    },
+    "Microsoft.IfCondition": {
+        "form": {
+            "label": "[[[ 🔥 Brānch: Ⅱf/∃lsə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Ⅱf Cøndïtïøn🔥 ]]]"
+        }
+    },
+    "Microsoft.LogAction": {
+        "form": {
+            "label": "[[[ 🔥 Løg tø cønsølə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Løg Λctïøn🔥 ]]]"
+        }
+    },
+    "Microsoft.RepeatDialog": {
+        "form": {
+            "label": "[[[ 🔥 Rəpəāt thïs dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 Rəpəāt Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.ReplaceDialog": {
+        "form": {
+            "label": "[[[ 🔥 Rəplācə thïs dïāløg🔥 ]]]",
+            "subtitle": "[[[ 🔥 Rəplācə Dïāløg🔥 ]]]"
+        }
+    },
+    "Microsoft.SendActivity": {
+        "form": {
+            "label": "[[[ 🔥 Sənd ā rəspønsə🔥 ]]]",
+            "subtitle": "[[[ 🔥 Sənd Λctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.SetProperties": {
+        "form": {
+            "label": "[[[ 🔥 Sət prøpərtïəs🔥 ]]]",
+            "subtitle": "[[[ 🔥 Sət Prøpərtïəs🔥 ]]]"
+        }
+    },
+    "Microsoft.SetProperty": {
+        "form": {
+            "label": "[[[ 🔥 Sət ā prøpərty🔥 ]]]",
+            "subtitle": "[[[ 🔥 Sət Prøpərty🔥 ]]]"
+        }
+    },
+    "Microsoft.SignOutUser": {
+        "form": {
+            "label": "[[[ 🔥 Sïgn øůt ůsər🔥 ]]]",
+            "subtitle": "[[[ 🔥 Sïgnøůt ⩁sər🔥 ]]]"
+        }
+    },
+    "Microsoft.SwitchCondition": {
+        "form": {
+            "label": "[[[ 🔥 Brānch: Swïtch (můltïplə øptïøns)🔥 ]]]",
+            "subtitle": "[[[ 🔥 Swïtch Cøndïtïøn🔥 ]]]"
+        }
+    },
+    "Microsoft.TraceActivity": {
+        "form": {
+            "label": "[[[ 🔥 ∃mït ā trācə əvənt🔥 ]]]",
+            "subtitle": "[[[ 🔥 Trācə Λctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnActivity": {
+        "form": {
+            "label": "[[[ 🔥 Λctïvïtïəs🔥 ]]]",
+            "subtitle": "[[[ 🔥 Λctïvïty rəcəïvəd🔥 ]]]"
+        }
+    },
+    "Microsoft.OnBeginDialog": {
+        "form": {
+            "label": "[[[ 🔥 Dïāløg stārtəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Bəgïn dïāløg əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnCancelDialog": {
+        "form": {
+            "label": "[[[ 🔥 Dïāløg cāncəlləd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cāncəl dïāløg əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnCondition": {
+        "form": {
+            "label": "[[[ 🔥 Hāndlə ā cøndïtïøn🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cøndïtïøn🔥 ]]]"
+        }
+    },
+    "Microsoft.OnConversationUpdateActivity": {
+        "form": {
+            "description": "[[[ 🔥 Hāndlə thə əvənts fïrəd whən ā ůsər bəgïns ā nəw cønvərsātïøn wïth thə bøt.🔥 ]]]",
+            "label": "[[[ 🔥 Grəətïng🔥 ]]]",
+            "subtitle": "[[[ 🔥 Cønvərsātïøn⩁pdātə āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnDialogEvent": {
+        "form": {
+            "label": "[[[ 🔥 Dïāløg əvənts🔥 ]]]",
+            "subtitle": "[[[ 🔥 Dïāløg əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnEndOfConversationActivity": {
+        "form": {
+            "label": "[[[ 🔥 Cønvərsātïøn əndəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃nd⨀fCønvərsātïøn āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnError": {
+        "form": {
+            "label": "[[[ 🔥 ∃rrør øccůrrəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃rrør əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnEventActivity": {
+        "form": {
+            "label": "[[[ 🔥 ∃vənt rəcəïvəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 ∃vənt āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnHandoffActivity": {
+        "form": {
+            "label": "[[[ 🔥 Hāndøvər tø hůmān🔥 ]]]",
+            "subtitle": "[[[ 🔥 Hāndøff āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnIntent": {
+        "form": {
+            "label": "[[[ 🔥 Ⅱntənt rəcøgnïzəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Ⅱntənt rəcøgnïzəd🔥 ]]]"
+        }
+    },
+    "Microsoft.OnInvokeActivity": {
+        "form": {
+            "label": "[[[ 🔥 Cønvərsātïøn ïnvøkəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Ⅱnvøkə āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnMessageActivity": {
+        "form": {
+            "label": "[[[ 🔥 Məssāgə rəcəïvəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Məssāgə rəcəïvəd āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnMessageDeleteActivity": {
+        "form": {
+            "label": "[[[ 🔥 Məssāgə dələtəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Məssāgə dələtəd āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnMessageReactionActivity": {
+        "form": {
+            "label": "[[[ 🔥 Məssāgə rəāctïøn🔥 ]]]",
+            "subtitle": "[[[ 🔥 Məssāgə rəāctïøn āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnMessageUpdateActivity": {
+        "form": {
+            "label": "[[[ 🔥 Məssāgə ůpdātəd🔥 ]]]",
+            "subtitle": "[[[ 🔥 Məssāgə ůpdātəd āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnRepromptDialog": {
+        "form": {
+            "label": "[[[ 🔥 Rə-prømpt før ïnpůt🔥 ]]]",
+            "subtitle": "[[[ 🔥 Rəprømpt dïāløg əvənt🔥 ]]]"
+        }
+    },
+    "Microsoft.OnTypingActivity": {
+        "form": {
+            "label": "[[[ 🔥 ⩁sər ïs typïng🔥 ]]]",
+            "subtitle": "[[[ 🔥 Typïng āctïvïty🔥 ]]]"
+        }
+    },
+    "Microsoft.OnUnknownIntent": {
+        "form": {
+            "label": "[[[ 🔥 ⩁nknøwn ïntənt🔥 ]]]",
+            "subtitle": "[[[ 🔥 ⩁nknøwn ïntənt rəcøgnïzəd🔥 ]]]"
+        }
+    }
+}

@@ -72,15 +72,7 @@
                     "description": "Schema to fill in.",
                     "anyOf": {
                         "0": {
-                            "title": "Core schema meta-schema",
-                            "properties": {
-                                "title": {
-                                    "type": "string"
-                                },
-                                "description": {
-                                    "type": "string"
-                                }
-                            }
+                            "title": "Core schema meta-schema"
                         },
                         "1": {
                             "title": "Reference to JSON schema",
