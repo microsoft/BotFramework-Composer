@@ -54,13 +54,6 @@ const initialFormDataErrors = {
   activity: '',
 };
 
-export interface LuFilePayload {
-  id: string;
-  content: string;
-}
-
-// -------------------- TriggerCreationModal -------------------- //
-
 interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
