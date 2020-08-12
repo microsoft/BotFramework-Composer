@@ -91,17 +91,11 @@ export const qnaDispatcher = () => {
     (callbackHelpers: CallbackInterface) => async ({
       id,
       knowledgeBaseName,
-      subscriptionKey,
       url,
-      region,
-      isCreatingBot,
     }: {
       id: string;
       knowledgeBaseName: string;
-      subscriptionKey: string;
       url: string;
-      region: string;
-      isCreatingBot: boolean;
     }) => {
       const { set, snapshot } = callbackHelpers;
       const qnaFiles = await snapshot.getPromise(qnaFilesState);
@@ -109,8 +103,11 @@ export const qnaDispatcher = () => {
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
       try {
         const response = await httpClient.get(`/qnaContent`, {
-          params: { subscriptionKey, url, region, isCreatingBot },
+          params: { url },
         });
+        if (!knowledgeBaseName) {
+          knowledgeBaseName = 'default knowledge base';
+        }
         const appendedContent = `> knowledge base name: ${knowledgeBaseName}\n` + response.data;
         const content = qnaFile ? qnaFile.content + '\n' + appendedContent : appendedContent;
 

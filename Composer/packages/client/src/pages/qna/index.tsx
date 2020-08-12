@@ -15,7 +15,7 @@ import { navigateTo } from '../../utils/navigation';
 import { TestController } from '../../components/TestController/TestController';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { dialogsState, projectIdState, qnaAllUpViewStatusState, settingsState } from '../../recoilModel/atoms/botState';
+import { dialogsState, projectIdState, qnaAllUpViewStatusState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 import { QnAAllUpViewStatus } from '../../recoilModel/types';
 
@@ -32,7 +32,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   const actions = useRecoilValue(dispatcherState);
   const dialogs = useRecoilValue(dialogsState);
   const projectId = useRecoilValue(projectIdState);
-  const settings = useRecoilValue(settingsState);
   //To do: support other languages
   const locale = 'en-us';
   //const locale = useRecoilValue(localeState);
@@ -133,22 +132,11 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     setImportQnAFromUrlModalVisiability(false);
   };
 
-  const onSubmit = async (urls: string[], knowledgeBaseName: string, subscriptionKey: string, region: string) => {
-    await actions.setSettings(projectId, {
-      ...settings,
-      qna: { subscriptionKey, endpointKey: settings.qna.endpointKey },
-    });
+  const onSubmit = async (urls: string[], knowledgeBaseName: string) => {
     onDismiss();
     for (let i = 0; i < urls.length; i++) {
       if (!urls[i]) continue;
-      await actions.importQnAFromUrl({
-        id: `${dialogId}.${locale}`,
-        knowledgeBaseName,
-        subscriptionKey: '',
-        url: urls[i],
-        region,
-        isCreatingBot: true,
-      });
+      await actions.importQnAFromUrl({ id: `${dialogId}.${locale}`, knowledgeBaseName, url: urls[i] });
     }
   };
 
@@ -167,19 +155,9 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           <CodeEditor dialogId={dialogId} path="/edit" />
           {qnaAllUpViewStatus === QnAAllUpViewStatus.Success && <TableView dialogId={dialogId} path="/" />}
         </Router>
-        {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && <LoadingSpinner />}
-        {setImportQnAFromUrlModalVisiability && (
-          <ImportQnAFromUrlModal
-            isRegionNeeded
-            isSubscriptionKeyNeeded
-            dialogId={dialogId}
-            isCreatingBot={false}
-            isMultipleUrlAllowed={false}
-            isOpen={importQnAFromUrlModalVisiability}
-            subscriptionKey={settings.qna.subscriptionKey}
-            onDismiss={onDismiss}
-            onSubmit={onSubmit}
-          />
+        {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && <LoadingSpinner message={'Extracting QnA pairs'} />}
+        {importQnAFromUrlModalVisiability && (
+          <ImportQnAFromUrlModal dialogId={dialogId} isCreatingBot={false} onDismiss={onDismiss} onSubmit={onSubmit} />
         )}
       </Suspense>
     </Page>

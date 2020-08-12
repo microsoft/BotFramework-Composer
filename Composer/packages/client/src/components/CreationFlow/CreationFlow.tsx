@@ -102,14 +102,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     await handleCreateNew(formData, QnABotTemplateId);
     for (let i = 0; i < urls.length; i++) {
       if (!urls[i]) continue;
-      await importQnAFromUrl({
-        id: `${formData.name.toLocaleLowerCase()}.${locale}`,
-        knowledgeBaseName,
-        subscriptionKey: '',
-        url: urls[i],
-        region: 'westus',
-        isCreatingBot: true,
-      });
+      await importQnAFromUrl({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, knowledgeBaseName, url: urls[i] });
     }
   };
 
@@ -172,11 +165,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
         />
         <ImportQnAFromUrlModal
           isCreatingBot
-          isMultipleUrlAllowed
-          isOpen
           dialogId={formData.name.toLowerCase()}
-          isRegionNeeded={false}
-          isSubscriptionKeyNeeded={false}
           path="create/QnASample/importQnA"
           onDismiss={handleDismiss}
           onSubmit={handleCreateQnA}
