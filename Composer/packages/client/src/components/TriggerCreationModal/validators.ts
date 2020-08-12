@@ -15,14 +15,7 @@ export const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
   return combineMessage(diagnostics);
 };
 
-export const validateIntentName = (selectedType: string, intent: string): string | undefined => {
-  if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
-    return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
-  }
-  return undefined;
-};
-
-export const validateDupRegExIntent = (
+const validateDupRegExIntent = (
   selectedType: string,
   intent: string,
   isRegEx: boolean,
@@ -30,6 +23,36 @@ export const validateDupRegExIntent = (
 ): string | undefined => {
   if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
     return formatMessage(`RegEx {intent} is already defined`, { intent });
+  }
+  return undefined;
+};
+
+const validateTriggerKind = (selectedType: string): string | undefined => {
+  if (!selectedType) {
+    return formatMessage('Please select a trigger type');
+  }
+  return undefined;
+};
+
+const validateTriggerPhrases = (
+  selectedType: string,
+  isRegEx: boolean,
+  intent: string,
+  triggerPhrases: string
+): string | undefined => {
+  if (selectedType === intentTypeKey && !isRegEx) {
+    if (triggerPhrases) {
+      return getLuDiagnostics(intent, triggerPhrases);
+    } else {
+      return formatMessage('Please input trigger phrases');
+    }
+  }
+  return undefined;
+};
+
+export const validateIntentName = (selectedType: string, intent: string): string | undefined => {
+  if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
+    return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
   return undefined;
 };
@@ -55,29 +78,6 @@ export const validateEventKind = (selectedType: string, $kind: string): string |
 
   if (selectedType === activityTypeKey && !$kind) {
     return formatMessage('Please select an activity type');
-  }
-  return undefined;
-};
-
-export const validateTriggerKind = (selectedType: string): string | undefined => {
-  if (!selectedType) {
-    return formatMessage('Please select a trigger type');
-  }
-  return undefined;
-};
-
-export const validateTriggerPhrases = (
-  selectedType: string,
-  isRegEx: boolean,
-  intent: string,
-  triggerPhrases: string
-): string | undefined => {
-  if (selectedType === intentTypeKey && !isRegEx) {
-    if (triggerPhrases) {
-      return getLuDiagnostics(intent, triggerPhrases);
-    } else {
-      return formatMessage('Please input trigger phrases');
-    }
   }
   return undefined;
 };
