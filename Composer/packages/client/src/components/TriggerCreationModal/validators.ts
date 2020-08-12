@@ -92,8 +92,9 @@ export const validateForm = (
   const errors: TriggerFormDataErrors = {};
   const { $kind, event: eventName, intent, regEx, triggerPhrases } = data;
 
-  errors.event = validateEventName(selectedType, $kind, eventName) ?? validateEventKind(selectedType, $kind);
+  errors.event = validateEventKind(selectedType, $kind);
   errors.$kind = validateTriggerKind(selectedType);
+  errors.customEventName = validateEventName(selectedType, $kind, eventName);
   errors.intent = validateIntentName(selectedType, intent);
   errors.regEx =
     validateDupRegExIntent(selectedType, intent, isRegEx, regExIntents) ??

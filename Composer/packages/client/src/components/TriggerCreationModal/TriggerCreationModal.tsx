@@ -119,7 +119,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
     const errors: TriggerFormDataErrors = {};
-    errors.event = validateEventName(selectedType, SDKKinds.OnDialogEvent, value || '');
+    errors.customEventName = validateEventName(selectedType, SDKKinds.OnDialogEvent, value || '');
     setFormData({
       ...formData,
       $kind: SDKKinds.OnDialogEvent,
@@ -162,7 +162,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const customEventWidget = (
     <TextField
       data-testid="CustomEventName"
-      errorMessage={formData.errors.event}
+      errorMessage={formData.errors.customEventName}
       label={formatMessage('What is the name of the custom event?')}
       styles={textInputStyles}
       onChange={handleEventNameChange}

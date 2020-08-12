@@ -11,6 +11,9 @@ export interface TriggerFormDataErrors {
   /** Error msg of L2 dropdown 'Activities'. */
   activity?: string;
 
+  /** Error msg of [trigger=OnDialogEvent] custom event name value. */
+  customEventName?: string;
+
   /** Error msg of [tirgger=OnIntent, recognizer=RegEx] regex value. */
   regEx?: string;
 
