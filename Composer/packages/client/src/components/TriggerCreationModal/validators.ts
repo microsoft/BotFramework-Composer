@@ -37,8 +37,8 @@ export const validateActivityKind = ($kind: string): string | undefined => {
   return undefined;
 };
 
-export const validateEventName = ($kind: string, eventName: string): string | undefined => {
-  if ($kind === eventTypeKey && !eventName) {
+export const validateEventName = (eventName: string): string | undefined => {
+  if (!eventName) {
     return formatMessage('Please enter an event name');
   }
   return undefined;
@@ -95,7 +95,7 @@ export const validateForm = (
       errors.activity = validateActivityKind($kind);
       break;
     case customEventKey:
-      errors.customEventName = validateEventName($kind, eventName);
+      errors.customEventName = validateEventName(eventName);
       break;
     case intentTypeKey:
       errors.intent = validateIntentName(intent);

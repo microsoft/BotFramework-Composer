@@ -122,7 +122,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
     const errors: TriggerFormDataErrors = {};
-    errors.customEventName = validateEventName(SDKKinds.OnDialogEvent, value || '');
+    errors.customEventName = validateEventName(value || '');
     setFormData({
       ...formData,
       $kind: SDKKinds.OnDialogEvent,
