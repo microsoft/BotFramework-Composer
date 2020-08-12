@@ -68,19 +68,19 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const userSettings = useRecoilValue(userSettingsState);
 
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
-  const isRegexRecognizer = (dialogFile?.content?.recognizer?.$kind ?? '') === SDKKinds.RegexRecognizer;
-  const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
-  const recognizerUnassigned = !dialogFile?.content?.recognizer;
+  const recognizer = dialogFile?.content?.recognizer;
+  const regexIntents = recognizer?.intents ?? [];
+  const isRegexRecognizer = recognizer?.$kind === SDKKinds.RegexRecognizer;
+  const [selectedType, setSelectedType] = useState(recognizer ? SDKKinds.OnIntent : '');
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
-    $kind: recognizerUnassigned ? '' : SDKKinds.OnIntent,
+    $kind: recognizer ? SDKKinds.OnIntent : '',
     event: '',
     intent: '',
     triggerPhrases: '',
     regEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-  const [selectedType, setSelectedType] = useState(recognizerUnassigned ? '' : SDKKinds.OnIntent);
   const showIntentName = selectedType === SDKKinds.OnIntent;
   const showRegExDropDown = selectedType === SDKKinds.OnIntent && isRegexRecognizer;
   const showTriggerPhrase = selectedType === SDKKinds.OnIntent && !isRegexRecognizer;
@@ -88,11 +88,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const showActivityDropDown = selectedType === SDKKinds.OnActivity;
   const showCustomEvent = selectedType === customEventKey;
 
-  let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
-
-  if (recognizerUnassigned) {
-    triggerTypeOptions = triggerTypeOptions.filter((t) => t.key !== SDKKinds.OnIntent);
-  }
+  const triggerTypeOptions: IDropdownOption[] = getTriggerTypes(recognizer);
 
   const onClickSubmitButton = (e) => {
     e.preventDefault();
