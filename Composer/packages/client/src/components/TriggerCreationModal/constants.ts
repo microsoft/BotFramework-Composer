@@ -3,10 +3,11 @@
 
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
+import { SDKKinds } from '@bfc/shared';
 
-export const eventTypeKey = 'DialogEvents';
-export const intentTypeKey = 'IntentRecognized';
-export const activityTypeKey = 'Activities';
+export const eventTypeKey = SDKKinds.OnDialogEvent;
+export const intentTypeKey = SDKKinds.OnIntent;
+export const activityTypeKey = SDKKinds.OnActivity;
 export const customEventKey = 'CustomEvents';
 
 export const TriggerTypes: IDropdownOption[] = [
@@ -14,7 +15,7 @@ export const TriggerTypes: IDropdownOption[] = [
   { key: 'Microsoft.OnUnknownIntent', text: formatMessage('Unknown intent') },
   { key: 'Microsoft.OnDialogEvent', text: formatMessage('Dialog events') },
   { key: 'Microsoft.OnActivity', text: formatMessage('Activities') },
-  { key: 'OnCustomEvent', text: formatMessage('Custom events') },
+  { key: customEventKey, text: formatMessage('Custom events') },
 ];
 
 export const ActivityTypes: IDropdownOption[] = [
