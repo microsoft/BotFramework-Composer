@@ -314,7 +314,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const onTriggerCreationSubmit = async (
     dialog: DialogInfo,
     intent?: LuIntentSection,
-    lgFilePayload?: { [key: string]: LgTemplate[] }
+    lgFilePayload?: { [key: string]: LgTemplate[] },
+    url?: string
   ) => {
     const dialogPayload = {
       id: dialog.id,
@@ -337,7 +338,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
-    selectTo(`triggers[${index}]`);
+    if (url) {
+      navigateTo(url);
+    } else {
+      selectTo(`triggers[${index}]`);
+    }
     updateDialog(dialogPayload);
   };
 
@@ -690,7 +695,8 @@ SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.di
     };
     if (dialogId) {
       const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
-      onTriggerCreationSubmit(newDialog, undefined, lgFilePayload);
+      const url = `/bot/${projectId}/qna/${dialogId}`;
+      onTriggerCreationSubmit(newDialog, undefined, lgFilePayload, url);
       for (let i = 0; i < urls.length; i++) {
         if (!urls[i]) continue;
         await importQnAFromUrl({ id: `${dialogId}.${locale}`, url: urls[i] });
