@@ -24,35 +24,35 @@ export const validateTriggerKind = (selectedType: string): string | undefined =>
 };
 
 export const validateEventKind = (selectedType: string, $kind: string): string | undefined => {
-  if (selectedType === eventTypeKey && !$kind) {
+  if (!$kind) {
     return formatMessage('Please select a event type');
   }
   return undefined;
 };
 
 export const validateActivityKind = (selectedType: string, $kind: string): string | undefined => {
-  if (selectedType === activityTypeKey && !$kind) {
+  if (!$kind) {
     return formatMessage('Please select an activity type');
   }
   return undefined;
 };
 
 export const validateEventName = (selectedType: string, $kind: string, eventName: string): string | undefined => {
-  if (selectedType === customEventKey && $kind === eventTypeKey && !eventName) {
+  if ($kind === eventTypeKey && !eventName) {
     return formatMessage('Please enter an event name');
   }
   return undefined;
 };
 
 export const validateIntentName = (selectedType: string, intent: string): string | undefined => {
-  if (selectedType === intentTypeKey && (!intent || !nameRegex.test(intent))) {
+  if (!intent || !nameRegex.test(intent)) {
     return formatMessage('Spaces and special characters are not allowed. Use letters, numbers, -, or _.');
   }
   return undefined;
 };
 
 export const validateRegExPattern = (selectedType: string, isRegEx: boolean, regEx: string): string | undefined => {
-  if (selectedType === intentTypeKey && isRegEx && !regEx) {
+  if (isRegEx && !regEx) {
     return formatMessage('Please input regEx pattern');
   }
   return undefined;
@@ -64,7 +64,7 @@ export const validateDupRegExIntent = (
   isRegEx: boolean,
   regExIntents: [{ intent: string; pattern: string }]
 ): string | undefined => {
-  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
+  if (isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
     return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
@@ -76,7 +76,7 @@ export const validateTriggerPhrases = (
   intent: string,
   triggerPhrases: string
 ): string | undefined => {
-  if (selectedType === intentTypeKey && !isRegEx) {
+  if (!isRegEx) {
     if (triggerPhrases) {
       return getLuDiagnostics(intent, triggerPhrases);
     } else {
@@ -96,13 +96,25 @@ export const validateForm = (
   const { $kind, event: eventName, intent, regEx, triggerPhrases } = data;
 
   errors.$kind = validateTriggerKind(selectedType);
-  errors.event = validateEventKind(selectedType, $kind);
-  errors.activity = validateActivityKind(selectedType, $kind);
-  errors.customEventName = validateEventName(selectedType, $kind, eventName);
-  errors.intent = validateIntentName(selectedType, intent);
-  errors.regEx =
-    validateDupRegExIntent(selectedType, intent, isRegEx, regExIntents) ??
-    validateRegExPattern(selectedType, isRegEx, regEx);
-  errors.triggerPhrases = validateTriggerPhrases(selectedType, isRegEx, intent, triggerPhrases);
+
+  switch (selectedType) {
+    case eventTypeKey:
+      errors.event = validateEventKind(selectedType, $kind);
+      break;
+    case activityTypeKey:
+      errors.activity = validateActivityKind(selectedType, $kind);
+      break;
+    case customEventKey:
+      errors.customEventName = validateEventName(selectedType, $kind, eventName);
+      break;
+    case intentTypeKey:
+      errors.intent = validateIntentName(selectedType, intent);
+      errors.regEx =
+        validateDupRegExIntent(selectedType, intent, isRegEx, regExIntents) ??
+        validateRegExPattern(selectedType, isRegEx, regEx);
+      errors.triggerPhrases = validateTriggerPhrases(selectedType, isRegEx, intent, triggerPhrases);
+      break;
+  }
+
   return errors;
 };
