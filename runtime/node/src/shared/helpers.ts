@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import * as fs from 'fs';
-import * as minimist from 'minimist';
-import * as path from 'path';
+import fs from 'fs';
+import minimist from 'minimist';
+import path from 'path';
 import { Server } from 'restify';
+import merge from 'lodash/merge';
 import {
   BotFrameworkAdapter,
   BotFrameworkAdapterSettings,
@@ -54,8 +55,7 @@ export const getSettings = (projectRoot = getProjectRoot()): BotSettings => {
   // load appsettings.json
   const appsettingsPath = path.join(projectRoot, 'settings/appsettings.json');
   if (fs.existsSync(appsettingsPath)) {
-    const items = JSON.parse(fs.readFileSync(appsettingsPath, 'utf8'));
-    settings = Object.assign(settings, items); // merge settings
+    settings = JSON.parse(fs.readFileSync(appsettingsPath, 'utf8'));
   }
 
   // load generated settings
@@ -65,7 +65,7 @@ export const getSettings = (projectRoot = getProjectRoot()): BotSettings => {
     for (const file of generatedFiles) {
       if (file.endsWith('.json')) {
         const items = JSON.parse(fs.readFileSync(path.join(generatedPath, file), 'utf8'));
-        settings.luis = Object.assign(settings.luis, items.luis); // merge luis settings
+        settings.luis = merge(settings.luis, items.luis); // merge luis settings
       }
     }
   }

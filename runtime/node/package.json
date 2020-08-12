@@ -15,10 +15,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/lodash": "^4.14.159",
     "botbuilder": "4.10.0-rc0",
     "botbuilder-dialogs": "4.10.0-rc0",
     "botbuilder-dialogs-adaptive": "4.10.0-rc0-preview",
     "botbuilder-dialogs-declarative": "4.10.0-rc0-preview",
+    "lodash": "^4.17.19",
     "minimist": "1.2.5",
     "restify": "8.5.1"
   },
