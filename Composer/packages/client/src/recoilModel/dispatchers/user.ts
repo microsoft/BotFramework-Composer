@@ -7,6 +7,7 @@ import jwtDecode from 'jwt-decode';
 
 import { userSettingsState, currentUserState, CurrentUser } from '../atoms/appState';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
+import storage from '../../utils/storage';
 import { UserSettingsPayload } from '../types';
 
 enum ClaimNames {
@@ -83,6 +84,7 @@ export const userDispatcher = () => {
             }
           }
         }
+        storage.set('userSettings', newSettings);
         return newSettings;
       });
     }
