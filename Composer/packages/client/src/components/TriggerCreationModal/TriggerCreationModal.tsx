@@ -70,7 +70,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const recognizer = dialogFile?.content?.recognizer;
   const regexIntents = recognizer?.intents ?? [];
-  const isRegexRecognizer = recognizer?.$kind === SDKKinds.RegexRecognizer;
   const [selectedType, setSelectedType] = useState(recognizer ? SDKKinds.OnIntent : '');
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
@@ -81,14 +80,16 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     regEx: '',
   };
   const [formData, setFormData] = useState(initialFormData);
-  const showIntentName = selectedType === SDKKinds.OnIntent;
-  const showRegExDropDown = selectedType === SDKKinds.OnIntent && isRegexRecognizer;
-  const showTriggerPhrase = selectedType === SDKKinds.OnIntent && !isRegexRecognizer;
+
   const showEventDropDown = selectedType === SDKKinds.OnDialogEvent;
   const showActivityDropDown = selectedType === SDKKinds.OnActivity;
   const showCustomEvent = selectedType === customEventKey;
 
-  const triggerTypeOptions: IDropdownOption[] = getTriggerTypes(recognizer);
+  const showIntentName = selectedType === SDKKinds.OnIntent;
+  const isRegexRecognizer = recognizer?.$kind === SDKKinds.RegexRecognizer;
+  const isLuisRecognizer = recognizer?.$kind === SDKKinds.LuisRecognizer;
+  const isOnRegexIntent = selectedType === SDKKinds.OnIntent && isRegexRecognizer;
+  const isOnLuisIntent = selectedType === SDKKinds.OnIntent && isLuisRecognizer;
 
   const onClickSubmitButton = (e) => {
     e.preventDefault();
@@ -147,7 +148,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const onNameChange = (e, name) => {
     const errors: TriggerFormDataErrors = {};
     errors.intent = validateIntentName(selectedType, name);
-    if (showTriggerPhrase) {
+    if (isOnLuisIntent) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
     }
     setFormData({ ...formData, intent: name, errors: { ...formData.errors, ...errors } });
@@ -167,6 +168,55 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const errors = validateForm(selectedType, formData, isRegexRecognizer, regexIntents);
   const preventSubmit = shouldDisable(errors);
 
+  const customEventWidget = showCustomEvent && (
+    <TextField
+      data-testid="CustomEventName"
+      errorMessage={formData.errors.event}
+      label={formatMessage('What is the name of the custom event?')}
+      styles={intent}
+      onChange={handleEventNameChange}
+    />
+  );
+
+  const intentNameWidget = showIntentName && (
+    <TextField
+      data-testid="TriggerName"
+      errorMessage={formData.errors.intent}
+      label={
+        isRegexRecognizer
+          ? formatMessage('What is the name of this trigger (RegEx)')
+          : formatMessage('What is the name of this trigger (LUIS)')
+      }
+      styles={intent}
+      onChange={onNameChange}
+    />
+  );
+  const regexIntentWidget = isOnRegexIntent && (
+    <TextField
+      data-testid="RegExField"
+      errorMessage={formData.errors.regEx}
+      label={formatMessage('Please input regEx pattern')}
+      onChange={onChangeRegEx}
+    />
+  );
+  const luisIntentWidget = isOnLuisIntent && (
+    <React.Fragment>
+      <Label>{formatMessage('Trigger phrases')}</Label>
+      <LuEditor
+        editorSettings={userSettings.codeEditor}
+        errorMessage={formData.errors.triggerPhrases}
+        height={225}
+        luOption={{
+          projectId,
+          fileId: dialogId,
+          sectionId: formData.intent || PlaceHolderSectionName,
+        }}
+        placeholder={inlineModePlaceholder}
+        value={formData.triggerPhrases}
+        onChange={onTriggerPhrasesChange}
+      />
+    </React.Fragment>
+  );
   return (
     <Dialog
       dialogContentProps={{
@@ -188,7 +238,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             defaultSelectedKey={selectedType}
             errorMessage={formData.errors.$kind}
             label={formatMessage('What is the type of this trigger?')}
-            options={triggerTypeOptions}
+            options={getTriggerTypes(recognizer)}
             styles={dropdownStyles}
             onChange={onSelectTriggerType}
           />
@@ -203,15 +253,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               onChange={handleEventTypeChange}
             />
           )}
-          {showCustomEvent && (
-            <TextField
-              data-testid="CustomEventName"
-              errorMessage={formData.errors.event}
-              label={formatMessage('What is the name of the custom event?')}
-              styles={intent}
-              onChange={handleEventNameChange}
-            />
-          )}
           {showActivityDropDown && (
             <Dropdown
               data-testid={'activityTypeDropDown'}
@@ -223,46 +264,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               onChange={handleEventTypeChange}
             />
           )}
-          {showIntentName && (
-            <TextField
-              data-testid="TriggerName"
-              errorMessage={formData.errors.intent}
-              label={
-                isRegexRecognizer
-                  ? formatMessage('What is the name of this trigger (RegEx)')
-                  : formatMessage('What is the name of this trigger (LUIS)')
-              }
-              styles={intent}
-              onChange={onNameChange}
-            />
-          )}
-
-          {showRegExDropDown && (
-            <TextField
-              data-testid="RegExField"
-              errorMessage={formData.errors.regEx}
-              label={formatMessage('Please input regEx pattern')}
-              onChange={onChangeRegEx}
-            />
-          )}
-          {showTriggerPhrase && (
-            <React.Fragment>
-              <Label>{formatMessage('Trigger phrases')}</Label>
-              <LuEditor
-                editorSettings={userSettings.codeEditor}
-                errorMessage={formData.errors.triggerPhrases}
-                height={225}
-                luOption={{
-                  projectId,
-                  fileId: dialogId,
-                  sectionId: formData.intent || PlaceHolderSectionName,
-                }}
-                placeholder={inlineModePlaceholder}
-                value={formData.triggerPhrases}
-                onChange={onTriggerPhrasesChange}
-              />
-            </React.Fragment>
-          )}
+          {customEventWidget}
+          {intentNameWidget}
+          {regexIntentWidget}
+          {luisIntentWidget}
         </Stack>
       </div>
       <DialogFooter>
