@@ -12,7 +12,7 @@ import { DefaultMenuSchema } from './defaultMenuSchema';
 const DefaultRecognizers: RecognizerSchema[] = [
   {
     id: SDKKinds.RegexRecognizer,
-    displayName: () => formatMessage('Regular Expression recognizer(Regex)'),
+    displayName: () => formatMessage('Regular Expression'),
     editor: RegexIntentField,
     isSelected: (data) => {
       return typeof data === 'object' && data.$kind === SDKKinds.RegexRecognizer;

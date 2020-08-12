@@ -172,7 +172,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           />
         )}
         {importQnAFromUrlModalVisiability && (
-          <ImportQnAFromUrlModal dialogId={dialogId} isCreatingBot={false} onDismiss={onDismiss} onSubmit={onSubmit} />
+          <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={onDismiss} onSubmit={onSubmit} />
         )}
       </Suspense>
     </Page>

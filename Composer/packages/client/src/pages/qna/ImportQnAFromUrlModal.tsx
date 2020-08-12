@@ -75,7 +75,6 @@ interface ImportQnAFromUrlModalProps
     location: string;
   }> {
   dialogId: string;
-  isCreatingBot: boolean;
   subscriptionKey?: string;
   onDismiss: () => void;
   onSubmit: (urls: string[]) => void;
@@ -86,7 +85,7 @@ interface ImportQnAFromUrlModalFormData {
 }
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
-  const { onDismiss, onSubmit, dialogId, isCreatingBot = false } = props;
+  const { onDismiss, onSubmit, dialogId } = props;
   const [urlErrors, setUrlErrors] = useState(['']);
   const formConfig: FieldConfig<ImportQnAFromUrlModalFormData> = {
     urls: {

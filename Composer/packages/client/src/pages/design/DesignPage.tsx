@@ -803,12 +803,7 @@ SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.di
           />
         )}
         {importQnAModalVisibility && (
-          <ImportQnAFromUrlModal
-            dialogId={dialogId}
-            isCreatingBot={false}
-            onDismiss={cancelImportQnAModal}
-            onSubmit={handleCreateQnA}
-          />
+          <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={cancelImportQnAModal} onSubmit={handleCreateQnA} />
         )}
         {displaySkillManifest && (
           <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />
