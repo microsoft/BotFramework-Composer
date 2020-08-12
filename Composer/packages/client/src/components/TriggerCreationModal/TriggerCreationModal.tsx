@@ -122,7 +122,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
     const errors: TriggerFormDataErrors = {};
-    errors.customEventName = validateEventName(selectedType, SDKKinds.OnDialogEvent, value || '');
+    errors.customEventName = validateEventName(SDKKinds.OnDialogEvent, value || '');
     setFormData({
       ...formData,
       $kind: SDKKinds.OnDialogEvent,
@@ -134,7 +134,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const handleEventTypeChange = (e: React.FormEvent, option?: IDropdownOption) => {
     if (option) {
       const errors: TriggerFormDataErrors = {};
-      errors.event = validateEventKind(selectedType, option.key as string);
+      errors.event = validateEventKind(option.key as string);
       setFormData({ ...formData, $kind: option.key as string, errors: { ...formData.errors, ...errors } });
     }
   };
@@ -142,14 +142,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const handleActivityTypeChange = (e: React.FormEvent, option?: IDropdownOption) => {
     if (option) {
       const errors: TriggerFormDataErrors = {};
-      errors.activity = validateActivityKind(selectedType, option.key as string);
+      errors.activity = validateActivityKind(option.key as string);
       setFormData({ ...formData, $kind: option.key as string, errors: { ...formData.errors, ...errors } });
     }
   };
 
   const onIntentNameChange = (e, name) => {
     const errors: TriggerFormDataErrors = {};
-    errors.intent = validateIntentName(selectedType, name);
+    errors.intent = validateIntentName(name);
     if (isLuisRecognizer) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
     }
@@ -158,7 +158,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const onChangeRegEx = (e, pattern) => {
     const errors: TriggerFormDataErrors = {};
-    errors.regEx = validateRegExPattern(selectedType, isRegexRecognizer, pattern);
+    errors.regEx = validateRegExPattern(isRegexRecognizer, pattern);
     setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
   };
 
