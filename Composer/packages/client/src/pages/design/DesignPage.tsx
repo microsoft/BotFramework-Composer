@@ -19,6 +19,7 @@ import {
   getEditorAPI,
   LgTemplate,
   registerEditorAPI,
+  generateDesignerId,
 } from '@bfc/shared';
 import { ActionButton, Button } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
@@ -28,7 +29,15 @@ import { useRecoilValue } from 'recoil';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
 import { DialogDeleting } from '../../constants';
-import { createSelectedPath, deleteTrigger, getbreadcrumbLabel } from '../../utils/dialogUtil';
+import {
+  createSelectedPath,
+  deleteTrigger,
+  getbreadcrumbLabel,
+  regexRecognizerKey,
+  onChooseIntentKey,
+  generateNewDialog,
+  qnaMatcherKey,
+} from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -37,7 +46,6 @@ import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
-import { regexRecognizerKey, onChooseIntentKey, qnaMatcherKey } from '../../utils/dialogUtil';
 import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import {
   projectIdState,
@@ -62,6 +70,7 @@ import { getBaseName } from '../../utils/fileUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
+import ImportQnAFromUrlModal from '../qna/ImportQnAFromUrlModal';
 
 import {
   breadcrumbClass,
@@ -182,6 +191,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
+    importQnAFromUrl,
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
@@ -191,6 +201,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
   const [dialogJsonVisible, setDialogJsonVisibility] = useState(false);
+  const [importQnAModalVisibility, setImportQnAModalVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
   const [showWarning, setShowWarning] = useState(true);
@@ -288,6 +299,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return clearUndo;
   }, []);
 
+  const openImportQnAModal = () => {
+    setImportQnAModalVisibility(true);
+  };
+
   const onTriggerCreationDismiss = () => {
     setTriggerModalVisibility(false);
   };
@@ -381,6 +396,16 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             }),
             onClick: () => {
               openNewTriggerModal();
+            },
+          },
+          {
+            'data-testid': 'AddNewKnowledgebase',
+            key: 'addKnowledge',
+            text: formatMessage(` Add new knowledgebase on {displayName}`, {
+              displayName: currentDialog?.displayName ?? '',
+            }),
+            onClick: () => {
+              openImportQnAModal();
             },
           },
         ],
@@ -625,6 +650,54 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     onboardingAddCoachMarkRef({ addNew });
   }, []);
 
+  const cancelImportQnAModal = () => {
+    setImportQnAModalVisibility(false);
+  };
+
+  const handleCreateQnA = async (urls: string[], knowledgeBaseName: string) => {
+    cancelImportQnAModal();
+    const lgTemplateId1 = generateDesignerId();
+    const lgTemplateId2 = generateDesignerId();
+    const extraTriggerAttributes = {
+      'actions[0].actions[1].prompt': `\${TextInput_Prompt_${lgTemplateId1}()}`,
+      'actions[0].elseActions[0].activity': `\${SendActivity_${lgTemplateId2}()}`,
+    };
+    const lgTemplates: LgTemplate[] = [
+      {
+        name: `TextInput_Prompt_${lgTemplateId1}`,
+        body:
+          '[Activity\n\
+Text = ${@answer}\n\
+SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}\n\
+]',
+      } as LgTemplate,
+      {
+        name: `SendActivity_${lgTemplateId2}`,
+        body: '- ${@answer}',
+      } as LgTemplate,
+    ];
+    const lgFilePayload = {
+      [`${dialogId}.${locale}`]: lgTemplates,
+    };
+
+    const formData = {
+      $kind: qnaMatcherKey,
+      errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
+      event: '',
+      intent: '',
+      regEx: '',
+      triggerPhrases: '',
+    };
+    if (dialogId) {
+      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
+      onTriggerCreationSubmit(newDialog, undefined, lgFilePayload);
+      for (let i = 0; i < urls.length; i++) {
+        if (!urls[i]) continue;
+        await importQnAFromUrl({ id: `${dialogId}.${locale}`, knowledgeBaseName, url: urls[i] });
+      }
+    }
+  };
+
   const pluginConfig: PluginConfig = useMemo(() => {
     const sdkUISchema = schemas?.ui?.content ?? {};
     const userUISchema = schemas?.uiOverrides?.content ?? {};
@@ -721,6 +794,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             isOpen={triggerModalVisible}
             onDismiss={onTriggerCreationDismiss}
             onSubmit={onTriggerCreationSubmit}
+          />
+        )}
+        {importQnAModalVisibility && (
+          <ImportQnAFromUrlModal
+            dialogId={dialogId}
+            isCreatingBot={false}
+            onDismiss={cancelImportQnAModal}
+            onSubmit={handleCreateQnA}
           />
         )}
         {displaySkillManifest && (

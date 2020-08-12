@@ -419,12 +419,9 @@ async function updateBoilerplate(req: Request, res: Response) {
 }
 
 async function parseQnAContent(req: Request, res: Response) {
-  const subscriptionKey = req.query.isCreatingBot
-    ? '77957a4340e7472a8dea4948223893be'
-    : req.query.subscriptionKey.trim();
+  const subscriptionKey = '77957a4340e7472a8dea4948223893be';
   const url = req.query.url.trim() as string;
-  const region = req.query.region.trim();
-  const subscriptionKeyEndpoint = `https://${region}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+  const subscriptionKeyEndpoint = `https://westus.api.cognitive.microsoft.com/qnamaker/v4.0`;
   const extension = ['.pdf', '.tsv', '.doc', '.docx', '.xlsx'];
   try {
     const builder = new qnaBuild.Builder((message) => {
