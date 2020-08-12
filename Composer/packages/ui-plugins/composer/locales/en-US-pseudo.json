@@ -1,0 +1,215 @@
+{
+    "access_external_resources_7e37fe21": {
+        "message": "[[[ 🔥 Λccəss əxtərnāl rəsøůrcəs🔥 ]]]"
+    },
+    "adaptive_dialog_61a05dde": {
+        "message": "[[[ 🔥 Λdāptïvə dïāløg🔥 ]]]"
+    },
+    "ask_a_question_92ef7e0c": {
+        "message": "[[[ 🔥 Λsk ā qůəstïøn🔥 ]]]"
+    },
+    "attachment_input_e0ece49c": {
+        "message": "[[[ 🔥 Λttāchmənt Ⅱnpůt🔥 ]]]"
+    },
+    "begin_a_new_dialog_60249bd8": {
+        "message": "[[[ 🔥 Bəgïn ā nəw dïāløg🔥 ]]]"
+    },
+    "begin_dialog_12e2becf": {
+        "message": "[[[ 🔥 Bəgïn Dïāløg🔥 ]]]"
+    },
+    "branch_if_else_391e5681": {
+        "message": "[[[ 🔥 Brānch: Ⅱf/əlsə🔥 ]]]"
+    },
+    "branch_if_else_992cf9bf": {
+        "message": "[[[ 🔥 Brānch: Ⅱf/∃lsə🔥 ]]]"
+    },
+    "branch_switch_multiple_options_95c6a326": {
+        "message": "[[[ 🔥 Brānch: Swïtch (můltïplə øptïøns)🔥 ]]]"
+    },
+    "break_out_of_loop_ab30157c": {
+        "message": "[[[ 🔥 Brəāk øůt øf løøp🔥 ]]]"
+    },
+    "cancel_all_active_dialogs_335b1623": {
+        "message": "[[[ 🔥 Cāncəl āll āctïvə dïāløgs🔥 ]]]"
+    },
+    "cancel_all_dialogs_32144c45": {
+        "message": "[[[ 🔥 Cāncəl Λll Dïāløgs🔥 ]]]"
+    },
+    "cancel_dialog_event_cc671dee": {
+        "message": "[[[ 🔥 Cāncəl dïāløg əvənt🔥 ]]]"
+    },
+    "choice_input_f75a2353": {
+        "message": "[[[ 🔥 Chøïcə Ⅱnpůt🔥 ]]]"
+    },
+    "confirm_input_bf996e7a": {
+        "message": "[[[ 🔥 Cønfïrm Ⅱnpůt🔥 ]]]"
+    },
+    "confirmation_fec87d65": {
+        "message": "[[[ 🔥 Cønfïrmātïøn🔥 ]]]"
+    },
+    "connect_to_a_skill_53c9dff0": {
+        "message": "[[[ 🔥 Cønnəct tø ā skïll🔥 ]]]"
+    },
+    "connect_to_qna_knowledgebase_4b324132": {
+        "message": "[[[ 🔥 Cønnəct tø QnΛ Knøwlədgəbāsə🔥 ]]]"
+    },
+    "continue_loop_22635585": {
+        "message": "[[[ 🔥 Cøntïnůə løøp🔥 ]]]"
+    },
+    "create_a_condition_8686fd5": {
+        "message": "[[[ 🔥 Crəātə ā cøndïtïøn🔥 ]]]"
+    },
+    "date_or_time_d30bcc7d": {
+        "message": "[[[ 🔥 Dātə ør tïmə🔥 ]]]"
+    },
+    "date_time_input_2416ffc1": {
+        "message": "[[[ 🔥 Dātə Tïmə Ⅱnpůt🔥 ]]]"
+    },
+    "debug_break_46cb5adb": {
+        "message": "[[[ 🔥 Dəbůg Brəāk🔥 ]]]"
+    },
+    "debugging_options_20e2e9da": {
+        "message": "[[[ 🔥 Dəbůggïng øptïøns🔥 ]]]"
+    },
+    "delete_a_property_f2d70f79": {
+        "message": "[[[ 🔥 Dələtə ā prøpərty🔥 ]]]"
+    },
+    "delete_properties_8bc77b42": {
+        "message": "[[[ 🔥 Dələtə Prøpərtïəs🔥 ]]]"
+    },
+    "delete_properties_c49a7892": {
+        "message": "[[[ 🔥 Dələtə prøpərtïəs🔥 ]]]"
+    },
+    "delete_property_b3786fa0": {
+        "message": "[[[ 🔥 Dələtə Prøpərty🔥 ]]]"
+    },
+    "dialog_cancelled_767b512a": {
+        "message": "[[[ 🔥 Dïāløg cāncəlləd🔥 ]]]"
+    },
+    "dialog_management_2980578": {
+        "message": "[[[ 🔥 Dïāløg mānāgəmənt🔥 ]]]"
+    },
+    "edit_actions_b38e9fac": {
+        "message": "[[[ 🔥 ∃dït Λctïøns🔥 ]]]"
+    },
+    "edit_an_array_property_5d886011": {
+        "message": "[[[ 🔥 ∃dït ān ārrāy prøpərty🔥 ]]]"
+    },
+    "edit_array_4ab37c8": {
+        "message": "[[[ 🔥 ∃dït Λrrāy🔥 ]]]"
+    },
+    "emit_a_custom_event_78cf318b": {
+        "message": "[[[ 🔥 ∃mït ā cůstøm əvənt🔥 ]]]"
+    },
+    "emit_a_trace_event_f653ae84": {
+        "message": "[[[ 🔥 ∃mït ā trācə əvənt🔥 ]]]"
+    },
+    "emit_event_32aa6583": {
+        "message": "[[[ 🔥 ∃mït ∃vənt🔥 ]]]"
+    },
+    "end_dialog_8f562a4c": {
+        "message": "[[[ 🔥 ∃nd Dïāløg🔥 ]]]"
+    },
+    "end_this_dialog_3ed0d50b": {
+        "message": "[[[ 🔥 ∃nd thïs dïāløg🔥 ]]]"
+    },
+    "end_turn_6ab71cea": {
+        "message": "[[[ 🔥 ∃nd Tůrn🔥 ]]]"
+    },
+    "end_turn_ca85b3d4": {
+        "message": "[[[ 🔥 ∃nd tůrn🔥 ]]]"
+    },
+    "file_or_attachment_5467e604": {
+        "message": "[[[ 🔥 Fïlə ør āttāchmənt🔥 ]]]"
+    },
+    "for_each_def04c48": {
+        "message": "[[[ 🔥 Før ∃āch🔥 ]]]"
+    },
+    "for_each_page_3b4d4b69": {
+        "message": "[[[ 🔥 Før ∃āch Pāgə🔥 ]]]"
+    },
+    "http_request_79847109": {
+        "message": "[[[ 🔥 HTTP Rəqůəst🔥 ]]]"
+    },
+    "if_condition_56c9be4a": {
+        "message": "[[[ 🔥 Ⅱf Cøndïtïøn🔥 ]]]"
+    },
+    "language_understanding_9ae3f1f6": {
+        "message": "[[[ 🔥 Lāngůāgə ⩁ndərstāndïng🔥 ]]]"
+    },
+    "log_to_console_4fc23e34": {
+        "message": "[[[ 🔥 Løg tø cønsølə🔥 ]]]"
+    },
+    "loop_for_each_item_e09537ae": {
+        "message": "[[[ 🔥 Løøp: Før əāch ïtəm🔥 ]]]"
+    },
+    "loop_for_each_page_multiple_items_733e7f41": {
+        "message": "[[[ 🔥 Løøp: Før əāch pāgə (můltïplə ïtəms)🔥 ]]]"
+    },
+    "looping_ddae56ff": {
+        "message": "[[[ 🔥 Løøpïng🔥 ]]]"
+    },
+    "manage_properties_c9fa4456": {
+        "message": "[[[ 🔥 Mānāgə prøpərtïəs🔥 ]]]"
+    },
+    "modify_active_dialog_edcf4a45": {
+        "message": "[[[ 🔥 Mødïfy āctïvə dïāløg🔥 ]]]"
+    },
+    "multi_choice_839b54bb": {
+        "message": "[[[ 🔥 Můltï-chøïcə🔥 ]]]"
+    },
+    "none_3b5e34d2": {
+        "message": "[[[ 🔥 Nønə🔥 ]]]"
+    },
+    "number_a6dc44e": {
+        "message": "[[[ 🔥 Nůmbər🔥 ]]]"
+    },
+    "oauth_login_b6aa9534": {
+        "message": "[[[ 🔥 ⨀Λůth løgïn🔥 ]]]"
+    },
+    "prompt_for_a_date_or_a_time_d2df7f90": {
+        "message": "[[[ 🔥 Prømpt før ā dātə ør ā tïmə🔥 ]]]"
+    },
+    "prompt_for_a_file_or_an_attachment_1bf18e7e": {
+        "message": "[[[ 🔥 Prømpt før ā fïlə ør ān āttāchmənt🔥 ]]]"
+    },
+    "prompt_for_confirmation_dc85565c": {
+        "message": "[[[ 🔥 Prømpt før cønfïrmātïøn🔥 ]]]"
+    },
+    "prompt_with_multi_choice_f428542f": {
+        "message": "[[[ 🔥 Prømpt wïth můltï-chøïcə🔥 ]]]"
+    },
+    "regular_expression_855557bf": {
+        "message": "[[[ 🔥 Rəgůlār ∃xprəssïøn🔥 ]]]"
+    },
+    "repeat_this_dialog_83ca994e": {
+        "message": "[[[ 🔥 Rəpəāt thïs dïāløg🔥 ]]]"
+    },
+    "replace_this_dialog_e304015e": {
+        "message": "[[[ 🔥 Rəplācə thïs dïāløg🔥 ]]]"
+    },
+    "send_a_response_1a917d7e": {
+        "message": "[[[ 🔥 Sənd ā rəspønsə🔥 ]]]"
+    },
+    "send_an_http_request_aa32fd2": {
+        "message": "[[[ 🔥 Sənd ān HTTP rəqůəst🔥 ]]]"
+    },
+    "set_a_property_4258d8d7": {
+        "message": "[[[ 🔥 Sət ā prøpərty🔥 ]]]"
+    },
+    "set_properties_7415af3c": {
+        "message": "[[[ 🔥 Sət prøpərtïəs🔥 ]]]"
+    },
+    "sign_out_user_6845d640": {
+        "message": "[[[ 🔥 Sïgn øůt ůsər🔥 ]]]"
+    },
+    "text_7f4593da": {
+        "message": "[[[ 🔥 Təxt🔥 ]]]"
+    },
+    "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
+        "message": "[[[ 🔥 Thïs cønfïgůrəs ā dātā drïvən dïāløg vïā ā cølləctïøn øf əvənts ānd āctïøns.🔥 ]]]"
+    },
+    "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
+        "message": "[[[ 🔥 Tø ůndərstānd whāt thə ůsər sāys, yøůr dïāløg nəəds ā \"Rəcøgnïzər\"; thāt ïnclůdəs əxāmplə wørds ānd səntəncəs thāt ůsərs māy ůsə.🔥 ]]]"
+    }
+}
