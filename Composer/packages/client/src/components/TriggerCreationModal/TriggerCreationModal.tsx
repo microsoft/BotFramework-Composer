@@ -24,7 +24,7 @@ import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedD
 
 import { customEventKey, EventTypes, ActivityTypes } from './constants';
 import { getTriggerTypes } from './getTriggerTypes';
-import { styles, dialogWindow, dropdownStyles, intent } from './style';
+import { modalStyles, dialogStyles, triggerFormStyles, dropdownStyles, textInputStyles } from './style';
 import {
   getLuDiagnostics,
   validateEventName,
@@ -171,7 +171,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       data-testid="CustomEventName"
       errorMessage={formData.errors.event}
       label={formatMessage('What is the name of the custom event?')}
-      styles={intent}
+      styles={textInputStyles}
       onChange={handleEventNameChange}
     />
   );
@@ -186,7 +186,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             ? formatMessage('What is the name of this trigger (RegEx)')
             : formatMessage('What is the name of this trigger (LUIS)')
         }
-        styles={intent}
+        styles={textInputStyles}
         onChange={onIntentNameChange}
       />
       {isRegexRecognizer && (
@@ -194,6 +194,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
           data-testid="RegExField"
           errorMessage={formData.errors.regEx}
           label={formatMessage('Please input regEx pattern')}
+          styles={textInputStyles}
           onChange={onChangeRegEx}
         />
       )}
@@ -223,16 +224,16 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       dialogContentProps={{
         type: DialogType.normal,
         title: formatMessage('Create a trigger'),
-        styles: styles.dialog,
+        styles: dialogStyles,
       }}
       hidden={!isOpen}
       modalProps={{
         isBlocking: false,
-        styles: styles.modal,
+        styles: modalStyles,
       }}
       onDismiss={onDismiss}
     >
-      <div css={dialogWindow}>
+      <div css={triggerFormStyles}>
         <Stack>
           <Dropdown
             data-testid={'triggerTypeDropDown'}
