@@ -76,7 +76,10 @@ export const validateEventKind = (selectedType: string, $kind: string): string |
   if (selectedType === eventTypeKey && !$kind) {
     return formatMessage('Please select a event type');
   }
+  return undefined;
+};
 
+export const validateActivityKind = (selectedType: string, $kind: string): string | undefined => {
   if (selectedType === activityTypeKey && !$kind) {
     return formatMessage('Please select an activity type');
   }
@@ -92,8 +95,9 @@ export const validateForm = (
   const errors: TriggerFormDataErrors = {};
   const { $kind, event: eventName, intent, regEx, triggerPhrases } = data;
 
-  errors.event = validateEventKind(selectedType, $kind);
   errors.$kind = validateTriggerKind(selectedType);
+  errors.event = validateEventKind(selectedType, $kind);
+  errors.activity = validateActivityKind(selectedType, $kind);
   errors.customEventName = validateEventName(selectedType, $kind, eventName);
   errors.intent = validateIntentName(selectedType, intent);
   errors.regEx =

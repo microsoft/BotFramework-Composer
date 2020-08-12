@@ -34,6 +34,7 @@ import {
   validateForm,
   validateIntentName,
   validateRegExPattern,
+  validateActivityKind,
 } from './validators';
 
 const shouldDisable = (errors: TriggerFormDataErrors) => {
@@ -132,6 +133,14 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     if (option) {
       const errors: TriggerFormDataErrors = {};
       errors.event = validateEventKind(selectedType, option.key as string);
+      setFormData({ ...formData, $kind: option.key as string, errors: { ...formData.errors, ...errors } });
+    }
+  };
+
+  const handleActivityTypeChange = (e: React.FormEvent, option?: IDropdownOption) => {
+    if (option) {
+      const errors: TriggerFormDataErrors = {};
+      errors.activity = validateActivityKind(selectedType, option.key as string);
       setFormData({ ...formData, $kind: option.key as string, errors: { ...formData.errors, ...errors } });
     }
   };
@@ -256,7 +265,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               options={ActivityTypes}
               placeholder={formatMessage('Select an activity type')}
               styles={dropdownStyles}
-              onChange={handleEventTypeChange}
+              onChange={handleActivityTypeChange}
             />
           )}
           {isCustomEvent && customEventWidget}
