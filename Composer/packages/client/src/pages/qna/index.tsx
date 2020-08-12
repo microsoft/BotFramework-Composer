@@ -21,6 +21,7 @@ import { QnAAllUpViewStatus } from '../../recoilModel/types';
 
 import TableView from './table-view';
 import { ImportQnAFromUrlModal } from './ImportQnAFromUrlModal';
+import { FailedImportQnAModal } from './FailedImportQnAModal';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
@@ -132,14 +133,17 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     setImportQnAFromUrlModalVisiability(false);
   };
 
-  const onSubmit = async (urls: string[], knowledgeBaseName: string) => {
+  const onSubmit = async (urls: string[]) => {
     onDismiss();
     for (let i = 0; i < urls.length; i++) {
       if (!urls[i]) continue;
-      await actions.importQnAFromUrl({ id: `${dialogId}.${locale}`, knowledgeBaseName, url: urls[i] });
+      await actions.importQnAFromUrl({ id: `${dialogId}.${locale}`, url: urls[i] });
     }
   };
 
+  const onConfirm = () => {
+    actions.updateQnAAllUpViewStatus({ status: QnAAllUpViewStatus.Success });
+  };
   return (
     <Page
       data-testid="QnAPage"
@@ -153,9 +157,18 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
           <CodeEditor dialogId={dialogId} path="/edit" />
-          {qnaAllUpViewStatus === QnAAllUpViewStatus.Success && <TableView dialogId={dialogId} path="/" />}
+          {qnaAllUpViewStatus !== QnAAllUpViewStatus.Loading && <TableView dialogId={dialogId} path="/" />}
         </Router>
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && <LoadingSpinner message={'Extracting QnA pairs'} />}
+        {qnaAllUpViewStatus === QnAAllUpViewStatus.Failed && (
+          <FailedImportQnAModal
+            setting={{
+              title: 'Bad Argument',
+              subtitle: 'Failed to import QnA resource. Your url is invalid.',
+            }}
+            onConfirm={onConfirm}
+          />
+        )}
         {importQnAFromUrlModalVisiability && (
           <ImportQnAFromUrlModal dialogId={dialogId} isCreatingBot={false} onDismiss={onDismiss} onSubmit={onSubmit} />
         )}

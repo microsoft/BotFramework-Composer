@@ -96,13 +96,13 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveProjectAs(projectId, formData.name, formData.description, formData.location);
   };
 
-  const handleCreateQnA = async (urls: string[], knowledgeBaseName: string) => {
+  const handleCreateQnA = async (urls: string[]) => {
     saveTemplateId(QnABotTemplateId);
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
     await handleCreateNew(formData, QnABotTemplateId);
     for (let i = 0; i < urls.length; i++) {
       if (!urls[i]) continue;
-      await importQnAFromUrl({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, knowledgeBaseName, url: urls[i] });
+      await importQnAFromUrl({ id: `${formData.name.toLocaleLowerCase()}.${locale}`, url: urls[i] });
     }
   };
 

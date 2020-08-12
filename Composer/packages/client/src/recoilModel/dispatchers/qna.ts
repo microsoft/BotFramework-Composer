@@ -6,7 +6,6 @@ import { useRecoilCallback, CallbackInterface } from 'recoil';
 
 import qnaWorker from '../parsers/qnaWorker';
 import { qnaFilesState, qnaAllUpViewStatusState, projectIdState, localeState, settingsState } from '../atoms/botState';
-import { applicationErrorState } from '../atoms';
 import { QnAAllUpViewStatus } from '../types';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
@@ -88,15 +87,7 @@ export const qnaDispatcher = () => {
     }
   );
   const importQnAFromUrl = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
-      id,
-      knowledgeBaseName,
-      url,
-    }: {
-      id: string;
-      knowledgeBaseName: string;
-      url: string;
-    }) => {
+    (callbackHelpers: CallbackInterface) => async ({ id, url }: { id: string; url: string }) => {
       const { set, snapshot } = callbackHelpers;
       const qnaFiles = await snapshot.getPromise(qnaFilesState);
       const qnaFile = qnaFiles.find((f) => f.id === id);
@@ -105,20 +96,20 @@ export const qnaDispatcher = () => {
         const response = await httpClient.get(`/qnaContent`, {
           params: { url },
         });
-        if (!knowledgeBaseName) {
-          knowledgeBaseName = 'default knowledge base';
-        }
-        const appendedContent = `> knowledge base name: ${knowledgeBaseName}\n` + response.data;
-        const content = qnaFile ? qnaFile.content + '\n' + appendedContent : appendedContent;
+        const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
 
         await updateQnAFileState(callbackHelpers, { id, content });
+        set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
       } catch (err) {
-        set(applicationErrorState, {
-          message: err.message,
-          summary: `Failed to import QnA`,
-        });
+        set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Failed);
       }
-      set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
+    }
+  );
+
+  const updateQnAAllUpViewStatus = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ status }: { status: QnAAllUpViewStatus }) => {
+      const { set } = callbackHelpers;
+      set(qnaAllUpViewStatusState, status);
     }
   );
 
@@ -126,5 +117,6 @@ export const qnaDispatcher = () => {
     createQnAFile,
     updateQnAFile,
     importQnAFromUrl,
+    updateQnAAllUpViewStatus,
   };
 };
