@@ -35,6 +35,7 @@ import {
   validateIntentName,
   validateRegExPattern,
   validateActivityKind,
+  validateTriggerKind,
 } from './validators';
 
 const shouldDisable = (errors: TriggerFormDataErrors) => {
@@ -115,7 +116,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     } else {
       newFormData = { ...newFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key };
     }
-    setFormData({ ...newFormData, errors: {} });
+    newFormData.errors.$kind = validateTriggerKind(option.key);
+    setFormData(newFormData);
   };
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
