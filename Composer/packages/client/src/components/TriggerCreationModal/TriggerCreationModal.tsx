@@ -23,7 +23,7 @@ import { userSettingsState } from '../../recoilModel';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { TriggerFormData } from './types/TriggerFormData';
-import { TriggerFormDataErrors } from './TriggerFormDataErrors';
+import { TriggerFormDataErrors } from './types/TriggerFormDataErrors';
 import { customEventKey, EventTypes, ActivityTypes } from './constants';
 import { getTriggerTypes } from './getTriggerTypes';
 import { modalStyles, dialogStyles, triggerFormStyles, dropdownStyles, textInputStyles } from './style';
@@ -35,15 +35,6 @@ import {
   validateIntentName,
   validateRegExPattern,
 } from './validators';
-
-const initialFormDataErrors = {
-  $kind: '',
-  intent: '',
-  event: '',
-  triggerPhrases: '',
-  regEx: '',
-  activity: '',
-};
 
 const shouldDisable = (errors: TriggerFormDataErrors) => {
   for (const key in errors) {
@@ -74,7 +65,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const regexIntents = recognizer?.intents ?? [];
   const [selectedType, setSelectedType] = useState(recognizer ? SDKKinds.OnIntent : '');
   const initialFormData: TriggerFormData = {
-    errors: initialFormDataErrors,
+    errors: {},
     $kind: recognizer ? SDKKinds.OnIntent : '',
     event: '',
     intent: '',
@@ -123,7 +114,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     } else {
       newFormData = { ...newFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key };
     }
-    setFormData({ ...newFormData, errors: initialFormDataErrors });
+    setFormData({ ...newFormData, errors: {} });
   };
 
   const handleEventNameChange = (event: React.FormEvent, value?: string) => {
