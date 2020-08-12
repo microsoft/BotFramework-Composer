@@ -232,17 +232,17 @@ export function CreateOptions(props) {
       onRenderField: SelectOption,
     },
     {
-      ariaLabel: formatMessage('Create from QnA') + (option === optionKeys.createFromQnA ? ' selected' : ''),
-      key: optionKeys.createFromQnA,
-      'data-testid': 'Create from QnA',
-      text: formatMessage('Create from Knowledge (QnA)'),
-      onRenderField: SelectOption,
-    },
-    {
       ariaLabel: formatMessage('Create from template') + (option === optionKeys.createFromTemplate ? ' selected' : ''),
       key: optionKeys.createFromTemplate,
       'data-testid': 'Create from template',
       text: formatMessage('Create from template'),
+      onRenderField: SelectOption,
+    },
+    {
+      ariaLabel: formatMessage('Create from QnA') + (option === optionKeys.createFromQnA ? ' selected' : ''),
+      key: optionKeys.createFromQnA,
+      'data-testid': 'Create from QnA',
+      text: formatMessage('Create from knowledge (QnA Maker)'),
       onRenderField: SelectOption,
     },
   ];

@@ -159,7 +159,9 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
           <CodeEditor dialogId={dialogId} path="/edit" />
           {qnaAllUpViewStatus !== QnAAllUpViewStatus.Loading && <TableView dialogId={dialogId} path="/" />}
         </Router>
-        {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && <LoadingSpinner message={'Extracting QnA pairs'} />}
+        {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && (
+          <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
+        )}
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Failed && (
           <FailedImportQnAModal
             setting={{

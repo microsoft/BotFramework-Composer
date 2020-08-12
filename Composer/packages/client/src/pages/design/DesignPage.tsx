@@ -406,7 +406,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           {
             'data-testid': 'AddNewKnowledgebase',
             key: 'addKnowledge',
-            text: formatMessage(` Add new knowledgebase on {displayName}`, {
+            text: formatMessage(` Add new knowledge base on {displayName}`, {
               displayName: currentDialog?.displayName ?? '',
             }),
             onClick: () => {

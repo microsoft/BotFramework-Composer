@@ -142,7 +142,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage('Populate your KB.'),
+        title: formatMessage('Create your knowledge base using QnA Maker'),
         subText: formatMessage(
           'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
         ),
@@ -189,19 +189,17 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
         </Stack>
       </div>
       <DialogFooter>
-        {isCreatingBot && (
-          <DefaultButton
-            data-testid={'createKnowledgeBaseFromScratch'}
-            styles={{ root: { marginRight: 155 } }}
-            text={formatMessage('Create knowledge base(KB) from scratch')}
-            onClick={() => {
-              if (hasErrors) {
-                return;
-              }
-              onSubmit([]);
-            }}
-          />
-        )}
+        <DefaultButton
+          data-testid={'createKnowledgeBaseFromScratch'}
+          styles={{ root: { marginRight: 155 } }}
+          text={formatMessage('Create knowledge base from scratch')}
+          onClick={() => {
+            if (hasErrors) {
+              return;
+            }
+            onSubmit([]);
+          }}
+        />
         <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
         <PrimaryButton
           data-testid={'createKnowledgeBase'}
