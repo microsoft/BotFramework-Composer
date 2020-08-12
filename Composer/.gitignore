@@ -6,3 +6,5 @@ cypress/results
 cypress/videos
 
 TestBots/
+
+l10ntemp/

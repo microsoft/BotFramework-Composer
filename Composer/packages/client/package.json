@@ -14,8 +14,7 @@
     "test": "jest",
     "lint": "eslint --quiet --ext .js,.jsx,.ts,.tsx ./src ./__tests__",
     "lint:fix": "yarn lint --fix",
-    "typecheck": "tsc --noEmit",
-    "extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o src/locales/en-US.json src/**/*.ts src/**/*.tsx"
+    "typecheck": "tsc --noEmit"
   },
   "proxy": "http://localhost:5000",
   "dependencies": {

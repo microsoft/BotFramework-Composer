@@ -9,7 +9,8 @@
     "lodash": "^4.17.12",
     "set-value": "^3.0.2",
     "kind-of": "^6.0.3",
-    "elliptic": "^6.5.3"
+    "elliptic": "^6.5.3",
+    "@babel/parser": "^7.11.3"
   },
   "engines": {
     "node": ">=12"
@@ -62,8 +63,10 @@
     "typecheck:server": "yarn workspace @bfc/server typecheck",
     "typecheck:client": "yarn workspace @bfc/client typecheck",
     "tableflip": "rimraf node_modules/ **/node_modules && yarn && yarn build",
-    "l10n-extract": "node scripts/l10n-extract.js",
-    "l10n-transform": "node scripts/l10n-transform.js"
+    "l10n:extract": "cross-env NODE_ENV=production format-message extract -g underscored_crc32 -o packages/client/src/locales/en-US.json l10ntemp/**/*.js",
+    "l10n:extractJson": "node scripts/l10n-extractJson.js",
+    "l10n:transform": "node scripts/l10n-transform.js",
+    "l10n:babel": "babel ./packages --extensions \".ts,.tsx,.jsx,.js\" --out-dir l10ntemp --presets=@babel/react,@babel/typescript --plugins=@babel/plugin-proposal-class-properties --ignore \"packages/**/__tests__\",\"packages/**/node_modules\",\"packages/**/build/**/*.js\""
   },
   "husky": {
     "hooks": {

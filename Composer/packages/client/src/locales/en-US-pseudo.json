@@ -5,6 +5,18 @@
     "5_minute_intro_7ea06d2b": {
         "message": "[[[ 🔥 5 Mïnůtə Ⅱntrø🔥 ]]]"
     },
+    "ErrorInfo_part1": {
+        "message": "[[[ 🔥 Λn ərrør øccůrəd ïn thə førm ədïtør!🔥 ]]]"
+    },
+    "ErrorInfo_part2": {
+        "message": "[[[ 🔥 Thïs ïs lïkəly důə tø mālførməd dātā ør mïssïng fůnctïønālïty ïn Cømpøsər.🔥 ]]]"
+    },
+    "ErrorInfo_part3": {
+        "message": "[[[ 🔥 Try nāvïgātïng tø ānøthər nødə ïn thə vïsůāl ədïtør.🔥 ]]]"
+    },
+    "a_dialog_file_must_have_a_name_123ff67d": {
+        "message": "[[[ 🔥 ā dïāløg fïlə můst hāvə ā nāmə🔥 ]]]"
+    },
     "a_minimap_gives_an_overview_of_your_source_code_fo_9a897f4f": {
         "message": "[[[ 🔥 Λ mïnïmāp gïvəs ān øvərvïəw øf yøůr søůrcə cødə før qůïck nāvïgātïøn ānd cødə ůndərstāndïng.🔥 ]]]"
     },
@@ -17,20 +29,74 @@
     "about_70c18bba": {
         "message": "[[[ 🔥 Λbøůt🔥 ]]]"
     },
+    "access_external_resources_7e37fe21": {
+        "message": "[[[ 🔥 Λccəss əxtərnāl rəsøůrcəs🔥 ]]]"
+    },
+    "action_created_f80af9a0": {
+        "message": "[[[ 🔥 Λctïøn crəātəd🔥 ]]]"
+    },
+    "action_deleted_a10c002b": {
+        "message": "[[[ 🔥 Λctïøn dələtəd🔥 ]]]"
+    },
+    "action_focused_400ee4af": {
+        "message": "[[[ 🔥 Λctïøn føcůsəd🔥 ]]]"
+    },
+    "action_unfocused_18a2800e": {
+        "message": "[[[ 🔥 Λctïøn ůnføcůsəd🔥 ]]]"
+    },
+    "actions_copied_2821ab27": {
+        "message": "[[[ 🔥 Λctïøns cøpïəd🔥 ]]]"
+    },
+    "actions_created_6c5acc11": {
+        "message": "[[[ 🔥 Λctïøns crəātəd🔥 ]]]"
+    },
+    "actions_cut_929f4c37": {
+        "message": "[[[ 🔥 Λctïøns cůt🔥 ]]]"
+    },
     "actions_define_b_how_the_bot_responds_b_to_a_certa_890a71f4": {
         "message": "[[[ 🔥 Λctïøns dəfïnə <b>høw thə bøt rəspønds</b> tø ā cərtāïn trïggər.🔥 ]]]"
+    },
+    "actions_deleted_355c359a": {
+        "message": "[[[ 🔥 Λctïøns dələtəd🔥 ]]]"
+    },
+    "actions_disabled_c1accfb6": {
+        "message": "[[[ 🔥 Λctïøns dïsābləd🔥 ]]]"
     },
     "actions_efcde10d": {
         "message": "[[[ 🔥 Λctïøns🔥 ]]]"
     },
+    "actions_enabled_8e9ec02d": {
+        "message": "[[[ 🔥 Λctïøns ənābləd🔥 ]]]"
+    },
+    "actions_moved_d7777b29": {
+        "message": "[[[ 🔥 Λctïøns møvəd🔥 ]]]"
+    },
+    "activities_125193f7": {
+        "message": "[[[ 🔥 Λctïvïtïəs🔥 ]]]"
+    },
     "activity_13915493": {
         "message": "[[[ 🔥 Λctïvïty🔥 ]]]"
+    },
+    "activity_received_2f20fa9d": {
+        "message": "[[[ 🔥 Λctïvïty rəcəïvəd🔥 ]]]"
+    },
+    "adaptive_dialog_61a05dde": {
+        "message": "[[[ 🔥 Λdāptïvə dïāløg🔥 ]]]"
     },
     "add_8523c19b": {
         "message": "[[[ 🔥 Λdd🔥 ]]]"
     },
+    "add_a_new_key_5c208c29": {
+        "message": "[[[ 🔥 Λdd ā nəw kəy🔥 ]]]"
+    },
+    "add_a_new_skill_dialog_aaaafa9c": {
+        "message": "[[[ 🔥 Λdd ā nəw Skïll Dïāløg🔥 ]]]"
+    },
     "add_a_new_trigger_a82d3db8": {
         "message": "[[[ 🔥 Λdd ā nəw trïggər🔥 ]]]"
+    },
+    "add_a_new_value_24ca14ac": {
+        "message": "[[[ 🔥 Λdd ā nəw vālůə🔥 ]]]"
     },
     "add_a_publish_profile_fca2263a": {
         "message": "[[[ 🔥 Λdd ā půblïsh prøfïlə🔥 ]]]"
@@ -50,17 +116,35 @@
     "add_language_75dee49e": {
         "message": "[[[ 🔥 Λdd lāngůāgə🔥 ]]]"
     },
+    "add_multiple_comma_separated_synonyms_2639283f": {
+        "message": "[[[ 🔥 Λdd můltïplə cømmā-səpārātəd synønyms🔥 ]]]"
+    },
     "add_new_dialog_25f12c9": {
         "message": "[[[ 🔥 Λdd nəw dïāløg🔥 ]]]"
     },
     "add_new_profile_47b225e6": {
         "message": "[[[ 🔥 Λdd nəw prøfïlə🔥 ]]]"
     },
+    "add_new_propertyname_bedf7dc6": {
+        "message": "[[[ 🔥 Λdd nəw { prøpərtyNāmə }🔥 ]]]"
+    },
     "add_new_trigger_on_displayname_2aaf6e4c": {
         "message": "[[[ 🔥 Λdd nəw trïggər øn { dïsplāyNāmə }🔥 ]]]"
     },
+    "add_new_validation_rule_here_eb675ccf": {
+        "message": "[[[ 🔥 Λdd nəw vālïdātïøn růlə hərə🔥 ]]]"
+    },
+    "add_some_example_phrases_to_trigger_this_intent_pl_568eaf51": {
+        "message": "[[[ 🔥 > ādd sømə əxāmplə phrāsəs tø trïggər thïs ïntənt:\n> - pləāsə təll mə thə wəāthər\n> - whāt ïs thə wəāthər lïkə ïn '{'cïty=Səāttlə'}'\n\n> əntïty dəfïnïtïøns:\n> @ ml cïty🔥 ]]]"
+    },
+    "add_some_expected_user_responses_please_remind_me__31dc5c07": {
+        "message": "[[[ 🔥 > ādd sømə əxpəctəd ůsər rəspønsəs:\n> - Pləāsə rəmïnd mə tø '{'ïtəmTïtlə=bůy mïlk'}'\n> - rəmïnd mə tø '{'ïtəmTïtlə'}'\n> - ādd '{'ïtəmTïtlə'}' tø my tødø lïst\n>\n> əntïty dəfïnïtïøns:\n> @ ml ïtəmTïtlə\n🔥 ]]]"
+    },
     "add_welcome_message_49d9ded9": {
         "message": "[[[ 🔥 Λdd wəlcømə məssāgə🔥 ]]]"
+    },
+    "advanced_events_2cbfa47d": {
+        "message": "[[[ 🔥 Λdvāncəd ∃vənts🔥 ]]]"
     },
     "all_4321c3a1": {
         "message": "[[[ 🔥 Λll🔥 ]]]"
@@ -80,6 +164,9 @@
     "app_id_2f53f1f8": {
         "message": "[[[ 🔥 Λpp Ⅱd🔥 ]]]"
     },
+    "append_choices_35c45a2d": {
+        "message": "[[[ 🔥 Λppənd chøïcəs🔥 ]]]"
+    },
     "application_settings_39e840c6": {
         "message": "[[[ 🔥 Λpplïcātïøn Səttïngs🔥 ]]]"
     },
@@ -91,6 +178,12 @@
     },
     "are_you_sure_you_want_to_exit_the_onboarding_produ_c2de1b23": {
         "message": "[[[ 🔥 Λrə yøů sůrə yøů wānt tø əxït thə ⨀nbøārdïng Prødůct Tøůr? Yøů cān rəstārt thə tøůr ïn thə ønbøārdïng səttïngs.🔥 ]]]"
+    },
+    "ask_a_question_92ef7e0c": {
+        "message": "[[[ 🔥 Λsk ā qůəstïøn🔥 ]]]"
+    },
+    "attachment_input_e0ece49c": {
+        "message": "[[[ 🔥 Λttāchmənt Ⅱnpůt🔥 ]]]"
     },
     "authoring_canvas_18802e39": {
         "message": "[[[ 🔥 Λůthørïng cānvās🔥 ]]]"
@@ -110,8 +203,29 @@
     "been_used_5daccdb2": {
         "message": "[[[ 🔥 Bəən ůsəd🔥 ]]]"
     },
+    "begin_a_new_dialog_60249bd8": {
+        "message": "[[[ 🔥 Bəgïn ā nəw dïāløg🔥 ]]]"
+    },
+    "begin_a_remote_skill_dialog_93e47189": {
+        "message": "[[[ 🔥 Bəgïn ā rəmøtə skïll dïāløg.🔥 ]]]"
+    },
+    "begin_dialog_12e2becf": {
+        "message": "[[[ 🔥 Bəgïn Dïāløg🔥 ]]]"
+    },
+    "begin_dialog_event_285bc650": {
+        "message": "[[[ 🔥 Bəgïn dïāløg əvənt🔥 ]]]"
+    },
+    "begindialog_a5594562": {
+        "message": "[[[ 🔥 BəgïnDïāløg🔥 ]]]"
+    },
     "ben_brown_99c12d19": {
         "message": "[[[ 🔥 Bən Brøwn🔥 ]]]"
+    },
+    "boolean_field_602934c9": {
+        "message": "[[[ 🔥 bøøləān fïəld🔥 ]]]"
+    },
+    "bot_asks_5e9f0202": {
+        "message": "[[[ 🔥 Bøt Λsks🔥 ]]]"
     },
     "bot_framework_composer_enables_developers_and_mult_ce0e42a9": {
         "message": "[[[ 🔥 Bøt Frāməwørk Cømpøsər ənābləs dəvəløpərs ānd můltï-dïscïplïnāry təāms tø bůïld āll kïnds øf cønvərsātïønāl əxpərïəncəs, ůsïng thə lātəst cømpønənts frøm thə Bøt Frāməwørk: SDK, LG, L⩁, ānd dəclārātïvə fïlə førmāts, āll wïthøůt wrïtïng cødə.🔥 ]]]"
@@ -152,6 +266,21 @@
     "bot_settings_ce2783e4": {
         "message": "[[[ 🔥 Bøt Səttïngs🔥 ]]]"
     },
+    "branch_if_else_391e5681": {
+        "message": "[[[ 🔥 Brānch: Ⅱf/əlsə🔥 ]]]"
+    },
+    "branch_if_else_992cf9bf": {
+        "message": "[[[ 🔥 Brānch: Ⅱf/∃lsə🔥 ]]]"
+    },
+    "branch_if_else_f6a36f1d": {
+        "message": "[[[ 🔥 Brānch: ïf/əlsə🔥 ]]]"
+    },
+    "branch_switch_multiple_options_95c6a326": {
+        "message": "[[[ 🔥 Brānch: Swïtch (můltïplə øptïøns)🔥 ]]]"
+    },
+    "break_out_of_loop_ab30157c": {
+        "message": "[[[ 🔥 Brəāk øůt øf løøp🔥 ]]]"
+    },
     "build_your_first_bot_f9c3e427": {
         "message": "[[[ 🔥 Bůïld yøůr fïrst bøt🔥 ]]]"
     },
@@ -161,11 +290,26 @@
     "calculating_17b21be7": {
         "message": "[[[ 🔥 Cālcůlātïng...🔥 ]]]"
     },
+    "cancel_all_active_dialogs_335b1623": {
+        "message": "[[[ 🔥 Cāncəl āll āctïvə dïāløgs🔥 ]]]"
+    },
+    "cancel_all_dialogs_32144c45": {
+        "message": "[[[ 🔥 Cāncəl Λll Dïāløgs🔥 ]]]"
+    },
     "cancel_caeb1e68": {
         "message": "[[[ 🔥 Cāncəl🔥 ]]]"
     },
+    "cancel_dialog_event_cc671dee": {
+        "message": "[[[ 🔥 Cāncəl dïāløg əvənt🔥 ]]]"
+    },
     "check_for_updates_and_install_them_automatically_50337340": {
         "message": "[[[ 🔥 Chəck før ůpdātəs ānd ïnstāll thəm āůtømātïcālly.🔥 ]]]"
+    },
+    "choice_input_f75a2353": {
+        "message": "[[[ 🔥 Chøïcə Ⅱnpůt🔥 ]]]"
+    },
+    "choice_name_fe8411f4": {
+        "message": "[[[ 🔥 Chøïcə Nāmə🔥 ]]]"
     },
     "choose_a_location_for_your_new_bot_project_e979f2d5": {
         "message": "[[[ 🔥 Chøøsə ā løcātïøn før yøůr nəw bøt prøjəct.🔥 ]]]"
@@ -200,6 +344,9 @@
     "comment_7ef1428e": {
         "message": "[[[ 🔥 Cømmənt🔥 ]]]"
     },
+    "component_stacktrace_e24b1983": {
+        "message": "[[[ 🔥 Cømpønənt Stācktrācə:🔥 ]]]"
+    },
     "composer_cannot_yet_translate_your_bot_automatical_2d54081b": {
         "message": "[[[ 🔥 Cømpøsər cānnøt yət trānslātə yøůr bøt āůtømātïcālly.\nTø crəātə ā trānslātïøn mānůālly, Cømpøsər wïll crəātə ā cøpy øf yøůr bøt’s cøntənt wïth thə nāmə øf thə āddïtïønāl lāngůāgə. Thïs cøntənt cān thən bə trānslātəd wïthøůt āffəctïng thə ørïgïnāl bøt løgïc ør fløw ānd yøů cān swïtch bətwəən lāngůāgəs tø ənsůrə thə rəspønsəs ārə cørrəctly ānd āpprøprïātəly trānslātəd.🔥 ]]]"
     },
@@ -221,6 +368,9 @@
     "composer_will_update_the_next_time_you_close_the_a_d74264a1": {
         "message": "[[[ 🔥 Cømpøsər wïll ůpdātə thə nəxt tïmə yøů cløsə thə āpp.🔥 ]]]"
     },
+    "conditionalselector_ed2031f0": {
+        "message": "[[[ 🔥 CøndïtïønālSələctør🔥 ]]]"
+    },
     "configure_composer_to_start_your_bot_using_runtime_fe37dadf": {
         "message": "[[[ 🔥 Cønfïgůrə Cømpøsər tø stārt yøůr bøt ůsïng růntïmə cødə yøů cān cůstømïzə ānd cøntrøl.🔥 ]]]"
     },
@@ -230,6 +380,15 @@
     "confirm_6556b3a6": {
         "message": "[[[ 🔥 Cønfïrm🔥 ]]]"
     },
+    "confirm_choices_db8e99fb": {
+        "message": "[[[ 🔥 Cønfïrm Chøïcəs🔥 ]]]"
+    },
+    "confirm_input_bf996e7a": {
+        "message": "[[[ 🔥 Cønfïrm Ⅱnpůt🔥 ]]]"
+    },
+    "confirmation_fec87d65": {
+        "message": "[[[ 🔥 Cønfïrmātïøn🔥 ]]]"
+    },
     "confirmation_modal_must_have_a_title_b0816e0b": {
         "message": "[[[ 🔥 Cønfïrmātïøn mødāl můst hāvə ā tïtlə.🔥 ]]]"
     },
@@ -238,6 +397,24 @@
     },
     "connect_to_a_new_skill_34d582ab": {
         "message": "[[[ 🔥 Cønnəct tø ā nəw skïll🔥 ]]]"
+    },
+    "connect_to_a_skill_53c9dff0": {
+        "message": "[[[ 🔥 Cønnəct tø ā skïll🔥 ]]]"
+    },
+    "connect_to_qna_knowledgebase_4b324132": {
+        "message": "[[[ 🔥 Cønnəct tø QnΛ Knøwlədgəbāsə🔥 ]]]"
+    },
+    "continue_loop_22635585": {
+        "message": "[[[ 🔥 Cøntïnůə løøp🔥 ]]]"
+    },
+    "conversation_ended_a8bd37dd": {
+        "message": "[[[ 🔥 Cønvərsātïøn əndəd🔥 ]]]"
+    },
+    "conversation_invoked_e960884e": {
+        "message": "[[[ 🔥 Cønvərsātïøn ïnvøkəd🔥 ]]]"
+    },
+    "conversationupdate_activity_9e94bff5": {
+        "message": "[[[ 🔥 Cønvərsātïøn⩁pdātə āctïvïty🔥 ]]]"
     },
     "copy_9748f9f": {
         "message": "[[[ 🔥 Cøpy🔥 ]]]"
@@ -254,8 +431,14 @@
     "create_132b3be1": {
         "message": "[[[ 🔥 Crəātə🔥 ]]]"
     },
+    "create_a_condition_8686fd5": {
+        "message": "[[[ 🔥 Crəātə ā cøndïtïøn🔥 ]]]"
+    },
     "create_a_name_for_the_project_which_will_be_used_t_57e9b690": {
         "message": "[[[ 🔥 Crəātə ā nāmə før thə prøjəct whïch wïll bə ůsəd tø nāmə thə āpplïcātïøn: (prøjəctnāmə-ənvïrønmənt-L⩁fïlənāmə)🔥 ]]]"
+    },
+    "create_a_new_dialog_21d84b82": {
+        "message": "[[[ 🔥 Crəātə ā nəw dïāløg🔥 ]]]"
     },
     "create_a_new_skill_manifest_or_select_which_one_yo_a97e9616": {
         "message": "[[[ 🔥 Crəātə ā nəw skïll mānïfəst ør sələct whïch ønə yøů wānt tø ədït🔥 ]]]"
@@ -290,6 +473,9 @@
     "current_40c0812f": {
         "message": "[[[ 🔥  - Cůrrənt🔥 ]]]"
     },
+    "custom_actions_5d396747": {
+        "message": "[[[ 🔥 Cůstøm Λctïøns🔥 ]]]"
+    },
     "custom_events_d6f0e45b": {
         "message": "[[[ 🔥 Cůstøm əvənts🔥 ]]]"
     },
@@ -311,6 +497,24 @@
     "date_modified_e1c8ac8f": {
         "message": "[[[ 🔥 Dātə Mødïfïəd🔥 ]]]"
     },
+    "date_or_time_d30bcc7d": {
+        "message": "[[[ 🔥 Dātə ør tïmə🔥 ]]]"
+    },
+    "date_time_input_2416ffc1": {
+        "message": "[[[ 🔥 Dātə Tïmə Ⅱnpůt🔥 ]]]"
+    },
+    "debug_break_46cb5adb": {
+        "message": "[[[ 🔥 Dəbůg Brəāk🔥 ]]]"
+    },
+    "debug_break_870a75df": {
+        "message": "[[[ 🔥 Dəbůg brəāk🔥 ]]]"
+    },
+    "debugging_options_20e2e9da": {
+        "message": "[[[ 🔥 Dəbůggïng øptïøns🔥 ]]]"
+    },
+    "decrement_by_step_9b6c2fa3": {
+        "message": "[[[ 🔥 dəcrəmənt by { stəp }🔥 ]]]"
+    },
     "default_language_486a558d": {
         "message": "[[[ 🔥 Dəfāůlt lāngůāgə🔥 ]]]"
     },
@@ -323,14 +527,29 @@
     "defined_in_475568fb": {
         "message": "[[[ 🔥 Dəfïnəd ïn:🔥 ]]]"
     },
+    "definition_not_found_for_defname_7194fd07": {
+        "message": "[[[ 🔥 Dəfïnïtïøn nøt føůnd før { dəfNāmə }🔥 ]]]"
+    },
     "delete_a6efa79d": {
         "message": "[[[ 🔥 Dələtə🔥 ]]]"
+    },
+    "delete_a_property_f2d70f79": {
+        "message": "[[[ 🔥 Dələtə ā prøpərty🔥 ]]]"
     },
     "delete_bot_73586104": {
         "message": "[[[ 🔥 Dələtə Bøt🔥 ]]]"
     },
     "delete_language_1527609d": {
         "message": "[[[ 🔥 Dələtə lāngůāgə🔥 ]]]"
+    },
+    "delete_properties_8bc77b42": {
+        "message": "[[[ 🔥 Dələtə Prøpərtïəs🔥 ]]]"
+    },
+    "delete_properties_c49a7892": {
+        "message": "[[[ 🔥 Dələtə prøpərtïəs🔥 ]]]"
+    },
+    "delete_property_b3786fa0": {
+        "message": "[[[ 🔥 Dələtə Prøpərty🔥 ]]]"
     },
     "describe_your_skill_88554792": {
         "message": "[[[ 🔥 Dəscrïbə yøůr skïll🔥 ]]]"
@@ -341,8 +560,41 @@
     "design_51b2812a": {
         "message": "[[[ 🔥 Dəsïgn🔥 ]]]"
     },
+    "dialog_68ba69ba": {
+        "message": "[[[ 🔥 (Dïāløg)🔥 ]]]"
+    },
+    "dialog_cancelled_767b512a": {
+        "message": "[[[ 🔥 Dïāløg cāncəlləd🔥 ]]]"
+    },
+    "dialog_data_61d5539b": {
+        "message": "[[[ 🔥 Dïāløg dātā🔥 ]]]"
+    },
     "dialog_dialogid_not_found_5e8214c3": {
         "message": "[[[ 🔥 dïāløg { dïāløgⅡd } nøt føůnd🔥 ]]]"
+    },
+    "dialog_events_f1b2e2a0": {
+        "message": "[[[ 🔥 Dïāløg əvənts🔥 ]]]"
+    },
+    "dialog_input_schema_c7864fbd": {
+        "message": "[[[ 🔥 Dïāløg ïnpůt schəmā.🔥 ]]]"
+    },
+    "dialog_interface_398bc493": {
+        "message": "[[[ 🔥 Dïāløg Ⅱntərfācə🔥 ]]]"
+    },
+    "dialog_management_2980578": {
+        "message": "[[[ 🔥 Dïāløg mānāgəmənt🔥 ]]]"
+    },
+    "dialog_opened_f6392b1": {
+        "message": "[[[ 🔥 Dïāløg øpənəd🔥 ]]]"
+    },
+    "dialog_output_schema_acfe2186": {
+        "message": "[[[ 🔥 Dïāløg øůtpůt schəmā.🔥 ]]]"
+    },
+    "dialog_started_912507c": {
+        "message": "[[[ 🔥 Dïāløg stārtəd🔥 ]]]"
+    },
+    "dialogfactory_missing_schema_5c3255c4": {
+        "message": "[[[ 🔥 DïāløgFāctøry mïssïng schəmā.🔥 ]]]"
     },
     "dialognum_plural_0_no_dialogs_1_one_dialog_other_d_1b86909b": {
         "message": "[[[ 🔥 { dïāløgNům, plůrāl,\n     =0 {Nø dïāløgs}\n     =1 {⨀nə dïāløg}\n  øthər {# dïāløgs}\n} hāvə bəən føůnd.\n            { dïāløgNům, sələct,\n      0 {}\n  øthər {Prəss døwn ārrøw kəy tø nāvïgātə thə səārch rəsůlts}\n}🔥 ]]]"
@@ -380,6 +632,12 @@
     "duplicate_skill_name_d9f6eb8d": {
         "message": "[[[ 🔥 Důplïcātə skïll nāmə🔥 ]]]"
     },
+    "each_page_of_pagesizestring_in_propstring_a7e23b00": {
+        "message": "[[[ 🔥 ∃āch pāgə øf { pāgəSïzəStrïng } ïn { prøpStrïng }🔥 ]]]"
+    },
+    "each_value_in_ae285cd9": {
+        "message": "[[[ 🔥 ∃āch vālůə ïn🔥 ]]]"
+    },
     "early_adopters_e8db7999": {
         "message": "[[[ 🔥 ∃ārly ādøptərs🔥 ]]]"
     },
@@ -388,6 +646,15 @@
     },
     "edit_a_skill_5665d9ac": {
         "message": "[[[ 🔥 ∃dït ā skïll🔥 ]]]"
+    },
+    "edit_actions_b38e9fac": {
+        "message": "[[[ 🔥 ∃dït Λctïøns🔥 ]]]"
+    },
+    "edit_an_array_property_5d886011": {
+        "message": "[[[ 🔥 ∃dït ān ārrāy prøpərty🔥 ]]]"
+    },
+    "edit_array_4ab37c8": {
+        "message": "[[[ 🔥 ∃dït Λrrāy🔥 ]]]"
     },
     "edit_c5fbea07": {
         "message": "[[[ 🔥 ∃dït🔥 ]]]"
@@ -398,14 +665,41 @@
     "edit_mode_7e07cfdf": {
         "message": "[[[ 🔥 ∃dït mødə🔥 ]]]"
     },
+    "edit_property_dd6a1172": {
+        "message": "[[[ 🔥 ∃dït Prøpərty🔥 ]]]"
+    },
     "ejecting_runtime_f6c90614": {
         "message": "[[[ 🔥 ∃jəctïng růntïmə...🔥 ]]]"
+    },
+    "emit_a_custom_event_78cf318b": {
+        "message": "[[[ 🔥 ∃mït ā cůstøm əvənt🔥 ]]]"
+    },
+    "emit_a_trace_event_f653ae84": {
+        "message": "[[[ 🔥 ∃mït ā trācə əvənt🔥 ]]]"
+    },
+    "emit_event_32aa6583": {
+        "message": "[[[ 🔥 ∃mït ∃vənt🔥 ]]]"
     },
     "enable_6f5d1328": {
         "message": "[[[ 🔥 ∃nāblə🔥 ]]]"
     },
     "enable_line_numbers_to_refer_to_code_lines_by_numb_e5ba66ea": {
         "message": "[[[ 🔥 ∃nāblə lïnə nůmbərs tø rəfər tø cødə lïnəs by nůmbər.🔥 ]]]"
+    },
+    "end_dialog_8f562a4c": {
+        "message": "[[[ 🔥 ∃nd Dïāløg🔥 ]]]"
+    },
+    "end_this_dialog_3ed0d50b": {
+        "message": "[[[ 🔥 ∃nd thïs dïāløg🔥 ]]]"
+    },
+    "end_turn_6ab71cea": {
+        "message": "[[[ 🔥 ∃nd Tůrn🔥 ]]]"
+    },
+    "end_turn_ca85b3d4": {
+        "message": "[[[ 🔥 ∃nd tůrn🔥 ]]]"
+    },
+    "endofconversation_activity_4aa21306": {
+        "message": "[[[ 🔥 ∃nd⨀fCønvərsātïøn āctïvïty🔥 ]]]"
     },
     "enter_a_manifest_url_to_add_a_new_skill_to_your_bo_57e9d660": {
         "message": "[[[ 🔥 ∃ntər ā mānïfəst ůrl tø ādd ā nəw skïll tø yøůr bøt.🔥 ]]]"
@@ -416,11 +710,44 @@
     "error_98e81528": {
         "message": "[[[ 🔥 ∃rrør🔥 ]]]"
     },
+    "error_afac7133": {
+        "message": "[[[ 🔥 ∃rrør:🔥 ]]]"
+    },
+    "error_event_c079b608": {
+        "message": "[[[ 🔥 ∃rrør əvənt🔥 ]]]"
+    },
+    "error_func_does_not_have_an_evaluator_it_s_not_a_b_8c660980": {
+        "message": "[[[ 🔥 ∃rrør: { fůnc } døəs nøt hāvə ān əvālůātør, ït''s nøt ā bůïlt-ïn fůnctïøn ør ā cůstøm fůnctïøn🔥 ]]]"
+    },
+    "error_in_ui_schema_for_title_errormsg_options_7f3c22f2": {
+        "message": "[[[ 🔥 ∃rrør ïn ⩁Ⅱ schəmā før { tïtlə }: { ərrørMsg }\n{ øptïøns }🔥 ]]]"
+    },
     "error_occured_ejecting_runtime_76bb48e7": {
         "message": "[[[ 🔥 ∃rrør øccůrəd əjəctïng růntïmə!🔥 ]]]"
     },
+    "error_occurred_5549a6b4": {
+        "message": "[[[ 🔥 ∃rrør øccůrrəd🔥 ]]]"
+    },
     "error_processing_schema_2c707cf3": {
         "message": "[[[ 🔥 ∃rrør Prøcəssïng Schəmā🔥 ]]]"
+    },
+    "event_48c2be6e": {
+        "message": "[[[ 🔥  (∃vənt)🔥 ]]]"
+    },
+    "event_activity_2067a94b": {
+        "message": "[[[ 🔥 ∃vənt āctïvïty🔥 ]]]"
+    },
+    "event_created_e9e05afc": {
+        "message": "[[[ 🔥 ∃vənt crəātəd🔥 ]]]"
+    },
+    "event_focused_51e447f3": {
+        "message": "[[[ 🔥 ∃vənt føcůsəd🔥 ]]]"
+    },
+    "event_received_457f99d6": {
+        "message": "[[[ 🔥 ∃vənt rəcəïvəd🔥 ]]]"
+    },
+    "events_cf7a8c50": {
+        "message": "[[[ 🔥 ∃vənts🔥 ]]]"
     },
     "example_bot_list_9be1d563": {
         "message": "[[[ 🔥 ∃xāmplə bøt lïst🔥 ]]]"
@@ -437,6 +764,9 @@
     "expand_navigation_20330d1d": {
         "message": "[[[ 🔥 ∃xpānd Nāvïgātïøn🔥 ]]]"
     },
+    "expected_responses_intent_intentname_44b051c": {
+        "message": "[[[ 🔥 ∃xpəctəd rəspønsəs (ïntənt: #{ ïntəntNāmə })🔥 ]]]"
+    },
     "export_as_skill_764cf284": {
         "message": "[[[ 🔥 ∃xpørt ās skïll🔥 ]]]"
     },
@@ -446,8 +776,26 @@
     "export_de71cd8e": {
         "message": "[[[ 🔥 ∃xpørt🔥 ]]]"
     },
+    "expression_7f906a13": {
+        "message": "[[[ 🔥 ∃xprəssïøn🔥 ]]]"
+    },
     "external_resources_will_not_be_changed_c08b0009": {
         "message": "[[[ 🔥 ∃xtərnāl rəsøůrcəs wïll nøt bə chāngəd.🔥 ]]]"
+    },
+    "false_2f39ee6d": {
+        "message": "[[[ 🔥 fālsə🔥 ]]]"
+    },
+    "false_eef8c169": {
+        "message": "[[[ 🔥 Fālsə🔥 ]]]"
+    },
+    "field_set_6e7d7f67": {
+        "message": "[[[ 🔥 Fïəld Sət🔥 ]]]"
+    },
+    "file_not_found_9eec054c": {
+        "message": "[[[ 🔥 Fïlə nøt føůnd🔥 ]]]"
+    },
+    "file_or_attachment_5467e604": {
+        "message": "[[[ 🔥 Fïlə ør āttāchmənt🔥 ]]]"
     },
     "file_type_fd1ba7ee": {
         "message": "[[[ 🔥 Fïlə Typə🔥 ]]]"
@@ -458,11 +806,26 @@
     "filter_dialog_de3ce43f": {
         "message": "[[[ 🔥 Fïltər Dïāløg🔥 ]]]"
     },
+    "firstselector_a3daca5d": {
+        "message": "[[[ 🔥 FïrstSələctør🔥 ]]]"
+    },
     "folder_foldername_already_exists_4a2260e9": {
         "message": "[[[ 🔥 føldər { føldərNāmə } ālrəādy əxïsts🔥 ]]]"
     },
+    "for_each_def04c48": {
+        "message": "[[[ 🔥 Før ∃āch🔥 ]]]"
+    },
+    "for_each_page_3b4d4b69": {
+        "message": "[[[ 🔥 Før ∃āch Pāgə🔥 ]]]"
+    },
     "form_editor_7c2b02f0": {
         "message": "[[[ 🔥 førm ədïtør🔥 ]]]"
+    },
+    "form_title_baf85c7e": {
+        "message": "[[[ 🔥 førm tïtlə🔥 ]]]"
+    },
+    "fromtemplatename_does_not_exist_d429483c": {
+        "message": "[[[ 🔥 frømTəmplātəNāmə døəs nøt əxïst🔥 ]]]"
     },
     "gb_7570760e": {
         "message": "[[[ 🔥 GB🔥 ]]]"
@@ -485,11 +848,32 @@
     "got_it_2c06b54a": {
         "message": "[[[ 🔥 Gøt ït!🔥 ]]]"
     },
+    "greeting_f906f962": {
+        "message": "[[[ 🔥 Grəətïng🔥 ]]]"
+    },
+    "handle_a_condition_f32eb8d": {
+        "message": "[[[ 🔥 Hāndlə ā Cøndïtïøn🔥 ]]]"
+    },
+    "handoff_activity_14363a20": {
+        "message": "[[[ 🔥 Hāndøff āctïvïty🔥 ]]]"
+    },
+    "handover_to_human_1a619574": {
+        "message": "[[[ 🔥 Hāndøvər tø hůmān🔥 ]]]"
+    },
+    "here_s_what_we_know_4e9c1731": {
+        "message": "[[[ 🔥 Hərə’s whāt wə knøw…🔥 ]]]"
+    },
     "hide_code_5dcffa94": {
         "message": "[[[ 🔥 Hïdə cødə🔥 ]]]"
     },
     "home_351838cd": {
         "message": "[[[ 🔥 Hømə🔥 ]]]"
+    },
+    "host_ef9acfae": {
+        "message": "[[[ 🔥 Høst 🔥 ]]]"
+    },
+    "http_request_79847109": {
+        "message": "[[[ 🔥 HTTP Rəqůəst🔥 ]]]"
     },
     "i_want_to_delete_this_bot_f81a4735": {
         "message": "[[[ 🔥 Ⅱ wānt tø dələtə thïs bøt🔥 ]]]"
@@ -500,8 +884,11 @@
     "iconname_file_icon_29976c8e": {
         "message": "[[[ 🔥 { ïcønNāmə } fïlə ïcøn🔥 ]]]"
     },
-    "if_this_problem_persists_please_file_an_issue_on_a_e9b079b1": {
-        "message": "[[[ 🔥 Ⅱf thïs prøbləm pərsïsts, pləāsə fïlə ān ïssůə øn <ā>GïtHůb</ā>.🔥 ]]]"
+    "if_condition_56c9be4a": {
+        "message": "[[[ 🔥 Ⅱf Cøndïtïøn🔥 ]]]"
+    },
+    "if_this_problem_persists_please_file_an_issue_on_6fbc8e2b": {
+        "message": "[[[ 🔥 Ⅱf thïs prøbləm pərsïsts, pləāsə fïlə ān ïssůə øn🔥 ]]]"
     },
     "in_production_5a70b8b4": {
         "message": "[[[ 🔥 Ⅱn prødůctïøn🔥 ]]]"
@@ -511,6 +898,12 @@
     },
     "in_the_b_create_a_trigger_b_wizard_set_the_trigger_f9b23519": {
         "message": "[[[ 🔥 Ⅱn thə <b>Crəātə ā trïggər</b> wïzārd, sət thə trïggər typə tø <ï>Λctïvïtïəs</ï> ïn thə drøpdøwn. Thən sət thə <b>Λctïvïty Typə</b> tø <ï>Grəətïng (Cønvərsātïøn⩁pdātə āctïvïty)</ï>, ānd clïck thə <b>Sůbmït</b> bůttøn.🔥 ]]]"
+    },
+    "increment_by_step_1cf3a88": {
+        "message": "[[[ 🔥 ïncrəmənt by { stəp }🔥 ]]]"
+    },
+    "input_1d1d9b8e": {
+        "message": "[[[ 🔥 Ⅱnpůt🔥 ]]]"
     },
     "install_microsoft_net_core_sdk_2de509f0": {
         "message": "[[[ 🔥 Ⅱnstāll Mïcrøsøft .N∃T Cørə SDK🔥 ]]]"
@@ -524,11 +917,26 @@
     "intent_2291200b": {
         "message": "[[[ 🔥 Ⅱntənt🔥 ]]]"
     },
+    "intent_recognized_c3840853": {
+        "message": "[[[ 🔥 Ⅱntənt rəcøgnïzəd🔥 ]]]"
+    },
     "intentname_is_missing_or_empty_e49db2f8": {
         "message": "[[[ 🔥 ïntəntNāmə ïs mïssïng ør əmpty🔥 ]]]"
     },
     "introduction_of_key_concepts_and_user_experience_e_971b32e9": {
         "message": "[[[ 🔥 Ⅱntrødůctïøn øf kəy cøncəpts ānd ůsər əxpərïəncə ələmənts før Cømpøsər.🔥 ]]]"
+    },
+    "invoke_activity_87df4903": {
+        "message": "[[[ 🔥 Ⅱnvøkə āctïvïty🔥 ]]]"
+    },
+    "is_missing_or_empty_a551462e": {
+        "message": "[[[ 🔥 ïs mïssïng ør əmpty🔥 ]]]"
+    },
+    "item_actions_22d0242": {
+        "message": "[[[ 🔥 Ⅱtəm Λctïøns🔥 ]]]"
+    },
+    "item_actions_cd903bde": {
+        "message": "[[[ 🔥 Ⅱtəm āctïøns🔥 ]]]"
     },
     "item_added_f3910bed": {
         "message": "[[[ 🔥 ïtəm āddəd🔥 ]]]"
@@ -539,17 +947,41 @@
     "kb_d9c53902": {
         "message": "[[[ 🔥 KB🔥 ]]]"
     },
+    "key_cannot_be_blank_dccc1b46": {
+        "message": "[[[ 🔥 Kəy cānnøt bə blānk🔥 ]]]"
+    },
+    "key_f2a919d5": {
+        "message": "[[[ 🔥 Kəy🔥 ]]]"
+    },
+    "keys_must_be_unique_2028cef3": {
+        "message": "[[[ 🔥 Kəys můst bə ůnïqůə🔥 ]]]"
+    },
+    "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
+        "message": "[[[ 🔥 L{ stārtLïnə }:{ stārtChārāctər } - L{ əndLïnə }:{ əndChārāctər } 🔥 ]]]"
+    },
+    "language_generation_1876f6d6": {
+        "message": "[[[ 🔥 Lāngůāgə Gənərātïøn🔥 ]]]"
+    },
     "language_generation_file_80c08efe": {
         "message": "[[[ 🔥 lāngůāgə gənərātïøn fïlə🔥 ]]]"
     },
+    "language_understanding_9ae3f1f6": {
+        "message": "[[[ 🔥 Lāngůāgə ⩁ndərstāndïng🔥 ]]]"
+    },
     "language_understanding_file_a65abc2c": {
         "message": "[[[ 🔥 lāngůāgə ůndərstāndïng fïlə🔥 ]]]"
+    },
+    "languagepolicy_e754ad28": {
+        "message": "[[[ 🔥 LāngůāgəPølïcy🔥 ]]]"
     },
     "last_modified_time_is_time_b1497d3": {
         "message": "[[[ 🔥 Lāst mødïfïəd tïmə ïs { tïmə }🔥 ]]]"
     },
     "learn_more_a79a7918": {
         "message": "[[[ 🔥 Ləārn mørə🔥 ]]]"
+    },
+    "learn_more_about_title_d1d3edbe": {
+        "message": "[[[ 🔥 Ləārn mørə ābøůt { tïtlə }🔥 ]]]"
     },
     "learn_more_c08939e8": {
         "message": "[[[ 🔥 Ləārn mørə.🔥 ]]]"
@@ -563,14 +995,23 @@
     "lg_editor_ee0184e6": {
         "message": "[[[ 🔥 LG ədïtør🔥 ]]]"
     },
+    "lg_file_already_exist_55195d20": {
+        "message": "[[[ 🔥 lg fïlə ālrəādy əxïst🔥 ]]]"
+    },
     "lg_file_id_not_found_6bd6869b": {
         "message": "[[[ 🔥 LG fïlə { ïd } nøt føůnd🔥 ]]]"
+    },
+    "lg_language_client_7892c4c1": {
+        "message": "[[[ 🔥 LG Lāngůāgə Clïənt🔥 ]]]"
     },
     "lg_navigation_pane_97b15c3d": {
         "message": "[[[ 🔥 LG Nāvïgātïøn Pānə🔥 ]]]"
     },
     "line_numbers_1bfa7fb": {
         "message": "[[[ 🔥 Lïnə nůmbərs🔥 ]]]"
+    },
+    "line_startline_startcharacter_line_endline_endchar_372bb2f4": {
+        "message": "[[[ 🔥 lïnə { stārtLïnə }:{ stārtChārāctər } - lïnə { əndLïnə }:{ əndChārāctər }🔥 ]]]"
     },
     "link_to_where_this_luis_intent_is_defined_9be25fb7": {
         "message": "[[[ 🔥 lïnk tø whərə thïs L⩁ⅡS ïntənt ïs dəfïnəd🔥 ]]]"
@@ -590,17 +1031,35 @@
     "location_is_location_8c17b5de": {
         "message": "[[[ 🔥 løcātïøn ïs { løcātïøn }🔥 ]]]"
     },
+    "log_to_console_4fc23e34": {
+        "message": "[[[ 🔥 Løg tø cønsølə🔥 ]]]"
+    },
     "login_6f3d6249": {
         "message": "[[[ 🔥 Løgïn🔥 ]]]"
     },
     "login_to_composer_eb42b41": {
         "message": "[[[ 🔥 Løgïn tø Cømpøsər🔥 ]]]"
     },
+    "loop_for_each_item_53eb7c5b": {
+        "message": "[[[ 🔥 Løøp: før əāch ïtəm🔥 ]]]"
+    },
+    "loop_for_each_item_e09537ae": {
+        "message": "[[[ 🔥 Løøp: Før əāch ïtəm🔥 ]]]"
+    },
+    "loop_for_each_page_multiple_items_733e7f41": {
+        "message": "[[[ 🔥 Løøp: Før əāch pāgə (můltïplə ïtəms)🔥 ]]]"
+    },
+    "looping_ddae56ff": {
+        "message": "[[[ 🔥 Løøpïng🔥 ]]]"
+    },
     "lu_editor_d09fb2b0": {
         "message": "[[[ 🔥 L⩁ ədïtør🔥 ]]]"
     },
     "lu_file_id_not_found_8732d33e": {
         "message": "[[[ 🔥 L⩁ fïlə { ïd } nøt føůnd🔥 ]]]"
+    },
+    "lu_language_client_bbffcd7b": {
+        "message": "[[[ 🔥 L⩁ Lāngůāgə Clïənt🔥 ]]]"
     },
     "lu_navigation_pane_54dc5587": {
         "message": "[[[ 🔥 L⩁ Nāvïgātïøn Pānə🔥 ]]]"
@@ -614,6 +1073,9 @@
     "make_a_copy_77d1233": {
         "message": "[[[ 🔥 Mākə ā cøpy🔥 ]]]"
     },
+    "manage_properties_c9fa4456": {
+        "message": "[[[ 🔥 Mānāgə prøpərtïəs🔥 ]]]"
+    },
     "manifest_url_30824e88": {
         "message": "[[[ 🔥 Mānïfəst ůrl🔥 ]]]"
     },
@@ -626,23 +1088,74 @@
     "message_5c38209d": {
         "message": "[[[ 🔥 Məssāgə🔥 ]]]"
     },
+    "message_deleted_628eef3a": {
+        "message": "[[[ 🔥 Məssāgə dələtəd🔥 ]]]"
+    },
+    "message_deleted_activity_85dd8915": {
+        "message": "[[[ 🔥 Məssāgə dələtəd āctïvïty🔥 ]]]"
+    },
+    "message_reaction_3704d790": {
+        "message": "[[[ 🔥 Məssāgə rəāctïøn🔥 ]]]"
+    },
+    "message_reaction_activity_379944e7": {
+        "message": "[[[ 🔥 Məssāgə rəāctïøn āctïvïty🔥 ]]]"
+    },
+    "message_received_5abfe9a0": {
+        "message": "[[[ 🔥 Məssāgə rəcəïvəd🔥 ]]]"
+    },
+    "message_received_activity_1ff7c2a4": {
+        "message": "[[[ 🔥 Məssāgə rəcəïvəd āctïvïty🔥 ]]]"
+    },
+    "message_updated_4f2e37fe": {
+        "message": "[[[ 🔥 Məssāgə ůpdātəd🔥 ]]]"
+    },
+    "message_updated_activity_4997737e": {
+        "message": "[[[ 🔥 Məssāgə ůpdātəd āctïvïty🔥 ]]]"
+    },
     "microsoft_app_id_a7f3e591": {
         "message": "[[[ 🔥 Mïcrøsøft Λpp Ⅱd🔥 ]]]"
     },
     "minimap_beb3be27": {
         "message": "[[[ 🔥 Mïnïmāp🔥 ]]]"
     },
+    "missing_definition_for_defname_33f2b594": {
+        "message": "[[[ 🔥 Mïssïng dəfïnïtïøn før { dəfNāmə }🔥 ]]]"
+    },
     "modification_rejected_6a6e8322": {
         "message": "[[[ 🔥 Mødïfïcātïøn Rəjəctəd🔥 ]]]"
+    },
+    "modify_active_dialog_edcf4a45": {
+        "message": "[[[ 🔥 Mødïfy āctïvə dïāløg🔥 ]]]"
+    },
+    "modify_this_dialog_3c38af24": {
+        "message": "[[[ 🔥 Mødïfy thïs dïāløg🔥 ]]]"
     },
     "more_options_e89670cf": {
         "message": "[[[ 🔥 Mørə øptïøns🔥 ]]]"
     },
+    "mostspecificselector_2cf1a6ae": {
+        "message": "[[[ 🔥 MøstSpəcïfïcSələctør🔥 ]]]"
+    },
     "move_abf00365": {
         "message": "[[[ 🔥 Møvə🔥 ]]]"
     },
+    "move_down_eaae3426": {
+        "message": "[[[ 🔥 Møvə Døwn🔥 ]]]"
+    },
+    "move_up_b1c4d3a5": {
+        "message": "[[[ 🔥 Møvə ⩁p🔥 ]]]"
+    },
     "msft_ignite_ai_show_e131edef": {
         "message": "[[[ 🔥 MSFT Ⅱgnïtə ΛⅡ Shøw🔥 ]]]"
+    },
+    "multi_choice_839b54bb": {
+        "message": "[[[ 🔥 Můltï-chøïcə🔥 ]]]"
+    },
+    "multiple_wildcards_26f50b6c": {
+        "message": "[[[ 🔥 můltïplə wïldcārds🔥 ]]]"
+    },
+    "must_be_an_expression_774c49d": {
+        "message": "[[[ 🔥 můst bə ān əxprəssïøn:🔥 ]]]"
     },
     "must_have_a_name_d5c5c464": {
         "message": "[[[ 🔥 Můst hāvə ā nāmə🔥 ]]]"
@@ -656,11 +1169,17 @@
     "name_contains_invalid_charactors_d1780987": {
         "message": "[[[ 🔥 Nāmə cøntāïns ïnvālïd chārāctørs🔥 ]]]"
     },
+    "name_copy_55d27c1a": {
+        "message": "[[[ 🔥 { nāmə }_Cøpy🔥 ]]]"
+    },
     "name_is_name_abc564f9": {
         "message": "[[[ 🔥 Nāmə ïs { nāmə }🔥 ]]]"
     },
     "name_is_required_29d28f8d": {
         "message": "[[[ 🔥 { nāmə } ïs rəqůïrəd🔥 ]]]"
+    },
+    "name_of_skill_dialog_to_call_201707f3": {
+        "message": "[[[ 🔥 Nāmə øf skïll dïāløg tø cāll🔥 ]]]"
     },
     "navigation_control_94f2649e": {
         "message": "[[[ 🔥 nāvïgātïøn cøntrøl🔥 ]]]"
@@ -689,11 +1208,32 @@
     "new_update_available_30534ea5": {
         "message": "[[[ 🔥 Nəw ůpdātə āvāïlāblə🔥 ]]]"
     },
+    "new_value_3c1ce474": {
+        "message": "[[[ 🔥 Nəw vālůə🔥 ]]]"
+    },
+    "newsectionplaceholdersectionname_5fc0d21": {
+        "message": "[[[ 🔥 _NəwSəctïønPlācəHøldərSəctïønNāmə🔥 ]]]"
+    },
     "next_40e12421": {
         "message": "[[[ 🔥 Nəxt🔥 ]]]"
     },
+    "no_editor_for_type_8b5593c5": {
+        "message": "[[[ 🔥 Nø ∃dïtør før { typə }🔥 ]]]"
+    },
     "no_updates_available_cecd904d": {
         "message": "[[[ 🔥 Nø ůpdātəs āvāïlāblə🔥 ]]]"
+    },
+    "no_wildcard_ff439e76": {
+        "message": "[[[ 🔥 nø wïldcārd🔥 ]]]"
+    },
+    "node_menu_e2aa8092": {
+        "message": "[[[ 🔥 Nødə mənů🔥 ]]]"
+    },
+    "none_3b5e34d2": {
+        "message": "[[[ 🔥 Nønə🔥 ]]]"
+    },
+    "not_a_single_template_e37f894": {
+        "message": "[[[ 🔥 Nøt ā sïnglə təmplātə🔥 ]]]"
     },
     "not_yet_published_669e37b3": {
         "message": "[[[ 🔥 Nøt yət půblïshəd🔥 ]]]"
@@ -713,6 +1253,15 @@
     "nov_12_2019_96ec5473": {
         "message": "[[[ 🔥 Nøv 12, 2019🔥 ]]]"
     },
+    "number_a6dc44e": {
+        "message": "[[[ 🔥 Nůmbər🔥 ]]]"
+    },
+    "numeric_field_c2564f69": {
+        "message": "[[[ 🔥 nůmərïc fïəld🔥 ]]]"
+    },
+    "oauth_login_b6aa9534": {
+        "message": "[[[ 🔥 ⨀Λůth løgïn🔥 ]]]"
+    },
     "off_5385ef3f": {
         "message": "[[[ 🔥 ⨀ff🔥 ]]]"
     },
@@ -731,20 +1280,44 @@
     "onboarding_8407871c": {
         "message": "[[[ 🔥 ⨀nbøārdïng🔥 ]]]"
     },
+    "ondialogevents_types_3dc569b5": {
+        "message": "[[[ 🔥 ⨀nDïāløg∃vənts Typəs🔥 ]]]"
+    },
     "open_e0beb7b9": {
         "message": "[[[ 🔥 ⨀pən🔥 ]]]"
     },
     "open_inline_editor_a5aabcfa": {
         "message": "[[[ 🔥 ⨀pən ïnlïnə ədïtør🔥 ]]]"
     },
+    "open_skills_page_for_configuration_details_a2a484ea": {
+        "message": "[[[ 🔥 ⨀pən Skïlls pāgə før cønfïgůrātïøn dətāïls🔥 ]]]"
+    },
     "or_4f7d4edb": {
         "message": "[[[ 🔥 ⨀r: 🔥 ]]]"
+    },
+    "origin_lg_file_not_found_in_store_d194cdbc": {
+        "message": "[[[ 🔥 ørïgïn lg fïlə nøt føůnd ïn størə🔥 ]]]"
+    },
+    "origin_lu_file_not_found_in_store_19e5cc8f": {
+        "message": "[[[ 🔥 ørïgïn lů fïlə nøt føůnd ïn størə🔥 ]]]"
     },
     "original_ce7b7e64": {
         "message": "[[[ 🔥  - ⨀rïgïnāl🔥 ]]]"
     },
+    "other_1c6d9c79": {
+        "message": "[[[ 🔥 ⨀thər🔥 ]]]"
+    },
+    "output_5023cf84": {
+        "message": "[[[ 🔥 ⨀ůtpůt🔥 ]]]"
+    },
     "page_number_cdee4179": {
         "message": "[[[ 🔥 Pāgə nůmbər🔥 ]]]"
+    },
+    "parse_failed_at_name_error_8f562bda": {
+        "message": "[[[ 🔥 Pārsə fāïləd āt { nāmə }: { ərrør }🔥 ]]]"
+    },
+    "paste_5963d1c1": {
+        "message": "[[[ 🔥 Pāstə🔥 ]]]"
     },
     "please_enter_a_value_for_key_77cfc097": {
         "message": "[[[ 🔥 Pləāsə əntər ā vālůə før { kəy }🔥 ]]]"
@@ -779,6 +1352,12 @@
     "please_select_an_activity_type_92f4a8a1": {
         "message": "[[[ 🔥 Pləāsə sələct ān āctïvïty typə🔥 ]]]"
     },
+    "press_enter_to_add_this_item_or_tab_to_move_to_the_6beb8a14": {
+        "message": "[[[ 🔥 prəss ∃ntər tø ādd thïs ïtəm ør Tāb tø møvə tø thə nəxt ïntərāctïvə ələmənt🔥 ]]]"
+    },
+    "press_enter_to_add_this_name_and_advance_to_the_ne_6a2ae080": {
+        "message": "[[[ 🔥 prəss ∃ntər tø ādd thïs nāmə ānd ādvāncə tø thə nəxt røw, ør prəss Tāb tø ādvāncə tø thə vālůə fïəld🔥 ]]]"
+    },
     "previous_bd2ac015": {
         "message": "[[[ 🔥 Prəvïøůs🔥 ]]]"
     },
@@ -794,8 +1373,41 @@
     "progress_of_total_87de8616": {
         "message": "[[[ 🔥 { prøgrəss }% øf { tøtāl }🔥 ]]]"
     },
+    "prompt_for_a_date_5d2c689e": {
+        "message": "[[[ 🔥 Prømpt før ā dātə🔥 ]]]"
+    },
+    "prompt_for_a_date_or_a_time_d2df7f90": {
+        "message": "[[[ 🔥 Prømpt før ā dātə ør ā tïmə🔥 ]]]"
+    },
+    "prompt_for_a_file_or_an_attachment_1bf18e7e": {
+        "message": "[[[ 🔥 Prømpt før ā fïlə ør ān āttāchmənt🔥 ]]]"
+    },
+    "prompt_for_a_number_84999edb": {
+        "message": "[[[ 🔥 Prømpt før ā nůmbər🔥 ]]]"
+    },
+    "prompt_for_attachment_727d4fac": {
+        "message": "[[[ 🔥 Prømpt før Λttāchmənt🔥 ]]]"
+    },
+    "prompt_for_confirmation_dc85565c": {
+        "message": "[[[ 🔥 Prømpt før cønfïrmātïøn🔥 ]]]"
+    },
+    "prompt_for_text_5c524f80": {
+        "message": "[[[ 🔥 Prømpt før təxt🔥 ]]]"
+    },
+    "prompt_with_multi_choice_f428542f": {
+        "message": "[[[ 🔥 Prømpt wïth můltï-chøïcə🔥 ]]]"
+    },
+    "property_description_8d21ea2e": {
+        "message": "[[[ 🔥 Prøpərty dəscrïptïøn.🔥 ]]]"
+    },
     "property_editor_preferences_ad7a4b62": {
         "message": "[[[ 🔥 Prøpərty ədïtør prəfərəncəs🔥 ]]]"
+    },
+    "property_title_f2b443b7": {
+        "message": "[[[ 🔥 Prøpərty tïtlə🔥 ]]]"
+    },
+    "property_type_95689fa5": {
+        "message": "[[[ 🔥 Prøpərty typə.🔥 ]]]"
     },
     "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
         "message": "[[[ 🔥 Prøvïdə ā brïəf dəscrïptïøn. Ⅱt wïll āppəār øn thə půblïsh hïstøry lïst.🔥 ]]]"
@@ -824,20 +1436,56 @@
     "publishing_d63a8f2d": {
         "message": "[[[ 🔥 Půblïshïng🔥 ]]]"
     },
+    "randomselector_4a5274f1": {
+        "message": "[[[ 🔥 RāndømSələctør🔥 ]]]"
+    },
+    "range_selection_30caeea5": {
+        "message": "[[[ 🔥 Rāngə Sələctïøn🔥 ]]]"
+    },
+    "re_prompt_for_input_c3b5b3ab": {
+        "message": "[[[ 🔥 Rə-prømpt før ïnpůt🔥 ]]]"
+    },
     "recent_bots_53585911": {
         "message": "[[[ 🔥 Rəcənt Bøts🔥 ]]]"
+    },
+    "recognizer_type_dc591e16": {
+        "message": "[[[ 🔥 Rəcøgnïzər Typə🔥 ]]]"
+    },
+    "recognizers_cefce9d1": {
+        "message": "[[[ 🔥 Rəcøgnïzərs🔥 ]]]"
     },
     "redo_363c58b7": {
         "message": "[[[ 🔥 Rədø🔥 ]]]"
     },
+    "redo_is_not_support_1595aaa4": {
+        "message": "[[[ 🔥 Rədø ïs nøt sůppørt🔥 ]]]"
+    },
+    "refer_to_the_syntax_documentation_here_df8dc9b4": {
+        "message": "[[[ 🔥 Rəfər tø thə syntāx døcůməntātïøn hərə.🔥 ]]]"
+    },
     "regex_intent_is_already_defined_df095c1f": {
         "message": "[[[ 🔥 Rəg∃x { ïntənt } ïs ālrəādy dəfïnəd🔥 ]]]"
+    },
+    "regular_expression_855557bf": {
+        "message": "[[[ 🔥 Rəgůlār ∃xprəssïøn🔥 ]]]"
     },
     "release_1af20f26": {
         "message": "[[[ 🔥 Rələāsə: 🔥 ]]]"
     },
     "reloading_49d2f661": {
         "message": "[[[ 🔥 Rəløādïng🔥 ]]]"
+    },
+    "remove_f47dc62a": {
+        "message": "[[[ 🔥 Rəmøvə🔥 ]]]"
+    },
+    "repeat_this_dialog_83ca994e": {
+        "message": "[[[ 🔥 Rəpəāt thïs dïāløg🔥 ]]]"
+    },
+    "replace_this_dialog_e304015e": {
+        "message": "[[[ 🔥 Rəplācə thïs dïāløg🔥 ]]]"
+    },
+    "reprompt_dialog_event_c42d2c33": {
+        "message": "[[[ 🔥 Rəprømpt dïāløg əvənt🔥 ]]]"
     },
     "response_is_response_3cd62f8f": {
         "message": "[[[ 🔥 Rəspønsə ïs { rəspønsə }🔥 ]]]"
@@ -847,6 +1495,15 @@
     },
     "restart_bot_34e36428": {
         "message": "[[[ 🔥 Rəstārt Bøt🔥 ]]]"
+    },
+    "result_b1f14e91": {
+        "message": "[[[ 🔥  = Rəsůlt🔥 ]]]"
+    },
+    "result_property_100ef34f": {
+        "message": "[[[ 🔥  = Rəsůlt prøpərty🔥 ]]]"
+    },
+    "return_value_b386d1b": {
+        "message": "[[[ 🔥 = Rətůrn vālůə🔥 ]]]"
     },
     "review_and_generate_63dec712": {
         "message": "[[[ 🔥 Rəvïəw ānd gənərātə🔥 ]]]"
@@ -871,6 +1528,9 @@
     },
     "save_as_9e0cf70b": {
         "message": "[[[ 🔥 Sāvə ās🔥 ]]]"
+    },
+    "schema_24739a48": {
+        "message": "[[[ 🔥 Schəmā🔥 ]]]"
     },
     "scripts_successfully_updated_3a75d57f": {
         "message": "[[[ 🔥 Scrïpts sůccəssfůlly ůpdātəd.🔥 ]]]"
@@ -902,11 +1562,29 @@
     "select_options_9ee7b227": {
         "message": "[[[ 🔥 Sələct øptïøns🔥 ]]]"
     },
+    "select_property_type_5f3ab685": {
+        "message": "[[[ 🔥 sələct prøpərty typə🔥 ]]]"
+    },
     "select_runtime_version_to_add_d63d383b": {
         "message": "[[[ 🔥 Sələct růntïmə vərsïøn tø ādd🔥 ]]]"
     },
     "select_the_language_that_bot_will_be_able_to_under_1f2bcb96": {
         "message": "[[[ 🔥 Sələct thə lāngůāgə thāt bøt wïll bə āblə tø ůndərstānd (⩁sər ïnpůt) ānd rəspønd tø (Bøt rəspønsəs).\n    Tø mākə thïs bøt āvāïlāblə ïn øthər lāngůāgəs, clïck “Λdd’ tø crəātə ā cøpy øf thə dəfāůlt lāngůāgə, ānd trānslātə thə cøntənt ïntø thə nəw lāngůāgə.🔥 ]]]"
+    },
+    "selection_field_86d1dc94": {
+        "message": "[[[ 🔥 sələctïøn fïəld🔥 ]]]"
+    },
+    "selectors_2dcb3029": {
+        "message": "[[[ 🔥 Sələctørs🔥 ]]]"
+    },
+    "send_a_response_1a917d7e": {
+        "message": "[[[ 🔥 Sənd ā rəspønsə🔥 ]]]"
+    },
+    "send_an_http_request_aa32fd2": {
+        "message": "[[[ 🔥 Sənd ān HTTP rəqůəst🔥 ]]]"
+    },
+    "send_messages_c48b239": {
+        "message": "[[[ 🔥 Sənd Məssāgəs🔥 ]]]"
     },
     "sentence_wrap_930c8ced": {
         "message": "[[[ 🔥 Səntəncə wrāp🔥 ]]]"
@@ -914,8 +1592,14 @@
     "session_expired_12aaf414": {
         "message": "[[[ 🔥 Səssïøn əxpïrəd🔥 ]]]"
     },
+    "set_a_property_4258d8d7": {
+        "message": "[[[ 🔥 Sət ā prøpərty🔥 ]]]"
+    },
     "set_destination_folder_f76e0259": {
         "message": "[[[ 🔥 Sət dəstïnātïøn føldər🔥 ]]]"
+    },
+    "set_properties_7415af3c": {
+        "message": "[[[ 🔥 Sət prøpərtïəs🔥 ]]]"
     },
     "set_up_your_bot_75009578": {
         "message": "[[[ 🔥 Sət ůp yøůr bøt🔥 ]]]"
@@ -941,6 +1625,15 @@
     "show_keys_3072a5b8": {
         "message": "[[[ 🔥 Shøw kəys🔥 ]]]"
     },
+    "show_skill_manifest_5d0abde1": {
+        "message": "[[[ 🔥 Shøw skïll mānïfəst🔥 ]]]"
+    },
+    "sign_out_user_6845d640": {
+        "message": "[[[ 🔥 Sïgn øůt ůsər🔥 ]]]"
+    },
+    "skill_dialog_name_1bbf0eff": {
+        "message": "[[[ 🔥 Skïll Dïāløg Nāmə🔥 ]]]"
+    },
     "skill_endpoint_b563491e": {
         "message": "[[[ 🔥 Skïll ∃ndpøïnt🔥 ]]]"
     },
@@ -952,9 +1645,6 @@
     },
     "skills_49cccd6a": {
         "message": "[[[ 🔥 Skïlls🔥 ]]]"
-    },
-    "something_went_wrong_19a64ca0": {
-        "message": "[[[ 🔥 Søməthïng wənt wrøng!🔥 ]]]"
     },
     "sorry_something_went_wrong_with_connecting_bot_run_7d6785e3": {
         "message": "[[[ 🔥 Sørry, søməthïng wənt wrøng wïth cønnəctïng bøt růntïmə🔥 ]]]"
@@ -989,8 +1679,14 @@
     "step_of_setlength_43c73821": {
         "message": "[[[ 🔥 { stəp } øf { sətLəngth }🔥 ]]]"
     },
+    "string_field_db491570": {
+        "message": "[[[ 🔥 strïng fïəld🔥 ]]]"
+    },
     "submit_a3cc6859": {
         "message": "[[[ 🔥 Sůbmït🔥 ]]]"
+    },
+    "synonyms_optional_afe5cdb1": {
+        "message": "[[[ 🔥 Synønyms (⨀ptïønāl)🔥 ]]]"
     },
     "tb_149f379c": {
         "message": "[[[ 🔥 TB🔥 ]]]"
@@ -1006,6 +1702,9 @@
     },
     "test_your_bot_3cd1f4bb": {
         "message": "[[[ 🔥 Təst yøůr bøt🔥 ]]]"
+    },
+    "text_7f4593da": {
+        "message": "[[[ 🔥 Təxt🔥 ]]]"
     },
     "the_callback_url_for_the_skill_host_e20e1012": {
         "message": "[[[ 🔥 Thə cāllbāck ůrl før thə skïll høst.🔥 ]]]"
@@ -1025,6 +1724,12 @@
     "the_microsoft_app_id_that_will_be_calling_the_skil_955424de": {
         "message": "[[[ 🔥 Thə Mïcrøsøft Λpp Ⅱd thāt wïll bə cāllïng thə skïll.🔥 ]]]"
     },
+    "the_page_you_are_looking_for_can_t_be_found_a3b75795": {
+        "message": "[[[ 🔥 Thə pāgə yøů ārə løøkïng før cān''t bə føůnd.🔥 ]]]"
+    },
+    "the_return_type_does_not_match_2ae72548": {
+        "message": "[[[ 🔥 thə rətůrn typə døəs nøt mātch🔥 ]]]"
+    },
     "the_welcome_message_is_triggered_by_the_i_conversa_a3ff58f8": {
         "message": "[[[ 🔥 Thə wəlcømə məssāgə ïs trïggərəd by thə <ï>Cønvərsātïøn⩁pdātə</ï> əvənt. Tø ādd ā nəw <ï>Cønvərsātïøn⩁pdātə</ï> trïggər:🔥 ]]]"
     },
@@ -1033,6 +1738,9 @@
     },
     "these_examples_bring_together_all_of_the_best_prac_ca1b89c7": {
         "message": "[[[ 🔥 Thəsə əxāmpləs brïng tøgəthər āll øf thə bəst prāctïcəs ānd sůppørtïng cømpønənts wə''və ïdəntïfïəd thrøůgh bůïldïng øf cønvərsātïønāl əxpərïəncəs.🔥 ]]]"
+    },
+    "this_configures_a_data_driven_dialog_via_a_collect_c7fa4389": {
+        "message": "[[[ 🔥 Thïs cønfïgůrəs ā dātā drïvən dïāløg vïā ā cølləctïøn øf əvənts ānd āctïøns.🔥 ]]]"
     },
     "this_dialog_has_no_trigger_yet_d1f1d173": {
         "message": "[[[ 🔥 Thïs dïāløg hās nø trïggər yət.🔥 ]]]"
@@ -1076,14 +1784,29 @@
     "to_customize_the_welcome_message_select_the_i_send_9b4bf4f": {
         "message": "[[[ 🔥 Tø cůstømïzə thə wəlcømə məssāgə, sələct thə <ï>Sənd ā rəspønsə</ï> āctïøn ïn thə Vïsůāl ∃dïtør. Thən ïn thə Førm ∃dïtør øn thə rïght, yøů cān ədït thə bøt''s wəlcømə məssāgə ïn thə <b>Lāngůāgə Gənərātïøn</b> fïəld.🔥 ]]]"
     },
+    "to_learn_more_about_the_lg_file_format_read_the_do_ef6e083d": {
+        "message": "[[[ 🔥 > Tø ləārn mørə ābøůt thə LG fïlə førmāt, rəād thə døcůməntātïøn āt\n> { lgHəlp }🔥 ]]]"
+    },
+    "to_learn_more_about_the_lu_file_format_read_the_do_cac5ffc9": {
+        "message": "[[[ 🔥 > Tø ləārn mørə ābøůt thə L⩁ fïlə førmāt, rəād thə døcůməntātïøn āt\n> { L⩁_H∃LP }🔥 ]]]"
+    },
     "to_make_your_bot_available_for_others_as_a_skill_w_f2c19b9c": {
         "message": "[[[ 🔥 Tø mākə yøůr bøt āvāïlāblə før øthərs ās ā skïll, wə nəəd tø gənərātə ā mānïfəst.🔥 ]]]"
     },
     "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
         "message": "[[[ 🔥 Tø růn thïs bøt, Cømpøsər nəəds .N∃T Cørə SDK.🔥 ]]]"
     },
+    "to_understand_what_the_user_says_your_dialog_needs_1e87c8de": {
+        "message": "[[[ 🔥 Tø ůndərstānd whāt thə ůsər sāys, yøůr dïāløg nəəds ā ''ⅡRəcøgnïzər'', thāt ïnclůdəs əxāmplə wørds ānd səntəncəs thāt ůsərs māy ůsə.🔥 ]]]"
+    },
+    "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
+        "message": "[[[ 🔥 Tø ůndərstānd whāt thə ůsər sāys, yøůr dïāløg nəəds ā \"Rəcøgnïzər\"; thāt ïnclůdəs əxāmplə wørds ānd səntəncəs thāt ůsərs māy ůsə.🔥 ]]]"
+    },
     "to_which_language_will_you_be_translating_your_bot_77219d69": {
         "message": "[[[ 🔥 Tø whïch lāngůāgə wïll yøů bə trānslātïng yøůr bøt?🔥 ]]]"
+    },
+    "token_property_e53a19d9": {
+        "message": "[[[ 🔥  = Tøkən Prøpərty🔥 ]]]"
     },
     "toolbar_bafd4228": {
         "message": "[[[ 🔥 tøølbār🔥 ]]]"
@@ -1094,8 +1817,20 @@
     "trigger_phrases_f6754fa": {
         "message": "[[[ 🔥 Trïggər phrāsəs🔥 ]]]"
     },
+    "trigger_phrases_intent_intentname_a1b62148": {
+        "message": "[[[ 🔥 Trïggər phrāsəs (ïntənt: #{ ïntəntNāmə })🔥 ]]]"
+    },
     "triggers_connect_intents_with_bot_responses_think__fdfc97ea": {
         "message": "[[[ 🔥 Trïggərs cønnəct ïntənts wïth bøt rəspønsəs. Thïnk øf ā trïggər ās ønə cāpābïlïty øf yøůr bøt. Sø yøůr bøt ïs ā cølləctïøn øf trïggərs. Tø ādd ā nəw trïggər, clïck thə <b>Λdd</b> bůttøn ïn thə tøølbār, ānd thən sələct thə <b>Λdd ā nəw trïggər</b> øptïøn frøm thə drøpdøwn mənů.🔥 ]]]"
+    },
+    "true_1900d7ae": {
+        "message": "[[[ 🔥 trůə🔥 ]]]"
+    },
+    "true_b9327890": {
+        "message": "[[[ 🔥 Trůə🔥 ]]]"
+    },
+    "trueselector_40702dda": {
+        "message": "[[[ 🔥 TrůəSələctør🔥 ]]]"
     },
     "try_again_ad656c3c": {
         "message": "[[[ 🔥 Try āgāïn🔥 ]]]"
@@ -1103,11 +1838,29 @@
     "type_c8106334": {
         "message": "[[[ 🔥 Typə🔥 ]]]"
     },
+    "type_could_not_be_loaded_65ebaf86": {
+        "message": "[[[ 🔥 { typə } cøůld nøt bə løādəd🔥 ]]]"
+    },
     "type_dialog_name_14a50769": {
         "message": "[[[ 🔥 Typə dïāløg nāmə🔥 ]]]"
     },
+    "typing_activity_6b634ae": {
+        "message": "[[[ 🔥 Typïng āctïvïty🔥 ]]]"
+    },
+    "unable_to_determine_recognizer_type_from_data_valu_2960f526": {
+        "message": "[[[ 🔥 ⩁nāblə tø dətərmïnə rəcøgnïzər typə frøm dātā: { vālůə }🔥 ]]]"
+    },
     "undo_a7be8fef": {
         "message": "[[[ 🔥 ⩁ndø🔥 ]]]"
+    },
+    "undo_is_not_support_a27c5281": {
+        "message": "[[[ 🔥 ⩁ndø ïs nøt sůppørt🔥 ]]]"
+    },
+    "unknown_intent_44b962ba": {
+        "message": "[[[ 🔥 ⩁nknøwn ïntənt🔥 ]]]"
+    },
+    "unknown_intent_recognized_1953f9be": {
+        "message": "[[[ 🔥 ⩁nknøwn ïntənt rəcøgnïzəd🔥 ]]]"
     },
     "unknown_state_23f73afb": {
         "message": "[[[ 🔥 ⩁nknøwn Stātə🔥 ]]]"
@@ -1154,8 +1907,17 @@
     "user_input_a6ff658d": {
         "message": "[[[ 🔥 ⩁sər Ⅱnpůt🔥 ]]]"
     },
+    "user_is_typing_790cb502": {
+        "message": "[[[ 🔥 ⩁sər ïs typïng🔥 ]]]"
+    },
     "validating_35b79a96": {
         "message": "[[[ 🔥 Vālïdātïng...🔥 ]]]"
+    },
+    "validation_rules_efd3144d": {
+        "message": "[[[ 🔥 Vālïdātïøn Růləs🔥 ]]]"
+    },
+    "value_d842f16d": {
+        "message": "[[[ 🔥 Vālůə🔥 ]]]"
     },
     "version_version_a051e218": {
         "message": "[[[ 🔥 Vərsïøn { vərsïøn }🔥 ]]]"
@@ -1207,6 +1969,9 @@
     },
     "what_is_the_type_of_this_trigger_d2701744": {
         "message": "[[[ 🔥 Whāt ïs thə typə øf thïs trïggər?🔥 ]]]"
+    },
+    "what_your_bot_says_to_the_user_visit_a_target_blan_7735479": {
+        "message": "[[[ 🔥 Whāt yøůr Bøt sāys tø thə ůsər. Vïsït <ā tārgət=\"_blānk\" hrəf=\"https://ākā.ms/bf-cømpøsər-døcs-lg\"> thə døcůməntātïøn</ā> ā rəfərəncə øf cāpābïlïtïəs.🔥 ]]]"
     },
     "when_deleting_a_language_only_the_content_will_be__8f7f8dee": {
         "message": "[[[ 🔥 Whən dələtïng ā lāngůāgə, ønly thə cøntənt wïll bə rəmøvəd. Thə fløw ānd løgïc øf thə cønvərsātïøn ānd dïāløg wïll rəmāïn fůnctïønāl.🔥 ]]]"
