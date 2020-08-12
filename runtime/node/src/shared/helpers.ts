@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import * as fs from "fs";
-import * as minimist from "minimist";
-import * as path from "path";
-import { Server } from "restify";
+import * as fs from 'fs';
+import * as minimist from 'minimist';
+import * as path from 'path';
+import { Server } from 'restify';
 import {
   BotFrameworkAdapter,
   BotFrameworkAdapterSettings,
@@ -16,14 +16,11 @@ import {
   UserState,
   WebRequest,
   WebResponse,
-} from "botbuilder";
-import {
-  AuthenticationConfiguration,
-  SimpleCredentialProvider,
-} from "botframework-connector";
-import { ComposerBot } from "./composerBot";
-import { BotSettings } from "./settings";
-import { SkillConversationIdFactory } from "./skillConversationIdFactory";
+} from 'botbuilder';
+import { AuthenticationConfiguration, SimpleCredentialProvider } from 'botframework-connector';
+import { ComposerBot } from './composerBot';
+import { BotSettings } from './settings';
+import { SkillConversationIdFactory } from './skillConversationIdFactory';
 
 /**
  * Get listening port for listening from environment variables or arguments.
@@ -40,10 +37,10 @@ export const getServerPort = () => {
  */
 export const getProjectRoot = (): string => {
   // get the root folder according to environment
-  if (process.env.node_environment === "production") {
-    return path.join(__dirname, "../../azurewebapp/ComposerDialogs");
+  if (process.env.node_environment === 'production') {
+    return path.join(__dirname, '../../azurewebapp/ComposerDialogs');
   } else {
-    return path.join(__dirname, "../../../");
+    return path.join(__dirname, '../../../');
   }
 };
 
@@ -55,19 +52,19 @@ export const getSettings = (projectRoot = getProjectRoot()): BotSettings => {
   // Find settings json file
   let settings = {} as BotSettings;
   // load appsettings.json
-  const appsettingsPath = path.join(projectRoot, "settings/appsettings.json");
+  const appsettingsPath = path.join(projectRoot, 'settings/appsettings.json');
   if (fs.existsSync(appsettingsPath)) {
-    const items = require(appsettingsPath);
+    const items = JSON.parse(fs.readFileSync(appsettingsPath, 'utf8'));
     settings = Object.assign(settings, items); // merge settings
   }
 
   // load generated settings
-  const generatedPath = path.join(projectRoot, "generated");
+  const generatedPath = path.join(projectRoot, 'generated');
   if (fs.existsSync(generatedPath)) {
     const generatedFiles = fs.readdirSync(generatedPath);
-    for (let file of generatedFiles) {
-      if (file.endsWith(".json")) {
-        const items = require(path.join(generatedPath, file));
+    for (const file of generatedFiles) {
+      if (file.endsWith('.json')) {
+        const items = JSON.parse(fs.readFileSync(path.join(generatedPath, file), 'utf8'));
         settings.luis = Object.assign(settings.luis, items.luis); // merge luis settings
       }
     }
@@ -75,12 +72,12 @@ export const getSettings = (projectRoot = getProjectRoot()): BotSettings => {
 
   // load settings from arguments
   const argv = minimist(process.argv.slice(2));
-  for (let key in argv) {
-    if (key.includes(":")) {
-      const segments: string[] = key.split(":");
+  for (const key in argv) {
+    if (key.includes(':')) {
+      const segments: string[] = key.split(':');
       let base = settings;
       segments.forEach((segment, index) => {
-        if (!base.hasOwnProperty(segment)) {
+        if (!Object.prototype.hasOwnProperty.call(base, segment)) {
           base[segment] = {};
         }
 
@@ -94,10 +91,8 @@ export const getSettings = (projectRoot = getProjectRoot()): BotSettings => {
       settings[key] = argv[key];
     }
   }
-  settings.MicrosoftAppId =
-    settings.MicrosoftAppId || process.env.MicrosoftAppId;
-  settings.MicrosoftAppPassword =
-    settings.MicrosoftAppPassword || process.env.MicrosoftAppPassword;
+  settings.MicrosoftAppId = settings.MicrosoftAppId || process.env.MicrosoftAppId;
+  settings.MicrosoftAppPassword = settings.MicrosoftAppPassword || process.env.MicrosoftAppPassword;
   return settings;
 };
 
@@ -108,8 +103,7 @@ export const getSettings = (projectRoot = getProjectRoot()): BotSettings => {
 export const getRootDialog = (folderPath: string): string => {
   // Find entry dialog file
   const files = fs.readdirSync(folderPath);
-  const rootDialog =
-    files.find((file) => file.endsWith(".dialog")) ?? "main.dialog";
+  const rootDialog = files.find((file) => file.endsWith('.dialog')) ?? 'main.dialog';
   return rootDialog;
 };
 
@@ -118,10 +112,7 @@ export const getRootDialog = (folderPath: string): string => {
  * @param userState User state required by a botframework adapter.
  * @param conversationState Conversation state required by a botframework adapter.
  */
-export const getBotAdapter = (
-  userState: UserState,
-  conversationState: ConversationState
-): BotFrameworkAdapter => {
+export const getBotAdapter = (userState: UserState, conversationState: ConversationState): BotFrameworkAdapter => {
   const settings = getSettings();
   const adapterSettings: Partial<BotFrameworkAdapterSettings> = {
     appId: settings.MicrosoftAppId,
@@ -131,32 +122,21 @@ export const getBotAdapter = (
   adapter.onTurnError = async (turnContext: TurnContext, error: Error) => {
     try {
       // Send a message to the user.
-      let onTurnErrorMessage = "The bot encountered an error or bug.";
-      await turnContext.sendActivity(
-        onTurnErrorMessage,
-        onTurnErrorMessage,
-        InputHints.IgnoringInput
-      );
+      let onTurnErrorMessage = 'The bot encountered an error or bug.';
+      await turnContext.sendActivity(onTurnErrorMessage, onTurnErrorMessage, InputHints.IgnoringInput);
 
-      onTurnErrorMessage =
-        "To continue to run this bot, please fix the bot source code.";
-      await turnContext.sendActivity(
-        onTurnErrorMessage,
-        onTurnErrorMessage,
-        InputHints.ExpectingInput
-      );
+      onTurnErrorMessage = 'To continue to run this bot, please fix the bot source code.';
+      await turnContext.sendActivity(onTurnErrorMessage, onTurnErrorMessage, InputHints.ExpectingInput);
 
       // Send a trace activity, which will be displayed in Bot Framework Emulator.
       await turnContext.sendTraceActivity(
-        "OnTurnError Trace",
+        'OnTurnError Trace',
         `${error}`,
-        "https://www.botframework.com/schemas/error",
-        "TurnError"
+        'https://www.botframework.com/schemas/error',
+        'TurnError'
       );
     } catch (err) {
-      console.error(
-        `\n [onTurnError] Exception caught in sendErrorMessage: ${err}`
-      );
+      console.error(`\n [onTurnError] Exception caught in sendErrorMessage: ${err}`);
     }
     await conversationState.clear(turnContext);
     await conversationState.saveChanges(turnContext);
@@ -170,12 +150,8 @@ export const getBotAdapter = (
  * @param adapter Botframework adapter to handle message requests.
  * @param bot Composer bot to process message requests.
  */
-export const configureMessageEndpoint = (
-  server: Server,
-  adapter: BotFrameworkAdapter,
-  bot: ComposerBot
-) => {
-  server.post("/api/messages", (req: WebRequest, res: WebResponse): void => {
+export const configureMessageEndpoint = (server: Server, adapter: BotFrameworkAdapter, bot: ComposerBot) => {
+  server.post('/api/messages', (req: WebRequest, res: WebResponse): void => {
     adapter.processActivity(
       req,
       res,
@@ -200,20 +176,11 @@ export const configureSkillEndpoint = (
   skillConversationIdFactory: SkillConversationIdFactory
 ) => {
   const settings = getSettings();
-  const credentialProvider = new SimpleCredentialProvider(
-    settings.MicrosoftAppId,
-    settings.MicrosoftAppPassword
-  );
+  const credentialProvider = new SimpleCredentialProvider(settings.MicrosoftAppId, settings.MicrosoftAppPassword);
   const authConfig = new AuthenticationConfiguration([]);
-  const handler = new SkillHandler(
-    adapter,
-    bot,
-    skillConversationIdFactory,
-    credentialProvider,
-    authConfig
-  );
+  const handler = new SkillHandler(adapter, bot, skillConversationIdFactory, credentialProvider, authConfig);
   const skillEndpoint = new ChannelServiceRoutes(handler);
-  skillEndpoint.register(server, "/api/skills");
+  skillEndpoint.register(server, '/api/skills');
 };
 
 /**
@@ -222,13 +189,13 @@ export const configureSkillEndpoint = (
  */
 export const configureManifestsEndpoint = (server: Server) => {
   const projectRoot = getProjectRoot();
-  const manifestsPath = path.join(projectRoot, "manifests");
+  const manifestsPath = path.join(projectRoot, 'manifests');
   if (fs.existsSync(manifestsPath)) {
     const manifestFiles = fs.readdirSync(manifestsPath);
-    for (let file of manifestFiles) {
-      if (file.endsWith(".json")) {
+    for (const file of manifestFiles) {
+      if (file.endsWith('.json')) {
         server.get(`/${file}`, (_req, res): void => {
-          const manifest = require(path.join(manifestsPath, file));
+          const manifest = JSON.parse(fs.readFileSync(path.join(manifestsPath, file), 'utf8'));
           res.send(manifest);
         });
       }

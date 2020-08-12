@@ -2,9 +2,15 @@
 // Licensed under the MIT License.
 
 import * as restify from 'restify';
-import { ConversationState, MemoryStorage, UserState } from "botbuilder";
-import { ComposerBot } from "./shared/composerBot";
-import { getBotAdapter, configureSkillEndpoint, configureMessageEndpoint, getServerPort, configureManifestsEndpoint } from './shared/helpers';
+import { ConversationState, MemoryStorage, UserState } from 'botbuilder';
+import { ComposerBot } from './shared/composerBot';
+import {
+  getBotAdapter,
+  configureSkillEndpoint,
+  configureMessageEndpoint,
+  getServerPort,
+  configureManifestsEndpoint,
+} from './shared/helpers';
 import { SkillConversationIdFactory } from './shared/skillConversationIdFactory';
 
 // Create shared memory storage.
@@ -38,10 +44,6 @@ configureManifestsEndpoint(server);
 // Get port and listen.
 const port = getServerPort();
 server.listen(port, (): void => {
-  console.log(
-    `\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`
-  );
-  console.log(
-    `\nTo talk to your bot, open http://localhost:${ port }/api/messages in the Emulator.`
-  );
+  console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
+  console.log(`\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`);
 });

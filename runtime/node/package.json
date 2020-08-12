@@ -8,7 +8,9 @@
     "test:watch": "jest --watch",
     "start": "node ./lib/webapp.js",
     "start:function": "node ./lib/function.js",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "eslint --quiet --ext .js,.ts,.tsx ./src",
+    "lint:fix":"npm run lint --fix"
   },
   "author": "",
   "license": "ISC",
@@ -18,8 +20,7 @@
     "botbuilder-dialogs-adaptive": "4.10.0-rc0-preview",
     "botbuilder-dialogs-declarative": "4.10.0-rc0-preview",
     "minimist": "1.2.5",
-    "restify": "8.5.1",
-    "typescript": "^3.9.7"
+    "restify": "8.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
@@ -30,6 +31,13 @@
     "@types/node": "^10.12.18",
     "@types/restify": "^8.4.2",
     "babel-jest": "^26.1.0",
-    "jest": "^26.1.0"
+    "jest": "^26.1.0",
+    "typescript": "^3.9.7",
+    "eslint": "7.0.0",
+    "@typescript-eslint/eslint-plugin": "2.34.0",
+    "@typescript-eslint/parser": "2.34.0",
+    "prettier": "2.0.5",
+    "eslint-plugin-prettier": "3.1.3",
+    "eslint-config-prettier": "6.11.0"
   }
 }

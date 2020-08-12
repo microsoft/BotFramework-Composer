@@ -1,10 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ActivityHandler, ActivityTypes, ConversationState, SkillHttpClient, TurnContext, UserState } from "botbuilder";
-import { DialogManager } from "botbuilder-dialogs";
-import { AdaptiveDialog, AdaptiveDialogComponentRegistration, LanguageGeneratorExtensions, LanguagePolicy, ResourceExtensions, SkillExtensions } from "botbuilder-dialogs-adaptive";
-import { ResourceExplorer } from "botbuilder-dialogs-declarative";
+import { ActivityHandler, ActivityTypes, ConversationState, SkillHttpClient, TurnContext, UserState } from 'botbuilder';
+import { DialogManager } from 'botbuilder-dialogs';
+import {
+  AdaptiveDialog,
+  AdaptiveDialogComponentRegistration,
+  LanguageGeneratorExtensions,
+  LanguagePolicy,
+  ResourceExtensions,
+  SkillExtensions,
+} from 'botbuilder-dialogs-adaptive';
+import { ResourceExplorer } from 'botbuilder-dialogs-declarative';
 import { SimpleCredentialProvider, SkillValidation } from 'botframework-connector';
 import { BotSettings } from './settings';
 import { SkillConversationIdFactory } from './skillConversationIdFactory';
@@ -36,7 +43,7 @@ export class ComposerBot extends ActivityHandler {
 
     // Create and configure resource explorer.
     this.resourceExplorer = new ResourceExplorer();
-    this.resourceExplorer.addFolders(this.projectRoot, ["runtime"], false);
+    this.resourceExplorer.addFolders(this.projectRoot, ['runtime'], false);
     this.resourceExplorer.addComponent(new AdaptiveDialogComponentRegistration(this.resourceExplorer));
 
     this.loadRootDialog();
@@ -53,7 +60,7 @@ export class ComposerBot extends ActivityHandler {
       rootDialog.autoEndDialog = false;
     }
 
-    const removeRecipientMention = this.settings.feature && this.settings.feature.removeRecipientMention || false
+    const removeRecipientMention = (this.settings.feature && this.settings.feature.removeRecipientMention) || false;
     if (removeRecipientMention && turnContext.activity.type == ActivityTypes.Message) {
       TurnContext.removeRecipientMention(turnContext.activity);
     }
@@ -68,7 +75,7 @@ export class ComposerBot extends ActivityHandler {
     const rootDialog = this.resourceExplorer.loadType(rootDialogFile) as AdaptiveDialog;
     this.dialogManager = new DialogManager(rootDialog);
     ResourceExtensions.useResourceExplorer(this.dialogManager, this.resourceExplorer);
-    this.dialogManager.initialTurnState.set("settings", this.settings);
+    this.dialogManager.initialTurnState.set('settings', this.settings);
     this.dialogManager.conversationState = this.conversationState;
     this.dialogManager.userState = this.userState;
   }
@@ -81,7 +88,10 @@ export class ComposerBot extends ActivityHandler {
   }
 
   private configureSkills() {
-    const credentialProvider = new SimpleCredentialProvider(this.settings.MicrosoftAppId, this.settings.MicrosoftAppPassword);
+    const credentialProvider = new SimpleCredentialProvider(
+      this.settings.MicrosoftAppId,
+      this.settings.MicrosoftAppPassword
+    );
     const skillClient = new SkillHttpClient(credentialProvider, this.skillConversationIdFactory);
     SkillExtensions.useSkillClient(this.dialogManager, skillClient);
     SkillExtensions.useSkillConversationIdFactory(this.dialogManager, this.skillConversationIdFactory);

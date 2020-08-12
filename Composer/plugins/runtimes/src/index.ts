@@ -150,7 +150,7 @@ export default async (composer: any): Promise<void> => {
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { installOut, installErr } = await exec('npm install', {
+      const { installOut, installErr } = await exec('npm install --dev', {
         cwd: runtimePath,
         stdio: 'pipe',
       });
@@ -196,7 +196,7 @@ export default async (composer: any): Promise<void> => {
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
         // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         // install packages
-        const { initErr } = await exec('npm install', { cwd: destPath, stdio: 'pipe' });
+        const { initErr } = await exec('npm install --dev', { cwd: destPath, stdio: 'pipe' });
         if (initErr) {
           throw new Error(initErr);
         }
