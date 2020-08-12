@@ -51,8 +51,8 @@ export const validateIntentName = (intent: string): string | undefined => {
   return undefined;
 };
 
-export const validateRegExPattern = (isRegEx: boolean, regEx: string): string | undefined => {
-  if (isRegEx && !regEx) {
+export const validateRegExPattern = (regEx: string): string | undefined => {
+  if (!regEx) {
     return formatMessage('Please input regEx pattern');
   }
   return undefined;
@@ -60,28 +60,20 @@ export const validateRegExPattern = (isRegEx: boolean, regEx: string): string | 
 
 export const validateDupRegExIntent = (
   intent: string,
-  isRegEx: boolean,
   regExIntents: [{ intent: string; pattern: string }]
 ): string | undefined => {
-  if (isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
+  if (regExIntents.find((ri) => ri.intent === intent)) {
     return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
 };
 
-export const validateTriggerPhrases = (
-  isRegEx: boolean,
-  intent: string,
-  triggerPhrases: string
-): string | undefined => {
-  if (!isRegEx) {
-    if (triggerPhrases) {
-      return getLuDiagnostics(intent, triggerPhrases);
-    } else {
-      return formatMessage('Please input trigger phrases');
-    }
+export const validateTriggerPhrases = (intent: string, triggerPhrases: string): string | undefined => {
+  if (triggerPhrases) {
+    return getLuDiagnostics(intent, triggerPhrases);
+  } else {
+    return formatMessage('Please input trigger phrases');
   }
-  return undefined;
 };
 
 export const validateForm = (
@@ -107,8 +99,11 @@ export const validateForm = (
       break;
     case intentTypeKey:
       errors.intent = validateIntentName(intent);
-      errors.regEx = validateDupRegExIntent(intent, isRegEx, regExIntents) ?? validateRegExPattern(isRegEx, regEx);
-      errors.triggerPhrases = validateTriggerPhrases(isRegEx, intent, triggerPhrases);
+      if (isRegEx) {
+        errors.regEx = validateDupRegExIntent(intent, regExIntents) ?? validateRegExPattern(regEx);
+      } else {
+        errors.triggerPhrases = validateTriggerPhrases(intent, triggerPhrases);
+      }
       break;
   }
 

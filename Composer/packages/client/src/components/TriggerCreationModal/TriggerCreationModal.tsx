@@ -158,7 +158,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
 
   const onChangeRegEx = (e, pattern) => {
     const errors: TriggerFormDataErrors = {};
-    errors.regEx = validateRegExPattern(isRegexRecognizer, pattern);
+    errors.regEx = validateRegExPattern(pattern);
     setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
   };
 
