@@ -235,7 +235,7 @@ export function CreateOptions(props) {
       ariaLabel: formatMessage('Create from QnA') + (option === optionKeys.createFromQnA ? ' selected' : ''),
       key: optionKeys.createFromQnA,
       'data-testid': 'Create from QnA',
-      text: formatMessage('Create new knowledge base from FAQ, URL or PDF'),
+      text: formatMessage('Create from Knowledge (QnA)'),
       onRenderField: SelectOption,
     },
     {
