@@ -208,9 +208,9 @@ describe('generateDispatchModels', () => {
     expect(result).toEqual({});
   });
 
-  it("should return empty object if the schema doesn't include dispatchModels", () => {
+  it('should return dispatch models', () => {
     const schema = { properties: { dispatchModels: {} } };
-    const dialogs: any = [{ id: 'test', content: { recognizer: 'test.lu' } }];
+    const dialogs: any = [{ id: 'test', content: { recognizer: 'test.lu' }, isRoot: true }];
     const selectedTriggers = [{ $kind: SDKKinds.OnIntent, intent: 'testIntent' }];
     const luFiles: any = [{ id: 'test.en-us' }, { id: 'test.fr-FR' }];
     const result = generateDispatchModels(schema, dialogs, selectedTriggers, luFiles);
