@@ -7,7 +7,7 @@ import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
-import { importResolverGenerator } from './luResolver';
+import { luImportResolverGenerator, fileInfoToResources } from './luResolver';
 import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 
@@ -114,7 +114,7 @@ export class LuPublisher {
       return { content: file.content, id: file.name };
     });
 
-    const resolver = importResolverGenerator(files);
+    const resolver = luImportResolverGenerator(fileInfoToResources(files));
     const result = await crossTrainer.crossTrain(luContents, [], this.crossTrainConfig, resolver);
 
     await this.writeFiles(result.luResult);
@@ -164,7 +164,7 @@ export class LuPublisher {
       throw new Error('No LUIS files exist');
     }
 
-    const resolver = importResolverGenerator(files);
+    const resolver = luImportResolverGenerator(fileInfoToResources(files));
     const loadResult = await this._loadLuContents(config.models, resolver);
     loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
     const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;

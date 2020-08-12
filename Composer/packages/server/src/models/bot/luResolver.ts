@@ -25,7 +25,7 @@ export function fileInfoToResources(files: FileInfo[]): ResolverResource[] {
   });
 }
 
-export function importResolverGenerator(files: FileInfo[]) {
+export function luImportResolverGenerator(files: ResolverResource[]) {
   /**
    *  @param srcId current file id
    *  @param idsToFind imported file id
@@ -54,12 +54,11 @@ export function importResolverGenerator(files: FileInfo[]) {
       const targetId = getFileName(fileId).replace(extReg, '');
 
       const targetFile =
-        files.find(({ name }) => name === `${targetId}.${locale}${ext}`) ||
-        files.find(({ name }) => name === `${targetId}${ext}`);
+        files.find(({ id }) => id === `${targetId}.${locale}`) || files.find(({ id }) => id === `${targetId}`);
 
-      if (!targetFile) throw new Error(`File not found`);
+      if (!targetFile) throw new Error(`File: ${file.filePath} not found`);
 
-      const options = new luOptions(targetId, file.includeInCollate, locale, targetFile.path);
+      const options = new luOptions(targetId, file.includeInCollate, locale);
       return new luObject(targetFile.content, options);
     });
 
