@@ -15,7 +15,6 @@ import {
   getbreadcrumbLabel,
   getSelected,
 } from '../../src/utils/dialogUtil';
-import { getTriggerTypes } from '../../src/components/TriggerCreationModal/getTriggerTypes';
 
 const dialogsMap = {
   Dialog1: {
@@ -178,19 +177,6 @@ describe('deleteTrigger', () => {
     const length = dialogs[0].content.triggers.length;
     const dialogContent = deleteTrigger(dialogs, 'id1', 2);
     expect(dialogContent.triggers.length).toBe(length - 1);
-  });
-});
-
-describe('getTriggerTypes', () => {
-  it('return trigger types', () => {
-    const triggerTypes = getTriggerTypes();
-    expect(triggerTypes).toEqual([
-      { key: 'Microsoft.OnIntent', text: 'Intent recognized' },
-      { key: 'Microsoft.OnUnknownIntent', text: 'Unknown intent' },
-      { key: 'Microsoft.OnDialogEvent', text: 'Dialog events' },
-      { key: 'Microsoft.OnActivity', text: 'Activities' },
-      { key: 'OnCustomEvent', text: 'Custom events' },
-    ]);
   });
 });
 
