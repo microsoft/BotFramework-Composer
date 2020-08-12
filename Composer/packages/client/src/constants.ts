@@ -110,6 +110,12 @@ export const DialogCreationCopy = {
     title: formatMessage('Set destination folder'),
     subText: formatMessage('Choose a location for your new bot project.'),
   },
+  IMPORT_QNA: {
+    title: formatMessage('Create New Knowledge Base'),
+    subText: formatMessage(
+      'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
+    ),
+  },
 };
 
 export const DialogDeleting = {

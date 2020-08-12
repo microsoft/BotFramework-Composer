@@ -654,7 +654,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setImportQnAModalVisibility(false);
   };
 
-  const handleCreateQnA = async (urls: string[], knowledgeBaseName: string) => {
+  const handleCreateQnA = async (urls: string[]) => {
     cancelImportQnAModal();
     const lgTemplateId1 = generateDesignerId();
     const lgTemplateId2 = generateDesignerId();
@@ -693,7 +693,7 @@ SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.di
       onTriggerCreationSubmit(newDialog, undefined, lgFilePayload);
       for (let i = 0; i < urls.length; i++) {
         if (!urls[i]) continue;
-        await importQnAFromUrl({ id: `${dialogId}.${locale}`, knowledgeBaseName, url: urls[i] });
+        await importQnAFromUrl({ id: `${dialogId}.${locale}`, url: urls[i] });
       }
     }
   };
