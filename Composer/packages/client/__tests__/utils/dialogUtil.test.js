@@ -9,13 +9,13 @@ import {
   updateRegExIntent,
   createSelectedPath,
   deleteTrigger,
-  getTriggerTypes,
   getEventTypes,
   getActivityTypes,
   getFriendlyName,
   getbreadcrumbLabel,
   getSelected,
 } from '../../src/utils/dialogUtil';
+import { getTriggerTypes } from '../../src/components/TriggerCreationModal/getTriggerTypes';
 
 const dialogsMap = {
   Dialog1: {

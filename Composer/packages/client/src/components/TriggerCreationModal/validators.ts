@@ -4,14 +4,8 @@
 import formatMessage from 'format-message';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 
-import {
-  TriggerFormData,
-  TriggerFormDataErrors,
-  eventTypeKey,
-  customEventKey,
-  intentTypeKey,
-  activityTypeKey,
-} from '../../utils/dialogUtil';
+import { TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
+import { eventTypeKey, customEventKey, intentTypeKey, activityTypeKey } from '../../utils/constants';
 import { nameRegex } from '../../constants';
 
 export const getLuDiagnostics = (intent: string, triggerPhrases: string) => {

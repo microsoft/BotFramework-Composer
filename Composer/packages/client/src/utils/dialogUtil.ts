@@ -15,7 +15,6 @@ import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
-import formatMessage from 'format-message';
 
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
@@ -46,12 +45,6 @@ export function getDialog(dialogs: DialogInfo[], dialogId: string) {
   const dialog = dialogs.find((item) => item.id === dialogId);
   return cloneDeep(dialog);
 }
-
-export const eventTypeKey: string = SDKKinds.OnDialogEvent;
-export const intentTypeKey: string = SDKKinds.OnIntent;
-export const activityTypeKey: string = SDKKinds.OnActivity;
-export const regexRecognizerKey: string = SDKKinds.RegexRecognizer;
-export const customEventKey = 'OnCustomEvent';
 
 function insert(content, path: string, position: number | undefined, data: any) {
   const current = get(content, path, []);
@@ -178,7 +171,7 @@ export function deleteTrigger(
 ) {
   let dialogCopy = getDialog(dialogs, dialogId);
   if (!dialogCopy) return null;
-  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === regexRecognizerKey;
+  const isRegEx = get(dialogCopy, 'content.recognizer.$kind', '') === SDKKinds.RegexRecognizer;
   if (isRegEx) {
     const regExIntent = get(dialogCopy, `content.triggers[${index}].intent`, '');
     dialogCopy = deleteRegExIntent(dialogCopy, regExIntent);
@@ -189,26 +182,6 @@ export function deleteTrigger(
     callbackOnDeletedTrigger(removedTriggers[0]);
   }
   return dialogCopy.content;
-}
-
-export function getTriggerTypes(): IDropdownOption[] {
-  const triggerTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.EVENTS].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        name = labelOverrides.title;
-      }
-
-      return { key: t, text: name || t };
-    }),
-    {
-      key: customEventKey,
-      text: formatMessage('Custom events'),
-    },
-  ];
-  return triggerTypes;
 }
 
 export function getEventTypes(): IComboBoxOption[] {

@@ -20,17 +20,17 @@ import { useRecoilValue } from 'recoil';
 
 import {
   generateNewDialog,
-  getTriggerTypes,
   TriggerFormData,
   TriggerFormDataErrors,
-  customEventKey,
   getEventTypes,
   getActivityTypes,
 } from '../../utils/dialogUtil';
+import { customEventKey } from '../../utils/constants';
 import { projectIdState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
+import { getTriggerTypes } from './getTriggerTypes';
 import { styles, dialogWindow, dropdownStyles, intent } from './style';
 import {
   getLuDiagnostics,
