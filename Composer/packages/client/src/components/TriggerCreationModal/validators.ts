@@ -16,37 +16,30 @@ export const getLuDiagnostics = (intent: string, triggerPhrases: string) => {
   return combineMessage(diagnostics);
 };
 
-const validateDupRegExIntent = (
-  selectedType: string,
-  intent: string,
-  isRegEx: boolean,
-  regExIntents: [{ intent: string; pattern: string }]
-): string | undefined => {
-  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
-    return formatMessage(`RegEx {intent} is already defined`, { intent });
-  }
-  return undefined;
-};
-
-const validateTriggerKind = (selectedType: string): string | undefined => {
+export const validateTriggerKind = (selectedType: string): string | undefined => {
   if (!selectedType) {
     return formatMessage('Please select a trigger type');
   }
   return undefined;
 };
 
-const validateTriggerPhrases = (
-  selectedType: string,
-  isRegEx: boolean,
-  intent: string,
-  triggerPhrases: string
-): string | undefined => {
-  if (selectedType === intentTypeKey && !isRegEx) {
-    if (triggerPhrases) {
-      return getLuDiagnostics(intent, triggerPhrases);
-    } else {
-      return formatMessage('Please input trigger phrases');
-    }
+export const validateEventKind = (selectedType: string, $kind: string): string | undefined => {
+  if (selectedType === eventTypeKey && !$kind) {
+    return formatMessage('Please select a event type');
+  }
+  return undefined;
+};
+
+export const validateActivityKind = (selectedType: string, $kind: string): string | undefined => {
+  if (selectedType === activityTypeKey && !$kind) {
+    return formatMessage('Please select an activity type');
+  }
+  return undefined;
+};
+
+export const validateEventName = (selectedType: string, $kind: string, eventName: string): string | undefined => {
+  if (selectedType === customEventKey && $kind === eventTypeKey && !eventName) {
+    return formatMessage('Please enter an event name');
   }
   return undefined;
 };
@@ -65,23 +58,30 @@ export const validateRegExPattern = (selectedType: string, isRegEx: boolean, reg
   return undefined;
 };
 
-export const validateEventName = (selectedType: string, $kind: string, eventName: string): string | undefined => {
-  if (selectedType === customEventKey && $kind === eventTypeKey && !eventName) {
-    return formatMessage('Please enter an event name');
+export const validateDupRegExIntent = (
+  selectedType: string,
+  intent: string,
+  isRegEx: boolean,
+  regExIntents: [{ intent: string; pattern: string }]
+): string | undefined => {
+  if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
+    return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
 };
 
-export const validateEventKind = (selectedType: string, $kind: string): string | undefined => {
-  if (selectedType === eventTypeKey && !$kind) {
-    return formatMessage('Please select a event type');
-  }
-  return undefined;
-};
-
-export const validateActivityKind = (selectedType: string, $kind: string): string | undefined => {
-  if (selectedType === activityTypeKey && !$kind) {
-    return formatMessage('Please select an activity type');
+export const validateTriggerPhrases = (
+  selectedType: string,
+  isRegEx: boolean,
+  intent: string,
+  triggerPhrases: string
+): string | undefined => {
+  if (selectedType === intentTypeKey && !isRegEx) {
+    if (triggerPhrases) {
+      return getLuDiagnostics(intent, triggerPhrases);
+    } else {
+      return formatMessage('Please input trigger phrases');
+    }
   }
   return undefined;
 };
