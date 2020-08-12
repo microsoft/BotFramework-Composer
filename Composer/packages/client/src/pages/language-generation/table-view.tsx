@@ -21,22 +21,16 @@ import { useRecoilValue } from 'recoil';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, content } from '../language-understanding/styles';
-import {
-  dispatcherState,
-  dialogsState,
-  lgFilesState,
-  projectIdState,
-  localeState,
-  settingsState,
-} from '../../recoilModel';
+import { dispatcherState, lgFilesState, projectIdState, localeState, settingsState } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const lgFiles = useRecoilValue(lgFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);

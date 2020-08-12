@@ -67,8 +67,20 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
       label: 'Edit',
       submenu: [
         // NOTE: Avoid using builtin `role`, it won't override the click handler.
-        { id: 'Undo', label: 'Undo', accelerator: 'CmdOrCtrl+Z', click: () => handleMenuEvents('undo') },
-        { id: 'Redo', label: 'Redo', accelerator: 'CmdOrCtrl+Shift+Z', click: () => handleMenuEvents('redo') },
+        {
+          id: 'Undo',
+          label: 'Undo',
+          enabled: false,
+          accelerator: 'CmdOrCtrl+Z',
+          click: () => handleMenuEvents('undo'),
+        },
+        {
+          id: 'Redo',
+          label: 'Redo',
+          enabled: false,
+          accelerator: 'CmdOrCtrl+Shift+Z',
+          click: () => handleMenuEvents('redo'),
+        },
         { type: 'separator' },
         { id: 'Cut', label: 'Cut', enabled: false, accelerator: 'CmdOrCtrl+X', click: () => handleMenuEvents('cut') },
         {
@@ -181,14 +193,21 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 
-  // Let menu enable/disable status reflect action selection states.
-  ipcMain &&
-    ipcMain.on &&
+  if (ipcMain && ipcMain.on) {
     ipcMain.on('composer-state-change', (e, state) => {
+      // Let menu enable/disable status reflects action selection states.
       const actionSelected = !!state.actionSelected;
       ['Cut', 'Copy', 'Delete'].forEach((id) => {
         menu.getMenuItemById(id).enabled = actionSelected;
       });
+
+      // Let menu undo/redo status reflects history status
+      const canUndo = !!state.canUndo;
+      menu.getMenuItemById('Undo').enabled = canUndo;
+      const canRedo = !!state.canRedo;
+      menu.getMenuItemById('Redo').enabled = canRedo;
+
       Menu.setApplicationMenu(menu);
     });
+  }
 }

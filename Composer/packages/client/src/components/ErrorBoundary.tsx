@@ -1,26 +1,23 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-
+/* eslint-disable format-message/literal-pattern */
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
-import formatMessage from 'format-message';
 
 import { StateError } from '../recoilModel/types';
 
 import { ErrorPopup } from './ErrorPopup/ErrorPopup';
 
-const githubIssueUrl = `https://github.com/microsoft/BotFramework-Composer/issues`;
-const errorToShow: StateError = {
-  message: formatMessage.rich('If this problem persists, please file an issue on <a>GitHub</a>.', {
-    // eslint-disable-next-line react/display-name
-    a: ({ children }) => (
-      <a key="a" href={githubIssueUrl} rel="noopener noreferrer" style={{ color: `greenyellow` }} target="_blank">
-        {children}
-      </a>
-    ),
-  }),
-  summary: formatMessage('Something went wrong!'),
+const genericErrorTitle = 'Something went wrong!';
+
+const formatToStateError = (error: any): StateError => {
+  const message: string = typeof error === 'string' ? error : error?.message || error?.detail;
+  const summary: string = message || genericErrorTitle;
+  return {
+    message,
+    summary,
+  };
 };
 
 interface ErrorBoundaryProps {
@@ -51,17 +48,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   unhandledrejectionHandler(event) {
     event.preventDefault();
     console.error(event.reason);
-    this.props.setApplicationLevelError(errorToShow);
+    this.props.setApplicationLevelError(formatToStateError(event));
   }
 
   eventHandler(error) {
     console.error(error);
-    this.props.setApplicationLevelError(errorToShow);
+    this.props.setApplicationLevelError(formatToStateError(error));
   }
 
   onErrorHandler(message, source, lineno, colno, error) {
     console.error({ message, source, lineno, colno, error });
-    this.props.setApplicationLevelError(errorToShow);
+    this.props.setApplicationLevelError(formatToStateError(message));
     return true;
   }
 
@@ -72,9 +69,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   // catch all render errors for children components
-  componentDidCatch(error) {
-    console.log(error);
-    this.props.setApplicationLevelError(errorToShow);
+  componentDidCatch(error, errorInfo) {
+    console.error(error);
+    console.error(errorInfo);
+    this.props.setApplicationLevelError(formatToStateError(error));
   }
 
   componentWillUnmount() {
@@ -100,8 +98,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       <div>
         {currentApplicationError ? (
           <ErrorPopup
-            error={currentApplicationError?.message}
-            title={currentApplicationError?.summary}
+            error={currentApplicationError}
             onDismiss={() => {
               this.closeErrorPopup();
             }}

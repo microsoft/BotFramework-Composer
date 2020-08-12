@@ -7,32 +7,95 @@ import { getCustomSchema } from '../../../src/adaptive-flow-editor/utils/getCust
 
 describe('getCustomSchema', () => {
   it('can handle invalid input', () => {
-    expect(getCustomSchema()).toBeUndefined();
-    expect(getCustomSchema({}, undefined)).toBeUndefined();
-    expect(getCustomSchema(undefined, undefined)).toBeUndefined();
+    expect(getCustomSchema()).toEqual({});
+    expect(getCustomSchema({}, undefined)).toEqual({});
+    expect(getCustomSchema(undefined, undefined)).toEqual({});
 
-    expect(getCustomSchema({}, {})).toBeUndefined();
+    expect(getCustomSchema({}, {})).toEqual({});
   });
 
-  it('can genreate diff schema', () => {
+  it('can genreate diff action schema', () => {
     const ejected = {
       definitions: {
         'Microsoft.SendActivity': {
+          $role: 'implements(Microsoft.IDialog)',
           title: 'SendActivity Title',
           description: 'Send an activity.',
         },
       },
     } as OBISchema;
     expect(getCustomSchema({ oneOf: [], definitions: {} }, ejected)).toEqual({
-      oneOf: [
-        {
+      actions: {
+        oneOf: [
+          {
+            title: 'SendActivity Title',
+            description: 'Send an activity.',
+            $ref: '#/definitions/Microsoft.SendActivity',
+          },
+        ],
+        definitions: {
+          'Microsoft.SendActivity': ejected.definitions['Microsoft.SendActivity'],
+        },
+      },
+    });
+  });
+
+  it('can genreate diff synthesized schema', () => {
+    const ejected = {
+      definitions: {
+        'Microsoft.SendActivity': {
+          $role: 'implements(Microsoft.IDialog)',
           title: 'SendActivity Title',
           description: 'Send an activity.',
-          $ref: '#/definitions/Microsoft.SendActivity',
         },
-      ],
-      definitions: {
-        'Microsoft.SendActivity': ejected.definitions['Microsoft.SendActivity'],
+        'Microsoft.MyRecognizer': {
+          $role: 'implements(Microsoft.IRecognizer)',
+          title: 'My Recognizer Title',
+          description: 'My Recognizer.',
+        },
+        'Microsoft.MyTrigger': {
+          $role: 'implements(Microsoft.ITrigger)',
+          title: 'My Trigger Title',
+          description: 'My Trigger.',
+        },
+      },
+    } as OBISchema;
+    expect(getCustomSchema({ oneOf: [], definitions: {} }, ejected)).toEqual({
+      actions: {
+        oneOf: [
+          {
+            title: 'SendActivity Title',
+            description: 'Send an activity.',
+            $ref: '#/definitions/Microsoft.SendActivity',
+          },
+        ],
+        definitions: {
+          'Microsoft.SendActivity': ejected.definitions['Microsoft.SendActivity'],
+        },
+      },
+      recognizers: {
+        oneOf: [
+          {
+            title: 'My Recognizer Title',
+            description: 'My Recognizer.',
+            $ref: '#/definitions/Microsoft.MyRecognizer',
+          },
+        ],
+        definitions: {
+          'Microsoft.MyRecognizer': ejected.definitions['Microsoft.MyRecognizer'],
+        },
+      },
+      triggers: {
+        oneOf: [
+          {
+            title: 'My Trigger Title',
+            description: 'My Trigger.',
+            $ref: '#/definitions/Microsoft.MyTrigger',
+          },
+        ],
+        definitions: {
+          'Microsoft.MyTrigger': ejected.definitions['Microsoft.MyTrigger'],
+        },
       },
     });
   });

@@ -6,15 +6,12 @@ import { MicrosoftIDialog } from '../types';
 import { copyAdaptiveAction } from './copyAdaptiveAction';
 import { ExternalApi } from './ExternalApi';
 
-export async function copyAdaptiveActionList(
-  actions: MicrosoftIDialog[],
-  externalApi: ExternalApi
-): Promise<MicrosoftIDialog[]> {
+export function copyAdaptiveActionList(actions: MicrosoftIDialog[], externalApi: ExternalApi): MicrosoftIDialog[] {
   if (!Array.isArray(actions)) return [];
 
   const results: MicrosoftIDialog[] = [];
   for (const action of actions) {
-    const copy = await copyAdaptiveAction(action, externalApi);
+    const copy = copyAdaptiveAction(action, externalApi);
     results.push(copy);
   }
   return results;
