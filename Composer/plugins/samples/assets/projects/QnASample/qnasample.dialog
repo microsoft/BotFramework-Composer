@@ -7,7 +7,7 @@
       "id": "U700F8"
     }
   },
-  "autoEndDialog": true,
+  "autoEndDialog": false,
   "defaultResultProperty": "dialog.result",
   "triggers": [
     {
