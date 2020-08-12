@@ -17,11 +17,13 @@ import { DialogInfo, SDKKinds, LuIntentSection } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { useRecoilValue } from 'recoil';
 
-import { generateNewDialog, TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
+import { generateNewDialog } from '../../utils/dialogUtil';
 import { projectIdState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
+import { TriggerFormData } from './types/TriggerFormData';
+import { TriggerFormDataErrors } from './TriggerFormDataErrors';
 import { customEventKey, EventTypes, ActivityTypes } from './constants';
 import { getTriggerTypes } from './getTriggerTypes';
 import { modalStyles, dialogStyles, triggerFormStyles, dropdownStyles, textInputStyles } from './style';

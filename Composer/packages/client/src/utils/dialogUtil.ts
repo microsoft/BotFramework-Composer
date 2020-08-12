@@ -16,29 +16,13 @@ import cloneDeep from 'lodash/cloneDeep';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 
+import { TriggerFormData } from '../components/TriggerCreationModal/types/TriggerFormData';
+
 import { getFocusPath } from './navigation';
 import { upperCaseName } from './fileUtil';
 
 interface DialogsMap {
   [dialogId: string]: any;
-}
-
-export interface TriggerFormData {
-  errors: TriggerFormDataErrors;
-  $kind: string;
-  event: string;
-  intent: string;
-  triggerPhrases: string;
-  regEx: string;
-}
-
-export interface TriggerFormDataErrors {
-  $kind?: string;
-  intent?: string;
-  event?: string;
-  triggerPhrases?: string;
-  regEx?: string;
-  activity?: string;
 }
 
 export function getDialog(dialogs: DialogInfo[], dialogId: string) {
