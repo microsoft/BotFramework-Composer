@@ -21,16 +21,7 @@ import { useRecoilValue } from 'recoil';
 import { increaseNameUtilNotExist } from '../../utils/lgUtil';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell, content } from '../language-understanding/styles';
-import {
-  dispatcherState,
-  dialogsState,
-  lgFilesState,
-  projectIdState,
-  localeState,
-  settingsState,
-  botStateByProjectIdSelector,
-  currentProjectIdState,
-} from '../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from '../../recoilModel';
 import { languageListTemplates } from '../../components/MultiLanguage';
 
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -38,7 +29,9 @@ interface TableViewProps extends RouteComponentProps<{}> {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const { dialogs, lgFiles, settings, locale } = useRecoilValue(botStateByProjectIdSelector);
+  const { validatedDialogs: dialogs, lgFiles, dialogSetting: settings, locale } = useRecoilValue(
+    botStateByProjectIdSelector
+  );
   const projectId = useRecoilValue(currentProjectIdState);
   const { createLgTemplate, copyLgTemplate, removeLgTemplate, setMessage } = useRecoilValue(dispatcherState);
 
@@ -328,7 +321,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           iconProps={{ iconName: 'CirclePlus' }}
           onClick={() => {
             onCreateNewTemplate();
-            setMessage('item added');
+            setMessage(formatMessage('item added'));
           }}
         >
           {formatMessage('New template')}

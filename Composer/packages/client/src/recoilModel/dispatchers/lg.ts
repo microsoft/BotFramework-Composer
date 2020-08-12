@@ -4,12 +4,13 @@
 import { LgTemplate, LgFile, importResolverGenerator } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
+import formatMessage from 'format-message';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
 import { botStateByProjectIdSelector } from '../selectors';
 
 import LgWorker from './../parsers/lgWorker';
-import { lgFilesState, currentProjectIdState } from './../atoms/botState';
+import { lgFilesState } from './../atoms';
 import * as lgUtil from './../../utils/lgUtil';
 
 const templateIsNotEmpty = ({ name, body }) => {
@@ -19,15 +20,10 @@ const templateIsNotEmpty = ({ name, body }) => {
 // fill other locale lgFile new added template with '- '
 const initialBody = '- ';
 
-export const updateLgFileState = async (
-  callbackHelpers: CallbackInterface,
-  { id, content }: { id: string; content: string }
-) => {
-  const { set, snapshot } = callbackHelpers;
-  const { lgFiles } = await snapshot.getPromise(botStateByProjectIdSelector);
+export const updateLgFileState = (lgFiles: LgFile[], updatedLgFile: LgFile) => {
+  const { id } = updatedLgFile;
   const dialogId = getBaseName(id);
   const locale = getExtension(id);
-  const updatedLgFile = (await LgWorker.parse(id, content, lgFiles)) as LgFile;
   const originLgFile = lgFiles.find((file) => id === file.id);
   const sameIdOtherLocaleFiles = lgFiles.filter((file) => {
     const fileDialogId = getBaseName(file.id);
@@ -36,7 +32,7 @@ export const updateLgFileState = async (
   });
 
   if (!originLgFile) {
-    throw new Error('origin lg file not found in store');
+    throw new Error(formatMessage('origin lg file not found in store'));
   }
 
   const changes: LgFile[] = [updatedLgFile];
@@ -59,10 +55,9 @@ export const updateLgFileState = async (
   if (onlyAdds || onlyDeletes) {
     for (const file of sameIdOtherLocaleFiles) {
       const lgImportResolver = importResolverGenerator(lgFiles, '.lg', getExtension(file.id));
-      let newLgFile = lgUtil.addTemplates(file.id, file.content, addedTemplates, lgImportResolver);
+      let newLgFile = lgUtil.addTemplates(file, addedTemplates, lgImportResolver);
       newLgFile = lgUtil.removeTemplates(
-        file.id,
-        newLgFile.content,
+        newLgFile,
         deletedTemplates.map(({ name }) => name),
         lgImportResolver
       );
@@ -71,29 +66,24 @@ export const updateLgFileState = async (
     }
   }
 
-  const newlgFiles = lgFiles.map((file) => {
+  return lgFiles.map((file) => {
     const changedFile = changes.find(({ id }) => id === file.id);
-    if (changedFile) {
-      return changedFile;
-    }
-    return file;
+    return changedFile ? changedFile : file;
   });
-
-  set(lgFilesState, newlgFiles);
 };
 
 // when do create, passed id do not carried with locale
 export const createLgFileState = async (
   callbackHelpers: CallbackInterface,
-  { id, content }: { id: string; content: string }
+  { id, content, projectId }: { id: string; content: string; projectId: string }
 ) => {
   const { set, snapshot } = callbackHelpers;
-  const { lgFiles, locale, settings } = await snapshot.getPromise(botStateByProjectIdSelector);
-  const projectId = await snapshot.getPromise(currentProjectIdState);
+  const { lgFiles, locale, dialogSetting: settings } = await snapshot.getPromise(botStateByProjectIdSelector);
+
   const { languages } = settings;
   const createdLgId = `${id}.${locale}`;
   if (lgFiles.find((lg) => lg.id === createdLgId)) {
-    throw new Error('lg file already exist');
+    throw new Error(formatMessage('lg file already exist'));
   }
   // slot with common.lg import
   let lgInitialContent = '';
@@ -102,7 +92,7 @@ export const createLgFileState = async (
     lgInitialContent = `[import](common.lg)`;
   }
   content = [lgInitialContent, content].join('\n');
-  const createdLgFile = (await LgWorker.parse(createdLgId, content, lgFiles)) as LgFile;
+  const createdLgFile = lgUtil.parse(createdLgId, content, lgFiles);
   const changes: LgFile[] = [];
 
   // copy to other locales
@@ -116,28 +106,52 @@ export const createLgFileState = async (
   set(lgFilesState(projectId), [...lgFiles, ...changes]);
 };
 
-export const removeLgFileState = async (callbackHelpers: CallbackInterface, { id }: { id: string }) => {
+export const removeLgFileState = async (
+  callbackHelpers: CallbackInterface,
+  { id, projectId }: { id: string; projectId: string }
+) => {
   const { set, snapshot } = callbackHelpers;
   let { lgFiles } = await snapshot.getPromise(botStateByProjectIdSelector);
   lgFiles = lgFiles.filter((file) => getBaseName(file.id) !== id);
-  const projectId = await snapshot.getPromise(currentProjectIdState);
   set(lgFilesState(projectId), lgFiles);
 };
 
 export const lgDispatcher = () => {
   const createLgFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
-      await createLgFileState(callbackHelpers, { id, content });
+    (callbackHelpers: CallbackInterface) => async ({
+      id,
+      content,
+      projectId,
+    }: {
+      id: string;
+      content: string;
+      projectId: string;
+    }) => {
+      await createLgFileState(callbackHelpers, { id, content, projectId });
     }
   );
 
-  const removeLgFile = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ id }: { id: string }) => {
-    await removeLgFileState(callbackHelpers, { id });
-  });
+  const removeLgFile = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async ({ id, projectId }: { id: string; projectId: string }) => {
+      await removeLgFileState(callbackHelpers, { id, projectId });
+    }
+  );
 
   const updateLgFile = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, content }: { id: string; content: string }) => {
-      await updateLgFileState(callbackHelpers, { id, content });
+    ({ set, snapshot }: CallbackInterface) => async ({
+      id,
+      content,
+      projectId,
+    }: {
+      id: string;
+      content: string;
+      projectId: string;
+    }) => {
+      const lgFiles = await snapshot.getPromise(lgFilesState(projectId));
+      const updatedFile = (await LgWorker.parse(id, content, lgFiles)) as LgFile;
+      set(lgFilesState(projectId), (lgFiles) => {
+        return updateLgFileState(lgFiles, updatedFile);
+      });
     }
   );
 
@@ -146,68 +160,101 @@ export const lgDispatcher = () => {
   };
 
   const updateLgTemplate = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
+    ({ set }: CallbackInterface) => ({
       id,
       templateName,
       template,
+      projectId,
     }: {
       id: string;
       templateName: string;
       template: LgTemplate;
+      projectId: string;
     }) => {
-      const { snapshot } = callbackHelpers;
-      const lgFiles = await snapshot.getPromise(lgFilesState);
-      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
-      content = lgUtil.updateTemplate(id, content, templateName, template, lgFileResolver(lgFiles)).content;
-      await updateLgFileState(callbackHelpers, { id, content });
+      set(lgFilesState(projectId), (lgFiles) => {
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        const updatedFile = lgUtil.updateTemplate(lgFile, templateName, template, lgFileResolver(lgFiles));
+        return updateLgFileState(lgFiles, updatedFile);
+      });
     }
   );
 
   const createLgTemplate = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, template }: { id: string; template: LgTemplate }) => {
-      const { snapshot } = callbackHelpers;
-      const lgFiles = await snapshot.getPromise(lgFilesState);
-      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
-      content = lgUtil.addTemplate(id, content, template, lgFileResolver(lgFiles)).content;
-      await updateLgFileState(callbackHelpers, { id, content });
+    ({ set }: CallbackInterface) => ({
+      id,
+      template,
+      projectId,
+    }: {
+      id: string;
+      template: LgTemplate;
+      projectId: string;
+    }) => {
+      set(lgFilesState(projectId), (lgFiles) => {
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        const updatedFile = lgUtil.addTemplate(lgFile, template, lgFileResolver(lgFiles));
+        return updateLgFileState(lgFiles, updatedFile);
+      });
     }
   );
 
   const removeLgTemplate = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, templateName }: { id: string; templateName: string }) => {
-      const { snapshot } = callbackHelpers;
-      const lgFiles = await snapshot.getPromise(lgFilesState);
-      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
-      content = lgUtil.removeTemplate(id, content, templateName, lgFileResolver(lgFiles)).content;
-      await updateLgFileState(callbackHelpers, { id, content });
+    ({ set }: CallbackInterface) => ({
+      id,
+      templateName,
+      projectId,
+    }: {
+      id: string;
+      templateName: string;
+      projectId: string;
+    }) => {
+      set(lgFilesState(projectId), (lgFiles) => {
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        const updatedFile = lgUtil.removeTemplate(lgFile, templateName, lgFileResolver(lgFiles));
+        return updateLgFileState(lgFiles, updatedFile);
+      });
     }
   );
 
   const removeLgTemplates = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ id, templateNames }: { id: string; templateNames: string[] }) => {
-      const { snapshot } = callbackHelpers;
-      const lgFiles = await snapshot.getPromise(lgFilesState);
-      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
-      content = lgUtil.removeTemplates(id, content, templateNames, lgFileResolver(lgFiles)).content;
-      await updateLgFileState(callbackHelpers, { id, content });
+    ({ set }: CallbackInterface) => ({
+      id,
+      templateNames,
+      projectId,
+    }: {
+      id: string;
+      templateNames: string[];
+      projectId: string;
+    }) => {
+      set(lgFilesState(projectId), (lgFiles) => {
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        const updatedFile = lgUtil.removeTemplates(lgFile, templateNames, lgFileResolver(lgFiles));
+        return updateLgFileState(lgFiles, updatedFile);
+      });
     }
   );
 
   const copyLgTemplate = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({
+    ({ set }: CallbackInterface) => ({
       id,
       fromTemplateName,
       toTemplateName,
+      projectId,
     }: {
       id: string;
       fromTemplateName: string;
       toTemplateName: string;
+      projectId: string;
     }) => {
-      const { snapshot } = callbackHelpers;
-      const lgFiles = await snapshot.getPromise(lgFilesState);
-      let content = lgFiles.find((file) => file.id === id)?.content ?? '';
-      content = lgUtil.copyTemplate(id, content, fromTemplateName, toTemplateName, lgFileResolver(lgFiles)).content;
-      await updateLgFileState(callbackHelpers, { id, content });
+      set(lgFilesState(projectId), (lgFiles) => {
+        const lgFile = lgFiles.find((file) => file.id === id);
+        if (!lgFile) return lgFiles;
+        const updatedFile = lgUtil.copyTemplate(lgFile, fromTemplateName, toTemplateName, lgFileResolver(lgFiles));
+        return updateLgFileState(lgFiles, updatedFile);
+      });
     }
   );
 

@@ -34,7 +34,6 @@ import {
   getActivityTypes,
   regexRecognizerKey,
 } from '../../utils/dialogUtil';
-import { addIntent } from '../../utils/luUtil';
 import { userSettingsState, botStateByProjectIdSelector } from '../../recoilModel';
 import { nameRegex } from '../../constants';
 
@@ -116,7 +115,7 @@ const validateDupRegExIntent = (
   regExIntents: [{ intent: string; pattern: string }]
 ): string | undefined => {
   if (selectedType === intentTypeKey && isRegEx && regExIntents.find((ri) => ri.intent === intent)) {
-    return `regEx ${intent} is already defined`;
+    return formatMessage(`RegEx {intent} is already defined`, { intent });
   }
   return undefined;
 };
@@ -205,9 +204,9 @@ interface TriggerCreationModalProps {
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
-  const { dialogs, locale, schemas, luFiles } = useRecoilValue(botStateByProjectIdSelector);
+  const { validatedDialogs: dialogs, locale, schemas, luFiles } = useRecoilValue(botStateByProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
-  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
+
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
@@ -258,16 +257,10 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       });
       return;
     }
-    const content = luFile?.content ?? '';
-    const luFileId = luFile?.id || `${dialogId}.${locale}`;
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
     if (formData.$kind === intentTypeKey && !isRegEx) {
-      const newContent = addIntent(content, { Name: formData.intent, Body: formData.triggerPhrases });
-      const updateLuFile = {
-        id: luFileId,
-        content: newContent,
-      };
-      onSubmit(newDialog, updateLuFile);
+      const newIntent = { Name: formData.intent, Body: formData.triggerPhrases };
+      onSubmit(newDialog, newIntent);
     } else {
       onSubmit(newDialog);
     }
@@ -403,7 +396,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
             <TextField
               data-testid="RegExField"
               errorMessage={formData.errors.regEx}
-              label={formatMessage('Please input regex pattern')}
+              label={formatMessage('Please input regEx pattern')}
               onChange={onChangeRegEx}
             />
           )}

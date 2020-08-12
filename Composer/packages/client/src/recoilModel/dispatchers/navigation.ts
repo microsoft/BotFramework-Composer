@@ -8,13 +8,13 @@ import { PromptTab } from '@bfc/shared';
 
 import { getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
-import { focusPathState, breadcrumbState, designPageLocationState, currentProjectIdState } from './../atoms/botState';
+import { focusPathState, breadcrumbState, designPageLocationState, currentProjectIdState } from './../atoms';
 import { updateBreadcrumb, navigateTo, checkUrl, getUrlSearch, BreadcrumbUpdateType } from './../../utils/navigation';
 
 export const navigationDispatcher = () => {
   const setDesignPageLocation = useRecoilCallback(
     ({ set }: CallbackInterface) => async ({
-      projectId = '',
+      projectId,
       dialogId = '',
       selected = '',
       focused = '',
@@ -22,6 +22,8 @@ export const navigationDispatcher = () => {
       promptTab,
     }) => {
       //generate focusedPath. This will remove when all focusPath related is removed
+      set(currentProjectIdState, projectId);
+
       let focusPath = dialogId + '#';
       if (focused) {
         focusPath = dialogId + '#.' + focused;
@@ -29,9 +31,9 @@ export const navigationDispatcher = () => {
         focusPath = dialogId + '#.' + selected;
       }
 
-      set(focusPathState, focusPath);
+      set(focusPathState(projectId), focusPath);
       //add current path to the breadcrumb
-      set(breadcrumbState, [...breadcrumb, { dialogId, selected, focused }]);
+      set(breadcrumbState(projectId), [...breadcrumb, { dialogId, selected, focused }]);
       set(designPageLocationState, {
         dialogId,
         projectId,

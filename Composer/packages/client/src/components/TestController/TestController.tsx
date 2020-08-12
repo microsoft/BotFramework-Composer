@@ -11,12 +11,6 @@ import { useRecoilValue } from 'recoil';
 
 import { DefaultPublishConfig } from '../../constants';
 import {
-  botNameState,
-  botStatusState,
-  dialogsState,
-  luFilesState,
-  settingsState,
-  botLoadErrorState,
   botEndpointsState,
   dispatcherState,
   currentProjectIdState,
@@ -56,9 +50,14 @@ export const TestController: React.FC = () => {
   const [calloutVisible, setCalloutVisible] = useState(false);
   const botActionRef = useRef(null);
   const notifications = useNotifications();
-  const { botName, botStatus, dialogs, luFiles, settings, botLoadErrorMsg } = useRecoilValue(
-    botStateByProjectIdSelector
-  );
+  const {
+    botName,
+    botStatus,
+    validatedDialogs: dialogs,
+    luFiles,
+    dialogSetting: settings,
+    botLoadErrorMsg,
+  } = useRecoilValue(botStateByProjectIdSelector);
   const { botEndpoints } = useRecoilValue(botEndpointsState);
 
   const {

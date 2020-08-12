@@ -11,8 +11,9 @@ const defaultProps = {
   name: 'foo',
   formData: { foo: 'value' },
   value: 'value',
+  schema: {},
   onNameChange: jest.fn(),
-  onValueChange: jest.fn(),
+  onChange: jest.fn(),
   onDelete: jest.fn(),
 };
 
@@ -77,20 +78,20 @@ describe('<ObjectItem />', () => {
     });
 
     it('has a fallback placeholder', () => {
-      const { getByPlaceholderText } = renderSubject({ name: '' });
+      const { getByPlaceholderText } = renderSubject({ name: undefined });
       expect(getByPlaceholderText('Add a new key')).toBeInTheDocument();
     });
   });
 
   describe('changing the value', () => {
     it('can update the value', () => {
-      const onValueChange = jest.fn();
-      const { getByDisplayValue } = renderSubject({ onValueChange });
+      const onChange = jest.fn();
+      const { getByDisplayValue } = renderSubject({ onChange });
 
       const input = getByDisplayValue('value');
       fireEvent.change(input, { target: { value: 'new value' } });
 
-      expect(onValueChange).toHaveBeenCalledWith('new value');
+      expect(onChange).toHaveBeenCalledWith('new value');
     });
 
     it('shows the initial value as placeholder', () => {

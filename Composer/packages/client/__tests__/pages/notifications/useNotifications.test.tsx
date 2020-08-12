@@ -12,7 +12,10 @@ import {
   luFilesState,
   lgFilesState,
   BotDiagnosticsState,
+  settingsState,
+  schemasState,
 } from '../../../src/recoilModel';
+import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
 const state = {
   projectId: 'test',
@@ -22,14 +25,6 @@ const state = {
       content: 'test',
       luFile: 'test',
       referredLuIntents: [],
-      diagnostics: [
-        {
-          message: 'must be an expression',
-          path: 'test.triggers[0]#Microsoft.OnUnknownIntent#condition',
-          severity: 1,
-          source: 'test',
-        },
-      ],
       skills: ['https://yuesuemailskill0207-gjvga67.azurewebsites.net/manifest/manifest-1.0.json'],
     },
   ],
@@ -108,6 +103,8 @@ const initRecoilState = ({ set }) => {
   set(luFilesState, state.luFiles);
   set(lgFilesState, state.lgFiles);
   set(BotDiagnosticsState, state.diagnostics);
+  set(settingsState, state.settings);
+  set(schemasState, mockProjectResponse.schemas);
 };
 
 describe('useNotification hooks', () => {
@@ -125,7 +122,7 @@ describe('useNotification hooks', () => {
   });
 
   it('should return notifications', () => {
-    expect(renderedResult.current.length).toBe(5);
+    expect(renderedResult.current.length).toBe(4);
   });
 
   it('should return filtered notifications', () => {

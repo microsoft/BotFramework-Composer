@@ -32,18 +32,18 @@ export const useLgApi = (shellApi: ShellApi) => {
     return targetTemplate ? targetTemplate.body : lgText;
   };
 
-  const createLgTemplate = async (
+  const createLgTemplate = (
     lgFileId: string,
     lgText: string,
     hostActionId: string,
     hostActionData: BaseSchema,
     hostFieldName: string
-  ): Promise<string> => {
+  ): string => {
     if (!lgText) return '';
     const newLgType = new LgType(hostActionData.$kind, hostFieldName).toString();
     const newLgTemplateName = new LgMetaData(newLgType, hostActionId).toString();
     const newLgTemplateRefStr = new LgTemplateRef(newLgTemplateName).toString();
-    await addLgTemplate(lgFileId, newLgTemplateName, lgText);
+    addLgTemplate(lgFileId, newLgTemplateName, lgText);
     return newLgTemplateRefStr;
   };
 

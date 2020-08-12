@@ -53,7 +53,7 @@ const Routes = (props) => {
             <Skills path="skills/*" />
             <DesignPage path="*" />
           </ProjectRouter>
-          <SettingPage path="settings/*" />
+          <SettingPage path="settings/:projectId/*" />
           <BotCreationFlowRouter path="projects/*" />
           <BotCreationFlowRouter path="home" />
           <NotFound default />

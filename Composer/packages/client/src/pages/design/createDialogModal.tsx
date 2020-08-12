@@ -10,7 +10,6 @@ import { useRecoilValue } from 'recoil';
 
 import { DialogCreationCopy, nameRegex } from '../../constants';
 import { StorageFolder } from '../../recoilModel/types';
-import { dialogsState, currentProjectIdState } from '../../recoilModel/atoms/botState';
 import { DialogWrapper, DialogTypes } from '../../components/DialogWrapper';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 import { botStateByProjectIdSelector } from '../../recoilModel';
@@ -31,7 +30,7 @@ interface CreateDialogModalProps {
 }
 
 export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
-  const { dialogs } = useRecoilValue(botStateByProjectIdSelector);
+  const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
   const { onSubmit, onDismiss, isOpen } = props;
   const formConfig: FieldConfig<DialogFormData> = {
     name: {
@@ -44,9 +43,11 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
           return formatMessage('Duplicate dialog name');
         }
       },
+      defaultValue: '',
     },
     description: {
       required: false,
+      defaultValue: '',
     },
   };
 
@@ -104,7 +105,7 @@ export const CreateDialogModal: React.FC<CreateDialogModalProps> = (props) => {
           <DefaultButton text={formatMessage('Cancel')} onClick={onDismiss} />
           <PrimaryButton
             data-testid="SubmitNewDialogBtn"
-            disabled={hasErrors}
+            disabled={hasErrors || formData.name === ''}
             text={formatMessage('OK')}
             onClick={handleSubmit}
           />

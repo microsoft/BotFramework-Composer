@@ -12,7 +12,7 @@ import querystring from 'query-string';
 import { CodeEditorSettings } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { luFilesState, projectIdState, localeState, settingsState } from '../../recoilModel/atoms/botState';
+import { luFilesState, localeState, settingsState } from '../../recoilModel/atoms';
 import { userSettingsState, dispatcherState } from '../../recoilModel';
 
 import { DiffCodeEditor } from './diff-editor';
@@ -21,6 +21,7 @@ const lspServerPath = '/lu-language-server';
 
 interface CodeEditorProps extends RouteComponentProps<{}> {
   dialogId: string;
+  projectId: string;
 }
 
 const CodeEditor: React.FC<CodeEditorProps> = (props) => {
@@ -31,14 +32,13 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
     updateUserSettings,
     setLocale,
   } = useRecoilValue(dispatcherState);
-  const luFiles = useRecoilValue(luFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
+  const { dialogId, projectId } = props;
+  const luFiles = useRecoilValue(luFilesState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const settings = useRecoilValue(settingsState(projectId));
 
   const { languages, defaultLanguage } = settings;
 
-  const { dialogId } = props;
   const file = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const defaultLangFile = luFiles.find(({ id }) => id === `${dialogId}.${defaultLanguage}`);
 
@@ -87,6 +87,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
         const payload = {
           id: file.id,
           intentName: Name,
+          projectId,
           intent: {
             Name,
             Body,
@@ -178,7 +179,9 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           left={currentLanguageFileEditor}
           locale={locale}
           right={defaultLanguageFileEditor}
-          onLanguageChange={setLocale}
+          onLanguageChange={(locale) => {
+            setLocale(locale, projectId);
+          }}
         ></DiffCodeEditor>
       )}
     </Fragment>

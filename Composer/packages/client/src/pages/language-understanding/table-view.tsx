@@ -22,14 +22,9 @@ import { LuFile, LuIntentSection } from '@bfc/shared';
 
 import { getExtension } from '../../utils/fileUtil';
 import { languageListTemplates } from '../../components/MultiLanguage';
-import {
-  dialogsState,
-  luFilesState,
-  projectIdState,
-  localeState,
-  settingsState,
-} from '../../recoilModel/atoms/botState';
+import { luFilesState, projectIdState, localeState, settingsState } from '../../recoilModel/atoms/botState';
 import { navigateTo } from '../../utils/navigation';
+import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 import { formCell, luPhraseCell, tableCell, content } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -46,7 +41,7 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const dialogs = useRecoilValue(dialogsState);
+  const dialogs = useRecoilValue(validatedDialogsSelector);
   const luFiles = useRecoilValue(luFilesState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
@@ -107,7 +102,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const buttons = [
       {
         key: 'edit',
-        name: 'Edit',
+        name: formatMessage('Edit'),
         onClick: () => {
           const { name, dialogId } = intents[index];
           navigateTo(`/bot/${projectId}/language-understanding/${dialogId}/edit?t=${encodeURIComponent(name)}`);
@@ -232,7 +227,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
             <div
               key={id}
               data-is-focusable
-              aria-label={formatMessage(`link to where this luis intent defined`)}
+              aria-label={formatMessage(`link to where this LUIS intent is defined`)}
               onClick={() => navigateTo(`/bot/${projectId}/dialogs/${id}`)}
             >
               <Link>{id}</Link>

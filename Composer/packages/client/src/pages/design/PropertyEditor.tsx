@@ -5,16 +5,14 @@
 import { jsx } from '@emotion/core';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AdaptiveForm, { resolveRef, getUIOptions } from '@bfc/adaptive-form';
-import Extension, { FormErrors, JSONSchema7, PluginConfig } from '@bfc/extension';
+import { FormErrors, JSONSchema7, useFormConfig } from '@bfc/extension';
 import formatMessage from 'format-message';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
-import mapValues from 'lodash/mapValues';
 import { Resizable, ResizeCallback } from 're-resizable';
 import { MicrosoftAdaptiveDialog } from '@bfc/shared';
 
 import { useShell } from '../../shell';
-import plugins, { mergePluginConfigs } from '../../plugins';
 
 import { formEditor } from './styles';
 
@@ -57,22 +55,17 @@ const PropertyEditor: React.FC = () => {
     };
   }, [formData]);
 
+  const formUIOptions = useFormConfig();
+
   const $schema = useMemo(() => {
     if (schemas?.sdk?.content && localData) {
       return resolveBaseSchema(schemas.sdk.content, localData.$kind);
     }
   }, [schemas?.sdk?.content, localData.$kind]);
 
-  const pluginConfig: PluginConfig = useMemo(() => {
-    const sdkUISchema = schemas?.ui?.content ?? {};
-    const userUISchema = schemas?.uiOverrides?.content ?? {};
-
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
-  }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
-
   const $uiOptions = useMemo(() => {
-    return getUIOptions($schema, mapValues(pluginConfig.uiSchema, 'form'));
-  }, [$schema, pluginConfig]);
+    return getUIOptions($schema, formUIOptions);
+  }, [$schema, formUIOptions]);
 
   const errors = useMemo(() => {
     const diagnostics = currentDialog?.diagnostics;
@@ -109,6 +102,8 @@ const PropertyEditor: React.FC = () => {
     const id = setTimeout(() => {
       if (!isEqual(formData, localData)) {
         shellApi.saveData(localData, focusedSteps[0]);
+      } else {
+        shellApi.commitChanges();
       }
     }, 300);
 
@@ -133,15 +128,13 @@ const PropertyEditor: React.FC = () => {
       onResizeStop={handleResize}
     >
       <div aria-label={formatMessage('form editor')} css={formEditor} data-testid="PropertyEditor" role="region">
-        <Extension plugins={pluginConfig} shell={shellApi} shellData={shellData}>
-          <AdaptiveForm
-            errors={errors}
-            formData={localData}
-            schema={$schema}
-            uiOptions={$uiOptions}
-            onChange={handleDataChange}
-          />
-        </Extension>
+        <AdaptiveForm
+          errors={errors}
+          formData={localData}
+          schema={$schema}
+          uiOptions={$uiOptions}
+          onChange={handleDataChange}
+        />
       </div>
     </Resizable>
   );

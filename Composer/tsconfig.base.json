@@ -5,6 +5,7 @@
     "declarationMap": true,
     "esModuleInterop": true,
     "jsx": "react",
+    "importHelpers": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": false,

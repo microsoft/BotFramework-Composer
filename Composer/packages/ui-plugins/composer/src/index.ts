@@ -1,11 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { PluginConfig, FormUISchema, RecognizerSchema } from '@bfc/extension';
+import { PluginConfig, FormUISchema, RecognizerSchema, UISchema, MenuUISchema } from '@bfc/extension';
 import { IntentField, RecognizerField, RegexIntentField } from '@bfc/adaptive-form';
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import mapValues from 'lodash/mapValues';
+
+import { DefaultMenuSchema } from './defaultMenuSchema';
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
@@ -27,14 +29,9 @@ const DefaultRecognizers: RecognizerSchema[] = [
   },
 ];
 
-const triggerUiSchema = {
-  order: ['condition', '*'],
-  hidden: ['actions'],
-};
-
 const DefaultFormSchema: FormUISchema = {
   [SDKKinds.AdaptiveDialog]: {
-    label: 'Adaptive dialog',
+    label: () => formatMessage('Adaptive dialog'),
     description: () => formatMessage('This configures a data driven dialog via a collection of events and actions.'),
     helpLink: 'https://aka.ms/bf-composer-docs-dialog',
     order: ['recognizer', '*'],
@@ -50,12 +47,12 @@ const DefaultFormSchema: FormUISchema = {
     },
   },
   [SDKKinds.AttachmentInput]: {
-    label: 'Prompt for a file or an attachment',
+    label: () => formatMessage('Prompt for a file or an attachment'),
     subtitle: () => formatMessage('Attachment Input'),
     helpLink: 'https://aka.ms/bfc-ask-for-user-input',
   },
   [SDKKinds.BeginDialog]: {
-    label: 'Begin a new dialog',
+    label: () => formatMessage('Begin a new dialog'),
     subtitle: () => formatMessage('Begin Dialog'),
     helpLink: 'https://aka.ms/bfc-understanding-dialogs',
     order: ['dialog', 'options', 'resultProperty', 'includeActivity', '*'],
@@ -163,188 +160,29 @@ const DefaultFormSchema: FormUISchema = {
     field: RecognizerField,
     helpLink: 'https://aka.ms/BFC-Using-LU',
   },
-  [SDKKinds.LogAction]: {
-    label: () => formatMessage('Log to console'),
-    subtitle: () => formatMessage('Log Action'),
-    helpLink: 'https://aka.ms/bfc-debugging-bots',
-  },
-  [SDKKinds.NumberInput]: {
-    label: () => formatMessage('Prompt for a number'),
-    subtitle: () => formatMessage('Number Input'),
-    helpLink: 'https://aka.ms/bfc-ask-for-user-input',
-  },
-  [SDKKinds.OAuthInput]: {
-    label: () => formatMessage('OAuth login'),
-    subtitle: () => formatMessage('OAuth Input'),
-    helpLink: 'https://aka.ms/bfc-using-oauth',
-    order: ['connectionName', '*'],
-  },
-  [SDKKinds.OnActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Activities'),
-    subtitle: () => formatMessage('Activity received'),
-  },
-  [SDKKinds.OnBeginDialog]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Dialog started'),
-    subtitle: () => formatMessage('Begin dialog event'),
-  },
-  [SDKKinds.OnCancelDialog]: { ...triggerUiSchema },
-  [SDKKinds.OnCondition]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Handle a condition'),
-    subtitle: () => formatMessage('Condition'),
-  },
-  [SDKKinds.OnConversationUpdateActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Greeting'),
-    subtitle: () => formatMessage('ConversationUpdate activity'),
-    description: () => formatMessage('Handle the events fired when a user begins a new conversation with the bot.'),
-    helpLink: 'https://aka.ms/bf-composer-docs-conversation-update-activity',
-  },
-  [SDKKinds.OnDialogEvent]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Dialog events'),
-    subtitle: () => formatMessage('Dialog event'),
-  },
-  [SDKKinds.OnEndOfConversationActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Conversation ended'),
-    subtitle: () => formatMessage('EndOfConversation activity'),
-  },
-  [SDKKinds.OnError]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Error occurred'),
-    subtitle: () => formatMessage('Error event'),
-  },
-  [SDKKinds.OnEventActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Event received'),
-    subtitle: () => formatMessage('Event activity'),
-  },
-  [SDKKinds.OnHandoffActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Handover to human'),
-    subtitle: () => formatMessage('Handoff activity'),
-  },
   [SDKKinds.OnIntent]: {
-    label: () => formatMessage('Intent recognized'),
-    subtitle: () => formatMessage('Intent recognized'),
-    order: ['intent', 'condition', 'entities', '*'],
-    hidden: ['actions'],
     properties: {
       intent: {
         field: IntentField,
       },
     },
   },
-  [SDKKinds.OnInvokeActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Conversation invoked'),
-    subtitle: () => formatMessage('Invoke activity'),
-  },
-  [SDKKinds.OnMessageActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Message received'),
-    subtitle: () => formatMessage('Message received activity'),
-  },
-  [SDKKinds.OnMessageDeleteActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Message deleted'),
-    subtitle: () => formatMessage('Message deleted activity'),
-  },
-  [SDKKinds.OnMessageReactionActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Message reaction'),
-    subtitle: () => formatMessage('Message reaction activity'),
-  },
-  [SDKKinds.OnMessageUpdateActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Message updated'),
-    subtitle: () => formatMessage('Message updated activity'),
-  },
-  [SDKKinds.OnRepromptDialog]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Re-prompt for input'),
-    subtitle: () => formatMessage('Reprompt dialog event'),
-  },
-  [SDKKinds.OnTypingActivity]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('User is typing'),
-    subtitle: () => formatMessage('Typing activity'),
-  },
-  [SDKKinds.OnUnknownIntent]: {
-    ...triggerUiSchema,
-    label: () => formatMessage('Unknown intent'),
-    subtitle: () => formatMessage('Unknown intent recognized'),
-  },
-  [SDKKinds.QnAMakerDialog]: {
-    label: () => formatMessage('Connect to QnA Knowledgebase'),
-    subtitle: () => formatMessage('QnA Maker Dialog'),
-    helpLink: 'https://aka.ms/bfc-using-QnA',
-  },
-  [SDKKinds.RegexRecognizer]: {
-    hidden: ['entities'],
-  },
-  [SDKKinds.RepeatDialog]: {
-    label: () => formatMessage('Repeat this dialog'),
-    subtitle: () => formatMessage('Repeat Dialog'),
-    helpLink: 'https://aka.ms/bfc-understanding-dialogs',
-    order: ['options', 'includeActivity', '*'],
-  },
-  [SDKKinds.ReplaceDialog]: {
-    label: () => formatMessage('Replace this dialog'),
-    subtitle: () => formatMessage('Replace Dialog'),
-    helpLink: 'https://aka.ms/bfc-understanding-dialogs',
-    order: ['dialog', 'options', 'includeActivity', '*'],
-  },
-  [SDKKinds.SendActivity]: {
-    label: () => formatMessage('Send a response'),
+};
 
-    subtitle: () => formatMessage('Send Activity'),
-    helpLink: 'https://aka.ms/bfc-send-activity',
-    order: ['activity', '*'],
-  },
-  [SDKKinds.SetProperty]: {
-    label: () => formatMessage('Set a property'),
-    subtitle: () => formatMessage('Set Property'),
-    helpLink: 'https://aka.ms/bfc-using-memory',
-  },
-  [SDKKinds.SetProperties]: {
-    label: () => formatMessage('Set properties'),
-    subtitle: () => formatMessage('Set Properties'),
-    helpLink: 'https://aka.ms/bfc-using-memory',
-  },
-  [SDKKinds.SignOutUser]: {
-    label: () => formatMessage('Sign out user'),
-    subtitle: () => formatMessage('Signout User'),
-  },
-  [SDKKinds.BeginSkill]: {
-    label: () => formatMessage('Connect to a skill'),
-    subtitle: () => formatMessage('Skill Dialog'),
-    helpLink: 'https://aka.ms/bf-composer-docs-connect-skill',
-  },
-  [SDKKinds.SwitchCondition]: {
-    label: () => formatMessage('Branch: Switch (multiple options)'),
-    subtitle: () => formatMessage('Switch Condition'),
-    helpLink: 'https://aka.ms/bfc-controlling-conversation-flow',
-    hidden: ['default'],
-    properties: { cases: { hidden: ['actions'] } },
-  },
-  [SDKKinds.TextInput]: {
-    label: () => formatMessage('Prompt for text'),
-    subtitle: () => formatMessage('Text Input'),
-    helpLink: 'https://aka.ms/bfc-ask-for-user-input',
-  },
-  [SDKKinds.TraceActivity]: {
-    label: () => formatMessage('Emit a trace event'),
-    subtitle: () => formatMessage('Trace Activity'),
-    helpLink: 'https://aka.ms/bfc-debugging-bots',
-  },
+const synthesizeUISchema = (formSchema: FormUISchema, menuSchema: MenuUISchema): UISchema => {
+  const uiSchema: UISchema = mapValues(formSchema, (val) => ({ form: val }));
+  for (const [$kind, menuConfig] of Object.entries(menuSchema)) {
+    if (uiSchema[$kind]) {
+      uiSchema[$kind].menu = menuConfig;
+    } else {
+      uiSchema[$kind] = { menu: menuConfig };
+    }
+  }
+  return uiSchema;
 };
 
 const config: PluginConfig = {
-  uiSchema: mapValues(DefaultFormSchema, (val) => ({ form: val })),
+  uiSchema: synthesizeUISchema(DefaultFormSchema, DefaultMenuSchema),
   recognizers: DefaultRecognizers,
 };
 

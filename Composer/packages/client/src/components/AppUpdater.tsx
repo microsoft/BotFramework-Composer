@@ -205,9 +205,11 @@ export const AppUpdater: React.FC<{}> = () => {
       case AppUpdaterStatus.UPDATE_IN_PROGRESS: {
         let trimmedTotalInMB;
         if (downloadSizeInBytes === undefined) {
-          trimmedTotalInMB = 'Calculating...';
+          trimmedTotalInMB = formatMessage('Calculating...');
         } else {
-          trimmedTotalInMB = `${(downloadSizeInBytes / 1000000).toFixed(2)}MB`;
+          trimmedTotalInMB = formatMessage('{total}MB', {
+            total: (downloadSizeInBytes / 1000000).toFixed(2),
+          });
         }
         const progressInHundredths = (progressPercent ?? 0) / 100;
         return (

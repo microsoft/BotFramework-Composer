@@ -6,29 +6,29 @@ import { useRef, useEffect, useState, Fragment } from 'react';
 import { atom, useRecoilTransactionObserver_UNSTABLE, Snapshot, useRecoilState } from 'recoil';
 import once from 'lodash/once';
 import React from 'react';
+import { BotAssets } from '@bfc/shared';
 
 import { prepareAxios } from './../utils/auth';
 import filePersistence from './persistence/FilePersistence';
 import createDispatchers, { Dispatcher } from './dispatchers';
-import { dialogsState, projectIdState, luFilesState, skillManifestsState, settingsState, lgFilesState } from './atoms';
-import { BotAssets } from './types';
+import { currentProjectIdState } from './atoms';
+import { UndoRoot } from './undo/history';
+import { botStateByProjectIdSelector } from './selectors';
 
 const getBotAssets = async (snapshot: Snapshot): Promise<BotAssets> => {
   const result = await Promise.all([
-    snapshot.getPromise(projectIdState),
-    snapshot.getPromise(dialogsState),
-    snapshot.getPromise(luFilesState),
-    snapshot.getPromise(lgFilesState),
-    snapshot.getPromise(skillManifestsState),
-    snapshot.getPromise(settingsState),
+    snapshot.getPromise(currentProjectIdState),
+    snapshot.getPromise(botStateByProjectIdSelector),
   ]);
+  const { dialogs, luFiles, lgFiles, skillManifests, dialogSetting, dialogSchemas } = result[1];
   return {
     projectId: result[0],
-    dialogs: result[1],
-    luFiles: result[2],
-    lgFiles: result[3],
-    skillManifests: result[4],
-    setting: result[5],
+    dialogs,
+    luFiles,
+    lgFiles,
+    skillManifests,
+    setting: dialogSetting,
+    dialogSchemas,
   };
 };
 
@@ -77,6 +77,7 @@ export const DispatcherWrapper = ({ children }) => {
 
   return (
     <Fragment>
+      <UndoRoot />
       <InitDispatcher onLoad={setLoaded} />
       {loaded ? children : null}
     </Fragment>

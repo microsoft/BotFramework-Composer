@@ -7,18 +7,19 @@ import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 
 import { useResolvers } from '../hooks/useResolver';
+import { Dispatcher } from '../recoilModel/dispatchers';
 
 import { botStateByProjectIdSelector, currentProjectIdState } from './../recoilModel';
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
 function createLgApi(
-  focusPath: string,
-  actions: any, //TODO
+  state: { focusPath: string; projectId: string },
+  actions: Dispatcher,
   lgFileResolver: (id: string) => LgFile | undefined
 ) {
   const getLgTemplates = (id) => {
     if (id === undefined) throw new Error('must have a file id');
-    const focusedDialogId = focusPath.split('#').shift() || id;
+    const focusedDialogId = state.focusPath.split('#').shift() || id;
     const file = lgFileResolver(focusedDialogId);
     if (!file) throw new Error(`lg file ${id} not found`);
     return file.templates;
@@ -34,6 +35,7 @@ function createLgApi(
       id: file.id,
       templateName,
       template,
+      projectId: state.projectId,
     });
   };
 
@@ -46,6 +48,7 @@ function createLgApi(
       id: file.id,
       fromTemplateName,
       toTemplateName,
+      projectId: state.projectId,
     });
   };
 
@@ -57,6 +60,7 @@ function createLgApi(
     return actions.removeLgTemplate({
       id: file.id,
       templateName,
+      projectId: state.projectId,
     });
   };
 
@@ -68,6 +72,7 @@ function createLgApi(
     return actions.removeLgTemplates({
       id: file.id,
       templateNames,
+      projectId: state.projectId,
     });
   };
 
@@ -86,10 +91,10 @@ export function useLgApi() {
   const projectId = useRecoilValue(currentProjectIdState);
   const actions = useRecoilValue(dispatcherState);
   const { lgFileResolver } = useResolvers();
-  const [api, setApi] = useState(createLgApi(focusPath, actions, lgFileResolver));
+  const [api, setApi] = useState(createLgApi({ focusPath, projectId }, actions, lgFileResolver));
 
   useEffect(() => {
-    const newApi = createLgApi(focusPath, actions, lgFileResolver);
+    const newApi = createLgApi({ focusPath, projectId }, actions, lgFileResolver);
     setApi(newApi);
 
     return () => {
