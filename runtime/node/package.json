@@ -10,7 +10,7 @@
     "start:function": "node ./lib/function.js",
     "build": "tsc",
     "lint": "eslint --quiet --ext .js,.ts,.tsx ./src",
-    "lint:fix":"npm run lint --fix"
+    "lint:fix": "npm run lint --fix"
   },
   "author": "",
   "license": "ISC",
