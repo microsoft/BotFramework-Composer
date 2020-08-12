@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import formatMessage from 'format-message';
+
 import { BranchIntervalX, BranchIntervalY } from '../constants/ElementSizes';
 import { GraphNode } from '../models/GraphNode';
 import { GraphLayout } from '../models/GraphLayout';
@@ -26,8 +28,8 @@ export function ifElseLayouter(
   const leftNode = ifNode || new GraphNode();
   const rightNode = elseNode || new GraphNode();
 
-  const leftNodeText = 'True';
-  const rightNodeText = 'False';
+  const leftNodeText = formatMessage('True');
+  const rightNodeText = formatMessage('False');
 
   // Condition
   conditionNode.offset = {

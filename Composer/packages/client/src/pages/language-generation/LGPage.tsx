@@ -9,7 +9,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { dialogsState, currentProjectIdState } from '../../recoilModel/atoms/botState';
+import { currentProjectIdState } from '../../recoilModel/atoms/botState';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';
@@ -26,7 +26,7 @@ interface LGPageProps extends RouteComponentProps<{}> {
 }
 
 const LGPage: React.FC<LGPageProps> = (props) => {
-  const { dialogs } = useRecoilValue(botStateByProjectIdSelector);
+  const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
   const projectId = useRecoilValue(currentProjectIdState);
 
   const path = props.location?.pathname ?? '';
@@ -59,7 +59,7 @@ const LGPage: React.FC<LGPageProps> = (props) => {
 
     newDialogLinks.splice(0, 0, {
       id: 'common',
-      name: 'All',
+      name: formatMessage('All'),
       ariaLabel: formatMessage('all language generation files'),
       url: commonUrl,
     });

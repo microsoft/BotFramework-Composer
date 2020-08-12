@@ -3,6 +3,7 @@
 import { FileInfo, importResolverGenerator } from '@bfc/shared';
 
 import { dialogIndexer } from './dialogIndexer';
+import { dialogSchemaIndexer } from './dialogSchemaIndexer';
 import { lgIndexer } from './lgIndexer';
 import { luIndexer } from './luIndexer';
 import { skillManifestIndexer } from './skillManifestIndexer';
@@ -19,7 +20,13 @@ class Indexer {
         }
         return result;
       },
-      { [FileExtensions.lg]: [], [FileExtensions.Lu]: [], [FileExtensions.Dialog]: [], [FileExtensions.Manifest]: [] }
+      {
+        [FileExtensions.lg]: [],
+        [FileExtensions.Lu]: [],
+        [FileExtensions.Dialog]: [],
+        [FileExtensions.DialogSchema]: [],
+        [FileExtensions.Manifest]: [],
+      }
     );
   }
 
@@ -38,6 +45,7 @@ class Indexer {
     const result = this.classifyFile(files);
     return {
       dialogs: dialogIndexer.index(result[FileExtensions.Dialog], botName),
+      dialogSchemas: dialogSchemaIndexer.index(result[FileExtensions.DialogSchema]),
       lgFiles: lgIndexer.index(result[FileExtensions.lg], this.getLgImportResolver(result[FileExtensions.lg], locale)),
       luFiles: luIndexer.index(result[FileExtensions.Lu]),
       skillManifestFiles: skillManifestIndexer.index(result[FileExtensions.Manifest]),
@@ -47,7 +55,9 @@ class Indexer {
 
 export const indexer = new Indexer();
 
+export * from './botIndexer';
 export * from './dialogIndexer';
+export * from './dialogSchemaIndexer';
 export * from './lgIndexer';
 export * from './luIndexer';
 export * from './utils';

@@ -46,6 +46,7 @@ import {
   boilerplateVersionState,
   botProjectsState,
   currentProjectIdState,
+  dialogSchemasState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
 
@@ -128,7 +129,7 @@ export const projectDispatcher = () => {
     }
 
     try {
-      const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
+      const { dialogs, dialogSchemas, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
       let mainDialog = '';
       const verifiedDialogs = dialogs.map((dialog) => {
         if (dialog.isRoot) {
@@ -143,6 +144,7 @@ export const projectDispatcher = () => {
         set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
         set(lgFilesState, lgFiles);
         set(dialogsState, verifiedDialogs);
+        set(dialogSchemasState, dialogSchemas);
         set(botEnvironmentState, botEnvironment);
         set(botNameState, botName);
         if (location !== curLocation) {

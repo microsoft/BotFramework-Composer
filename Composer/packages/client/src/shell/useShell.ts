@@ -2,14 +2,16 @@
 // Licensed under the MIT License.
 
 import { useMemo, useRef } from 'react';
-import { ShellApi, ShellData } from '@bfc/shared';
+import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
 import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
+import formatMessage from 'format-message';
 
 import { updateRegExIntent } from '../utils/dialogUtil';
 import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
+import { undoFunctionState } from '../recoilModel/undo/history';
 import {
   dispatcherState,
   userSettingsState,
@@ -23,9 +25,9 @@ import { useLuApi } from './luApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
-type EventSource = 'VisualEditor' | 'PropertyEditor' | 'ProjectTree';
+type EventSource = 'FlowEditor' | 'PropertyEditor' | 'DesignPage';
 
-export function useShell(source: EventSource): { api: ShellApi; data: ShellData } {
+export function useShell(source: EventSource): Shell {
   const dialogMapRef = useRef({});
   const {
     focusPath,
@@ -34,17 +36,21 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     schemas,
     skills,
     botName,
-    dialogs,
+    validatedDialogs: dialogs,
     luFiles,
     locale,
     lgFiles,
+    dialogSchemas,
   } = useRecoilValue(botStateByProjectIdSelector);
+
   const projectId = useRecoilValue(currentProjectIdState);
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
+  const { undo, redo, commitChanges } = useRecoilValue(undoFunctionState);
   const {
     updateDialog,
+    updateDialogSchema,
     createDialogBegin,
     navTo,
     focusTo,
@@ -57,6 +63,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     setMessage,
     displayManifestModal,
   } = useRecoilValue(dispatcherState);
+
   const lgApi = useLgApi();
   const luApi = useLuApi();
 
@@ -69,11 +76,11 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     }, {});
   }, [dialogs]);
 
-  async function updateRegExIntentHandler(id, intentName, pattern) {
+  function updateRegExIntentHandler(id, intentName, pattern) {
     const dialog = dialogs.find((dialog) => dialog.id === id);
-    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return await updateDialog({ id, content: newDialog.content });
+    return updateDialog({ id, content: newDialog.content, projectId });
   }
 
   function cleanData() {
@@ -82,6 +89,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       const payload = {
         id: dialogId,
         content: cleanedData,
+        projectId,
       };
       updateDialog(payload);
     }
@@ -124,6 +132,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       updateDialog({
         id: dialogId,
         content: newDialogData,
+        projectId,
       });
     },
     saveData: (newData, updatePath) => {
@@ -136,6 +145,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
       const payload = {
         id: dialogId,
         content: updatedDialog,
+        projectId,
       };
       dialogMapRef.current[dialogId] = updatedDialog;
       updateDialog(payload);
@@ -146,11 +156,12 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         /**
          * It's improper to fallback to `dialogId` directly:
          *   - If 'action' not exists at `focused` path, fallback to trigger path;
-         *   - If 'trigger' not exisits at `selected` path, fallback to dialog Id;
+         *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
         navTo(dialogId, []);
       }
+      commitChanges();
     },
     ...lgApi,
     ...luApi,
@@ -162,9 +173,13 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
     onCopy: setVisualEditorClipboard,
     createDialog: (actionsSeed) => {
       return new Promise((resolve) => {
-        createDialogBegin(actionsSeed, (newDialog: string | null) => {
-          resolve(newDialog);
-        });
+        createDialogBegin(
+          actionsSeed,
+          (newDialog: string | null) => {
+            resolve(newDialog);
+          },
+          projectId
+        );
       });
     },
     addSkillDialog: () => {
@@ -174,12 +189,16 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         });
       });
     },
-    undo: () => {}, //TODO
-    redo: () => {}, //TODO
+    undo,
+    redo,
+    commitChanges,
     addCoachMarkRef: onboardingAddCoachMarkRef,
     updateUserSettings: updateUserSettings,
     announce: setMessage,
     displayManifestModal: displayManifestModal,
+    updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
+      updateDialogSchema(dialogSchema, projectId);
+    },
   };
 
   const currentDialog = useMemo(() => dialogs.find((d) => d.id === dialogId), [dialogs, dialogId]);
@@ -196,6 +215,7 @@ export function useShell(source: EventSource): { api: ShellApi; data: ShellData 
         botName,
         projectId,
         dialogs,
+        dialogSchemas,
         dialogId,
         focusPath,
         schemas,

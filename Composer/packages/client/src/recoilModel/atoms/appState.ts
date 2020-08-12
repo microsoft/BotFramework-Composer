@@ -10,6 +10,7 @@ import {
   RuntimeTemplate,
   AppUpdateState,
   BoilerplateVersion,
+  DesignPageLocation,
 } from '../../recoilModel/types';
 import { getUserSettings } from '../utils';
 import onboardingStorage from '../../utils/onboardingStorage';
@@ -154,4 +155,24 @@ export const boilerplateVersionState = atom<BoilerplateVersion>({
 export const botOpeningState = atom<boolean>({
   key: getFullyQualifiedKey('botOpening'),
   default: false,
+});
+
+export const botProjectsState = atom<string[]>({
+  key: getFullyQualifiedKey('botProjects'),
+  default: [],
+});
+
+export const currentProjectIdState = atom<string>({
+  key: getFullyQualifiedKey('currentProjectId'),
+  default: '',
+});
+
+export const designPageLocationState = atom<DesignPageLocation>({
+  key: getFullyQualifiedKey('designPageLocation'),
+  default: {
+    projectId: '',
+    dialogId: '',
+    focused: '',
+    selected: '',
+  },
 });

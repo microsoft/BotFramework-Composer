@@ -11,6 +11,10 @@ export function getExtension(filename: string): string | undefined {
   return re.exec(filename)?.[0];
 }
 
+export function getLocale(fileId: string): string | undefined {
+  return /\w\.\w/.test(fileId) ? fileId.split('.').pop() : '';
+}
+
 // split text to lines
 export function splitNewlineText(text: string): string[] {
   return text.split('\n');

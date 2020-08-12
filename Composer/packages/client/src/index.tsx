@@ -15,7 +15,7 @@ import { DispatcherWrapper } from './recoilModel';
 const appHostElm = document.getElementById('root');
 
 formatMessage.setup({
-  missingTranslation: 'ignore',
+  missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
 });
 
 const emotionCache = createCache({

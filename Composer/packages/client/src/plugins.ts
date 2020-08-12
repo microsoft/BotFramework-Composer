@@ -8,6 +8,7 @@ import type { MergeWithCustomizer } from 'lodash';
 import type { PluginConfig } from '@bfc/extension';
 import composer from '@bfc/ui-plugin-composer';
 import prompts from '@bfc/ui-plugin-prompts';
+import schemaEditor from '@bfc/ui-plugin-dialog-schema-editor';
 import selectDialog from '@bfc/ui-plugin-select-dialog';
 import selectSkillDialog from '@bfc/ui-plugin-select-skill-dialog';
 import lg from '@bfc/ui-plugin-lg';
@@ -35,4 +36,4 @@ export function mergePluginConfigs(...plugins: PluginConfig[]): Required<PluginC
   return mergeWith({}, defaultPlugin, ...plugins, mergeArrays);
 }
 
-export default mergePluginConfigs(composer, prompts, selectDialog, selectSkillDialog, lg, lu);
+export default mergePluginConfigs(composer, prompts, selectDialog, selectSkillDialog, lg, lu, schemaEditor);

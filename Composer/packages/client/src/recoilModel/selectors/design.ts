@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 import { selector } from 'recoil';
+import { validateDialog } from '@bfc/indexers';
 
 import {
   currentProjectIdState,
@@ -37,6 +38,7 @@ import {
   onAddLanguageDialogCompleteState,
   onDelLanguageDialogCompleteState,
   botNameState,
+  dialogSchemasState,
 } from '../atoms';
 
 export const botStateByProjectIdSelector = selector({
@@ -57,11 +59,10 @@ export const botStateByProjectIdSelector = selector({
     const botLoadError = get(botLoadErrorState(projectId));
     const actionsSeed = get(actionsSeedState(projectId));
     const skillManifests = get(skillManifestsState(projectId));
-    const designPageLocation = get(designPageLocationState(projectId));
     const breadcrumb = get(breadcrumbState(projectId));
     const showCreateDialogModal = get(showCreateDialogModalState(projectId));
     const showAddSkillDialogModal = get(showAddSkillDialogModalState(projectId));
-    const settings = get(settingsState(projectId));
+    const dialogSetting = get(settingsState(projectId));
     const publishVersions = get(publishVersionsState(projectId));
     const publishStatus = get(publishStatusState(projectId));
     const lastPublishChange = get(lastPublishChangeState(projectId));
@@ -76,10 +77,16 @@ export const botStateByProjectIdSelector = selector({
     const onAddLanguageDialogComplete = get(onAddLanguageDialogCompleteState(projectId));
     const onDelLanguageDialogComplete = get(onDelLanguageDialogCompleteState(projectId));
     const botLoadErrorMsg = get(botLoadErrorState(projectId));
+    const dialogSchemas = get(dialogSchemasState(projectId));
+
+    const validatedDialogs = dialogs.map((dialog) => {
+      return { ...dialog, diagnostics: validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles) };
+    });
 
     return {
       botLoadErrorMsg,
       dialogs,
+      validatedDialogs,
       schemas,
       botName,
       location,
@@ -93,11 +100,10 @@ export const botStateByProjectIdSelector = selector({
       botLoadError,
       actionsSeed,
       skillManifests,
-      designPageLocation,
       breadcrumb,
       showCreateDialogModal,
       showAddSkillDialogModal,
-      settings,
+      dialogSetting,
       publishVersions,
       publishStatus,
       lastPublishChange,
@@ -111,6 +117,7 @@ export const botStateByProjectIdSelector = selector({
       showDelLanguageModal,
       onAddLanguageDialogComplete,
       onDelLanguageDialogComplete,
+      dialogSchemas,
     };
   },
 });

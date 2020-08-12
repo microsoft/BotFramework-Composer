@@ -21,7 +21,7 @@ const getCurrentSet = (stepSets) => stepSets.findIndex(({ id }) => id === onboar
 const Onboarding: React.FC = () => {
   const didMount = useRef(false);
   const projectId = useRecoilValue(currentProjectIdState);
-  const { dialogs } = useRecoilValue(botStateByProjectIdSelector);
+  const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
   const { onboardingSetComplete } = useRecoilValue(dispatcherState);
   const onboarding = useRecoilValue(onboardingState);
   const complete = onboarding.complete;

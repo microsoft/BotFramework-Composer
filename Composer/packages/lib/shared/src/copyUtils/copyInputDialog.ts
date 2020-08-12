@@ -6,7 +6,7 @@ import { InputDialog } from '../types';
 import { ExternalApi } from './ExternalApi';
 import { shallowCopyAdaptiveAction } from './shallowCopyAdaptiveAction';
 
-export const copyInputDialog = async (input: InputDialog, externalApi: ExternalApi): Promise<InputDialog> => {
+export const copyInputDialog = (input: InputDialog, externalApi: ExternalApi): InputDialog => {
   const inputActionId = input.$designer?.id || '';
 
   const copy = shallowCopyAdaptiveAction(input, externalApi);
@@ -16,22 +16,22 @@ export const copyInputDialog = async (input: InputDialog, externalApi: ExternalA
     externalApi.copyLgField(inputActionId, input, copiedActionId, toAction, fieldName);
 
   if (input.prompt !== undefined) {
-    copy.prompt = await copyLg(copy, 'prompt');
+    copy.prompt = copyLg(copy, 'prompt');
   }
 
   if (input.unrecognizedPrompt !== undefined) {
-    copy.unrecognizedPrompt = await copyLg(copy, 'unrecognizedPrompt');
+    copy.unrecognizedPrompt = copyLg(copy, 'unrecognizedPrompt');
   }
 
   if (input.invalidPrompt !== undefined) {
-    copy.invalidPrompt = await copyLg(copy, 'invalidPrompt');
+    copy.invalidPrompt = copyLg(copy, 'invalidPrompt');
   }
 
   if (input.defaultValueResponse !== undefined) {
-    copy.defaultValueResponse = await copyLg(copy, 'defaultValueResponse');
+    copy.defaultValueResponse = copyLg(copy, 'defaultValueResponse');
   }
 
-  await externalApi.copyLuField(inputActionId, input, copiedActionId, copy, '');
+  externalApi.copyLuField(inputActionId, input, copiedActionId, copy, '');
 
   return copy;
 };

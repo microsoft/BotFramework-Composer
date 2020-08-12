@@ -60,10 +60,10 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
 
   const updateSetting = (field) => (e, newValue) => {
     let valid = true;
-    let error = 'There was an error';
+    let error = formatMessage('There was an error');
     if (newValue === '') {
       valid = false;
-      error = 'This is a required field.';
+      error = formatMessage('This is a required field.');
     }
 
     setRuntimeField(projectId, field, newValue);
@@ -109,7 +109,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const callUpdateBoilerplate = async () => {
     const title = formatMessage('Update Scripts');
     const msg = formatMessage(
-      'Existing files in scripts/ folder will be overwritten. Are you sure you want to continue?'
+      'Existing files in scripts/folder will be overwritten. Are you sure you want to continue?'
     );
     const res = await OpenConfirmModal(title, msg);
     if (res) {

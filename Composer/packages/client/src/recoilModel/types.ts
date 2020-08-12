@@ -1,19 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { JSONSchema7 } from '@bfc/extension';
-import {
-  AppUpdaterSettings,
-  CodeEditorSettings,
-  DialogInfo,
-  LuFile,
-  LgFile,
-  PromptTab,
-  DialogSetting,
-} from '@bfc/shared';
+import { AppUpdaterSettings, CodeEditorSettings, PromptTab } from '@bfc/shared';
 
 import { AppUpdaterStatus, BotStatus } from '../constants';
-
-import { SkillManifest } from './../pages/design/exportSkillModal/constants';
 
 export interface StateError {
   status?: number;
@@ -109,15 +99,6 @@ export type UserSettingsPayload = {
   codeEditor: Partial<CodeEditorSettings>;
   propertyEditorWidth: number;
   dialogNavWidth: number;
-};
-
-export type BotAssets = {
-  projectId: string;
-  dialogs: DialogInfo[];
-  luFiles: LuFile[];
-  lgFiles: LgFile[];
-  skillManifests: SkillManifest[];
-  setting: DialogSetting;
 };
 
 export type BoilerplateVersion = {

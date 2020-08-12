@@ -10,8 +10,8 @@ import { botNameState } from './../atoms/botState';
 import { logMessage } from './shared';
 
 export const exportDispatcher = () => {
-  const exportToZip = useRecoilCallback((callbackHelpers: CallbackInterface) => async ({ projectId }) => {
-    const botName = await callbackHelpers.snapshot.getPromise(botNameState);
+  const exportToZip = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
+    const botName = await callbackHelpers.snapshot.getPromise(botNameState(projectId));
     try {
       const response = await httpClient.get(`/projects/${projectId}/export/`, { responseType: 'blob' });
       const url = window.URL.createObjectURL(new Blob([response.data]));

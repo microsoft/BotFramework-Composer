@@ -4,12 +4,13 @@ import { useRef } from 'react';
 import { importResolverGenerator } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 
-import { localeState, lgFilesState, luFilesState } from '../recoilModel';
+import { localeState, lgFilesState, luFilesState, currentProjectIdState } from '../recoilModel';
 
 export const useResolvers = () => {
-  const lgFiles = useRecoilValue(lgFilesState);
-  const locale = useRecoilValue(localeState);
-  const luFiles = useRecoilValue(luFilesState);
+  const projectId = useRecoilValue(currentProjectIdState);
+  const lgFiles = useRecoilValue(lgFilesState(projectId));
+  const locale = useRecoilValue(localeState(projectId));
+  const luFiles = useRecoilValue(luFilesState(projectId));
 
   const lgFilesRef = useRef(lgFiles);
   lgFilesRef.current = lgFiles;

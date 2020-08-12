@@ -7,8 +7,9 @@
  * for more usage detail, please check client/__tests__/utils/luUtil.test.ts
  */
 import keys from 'lodash/keys';
-import { createSingleMessage } from '@bfc/indexers';
+import { createSingleMessage, BotIndexer } from '@bfc/indexers';
 import { LuFile, DialogInfo, DiagnosticSeverity } from '@bfc/shared';
+import formatMessage from 'format-message';
 
 import { getBaseName, getExtension } from './fileUtil';
 
@@ -160,12 +161,14 @@ export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
   );
   if (invalidLuFile.length !== 0) {
     const msg = generateErrorMessage(invalidLuFile);
-    throw new Error(`The Following LuFile(s) are invalid: \n` + msg);
+    throw new Error(formatMessage(`The Following LuFile(s) are invalid: \n`) + msg);
   }
   const emptyLuFiles = referred.filter((file) => file.empty);
   if (emptyLuFiles.length !== 0) {
     const msg = emptyLuFiles.map((file) => file.id).join(' ');
-    throw new Error(`You have the following empty LuFile(s): ` + msg);
+    throw new Error(formatMessage(`You have the following empty LuFile(s): `) + msg);
   }
-  return referred;
+  // supported LUIS locale.
+  const supported = BotIndexer.filterLUISFilesToPublish(referred);
+  return supported;
 }

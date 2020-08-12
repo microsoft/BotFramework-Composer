@@ -11,7 +11,6 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { useRecoilValue } from 'recoil';
 
 import {
-  projectIdState,
   localeState,
   showAddLanguageModalState,
   showDelLanguageModalState,
@@ -32,8 +31,9 @@ import { SettingsRoutes } from './router';
 const getProjectLink = (path: string, id?: string) => {
   return id ? `/settings/bot/${id}/${path}` : `/settings/${path}`;
 };
+2;
 
-const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
+const SettingPage: React.FC<RouteComponentProps<{ projectId: string }>> = (props) => {
   const {
     deleteBotProject,
     addLanguageDialogBegin,
@@ -43,11 +43,11 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     addLanguages,
     deleteLanguages,
   } = useRecoilValue(dispatcherState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const showAddLanguageModal = useRecoilValue(showAddLanguageModalState);
-  const showDelLanguageModal = useRecoilValue(showDelLanguageModalState);
-  const { defaultLanguage, languages } = useRecoilValue(settingsState);
+  const projectId = props.projectId || '';
+  const locale = useRecoilValue(localeState(projectId));
+  const showAddLanguageModal = useRecoilValue(showAddLanguageModalState(projectId));
+  const showDelLanguageModal = useRecoilValue(showDelLanguageModalState(projectId));
+  const { defaultLanguage, languages } = useRecoilValue(settingsState(projectId));
   const { navigate } = useLocation();
 
   // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
@@ -180,21 +180,30 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
             onClick: openDeleteBotModal,
           },
           {
-            key: 'edit.addLanguage',
-            text: formatMessage('Add language'),
-            onClick: () => {
-              addLanguageDialogBegin(() => {});
-            },
-          },
-          {
             key: 'edit.deleteLanguage',
             text: formatMessage('Delete language'),
             onClick: () => {
-              delLanguageDialogBegin(() => {});
+              delLanguageDialogBegin(projectId, () => {});
             },
           },
         ],
       },
+    },
+
+    {
+      type: 'action',
+      text: formatMessage('Add language'),
+      buttonProps: {
+        iconProps: {
+          iconName: 'CirclePlus',
+        },
+        onClick: () => {
+          addLanguageDialogBegin(projectId, () => {});
+        },
+      },
+      align: 'left',
+      dataTestid: 'AddLanguageFlyout',
+      disabled: false,
     },
 
     {
@@ -226,7 +235,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
         isOpen={showAddLanguageModal}
         languages={languages}
         locale={locale}
-        onDismiss={addLanguageDialogCancel}
+        onDismiss={() => addLanguageDialogCancel(projectId)}
         onSubmit={onAddLangModalSubmit}
       ></AddLanguageModal>
       <DeleteLanguageModal
@@ -234,7 +243,7 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
         isOpen={showDelLanguageModal}
         languages={languages}
         locale={locale}
-        onDismiss={delLanguageDialogCancel}
+        onDismiss={() => delLanguageDialogCancel(projectId)}
         onSubmit={onDeleteLangModalSubmit}
       ></DeleteLanguageModal>
       <SettingsRoutes projectId={projectId} />

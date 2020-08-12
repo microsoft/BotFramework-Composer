@@ -31,14 +31,24 @@ describe('createActionMenu()', () => {
   });
 
   it('should show custom actions as last item.', () => {
-    const menuItemsWithoutCustomActions = createActionMenu(() => null, { isSelfHosted: false, enablePaste: false }, []);
+    const menuItemsWithoutCustomActions = createActionMenu(
+      () => null,
+      { isSelfHosted: false, enablePaste: false },
+      {},
+      []
+    );
     expect(menuItemsWithoutCustomActions.findIndex((x) => x.key === 'Custom Actions')).toEqual(-1);
 
     const customActions = [
       [{ title: 'Custom1', description: 'Custom1', $ref: 'Group1.Custom1' }],
       [{ title: 'Custom2', description: 'Custom2', $ref: 'Group2.Custom2' }],
     ];
-    const withCustomActions = createActionMenu(() => null, { isSelfHosted: false, enablePaste: false }, customActions);
+    const withCustomActions = createActionMenu(
+      () => null,
+      { isSelfHosted: false, enablePaste: false },
+      {},
+      customActions
+    );
     expect(withCustomActions.findIndex((x) => x.key === 'Custom Actions')).toEqual(withCustomActions.length - 1);
     expect(withCustomActions[withCustomActions.length - 1].subMenuProps?.items.length).toEqual(3); // 2 action labels + 1 sep line
   });

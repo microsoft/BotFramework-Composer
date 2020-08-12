@@ -1,8 +1,17 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DialogInfo, Diagnostic, LgFile, LuFile, BotSchemas, Skill, DialogSetting } from '@bfc/shared';
 import { atom, atomFamily } from 'recoil';
+import {
+  DialogInfo,
+  DialogSchemaFile,
+  Diagnostic,
+  LgFile,
+  LuFile,
+  BotSchemas,
+  Skill,
+  DialogSetting,
+} from '@bfc/shared';
 
 import { BotLoadError, DesignPageLocation } from '../../recoilModel/types';
 
@@ -27,13 +36,8 @@ export const schemasState = atomFamily<BotSchemas, string>({
   },
 });
 
-export const currentProjectIdState = atom<string>({
-  key: getFullyQualifiedKey('currentProjectId'),
-  default: '',
-});
-
-export const botProjectsState = atom<string[]>({
-  key: getFullyQualifiedKey('botProjects'),
+export const dialogSchemasState = atomFamily<DialogSchemaFile[], string>({
+  key: getFullyQualifiedKey('dialogSchema'),
   default: [],
 });
 
@@ -119,18 +123,6 @@ export const skillManifestsState = atomFamily<any, string>({
   key: getFullyQualifiedKey('skillManifests'),
   default: (id) => {
     return [];
-  },
-});
-
-export const designPageLocationState = atomFamily<DesignPageLocation, string>({
-  key: getFullyQualifiedKey('designPageLocation'),
-  default: (id) => {
-    return {
-      projectId: '',
-      dialogId: '',
-      focused: '',
-      selected: '',
-    };
   },
 });
 
