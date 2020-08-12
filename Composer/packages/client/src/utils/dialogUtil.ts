@@ -184,46 +184,6 @@ export function deleteTrigger(
   return dialogCopy.content;
 }
 
-export function getEventTypes(): IComboBoxOption[] {
-  const eventTypes: IComboBoxOption[] = [
-    ...dialogGroups[DialogGroup.DIALOG_EVENT_TYPES].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        if (labelOverrides.subtitle) {
-          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
-        } else {
-          name = labelOverrides.title;
-        }
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return eventTypes;
-}
-
-export function getActivityTypes(): IDropdownOption[] {
-  const activityTypes: IDropdownOption[] = [
-    ...dialogGroups[DialogGroup.ADVANCED_EVENTS].types.map((t) => {
-      let name = t as string;
-      const labelOverrides = ConceptLabels[t];
-
-      if (labelOverrides && labelOverrides.title) {
-        if (labelOverrides.subtitle) {
-          name = `${labelOverrides.title} (${labelOverrides.subtitle})`;
-        } else {
-          name = labelOverrides.title;
-        }
-      }
-
-      return { key: t, text: name || t };
-    }),
-  ];
-  return activityTypes;
-}
-
 function getDialogsMap(dialogs: DialogInfo[]): DialogsMap {
   return dialogs.reduce((result, dialog) => {
     result[dialog.id] = dialog.content;

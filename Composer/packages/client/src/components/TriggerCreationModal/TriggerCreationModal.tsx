@@ -15,21 +15,14 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
 import { DialogInfo, SDKKinds, LuIntentSection } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
-import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
 
-import {
-  generateNewDialog,
-  TriggerFormData,
-  TriggerFormDataErrors,
-  getEventTypes,
-  getActivityTypes,
-} from '../../utils/dialogUtil';
+import { generateNewDialog, TriggerFormData, TriggerFormDataErrors } from '../../utils/dialogUtil';
 import { projectIdState, schemasState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
-import { customEventKey } from './constants';
+import { customEventKey, EventTypes, ActivityTypes } from './constants';
 import { getTriggerTypes } from './getTriggerTypes';
 import { styles, dialogWindow, dropdownStyles, intent } from './style';
 import {
@@ -95,8 +88,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const showActivityDropDown = selectedType === SDKKinds.OnActivity;
   const showCustomEvent = selectedType === customEventKey;
 
-  const eventTypes: IComboBoxOption[] = getEventTypes();
-  const activityTypes: IDropdownOption[] = getActivityTypes();
   let triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
   if (recognizerUnassigned) {
@@ -210,7 +201,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               data-testid={'eventTypeDropDown'}
               errorMessage={formData.errors.event}
               label={formatMessage('Which event?')}
-              options={eventTypes}
+              options={EventTypes}
               placeholder={formatMessage('Select an event type')}
               styles={dropdownStyles}
               onChange={handleEventTypeChange}
@@ -230,7 +221,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
               data-testid={'activityTypeDropDown'}
               errorMessage={formData.errors.activity}
               label={formatMessage('Which activity type?')}
-              options={activityTypes}
+              options={ActivityTypes}
               placeholder={formatMessage('Select an activity type')}
               styles={dropdownStyles}
               onChange={handleEventTypeChange}
