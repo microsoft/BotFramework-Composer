@@ -5,7 +5,7 @@ import { ConceptLabels, DialogGroup, dialogGroups } from '@bfc/shared';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import formatMessage from 'format-message';
 
-import { customEventKey } from '../../utils/constants';
+import { customEventKey } from './constants';
 
 export function getTriggerTypes(): IDropdownOption[] {
   const triggerTypes: IDropdownOption[] = [
