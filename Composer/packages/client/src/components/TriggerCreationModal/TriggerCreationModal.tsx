@@ -116,7 +116,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     } else {
       newFormData = { ...newFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key };
     }
-    newFormData.errors.$kind = validateTriggerKind(option.key);
+    newFormData.errors.triggerType = validateTriggerKind(option.key);
     setFormData(newFormData);
   };
 
@@ -242,7 +242,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
           <Dropdown
             data-testid={'triggerTypeDropDown'}
             defaultSelectedKey={selectedType}
-            errorMessage={formData.errors.$kind}
+            errorMessage={formData.errors.triggerType}
             label={formatMessage('What is the type of this trigger?')}
             options={getTriggerTypes(recognizer)}
             styles={dropdownStyles}

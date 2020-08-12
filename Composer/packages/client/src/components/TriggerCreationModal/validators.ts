@@ -85,7 +85,7 @@ export const validateForm = (
   const errors: TriggerFormDataErrors = {};
   const { $kind, event: eventName, intent, regEx, triggerPhrases } = data;
 
-  errors.$kind = validateTriggerKind(selectedType);
+  errors.triggerType = validateTriggerKind(selectedType);
 
   switch (selectedType) {
     case eventTypeKey:

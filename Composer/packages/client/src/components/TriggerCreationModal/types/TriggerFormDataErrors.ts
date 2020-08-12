@@ -3,7 +3,7 @@
 
 export interface TriggerFormDataErrors {
   /** Error msg of L1 dropdown 'type of Trigger'. */
-  $kind?: string;
+  triggerType?: string;
 
   /** Error msg of L2 dropdown 'Dialog events'. */
   event?: string;
