@@ -110,4 +110,5 @@ export type BoilerplateVersion = {
 export enum QnAAllUpViewStatus {
   Loading,
   Success,
+  Failed,
 }

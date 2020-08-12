@@ -39,7 +39,7 @@ const dialogWindow = css`
   display: flex;
   flex-direction: column;
   width: 400px;
-  min-height: 300px;
+  min-height: 200px;
 `;
 
 const textField = {
@@ -78,12 +78,11 @@ interface ImportQnAFromUrlModalProps
   isCreatingBot: boolean;
   subscriptionKey?: string;
   onDismiss: () => void;
-  onSubmit: (urls: string[], knowledgeBaseName: string) => void;
+  onSubmit: (urls: string[]) => void;
 }
 
 interface ImportQnAFromUrlModalFormData {
   urls: string[];
-  knowledgeBaseName: string;
 }
 
 export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (props) => {
@@ -94,27 +93,34 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
       required: true,
       defaultValue: [''],
     },
-    knowledgeBaseName: {
-      defaultValue: '',
-    },
   };
   const { formData, updateField, hasErrors } = useForm(formConfig);
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = !isQnAFileselected || hasErrors || urlErrors.some((e) => !!e) || formData.urls.some((url) => !url);
   const validateUrls = (urls: string[]) => {
-    return urls.map((url) => {
-      if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        return formatMessage('A valid url should start with http:// or https://');
-      } else {
-        return '';
+    const res = Array(urls.length).fill('');
+    for (let i = 0; i < urls.length; i++) {
+      if (!urls[i].startsWith('http://') && !urls[i].startsWith('https://')) {
+        res[i] = formatMessage('A valid url should start with http:// or https://');
       }
-    });
+    }
+
+    for (let i = 0; i < urls.length; i++) {
+      for (let j = 0; j < urls.length; j++) {
+        if (urls[i] === urls[j] && i !== j) {
+          res[i] = formatMessage('This url is duplicated');
+          res[j] = formatMessage('This url is duplicated');
+        }
+      }
+    }
+    return res;
   };
 
   const addNewUrl = () => {
     const urls = cloneDeep(formData.urls);
     urls.splice(urls.length, 0, '');
     updateField('urls', urls);
+    setUrlErrors(validateUrls(urls));
   };
 
   const updateUrl = (index: number, url: string | undefined) => {
@@ -129,13 +135,14 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     const urls = cloneDeep(formData.urls);
     urls.splice(index, 1);
     updateField('urls', urls);
+    setUrlErrors(validateUrls(urls));
   };
 
   return (
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage('Create New Knowledge Base'),
+        title: formatMessage('Populate your KB.'),
         subText: formatMessage(
           'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
         ),
@@ -150,20 +157,13 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     >
       <div css={dialogWindow}>
         <Stack>
-          <TextField
-            data-testid="knowledgeBaseNameTextField"
-            label={formatMessage('knowledgebase name')}
-            styles={textField}
-            value={formData.knowledgeBaseName}
-            onChange={(e, knowledgeBaseName) => updateField('knowledgeBaseName', knowledgeBaseName)}
-          />
           {formData.urls.map((l, index) => {
             return (
               <div key={index} css={urlContainer}>
                 <TextField
                   data-testid="knowledgeLocationTextField"
                   errorMessage={urlErrors[index]}
-                  label={index === 0 ? formatMessage('knowledge location (URL name)') : ''}
+                  label={index === 0 ? formatMessage('URL') : ''}
                   placeholder={'http://'}
                   styles={textField}
                   value={l}
@@ -181,7 +181,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
             );
           })}
           <ActionButton css={actionButton} data-testid={'addQnAImportUrl'} iconProps={{ iconName: 'Add' }}>
-            {<Link onClick={addNewUrl}>{formatMessage('Add')}</Link>}
+            {<Link onClick={addNewUrl}>{formatMessage('Add URL')}</Link>}
           </ActionButton>
           {!isQnAFileselected && (
             <div css={warning}> {formatMessage('please select a specific qna file to import QnA')}</div>
@@ -198,7 +198,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
               if (hasErrors) {
                 return;
               }
-              onSubmit([], formData.knowledgeBaseName);
+              onSubmit([]);
             }}
           />
         )}
@@ -211,7 +211,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
             if (hasErrors) {
               return;
             }
-            onSubmit(formData.urls, formData.knowledgeBaseName);
+            onSubmit(formData.urls);
           }}
         />
       </DialogFooter>
