@@ -8,7 +8,7 @@ import React, { useCallback, useState } from 'react';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
 
-import { skillsState, botNameState, settingsState, projectIdState, dispatcherState } from '../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from '../../recoilModel';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { TestController } from '../../components/TestController/TestController';
 import { CreateSkillModal, ISkillFormData } from '../../components/CreateSkillModal';
@@ -20,10 +20,8 @@ import SkillList from './skill-list';
 const Skills: React.FC<RouteComponentProps> = () => {
   const [editIndex, setEditIndex] = useState<number | undefined>();
 
-  const botName = useRecoilValue(botNameState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
-  const skills = useRecoilValue(skillsState);
+  const { botName, dialogSetting: settings, skills } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
   const { setSettings, updateSkill } = useRecoilValue(dispatcherState);
 
   const toolbarItems: IToolbarItem[] = [

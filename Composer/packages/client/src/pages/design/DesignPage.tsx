@@ -579,7 +579,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
             isOpen={showAddSkillDialogModal}
             projectId={projectId}
             skills={skills}
-            onDismiss={() => addSkillDialogCancel()}
+            onDismiss={() => addSkillDialogCancel(projectId)}
             onSubmit={handleAddSkillDialogSubmit}
           />
         )}
@@ -600,7 +600,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           />
         )}
         {displaySkillManifest && (
-          <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={dismissManifestModal} />
+          <DisplayManifestModal manifestId={displaySkillManifest} onDismiss={() => dismissManifestModal(projectId)} />
         )}
       </Suspense>
     </React.Fragment>

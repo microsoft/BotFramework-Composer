@@ -59,7 +59,7 @@ export const navigationDispatcher = () => {
   const selectTo = useRecoilCallback(({ snapshot }: CallbackInterface) => async (selectPath: string) => {
     if (!selectPath) return;
     const designPageLocation = await snapshot.getPromise(designPageLocationState);
-    const breadcrumb = await snapshot.getPromise(breadcrumbState);
+    const breadcrumb = await snapshot.getPromise(breadcrumbState(designPageLocation.projectId));
     const currentProjectId = await snapshot.getPromise(currentProjectIdState);
     // initial dialogId, projectId maybe empty string  ""
     let { dialogId, projectId } = designPageLocation;

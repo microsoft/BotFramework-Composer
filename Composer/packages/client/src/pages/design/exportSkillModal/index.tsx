@@ -12,7 +12,7 @@ import { Link } from 'office-ui-fabric-react/lib/components/Link';
 import { useRecoilValue } from 'recoil';
 import { SkillManifest } from '@bfc/shared';
 
-import { skillManifestsState, dispatcherState } from '../../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from '../../../recoilModel';
 
 import { editorSteps, ManifestEditorSteps, order } from './constants';
 import { styles } from './styles';
@@ -24,7 +24,8 @@ interface ExportSkillModalProps {
 }
 
 const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss }) => {
-  const skillManifests = useRecoilValue(skillManifestsState);
+  const { skillManifests } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
   const { updateSkillManifest } = useRecoilValue(dispatcherState);
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -61,7 +62,11 @@ const ExportSkillModal: React.FC<ExportSkillModalProps> = ({ onSubmit, onDismiss
   };
 
   const handleSave = (manifest?: SkillManifest) => {
-    updateSkillManifest(manifest || content);
+    const skillManifest = manifest || content;
+    updateSkillManifest({
+      ...skillManifest,
+      projectId,
+    });
   };
 
   const handleSelectManifest = (manifest) => {
