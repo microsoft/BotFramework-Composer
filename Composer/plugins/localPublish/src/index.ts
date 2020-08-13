@@ -32,7 +32,6 @@ interface PublishConfig {
   botId: string;
   version: string;
   fullSettings: any;
-  templatePath: string;
 }
 
 const isWin = process.platform === 'win32';
@@ -40,7 +39,6 @@ const isWin = process.platform === 'win32';
 class LocalPublisher {
   static runningBots: { [key: string]: RunningBot } = {};
   private readonly baseDir = path.resolve(__dirname, '../');
-  private templatePath;
   private composer: any;
 
   constructor(composer: any) {
@@ -105,8 +103,7 @@ class LocalPublisher {
 
   // config include botId and version, project is content(ComposerDialogs)
   publish = async (config: PublishConfig, project, metadata, user): Promise<any> => {
-    const { templatePath, fullSettings } = config;
-    this.templatePath = templatePath;
+    const { fullSettings } = config;
     const botId = project.id;
     const version = 'default';
 
@@ -219,6 +216,8 @@ class LocalPublisher {
     this.composer.log('Initializing bot');
     const botId = project.id;
     const isExist = await this.botExist(botId);
+    // get runtime template
+    const runtime = this.composer.getRuntimeByProject(project);
     try {
       if (!isExist) {
         const botDir = this.getBotDir(botId);
@@ -232,9 +231,8 @@ class LocalPublisher {
         mkDir(this.getHistoryDir(botId), { recursive: true });
 
         // copy runtime template in folder
-        this.composer.log('COPY FROM ', this.templatePath, ' to ', runtimeDir);
-        await this.copyDir(this.templatePath, runtimeDir);
-        const runtime = this.composer.getRuntimeByProject(project);
+        this.composer.log('COPY FROM ', runtime.path, ' to ', runtimeDir);
+        await this.copyDir(runtime.path, runtimeDir);
         await runtime.build(runtimeDir, project);
       } else {
         // stop bot
@@ -250,8 +248,7 @@ class LocalPublisher {
           // in order to change runtime type
           await removeDirAndFiles(this.getBotRuntimeDir(botId));
           // copy runtime template in folder
-          await this.copyDir(this.templatePath, this.getBotRuntimeDir(botId));
-          const runtime = this.composer.getRuntimeByProject(project);
+          await this.copyDir(runtime.path, this.getBotRuntimeDir(botId));
           await runtime.build(this.getBotRuntimeDir(botId), project);
         }
       }

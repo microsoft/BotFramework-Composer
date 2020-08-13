@@ -15,7 +15,6 @@ export const defaultPublishConfig = {
   type: 'localpublish',
   configuration: JSON.stringify({}),
 };
-export const DEFAULT_RUNTIME = 'dotnet';
 
 export const LUISLocales = [
   'en-us',

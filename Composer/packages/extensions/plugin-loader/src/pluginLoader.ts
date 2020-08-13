@@ -111,25 +111,25 @@ export class PluginLoader {
     }
   }
 
-  // return a reference to the plugin used by the app
+  // get the runtime template currently used from project
   public getRuntimeByProject(project): RuntimeTemplate {
     const type = project.settings.runtime?.key || DEFAULT_RUNTIME;
-    const templates = this.extensions.runtimeTemplates.filter((t) => t.key === type);
-    if (templates.length) {
-      return templates[0];
+    const template = this.extensions.runtimeTemplates.find((t) => t.key === type);
+    if (template) {
+      return template;
     } else {
       throw new Error(formatMessage(`Support for runtime with name ${type} not available`));
     }
   }
 
-  // return a reference to the plugin used by the app
+  // get the runtime template currently used by type
   public getRuntime(type: string | undefined): RuntimeTemplate {
     if (!type) {
       type = DEFAULT_RUNTIME;
     }
-    const templates = this.extensions.runtimeTemplates.filter((t) => t.key === type);
-    if (templates.length) {
-      return templates[0];
+    const template = this.extensions.runtimeTemplates.find((t) => t.key === type);
+    if (template) {
+      return template;
     } else {
       throw new Error(formatMessage(`Support for runtime type ${type} not available`));
     }

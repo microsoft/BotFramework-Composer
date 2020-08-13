@@ -32,7 +32,6 @@ interface CreateAndDeployResources {
 
 interface PublishConfig {
   fullSettings: any;
-  templatePath: string;
   profileName: string; //profile name
   [key: string]: any;
 }
@@ -312,7 +311,6 @@ export default async (composer: any): Promise<void> => {
       const {
         // these are provided by Composer
         fullSettings, // all the bot's settings - includes sensitive values not included in projet.settings
-        templatePath, // templatePath point to the dotnet code todo: SHOULD BE DEPRECATED in favor of pulling this from the runtime template
         profileName, // the name of the publishing profile "My Azure Prod Slot"
 
         // these are specific to the azure publish profile shape
@@ -328,10 +326,11 @@ export default async (composer: any): Promise<void> => {
 
       // get the appropriate runtime template which contains methods to build and configure the runtime
       const runtime = composer.getRuntimeByProject(project);
+      // set runtime code path as runtime template folder path
+      let runtimeCodePath = runtime.path;
 
       // If the project is using an "ejected" runtime, use that version of the code instead of the built-in template
       // TODO: this templatePath should come from the runtime instead of this magic parameter
-      let runtimeCodePath = templatePath;
       if (
         project.settings &&
         project.settings.runtime &&

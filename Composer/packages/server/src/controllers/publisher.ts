@@ -1,14 +1,11 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import path from 'path';
-
 import merge from 'lodash/merge';
 import { pluginLoader, PluginLoader } from '@bfc/plugin-loader';
-import { DEFAULT_RUNTIME, defaultPublishConfig } from '@bfc/shared';
+import { defaultPublishConfig } from '@bfc/shared';
 
 import { BotProjectService } from '../services/project';
-import { runtimeFolder } from '../settings/env';
 
 export const PublishController = {
   getTypes: async (req, res) => {
@@ -48,15 +45,11 @@ export const PublishController = {
     const profile = profiles.length ? profiles[0] : undefined;
     const method = profile ? profile.type : undefined; // get the publish plugin key
 
-    const runtime = pluginLoader.getRuntimeByProject(currentProject);
-    const pathToRuntime = runtime.path;
-
     if (profile && method && pluginLoader?.extensions?.publish[method]?.methods?.publish) {
       // append config from client(like sensitive settings)
       const configuration = {
         profileName: profile.name,
         fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-        templatePath: pathToRuntime,
         ...JSON.parse(profile.configuration),
       };
 
@@ -204,7 +197,6 @@ export const PublishController = {
       const configuration = {
         profileName: profile.name,
         fullSettings: merge({}, currentProject.settings, sensitiveSettings),
-        templatePath: path.resolve(runtimeFolder, DEFAULT_RUNTIME),
         ...JSON.parse(profile.configuration),
       };
       // get the externally defined method
