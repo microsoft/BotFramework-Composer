@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { SkillManifest } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 
@@ -25,11 +26,18 @@ export const skillDispatcher = () => {
     set(skillManifestsState, (skillManifests) => skillManifests.filter((manifest) => manifest.id !== id));
   });
 
-  const updateSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async ({ id, content }) => {
-    set(skillManifestsState, (skillManifests) =>
-      skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
-    );
-  });
+  const updateSkillManifest = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({ id, content }: SkillManifest) => {
+      const manifests = await snapshot.getPromise(skillManifestsState);
+      if (!manifests.some((manifest) => manifest.id === id)) {
+        createSkillManifest({ id, content });
+      }
+
+      set(skillManifestsState, (skillManifests) =>
+        skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
+      );
+    }
+  );
 
   const updateSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ projectId, targetId, skillData }) => {
