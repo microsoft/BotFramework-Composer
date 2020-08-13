@@ -19,11 +19,10 @@ const ejectRuntimeAction = (dispatcher: Dispatcher) => {
         if (!lodashGet(response, 'data.settings.path', '') || !lodashGet(response, 'data.settings.startCommand', '')) {
           throw new Error('Runtime cannot be ejected');
         }
-        const path = response.data.settings.path;
-        const command = response.data.settings.startCommand;
-        const runtimename = response.data.settings.name;
-        const key = response.data.settings.key;
-        dispatcher.setRuntimeSettings(projectId, path, command, key, runtimename);
+        dispatcher.setRuntimeSettings(projectId, {
+          ...response.data.settings,
+          command: response.data.settings.startCommand,
+        });
       } catch (ex) {
         const errorToShow: StateError = {
           message: ex.response?.data?.message || ex.message,

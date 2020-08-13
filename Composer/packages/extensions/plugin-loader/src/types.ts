@@ -36,6 +36,7 @@ export interface BotTemplate {
 
 // TODO: Add types for project, metadata
 export interface PublishPlugin<Config = any> {
+  // methods plugins should support
   publish: (config: Config, project: IBotProject, metadata: any, user?: UserIdentity) => Promise<PublishResponse>;
   getStatus?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResponse>;
   getHistory?: (config: Config, project: IBotProject, user?: UserIdentity) => Promise<PublishResult[]>;
@@ -45,6 +46,12 @@ export interface PublishPlugin<Config = any> {
     rollbackToVersion: string,
     user?: UserIdentity
   ) => Promise<PublishResponse>;
+
+  // other properties
+  schema?: JSONSchema7;
+  instructions?: string;
+  customName?: string;
+  customDescription?: string;
   [key: string]: any;
 }
 
@@ -102,12 +109,12 @@ export interface ExtensionCollection {
       plugin: {
         name: string;
         description: string;
+        /** (Optional instructions displayed in the UI) */
+        instructions?: string;
+        /** (Optional) Schema for publishing configuration. */
+        schema?: JSONSchema7;
       };
       methods: PublishPlugin;
-      /** (Optional instructions displayed in the UI) */
-      instructions?: string;
-      /** (Optional) Schema for publishing configuration. */
-      schema?: JSONSchema7;
     };
   };
   authentication: {

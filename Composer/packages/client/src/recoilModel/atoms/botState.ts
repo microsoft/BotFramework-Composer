@@ -67,11 +67,6 @@ export const botStatusState = atom<BotStatus>({
   default: BotStatus.unConnected,
 });
 
-export const botStatusIntervalState = atom<NodeJS.Timeout | undefined>({
-  key: getFullyQualifiedKey('botStatusInterval'),
-  default: undefined,
-});
-
 export const botLoadErrorState = atom<BotLoadError>({
   key: getFullyQualifiedKey('botLoadErrorMsg'),
   default: { title: '', message: '' },

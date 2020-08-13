@@ -6,14 +6,7 @@ import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { defaultPublishConfig } from '@bfc/shared';
 
-import {
-  publishTypesState,
-  botStatusState,
-  publishHistoryState,
-  botLoadErrorState,
-  botStatusIntervalState,
-  projectIdState,
-} from '../atoms/botState';
+import { publishTypesState, botStatusState, publishHistoryState, botLoadErrorState } from '../atoms/botState';
 import filePersistence from '../persistence/FilePersistence';
 import { botEndpointsState } from '../atoms';
 
@@ -24,8 +17,6 @@ import { logMessage } from './shared';
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
 const PUBLISH_FAILED = 500;
-
-const POLLING_INTERVAL = 2500;
 
 export const publisherDispatcher = () => {
   const publishFailure = async ({ set }: CallbackInterface, title: string, error, target) => {
@@ -112,37 +103,6 @@ export const publisherDispatcher = () => {
     }
   };
 
-  const getPublishStatusHelper = async (callbackHelpers: CallbackInterface, projectId: string, target: any) => {
-    try {
-      const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
-      updatePublishStatus(callbackHelpers, projectId, target, response.data);
-    } catch (err) {
-      updatePublishStatus(callbackHelpers, projectId, target, err.response.data);
-    }
-  };
-
-  const startPollingRuntime = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    const { set, snapshot } = callbackHelpers;
-    const botStatusInterval = await snapshot.getPromise(botStatusIntervalState);
-    const projectId = await snapshot.getPromise(projectIdState);
-    if (!botStatusInterval) {
-      const cancelInterval = setInterval(() => {
-        // get publish status
-        getPublishStatusHelper(callbackHelpers, projectId, defaultPublishConfig);
-      }, POLLING_INTERVAL);
-      set(botStatusIntervalState, cancelInterval);
-    }
-  });
-
-  const stopPollingRuntime = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    const { set, snapshot } = callbackHelpers;
-    const botStatusInterval = await snapshot.getPromise(botStatusIntervalState);
-    if (botStatusInterval) {
-      clearInterval(botStatusInterval);
-      set(botStatusIntervalState, undefined);
-    }
-  });
-
   const getPublishTargetTypes = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
     const { set } = callbackHelpers;
     try {
@@ -206,7 +166,12 @@ export const publisherDispatcher = () => {
   // get bot status from target publisher
   const getPublishStatus = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async (projectId: string, target: any) => {
-      await getPublishStatusHelper(callbackHelpers, projectId, target);
+      try {
+        const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
+        updatePublishStatus(callbackHelpers, projectId, target, response.data);
+      } catch (err) {
+        updatePublishStatus(callbackHelpers, projectId, target, err.response.data);
+      }
     }
   );
 
@@ -233,7 +198,5 @@ export const publisherDispatcher = () => {
     rollbackToVersion,
     getPublishStatus,
     getPublishHistory,
-    startPollingRuntime,
-    stopPollingRuntime,
   };
 };

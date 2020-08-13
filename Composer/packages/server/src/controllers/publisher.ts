@@ -16,13 +16,13 @@ export const PublishController = {
       Object.values(pluginLoader.extensions.publish)
         .filter((extension) => extension.plugin.name !== defaultPublishConfig.type)
         .map((extension) => {
-          const { plugin, methods, schema, instructions } = extension;
+          const { plugin, methods } = extension;
 
           return {
             name: plugin.name,
             description: plugin.description,
-            instructions: instructions,
-            schema,
+            instructions: plugin.instructions,
+            schema: plugin.schema,
             features: {
               history: typeof methods.history === 'function',
               publish: typeof methods.publish === 'function',
@@ -46,7 +46,7 @@ export const PublishController = {
 
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
-    const method = profile ? profile.type : undefined;
+    const method = profile ? profile.type : undefined; // get the publish plugin key
 
     const runtime = pluginLoader.getRuntimeByProject(currentProject);
     const pathToRuntime = runtime.path;
@@ -99,7 +99,7 @@ export const PublishController = {
 
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
-
+    // get the publish plugin key
     const method = profile ? profile.type : undefined;
     if (
       profile &&
@@ -146,7 +146,7 @@ export const PublishController = {
 
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
-
+    // get the publish plugin key
     const method = profile ? profile.type : undefined;
 
     if (
@@ -190,6 +190,7 @@ export const PublishController = {
 
     const profiles = allTargets.filter((t) => t.name === target);
     const profile = profiles.length ? profiles[0] : undefined;
+    // get the publish plugin key
     const method = profile ? profile.type : undefined;
 
     if (

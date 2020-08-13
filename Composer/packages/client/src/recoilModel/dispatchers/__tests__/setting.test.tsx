@@ -120,7 +120,7 @@ describe('setting dispatcher', () => {
 
   it('should update RuntimeSettings', async () => {
     await act(async () => {
-      await dispatcher.setRuntimeSettings('', 'path', 'command', 'key', 'name');
+      await dispatcher.setRuntimeSettings('', { path: 'path', command: 'command', key: 'key', name: 'name' });
     });
 
     expect(renderedComponent.current.settings.runtime.customRuntime).toBeTruthy();

@@ -34,15 +34,15 @@ export const settingsDispatcher = () => {
   );
 
   const setRuntimeSettings = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (_, path: string, command: string, key: string, name: string) => {
+    ({ set }: CallbackInterface) => async (
+      _,
+      runtime: { path: string; command: string; key: string; name: string }
+    ) => {
       set(settingsState, (currentSettingsState) => ({
         ...currentSettingsState,
         runtime: {
+          ...runtime,
           customRuntime: true,
-          path,
-          command,
-          key,
-          name,
         },
       }));
     }

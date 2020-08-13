@@ -7,10 +7,12 @@ import { v4 as uuid } from 'uuid';
 import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 import { IBotProject } from '@bfc/shared';
+import { JSONSchema7 } from '@bfc/plugin-loader';
 
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
 import schema from './schema';
+
 // This option controls whether the history is serialized to a file between sessions with Composer
 // set to TRUE for history to be saved to disk
 // set to FALSE for history to be cached in memory only
@@ -43,8 +45,12 @@ export default async (composer: any): Promise<void> => {
     private histories: any;
     private logMessages: any[];
     private mode: string;
+    public schema: JSONSchema7;
+    public instructions: string;
+    public customName: string;
+    public customDescription: string;
 
-    constructor(mode?: string) {
+    constructor(mode?: string, customName?: string, customDescription?: string) {
       this.histories = {};
       this.historyFilePath = path.resolve(__dirname, '../publishHistory.txt');
       if (PERSIST_HISTORY) {
@@ -53,6 +59,10 @@ export default async (composer: any): Promise<void> => {
       this.publishingBots = {};
       this.logMessages = [];
       this.mode = mode || 'azurewebapp';
+      this.schema = schema;
+      this.instructions = instructions;
+      this.customName = customName;
+      this.customDescription = customDescription;
     }
 
     private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../publishBots`);
@@ -461,14 +471,12 @@ export default async (composer: any): Promise<void> => {
   }
 
   const azurePublish = new AzurePublisher();
-  const azureFunctionsPublish = new AzurePublisher('azurefunctions');
-
-  await composer.addPublishMethod(azurePublish, schema, instructions);
-  await composer.addPublishMethod(
-    azureFunctionsPublish,
-    schema,
-    instructions,
+  const azureFunctionsPublish = new AzurePublisher(
+    'azurefunctions',
     'azureFunctionsPublish',
     'Publish bot to Azure Functions (Preview)'
   );
+
+  await composer.addPublishMethod(azurePublish);
+  await composer.addPublishMethod(azureFunctionsPublish);
 };

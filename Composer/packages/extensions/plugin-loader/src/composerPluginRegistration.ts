@@ -3,7 +3,6 @@
 
 import { RequestHandler } from 'express-serve-static-core';
 import { Debugger } from 'debug';
-import { JSONSchema7 } from 'json-schema';
 
 import { PluginLoader } from './pluginLoader';
 import log from './logger';
@@ -56,22 +55,16 @@ export class ComposerPluginRegistration {
   /**************************************************************************************
    * Publish related features
    *************************************************************************************/
-  public async addPublishMethod(
-    plugin: PublishPlugin,
-    schema?: JSONSchema7,
-    instructions?: string,
-    customName?: string,
-    customDescription?: string
-  ) {
+  public async addPublishMethod(plugin: PublishPlugin) {
     log('registering publish method', this.name);
-    this.loader.extensions.publish[customName || this.name] = {
+    this.loader.extensions.publish[plugin.customName || this.name] = {
       plugin: {
-        name: customName || this.name,
-        description: customDescription || this.description,
+        name: plugin.customName || this.name,
+        description: plugin.customDescription || this.description,
+        instructions: plugin.instructions,
+        schema: plugin.schema,
       },
-      instructions: instructions,
       methods: plugin,
-      schema: schema,
     };
   }
 
@@ -98,12 +91,16 @@ export class ComposerPluginRegistration {
     this.loader.extensions.runtimeTemplates.push(plugin);
   }
 
-  // return a reference to the plugin used by the app
+  /**************************************************************************************
+   * Get current runtime from project
+   *************************************************************************************/
   public getRuntimeByProject(project): RuntimeTemplate {
     return this.loader.getRuntimeByProject(project);
   }
 
-  // return a reference to the plugin used by the app
+  /**************************************************************************************
+   * Get current runtime by type
+   *************************************************************************************/
   public getRuntime(type: string | undefined): RuntimeTemplate {
     return this.loader.getRuntime(type);
   }

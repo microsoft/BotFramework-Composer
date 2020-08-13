@@ -49,10 +49,12 @@ export const botButton = css`
 `;
 
 // -------------------- TestController -------------------- //
-
+const POLLING_INTERVAL = 2500;
 export const TestController: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [calloutVisible, setCalloutVisible] = useState(false);
+  const [botStatusInterval, setBotStatusInterval] = useState<NodeJS.Timeout | undefined>(undefined);
+
   const botActionRef = useRef(null);
   const notifications = useNotifications();
   const botName = useRecoilValue(botNameState);
@@ -69,8 +71,6 @@ export const TestController: React.FC = () => {
     publishLuis,
     getPublishStatus,
     setBotStatus,
-    startPollingRuntime,
-    stopPollingRuntime,
     setSettings,
   } = useRecoilValue(dispatcherState);
   const connected = botStatus === BotStatus.connected;
@@ -128,6 +128,23 @@ export const TestController: React.FC = () => {
 
   function openCallout() {
     setCalloutVisible(true);
+  }
+
+  function startPollingRuntime() {
+    if (!botStatusInterval) {
+      const cancelInterval = setInterval(() => {
+        // get publish status
+        getPublishStatus(projectId, defaultPublishConfig);
+      }, POLLING_INTERVAL);
+      setBotStatusInterval(cancelInterval);
+    }
+  }
+
+  function stopPollingRuntime() {
+    if (botStatusInterval) {
+      clearInterval(botStatusInterval);
+      setBotStatusInterval(undefined);
+    }
   }
 
   async function handlePublishLuis(luisConfig) {
