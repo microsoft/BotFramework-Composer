@@ -52,10 +52,6 @@ namespace Microsoft.BotFramework.Composer.Core
             {
                 rootDialog.AutoEndDialog = true;
             }
-            else
-            {
-                rootDialog.AutoEndDialog = false;
-            }
 
             if (this.removeRecipientMention && turnContext?.Activity?.Type == "message")
             {

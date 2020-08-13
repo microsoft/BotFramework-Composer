@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { BotIndexer } from '@bfc/indexers';
 
-import { currentProjectIdState } from '../../recoilModel/atoms/botState';
+import { currentProjectIdState } from '../../recoilModel/atoms';
 import { botStateByProjectIdSelector } from '../../recoilModel';
 
 import {

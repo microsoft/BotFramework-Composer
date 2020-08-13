@@ -73,6 +73,7 @@ function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
 
   if (data.intent) {
     optionalAttributes.intent = data.intent;
+    optionalAttributes.$designer.name = data.intent;
   }
 
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
@@ -90,11 +91,37 @@ function createTrigger(dialog: DialogInfo, data: TriggerFormData, factory: Dialo
   return dialogCopy;
 }
 
+export function updateIntentTrigger(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const trigger = (dialogCopy.content?.triggers ?? []).find(
+    (t) => t.$kind === SDKKinds.OnIntent && t.intent === intentName
+  );
+
+  if (trigger) {
+    trigger.intent = newIntentName;
+  }
+
+  return dialogCopy;
+}
+
 function createRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
   const regex = generateRegexExpression(intent, pattern);
   const dialogCopy = cloneDeep(dialog);
   insert(dialogCopy.content, 'recognizer.intents', undefined, regex);
   return dialogCopy;
+}
+
+export function renameRegExIntent(dialog: DialogInfo, intentName: string, newIntentName: string): DialogInfo {
+  const dialogCopy = cloneDeep(dialog);
+  const regexIntents = get(dialogCopy, 'content.recognizer.intents', []);
+  const targetIntent = regexIntents.find((ri) => ri.intent === intentName);
+  if (!targetIntent || !newIntentName) {
+    return dialogCopy;
+  }
+
+  targetIntent.intent = newIntentName;
+
+  return updateIntentTrigger(dialogCopy, intentName, newIntentName);
 }
 
 export function updateRegExIntent(dialog: DialogInfo, intent: string, pattern: string): DialogInfo {
@@ -287,54 +314,6 @@ export function setDialogData(dialogsMap: DialogsMap, dialogId: string, dataPath
     return data;
   }
   return set(dialog, dataPath, data);
-}
-
-export function sanitizeDialogData(dialogData: any) {
-  if (dialogData === null || dialogData === '') {
-    return undefined;
-  }
-
-  if (Array.isArray(dialogData)) {
-    return dialogData.length > 0 ? dialogData.map(sanitizeDialogData).filter(Boolean) : undefined;
-  }
-
-  if (typeof dialogData === 'object') {
-    const obj = cloneDeep(dialogData); // Prevent mutation of source object.
-
-    for (const key in obj) {
-      if (obj[key] === undefined || obj[key] === null || obj[key] === '') {
-        delete obj[key];
-        continue;
-      }
-
-      const result = sanitizeDialogData(obj[key]);
-      switch (typeof result) {
-        case 'undefined':
-          delete obj[key];
-          break;
-        case 'boolean':
-          obj[key] = result;
-          break;
-        case 'object':
-          if (Object.keys(result).length === 0) {
-            delete obj[key];
-          } else {
-            obj[key] = result;
-          }
-          break;
-        default:
-          obj[key] = result;
-      }
-    }
-
-    if (Object.keys(obj).length === 0) {
-      return undefined;
-    }
-
-    return obj;
-  }
-
-  return dialogData;
 }
 
 export function getSelected(focused: string): string {

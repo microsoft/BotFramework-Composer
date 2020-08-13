@@ -11,8 +11,8 @@ process.on('message', (message: WorkerMsg) => {
 
   try {
     const lgImportResolver = importResolverGenerator(resources, '.lg');
-    const { templates, diagnostics } = lgIndexer.parse(content, id, lgImportResolver);
-    process.send?.({ id: message.id, payload: { id, content, templates, diagnostics } });
+    const { templates, allTemplates, diagnostics } = lgIndexer.parse(content, id, lgImportResolver);
+    process.send?.({ id: message.id, payload: { id, content, templates, allTemplates, diagnostics } });
   } catch (error) {
     process.send?.({ id: message.id, error });
   }

@@ -3,12 +3,11 @@
 
 import { useMemo, useRef } from 'react';
 import { ShellApi, ShellData, Shell, DialogSchemaFile } from '@bfc/shared';
-import isEqual from 'lodash/isEqual';
 import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
-import { updateRegExIntent } from '../utils/dialogUtil';
-import { getDialogData, setDialogData, sanitizeDialogData } from '../utils/dialogUtil';
+import { updateRegExIntent, renameRegExIntent, updateIntentTrigger } from '../utils/dialogUtil';
+import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 import { undoFunctionState } from '../recoilModel/undo/history';
@@ -81,33 +80,32 @@ export function useShell(source: EventSource): Shell {
     const dialog = dialogs.find((dialog) => dialog.id === id);
     if (!dialog) throw new Error(formatMessage(`dialog {dialogId} not found`, { dialogId }));
     const newDialog = updateRegExIntent(dialog, intentName, pattern);
-    return updateDialog({ id, content: newDialog.content, projectId });
+    updateDialog({ id, content: newDialog.content, projectId });
   }
 
-  function cleanData() {
-    const cleanedData = sanitizeDialogData(dialogsMap[dialogId]);
-    if (!isEqual(dialogsMap[dialogId], cleanedData)) {
-      const payload = {
-        id: dialogId,
-        content: cleanedData,
-        projectId,
-      };
-      updateDialog(payload);
-    }
+  function renameRegExIntentHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = renameRegExIntent(dialog, intentName, newIntentName);
+    updateDialog({ id, content: newDialog.content, projectId });
+  }
+
+  function updateIntentTriggerHandler(id: string, intentName: string, newIntentName: string) {
+    const dialog = dialogs.find((dialog) => dialog.id === id);
+    if (!dialog) throw new Error(`dialog ${dialogId} not found`);
+    const newDialog = updateIntentTrigger(dialog, intentName, newIntentName);
+    updateDialog({ id, content: newDialog.content, projectId });
   }
 
   function navigationTo(path) {
-    cleanData();
     navTo(path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    cleanData();
     selectTo(subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
-    cleanData();
     let dataPath: string = subPaths[0];
 
     if (source === FORM_EDITOR) {
@@ -167,6 +165,8 @@ export function useShell(source: EventSource): Shell {
     ...lgApi,
     ...luApi,
     updateRegExIntent: updateRegExIntentHandler,
+    renameRegExIntent: renameRegExIntentHandler,
+    updateIntentTrigger: updateIntentTriggerHandler,
     navTo: navigationTo,
     onFocusEvent: focusEvent,
     onFocusSteps: focusSteps,

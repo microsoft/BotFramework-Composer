@@ -36,6 +36,19 @@ function createLuApi(
     return dispatchers.updateLuIntent({ id: file.id, intentName, intent, projectId: state.projectId });
   };
 
+  const renameLuIntent = (id: string, intentName: string, newIntentName: string) => {
+    const file = luFileResolver(id);
+    if (!file) throw new Error(`lu file ${id} not found`);
+    if (!intentName) throw new Error(`intentName is missing or empty`);
+
+    const oldIntent = file.intents.find((i) => i.Name === intentName);
+    if (!oldIntent) throw new Error(`intent not found with id ${intentName}`);
+
+    const newIntent = { ...oldIntent, Name: newIntentName };
+
+    return dispatchers.updateLuIntent({ id: file.id, intentName, intent: newIntent, projectId: state.projectId });
+  };
+
   const removeLuIntent = (id: string, intentName: string) => {
     const file = luFileResolver(id);
     if (!file) throw new Error(fileNotFound(id));
@@ -63,6 +76,7 @@ function createLuApi(
     getLuIntents,
     getLuIntent,
     updateLuIntent,
+    renameLuIntent,
     removeLuIntent,
   };
 }

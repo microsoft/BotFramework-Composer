@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from 'react';
 import { LgFile } from '@bfc/shared';
-import debounce from 'lodash/debounce';
 import { useRecoilValue } from 'recoil';
 
 import { useResolvers } from '../hooks/useResolver';
@@ -25,7 +24,7 @@ function createLgApi(
     return file.templates;
   };
 
-  const updateLgTemplate = async (id: string, templateName: string, templateBody: string) => {
+  const updateLgTemplate = (id: string, templateName: string, templateBody: string) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
@@ -39,7 +38,7 @@ function createLgApi(
     });
   };
 
-  const copyLgTemplate = async (id, fromTemplateName, toTemplateName) => {
+  const copyLgTemplate = (id, fromTemplateName, toTemplateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!fromTemplateName || !toTemplateName) throw new Error(`templateName is missing or empty`);
@@ -52,7 +51,7 @@ function createLgApi(
     });
   };
 
-  const removeLgTemplate = async (id, templateName) => {
+  const removeLgTemplate = (id, templateName) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateName) throw new Error(`templateName is missing or empty`);
@@ -64,7 +63,7 @@ function createLgApi(
     });
   };
 
-  const removeLgTemplates = async (id, templateNames) => {
+  const removeLgTemplates = (id, templateNames) => {
     const file = lgFileResolver(id);
     if (!file) throw new Error(`lg file ${id} not found`);
     if (!templateNames) throw new Error(`templateName is missing or empty`);
@@ -79,7 +78,7 @@ function createLgApi(
   return {
     addLgTemplate: updateLgTemplate,
     getLgTemplates,
-    updateLgTemplate: debounce(updateLgTemplate, 250),
+    updateLgTemplate,
     removeLgTemplate,
     removeLgTemplates,
     copyLgTemplate,
