@@ -3,27 +3,16 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import formatMessage from 'format-message';
 import { CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 import { RecoilRoot } from 'recoil';
-import generate from 'format-message-generate-id';
 
 import './index.css';
+
 import { App } from './App';
 import { DispatcherWrapper } from './recoilModel';
-import pseudo from './locales/en-US-pseudo.json';
 
 const appHostElm = document.getElementById('root');
-
-formatMessage.setup({
-  locale: 'en-US-pseudo',
-  generateId: generate.underscored_crc32,
-  missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
-  translations: {
-    'en-US-pseudo': pseudo,
-  },
-});
 
 const emotionCache = createCache({
   // @ts-ignore
