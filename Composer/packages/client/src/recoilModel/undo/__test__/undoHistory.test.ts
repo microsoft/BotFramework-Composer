@@ -46,4 +46,13 @@ describe('undoHistory class', () => {
     undoHistory.clear();
     expect(undoHistory.stack.length).toBe(0);
   });
+
+  it('should only support 30 history', () => {
+    for (let i = 0; i < 40; i++) {
+      undoHistory.add(new Map().set(dialogsState, `${i}`));
+    }
+    expect(undoHistory.stack.length).toBe(30);
+    expect(undoHistory.getPresentAssets()?.get(dialogsState)).toBe('39');
+    expect(undoHistory.stack[0].get(dialogsState)).toBe('10');
+  });
 });

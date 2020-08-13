@@ -67,6 +67,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     if (file) {
       const newName = increaseNameUtilNotExist(templates, 'TemplateName');
       const payload = {
+        projectId,
         id: file.id,
         template: {
           name: newName,
@@ -84,6 +85,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         const payload = {
           id: file.id,
           templateName: templates[index].name,
+          projectId,
         };
 
         removeLgTemplate(payload);
@@ -101,6 +103,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           id: file.id,
           fromTemplateName: name,
           toTemplateName: resolvedName,
+          projectId,
         };
         copyLgTemplate(payload);
         setFocusedIndex(templates.length);

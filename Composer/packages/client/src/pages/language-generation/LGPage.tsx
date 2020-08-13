@@ -9,7 +9,7 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { currentProjectIdState } from '../../recoilModel/atoms/botState';
+import { currentProjectIdState } from '../../recoilModel/atoms';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';

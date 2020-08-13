@@ -4,11 +4,12 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { useRecoilTransactionObserver_UNSTABLE as useRecoilTransactionObserver, RecoilState } from 'recoil';
 import { atom, Snapshot, useRecoilCallback, CallbackInterface, useSetRecoilState } from 'recoil';
+import uniqueId from 'lodash/uniqueId';
 
-import { projectIdState } from '../atoms';
 import { navigateTo, getUrlSearch } from '../../utils/navigation';
 
-import { designPageLocationState } from './../atoms/botState';
+import { breadcrumbState } from './../atoms/botState';
+import { designPageLocationState } from './../atoms';
 import undoHistory, { UndoHistory } from './undoHistory';
 import { trackedAtoms, AtomAssetsMap } from './trackedAtoms';
 
@@ -24,6 +25,11 @@ export const undoFunctionState = atom({
   },
 });
 
+export const undoVersionState = atom({
+  key: 'version',
+  default: '',
+});
+
 const getAtomAssetsMap = (snap: Snapshot): AtomAssetsMap => {
   const atomMap = new Map<RecoilState<any>, any>();
   trackedAtoms.forEach((atom) => {
@@ -34,6 +40,7 @@ const getAtomAssetsMap = (snap: Snapshot): AtomAssetsMap => {
   //should record the location state
   atomMap.set(designPageLocationState, snap.getLoadable(designPageLocationState).contents);
   atomMap.set(projectIdState, snap.getLoadable(projectIdState).contents);
+  atomMap.set(breadcrumbState, snap.getLoadable(breadcrumbState).contents);
   return atomMap;
 };
 
@@ -52,13 +59,17 @@ const checkAtomsChanged = (current: AtomAssetsMap, previous: AtomAssetsMap, atom
   return atoms.some((atom) => checkAtomChanged(current, previous, atom));
 };
 
-function navigate(next: AtomAssetsMap, undoHistory: UndoHistory) {
+function navigate(next: AtomAssetsMap) {
   const location = next.get(designPageLocationState);
+  const breadcrumb = [...next.get(breadcrumbState)];
   if (location) {
-    const { dialogId, selected, focused, projectId } =
-      undoHistory.present === 0 ? undoHistory.initialLocation : location;
-    const currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
-    navigateTo(currentUri);
+    const { dialogId, selected, focused, projectId, promptTab } = location;
+    let currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selected, focused)}`;
+    if (promptTab) {
+      currentUri += `#${promptTab}`;
+    }
+    breadcrumb.pop();
+    navigateTo(currentUri, { state: { breadcrumb } });
   }
 }
 
@@ -79,8 +90,10 @@ function mapTrackedAtomsOntoSnapshot(
 
 function setInitialLocation(snapshot: Snapshot, undoHistory: UndoHistory) {
   const location = snapshot.getLoadable(designPageLocationState);
+  const breadcrumb = snapshot.getLoadable(breadcrumbState);
   if (location.state === 'hasValue') {
-    undoHistory.setInitialLocation({ ...location.contents });
+    undoHistory.setInitialValue(designPageLocationState, location.contents);
+    undoHistory.setInitialValue(breadcrumbState, breadcrumb.contents);
   }
 }
 
@@ -88,6 +101,8 @@ export const UndoRoot = React.memo(() => {
   const history = useRef(undoHistory).current;
   const setUndoFunction = useSetRecoilState(undoFunctionState);
   const [, forceUpdate] = useState([]);
+  const setVersion = useSetRecoilState(undoVersionState);
+
   //use to record the first time change, this will help to get the init location
   //init location is used to undo navigate
   const assetsChanged = useRef(false);
@@ -115,7 +130,7 @@ export const UndoRoot = React.memo(() => {
   ) => {
     target = mapTrackedAtomsOntoSnapshot(target, current, next);
     gotoSnapshot(target);
-    navigate(next, history);
+    navigate(next);
   };
 
   const undo = useRecoilCallback(({ snapshot, gotoSnapshot }: CallbackInterface) => () => {
@@ -123,6 +138,7 @@ export const UndoRoot = React.memo(() => {
       const present = history.getPresentAssets();
       const next = history.undo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot);
+      setVersion(uniqueId());
     }
   });
 
@@ -131,6 +147,7 @@ export const UndoRoot = React.memo(() => {
       const present = history.getPresentAssets();
       const next = history.redo();
       if (present) undoAssets(snapshot, present, next, gotoSnapshot);
+      setVersion(uniqueId());
     }
   });
 

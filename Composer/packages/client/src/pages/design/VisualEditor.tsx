@@ -11,7 +11,7 @@ import VisualDesigner from '@bfc/adaptive-flow';
 import { useRecoilValue } from 'recoil';
 
 import grayComposerIcon from '../../images/grayComposerIcon.svg';
-import { dispatcherState, botStateByProjectIdSelector } from '../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector, designPageLocationState } from '../../recoilModel';
 
 import { middleTriggerContainer, middleTriggerElements, triggerButton, visualEditor } from './styles';
 
@@ -54,7 +54,7 @@ interface VisualEditorProps {
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
   const { openNewTriggerModal } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
-  const { designPageLocation } = useRecoilValue(botStateByProjectIdSelector);
+  const designPageLocation = useRecoilValue(designPageLocationState);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
   const { validatedDialogs: dialogs, schemas } = useRecoilValue(botStateByProjectIdSelector);
   const { dialogId, selected } = designPageLocation;

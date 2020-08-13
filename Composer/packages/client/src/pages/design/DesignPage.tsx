@@ -8,7 +8,15 @@ import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcru
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import { DialogFactory, SDKKinds, DialogInfo, PromptTab, LuIntentSection, getEditorAPI } from '@bfc/shared';
+import {
+  DialogFactory,
+  SDKKinds,
+  DialogInfo,
+  PromptTab,
+  LuIntentSection,
+  getEditorAPI,
+  registerEditorAPI,
+} from '@bfc/shared';
 import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
@@ -26,16 +34,16 @@ import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { clearBreadcrumb } from '../../utils/navigation';
 import { navigateTo } from '../../utils/navigation';
 import { useShell } from '../../shell';
-import { undoFunctionState } from '../../recoilModel/undo/history';
-import {
-  userSettingsState,
-  botStateByProjectIdSelector,
-  visualEditorSelectionState,
-  dispatcherState,
-  designPageLocationState,
-} from '../../recoilModel';
+import { undoFunctionState, undoVersionState } from '../../recoilModel/undo/history';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
+import {
+  botStateByProjectIdSelector,
+  designPageLocationState,
+  visualEditorSelectionState,
+  dispatcherState,
+  userSettingsState,
+} from '../../recoilModel';
 
 import {
   breadcrumbClass,
@@ -91,7 +99,6 @@ const getTabFromFragment = () => {
 
 const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: string }>> = (props) => {
   const userSettings = useRecoilValue(userSettingsState);
-  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
   const {
     schemas,
     displaySkillManifest,
@@ -107,7 +114,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   } = useRecoilValue(botStateByProjectIdSelector);
   const designPageLocation = useRecoilValue(designPageLocationState);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
-
+  const undoVersion = useRecoilValue(undoVersionState);
+  const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
   const {
     removeDialog,
     updateDialog,
@@ -182,6 +190,10 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   }, [location]);
 
   useEffect(() => {
+    registerEditorAPI('Editing', {
+      Undo: () => undo(),
+      Redo: () => redo(),
+    });
     //leave design page should clear the history
     return clearUndo;
   }, []);
@@ -234,7 +246,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  useElectronFeatures(actionSelected);
+  useElectronFeatures(actionSelected, canUndo(), canRedo());
 
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
@@ -543,7 +555,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 {breadcrumbItems}
                 {dialogJsonVisible ? (
                   <JsonEditor
-                    key="dialogjson"
+                    key={'dialogjson'}
                     editorSettings={userSettings.codeEditor}
                     id={currentDialog.id}
                     schema={schemas.sdk.content}
@@ -559,7 +571,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 )}
               </div>
               <Extension plugins={pluginConfig} shell={shellForPropertyEditor}>
-                <PropertyEditor key={focusPath} />
+                <PropertyEditor key={focusPath + undoVersion} />
               </Extension>
             </div>
           </Conversation>
