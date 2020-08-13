@@ -10,7 +10,7 @@ import { useRecoilValue } from 'recoil';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { FontWeights } from 'office-ui-fabric-react/lib/Styling';
 
-import { dispatcherState, appUpdateState, botNameState, localeState } from '../recoilModel';
+import { dispatcherState, appUpdateState, botStateByProjectIdSelector } from '../recoilModel';
 import composerIcon from '../images/composerIcon.svg';
 import { AppUpdaterStatus } from '../constants';
 
@@ -74,8 +74,7 @@ const headerTextContainer = css`
 
 export const Header = () => {
   const { setAppUpdateShowing } = useRecoilValue(dispatcherState);
-  const curBotName = useRecoilValue(botNameState);
-  const locale = useRecoilValue(localeState);
+  const { botName, locale } = useRecoilValue(botStateByProjectIdSelector);
   const appUpdate = useRecoilValue(appUpdateState);
   const { showing, status } = appUpdate;
 
@@ -95,10 +94,10 @@ export const Header = () => {
       />
       <div css={headerTextContainer}>
         <div css={title}>{formatMessage('Bot Framework Composer')}</div>
-        {curBotName && (
+        {botName && (
           <Fragment>
             <div css={divider} />
-            <span css={botName}>{`${curBotName} (${locale})`}</span>
+            <span css={botName}>{`${botName} (${locale})`}</span>
           </Fragment>
         )}
       </div>

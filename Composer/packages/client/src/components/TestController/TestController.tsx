@@ -58,7 +58,7 @@ export const TestController: React.FC = () => {
     dialogSetting: settings,
     botLoadErrorMsg,
   } = useRecoilValue(botStateByProjectIdSelector);
-  const { botEndpoints } = useRecoilValue(botEndpointsState);
+  const botEndpoints = useRecoilValue(botEndpointsState);
 
   const {
     publishToTarget,
@@ -88,7 +88,7 @@ export const TestController: React.FC = () => {
     switch (botStatus) {
       case BotStatus.failed:
         openCallout();
-        setBotStatus(BotStatus.pending);
+        setBotStatus(BotStatus.pending, projectId);
         break;
       case BotStatus.published:
         handleLoadBot();
@@ -113,14 +113,14 @@ export const TestController: React.FC = () => {
   }
 
   async function handlePublishLuis(luisConfig) {
-    setBotStatus(BotStatus.publishing);
+    setBotStatus(BotStatus.publishing, projectId);
     dismissDialog();
     await setSettings(projectId, { ...settings, luis: luisConfig });
     await publishLuis(luisConfig, projectId);
   }
 
   async function handleLoadBot() {
-    setBotStatus(BotStatus.reloading);
+    setBotStatus(BotStatus.reloading, projectId);
     const sensitiveSettings = settingsStorage.get(projectId);
     await publishToTarget(projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
   }
@@ -165,7 +165,6 @@ export const TestController: React.FC = () => {
       )
     );
   }
-
   return (
     <Fragment>
       <div ref={botActionRef} css={bot}>

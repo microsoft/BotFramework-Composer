@@ -6,6 +6,8 @@
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import { PromptTab } from '@bfc/shared';
 
+import { botStateByProjectIdSelector } from '../selectors';
+
 import { getSelected } from './../../utils/dialogUtil';
 import { BreadcrumbItem } from './../../recoilModel/types';
 import { focusPathState, breadcrumbState, designPageLocationState, currentProjectIdState } from './../atoms';
@@ -34,9 +36,8 @@ export const navigationDispatcher = () => {
       set(focusPathState(projectId), focusPath);
       //add current path to the breadcrumb
       set(breadcrumbState(projectId), [...breadcrumb, { dialogId, selected, focused }]);
-      set(designPageLocationState, {
+      set(designPageLocationState(projectId), {
         dialogId,
-        projectId,
         selected,
         focused,
         promptTab: Object.values(PromptTab).find((value) => promptTab === value),
@@ -45,9 +46,12 @@ export const navigationDispatcher = () => {
   );
 
   const navTo = useRecoilCallback(
-    ({ snapshot }: CallbackInterface) => async (dialogId: string, breadcrumb: BreadcrumbItem[] = []) => {
-      const projectId = await snapshot.getPromise(currentProjectIdState);
-      const designPageLocation = await snapshot.getPromise(designPageLocationState);
+    ({ snapshot }: CallbackInterface) => async (
+      projectId: string,
+      dialogId: string,
+      breadcrumb: BreadcrumbItem[] = []
+    ) => {
+      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       const currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
       if (checkUrl(currentUri, designPageLocation)) return;
       //if dialog change we should flush some debounced functions
@@ -56,71 +60,73 @@ export const navigationDispatcher = () => {
     }
   );
 
-  const selectTo = useRecoilCallback(({ snapshot }: CallbackInterface) => async (selectPath: string) => {
-    if (!selectPath) return;
-    const designPageLocation = await snapshot.getPromise(designPageLocationState);
-    const breadcrumb = await snapshot.getPromise(breadcrumbState(designPageLocation.projectId));
-    const currentProjectId = await snapshot.getPromise(currentProjectIdState);
-    // initial dialogId, projectId maybe empty string  ""
-    let { dialogId, projectId } = designPageLocation;
+  const selectTo = useRecoilCallback(
+    ({ snapshot }: CallbackInterface) => async (projectId: string, selectPath: string) => {
+      if (!selectPath) return;
+      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
+      const breadcrumb = await snapshot.getPromise(breadcrumbState(projectId));
 
-    if (!dialogId) dialogId = 'Main';
-    if (!projectId) projectId = currentProjectId;
+      // initial dialogId, projectId maybe empty string  ""
+      let { dialogId } = designPageLocation;
 
-    let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
+      if (!dialogId) dialogId = 'Main';
 
-    currentUri = `${currentUri}?selected=${selectPath}`;
+      let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
-    if (checkUrl(currentUri, designPageLocation)) return;
-    navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
-  });
+      currentUri = `${currentUri}?selected=${selectPath}`;
+
+      if (checkUrl(currentUri, designPageLocation)) return;
+      navigateTo(currentUri, { state: { breadcrumb: updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected) } });
+    }
+  );
 
   const focusTo = useRecoilCallback(
-    ({ snapshot }: CallbackInterface) => async (focusPath: string, fragment: string) => {
-      const designPageLocation = await snapshot.getPromise(designPageLocationState);
-      let breadcrumb = await snapshot.getPromise(breadcrumbState);
-      const { dialogId, projectId, selected } = designPageLocation;
+    ({ snapshot }: CallbackInterface) => async (projectId: string, focusPath: string, fragment: string) => {
+      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
+      const { breadcrumb } = await snapshot.getPromise(botStateByProjectIdSelector);
+      let updatedBreadcrumb = [...breadcrumb];
+      const { dialogId, selected } = designPageLocation;
 
       let currentUri = `/bot/${projectId}/dialogs/${dialogId}`;
 
       if (focusPath) {
         const targetSelected = getSelected(focusPath);
         if (targetSelected !== selected) {
-          breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
-          breadcrumb.push({ dialogId, selected: targetSelected, focused: '' });
+          updatedBreadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
+          updatedBreadcrumb.push({ dialogId, selected: targetSelected, focused: '' });
         }
         currentUri = `${currentUri}?selected=${targetSelected}&focused=${focusPath}`;
-        breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Focused);
+        updatedBreadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Focused);
       } else {
         currentUri = `${currentUri}?selected=${selected}`;
-        breadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
+        updatedBreadcrumb = updateBreadcrumb(breadcrumb, BreadcrumbUpdateType.Selected);
       }
 
       if (fragment && typeof fragment === 'string') {
         currentUri += `#${fragment}`;
       }
       if (checkUrl(currentUri, designPageLocation)) return;
-      navigateTo(currentUri, { state: { breadcrumb } });
+      navigateTo(currentUri, { state: { breadcrumb: updatedBreadcrumb } });
     }
   );
 
   const selectAndFocus = useRecoilCallback(
     ({ snapshot }: CallbackInterface) => async (
+      projectId: string,
       dialogId: string,
       selectPath: string,
       focusPath: string,
       breadcrumb: BreadcrumbItem[] = []
     ) => {
       const search = getUrlSearch(selectPath, focusPath);
-      const designPageLocation = await snapshot.getPromise(designPageLocationState);
+      const designPageLocation = await snapshot.getPromise(designPageLocationState(projectId));
       if (search) {
-        const projectId = await snapshot.getPromise(currentProjectIdState);
         const currentUri = `/bot/${projectId}/dialogs/${dialogId}${getUrlSearch(selectPath, focusPath)}`;
 
         if (checkUrl(currentUri, designPageLocation)) return;
         navigateTo(currentUri, { state: { breadcrumb } });
       } else {
-        navTo(dialogId, breadcrumb);
+        navTo(projectId, dialogId, breadcrumb);
       }
     }
   );

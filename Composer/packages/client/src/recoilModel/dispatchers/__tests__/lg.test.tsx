@@ -8,9 +8,11 @@ import { act } from '@bfc/test-utils/lib/hooks';
 
 import { lgDispatcher } from '../lg';
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { lgFilesState } from '../../atoms';
+import { lgFilesState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
+
+const projectId = '123asad.123sad';
 
 jest.mock('../../parsers/lgWorker', () => {
   return {
@@ -42,7 +44,7 @@ describe('Lg dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const [lgFiles, setLgFiles] = useRecoilState(lgFilesState);
+      const [lgFiles, setLgFiles] = useRecoilState(lgFilesState(projectId));
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
@@ -53,7 +55,10 @@ describe('Lg dispatcher', () => {
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
-      states: [{ recoilState: lgFilesState, initialValue: lgFiles }],
+      states: [
+        { recoilState: lgFilesState(projectId), initialValue: lgFiles },
+        { recoilState: currentProjectIdState, initialValue: projectId },
+      ],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
@@ -70,6 +75,7 @@ describe('Lg dispatcher', () => {
       await dispatcher.createLgTemplate({
         id: 'common.en-us',
         template: getLgTemplate('Test', '-add'),
+        projectId,
       });
     });
 

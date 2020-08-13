@@ -9,7 +9,6 @@ import { Toggle } from 'office-ui-fabric-react/lib/Toggle';
 import { RouteComponentProps, Router } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 
-import { currentProjectIdState } from '../../recoilModel/atoms';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { actionButton } from '../language-understanding/styles';
 import { navigateTo } from '../../utils/navigation';
@@ -21,16 +20,17 @@ import { botStateByProjectIdSelector } from '../../recoilModel';
 import TableView from './table-view';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface LGPageProps extends RouteComponentProps<{}> {
-  dialogId?: string;
+interface LGPageProps {
+  dialogId: string;
+  projectId: string;
 }
 
-const LGPage: React.FC<LGPageProps> = (props) => {
+const LGPage: React.FC<RouteComponentProps<LGPageProps>> = (props: RouteComponentProps<LGPageProps>) => {
   const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
-  const projectId = useRecoilValue(currentProjectIdState);
 
   const path = props.location?.pathname ?? '';
-  const { dialogId = '' } = props;
+  const { dialogId = '', projectId = '' } = props;
+
   const edit = /\/edit(\/)?$/.test(path);
 
   const navLinks: INavTreeItem[] = useMemo(() => {
@@ -115,7 +115,7 @@ const LGPage: React.FC<LGPageProps> = (props) => {
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit/*" />
+          <CodeEditor dialogId={dialogId} path="/edit/*" projectId={projectId} />
           <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>

@@ -111,8 +111,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     locale,
     luFiles,
     validatedDialogs: dialogs,
+    designPageLocation,
   } = useRecoilValue(botStateByProjectIdSelector);
-  const designPageLocation = useRecoilValue(designPageLocationState);
   const visualEditorSelection = useRecoilValue(visualEditorSelectionState);
   const undoVersion = useRecoilValue(undoVersionState);
   const { undo, redo, canRedo, canUndo, commitChanges, clearUndo } = useRecoilValue(undoFunctionState);
@@ -165,7 +165,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     if (currentDialog?.id) {
       const index = currentDialog.triggers.findIndex(({ type }) => type === SDKKinds.OnBeginDialog);
       if (index >= 0 && !designPageLocation.selected) {
-        selectTo(createSelectedPath(index));
+        selectTo(projectId, createSelectedPath(index));
       }
     }
   }, [currentDialog?.id]);
@@ -217,21 +217,21 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
 
     const index = get(dialog, 'content.triggers', []).length - 1;
-    selectTo(`triggers[${index}]`);
+    selectTo(projectId, `triggers[${index}]`);
     updateDialog(dialogPayload);
   };
 
   function handleSelect(projectId, id, selected = '') {
     if (selected) {
-      selectTo(selected);
+      selectTo(projectId, selected);
     } else {
-      navTo(id, []);
+      navTo(projectId, id, []);
     }
   }
 
   const onCreateDialogComplete = (newDialog) => {
     if (newDialog) {
-      navTo(newDialog, []);
+      navTo(projectId, newDialog, []);
     }
   };
 
@@ -403,7 +403,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   function handleBreadcrumbItemClick(_event, item) {
     if (item) {
       const { dialogId, selected, focused, index } = item;
-      selectAndFocus(dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
+      selectAndFocus(projectId, dialogId, selected, focused, clearBreadcrumb(breadcrumb, index));
     }
   }
 
@@ -504,14 +504,14 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       if (index === currentIdx) {
         if (currentIdx - 1 >= 0) {
           //if the deleted node is selected and the selected one is not the first one, navTo the previous trigger;
-          selectTo(createSelectedPath(currentIdx - 1));
+          selectTo(projectId, createSelectedPath(currentIdx - 1));
         } else {
           //if the deleted node is selected and the selected one is the first one, navTo the first trigger;
-          navTo(id, []);
+          navTo(projectId, id, []);
         }
       } else if (index < currentIdx) {
         //if the deleted node is at the front, navTo the current one;
-        selectTo(createSelectedPath(currentIdx - 1));
+        selectTo(projectId, createSelectedPath(currentIdx - 1));
       }
     }
   }

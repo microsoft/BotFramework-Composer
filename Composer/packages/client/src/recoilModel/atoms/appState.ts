@@ -166,13 +166,3 @@ export const currentProjectIdState = atom<string>({
   key: getFullyQualifiedKey('currentProjectId'),
   default: '',
 });
-
-export const designPageLocationState = atom<DesignPageLocation>({
-  key: getFullyQualifiedKey('designPageLocation'),
-  default: {
-    projectId: '',
-    dialogId: '',
-    focused: '',
-    selected: '',
-  },
-});

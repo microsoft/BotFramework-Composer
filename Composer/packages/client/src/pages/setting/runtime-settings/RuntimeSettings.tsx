@@ -14,12 +14,11 @@ import { useRecoilValue } from 'recoil';
 import { Spinner } from 'office-ui-fabric-react/lib/Spinner';
 
 import {
-  botNameState,
-  settingsState,
-  projectIdState,
   dispatcherState,
   ejectRuntimeSelector,
   boilerplateVersionState,
+  botStateByProjectIdSelector,
+  currentProjectIdState,
 } from '../../../recoilModel';
 import { OpenConfirmModal } from '../../../components/Modal/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -29,9 +28,8 @@ import { WorkingModal } from './workingModal';
 import { breathingSpace, runtimeSettingsStyle, runtimeControls, runtimeToggle, controlGroup } from './style';
 
 export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
-  const botName = useRecoilValue(botNameState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
+  const { botName, dialogSetting: settings } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
   const boilerplateVersion = useRecoilValue(boilerplateVersionState);
 
   const { setCustomRuntime, setRuntimeField, getBoilerplateVersion, updateBoilerplate } = useRecoilValue(

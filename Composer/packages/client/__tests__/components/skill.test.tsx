@@ -10,11 +10,13 @@ import Skills from '../../src/pages/skills';
 import SkillList from '../../src/pages/skills/skill-list';
 import { renderWithRecoil } from '../testUtils';
 import CreateSkillModal from '../../src/components/CreateSkillModal';
-import { settingsState } from '../../src/recoilModel';
+import { settingsState, currentProjectIdState, botEndpointsState } from '../../src/recoilModel';
 
 jest.mock('../../src//utils/httpUtil');
 
 jest.mock('../../src/components/Modal/dialogStyle', () => ({}));
+
+const projectId = '12321.234234';
 
 const items: Skill[] = [
   {
@@ -40,7 +42,11 @@ const items: Skill[] = [
 ];
 
 const recoilInitState = ({ set }) => {
-  set(settingsState, {
+  set(currentProjectIdState, projectId);
+  set(botEndpointsState, {
+    projectId: 'http://localhost:3000/api/messages',
+  });
+  set(settingsState(projectId), {
     luis: {
       name: '',
       authoringKey: '12345',
@@ -72,7 +78,7 @@ describe('Skill page', () => {
 describe('<SkillList />', () => {
   it('should render the SkillList', () => {
     const { container } = renderWithRecoil(
-      <SkillList projectId="test-project" skills={items} onDelete={jest.fn()} onEdit={jest.fn()} />
+      <SkillList projectId={projectId} skills={items} onDelete={jest.fn()} onEdit={jest.fn()} />
     );
     expect(container).toHaveTextContent('Email Skill');
     expect(container).toHaveTextContent('Point Of Interest Skill');
@@ -81,7 +87,7 @@ describe('<SkillList />', () => {
   it('can edit the skill', () => {
     const onEdit = jest.fn();
     const { getAllByTestId } = renderWithRecoil(
-      <SkillList projectId="test-project" skills={items} onDelete={jest.fn()} onEdit={onEdit} />
+      <SkillList projectId={projectId} skills={items} onDelete={jest.fn()} onEdit={onEdit} />
     );
 
     const editBtns = getAllByTestId('EditSkill');
@@ -106,7 +112,7 @@ describe('<SkillForm />', () => {
       <CreateSkillModal
         isOpen
         editIndex={0}
-        projectId={'243245'}
+        projectId={projectId}
         skills={items}
         onDismiss={onDismiss}
         onSubmit={onSubmit}

@@ -216,3 +216,19 @@ export const onDelLanguageDialogCompleteState = atomFamily<any, string>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
 });
+
+export const projectsMetaDataState = atomFamily<any, string>({
+  key: getFullyQualifiedKey('projectsMetaDataState'),
+  default: (id) => {
+    return {};
+  },
+});
+
+export const designPageLocationState = atomFamily<DesignPageLocation, string>({
+  key: getFullyQualifiedKey('designPageLocation'),
+  default: {
+    dialogId: '',
+    focused: '',
+    selected: '',
+  },
+});

@@ -20,13 +20,13 @@ export const settingsDispatcher = () => {
           settingStorage.setField(projectId, property, propertyValue);
         }
       }
-      set(settingsState, settings);
+      set(settingsState(projectId), settings);
     }
   );
 
   const setPublishTargets = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (publishTargets: PublishTarget[]) => {
-      set(settingsState, (settings) => ({
+    ({ set }: CallbackInterface) => async (publishTargets: PublishTarget[], projectId: string) => {
+      set(settingsState(projectId), (settings) => ({
         ...settings,
         publishTargets,
       }));
@@ -34,8 +34,8 @@ export const settingsDispatcher = () => {
   );
 
   const setRuntimeSettings = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (_, path: string, command: string) => {
-      set(settingsState, (currentSettingsState) => ({
+    ({ set }: CallbackInterface) => async (projectId: string, path: string, command: string) => {
+      set(settingsState(projectId), (currentSettingsState) => ({
         ...currentSettingsState,
         runtime: {
           customRuntime: true,
@@ -47,8 +47,8 @@ export const settingsDispatcher = () => {
   );
 
   const setRuntimeField = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (_, field: string, newValue: boolean) => {
-      set(settingsState, (currentValue) => ({
+    ({ set }: CallbackInterface) => async (projectId: string, field: string, newValue: boolean) => {
+      set(settingsState(projectId), (currentValue) => ({
         ...currentValue,
         runtime: {
           ...currentValue.runtime,
@@ -58,8 +58,8 @@ export const settingsDispatcher = () => {
     }
   );
 
-  const setCustomRuntime = useRecoilCallback(() => async (_, isOn: boolean) => {
-    setRuntimeField('', 'customRuntime', isOn);
+  const setCustomRuntime = useRecoilCallback(() => async (projectId: string, isOn: boolean) => {
+    setRuntimeField(projectId, 'customRuntime', isOn);
   });
 
   return {

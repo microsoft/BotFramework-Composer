@@ -11,12 +11,13 @@ import { showCreateDialogModalState } from '../../src/recoilModel';
 describe('<CreateDialogModal/>', () => {
   const onSubmitMock = jest.fn();
   const onDismissMock = jest.fn();
+  const projectId = 'test-create-dialog';
 
   function renderComponent() {
     return renderWithRecoil(
       <CreateDialogModal isOpen onDismiss={onDismissMock} onSubmit={onSubmitMock} />,
       ({ set }) => {
-        set(showCreateDialogModalState, true);
+        set(showCreateDialogModalState(projectId), true);
       }
     );
   }

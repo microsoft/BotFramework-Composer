@@ -7,13 +7,13 @@ import TableView from '../../../src/pages/language-understanding/table-view';
 import CodeEditor from '../../../src/pages/language-understanding/code-editor';
 import { renderWithRecoil } from '../../testUtils';
 import {
-  projectIdState,
   localeState,
   dialogsState,
   luFilesState,
   lgFilesState,
   settingsState,
   schemasState,
+  currentProjectIdState,
 } from '../../../src/recoilModel';
 import mockProjectResponse from '../../../src/recoilModel/dispatchers/__tests__/mocks/mockProjectResponse.json';
 
@@ -41,7 +41,7 @@ const state = {
 };
 
 const initRecoilState = ({ set }) => {
-  set(projectIdState, state.projectId);
+  set(currentProjectIdState, state.projectId);
   set(localeState, state.locale);
   set(dialogsState, state.dialogs);
   set(luFilesState, state.luFiles);

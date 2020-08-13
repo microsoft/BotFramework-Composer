@@ -12,10 +12,10 @@ import { CreationFlowStatus } from '../../constants';
 import {
   dispatcherState,
   creationFlowStatusState,
-  projectIdState,
   templateProjectsState,
   storagesState,
   focusedStorageFolderState,
+  currentProjectIdState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
 
@@ -28,7 +28,7 @@ type CreationFlowProps = RouteComponentProps<{}>;
 const CreationFlow: React.FC<CreationFlowProps> = () => {
   const {
     fetchTemplates,
-    openBotProject,
+    openProject,
     createProject,
     saveProjectAs,
     fetchStorages,
@@ -40,7 +40,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     saveTemplateId,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
-  const projectId = useRecoilValue(projectIdState);
+  const projectId = useRecoilValue(currentProjectIdState);
   const templateProjects = useRecoilValue(templateProjectsState);
   const storages = useRecoilValue(storagesState);
   const focusedStorageFolder = useRecoilValue(focusedStorageFolderState);
@@ -79,7 +79,7 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
 
   const openBot = async (botFolder) => {
     setCreationFlowStatus(CreationFlowStatus.CLOSE);
-    openBotProject(botFolder);
+    openProject(botFolder);
   };
 
   const handleCreateNew = async (formData, templateId: string) => {

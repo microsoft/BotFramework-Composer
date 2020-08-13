@@ -19,12 +19,10 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
-import { designPageLocationState } from '../atoms/botState';
+import { designPageLocationState, botDiagnosticsState, botProjectsState, projectsMetaDataState } from '../atoms';
 
-import * as meetingVA from './__tests__/MeetingVA.botProject.json';
 import {
   skillManifestsState,
-  BotDiagnosticsState,
   settingsState,
   localeState,
   luFilesState,
@@ -44,8 +42,6 @@ import {
   templateIdState,
   announcementState,
   boilerplateVersionState,
-  botProjectsState,
-  currentProjectIdState,
   dialogSchemasState,
 } from './../atoms';
 import { logMessage, setError } from './../dispatchers/shared';
@@ -115,8 +111,8 @@ const initLuFilesStatus = (projectId: string, luFiles: LuFile[], dialogs: Dialog
 export const projectDispatcher = () => {
   const initBotState = async (callbackHelpers: CallbackInterface, data: any, jumpToMain: boolean) => {
     const { snapshot, gotoSnapshot } = callbackHelpers;
-    const curLocation = await snapshot.getPromise(locationState);
-    const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
+    const { files, botName, botEnvironment, location, schemas, settings, projectId, diagnostics, skills } = data;
+    const curLocation = await snapshot.getPromise(locationState(projectId));
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
 
@@ -140,25 +136,26 @@ export const projectDispatcher = () => {
       });
 
       const newSnapshot = snapshot.map(({ set }) => {
-        set(skillManifestsState, skillManifestFiles);
-        set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
-        set(lgFilesState, lgFiles);
-        set(dialogsState, verifiedDialogs);
-        set(dialogSchemasState, dialogSchemas);
-        set(botEnvironmentState, botEnvironment);
-        set(botNameState, botName);
+        set(skillManifestsState(projectId), skillManifestFiles);
+        set(luFilesState(projectId), initLuFilesStatus(botName, luFiles, dialogs));
+        set(lgFilesState(projectId), lgFiles);
+        set(dialogsState(projectId), verifiedDialogs);
+        set(dialogSchemasState(projectId), dialogSchemas);
+        set(botEnvironmentState(projectId), botEnvironment);
+        set(botNameState(projectId), botName);
         if (location !== curLocation) {
-          set(botStatusState, BotStatus.unConnected);
-          set(locationState, location);
+          set(botStatusState(projectId), BotStatus.unConnected);
+          set(locationState(projectId), location);
         }
-        set(skillsState, skills);
-        set(schemasState, schemas);
-        set(localeState, locale);
-        set(BotDiagnosticsState, diagnostics);
+        set(skillsState(projectId), skills);
+        set(schemasState(projectId), schemas);
+        set(localeState(projectId), locale);
+        set(botDiagnosticsState(projectId), diagnostics);
         set(botOpeningState, false);
+
         refreshLocalStorage(projectId, settings);
         const mergedSettings = mergeLocalStorage(projectId, settings);
-        set(settingsState, mergedSettings);
+        set(settingsState(projectId), mergedSettings);
       });
       gotoSnapshot(newSnapshot);
       if (jumpToMain && projectId) {
@@ -192,11 +189,11 @@ export const projectDispatcher = () => {
     await checkProjectUpdates();
   };
 
-  const openBotProject = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default') => {
+  const openProject = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (path: string, storageId = 'default', relativePath = undefined) => {
       try {
         await setBotOpeningStatus(callbackHelpers);
-        const response = await httpClient.put(`/projects/open`, { path, storageId });
+        const response = await httpClient.put(`/projects/open`, { path, storageId, relativePath });
         await initBotState(callbackHelpers, response.data, true);
         return response.data.id;
       } catch (ex) {
@@ -252,18 +249,19 @@ export const projectDispatcher = () => {
       await httpClient.delete(`/projects/${projectId}`);
       luFileStatusStorage.removeAllStatuses(projectId);
       settingStorage.remove(projectId);
+
       reset(dialogsState(projectId));
-      reset(botEnvironmentState);
-      reset(botNameState);
-      reset(botStatusState);
-      reset(locationState);
-      reset(lgFilesState);
-      reset(skillsState);
-      reset(schemasState);
-      reset(luFilesState);
-      reset(settingsState);
-      reset(localeState);
-      reset(skillManifestsState);
+      reset(botEnvironmentState(projectId));
+      reset(botNameState(projectId));
+      reset(botStatusState(projectId));
+      reset(locationState(projectId));
+      reset(lgFilesState(projectId));
+      reset(skillsState(projectId));
+      reset(schemasState(projectId));
+      reset(luFilesState(projectId));
+      reset(settingsState(projectId));
+      reset(localeState(projectId));
+      reset(skillManifestsState(projectId));
       reset(designPageLocationState);
     } catch (e) {
       logMessage(callbackHelpers, e.message);
@@ -330,9 +328,9 @@ export const projectDispatcher = () => {
     }
   });
 
-  const setBotStatus = useRecoilCallback<[BotStatus], Promise<void>>(
-    ({ set }: CallbackInterface) => async (status: BotStatus) => {
-      set(botStatusState, status);
+  const setBotStatus = useRecoilCallback<[BotStatus, string], void>(
+    ({ set }: CallbackInterface) => (status: BotStatus, projectId: string) => {
+      set(botStatusState(projectId), status);
     }
   );
 
@@ -389,74 +387,17 @@ export const projectDispatcher = () => {
     }
   });
 
-  const initBotProjectState = async ({ snapshot, gotoSnapshot }: CallbackInterface, projectData: any) => {
-    const curLocation = await snapshot.getPromise(locationState);
-    const { files, botName, schemas, id: projectId, locale } = projectData;
-
-    try {
-      schemas.sdk.content = processSchema(projectId, schemas.sdk.content);
-    } catch (err) {
-      const diagnostics = schemas.diagnostics ?? [];
-      diagnostics.push(err.message);
-      schemas.diagnostics = diagnostics;
-    }
-    const { dialogs, luFiles, lgFiles, skillManifestFiles } = indexer.index(files, botName, locale);
-    let mainDialog = '';
-    const verifiedDialogs = dialogs.map((dialog) => {
-      if (dialog.isRoot) {
-        mainDialog = dialog.id;
-      }
-      dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-      return dialog;
-    });
-    const mainUrl = `/bot/${projectId}/dialogs/${mainDialog}`;
-    return {
-      projectId,
-      dialogs,
-      mainUrl,
-    };
-  };
-
-  const openBotProjectWorkspace = useRecoilCallback((callbackHelpers: CallbackInterface) => async () => {
-    try {
-      await setBotOpeningStatus(callbackHelpers);
-      const meetingVaPromise = httpClient.put(`/projects/open`, { path: meetingVA.workspace, storageId: 'default' });
-
-      const skillPromise = meetingVA.skills.map((skill) => {
-        return httpClient.put(`/projects/open`, { path: skill.workspace, storageId: 'default' });
+  const addToBotProject = useRecoilCallback(
+    ({ set }: CallbackInterface) => async (projectId: string, isRootBot: boolean) => {
+      set(botProjectsState, (current) => [...current, projectId]);
+      set(projectsMetaDataState(projectId), {
+        isRootBot,
       });
-      const botProjectResponses = await Promise.all([...skillPromise, meetingVaPromise]);
-      const dataResponses = botProjectResponses.map((response) => response.data);
-      const results: any[] = [];
-      for (const response of dataResponses) {
-        const result = await initBotProjectState(callbackHelpers, response);
-        results.push(result);
-      }
-      const projectIds = results.map((result) => result.projectId);
-      callbackHelpers.set(botProjectsState, projectIds);
-
-      results.forEach((result, index) => {
-        callbackHelpers.set(dialogsNewState(result.projectId), result.dialogs);
-        if (index === 0) {
-          callbackHelpers.set(currentProjectIdState, result.projectId);
-          navigateTo(result.mainUrl);
-        }
-      });
-    } catch (ex) {
-      setError(callbackHelpers, ex);
     }
-  });
-
-  const setCurrentProjectId = useRecoilCallback((callbackHelpers: CallbackInterface) => async (projectId: string) => {
-    try {
-      callbackHelpers.set(currentProjectIdState, projectId);
-    } catch (ex) {
-      setError(callbackHelpers, ex);
-    }
-  });
+  );
 
   return {
-    openBotProject,
+    openProject,
     createProject,
     deleteBotProject,
     saveProjectAs,
@@ -470,7 +411,6 @@ export const projectDispatcher = () => {
     saveTemplateId,
     updateBoilerplate,
     getBoilerplateVersion,
-    openBotProjectWorkspace,
-    setCurrentProjectId,
+    addToBotProject,
   };
 };

@@ -15,12 +15,10 @@ import cloneDeep from 'lodash/cloneDeep';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 
 import {
-  botNameState,
-  settingsState,
-  projectIdState,
   dispatcherState,
   userSettingsState,
-  localeState,
+  botStateByProjectIdSelector,
+  currentProjectIdState,
 } from '../../../recoilModel';
 import { languageListTemplates } from '../../../components/MultiLanguage';
 import { navigateTo } from '../../../utils/navigation';
@@ -29,10 +27,8 @@ import { settingsEditor, toolbar } from './style';
 import { BotSettings } from './constants';
 
 export const DialogSettings: React.FC<RouteComponentProps> = () => {
-  const botName = useRecoilValue(botNameState);
-  const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
-  const projectId = useRecoilValue(projectIdState);
+  const { botName, locale, dialogSetting: settings } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
   const userSettings = useRecoilValue(userSettingsState);
   const { setSettings, setLocale, addLanguageDialogBegin } = useRecoilValue(dispatcherState);
 
@@ -64,7 +60,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   ) => {
     const selectedLang = option?.key as string;
     if (selectedLang && selectedLang !== defaultLanguage) {
-      setLocale(selectedLang);
+      setLocale(selectedLang, projectId);
       const updatedSetting = { ...cloneDeep(settings), defaultLanguage: selectedLang };
       if (updatedSetting?.luis?.defaultLanguage) {
         updatedSetting.luis.defaultLanguage = selectedLang;
@@ -76,7 +72,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
   const onLanguageChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, _index?: number) => {
     const selectedLang = option?.key as string;
     if (selectedLang && selectedLang !== locale) {
-      setLocale(selectedLang);
+      setLocale(selectedLang, projectId);
     }
   };
 
@@ -122,13 +118,7 @@ export const DialogSettings: React.FC<RouteComponentProps> = () => {
               onChange={onLanguageChange}
             />
 
-            <Link
-              onClick={() => {
-                addLanguageDialogBegin(() => {});
-              }}
-            >
-              {BotSettings.languageAddLanauge}
-            </Link>
+            <Link onClick={() => addLanguageDialogBegin(projectId, () => {})}>{BotSettings.languageAddLanauge}</Link>
           </div>
 
           <Dropdown
