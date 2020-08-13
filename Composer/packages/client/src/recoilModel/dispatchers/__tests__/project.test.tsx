@@ -149,7 +149,7 @@ describe('Project dispatcher', () => {
       data: mockProjectResponse,
     });
     await act(async () => {
-      result = await dispatcher.openBotProject('../test/empty-bot', 'default');
+      result = await dispatcher.openProject('../test/empty-bot', 'default');
     });
     expect(renderedComponent.current.projectId).toBe(mockProjectResponse.id);
     expect(renderedComponent.current.botName).toBe(mockProjectResponse.botName);
@@ -178,7 +178,7 @@ describe('Project dispatcher', () => {
           path: '../test/empty-bot',
         },
       ]);
-      await dispatcher.openBotProject('../test/empty-bot', 'default');
+      await dispatcher.openProject('../test/empty-bot', 'default');
     });
     expect(renderedComponent.current.botOpening).toBeFalsy();
     expect(renderedComponent.current.appError).toEqual(errorObj);
@@ -232,7 +232,7 @@ describe('Project dispatcher', () => {
       data: mockProjectResponse,
     });
     await act(async () => {
-      await dispatcher.openBotProject('../test/empty-bot', 'default');
+      await dispatcher.openProject('../test/empty-bot', 'default');
       await dispatcher.deleteBotProject('30876.502871204648');
     });
 

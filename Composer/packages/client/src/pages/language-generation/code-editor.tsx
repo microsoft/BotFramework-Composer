@@ -193,7 +193,7 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
           left={currentLanguageFileEditor}
           locale={locale}
           right={defaultLanguageFileEditor}
-          onLanguageChange={setLocale}
+          onLanguageChange={(locale) => setLocale(locale, projectId)}
         ></DiffCodeEditor>
       )}
     </Fragment>

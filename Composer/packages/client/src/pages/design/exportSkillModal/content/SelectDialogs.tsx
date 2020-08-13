@@ -21,7 +21,7 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { dialogsState } from '../../../../recoilModel';
+import { botStateByProjectIdSelector } from '../../../../recoilModel';
 
 const styles = {
   detailListContainer: css`
@@ -34,7 +34,7 @@ const styles = {
 };
 
 export const SelectDialogs: React.FC<ContentProps> = ({ editJson, schema, setSelectedDialogs }) => {
-  const items = useRecoilValue(dialogsState);
+  const { dialogs: items } = useRecoilValue(botStateByProjectIdSelector);
 
   // for detail file list in open panel
   const tableColumns = [

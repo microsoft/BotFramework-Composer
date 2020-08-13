@@ -13,14 +13,7 @@ import { PublishTarget } from '@bfc/shared';
 
 import settingsStorage from '../../utils/dialogSettingStorage';
 import { projectContainer } from '../design/styles';
-import {
-  settingsState,
-  botNameState,
-  publishTypesState,
-  projectIdState,
-  publishHistoryState,
-  dispatcherState,
-} from '../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from '../../recoilModel';
 import { navigateTo } from '../../utils/navigation';
 import { Toolbar, IToolbarItem } from '../../components/Toolbar';
 import { OpenConfirmModal } from '../../components/Modal/ConfirmDialog';
@@ -38,11 +31,10 @@ interface PublishPageProps extends RouteComponentProps<{}> {
 const Publish: React.FC<PublishPageProps> = (props) => {
   const selectedTargetName = props.targetName;
   const [selectedTarget, setSelectedTarget] = useState<PublishTarget | undefined>();
-  const settings = useRecoilValue(settingsState);
-  const botName = useRecoilValue(botNameState);
-  const publishTypes = useRecoilValue(publishTypesState);
-  const projectId = useRecoilValue(projectIdState);
-  const publishHistory = useRecoilValue(publishHistoryState);
+  const { dialogSetting: settings, botName, publishTypes, publishHistory } = useRecoilValue(
+    botStateByProjectIdSelector
+  );
+  const projectId = useRecoilValue(currentProjectIdState);
   const {
     getPublishStatus,
     getPublishTargetTypes,
@@ -170,7 +162,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
 
   useEffect(() => {
     if (projectId) {
-      getPublishTargetTypes();
+      getPublishTargetTypes(projectId);
       // init selected status
       setSelectedVersion(null);
     }
@@ -247,7 +239,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           configuration,
         },
       ]);
-      await setPublishTargets(targets);
+      await setPublishTargets(targets, projectId);
       onSelectTarget(name);
     },
     [settings.publishTargets, projectId, botName]
@@ -267,7 +259,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         configuration,
       };
 
-      await setPublishTargets(targets);
+      await setPublishTargets(targets, projectId);
 
       onSelectTarget(name);
     },
@@ -333,7 +325,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
           }
         });
 
-        await setPublishTargets(updatedPublishTargets);
+        await setPublishTargets(updatedPublishTargets, projectId);
       }
     },
     [projectId, selectedTarget, settings.publishTargets]
@@ -359,7 +351,7 @@ const Publish: React.FC<PublishPageProps> = (props) => {
       if (result) {
         if (settings.publishTargets && settings.publishTargets.length > index) {
           const targets = settings.publishTargets.slice(0, index).concat(settings.publishTargets.slice(index + 1));
-          await setPublishTargets(targets);
+          await setPublishTargets(targets, projectId);
           // redirect to all profiles
           setSelectedTarget(undefined);
           onSelectTarget('all');

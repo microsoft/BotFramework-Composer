@@ -11,14 +11,7 @@ import { getDialogData, setDialogData } from '../utils/dialogUtil';
 import { getFocusPath } from '../utils/navigation';
 import { isAbsHosted } from '../utils/envUtil';
 import { undoFunctionState } from '../recoilModel/undo/history';
-import {
-  dispatcherState,
-  userSettingsState,
-  clipboardActionsState,
-  botStateByProjectIdSelector,
-  currentProjectIdState,
-  designPageLocationState,
-} from '../recoilModel';
+import { dispatcherState, userSettingsState, clipboardActionsState, botStateByProjectIdSelector } from '../recoilModel';
 
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
@@ -40,10 +33,9 @@ export function useShell(source: EventSource): Shell {
     locale,
     lgFiles,
     dialogSchemas,
+    designPageLocation,
+    projectId,
   } = useRecoilValue(botStateByProjectIdSelector);
-  const designPageLocation = useRecoilValue(designPageLocationState);
-
-  const projectId = useRecoilValue(currentProjectIdState);
 
   const userSettings = useRecoilValue(userSettingsState);
   const clipboardActions = useRecoilValue(clipboardActionsState);
@@ -98,11 +90,11 @@ export function useShell(source: EventSource): Shell {
   }
 
   function navigationTo(path) {
-    navTo(path, breadcrumb);
+    navTo(projectId, path, breadcrumb);
   }
 
   function focusEvent(subPath) {
-    selectTo(subPath);
+    selectTo(projectId, subPath);
   }
 
   function focusSteps(subPaths: string[] = [], fragment?: string) {
@@ -117,7 +109,7 @@ export function useShell(source: EventSource): Shell {
       }
     }
 
-    focusTo(dataPath, fragment ?? '');
+    focusTo(projectId, dataPath, fragment ?? '');
   }
 
   dialogMapRef.current = dialogsMap;
@@ -158,7 +150,7 @@ export function useShell(source: EventSource): Shell {
          *   - If 'trigger' not exists at `selected` path, fallback to dialog Id;
          *   - If 'dialog' not exists at `dialogId` path, fallback to main dialog.
          */
-        navTo(dialogId, []);
+        navTo(projectId, dialogId, []);
       }
       commitChanges();
     },

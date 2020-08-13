@@ -22,9 +22,8 @@ import { LuFile, LuIntentSection } from '@bfc/shared';
 
 import { getExtension } from '../../utils/fileUtil';
 import { languageListTemplates } from '../../components/MultiLanguage';
-import { luFilesState, projectIdState, localeState, settingsState } from '../../recoilModel/atoms/botState';
 import { navigateTo } from '../../utils/navigation';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import { botStateByProjectIdSelector, currentProjectIdState } from '../../recoilModel';
 
 import { formCell, luPhraseCell, tableCell, content } from './styles';
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -41,11 +40,10 @@ interface Intent {
 }
 
 const TableView: React.FC<TableViewProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const luFiles = useRecoilValue(luFilesState);
-  const projectId = useRecoilValue(projectIdState);
-  const locale = useRecoilValue(localeState);
-  const settings = useRecoilValue(settingsState);
+  const { luFiles, locale, dialogSetting: settings, validatedDialogs: dialogs } = useRecoilValue(
+    botStateByProjectIdSelector
+  );
+  const projectId = useRecoilValue(currentProjectIdState);
 
   const { languages, defaultLanguage } = settings;
   const { dialogId } = props;

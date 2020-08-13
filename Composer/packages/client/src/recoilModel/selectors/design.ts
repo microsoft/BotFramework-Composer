@@ -19,7 +19,6 @@ import {
   botLoadErrorState,
   actionsSeedState,
   skillManifestsState,
-  designPageLocationState,
   breadcrumbState,
   showCreateDialogModalState,
   showAddSkillDialogModalState,
@@ -39,12 +38,16 @@ import {
   onDelLanguageDialogCompleteState,
   botNameState,
   dialogSchemasState,
+  designPageLocationState,
 } from '../atoms';
+import { dispatcherState } from '../DispatcherWrapper';
+import { Dispatcher } from '../dispatchers';
 
 export const botStateByProjectIdSelector = selector({
   key: 'botStateByProjectIdSelector',
   get: ({ get }) => {
     const projectId = get(currentProjectIdState);
+
     const dialogs = get(dialogsState(projectId));
     const schemas = get(schemasState(projectId));
     const botName = get(botNameState(projectId));
@@ -78,6 +81,7 @@ export const botStateByProjectIdSelector = selector({
     const onDelLanguageDialogComplete = get(onDelLanguageDialogCompleteState(projectId));
     const botLoadErrorMsg = get(botLoadErrorState(projectId));
     const dialogSchemas = get(dialogSchemasState(projectId));
+    const designPageLocation = get(designPageLocationState(projectId));
 
     const validatedDialogs = dialogs.map((dialog) => {
       return { ...dialog, diagnostics: validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles) };
@@ -118,6 +122,34 @@ export const botStateByProjectIdSelector = selector({
       onAddLanguageDialogComplete,
       onDelLanguageDialogComplete,
       dialogSchemas,
+      designPageLocation,
+      projectId,
     };
+  },
+});
+
+// TODO Load Bot Projects file
+
+const loadBotProjects = (dispatcher: Dispatcher) => {
+  return {
+    onAction: async (validatedBotProject, pathToFile) => {
+      const projectId = await dispatcher.openProject(validatedBotProject.workspace, 'default', pathToFile);
+      dispatcher.addToBotProject(projectId, true);
+      for (const skill of validatedBotProject.skills) {
+        const projectId = await dispatcher.openProject(skill.workspace, 'default', pathToFile);
+        dispatcher.addToBotProject(projectId, false);
+      }
+    },
+  };
+};
+
+export const loadBotProjectFileSelector = selector({
+  key: 'loadBotProjectFileSelector',
+  get: ({ get }) => {
+    const dispatcher = get(dispatcherState);
+    if (!dispatcher) {
+      return undefined;
+    }
+    return loadBotProjects(dispatcher);
   },
 });

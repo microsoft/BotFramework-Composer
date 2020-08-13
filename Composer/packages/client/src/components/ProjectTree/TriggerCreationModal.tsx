@@ -14,7 +14,7 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { DialogInfo, SDKKinds } from '@bfc/shared';
+import { DialogInfo, SDKKinds, LuIntentSection } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
@@ -198,13 +198,13 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, luFilePayload?: LuFilePayload) => void;
+  onSubmit: (dialog: DialogInfo, luFilePayload?: LuIntentSection) => void;
   projectId: string;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
   const { isOpen, onDismiss, onSubmit, dialogId, projectId } = props;
-  const { validatedDialogs: dialogs, locale, schemas, luFiles } = useRecoilValue(botStateByProjectIdSelector);
+  const { validatedDialogs: dialogs, schemas } = useRecoilValue(botStateByProjectIdSelector);
   const userSettings = useRecoilValue(userSettingsState);
 
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
@@ -259,7 +259,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     }
     const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content);
     if (formData.$kind === intentTypeKey && !isRegEx) {
-      const newIntent = { Name: formData.intent, Body: formData.triggerPhrases };
+      const newIntent: any = { Name: formData.intent, Body: formData.triggerPhrases };
       onSubmit(newDialog, newIntent);
     } else {
       onSubmit(newDialog);

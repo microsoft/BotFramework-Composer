@@ -11,26 +11,24 @@ import { useRecoilValue } from 'recoil';
 import { navigateTo } from '../../utils/navigation';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TestController } from '../../components/TestController/TestController';
-import { projectIdState } from '../../recoilModel/atoms/botState';
 import { INavTreeItem } from '../../components/NavTree';
 import { Page } from '../../components/Page';
-import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
+import { botStateByProjectIdSelector } from '../../recoilModel';
 
 import TableView from './table-view';
 import { actionButton } from './styles';
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
-interface LUPageProps extends RouteComponentProps<{}> {
+interface LUPageProps {
   dialogId?: string;
-  path: string;
+  projectId: string;
 }
 
-const LUPage: React.FC<LUPageProps> = (props) => {
-  const dialogs = useRecoilValue(validatedDialogsSelector);
-  const projectId = useRecoilValue(projectIdState);
+const LUPage: React.FC<RouteComponentProps<LUPageProps>> = (props) => {
+  const { validatedDialogs: dialogs } = useRecoilValue(botStateByProjectIdSelector);
 
   const path = props.location?.pathname ?? '';
-  const { dialogId = '' } = props;
+  const { dialogId = '', projectId = '' } = props;
   const edit = /\/edit(\/)?$/.test(path);
   const isRoot = dialogId === 'all';
 
@@ -115,7 +113,7 @@ const LUPage: React.FC<LUPageProps> = (props) => {
     >
       <Suspense fallback={<LoadingSpinner />}>
         <Router component={Fragment} primary={false}>
-          <CodeEditor dialogId={dialogId} path="/edit" />
+          <CodeEditor dialogId={dialogId} path="/edit" projectId={projectId} />
           <TableView dialogId={dialogId} path="/" />
         </Router>
       </Suspense>

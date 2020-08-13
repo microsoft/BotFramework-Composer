@@ -5,19 +5,11 @@ import { useRecoilValue } from 'recoil';
 import { act } from '@bfc/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import {
-  luFilesState,
-  lgFilesState,
-  settingsState,
-  dialogsState,
-  localeState,
-  onAddLanguageDialogCompleteState,
-  onDelLanguageDialogCompleteState,
-  actionsSeedState,
-} from '../../atoms';
+import { luFilesState, lgFilesState, settingsState, dialogsState, localeState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { multilangDispatcher } from '../multilang';
+import { botStateByProjectIdSelector } from '../../selectors';
 
 const state = {
   dialogs: [{ id: '1' }, { id: '2' }],
@@ -34,21 +26,25 @@ const state = {
     defaultLanguage: 'en-us',
     languages: ['en-us', 'fr-fr'],
   },
+  projectId: '1234-abcd',
 };
 
 describe('Multilang dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const dialogs = useRecoilValue(dialogsState);
-      const locale = useRecoilValue(localeState);
-      const settings = useRecoilValue(settingsState);
-      const luFiles = useRecoilValue(luFilesState);
-      const lgFiles = useRecoilValue(lgFilesState);
+      const {
+        actionsSeed,
+        dialogs,
+        locale,
+        dialogSetting: settings,
+        luFiles,
+        lgFiles,
+        onAddLanguageDialogComplete,
+        onDelLanguageDialogComplete,
+      } = useRecoilValue(botStateByProjectIdSelector);
+
       const currentDispatcher = useRecoilValue(dispatcherState);
-      const actionsSeed = useRecoilValue(actionsSeedState);
-      const onAddLanguageDialogComplete = useRecoilValue(onAddLanguageDialogCompleteState);
-      const onDelLanguageDialogComplete = useRecoilValue(onDelLanguageDialogCompleteState);
 
       return {
         dialogs,
@@ -65,11 +61,11 @@ describe('Multilang dispatcher', () => {
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
       states: [
-        { recoilState: dialogsState, initialValue: state.dialogs },
-        { recoilState: localeState, initialValue: state.locale },
-        { recoilState: lgFilesState, initialValue: state.lgFiles },
-        { recoilState: luFilesState, initialValue: state.luFiles },
-        { recoilState: settingsState, initialValue: state.settings },
+        { recoilState: dialogsState(state.projectId), initialValue: state.dialogs },
+        { recoilState: localeState(state.projectId), initialValue: state.locale },
+        { recoilState: lgFilesState(state.projectId), initialValue: state.lgFiles },
+        { recoilState: luFilesState(state.projectId), initialValue: state.luFiles },
+        { recoilState: settingsState(state.projectId), initialValue: state.settings },
       ],
       dispatcher: {
         recoilState: dispatcherState,
@@ -88,6 +84,7 @@ describe('Multilang dispatcher', () => {
         languages: ['zh-cn'],
         defaultLang: 'en-us',
         switchTo: true,
+        projectId: state.projectId,
       });
     });
     expect(renderedComponent.current.settings.languages).toEqual(['en-us', 'fr-fr', 'zh-cn']);
@@ -102,6 +99,7 @@ describe('Multilang dispatcher', () => {
     await act(async () => {
       await dispatcher.deleteLanguages({
         languages: ['fr-fr'],
+        projectId: state.projectId,
       });
     });
     expect(renderedComponent.current.settings.languages).toEqual(['en-us']);
@@ -111,7 +109,7 @@ describe('Multilang dispatcher', () => {
 
   it('set locale', async () => {
     await act(async () => {
-      await dispatcher.setLocale('fr-fr');
+      await dispatcher.setLocale('fr-fr', state.projectId);
     });
     expect(renderedComponent.current.locale).toEqual('fr-fr');
   });

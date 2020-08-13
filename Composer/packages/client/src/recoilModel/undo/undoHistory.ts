@@ -13,14 +13,14 @@ export class UndoHistory {
   public present = -1;
 
   public undo() {
-    if (!this.canUndo()) throw new Error(formatMessage('Undo is not support'));
+    if (!this.canUndo()) throw new Error(formatMessage('Undo is not supported'));
 
     this.present = this.present - 1;
     return this.stack[this.present];
   }
 
   public redo() {
-    if (!this.canRedo()) throw new Error(formatMessage('Redo is not support'));
+    if (!this.canRedo()) throw new Error(formatMessage('Redo is not supported'));
 
     this.present = this.present + 1;
     return this.stack[this.present];

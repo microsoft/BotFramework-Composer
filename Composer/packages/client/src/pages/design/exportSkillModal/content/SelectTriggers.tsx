@@ -21,7 +21,7 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { dialogsState, schemasState } from '../../../../recoilModel';
+import { botStateByProjectIdSelector } from '../../../../recoilModel';
 import { getFriendlyName } from '../../../../utils/dialogUtil';
 import { isSupportedTrigger } from '../generateSkillManifest';
 
@@ -41,8 +41,7 @@ const getLabel = (kind: SDKKinds, uiSchema) => {
 };
 
 export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers }) => {
-  const dialogs = useRecoilValue(dialogsState);
-  const schemas = useRecoilValue(schemasState);
+  const { dialogs, schemas } = useRecoilValue(botStateByProjectIdSelector);
 
   const items = useMemo(() => {
     const { triggers = [] } = dialogs.find(({ isRoot }) => isRoot) || ({} as DialogInfo);

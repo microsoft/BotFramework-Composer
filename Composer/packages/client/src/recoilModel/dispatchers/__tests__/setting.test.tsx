@@ -5,10 +5,13 @@ import { useRecoilValue } from 'recoil';
 import { act } from '@bfc/test-utils/lib/hooks';
 
 import { renderRecoilHook } from '../../../../__tests__/testUtils';
-import { settingsState } from '../../atoms';
+import { settingsState, currentProjectIdState } from '../../atoms';
 import { dispatcherState } from '../../../recoilModel/DispatcherWrapper';
 import { Dispatcher } from '..';
 import { settingsDispatcher } from '../setting';
+import { botStateByProjectIdSelector } from '../../selectors';
+
+const projectId = '1235a.2341';
 
 const settings = {
   feature: {
@@ -68,7 +71,7 @@ describe('setting dispatcher', () => {
   let renderedComponent, dispatcher: Dispatcher;
   beforeEach(() => {
     const useRecoilTestHook = () => {
-      const settings = useRecoilValue(settingsState);
+      const { dialogSetting: settings } = useRecoilValue(botStateByProjectIdSelector);
       const currentDispatcher = useRecoilValue(dispatcherState);
 
       return {
@@ -78,7 +81,10 @@ describe('setting dispatcher', () => {
     };
 
     const { result } = renderRecoilHook(useRecoilTestHook, {
-      states: [{ recoilState: settingsState, initialValue: settings }],
+      states: [
+        { recoilState: settingsState(projectId), initialValue: settings },
+        { recoilState: currentProjectIdState, initialValue: projectId },
+      ],
       dispatcher: {
         recoilState: dispatcherState,
         initialValue: {
@@ -92,7 +98,7 @@ describe('setting dispatcher', () => {
 
   it('should update all settings', async () => {
     await act(async () => {
-      await dispatcher.setSettings('test', {
+      await dispatcher.setSettings(projectId, {
         ...settings,
         MicrosoftAppPassword: 'test',
         luis: { ...settings.luis, authoringKey: 'test', endpointKey: 'test' },
@@ -104,14 +110,17 @@ describe('setting dispatcher', () => {
 
   it('should update PublishTargets', async () => {
     await act(async () => {
-      await dispatcher.setPublishTargets([
-        {
-          name: 'new',
-          type: 'type',
-          configuration: '',
-          lastPublished: new Date(),
-        },
-      ]);
+      await dispatcher.setPublishTargets(
+        [
+          {
+            name: 'new',
+            type: 'type',
+            configuration: '',
+            lastPublished: new Date(),
+          },
+        ],
+        projectId
+      );
     });
 
     expect(renderedComponent.current.settings.publishTargets.length).toBe(1);
@@ -120,7 +129,7 @@ describe('setting dispatcher', () => {
 
   it('should update RuntimeSettings', async () => {
     await act(async () => {
-      await dispatcher.setRuntimeSettings('', 'path', 'command');
+      await dispatcher.setRuntimeSettings(projectId, 'path', 'command');
     });
 
     expect(renderedComponent.current.settings.runtime.customRuntime).toBeTruthy();
@@ -130,12 +139,12 @@ describe('setting dispatcher', () => {
 
   it('should update customRuntime', async () => {
     await act(async () => {
-      await dispatcher.setCustomRuntime('', false);
+      await dispatcher.setCustomRuntime(projectId, false);
     });
     expect(renderedComponent.current.settings.runtime.customRuntime).toBeFalsy();
 
     await act(async () => {
-      await dispatcher.setCustomRuntime('', true);
+      await dispatcher.setCustomRuntime(projectId, true);
     });
     expect(renderedComponent.current.settings.runtime.customRuntime).toBeTruthy();
   });
