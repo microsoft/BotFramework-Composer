@@ -403,7 +403,7 @@ export class BotProject implements IBotProject {
       });
 
       this.luPublisher.setPublishConfig(luisConfig, crossTrainConfig, this.settings.downsampling);
-      await this.luPublisher.publish(luFiles);
+      await this.luPublisher.publish(luFiles, Array.from(this.files.values()));
     }
   };
 

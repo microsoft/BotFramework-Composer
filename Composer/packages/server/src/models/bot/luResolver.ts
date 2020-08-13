@@ -16,6 +16,10 @@ function getBaseName(filename?: string): string | any {
   return filename.substring(0, filename.lastIndexOf('.')) || filename;
 }
 
+export function getLUFiles(files: FileInfo[]): FileInfo[] {
+  return files.filter(({ name }) => name.endsWith('.lu'));
+}
+
 export function fileInfoToResources(files: FileInfo[]): ResolverResource[] {
   return files.map((file) => {
     return {

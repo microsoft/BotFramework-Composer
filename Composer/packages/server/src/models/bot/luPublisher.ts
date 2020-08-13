@@ -7,7 +7,7 @@ import { Path } from '../../utility/path';
 import { IFileStorage } from '../storage/interface';
 import log from '../../logger';
 
-import { luImportResolverGenerator, fileInfoToResources } from './luResolver';
+import { luImportResolverGenerator, fileInfoToResources, getLUFiles } from './luResolver';
 import { ComposerReservoirSampler } from './sampler/ReservoirSampler';
 import { ComposerBootstrapSampler } from './sampler/BootstrapSampler';
 
@@ -65,14 +65,14 @@ export class LuPublisher {
     this._locale = locale;
   }
 
-  public publish = async (files: FileInfo[]) => {
+  public publish = async (files: FileInfo[], allFiles: FileInfo[]) => {
     try {
       await this.createGeneratedDir();
 
       //do cross train before publish
-      await this.crossTrain(files);
+      await this.crossTrain(files, allFiles);
 
-      await this.runBuild(files);
+      await this.runBuild(files, allFiles);
       //remove the cross train result
       await this.cleanCrossTrain();
     } catch (error) {
@@ -108,13 +108,13 @@ export class LuPublisher {
     return this.crossTrainConfig.rootIds.length > 0;
   }
 
-  private async crossTrain(files: FileInfo[]) {
+  private async crossTrain(files: FileInfo[], allFiles: FileInfo[]) {
     if (!this.needCrossTrain()) return;
     const luContents = files.map((file) => {
       return { content: file.content, id: file.name };
     });
 
-    const resolver = luImportResolverGenerator(fileInfoToResources(files));
+    const resolver = luImportResolverGenerator(fileInfoToResources(getLUFiles(allFiles)));
     const result = await crossTrainer.crossTrain(luContents, [], this.crossTrainConfig, resolver);
 
     await this.writeFiles(result.luResult);
@@ -158,13 +158,13 @@ export class LuPublisher {
     }
   }
 
-  private async runBuild(files: FileInfo[]) {
+  private async runBuild(files: FileInfo[], allFiles: FileInfo[]) {
     const config = await this._getConfig(files);
     if (config.models.length === 0) {
       throw new Error('No LUIS files exist');
     }
 
-    const resolver = luImportResolverGenerator(fileInfoToResources(files));
+    const resolver = luImportResolverGenerator(fileInfoToResources(getLUFiles(allFiles)));
     const loadResult = await this._loadLuContents(config.models, resolver);
     loadResult.luContents = await this.downsizeUtterances(loadResult.luContents);
     const authoringEndpoint = config.authoringEndpoint ?? `https://${config.region}.api.cognitive.microsoft.com`;

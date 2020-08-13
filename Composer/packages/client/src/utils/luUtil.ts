@@ -22,10 +22,6 @@ export function getReferredFiles(luFiles: LuFile[], dialogs: DialogInfo[]) {
   });
 }
 
-function getCommonFiles(luFiles: LuFile[]) {
-  return luFiles.filter((file) => getBaseName(file.id) === 'common' && file.empty === false);
-}
-
 function createConfigId(fileId) {
   return `${fileId}.lu`;
 }
@@ -160,9 +156,7 @@ function generateErrorMessage(invalidLuFile: LuFile[]) {
 
 export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
   const referred = getReferredFiles(luFiles, dialogs);
-  const commons = getCommonFiles(luFiles);
-  const filesToPublish = [...referred, ...commons];
-  const invalidLuFile = filesToPublish.filter(
+  const invalidLuFile = referred.filter(
     (file) => file.diagnostics.filter((n) => n.severity === DiagnosticSeverity.Error).length !== 0
   );
   if (invalidLuFile.length !== 0) {
@@ -175,6 +169,6 @@ export function checkLuisPublish(luFiles: LuFile[], dialogs: DialogInfo[]) {
     throw new Error(formatMessage(`You have the following empty LuFile(s): `) + msg);
   }
   // supported LUIS locale.
-  const supported = BotIndexer.filterLUISFilesToPublish(filesToPublish);
+  const supported = BotIndexer.filterLUISFilesToPublish(referred);
   return supported;
 }
