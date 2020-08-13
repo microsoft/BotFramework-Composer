@@ -1,20 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  ConceptLabels,
-  DialogGroup,
-  SDKKinds,
-  dialogGroups,
-  DialogInfo,
-  DialogFactory,
-  ITriggerCondition,
-} from '@bfc/shared';
+import { ConceptLabels, SDKKinds, DialogInfo, DialogFactory, ITriggerCondition } from '@bfc/shared';
 import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 
 import { TriggerFormData } from '../components/TriggerCreationModal/types/TriggerFormData';
 
