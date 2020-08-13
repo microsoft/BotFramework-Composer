@@ -3,6 +3,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
+import { SkillManifest } from '@bfc/shared';
 
 import httpClient from '../../utils/httpUtil';
 
@@ -17,9 +18,9 @@ import {
 import { logMessage } from './shared';
 
 export const skillDispatcher = () => {
-  const createSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async ({ id, content, projectId }) => {
+  const createSkillManifest = ({ set }, { id, content, projectId }) => {
     set(skillManifestsState(projectId), (skillManifests) => [...skillManifests, { content, id }]);
-  });
+  };
 
   const removeSkillManifest = useRecoilCallback(
     ({ set }: CallbackInterface) => async (id: string, projectId: string) => {
@@ -27,11 +28,18 @@ export const skillDispatcher = () => {
     }
   );
 
-  const updateSkillManifest = useRecoilCallback(({ set }: CallbackInterface) => async ({ id, content, projectId }) => {
-    set(skillManifestsState(projectId), (skillManifests) =>
-      skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
-    );
-  });
+  const updateSkillManifest = useRecoilCallback(
+    ({ set, snapshot }: CallbackInterface) => async ({ id, content }: SkillManifest, projectId: string) => {
+      const manifests = await snapshot.getPromise(skillManifestsState(projectId));
+      if (!manifests.some((manifest) => manifest.id === id)) {
+        createSkillManifest({ set }, { id, content, projectId });
+      }
+
+      set(skillManifestsState(projectId), (skillManifests) =>
+        skillManifests.map((manifest) => (manifest.id === id ? { id, content } : manifest))
+      );
+    }
+  );
 
   const updateSkill = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ projectId, targetId, skillData }) => {
