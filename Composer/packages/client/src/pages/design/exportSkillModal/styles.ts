@@ -27,7 +27,7 @@ export const styles: { dialog: Partial<IDialogContentStyles>; modal: Partial<IMo
     },
   },
   container: css`
-    height: 550px;
+    height: 520px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -36,7 +36,8 @@ export const styles: { dialog: Partial<IDialogContentStyles>; modal: Partial<IMo
   `,
   content: css`
     flex: 1;
-    overflow: auto;
+
+    label: Content;
   `,
   buttonContainer: css`
     display: flex;
