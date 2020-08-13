@@ -21,7 +21,7 @@ import { useRecoilValue } from 'recoil';
 
 import { calculateTimeDiff } from '../../../../utils/fileUtil';
 import { ContentProps, SCHEMA_URIS, VERSION_REGEX } from '../constants';
-import { botNameState, dispatcherState } from '../../../../recoilModel';
+import { dispatcherState, botStateByProjectIdSelector, currentProjectIdState } from '../../../../recoilModel';
 
 const styles = {
   detailListContainer: css`
@@ -39,7 +39,9 @@ const styles = {
 
 export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillManifests, setSkillManifest }) => {
   const actions = useRecoilValue(dispatcherState);
-  const botName = useRecoilValue(botNameState);
+  const { botName } = useRecoilValue(botStateByProjectIdSelector);
+  const projectId = useRecoilValue(currentProjectIdState);
+
   const [manifestVersion, setManifestVersion] = useState<string>(SCHEMA_URIS[0]);
   const [errors, setErrors] = useState<{ version?: string }>({});
 
@@ -74,7 +76,7 @@ export const SelectManifest: React.FC<ContentProps> = ({ completeStep, skillMani
       setErrors({ version: formatMessage('Please select a version of the manifest schema') });
       return;
     }
-    actions.createSkillManifest({ id: fileName, content: { $schema: manifestVersion } });
+    actions.createSkillManifest({ id: fileName, content: { $schema: manifestVersion }, projectId });
     setSkillManifest(fileName);
     completeStep();
   };

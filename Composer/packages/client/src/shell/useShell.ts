@@ -18,6 +18,7 @@ import {
   clipboardActionsState,
   botStateByProjectIdSelector,
   currentProjectIdState,
+  designPageLocationState,
 } from '../recoilModel';
 
 import { useLgApi } from './lgApi';
@@ -31,7 +32,6 @@ export function useShell(source: EventSource): Shell {
   const dialogMapRef = useRef({});
   const {
     focusPath,
-    designPageLocation,
     breadcrumb,
     schemas,
     skills,
@@ -42,6 +42,7 @@ export function useShell(source: EventSource): Shell {
     lgFiles,
     dialogSchemas,
   } = useRecoilValue(botStateByProjectIdSelector);
+  const designPageLocation = useRecoilValue(designPageLocationState);
 
   const projectId = useRecoilValue(currentProjectIdState);
 
@@ -186,7 +187,7 @@ export function useShell(source: EventSource): Shell {
       return new Promise((resolve) => {
         addSkillDialogBegin((newSkill: { manifestUrl: string } | null) => {
           resolve(newSkill);
-        });
+        }, projectId);
       });
     },
     undo,
@@ -195,7 +196,7 @@ export function useShell(source: EventSource): Shell {
     addCoachMarkRef: onboardingAddCoachMarkRef,
     updateUserSettings: updateUserSettings,
     announce: setMessage,
-    displayManifestModal: displayManifestModal,
+    displayManifestModal: (skillId) => displayManifestModal(skillId, projectId),
     updateDialogSchema: async (dialogSchema: DialogSchemaFile) => {
       updateDialogSchema(dialogSchema, projectId);
     },
