@@ -11,7 +11,7 @@ import {
   IDetailsRowProps,
   SelectionMode,
 } from 'office-ui-fabric-react/lib/DetailsList';
-import { DialogInfo, ITrigger } from '@bfc/shared';
+import { DialogInfo, ITrigger, SDKKinds } from '@bfc/shared';
 import { IRenderFunction } from 'office-ui-fabric-react/lib/Utilities';
 import { Selection } from 'office-ui-fabric-react/lib/DetailsList';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
@@ -21,7 +21,7 @@ import { useRecoilValue } from 'recoil';
 import formatMessage from 'format-message';
 
 import { ContentProps } from '../constants';
-import { dialogsState } from '../../../../recoilModel';
+import { dialogsState, schemasState } from '../../../../recoilModel';
 import { getFriendlyName } from '../../../../utils/dialogUtil';
 import { isSupportedTrigger } from '../generateSkillManifest';
 
@@ -35,8 +35,14 @@ const styles = {
   `,
 };
 
+const getLabel = (kind: SDKKinds, uiSchema) => {
+  const { label } = uiSchema?.[kind]?.form || {};
+  return label || kind.replace('Microsoft.', '');
+};
+
 export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers }) => {
   const dialogs = useRecoilValue(dialogsState);
+  const schemas = useRecoilValue(schemasState);
 
   const items = useMemo(() => {
     const { triggers = [] } = dialogs.find(({ isRoot }) => isRoot) || ({} as DialogInfo);
@@ -87,7 +93,8 @@ export const SelectTriggers: React.FC<ContentProps> = ({ setSelectedTriggers }) 
       sortDescendingAriaLabel: formatMessage('Sorted Z to A'),
       data: 'string',
       onRender: (item: ITrigger) => {
-        return <span aria-label={item.type}>{item.type}</span>;
+        const label = getLabel(item.type as SDKKinds, schemas.ui?.content || {});
+        return <span aria-label={label}>{label}</span>;
       },
       isPadded: true,
     },
