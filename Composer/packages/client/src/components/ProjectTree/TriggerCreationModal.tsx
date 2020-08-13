@@ -223,7 +223,12 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (dialog: DialogInfo, intent?: LuIntentSection, lgFilePayload?: { [key: string]: LgTemplate[] }) => void;
+  onSubmit: (
+    dialog: DialogInfo,
+    intent?: LuIntentSection,
+    lgFilePayload?: { [key: string]: LgTemplate[] },
+    url?: string
+  ) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
