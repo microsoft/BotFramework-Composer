@@ -65,7 +65,6 @@ export const getRowProps = (rowProps: FormRowProps, field: string) => {
 const formRow = {
   row: css`
     display: flex;
-    margin: 10px 18px;
 
     label: FormRowContainer;
   `,
