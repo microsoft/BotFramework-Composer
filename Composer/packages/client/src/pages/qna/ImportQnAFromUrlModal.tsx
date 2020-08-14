@@ -8,7 +8,6 @@ import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import cloneDeep from 'lodash/cloneDeep';
 import { PrimaryButton, DefaultButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
@@ -97,26 +96,25 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
   const isQnAFileselected = !(dialogId === 'all');
   const disabled = !isQnAFileselected || hasErrors || urlErrors.some((e) => !!e) || formData.urls.some((url) => !url);
   const validateUrls = (urls: string[]) => {
-    const res = Array(urls.length).fill('');
+    const errors = Array(urls.length).fill('');
     for (let i = 0; i < urls.length; i++) {
       if (!urls[i].startsWith('http://') && !urls[i].startsWith('https://')) {
-        res[i] = formatMessage('A valid url should start with http:// or https://');
+        errors[i] = formatMessage('A valid url should start with http:// or https://');
       }
     }
 
     for (let i = 0; i < urls.length; i++) {
       for (let j = 0; j < urls.length; j++) {
         if (urls[i] === urls[j] && i !== j) {
-          res[i] = formatMessage('This url is duplicated');
-          res[j] = formatMessage('This url is duplicated');
+          errors[i] = errors[j] = formatMessage('This url is duplicated');
         }
       }
     }
-    return res;
+    return errors;
   };
 
   const addNewUrl = () => {
-    const urls = cloneDeep(formData.urls);
+    const urls = [...formData.urls];
     urls.splice(urls.length, 0, '');
     updateField('urls', urls);
     setUrlErrors(validateUrls(urls));
@@ -124,14 +122,14 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
 
   const updateUrl = (index: number, url: string | undefined) => {
     if (!url) url = '';
-    const urls = cloneDeep(formData.urls);
+    const urls = [...formData.urls];
     urls[index] = url;
     updateField('urls', urls);
     setUrlErrors(validateUrls(urls));
   };
 
   const removeUrl = (index: number) => {
-    const urls = cloneDeep(formData.urls);
+    const urls = [...formData.urls];
     urls.splice(index, 1);
     updateField('urls', urls);
     setUrlErrors(validateUrls(urls));

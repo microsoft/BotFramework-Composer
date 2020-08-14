@@ -102,7 +102,7 @@ const initialDialogShape = () => ({
             maxTurnCount: 3,
             alwaysPrompt: true,
             allowInterruptions: false,
-            prompt: '',
+            prompt: `\${TextInput_Prompt_${generateDesignerId()}()}`,
             property: 'turn.qnaMultiTurnResponse',
           },
           {
@@ -152,7 +152,7 @@ const initialDialogShape = () => ({
             $designer: {
               id: generateDesignerId(),
             },
-            activity: '',
+            activity: `\${SendActivity_${generateDesignerId()}()}`,
           },
         ],
       },
@@ -260,7 +260,7 @@ const initialDialogShape = () => ({
         maxTurnCount: 3,
         alwaysPrompt: true,
         allowInterruptions: false,
-        prompt: '',
+        prompt: `\${TextInput_Prompt_${generateDesignerId()}()}`,
         property: 'turn.intentChoice',
         value: '=@userChosenIntent',
         top: 3,
@@ -295,7 +295,7 @@ const initialDialogShape = () => ({
             $designer: {
               id: generateDesignerId(),
             },
-            activity: '',
+            activity: `\${SendActivity_${generateDesignerId()}()}`,
           },
         ],
         top: 3,

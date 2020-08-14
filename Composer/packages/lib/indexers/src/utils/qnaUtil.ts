@@ -22,10 +22,7 @@ export function checkIsSingleSection(content: string) {
 
 export function generateQnAPair() {
   let result = '';
-  result += `\n# ?`;
-  result += '\n```';
-  result += `\n`;
-  result += '\n```';
+  result += '\n# ?\n```\n\n```';
   return result;
 }
 

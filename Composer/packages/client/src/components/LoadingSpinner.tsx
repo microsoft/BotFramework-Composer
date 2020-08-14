@@ -20,10 +20,10 @@ interface LoadingSpinnerProps {
 }
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = (props) => {
-  const { message = 'Loading' } = props;
+  const { message } = props;
   return (
     <div css={container}>
-      <Spinner label={formatMessage(`{msg}`, { msg: message })} />
+      <Spinner label={message || formatMessage('Loading')} />
     </div>
   );
 };

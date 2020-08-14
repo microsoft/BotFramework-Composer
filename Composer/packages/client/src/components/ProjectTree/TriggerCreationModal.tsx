@@ -14,17 +14,16 @@ import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
 import { PlaceHolderSectionName } from '@bfc/indexers/lib/utils/luUtil';
-import { DialogInfo, SDKKinds, LuIntentSection } from '@bfc/shared';
+import { SDKKinds } from '@bfc/shared';
 import { LuEditor, inlineModePlaceholder } from '@bfc/code-editor';
 import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
 import get from 'lodash/get';
-import { generateDesignerId, LgTemplate } from '@bfc/shared';
+import { LgTemplate } from '@bfc/shared';
 
 import {
-  generateNewDialog,
   getTriggerTypes,
   TriggerFormData,
   TriggerFormDataErrors,
@@ -38,16 +37,9 @@ import {
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
-import { projectIdState, schemasState, localeState, lgFilesState } from '../../recoilModel/atoms/botState';
+import { projectIdState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
-import {
-  nameRegex,
-  adaptiveCardJsonBody,
-  whichOneDidYouMeanBody,
-  pickOne,
-  getAnswerReadBack,
-  getIntentReadBack,
-} from '../../constants';
+import { nameRegex } from '../../constants';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 
 // -------------------- Styles -------------------- //
@@ -223,12 +215,7 @@ interface TriggerCreationModalProps {
   dialogId: string;
   isOpen: boolean;
   onDismiss: () => void;
-  onSubmit: (
-    dialog: DialogInfo,
-    intent?: LuIntentSection,
-    lgFilePayload?: { [key: string]: LgTemplate[] },
-    url?: string
-  ) => void;
+  onSubmit: (dialogId: string, formData: TriggerFormData) => void;
 }
 
 export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props) => {
@@ -236,10 +223,6 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const dialogs = useRecoilValue(validatedDialogsSelector);
 
   const projectId = useRecoilValue(projectIdState);
-  const schemas = useRecoilValue(schemasState);
-  const locale = useRecoilValue(localeState);
-  const lgFiles = useRecoilValue(lgFilesState);
-  const commonlgFile = lgFiles.find(({ id }) => id === `common.${locale}`);
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
   const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
@@ -298,92 +281,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
       });
       return;
     }
-
-    if (formData.$kind === intentTypeKey && isLUISnQnA && formData.triggerPhrases) {
-      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, {});
-      const newIntent = { Name: formData.intent, Body: formData.triggerPhrases };
-      onSubmit(newDialog, newIntent);
-    } else if (formData.$kind === qnaMatcherKey || formData.$kind === onChooseIntentKey) {
-      const lgTemplateId1 = generateDesignerId();
-      const lgTemplateId2 = generateDesignerId();
-      const extraTriggerAttributes = {};
-      if (formData.$kind === onChooseIntentKey) {
-        extraTriggerAttributes['actions[4].prompt'] = `\${TextInput_Prompt_${lgTemplateId1}()}`;
-        extraTriggerAttributes['actions[5].elseActions[0].activity'] = `\${SendActivity_${lgTemplateId2}()}`;
-        const lgTemplates1: LgTemplate[] = [
-          {
-            name: `TextInput_Prompt_${lgTemplateId1}`,
-            body: '[Activity\n\
-    Attachments = ${json(AdaptiveCardJson())}\n\
-]\n',
-          } as LgTemplate,
-          {
-            name: `SendActivity_${lgTemplateId2}`,
-            body: '- Sure, no worries.',
-          } as LgTemplate,
-        ];
-
-        let lgTemplates2: LgTemplate[] = [
-          {
-            name: 'AdaptiveCardJson',
-            body: adaptiveCardJsonBody,
-          } as LgTemplate,
-          {
-            name: `whichOneDidYouMean`,
-            body: whichOneDidYouMeanBody,
-          } as LgTemplate,
-          {
-            name: 'pickOne',
-            body: pickOne,
-          } as LgTemplate,
-          {
-            name: 'getAnswerReadBack',
-            body: getAnswerReadBack,
-          } as LgTemplate,
-          {
-            name: 'getIntentReadBack',
-            body: getIntentReadBack,
-          } as LgTemplate,
-        ];
-
-        lgTemplates2 = lgTemplates2.filter(
-          (t) => commonlgFile?.templates.findIndex((clft) => clft.name === t.name) === -1
-        );
-
-        const lgFilePayload = {
-          [`${dialogId}.${locale}`]: lgTemplates1,
-          [`common.${locale}`]: lgTemplates2,
-        };
-        const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
-        onSubmit(newDialog, undefined, lgFilePayload);
-      } else if (formData.$kind === qnaMatcherKey) {
-        extraTriggerAttributes['actions[0].actions[1].prompt'] = `\${TextInput_Prompt_${lgTemplateId1}()}`;
-        extraTriggerAttributes['actions[0].elseActions[0].activity'] = `\${SendActivity_${lgTemplateId2}()}`;
-        const lgTemplates: LgTemplate[] = [
-          {
-            name: `TextInput_Prompt_${lgTemplateId1}`,
-            body:
-              '[Activity\n\
-    Text = ${@answer}\n\
-    SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}\n\
-]',
-          } as LgTemplate,
-          {
-            name: `SendActivity_${lgTemplateId2}`,
-            body: '- ${@answer}',
-          } as LgTemplate,
-        ];
-        const lgFilePayload = {
-          [`${dialogId}.${locale}`]: lgTemplates,
-        };
-        const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
-        onSubmit(newDialog, undefined, lgFilePayload);
-      }
-    } else {
-      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, {});
-      onSubmit(newDialog);
-    }
     onDismiss();
+    onSubmit(dialogId, formData);
   };
 
   const onSelectTriggerType = (e, option) => {
@@ -505,6 +404,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
           )}
           {showCustomEvent && (
             <TextField
+              required
               data-testid="CustomEventName"
               errorMessage={formData.errors.event}
               label={formatMessage('What is the name of the custom event?')}
