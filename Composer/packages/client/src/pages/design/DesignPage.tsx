@@ -575,9 +575,9 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 ) : (
                   <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
                     <VisualEditor
-                      onFocus={() => setFlowEditorFocused(true)}
-                      onBlur={() => setFlowEditorFocused(false)}
                       openNewTriggerModal={openNewTriggerModal}
+                      onBlur={() => setFlowEditorFocused(false)}
+                      onFocus={() => setFlowEditorFocused(true)}
                     />
                   </Extension>
                 )}
