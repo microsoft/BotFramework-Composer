@@ -150,8 +150,37 @@ export const lgDispatcher = () => {
       set(lgFilesState, (lgFiles) => {
         const lgFile = lgFiles.find((file) => file.id === id);
         if (!lgFile) return lgFiles;
-        const updatedFile = lgUtil.updateTemplate(lgFile, templateName, template, lgFileResolver(lgFiles));
-        return updateLgFileState(lgFiles, updatedFile);
+        const sameIdOtherLocaleFiles = lgFiles.filter((file) => getBaseName(file.id) === getBaseName(id));
+
+        // name change, need update cross multi locale file.
+        if (template.name !== templateName) {
+          const changes: LgFile[] = [];
+          for (const item of sameIdOtherLocaleFiles) {
+            const updatedFile = lgUtil.updateTemplate(
+              item,
+              templateName,
+              { name: template.name },
+              lgFileResolver(lgFiles)
+            );
+            changes.push(updatedFile);
+          }
+          return lgFiles.map((file) => {
+            const changedFile = changes.find(({ id }) => id === file.id);
+            return changedFile ? changedFile : file;
+          });
+
+          // body change, only update current locale file
+        } else {
+          const updatedFile = lgUtil.updateTemplate(
+            lgFile,
+            templateName,
+            { body: template.body },
+            lgFileResolver(lgFiles)
+          );
+          return lgFiles.map((file) => {
+            return file.id === id ? updatedFile : file;
+          });
+        }
       });
     }
   );
