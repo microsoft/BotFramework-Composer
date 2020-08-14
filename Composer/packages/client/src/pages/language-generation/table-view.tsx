@@ -17,9 +17,9 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { LgTemplate } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
-import { EditableField } from '@bfc/adaptive-form';
 import { lgUtil } from '@bfc/indexers';
 
+import { EditableField } from '../../components/EditableField';
 import { navigateTo } from '../../utils/navigation';
 import { actionButton, formCell } from '../language-understanding/styles';
 import { dispatcherState, lgFilesState, projectIdState, localeState, settingsState } from '../../recoilModel';
@@ -202,11 +202,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 depth={0}
                 id={displayName}
                 name={displayName}
-                schema={{}}
-                uiOptions={{}}
                 value={displayName}
                 onBlur={(_id, value) => {
-                  const newValue = value.trim().replace(/^#/, '');
+                  const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
                     handleTemplateUpdate(item.name, { ...item, name: newValue });
                   }
@@ -230,15 +228,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell}>
               <EditableField
+                multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
                 depth={0}
                 id={text}
                 name={text}
-                schema={{}}
-                uiOptions={{}}
                 value={text}
                 onBlur={(_id, value) => {
-                  const newValue = value.trim();
+                  const newValue = value?.trim();
                   if (newValue) {
                     handleTemplateUpdate(item.name, { ...item, body: newValue });
                   }
@@ -262,12 +259,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell}>
               <EditableField
+                multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
                 depth={0}
                 id={text}
                 name={text}
-                schema={{}}
-                uiOptions={{}}
                 value={text}
                 onBlur={(_id, value) => {
                   handleTemplateUpdate(item.name, { ...item, body: value });
@@ -291,15 +287,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell}>
               <EditableField
+                multiline
                 ariaLabel={formatMessage(`Response is {response}`, { response: text })}
                 depth={0}
                 id={text}
                 name={text}
-                schema={{}}
-                uiOptions={{}}
                 value={text}
                 onBlur={(_id, value) => {
-                  const newValue = value.trim();
+                  const newValue = value?.trim();
                   if (newValue) {
                     handleTemplateUpdateDefaultLocale(item.name, { ...item, body: newValue });
                   }

@@ -2,16 +2,31 @@
 // Licensed under the MIT License.
 
 import React, { useState, useEffect } from 'react';
-import { TextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
+import { TextField, ITextFieldStyles, ITextFieldProps } from 'office-ui-fabric-react/lib/TextField';
 import { NeutralColors } from '@uifabric/fluent-theme';
 import { mergeStyleSets } from '@uifabric/styling';
-import { FieldProps } from '@bfc/extension';
 
-interface EditableFieldProps extends Omit<FieldProps, 'definitions'> {
+interface EditableFieldProps extends Omit<ITextFieldProps, 'onChange' | 'onFocus' | 'onBlur'> {
   fontSize?: string;
   styles?: Partial<ITextFieldStyles>;
   transparentBorder?: boolean;
   ariaLabel?: string;
+  error?: string | JSX.Element;
+
+  className?: string;
+  depth: number;
+  description?: string;
+  disabled?: boolean;
+  id: string;
+  name: string;
+  placeholder?: string;
+  readonly?: boolean;
+  required?: boolean;
+  value?: string;
+
+  onChange: (newValue?: string) => void;
+  onFocus?: (id: string, value?: string) => void;
+  onBlur?: (id: string, value?: string) => void;
 }
 
 const EditableField: React.FC<EditableFieldProps> = (props) => {
@@ -20,6 +35,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
     styles = {},
     placeholder,
     fontSize,
+    multiline = false,
     onChange,
     onBlur,
     value,
@@ -49,7 +65,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
   const handleCommit = () => {
     setHasFocus(false);
     setEditing(false);
-    onBlur && onBlur(id, value);
+    onBlur && onBlur(id, localValue);
   };
 
   let borderColor: string | undefined = undefined;
@@ -68,6 +84,7 @@ const EditableField: React.FC<EditableFieldProps> = (props) => {
         ariaLabel={ariaLabel}
         autoComplete="off"
         errorMessage={error as string}
+        multiline={multiline}
         placeholder={placeholder || value}
         styles={
           mergeStyleSets(

@@ -19,8 +19,8 @@ import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 import { useRecoilValue } from 'recoil';
 import { LuFile, LuIntentSection } from '@bfc/shared';
-import { EditableField } from '@bfc/adaptive-form';
 
+import { EditableField } from '../../components/EditableField';
 import { getExtension } from '../../utils/fileUtil';
 import { languageListTemplates } from '../../components/MultiLanguage';
 import { dispatcherState, luFilesState, projectIdState, localeState, settingsState } from '../../recoilModel';
@@ -167,15 +167,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={formCell}>
               <EditableField
+                multiline
                 ariaLabel={formatMessage(`Name is {name}`, { name: displayName })}
                 depth={0}
                 id={displayName}
                 name={displayName}
-                schema={{}}
-                uiOptions={{}}
                 value={displayName}
                 onBlur={(_id, value) => {
-                  const newValue = value.trim().replace(/^#/, '');
+                  const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
                     handleIntentUpdate(item.name, { Name: newValue, Body: item.phrases });
                   }
@@ -198,15 +197,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={luPhraseCell}>
               <EditableField
+                multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
                 depth={0}
                 id={text}
                 name={text}
-                schema={{}}
-                uiOptions={{}}
                 value={text}
                 onBlur={(_id, value) => {
-                  const newValue = value.trim();
+                  const newValue = value?.trim();
                   if (newValue) {
                     handleIntentUpdate(item.name, { Name: item.name, Body: newValue });
                   }
@@ -229,15 +227,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={luPhraseCell}>
               <EditableField
+                multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
                 depth={0}
                 id={text}
                 name={text}
-                schema={{}}
-                uiOptions={{}}
                 value={text}
                 onBlur={(_id, value) => {
-                  const newValue = value.trim().replace(/^#/, '');
+                  const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
                     handleIntentUpdate(item.name, { Name: item.name, Body: newValue });
                   }
@@ -260,15 +257,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <div data-is-focusable css={luPhraseCell}>
               <EditableField
+                multiline
                 ariaLabel={formatMessage(`Sample Phrases are {phrases}`, { phrases: text })}
                 depth={0}
                 id={text}
                 name={text}
-                schema={{}}
-                uiOptions={{}}
                 value={text}
                 onBlur={(_id, value) => {
-                  const newValue = value.trim().replace(/^#/, '');
+                  const newValue = value?.trim().replace(/^#/, '');
                   if (newValue) {
                     handleTemplateUpdateDefaultLocale(item.name, {
                       Name: item.name,
