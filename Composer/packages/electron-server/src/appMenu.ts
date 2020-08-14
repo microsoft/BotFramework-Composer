@@ -94,7 +94,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
         },
         {
           id: 'Delete-native',
-          label: 'delete',
+          label: 'Delete',
           role: 'delete',
         },
         // Action editing mode shortcuts
