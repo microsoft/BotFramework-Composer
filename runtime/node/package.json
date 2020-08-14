@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/lodash": "^4.14.159",
+    "@azure/functions": "^1.2.2",
     "botbuilder": "4.10.0-rc0",
     "botbuilder-dialogs": "4.10.0-rc0",
     "botbuilder-dialogs-adaptive": "4.10.0-rc0-preview",
@@ -29,6 +29,7 @@
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
     "@types/jest": "^25.2.3",
+    "@types/lodash": "^4.14.159",
     "@types/minimist": "^1.2.0",
     "@types/node": "^10.12.18",
     "@types/restify": "^8.4.2",
