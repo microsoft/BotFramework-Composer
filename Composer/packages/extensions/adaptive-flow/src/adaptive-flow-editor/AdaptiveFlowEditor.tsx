@@ -58,9 +58,11 @@ const styles = css`
 `;
 
 export interface VisualDesignerProps {
+  onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
   schema?: JSONSchema7;
 }
-const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element => {
+const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema }): JSX.Element => {
   const { shellApi, ...shellData } = useShellApi();
   const { schema: schemaFromPlugins, widgets: widgetsFromPlugins } = useFlowUIOptions();
   const {
@@ -137,6 +139,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ schema }): JSX.Element 
             ref={divRef}
             css={styles}
             tabIndex={0}
+            onFocus={onFocus}
+            onBlur={onBlur}
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >

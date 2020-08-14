@@ -50,10 +50,12 @@ function onRenderBlankVisual(isTriggerEmpty, onClickAddTrigger) {
 
 interface VisualEditorProps {
   openNewTriggerModal: () => void;
+  onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
 }
 
 const VisualEditor: React.FC<VisualEditorProps> = (props) => {
-  const { openNewTriggerModal } = props;
+  const { openNewTriggerModal, onFocus, onBlur } = props;
   const [triggerButtonVisible, setTriggerButtonVisibility] = useState(false);
   const designPageLocation = useRecoilValue(designPageLocationState);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
@@ -77,7 +79,7 @@ const VisualEditor: React.FC<VisualEditorProps> = (props) => {
         css={visualEditor(triggerButtonVisible || !selected)}
         data-testid="VisualEditor"
       >
-        <VisualDesigner schema={schemas.sdk?.content} />
+        <VisualDesigner onFocus={onFocus} onBlur={onBlur} schema={schemas.sdk?.content} />
       </div>
       {!selected && onRenderBlankVisual(triggerButtonVisible, openNewTriggerModal)}
     </React.Fragment>
