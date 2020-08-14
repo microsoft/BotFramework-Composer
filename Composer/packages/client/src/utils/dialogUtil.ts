@@ -65,26 +65,7 @@ function insert(content, path: string, position: number | undefined, data: any) 
   return content;
 }
 
-function updateTriggerActionsAttributes(trigger, extraTriggerAttributes) {
-  const t = cloneDeep(trigger);
-  if (t.$kind === SDKKinds.OnQnAMatch) {
-    for (const key in extraTriggerAttributes) {
-      set(t, key, extraTriggerAttributes[key]);
-    }
-  }
-  if (t.$kind === SDKKinds.OnChooseIntent) {
-    for (const key in extraTriggerAttributes) {
-      set(t, key, extraTriggerAttributes[key]);
-    }
-  }
-  return t;
-}
-
-function generateNewTrigger(
-  data: TriggerFormData,
-  factory: DialogFactory,
-  extraTriggerAttributes: { [key: string]: any }
-) {
+function generateNewTrigger(data: TriggerFormData, factory: DialogFactory) {
   const optionalAttributes: { intent?: string; event?: string; $designer: { [key: string]: string } } = {
     $designer: {},
   };
@@ -99,22 +80,16 @@ function generateNewTrigger(
     optionalAttributes.$designer.name = data.intent;
   }
   const newStep = factory.create(data.$kind as SDKKinds, optionalAttributes);
-  const updatedStep = updateTriggerActionsAttributes(newStep, extraTriggerAttributes);
-  return updatedStep;
+  return newStep;
 }
 
 function generateRegexExpression(intent: string, pattern: string) {
   return { intent, pattern };
 }
 
-function createTrigger(
-  dialog: DialogInfo,
-  data: TriggerFormData,
-  extraAttributes: { [key: string]: any },
-  factory: DialogFactory
-): DialogInfo {
+function createTrigger(dialog: DialogInfo, data: TriggerFormData, factory: DialogFactory): DialogInfo {
   const dialogCopy = cloneDeep(dialog);
-  const trigger = generateNewTrigger(data, factory, extraAttributes);
+  const trigger = generateNewTrigger(data, factory);
   insert(dialogCopy.content, 'triggers', undefined, trigger);
   return dialogCopy;
 }
@@ -180,14 +155,13 @@ export function generateNewDialog(
   dialogs: DialogInfo[],
   dialogId: string,
   data: TriggerFormData,
-  schema: any,
-  extraAttributes: { [key: string]: any }
+  schema: any
 ): DialogInfo {
   //add new trigger
   const dialog = dialogs.find((dialog) => dialog.id === dialogId);
   if (!dialog) throw new Error(`dialog ${dialogId} does not exist`);
   const factory = new DialogFactory(schema);
-  let updatedDialog = createTrigger(dialog, data, extraAttributes, factory);
+  let updatedDialog = createTrigger(dialog, data, factory);
   //add regex expression
   if (data.regEx) {
     updatedDialog = createRegExIntent(updatedDialog, data.intent, data.regEx);

@@ -97,6 +97,7 @@ export interface ShellApi {
   announce: (message: string) => void;
   displayManifestModal: (manifestId: string) => void;
   updateDialogSchema: (_: DialogSchemaFile) => Promise<void>;
+  createTrigger: (id: string, formData, url?: string) => void;
 }
 
 export interface Shell {

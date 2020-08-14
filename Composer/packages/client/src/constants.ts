@@ -200,7 +200,7 @@ export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
-export const adaptiveCardJsonBody =
+const adaptiveCardJsonBody =
   '-```\
 \n{\
 \n      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",\
@@ -255,17 +255,17 @@ export const adaptiveCardJsonBody =
 \n}\
 ```';
 
-export const whichOneDidYouMeanBody = "\
+const whichOneDidYouMeanBody = "\
 - I'm not sure which one you mean.\n\
 - Hmmm, I find that to be ambiguous.\
 ";
 
-export const pickOne = `
+const pickOne = `
 - Can you pick one ?\n\
 - Can you help clarify by choosing one ?\
 `;
 
-export const getIntentReadBack = `
+const getIntentReadBack = `
 - SWITCH : \${toLower(dialog.luisResult.intent)}\n\
 - CASE : \${'GetUserProfile'}\n\
   - Start filling in your profile(GetUserProfile intent)\n\
@@ -273,6 +273,60 @@ export const getIntentReadBack = `
 - \${dialog.luisResult.intent}\n\
 `;
 
-export const getAnswerReadBack = `
+const getAnswerReadBack = `
 - See an answer from the Knowledge Base
 `;
+
+export const LgTemplateSamples = {
+  ['adaptiveCardJson']: {
+    name: 'AdaptiveCardJson',
+    body: adaptiveCardJsonBody,
+  },
+  ['whichOneDidYouMean']: {
+    name: `whichOneDidYouMean`,
+    body: whichOneDidYouMeanBody,
+  },
+  ['pickOne']: {
+    name: 'pickOne',
+    body: pickOne,
+  },
+  ['getAnswerReadBack']: {
+    name: 'getAnswerReadBack',
+    body: getAnswerReadBack,
+  },
+  ['getIntentReadBack']: {
+    name: 'getIntentReadBack',
+    body: getIntentReadBack,
+  },
+  TextInputPromptForOnChooseIntent: (designerId) => {
+    return {
+      name: `TextInput_Prompt_${designerId}`,
+      body: '[Activity\n\
+Attachments = ${json(AdaptiveCardJson())}\n\
+]\n',
+    };
+  },
+  SendActivityForOnChooseIntent: (designerId) => {
+    return {
+      name: `SendActivity_${designerId}`,
+      body: '- Sure, no worries.',
+    };
+  },
+  TextInputPromptForQnAMatcher: (designerId) => {
+    return {
+      name: `TextInput_Prompt_${designerId}`,
+      // eslint-disable-next-line
+      body:
+        '[Activity\n\
+    Text = ${expandText(@answer)}\n\
+    SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}\n\
+]',
+    };
+  },
+  SendActivityForQnAMatcher: (designerId) => {
+    return {
+      name: `SendActivity_${designerId}`,
+      body: '- ${expandText(@answer)}',
+    };
+  },
+};
