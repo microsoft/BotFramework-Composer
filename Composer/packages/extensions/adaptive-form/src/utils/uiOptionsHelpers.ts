@@ -39,7 +39,7 @@ export function getUiPlaceholder(props: FieldProps): string | undefined {
 
   const { placeholder: uiPlaceholder } = uiOptions;
 
-  let fieldUIPlaceholder: string = '';
+  let fieldUIPlaceholder = '';
 
   if (uiPlaceholder) {
     fieldUIPlaceholder = typeof uiPlaceholder === 'function' ? uiPlaceholder(value) : uiPlaceholder;
@@ -50,7 +50,7 @@ export function getUiPlaceholder(props: FieldProps): string | undefined {
   }
 
   if (fieldUIPlaceholder && schema.pattern) {
-    const regex = new RegExp(schema.pattern, 'g');
+    const regex = `${schema.pattern}`;
     const placeholderExamples = fieldUIPlaceholder.split(',').map((example) => example.trim());
     const filteredExamples = placeholderExamples.filter((example) => example.match(regex));
     fieldUIPlaceholder = filteredExamples.join(', ');
