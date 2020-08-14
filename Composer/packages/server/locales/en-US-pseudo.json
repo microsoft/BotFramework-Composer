@@ -959,11 +959,17 @@
     "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
         "message": "[[[ 🔥 L{ stārtLïnə }:{ stārtChārāctər } - L{ əndLïnə }:{ əndChārāctər } 🔥 ]]]"
     },
+    "language_6b3e2c7c": {
+        "message": "[[[ 🔥 Lāngůāgə🔥 ]]]"
+    },
     "language_generation_1876f6d6": {
         "message": "[[[ 🔥 Lāngůāgə Gənərātïøn🔥 ]]]"
     },
     "language_generation_file_80c08efe": {
         "message": "[[[ 🔥 lāngůāgə gənərātïøn fïlə🔥 ]]]"
+    },
+    "language_to_use_within_the_composer_application_it_694a2b0a": {
+        "message": "[[[ 🔥 Lāngůāgə tø ůsə wïthïn thə Cømpøsər āpplïcātïøn ïtsəlf.🔥 ]]]"
     },
     "language_understanding_9ae3f1f6": {
         "message": "[[[ 🔥 Lāngůāgə ⩁ndərstāndïng🔥 ]]]"
@@ -1412,6 +1418,9 @@
     "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
         "message": "[[[ 🔥 Prøvïdə ā brïəf dəscrïptïøn. Ⅱt wïll āppəār øn thə půblïsh hïstøry lïst.🔥 ]]]"
     },
+    "pseudo_1a319287": {
+        "message": "[[[ 🔥 Psəůdø🔥 ]]]"
+    },
     "publish_5211dca3": {
         "message": "[[[ 🔥 Půblïsh🔥 ]]]"
     },
@@ -1796,11 +1805,11 @@
     "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
         "message": "[[[ 🔥 Tø růn thïs bøt, Cømpøsər nəəds .N∃T Cørə SDK.🔥 ]]]"
     },
-    "to_understand_what_the_user_says_your_dialog_needs_1e87c8de": {
-        "message": "[[[ 🔥 Tø ůndərstānd whāt thə ůsər sāys, yøůr dïāløg nəəds ā ''ⅡRəcøgnïzər'', thāt ïnclůdəs əxāmplə wørds ānd səntəncəs thāt ůsərs māy ůsə.🔥 ]]]"
-    },
     "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
         "message": "[[[ 🔥 Tø ůndərstānd whāt thə ůsər sāys, yøůr dïāløg nəəds ā \"Rəcøgnïzər\"; thāt ïnclůdəs əxāmplə wørds ānd səntəncəs thāt ůsərs māy ůsə.🔥 ]]]"
+    },
+    "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
+        "message": "[[[ 🔥 Tø ůndərstānd whāt thə ůsər sāys, yøůr dïāløg nəəds ān ''ⅡRəcøgnïzər'' thāt ïnclůdəs əxāmplə wørds ānd səntəncəs thāt ůsərs māy ůsə.🔥 ]]]"
     },
     "to_which_language_will_you_be_translating_your_bot_77219d69": {
         "message": "[[[ 🔥 Tø whïch lāngůāgə wïll yøů bə trānslātïng yøůr bøt?🔥 ]]]"
@@ -1895,6 +1904,9 @@
     "url_should_start_with_http_s_9ca55d94": {
         "message": "[[[ 🔥 ⩁rl shøůld stārt wïth http[s]://🔥 ]]]"
     },
+    "us_english_98b1e1bf": {
+        "message": "[[[ 🔥 ⩁S ∃nglïsh🔥 ]]]"
+    },
     "use_custom_runtime_d7d323fd": {
         "message": "[[[ 🔥 ⩁sə cůstøm růntïmə🔥 ]]]"
     },
@@ -1909,6 +1921,9 @@
     },
     "user_is_typing_790cb502": {
         "message": "[[[ 🔥 ⩁sər ïs typïng🔥 ]]]"
+    },
+    "user_locale_107a7596": {
+        "message": "[[[ 🔥 ⩁sər løcālə🔥 ]]]"
     },
     "validating_35b79a96": {
         "message": "[[[ 🔥 Vālïdātïng...🔥 ]]]"

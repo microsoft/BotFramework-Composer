@@ -8,6 +8,7 @@ import axios from 'axios';
 import { autofixReferInDialog } from '@bfc/indexers';
 import { getNewDesigner, FileInfo, Skill, Diagnostic, IBotProject, DialogSetting, ILuisConfig } from '@bfc/shared';
 import { UserIdentity, pluginLoader } from '@bfc/plugin-loader';
+import merge from 'lodash/merge';
 
 import { Path } from '../../utility/path';
 import { copyDir } from '../../utility/storage';
@@ -126,6 +127,13 @@ export class BotProject implements IBotProject {
     return this.files.get('sdk.override.uischema');
   }
 
+  public get uiSchemaLocalized() {
+    const windowLocale = window.localStorage['composer:userSettings']?.appLocale;
+
+    // eslint-disable-next-line security/detect-non-literal-require
+    return require(`../../../schemas/locales/${windowLocale}/sdk.uischema`);
+  }
+
   public getFile(id: string) {
     return this.files.get(id);
   }
@@ -210,6 +218,7 @@ export class BotProject implements IBotProject {
     let sdkSchema = this.defaultSDKSchema;
     let uiSchema = this.defaultUISchema;
     let uiSchemaOverrides = {};
+    const uiSchemaLocalized = this.uiSchemaLocalized;
     const diagnostics: string[] = [];
 
     const userSDKSchemaFile = this.schema;
@@ -256,7 +265,7 @@ export class BotProject implements IBotProject {
         content: uiSchema,
       },
       uiOverrides: {
-        content: uiSchemaOverrides,
+        content: merge(uiSchemaOverrides, uiSchemaLocalized),
       },
       default: this.defaultSDKSchema,
       diagnostics,

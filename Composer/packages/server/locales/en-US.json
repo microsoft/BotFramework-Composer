@@ -959,11 +959,17 @@
   "l_startline_startcharacter_l_endline_endcharacter_72bc2e5d": {
     "message": "L{ startLine }:{ startCharacter } - L{ endLine }:{ endCharacter } "
   },
+  "language_6b3e2c7c": {
+    "message": "Language"
+  },
   "language_generation_1876f6d6": {
     "message": "Language Generation"
   },
   "language_generation_file_80c08efe": {
     "message": "language generation file"
+  },
+  "language_to_use_within_the_composer_application_it_694a2b0a": {
+    "message": "Language to use within the Composer application itself."
   },
   "language_understanding_9ae3f1f6": {
     "message": "Language Understanding"
@@ -1412,6 +1418,9 @@
   "provide_a_brief_description_it_will_appear_on_the__f962eb38": {
     "message": "Provide a brief description. It will appear on the publish history list."
   },
+  "pseudo_1a319287": {
+    "message": "Pseudo"
+  },
   "publish_5211dca3": {
     "message": "Publish"
   },
@@ -1796,11 +1805,11 @@
   "to_run_this_bot_composer_needs_net_core_sdk_d1551038": {
     "message": "To run this bot, Composer needs .NET Core SDK."
   },
-  "to_understand_what_the_user_says_your_dialog_needs_1e87c8de": {
-    "message": "To understand what the user says, your dialog needs a ''IRecognizer'', that includes example words and sentences that users may use."
-  },
   "to_understand_what_the_user_says_your_dialog_needs_4e791611": {
     "message": "To understand what the user says, your dialog needs a \"Recognizer\"; that includes example words and sentences that users may use."
+  },
+  "to_understand_what_the_user_says_your_dialog_needs_957034cc": {
+    "message": "To understand what the user says, your dialog needs an ''IRecognizer'' that includes example words and sentences that users may use."
   },
   "to_which_language_will_you_be_translating_your_bot_77219d69": {
     "message": "To which language will you be translating your bot?"
@@ -1895,6 +1904,9 @@
   "url_should_start_with_http_s_9ca55d94": {
     "message": "Url should start with http[s]://"
   },
+  "us_english_98b1e1bf": {
+    "message": "US English"
+  },
   "use_custom_runtime_d7d323fd": {
     "message": "Use custom runtime"
   },
@@ -1909,6 +1921,9 @@
   },
   "user_is_typing_790cb502": {
     "message": "User is typing"
+  },
+  "user_locale_107a7596": {
+    "message": "User locale"
   },
   "validating_35b79a96": {
     "message": "Validating..."
