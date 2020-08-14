@@ -1,7 +1,7 @@
-import { BotProjectRuntimeType } from './botProjectRuntimeType';
-
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+
+import { BotProjectRuntimeType } from './botProjectRuntimeType';
 
 export interface BotProjectDeployConfig {
   // Subscription Id of Azure Account

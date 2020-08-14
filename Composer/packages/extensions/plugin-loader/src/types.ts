@@ -5,7 +5,6 @@ import { JSONSchema7 } from 'json-schema';
 import { DialogSetting } from '@bfc/shared';
 import { IBotProject } from '@bfc/shared';
 // TODO: this will be possible when ifilestorage is in a shared module
-// import { IFileStorage } from '../../../server/src/models/storage/interface';
 
 export interface PublishResult {
   message: string;
@@ -59,13 +58,12 @@ export interface RuntimeTemplate {
   /** method used to eject the runtime into a project. returns resulting path of runtime! */
   eject: (project: IBotProject, localDisk?: any) => Promise<string>;
 
-  /** build method  */
+  /** build method used for local publish */
   build: (runtimePath: string, project: IBotProject) => Promise<void>;
 
-  /** run  */
   run: (project: IBotProject, localDisk?: any) => Promise<void>;
 
-  /** build for deploy method  */
+  /** build for deploy method */
   buildDeploy: (
     runtimePath: string,
     project: IBotProject,

@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import path from 'path';
 import { promisify } from 'util';
+import { exec } from 'child_process';
 
 import rimraf from 'rimraf';
 import * as fs from 'fs-extra';
@@ -9,7 +10,7 @@ import * as fs from 'fs-extra';
 import { copyDir } from './copyDir';
 import { IFileStorage } from './interface';
 
-const exec = promisify(require('child_process').exec);
+const execAsync = promisify(exec);
 
 const removeDirAndFiles = promisify(rimraf);
 
@@ -24,14 +25,14 @@ export default async (composer: any): Promise<void> => {
       composer.log(`BUILD THIS C# PROJECT! at ${runtimePath}...`);
       composer.log('Run dotnet user-secrets init...');
       // TODO: capture output of this and store it somewhere useful
-      const { initOut, initErr } = await exec('dotnet user-secrets init --project azurewebapp', {
+      const { stderr: initErr } = await execAsync('dotnet user-secrets init --project azurewebapp', {
         cwd: runtimePath,
       });
       if (initErr) {
         throw new Error(initErr);
       }
       composer.log('Run dotnet build...');
-      const { buildOut, buildErr } = await exec('dotnet build', { cwd: runtimePath });
+      const { stderr: buildErr } = await execAsync('dotnet build', { cwd: runtimePath });
       if (buildErr) {
         throw new Error(buildErr);
       }
@@ -64,7 +65,7 @@ export default async (composer: any): Promise<void> => {
 
       // do the dotnet publish
       try {
-        const { stdout, stderr } = await exec(
+        const { stdout, stderr } = await execAsync(
           `dotnet publish "${dotnetProjectPath}" -c release -o "${publishFolder}" -v q`,
           {
             cwd: runtimePath,
@@ -150,14 +151,18 @@ export default async (composer: any): Promise<void> => {
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { installOut, installErr } = await exec('npm install --dev', {
+      const { stderr: installErr } = await execAsync('npm install --dev', {
         cwd: runtimePath,
-        stdio: 'pipe',
       });
-      const { install2Out, install2Err } = await exec('npm run build', {
+      if (installErr) {
+        throw new Error(installErr);
+      }
+      const { stderr: install2Err } = await execAsync('npm run build', {
         cwd: runtimePath,
-        stdio: 'pipe',
       });
+      if (install2Err) {
+        throw new Error(install2Err);
+      }
       composer.log('BUILD COMPLETE');
     },
     run: async (project: any, localDisk: IFileStorage) => {
@@ -166,15 +171,18 @@ export default async (composer: any): Promise<void> => {
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { installOut, installErr } = await exec('npm install', {
+      const { stderr: installErr } = await execAsync('npm install', {
         cwd: path.resolve(runtimePath, '../'),
-        stdio: 'pipe',
       });
-      const { install2Out, install2Err } = await exec('npm run build', {
+      if (installErr) {
+        throw new Error(installErr);
+      }
+      const { stderr: install2Err } = await execAsync('npm run build', {
         cwd: path.resolve(runtimePath, '../'),
-        stdio: 'pipe',
       });
-
+      if (install2Err) {
+        throw new Error(install2Err);
+      }
       // write settings to disk in the appropriate location
       const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
@@ -196,11 +204,11 @@ export default async (composer: any): Promise<void> => {
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
         // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         // install packages
-        const { initErr } = await exec('npm install --dev', { cwd: destPath, stdio: 'pipe' });
+        const { stderr: initErr } = await execAsync('npm install --dev', { cwd: destPath });
         if (initErr) {
           throw new Error(initErr);
         }
-        const { initErr2 } = await exec('npm run build', { cwd: destPath, stdio: 'pipe' });
+        const { stderr: initErr2 } = await execAsync('npm run build', { cwd: destPath });
         if (initErr2) {
           throw new Error(initErr2);
         }

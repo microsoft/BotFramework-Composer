@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { join } from 'path';
+import Path from 'path';
 
 import { IFileStorage } from './interface';
 
@@ -23,11 +23,11 @@ export async function copyDir(
   const paths = await srcStorage.readDir(srcDir);
 
   for (const path of paths) {
-    const srcPath = join(srcDir, path);
+    const srcPath = Path.join(srcDir, path);
     if (pathsToExclude && pathsToExclude.has(srcPath)) {
       continue;
     }
-    const dstPath = join(dstDir, path);
+    const dstPath = Path.join(dstDir, path);
 
     if ((await srcStorage.stat(srcPath)).isFile) {
       // copy files
