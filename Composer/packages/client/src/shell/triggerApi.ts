@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { useEffect, useState } from 'react';
-import { LuFile, LgFile, DialogInfo } from '@bfc/shared';
+import { LuFile, LgFile, DialogInfo, LgTemplateSamples } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
 import { LgTemplate } from '@bfc/shared';
 import get from 'lodash/get';
@@ -10,7 +10,6 @@ import get from 'lodash/get';
 import { useResolvers } from '../hooks/useResolver';
 import { projectIdState, schemasState, dialogsState, localeState, lgFilesState } from '../recoilModel/atoms';
 import { onChooseIntentKey, generateNewDialog, intentTypeKey, qnaMatcherKey } from '../utils/dialogUtil';
-import { LgTemplateSamples } from '../constants';
 import { navigateTo } from '../utils/navigation';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';

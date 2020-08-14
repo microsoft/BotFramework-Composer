@@ -153,7 +153,7 @@ const onRenderItem = (item: IOverflowSetItemProps) => {
       onFocus={item.onFocus}
     >
       <div css={content} tabIndex={-1}>
-        {item.warning ? (
+        {item.warningContent ? (
           <TooltipHost content={warningContent} directionalHint={DirectionalHint.bottomLeftEdge}>
             <Icon iconName={'Warning'} style={warningIcon} />
           </TooltipHost>
