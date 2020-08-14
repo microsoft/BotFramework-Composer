@@ -79,6 +79,21 @@ const onRenderLabel = (info) => (props) => (
   </Stack>
 );
 
+const regionOptions: IDropdownOption[] = [
+  {
+    key: 'westus',
+    text: formatMessage('westus'),
+  },
+  {
+    key: 'westeurope',
+    text: formatMessage('westeurope'),
+  },
+  {
+    key: 'australia',
+    text: formatMessage('australia'),
+  },
+];
+
 interface IPublishDialogProps {
   botName: string;
   isOpen: boolean;
@@ -142,20 +157,6 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
     },
   };
 
-  const regionOptions: IDropdownOption[] = [
-    {
-      key: 'westus',
-      text: formatMessage('westus'),
-    },
-    {
-      key: 'westeurope',
-      text: formatMessage('westeurope'),
-    },
-    {
-      key: 'australia',
-      text: formatMessage('australia'),
-    },
-  ];
   const { formData, formErrors, hasErrors, updateField } = useForm(formConfig, { validateOnMount: true });
 
   const handlePublish = useCallback(

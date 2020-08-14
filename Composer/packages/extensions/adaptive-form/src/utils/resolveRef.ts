@@ -30,6 +30,22 @@ export function resolveRef(
     } as JSONSchema7;
 
     return resolvedSchema;
+  } else if (
+    typeof schema.items === 'object' &&
+    !Array.isArray(schema.items) &&
+    typeof schema.items.$ref === 'string'
+  ) {
+    const { $ref, ...rest } = schema.items;
+    const items = resolveRef(schema.items, definitions);
+    const resolvedSchema = {
+      ...schema,
+      items: {
+        ...items,
+        ...rest,
+      },
+    } as JSONSchema7;
+
+    return resolvedSchema;
   }
 
   return schema;

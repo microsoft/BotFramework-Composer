@@ -402,7 +402,12 @@ const Publish: React.FC<PublishPageProps> = (props) => {
         <h1 css={HeaderText}>{selectedTarget ? selectedTargetName : formatMessage('Publish Profiles')}</h1>
       </div>
       <div css={ContentStyle} data-testid="Publish" role="main">
-        <div aria-label={formatMessage('Navigation panel')} css={projectContainer} role="region">
+        <div
+          aria-label={formatMessage('Navigation panel')}
+          css={projectContainer}
+          data-testid="target-list"
+          role="region"
+        >
           <div
             key={'_all'}
             css={selectedTargetName === 'all' ? targetSelected : overflowSet}
