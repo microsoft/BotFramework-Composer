@@ -93,6 +93,11 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
           role: 'copy',
         },
         {
+          id: 'Paste-native',
+          label: 'Paste',
+          role: 'paste',
+        },
+        {
           id: 'Delete-native',
           label: 'Delete',
           role: 'delete',
@@ -227,6 +232,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
           menu.getMenuItemById(nativeModeId).visible = mode === 'native';
           menu.getMenuItemById(actionModeId).visible = mode === 'action';
         });
+        menu.getMenuItemById('Paste-native').visible = mode === 'native';
       };
 
       // Turn shortcuts to Action editing mode when Flow Editor is focused.
