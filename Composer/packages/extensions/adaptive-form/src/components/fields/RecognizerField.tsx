@@ -19,6 +19,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
   const [isCustomType, setIsCustomType] = useState(false);
 
   useEffect(() => {
+    // this logic is for handling old bot with `recognizer = undefined'
     if (value === undefined) {
       const qnaFile = qnaFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
       const luFile = luFiles.find((f) => f.id === `${currentDialog.id}.${locale}`);
@@ -26,9 +27,15 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
         onChange(`${currentDialog.id}.lu.qna`);
       }
     }
+
+    // transform lu recognizer to crosstrained for old bot
+    if (value === `${currentDialog.id}.lu`) {
+      onChange(`${currentDialog.id}.lu.qna`);
+    }
   }, [value]);
 
   const options = useMemo(() => {
+    // filter luisRecognizer for dropdown options
     return recognizers
       .filter((r) => r.id !== SDKKinds.LuisRecognizer)
       .map((r) => ({
@@ -41,15 +48,12 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
     if (isCustomType) {
       return 'Custom';
     }
-    let selected =
+    const selected =
       value === undefined ? [recognizers[0].id] : recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
 
     const involvedCustomItem = selected.find((item) => item !== 'Custom');
     if (involvedCustomItem) {
-      selected = selected.filter((item) => item !== 'Custom');
-      if (selected.length === 0) {
-        return involvedCustomItem;
-      }
+      return involvedCustomItem;
     }
     if (selected.length < 1) {
       /* istanbul ignore next */
@@ -63,11 +67,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       return;
     }
 
-    selected.map((s) => {
-      if (s === SDKKinds.LuisRecognizer) {
-        onChange(`${currentDialog.id}.lu.qna`);
-      }
-    });
+    // transform luis recognizer to crosss trained recognizer for old bot.
     if (selected[0] === SDKKinds.LuisRecognizer) {
       selected[0] = SDKKinds.CrossTrainedRecognizerSet;
     }
@@ -76,11 +76,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
 
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
-      if (option.key === 'Custom') {
-        setIsCustomType(true);
-      } else {
-        setIsCustomType(false);
-      }
+      setIsCustomType(option.key === 'Custom');
 
       const handler = recognizers.find((r) => r.id === option.key)?.handleRecognizerChange;
 
