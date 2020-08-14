@@ -1,7 +1,10 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import express, { Router, Request, Response, NextFunction, RequestHandler } from 'express';
+import path from 'path';
+
+//import express, { Router, Request, Response, NextFunction, RequestHandler } from 'express';
+import express, { Router } from 'express';
 
 import { ProjectController } from '../controllers/project';
 import { StorageController } from '../controllers/storage';
@@ -55,13 +58,15 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
 
-const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
-  Promise.resolve(handler(req, res, next)).catch(next);
-};
+router.use('/assets/locales/', express.static(path.join(__dirname, '..', '/locales')));
 
-router.stack.map((layer) => {
-  const fn: RequestHandler = layer.route.stack[0].handle;
-  layer.route.stack[0].handle = ErrorHandler(fn);
-});
+// const errorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
+//   Promise.resolve(handler(req, res, next)).catch(next);
+// };
+
+// router.stack.map((layer) => {
+//   const fn: RequestHandler = layer.route.stack[0].handle;
+//   layer.route.stack[0].handle = errorHandler(fn);
+// });
 
 export const apiRouter = router;
