@@ -158,8 +158,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'name',
         name: formatMessage('Name'),
         fieldName: 'name',
-        minWidth: 100,
-        maxWidth: 150,
         isResizable: true,
         data: 'string',
         onRender: (item) => {

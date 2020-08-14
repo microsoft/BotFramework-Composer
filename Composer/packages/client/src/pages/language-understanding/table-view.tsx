@@ -126,8 +126,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'name',
         name: formatMessage('Intent'),
         fieldName: 'name',
-        minWidth: 100,
-        maxWidth: 150,
         data: 'string',
         onRender: (item: Intent) => {
           let displayName = `#${item.name}`;
