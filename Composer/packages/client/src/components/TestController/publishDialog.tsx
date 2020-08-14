@@ -171,6 +171,29 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
     [hasErrors, formData]
   );
 
+  const luisTitleRender = () => {
+    return (
+      <Fragment>
+        <br />
+        {Text.LUISDEPLOY}
+        <Link href={Links.LUIS} target="_blank">
+          {formatMessage('Learn more.')}
+        </Link>
+      </Fragment>
+    );
+  };
+
+  const qnaTitleRender = () => {
+    return (
+      <Fragment>
+        <br />
+        {Text.QNADEPLOY}
+        <Link href={Links.QNA} target="_blank">
+          {formatMessage('Learn more.')}
+        </Link>
+      </Fragment>
+    );
+  };
   return (
     <Dialog
       dialogContentProps={{
@@ -187,10 +210,9 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
       onDismiss={onDismiss}
     >
       <div css={dialogSubTitle}>
-        {Text.LUISDEPLOY}{' '}
-        <Link href={Links.LUIS} target="_blank">
-          {formatMessage('Learn more.')}
-        </Link>
+        {Text.DEPLOY}
+        {luConfigShow ? luisTitleRender() : ''}
+        {qnaConfigShow ? qnaTitleRender() : ''}
       </div>
       <form css={dialogContent} onSubmit={handlePublish}>
         <Stack gap={20}>

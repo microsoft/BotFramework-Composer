@@ -17,8 +17,9 @@ export const Tips = {
     `When multiple people are working with models you want to be able to work with models independently from each other tied to the source control.`
   ),
   AUTHORING_KEY: formatMessage('An authoring key is created automatically when you create a LUIS account.'),
-  SUBSCRIPTION_KEY: formatMessage('A subscript key is created automatically when you create a QnA account.'),
+  SUBSCRIPTION_KEY: formatMessage('A subscription key is created when you create a QnA Maker resource.'),
   AUTHORING_REGION: formatMessage('Authoring region to use (e.g. westus, westeurope, australiaeast)'),
+  QNA_REGION: formatMessage('Authoring region to use (westus)  (QnA maker resource location)'),
   DEFAULT_LANGUAGE: formatMessage(
     `Configures default language model to use if there is no culture code in the file name (Default: en-us)`
   ),
@@ -26,11 +27,16 @@ export const Tips = {
 
 export const Links = {
   LUIS: 'https://docs.microsoft.com/en-us/azure/cognitive-services/luis/luis-concept-keys?tabs=V2',
+  QNA: 'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/azure-resources#keys-in-qna-maker',
 };
 
 export const Text = {
+  DEPLOY: formatMessage(`Your bot is using LUIS and QNA for natural language understanding.`),
   LUISDEPLOY: formatMessage(
-    `Your bot is using LUIS and QNA for natural language understanding. If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
+    `If you already have a LUIS account, provide the information below. If you do not have an account yet, create a (free) account first.`
+  ),
+  QNADEPLOY: formatMessage(
+    `If you already have a QNA account, provide the information below. If you do not have an account yet, create a (free) account first.`
   ),
   LUISDEPLOYSUCCESS: formatMessage('Congratulations! Your model is successfully published.'),
   LUISDEPLOYFAILURE: formatMessage('Sorry, something went wrong with publishing. Try again or exit out of this task.'),
