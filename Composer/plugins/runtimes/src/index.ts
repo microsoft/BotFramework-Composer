@@ -11,7 +11,7 @@ import { copyDir } from './copyDir';
 import { IFileStorage } from './interface';
 
 const execAsync = promisify(exec);
-
+const mkdir = fs.promises.mkdir;
 const removeDirAndFiles = promisify(rimraf);
 
 export default async (composer: any): Promise<void> => {
@@ -57,10 +57,10 @@ export default async (composer: any): Promise<void> => {
       const dotnetProjectPath = path.join(runtimePath, csproj);
 
       // Check for existing .deployment file, if missing, write it.
-      if (!fs.pathExistsSync(deployFilePath)) {
+      if (!(await fs.pathExists(deployFilePath))) {
         const data = `[config]\nproject = ${csproj}`;
 
-        fs.writeFileSync(deployFilePath, data);
+        await fs.writeFile(deployFilePath, data);
       }
 
       // do the dotnet publish
@@ -73,10 +73,10 @@ export default async (composer: any): Promise<void> => {
         );
         composer.log('OUTPUT FROM BUILD', stdout);
         if (stderr) {
-          console.error('ERR FROM BUILD: ', stderr);
+          composer.log('ERR FROM BUILD: ', stderr);
         }
       } catch (err) {
-        console.error('Error doing dotnet publish', err);
+        composer.log('Error doing dotnet publish', err);
         throw err;
         return;
       }
@@ -91,9 +91,9 @@ export default async (composer: any): Promise<void> => {
       // write settings to disk in the appropriate location
       const settingsPath = path.join(publishFolder, 'ComposerDialogs', 'settings', 'appsettings.json');
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+        await mkdir(path.dirname(settingsPath), { recursive: true });
       }
-      fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
+      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
 
       // return the location of the build artifiacts
       return publishFolder;
@@ -137,7 +137,7 @@ export default async (composer: any): Promise<void> => {
         }
 
         if (await fs.pathExists(srcManifestDir)) {
-          copyDir(srcManifestDir, srcStorage, manifestDstDir, dstStorage);
+          await copyDir(srcManifestDir, srcStorage, manifestDstDir, dstStorage);
         }
       }
     },
@@ -186,9 +186,9 @@ export default async (composer: any): Promise<void> => {
       // write settings to disk in the appropriate location
       const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        fs.mkdirSync(path.dirname(settingsPath), { recursive: true });
+        mkdir(path.dirname(settingsPath), { recursive: true });
       }
-      fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
+      await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
 
       composer.log('BUILD COMPLETE');
       return path.resolve(runtimePath, '../');
@@ -196,13 +196,10 @@ export default async (composer: any): Promise<void> => {
     eject: async (project: any, localDisk: IFileStorage) => {
       const sourcePath = path.resolve(__dirname, '../../../../runtime/node');
       const destPath = path.join(project.dir, 'runtime');
-      // const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
-      // const schemaDstPath = path.join(project.dir, 'schemas');
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
         const excludeFolder = new Set<string>().add(path.resolve(sourcePath, 'node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
-        // await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage);
         // install packages
         const { stderr: initErr } = await execAsync('npm install --dev', { cwd: destPath });
         if (initErr) {

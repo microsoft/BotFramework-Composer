@@ -10,8 +10,8 @@ import { DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Fragment, useState, useMemo } from 'react';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
-import { PublishTarget } from '@bfc/shared';
 import { useRecoilValue } from 'recoil';
+import { PublishTarget } from '@bfc/shared';
 
 import { PublishType } from '../../recoilModel/types';
 import { userSettingsState } from '../../recoilModel';

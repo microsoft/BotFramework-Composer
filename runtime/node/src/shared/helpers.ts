@@ -68,7 +68,7 @@ export const getSettings = (projectRoot = getProjectRoot()): BotSettings => {
     for (const file of generatedFiles) {
       if (file.endsWith('.json')) {
         const items = JSON.parse(fs.readFileSync(path.join(generatedPath, file), 'utf8'));
-        settings.luis = merge(settings.luis, items.luis); // merge luis settings
+        settings.luis = merge({}, settings.luis, items.luis); // merge luis settings
       }
     }
   }
@@ -134,12 +134,12 @@ export const getBotAdapter = (userState: UserState, conversationState: Conversat
       // Send a trace activity, which will be displayed in Bot Framework Emulator.
       await turnContext.sendTraceActivity(
         'OnTurnError Trace',
-        `${ error }`,
+        `${error}`,
         'https://www.botframework.com/schemas/error',
         'TurnError'
       );
     } catch (err) {
-      console.error(`\n [onTurnError] Exception caught in sendErrorMessage: ${ err }`);
+      console.error(`\n [onTurnError] Exception caught in sendErrorMessage: ${err}`);
     }
     await conversationState.clear(turnContext);
     await conversationState.saveChanges(turnContext);
@@ -197,7 +197,7 @@ export const configureManifestsEndpoint = (server: Server) => {
     const manifestFiles = fs.readdirSync(manifestsPath);
     for (const file of manifestFiles) {
       if (file.endsWith('.json')) {
-        server.get(`/${ file }`, (_req, res): void => {
+        server.get(`/${file}`, (_req, res): void => {
           const manifest = JSON.parse(fs.readFileSync(path.join(manifestsPath, file), 'utf8'));
           res.send(manifest);
         });
