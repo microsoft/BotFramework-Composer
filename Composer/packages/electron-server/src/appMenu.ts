@@ -66,7 +66,6 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
     {
       label: 'Edit',
       submenu: [
-        // NOTE: Avoid using builtin `role`, it won't override the click handler.
         {
           id: 'Undo',
           label: 'Undo',
@@ -82,11 +81,35 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
           click: () => handleMenuEvents('redo'),
         },
         { type: 'separator' },
-        { id: 'Cut', label: 'Cut', enabled: false, accelerator: 'CmdOrCtrl+X', click: () => handleMenuEvents('cut') },
+        // Native mode shorcuts
+        {
+          id: 'Cut-native',
+          label: 'Cut',
+          role: 'cut',
+        },
+        {
+          id: 'Copy-native',
+          label: 'Copy',
+          role: 'copy',
+        },
+        {
+          id: 'Delete-native',
+          label: 'delete',
+        },
+        // Action editing mode shortcuts
+        {
+          id: 'Cut',
+          label: 'Cut',
+          enabled: false,
+          visible: false,
+          accelerator: 'CmdOrCtrl+X',
+          click: () => handleMenuEvents('cut'),
+        },
         {
           id: 'Copy',
           label: 'Copy',
           enabled: false,
+          visible: false,
           accelerator: 'CmdOrCtrl+C',
           click: () => handleMenuEvents('copy'),
         },
@@ -94,6 +117,7 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
           id: 'Delete',
           label: 'Delete',
           enabled: false,
+          visible: false,
           accelerator: 'Delete',
           click: () => handleMenuEvents('delete'),
         },
@@ -195,21 +219,27 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
 
   if (ipcMain && ipcMain.on) {
     ipcMain.on('composer-state-change', (e, state) => {
+      const toggleEditingMode = (menu: Menu, mode: 'native' | 'action') => {
+        ['Cut', 'Copy', 'Delete'].forEach((label) => {
+          const nativeModeId = label + '-native';
+          const actionModeId = label;
+          menu.getMenuItemById(nativeModeId).visible = mode === 'native';
+          menu.getMenuItemById(actionModeId).visible = mode === 'action';
+        });
+      };
+
       // Turn shortcuts to Action editing mode when Flow Editor is focused.
       const flowFocused = !!state.flowFocused;
       if (flowFocused) {
+        toggleEditingMode(menu, 'action');
+
         // Let menu enable/disable status reflects action selection states.
         const actionSelected = !!state.actionSelected;
         ['Cut', 'Copy', 'Delete'].forEach((id) => {
           menu.getMenuItemById(id).enabled = actionSelected;
-          menu.getMenuItemById(id).role = undefined;
         });
       } else {
-        ['Cut', 'Copy', 'Delete'].forEach((id) => {
-          menu.getMenuItemById(id).enabled = true;
-          // Use Electron default behavior based on role
-          menu.getMenuItemById(id).role = id.toLowerCase() as any;
-        });
+        toggleEditingMode(menu, 'native');
       }
 
       // Let menu undo/redo status reflects history status
