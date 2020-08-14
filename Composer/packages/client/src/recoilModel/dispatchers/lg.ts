@@ -5,12 +5,12 @@ import { LgTemplate, LgFile, importResolverGenerator } from '@bfc/shared';
 import { useRecoilCallback, CallbackInterface } from 'recoil';
 import differenceBy from 'lodash/differenceBy';
 import formatMessage from 'format-message';
+import { lgUtil } from '@bfc/indexers';
 
 import { getBaseName, getExtension } from '../../utils/fileUtil';
 
 import LgWorker from './../parsers/lgWorker';
 import { lgFilesState, localeState, settingsState } from './../atoms/botState';
-import * as lgUtil from './../../utils/lgUtil';
 
 const templateIsNotEmpty = ({ name, body }) => {
   return !!name && !!body;
