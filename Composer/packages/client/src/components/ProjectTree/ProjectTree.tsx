@@ -64,10 +64,9 @@ const root = css`
 
 // -------------------- ProjectTree -------------------- //
 
-function createGroupItem(dialog: DialogInfo, currentId: string, position: number) {
+function createGroupItem(dialog: DialogInfo, currentId: string, position: number, warningContent: string) {
   const isRegEx = (dialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
-  const isNotSupported =
-    isRegEx && dialog.triggers.some((t) => t.type === qnaMatcherKey || t.type === onChooseIntentKey);
+  const withWarning = isRegEx && dialog.triggers.some((t) => t.type === qnaMatcherKey || t.type === onChooseIntentKey);
   return {
     key: dialog.id,
     name: dialog.displayName,
@@ -76,15 +75,15 @@ function createGroupItem(dialog: DialogInfo, currentId: string, position: number
     count: dialog.triggers.length,
     hasMoreData: true,
     isCollapsed: dialog.id !== currentId,
-    data: { ...dialog, warning: isNotSupported },
+    data: { ...dialog, warningContent: withWarning ? warningContent : '' },
   };
 }
 
-function createItem(trigger: ITrigger, index: number, isNotSupported?: boolean) {
+function createItem(trigger: ITrigger, index: number, warningContent?: string) {
   return {
     ...trigger,
     index,
-    warning: isNotSupported,
+    warningContent: warningContent,
     displayName: trigger.displayName || getFriendlyName({ $kind: trigger.type }),
   };
 }
@@ -105,7 +104,8 @@ function sortDialog(dialogs: DialogInfo[]) {
 function createItemsAndGroups(
   dialogs: DialogInfo[],
   dialogId: string,
-  filter: string
+  filter: string,
+  warningContent: string
 ): { items: any[]; groups: IGroup[] } {
   let position = 0;
   const result = dialogs
@@ -114,12 +114,12 @@ function createItemsAndGroups(
     })
     .reduce(
       (result: { items: any[]; groups: IGroup[] }, dialog) => {
-        result.groups.push(createGroupItem(dialog, dialogId, position));
+        result.groups.push(createGroupItem(dialog, dialogId, position, warningContent));
         position += dialog.triggers.length;
         const isRegEx = (dialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
         dialog.triggers.forEach((item, index) => {
-          const isNotSupported = isRegEx && (item.type === qnaMatcherKey || item.type === onChooseIntentKey);
-          result.items.push(createItem(item, index, isNotSupported));
+          const withWarning = isRegEx && (item.type === qnaMatcherKey || item.type === onChooseIntentKey);
+          result.items.push(createItem(item, index, withWarning ? warningContent : ''));
         });
         return result;
       },
@@ -132,6 +132,7 @@ interface IProjectTreeProps {
   dialogs: DialogInfo[];
   dialogId: string;
   selected: string;
+  warningContent: string;
   onSelect: (id: string, selected?: string) => void;
   onDeleteTrigger: (id: string, index: number) => void;
   onDeleteDialog: (id: string) => void;
@@ -142,7 +143,7 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
   const { dialogNavWidth: currentWidth } = useRecoilValue(userSettingsState);
 
   const groupRef: React.RefObject<IGroupedList> = useRef(null);
-  const { dialogs, dialogId, selected, onSelect, onDeleteTrigger, onDeleteDialog } = props;
+  const { dialogs, dialogId, selected, warningContent, onSelect, onDeleteTrigger, onDeleteDialog } = props;
   const [filter, setFilter] = useState('');
   const delayedSetFilter = debounce((newValue) => setFilter(newValue), 1000);
   const addMainDialogRef = useCallback((mainDialog) => onboardingAddCoachMarkRef({ mainDialog }), []);
@@ -197,7 +198,12 @@ export const ProjectTree: React.FC<IProjectTreeProps> = (props) => {
     updateUserSettings({ dialogNavWidth: currentWidth + d.width });
   };
 
-  const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(sortedDialogs, dialogId, filter);
+  const itemsAndGroups: { items: any[]; groups: IGroup[] } = createItemsAndGroups(
+    sortedDialogs,
+    dialogId,
+    filter,
+    warningContent
+  );
 
   return (
     <Resizable

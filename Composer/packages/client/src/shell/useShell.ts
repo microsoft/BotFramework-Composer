@@ -33,6 +33,7 @@ import { validatedDialogsSelector } from '../recoilModel/selectors/validatedDial
 import { useLgApi } from './lgApi';
 import { useLuApi } from './luApi';
 import { useQnaApi } from './qnaApi';
+import { useTriggerApi } from './triggerApi';
 
 const FORM_EDITOR = 'PropertyEditor';
 
@@ -74,7 +75,7 @@ export function useShell(source: EventSource): Shell {
   const lgApi = useLgApi();
   const luApi = useLuApi();
   const qnaApi = useQnaApi();
-
+  const triggerApi = useTriggerApi();
   const { dialogId, selected, focused, promptTab } = designPageLocation;
 
   const dialogsMap = useMemo(() => {
@@ -171,6 +172,7 @@ export function useShell(source: EventSource): Shell {
     ...lgApi,
     ...luApi,
     ...qnaApi,
+    ...triggerApi,
     updateRegExIntent: updateRegExIntentHandler,
     renameRegExIntent: renameRegExIntentHandler,
     updateIntentTrigger: updateIntentTriggerHandler,

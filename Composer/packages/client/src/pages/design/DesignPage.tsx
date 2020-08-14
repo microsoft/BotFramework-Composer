@@ -4,24 +4,12 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React, { Suspense, useEffect, useMemo, useState, useCallback } from 'react';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { SharedColors } from '@uifabric/fluent-theme';
 import { Breadcrumb, IBreadcrumbItem } from 'office-ui-fabric-react/lib/Breadcrumb';
 import formatMessage from 'format-message';
 import { globalHistory, RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
-import {
-  DialogFactory,
-  SDKKinds,
-  DialogInfo,
-  PromptTab,
-  LuIntentSection,
-  getEditorAPI,
-  LgTemplate,
-  registerEditorAPI,
-  generateDesignerId,
-} from '@bfc/shared';
-import { ActionButton, Button } from 'office-ui-fabric-react/lib/Button';
+import { DialogFactory, SDKKinds, DialogInfo, PromptTab, getEditorAPI, registerEditorAPI } from '@bfc/shared';
+import { ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { JsonEditor } from '@bfc/code-editor';
 import Extension, { useTriggerApi, PluginConfig } from '@bfc/extension';
 import { useRecoilValue } from 'recoil';
@@ -35,8 +23,8 @@ import {
   getbreadcrumbLabel,
   regexRecognizerKey,
   onChooseIntentKey,
-  generateNewDialog,
   qnaMatcherKey,
+  TriggerFormData,
 } from '../../utils/dialogUtil';
 import { Conversation } from '../../components/Conversation';
 import { dialogStyle } from '../../components/Modal/dialogStyle';
@@ -61,10 +49,8 @@ import {
   skillsState,
   actionsSeedState,
   userSettingsState,
-  luFilesState,
   localeState,
   qnaFilesState,
-  lgFilesState,
 } from '../../recoilModel';
 import { getBaseName } from '../../utils/fileUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
@@ -72,6 +58,7 @@ import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
 import ImportQnAFromUrlModal from '../qna/ImportQnAFromUrlModal';
 
+import { WarningMessage, warningContent } from './WarningMessage';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -89,35 +76,6 @@ const CreateDialogModal = React.lazy(() => import('./createDialogModal'));
 const DisplayManifestModal = React.lazy(() => import('../../components/Modal/DisplayManifestModal'));
 const ExportSkillModal = React.lazy(() => import('./exportSkillModal'));
 const TriggerCreationModal = React.lazy(() => import('../../components/ProjectTree/TriggerCreationModal'));
-
-const warningIcon = {
-  marginLeft: 5,
-  color: '#8A8780',
-  fontSize: 20,
-  cursor: 'pointer',
-};
-
-const warningRoot = {
-  display: 'flex',
-  background: '#FFF4CE',
-  height: 50,
-  alignItems: 'center',
-};
-
-const warningFont = {
-  color: SharedColors.gray40,
-  fontSize: 9,
-  paddingLeft: 10,
-};
-
-const changeRecognizerButton = {
-  root: {
-    marginLeft: 200,
-    border: '1px solid',
-    borderRadius: 2,
-    fontSize: 14,
-  },
-};
 
 function onRenderContent(subTitle, style) {
   return (
@@ -169,8 +127,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const actionsSeed = useRecoilValue(actionsSeedState);
   const userSettings = useRecoilValue(userSettingsState);
   const qnaFiles = useRecoilValue(qnaFilesState);
-  const luFiles = useRecoilValue(luFilesState);
-  const lgFiles = useRecoilValue(lgFilesState);
   const locale = useRecoilValue(localeState);
   const undoVersion = useRecoilValue(undoVersionState);
   const {
@@ -186,8 +142,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     selectAndFocus,
     addSkillDialogCancel,
     createQnAFile,
-    createLuIntent,
-    createLgTemplates,
     updateSkill,
     exportToZip,
     onboardingAddCoachMarkRef,
@@ -195,8 +149,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   } = useRecoilValue(dispatcherState);
 
   const { location, dialogId } = props;
-  const luFile = luFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const lgFile = lgFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const params = new URLSearchParams(location?.search);
   const selected = params.get('selected') || '';
   const [triggerModalVisible, setTriggerModalVisibility] = useState(false);
@@ -209,7 +161,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const shellForFlowEditor = useShell('FlowEditor');
   const shellForPropertyEditor = useShell('PropertyEditor');
   const triggerApi = useTriggerApi(shell.api);
-
+  const { createTrigger } = shell.api;
   useEffect(() => {
     const currentDialog = dialogs.find(({ id }) => id === dialogId);
     if (currentDialog) {
@@ -270,26 +222,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   }, [location]);
 
-  const changeRecognizerComponent = useMemo(() => {
-    return (
-      <div css={warningRoot}>
-        <Icon iconName={'Warning'} style={warningIcon} />
-        <div css={warningFont}>
-          {formatMessage(
-            'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
-          )}
-        </div>
-        <Button
-          styles={changeRecognizerButton}
-          text={formatMessage('Change Recognizer')}
-          onClick={() => {
-            navigateTo(`/bot/${projectId}/qna/all`);
-          }}
-        />
-        <Icon iconName={'Cancel'} style={warningIcon} onClick={() => setShowWarning(false)} />
-      </div>
-    );
-  }, []);
   useEffect(() => {
     registerEditorAPI('Editing', {
       Undo: () => undo(),
@@ -311,39 +243,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setTriggerModalVisibility(true);
   };
 
-  const onTriggerCreationSubmit = async (
-    dialog: DialogInfo,
-    intent?: LuIntentSection,
-    lgFilePayload?: { [key: string]: LgTemplate[] },
-    url?: string
-  ) => {
-    const dialogPayload = {
-      id: dialog.id,
-      projectId,
-      content: dialog.content,
-    };
-    if (luFile && intent) {
-      createLuIntent({ id: luFile.id, intent, projectId });
-    }
-
-    if (lgFile && lgFilePayload) {
-      if (lgFilePayload[`common.${locale}`] && lgFilePayload[`common.${locale}`].length > 0) {
-        await createLgTemplates({ id: `common.${locale}`, templates: lgFilePayload[`common.${locale}`] });
-      }
-      for (const key in lgFilePayload) {
-        if (key !== `common.${locale}`) {
-          await createLgTemplates({ id: key, templates: lgFilePayload[key] });
-        }
-      }
-    }
-
-    const index = get(dialog, 'content.triggers', []).length - 1;
-    if (url) {
-      navigateTo(url);
-    } else {
-      selectTo(`triggers[${index}]`);
-    }
-    updateDialog(dialogPayload);
+  const onTriggerCreationSubmit = async (dialogId: string, formData: TriggerFormData) => {
+    createTrigger(dialogId, formData);
   };
 
   function handleSelect(id, selected = '') {
@@ -659,32 +560,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     setImportQnAModalVisibility(false);
   };
 
-  const handleCreateQnA = async (urls: string[]) => {
+  const handleCreateQnA = async (importUrls: string[]) => {
     cancelImportQnAModal();
-    const lgTemplateId1 = generateDesignerId();
-    const lgTemplateId2 = generateDesignerId();
-    const extraTriggerAttributes = {
-      'actions[0].actions[1].prompt': `\${TextInput_Prompt_${lgTemplateId1}()}`,
-      'actions[0].elseActions[0].activity': `\${SendActivity_${lgTemplateId2}()}`,
-    };
-    const lgTemplates: LgTemplate[] = [
-      {
-        name: `TextInput_Prompt_${lgTemplateId1}`,
-        body:
-          '[Activity\n\
-Text = ${@answer}\n\
-SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.displayText)}\n\
-]',
-      } as LgTemplate,
-      {
-        name: `SendActivity_${lgTemplateId2}`,
-        body: '- ${@answer}',
-      } as LgTemplate,
-    ];
-    const lgFilePayload = {
-      [`${dialogId}.${locale}`]: lgTemplates,
-    };
-
     const formData = {
       $kind: qnaMatcherKey,
       errors: { $kind: '', intent: '', event: '', triggerPhrases: '', regEx: '', activity: '' },
@@ -694,12 +571,11 @@ SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.di
       triggerPhrases: '',
     };
     if (dialogId) {
-      const newDialog = generateNewDialog(dialogs, dialogId, formData, schemas.sdk?.content, extraTriggerAttributes);
       const url = `/bot/${projectId}/qna/${dialogId}`;
-      onTriggerCreationSubmit(newDialog, undefined, lgFilePayload, url);
-      for (let i = 0; i < urls.length; i++) {
-        if (!urls[i]) continue;
-        await importQnAFromUrl({ id: `${dialogId}.${locale}`, url: urls[i] });
+      createTrigger(dialogId, formData, url);
+      for (let i = 0; i < importUrls.length; i++) {
+        if (!importUrls[i]) continue;
+        await importQnAFromUrl({ id: `${dialogId}.${locale}`, url: importUrls[i] });
       }
     }
   };
@@ -716,7 +592,7 @@ SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.di
 
   const isRegEx = (currentDialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const selectedTrigger = currentDialog.triggers.find((t) => t.id === selected);
-  const isNotSupported =
+  const withWarning =
     isRegEx && (selectedTrigger?.type === qnaMatcherKey || selectedTrigger?.type === onChooseIntentKey);
 
   return (
@@ -726,6 +602,7 @@ SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.di
           dialogId={dialogId}
           dialogs={dialogs}
           selected={selected}
+          warningContent={warningContent}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
           onSelect={handleSelect}
@@ -754,8 +631,8 @@ SuggestedActions = ${foreach(turn.recognized.answers[0].context.prompts, x, x.di
                       updateDialog({ id: currentDialog.id, content: data });
                     }}
                   />
-                ) : isNotSupported ? (
-                  showWarning && changeRecognizerComponent
+                ) : withWarning ? (
+                  showWarning && <WarningMessage setShowWarning={setShowWarning} />
                 ) : (
                   <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
                     <VisualEditor openNewTriggerModal={openNewTriggerModal} />
