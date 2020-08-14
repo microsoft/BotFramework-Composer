@@ -195,11 +195,22 @@ export function initAppMenu(win?: Electron.BrowserWindow) {
 
   if (ipcMain && ipcMain.on) {
     ipcMain.on('composer-state-change', (e, state) => {
-      // Let menu enable/disable status reflects action selection states.
-      const actionSelected = !!state.actionSelected;
-      ['Cut', 'Copy', 'Delete'].forEach((id) => {
-        menu.getMenuItemById(id).enabled = actionSelected;
-      });
+      // Turn shortcuts to Action editing mode when Flow Editor is focused.
+      const flowFocused = !!state.flowFocused;
+      if (flowFocused) {
+        // Let menu enable/disable status reflects action selection states.
+        const actionSelected = !!state.actionSelected;
+        ['Cut', 'Copy', 'Delete'].forEach((id) => {
+          menu.getMenuItemById(id).enabled = actionSelected;
+          menu.getMenuItemById(id).role = undefined;
+        });
+      } else {
+        ['Cut', 'Copy', 'Delete'].forEach((id) => {
+          menu.getMenuItemById(id).enabled = true;
+          // Use Electron default behavior based on role
+          menu.getMenuItemById(id).role = id.toLowerCase() as any;
+        });
+      }
 
       // Let menu undo/redo status reflects history status
       const canUndo = !!state.canUndo;
