@@ -191,6 +191,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: formatMessage('Name'),
         fieldName: 'name',
         minWidth: 100,
+        maxWidth: 200,
         isResizable: true,
         data: 'string',
         onRender: (item) => {
@@ -222,7 +223,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         minWidth: 500,
         isResizable: true,
         data: 'string',
-        isPadded: true,
         onRender: (item) => {
           const text = item.body;
           return (
@@ -251,9 +251,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: currentLangResponsesHeader,
         fieldName: 'responses',
         minWidth: 300,
+        maxWidth: 500,
         isResizable: true,
         data: 'string',
-        isPadded: true,
         onRender: (item) => {
           const text = item.body;
           return (
@@ -281,7 +281,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         minWidth: 300,
         isResizable: true,
         data: 'string',
-        isPadded: true,
         onRender: (item) => {
           const text = item[`body-${defaultLanguage}`];
           return (

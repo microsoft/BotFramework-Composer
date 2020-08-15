@@ -160,6 +160,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         name: formatMessage('Intent'),
         fieldName: 'name',
         minWidth: 100,
+        maxWidth: 200,
         isResizable: true,
         data: 'string',
         onRender: (item: Intent) => {
@@ -219,7 +220,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'phrases-lang',
         name: currentLangResponsesHeader,
         fieldName: 'phrases',
-        minWidth: 500,
+        minWidth: 300,
+        maxWidth: 500,
         isResizable: true,
         data: 'string',
         onRender: (item) => {
@@ -249,7 +251,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'phrases-default-lang',
         name: defaultLangResponsesHeader,
         fieldName: 'phrases-default-lang',
-        minWidth: 500,
+        minWidth: 300,
         isResizable: true,
         data: 'string',
         onRender: (item) => {
