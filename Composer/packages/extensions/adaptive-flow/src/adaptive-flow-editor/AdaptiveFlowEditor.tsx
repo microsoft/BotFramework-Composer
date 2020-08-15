@@ -139,8 +139,8 @@ const VisualDesigner: React.FC<VisualDesignerProps> = ({ onFocus, onBlur, schema
             ref={divRef}
             css={styles}
             tabIndex={0}
-            onFocus={onFocus}
             onBlur={onBlur}
+            onFocus={onFocus}
             {...enableKeyboardCommandAttributes(handleCommand)}
             data-testid="visualdesigner-container"
           >
