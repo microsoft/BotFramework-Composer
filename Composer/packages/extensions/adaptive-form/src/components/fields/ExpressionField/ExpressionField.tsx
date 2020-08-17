@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import React, { useMemo, useState } from 'react';
-import { FieldProps, useShellApi, useFormConfig } from '@bfc/extension';
-import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { JsonEditor } from '@bfc/code-editor';
+import { FieldProps, useFormConfig, useShellApi } from '@bfc/extension';
+import { css, jsx } from '@emotion/core';
 import formatMessage from 'format-message';
+import { Dropdown, IDropdownOption, ResponsiveMode } from 'office-ui-fabric-react/lib/Dropdown';
+import React, { useMemo, useState } from 'react';
 
 import { getUiPlaceholder, resolveFieldWidget } from '../../../utils';
 import { FieldLabel } from '../../FieldLabel';
@@ -71,8 +71,7 @@ const ExpressionField: React.FC<FieldProps> = (props) => {
       return null;
     }
     // attempt to get a placeholder with the selected schema
-    const placeholder =
-      getUiPlaceholder({ ...props, schema: selectedSchema, placeholder: undefined }) || props.placeholder;
+    const placeholder = getUiPlaceholder({ ...props, schema: selectedSchema }) || props.placeholder;
     const enumOptions = selectedSchema?.enum as string[];
 
     if (selectedKey === 'expression') {
