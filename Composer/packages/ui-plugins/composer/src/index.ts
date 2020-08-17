@@ -6,14 +6,8 @@ import { IntentField, RecognizerField, RegexIntentField } from '@bfc/adaptive-fo
 import { SDKKinds } from '@bfc/shared';
 import formatMessage from 'format-message';
 import mapValues from 'lodash/mapValues';
-import generate from 'format-message-generate-id';
 
 import { DefaultMenuSchema } from './defaultMenuSchema';
-
-formatMessage.setup({
-  generateId: generate.underscored_crc32,
-  missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
-});
 
 const DefaultRecognizers: RecognizerSchema[] = [
   {
