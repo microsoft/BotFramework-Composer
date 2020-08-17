@@ -39,15 +39,22 @@ export function getUiPlaceholder(props: FieldProps): string | undefined {
 
   const { placeholder: uiPlaceholder } = uiOptions;
 
+  let fieldUIPlaceholder = '';
+
   if (uiPlaceholder) {
-    return typeof uiPlaceholder === 'function' ? uiPlaceholder(value) : uiPlaceholder;
+    fieldUIPlaceholder = typeof uiPlaceholder === 'function' ? uiPlaceholder(value) : uiPlaceholder;
+  } else if (placeholder) {
+    fieldUIPlaceholder = placeholder;
+  } else if (schema && Array.isArray(schema.examples) && schema.examples.length > 0) {
+    fieldUIPlaceholder = `ex. ${schema.examples.join(', ')}`;
   }
 
-  if (placeholder) {
-    return placeholder;
+  if (fieldUIPlaceholder && schema.pattern) {
+    const regex = `${schema.pattern}`;
+    const placeholderExamples = fieldUIPlaceholder.split(',').map((example) => example.trim());
+    const filteredExamples = placeholderExamples.filter((example) => example.match(regex));
+    fieldUIPlaceholder = filteredExamples.join(', ');
   }
 
-  if (schema && Array.isArray(schema.examples) && schema.examples.length > 0) {
-    return `ex. ${schema.examples.join(', ')}`;
-  }
+  return fieldUIPlaceholder !== '' ? fieldUIPlaceholder : undefined;
 }
