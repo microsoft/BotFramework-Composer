@@ -15,7 +15,7 @@ import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { IConfig } from '@bfc/shared';
+import { IConfig, IPublishConfig } from '@bfc/shared';
 import { Dropdown, ResponsiveMode, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
 import { Text, Tips, Links, nameRegex } from '../../constants';
@@ -99,7 +99,7 @@ interface IPublishDialogProps {
   isOpen: boolean;
   config: IConfig;
   onDismiss: () => void;
-  onPublish: (data: FormData) => void;
+  onPublish: (data: IPublishConfig) => void;
 }
 
 export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
@@ -165,8 +165,20 @@ export const PublishDialog: React.FC<IPublishDialogProps> = (props) => {
       if (hasErrors) {
         return;
       }
-
-      onPublish(formData);
+      const newValue = formData;
+      const subscriptionKey = formData.subscriptionKey;
+      const qnaRegion = formData.qnaRegion;
+      delete newValue.subscriptionKey;
+      delete newValue.qnaRegion;
+      const publishConfig = {
+        luis: newValue,
+        qna: {
+          subscriptionKey,
+          qnaRegion,
+          endpointKey: '',
+        },
+      };
+      onPublish(publishConfig);
     },
     [hasErrors, formData]
   );

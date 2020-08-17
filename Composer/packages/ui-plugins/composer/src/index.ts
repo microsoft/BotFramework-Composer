@@ -26,7 +26,7 @@ const DefaultRecognizers: RecognizerSchema[] = [
     },
   },
   {
-    id: 'Custom',
+    id: SDKKinds.CustomRecognizer,
     displayName: () => formatMessage('Custom recognizer'),
     isSelected: (data) => typeof data === 'object',
     handleRecognizerChange: (props) =>

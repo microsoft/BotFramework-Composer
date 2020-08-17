@@ -89,7 +89,7 @@ export class Builder {
   };
 
   public getQnaEndpointKey = async (subscriptionKey: string, config: IConfig | Record<string, any>) => {
-    const subscriptionKeyEndpoint = `https://${config?.authoringRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
+    const subscriptionKeyEndpoint = `https://${config?.qnaRegion}.api.cognitive.microsoft.com/qnamaker/v4.0`;
     const endpointKey = await this.qnaBuilder.getEndpointKeys(subscriptionKey, subscriptionKeyEndpoint);
     return endpointKey.primaryEndpointKey;
   };

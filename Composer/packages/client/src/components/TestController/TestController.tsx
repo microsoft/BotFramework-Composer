@@ -8,7 +8,7 @@ import { jsx, css } from '@emotion/core';
 import { PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 import formatMessage from 'format-message';
 import { useRecoilValue } from 'recoil';
-import { IConfig } from '@bfc/shared';
+import { IConfig, IPublishConfig } from '@bfc/shared';
 
 import {
   botNameState,
@@ -81,7 +81,7 @@ export const TestController: React.FC = () => {
   const addRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const errorLength = notifications.filter((n) => n.severity === 'Error').length;
   const showError = errorLength > 0;
-  const publishConfig = { subscriptionKey: settings.qna.subscriptionKey, ...settings.luis } as IConfig;
+  const publishDialogConfig = { subscriptionKey: settings.qna.subscriptionKey, ...settings.luis } as IConfig;
   const warningLength = notifications.filter((n) => n.severity === 'Warning').length;
   const showWarning = !showError && warningLength > 0;
 
@@ -119,27 +119,22 @@ export const TestController: React.FC = () => {
     setCalloutVisible(true);
   }
 
-  async function handlePublish(config) {
+  async function handlePublish(config: IPublishConfig) {
     setBotStatus(BotStatus.publishing);
     dismissDialog();
-    // save the settings change to store and persist to server
-    const newValue = config;
-    const subscriptionKey = newValue.subscriptionKey;
-    const qnaRegion = newValue.qnaRegion;
-    delete newValue.subscriptionKey;
-    delete newValue.qnaRegion;
+    const { luis, qna } = config;
     await setSettings(projectId, {
       ...settings,
-      luis: newValue,
-      qna: { ...settings.qna, subscriptionKey, region: qnaRegion, endpointKey: '' },
+      luis: luis,
+      qna: Object.assign({}, settings.qna, qna),
     });
-    await build(newValue.authoringKey, subscriptionKey, qnaRegion, projectId);
+    await build(luis.authoringKey, qna.subscriptionKey, qna.qnaRegion, projectId);
   }
 
   async function handleLoadBot() {
     setBotStatus(BotStatus.reloading);
-    if (settings.qna && Object(settings.qna).subscriptionKey) {
-      await setQnASettings(projectId, Object(settings.qna).subscriptionKey);
+    if (settings.qna && settings.qna.subscriptionKey) {
+      await setQnASettings(projectId, settings.qna.subscriptionKey);
     }
     const sensitiveSettings = settingsStorage.get(projectId);
     await publishToTarget(projectId, DefaultPublishConfig, { comment: '' }, sensitiveSettings);
@@ -148,42 +143,41 @@ export const TestController: React.FC = () => {
   function isConfigComplete(config) {
     let complete = true;
     if (getReferredLuFiles(luFiles, dialogs).length > 0) {
-      for (const key in LuisConfig) {
-        if (config?.[LuisConfig[key]] === '') {
-          complete = false;
-          break;
-        }
+      if (Object.keys(LuisConfig).some((luisConfigKey) => config?.[luisConfigKey] === '')) {
+        complete = false;
       }
     }
     if (getReferredQnaFiles(qnaFiles, dialogs).length > 0) {
-      for (const key in QnaConfig) {
-        if (config?.[QnaConfig[key]] === '') {
-          complete = false;
-          break;
-        }
+      if (Object.keys(QnaConfig).some((qnaConfigKey) => config?.[qnaConfigKey] === '')) {
+        complete = false;
       }
     }
     return complete;
   }
 
-  function isDialogDefaultRecognizer(dialogs) {
+  // return true if dialogs have one with default recognizer.
+  function needsPublish(dialogs) {
     let isDefaultRecognizer = false;
-    dialogs.map((dialog) => {
-      if (typeof dialog.content.recognizer === 'string') {
-        isDefaultRecognizer = true;
-        return;
-      }
-    });
+    if (dialogs.some((dialog) => typeof dialog.content.recognizer === 'string')) {
+      isDefaultRecognizer = true;
+    }
     return isDefaultRecognizer;
   }
 
   async function handleStart() {
     dismissCallout();
-    const config = Object.assign({}, settings.luis, {
-      subscriptionKey: Object(settings.qna).subscriptionKey,
-      qnaRegion: Object(settings.qna).qnaRegion,
-    });
-    if (!isAbsHosted() && isDialogDefaultRecognizer(dialogs)) {
+    const config = Object.assign(
+      {},
+      {
+        luis: settings.luis,
+        qna: {
+          subscriptionKey: settings.qna.subscriptionKey,
+          qnaRegion: settings.qna.qnaRegion,
+          endpointKey: '',
+        },
+      }
+    );
+    if (!isAbsHosted() && needsPublish(dialogs)) {
       if (botStatus === BotStatus.failed || botStatus === BotStatus.pending || !isConfigComplete(config)) {
         openDialog();
       } else {
@@ -245,7 +239,7 @@ export const TestController: React.FC = () => {
       {settings.luis && modalOpen && (
         <PublishDialog
           botName={botName}
-          config={publishConfig}
+          config={publishDialogConfig}
           isOpen={modalOpen}
           onDismiss={dismissDialog}
           onPublish={handlePublish}

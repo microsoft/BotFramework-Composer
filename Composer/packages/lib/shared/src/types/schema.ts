@@ -27,6 +27,7 @@ export enum SDKKinds {
   ContinueLoop = 'Microsoft.ContinueLoop',
   CrossTrainedRecognizerSet = 'Microsoft.CrossTrainedRecognizerSet',
   CurrencyEntityRecognizer = 'Microsoft.CurrencyEntityRecognizer',
+  CustomRecognizer = 'Microsoft.CustomRecognizer',
   DateTimeEntityRecognizer = 'Microsoft.DateTimeEntityRecognizer',
   DateTimeInput = 'Microsoft.DateTimeInput',
   DebugBreak = 'Microsoft.DebugBreak',

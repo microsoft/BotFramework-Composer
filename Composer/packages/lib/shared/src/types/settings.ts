@@ -63,6 +63,11 @@ export interface IConfig extends ILuisConfig {
   qnaRegion: string | 'westus';
 }
 
+export interface IPublishConfig {
+  luis: ILuisConfig;
+  qna: IQnAConfig;
+}
+
 export interface PublishTarget {
   name: string;
   type: string;

@@ -46,12 +46,12 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
 
   const selectedType = useMemo(() => {
     if (isCustomType) {
-      return 'Custom';
+      return SDKKinds.CustomRecognizer;
     }
     const selected =
       value === undefined ? [recognizers[0].id] : recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
 
-    const involvedCustomItem = selected.find((item) => item !== 'Custom');
+    const involvedCustomItem = selected.find((item) => item !== SDKKinds.CustomRecognizer);
     if (involvedCustomItem) {
       return involvedCustomItem;
     }
@@ -72,11 +72,14 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       selected[0] = SDKKinds.CrossTrainedRecognizerSet;
     }
     return selected[0];
-  }, [value]);
+  }, [value, isCustomType]);
 
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
-      setIsCustomType(option.key === 'Custom');
+      if (option.key === SDKKinds.CustomRecognizer) {
+        setIsCustomType(true);
+        return;
+      }
 
       const handler = recognizers.find((r) => r.id === option.key)?.handleRecognizerChange;
 
@@ -105,7 +108,7 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       ) : (
         formatMessage('Unable to determine recognizer type from data: {value}', { value })
       )}
-      {selectedType === 'Custom' && (
+      {selectedType === SDKKinds.CustomRecognizer && (
         <JsonEditor
           key={'customRecognizer'}
           height={200}

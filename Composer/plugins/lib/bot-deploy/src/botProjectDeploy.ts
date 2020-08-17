@@ -23,6 +23,7 @@ import { FileInfo } from '@bfc/shared';
 import { BotProjectDeployConfig } from './botProjectDeployConfig';
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 import { ICrossTrainConfig, createCrossTrainConfig } from './utils/crossTrainUtil';
+import { DeployConfig } from './types';
 
 import archiver = require('archiver');
 
@@ -711,17 +712,17 @@ export class BotProjectDeploy {
   /**
    * Deploy a bot to a location
    */
-  public async deploy(
-    name: string,
-    environment: string,
-    luisAuthoringKey?: string,
-    luisAuthoringRegion?: string,
-    qnaSubscriptionKey?: string,
-    botPath?: string,
-    language?: string,
-    hostname?: string,
-    luisResource?: string
-  ) {
+  public async deploy({
+    name,
+    environment,
+    luisAuthoringKey,
+    luisAuthoringRegion,
+    qnaSubscriptionKey,
+    botPath,
+    language,
+    hostname,
+    luisResource,
+  }: DeployConfig) {
     try {
       // Check for existing deployment files
       if (!fs.pathExistsSync(this.deployFilePath)) {
@@ -1155,6 +1156,12 @@ export class BotProjectDeploy {
     qnaSubscriptionKey?: string
   ) {
     await this.create(name, location, environment, appPassword);
-    await this.deploy(name, environment, luisAuthoringKey, luisAuthoringRegion, qnaSubscriptionKey);
+    await this.deploy({
+      name,
+      environment,
+      luisAuthoringKey,
+      luisAuthoringRegion,
+      qnaSubscriptionKey,
+    });
   }
 }
