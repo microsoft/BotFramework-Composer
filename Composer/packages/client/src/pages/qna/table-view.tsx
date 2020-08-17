@@ -5,14 +5,20 @@
 import { jsx } from '@emotion/core';
 import { useRecoilValue } from 'recoil';
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
-import { DetailsList, DetailsListLayoutMode, SelectionMode } from 'office-ui-fabric-react/lib/DetailsList';
+import {
+  DetailsList,
+  DetailsRow,
+  DetailsListLayoutMode,
+  SelectionMode,
+  Selection,
+  CheckboxVisibility,
+} from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
-import { ActionButton, IconButton } from 'office-ui-fabric-react/lib/Button';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { ScrollablePane, ScrollbarVisibility } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
-import { NeutralColors, FontSizes } from '@uifabric/fluent-theme';
 import formatMessage from 'format-message';
 import { RouteComponentProps } from '@reach/router';
 import get from 'lodash/get';
@@ -28,7 +34,18 @@ import {
 import { dialogsState, qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
 
-import { formCell, content, textField, bold, link, actionButton } from './styles';
+import {
+  formCell,
+  content,
+  textFieldQuestion,
+  textFieldAnswer,
+  bold,
+  contentAnswer,
+  addQnAPairLink,
+  divider,
+  rowDetails,
+  icon,
+} from './styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
   dialogId: string;
@@ -50,7 +67,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
   //const locale = useRecoilValue(localeState);
   const { dialogId } = props;
   const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
-  const limitedNumber = useRef(5).current;
+  const fileRef = useRef(file);
+  fileRef.current = file;
+  const limitedNumber = useRef(1).current;
   const generateQnASections = (file) => {
     return get(file, 'qnaSections', []).map((qnaSection, index) => {
       const qnaDialog = dialogs.find((dialog) => file.id === `${dialog.id}.${locale}`);
@@ -69,7 +88,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return result.concat(res);
   }, []);
 
-  const singleFileQnASections = generateQnASections(file);
+  const singleFileQnASections = generateQnASections(fileRef.current);
   const qnaSections = useMemo(() => {
     if (dialogId === 'all') {
       return allQnASections;
@@ -77,13 +96,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
       return singleFileQnASections;
     }
   }, [dialogId, qnaFiles]);
-  const [showAllAlternatives, setShowAllAlternatives] = useState(Array(qnaSections.length).fill(false));
+  const [showQnAPairDetails, setShowQnAPairDetails] = useState(Array(qnaSections.length).fill(false));
   const [qnaSectionIndex, setQnASectionIndex] = useState(-1);
   const [questionIndex, setQuestionIndex] = useState(-1); //used in QnASection.Questions array
   const [question, setQuestion] = useState('');
   const [editMode, setEditMode] = useState(EditMode.None);
   const [answerIndex, setAnswerIndex] = useState(-1);
   const [answer, setAnswer] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const createOrUpdateQuestion = () => {
     if (question && editMode === EditMode.Creating) {
@@ -120,18 +140,18 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   useEffect(() => {
-    setShowAllAlternatives(Array(qnaSections.length).fill(false));
+    setShowQnAPairDetails(Array(qnaSections.length).fill(false));
   }, [dialogId, projectId]);
 
-  const toggleShowAllAlternatives = (index: number) => {
-    const newArray = showAllAlternatives.map((element, i) => {
+  const toggleShowAll = (index: number) => {
+    const newArray = showQnAPairDetails.map((element, i) => {
       if (i === index) {
         return !element;
       } else {
         return element;
       }
     });
-    setShowAllAlternatives(newArray);
+    setShowQnAPairDetails(newArray);
   };
 
   const handleQuestionKeydown = (e) => {
@@ -170,13 +190,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   };
 
   const handleAnswerKeydown = (e) => {
-    if (e.key === 'Enter') {
-      updateAnswer();
-      setEditMode(EditMode.None);
-      setQnASectionIndex(-1);
-      setAnswerIndex(-1);
-      e.preventDefault();
-    }
     if (e.key === 'Escape') {
       setEditMode(EditMode.None);
       setQnASectionIndex(-1);
@@ -205,40 +218,48 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setAnswer(answer);
   };
 
-  const getTemplatesMoreButtons = useCallback(
-    (item, index) => {
-      const buttons = [
-        {
-          key: 'delete',
-          name: formatMessage('Delete'),
-          onClick: () => {
-            actions.setMessage('item deleted');
-            if (file) {
-              const updatedQnAFileContent = removeSection(index, file.content);
-              actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
-            }
-          },
-        },
-      ];
-
-      return buttons;
-    },
-    [dialogId, locale, file]
-  );
+  const selection = useMemo(() => {
+    return new Selection({
+      onSelectionChanged: () => {
+        const selectedIndexs = selection.getSelectedIndices();
+        setSelectedIndex(selectedIndexs[0]);
+      },
+    });
+  }, []);
 
   const getTableColums = () => {
     const tableColums = [
       {
+        key: 'ToggleShowAll',
+        name: '',
+        fieldName: 'CollapseIcon',
+        minWidth: 50,
+        maxWidth: 50,
+        isResizable: false,
+        isPadded: true,
+        onRender: (item, qnaIndex) => {
+          return (
+            <IconButton
+              ariaLabel="ChevronDown"
+              css={icon}
+              iconProps={{ iconName: showQnAPairDetails[qnaIndex] ? 'ChevronDown' : 'ChevronRight' }}
+              title="ChevronDown"
+              onClick={() => toggleShowAll(qnaIndex)}
+            />
+          );
+        },
+      },
+      {
         key: 'Question',
         name: formatMessage('Question'),
         fieldName: 'question',
-        minWidth: 150,
-        maxWidth: 250,
+        minWidth: 250,
+        maxWidth: 450,
         isResizable: true,
         data: 'string',
         onRender: (item, qnaIndex) => {
           const questions = get(item, 'Questions', []);
-          const showingQuestions = showAllAlternatives[qnaIndex] ? questions : questions.slice(0, limitedNumber);
+          const showingQuestions = showQnAPairDetails[qnaIndex] ? questions : questions.slice(0, limitedNumber);
           //This question of this qna Section is '#?'
           const isQuestionEmpty = showingQuestions.length === 1 && showingQuestions[0].content === '';
           return (
@@ -261,8 +282,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         }
                       }}
                     >
-                      {isQuestionEmpty && <div css={bold}>{formatMessage('Enter a question')}</div>}
-                      {!isQuestionEmpty && <div css={qIndex === 0 ? bold : {}}>{q.content}</div>}
+                      {isQuestionEmpty && <div css={bold}>{formatMessage('Enter a question') + ' (0)'}</div>}
+                      {!isQuestionEmpty && (
+                        <div css={qIndex === 0 ? bold : {}}>
+                          {`${q.content} ${qIndex === 0 ? `(${questions.length})` : ''}`}
+                        </div>
+                      )}
                     </div>
                   );
                   //It is updating this qnaSection's qIndex-th Question
@@ -270,7 +295,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   return (
                     <TextField
                       autoFocus
-                      styles={textField}
+                      styles={textFieldQuestion}
                       value={question}
                       onBlur={(e) => {
                         handleQuestionOnBlur(e);
@@ -307,32 +332,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
         },
       },
       {
-        key: 'Alternatives',
-        name: formatMessage('alternatives'),
-        fieldName: 'alternatives',
-        minWidth: 150,
-        maxWidth: 250,
-        isResizable: true,
-        data: 'string',
-        isPadded: true,
-        onRender: (item, qnaIndex) => {
-          const alternatives = get(item, 'Questions', []);
-          const showingAlternatives = showAllAlternatives[qnaIndex]
-            ? alternatives
-            : alternatives.slice(0, limitedNumber);
-          return (
-            <Link styles={link} onClick={() => toggleShowAllAlternatives(qnaIndex)}>
-              {formatMessage('showing {current} of {all}', {
-                current: showingAlternatives.length,
-                all: alternatives.length,
-              })}
-            </Link>
-          );
-        },
-      },
-      {
         key: 'Answer',
-        name: formatMessage('answer'),
+        name: formatMessage('Answer'),
         fieldName: 'answer',
         minWidth: 150,
         maxWidth: 400,
@@ -341,11 +342,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isPadded: true,
         onRender: (item, qnaIndex) => {
           return (
-            <div data-is-focusable css={formCell}>
+            <div data-is-focusable css={formCell} data-testId={'dasdasdasd'}>
               {(qnaIndex !== qnaSectionIndex || answerIndex === -1 || editMode !== EditMode.Updating) && (
                 <div
                   aria-label={formatMessage(`Answer is {answer}`, { answer: item.Answer })}
-                  css={content}
+                  css={contentAnswer(showQnAPairDetails[qnaIndex])}
                   role={'textbox'}
                   tabIndex={0}
                   onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(qnaIndex, item.Answer) : () => {})}
@@ -362,7 +363,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
               {qnaIndex === qnaSectionIndex && answerIndex === 0 && editMode === EditMode.Updating && (
                 <TextField
                   autoFocus
-                  styles={textField}
+                  multiline
+                  autoAdjustHeight={showQnAPairDetails[qnaIndex]}
+                  styles={textFieldAnswer}
                   value={answer}
                   onBlur={(e) => {
                     handleAnswerOnBlur(e);
@@ -378,7 +381,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         },
       },
     ];
-    const moreLabel = formatMessage('Actions');
     if (dialogId !== 'all') {
       const extraOperations = {
         key: 'buttons',
@@ -386,21 +388,25 @@ const TableView: React.FC<TableViewProps> = (props) => {
         minWidth: 50,
         maxWidth: 50,
         isResizable: true,
+        isPadded: true,
         fieldName: 'buttons',
         data: 'string',
         onRender: (item, index) => {
+          if (selectedIndex !== index) return <div />;
           return (
-            <TooltipHost calloutProps={{ gapSpace: 10 }} content={moreLabel}>
-              <IconButton
-                ariaLabel={moreLabel}
-                menuIconProps={{ iconName: 'MoreVertical' }}
-                menuProps={{
-                  shouldFocusOnMount: true,
-                  items: getTemplatesMoreButtons(item, index),
-                }}
-                styles={{ menuIcon: { color: NeutralColors.black, fontSize: FontSizes.size16 } }}
-              />
-            </TooltipHost>
+            <IconButton
+              ariaLabel="Delete"
+              css={icon}
+              iconProps={{ iconName: 'Delete' }}
+              title="Delete"
+              onClick={() => {
+                actions.setMessage('item deleted');
+                if (fileRef && fileRef.current) {
+                  const updatedQnAFileContent = removeSection(index, fileRef.current.content);
+                  actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
+                }
+              }}
+            />
           );
         },
       };
@@ -441,34 +447,33 @@ const TableView: React.FC<TableViewProps> = (props) => {
             ...props,
             onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
           })}
+          <Link
+            styles={addQnAPairLink}
+            onClick={() => {
+              onCreateNewTemplate();
+              actions.setMessage('item added');
+            }}
+          >
+            {formatMessage('+ Add QnA Pair')}
+          </Link>
+          <div css={divider}> </div>
         </Sticky>
       </div>
     );
   }, []);
 
-  const onCreateNewTemplate = () => {
-    const newQnAPair = generateQnAPair();
-    const content = get(file, 'content', '');
-    const newContent = addSection(content, newQnAPair);
-    actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: newContent });
+  const onRenderRow = (props) => {
+    if (props) {
+      return <DetailsRow {...props} styles={rowDetails} tabIndex={props.itemIndex} />;
+    }
+    return null;
   };
 
-  const onRenderDetailsFooter = () => {
-    if (dialogId === 'all') return null;
-    return (
-      <div data-testid="tableFooter">
-        <ActionButton
-          css={actionButton}
-          iconProps={{ iconName: 'CirclePlus' }}
-          onClick={() => {
-            onCreateNewTemplate();
-            actions.setMessage('item added');
-          }}
-        >
-          {formatMessage('New QnA Section')}
-        </ActionButton>
-      </div>
-    );
+  const onCreateNewTemplate = () => {
+    const newQnAPair = generateQnAPair();
+    const content = get(fileRef.current, 'content', '');
+    const newContent = addSection(content, newQnAPair);
+    actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: newContent });
   };
 
   const getKeyCallback = useCallback((item) => item.uuid, []);
@@ -476,12 +481,14 @@ const TableView: React.FC<TableViewProps> = (props) => {
     <div className={'table-view'} data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
+          checkboxVisibility={CheckboxVisibility.hidden}
           className="table-view-list"
           columns={getTableColums()}
           getKey={getKeyCallback}
           items={qnaSections}
           layoutMode={DetailsListLayoutMode.justified}
-          selectionMode={SelectionMode.none}
+          selection={selection}
+          selectionMode={SelectionMode.single}
           styles={{
             root: {
               overflowX: 'hidden',
@@ -493,8 +500,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
               },
             },
           }}
-          onRenderDetailsFooter={onRenderDetailsFooter}
           onRenderDetailsHeader={onRenderDetailsHeader}
+          onRenderRow={onRenderRow}
         />
       </ScrollablePane>
     </div>
