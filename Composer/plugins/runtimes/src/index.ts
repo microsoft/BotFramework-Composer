@@ -11,7 +11,6 @@ import { copyDir } from './copyDir';
 import { IFileStorage } from './interface';
 
 const execAsync = promisify(exec);
-const mkdir = fs.promises.mkdir;
 const removeDirAndFiles = promisify(rimraf);
 
 export default async (composer: any): Promise<void> => {
@@ -91,16 +90,20 @@ export default async (composer: any): Promise<void> => {
       // write settings to disk in the appropriate location
       const settingsPath = path.join(publishFolder, 'ComposerDialogs', 'settings', 'appsettings.json');
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        await mkdir(path.dirname(settingsPath), { recursive: true });
+        await fs.mkdirp(path.dirname(settingsPath));
       }
       await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
 
       // return the location of the build artifiacts
       return publishFolder;
     },
-    eject: async (project, localDisk: IFileStorage) => {
+    eject: async (project, localDisk: IFileStorage, isReplace: boolean) => {
       const sourcePath = path.resolve(__dirname, '../../../../runtime/dotnet');
       const destPath = path.join(project.dir, 'runtime');
+      if ((await project.fileStorage.exists(destPath)) && isReplace) {
+        // remove runtime folder
+        await removeDirAndFiles(destPath);
+      }
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
@@ -151,9 +154,13 @@ export default async (composer: any): Promise<void> => {
     build: async (runtimePath: string, _project: any) => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { stderr: installErr } = await execAsync('npm install --dev', {
-        cwd: runtimePath,
-      });
+      // install dev dependencies in production, make sure typescript is installed
+      const { stderr: installErr } = await execAsync(
+        'npm install --loglevel=error && npm install --only=dev --loglevel=error',
+        {
+          cwd: runtimePath,
+        }
+      );
       if (installErr) {
         throw new Error(installErr);
       }
@@ -171,7 +178,7 @@ export default async (composer: any): Promise<void> => {
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { stderr: installErr } = await execAsync('npm install', {
+      const { stderr: installErr } = await execAsync('npm install --loglevel=error', {
         cwd: path.resolve(runtimePath, '../'),
       });
       if (installErr) {
@@ -186,22 +193,33 @@ export default async (composer: any): Promise<void> => {
       // write settings to disk in the appropriate location
       const settingsPath = path.join(runtimePath, 'ComposerDialogs', 'settings', 'appsettings.json');
       if (!(await fs.pathExists(path.dirname(settingsPath)))) {
-        mkdir(path.dirname(settingsPath), { recursive: true });
+        await fs.mkdirp(path.dirname(settingsPath));
       }
       await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
 
       composer.log('BUILD COMPLETE');
       return path.resolve(runtimePath, '../');
     },
-    eject: async (project: any, localDisk: IFileStorage) => {
+    eject: async (project: any, localDisk: IFileStorage, isReplace: boolean) => {
       const sourcePath = path.resolve(__dirname, '../../../../runtime/node');
       const destPath = path.join(project.dir, 'runtime');
+
+      if ((await project.fileStorage.exists(destPath)) && isReplace) {
+        // remove runtime folder
+        await removeDirAndFiles(destPath);
+      }
+
       if (!(await project.fileStorage.exists(destPath))) {
         // used to read bot project template from source (bundled in plugin)
         const excludeFolder = new Set<string>().add(path.resolve(sourcePath, 'node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
-        // install packages
-        const { stderr: initErr } = await execAsync('npm install --dev', { cwd: destPath });
+        // install dev dependencies in production, make sure typescript is installed
+        const { stderr: initErr } = await execAsync(
+          'npm install --loglevel=error && npm install --only=dev --loglevel=error',
+          {
+            cwd: destPath,
+          }
+        );
         if (initErr) {
           throw new Error(initErr);
         }

@@ -56,7 +56,7 @@ export interface PublishPlugin<Config = any> {
 
 export interface RuntimeTemplate {
   /** method used to eject the runtime into a project. returns resulting path of runtime! */
-  eject: (project: IBotProject, localDisk?: any) => Promise<string>;
+  eject: (project: IBotProject, localDisk?: any, isReplace?: boolean) => Promise<string>;
 
   /** build method used for local publish */
   build: (runtimePath: string, project: IBotProject) => Promise<void>;

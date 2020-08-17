@@ -203,3 +203,8 @@ export const onDelLanguageDialogCompleteState = atom<any>({
   key: getFullyQualifiedKey('onDelLanguageDialogComplete'),
   default: { func: undefined },
 });
+
+export const isEjectRuntimeExistState = atom<boolean>({
+  key: getFullyQualifiedKey('isEjectRuntimeExist'),
+  default: false,
+});

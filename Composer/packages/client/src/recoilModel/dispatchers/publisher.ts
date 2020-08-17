@@ -6,7 +6,13 @@ import formatMessage from 'format-message';
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import { defaultPublishConfig } from '@bfc/shared';
 
-import { publishTypesState, botStatusState, publishHistoryState, botLoadErrorState } from '../atoms/botState';
+import {
+  publishTypesState,
+  botStatusState,
+  publishHistoryState,
+  botLoadErrorState,
+  isEjectRuntimeExistState,
+} from '../atoms/botState';
 import filePersistence from '../persistence/FilePersistence';
 import { botEndpointsState } from '../atoms';
 
@@ -192,11 +198,17 @@ export const publisherDispatcher = () => {
     }
   );
 
+  const setEjectRuntimeExist = useRecoilCallback((callbackHelpers: CallbackInterface) => async (isExist: boolean) => {
+    const { set } = callbackHelpers;
+    set(isEjectRuntimeExistState, isExist);
+  });
+
   return {
     getPublishTargetTypes,
     publishToTarget,
     rollbackToVersion,
     getPublishStatus,
     getPublishHistory,
+    setEjectRuntimeExist,
   };
 };

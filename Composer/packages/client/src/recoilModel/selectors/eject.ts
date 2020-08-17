@@ -13,9 +13,10 @@ import { StateError } from '../../recoilModel/types';
 // Actions
 const ejectRuntimeAction = (dispatcher: Dispatcher) => {
   return {
-    onAction: async (projectId: string, name: string) => {
+    onAction: async (projectId: string, name: string, replace = false) => {
       try {
-        const response = await httpClient.post(`/runtime/eject/${projectId}/${name}`);
+        dispatcher.setEjectRuntimeExist(false);
+        const response = await httpClient.post(`/runtime/eject/${projectId}/${name}`, { isReplace: replace });
         if (!lodashGet(response, 'data.settings.path', '') || !lodashGet(response, 'data.settings.startCommand', '')) {
           throw new Error('Runtime cannot be ejected');
         }
@@ -24,12 +25,20 @@ const ejectRuntimeAction = (dispatcher: Dispatcher) => {
           command: response.data.settings.startCommand,
         });
       } catch (ex) {
-        const errorToShow: StateError = {
-          message: ex.response?.data?.message || ex.message,
-          summary: formatMessage('Error occured ejecting runtime!'),
-          status: ex.response?.data?.status || ex.status,
-        };
-        dispatcher.setApplicationLevelError(errorToShow);
+        if (
+          ex.response?.data?.message &&
+          typeof ex.response.data.message === 'string' &&
+          ex.response.data.message.includes('Runtime already exists')
+        ) {
+          dispatcher.setEjectRuntimeExist(true);
+        } else {
+          const errorToShow: StateError = {
+            message: ex.response?.data?.message || ex.message,
+            summary: formatMessage('Error occured ejecting runtime!'),
+            status: ex.response?.data?.status || ex.status,
+          };
+          dispatcher.setApplicationLevelError(errorToShow);
+        }
       }
     },
   };
