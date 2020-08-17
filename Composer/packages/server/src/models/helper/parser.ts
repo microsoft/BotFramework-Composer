@@ -3,6 +3,8 @@
 
 import fs from 'fs';
 
+import uniqueId from 'lodash/uniqueId';
+
 import { Path } from '../../utility/path';
 
 import log from './../../logger';
@@ -31,7 +33,7 @@ export async function parseQnAContent(url: string) {
   const subscriptionKey = QNA_SUBSCRIPTION_KEY || getBuildEnvironment()?.QNA_SUBSCRIPTION_KEY;
 
   if (!subscriptionKey) {
-    throw new Error('please set QNA_SUBSCRIPTION_KEY env variable ={YOUR-QNA-SUBSCRIPTION-KEY}');
+    throw new Error('please set env virable QNA_SUBSCRIPTION_KEY={your subscpriont key}');
   }
 
   if (DOC_EXTENSIONS.some((e) => url.endsWith(e))) {
@@ -42,10 +44,10 @@ export async function parseQnAContent(url: string) {
       url,
       subscriptionKey,
       COGNITIVE_SERVICES_ENDPOINTS,
-      'default'
+      uniqueId()
     );
   } else {
-    qnaContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, 'default');
+    qnaContent = await builder.importUrlReference(url, subscriptionKey, COGNITIVE_SERVICES_ENDPOINTS, uniqueId());
   }
 
   return qnaContent;

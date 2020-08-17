@@ -9,7 +9,7 @@ async function getQnaContent(req: Request, res: Response) {
     res.status(200).json(await parseQnAContent(req.query.url.trim()));
   } catch (e) {
     res.status(400).json({
-      message: e.message,
+      message: e.message || e.text,
     });
   }
 }
