@@ -77,7 +77,6 @@ export const userDispatcher = () => {
       if (settings.appLocale != null) {
         // we're changing the locale, which might fail if we can't load it
         const resp = await httpClient.get(`/assets/locales/${settings.appLocale}.json`);
-        console.log(resp);
         const data = resp?.data;
         if (data == null || typeof data === 'string') {
           // this is an invalid locale, so don't set anything
