@@ -63,6 +63,10 @@ const AppSettings: React.FC<RouteComponentProps> = () => {
               key: 'en-US-pseudo',
               text: formatMessage('Pseudo'),
             },
+            {
+              key: 'en-US-DoesNotExist',
+              text: formatMessage('Does Not Exist'),
+            },
           ]}
           selected={userSettings.appLocale}
           title={formatMessage('Language')}

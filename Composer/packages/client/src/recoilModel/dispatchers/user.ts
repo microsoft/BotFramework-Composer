@@ -4,11 +4,14 @@
 
 import { CallbackInterface, useRecoilCallback } from 'recoil';
 import jwtDecode from 'jwt-decode';
+import generate from 'format-message-generate-id';
+import formatMessage from 'format-message';
 
 import { userSettingsState, currentUserState, CurrentUser } from '../atoms/appState';
 import { getUserTokenFromCache, loginPopup, refreshToken } from '../../utils/auth';
 import storage from '../../utils/storage';
 import { UserSettingsPayload } from '../types';
+import httpClient from '../../utils/httpUtil';
 
 enum ClaimNames {
   upn = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn',
@@ -71,6 +74,26 @@ export const userDispatcher = () => {
 
   const updateUserSettings = useRecoilCallback(
     ({ set }: CallbackInterface) => async (settings: Partial<UserSettingsPayload>) => {
+      if (settings.appLocale != null) {
+        // we're changing the locale, which might fail if we can't load it
+        const resp = await httpClient.get(`/assets/locales/${settings.appLocale}.json`);
+        console.log(resp);
+        const data = resp?.data;
+        if (data == null || typeof data === 'string') {
+          // this is an invalid locale, so don't set anything
+          console.error('Tried to read an invalid locale');
+          return;
+        } else {
+          formatMessage.setup({
+            locale: settings.appLocale,
+            generateId: generate.underscored_crc32,
+            missingTranslation: process.env.NODE_ENV === 'development' ? 'warning' : 'ignore',
+            translations: {
+              [settings.appLocale]: data,
+            },
+          });
+        }
+      }
       set(userSettingsState, (currentSettings) => {
         const newSettings = {
           ...currentSettings,
