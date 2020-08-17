@@ -17,9 +17,6 @@ import settings from '../settings';
 
 import { Path } from './../utility/path';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const qnaBuild = require('@microsoft/bf-lu/lib/parser/qnabuild/builder.js');
-
 async function createProject(req: Request, res: Response) {
   let { templateId } = req.body;
   const { name, description, storageId, location, schemaUrl } = req.body;
@@ -418,37 +415,6 @@ async function updateBoilerplate(req: Request, res: Response) {
   }
 }
 
-async function parseQnAContent(req: Request, res: Response) {
-  const subscriptionKey = '77957a4340e7472a8dea4948223893be';
-  const url = req.query.url.trim() as string;
-  const subscriptionKeyEndpoint = `https://westus.api.cognitive.microsoft.com/qnamaker/v4.0`;
-  const extension = ['.pdf', '.tsv', '.doc', '.docx', '.xlsx'];
-  try {
-    const builder = new qnaBuild.Builder((message) => {
-      log(message);
-    });
-    let qnaContent = '';
-    if (extension.some((e) => url.endsWith(e))) {
-      const index = url.lastIndexOf('.');
-      const extension = url.substring(index);
-      qnaContent = await builder.importFileReference(
-        `onlineFile${extension}`,
-        url,
-        subscriptionKey,
-        subscriptionKeyEndpoint,
-        'default'
-      );
-    } else {
-      qnaContent = await builder.importUrlReference(url, subscriptionKey, subscriptionKeyEndpoint, 'default');
-    }
-    res.status(200).json(qnaContent);
-  } catch (e) {
-    res.status(400).json({
-      message: e.message,
-    });
-  }
-}
-
 export const ProjectController = {
   getProjectById,
   openProject,
@@ -467,5 +433,4 @@ export const ProjectController = {
   getRecentProjects,
   updateBoilerplate,
   checkBoilerplateVersion,
-  parseQnAContent,
 };

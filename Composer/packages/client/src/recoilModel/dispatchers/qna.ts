@@ -11,7 +11,7 @@ import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { getBaseName } from '../../utils/fileUtil';
 
 import httpClient from './../../utils/httpUtil';
-// import { Text, BotStatus } from './../../constants';
+import { setError } from './shared';
 
 export const updateQnAFileState = async (
   callbackHelpers: CallbackInterface,
@@ -86,6 +86,7 @@ export const qnaDispatcher = () => {
       await createQnAFileState(callbackHelpers, { id, content });
     }
   );
+
   const importQnAFromUrl = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, url }: { id: string; url: string }) => {
       const { set, snapshot } = callbackHelpers;
@@ -93,7 +94,7 @@ export const qnaDispatcher = () => {
       const qnaFile = qnaFiles.find((f) => f.id === id);
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
       try {
-        const response = await httpClient.get(`/qnaContent`, {
+        const response = await httpClient.get(`/helper/qna/parse`, {
           params: { url },
         });
         const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
@@ -101,15 +102,10 @@ export const qnaDispatcher = () => {
         await updateQnAFileState(callbackHelpers, { id, content });
         set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
       } catch (err) {
-        set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Failed);
+        setError(callbackHelpers, err);
+      } finally {
+        set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Success);
       }
-    }
-  );
-
-  const updateQnAAllUpViewStatus = useRecoilCallback(
-    (callbackHelpers: CallbackInterface) => async ({ status }: { status: QnAAllUpViewStatus }) => {
-      const { set } = callbackHelpers;
-      set(qnaAllUpViewStatusState, status);
     }
   );
 
@@ -117,6 +113,5 @@ export const qnaDispatcher = () => {
     createQnAFile,
     updateQnAFile,
     importQnAFromUrl,
-    updateQnAAllUpViewStatus,
   };
 };

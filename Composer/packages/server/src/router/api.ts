@@ -9,6 +9,8 @@ import { PublishController } from '../controllers/publisher';
 import { AssetController } from '../controllers/asset';
 import { EjectController } from '../controllers/eject';
 
+import { HelperController } from './../controllers/helper';
+
 const router: Router = express.Router({});
 
 router.post('/projects', ProjectController.createProject);
@@ -31,7 +33,6 @@ router.get('/projects/:projectId/export', ProjectController.exportProject);
 // update the boilerplate content
 router.get('/projects/:projectId/boilerplateVersion', ProjectController.checkBoilerplateVersion);
 router.post('/projects/:projectId/updateBoilerplate', ProjectController.updateBoilerplate);
-router.get('/qnaContent', ProjectController.parseQnAContent);
 
 // storages
 router.put('/storages/currentPath', StorageController.updateCurrentPath);
@@ -56,6 +57,9 @@ router.post('/runtime/eject/:projectId/:template', EjectController.eject);
 
 //assets
 router.get('/assets/projectTemplates', AssetController.getProjTemplates);
+
+//help api
+router.get('/helper/qna/parse', HelperController.getQnaContent);
 
 const ErrorHandler = (handler: RequestHandler) => (req: Request, res: Response, next: NextFunction) => {
   Promise.resolve(handler(req, res, next)).catch(next);
