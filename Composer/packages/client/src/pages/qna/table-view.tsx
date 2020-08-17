@@ -28,7 +28,7 @@ import {
   updateQuestion,
   updateAnswer as updateAnswerUtil,
   generateQnAPair,
-  addSection,
+  insertSection,
   removeSection,
 } from '../../utils/qnaUtil';
 import { dialogsState, qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
@@ -45,6 +45,8 @@ import {
   divider,
   rowDetails,
   icon,
+  addButtonContainer,
+  addAlternativeLink,
 } from './styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -69,6 +71,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const file = qnaFiles.find(({ id }) => id === `${dialogId}.${locale}`);
   const fileRef = useRef(file);
   fileRef.current = file;
+  const dialogIdRef = useRef(dialogId);
+  dialogIdRef.current = dialogId;
+  const localeRef = useRef(locale);
+  localeRef.current = locale;
   const limitedNumber = useRef(1).current;
   const generateQnASections = (file) => {
     return get(file, 'qnaSections', []).map((qnaSection, index) => {
@@ -108,11 +114,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const createOrUpdateQuestion = () => {
     if (question && editMode === EditMode.Creating) {
       const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
-      actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
+      actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: updatedQnAFileContent });
     }
     if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Questions[questionIndex].content !== question) {
       const updatedQnAFileContent = updateQuestion(question, questionIndex, qnaSections, qnaSectionIndex);
-      actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
+      actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: updatedQnAFileContent });
     }
     cancelQuestionEditOperation();
   };
@@ -120,7 +126,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const updateAnswer = () => {
     if (editMode === EditMode.Updating && qnaSections[qnaSectionIndex].Answer !== answer) {
       const updatedQnAFileContent = updateAnswerUtil(answer, qnaSections, qnaSectionIndex);
-      actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
+      actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: updatedQnAFileContent });
     }
     cancelAnswerEditOperation();
   };
@@ -171,13 +177,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
     e.preventDefault();
   };
 
-  const handleAddingAlternatives = (index: number) => {
+  const handleAddingAlternatives = (e, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
     setEditMode(EditMode.Creating);
     setQnASectionIndex(index);
     setQuestionIndex(-1);
   };
 
-  const handleUpdateingAlternatives = (qnaSectionIndex: number, questionIndex: number, question: string) => {
+  const handleUpdateingAlternatives = (e, qnaSectionIndex: number, questionIndex: number, question: string) => {
+    e.preventDefault();
+    e.stopPropagation();
     setEditMode(EditMode.Updating);
     setQuestion(question);
     setQnASectionIndex(qnaSectionIndex);
@@ -206,7 +216,9 @@ const TableView: React.FC<TableViewProps> = (props) => {
     e.preventDefault();
   };
 
-  const handleUpdateingAnswer = (qnaSectionIndex: number, answer: string) => {
+  const handleUpdateingAnswer = (e, qnaSectionIndex: number, answer: string) => {
+    e.preventDefault();
+    e.stopPropagation();
     setEditMode(EditMode.Updating);
     setAnswer(answer);
     setQnASectionIndex(qnaSectionIndex);
@@ -273,12 +285,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
                       role={'textbox'}
                       tabIndex={0}
                       onClick={(e) =>
-                        dialogId !== 'all' ? handleUpdateingAlternatives(qnaIndex, qIndex, q.content) : () => {}
+                        dialogId !== 'all' ? handleUpdateingAlternatives(e, qnaIndex, qIndex, q.content) : () => {}
                       }
                       onKeyDown={(e) => {
                         e.preventDefault();
                         if (e.key === 'Enter') {
-                          handleUpdateingAlternatives(qnaIndex, qIndex, q.content);
+                          handleUpdateingAlternatives(e, qnaIndex, qIndex, q.content);
                         }
                       }}
                     >
@@ -323,7 +335,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 />
               )}
               {!(editMode === EditMode.Creating && qnaSectionIndex === qnaIndex) && dialogId !== 'all' && (
-                <Link onClick={() => handleAddingAlternatives(qnaIndex)}>
+                <Link styles={addAlternativeLink} onClick={(e) => handleAddingAlternatives(e, qnaIndex)}>
                   {formatMessage('add alternative phrasing')}
                 </Link>
               )}
@@ -349,11 +361,11 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   css={contentAnswer(showQnAPairDetails[qnaIndex])}
                   role={'textbox'}
                   tabIndex={0}
-                  onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(qnaIndex, item.Answer) : () => {})}
+                  onClick={(e) => (dialogId !== 'all' ? handleUpdateingAnswer(e, qnaIndex, item.Answer) : () => {})}
                   onKeyDown={(e) => {
                     e.preventDefault();
                     if (e.key === 'Enter') {
-                      handleUpdateingAnswer(qnaIndex, item.Answer);
+                      handleUpdateingAnswer(e, qnaIndex, item.Answer);
                     }
                   }}
                 >
@@ -403,7 +415,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
                 actions.setMessage('item deleted');
                 if (fileRef && fileRef.current) {
                   const updatedQnAFileContent = removeSection(index, fileRef.current.content);
-                  actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: updatedQnAFileContent });
+                  actions.updateQnAFile({
+                    id: `${dialogIdRef.current}.${localeRef.current}`,
+                    content: updatedQnAFileContent,
+                  });
                 }
               }}
             />
@@ -414,7 +429,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     }
 
     // all view, show used in column
-    if (dialogId === 'all') {
+    if (dialogIdRef.current === 'all') {
       const beenUsedColumn = {
         key: 'usedIn',
         name: formatMessage('Used In'),
@@ -439,32 +454,47 @@ const TableView: React.FC<TableViewProps> = (props) => {
     return tableColums;
   };
 
-  const onRenderDetailsHeader = useCallback((props, defaultRender) => {
-    return (
-      <div data-testid="tableHeader">
-        <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
-          {defaultRender({
-            ...props,
-            onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
-          })}
-          <Link
-            styles={addQnAPairLink}
-            onClick={() => {
-              onCreateNewTemplate();
-              actions.setMessage('item added');
-            }}
-          >
-            {formatMessage('+ Add QnA Pair')}
-          </Link>
-          <div css={divider}> </div>
-        </Sticky>
-      </div>
-    );
-  }, []);
+  const onRenderDetailsHeader = useCallback(
+    (props, defaultRender) => {
+      return (
+        <div data-testid="tableHeader">
+          <Sticky isScrollSynced stickyPosition={StickyPositionType.Header}>
+            {defaultRender({
+              ...props,
+              onRenderColumnHeaderTooltip: (tooltipHostProps) => <TooltipHost {...tooltipHostProps} />,
+            })}
+
+            {dialogIdRef.current !== 'all' && (
+              <div css={addButtonContainer}>
+                <Link
+                  styles={addQnAPairLink}
+                  onClick={() => {
+                    onCreateNewTemplate();
+                    actions.setMessage('item added');
+                  }}
+                >
+                  {formatMessage('+ Add QnA Pair')}
+                </Link>
+              </div>
+            )}
+            <div css={divider}> </div>
+          </Sticky>
+        </div>
+      );
+    },
+    [dialogIdRef]
+  );
 
   const onRenderRow = (props) => {
     if (props) {
-      return <DetailsRow {...props} styles={rowDetails} tabIndex={props.itemIndex} />;
+      return (
+        <DetailsRow
+          {...props}
+          styles={rowDetails}
+          tabIndex={props.itemIndex}
+          onClick={() => toggleShowAll(props.itemIndex)}
+        />
+      );
     }
     return null;
   };
@@ -472,8 +502,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onCreateNewTemplate = () => {
     const newQnAPair = generateQnAPair();
     const content = get(fileRef.current, 'content', '');
-    const newContent = addSection(content, newQnAPair);
-    actions.updateQnAFile({ id: `${dialogId}.${locale}`, content: newContent });
+    const newContent = insertSection(0, content, newQnAPair);
+    actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: newContent });
   };
 
   const getKeyCallback = useCallback((item) => item.uuid, []);
