@@ -21,7 +21,6 @@ import { QnAAllUpViewStatus } from '../../recoilModel/types';
 
 import TableView from './table-view';
 import { ImportQnAFromUrlModal } from './ImportQnAFromUrlModal';
-import { FailedImportQnAModal } from './FailedImportQnAModal';
 
 const CodeEditor = React.lazy(() => import('./code-editor'));
 
@@ -141,9 +140,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
     }
   };
 
-  const onConfirm = () => {
-    actions.updateQnAAllUpViewStatus({ status: QnAAllUpViewStatus.Success });
-  };
   return (
     <Page
       data-testid="QnAPage"
@@ -161,15 +157,6 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         </Router>
         {qnaAllUpViewStatus === QnAAllUpViewStatus.Loading && (
           <LoadingSpinner message={'Extracting QnA pairs. This could take a moment.'} />
-        )}
-        {qnaAllUpViewStatus === QnAAllUpViewStatus.Failed && (
-          <FailedImportQnAModal
-            setting={{
-              title: 'Bad Argument',
-              subtitle: 'Failed to import QnA resource. Your url is invalid.',
-            }}
-            onConfirm={onConfirm}
-          />
         )}
         {importQnAFromUrlModalVisiability && (
           <ImportQnAFromUrlModal dialogId={dialogId} onDismiss={onDismiss} onSubmit={onSubmit} />
