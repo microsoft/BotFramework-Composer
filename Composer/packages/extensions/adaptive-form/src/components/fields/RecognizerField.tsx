@@ -72,11 +72,14 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       selected[0] = SDKKinds.CrossTrainedRecognizerSet;
     }
     return selected[0];
-  }, [value]);
+  }, [value, isCustomType]);
 
   const handleChangeRecognizerType = (_, option?: IDropdownOption): void => {
     if (option) {
       setIsCustomType(option.key === 'Custom');
+      if (option.key === 'Custom') {
+        return;
+      }
 
       const handler = recognizers.find((r) => r.id === option.key)?.handleRecognizerChange;
 
