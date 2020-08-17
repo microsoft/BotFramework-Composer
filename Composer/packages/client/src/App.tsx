@@ -15,19 +15,9 @@ import httpClient from './utils/httpUtil';
 
 initializeIcons(undefined, { disableWarnings: true });
 
-export const App: React.FC = () => {
-  const { appLocale } = useRecoilValue(userSettingsState);
-  const [localeFile, setLocaleFile] = useState<Translation>();
+type LocaleFile = { [key: string]: string | Translation } | undefined;
 
-  useEffect(() => {
-    (async () => {
-      const resp = await httpClient.get(`/assets/locales/${appLocale}.json`);
-      console.log(resp.data['0_bytes_a1e1cdb3']);
-      const data = resp?.data;
-      setLocaleFile(data);
-    })();
-  }, [appLocale]);
-
+function setLocale(appLocale: string, localeFile?: LocaleFile) {
   formatMessage.setup({
     locale: appLocale,
     generateId: generate.underscored_crc32,
@@ -36,6 +26,23 @@ export const App: React.FC = () => {
       [appLocale]: localeFile,
     },
   });
+}
+
+export const App: React.FC = () => {
+  const { appLocale } = useRecoilValue(userSettingsState);
+  const [localeFile, setLocaleFile] = useState<LocaleFile>({});
+
+  useEffect(() => {
+    (async () => {
+      const resp = await httpClient.get(`/assets/locales/${appLocale}.json`);
+      console.log(resp.data['0_bytes_a1e1cdb3']);
+      const data = resp?.data;
+      setLocaleFile(data);
+      setLocale(appLocale, localeFile);
+    })();
+  }, [appLocale]);
+
+  setLocale(appLocale, localeFile);
 
   return (
     <Fragment>

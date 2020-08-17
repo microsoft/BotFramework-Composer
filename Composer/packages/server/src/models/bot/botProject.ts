@@ -128,10 +128,7 @@ export class BotProject implements IBotProject {
   }
 
   public get uiSchemaLocalized() {
-    const windowLocale = window.localStorage['composer:userSettings']?.appLocale;
-
-    // eslint-disable-next-line security/detect-non-literal-require
-    return require(`../../../schemas/locales/${windowLocale}/sdk.uischema`);
+    return {};
   }
 
   public getFile(id: string) {
