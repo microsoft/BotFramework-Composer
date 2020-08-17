@@ -16,6 +16,7 @@ import { botOpeningState, projectIdState, dispatcherState, schemasState } from '
 import { openAlertModal } from './components/Modal/AlertDialog';
 import { dialogStyle } from './components/Modal/dialogStyle';
 import { LoadingSpinner } from './components/LoadingSpinner';
+import { useProjectIdCache } from './utils/hooks';
 
 const DesignPage = React.lazy(() => import('./pages/design/DesignPage'));
 const LUPage = React.lazy(() => import('./pages/language-understanding/LUPage'));
@@ -28,6 +29,17 @@ const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
+  const cachedProjectId = useProjectIdCache();
+  const projectId = useRecoilValue(projectIdState);
+  const { fetchProjectById } = useRecoilValue(dispatcherState);
+  // when fresh page, projectId in store are empty, no project are opened at client
+  // use cached projectId do fetch.
+  useEffect(() => {
+    if (!projectId && cachedProjectId) {
+      fetchProjectById(cachedProjectId);
+    }
+  }, []);
+
   return (
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>

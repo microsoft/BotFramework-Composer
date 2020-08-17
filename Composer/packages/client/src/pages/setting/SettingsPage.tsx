@@ -26,7 +26,6 @@ import { INavTreeItem } from '../../components/NavTree';
 import { useLocation } from '../../utils/hooks';
 import { IToolbarItem } from '../../components/Toolbar';
 import { AddLanguageModal, DeleteLanguageModal } from '../../components/MultiLanguage/index';
-import { useProjectIdCache } from '../../utils/hooks';
 
 import { SettingsRoutes } from './router';
 
@@ -43,7 +42,6 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
     delLanguageDialogCancel,
     addLanguages,
     deleteLanguages,
-    fetchProjectById,
   } = useRecoilValue(dispatcherState);
   const projectId = useRecoilValue(projectIdState);
   const locale = useRecoilValue(localeState);
@@ -52,14 +50,6 @@ const SettingPage: React.FC<RouteComponentProps<{ '*': string }>> = () => {
   const { defaultLanguage, languages } = useRecoilValue(settingsState);
   const { navigate } = useLocation();
 
-  // when fresh page, projectId in store are empty, no project are opened at client
-  // use cached projectId do fetch.
-  const cachedProjectId = useProjectIdCache();
-  useEffect(() => {
-    if (!projectId && cachedProjectId) {
-      fetchProjectById(cachedProjectId);
-    }
-  }, [projectId]);
   // If no project is open and user tries to access a bot-scoped settings (e.g., browser history, deep link)
   // Redirect them to the default settings route that is not bot-scoped
   useEffect(() => {

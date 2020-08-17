@@ -17,7 +17,6 @@ import {
   storagesState,
   focusedStorageFolderState,
 } from '../../recoilModel';
-import { useProjectIdCache } from '../../utils/hooks';
 import Home from '../../pages/home/Home';
 
 import { CreateOptions } from './CreateOptions';
@@ -39,7 +38,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
     updateCurrentPathForStorage,
     updateFolder,
     saveTemplateId,
-    fetchProjectById,
   } = useRecoilValue(dispatcherState);
   const creationFlowStatus = useRecoilValue(creationFlowStatusState);
   const projectId = useRecoilValue(projectIdState);
@@ -49,10 +47,6 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   const currentStorageIndex = useRef(0);
   const storage = storages[currentStorageIndex.current];
   const currentStorageId = storage ? storage.id : 'default';
-
-  // when fresh page, projectId in store are empty, no project are opened at client
-  // use cached projectId do fetch.
-  const cachedProjectId = useProjectIdCache();
 
   useEffect(() => {
     if (storages && storages.length) {
@@ -64,12 +58,9 @@ const CreationFlow: React.FC<CreationFlowProps> = () => {
   }, [storages]);
 
   useEffect(() => {
-    if (!projectId && cachedProjectId) {
-      fetchProjectById(cachedProjectId);
-    }
     fetchStorages();
     fetchTemplates();
-  }, [projectId]);
+  }, []);
 
   const updateCurrentPath = async (newPath, storageId) => {
     if (!storageId) {
