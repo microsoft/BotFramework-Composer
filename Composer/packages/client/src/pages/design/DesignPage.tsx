@@ -261,6 +261,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     }
   };
 
+  const [flowEditorFocused, setFlowEditorFocused] = useState(false);
   const { actionSelected, showDisableBtn, showEnableBtn } = useMemo(() => {
     const actionSelected = Array.isArray(visualEditorSelection) && visualEditorSelection.length > 0;
     if (!actionSelected) {
@@ -272,7 +273,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return { actionSelected, showDisableBtn, showEnableBtn };
   }, [visualEditorSelection]);
 
-  useElectronFeatures(actionSelected, canUndo(), canRedo());
+  useElectronFeatures(actionSelected, flowEditorFocused, canUndo(), canRedo());
 
   const EditorAPI = getEditorAPI();
   const toolbarItems: IToolbarItem[] = [
@@ -635,7 +636,11 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                   showWarning && <WarningMessage setShowWarning={setShowWarning} />
                 ) : (
                   <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
-                    <VisualEditor openNewTriggerModal={openNewTriggerModal} />
+                    <VisualEditor
+                      openNewTriggerModal={openNewTriggerModal}
+                      onBlur={() => setFlowEditorFocused(false)}
+                      onFocus={() => setFlowEditorFocused(true)}
+                    />
                   </Extension>
                 )}
               </div>
