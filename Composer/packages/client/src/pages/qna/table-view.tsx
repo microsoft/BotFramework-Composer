@@ -488,12 +488,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const onRenderRow = (props) => {
     if (props) {
       return (
-        <DetailsRow
-          {...props}
-          styles={rowDetails(props.itemIndex === selectedIndex)}
-          tabIndex={props.itemIndex}
-          onClick={() => toggleShowAll(props.itemIndex)}
-        />
+        <DetailsRow {...props} styles={rowDetails(props.itemIndex === selectedIndex)} tabIndex={props.itemIndex} />
       );
     }
     return null;
