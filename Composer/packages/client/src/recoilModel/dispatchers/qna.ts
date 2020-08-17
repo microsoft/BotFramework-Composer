@@ -86,6 +86,7 @@ export const qnaDispatcher = () => {
       await createQnAFileState(callbackHelpers, { id, content });
     }
   );
+
   const importQnAFromUrl = useRecoilCallback(
     (callbackHelpers: CallbackInterface) => async ({ id, url }: { id: string; url: string }) => {
       const { set, snapshot } = callbackHelpers;
@@ -93,7 +94,7 @@ export const qnaDispatcher = () => {
       const qnaFile = qnaFiles.find((f) => f.id === id);
       set(qnaAllUpViewStatusState, QnAAllUpViewStatus.Loading);
       try {
-        const response = await httpClient.get(`/qnaContent`, {
+        const response = await httpClient.get(`/helper/qna/parse`, {
           params: { url },
         });
         const content = qnaFile ? qnaFile.content + '\n' + response.data : response.data;
