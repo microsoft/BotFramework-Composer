@@ -4,7 +4,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import generate from 'format-message-generate-id';
-import formatMessage from 'format-message';
+import formatMessage, { Translation } from 'format-message';
 import { useRecoilValue } from 'recoil';
 
 import { Header } from './components/Header';
@@ -17,7 +17,7 @@ initializeIcons(undefined, { disableWarnings: true });
 
 export const App: React.FC = () => {
   const { appLocale } = useRecoilValue(userSettingsState);
-  const [localeFile, setLocaleFile] = useState<{ Translation }>();
+  const [localeFile, setLocaleFile] = useState<Translation>();
 
   useEffect(() => {
     (async () => {
