@@ -12,6 +12,9 @@ import {
   configureManifestsEndpoint,
 } from './shared/helpers';
 import { SkillConversationIdFactory } from './shared/skillConversationIdFactory';
+import debug from 'debug';
+
+const logger = debug('composer:runtime:nodejs');
 
 // Create shared memory storage.
 const memoryStorage = new MemoryStorage();
@@ -44,6 +47,6 @@ configureManifestsEndpoint(server);
 // Get port and listen.
 const port = getServerPort();
 server.listen(port, (): void => {
-  console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
-  console.log(`\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`);
+  logger(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
+  logger(`\nTo talk to your bot, open http://localhost:${port}/api/messages in the Emulator.`);
 });

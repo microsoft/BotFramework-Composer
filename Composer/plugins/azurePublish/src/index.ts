@@ -8,6 +8,7 @@ import md5 from 'md5';
 import { copy, rmdir, emptyDir, readJson, pathExists, writeJson, mkdirSync, writeFileSync } from 'fs-extra';
 import { IBotProject } from '@bfc/shared';
 import { JSONSchema7 } from '@bfc/plugin-loader';
+import { Debugger } from 'debug';
 
 import { mergeDeep } from './mergeDeep';
 import { BotProjectDeploy } from './deploy';
@@ -48,6 +49,7 @@ export default async (composer: any): Promise<void> => {
     public instructions: string;
     public customName: string;
     public customDescription: string;
+    public logger: Debugger;
 
     constructor(mode?: string, customName?: string, customDescription?: string) {
       this.histories = {};
@@ -62,6 +64,7 @@ export default async (composer: any): Promise<void> => {
       this.instructions = instructions;
       this.customName = customName;
       this.customDescription = customDescription;
+      this.logger = composer.log;
     }
 
     private baseRuntimeFolder = process.env.AZURE_PUBLISH_PATH || path.resolve(__dirname, `../publishBots`);
@@ -203,7 +206,7 @@ export default async (composer: any): Promise<void> => {
         const azDeployer = new BotProjectDeploy({
           subId: subscriptionID, // deprecate - not used
           logger: (msg: any) => {
-            console.log(msg);
+            this.logger(msg);
             this.logMessages.push(JSON.stringify(msg, null, 2));
 
             // update the log messages provided to Composer via the status API.
@@ -232,7 +235,8 @@ export default async (composer: any): Promise<void> => {
           await this.cleanup(resourcekey);
         }
       } catch (error) {
-        console.log(error);
+        this.logger(error);
+        console.error(error);
         if (error instanceof Error) {
           this.logMessages.push(error.message);
         } else if (typeof error === 'object') {
@@ -348,7 +352,6 @@ export default async (composer: any): Promise<void> => {
       // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
       // these will be written to the appropriate settings file inside the appropriate runtime plugin.
       const mergedSettings = mergeDeep(fullSettings, settings);
-
       // Prepare parameters and then perform the actual deployment action
       const customizeConfiguration: CreateAndDeployResources = {
         accessToken,
