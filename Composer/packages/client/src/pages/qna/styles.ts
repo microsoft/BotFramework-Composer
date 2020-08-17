@@ -6,6 +6,7 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 export const content = css`
   min-height: 28px;
+  width: 150px;
   outline: none;
 `;
 
@@ -107,3 +108,14 @@ export const rowDetails = () => {
 export const icon = css`
   color: ${NeutralColors.black};
 `;
+
+export const addButtonContainer = css`
+  z-index: 1;
+  background: ${NeutralColors.white};
+`;
+
+export const addAlternativeLink = {
+  root: {
+    width: 150,
+  },
+};
