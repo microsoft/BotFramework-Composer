@@ -435,7 +435,8 @@ class LocalPublisher {
     zip.extractAllTo(dstPath, true);
   };
 
-  private stopBot = (botId: string) => {
+  // make it public, so that able to stop runtime before switch ejected runtime.
+  public stopBot = (botId: string) => {
     const proc = LocalPublisher.runningBots[botId]?.process;
 
     if (proc) {

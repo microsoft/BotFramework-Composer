@@ -35,9 +35,13 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
   const projectId = useRecoilValue(projectIdState);
   const boilerplateVersion = useRecoilValue(boilerplateVersionState);
   const isEjectRuntimeExist = useRecoilValue(isEjectRuntimeExistState);
-  const { setCustomRuntime, setRuntimeField, getBoilerplateVersion, updateBoilerplate } = useRecoilValue(
-    dispatcherState
-  );
+  const {
+    setCustomRuntime,
+    setRuntimeField,
+    getBoilerplateVersion,
+    updateBoilerplate,
+    stopPublishBot,
+  } = useRecoilValue(dispatcherState);
   const runtimeEjection = useRecoilValue(ejectRuntimeSelector);
 
   const [formDataErrors, setFormDataErrors] = useState({ command: '', path: '' });
@@ -142,7 +146,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
     if (res) {
       setEjecting(true);
       // stop runtime
-
+      await stopPublishBot(projectId);
       // replace the runtime
       await runtimeEjection?.onAction(projectId, templateKey, true);
       setEjecting(false);

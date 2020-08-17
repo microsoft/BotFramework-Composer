@@ -275,4 +275,34 @@ export const PublishController = {
       message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
     });
   },
+
+  stopBot: async (req, res) => {
+    const projectId = req.params.projectId;
+    const profile = defaultPublishConfig;
+    const method = profile.type;
+    if (
+      profile &&
+      method &&
+      pluginLoader.extensions.publish[method] &&
+      pluginLoader.extensions.publish[method].methods &&
+      pluginLoader.extensions.publish[method].methods.stopBot
+    ) {
+      const pluginMethod = pluginLoader.extensions.publish[method].methods.stopBot;
+      if (typeof pluginMethod === 'function') {
+        try {
+          await pluginMethod.call(null, projectId);
+          return res.status(200).json({ message: 'stop bot success' });
+        } catch (err) {
+          return res.status(500).json({
+            statusCode: '500',
+            message: err.message,
+          });
+        }
+      }
+    }
+    res.status(400).json({
+      statusCode: '400',
+      message: `${method} is not a valid publishing target type. There may be a missing plugin.`,
+    });
+  },
 };

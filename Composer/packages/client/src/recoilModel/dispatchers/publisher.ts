@@ -18,7 +18,7 @@ import { botEndpointsState } from '../atoms';
 
 import { BotStatus, Text } from './../../constants';
 import httpClient from './../../utils/httpUtil';
-import { logMessage } from './shared';
+import { logMessage, setError } from './shared';
 
 const PUBLISH_SUCCESS = 200;
 const PUBLISH_PENDING = 202;
@@ -198,14 +198,27 @@ export const publisherDispatcher = () => {
     }
   );
 
-  const setEjectRuntimeExist = useRecoilCallback((callbackHelpers: CallbackInterface) => async (isExist: boolean) => {
-    const { set } = callbackHelpers;
+  const setEjectRuntimeExist = useRecoilCallback(({ set }: CallbackInterface) => async (isExist: boolean) => {
     set(isEjectRuntimeExistState, isExist);
   });
 
+  // only support local publish
+  const stopPublishBot = useRecoilCallback(
+    (callbackHelpers: CallbackInterface) => async (projectId: string, target: any = defaultPublishConfig) => {
+      const { set } = callbackHelpers;
+      try {
+        await httpClient.post(`/publish/${projectId}/stopPublish/${target.name}`);
+        set(botStatusState, BotStatus.unConnected);
+      } catch (err) {
+        setError(callbackHelpers, err);
+        logMessage(callbackHelpers, err.message);
+      }
+    }
+  );
   return {
     getPublishTargetTypes,
     publishToTarget,
+    stopPublishBot,
     rollbackToVersion,
     getPublishStatus,
     getPublishHistory,
