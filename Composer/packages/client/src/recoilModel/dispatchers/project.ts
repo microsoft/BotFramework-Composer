@@ -19,6 +19,7 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import filePersistence from '../persistence/FilePersistence';
 import { navigateTo } from '../../utils/navigation';
 import languageStorage from '../../utils/languageStorage';
+import { projectIdCache } from '../../utils/projectCache';
 import { designPageLocationState } from '../atoms/botState';
 
 import {
@@ -117,6 +118,9 @@ export const projectDispatcher = () => {
     const { files, botName, botEnvironment, location, schemas, settings, id: projectId, diagnostics, skills } = data;
     const storedLocale = languageStorage.get(botName)?.locale;
     const locale = settings.languages.includes(storedLocale) ? storedLocale : settings.defaultLanguage;
+
+    // cache current projectId in session, resolve page refresh caused state lost.
+    projectIdCache.set(projectId);
 
     try {
       schemas.sdk.content = processSchema(projectId, schemas.sdk.content);

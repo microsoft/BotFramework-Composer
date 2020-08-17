@@ -10,6 +10,7 @@ import { useRecoilValue } from 'recoil';
 import { projectIdState, designPageLocationState } from './../recoilModel';
 import { bottomLinks, topLinks } from './pageLinks';
 import routerCache from './routerCache';
+import { projectIdCache } from './projectCache';
 
 export const useLocation = () => {
   const { location, navigate } = globalHistory;
@@ -47,4 +48,13 @@ export const useRouterCache = (to: string) => {
   }, []);
 
   return state[to] || to;
+};
+
+export const useProjectIdCache = () => {
+  const [projectId, setProjectId] = useState(projectIdCache.get());
+  useEffect(() => {
+    setProjectId(projectIdCache.get());
+  }, []);
+
+  return projectId;
 };
