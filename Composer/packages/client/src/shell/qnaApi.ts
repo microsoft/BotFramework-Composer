@@ -10,11 +10,7 @@ import { projectIdState } from '../recoilModel/atoms';
 
 import { dispatcherState } from './../recoilModel/DispatcherWrapper';
 
-function createQnaApi(
-  state: { projectId },
-  dispatchers: any, //TODO
-  qnaFileResolver: (id: string) => QnAFile | undefined
-) {
+function createQnaApi(state: { projectId }, dispatchers: any, qnaFileResolver: (id: string) => QnAFile | undefined) {
   const updateQnaContentHandler = async (id, content) => {
     const file = qnaFileResolver(id);
     const projectId = state.projectId;

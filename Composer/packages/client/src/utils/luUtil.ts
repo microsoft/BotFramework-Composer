@@ -18,9 +18,8 @@ export * from '@bfc/indexers/lib/utils/luUtil';
 export function getReferredLuFiles(luFiles: LuFile[], dialogs: DialogInfo[], checkContent = true) {
   return luFiles.filter((file) => {
     const idWithOutLocale = getBaseName(file.id);
-    return dialogs.some(
-      (dialog) => dialog.luFile === idWithOutLocale && ((checkContent && !!file.content) || !checkContent)
-    );
+    const contentNotEmpty = (checkContent && !!file.content) || !checkContent;
+    return dialogs.some((dialog) => dialog.luFile === idWithOutLocale && contentNotEmpty);
   });
 }
 
@@ -111,30 +110,29 @@ export function createCrossTrainConfig(dialogs: DialogInfo[], luFiles: LuFile[])
     if (dialog.isRoot) rootId = dialog.id;
     const luFile = luFiles.find((luFile) => getBaseName(luFile.id) === dialog.luFile);
     if (luFile) {
-      let { intentTriggers } = dialog;
-      // filter intenttrigger which be involved in lu file
-      intentTriggers = intentTriggers.filter((intentTrigger) =>
-        luFile.intents.find((intent) => intent.Name === intentTrigger.intent)
-      );
       const fileId = dialog.id;
+      const { intentTriggers } = dialog;
+      // filter intenttrigger which be involved in lu file
       //find the trigger's dialog that use a recognizer
-      intentTriggers.forEach((item) => {
-        //find all dialogs in trigger that has a luis recognizer
-        const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
+      intentTriggers
+        .filter((intentTrigger) => luFile.intents.find((intent) => intent.Name === intentTrigger.intent))
+        .forEach((item) => {
+          //find all dialogs in trigger that has a luis recognizer
+          const used = item.dialogs.filter((dialog) => !!countMap[dialog]);
 
-        const deduped = Array.from(new Set<string>(used));
+          const deduped = Array.from(new Set<string>(used));
 
-        const result = {};
-        if (deduped.length === 1) {
-          result[item.intent] = deduped[0];
-        } else if (deduped.length) {
-          result[item.intent] = deduped;
-        } else {
-          result[item.intent] = '';
-        }
+          const result = {};
+          if (deduped.length === 1) {
+            result[item.intent] = deduped[0];
+          } else if (deduped.length) {
+            result[item.intent] = deduped;
+          } else {
+            result[item.intent] = '';
+          }
 
-        triggerRules[fileId] = { ...triggerRules[fileId], ...result };
-      });
+          triggerRules[fileId] = { ...triggerRules[fileId], ...result };
+        });
     }
   });
 
