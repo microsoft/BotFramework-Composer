@@ -97,10 +97,15 @@ export const divider = css`
   background: ${NeutralColors.gray30};
 `;
 
-export const rowDetails = () => {
+export const rowDetails = (selected: boolean) => {
   return {
     root: {
       minHeight: 76,
+      selectors: {
+        '&:hover div': {
+          background: selected ? NeutralColors.gray30 : NeutralColors.white,
+        },
+      },
     },
   };
 };

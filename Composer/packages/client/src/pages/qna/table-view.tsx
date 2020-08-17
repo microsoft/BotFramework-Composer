@@ -490,7 +490,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
       return (
         <DetailsRow
           {...props}
-          styles={rowDetails}
+          styles={rowDetails(props.itemIndex === selectedIndex)}
           tabIndex={props.itemIndex}
           onClick={() => toggleShowAll(props.itemIndex)}
         />
