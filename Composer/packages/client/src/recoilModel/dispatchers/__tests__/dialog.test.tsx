@@ -41,6 +41,18 @@ jest.mock('@bfc/indexers', () => {
         content,
       }),
     },
+    lgUtil: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
+    luUtil: {
+      parse: (id, content) => ({
+        id,
+        content,
+      }),
+    },
   };
 });
 
