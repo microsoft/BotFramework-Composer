@@ -3,7 +3,7 @@
 
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import formatMessage from 'format-message';
 import { Dialog, DialogType, DialogFooter } from 'office-ui-fabric-react/lib/Dialog';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
@@ -11,9 +11,10 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { PrimaryButton, DefaultButton, ActionButton } from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import { FontWeights } from '@uifabric/styling';
-import { FontSizes, SharedColors } from '@uifabric/fluent-theme';
+import { FontSizes, SharedColors, NeutralColors } from '@uifabric/fluent-theme';
 import { RouteComponentProps } from '@reach/router';
 
+import { QnAMakerLearningUrl, knowledgeBaseSourceUrl } from '../../constants';
 import { FieldConfig, useForm } from '../../hooks/useForm';
 const styles = {
   dialog: {
@@ -69,6 +70,12 @@ const cancel = css`
   margin-left: 10px;
 `;
 
+const subText = css`
+  color: ${NeutralColors.gray130};
+  font-size: 14px;
+  font-weight: 400;
+`;
+
 interface ImportQnAFromUrlModalProps
   extends RouteComponentProps<{
     location: string;
@@ -114,8 +121,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
   };
 
   const addNewUrl = () => {
-    const urls = [...formData.urls];
-    urls.splice(urls.length, 0, '');
+    const urls = [...formData.urls, ''];
     updateField('urls', urls);
     setUrlErrors(validateUrls(urls));
   };
@@ -134,15 +140,41 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     updateField('urls', urls);
     setUrlErrors(validateUrls(urls));
   };
+  /*
+formatMessage('Populate your KB.'),
+        subText: formatMessage(
+          'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
+        ),
+  */
+  const dialogTitle = useMemo(() => {
+    return (
+      <div>
+        {formatMessage('Populate your KB.')}
+        <p>
+          <span css={subText}>
+            {formatMessage(
+              'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. '
+            )}
+            <Link href={knowledgeBaseSourceUrl} target={'_blank'}>
+              {formatMessage('Learn more about knowledge base sources. ')}
+            </Link>
+            {formatMessage(
+              'Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. '
+            )}
+            <Link href={QnAMakerLearningUrl} target={'_blank'}>
+              {formatMessage('Learn more about QnA Maker SKUs.')}
+            </Link>
+          </span>
+        </p>
+      </div>
+    );
+  }, []);
 
   return (
     <Dialog
       dialogContentProps={{
         type: DialogType.normal,
-        title: formatMessage('Create your knowledge base using QnA Maker'),
-        subText: formatMessage(
-          'Extract question-and-answer pairs from an online FAQ, product manuals, or other files. Supported formats are .tsv, .pdf, .doc, .docx, .xlsx, containing questions and answers in sequence. Learn more about knowledge base sources. Skip this step to add questions and answers manually after creation. The number of sources and file size you can add depends on the QnA service SKU you choose. Learn more about QnA Maker SKUs.'
-        ),
+        title: dialogTitle,
         styles: styles.dialog,
       }}
       hidden={false}
@@ -177,8 +209,13 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
               </div>
             );
           })}
-          <ActionButton css={actionButton} data-testid={'addQnAImportUrl'} iconProps={{ iconName: 'Add' }}>
-            {<Link onClick={addNewUrl}>{formatMessage('Add URL')}</Link>}
+          <ActionButton
+            css={actionButton}
+            data-testid={'addQnAImportUrl'}
+            iconProps={{ iconName: 'Add' }}
+            onClick={addNewUrl}
+          >
+            {formatMessage('Add URL')}
           </ActionButton>
           {!isQnAFileselected && (
             <div css={warning}> {formatMessage('please select a specific qna file to import QnA')}</div>

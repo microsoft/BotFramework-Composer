@@ -10,7 +10,6 @@ import {
   DetailsRow,
   DetailsListLayoutMode,
   SelectionMode,
-  Selection,
   CheckboxVisibility,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
@@ -101,7 +100,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     } else {
       return singleFileQnASections;
     }
-  }, [dialogId, qnaFiles]);
+  }, [dialogIdRef.current, qnaFiles]);
   const [showQnAPairDetails, setShowQnAPairDetails] = useState(Array(qnaSections.length).fill(false));
   const [qnaSectionIndex, setQnASectionIndex] = useState(-1);
   const [questionIndex, setQuestionIndex] = useState(-1); //used in QnASection.Questions array
@@ -109,8 +108,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
   const [editMode, setEditMode] = useState(EditMode.None);
   const [answerIndex, setAnswerIndex] = useState(-1);
   const [answer, setAnswer] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-
   const createOrUpdateQuestion = () => {
     if (question && editMode === EditMode.Creating) {
       const updatedQnAFileContent = addQuestion(question, qnaSections, qnaSectionIndex);
@@ -230,15 +227,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setAnswer(answer);
   };
 
-  const selection = useMemo(() => {
-    return new Selection({
-      onSelectionChanged: () => {
-        const selectedIndexs = selection.getSelectedIndices();
-        setSelectedIndex(selectedIndexs[0]);
-      },
-    });
-  }, []);
-
   const getTableColums = () => {
     const tableColums = [
       {
@@ -253,8 +241,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
           return (
             <IconButton
               ariaLabel="ChevronDown"
-              css={icon}
               iconProps={{ iconName: showQnAPairDetails[qnaIndex] ? 'ChevronDown' : 'ChevronRight' }}
+              styles={icon}
               title="ChevronDown"
               onClick={() => toggleShowAll(qnaIndex)}
             />
@@ -354,7 +342,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isPadded: true,
         onRender: (item, qnaIndex) => {
           return (
-            <div data-is-focusable css={formCell} data-testId={'dasdasdasd'}>
+            <div data-is-focusable css={formCell}>
               {(qnaIndex !== qnaSectionIndex || answerIndex === -1 || editMode !== EditMode.Updating) && (
                 <div
                   aria-label={formatMessage(`Answer is {answer}`, { answer: item.Answer })}
@@ -403,18 +391,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
         isPadded: true,
         fieldName: 'buttons',
         data: 'string',
-        onRender: (item, index) => {
-          if (selectedIndex !== index) return <div />;
+        onRender: (item, qnaIndex) => {
           return (
             <IconButton
               ariaLabel="Delete"
-              css={icon}
               iconProps={{ iconName: 'Delete' }}
+              styles={icon}
               title="Delete"
               onClick={() => {
                 actions.setMessage('item deleted');
                 if (fileRef && fileRef.current) {
-                  const updatedQnAFileContent = removeSection(index, fileRef.current.content);
+                  const updatedQnAFileContent = removeSection(qnaIndex, fileRef.current.content);
                   actions.updateQnAFile({
                     id: `${dialogIdRef.current}.${localeRef.current}`,
                     content: updatedQnAFileContent,
@@ -487,9 +474,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const onRenderRow = (props) => {
     if (props) {
-      return (
-        <DetailsRow {...props} styles={rowDetails(props.itemIndex === selectedIndex)} tabIndex={props.itemIndex} />
-      );
+      return <DetailsRow {...props} styles={rowDetails} tabIndex={props.itemIndex} />;
     }
     return null;
   };
@@ -499,6 +484,8 @@ const TableView: React.FC<TableViewProps> = (props) => {
     const content = get(fileRef.current, 'content', '');
     const newContent = insertSection(0, content, newQnAPair);
     actions.updateQnAFile({ id: `${dialogIdRef.current}.${localeRef.current}`, content: newContent });
+    const newArray = [false, ...showQnAPairDetails];
+    setShowQnAPairDetails(newArray);
   };
 
   const getKeyCallback = useCallback((item) => item.uuid, []);
@@ -512,19 +499,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
           getKey={getKeyCallback}
           items={qnaSections}
           layoutMode={DetailsListLayoutMode.justified}
-          selection={selection}
           selectionMode={SelectionMode.single}
-          styles={{
-            root: {
-              overflowX: 'hidden',
-              // hack for https://github.com/OfficeDev/office-ui-fabric-react/issues/8783
-              selectors: {
-                'div[role="row"]:hover': {
-                  background: 'none',
-                },
-              },
-            },
-          }}
           onRenderDetailsHeader={onRenderDetailsHeader}
           onRenderRow={onRenderRow}
         />
