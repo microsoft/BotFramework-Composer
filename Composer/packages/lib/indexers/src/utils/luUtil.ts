@@ -170,13 +170,16 @@ function updateInSections(
  * @param intentName intent Name, support subSection naming 'CheckEmail/CheckUnreadEmail'. if #CheckEmail not exist will do recursive add.
  * @param {Name, Body} intent the updates. if intent is empty will do remove.
  */
-export function updateIntent(luFile: LuFile, intentName: string, intent: LuIntentSection | null): LuFile {
+export function updateIntent(
+  luFile: LuFile,
+  intentName: string,
+  intent: { Name?: string; Body?: string } | null
+): LuFile {
   let targetSection;
   let targetSectionContent;
   const { id, resource } = luFile;
-
-  const updatedSectionContent = textFromIntent(intent);
   const { Sections } = resource;
+
   // if intent is null, do remove
   // and if remove target not exist return origin content;
   if (!intent || isEmpty(intent)) {
@@ -198,20 +201,27 @@ export function updateIntent(luFile: LuFile, intentName: string, intent: LuInten
     }
   }
 
+  const orginSection = Sections.find(({ Name }) => Name === intentName);
+  const intentToUpdate: LuIntentSection = {
+    ...orginSection,
+    Name: intent?.Name || orginSection?.Name || '',
+    Body: intent?.Body || orginSection?.Body || '',
+  };
+
   // nestedSection name path
   if (intentName.includes('/')) {
     const [parrentName, childName] = intentName.split('/');
     targetSection = Sections.find(({ Name }) => Name === parrentName);
 
     if (targetSection) {
-      const updatedSections = updateInSections(targetSection.SimpleIntentSections, childName, intent);
+      const updatedSections = updateInSections(targetSection.SimpleIntentSections, childName, intentToUpdate);
       targetSectionContent = textFromIntent({ Name: targetSection.Name, Body: textFromIntents(updatedSections, 2) });
     } else {
-      targetSectionContent = textFromIntent({ Name: parrentName, Body: textFromIntent(intent, 2) });
+      targetSectionContent = textFromIntent({ Name: parrentName, Body: textFromIntent(intentToUpdate, 2) });
     }
   } else {
     targetSection = Sections.find(({ Name }) => Name === intentName);
-    targetSectionContent = updatedSectionContent;
+    targetSectionContent = textFromIntent(intentToUpdate);
   }
 
   let newResource;
@@ -230,14 +240,14 @@ export function updateIntent(luFile: LuFile, intentName: string, intent: LuInten
  * @param content origin lu file content
  * @param {Name, Body} intent the adds. Name support subSection naming 'CheckEmail/CheckUnreadEmail', if #CheckEmail not exist will do recursive add.
  */
-export function addIntent(luFile: LuFile, { Name, Body, Entities }: LuIntentSection): LuFile {
+export function addIntent(luFile: LuFile, { Name, Body }: LuIntentSection): LuFile {
   const intentName = Name;
   if (Name.includes('/')) {
     const [, childName] = Name.split('/');
     Name = childName;
   }
   // If the invoker doesn't want to carry Entities, don't pass Entities in.
-  return updateIntent(luFile, intentName, { Name, Body, Entities });
+  return updateIntent(luFile, intentName, { Name, Body });
 }
 
 export function addIntents(luFile: LuFile, intents: LuIntentSection[]): LuFile {
