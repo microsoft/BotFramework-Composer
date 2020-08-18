@@ -108,7 +108,7 @@ export default async (composer: any): Promise<void> => {
         // used to read bot project template from source (bundled in plugin)
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage);
         const schemaDstPath = path.join(project.dir, 'schemas');
-        const schemaSrcPath = path.join(sourcePath, 'azurewebapp/schemas');
+        const schemaSrcPath = path.join(sourcePath, 'azurewebapp/Schemas');
         const customSchemaExists = fs.existsSync(schemaDstPath);
         const pathsToExclude: Set<string> = new Set();
         if (customSchemaExists) {
@@ -118,7 +118,7 @@ export default async (composer: any): Promise<void> => {
           }
         }
         await copyDir(schemaSrcPath, localDisk, schemaDstPath, project.fileStorage, pathsToExclude);
-        const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/schemas');
+        const schemaFolderInRuntime = path.join(destPath, 'azurewebapp/Schemas');
         await removeDirAndFiles(schemaFolderInRuntime);
         return destPath;
       }
@@ -155,14 +155,12 @@ export default async (composer: any): Promise<void> => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
       // install dev dependencies in production, make sure typescript is installed
-      const { stderr: installErr } = await execAsync(
-        'npm install --loglevel=error && npm install --only=dev --loglevel=error',
-        {
-          cwd: runtimePath,
-        }
-      );
+      const { stderr: installErr } = await execAsync('npm install && npm install --only=dev', {
+        cwd: runtimePath,
+      });
       if (installErr) {
-        throw new Error(installErr);
+        // in order to not throw warning, we just log all warning and error message
+        composer.log(installErr);
       }
       const { stderr: install2Err } = await execAsync('npm run build', {
         cwd: runtimePath,
@@ -178,11 +176,11 @@ export default async (composer: any): Promise<void> => {
     buildDeploy: async (runtimePath: string, project: any, settings: any, profileName: string): Promise<string> => {
       // do stuff
       composer.log('BUILD THIS JS PROJECT');
-      const { stderr: installErr } = await execAsync('npm install --loglevel=error', {
+      const { stderr: installErr } = await execAsync('npm install', {
         cwd: path.resolve(runtimePath, '../'),
       });
       if (installErr) {
-        throw new Error(installErr);
+        composer.log(installErr);
       }
       const { stderr: install2Err } = await execAsync('npm run build', {
         cwd: path.resolve(runtimePath, '../'),
@@ -214,14 +212,11 @@ export default async (composer: any): Promise<void> => {
         const excludeFolder = new Set<string>().add(path.resolve(sourcePath, 'node_modules'));
         await copyDir(sourcePath, localDisk, destPath, project.fileStorage, excludeFolder);
         // install dev dependencies in production, make sure typescript is installed
-        const { stderr: initErr } = await execAsync(
-          'npm install --loglevel=error && npm install --only=dev --loglevel=error',
-          {
-            cwd: destPath,
-          }
-        );
+        const { stderr: initErr } = await execAsync('npm install && npm install --only=dev', {
+          cwd: destPath,
+        });
         if (initErr) {
-          throw new Error(initErr);
+          composer.log(initErr);
         }
         const { stderr: initErr2 } = await execAsync('npm run build', { cwd: destPath });
         if (initErr2) {
