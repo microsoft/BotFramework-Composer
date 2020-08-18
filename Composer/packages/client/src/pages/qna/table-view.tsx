@@ -490,11 +490,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
 
   const getKeyCallback = useCallback((item) => item.uuid, []);
   return (
-    <div className={'table-view'} data-testid={'table-view'}>
+    <div data-testid={'table-view'}>
       <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
         <DetailsList
           checkboxVisibility={CheckboxVisibility.hidden}
-          className="table-view-list"
           columns={getTableColums()}
           getKey={getKeyCallback}
           items={qnaSections}

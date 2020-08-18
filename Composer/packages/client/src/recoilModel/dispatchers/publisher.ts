@@ -154,7 +154,6 @@ export const publisherDispatcher = () => {
         const response = await httpClient.get(`/publish/${projectId}/status/${target.name}`);
         updatePublishStatus(callbackHelpers, projectId, target, response.data);
       } catch (err) {
-        console.log(err);
         updatePublishStatus(callbackHelpers, projectId, target, err.response.data);
       }
     }

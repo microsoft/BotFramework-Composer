@@ -11,6 +11,7 @@ import settingStorage from '../../utils/dialogSettingStorage';
 import { settingsState } from '../atoms/botState';
 
 import httpClient from './../../utils/httpUtil';
+import { setError } from './shared';
 
 export const settingsDispatcher = () => {
   const setSettings = useRecoilCallback<[string, DialogSetting], Promise<void>>(
@@ -65,7 +66,8 @@ export const settingsDispatcher = () => {
   });
 
   const setQnASettings = useRecoilCallback(
-    ({ set }: CallbackInterface) => async (projectId: string, subscriptionKey: string) => {
+    (callbackHelpers: CallbackInterface) => async (projectId: string, subscriptionKey: string) => {
+      const { set } = callbackHelpers;
       try {
         const response = await httpClient.post(`/projects/${projectId}/qnaSettings/set`, {
           projectId,
@@ -80,7 +82,7 @@ export const settingsDispatcher = () => {
           },
         }));
       } catch (err) {
-        console.log(err);
+        setError(callbackHelpers, err);
       }
     }
   );
