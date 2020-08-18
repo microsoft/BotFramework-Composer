@@ -6,7 +6,6 @@ import { NeutralColors } from '@uifabric/fluent-theme';
 import { IIconStyles } from 'office-ui-fabric-react/lib/Icon';
 export const content = css`
   min-height: 28px;
-  width: 150px;
   outline: none;
 `;
 
@@ -28,12 +27,19 @@ export const formCell = css`
   line-height: 28px;
 `;
 
+export const inlineContainer = (isBold) => css`
+  display: inline-block;
+  font-weight: ${isBold ? FontWeights.semibold : 400};
+`;
+
 export const textFieldQuestion = {
   root: {
+    width: 'auto',
     height: 28,
     marginLeft: -5,
   },
   field: {
+    width: 'auto',
     paddingLeft: 4,
     marginTop: -5,
   },
@@ -53,10 +59,6 @@ export const textFieldAnswer = {
   },
 };
 
-export const bold = css`
-  font-weight: ${FontWeights.semibold};
-`;
-
 export const link = {
   root: {
     fontSize: 14,
@@ -68,7 +70,7 @@ export const addQnAPairLink = {
   root: {
     fontSize: 14,
     lineHeight: 28,
-    marginLeft: 105,
+    marginLeft: 72,
   },
 };
 
@@ -117,7 +119,8 @@ export const rowDetails = {
 export const icon = {
   root: {
     color: NeutralColors.black,
-    visibility: 'hidden',
+    visibility: 'visible',
+    paddingLeft: 18,
   },
 };
 

@@ -38,7 +38,6 @@ import {
   content,
   textFieldQuestion,
   textFieldAnswer,
-  bold,
   contentAnswer,
   addQnAPairLink,
   divider,
@@ -46,6 +45,7 @@ import {
   icon,
   addButtonContainer,
   addAlternativeLink,
+  inlineContainer,
 } from './styles';
 
 interface TableViewProps extends RouteComponentProps<{}> {
@@ -157,6 +157,17 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setShowQnAPairDetails(newArray);
   };
 
+  const expandDetails = (index: number) => {
+    const newArray = showQnAPairDetails.map((element, i) => {
+      if (i === index) {
+        return true;
+      } else {
+        return element;
+      }
+    });
+    setShowQnAPairDetails(newArray);
+  };
+
   const handleQuestionKeydown = (e) => {
     if (e.key === 'Enter') {
       createOrUpdateQuestion();
@@ -180,6 +191,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setEditMode(EditMode.Creating);
     setQnASectionIndex(index);
     setQuestionIndex(-1);
+    expandDetails(index);
   };
 
   const handleUpdateingAlternatives = (e, qnaSectionIndex: number, questionIndex: number, question: string) => {
@@ -189,6 +201,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setQuestion(question);
     setQnASectionIndex(qnaSectionIndex);
     setQuestionIndex(questionIndex);
+    expandDetails(qnaSectionIndex);
   };
 
   const handleQuestionOnChange = (newValue, index: number) => {
@@ -220,6 +233,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
     setAnswer(answer);
     setQnASectionIndex(qnaSectionIndex);
     setAnswerIndex(0);
+    expandDetails(qnaSectionIndex);
   };
 
   const handleAnswerOnChange = (answer, index: number) => {
@@ -232,11 +246,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
       {
         key: 'ToggleShowAll',
         name: '',
-        fieldName: 'CollapseIcon',
-        minWidth: 50,
-        maxWidth: 50,
-        isResizable: false,
-        isPadded: true,
+        fieldName: 'Chevron',
+        minWidth: 40,
+        maxWidth: 40,
+        isResizable: true,
         onRender: (item, qnaIndex) => {
           return (
             <IconButton
@@ -282,10 +295,12 @@ const TableView: React.FC<TableViewProps> = (props) => {
                         }
                       }}
                     >
-                      {isQuestionEmpty && <div css={bold}>{formatMessage('Enter a question') + ' (0)'}</div>}
+                      {isQuestionEmpty && <div css={inlineContainer(true)}>{formatMessage('Enter a question')}</div>}
                       {!isQuestionEmpty && (
-                        <div css={qIndex === 0 ? bold : {}}>
-                          {`${q.content} ${qIndex === 0 ? `(${questions.length})` : ''}`}
+                        <div css={inlineContainer(qIndex === 0)}>
+                          {`${q.content} ${
+                            qIndex === 0 && !showQnAPairDetails[qnaIndex] ? `(${questions.length})` : ''
+                          }`}
                         </div>
                       )}
                     </div>
@@ -335,11 +350,10 @@ const TableView: React.FC<TableViewProps> = (props) => {
         key: 'Answer',
         name: formatMessage('Answer'),
         fieldName: 'answer',
-        minWidth: 150,
-        maxWidth: 400,
+        minWidth: 250,
+        maxWidth: 450,
         isResizable: true,
         data: 'string',
-        isPadded: true,
         onRender: (item, qnaIndex) => {
           return (
             <div data-is-focusable css={formCell}>
@@ -365,6 +379,7 @@ const TableView: React.FC<TableViewProps> = (props) => {
                   autoFocus
                   multiline
                   autoAdjustHeight={showQnAPairDetails[qnaIndex]}
+                  resizable={false}
                   styles={textFieldAnswer}
                   value={answer}
                   onBlur={(e) => {
@@ -388,7 +403,6 @@ const TableView: React.FC<TableViewProps> = (props) => {
         minWidth: 50,
         maxWidth: 50,
         isResizable: true,
-        isPadded: true,
         fieldName: 'buttons',
         data: 'string',
         onRender: (item, qnaIndex) => {
