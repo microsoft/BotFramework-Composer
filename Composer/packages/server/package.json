@@ -22,7 +22,7 @@
   },
   "author": "",
   "nodemonConfig": {
-    "exec": "cross-env TS_NODE_FILES=true node --inspect=9228 -r ts-node/register src/init.ts",
+    "exec": "cross-env TS_NODE_FILES=true node -r ts-node/register src/init.ts",
     "watch": [
       "src"
     ],
