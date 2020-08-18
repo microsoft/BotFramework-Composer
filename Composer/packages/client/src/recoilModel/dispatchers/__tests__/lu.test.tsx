@@ -82,7 +82,6 @@ describe('Lu dispatcher', () => {
         id: luFiles[0].id,
         intentName: 'Hello',
         intent: getLuIntent('Hello', '-IntentValue'),
-        projectId: '',
       });
     });
 
