@@ -5,8 +5,8 @@ import get from 'lodash/get';
 import formatMessage from 'format-message';
 
 import { SDKKinds } from './types';
-import { ConceptLabels } from './labelMap';
-import { PromptTab, PropmtTabTitles } from './promptTabs';
+import { conceptLabels } from './labelMap';
+import { PromptTab, PromptTabTitles } from './promptTabs';
 
 export const PROMPT_TYPES = [
   SDKKinds.AttachmentInput,
@@ -184,12 +184,12 @@ const truncateSDKType = ($kind) => (typeof $kind === 'string' ? $kind.replace('M
 export function generateSDKTitle(data, customizedTitle?: string, tab?: PromptTab) {
   const $kind = get(data, '$kind');
   const titleFrom$designer = get(data, '$designer.name');
-  const titleFromShared = get(ConceptLabels, [$kind, 'title']);
+  const titleFromShared = get(conceptLabels(), [$kind, 'title']);
   const titleFrom$kind = truncateSDKType($kind);
 
   const title = titleFrom$designer || customizedTitle || titleFromShared || titleFrom$kind;
   if (tab) {
-    return `${PropmtTabTitles} (${title})`;
+    return `${PromptTabTitles} (${title})`;
   }
   return title;
 }

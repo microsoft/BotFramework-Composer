@@ -6,7 +6,7 @@ import { Pivot, PivotLinkSize, PivotItem } from 'office-ui-fabric-react/lib/Pivo
 import get from 'lodash/get';
 import { FieldProps, useShellApi } from '@bfc/extension';
 import { SchemaField } from '@bfc/adaptive-form';
-import { PromptTab, PropmtTabTitles } from '@bfc/shared';
+import { PromptTab, PromptTabTitles } from '@bfc/shared';
 
 import { tabs } from './styles';
 import { BotAsks } from './BotAsks';
@@ -53,13 +53,13 @@ const PromptField: React.FC<FieldProps> = (props) => {
   return (
     <div>
       <Pivot linkSize={PivotLinkSize.large} selectedKey={focusedTab} styles={tabs} onLinkClick={handleTabChange}>
-        <PivotItem headerText={PropmtTabTitles[PromptTab.BOT_ASKS]} itemKey={PromptTab.BOT_ASKS}>
+        <PivotItem headerText={PromptTabTitles[PromptTab.BOT_ASKS]()} itemKey={PromptTab.BOT_ASKS}>
           <BotAsks {...props} getError={getError} getSchema={getSchema} onChange={updateField} />
         </PivotItem>
-        <PivotItem headerText={PropmtTabTitles[PromptTab.USER_INPUT]} itemKey={PromptTab.USER_INPUT}>
+        <PivotItem headerText={PromptTabTitles[PromptTab.USER_INPUT]()} itemKey={PromptTab.USER_INPUT}>
           <UserInput {...props} getError={getError} getSchema={getSchema} onChange={updateField} />
         </PivotItem>
-        <PivotItem headerText={PropmtTabTitles[PromptTab.OTHER]} itemKey={PromptTab.OTHER}>
+        <PivotItem headerText={PromptTabTitles[PromptTab.OTHER]()} itemKey={PromptTab.OTHER}>
           {OTHER_FIELDS.filter((f) => getSchema(f)).map((f) => (
             <SchemaField
               key={f}

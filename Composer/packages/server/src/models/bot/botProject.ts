@@ -223,7 +223,7 @@ export class BotProject implements IBotProject {
     if (userSDKSchemaFile !== undefined) {
       debug('Customized SDK schema found');
       try {
-        sdkSchema = JSON.parse(userSDKSchemaFile.content);
+        sdkSchema = merge(sdkSchema, JSON.parse(userSDKSchemaFile.content));
       } catch (err) {
         debug('Attempt to parse sdk schema as JSON failed.\nError: %s', err.messagee);
         diagnostics.push(`Error in sdk.schema, ${err.message}`);
@@ -235,7 +235,7 @@ export class BotProject implements IBotProject {
     if (uiSchemaFile !== undefined) {
       debug('UI Schema found.');
       try {
-        uiSchema = JSON.parse(uiSchemaFile.content);
+        uiSchema = merge(uiSchema, JSON.parse(uiSchemaFile.content));
       } catch (err) {
         debug('Attempt to parse ui schema as JSON failed.\nError: %s', err.messagee);
         diagnostics.push(`Error in sdk.uischema, ${err.message}`);

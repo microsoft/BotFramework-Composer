@@ -33,8 +33,8 @@ for (const file of inFiles) {
   const outputTransformed = keep(schema, L10N_FIELDS, transFn);
   const outputFn = outputDir + path.sep + baseName;
 
-  console.log('writing', outputFn);
+  console.log('writing', outputFn, 'and', outputDirTrans + path.sep + baseName);
   /* eslint-disable security/detect-non-literal-fs-filename */
-  fs.writeFileSync(outputDir + path.sep + baseName, JSON.stringify(output, null, 4));
+  fs.writeFileSync(outputFn, JSON.stringify(output, null, 4));
   fs.writeFileSync(outputDirTrans + path.sep + baseName, JSON.stringify(outputTransformed, null, 4));
 }
