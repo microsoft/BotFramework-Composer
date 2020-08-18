@@ -28,7 +28,6 @@ const BotCreationFlowRouter = React.lazy(() => import('./components/CreationFlow
 
 const Routes = (props) => {
   const botOpening = useRecoilValue(botOpeningState);
-
   return (
     <div css={data}>
       <Suspense fallback={<LoadingSpinner />}>

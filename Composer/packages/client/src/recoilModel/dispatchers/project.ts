@@ -141,6 +141,7 @@ export const projectDispatcher = () => {
         return dialog;
       });
 
+      // Important: gotoSnapshot will wipe all states.
       const newSnapshot = snapshot.map(({ set }) => {
         set(skillManifestsState, skillManifestFiles);
         set(luFilesState, initLuFilesStatus(botName, luFiles, dialogs));
