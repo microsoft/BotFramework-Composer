@@ -68,7 +68,7 @@ export const addQnAPairLink = {
   root: {
     fontSize: 14,
     lineHeight: 28,
-    marginLeft: 10,
+    marginLeft: 105,
   },
 };
 
@@ -97,22 +97,29 @@ export const divider = css`
   background: ${NeutralColors.gray30};
 `;
 
-export const rowDetails = (selected: boolean) => {
-  return {
-    root: {
-      minHeight: 76,
-      selectors: {
-        '&:hover div': {
-          background: selected ? NeutralColors.gray30 : NeutralColors.white,
-        },
+export const rowDetails = {
+  root: {
+    minHeight: 76,
+    selectors: {
+      '&:hover': {
+        background: NeutralColors.gray30,
+      },
+      '&:hover .ms-Button--icon': {
+        visibility: 'visible',
+      },
+      '&.is-selected .ms-Button--icon': {
+        visibility: 'visible',
       },
     },
-  };
+  },
 };
 
-export const icon = css`
-  color: ${NeutralColors.black};
-`;
+export const icon = {
+  root: {
+    color: NeutralColors.black,
+    visibility: 'hidden',
+  },
+};
 
 export const addButtonContainer = css`
   z-index: 1;

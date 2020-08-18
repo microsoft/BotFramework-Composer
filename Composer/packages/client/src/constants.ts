@@ -205,3 +205,8 @@ export const EmptyBotTemplateId = 'EmptyBot';
 export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
+
+export const knowledgeBaseSourceUrl =
+  'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/content-types';
+
+export const QnAMakerLearningUrl = 'https://azure.microsoft.com/en-us/pricing/details/cognitive-services/qna-maker/';
