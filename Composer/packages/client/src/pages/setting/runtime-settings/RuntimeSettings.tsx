@@ -53,7 +53,7 @@ export const RuntimeSettings: React.FC<RouteComponentProps> = () => {
 
   useEffect(() => {
     // check the status of the boilerplate material and see if it requires an update
-    getBoilerplateVersion(projectId);
+    if (projectId) getBoilerplateVersion(projectId);
   }, []);
 
   useEffect(() => {
