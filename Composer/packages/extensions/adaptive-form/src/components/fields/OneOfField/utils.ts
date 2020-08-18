@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { JSONSchema7, JSONSchema7Definition, FieldProps } from '@bfc/extension';
-import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { FieldProps, JSONSchema7, JSONSchema7Definition } from '@bfc/extension';
 import merge from 'lodash/merge';
 import omit from 'lodash/omit';
+import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 
-import { resolveRef, getValueType, getUiPlaceholder, getUiDescription } from '../../../utils';
+import { getUiDescription, getUiPlaceholder, getValueType, resolveRef } from '../../../utils';
 
 function getOptionLabel(schema: JSONSchema7): string {
   const { title, enum: enumOptions } = schema;
@@ -111,7 +111,7 @@ export function getFieldProps(props: FieldProps, schema?: JSONSchema7): FieldPro
     // allows object fields to render their labels
     label: schema?.type === 'object' ? undefined : false,
     depth: props.depth - 1,
-    placeholder: getUiPlaceholder({ ...props, placeholder: undefined }),
+    placeholder: getUiPlaceholder({ ...props }),
     description: getUiDescription({ ...props, description: undefined }),
   };
 }
