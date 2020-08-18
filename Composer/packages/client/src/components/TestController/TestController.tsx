@@ -143,12 +143,12 @@ export const TestController: React.FC = () => {
   function isConfigComplete(config) {
     let complete = true;
     if (getReferredLuFiles(luFiles, dialogs).length > 0) {
-      if (Object.keys(LuisConfig).some((luisConfigKey) => config?.[luisConfigKey] === '')) {
+      if (Object.values(LuisConfig).some((luisConfigKey) => config.luis[luisConfigKey] === '')) {
         complete = false;
       }
     }
     if (getReferredQnaFiles(qnaFiles, dialogs).length > 0) {
-      if (Object.keys(QnaConfig).some((qnaConfigKey) => config?.[qnaConfigKey] === '')) {
+      if (Object.values(QnaConfig).some((qnaConfigKey) => config.qna[qnaConfigKey] === '')) {
         complete = false;
       }
     }
