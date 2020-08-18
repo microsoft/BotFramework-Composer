@@ -467,6 +467,7 @@ export class BotProject implements IBotProject {
   public updateQnaEndpointKey = async (subscriptionKey: string) => {
     const qnaEndpointKey = await this.builder.getQnaEndpointKey(subscriptionKey, {
       ...this.settings?.luis,
+      qnaRegion: this.settings?.qna.qnaRegion,
       subscriptionKey,
     });
     return qnaEndpointKey;
