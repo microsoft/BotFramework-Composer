@@ -197,7 +197,7 @@ export const projectDispatcher = () => {
       if (jump && projectId) {
         let url = `/bot/${projectId}/dialogs/${mainDialog}`;
         if (templateId === QnABotTemplateId) {
-          url = `/bot/${projectId}/qna/${mainDialog}`;
+          url = `/bot/${projectId}/knowledge-base/${mainDialog}`;
         }
         navigateTo(url);
       }

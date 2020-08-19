@@ -48,7 +48,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
         id: dialog.id,
         name: dialog.displayName,
         ariaLabel: formatMessage('qna file'),
-        url: `/bot/${projectId}/qna/${dialog.id}`,
+        url: `/bot/${projectId}/knowledge-base/${dialog.id}`,
       };
     });
     const mainDialogIndex = newDialogLinks.findIndex((link) => link.id === 'Main');
@@ -61,7 +61,7 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
       id: 'all',
       name: 'All',
       ariaLabel: formatMessage('all qna files'),
-      url: `/bot/${projectId}/qna/all`,
+      url: `/bot/${projectId}/knowledge-base/all`,
     });
     return newDialogLinks;
   }, [dialogs]);
@@ -69,13 +69,13 @@ const QnAPage: React.FC<QnAPageProps> = (props) => {
   useEffect(() => {
     const activeDialog = dialogs.find(({ id }) => id === dialogId);
     if (!activeDialog && dialogs.length && dialogId !== 'all') {
-      navigateTo(`/bot/${projectId}/qna/${dialogId}`);
+      navigateTo(`/bot/${projectId}/knowledge-base/${dialogId}`);
     }
   }, [dialogId, dialogs, projectId]);
 
   const onToggleEditMode = useCallback(
     (_e, checked) => {
-      let url = `/bot/${projectId}/qna/${dialogId}`;
+      let url = `/bot/${projectId}/knowledge-base/${dialogId}`;
       if (checked) url += `/edit`;
       navigateTo(url);
     },

@@ -54,7 +54,7 @@ import { getBaseName } from '../../utils/fileUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
-import ImportQnAFromUrlModal from '../qna/ImportQnAFromUrlModal';
+import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
 import { triggerNotSupported } from '../../utils/dialogValidator';
 
 import { WarningMessage } from './WarningMessage';
@@ -571,7 +571,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       triggerPhrases: '',
     };
     if (dialogId) {
-      const url = `/bot/${projectId}/qna/${dialogId}`;
+      const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
       createTrigger(dialogId, formData, url);
       for (let i = 0; i < importUrls.length; i++) {
         if (!importUrls[i]) continue;
@@ -635,7 +635,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                       onCancel={() => {
                         setWarningIsVisible(false);
                       }}
-                      onOk={() => navTo(`/bot/${projectId}/qna/all`)}
+                      onOk={() => navTo(`/bot/${projectId}/knowledge-base/all`)}
                     />
                   )
                 ) : (

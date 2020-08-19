@@ -19,7 +19,7 @@ import {
   localeState,
 } from '../../recoilModel';
 import Home from '../../pages/home/Home';
-import ImportQnAFromUrlModal from '../../pages/qna/ImportQnAFromUrlModal';
+import ImportQnAFromUrlModal from '../../pages/knowledge-base/ImportQnAFromUrlModal';
 import { QnABotTemplateId } from '../../constants';
 import { useProjectIdCache } from '../../utils/hooks';
 
