@@ -111,8 +111,8 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     }
 
     for (let i = 0; i < urls.length; i++) {
-      for (let j = 0; j < urls.length; j++) {
-        if (urls[i] === urls[j] && i !== j) {
+      for (let j = i + 1; j < urls.length; j++) {
+        if (urls[i] === urls[j]) {
           errors[i] = errors[j] = formatMessage('This url is duplicated');
         }
       }
@@ -126,8 +126,7 @@ export const ImportQnAFromUrlModal: React.FC<ImportQnAFromUrlModalProps> = (prop
     setUrlErrors(validateUrls(urls));
   };
 
-  const updateUrl = (index: number, url: string | undefined) => {
-    if (!url) url = '';
+  const updateUrl = (index: number, url = '') => {
     const urls = [...formData.urls];
     urls[index] = url;
     updateField('urls', urls);

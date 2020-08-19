@@ -6,11 +6,8 @@ import { jsx } from '@emotion/core';
 import { SharedColors } from '@uifabric/fluent-theme';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Button } from 'office-ui-fabric-react/lib/Button';
-import { useRecoilValue } from 'recoil';
-import formatMessage from 'format-message';
 
-import { navigateTo } from '../../utils/navigation';
-import { projectIdState } from '../../recoilModel';
+import { triggerNotSupportedWarning } from '../../constants';
 
 const warningIcon = {
   marginLeft: 5,
@@ -42,28 +39,25 @@ const changeRecognizerButton = {
 };
 
 interface WarningMessageProps {
-  setShowWarning: (showWarning: boolean) => void;
+  okText: string;
+  onOk: () => void;
+  onCancel: () => void;
 }
 
-export const warningContent = formatMessage(
-  'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
-);
-
 export const WarningMessage: React.FC<WarningMessageProps> = (props) => {
-  const { setShowWarning } = props;
-  const projectId = useRecoilValue(projectIdState);
+  const { okText, onOk, onCancel } = props;
   return (
     <div css={warningRoot}>
       <Icon iconName={'Warning'} style={warningIcon} />
-      <div css={warningFont}>{warningContent}</div>
+      <div css={warningFont}>{triggerNotSupportedWarning}</div>
       <Button
         styles={changeRecognizerButton}
-        text={formatMessage('Change Recognizer')}
+        text={okText}
         onClick={() => {
-          navigateTo(`/bot/${projectId}/qna/all`);
+          onOk();
         }}
       />
-      <Icon iconName={'Cancel'} style={warningIcon} onClick={() => setShowWarning(false)} />
+      <Icon iconName={'Cancel'} style={warningIcon} onClick={onCancel} />
     </div>
   );
 };
