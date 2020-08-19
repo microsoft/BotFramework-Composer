@@ -2,16 +2,16 @@
 // Licensed under the MIT License.
 
 import * as path from 'path';
+import { promisify } from 'util';
 
 import * as fs from 'fs-extra';
 import * as rp from 'request-promise';
+import { ILuisConfig } from '@bfc/shared';
 
 import { BotProjectDeployLoggerType } from './botProjectLoggerType';
 
-const { promisify } = require('util');
-
 const luBuild = require('@microsoft/bf-lu/lib/parser/lubuild/builder.js');
-const readdir = promisify(fs.readdir);
+const readdir: any = promisify(fs.readdir);
 
 export interface LuisPublishConfig {
   // Logger
@@ -70,13 +70,12 @@ export class LuisPublish {
     environment: string,
     accessToken: string,
     language: string,
-    luisEndpoint: string,
-    luisAuthoringEndpoint: string,
-    luisEndpointKey: string,
-    luisAuthoringKey?: string,
-    luisAuthoringRegion?: string,
+    luisSettings: ILuisConfig,
     luisResource?: string
   ) {
+    const { authoringKey: luisAuthoringKey, authoringRegion: luisAuthoringRegion } = luisSettings;
+    let { endpoint: luisEndpoint, authoringEndpoint: luisAuthoringEndpoint } = luisSettings;
+
     if (luisAuthoringKey && luisAuthoringRegion) {
       // Get a list of all the .lu files that are not empty
       const botFiles = await this.getFiles(workingFolder);
@@ -107,7 +106,7 @@ export class LuisPublish {
       // Pass in the list of the non-empty LU files we got above...
       const loadResult = await builder.loadContents(
         modelFiles,
-        language || '',
+        language || 'en-us',
         environment || '',
         luisAuthoringRegion || ''
       );

@@ -54,6 +54,8 @@ export interface PublishPlugin<Config = any> {
   [key: string]: any;
 }
 
+export const DEFAULT_RUNTIME = 'csharp-azurewebapp';
+
 export interface RuntimeTemplate {
   /** method used to eject the runtime into a project. returns resulting path of runtime! */
   eject: (project: IBotProject, localDisk?: any, isReplace?: boolean) => Promise<string>;

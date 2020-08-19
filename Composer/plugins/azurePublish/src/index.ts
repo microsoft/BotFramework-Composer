@@ -352,6 +352,7 @@ export default async (composer: any): Promise<void> => {
       // this combines the bot-wide settings, the environment specific settings, and 2 new fields needed for deployed bots
       // these will be written to the appropriate settings file inside the appropriate runtime plugin.
       const mergedSettings = mergeDeep(fullSettings, settings);
+
       // Prepare parameters and then perform the actual deployment action
       const customizeConfiguration: CreateAndDeployResources = {
         accessToken,

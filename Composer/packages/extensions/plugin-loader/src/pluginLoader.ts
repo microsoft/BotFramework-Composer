@@ -11,9 +11,8 @@ import glob from 'globby';
 import formatMessage from 'format-message';
 
 import { ComposerPluginRegistration } from './composerPluginRegistration';
-import { UserIdentity, ExtensionCollection, RuntimeTemplate } from './types';
+import { UserIdentity, ExtensionCollection, RuntimeTemplate, DEFAULT_RUNTIME } from './types';
 import log from './logger';
-const DEFAULT_RUNTIME = 'csharp-azurewebapp';
 
 export class PluginLoader {
   private _passport: passport.PassportStatic;

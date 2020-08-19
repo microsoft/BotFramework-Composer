@@ -57,10 +57,7 @@ export class BotProjectDeploy {
       // Do the LUIS build if LUIS settings are present
       if (settings.luis) {
         const luisAuthoringKey = settings.luis.authoringKey;
-        const luisAuthoringRegion = settings.luis.region;
-        const luisEndpointKey = settings.luis.endpointKey;
-        const luisEndpoint = settings.luis.endpoint;
-        const luisAuthoringEndpoint = settings.luis.authoringEndpoint;
+        const luisAuthoringRegion = settings.luis.authoringRegion || settings.luis.region;
 
         if (luisAuthoringKey && luisAuthoringRegion) {
           if (!language) {
@@ -76,11 +73,7 @@ export class BotProjectDeploy {
             environment,
             this.accessToken,
             language,
-            luisEndpoint,
-            luisAuthoringEndpoint,
-            luisEndpointKey,
-            luisAuthoringKey,
-            luisAuthoringRegion,
+            settings.luis,
             luisResource
           );
 

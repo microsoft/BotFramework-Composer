@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import mergeWith from 'lodash/mergeWith';
 
 /**
  * Originally found on Stack Overflow:
@@ -16,25 +15,20 @@ export function isObject(item) {
   return item && typeof item === 'object' && !Array.isArray(item);
 }
 
-function mergeObject(targetValue, srcValue) {
-  if (Array.isArray(targetValue)) {
-    return targetValue.concat(srcValue);
-  } else if (!isObject(targetValue)) {
-    return targetValue ? targetValue : srcValue;
-  } else {
-    // merge two objects
-    Object.keys(srcValue).forEach((key) => {
-      mergeObject(targetValue[key], srcValue[key]);
-    });
-    return targetValue;
-  }
-}
+export function mergeDeep(target, ...sources) {
+  if (!sources.length) return target;
+  const source = sources.shift();
 
-/**
- * Deep merge two objects.
- * @param target
- * @param ...sources
- */
-export function mergeDeep(target, source) {
-  return mergeWith(target, source, mergeObject);
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+
+  return mergeDeep(target, ...sources);
 }
