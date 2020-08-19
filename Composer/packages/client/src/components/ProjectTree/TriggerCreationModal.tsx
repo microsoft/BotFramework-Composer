@@ -10,6 +10,7 @@ import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/Button'
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import { IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { luIndexer, combineMessage } from '@bfc/indexers';
@@ -20,8 +21,6 @@ import { IComboBoxOption } from 'office-ui-fabric-react/lib/ComboBox';
 import { useRecoilValue } from 'recoil';
 import { FontWeights } from '@uifabric/styling';
 import { FontSizes } from '@uifabric/fluent-theme';
-import get from 'lodash/get';
-import { LgTemplate } from '@bfc/shared';
 
 import {
   getTriggerTypes,
@@ -33,7 +32,6 @@ import {
   activityTypeKey,
   getEventTypes,
   getActivityTypes,
-  regexRecognizerKey,
   qnaMatcherKey,
   onChooseIntentKey,
 } from '../../utils/dialogUtil';
@@ -41,7 +39,7 @@ import { projectIdState } from '../../recoilModel/atoms/botState';
 import { userSettingsState } from '../../recoilModel';
 import { nameRegex } from '../../constants';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
-
+import { isRegExRecognizerType, isLUISnQnARecognizerType } from '../../utils/dialogValidator';
 // -------------------- Styles -------------------- //
 
 const styles = {
@@ -93,6 +91,12 @@ const optionRow = {
   display: 'flex',
   height: 15,
   fontSize: 15,
+};
+
+export const warningIcon = {
+  marginLeft: 5,
+  color: '#BE880A',
+  fontSize: 5,
 };
 
 // -------------------- Validation Helpers -------------------- //
@@ -194,21 +198,6 @@ const validateForm = (
   return errors;
 };
 
-export interface LuFilePayload {
-  id: string;
-  content: string;
-}
-
-export interface LgFilePayload {
-  id: string;
-  lgTemplates: LgTemplate[];
-}
-
-export interface QnAFilePayload {
-  id: string;
-  content: string;
-}
-
 // -------------------- TriggerCreationModal -------------------- //
 
 interface TriggerCreationModalProps {
@@ -225,9 +214,8 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const projectId = useRecoilValue(projectIdState);
   const userSettings = useRecoilValue(userSettingsState);
   const dialogFile = dialogs.find((dialog) => dialog.id === dialogId);
-  const isRegEx = (dialogFile?.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
-  const recognizer = get(dialogFile, 'content.recognizer', '');
-  const isLUISnQnA = typeof recognizer === 'string' && recognizer.endsWith('.lu.qna');
+  const isRegEx = isRegExRecognizerType(dialogFile);
+  const isLUISnQnA = isLUISnQnARecognizerType(dialogFile);
   const regexIntents = dialogFile?.content?.recognizer?.intents ?? [];
   const initialFormData: TriggerFormData = {
     errors: initialFormDataErrors,
@@ -250,14 +238,23 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
   const triggerTypeOptions: IDropdownOption[] = getTriggerTypes();
 
   if (isRegEx) {
-    let index = triggerTypeOptions.findIndex((t) => t.key === qnaMatcherKey);
-    triggerTypeOptions[index].data = { icon: 'Warning' };
-    index = triggerTypeOptions.findIndex((t) => t.key === onChooseIntentKey);
-    triggerTypeOptions[index].data = { icon: 'Warning' };
+    const qnaMatcherOption = triggerTypeOptions.find((t) => t.key === qnaMatcherKey);
+    if (qnaMatcherOption) {
+      qnaMatcherOption.data = { icon: 'Warning' };
+    }
+    const onChooseIntentOption = triggerTypeOptions.find((t) => t.key === onChooseIntentKey);
+    if (onChooseIntentOption) {
+      onChooseIntentOption.data = { icon: 'Warning' };
+    }
   }
 
   const onRenderOption = (option: IDropdownOption) => {
-    return <div css={optionRow}>{option.text}</div>;
+    return (
+      <div css={optionRow}>
+        {option.text}
+        {option.data && option.data.icon && <Icon iconName={option.data.icon} style={warningIcon} />}
+      </div>
+    );
   };
 
   const shouldDisable = (errors: TriggerFormDataErrors) => {
@@ -275,10 +272,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     //If still have some errors here, it is a bug.
     const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
     if (shouldDisable(errors)) {
-      setFormData({
-        ...formData,
-        errors,
-      });
+      setFormData({ ...formData, errors });
       return;
     }
     onDismiss();
@@ -293,10 +287,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     if (isCompound) {
       newFormData = { ...newFormData, $kind: '' };
     } else {
-      newFormData = {
-        ...newFormData,
-        $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key,
-      };
+      newFormData = { ...newFormData, $kind: option.key === customEventKey ? SDKKinds.OnDialogEvent : option.key };
     }
     setFormData({ ...newFormData, errors: initialFormDataErrors });
   };
@@ -316,11 +307,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     if (option) {
       const errors: TriggerFormDataErrors = {};
       errors.event = validateEventKind(selectedType, option.key as string);
-      setFormData({
-        ...formData,
-        $kind: option.key as string,
-        errors: { ...formData.errors, ...errors },
-      });
+      setFormData({ ...formData, $kind: option.key as string, errors: { ...formData.errors, ...errors } });
     }
   };
 
@@ -330,21 +317,13 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     if (showTriggerPhrase && formData.triggerPhrases) {
       errors.triggerPhrases = getLuDiagnostics(name, formData.triggerPhrases);
     }
-    setFormData({
-      ...formData,
-      intent: name,
-      errors: { ...formData.errors, ...errors },
-    });
+    setFormData({ ...formData, intent: name, errors: { ...formData.errors, ...errors } });
   };
 
   const onChangeRegEx = (e, pattern) => {
     const errors: TriggerFormDataErrors = {};
     errors.regEx = validateRegExPattern(selectedType, isRegEx, pattern);
-    setFormData({
-      ...formData,
-      regEx: pattern,
-      errors: { ...formData.errors, ...errors },
-    });
+    setFormData({ ...formData, regEx: pattern, errors: { ...formData.errors, ...errors } });
   };
 
   //Trigger phrase is optional
@@ -355,11 +334,7 @@ export const TriggerCreationModal: React.FC<TriggerCreationModalProps> = (props)
     } else {
       errors.triggerPhrases = '';
     }
-    setFormData({
-      ...formData,
-      triggerPhrases: body,
-      errors: { ...formData.errors, ...errors },
-    });
+    setFormData({ ...formData, triggerPhrases: body, errors: { ...formData.errors, ...errors } });
   };
   const errors = validateForm(selectedType, formData, isRegEx, regexIntents);
   const disable = shouldDisable(errors);

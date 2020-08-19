@@ -119,7 +119,7 @@ export const rowDetails = {
 export const icon = {
   root: {
     color: NeutralColors.black,
-    visibility: 'visible',
+    visibility: 'hidden',
     paddingLeft: 18,
   },
 };

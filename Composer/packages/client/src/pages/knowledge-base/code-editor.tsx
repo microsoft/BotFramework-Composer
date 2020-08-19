@@ -4,14 +4,14 @@
 /* eslint-disable react/display-name */
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { LuEditor, EditorDidMount, defaultQnAPlaceholder } from '@bfc/code-editor';
+import { EditorDidMount, defaultQnAPlaceholder } from '@bfc/code-editor';
 import isEmpty from 'lodash/isEmpty';
 import { RouteComponentProps } from '@reach/router';
 import querystring from 'query-string';
 import debounce from 'lodash/debounce';
 import get from 'lodash/get';
 import { CodeEditorSettings } from '@bfc/shared';
-import { QNA_HELP } from '@bfc/code-editor/lib/constants';
+import { QnAEditor } from '@bfc/code-editor';
 
 import { qnaFilesState, projectIdState } from '../../recoilModel/atoms/botState';
 import { dispatcherState } from '../../recoilModel';
@@ -71,11 +71,10 @@ const CodeEditor: React.FC<CodeEditorProps> = (props) => {
   );
 
   return (
-    <LuEditor
+    <QnAEditor
       diagnostics={currentDiagnostics}
       editorDidMount={editorDidMount}
       editorSettings={userSettings.codeEditor}
-      helpURL={QNA_HELP}
       languageServer={{
         path: lspServerPath,
       }}

@@ -21,8 +21,6 @@ import {
   createSelectedPath,
   deleteTrigger,
   getbreadcrumbLabel,
-  regexRecognizerKey,
-  onChooseIntentKey,
   qnaMatcherKey,
   TriggerFormData,
 } from '../../utils/dialogUtil';
@@ -56,9 +54,10 @@ import { getBaseName } from '../../utils/fileUtil';
 import { validatedDialogsSelector } from '../../recoilModel/selectors/validatedDialogs';
 import plugins, { mergePluginConfigs } from '../../plugins';
 import { useElectronFeatures } from '../../hooks/useElectronFeatures';
-import ImportQnAFromUrlModal from '../qna/ImportQnAFromUrlModal';
+import ImportQnAFromUrlModal from '../knowledge-base/ImportQnAFromUrlModal';
+import { triggerNotSupported } from '../../utils/dialogValidator';
 
-import { WarningMessage, warningContent } from './WarningMessage';
+import { WarningMessage } from './WarningMessage';
 import {
   breadcrumbClass,
   contentWrapper,
@@ -156,7 +155,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
   const [importQnAModalVisibility, setImportQnAModalVisibility] = useState(false);
   const [currentDialog, setCurrentDialog] = useState<DialogInfo>(dialogs[0]);
   const [exportSkillModalVisible, setExportSkillModalVisible] = useState(false);
-  const [showWarning, setShowWarning] = useState(true);
+  const [warningIsVisible, setWarningIsVisible] = useState(true);
   const shell = useShell('DesignPage');
   const shellForFlowEditor = useShell('FlowEditor');
   const shellForPropertyEditor = useShell('PropertyEditor');
@@ -173,7 +172,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       navigateTo(`/bot/${projectId}/dialogs/${rootDialog.id}${search}`);
       return;
     }
-    setShowWarning(true);
+    setWarningIsVisible(true);
   }, [dialogId, dialogs, location]);
 
   // migration: add id to dialog when dialog doesn't have id
@@ -572,7 +571,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
       triggerPhrases: '',
     };
     if (dialogId) {
-      const url = `/bot/${projectId}/qna/${dialogId}`;
+      const url = `/bot/${projectId}/knowledge-base/${dialogId}`;
       createTrigger(dialogId, formData, url);
       for (let i = 0; i < importUrls.length; i++) {
         if (!importUrls[i]) continue;
@@ -591,10 +590,8 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
     return <LoadingSpinner />;
   }
 
-  const isRegEx = (currentDialog.content?.recognizer?.$kind ?? '') === regexRecognizerKey;
   const selectedTrigger = currentDialog.triggers.find((t) => t.id === selected);
-  const withWarning =
-    isRegEx && (selectedTrigger?.type === qnaMatcherKey || selectedTrigger?.type === onChooseIntentKey);
+  const withWarning = triggerNotSupported(currentDialog, selectedTrigger);
 
   return (
     <React.Fragment>
@@ -603,7 +600,6 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
           dialogId={dialogId}
           dialogs={dialogs}
           selected={selected}
-          warningContent={warningContent}
           onDeleteDialog={handleDeleteDialog}
           onDeleteTrigger={handleDeleteTrigger}
           onSelect={handleSelect}
@@ -633,7 +629,15 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                     }}
                   />
                 ) : withWarning ? (
-                  showWarning && <WarningMessage setShowWarning={setShowWarning} />
+                  warningIsVisible && (
+                    <WarningMessage
+                      okText={formatMessage('Change Recognizer')}
+                      onCancel={() => {
+                        setWarningIsVisible(false);
+                      }}
+                      onOk={() => navTo(`/bot/${projectId}/knowledge-base/all`)}
+                    />
+                  )
                 ) : (
                   <Extension plugins={pluginConfig} shell={shellForFlowEditor}>
                     <VisualEditor

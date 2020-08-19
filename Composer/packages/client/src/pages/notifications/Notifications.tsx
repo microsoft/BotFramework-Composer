@@ -39,7 +39,7 @@ const Notifications: React.FC<RouteComponentProps> = () => {
     },
     [NotificationType.QNA]: (item: INotification) => {
       const { projectId, resourceId, diagnostic } = item;
-      const uri = `/bot/${projectId}/qna/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
+      const uri = `/bot/${projectId}/knowledge-base/${resourceId}/edit#L=${diagnostic.range?.start.line || 0}`;
       navigateTo(uri);
     },
     [NotificationType.DIALOG]: (item: INotification) => {

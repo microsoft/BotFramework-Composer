@@ -207,6 +207,10 @@ export const QnABotTemplateId = 'QnASample';
 
 export const nameRegex = /^[a-zA-Z0-9-_]+$/;
 
+export const triggerNotSupportedWarning = formatMessage(
+  'This trigger type is not supported by the RegEx recognizer. To ensure this trigger is fired, change the recognizer type.'
+);
+
 export const knowledgeBaseSourceUrl =
   'https://docs.microsoft.com/en-us/azure/cognitive-services/qnamaker/concepts/content-types';
 

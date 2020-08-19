@@ -11,6 +11,10 @@ import luFileStatusStorage from '../../utils/luFileStatusStorage';
 import qnaFileStatusStorage from '../../utils/qnaFileStatusStorage';
 import { luFilesState, qnaFilesState, dialogsState, botStatusState, botLoadErrorState } from '../atoms';
 
+const checkEmptyQuestionOrAnswerInQnAFile = (sections) => {
+  return sections.some((s) => !s.Answer || s.Questions.some((q) => !q.content));
+};
+
 export const builderDispatcher = () => {
   const build = useRecoilCallback(
     ({ set, snapshot }: CallbackInterface) => async (
@@ -26,10 +30,12 @@ export const builderDispatcher = () => {
 
       const errorMsg = qnaFiles.reduce(
         (result, file) => {
-          if (file.qnaSections && file.qnaSections.length > 0) {
-            if (file.qnaSections.some((s) => !s.Answer || s.Questions.some((q) => !q.content))) {
-              result.message = result.message + `${file.id}.qna file contains empty answer or questions`;
-            }
+          if (
+            file.qnaSections &&
+            file.qnaSections.length > 0 &&
+            checkEmptyQuestionOrAnswerInQnAFile(file.qnaSections)
+          ) {
+            result.message = result.message + `${file.id}.qna file contains empty answer or questions`;
           }
           return result;
         },
