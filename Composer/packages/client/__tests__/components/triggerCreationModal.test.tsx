@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import * as React from 'react';
-import { fireEvent, act, waitFor } from '@bfc/test-utils';
+import { fireEvent, waitFor } from '@bfc/test-utils';
 
 import { TriggerCreationModal } from '../../src/components/ProjectTree/TriggerCreationModal';
 import { renderWithRecoil } from '../testUtils';
