@@ -20,9 +20,26 @@ const schema = {
 const data = 'form data';
 
 describe('getOrderedProperties', () => {
-  it('excludes fields according to hidden option', () => {
-    expect(getOrderedProperties(schema, { hidden: ['two'] }, data)).not.toContain('two');
-    expect(getOrderedProperties(schema, { hidden: () => ['two'] }, data)).not.toContain('two');
+  it('includes hidden fields', () => {
+    expect(getOrderedProperties(schema, { hidden: ['two'] }, data)).toContain('two');
+    expect(getOrderedProperties(schema, { hidden: () => ['two'] }, data)).toContain('two');
+  });
+
+  it('includes hidden fields when all non-hidden fields are in the order', () => {
+    const order = ['one', 'three', 'four', 'five', 'six', 'seven'];
+
+    expect(getOrderedProperties(schema, { order, hidden: ['two'] }, data)).toContain('two');
+    expect(getOrderedProperties(schema, { order, hidden: () => ['two'] }, data)).toContain('two');
+  });
+
+  it('includes hidden fields when all non-hidden fields are in the order', () => {
+    const order = ['one', 'three', ['four', 'five'], 'six', 'seven'];
+    const expectedResult = ['one', 'three', ['four', 'five'], 'six', 'seven', 'two'];
+
+    // @ts-expect-error
+    expect(getOrderedProperties(schema, { order, hidden: ['two'] }, data)).toEqual(expectedResult);
+    // @ts-expect-error
+    expect(getOrderedProperties(schema, { order, hidden: () => ['two'] }, data)).toEqual(expectedResult);
   });
 
   it('sorts according to order option', () => {

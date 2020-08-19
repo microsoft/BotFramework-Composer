@@ -29,6 +29,7 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     value,
     rawErrors,
     hideError,
+    hidden,
     onChange,
     ...rest
   } = props;
@@ -40,30 +41,30 @@ const SchemaField: React.FC<FieldProps> = (props) => {
     ...baseUIOptions,
   };
 
-  useEffect(() => {
-    if (typeof value === 'undefined') {
-      if (schema?.const) {
-        onChange(schema.const);
-      } else if (schema?.default) {
-        onChange(schema.default);
-      }
-    }
-  }, []);
-
-  if (name.startsWith('$')) {
-    return null;
-  }
-
-  const error = typeof rawErrors === 'string' && (
-    <ErrorMessage error={rawErrors} helpLink={uiOptions.helpLink} label={getUiLabel(props)} />
-  );
-
   const handleChange = (newValue: any) => {
     const serializedValue =
       typeof uiOptions?.serializer?.set === 'function' ? uiOptions.serializer.set(newValue) : newValue;
 
     onChange(serializedValue);
   };
+
+  useEffect(() => {
+    if (typeof value === 'undefined') {
+      if (schema.const) {
+        handleChange(schema.const);
+      } else if (schema.default) {
+        handleChange(schema.default);
+      }
+    }
+  }, []);
+
+  if (name.startsWith('$') || hidden) {
+    return null;
+  }
+
+  const error = typeof rawErrors === 'string' && (
+    <ErrorMessage error={rawErrors} helpLink={uiOptions.helpLink} label={getUiLabel(props)} />
+  );
 
   const deserializedValue = typeof uiOptions?.serializer?.get === 'function' ? uiOptions.serializer.get(value) : value;
 
