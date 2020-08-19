@@ -22,10 +22,9 @@ import formatMessage from 'format-message';
 
 const styles = {
   detailListContainer: css`
+    flex-grow: 1;
     height: 350px;
-    margin-bottom: 10px
     position: relative;
-    padding-top: 10px;
     overflow: hidden;
   `,
 };
