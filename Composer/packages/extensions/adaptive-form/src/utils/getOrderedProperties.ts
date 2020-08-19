@@ -4,20 +4,19 @@ import { UIOptions, JSONSchema7 } from '@bfc/extension';
 import cloneDeep from 'lodash/cloneDeep';
 import formatMessage from 'format-message';
 
-const globalHiddenProperties = ['$kind', '$id', '$copy', '$designer', 'id', 'disabled'];
+import { getHiddenProperties } from './getHiddenProperties';
 
 type OrderConfig = (string | [string, string])[];
 
 export function getOrderedProperties(
   schema: JSONSchema7,
-  uiOptions: UIOptions,
+  baseUiOptions: UIOptions,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ): OrderConfig {
-  const { hidden, order = ['*'] } = cloneDeep(uiOptions);
-
-  const hiddenFieldSet = new Set(typeof hidden === 'function' ? hidden(data) : hidden || []);
-  globalHiddenProperties.forEach((f) => hiddenFieldSet.add(f));
+  const uiOptions = cloneDeep(baseUiOptions);
+  const { order = ['*'] } = uiOptions;
+  const hiddenFieldSet = getHiddenProperties(uiOptions, data);
 
   const uiOrder = typeof order === 'function' ? order(data) : order || [];
   const orderedFieldSet = new Set<string>();
@@ -59,7 +58,7 @@ export function getOrderedProperties(
   const restIdx = orderedFields.indexOf('*');
   // only validate wildcard if not all properties are ordered already
   if (allProperties.some((p) => !orderedFieldSet.has(p))) {
-    let errorMsg = '';
+    let errorMsg;
     if (restIdx === -1) {
       errorMsg = formatMessage('no wildcard');
     } else if (restIdx !== orderedFields.lastIndexOf('*')) {
@@ -75,15 +74,16 @@ export function getOrderedProperties(
         })
       );
     }
+  }
 
-    const restFields = Object.keys(schema.properties || {}).filter((p) => {
-      return !orderedFieldSet.has(p) && !hiddenFieldSet.has(p) && !p.startsWith('$');
-    });
+  const restFields = Object.keys(schema.properties || {}).filter((p) => {
+    return !orderedFieldSet.has(p) && !p.startsWith('$');
+  });
 
+  if (restIdx === -1) {
+    orderedFields.push(...restFields);
+  } else {
     orderedFields.splice(restIdx, 1, ...restFields);
-  } else if (restIdx > -1) {
-    // remove the wildcard
-    orderedFields.splice(restIdx, 1);
   }
 
   return orderedFields;

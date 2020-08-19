@@ -78,7 +78,9 @@ export interface Language {
 }
 
 export interface DispatchModels {
-  languages?: Language[];
+  languages?: {
+    [local: string]: Language[];
+  };
   intents?: string[];
 }
 
