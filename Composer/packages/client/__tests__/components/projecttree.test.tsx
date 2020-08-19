@@ -7,6 +7,7 @@ import { fireEvent } from '@bfc/test-utils';
 import { dialogs } from '../constants.json';
 import { ProjectTree } from '../../src/components/ProjectTree/ProjectTree';
 import { renderWithRecoil } from '../testUtils';
+import { warningContent } from '../../src/pages/design/WarningMessage';
 
 describe('<ProjectTree/>', () => {
   it('should render the projecttree', async () => {
@@ -15,6 +16,7 @@ describe('<ProjectTree/>', () => {
         dialogId="ToDoBot"
         dialogs={dialogs as any}
         selected=""
+        warningContent={warningContent}
         onDeleteDialog={() => {}}
         onDeleteTrigger={() => {}}
         onSelect={() => {}}
@@ -31,6 +33,7 @@ describe('<ProjectTree/>', () => {
         dialogId="ToDoBot"
         dialogs={dialogs as any}
         selected=""
+        warningContent={warningContent}
         onDeleteDialog={() => {}}
         onDeleteTrigger={() => {}}
         onSelect={mockFileSelect}

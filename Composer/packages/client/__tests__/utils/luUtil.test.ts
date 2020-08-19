@@ -8,7 +8,7 @@ import { getReferredLuFiles, createCrossTrainConfig, checkLuisBuild } from '../.
 describe('getReferredLuFiles', () => {
   it('returns referred luFiles from dialog', () => {
     const dialogs = [{ luFile: 'a' }];
-    const luFiles = [{ id: 'a.en-us' }, { id: 'b.en-us' }, { id: 'c.en-us' }];
+    const luFiles = [{ id: 'a.en-us', content: 'xxx' }, { id: 'b.en-us' }, { id: 'c.en-us' }];
     const referred = getReferredLuFiles(luFiles as LuFile[], dialogs as DialogInfo[]);
     expect(referred.length).toEqual(1);
     expect(referred[0].id).toEqual('a.en-us');

@@ -34,7 +34,7 @@ export const dialogsDispatcher = () => {
 
   const updateDialog = useRecoilCallback(({ set }: CallbackInterface) => ({ id, content }) => {
     // migration: add id for dialog
-    if (!content.id) {
+    if (typeof content === 'object' && !content.id) {
       content.id = id;
     }
     set(dialogsState, (dialogs) => {
@@ -70,7 +70,9 @@ export const dialogsDispatcher = () => {
     const luFiles = await snapshot.getPromise(luFilesState);
     const dialog = { isRoot: false, displayName: id, ...dialogIndexer.parse(id, fixedContent) };
     dialog.diagnostics = validateDialog(dialog, schemas.sdk.content, lgFiles, luFiles);
-    dialog.content.id = id;
+    if (typeof dialog.content === 'object') {
+      dialog.content.id = id;
+    }
     await createLgFileState(callbackHelpers, { id, content: '' });
     await createLuFileState(callbackHelpers, { id, content: '' });
     await createQnAFileState(callbackHelpers, { id, content: '' });

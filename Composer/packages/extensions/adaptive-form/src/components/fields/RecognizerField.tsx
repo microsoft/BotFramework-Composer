@@ -49,7 +49,11 @@ const RecognizerField: React.FC<FieldProps<MicrosoftIRecognizer>> = (props) => {
       return SDKKinds.CustomRecognizer;
     }
     const selected =
-      value === undefined ? [recognizers[0].id] : recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
+      value === undefined
+        ? recognizers.length > 0
+          ? [recognizers[0].id]
+          : []
+        : recognizers.filter((r) => r.isSelected(value)).map((r) => r.id);
 
     const involvedCustomItem = selected.find((item) => item !== SDKKinds.CustomRecognizer);
     if (involvedCustomItem) {

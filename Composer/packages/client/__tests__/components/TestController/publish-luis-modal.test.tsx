@@ -18,8 +18,8 @@ const luisConfig = {
   defaultLanguage: 'en-us',
   environment: 'composer',
 };
-const config = { subscriptionKey: '12345', ...luisConfig };
-const qnaConfig = { subscriptionKey: '12345', endpointKey: '12345' };
+const config = { subscriptionKey: '12345', qnaRegion: 'westus', ...luisConfig };
+const qnaConfig = { subscriptionKey: '12345', endpointKey: '12345', qnaRegion: 'westus' };
 describe('<PublishDialog />', () => {
   it('should render the <PublishDialog />', () => {
     const onDismiss = jest.fn(() => {});
@@ -47,14 +47,21 @@ describe('<PublishDialog />', () => {
     fireEvent.click(publishButton);
     expect(onPublish).toBeCalled();
     expect(onPublish).toBeCalledWith({
-      name: 'sampleBot0',
-      authoringKey: '12345',
-      authoringEndpoint: 'testAuthoringEndpoint',
-      endpointKey: '12345',
-      endpoint: 'testEndpoint',
-      authoringRegion: 'westus',
-      defaultLanguage: 'en-us',
-      environment: 'composer',
+      luis: {
+        name: 'sampleBot0',
+        authoringKey: '12345',
+        authoringEndpoint: 'testAuthoringEndpoint',
+        endpointKey: '12345',
+        endpoint: 'testEndpoint',
+        authoringRegion: 'westus',
+        defaultLanguage: 'en-us',
+        environment: 'composer',
+      },
+      qna: {
+        subscriptionKey: '12345',
+        endpointKey: '',
+        qnaRegion: 'westus',
+      },
     });
   });
 });

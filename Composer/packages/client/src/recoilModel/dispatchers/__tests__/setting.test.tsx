@@ -46,8 +46,9 @@ const settings = {
   publishTargets: [],
   qna: {
     knowledgebaseid: '',
-    endpointkey: '',
+    endpointKey: '',
     hostname: '',
+    qnaRegion: 'westus',
   },
   telemetry: {
     logPersonalInformation: false,

@@ -11,7 +11,11 @@ import { RecognizerField } from '../RecognizerField';
 import { fieldProps } from './testUtils';
 
 jest.mock('@bfc/extension', () => ({
-  useShellApi: jest.fn(),
+  useShellApi: jest.fn(() => ({
+    qnaFiles: [],
+    luFiles: [],
+    currentDialog: { id: 'testId' },
+  })),
   useRecognizerConfig: jest.fn(),
 }));
 
